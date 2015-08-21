@@ -2945,84 +2945,84 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_T swig_types[5]
 #define SWIGTYPE_p_allocator_type swig_types[6]
 #define SWIGTYPE_p_char swig_types[7]
-#define SWIGTYPE_p_const_reference swig_types[8]
-#define SWIGTYPE_p_cphd__Antenna swig_types[9]
-#define SWIGTYPE_p_cphd__AreaPlane swig_types[10]
-#define SWIGTYPE_p_cphd__ArraySize swig_types[11]
-#define SWIGTYPE_p_cphd__CPHDReader swig_types[12]
-#define SWIGTYPE_p_cphd__Channel swig_types[13]
-#define SWIGTYPE_p_cphd__ChannelParameters swig_types[14]
-#define SWIGTYPE_p_cphd__Data swig_types[15]
-#define SWIGTYPE_p_cphd__DomainType swig_types[16]
-#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[17]
-#define SWIGTYPE_p_cphd__FileHeader swig_types[18]
-#define SWIGTYPE_p_cphd__FxParameters swig_types[19]
-#define SWIGTYPE_p_cphd__Global swig_types[20]
-#define SWIGTYPE_p_cphd__ImageArea swig_types[21]
-#define SWIGTYPE_p_cphd__Metadata swig_types[22]
-#define SWIGTYPE_p_cphd__PhaseSGN swig_types[23]
-#define SWIGTYPE_p_cphd__SRP swig_types[24]
-#define SWIGTYPE_p_cphd__SRPType swig_types[25]
-#define SWIGTYPE_p_cphd__SampleType swig_types[26]
-#define SWIGTYPE_p_cphd__TOAParameters swig_types[27]
-#define SWIGTYPE_p_cphd__VBM swig_types[28]
-#define SWIGTYPE_p_cphd__VectorParameters swig_types[29]
-#define SWIGTYPE_p_cphd__Wideband swig_types[30]
-#define SWIGTYPE_p_difference_type swig_types[31]
-#define SWIGTYPE_p_except__Context swig_types[32]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[33]
-#define SWIGTYPE_p_int swig_types[34]
-#define SWIGTYPE_p_int16_t swig_types[35]
-#define SWIGTYPE_p_int32_t swig_types[36]
-#define SWIGTYPE_p_int64_t swig_types[37]
-#define SWIGTYPE_p_int8_t swig_types[38]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[39]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[40]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[41]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[42]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[43]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[44]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[45]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[46]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[47]
-#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[48]
-#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[49]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[50]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[51]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[52]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[53]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[54]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[55]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[56]
-#define SWIGTYPE_p_nitf__DateTime swig_types[57]
-#define SWIGTYPE_p_off_t swig_types[58]
-#define SWIGTYPE_p_p_PyObject swig_types[59]
-#define SWIGTYPE_p_pid_t swig_types[60]
-#define SWIGTYPE_p_reference swig_types[61]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[62]
-#define SWIGTYPE_p_scene__FrameType swig_types[63]
-#define SWIGTYPE_p_scene__LatLon swig_types[64]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[65]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[66]
-#define SWIGTYPE_p_six__BooleanType swig_types[67]
-#define SWIGTYPE_p_six__CollectType swig_types[68]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[69]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[70]
-#define SWIGTYPE_p_six__DataType swig_types[71]
-#define SWIGTYPE_p_six__FFTSign swig_types[72]
-#define SWIGTYPE_p_six__RadarModeType swig_types[73]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[74]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[75]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[76]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[77]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[78]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[79]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[80]
-#define SWIGTYPE_p_size_t swig_types[81]
-#define SWIGTYPE_p_size_type swig_types[82]
-#define SWIGTYPE_p_ssize_t swig_types[83]
-#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[84]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[85]
+#define SWIGTYPE_p_cphd__Antenna swig_types[8]
+#define SWIGTYPE_p_cphd__AreaPlane swig_types[9]
+#define SWIGTYPE_p_cphd__ArraySize swig_types[10]
+#define SWIGTYPE_p_cphd__CPHDReader swig_types[11]
+#define SWIGTYPE_p_cphd__Channel swig_types[12]
+#define SWIGTYPE_p_cphd__ChannelParameters swig_types[13]
+#define SWIGTYPE_p_cphd__Data swig_types[14]
+#define SWIGTYPE_p_cphd__DomainType swig_types[15]
+#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[16]
+#define SWIGTYPE_p_cphd__FileHeader swig_types[17]
+#define SWIGTYPE_p_cphd__FxParameters swig_types[18]
+#define SWIGTYPE_p_cphd__Global swig_types[19]
+#define SWIGTYPE_p_cphd__ImageArea swig_types[20]
+#define SWIGTYPE_p_cphd__Metadata swig_types[21]
+#define SWIGTYPE_p_cphd__PhaseSGN swig_types[22]
+#define SWIGTYPE_p_cphd__SRP swig_types[23]
+#define SWIGTYPE_p_cphd__SRPType swig_types[24]
+#define SWIGTYPE_p_cphd__SampleType swig_types[25]
+#define SWIGTYPE_p_cphd__TOAParameters swig_types[26]
+#define SWIGTYPE_p_cphd__VBM swig_types[27]
+#define SWIGTYPE_p_cphd__VectorParameters swig_types[28]
+#define SWIGTYPE_p_cphd__Wideband swig_types[29]
+#define SWIGTYPE_p_difference_type swig_types[30]
+#define SWIGTYPE_p_except__Context swig_types[31]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[32]
+#define SWIGTYPE_p_int swig_types[33]
+#define SWIGTYPE_p_int16_t swig_types[34]
+#define SWIGTYPE_p_int32_t swig_types[35]
+#define SWIGTYPE_p_int64_t swig_types[36]
+#define SWIGTYPE_p_int8_t swig_types[37]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[38]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[39]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[40]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[41]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[42]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[43]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[44]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[45]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[46]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[47]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[48]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[49]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[50]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[51]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[52]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[53]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[54]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[55]
+#define SWIGTYPE_p_nitf__DateTime swig_types[56]
+#define SWIGTYPE_p_off_t swig_types[57]
+#define SWIGTYPE_p_p_PyObject swig_types[58]
+#define SWIGTYPE_p_pid_t swig_types[59]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[60]
+#define SWIGTYPE_p_scene__FrameType swig_types[61]
+#define SWIGTYPE_p_scene__LatLon swig_types[62]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[63]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[64]
+#define SWIGTYPE_p_six__BooleanType swig_types[65]
+#define SWIGTYPE_p_six__CollectType swig_types[66]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[67]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[68]
+#define SWIGTYPE_p_six__DataType swig_types[69]
+#define SWIGTYPE_p_six__FFTSign swig_types[70]
+#define SWIGTYPE_p_six__RadarModeType swig_types[71]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[72]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[73]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[74]
+#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[75]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[76]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[77]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[78]
+#define SWIGTYPE_p_size_t swig_types[79]
+#define SWIGTYPE_p_size_type swig_types[80]
+#define SWIGTYPE_p_ssize_t swig_types[81]
+#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[82]
+#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[83]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[84]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[85]
 #define SWIGTYPE_p_std__invalid_argument swig_types[86]
 #define SWIGTYPE_p_std__ostream swig_types[87]
 #define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[88]
@@ -4534,6 +4534,8 @@ namespace swig
 
 
 #include "import/cphd.h"
+#include "import/six.h"
+using six::Vector3;
 
 
 SWIGINTERNINLINE PyObject*
@@ -4757,53 +4759,13 @@ SWIGINTERN std::string cphd_FileHeader___str__(cphd::FileHeader *self){
 
   #define SWIG_From_double   PyFloat_FromDouble 
 
-SWIGINTERN std::string cphd_Metadata___str__(cphd::Metadata *self){
-        std::ostringstream out;
-        out << *self;
-        return out.str();
-    }
 
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  int r;
-  if (!PyBool_Check(obj))
-    return SWIG_ERROR;
-  r = PyObject_IsTrue(obj);
-  if (r == -1)
-    return SWIG_ERROR;
-  if (val) *val = r ? true : false;
-  return SWIG_OK;
-}
-
-SWIGINTERN std::string cphd_VBM___str__(cphd::VBM *self){
-        std::ostringstream out;
-        out << *self;
-        return out.str();
-    }
-SWIGINTERN void cphd_VBM_getVBMdata__SWIG_2(cphd::VBM *self,size_t channel,size_t data){
-        void* buffer = reinterpret_cast<void*>(data);
-        self->getVBMdata(channel, buffer);
-    }
-
-namespace swig {
-  template <> struct traits<double > {
-    typedef value_category category;
-    static const char* type_name() { return"double"; }
-  };  
-  template <>  struct traits_asval<double > {   
-    typedef double value_type;
-    static int asval(PyObject *obj, value_type *val) { 
-      return SWIG_AsVal_double (obj, val);
-    }
-  };
-  template <>  struct traits_from<double > {
-    typedef double value_type;
-    static PyObject *from(const value_type& val) {
-      return SWIG_From_double  (val);
-    }
-  };
-}
+  namespace swig {
+    template <>  struct traits<math::poly::OneD< Vector3 > > {
+      typedef pointer_category category;
+      static const char* type_name() { return"math::poly::OneD< Vector3 >"; }
+    };
+  }
 
 
 namespace swig {
@@ -4902,6 +4864,64 @@ namespace swig {
       }
     };
   }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<math::poly::OneD< Vector3 >, std::allocator< math::poly::OneD< Vector3 > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "math::poly::OneD< Vector3 >" "," "std::allocator< math::poly::OneD< Vector3 > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN std::string cphd_Metadata___str__(cphd::Metadata *self){
+        std::ostringstream out;
+        out << *self;
+        return out.str();
+    }
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
+SWIGINTERN std::string cphd_VBM___str__(cphd::VBM *self){
+        std::ostringstream out;
+        out << *self;
+        return out.str();
+    }
+SWIGINTERN void cphd_VBM_getVBMdata__SWIG_2(cphd::VBM *self,size_t channel,size_t data){
+        void* buffer = reinterpret_cast<void*>(data);
+        self->getVBMdata(channel, buffer);
+    }
+
+namespace swig {
+  template <> struct traits<double > {
+    typedef value_category category;
+    static const char* type_name() { return"double"; }
+  };  
+  template <>  struct traits_asval<double > {   
+    typedef double value_type;
+    static int asval(PyObject *obj, value_type *val) { 
+      return SWIG_AsVal_double (obj, val);
+    }
+  };
+  template <>  struct traits_from<double > {
+    typedef double value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_double  (val);
+    }
+  };
+}
 
 
       namespace swig {
@@ -5047,38 +5067,38 @@ SWIGINTERN void std_vector_Sl_cphd_ArraySize_Sg__insert__SWIG_1(std::vector< cph
 	};
       }
     
-SWIGINTERN swig::SwigPyIterator *std_vector_Sl_six_Vector3_Sg__iterator(std::vector< six::Vector3 > *self,PyObject **PYTHON_SELF){
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__iterator(std::vector< math::linear::VectorN< 3,double > > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
     }
-SWIGINTERN bool std_vector_Sl_six_Vector3_Sg____nonzero__(std::vector< six::Vector3 > const *self){
+SWIGINTERN bool std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____nonzero__(std::vector< math::linear::VectorN< 3,double > > const *self){
       return !(self->empty());
     }
-SWIGINTERN bool std_vector_Sl_six_Vector3_Sg____bool__(std::vector< six::Vector3 > const *self){
+SWIGINTERN bool std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____bool__(std::vector< math::linear::VectorN< 3,double > > const *self){
       return !(self->empty());
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::size_type std_vector_Sl_six_Vector3_Sg____len__(std::vector< six::Vector3 > const *self){
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::size_type std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____len__(std::vector< math::linear::VectorN< 3,double > > const *self){
       return self->size();
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::value_type std_vector_Sl_six_Vector3_Sg__pop(std::vector< six::Vector3 > *self){
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::value_type std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__pop(std::vector< math::linear::VectorN< 3,double > > *self){
       if (self->size() == 0)
 	throw std::out_of_range("pop from empty container");
       std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >::value_type x = self->back();
       self->pop_back();
       return x;
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *std_vector_Sl_six_Vector3_Sg____getslice__(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j){
+SWIGINTERN std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getslice__(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j){
       return swig::getslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setslice____SWIG_0(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &v=std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >()){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setslice____SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &v=std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >()){
       swig::setslice(self, i, j, 1, v);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____delslice__(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delslice__(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::difference_type j){
       swig::delslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____delitem____SWIG_0(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delitem____SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i){
       self->erase(swig::getpos(self,i));
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *std_vector_Sl_six_Vector3_Sg____getitem____SWIG_0(std::vector< six::Vector3 > *self,PySliceObject *slice){
+SWIGINTERN std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getitem____SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
@@ -5089,7 +5109,7 @@ SWIGINTERN std::vector< math::linear::VectorN< 3,double >,std::allocator< math::
       std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >::difference_type jd = j;
       return swig::getslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setitem____SWIG_0(std::vector< six::Vector3 > *self,PySliceObject *slice,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &v){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,PySliceObject *slice,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &v){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
@@ -5100,7 +5120,7 @@ SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setitem____SWIG_0(std::vector< s
       std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >::difference_type jd = j;
       swig::setslice(self, id, jd, step, v);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setitem____SWIG_1(std::vector< six::Vector3 > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_1(std::vector< math::linear::VectorN< 3,double > > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
@@ -5111,7 +5131,7 @@ SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setitem____SWIG_1(std::vector< s
       std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____delitem____SWIG_1(std::vector< six::Vector3 > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delitem____SWIG_1(std::vector< math::linear::VectorN< 3,double > > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
@@ -5122,19 +5142,231 @@ SWIGINTERN void std_vector_Sl_six_Vector3_Sg____delitem____SWIG_1(std::vector< s
       std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::value_type const &std_vector_Sl_six_Vector3_Sg____getitem____SWIG_1(std::vector< six::Vector3 > const *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i){
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::value_type const &std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getitem____SWIG_1(std::vector< math::linear::VectorN< 3,double > > const *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i){
       return *(swig::cgetpos(self, i));
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg____setitem____SWIG_2(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_2(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::difference_type i,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){
       *(swig::getpos(self,i)) = x;
     }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg__append(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__append(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){
       self->push_back(x);
     }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_six_Vector3_Sg__erase__SWIG_0(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos){ return self->erase(pos); }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_six_Vector3_Sg__erase__SWIG_1(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::iterator first,std::vector< math::linear::VectorN< 3,double > >::iterator last){ return self->erase(first, last); }
-SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_six_Vector3_Sg__insert__SWIG_0(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){ return self->insert(pos, x); }
-SWIGINTERN void std_vector_Sl_six_Vector3_Sg__insert__SWIG_1(std::vector< six::Vector3 > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos,std::vector< math::linear::VectorN< 3,double > >::size_type n,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){ self->insert(pos, n, x); }
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_1(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::iterator first,std::vector< math::linear::VectorN< 3,double > >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< math::linear::VectorN< 3,double > >::iterator std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_0(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_1(std::vector< math::linear::VectorN< 3,double > > *self,std::vector< math::linear::VectorN< 3,double > >::iterator pos,std::vector< math::linear::VectorN< 3,double > >::size_type n,std::vector< math::linear::VectorN< 3,double > >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits<cphd::ChannelParameters > {
+      typedef pointer_category category;
+      static const char* type_name() { return"cphd::ChannelParameters"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<cphd::ChannelParameters, std::allocator< cphd::ChannelParameters > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "cphd::ChannelParameters" "," "std::allocator< cphd::ChannelParameters >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_cphd_ChannelParameters_Sg__iterator(std::vector< cphd::ChannelParameters > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_cphd_ChannelParameters_Sg____nonzero__(std::vector< cphd::ChannelParameters > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_cphd_ChannelParameters_Sg____bool__(std::vector< cphd::ChannelParameters > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters >::size_type std_vector_Sl_cphd_ChannelParameters_Sg____len__(std::vector< cphd::ChannelParameters > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters >::value_type std_vector_Sl_cphd_ChannelParameters_Sg__pop(std::vector< cphd::ChannelParameters > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *std_vector_Sl_cphd_ChannelParameters_Sg____getslice__(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::difference_type i,std::vector< cphd::ChannelParameters >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____setslice____SWIG_0(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::difference_type i,std::vector< cphd::ChannelParameters >::difference_type j,std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &v=std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >()){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____delslice__(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::difference_type i,std::vector< cphd::ChannelParameters >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____delitem____SWIG_0(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::difference_type i){
+      self->erase(swig::getpos(self,i));
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *std_vector_Sl_cphd_ChannelParameters_Sg____getitem____SWIG_0(std::vector< cphd::ChannelParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type id = i;
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_0(std::vector< cphd::ChannelParameters > *self,PySliceObject *slice,std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type id = i;
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_1(std::vector< cphd::ChannelParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type id = i;
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____delitem____SWIG_1(std::vector< cphd::ChannelParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type id = i;
+      std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters >::value_type const &std_vector_Sl_cphd_ChannelParameters_Sg____getitem____SWIG_1(std::vector< cphd::ChannelParameters > const *self,std::vector< cphd::ChannelParameters >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_2(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::difference_type i,std::vector< cphd::ChannelParameters >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg__append(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< cphd::ChannelParameters >::iterator std_vector_Sl_cphd_ChannelParameters_Sg__erase__SWIG_0(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< cphd::ChannelParameters >::iterator std_vector_Sl_cphd_ChannelParameters_Sg__erase__SWIG_1(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::iterator first,std::vector< cphd::ChannelParameters >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< cphd::ChannelParameters >::iterator std_vector_Sl_cphd_ChannelParameters_Sg__insert__SWIG_0(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::iterator pos,std::vector< cphd::ChannelParameters >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_cphd_ChannelParameters_Sg__insert__SWIG_1(std::vector< cphd::ChannelParameters > *self,std::vector< cphd::ChannelParameters >::iterator pos,std::vector< cphd::ChannelParameters >::size_type n,std::vector< cphd::ChannelParameters >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits<six::sicd::AntennaParameters > {
+      typedef pointer_category category;
+      static const char* type_name() { return"six::sicd::AntennaParameters"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<six::sicd::AntennaParameters, std::allocator< six::sicd::AntennaParameters > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "six::sicd::AntennaParameters" "," "std::allocator< six::sicd::AntennaParameters >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_six_sicd_AntennaParameters_Sg__iterator(std::vector< six::sicd::AntennaParameters > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_six_sicd_AntennaParameters_Sg____nonzero__(std::vector< six::sicd::AntennaParameters > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_six_sicd_AntennaParameters_Sg____bool__(std::vector< six::sicd::AntennaParameters > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::size_type std_vector_Sl_six_sicd_AntennaParameters_Sg____len__(std::vector< six::sicd::AntennaParameters > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::value_type std_vector_Sl_six_sicd_AntennaParameters_Sg__pop(std::vector< six::sicd::AntennaParameters > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *std_vector_Sl_six_sicd_AntennaParameters_Sg____getslice__(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::difference_type i,std::vector< six::sicd::AntennaParameters >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____setslice____SWIG_0(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::difference_type i,std::vector< six::sicd::AntennaParameters >::difference_type j,std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &v=std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >()){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____delslice__(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::difference_type i,std::vector< six::sicd::AntennaParameters >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____delitem____SWIG_0(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::difference_type i){
+      self->erase(swig::getpos(self,i));
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *std_vector_Sl_six_sicd_AntennaParameters_Sg____getitem____SWIG_0(std::vector< six::sicd::AntennaParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type id = i;
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_0(std::vector< six::sicd::AntennaParameters > *self,PySliceObject *slice,std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type id = i;
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_1(std::vector< six::sicd::AntennaParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type id = i;
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____delitem____SWIG_1(std::vector< six::sicd::AntennaParameters > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type id = i;
+      std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::value_type const &std_vector_Sl_six_sicd_AntennaParameters_Sg____getitem____SWIG_1(std::vector< six::sicd::AntennaParameters > const *self,std::vector< six::sicd::AntennaParameters >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_2(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::difference_type i,std::vector< six::sicd::AntennaParameters >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg__append(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::iterator std_vector_Sl_six_sicd_AntennaParameters_Sg__erase__SWIG_0(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::iterator std_vector_Sl_six_sicd_AntennaParameters_Sg__erase__SWIG_1(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::iterator first,std::vector< six::sicd::AntennaParameters >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< six::sicd::AntennaParameters >::iterator std_vector_Sl_six_sicd_AntennaParameters_Sg__insert__SWIG_0(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::iterator pos,std::vector< six::sicd::AntennaParameters >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_six_sicd_AntennaParameters_Sg__insert__SWIG_1(std::vector< six::sicd::AntennaParameters > *self,std::vector< six::sicd::AntennaParameters >::iterator pos,std::vector< six::sicd::AntennaParameters >::size_type n,std::vector< six::sicd::AntennaParameters >::value_type const &x){ self->insert(pos, n, x); }
 
 mem::ScopedCopyablePtr< cphd::DwellTimeParameters > makeScopedCopyableDwellTimeParameters()
 {
@@ -35076,7 +35308,7 @@ SWIGINTERN PyObject *VectorArraySize_swigregister(PyObject *SWIGUNUSEDPARM(self)
 
 SWIGINTERN PyObject *_wrap_VectorVector3_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   PyObject **arg2 = (PyObject **) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -35087,13 +35319,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_iterator(PyObject *SWIGUNUSEDPARM(self)
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_iterator",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_iterator" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_iterator" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (swig::SwigPyIterator *)std_vector_Sl_six_Vector3_Sg__iterator(arg1,arg2);
+      result = (swig::SwigPyIterator *)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__iterator(arg1,arg2);
     } 
     catch (const std::exception& e)
     {
@@ -35130,7 +35362,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -35139,13 +35371,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3___nonzero__(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3___nonzero__",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___nonzero__" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___nonzero__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (bool)std_vector_Sl_six_Vector3_Sg____nonzero__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
+      result = (bool)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____nonzero__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
     } 
     catch (const std::exception& e)
     {
@@ -35182,7 +35414,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -35191,13 +35423,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3___bool__(PyObject *SWIGUNUSEDPARM(self)
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3___bool__",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___bool__" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___bool__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (bool)std_vector_Sl_six_Vector3_Sg____bool__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
+      result = (bool)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____bool__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
     } 
     catch (const std::exception& e)
     {
@@ -35234,7 +35466,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -35243,13 +35475,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3___len__(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3___len__",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___len__" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___len__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = std_vector_Sl_six_Vector3_Sg____len__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
+      result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____len__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
     } 
     catch (const std::exception& e)
     {
@@ -35286,7 +35518,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -35295,14 +35527,14 @@ SWIGINTERN PyObject *_wrap_VectorVector3_pop(PyObject *SWIGUNUSEDPARM(self), PyO
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_pop",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_pop" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_pop" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
       try {
-        result = std_vector_Sl_six_Vector3_Sg__pop(arg1);
+        result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__pop(arg1);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35344,7 +35576,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg3 ;
   void *argp1 = 0 ;
@@ -35361,9 +35593,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getslice__(PyObject *SWIGUNUSEDPARM(s
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getslice__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getslice__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___getslice__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -35378,7 +35610,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getslice__(PyObject *SWIGUNUSEDPARM(s
     try
     {
       try {
-        result = (std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *)std_vector_Sl_six_Vector3_Sg____getslice__(arg1,arg2,arg3);
+        result = (std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35423,7 +35655,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg3 ;
   std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *arg4 = 0 ;
@@ -35442,9 +35674,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_0(PyObject *SWIGUNUS
   if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorVector3___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setslice__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setslice__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___setslice__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -35470,7 +35702,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_0(PyObject *SWIGUNUS
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg4);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg4);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35517,7 +35749,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg3 ;
   void *argp1 = 0 ;
@@ -35533,9 +35765,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_1(PyObject *SWIGUNUS
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setslice__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setslice__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___setslice__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -35550,7 +35782,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setslice____SWIG_1(PyObject *SWIGUNUS
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35651,15 +35883,15 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setslice__(PyObject *self, PyObject *
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3___setslice__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)\n"
-    "    std::vector< six::Vector3 >::__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::difference_type)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::difference_type)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg3 ;
   void *argp1 = 0 ;
@@ -35675,9 +35907,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delslice__(PyObject *SWIGUNUSEDPARM(s
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delslice__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delslice__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___delslice__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -35692,7 +35924,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delslice__(PyObject *SWIGUNUSEDPARM(s
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____delslice__(arg1,arg2,arg3);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35737,7 +35969,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -35749,9 +35981,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_0(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3___delitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___delitem__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -35761,7 +35993,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_0(PyObject *SWIGUNUSE
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____delitem____SWIG_0(arg1,arg2);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35803,7 +36035,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -35814,9 +36046,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_0(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3___getitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -35827,7 +36059,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_0(PyObject *SWIGUNUSE
     try
     {
       try {
-        result = (std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *)std_vector_Sl_six_Vector3_Sg____getitem____SWIG_0(arg1,arg2);
+        result = (std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35872,7 +36104,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *arg3 = 0 ;
   void *argp1 = 0 ;
@@ -35885,9 +36117,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_0(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -35909,7 +36141,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_0(PyObject *SWIGUNUSE
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg3);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -35956,7 +36188,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -35966,9 +36198,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_1(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3___setitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -35979,7 +36211,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_1(PyObject *SWIGUNUSE
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____setitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -36024,7 +36256,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -36034,9 +36266,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_1(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3___delitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___delitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -36047,7 +36279,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delitem____SWIG_1(PyObject *SWIGUNUSE
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____delitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____delitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -36131,15 +36363,15 @@ SWIGINTERN PyObject *_wrap_VectorVector3___delitem__(PyObject *self, PyObject *a
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3___delitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::__delitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type)\n"
-    "    std::vector< six::Vector3 >::__delitem__(PySliceObject *)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::__delitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::__delitem__(PySliceObject *)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -36152,9 +36384,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_1(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3___getitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___getitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___getitem__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -36164,7 +36396,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getitem____SWIG_1(PyObject *SWIGUNUSE
     try
     {
       try {
-        result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &std_vector_Sl_six_Vector3_Sg____getitem____SWIG_1((std::vector< math::linear::VectorN< 3,double > > const *)arg1,arg2);
+        result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____getitem____SWIG_1((std::vector< math::linear::VectorN< 3,double > > const *)arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -36245,15 +36477,15 @@ SWIGINTERN PyObject *_wrap_VectorVector3___getitem__(PyObject *self, PyObject *a
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3___getitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::__getitem__(PySliceObject *)\n"
-    "    std::vector< six::Vector3 >::__getitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type) const\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::__getitem__(PySliceObject *)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::__getitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type) const\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::difference_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
@@ -36269,9 +36501,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_2(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3___setitem__" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3___setitem__" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::difference_type""'");
@@ -36289,7 +36521,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem____SWIG_2(PyObject *SWIGUNUSE
     try
     {
       try {
-        std_vector_Sl_six_Vector3_Sg____setitem____SWIG_2(arg1,arg2,(math::linear::VectorN< 3,double > const &)*arg3);
+        std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____setitem____SWIG_2(arg1,arg2,(math::linear::VectorN< 3,double > const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -36391,16 +36623,16 @@ SWIGINTERN PyObject *_wrap_VectorVector3___setitem__(PyObject *self, PyObject *a
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3___setitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::__setitem__(PySliceObject *,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)\n"
-    "    std::vector< six::Vector3 >::__setitem__(PySliceObject *)\n"
-    "    std::vector< six::Vector3 >::__setitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::__setitem__(PySliceObject *,std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::__setitem__(PySliceObject *)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::__setitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -36412,9 +36644,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_append(PyObject *SWIGUNUSEDPARM(self), 
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_append",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_append" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_append" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorVector3_append" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::value_type const &""'"); 
@@ -36426,7 +36658,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3_append(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      std_vector_Sl_six_Vector3_Sg__append(arg1,(math::linear::VectorN< 3,double > const &)*arg2);
+      std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__append(arg1,(math::linear::VectorN< 3,double > const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -36463,13 +36695,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *result = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_VectorVector3")) SWIG_fail;
   {
     try
     {
-      result = (std::vector< six::Vector3 > *)new std::vector< six::Vector3 >();
+      result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >();
     } 
     catch (const std::exception& e)
     {
@@ -36506,27 +36738,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
-  std::vector< six::Vector3 > *result = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_VectorVector3",&obj0)) SWIG_fail;
   {
     std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *ptr = (std::vector<math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *)0;
     res1 = swig::asptr(obj0, &ptr);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorVector3" "', argument " "1"" of type '" "std::vector< six::Vector3 > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorVector3" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorVector3" "', argument " "1"" of type '" "std::vector< six::Vector3 > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorVector3" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const &""'"); 
     }
     arg1 = ptr;
   }
   {
     try
     {
-      result = (std::vector< six::Vector3 > *)new std::vector< six::Vector3 >((std::vector< six::Vector3 > const &)*arg1);
+      result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >((std::vector< math::linear::VectorN< 3,double > > const &)*arg1);
     } 
     catch (const std::exception& e)
     {
@@ -36565,7 +36797,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -36574,13 +36806,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_empty(PyObject *SWIGUNUSEDPARM(self), P
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_empty",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_empty" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_empty" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (bool)((std::vector< six::Vector3 > const *)arg1)->empty();
+      result = (bool)((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->empty();
     } 
     catch (const std::exception& e)
     {
@@ -36617,7 +36849,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -36626,13 +36858,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_size(PyObject *SWIGUNUSEDPARM(self), Py
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_size",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_size" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_size" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = ((std::vector< six::Vector3 > const *)arg1)->size();
+      result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->size();
     } 
     catch (const std::exception& e)
     {
@@ -36669,7 +36901,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -36677,9 +36909,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_clear(PyObject *SWIGUNUSEDPARM(self), P
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_clear",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_clear" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_clear" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -36720,8 +36952,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
-  std::vector< six::Vector3 > *arg2 = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -36732,17 +36964,17 @@ SWIGINTERN PyObject *_wrap_VectorVector3_swap(PyObject *SWIGUNUSEDPARM(self), Py
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_swap",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_swap" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_swap" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorVector3_swap" "', argument " "2"" of type '" "std::vector< six::Vector3 > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorVector3_swap" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorVector3_swap" "', argument " "2"" of type '" "std::vector< six::Vector3 > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorVector3_swap" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< six::Vector3 > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp2);
   {
     try
     {
@@ -36783,7 +37015,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -36792,13 +37024,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_get_allocator(PyObject *SWIGUNUSEDPARM(
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_get_allocator",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_get_allocator" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_get_allocator" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = ((std::vector< six::Vector3 > const *)arg1)->get_allocator();
+      result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->get_allocator();
     } 
     catch (const std::exception& e)
     {
@@ -36835,18 +37067,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_begin",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_begin" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_begin" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -36888,18 +37120,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_end",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_end" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_end" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -36941,18 +37173,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::reverse_iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::reverse_iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_rbegin",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_rbegin" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_rbegin" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -36994,18 +37226,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::reverse_iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::reverse_iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_rend",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_rend" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_rend" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -37051,7 +37283,7 @@ SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_2(PyObject *SWIGUNUSEDPARM(se
   size_t val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< six::Vector3 > *result = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_VectorVector3",&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
@@ -37062,7 +37294,7 @@ SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_2(PyObject *SWIGUNUSEDPARM(se
   {
     try
     {
-      result = (std::vector< six::Vector3 > *)new std::vector< six::Vector3 >(arg1);
+      result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -37099,7 +37331,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -37107,9 +37339,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_pop_back(PyObject *SWIGUNUSEDPARM(self)
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_pop_back",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_pop_back" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_pop_back" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -37150,7 +37382,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -37162,9 +37394,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_resize__SWIG_0(PyObject *SWIGUNUSEDPARM
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_resize",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_resize" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_resize" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3_resize" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::size_type""'");
@@ -37210,22 +37442,22 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > arg2 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > >::iterator arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_erase",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_erase" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_erase" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3_erase" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::iterator""'");
@@ -37240,7 +37472,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(
   {
     try
     {
-      result = std_vector_Sl_six_Vector3_Sg__erase__SWIG_0(arg1,arg2);
+      result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_0(arg1,arg2);
     } 
     catch (const std::exception& e)
     {
@@ -37278,9 +37510,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > arg2 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > arg3 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > >::iterator arg2 ;
+  std::vector< math::linear::VectorN< 3,double > >::iterator arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -37290,14 +37522,14 @@ SWIGINTERN PyObject *_wrap_VectorVector3_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3_erase",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_erase" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_erase" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3_erase" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::iterator""'");
@@ -37323,7 +37555,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(
   {
     try
     {
-      result = std_vector_Sl_six_Vector3_Sg__erase__SWIG_1(arg1,arg2,arg3);
+      result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -37404,8 +37636,8 @@ SWIGINTERN PyObject *_wrap_VectorVector3_erase(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3_erase'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::erase(std::vector< math::linear::VectorN< 3,double > >::iterator)\n"
-    "    std::vector< six::Vector3 >::erase(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::iterator)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::erase(std::vector< math::linear::VectorN< 3,double > >::iterator)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::erase(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::iterator)\n");
   return 0;
 }
 
@@ -37420,7 +37652,7 @@ SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_3(PyObject *SWIGUNUSEDPARM(se
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< six::Vector3 > *result = 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorVector3",&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
@@ -37439,7 +37671,7 @@ SWIGINTERN PyObject *_wrap_new_VectorVector3__SWIG_3(PyObject *SWIGUNUSEDPARM(se
   {
     try
     {
-      result = (std::vector< six::Vector3 > *)new std::vector< six::Vector3 >(arg1,(std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg2);
+      result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >(arg1,(std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -37523,17 +37755,17 @@ SWIGINTERN PyObject *_wrap_new_VectorVector3(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorVector3'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::vector()\n"
-    "    std::vector< six::Vector3 >::vector(std::vector< six::Vector3 > const &)\n"
-    "    std::vector< six::Vector3 >::vector(std::vector< math::linear::VectorN< 3,double > >::size_type)\n"
-    "    std::vector< six::Vector3 >::vector(std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::vector()\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::vector(std::vector< math::linear::VectorN< 3,double > > const &)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::vector(std::vector< math::linear::VectorN< 3,double > >::size_type)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::vector(std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -37545,9 +37777,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_push_back(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_push_back",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_push_back" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_push_back" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorVector3_push_back" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::value_type const &""'"); 
@@ -37596,7 +37828,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -37605,13 +37837,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_front(PyObject *SWIGUNUSEDPARM(self), P
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_front",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_front" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_front" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< six::Vector3 > const *)arg1)->front();
+      result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->front();
     } 
     catch (const std::exception& e)
     {
@@ -37648,7 +37880,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -37657,13 +37889,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_back(PyObject *SWIGUNUSEDPARM(self), Py
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_back",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_back" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_back" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< six::Vector3 > const *)arg1)->back();
+      result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->back();
     } 
     catch (const std::exception& e)
     {
@@ -37700,7 +37932,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::size_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
@@ -37716,9 +37948,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_assign(PyObject *SWIGUNUSEDPARM(self), 
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3_assign",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_assign" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_assign" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3_assign" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::size_type""'");
@@ -37772,7 +38004,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::size_type arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
@@ -37788,9 +38020,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_resize__SWIG_1(PyObject *SWIGUNUSEDPARM
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3_resize",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_resize" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_resize" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3_resize" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::size_type""'");
@@ -37888,16 +38120,16 @@ SWIGINTERN PyObject *_wrap_VectorVector3_resize(PyObject *self, PyObject *args) 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3_resize'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::resize(std::vector< math::linear::VectorN< 3,double > >::size_type)\n"
-    "    std::vector< six::Vector3 >::resize(std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::resize(std::vector< math::linear::VectorN< 3,double > >::size_type)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::resize(std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > arg2 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > >::iterator arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -37908,14 +38140,14 @@ SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_0(PyObject *SWIGUNUSEDPARM
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > result;
+  std::vector< math::linear::VectorN< 3,double > >::iterator result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:VectorVector3_insert",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_insert" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_insert" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3_insert" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::iterator""'");
@@ -37938,7 +38170,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_0(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = std_vector_Sl_six_Vector3_Sg__insert__SWIG_0(arg1,arg2,(math::linear::VectorN< 3,double > const &)*arg3);
+      result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_0(arg1,arg2,(math::linear::VectorN< 3,double > const &)*arg3);
     } 
     catch (const std::exception& e)
     {
@@ -37976,8 +38208,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
-  SwigValueWrapper< std::vector< math::linear::VectorN< 3,double > >::iterator > arg2 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > >::iterator arg2 ;
   std::vector< math::linear::VectorN< 3,double > >::size_type arg3 ;
   std::vector< math::linear::VectorN< 3,double > >::value_type *arg4 = 0 ;
   void *argp1 = 0 ;
@@ -37996,9 +38228,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_1(PyObject *SWIGUNUSEDPARM
   if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorVector3_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_insert" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_insert" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorVector3_insert" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::iterator""'");
@@ -38026,7 +38258,7 @@ SWIGINTERN PyObject *_wrap_VectorVector3_insert__SWIG_1(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      std_vector_Sl_six_Vector3_Sg__insert__SWIG_1(arg1,arg2,arg3,(math::linear::VectorN< 3,double > const &)*arg4);
+      std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(math::linear::VectorN< 3,double > const &)*arg4);
     } 
     catch (const std::exception& e)
     {
@@ -38115,15 +38347,15 @@ SWIGINTERN PyObject *_wrap_VectorVector3_insert(PyObject *self, PyObject *args) 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorVector3_insert'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< six::Vector3 >::insert(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n"
-    "    std::vector< six::Vector3 >::insert(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
+    "    std::vector< math::linear::VectorN< 3,double > >::insert(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n"
+    "    std::vector< math::linear::VectorN< 3,double > >::insert(std::vector< math::linear::VectorN< 3,double > >::iterator,std::vector< math::linear::VectorN< 3,double > >::size_type,std::vector< math::linear::VectorN< 3,double > >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_VectorVector3_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   std::vector< math::linear::VectorN< 3,double > >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -38135,9 +38367,9 @@ SWIGINTERN PyObject *_wrap_VectorVector3_reserve(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTuple(args,(char *)"OO:VectorVector3_reserve",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_reserve" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_reserve" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorVector3_reserve" "', argument " "2"" of type '" "std::vector< math::linear::VectorN< 3,double > >::size_type""'");
@@ -38183,7 +38415,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorVector3_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -38192,13 +38424,13 @@ SWIGINTERN PyObject *_wrap_VectorVector3_capacity(PyObject *SWIGUNUSEDPARM(self)
   if (!PyArg_ParseTuple(args,(char *)"O:VectorVector3_capacity",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_capacity" "', argument " "1"" of type '" "std::vector< six::Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorVector3_capacity" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
-      result = ((std::vector< six::Vector3 > const *)arg1)->capacity();
+      result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->capacity();
     } 
     catch (const std::exception& e)
     {
@@ -38235,7 +38467,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_VectorVector3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< six::Vector3 > *arg1 = (std::vector< six::Vector3 > *) 0 ;
+  std::vector< math::linear::VectorN< 3,double > > *arg1 = (std::vector< math::linear::VectorN< 3,double > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -38243,9 +38475,9 @@ SWIGINTERN PyObject *_wrap_delete_VectorVector3(PyObject *SWIGUNUSEDPARM(self), 
   if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorVector3",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorVector3" "', argument " "1"" of type '" "std::vector< six::Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorVector3" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double > > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< six::Vector3 > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double > > * >(argp1);
   {
     try
     {
@@ -38288,6 +38520,6440 @@ SWIGINTERN PyObject *VectorVector3_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_iterator" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_cphd_ChannelParameters_Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___nonzero__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_cphd_ChannelParameters_Sg____nonzero__((std::vector< cphd::ChannelParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___bool__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_cphd_ChannelParameters_Sg____bool__((std::vector< cphd::ChannelParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___len__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_cphd_ChannelParameters_Sg____len__((std::vector< cphd::ChannelParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_pop" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_cphd_ChannelParameters_Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< cphd::ChannelParameters >::value_type(static_cast< const std::vector< cphd::ChannelParameters >::value_type& >(result))), SWIGTYPE_p_cphd__ChannelParameters, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___getslice__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___getslice__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorChannelParameters___getslice__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *)std_vector_Sl_cphd_ChannelParameters_Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg3 ;
+  std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorChannelParameters___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___setslice__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___setslice__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorChannelParameters___setslice__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val3);
+  {
+    std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *ptr = (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorChannelParameters___setslice__" "', argument " "4"" of type '" "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters___setslice__" "', argument " "4"" of type '" "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___setslice__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___setslice__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorChannelParameters___setslice__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setslice__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorChannelParameters___setslice____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorChannelParameters___setslice____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::__setslice__(std::vector< cphd::ChannelParameters >::difference_type,std::vector< cphd::ChannelParameters >::difference_type,std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &)\n"
+    "    std::vector< cphd::ChannelParameters >::__setslice__(std::vector< cphd::ChannelParameters >::difference_type,std::vector< cphd::ChannelParameters >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___delslice__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___delslice__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorChannelParameters___delslice__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___delitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___delitem__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___getitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *)std_vector_Sl_cphd_ChannelParameters_Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___setitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *ptr = (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorChannelParameters___setitem__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters___setitem__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___setitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___delitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___delitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::__delitem__(std::vector< cphd::ChannelParameters >::difference_type)\n"
+    "    std::vector< cphd::ChannelParameters >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< cphd::ChannelParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___getitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___getitem__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< cphd::ChannelParameters >::value_type *) &std_vector_Sl_cphd_ChannelParameters_Sg____getitem____SWIG_1((std::vector< cphd::ChannelParameters > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__ChannelParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___getitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::__getitem__(PySliceObject *)\n"
+    "    std::vector< cphd::ChannelParameters >::__getitem__(std::vector< cphd::ChannelParameters >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::difference_type arg2 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters___setitem__" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters___setitem__" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorChannelParameters___setitem__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters___setitem__" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_cphd_ChannelParameters_Sg____setitem____SWIG_2(arg1,arg2,(cphd::ChannelParameters const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorChannelParameters___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__ChannelParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorChannelParameters___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::__setitem__(PySliceObject *,std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > const &)\n"
+    "    std::vector< cphd::ChannelParameters >::__setitem__(PySliceObject *)\n"
+    "    std::vector< cphd::ChannelParameters >::__setitem__(std::vector< cphd::ChannelParameters >::difference_type,std::vector< cphd::ChannelParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_append" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorChannelParameters_append" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_append" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_cphd_ChannelParameters_Sg__append(arg1,(cphd::ChannelParameters const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorChannelParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorChannelParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters > *)new std::vector< cphd::ChannelParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorChannelParameters__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorChannelParameters",&obj0)) SWIG_fail;
+  {
+    std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *ptr = (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorChannelParameters" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorChannelParameters" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters > *)new std::vector< cphd::ChannelParameters >((std::vector< cphd::ChannelParameters > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_empty" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< cphd::ChannelParameters > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_size" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< cphd::ChannelParameters > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_clear" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_swap" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorChannelParameters_swap" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_swap" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< cphd::ChannelParameters > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_get_allocator" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< cphd::ChannelParameters > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< cphd::ChannelParameters >::allocator_type(static_cast< const std::vector< cphd::ChannelParameters >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_begin" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_end" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_rbegin" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_rend" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorChannelParameters__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorChannelParameters",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorChannelParameters" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters > *)new std::vector< cphd::ChannelParameters >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_pop_back" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_resize" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters_resize" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< cphd::ChannelParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_erase" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_cphd_ChannelParameters_Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::iterator arg2 ;
+  std::vector< cphd::ChannelParameters >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< cphd::ChannelParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_erase" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_erase" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_cphd_ChannelParameters_Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorChannelParameters_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorChannelParameters_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::erase(std::vector< cphd::ChannelParameters >::iterator)\n"
+    "    std::vector< cphd::ChannelParameters >::erase(std::vector< cphd::ChannelParameters >::iterator,std::vector< cphd::ChannelParameters >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorChannelParameters__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters >::size_type arg1 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< cphd::ChannelParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorChannelParameters",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorChannelParameters" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorChannelParameters" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorChannelParameters" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters > *)new std::vector< cphd::ChannelParameters >(arg1,(std::vector< cphd::ChannelParameters >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorChannelParameters(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorChannelParameters__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorChannelParameters__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorChannelParameters__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__ChannelParameters, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorChannelParameters__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorChannelParameters'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::vector()\n"
+    "    std::vector< cphd::ChannelParameters >::vector(std::vector< cphd::ChannelParameters > const &)\n"
+    "    std::vector< cphd::ChannelParameters >::vector(std::vector< cphd::ChannelParameters >::size_type)\n"
+    "    std::vector< cphd::ChannelParameters >::vector(std::vector< cphd::ChannelParameters >::size_type,std::vector< cphd::ChannelParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_push_back" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorChannelParameters_push_back" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_push_back" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< cphd::ChannelParameters >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_front" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters >::value_type *) &((std::vector< cphd::ChannelParameters > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__ChannelParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_back" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< cphd::ChannelParameters >::value_type *) &((std::vector< cphd::ChannelParameters > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__ChannelParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::size_type arg2 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_assign" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters_assign" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorChannelParameters_assign" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_assign" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< cphd::ChannelParameters >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::size_type arg2 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_resize" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters_resize" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorChannelParameters_resize" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_resize" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< cphd::ChannelParameters >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorChannelParameters_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__ChannelParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorChannelParameters_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::resize(std::vector< cphd::ChannelParameters >::size_type)\n"
+    "    std::vector< cphd::ChannelParameters >::resize(std::vector< cphd::ChannelParameters >::size_type,std::vector< cphd::ChannelParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::iterator arg2 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< cphd::ChannelParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorChannelParameters_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_insert" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_insert" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_insert" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorChannelParameters_insert" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_insert" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_cphd_ChannelParameters_Sg__insert__SWIG_0(arg1,arg2,(cphd::ChannelParameters const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< cphd::ChannelParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::iterator arg2 ;
+  std::vector< cphd::ChannelParameters >::size_type arg3 ;
+  std::vector< cphd::ChannelParameters >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorChannelParameters_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_insert" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_insert" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorChannelParameters_insert" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorChannelParameters_insert" "', argument " "3"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_cphd__ChannelParameters,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorChannelParameters_insert" "', argument " "4"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorChannelParameters_insert" "', argument " "4"" of type '" "std::vector< cphd::ChannelParameters >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< cphd::ChannelParameters >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_cphd_ChannelParameters_Sg__insert__SWIG_1(arg1,arg2,arg3,(cphd::ChannelParameters const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_insert(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__ChannelParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorChannelParameters_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< cphd::ChannelParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_cphd__ChannelParameters, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorChannelParameters_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorChannelParameters_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< cphd::ChannelParameters >::insert(std::vector< cphd::ChannelParameters >::iterator,std::vector< cphd::ChannelParameters >::value_type const &)\n"
+    "    std::vector< cphd::ChannelParameters >::insert(std::vector< cphd::ChannelParameters >::iterator,std::vector< cphd::ChannelParameters >::size_type,std::vector< cphd::ChannelParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  std::vector< cphd::ChannelParameters >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorChannelParameters_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_reserve" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorChannelParameters_reserve" "', argument " "2"" of type '" "std::vector< cphd::ChannelParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< cphd::ChannelParameters >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorChannelParameters_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::ChannelParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorChannelParameters_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorChannelParameters_capacity" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< cphd::ChannelParameters > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorChannelParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< cphd::ChannelParameters > *arg1 = (std::vector< cphd::ChannelParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorChannelParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorChannelParameters" "', argument " "1"" of type '" "std::vector< cphd::ChannelParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< cphd::ChannelParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorChannelParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_iterator" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_six_sicd_AntennaParameters_Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___nonzero__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_sicd_AntennaParameters_Sg____nonzero__((std::vector< six::sicd::AntennaParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___bool__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_sicd_AntennaParameters_Sg____bool__((std::vector< six::sicd::AntennaParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___len__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_six_sicd_AntennaParameters_Sg____len__((std::vector< six::sicd::AntennaParameters > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_pop" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_six_sicd_AntennaParameters_Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::sicd::AntennaParameters >::value_type(static_cast< const std::vector< six::sicd::AntennaParameters >::value_type& >(result))), SWIGTYPE_p_six__sicd__AntennaParameters, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___getslice__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___getslice__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorAntennaParameters___getslice__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *)std_vector_Sl_six_sicd_AntennaParameters_Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg3 ;
+  std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorAntennaParameters___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___setslice__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___setslice__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorAntennaParameters___setslice__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val3);
+  {
+    std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *ptr = (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorAntennaParameters___setslice__" "', argument " "4"" of type '" "std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters___setslice__" "', argument " "4"" of type '" "std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___setslice__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___setslice__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorAntennaParameters___setslice__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setslice__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorAntennaParameters___setslice____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorAntennaParameters___setslice____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::__setslice__(std::vector< six::sicd::AntennaParameters >::difference_type,std::vector< six::sicd::AntennaParameters >::difference_type,std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &)\n"
+    "    std::vector< six::sicd::AntennaParameters >::__setslice__(std::vector< six::sicd::AntennaParameters >::difference_type,std::vector< six::sicd::AntennaParameters >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___delslice__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___delslice__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorAntennaParameters___delslice__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___delitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___delitem__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___getitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *)std_vector_Sl_six_sicd_AntennaParameters_Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___setitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *ptr = (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorAntennaParameters___setitem__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters___setitem__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___setitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___delitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___delitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::__delitem__(std::vector< six::sicd::AntennaParameters >::difference_type)\n"
+    "    std::vector< six::sicd::AntennaParameters >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___getitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___getitem__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::sicd::AntennaParameters >::value_type *) &std_vector_Sl_six_sicd_AntennaParameters_Sg____getitem____SWIG_1((std::vector< six::sicd::AntennaParameters > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__sicd__AntennaParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___getitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::__getitem__(PySliceObject *)\n"
+    "    std::vector< six::sicd::AntennaParameters >::__getitem__(std::vector< six::sicd::AntennaParameters >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::difference_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters___setitem__" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters___setitem__" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorAntennaParameters___setitem__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters___setitem__" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_sicd_AntennaParameters_Sg____setitem____SWIG_2(arg1,arg2,(six::sicd::AntennaParameters const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorAntennaParameters___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__sicd__AntennaParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorAntennaParameters___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::__setitem__(PySliceObject *,std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > const &)\n"
+    "    std::vector< six::sicd::AntennaParameters >::__setitem__(PySliceObject *)\n"
+    "    std::vector< six::sicd::AntennaParameters >::__setitem__(std::vector< six::sicd::AntennaParameters >::difference_type,std::vector< six::sicd::AntennaParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_append" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorAntennaParameters_append" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_append" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_six_sicd_AntennaParameters_Sg__append(arg1,(six::sicd::AntennaParameters const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorAntennaParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorAntennaParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters > *)new std::vector< six::sicd::AntennaParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorAntennaParameters__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorAntennaParameters",&obj0)) SWIG_fail;
+  {
+    std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *ptr = (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorAntennaParameters" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorAntennaParameters" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters > *)new std::vector< six::sicd::AntennaParameters >((std::vector< six::sicd::AntennaParameters > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_empty" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< six::sicd::AntennaParameters > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_size" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::sicd::AntennaParameters > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_clear" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_swap" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorAntennaParameters_swap" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_swap" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< six::sicd::AntennaParameters > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_get_allocator" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::sicd::AntennaParameters > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::sicd::AntennaParameters >::allocator_type(static_cast< const std::vector< six::sicd::AntennaParameters >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_begin" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_end" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_rbegin" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_rend" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorAntennaParameters__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorAntennaParameters",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorAntennaParameters" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters > *)new std::vector< six::sicd::AntennaParameters >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_pop_back" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_resize" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters_resize" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_erase" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_sicd_AntennaParameters_Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator arg2 ;
+  std::vector< six::sicd::AntennaParameters >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_erase" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_erase" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_sicd_AntennaParameters_Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorAntennaParameters_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorAntennaParameters_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::erase(std::vector< six::sicd::AntennaParameters >::iterator)\n"
+    "    std::vector< six::sicd::AntennaParameters >::erase(std::vector< six::sicd::AntennaParameters >::iterator,std::vector< six::sicd::AntennaParameters >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorAntennaParameters__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters >::size_type arg1 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::sicd::AntennaParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorAntennaParameters",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorAntennaParameters" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorAntennaParameters" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorAntennaParameters" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters > *)new std::vector< six::sicd::AntennaParameters >(arg1,(std::vector< six::sicd::AntennaParameters >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorAntennaParameters(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorAntennaParameters__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorAntennaParameters__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorAntennaParameters__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_six__sicd__AntennaParameters, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorAntennaParameters__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorAntennaParameters'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::vector()\n"
+    "    std::vector< six::sicd::AntennaParameters >::vector(std::vector< six::sicd::AntennaParameters > const &)\n"
+    "    std::vector< six::sicd::AntennaParameters >::vector(std::vector< six::sicd::AntennaParameters >::size_type)\n"
+    "    std::vector< six::sicd::AntennaParameters >::vector(std::vector< six::sicd::AntennaParameters >::size_type,std::vector< six::sicd::AntennaParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_push_back" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorAntennaParameters_push_back" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_push_back" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< six::sicd::AntennaParameters >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_front" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters >::value_type *) &((std::vector< six::sicd::AntennaParameters > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__sicd__AntennaParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_back" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::sicd::AntennaParameters >::value_type *) &((std::vector< six::sicd::AntennaParameters > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__sicd__AntennaParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_assign" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters_assign" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorAntennaParameters_assign" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_assign" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< six::sicd::AntennaParameters >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type arg2 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_resize" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters_resize" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorAntennaParameters_resize" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_resize" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< six::sicd::AntennaParameters >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorAntennaParameters_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__sicd__AntennaParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorAntennaParameters_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::resize(std::vector< six::sicd::AntennaParameters >::size_type)\n"
+    "    std::vector< six::sicd::AntennaParameters >::resize(std::vector< six::sicd::AntennaParameters >::size_type,std::vector< six::sicd::AntennaParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator arg2 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorAntennaParameters_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_insert" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_insert" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_insert" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorAntennaParameters_insert" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_insert" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_six_sicd_AntennaParameters_Sg__insert__SWIG_0(arg1,arg2,(six::sicd::AntennaParameters const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::sicd::AntennaParameters >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::iterator arg2 ;
+  std::vector< six::sicd::AntennaParameters >::size_type arg3 ;
+  std::vector< six::sicd::AntennaParameters >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorAntennaParameters_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_insert" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_insert" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorAntennaParameters_insert" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorAntennaParameters_insert" "', argument " "3"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_six__sicd__AntennaParameters,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorAntennaParameters_insert" "', argument " "4"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorAntennaParameters_insert" "', argument " "4"" of type '" "std::vector< six::sicd::AntennaParameters >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< six::sicd::AntennaParameters >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_six_sicd_AntennaParameters_Sg__insert__SWIG_1(arg1,arg2,arg3,(six::sicd::AntennaParameters const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_insert(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__sicd__AntennaParameters, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorAntennaParameters_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::sicd::AntennaParameters >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_six__sicd__AntennaParameters, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorAntennaParameters_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorAntennaParameters_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::sicd::AntennaParameters >::insert(std::vector< six::sicd::AntennaParameters >::iterator,std::vector< six::sicd::AntennaParameters >::value_type const &)\n"
+    "    std::vector< six::sicd::AntennaParameters >::insert(std::vector< six::sicd::AntennaParameters >::iterator,std::vector< six::sicd::AntennaParameters >::size_type,std::vector< six::sicd::AntennaParameters >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorAntennaParameters_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_reserve" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorAntennaParameters_reserve" "', argument " "2"" of type '" "std::vector< six::sicd::AntennaParameters >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::sicd::AntennaParameters >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorAntennaParameters_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::sicd::AntennaParameters >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorAntennaParameters_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorAntennaParameters_capacity" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::sicd::AntennaParameters > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorAntennaParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::sicd::AntennaParameters > *arg1 = (std::vector< six::sicd::AntennaParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorAntennaParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorAntennaParameters" "', argument " "1"" of type '" "std::vector< six::sicd::AntennaParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::sicd::AntennaParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorAntennaParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -43227,8 +49893,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Channel", _wrap_delete_Channel, METH_VARARGS, (char *)"delete_Channel(Channel self)"},
 	 { (char *)"Channel___eq__", _wrap_Channel___eq__, METH_VARARGS, (char *)"Channel___eq__(Channel self, Channel other) -> bool"},
 	 { (char *)"Channel___ne__", _wrap_Channel___ne__, METH_VARARGS, (char *)"Channel___ne__(Channel self, Channel other) -> bool"},
-	 { (char *)"Channel_parameters_set", _wrap_Channel_parameters_set, METH_VARARGS, (char *)"Channel_parameters_set(Channel self, std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > * parameters)"},
-	 { (char *)"Channel_parameters_get", _wrap_Channel_parameters_get, METH_VARARGS, (char *)"Channel_parameters_get(Channel self) -> std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *"},
+	 { (char *)"Channel_parameters_set", _wrap_Channel_parameters_set, METH_VARARGS, (char *)"Channel_parameters_set(Channel self, VectorChannelParameters parameters)"},
+	 { (char *)"Channel_parameters_get", _wrap_Channel_parameters_get, METH_VARARGS, (char *)"Channel_parameters_get(Channel self) -> VectorChannelParameters"},
 	 { (char *)"Channel_swigregister", Channel_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SRP", _wrap_new_SRP, METH_VARARGS, (char *)"new_SRP() -> SRP"},
 	 { (char *)"SRP___eq__", _wrap_SRP___eq__, METH_VARARGS, (char *)"SRP___eq__(SRP self, SRP other) -> bool"},
@@ -43239,10 +49905,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SRP_numSRPs_get", _wrap_SRP_numSRPs_get, METH_VARARGS, (char *)"SRP_numSRPs_get(SRP self) -> size_t"},
 	 { (char *)"SRP_srpPT_set", _wrap_SRP_srpPT_set, METH_VARARGS, (char *)"SRP_srpPT_set(SRP self, VectorVector3 srpPT)"},
 	 { (char *)"SRP_srpPT_get", _wrap_SRP_srpPT_get, METH_VARARGS, (char *)"SRP_srpPT_get(SRP self) -> VectorVector3"},
-	 { (char *)"SRP_srpPVTPoly_set", _wrap_SRP_srpPVTPoly_set, METH_VARARGS, (char *)"SRP_srpPVTPoly_set(SRP self, std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > * srpPVTPoly)"},
-	 { (char *)"SRP_srpPVTPoly_get", _wrap_SRP_srpPVTPoly_get, METH_VARARGS, (char *)"SRP_srpPVTPoly_get(SRP self) -> std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > *"},
-	 { (char *)"SRP_srpPVVPoly_set", _wrap_SRP_srpPVVPoly_set, METH_VARARGS, (char *)"SRP_srpPVVPoly_set(SRP self, std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > * srpPVVPoly)"},
-	 { (char *)"SRP_srpPVVPoly_get", _wrap_SRP_srpPVVPoly_get, METH_VARARGS, (char *)"SRP_srpPVVPoly_get(SRP self) -> std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > *"},
+	 { (char *)"SRP_srpPVTPoly_set", _wrap_SRP_srpPVTPoly_set, METH_VARARGS, (char *)"SRP_srpPVTPoly_set(SRP self, VectorPolyXYZ srpPVTPoly)"},
+	 { (char *)"SRP_srpPVTPoly_get", _wrap_SRP_srpPVTPoly_get, METH_VARARGS, (char *)"SRP_srpPVTPoly_get(SRP self) -> VectorPolyXYZ"},
+	 { (char *)"SRP_srpPVVPoly_set", _wrap_SRP_srpPVVPoly_set, METH_VARARGS, (char *)"SRP_srpPVVPoly_set(SRP self, VectorPolyXYZ srpPVVPoly)"},
+	 { (char *)"SRP_srpPVVPoly_get", _wrap_SRP_srpPVVPoly_get, METH_VARARGS, (char *)"SRP_srpPVVPoly_get(SRP self) -> VectorPolyXYZ"},
 	 { (char *)"delete_SRP", _wrap_delete_SRP, METH_VARARGS, (char *)"delete_SRP(SRP self)"},
 	 { (char *)"SRP_swigregister", SRP_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_CphdAntenna", _wrap_new_CphdAntenna, METH_VARARGS, (char *)"new_CphdAntenna() -> CphdAntenna"},
@@ -43254,12 +49920,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CphdAntenna_numRcvAnt_get", _wrap_CphdAntenna_numRcvAnt_get, METH_VARARGS, (char *)"CphdAntenna_numRcvAnt_get(CphdAntenna self) -> size_t"},
 	 { (char *)"CphdAntenna_numTWAnt_set", _wrap_CphdAntenna_numTWAnt_set, METH_VARARGS, (char *)"CphdAntenna_numTWAnt_set(CphdAntenna self, size_t numTWAnt)"},
 	 { (char *)"CphdAntenna_numTWAnt_get", _wrap_CphdAntenna_numTWAnt_get, METH_VARARGS, (char *)"CphdAntenna_numTWAnt_get(CphdAntenna self) -> size_t"},
-	 { (char *)"CphdAntenna_tx_set", _wrap_CphdAntenna_tx_set, METH_VARARGS, (char *)"CphdAntenna_tx_set(CphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * tx)"},
-	 { (char *)"CphdAntenna_tx_get", _wrap_CphdAntenna_tx_get, METH_VARARGS, (char *)"CphdAntenna_tx_get(CphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
-	 { (char *)"CphdAntenna_rcv_set", _wrap_CphdAntenna_rcv_set, METH_VARARGS, (char *)"CphdAntenna_rcv_set(CphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * rcv)"},
-	 { (char *)"CphdAntenna_rcv_get", _wrap_CphdAntenna_rcv_get, METH_VARARGS, (char *)"CphdAntenna_rcv_get(CphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
-	 { (char *)"CphdAntenna_twoWay_set", _wrap_CphdAntenna_twoWay_set, METH_VARARGS, (char *)"CphdAntenna_twoWay_set(CphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * twoWay)"},
-	 { (char *)"CphdAntenna_twoWay_get", _wrap_CphdAntenna_twoWay_get, METH_VARARGS, (char *)"CphdAntenna_twoWay_get(CphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
+	 { (char *)"CphdAntenna_tx_set", _wrap_CphdAntenna_tx_set, METH_VARARGS, (char *)"CphdAntenna_tx_set(CphdAntenna self, VectorAntennaParameters tx)"},
+	 { (char *)"CphdAntenna_tx_get", _wrap_CphdAntenna_tx_get, METH_VARARGS, (char *)"CphdAntenna_tx_get(CphdAntenna self) -> VectorAntennaParameters"},
+	 { (char *)"CphdAntenna_rcv_set", _wrap_CphdAntenna_rcv_set, METH_VARARGS, (char *)"CphdAntenna_rcv_set(CphdAntenna self, VectorAntennaParameters rcv)"},
+	 { (char *)"CphdAntenna_rcv_get", _wrap_CphdAntenna_rcv_get, METH_VARARGS, (char *)"CphdAntenna_rcv_get(CphdAntenna self) -> VectorAntennaParameters"},
+	 { (char *)"CphdAntenna_twoWay_set", _wrap_CphdAntenna_twoWay_set, METH_VARARGS, (char *)"CphdAntenna_twoWay_set(CphdAntenna self, VectorAntennaParameters twoWay)"},
+	 { (char *)"CphdAntenna_twoWay_get", _wrap_CphdAntenna_twoWay_get, METH_VARARGS, (char *)"CphdAntenna_twoWay_get(CphdAntenna self) -> VectorAntennaParameters"},
 	 { (char *)"delete_CphdAntenna", _wrap_delete_CphdAntenna, METH_VARARGS, (char *)"delete_CphdAntenna(CphdAntenna self)"},
 	 { (char *)"CphdAntenna_swigregister", CphdAntenna_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FxParameters", _wrap_new_FxParameters, METH_VARARGS, (char *)"new_FxParameters() -> FxParameters"},
@@ -43614,6 +50280,128 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorVector3_capacity", _wrap_VectorVector3_capacity, METH_VARARGS, (char *)"VectorVector3_capacity(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
 	 { (char *)"delete_VectorVector3", _wrap_delete_VectorVector3, METH_VARARGS, (char *)"delete_VectorVector3(VectorVector3 self)"},
 	 { (char *)"VectorVector3_swigregister", VectorVector3_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorChannelParameters_iterator", _wrap_VectorChannelParameters_iterator, METH_VARARGS, (char *)"VectorChannelParameters_iterator(VectorChannelParameters self) -> SwigPyIterator"},
+	 { (char *)"VectorChannelParameters___nonzero__", _wrap_VectorChannelParameters___nonzero__, METH_VARARGS, (char *)"VectorChannelParameters___nonzero__(VectorChannelParameters self) -> bool"},
+	 { (char *)"VectorChannelParameters___bool__", _wrap_VectorChannelParameters___bool__, METH_VARARGS, (char *)"VectorChannelParameters___bool__(VectorChannelParameters self) -> bool"},
+	 { (char *)"VectorChannelParameters___len__", _wrap_VectorChannelParameters___len__, METH_VARARGS, (char *)"VectorChannelParameters___len__(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"},
+	 { (char *)"VectorChannelParameters_pop", _wrap_VectorChannelParameters_pop, METH_VARARGS, (char *)"VectorChannelParameters_pop(VectorChannelParameters self) -> ChannelParameters"},
+	 { (char *)"VectorChannelParameters___getslice__", _wrap_VectorChannelParameters___getslice__, METH_VARARGS, (char *)"VectorChannelParameters___getslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j) -> VectorChannelParameters"},
+	 { (char *)"VectorChannelParameters___setslice__", _wrap_VectorChannelParameters___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j, VectorChannelParameters v)\n"
+		"VectorChannelParameters___setslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)\n"
+		""},
+	 { (char *)"VectorChannelParameters___delslice__", _wrap_VectorChannelParameters___delslice__, METH_VARARGS, (char *)"VectorChannelParameters___delslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)"},
+	 { (char *)"VectorChannelParameters___delitem__", _wrap_VectorChannelParameters___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< cphd::ChannelParameters >::difference_type i)\n"
+		"VectorChannelParameters___delitem__(VectorChannelParameters self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorChannelParameters___getitem__", _wrap_VectorChannelParameters___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorChannelParameters\n"
+		"VectorChannelParameters___getitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i) -> ChannelParameters\n"
+		""},
+	 { (char *)"VectorChannelParameters___setitem__", _wrap_VectorChannelParameters___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorChannelParameters v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorChannelParameters___setitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, ChannelParameters x)\n"
+		""},
+	 { (char *)"VectorChannelParameters_append", _wrap_VectorChannelParameters_append, METH_VARARGS, (char *)"VectorChannelParameters_append(VectorChannelParameters self, ChannelParameters x)"},
+	 { (char *)"VectorChannelParameters_empty", _wrap_VectorChannelParameters_empty, METH_VARARGS, (char *)"VectorChannelParameters_empty(VectorChannelParameters self) -> bool"},
+	 { (char *)"VectorChannelParameters_size", _wrap_VectorChannelParameters_size, METH_VARARGS, (char *)"VectorChannelParameters_size(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"},
+	 { (char *)"VectorChannelParameters_clear", _wrap_VectorChannelParameters_clear, METH_VARARGS, (char *)"VectorChannelParameters_clear(VectorChannelParameters self)"},
+	 { (char *)"VectorChannelParameters_swap", _wrap_VectorChannelParameters_swap, METH_VARARGS, (char *)"VectorChannelParameters_swap(VectorChannelParameters self, VectorChannelParameters v)"},
+	 { (char *)"VectorChannelParameters_get_allocator", _wrap_VectorChannelParameters_get_allocator, METH_VARARGS, (char *)"VectorChannelParameters_get_allocator(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::allocator_type"},
+	 { (char *)"VectorChannelParameters_begin", _wrap_VectorChannelParameters_begin, METH_VARARGS, (char *)"VectorChannelParameters_begin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"},
+	 { (char *)"VectorChannelParameters_end", _wrap_VectorChannelParameters_end, METH_VARARGS, (char *)"VectorChannelParameters_end(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"},
+	 { (char *)"VectorChannelParameters_rbegin", _wrap_VectorChannelParameters_rbegin, METH_VARARGS, (char *)"VectorChannelParameters_rbegin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"},
+	 { (char *)"VectorChannelParameters_rend", _wrap_VectorChannelParameters_rend, METH_VARARGS, (char *)"VectorChannelParameters_rend(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"},
+	 { (char *)"VectorChannelParameters_pop_back", _wrap_VectorChannelParameters_pop_back, METH_VARARGS, (char *)"VectorChannelParameters_pop_back(VectorChannelParameters self)"},
+	 { (char *)"VectorChannelParameters_erase", _wrap_VectorChannelParameters_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< cphd::ChannelParameters >::iterator pos) -> std::vector< cphd::ChannelParameters >::iterator\n"
+		"VectorChannelParameters_erase(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator first, std::vector< cphd::ChannelParameters >::iterator last) -> std::vector< cphd::ChannelParameters >::iterator\n"
+		""},
+	 { (char *)"new_VectorChannelParameters", _wrap_new_VectorChannelParameters, METH_VARARGS, (char *)"\n"
+		"VectorChannelParameters()\n"
+		"VectorChannelParameters(VectorChannelParameters arg2)\n"
+		"VectorChannelParameters(std::vector< cphd::ChannelParameters >::size_type size)\n"
+		"new_VectorChannelParameters(std::vector< cphd::ChannelParameters >::size_type size, ChannelParameters value) -> VectorChannelParameters\n"
+		""},
+	 { (char *)"VectorChannelParameters_push_back", _wrap_VectorChannelParameters_push_back, METH_VARARGS, (char *)"VectorChannelParameters_push_back(VectorChannelParameters self, ChannelParameters x)"},
+	 { (char *)"VectorChannelParameters_front", _wrap_VectorChannelParameters_front, METH_VARARGS, (char *)"VectorChannelParameters_front(VectorChannelParameters self) -> ChannelParameters"},
+	 { (char *)"VectorChannelParameters_back", _wrap_VectorChannelParameters_back, METH_VARARGS, (char *)"VectorChannelParameters_back(VectorChannelParameters self) -> ChannelParameters"},
+	 { (char *)"VectorChannelParameters_assign", _wrap_VectorChannelParameters_assign, METH_VARARGS, (char *)"VectorChannelParameters_assign(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)"},
+	 { (char *)"VectorChannelParameters_resize", _wrap_VectorChannelParameters_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< cphd::ChannelParameters >::size_type new_size)\n"
+		"VectorChannelParameters_resize(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type new_size, ChannelParameters x)\n"
+		""},
+	 { (char *)"VectorChannelParameters_insert", _wrap_VectorChannelParameters_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< cphd::ChannelParameters >::iterator pos, ChannelParameters x) -> std::vector< cphd::ChannelParameters >::iterator\n"
+		"VectorChannelParameters_insert(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)\n"
+		""},
+	 { (char *)"VectorChannelParameters_reserve", _wrap_VectorChannelParameters_reserve, METH_VARARGS, (char *)"VectorChannelParameters_reserve(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n)"},
+	 { (char *)"VectorChannelParameters_capacity", _wrap_VectorChannelParameters_capacity, METH_VARARGS, (char *)"VectorChannelParameters_capacity(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"},
+	 { (char *)"delete_VectorChannelParameters", _wrap_delete_VectorChannelParameters, METH_VARARGS, (char *)"delete_VectorChannelParameters(VectorChannelParameters self)"},
+	 { (char *)"VectorChannelParameters_swigregister", VectorChannelParameters_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorAntennaParameters_iterator", _wrap_VectorAntennaParameters_iterator, METH_VARARGS, (char *)"VectorAntennaParameters_iterator(VectorAntennaParameters self) -> SwigPyIterator"},
+	 { (char *)"VectorAntennaParameters___nonzero__", _wrap_VectorAntennaParameters___nonzero__, METH_VARARGS, (char *)"VectorAntennaParameters___nonzero__(VectorAntennaParameters self) -> bool"},
+	 { (char *)"VectorAntennaParameters___bool__", _wrap_VectorAntennaParameters___bool__, METH_VARARGS, (char *)"VectorAntennaParameters___bool__(VectorAntennaParameters self) -> bool"},
+	 { (char *)"VectorAntennaParameters___len__", _wrap_VectorAntennaParameters___len__, METH_VARARGS, (char *)"VectorAntennaParameters___len__(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"},
+	 { (char *)"VectorAntennaParameters_pop", _wrap_VectorAntennaParameters_pop, METH_VARARGS, (char *)"VectorAntennaParameters_pop(VectorAntennaParameters self) -> AntennaParameters"},
+	 { (char *)"VectorAntennaParameters___getslice__", _wrap_VectorAntennaParameters___getslice__, METH_VARARGS, (char *)"VectorAntennaParameters___getslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j) -> VectorAntennaParameters"},
+	 { (char *)"VectorAntennaParameters___setslice__", _wrap_VectorAntennaParameters___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j, VectorAntennaParameters v)\n"
+		"VectorAntennaParameters___setslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)\n"
+		""},
+	 { (char *)"VectorAntennaParameters___delslice__", _wrap_VectorAntennaParameters___delslice__, METH_VARARGS, (char *)"VectorAntennaParameters___delslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)"},
+	 { (char *)"VectorAntennaParameters___delitem__", _wrap_VectorAntennaParameters___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< six::sicd::AntennaParameters >::difference_type i)\n"
+		"VectorAntennaParameters___delitem__(VectorAntennaParameters self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorAntennaParameters___getitem__", _wrap_VectorAntennaParameters___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorAntennaParameters\n"
+		"VectorAntennaParameters___getitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i) -> AntennaParameters\n"
+		""},
+	 { (char *)"VectorAntennaParameters___setitem__", _wrap_VectorAntennaParameters___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorAntennaParameters v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorAntennaParameters___setitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, AntennaParameters x)\n"
+		""},
+	 { (char *)"VectorAntennaParameters_append", _wrap_VectorAntennaParameters_append, METH_VARARGS, (char *)"VectorAntennaParameters_append(VectorAntennaParameters self, AntennaParameters x)"},
+	 { (char *)"VectorAntennaParameters_empty", _wrap_VectorAntennaParameters_empty, METH_VARARGS, (char *)"VectorAntennaParameters_empty(VectorAntennaParameters self) -> bool"},
+	 { (char *)"VectorAntennaParameters_size", _wrap_VectorAntennaParameters_size, METH_VARARGS, (char *)"VectorAntennaParameters_size(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"},
+	 { (char *)"VectorAntennaParameters_clear", _wrap_VectorAntennaParameters_clear, METH_VARARGS, (char *)"VectorAntennaParameters_clear(VectorAntennaParameters self)"},
+	 { (char *)"VectorAntennaParameters_swap", _wrap_VectorAntennaParameters_swap, METH_VARARGS, (char *)"VectorAntennaParameters_swap(VectorAntennaParameters self, VectorAntennaParameters v)"},
+	 { (char *)"VectorAntennaParameters_get_allocator", _wrap_VectorAntennaParameters_get_allocator, METH_VARARGS, (char *)"VectorAntennaParameters_get_allocator(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::allocator_type"},
+	 { (char *)"VectorAntennaParameters_begin", _wrap_VectorAntennaParameters_begin, METH_VARARGS, (char *)"VectorAntennaParameters_begin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"},
+	 { (char *)"VectorAntennaParameters_end", _wrap_VectorAntennaParameters_end, METH_VARARGS, (char *)"VectorAntennaParameters_end(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"},
+	 { (char *)"VectorAntennaParameters_rbegin", _wrap_VectorAntennaParameters_rbegin, METH_VARARGS, (char *)"VectorAntennaParameters_rbegin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"},
+	 { (char *)"VectorAntennaParameters_rend", _wrap_VectorAntennaParameters_rend, METH_VARARGS, (char *)"VectorAntennaParameters_rend(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"},
+	 { (char *)"VectorAntennaParameters_pop_back", _wrap_VectorAntennaParameters_pop_back, METH_VARARGS, (char *)"VectorAntennaParameters_pop_back(VectorAntennaParameters self)"},
+	 { (char *)"VectorAntennaParameters_erase", _wrap_VectorAntennaParameters_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< six::sicd::AntennaParameters >::iterator pos) -> std::vector< six::sicd::AntennaParameters >::iterator\n"
+		"VectorAntennaParameters_erase(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator first, std::vector< six::sicd::AntennaParameters >::iterator last) -> std::vector< six::sicd::AntennaParameters >::iterator\n"
+		""},
+	 { (char *)"new_VectorAntennaParameters", _wrap_new_VectorAntennaParameters, METH_VARARGS, (char *)"\n"
+		"VectorAntennaParameters()\n"
+		"VectorAntennaParameters(VectorAntennaParameters arg2)\n"
+		"VectorAntennaParameters(std::vector< six::sicd::AntennaParameters >::size_type size)\n"
+		"new_VectorAntennaParameters(std::vector< six::sicd::AntennaParameters >::size_type size, AntennaParameters value) -> VectorAntennaParameters\n"
+		""},
+	 { (char *)"VectorAntennaParameters_push_back", _wrap_VectorAntennaParameters_push_back, METH_VARARGS, (char *)"VectorAntennaParameters_push_back(VectorAntennaParameters self, AntennaParameters x)"},
+	 { (char *)"VectorAntennaParameters_front", _wrap_VectorAntennaParameters_front, METH_VARARGS, (char *)"VectorAntennaParameters_front(VectorAntennaParameters self) -> AntennaParameters"},
+	 { (char *)"VectorAntennaParameters_back", _wrap_VectorAntennaParameters_back, METH_VARARGS, (char *)"VectorAntennaParameters_back(VectorAntennaParameters self) -> AntennaParameters"},
+	 { (char *)"VectorAntennaParameters_assign", _wrap_VectorAntennaParameters_assign, METH_VARARGS, (char *)"VectorAntennaParameters_assign(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)"},
+	 { (char *)"VectorAntennaParameters_resize", _wrap_VectorAntennaParameters_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< six::sicd::AntennaParameters >::size_type new_size)\n"
+		"VectorAntennaParameters_resize(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type new_size, AntennaParameters x)\n"
+		""},
+	 { (char *)"VectorAntennaParameters_insert", _wrap_VectorAntennaParameters_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< six::sicd::AntennaParameters >::iterator pos, AntennaParameters x) -> std::vector< six::sicd::AntennaParameters >::iterator\n"
+		"VectorAntennaParameters_insert(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)\n"
+		""},
+	 { (char *)"VectorAntennaParameters_reserve", _wrap_VectorAntennaParameters_reserve, METH_VARARGS, (char *)"VectorAntennaParameters_reserve(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n)"},
+	 { (char *)"VectorAntennaParameters_capacity", _wrap_VectorAntennaParameters_capacity, METH_VARARGS, (char *)"VectorAntennaParameters_capacity(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"},
+	 { (char *)"delete_VectorAntennaParameters", _wrap_delete_VectorAntennaParameters, METH_VARARGS, (char *)"delete_VectorAntennaParameters(VectorAntennaParameters self)"},
+	 { (char *)"VectorAntennaParameters_swigregister", VectorAntennaParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ScopedCopyableDwellTimeParameters", _wrap_new_ScopedCopyableDwellTimeParameters, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableDwellTimeParameters(DwellTimeParameters ptr=None)\n"
 		"ScopedCopyableDwellTimeParameters()\n"
@@ -43706,12 +50494,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableCphdAntenna_numRcvAnt_get", _wrap_ScopedCopyableCphdAntenna_numRcvAnt_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_numRcvAnt_get(ScopedCopyableCphdAntenna self) -> size_t"},
 	 { (char *)"ScopedCopyableCphdAntenna_numTWAnt_set", _wrap_ScopedCopyableCphdAntenna_numTWAnt_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_numTWAnt_set(ScopedCopyableCphdAntenna self, size_t numTWAnt)"},
 	 { (char *)"ScopedCopyableCphdAntenna_numTWAnt_get", _wrap_ScopedCopyableCphdAntenna_numTWAnt_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_numTWAnt_get(ScopedCopyableCphdAntenna self) -> size_t"},
-	 { (char *)"ScopedCopyableCphdAntenna_tx_set", _wrap_ScopedCopyableCphdAntenna_tx_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_tx_set(ScopedCopyableCphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * tx)"},
-	 { (char *)"ScopedCopyableCphdAntenna_tx_get", _wrap_ScopedCopyableCphdAntenna_tx_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_tx_get(ScopedCopyableCphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
-	 { (char *)"ScopedCopyableCphdAntenna_rcv_set", _wrap_ScopedCopyableCphdAntenna_rcv_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_rcv_set(ScopedCopyableCphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * rcv)"},
-	 { (char *)"ScopedCopyableCphdAntenna_rcv_get", _wrap_ScopedCopyableCphdAntenna_rcv_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_rcv_get(ScopedCopyableCphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
-	 { (char *)"ScopedCopyableCphdAntenna_twoWay_set", _wrap_ScopedCopyableCphdAntenna_twoWay_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_twoWay_set(ScopedCopyableCphdAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * twoWay)"},
-	 { (char *)"ScopedCopyableCphdAntenna_twoWay_get", _wrap_ScopedCopyableCphdAntenna_twoWay_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_twoWay_get(ScopedCopyableCphdAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
+	 { (char *)"ScopedCopyableCphdAntenna_tx_set", _wrap_ScopedCopyableCphdAntenna_tx_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_tx_set(ScopedCopyableCphdAntenna self, VectorAntennaParameters tx)"},
+	 { (char *)"ScopedCopyableCphdAntenna_tx_get", _wrap_ScopedCopyableCphdAntenna_tx_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_tx_get(ScopedCopyableCphdAntenna self) -> VectorAntennaParameters"},
+	 { (char *)"ScopedCopyableCphdAntenna_rcv_set", _wrap_ScopedCopyableCphdAntenna_rcv_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_rcv_set(ScopedCopyableCphdAntenna self, VectorAntennaParameters rcv)"},
+	 { (char *)"ScopedCopyableCphdAntenna_rcv_get", _wrap_ScopedCopyableCphdAntenna_rcv_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_rcv_get(ScopedCopyableCphdAntenna self) -> VectorAntennaParameters"},
+	 { (char *)"ScopedCopyableCphdAntenna_twoWay_set", _wrap_ScopedCopyableCphdAntenna_twoWay_set, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_twoWay_set(ScopedCopyableCphdAntenna self, VectorAntennaParameters twoWay)"},
+	 { (char *)"ScopedCopyableCphdAntenna_twoWay_get", _wrap_ScopedCopyableCphdAntenna_twoWay_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_twoWay_get(ScopedCopyableCphdAntenna self) -> VectorAntennaParameters"},
 	 { (char *)"ScopedCopyableCphdAntenna_swigregister", ScopedCopyableCphdAntenna_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableCphdAntenna", _wrap_makeScopedCopyableCphdAntenna, METH_VARARGS, (char *)"makeScopedCopyableCphdAntenna() -> ScopedCopyableCphdAntenna"},
 	 { NULL, NULL, 0, NULL }
@@ -43734,13 +50522,12 @@ static swig_type_info _swigt__p_ParameterMap = {"_p_ParameterMap", "ParameterMap
 static swig_type_info _swigt__p_T = {"_p_T", "T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_const_reference = {"_p_const_reference", "const_reference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Antenna = {"_p_cphd__Antenna", "cphd::Antenna *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__AreaPlane = {"_p_cphd__AreaPlane", "cphd::AreaPlane *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__ArraySize = {"_p_cphd__ArraySize", "std::vector< cphd::ArraySize >::value_type *|cphd::ArraySize *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__CPHDReader = {"_p_cphd__CPHDReader", "cphd::CPHDReader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Channel = {"_p_cphd__Channel", "cphd::Channel *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_cphd__ChannelParameters = {"_p_cphd__ChannelParameters", "cphd::ChannelParameters *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__ChannelParameters = {"_p_cphd__ChannelParameters", "std::vector< cphd::ChannelParameters >::value_type *|cphd::ChannelParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Data = {"_p_cphd__Data", "cphd::Data *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__DomainType = {"_p_cphd__DomainType", "cphd::DomainType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__DwellTimeParameters = {"_p_cphd__DwellTimeParameters", "cphd::DwellTimeParameters *", 0, 0, (void*)0, 0};
@@ -43787,7 +50574,6 @@ static swig_type_info _swigt__p_nitf__DateTime = {"_p_nitf__DateTime", "nitf::Da
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_reference = {"_p_reference", "reference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AngleMagnitude = {"_p_scene__AngleMagnitude", "scene::AngleMagnitude *|six::AngleMagnitude *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__FrameType = {"_p_scene__FrameType", "scene::FrameType *|six::FrameType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__LatLon = {"_p_scene__LatLon", "scene::LatLon *|six::LatLon *|cphd::LatLon *", 0, 0, (void*)0, 0};
@@ -43801,7 +50587,7 @@ static swig_type_info _swigt__p_six__DataType = {"_p_six__DataType", "six::DataT
 static swig_type_info _swigt__p_six__FFTSign = {"_p_six__FFTSign", "six::FFTSign *|cphd::FFTSign *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__RadarModeType = {"_p_six__RadarModeType", "six::RadarModeType *|cphd::RadarModeType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ReferencePoint = {"_p_six__ReferencePoint", "six::ReferencePoint *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_six__sicd__AntennaParameters = {"_p_six__sicd__AntennaParameters", "six::sicd::AntennaParameters *|cphd::AntennaParameters *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__sicd__AntennaParameters = {"_p_six__sicd__AntennaParameters", "std::vector< six::sicd::AntennaParameters >::value_type *|six::sicd::AntennaParameters *|cphd::AntennaParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__AreaDirectionParameters = {"_p_six__sicd__AreaDirectionParameters", "six::sicd::AreaDirectionParameters *|cphd::AreaDirectionParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__CollectionInformation = {"_p_six__sicd__CollectionInformation", "six::sicd::CollectionInformation *|cphd::CollectionInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd__ElectricalBoresight", "six::sicd::ElectricalBoresight *|cphd::ElectricalBoresight *", 0, 0, (void*)0, 0};
@@ -43811,14 +50597,16 @@ static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *",
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_cphd__ArraySize_t = {"_p_std__allocatorT_cphd__ArraySize_t", "std::vector< cphd::ArraySize >::allocator_type *|std::allocator< cphd::ArraySize > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_cphd__ChannelParameters_t = {"_p_std__allocatorT_cphd__ChannelParameters_t", "std::vector< cphd::ChannelParameters >::allocator_type *|std::allocator< cphd::ChannelParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t = {"_p_std__allocatorT_math__linear__VectorNT_3_double_t_t", "std::vector< math::linear::VectorN< 3,double > >::allocator_type *|std::allocator< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_six__sicd__AntennaParameters_t = {"_p_std__allocatorT_six__sicd__AntennaParameters_t", "std::allocator< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t = {"_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t", "std::vector< cphd::ArraySize > *|std::vector< cphd::ArraySize,std::allocator< cphd::ArraySize > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t = {"_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t", "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double > > *|std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *|std::vector< cphd::Vector3,std::allocator< cphd::Vector3 > > *|std::vector< six::Vector3 > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t = {"_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t", "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *|std::vector< cphd::ChannelParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double > > *|std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *|std::vector< cphd::Vector3,std::allocator< cphd::Vector3 > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t = {"_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t", "std::vector< math::poly::OneD< Vector3 >,std::allocator< math::poly::OneD< Vector3 > > > *|std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > *|std::vector< math::poly::OneD< math::linear::VectorN< 3,double > >,std::allocator< math::poly::OneD< math::linear::VectorN< 3,double > > > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t = {"_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t", "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *|std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t = {"_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t", "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *|std::vector< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t = {"_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t", "std::vector< unsigned char,std::allocator< unsigned char > > *|std::vector< sys::ubyte,std::allocator< sys::ubyte > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t = {"_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t", "std::vector< void const *,std::allocator< void const * > > *", 0, 0, (void*)0, 0};
@@ -43844,7 +50632,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_T,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
-  &_swigt__p_const_reference,
   &_swigt__p_cphd__Antenna,
   &_swigt__p_cphd__AreaPlane,
   &_swigt__p_cphd__ArraySize,
@@ -43897,7 +50684,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
   &_swigt__p_pid_t,
-  &_swigt__p_reference,
   &_swigt__p_scene__AngleMagnitude,
   &_swigt__p_scene__FrameType,
   &_swigt__p_scene__LatLon,
@@ -43921,7 +50707,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
   &_swigt__p_std__allocatorT_cphd__ArraySize_t,
+  &_swigt__p_std__allocatorT_cphd__ChannelParameters_t,
   &_swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t,
+  &_swigt__p_std__allocatorT_six__sicd__AntennaParameters_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__ostream,
   &_swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t,
@@ -43954,7 +50742,6 @@ static swig_cast_info _swigc__p_ParameterMap[] = {  {&_swigt__p_ParameterMap, 0,
 static swig_cast_info _swigc__p_T[] = {  {&_swigt__p_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_const_reference[] = {  {&_swigt__p_const_reference, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__Antenna[] = {  {&_swigt__p_cphd__Antenna, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__AreaPlane[] = {  {&_swigt__p_cphd__AreaPlane, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__ArraySize[] = {  {&_swigt__p_cphd__ArraySize, 0, 0, 0},{0, 0, 0, 0}};
@@ -44007,7 +50794,6 @@ static swig_cast_info _swigc__p_nitf__DateTime[] = {  {&_swigt__p_nitf__DateTime
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_reference[] = {  {&_swigt__p_reference, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__AngleMagnitude[] = {  {&_swigt__p_scene__AngleMagnitude, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__FrameType[] = {  {&_swigt__p_scene__FrameType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__LatLon[] = {  {&_swigt__p_scene__LatLon, 0, 0, 0},  {&_swigt__p_scene__LatLonAlt, _p_scene__LatLonAltTo_p_scene__LatLon, 0, 0},{0, 0, 0, 0}};
@@ -44031,7 +50817,9 @@ static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_cphd__ArraySize_t[] = {  {&_swigt__p_std__allocatorT_cphd__ArraySize_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_cphd__ChannelParameters_t[] = {  {&_swigt__p_std__allocatorT_cphd__ChannelParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_six__sicd__AntennaParameters_t[] = {  {&_swigt__p_std__allocatorT_six__sicd__AntennaParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t[] = {  {&_swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -44064,7 +50852,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_T,
   _swigc__p_allocator_type,
   _swigc__p_char,
-  _swigc__p_const_reference,
   _swigc__p_cphd__Antenna,
   _swigc__p_cphd__AreaPlane,
   _swigc__p_cphd__ArraySize,
@@ -44117,7 +50904,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_off_t,
   _swigc__p_p_PyObject,
   _swigc__p_pid_t,
-  _swigc__p_reference,
   _swigc__p_scene__AngleMagnitude,
   _swigc__p_scene__FrameType,
   _swigc__p_scene__LatLon,
@@ -44141,7 +50927,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_type,
   _swigc__p_ssize_t,
   _swigc__p_std__allocatorT_cphd__ArraySize_t,
+  _swigc__p_std__allocatorT_cphd__ChannelParameters_t,
   _swigc__p_std__allocatorT_math__linear__VectorNT_3_double_t_t,
+  _swigc__p_std__allocatorT_six__sicd__AntennaParameters_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__ostream,
   _swigc__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t,

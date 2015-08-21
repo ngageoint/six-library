@@ -37,6 +37,8 @@
 
 %{
 #include "import/cphd.h"
+#include "import/six.h"
+using six::Vector3;
 %}
 
 
@@ -167,8 +169,10 @@ Wideband.read = read
 %}
 
 %template(VectorArraySize) std::vector<cphd::ArraySize>;
-%template(VectorVector3) std::vector<six::Vector3>;
-%template(VectorPolyXYZ) std::vector<six::PolyXYZ>;
+%template(VectorVector3) std::vector<math::linear::VectorN<3,double> >;
+%template(VectorChannelParameters) std::vector<cphd::ChannelParameters>;
+%template(VectorAntennaParameters) std::vector<six::sicd::AntennaParameters>;
+
 
 SCOPED_COPYABLE(cphd,DwellTimeParameters);
 SCOPED_COPYABLE(cphd,AreaPlane);

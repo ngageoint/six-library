@@ -2149,7 +2149,7 @@ VectorArraySize_swigregister = _cphd.VectorArraySize_swigregister
 VectorArraySize_swigregister(VectorArraySize)
 
 class VectorVector3(_object):
-    """Proxy of C++ std::vector<(six::Vector3)> class"""
+    """Proxy of C++ std::vector<(math::linear::VectorN<(3,double)>)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, VectorVector3, name, value)
     __swig_getmethods__ = {}
@@ -2291,10 +2291,10 @@ class VectorVector3(_object):
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(six::Vector3)> self) -> VectorVector3
-        __init__(std::vector<(six::Vector3)> self, VectorVector3 arg2) -> VectorVector3
-        __init__(std::vector<(six::Vector3)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size) -> VectorVector3
-        __init__(std::vector<(six::Vector3)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> VectorVector3
+        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self) -> VectorVector3
+        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, VectorVector3 arg2) -> VectorVector3
+        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size) -> VectorVector3
+        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> VectorVector3
         """
         this = _cphd.new_VectorVector3(*args)
         try:
@@ -2351,6 +2351,414 @@ class VectorVector3(_object):
     __del__ = lambda self: None
 VectorVector3_swigregister = _cphd.VectorVector3_swigregister
 VectorVector3_swigregister(VectorVector3)
+
+class VectorChannelParameters(_object):
+    """Proxy of C++ std::vector<(cphd::ChannelParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorChannelParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorChannelParameters, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorChannelParameters self) -> SwigPyIterator"""
+        return _cphd.VectorChannelParameters_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorChannelParameters self) -> bool"""
+        return _cphd.VectorChannelParameters___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorChannelParameters self) -> bool"""
+        return _cphd.VectorChannelParameters___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
+        return _cphd.VectorChannelParameters___len__(self)
+
+
+    def pop(self):
+        """pop(VectorChannelParameters self) -> ChannelParameters"""
+        return _cphd.VectorChannelParameters_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j) -> VectorChannelParameters"""
+        return _cphd.VectorChannelParameters___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j, VectorChannelParameters v)
+        __setslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)
+        """
+        return _cphd.VectorChannelParameters___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)"""
+        return _cphd.VectorChannelParameters___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i)
+        __delitem__(VectorChannelParameters self, PySliceObject * slice)
+        """
+        return _cphd.VectorChannelParameters___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorChannelParameters self, PySliceObject * slice) -> VectorChannelParameters
+        __getitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i) -> ChannelParameters
+        """
+        return _cphd.VectorChannelParameters___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorChannelParameters self, PySliceObject * slice, VectorChannelParameters v)
+        __setitem__(VectorChannelParameters self, PySliceObject * slice)
+        __setitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, ChannelParameters x)
+        """
+        return _cphd.VectorChannelParameters___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorChannelParameters self, ChannelParameters x)"""
+        return _cphd.VectorChannelParameters_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorChannelParameters self) -> bool"""
+        return _cphd.VectorChannelParameters_empty(self)
+
+
+    def size(self):
+        """size(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
+        return _cphd.VectorChannelParameters_size(self)
+
+
+    def clear(self):
+        """clear(VectorChannelParameters self)"""
+        return _cphd.VectorChannelParameters_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorChannelParameters self, VectorChannelParameters v)"""
+        return _cphd.VectorChannelParameters_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::allocator_type"""
+        return _cphd.VectorChannelParameters_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"""
+        return _cphd.VectorChannelParameters_begin(self)
+
+
+    def end(self):
+        """end(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"""
+        return _cphd.VectorChannelParameters_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"""
+        return _cphd.VectorChannelParameters_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"""
+        return _cphd.VectorChannelParameters_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorChannelParameters self)"""
+        return _cphd.VectorChannelParameters_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos) -> std::vector< cphd::ChannelParameters >::iterator
+        erase(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator first, std::vector< cphd::ChannelParameters >::iterator last) -> std::vector< cphd::ChannelParameters >::iterator
+        """
+        return _cphd.VectorChannelParameters_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(cphd::ChannelParameters)> self) -> VectorChannelParameters
+        __init__(std::vector<(cphd::ChannelParameters)> self, VectorChannelParameters arg2) -> VectorChannelParameters
+        __init__(std::vector<(cphd::ChannelParameters)> self, std::vector< cphd::ChannelParameters >::size_type size) -> VectorChannelParameters
+        __init__(std::vector<(cphd::ChannelParameters)> self, std::vector< cphd::ChannelParameters >::size_type size, ChannelParameters value) -> VectorChannelParameters
+        """
+        this = _cphd.new_VectorChannelParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorChannelParameters self, ChannelParameters x)"""
+        return _cphd.VectorChannelParameters_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorChannelParameters self) -> ChannelParameters"""
+        return _cphd.VectorChannelParameters_front(self)
+
+
+    def back(self):
+        """back(VectorChannelParameters self) -> ChannelParameters"""
+        return _cphd.VectorChannelParameters_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)"""
+        return _cphd.VectorChannelParameters_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type new_size)
+        resize(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type new_size, ChannelParameters x)
+        """
+        return _cphd.VectorChannelParameters_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos, ChannelParameters x) -> std::vector< cphd::ChannelParameters >::iterator
+        insert(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)
+        """
+        return _cphd.VectorChannelParameters_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n)"""
+        return _cphd.VectorChannelParameters_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
+        return _cphd.VectorChannelParameters_capacity(self)
+
+    __swig_destroy__ = _cphd.delete_VectorChannelParameters
+    __del__ = lambda self: None
+VectorChannelParameters_swigregister = _cphd.VectorChannelParameters_swigregister
+VectorChannelParameters_swigregister(VectorChannelParameters)
+
+class VectorAntennaParameters(_object):
+    """Proxy of C++ std::vector<(six::sicd::AntennaParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorAntennaParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorAntennaParameters, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorAntennaParameters self) -> SwigPyIterator"""
+        return _cphd.VectorAntennaParameters_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorAntennaParameters self) -> bool"""
+        return _cphd.VectorAntennaParameters___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorAntennaParameters self) -> bool"""
+        return _cphd.VectorAntennaParameters___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
+        return _cphd.VectorAntennaParameters___len__(self)
+
+
+    def pop(self):
+        """pop(VectorAntennaParameters self) -> AntennaParameters"""
+        return _cphd.VectorAntennaParameters_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j) -> VectorAntennaParameters"""
+        return _cphd.VectorAntennaParameters___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j, VectorAntennaParameters v)
+        __setslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)
+        """
+        return _cphd.VectorAntennaParameters___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)"""
+        return _cphd.VectorAntennaParameters___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i)
+        __delitem__(VectorAntennaParameters self, PySliceObject * slice)
+        """
+        return _cphd.VectorAntennaParameters___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorAntennaParameters self, PySliceObject * slice) -> VectorAntennaParameters
+        __getitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i) -> AntennaParameters
+        """
+        return _cphd.VectorAntennaParameters___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorAntennaParameters self, PySliceObject * slice, VectorAntennaParameters v)
+        __setitem__(VectorAntennaParameters self, PySliceObject * slice)
+        __setitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, AntennaParameters x)
+        """
+        return _cphd.VectorAntennaParameters___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorAntennaParameters self, AntennaParameters x)"""
+        return _cphd.VectorAntennaParameters_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorAntennaParameters self) -> bool"""
+        return _cphd.VectorAntennaParameters_empty(self)
+
+
+    def size(self):
+        """size(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
+        return _cphd.VectorAntennaParameters_size(self)
+
+
+    def clear(self):
+        """clear(VectorAntennaParameters self)"""
+        return _cphd.VectorAntennaParameters_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorAntennaParameters self, VectorAntennaParameters v)"""
+        return _cphd.VectorAntennaParameters_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::allocator_type"""
+        return _cphd.VectorAntennaParameters_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"""
+        return _cphd.VectorAntennaParameters_begin(self)
+
+
+    def end(self):
+        """end(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"""
+        return _cphd.VectorAntennaParameters_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"""
+        return _cphd.VectorAntennaParameters_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"""
+        return _cphd.VectorAntennaParameters_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorAntennaParameters self)"""
+        return _cphd.VectorAntennaParameters_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos) -> std::vector< six::sicd::AntennaParameters >::iterator
+        erase(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator first, std::vector< six::sicd::AntennaParameters >::iterator last) -> std::vector< six::sicd::AntennaParameters >::iterator
+        """
+        return _cphd.VectorAntennaParameters_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::sicd::AntennaParameters)> self) -> VectorAntennaParameters
+        __init__(std::vector<(six::sicd::AntennaParameters)> self, VectorAntennaParameters arg2) -> VectorAntennaParameters
+        __init__(std::vector<(six::sicd::AntennaParameters)> self, std::vector< six::sicd::AntennaParameters >::size_type size) -> VectorAntennaParameters
+        __init__(std::vector<(six::sicd::AntennaParameters)> self, std::vector< six::sicd::AntennaParameters >::size_type size, AntennaParameters value) -> VectorAntennaParameters
+        """
+        this = _cphd.new_VectorAntennaParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorAntennaParameters self, AntennaParameters x)"""
+        return _cphd.VectorAntennaParameters_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorAntennaParameters self) -> AntennaParameters"""
+        return _cphd.VectorAntennaParameters_front(self)
+
+
+    def back(self):
+        """back(VectorAntennaParameters self) -> AntennaParameters"""
+        return _cphd.VectorAntennaParameters_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)"""
+        return _cphd.VectorAntennaParameters_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type new_size)
+        resize(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type new_size, AntennaParameters x)
+        """
+        return _cphd.VectorAntennaParameters_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos, AntennaParameters x) -> std::vector< six::sicd::AntennaParameters >::iterator
+        insert(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)
+        """
+        return _cphd.VectorAntennaParameters_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n)"""
+        return _cphd.VectorAntennaParameters_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
+        return _cphd.VectorAntennaParameters_capacity(self)
+
+    __swig_destroy__ = _cphd.delete_VectorAntennaParameters
+    __del__ = lambda self: None
+VectorAntennaParameters_swigregister = _cphd.VectorAntennaParameters_swigregister
+VectorAntennaParameters_swigregister(VectorAntennaParameters)
 
 class ScopedCopyableDwellTimeParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> class"""
