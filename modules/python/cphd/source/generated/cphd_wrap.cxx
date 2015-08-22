@@ -2949,103 +2949,105 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_cphd__AreaPlane swig_types[9]
 #define SWIGTYPE_p_cphd__ArraySize swig_types[10]
 #define SWIGTYPE_p_cphd__CPHDReader swig_types[11]
-#define SWIGTYPE_p_cphd__Channel swig_types[12]
-#define SWIGTYPE_p_cphd__ChannelParameters swig_types[13]
-#define SWIGTYPE_p_cphd__Data swig_types[14]
-#define SWIGTYPE_p_cphd__DomainType swig_types[15]
-#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[16]
-#define SWIGTYPE_p_cphd__FileHeader swig_types[17]
-#define SWIGTYPE_p_cphd__FxParameters swig_types[18]
-#define SWIGTYPE_p_cphd__Global swig_types[19]
-#define SWIGTYPE_p_cphd__ImageArea swig_types[20]
-#define SWIGTYPE_p_cphd__Metadata swig_types[21]
-#define SWIGTYPE_p_cphd__PhaseSGN swig_types[22]
-#define SWIGTYPE_p_cphd__SRP swig_types[23]
-#define SWIGTYPE_p_cphd__SRPType swig_types[24]
-#define SWIGTYPE_p_cphd__SampleType swig_types[25]
-#define SWIGTYPE_p_cphd__TOAParameters swig_types[26]
-#define SWIGTYPE_p_cphd__VBM swig_types[27]
-#define SWIGTYPE_p_cphd__VectorParameters swig_types[28]
-#define SWIGTYPE_p_cphd__Wideband swig_types[29]
-#define SWIGTYPE_p_difference_type swig_types[30]
-#define SWIGTYPE_p_except__Context swig_types[31]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[32]
-#define SWIGTYPE_p_int swig_types[33]
-#define SWIGTYPE_p_int16_t swig_types[34]
-#define SWIGTYPE_p_int32_t swig_types[35]
-#define SWIGTYPE_p_int64_t swig_types[36]
-#define SWIGTYPE_p_int8_t swig_types[37]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[38]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[39]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[40]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[41]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[42]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[43]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[44]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[45]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[46]
-#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[47]
-#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[48]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[49]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[50]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[51]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[52]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[53]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[54]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[55]
-#define SWIGTYPE_p_nitf__DateTime swig_types[56]
-#define SWIGTYPE_p_off_t swig_types[57]
-#define SWIGTYPE_p_p_PyObject swig_types[58]
-#define SWIGTYPE_p_pid_t swig_types[59]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[60]
-#define SWIGTYPE_p_scene__FrameType swig_types[61]
-#define SWIGTYPE_p_scene__LatLon swig_types[62]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[63]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[64]
-#define SWIGTYPE_p_six__BooleanType swig_types[65]
-#define SWIGTYPE_p_six__CollectType swig_types[66]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[67]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[68]
-#define SWIGTYPE_p_six__DataType swig_types[69]
-#define SWIGTYPE_p_six__FFTSign swig_types[70]
-#define SWIGTYPE_p_six__RadarModeType swig_types[71]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[72]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[73]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[74]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[75]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[76]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[77]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[78]
-#define SWIGTYPE_p_size_t swig_types[79]
-#define SWIGTYPE_p_size_type swig_types[80]
-#define SWIGTYPE_p_ssize_t swig_types[81]
-#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[82]
-#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[83]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[84]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[85]
-#define SWIGTYPE_p_std__invalid_argument swig_types[86]
-#define SWIGTYPE_p_std__ostream swig_types[87]
-#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[88]
-#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[89]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[90]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[91]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[92]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[93]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[94]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[95]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[96]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[97]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[98]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[99]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[100]
-#define SWIGTYPE_p_uint16_t swig_types[101]
-#define SWIGTYPE_p_uint32_t swig_types[102]
-#define SWIGTYPE_p_uint64_t swig_types[103]
-#define SWIGTYPE_p_uint8_t swig_types[104]
-#define SWIGTYPE_p_unsigned_char swig_types[105]
-#define SWIGTYPE_p_value_type swig_types[106]
-static swig_type_info *swig_types[108];
-static swig_module_info swig_module = {swig_types, 107, 0, 0, 0, 0};
+#define SWIGTYPE_p_cphd__CPHDXMLControl swig_types[12]
+#define SWIGTYPE_p_cphd__Channel swig_types[13]
+#define SWIGTYPE_p_cphd__ChannelParameters swig_types[14]
+#define SWIGTYPE_p_cphd__Data swig_types[15]
+#define SWIGTYPE_p_cphd__DomainType swig_types[16]
+#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[17]
+#define SWIGTYPE_p_cphd__FileHeader swig_types[18]
+#define SWIGTYPE_p_cphd__FxParameters swig_types[19]
+#define SWIGTYPE_p_cphd__Global swig_types[20]
+#define SWIGTYPE_p_cphd__ImageArea swig_types[21]
+#define SWIGTYPE_p_cphd__Metadata swig_types[22]
+#define SWIGTYPE_p_cphd__PhaseSGN swig_types[23]
+#define SWIGTYPE_p_cphd__SRP swig_types[24]
+#define SWIGTYPE_p_cphd__SRPType swig_types[25]
+#define SWIGTYPE_p_cphd__SampleType swig_types[26]
+#define SWIGTYPE_p_cphd__TOAParameters swig_types[27]
+#define SWIGTYPE_p_cphd__VBM swig_types[28]
+#define SWIGTYPE_p_cphd__VectorParameters swig_types[29]
+#define SWIGTYPE_p_cphd__Wideband swig_types[30]
+#define SWIGTYPE_p_difference_type swig_types[31]
+#define SWIGTYPE_p_except__Context swig_types[32]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[33]
+#define SWIGTYPE_p_int swig_types[34]
+#define SWIGTYPE_p_int16_t swig_types[35]
+#define SWIGTYPE_p_int32_t swig_types[36]
+#define SWIGTYPE_p_int64_t swig_types[37]
+#define SWIGTYPE_p_int8_t swig_types[38]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[39]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[40]
+#define SWIGTYPE_p_logging__Logger swig_types[41]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[42]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[43]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[44]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[45]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[46]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[47]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[48]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[49]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[50]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[51]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[52]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[53]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[54]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[55]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[56]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[57]
+#define SWIGTYPE_p_nitf__DateTime swig_types[58]
+#define SWIGTYPE_p_off_t swig_types[59]
+#define SWIGTYPE_p_p_PyObject swig_types[60]
+#define SWIGTYPE_p_pid_t swig_types[61]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[62]
+#define SWIGTYPE_p_scene__FrameType swig_types[63]
+#define SWIGTYPE_p_scene__LatLon swig_types[64]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[65]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[66]
+#define SWIGTYPE_p_six__BooleanType swig_types[67]
+#define SWIGTYPE_p_six__CollectType swig_types[68]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[69]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[70]
+#define SWIGTYPE_p_six__DataType swig_types[71]
+#define SWIGTYPE_p_six__FFTSign swig_types[72]
+#define SWIGTYPE_p_six__RadarModeType swig_types[73]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[74]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[75]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[76]
+#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[77]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[78]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[79]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[80]
+#define SWIGTYPE_p_size_t swig_types[81]
+#define SWIGTYPE_p_size_type swig_types[82]
+#define SWIGTYPE_p_ssize_t swig_types[83]
+#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[84]
+#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[85]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[86]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[87]
+#define SWIGTYPE_p_std__invalid_argument swig_types[88]
+#define SWIGTYPE_p_std__ostream swig_types[89]
+#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[90]
+#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[91]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[92]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[93]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[94]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[95]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[96]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[97]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[98]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[99]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[100]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[101]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[102]
+#define SWIGTYPE_p_uint16_t swig_types[103]
+#define SWIGTYPE_p_uint32_t swig_types[104]
+#define SWIGTYPE_p_uint64_t swig_types[105]
+#define SWIGTYPE_p_uint8_t swig_types[106]
+#define SWIGTYPE_p_unsigned_char swig_types[107]
+#define SWIGTYPE_p_value_type swig_types[108]
+static swig_type_info *swig_types[110];
+static swig_module_info swig_module = {swig_types, 109, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4932,6 +4934,12 @@ SWIGINTERN void cphd_VBM_getVBMdata__SWIG_2(cphd::VBM *self,size_t channel,size_
         void* buffer = reinterpret_cast<void*>(data);
         self->getVBMdata(channel, buffer);
     }
+SWIGINTERN cphd::Metadata cphd_CPHDXMLControl_fromXMLString(cphd::CPHDXMLControl *self,std::string const &xmlString){
+    cphd::Metadata retv;
+    std::auto_ptr<cphd::Metadata> apMetadata = self->fromXML(xmlString);
+    retv = *apMetadata;
+    return retv;
+  }
 
 namespace swig {
   template <> struct traits<double > {
@@ -29330,6 +29338,464 @@ SWIGINTERN PyObject *VBM_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_CPHDXMLControl__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDXMLControl *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_CPHDXMLControl")) SWIG_fail;
+  {
+    try
+    {
+      result = (cphd::CPHDXMLControl *)new cphd::CPHDXMLControl();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__CPHDXMLControl, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_CPHDXMLControl__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  cphd::CPHDXMLControl *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_CPHDXMLControl",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDXMLControl" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_CPHDXMLControl" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try
+    {
+      result = (cphd::CPHDXMLControl *)new cphd::CPHDXMLControl(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__CPHDXMLControl, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_CPHDXMLControl__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::CPHDXMLControl *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_CPHDXMLControl",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDXMLControl" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  {
+    try
+    {
+      result = (cphd::CPHDXMLControl *)new cphd::CPHDXMLControl(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__CPHDXMLControl, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_CPHDXMLControl(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_CPHDXMLControl__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_CPHDXMLControl__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_CPHDXMLControl__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_CPHDXMLControl'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    cphd::CPHDXMLControl::CPHDXMLControl()\n"
+    "    cphd::CPHDXMLControl::CPHDXMLControl(logging::Logger *,bool)\n"
+    "    cphd::CPHDXMLControl::CPHDXMLControl(logging::Logger *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDXMLControl_toXMLString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDXMLControl *arg1 = (cphd::CPHDXMLControl *) 0 ;
+  cphd::Metadata *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CPHDXMLControl_toXMLString",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDXMLControl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDXMLControl_toXMLString" "', argument " "1"" of type '" "cphd::CPHDXMLControl *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDXMLControl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Metadata,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDXMLControl_toXMLString" "', argument " "2"" of type '" "cphd::Metadata const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDXMLControl_toXMLString" "', argument " "2"" of type '" "cphd::Metadata const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::Metadata * >(argp2);
+  {
+    try
+    {
+      result = (arg1)->toXMLString((cphd::Metadata const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDXMLControl_getXMLsize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDXMLControl *arg1 = (cphd::CPHDXMLControl *) 0 ;
+  cphd::Metadata *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CPHDXMLControl_getXMLsize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDXMLControl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDXMLControl_getXMLsize" "', argument " "1"" of type '" "cphd::CPHDXMLControl *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDXMLControl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Metadata,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDXMLControl_getXMLsize" "', argument " "2"" of type '" "cphd::Metadata const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDXMLControl_getXMLsize" "', argument " "2"" of type '" "cphd::Metadata const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::Metadata * >(argp2);
+  {
+    try
+    {
+      result = (arg1)->getXMLsize((cphd::Metadata const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDXMLControl_fromXMLString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDXMLControl *arg1 = (cphd::CPHDXMLControl *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  cphd::Metadata result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CPHDXMLControl_fromXMLString",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDXMLControl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDXMLControl_fromXMLString" "', argument " "1"" of type '" "cphd::CPHDXMLControl *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDXMLControl * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDXMLControl_fromXMLString" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDXMLControl_fromXMLString" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      result = cphd_CPHDXMLControl_fromXMLString(arg1,(std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new cphd::Metadata(static_cast< const cphd::Metadata& >(result))), SWIGTYPE_p_cphd__Metadata, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_CPHDXMLControl(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDXMLControl *arg1 = (cphd::CPHDXMLControl *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_CPHDXMLControl",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDXMLControl, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_CPHDXMLControl" "', argument " "1"" of type '" "cphd::CPHDXMLControl *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDXMLControl * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *CPHDXMLControl_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_cphd__CPHDXMLControl, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN int Swig_var_Wideband_ALL_set(PyObject *) {
   SWIG_Error(SWIG_AttributeError,"Variable Wideband_ALL is read-only.");
   return 1;
@@ -50913,6 +51379,16 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"delete_VBM", _wrap_delete_VBM, METH_VARARGS, (char *)"delete_VBM(VBM self)"},
 	 { (char *)"VBM_swigregister", VBM_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_CPHDXMLControl", _wrap_new_CPHDXMLControl, METH_VARARGS, (char *)"\n"
+		"CPHDXMLControl()\n"
+		"CPHDXMLControl(logging::Logger * log, bool ownLog=False)\n"
+		"new_CPHDXMLControl(logging::Logger * log) -> CPHDXMLControl\n"
+		""},
+	 { (char *)"CPHDXMLControl_toXMLString", _wrap_CPHDXMLControl_toXMLString, METH_VARARGS, (char *)"CPHDXMLControl_toXMLString(CPHDXMLControl self, Metadata metadata) -> std::string"},
+	 { (char *)"CPHDXMLControl_getXMLsize", _wrap_CPHDXMLControl_getXMLsize, METH_VARARGS, (char *)"CPHDXMLControl_getXMLsize(CPHDXMLControl self, Metadata metadata) -> size_t"},
+	 { (char *)"CPHDXMLControl_fromXMLString", _wrap_CPHDXMLControl_fromXMLString, METH_VARARGS, (char *)"CPHDXMLControl_fromXMLString(CPHDXMLControl self, std::string const & xmlString) -> Metadata"},
+	 { (char *)"delete_CPHDXMLControl", _wrap_delete_CPHDXMLControl, METH_VARARGS, (char *)"delete_CPHDXMLControl(CPHDXMLControl self)"},
+	 { (char *)"CPHDXMLControl_swigregister", CPHDXMLControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Wideband", _wrap_new_Wideband, METH_VARARGS, (char *)"\n"
 		"Wideband(std::string const & pathname, Data data, sys::Off_T startWB, sys::Off_T sizeWB)\n"
 		"new_Wideband(mem::SharedPtr< io::SeekableInputStream > inStream, Data data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
@@ -51339,6 +51815,7 @@ static swig_type_info _swigt__p_cphd__Antenna = {"_p_cphd__Antenna", "cphd::Ante
 static swig_type_info _swigt__p_cphd__AreaPlane = {"_p_cphd__AreaPlane", "cphd::AreaPlane *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__ArraySize = {"_p_cphd__ArraySize", "std::vector< cphd::ArraySize >::value_type *|cphd::ArraySize *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__CPHDReader = {"_p_cphd__CPHDReader", "cphd::CPHDReader *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__CPHDXMLControl = {"_p_cphd__CPHDXMLControl", "cphd::CPHDXMLControl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Channel = {"_p_cphd__Channel", "cphd::Channel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__ChannelParameters = {"_p_cphd__ChannelParameters", "std::vector< cphd::ChannelParameters >::value_type *|cphd::ChannelParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Data = {"_p_cphd__Data", "cphd::Data *", 0, 0, (void*)0, 0};
@@ -51367,6 +51844,7 @@ static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableInputStream = {"_p_io__SeekableInputStream", "io::SeekableInputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__FileInputStreamOS = {"_p_io__FileInputStreamOS", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "std::vector< math::linear::VectorN< 3,double > >::value_type *|Vector3 *|scene::Vector3 *|six::Vector3 *|cphd::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
@@ -51448,6 +51926,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_cphd__AreaPlane,
   &_swigt__p_cphd__ArraySize,
   &_swigt__p_cphd__CPHDReader,
+  &_swigt__p_cphd__CPHDXMLControl,
   &_swigt__p_cphd__Channel,
   &_swigt__p_cphd__ChannelParameters,
   &_swigt__p_cphd__Data,
@@ -51476,6 +51955,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int8_t,
   &_swigt__p_io__FileInputStreamOS,
   &_swigt__p_io__SeekableInputStream,
+  &_swigt__p_logging__Logger,
   &_swigt__p_math__linear__VectorNT_2_double_t,
   &_swigt__p_math__linear__VectorNT_3_double_t,
   &_swigt__p_math__linear__VectorT_double_t,
@@ -51557,6 +52037,7 @@ static swig_cast_info _swigc__p_cphd__Antenna[] = {  {&_swigt__p_cphd__Antenna, 
 static swig_cast_info _swigc__p_cphd__AreaPlane[] = {  {&_swigt__p_cphd__AreaPlane, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__ArraySize[] = {  {&_swigt__p_cphd__ArraySize, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__CPHDReader[] = {  {&_swigt__p_cphd__CPHDReader, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cphd__CPHDXMLControl[] = {  {&_swigt__p_cphd__CPHDXMLControl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__Channel[] = {  {&_swigt__p_cphd__Channel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__ChannelParameters[] = {  {&_swigt__p_cphd__ChannelParameters, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__Data[] = {  {&_swigt__p_cphd__Data, 0, 0, 0},{0, 0, 0, 0}};
@@ -51585,6 +52066,7 @@ static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__FileInputStreamOS[] = {{&_swigt__p_io__FileInputStreamOS, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableInputStream[] = {  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__SeekableInputStream, 0, 0},  {&_swigt__p_io__SeekableInputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Logger[] = {  {&_swigt__p_logging__Logger, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_2_double_t[] = {  {&_swigt__p_math__linear__VectorNT_2_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__p_math__linear__VectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -51666,6 +52148,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_cphd__AreaPlane,
   _swigc__p_cphd__ArraySize,
   _swigc__p_cphd__CPHDReader,
+  _swigc__p_cphd__CPHDXMLControl,
   _swigc__p_cphd__Channel,
   _swigc__p_cphd__ChannelParameters,
   _swigc__p_cphd__Data,
@@ -51694,6 +52177,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int8_t,
   _swigc__p_io__FileInputStreamOS,
   _swigc__p_io__SeekableInputStream,
+  _swigc__p_logging__Logger,
   _swigc__p_math__linear__VectorNT_2_double_t,
   _swigc__p_math__linear__VectorNT_3_double_t,
   _swigc__p_math__linear__VectorT_double_t,

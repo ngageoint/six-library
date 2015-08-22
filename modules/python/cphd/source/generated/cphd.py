@@ -1759,6 +1759,45 @@ class VBM(_object):
 VBM_swigregister = _cphd.VBM_swigregister
 VBM_swigregister(VBM)
 
+class CPHDXMLControl(_object):
+    """Proxy of C++ cphd::CPHDXMLControl class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CPHDXMLControl, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CPHDXMLControl, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(cphd::CPHDXMLControl self) -> CPHDXMLControl
+        __init__(cphd::CPHDXMLControl self, logging::Logger * log, bool ownLog=False) -> CPHDXMLControl
+        __init__(cphd::CPHDXMLControl self, logging::Logger * log) -> CPHDXMLControl
+        """
+        this = _cphd.new_CPHDXMLControl(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def toXMLString(self, metadata):
+        """toXMLString(CPHDXMLControl self, Metadata metadata) -> std::string"""
+        return _cphd.CPHDXMLControl_toXMLString(self, metadata)
+
+
+    def getXMLsize(self, metadata):
+        """getXMLsize(CPHDXMLControl self, Metadata metadata) -> size_t"""
+        return _cphd.CPHDXMLControl_getXMLsize(self, metadata)
+
+
+    def fromXMLString(self, xmlString):
+        """fromXMLString(CPHDXMLControl self, std::string const & xmlString) -> Metadata"""
+        return _cphd.CPHDXMLControl_fromXMLString(self, xmlString)
+
+    __swig_destroy__ = _cphd.delete_CPHDXMLControl
+    __del__ = lambda self: None
+CPHDXMLControl_swigregister = _cphd.CPHDXMLControl_swigregister
+CPHDXMLControl_swigregister(CPHDXMLControl)
+
 class Wideband(_object):
     """Proxy of C++ cphd::Wideband class"""
     __swig_setmethods__ = {}

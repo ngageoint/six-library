@@ -45,6 +45,11 @@ if __name__ == '__main__':
     data = cphd.Data()
     data.sampleType.value = cphd.SampleType.RE32F_IM32F
     data.arraySize.push_back(cphd.ArraySize(2,2))
+    data.arraySize.push_back(cphd.ArraySize(2,2))
+    data.arraySize[0].numVectors = 7
+    data.arraySize[0].numSamples = 8
+    data.arraySize[1].numVectors = 9
+    data.arraySize[1].numSamples = 10
     data.numCPHDChannels = 2
     data.numBytesVBP = 30
     metadata.data = data
@@ -250,29 +255,26 @@ if __name__ == '__main__':
     vecParam.srpPos = 4
     vecParam.tropoSRP = 4
     vecParam.ampSF = 4
-    vecParam.fxParameters = cphd.makeScopedCopyableFxParameters()
-    vecParam.fxParameters.Fx0 = 1
-    vecParam.fxParameters.FxSS = 2
-    vecParam.fxParameters.Fx1 = 3
-    vecParam.fxParameters.Fx2 = 3
+
+    # We can't set both of these at the same time
+    # Change the comments to switch which one to test
+    #vecParam.fxParameters = cphd.makeScopedCopyableFxParameters()
+    #vecParam.fxParameters.Fx0 = 1
+    #vecParam.fxParameters.FxSS = 2
+    #vecParam.fxParameters.Fx1 = 3
+    #vecParam.fxParameters.Fx2 = 3
     vecParam.toaParameters = cphd.makeScopedCopyableTOAParameters()
     vecParam.toaParameters.deltaTOA0 = 0
     vecParam.toaParameters.toaSS = 3
 
     metadata.vectorParameters = vecParam
-    
-    print metadata
 
-    numVec = coda_types.VectorSizeT()
-    numVec.push_back(100)
-    numVec.push_back(100)
-    numVec.push_back(100)
-    vbm = cphd.VBM(3,
-           numVec,
-           True,
-           True,
-           True,
-           metadata.getDomainType()
-           ) 
-    vbm.updateVectorParameters(vecParam)
-#    print vbm
+    xml_parser = cphd.CPHDXMLControl()
+    xmlStr1 = xml_parser.toXMLString(metadata)
+    newMeta = xml_parser.fromXMLString(xmlStr1)
+    xmlStr2 = xml_parser.toXMLString(newMeta)
+
+    if xmlStr1 == xmlStr2:
+        print 'Test passed'
+    else:
+        print 'Test failed'

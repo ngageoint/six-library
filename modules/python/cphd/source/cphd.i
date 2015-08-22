@@ -41,8 +41,9 @@
 #include "import/six.h"
 using six::Vector3;
 %}
-
-
+%ignore cphd::CPHDXMLControl::toXML(const Metadata& metadata);
+%ignore cphd::CPHDXMLControl::fromXML(const xml::lite::Document* doc);
+%ignore cphd::CPHDXMLControl::fromXML(const std::string& xmlString);
 %rename(CphdAntenna) cphd::Antenna;
 
 %include "cphd/Types.h"
@@ -56,6 +57,7 @@ using six::Vector3;
 %include "cphd/Metadata.h"
 %include "cphd/Data.h"
 %include "cphd/VBM.h"
+%include "cphd/CPHDXMLControl.h"
 
 %include "cphd/Wideband.h"
 %include "cphd/CPHDReader.h"
@@ -169,6 +171,15 @@ def read(self,
 Wideband.read = read
 %}
 
+%extend cphd::CPHDXMLControl {
+  cphd::Metadata fromXMLString(const std::string& xmlString)
+  {
+    cphd::Metadata retv;
+    std::auto_ptr<cphd::Metadata> apMetadata = $self->fromXML(xmlString);
+    retv = *apMetadata;
+    return retv;
+  }
+}
 %template(VectorArraySize) std::vector<cphd::ArraySize>;
 %template(VectorVector3) std::vector<math::linear::VectorN<3,double> >;
 %template(VectorChannelParameters) std::vector<cphd::ChannelParameters>;
@@ -180,4 +191,5 @@ SCOPED_COPYABLE(cphd,AreaPlane);
 SCOPED_COPYABLE(cphd,FxParameters);
 SCOPED_COPYABLE(cphd,TOAParameters);
 SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
+
 
