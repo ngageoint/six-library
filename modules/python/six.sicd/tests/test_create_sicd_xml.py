@@ -685,6 +685,7 @@ fos = FileOutputStream(origPathname)
 out_doc = xml_ctrl.toXML(cmplx, vs)
 root = out_doc.getRootElement()
 root.prettyPrint(fos)
+fos.close()
 
 # If we made it to here, all the Python bindings must be present and what we
 # wrote out must have passed schema validation
