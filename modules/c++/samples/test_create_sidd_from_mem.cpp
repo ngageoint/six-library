@@ -1739,11 +1739,11 @@ std::auto_ptr<six::WriteControl> getWriteControl(std::string outputName)
 
 /*!
  *  Read a SICD XML into a data structure.  If this was in a NITF
- *  you wouldnt bother with this step, since the ReadControl would
+ *  you wouldn't bother with this step, since the ReadControl would
  *  do this for you.
  *
  */
-six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
+six::sicd::ComplexData* getComplexData(const std::string& sicdXMLName)
 {
     // Create a file input stream
     io::FileInputStream sicdXMLFile(sicdXMLName);
@@ -1758,12 +1758,11 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
     xml::lite::Document *doc = xmlParser.getDocument();
 
     std::auto_ptr<logging::Logger> log (new logging::NullLogger());
-    six::XMLControl* xmlControl =
+    std::auto_ptr<six::XMLControl> xmlControl(
             six::XMLControlFactory::getInstance().newXMLControl(
-                    DataType::COMPLEX, log.get());
+                    DataType::COMPLEX, log.get()));
 
     six::Data* data = xmlControl->fromXML(doc, std::vector<std::string>());
-    delete xmlControl;
     return (six::sicd::ComplexData*) data;
 }
 
