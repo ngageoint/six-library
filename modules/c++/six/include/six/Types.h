@@ -319,7 +319,7 @@ struct LUT
     }
 
     //!  Clone the LUT table
-    virtual LUT* clone()
+    virtual LUT* clone() const
     {
         return new LUT(table.get(), numEntries, elementSize);
     }

@@ -50,6 +50,37 @@ void setField(const std::string& field,
 
     treField = value;
 }
+
+std::string generateILOC(size_t row, size_t col)
+{
+    std::ostringstream ostr;
+    ostr.fill('0');
+    ostr << std::setw(5) << row << std::setw(5) << col;
+
+    return ostr.str();
+}
+
+std::string generateILOC(const types::RowCol<size_t>& dims)
+{
+	return generateILOC(dims.row, dims.col);
+}
+
+class GetDisplayLutFromLegend
+{
+public:
+    GetDisplayLutFromLegend(const six::Legend& legend) :
+        mLegend(legend)
+    {
+    }
+
+    const six::LUT* operator()() const
+    {
+        return mLegend.mLUT.get();
+    }
+
+private:
+    const six::Legend& mLegend;
+};
 }
 
 namespace six
@@ -195,10 +226,8 @@ void NITFWriteControl::initialize(Container* container)
                 throw except::Exception(Ctxt(ostr.str()));
             }
 
-            std::ostringstream ostr;
-            ostr.fill('0');
-            ostr << std::setw(5) << segmentInfo.rowOffset << "00000";
-            subheader.getImageLocation().set(ostr.str());
+            subheader.getImageLocation().set(generateILOC(segmentInfo.rowOffset,
+            										      0));
 
             subheader.getTargetId().set(targetId);
 
@@ -257,11 +286,46 @@ void NITFWriteControl::initialize(Container* container)
             subheader.getImageDateAndTime().set(collectionDT);
             subheader.getImageId().set(getDerivedIID(numIS + 1, ii));
 
-            // TODO: Set IDLVL, IALVL, ILOC
-            // Will need to set image data itself later too
-        }
+            subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
+            const GetDisplayLutFromLegend getLUT(*legend);
+            std::vector<nitf::BandInfo> bandInfo =
+                    NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
+
+            // TODO: For now, we're only supporting RGB8LU legends
+            //       When we expand this, will need to set nbpp differently
+            //       potentially
+            const size_t legendNbpp = 8;
+            if (legend->mType != PixelType::RGB8LU)
+            {
+                throw except::Exception(Ctxt(
+                        "Only RGB8LU legends supported at present"));
+            }
+
+            subheader.setPixelInformation(
+                    NITFImageInfo::getPixelValueType(legend->mType),
+                    legendNbpp,
+                    legendNbpp,
+                    "R",
+                    NITFImageInfo::getRepresentation(legend->mType),
+                    "LEG",
+                    bandInfo);
+
+            subheader.setBlocking(legend->mDims.row, legend->mDims.col, 0, 0,
+                                  NITFImageInfo::getMode(legend->mType));
+
+            // While we never set IDLVL explicitly in here, NITRO will
+            // kindly do that for us (incrementing it once for each segment).
+            // We want to set the legend's IALVL to the IDLVL we want to attach
+            // to (which is the first image segment for this product which is
+            // conveniently at info.getStartIndex()... but IDLVL is 1-based).
+            subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(
+            		info.getStartIndex() + 1));
+
+            ++startIndex;
+        }
     }
+
     for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
     {
         const six::Data& data(*mContainer->getData(ii));
@@ -724,10 +788,10 @@ void NITFWriteControl::save(
         const NITFImageInfo& info = *mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
                 = info.getImageSegments();
-        size_t numIS = imageSegments.size();
-        size_t pixelSize = info.getData()->getNumBytesPerPixel();
-        size_t numCols = info.getData()->getNumCols();
-        size_t numChannels = info.getData()->getNumChannels();
+        const size_t numIS = imageSegments.size();
+        const size_t pixelSize = info.getData()->getNumBytesPerPixel();
+        const size_t numCols = info.getData()->getNumCols();
+        const size_t numChannels = info.getData()->getNumChannels();
 
         nitf::ImageSegment imageSegment = mRecord.getImages()[i];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
@@ -748,39 +812,72 @@ void NITFWriteControl::save(
                     "SICD does not support blocked or J2K compressed output"));
             }
 
-            // We will use the ImageWriter provided by NITRO so that we can
-            // take advantage of the built-in compression capabilities
-            nitf::ImageWriter iWriter = 
-                mWriter.newImageWriter(i, mCompressionOptions);
-            iWriter.setWriteCaching(1);
-
-            nitf::ImageSource iSource;
-            size_t bandSize = numCols * info.getData()->getNumRows();
-
-            for (size_t j = 0; j < numChannels; ++j)
+            for (size_t jj = 0; jj < numIS; ++jj)
             {
-                nitf::MemorySource ms((char *)imageData[i], bandSize, 
-                                      bandSize * j, pixelSize, 0);
-                iSource.addBand(ms);
+                // We will use the ImageWriter provided by NITRO so that we can
+                // take advantage of the built-in compression capabilities
+                nitf::ImageWriter iWriter =
+                    mWriter.newImageWriter(info.getStartIndex() + jj,
+                                           mCompressionOptions);
+                iWriter.setWriteCaching(1);
+
+                nitf::ImageSource iSource;
+                const size_t bandSize = numCols * info.getData()->getNumRows();
+
+                for (size_t chan = 0; chan < numChannels; ++chan)
+                {
+                    nitf::MemorySource ms(imageData[i], bandSize,
+                                          bandSize * chan, pixelSize, 0);
+                    iSource.addBand(ms);
+                }
+                iWriter.attachSource(iSource);
             }
-            iWriter.attachSource(iSource);
         }
         else
         {
             // this bypasses the normal NITF ImageWriter and streams directly
             // to the output
-            for (size_t j = 0; j < numIS; ++j)
+            for (size_t jj = 0; jj < numIS; ++jj)
             {
-                NITFSegmentInfo segmentInfo = imageSegments[j];
+                const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
                 mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
-                    new MemoryWriteHandler (segmentInfo, imageData[i],
-                                            segmentInfo.firstRow, numCols,
-                                            numChannels, pixelSize, doByteSwap));
+                    new MemoryWriteHandler(segmentInfo, imageData[i],
+                                           segmentInfo.firstRow, numCols,
+                                           numChannels, pixelSize, doByteSwap));
                 // Could set start index here
-                mWriter.setImageWriteHandler(info.getStartIndex() + j,
+                mWriter.setImageWriteHandler(info.getStartIndex() + jj,
                                              writeHandler);
             }
+        }
+
+        const Legend* const legend = mContainer->getLegend(i);
+        if (legend)
+        {
+            if (legend->mDims.row * legend->mDims.col != legend->mImage.size())
+            {
+                throw except::Exception(Ctxt("Legend dimensions don't match"));
+            }
+
+            if (legend->mImage.empty())
+            {
+                throw except::Exception(Ctxt("Empty legend"));
+            }
+
+            nitf::ImageSource iSource;
+
+            nitf::MemorySource memSource(&legend->mImage[0],
+                                         legend->mImage.size(),
+                                         0,
+                                         sizeof(sys::ubyte),
+                                         0);
+
+            iSource.addBand(memSource);
+
+            nitf::ImageWriter iWriter =
+                mWriter.newImageWriter(info.getStartIndex() + numIS);
+            iWriter.setWriteCaching(1);
+            iWriter.attachSource(iSource);
         }
     }
 

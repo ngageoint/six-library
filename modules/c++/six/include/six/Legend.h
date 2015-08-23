@@ -27,6 +27,8 @@
 
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+#include <mem/ScopedCloneablePtr.h>
+#include <six/Types.h>
 
 namespace six
 {
@@ -39,19 +41,21 @@ namespace six
 struct Legend
 {
 public:
-	// TODO: Or this could be PixelType and we throw if you give us an invalid
-	//       one
-	enum Type
-	{
-        RGB8LU = 0,
-        RGB24I
-	};
+    Legend() :
+        mType(PixelType::NOT_SET),
+        mLocation(0, 0),
+        mDims(0, 0)
+    {
+    }
 
-	Type mType;
+    // TODO: For now, only RGB8LU is supported
+	PixelType mType;
+
 	types::RowCol<size_t> mLocation;
 
 	types::RowCol<size_t> mDims;
 	std::vector<sys::ubyte> mImage;
+	mem::ScopedCloneablePtr<LUT> mLUT;
 };
 }
 
