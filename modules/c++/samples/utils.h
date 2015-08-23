@@ -45,6 +45,36 @@ six::LatLonCorners makeUpCornersFromDMS()
     return corners;
 }
 
+inline
+void verifySchemaEnvVariableIsSet(const std::string& commandLineArg = "")
+{
+    sys::OS os;
+    std::string schemaPath;
+    try
+    {
+        schemaPath = os.getEnv(six::SCHEMA_PATH);
+    }
+    catch(const except::Exception& )
+    {
+        std::string errorMsg =
+                "Must specify SICD/SIDD schema path via ";
+        if (!commandLineArg.empty())
+        {
+            errorMsg += commandLineArg + " or ";
+        }
+
+        errorMsg += std::string(six::SCHEMA_PATH) + " environment variable";
+
+        throw except::Exception(Ctxt(errorMsg));
+    }
+
+    if (schemaPath.empty())
+    {
+        throw except::Exception(Ctxt(std::string(six::SCHEMA_PATH) +
+                " environment variable is set but is empty"));
+    }
+}
+
 // Throws if both schemaArg isn't present and six::SCHEMA_PATH isn't set
 inline
 void getSchemaPaths(const cli::Results& options,
@@ -58,25 +88,7 @@ void getSchemaPaths(const cli::Results& options,
     }
     else
     {
-        sys::OS os;
-        std::string schemaPath;
-        try
-        {
-            schemaPath = os.getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
-        {
-            throw except::Exception(Ctxt(
-                    "Must specify SICD/SIDD schema path via " +
-                    commandLineArg + " or " + six::SCHEMA_PATH +
-                    " environment variable"));
-        }
-
-        if (schemaPath.empty())
-        {
-            throw except::Exception(Ctxt(std::string(six::SCHEMA_PATH) +
-                    " environment variable is set but is empty"));
-        }
+        verifySchemaEnvVariableIsSet(commandLineArg);
     }
 }
 
