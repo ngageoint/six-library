@@ -48,6 +48,13 @@ public:
     {
     }
 
+    // Resizes 'mImage' to match
+    void setDims(const types::RowCol<size_t>& dims)
+    {
+        mDims = dims;
+        mImage.resize(dims.row * dims.col);
+    }
+
     // TODO: For now, only RGB8LU is supported
 	PixelType mType;
 
