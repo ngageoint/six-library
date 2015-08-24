@@ -23,13 +23,28 @@
 %module(package="pysix") cphd
 
 %feature("autodoc", "1");
+
+%include "std_string.i"
+%include "std_vector.i"
+
+%import "sys.i"
 %import "types.i"
+%import "mem.i"
+%import "six_sicd.i"
+%import "six.i"
+%import "math_poly.i"
+%import "math_linear.i"
+%import "scene.i"
 
 %{
 #include "import/cphd.h"
+#include "import/six.h"
+using six::Vector3;
 %}
-
-%include "std_string.i"
+%ignore cphd::CPHDXMLControl::toXML(const Metadata& metadata);
+%ignore cphd::CPHDXMLControl::fromXML(const xml::lite::Document* doc);
+%ignore cphd::CPHDXMLControl::fromXML(const std::string& xmlString);
+%rename(CphdAntenna) cphd::Antenna;
 
 %include "cphd/Types.h"
 %include "cphd/Enums.h"
@@ -42,6 +57,7 @@
 %include "cphd/Metadata.h"
 %include "cphd/Data.h"
 %include "cphd/VBM.h"
+%include "cphd/CPHDXMLControl.h"
 
 %include "cphd/Wideband.h"
 %include "cphd/CPHDReader.h"
@@ -155,6 +171,25 @@ def read(self,
 Wideband.read = read
 %}
 
+%extend cphd::CPHDXMLControl {
+  cphd::Metadata fromXMLString(const std::string& xmlString)
+  {
+    cphd::Metadata retv;
+    std::auto_ptr<cphd::Metadata> apMetadata = $self->fromXML(xmlString);
+    retv = *apMetadata;
+    return retv;
+  }
+}
+%template(VectorArraySize) std::vector<cphd::ArraySize>;
+%template(VectorVector3) std::vector<math::linear::VectorN<3,double> >;
+%template(VectorChannelParameters) std::vector<cphd::ChannelParameters>;
+%template(VectorAntennaParameters) std::vector<six::sicd::AntennaParameters>;
 
+
+SCOPED_COPYABLE(cphd,DwellTimeParameters);
+SCOPED_COPYABLE(cphd,AreaPlane);
+SCOPED_COPYABLE(cphd,FxParameters);
+SCOPED_COPYABLE(cphd,TOAParameters);
+SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
 
 

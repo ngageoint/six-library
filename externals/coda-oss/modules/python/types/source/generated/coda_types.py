@@ -759,6 +759,210 @@ class VectorRowColInt(_object):
 VectorRowColInt_swigregister = _coda_types.VectorRowColInt_swigregister
 VectorRowColInt_swigregister(VectorRowColInt)
 
+class VectorSizeT(_object):
+    """Proxy of C++ std::vector<(size_t)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorSizeT, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorSizeT, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorSizeT self) -> SwigPyIterator"""
+        return _coda_types.VectorSizeT_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorSizeT self) -> bool"""
+        return _coda_types.VectorSizeT___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorSizeT self) -> bool"""
+        return _coda_types.VectorSizeT___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorSizeT self) -> std::vector< size_t >::size_type"""
+        return _coda_types.VectorSizeT___len__(self)
+
+
+    def pop(self):
+        """pop(VectorSizeT self) -> std::vector< size_t >::value_type"""
+        return _coda_types.VectorSizeT_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorSizeT self, std::vector< size_t >::difference_type i, std::vector< size_t >::difference_type j) -> VectorSizeT"""
+        return _coda_types.VectorSizeT___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorSizeT self, std::vector< size_t >::difference_type i, std::vector< size_t >::difference_type j, VectorSizeT v)
+        __setslice__(VectorSizeT self, std::vector< size_t >::difference_type i, std::vector< size_t >::difference_type j)
+        """
+        return _coda_types.VectorSizeT___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorSizeT self, std::vector< size_t >::difference_type i, std::vector< size_t >::difference_type j)"""
+        return _coda_types.VectorSizeT___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorSizeT self, std::vector< size_t >::difference_type i)
+        __delitem__(VectorSizeT self, PySliceObject * slice)
+        """
+        return _coda_types.VectorSizeT___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorSizeT self, PySliceObject * slice) -> VectorSizeT
+        __getitem__(VectorSizeT self, std::vector< size_t >::difference_type i) -> std::vector< size_t >::value_type const &
+        """
+        return _coda_types.VectorSizeT___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorSizeT self, PySliceObject * slice, VectorSizeT v)
+        __setitem__(VectorSizeT self, PySliceObject * slice)
+        __setitem__(VectorSizeT self, std::vector< size_t >::difference_type i, std::vector< size_t >::value_type const & x)
+        """
+        return _coda_types.VectorSizeT___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorSizeT self, std::vector< size_t >::value_type const & x)"""
+        return _coda_types.VectorSizeT_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorSizeT self) -> bool"""
+        return _coda_types.VectorSizeT_empty(self)
+
+
+    def size(self):
+        """size(VectorSizeT self) -> std::vector< size_t >::size_type"""
+        return _coda_types.VectorSizeT_size(self)
+
+
+    def clear(self):
+        """clear(VectorSizeT self)"""
+        return _coda_types.VectorSizeT_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorSizeT self, VectorSizeT v)"""
+        return _coda_types.VectorSizeT_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorSizeT self) -> std::vector< size_t >::allocator_type"""
+        return _coda_types.VectorSizeT_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorSizeT self) -> std::vector< size_t >::iterator"""
+        return _coda_types.VectorSizeT_begin(self)
+
+
+    def end(self):
+        """end(VectorSizeT self) -> std::vector< size_t >::iterator"""
+        return _coda_types.VectorSizeT_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorSizeT self) -> std::vector< size_t >::reverse_iterator"""
+        return _coda_types.VectorSizeT_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorSizeT self) -> std::vector< size_t >::reverse_iterator"""
+        return _coda_types.VectorSizeT_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorSizeT self)"""
+        return _coda_types.VectorSizeT_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorSizeT self, std::vector< size_t >::iterator pos) -> std::vector< size_t >::iterator
+        erase(VectorSizeT self, std::vector< size_t >::iterator first, std::vector< size_t >::iterator last) -> std::vector< size_t >::iterator
+        """
+        return _coda_types.VectorSizeT_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(size_t)> self) -> VectorSizeT
+        __init__(std::vector<(size_t)> self, VectorSizeT arg2) -> VectorSizeT
+        __init__(std::vector<(size_t)> self, std::vector< size_t >::size_type size) -> VectorSizeT
+        __init__(std::vector<(size_t)> self, std::vector< size_t >::size_type size, std::vector< size_t >::value_type const & value) -> VectorSizeT
+        """
+        this = _coda_types.new_VectorSizeT(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorSizeT self, std::vector< size_t >::value_type const & x)"""
+        return _coda_types.VectorSizeT_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorSizeT self) -> std::vector< size_t >::value_type const &"""
+        return _coda_types.VectorSizeT_front(self)
+
+
+    def back(self):
+        """back(VectorSizeT self) -> std::vector< size_t >::value_type const &"""
+        return _coda_types.VectorSizeT_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorSizeT self, std::vector< size_t >::size_type n, std::vector< size_t >::value_type const & x)"""
+        return _coda_types.VectorSizeT_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorSizeT self, std::vector< size_t >::size_type new_size)
+        resize(VectorSizeT self, std::vector< size_t >::size_type new_size, std::vector< size_t >::value_type const & x)
+        """
+        return _coda_types.VectorSizeT_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorSizeT self, std::vector< size_t >::iterator pos, std::vector< size_t >::value_type const & x) -> std::vector< size_t >::iterator
+        insert(VectorSizeT self, std::vector< size_t >::iterator pos, std::vector< size_t >::size_type n, std::vector< size_t >::value_type const & x)
+        """
+        return _coda_types.VectorSizeT_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorSizeT self, std::vector< size_t >::size_type n)"""
+        return _coda_types.VectorSizeT_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorSizeT self) -> std::vector< size_t >::size_type"""
+        return _coda_types.VectorSizeT_capacity(self)
+
+    __swig_destroy__ = _coda_types.delete_VectorSizeT
+    __del__ = lambda self: None
+VectorSizeT_swigregister = _coda_types.VectorSizeT_swigregister
+VectorSizeT_swigregister(VectorSizeT)
+
 # This file is compatible with both classic and new-style classes.
 
 
