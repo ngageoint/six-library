@@ -1697,6 +1697,7 @@ struct MagnificationMethod
     {
         NEAREST_NEIGHBOR = 1,
         BILINEAR = 2,
+        LAGRANGE = 3,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -1704,12 +1705,14 @@ struct MagnificationMethod
     MagnificationMethod(){ value = NOT_SET; }
 
     //! string constructor
-    MagnificationMethod(std::string s)
+    MagnificationMethod(const std::string& s)
     {
         if (s == "NEAREST_NEIGHBOR")
             value = NEAREST_NEIGHBOR;
         else if (s == "BILINEAR")
             value = BILINEAR;
+        else if (s == "LAGRANGE")
+            value = LAGRANGE;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -1726,6 +1729,9 @@ struct MagnificationMethod
             break;
         case 2:
             value = BILINEAR;
+            break;
+        case 3:
+            value = LAGRANGE;
             break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
@@ -1747,6 +1753,8 @@ struct MagnificationMethod
             return std::string("NEAREST_NEIGHBOR");
         case 2:
             return std::string("BILINEAR");
+        case 3:
+            return std::string("LAGRANGE");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
