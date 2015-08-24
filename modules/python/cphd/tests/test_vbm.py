@@ -165,6 +165,9 @@ retv = newVbm.load(fis, 0, vbmSize, 1)
 if retv != vbmSize:
     print 'VBM read failed'
 
+if fis.isOpen():
+    fis.close()
+
 nCh0 = newVbm.toBuffer(0)
 nCh1 = newVbm.toBuffer(1)
 nCh2 = newVbm.toBuffer(2)
