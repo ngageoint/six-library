@@ -67,7 +67,8 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddBuilder.addMeasurement(six::ProjectionType::PLANE).
             addExploitationFeatures(1);
 
-    std::auto_ptr<six::sidd::DerivedData> siddData(siddBuilder.steal());
+    six::sidd::DerivedData* siddData = siddBuilder.steal();
+    std::auto_ptr<six::Data> siddDataScoped(siddData);
 
     siddData->setNumRows(dims.row);
     siddData->setNumCols(dims.col);
@@ -109,7 +110,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
 
-    return siddData;
+    return siddDataScoped;
 }
 }
 
@@ -121,17 +122,17 @@ int main(int argc, char** argv)
         if (argc != 2)
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
-                      << " <output NITF pathname>\n\n";
+                      << " <output NITF pathname prefix>\n\n";
             return 1;
         }
-        const std::string outPathname(argv[1]);
+        const std::string outPathnamePrefix(argv[1]);
         verifySchemaEnvVariableIsSet();
 
-        // In order to make it easier to test segmenting, let's artifically set
+        // In order to make it easier to test segmenting, let's artificially set
         // the segment size really small
-        const types::RowCol<size_t> dims(100, 200);
-        const size_t numPixels(dims.row * dims.col);
-        const size_t maxSize = dims.col * 50;
+        const size_t numCols = 200;
+
+        const size_t maxSize = numCols * 50;
 
         six::XMLControlRegistry xmlRegistry;
         xmlRegistry.addCreator(
@@ -139,42 +140,117 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-
-
         six::Container container(six::DataType::DERIVED);
-        std::auto_ptr<six::Data> data(mockupDerivedData(dims));
+
+        std::vector<six::UByte*> buffers;
+
+        // First a single segment without a legend
+        types::RowCol<size_t> dims1(40, numCols);
+        std::auto_ptr<six::Data> data1(mockupDerivedData(dims1));
+
+        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.normL1()]);
+        std::fill_n(buffer1.get(), dims1.normL1(), 20);
+
+        container.addData(data1);
+        buffers.push_back(buffer1.get());
+
+        // Now a single segment with a legend
+        types::RowCol<size_t> dims2(40, numCols);
+        std::auto_ptr<six::Data> data2(mockupDerivedData(dims2));
 
         const types::RowCol<size_t> legendDims(50, 50);
-        std::auto_ptr<six::Legend> legend(new six::Legend());
-        legend->mType = six::PixelType::RGB8LU;
-        legend->mLocation.row = 10;
-        legend->mLocation.col = 10;
-        legend->setDims(legendDims);
-        legend->mLUT.reset(new six::LUT(256, 3));
+        std::auto_ptr<six::Legend> legend1(new six::Legend());
+        legend1->mType = six::PixelType::RGB8LU;
+        legend1->mLocation.row = 10;
+        legend1->mLocation.col = 10;
+        legend1->setDims(legendDims);
+        legend1->mLUT.reset(new six::LUT(256, 3));
         for (size_t ii = 0, idx = 0;
-             ii < legend->mLUT->numEntries;
+             ii < legend1->mLUT->numEntries;
              ++ii, idx += 3)
         {
-            legend->mLUT->table[idx] = ii;
-            legend->mLUT->table[idx + 1] = ii;
-            legend->mLUT->table[idx + 2] = ii;
+            legend1->mLUT->table[idx] = ii;
+            legend1->mLUT->table[idx + 1] = ii;
+            legend1->mLUT->table[idx + 2] = ii;
         }
 
-        container.addData(data, legend);
+        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.normL1()]);
+        std::fill_n(buffer2.get(), dims2.normL1(), 100);
 
-        six::NITFWriteControl writer;
+        container.addData(data2, legend1);
+        buffers.push_back(buffer2.get());
 
-        writer.getOptions().setParameter(
-                six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
-                str::toString(maxSize));
+        // Now a multi-segment without a legend
+        types::RowCol<size_t> dims3(150, numCols);
+        std::auto_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        writer.setXMLControlRegistry(&xmlRegistry);
-        writer.initialize(&container);
+        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.normL1()]);
+        std::fill_n(buffer3.get(), dims3.normL1(), 60);
 
-        const mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numPixels]);
-        std::fill_n(buffer.get(), numPixels, 0);
+        container.addData(data3);
+        buffers.push_back(buffer3.get());
 
-        writer.save(buffer.get(), outPathname);
+        // Now a multi-segment with a legend
+        types::RowCol<size_t> dims4(155, numCols);
+        std::auto_ptr<six::Data> data4(mockupDerivedData(dims4));
+
+        std::auto_ptr<six::Legend> legend2(new six::Legend());
+        legend2->mType = six::PixelType::RGB8LU;
+        legend2->mLocation.row = 10;
+        legend2->mLocation.col = 10;
+        legend2->setDims(legendDims);
+        legend2->mLUT.reset(new six::LUT(256, 3));
+        for (size_t ii = 0, idx = 0;
+             ii < legend2->mLUT->numEntries;
+             ++ii, idx += 3)
+        {
+            legend2->mLUT->table[idx] = ii;
+            legend2->mLUT->table[idx + 1] = ii;
+            legend2->mLUT->table[idx + 2] = ii;
+        }
+
+        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.normL1()]);
+        std::fill_n(buffer4.get(), dims4.normL1(), 200);
+
+        container.addData(data4, legend2);
+        buffers.push_back(buffer4.get());
+
+        // Write it out
+        {
+            six::NITFWriteControl writer;
+
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    str::toString(maxSize));
+
+            writer.setXMLControlRegistry(&xmlRegistry);
+            writer.initialize(&container);
+
+            writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
+        }
+
+        // Write it out with blocking
+        {
+            six::NITFWriteControl writer;
+
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    str::toString(maxSize));
+
+            const std::string blockSize("1024");
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    blockSize);
+
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    blockSize);
+
+            writer.setXMLControlRegistry(&xmlRegistry);
+            writer.initialize(&container);
+
+            writer.save(buffers, outPathnamePrefix + "_blocked.nitf");
+        }
 
         return 0;
     }
