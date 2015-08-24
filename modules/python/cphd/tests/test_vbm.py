@@ -34,7 +34,8 @@ from pysix import scene
 from coda import coda_types
 from coda import math_poly
 from coda import math_linear
-
+from coda import coda_io
+import numpy
 
 def notEqualVector3(lhs, rhs):
     return lhs[0] != rhs[0] or lhs[1] != rhs[1] or lhs[2] != rhs[2]
@@ -134,7 +135,46 @@ vbm.updateVectorParameters(vecParam)
 #print vecParam.deltaTOA0Offset()
 #print vecParam.toaSSOffset()
 
-# These print out the three channel buffers that we assigned to earlier
-#print vbm.toBuffer(0)
-#print vbm.toBuffer(1)
-#print vbm.toBuffer(2)
+#
+# Now we'll do a round trip test:
+#
+# Print everything out, load it up with VBM's
+# load() function and make sure it matches
+#
+
+testFileName = 'test.vbm'
+
+ch0 = vbm.toBuffer(0)
+ch1 = vbm.toBuffer(1)
+ch2 = vbm.toBuffer(2)
+
+# byteswap and write
+testFile = open(testFileName,'wb')
+testFile.write(ch0.byteswap())
+testFile.write(ch1.byteswap())
+testFile.write(ch2.byteswap())
+testFile.close()
+
+newVbm = cphd.VBM(3,numVec, True, False, True, domainType)
+fis = coda_io.FileInputStream(testFileName)
+
+# sum of size of each channel
+vbmSize = vbm.getVBMsize(0) + vbm.getVBMsize(1) + vbm.getVBMsize(2)
+
+retv = newVbm.load(fis, 0, vbmSize, 1)
+if retv != vbmSize:
+    print 'VBM read failed'
+
+nCh0 = newVbm.toBuffer(0)
+nCh1 = newVbm.toBuffer(1)
+nCh2 = newVbm.toBuffer(2)
+
+if not numpy.array_equal(ch0, nCh0):
+    print 'Channel 0 load failed'
+
+if not numpy.array_equal(ch1, nCh1):
+    print 'Channel 1 load failed'
+
+if not numpy.array_equal( ch2, nCh2):
+    print 'Channel 2 load failed'
+
