@@ -175,8 +175,8 @@ public:
     template <typename GetDisplayLutT>
     static
     std::vector<nitf::BandInfo>
-    NITFImageInfo::getBandInfoImpl(PixelType pixelType,
-                                   const GetDisplayLutT& getDisplayLUT);
+    getBandInfoImpl(PixelType pixelType,
+                    const GetDisplayLutT& getDisplayLUT);
 
     //!  File security classification system
     static const char CLSY[];
