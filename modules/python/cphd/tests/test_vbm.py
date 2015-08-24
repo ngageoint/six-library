@@ -57,6 +57,15 @@ vbm = cphd.VBM(3,
         domainType 
         )
 
+if vbm.haveTropoSRP():
+    print 'VBM TropoSRP selection not working'
+
+if not vbm.haveAmpSF():
+    print 'VBM AmpSF selection not workig'
+
+if not vbm.haveSRPTime():
+    print 'VBM SRPTime selection not working'
+
 assignNum = 99
 vbm.setTxTime(assignNum,1,1)
 if vbm.getTxTime(1,1) != assignNum:
@@ -97,24 +106,35 @@ if vbm.getTOASS(1,1) != assignNum:
 
 vbm.updateVectorParameters(vecParam)
 
-print vecParam.txTime
-print vecParam.txPos
-print vecParam.rcvTime
-print vecParam.rcvPos
-print vecParam.srpTime
-print vecParam.srpPos
-print vecParam.tropoSRP
-print vecParam.ampSF
-print vecParam.toaParameters.deltaTOA0
-print vecParam.toaParameters.toaSS
+# If you want to be sure things are getting assigned,
+# just uncomment all these
 
-print vecParam.txTimeOffset()
-print vecParam.txPosOffset()
-print vecParam.rcvTimeOffset()
-print vecParam.rcvPosOffset()
-print vecParam.srpTimeOffset()
-print vecParam.srpPosOffset()
-print vecParam.tropoSRPOffset()
-print vecParam.ampSFOffset()
-print vecParam.deltaTOA0Offset()
-print vecParam.toaSSOffset()
+# These show that our vecParam was updated using our optional
+# field selection (tropoSRP size will be undefined, tropoSRP offset
+# will be negative 1)
+#print vecParam.txTime
+#print vecParam.txPos
+#print vecParam.rcvTime
+#print vecParam.rcvPos
+#print vecParam.srpTime
+#print vecParam.srpPos
+#print vecParam.tropoSRP
+#print vecParam.ampSF
+#print vecParam.toaParameters.deltaTOA0
+#print vecParam.toaParameters.toaSS
+
+#print vecParam.txTimeOffset()
+#print vecParam.txPosOffset()
+#print vecParam.rcvTimeOffset()
+#print vecParam.rcvPosOffset()
+#print vecParam.srpTimeOffset()
+#print vecParam.srpPosOffset()
+#print vecParam.tropoSRPOffset()
+#print vecParam.ampSFOffset()
+#print vecParam.deltaTOA0Offset()
+#print vecParam.toaSSOffset()
+
+# These print out the three channel buffers that we assigned to earlier
+#print vbm.toBuffer(0)
+#print vbm.toBuffer(1)
+#print vbm.toBuffer(2)
