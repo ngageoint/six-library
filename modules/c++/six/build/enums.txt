@@ -53,6 +53,7 @@ __default__=six::NOT_SET_VALUE
 NOT_SET=six::NOT_SET_VALUE
 NEAREST_NEIGHBOR=1
 BILINEAR=2
+LAGRANGE=3
 __default__=six::NOT_SET_VALUE
 
 [DecimationMethod]
