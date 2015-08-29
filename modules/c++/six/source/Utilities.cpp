@@ -330,6 +330,8 @@ template<> MagnificationMethod six::toType<MagnificationMethod>(
         return MagnificationMethod::NEAREST_NEIGHBOR;
     if (type == "BILINEAR")
         return MagnificationMethod::BILINEAR;
+    if (type == "LAGRANGE")
+        return MagnificationMethod::LAGRANGE;
     return MagnificationMethod::NOT_SET;
 }
 
@@ -341,6 +343,8 @@ template<> std::string six::toString(const MagnificationMethod& method)
         return "NEAREST_NEIGHBOR";
     case MagnificationMethod::BILINEAR:
         return "BILINEAR";
+    case MagnificationMethod::LAGRANGE:
+        return "LAGRANGE";
     default:
         throw except::Exception(Ctxt("Unsupported method"));
     }
