@@ -284,7 +284,7 @@ void NITFWriteControl::initialize(Container* container)
             const DateTime collectionDT =
                     info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
-            subheader.getImageId().set(getDerivedIID(numIS + 1, ii));
+            subheader.getImageId().set(getDerivedIID(numIS, ii));
 
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
