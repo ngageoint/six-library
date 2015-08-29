@@ -199,6 +199,7 @@ void NITFWriteControl::initialize(Container* container)
         startIndex += numIS;
 
         // Images
+        const std::string imageSource = info.getData()->getSource();
         for (size_t jj = 0; jj < numIS; ++jj)
         {
             NITFSegmentInfo segmentInfo = imageSegments[jj];
@@ -211,9 +212,7 @@ void NITFWriteControl::initialize(Container* container)
                     info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
             subheader.getImageId().set(getIID(dataType, jj, numIS, ii));
-
-            std::string isorce = info.getData()->getSource();
-            subheader.getImageSource().set(isorce);
+            subheader.getImageSource().set(imageSource);
 
             // Fill out ILOC with the row offset, making sure it's in range
             if (segmentInfo.rowOffset > maxRows)
@@ -285,6 +284,7 @@ void NITFWriteControl::initialize(Container* container)
                     info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
             subheader.getImageId().set(getDerivedIID(numIS, ii));
+            subheader.getImageSource().set(imageSource);
 
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
@@ -321,6 +321,8 @@ void NITFWriteControl::initialize(Container* container)
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
             subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(
             		info.getStartIndex() + 1));
+
+            setImageSecurity(info.getData()->getClassification(), subheader);
 
             ++startIndex;
         }
