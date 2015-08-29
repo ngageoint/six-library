@@ -288,19 +288,37 @@ void NITFWriteControl::initialize(Container* container)
 
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
+            // Set NBPP and sanity check if LUT is set appropriately
+            size_t legendNbpp;
+            switch (legend->mType)
+            {
+            case PixelType::MONO8I:
+                // We shouldn't have a LUT
+                if (legend->mLUT.get())
+                {
+                    throw except::Exception(Ctxt(
+                            "LUT shouldn't be present for mono legend"));
+                }
+                legendNbpp = 8;
+                break;
+
+            case PixelType::RGB8LU:
+                // We should have a legend
+                if (legend->mLUT.get() == NULL)
+                {
+                    throw except::Exception(Ctxt(
+                            "LUT should be present for indexed RGB legend"));
+                }
+                legendNbpp = 8;
+                break;
+
+            default:
+                throw except::Exception(Ctxt("Unsupported legend pixel type"));
+            }
+
             const GetDisplayLutFromLegend getLUT(*legend);
             std::vector<nitf::BandInfo> bandInfo =
                     NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
-
-            // TODO: For now, we're only supporting RGB8LU legends
-            //       When we expand this, will need to set nbpp differently
-            //       potentially
-            const size_t legendNbpp = 8;
-            if (legend->mType != PixelType::RGB8LU)
-            {
-                throw except::Exception(Ctxt(
-                        "Only RGB8LU legends supported at present"));
-            }
 
             subheader.setPixelInformation(
                     NITFImageInfo::getPixelValueType(legend->mType),

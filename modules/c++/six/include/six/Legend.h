@@ -32,15 +32,17 @@
 
 namespace six
 {
-/*
- * This is a legend associated with a SIDD product
+/*!
+ * \struct Legend
+ * \brief A legend associated with a SIDD product
+ *
  * See section 2.4.3 of SIDD Volume 2
  *
- * TODO: Have started adding this in NITFWriteControl.cpp - see legend section
  */
 struct Legend
 {
 public:
+    //! Construct, initializing to invalid values
     Legend() :
         mType(PixelType::NOT_SET),
         mLocation(0, 0),
@@ -48,20 +50,30 @@ public:
     {
     }
 
-    // Resizes 'mImage' to match
+    //! Convenience method to resize the image to match the dimensions
     void setDims(const types::RowCol<size_t>& dims)
     {
         mDims = dims;
         mImage.resize(dims.row * dims.col);
     }
 
-    // TODO: For now, only RGB8LU is supported
+    //! Pixel type of legend image data.
+    //  TODO: For now, only MONO8I and RGB8LU are supported
 	PixelType mType;
 
+	//! Location of the legend with respect to the upper-left corner of the
+	//  image segment it's attached to
 	types::RowCol<size_t> mLocation;
 
+	//! Dimensions of the legend image pixels
 	types::RowCol<size_t> mDims;
+
+	//! Image legend pixels.  These are either pixel values or LUT indices
+	//  depending on of the pixel type is MONO8I or RGB8LU, respectively.
 	std::vector<sys::ubyte> mImage;
+
+	//! LUT associated with image pixels.  Must be present if pixel type is
+	//  RGB8LU.
 	mem::ScopedCloneablePtr<LUT> mLUT;
 };
 }
