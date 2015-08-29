@@ -145,30 +145,21 @@ int main(int argc, char** argv)
         container.addData(data1);
         buffers.push_back(buffer1.get());
 
-        // Now a single segment with a legend
+        // Now a single segment with a mono legend
         types::RowCol<size_t> dims2(40, numCols);
         std::auto_ptr<six::Data> data2(mockupDerivedData(dims2));
 
         const types::RowCol<size_t> legendDims(50, 50);
-        std::auto_ptr<six::Legend> legend1(new six::Legend());
-        legend1->mType = six::PixelType::RGB8LU;
-        legend1->mLocation.row = 10;
-        legend1->mLocation.col = 10;
-        legend1->setDims(legendDims);
-        legend1->mLUT.reset(new six::LUT(256, 3));
-        for (size_t ii = 0, idx = 0;
-             ii < legend1->mLUT->numEntries;
-             ++ii, idx += 3)
-        {
-            legend1->mLUT->table[idx] = ii;
-            legend1->mLUT->table[idx + 1] = ii;
-            legend1->mLUT->table[idx + 2] = ii;
-        }
+        std::auto_ptr<six::Legend> monoLegend(new six::Legend());
+        monoLegend->mType = six::PixelType::MONO8I;
+        monoLegend->mLocation.row = 10;
+        monoLegend->mLocation.col = 10;
+        monoLegend->setDims(legendDims);
 
         const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.normL1()]);
         std::fill_n(buffer2.get(), dims2.normL1(), 100);
 
-        container.addData(data2, legend1);
+        container.addData(data2, monoLegend);
         buffers.push_back(buffer2.get());
 
         // Now a multi-segment without a legend
@@ -181,29 +172,29 @@ int main(int argc, char** argv)
         container.addData(data3);
         buffers.push_back(buffer3.get());
 
-        // Now a multi-segment with a legend
+        // Now a multi-segment with an RGB legend
         types::RowCol<size_t> dims4(155, numCols);
         std::auto_ptr<six::Data> data4(mockupDerivedData(dims4));
 
-        std::auto_ptr<six::Legend> legend2(new six::Legend());
-        legend2->mType = six::PixelType::RGB8LU;
-        legend2->mLocation.row = 10;
-        legend2->mLocation.col = 10;
-        legend2->setDims(legendDims);
-        legend2->mLUT.reset(new six::LUT(256, 3));
+        std::auto_ptr<six::Legend> rgbLegend(new six::Legend());
+        rgbLegend->mType = six::PixelType::RGB8LU;
+        rgbLegend->mLocation.row = 10;
+        rgbLegend->mLocation.col = 10;
+        rgbLegend->setDims(legendDims);
+        rgbLegend->mLUT.reset(new six::LUT(256, 3));
         for (size_t ii = 0, idx = 0;
-             ii < legend2->mLUT->numEntries;
+             ii < rgbLegend->mLUT->numEntries;
              ++ii, idx += 3)
         {
-            legend2->mLUT->table[idx] = ii;
-            legend2->mLUT->table[idx + 1] = ii;
-            legend2->mLUT->table[idx + 2] = ii;
+            rgbLegend->mLUT->table[idx] = ii;
+            rgbLegend->mLUT->table[idx + 1] = ii;
+            rgbLegend->mLUT->table[idx + 2] = ii;
         }
 
         const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.normL1()]);
         std::fill_n(buffer4.get(), dims4.normL1(), 200);
 
-        container.addData(data4, legend2);
+        container.addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());
 
         // Write it out
