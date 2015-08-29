@@ -22,9 +22,9 @@
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
 
-#include "six/Data.h"
-#include "six/Utilities.h"
-#include "six/NITFSegmentInfo.h"
+#include <six/Data.h>
+#include <six/Utilities.h>
+#include <six/NITFSegmentInfo.h>
 
 namespace six
 {
@@ -45,9 +45,10 @@ class NITFImageInfo
 {
 public:
 
-    NITFImageInfo(Data* d, size_t maxRows = Constants::ILOC_MAX,
-            sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
-            bool computeSegments = false) :
+    NITFImageInfo(Data* d,
+    		      size_t maxRows = Constants::ILOC_MAX,
+                  sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
+                  bool computeSegments = false) :
         data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
     {
         productSize = (sys::Uint64_T) data->getNumBytesPerPixel()
@@ -62,66 +63,66 @@ public:
         return data->getNumBytesPerPixel() / data->getNumChannels() * 8;
     }
 
-    std::string getPixelValueType() const
+    static
+    std::string getPixelValueType(PixelType pixelType)
     {
-        std::string type;
-        switch (data->getPixelType())
+        switch (pixelType)
         {
         case PixelType::RE32F_IM32F:
-            type = "R";
-            break;
-
+            return "R";
         case PixelType::RE16I_IM16I:
-            type = "SI";
-            break;
-
+            return "SI";
         default:
-            type = "INT";
-
+            return "INT";
         }
-        return type;
+    }
+
+    std::string getPixelValueType() const
+    {
+        return getPixelValueType(data->getPixelType());
+    }
+
+    static
+    std::string getRepresentation(PixelType pixelType)
+    {
+        switch (pixelType)
+        {
+        case PixelType::MONO8LU:
+        case PixelType::MONO8I:
+        case PixelType::MONO16I:
+            return "MONO";
+        case PixelType::RGB8LU:
+            return "RGB/LUT";
+        case PixelType::RGB24I:
+            return "RGB";
+        default:
+            return "NODISPLY";
+        }
     }
 
     std::string getRepresentation() const
     {
+        return getRepresentation(data->getPixelType());
+    }
 
-        std::string irep;
-        switch (data->getPixelType())
+    static
+    std::string getMode(PixelType pixelType)
+    {
+        switch (pixelType)
         {
+        case PixelType::RGB8LU:
         case PixelType::MONO8LU:
         case PixelType::MONO8I:
         case PixelType::MONO16I:
-            irep = "MONO";
-            break;
-        case PixelType::RGB8LU:
-            irep = "RGB/LUT";
-            break;
-        case PixelType::RGB24I:
-            irep = "RGB";
-            break;
-
+            return "B";
         default:
-            irep = "NODISPLY";
+            return "P";
         }
-        return irep;
-
     }
 
     std::string getMode() const
     {
-        std::string imode;
-        switch (data->getPixelType())
-        {
-        case PixelType::RGB8LU:
-        case PixelType::MONO8LU:
-        case PixelType::MONO8I:
-        case PixelType::MONO16I:
-            imode = "B";
-            break;
-        default:
-            imode = "P";
-        }
-        return imode;
+        return getMode(data->getPixelType());
     }
 
     Data* getData() const
@@ -166,8 +167,16 @@ public:
         return maxProductSize;
     }
 
-    // Currently punts on LU
-    std::vector<nitf::BandInfo> getBandInfo();
+    std::vector<nitf::BandInfo> getBandInfo() const;
+
+    // We have to do this a little strangely with a functor rather than just
+    // always sending in the display LUT because that method will throw for
+    // ComplexData
+    template <typename GetDisplayLutT>
+    static
+    std::vector<nitf::BandInfo>
+    getBandInfoImpl(PixelType pixelType,
+                    const GetDisplayLutT& getDisplayLUT);
 
     //!  File security classification system
     static const char CLSY[];
@@ -202,30 +211,9 @@ public:
 
     //! Utility that generates a key for the given field, with optional prefix and index
     static std::string generateFieldKey(const std::string& field,
-            std::string prefix = "", int index = -1);
+            const std::string& prefix = "", int index = -1);
 
-protected:
-    Data* data;
-
-    size_t startIndex;
-
-    //! Number of bytes in the product
-    sys::Uint64_T productSize;
-
-    //! This is the total number of rows we can have in a NITF segment
-    size_t numRowsLimit;
-
-    //! This is the total size that each product seg can be
-    sys::Uint64_T maxProductSize;
-
-    /*!
-     *  This is a vector of segment information that is used to get
-     *  the per-segment info for populating/reading from a NITF
-     *
-     *  Note that the number of segments has a hard limit of 999
-     */
-    std::vector<NITFSegmentInfo> imageSegments;
-
+private:
     void computeImageInfo();
 
     /*!
@@ -286,8 +274,174 @@ protected:
     /*          numRowsLimit = maxRows; */
     /*      } */
 
+private:
+    Data* data;
+
+    size_t startIndex;
+
+    //! Number of bytes in the product
+    sys::Uint64_T productSize;
+
+    //! This is the total number of rows we can have in a NITF segment
+    size_t numRowsLimit;
+
+    //! This is the total size that each product seg can be
+    sys::Uint64_T maxProductSize;
+
+    /*!
+     *  This is a vector of segment information that is used to get
+     *  the per-segment info for populating/reading from a NITF
+     *
+     *  Note that the number of segments has a hard limit of 999
+     */
+    std::vector<NITFSegmentInfo> imageSegments;
 };
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// WHAT FOLLOWS IS IMPLEMENTATION DETAIL
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
+template <typename GetDisplayLutT>
+std::vector<nitf::BandInfo>
+NITFImageInfo::getBandInfoImpl(PixelType pixelType,
+                               const GetDisplayLutT& getDisplayLUT)
+{
+    std::vector<nitf::BandInfo> bands;
+
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
+    {
+        nitf::BandInfo band1;
+        band1.getSubcategory().set("I");
+        nitf::BandInfo band2;
+        band2.getSubcategory().set("Q");
+
+        bands.push_back(band1);
+        bands.push_back(band2);
+    }
+        break;
+    case PixelType::RGB24I:
+    {
+        nitf::BandInfo band1;
+        band1.getRepresentation().set("R");
+
+        nitf::BandInfo band2;
+        band2.getRepresentation().set("G");
+
+        nitf::BandInfo band3;
+        band3.getRepresentation().set("B");
+
+        bands.push_back(band1);
+        bands.push_back(band2);
+        bands.push_back(band3);
+    }
+        break;
+
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+    {
+        nitf::BandInfo band1;
+        band1.getRepresentation().set("M");
+        bands.push_back(band1);
+    }
+        break;
+
+    case PixelType::MONO8LU:
+    {
+        nitf::BandInfo band1;
+
+        // TODO: Why do we need to byte swap here?  If it is required, could
+        //       we avoid the clone and byte swap and instead index into
+        //       the LUT in the opposite order?
+        std::auto_ptr<LUT> lut(getDisplayLUT()->clone());
+        sys::byteSwap(reinterpret_cast<sys::byte*>(lut->table.get()),
+                      static_cast<unsigned short>(lut->elementSize),
+                      lut->numEntries);
+
+        if (lut->elementSize != sizeof(short))
+        {
+            throw except::Exception(Ctxt(
+                "Unexpected element size: " +
+                str::toString(lut->elementSize)));
+        }
+
+        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+        unsigned char* const table(lookupTable.getTable());
+
+        for (size_t i = 0; i < lut->numEntries; ++i)
+        {
+            // Need two LUTS in the nitf, with high order
+            // bits in the first and low order in the second
+            const unsigned char* const entry = (*lut)[i];
+            table[i] = entry[0];
+            table[lut->numEntries + i] = entry[1];
+        }
+
+        //         //I would like to set it this way but it does not seem to work.
+        //         //Using the init function instead.
+        //         //band1.getRepresentation().set("LU");
+        //         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
+
+        band1.init("LU", "", "", "",
+                   static_cast<nitf::Uint32>(lut->elementSize),
+                   static_cast<nitf::Uint32>(lut->numEntries),
+                   lookupTable);
+        bands.push_back(band1);
+    }
+        break;
+
+    case PixelType::RGB8LU:
+    {
+        nitf::BandInfo band1;
+
+        const LUT* const lut = getDisplayLUT();
+
+        if (lut->elementSize != 3)
+        {
+            throw except::Exception(Ctxt(
+                "Unexpected element size: " +
+                str::toString(lut->elementSize)));
+        }
+
+        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+        unsigned char* const table(lookupTable.getTable());
+
+        for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
+        {
+            for (size_t j = 0; j < lut->elementSize; ++j, ++k)
+            {
+                // Need to transpose the lookup table entries
+                table[j * lut->numEntries + i] = lut->table[k];
+            }
+        }
+
+        //I would like to set it this way but it does not seem to work.
+        //Using the init function instead.
+        //band1.getRepresentation().set("LU");
+        //band1.getLookupTable().setTable(table, 3, lut->numEntries);
+
+        band1.init("LU", "", "", "",
+                   static_cast<nitf::Uint32>(lut->elementSize),
+                   static_cast<nitf::Uint32>(lut->numEntries),
+                   lookupTable);
+        bands.push_back(band1);
+    }
+        break;
+
+    default:
+        throw except::Exception(Ctxt("Unknown pixel type"));
+    }
+
+    for (size_t i = 0; i < bands.size(); ++i)
+    {
+        bands[i].getImageFilterCondition().set("N");
+    }
+    return bands;
+}
 }
 
 #endif

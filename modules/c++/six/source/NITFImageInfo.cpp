@@ -29,8 +29,28 @@
 #include <six/NITFImageInfo.h>
 #include <scene/Utilities.h>
 
-using namespace six;
+namespace
+{
+class GetDisplayLutFromData
+{
+public:
+    GetDisplayLutFromData(six::Data& data) :
+        mData(data)
+    {
+    }
 
+    const six::LUT* operator()() const
+    {
+        return mData.getDisplayLUT();
+    }
+
+private:
+    six::Data& mData;
+};
+}
+
+namespace six
+{
 //!  File security classification system
 const char NITFImageInfo::CLSY[] = "CLSY";
 //!  File security codewords
@@ -189,145 +209,20 @@ void NITFImageInfo::compute()
     computeSegmentInfo();
 }
 
-// Currently punts on LU
-std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
+
+std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo() const
 {
-    std::vector < nitf::BandInfo > bands;
-
-    switch (data->getPixelType())
-    {
-    case PixelType::RE32F_IM32F:
-    case PixelType::RE16I_IM16I:
-    {
-        nitf::BandInfo band1;
-        band1.getSubcategory().set("I");
-        nitf::BandInfo band2;
-        band2.getSubcategory().set("Q");
-
-        bands.push_back(band1);
-        bands.push_back(band2);
-    }
-        break;
-    case PixelType::RGB24I:
-    {
-        nitf::BandInfo band1;
-        band1.getRepresentation().set("R");
-
-        nitf::BandInfo band2;
-        band2.getRepresentation().set("G");
-
-        nitf::BandInfo band3;
-        band3.getRepresentation().set("B");
-
-        bands.push_back(band1);
-        bands.push_back(band2);
-        bands.push_back(band3);
-    }
-        break;
-
-    case PixelType::MONO8I:
-    case PixelType::MONO16I:
-    {
-        nitf::BandInfo band1;
-        band1.getRepresentation().set("M");
-        bands.push_back(band1);
-    }
-        break;
-
-    case PixelType::MONO8LU:
-    {
-        nitf::BandInfo band1;
-
-        // TODO: Why do we need to byte swap here?  If it is required, could
-        //       we avoid the clone and byte swap and instead index into
-        //       the LUT in the opposite order?
-        std::auto_ptr<LUT> lut(data->getDisplayLUT()->clone());
-        sys::byteSwap((sys::byte*) lut->table.get(), lut->elementSize,
-                      lut->numEntries);
-
-        if (lut->elementSize != sizeof(short))
-        {
-            throw except::Exception(Ctxt(
-                "Unexpected element size: " +
-                str::toString(lut->elementSize)));
-        }
-
-        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
-        unsigned char* const table(lookupTable.getTable());
-
-        for (unsigned int i = 0; i < lut->numEntries; ++i)
-        {
-            // Need two LUTS in the nitf, with high order
-            // bits in the first and low order in the second
-            const unsigned char* const entry = (*lut)[i];
-            table[i] = entry[0];
-            table[lut->numEntries + i] = entry[1];
-        }
-
-        //         //I would like to set it this way but it does not seem to work.
-        //         //Using the init function instead.
-        //         //band1.getRepresentation().set("LU");
-        //         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
-
-        band1.init("LU", "", "", "", lut->elementSize, lut->numEntries,
-                   lookupTable);
-        bands.push_back(band1);
-    }
-        break;
-
-    case PixelType::RGB8LU:
-    {
-        nitf::BandInfo band1;
-
-        LUT* lut = data->getDisplayLUT();
-
-        if (lut->elementSize != 3)
-        {
-            throw except::Exception(Ctxt(
-                "Unexpected element size: " +
-                str::toString(lut->elementSize)));
-        }
-
-        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
-        unsigned char* const table(lookupTable.getTable());
-
-        for (unsigned int i = 0, k = 0; i < lut->numEntries; ++i)
-        {
-            for (unsigned int j = 0; j < lut->elementSize; ++j, ++k) //elementSize=3
-            {
-                // Need to transpose the lookup table entries
-                table[j * lut->numEntries + i] = lut->table[k];
-            }
-        }
-
-        //I would like to set it this way but it does not seem to work.
-        //Using the init function instead.
-        //band1.getRepresentation().set("LU");
-        //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-
-        band1.init("LU", "", "", "", lut->elementSize, lut->numEntries,
-                   lookupTable);
-        bands.push_back(band1);
-    }
-        break;
-
-    default:
-        throw except::Exception(Ctxt("Unknown pixel type"));
-    }
-
-    for (size_t i = 0; i < bands.size(); ++i)
-    {
-        bands[i].getImageFilterCondition().set("N");
-    }
-    return bands;
+    const GetDisplayLutFromData getLUT(*data);
+    return getBandInfoImpl<GetDisplayLutFromData>(data->getPixelType(), getLUT);
 }
 
 std::string NITFImageInfo::generateFieldKey(const std::string& field,
-        std::string prefix, int index)
+        const std::string& prefix, int index)
 {
     std::ostringstream s;
     s << prefix << field;
     if (index >= 0)
         s << "[" << str::toString(index) << "]";
     return s.str();
+}
 }

@@ -26,14 +26,6 @@
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 
-using namespace six;
-
-const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
-const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
-const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
-const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
-const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
-
 namespace
 {
 // Just using this to provide a more useful exception message
@@ -58,24 +50,51 @@ void setField(const std::string& field,
 
     treField = value;
 }
+
+std::string generateILOC(size_t row, size_t col)
+{
+    std::ostringstream ostr;
+    ostr.fill('0');
+    ostr << std::setw(5) << row << std::setw(5) << col;
+
+    return ostr.str();
 }
 
-NITFWriteControl::~NITFWriteControl()
+std::string generateILOC(const types::RowCol<size_t>& dims)
 {
-    for (size_t ii = 0; ii < mInfos.size(); ++ii)
-    {
-        delete mInfos[ii];
-    }
+	return generateILOC(dims.row, dims.col);
 }
+
+class GetDisplayLutFromLegend
+{
+public:
+    GetDisplayLutFromLegend(const six::Legend& legend) :
+        mLegend(legend)
+    {
+    }
+
+    const six::LUT* operator()() const
+    {
+        return mLegend.mLUT.get();
+    }
+
+private:
+    const six::Legend& mLegend;
+};
+}
+
+namespace six
+{
+const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
+const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
+const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
+const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
+const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 
 void NITFWriteControl::initialize(Container* container)
 {
     // Clean up
     // NOTE  We do not own the container, so we don't delete 'mContainer' here
-    for (size_t ii = 0; ii < mInfos.size(); ++ii)
-    {
-        delete mInfos[ii];
-    }
     mInfos.clear();
 
     mContainer = container;
@@ -102,14 +121,13 @@ void NITFWriteControl::initialize(Container* container)
      */
     if (mContainer->getDataType() == DataType::COMPLEX)
     {
-        std::auto_ptr<NITFImageInfo>
+        mem::SharedPtr<NITFImageInfo>
             info(new NITFImageInfo(mContainer->getData(0),
                                    maxRows,
                                    maxSize,
                                    true));
 
-        mInfos.resize(1);
-        mInfos[0] = info.release();
+        mInfos.push_back(info);
     }
     else
     {
@@ -123,11 +141,10 @@ void NITFWriteControl::initialize(Container* container)
             Data* const ith = mContainer->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                std::auto_ptr<NITFImageInfo>
+                mem::SharedPtr<NITFImageInfo>
                     info(new NITFImageInfo(ith, maxRows, maxSize, true));
 
-                mInfos.resize(mInfos.size() + 1);
-                mInfos.back() = info.release();
+                mInfos.push_back(info);
             }
         }
     }
@@ -135,8 +152,7 @@ void NITFWriteControl::initialize(Container* container)
 
     DataType dataType = mContainer->getDataType();
     std::string name = mInfos[0]->getData()->getName();
-    std::string fileTitle = FmtX("%s: %s", six::toString(dataType).c_str(),
-                                 name.c_str());
+    std::string fileTitle = six::toString(dataType) + ": " + name;
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ); //truncate past 80
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
@@ -148,26 +164,26 @@ void NITFWriteControl::initialize(Container* container)
     int startIndex = 0;
     for (size_t ii = 0; ii < mInfos.size(); ++ii)
     {
-        NITFImageInfo* info = mInfos[ii];
+        NITFImageInfo& info = *mInfos[ii];
 
         const std::vector <NITFSegmentInfo> imageSegments
-                = info->getImageSegments();
+                = info.getImageSegments();
 
         size_t numIS = imageSegments.size();
-        int nbpp = info->getNumBitsPerPixel();
-        int numCols = info->getData()->getNumCols();
-        std::string irep = info->getRepresentation();
-        std::string imode = info->getMode();
-        std::string pvtype = info->getPixelValueType();
+        int nbpp = info.getNumBitsPerPixel();
+        int numCols = info.getData()->getNumCols();
+        std::string irep = info.getRepresentation();
+        std::string imode = info.getMode();
+        std::string pvtype = info.getPixelValueType();
         // NITRO wants to see this, not our corners object
         double corners[4][2];
 
-        std::string targetId = "";
+        std::string targetId;
 
         // TODO: Subclass to get this?
-        // if (info->getData()->getDataType() == DataType::DERIVED)
+        // if (info.getData()->getDataType() == DataType::DERIVED)
         //         {
-        //             DerivedData* derived = (DerivedData*)info->getData();
+        //             DerivedData* derived = (DerivedData*)info.getData();
         //             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
         //             {
         //                 six::TargetInformation* target = derived->geographicAndTarget->targetInformation[0];
@@ -179,9 +195,11 @@ void NITFWriteControl::initialize(Container* container)
         //         }
 
         // Update this info's startIndex
-        info->setStartIndex(startIndex);
+        info.setStartIndex(startIndex);
         startIndex += numIS;
 
+        // Images
+        const std::string imageSource = info.getData()->getSource();
         for (size_t jj = 0; jj < numIS; ++jj)
         {
             NITFSegmentInfo segmentInfo = imageSegments[jj];
@@ -191,22 +209,10 @@ void NITFWriteControl::initialize(Container* container)
 
             subheader.getImageTitle().set(fileTitle);
             const DateTime collectionDT =
-                    info->getData()->getCollectionStartDateTime();
+                    info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
-
-            std::string iid = six::toString(dataType);
-            if (dataType == DataType::COMPLEX)
-            {
-                iid = FmtX("%s%03d", iid.c_str(), numIS > 1 ? jj + 1 : jj);
-            }
-            else
-            {
-                iid = FmtX("%s%03d%03d", iid.c_str(), ii + 1, jj + 1);
-            }
-            subheader.getImageId().set(iid);
-
-            std::string isorce = info->getData()->getSource();
-            subheader.getImageSource().set(isorce);
+            subheader.getImageId().set(getIID(dataType, jj, numIS, ii));
+            subheader.getImageSource().set(imageSource);
 
             // Fill out ILOC with the row offset, making sure it's in range
             if (segmentInfo.rowOffset > maxRows)
@@ -219,14 +225,12 @@ void NITFWriteControl::initialize(Container* container)
                 throw except::Exception(Ctxt(ostr.str()));
             }
 
-            std::ostringstream ostr;
-            ostr.fill('0');
-            ostr << std::setw(5) << segmentInfo.rowOffset << "00000";
-            subheader.getImageLocation().set(ostr.str());
+            subheader.getImageLocation().set(generateILOC(segmentInfo.rowOffset,
+            										      0));
 
             subheader.getTargetId().set(targetId);
 
-            std::vector < nitf::BandInfo > bandInfo = info->getBandInfo();
+            std::vector<nitf::BandInfo> bandInfo = info.getBandInfo();
 
             subheader.setPixelInformation(pvtype, nbpp, nbpp, "R", irep, "SAR",
                                           bandInfo);
@@ -245,7 +249,7 @@ void NITFWriteControl::initialize(Container* container)
             {
                 // Need to attach to last segment
                 subheader.getImageAttachmentLevel().set(
-                        (nitf::Uint16)(info->getStartIndex() + jj));
+                        (nitf::Uint16)(info.getStartIndex() + jj));
             }
 
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -255,7 +259,7 @@ void NITFWriteControl::initialize(Container* container)
             }
             subheader.setCornersFromLatLons(NITF_CORNERS_GEO, corners);
 
-            setImageSecurity(info->getData()->getClassification(), subheader);
+            setImageSecurity(info.getData()->getClassification(), subheader);
 
             if (enableJ2K)
             {
@@ -267,7 +271,81 @@ void NITFWriteControl::initialize(Container* container)
                 subheader.getCompressionRate().set(comrat);
             }
         }
+
+        // Optional legend
+        const Legend* const legend = mContainer->getLegend(ii);
+        if (legend)
+        {
+            nitf::ImageSegment imageSegment = mRecord.newImageSegment();
+            nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+            subheader.getImageTitle().set(fileTitle);
+            const DateTime collectionDT =
+                    info.getData()->getCollectionStartDateTime();
+            subheader.getImageDateAndTime().set(collectionDT);
+            subheader.getImageId().set(getDerivedIID(numIS, ii));
+            subheader.getImageSource().set(imageSource);
+
+            subheader.getImageLocation().set(generateILOC(legend->mLocation));
+
+            // Set NBPP and sanity check if LUT is set appropriately
+            size_t legendNbpp;
+            switch (legend->mType)
+            {
+            case PixelType::MONO8I:
+                // We shouldn't have a LUT
+                if (legend->mLUT.get())
+                {
+                    throw except::Exception(Ctxt(
+                            "LUT shouldn't be present for mono legend"));
+                }
+                legendNbpp = 8;
+                break;
+
+            case PixelType::RGB8LU:
+                // We should have a legend
+                if (legend->mLUT.get() == NULL)
+                {
+                    throw except::Exception(Ctxt(
+                            "LUT should be present for indexed RGB legend"));
+                }
+                legendNbpp = 8;
+                break;
+
+            default:
+                throw except::Exception(Ctxt("Unsupported legend pixel type"));
+            }
+
+            const GetDisplayLutFromLegend getLUT(*legend);
+            std::vector<nitf::BandInfo> bandInfo =
+                    NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
+
+            subheader.setPixelInformation(
+                    NITFImageInfo::getPixelValueType(legend->mType),
+                    legendNbpp,
+                    legendNbpp,
+                    "R",
+                    NITFImageInfo::getRepresentation(legend->mType),
+                    "LEG",
+                    bandInfo);
+
+            subheader.setBlocking(legend->mDims.row, legend->mDims.col, 0, 0,
+                                  NITFImageInfo::getMode(legend->mType));
+
+            // While we never set IDLVL explicitly in here, NITRO will
+            // kindly do that for us (incrementing it once for each segment).
+            // We want to set the legend's IALVL to the IDLVL we want to attach
+            // to (which is the first image segment for this product which is
+            // conveniently at info.getStartIndex()... but IDLVL is 1-based).
+            subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(
+            		info.getStartIndex() + 1));
+
+            setImageSecurity(info.getData()->getClassification(), subheader);
+
+            ++startIndex;
+        }
     }
+
     for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
     {
         const six::Data& data(*mContainer->getData(ii));
@@ -287,6 +365,46 @@ void NITFWriteControl::initialize(Container* container)
     }
 
     updateFileHeaderSecurity();
+}
+
+std::string NITFWriteControl::getComplexIID(size_t segmentNum,
+											size_t numImageSegments)
+{
+	// SICD###
+	std::ostringstream ostr;
+	ostr << six::toString(DataType(DataType::COMPLEX))
+	     << std::setfill('0') << std::setw(3)
+	     << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
+
+	return ostr.str();
+}
+
+std::string NITFWriteControl::getDerivedIID(size_t segmentNum,
+                                            size_t productNum)
+{
+	// SIDD######
+	std::ostringstream ostr;
+	ostr << six::toString(DataType(DataType::DERIVED))
+	     << std::setfill('0')
+         << std::setw(3) << (productNum + 1)
+         << std::setw(3) << (segmentNum + 1);
+
+	return ostr.str();
+}
+
+std::string NITFWriteControl::getIID(DataType dataType,
+		           	   	   	   	   	 size_t segmentNum,
+		           	   	   	   	   	 size_t numImageSegments,
+		           	   	   	   	   	 size_t productNum)
+{
+	if (dataType == DataType::COMPLEX)
+	{
+		return getComplexIID(segmentNum, numImageSegments);
+	}
+	else
+	{
+		return getDerivedIID(segmentNum, productNum);
+	}
 }
 
 void NITFWriteControl::setBlocking(const std::string& imode,
@@ -600,7 +718,7 @@ void NITFWriteControl::save(
     }
     else
     {
-        // Do what they say.  You really shouldnt do this
+        // Do what they say.  You really shouldn't do this
         // unless you know what you're doing anyway!
         doByteSwap = byteSwapping ? true : false;
     }
@@ -620,13 +738,13 @@ void NITFWriteControl::save(
     //        CODA ticket #443 will update support for this.
     for (size_t i = 0; i < numImages; ++i)
     {
-        NITFImageInfo* info = mInfos[i];
+        const NITFImageInfo& info = *mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
-                = info->getImageSegments();
+                = info.getImageSegments();
         size_t numIS = imageSegments.size();
-        size_t pixelSize = info->getData()->getNumBytesPerPixel();
-        size_t numCols = info->getData()->getNumCols();
-        size_t numChannels = info->getData()->getNumChannels();
+        size_t pixelSize = info.getData()->getNumBytesPerPixel();
+        size_t numCols = info.getData()->getNumCols();
+        size_t numChannels = info.getData()->getNumChannels();
 
         for (size_t j = 0; j < numIS; ++j)
         {
@@ -636,7 +754,7 @@ void NITFWriteControl::save(
                 new StreamWriteHandler (segmentInfo, imageData[i], numCols,
                                         numChannels, pixelSize, doByteSwap));
 
-            mWriter.setImageWriteHandler(info->getStartIndex() + j,
+            mWriter.setImageWriteHandler(info.getStartIndex() + j,
                                          writeHandler);
         }
     }
@@ -687,21 +805,17 @@ void NITFWriteControl::save(
     createCompressionOptions(mCompressionOptions);
     for (size_t i = 0; i < numImages; ++i)
     {
-        NITFImageInfo* info = mInfos[i];
+        const NITFImageInfo& info = *mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
-                = info->getImageSegments();
-        size_t numIS = imageSegments.size();
-        size_t pixelSize = info->getData()->getNumBytesPerPixel();
-        size_t numCols = info->getData()->getNumCols();
-        size_t numChannels = info->getData()->getNumChannels();
+                = info.getImageSegments();
+        const size_t numIS = imageSegments.size();
+        const size_t pixelSize = info.getData()->getNumBytesPerPixel();
+        const size_t numCols = info.getData()->getNumCols();
+        const size_t numChannels = info.getData()->getNumChannels();
 
         nitf::ImageSegment imageSegment = mRecord.getImages()[i];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        // The SIDD spec doesn't currently support writing blocked products
-        // this is a work around to allow it to happen for the power users.
-        // Setting the blocking information in the subheader after
-        // initialization will properly allow writing of blocked products.
         const bool isBlocking = 
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
@@ -712,45 +826,78 @@ void NITFWriteControl::save(
             !mCompressionOptions.empty())
         {
             if ((isBlocking || (enableJ2K && numIS == 1)) && 
-                info->getData()->getDataType() == six::DataType::COMPLEX)
+                info.getData()->getDataType() == six::DataType::COMPLEX)
             {
                 throw except::Exception(Ctxt(
                     "SICD does not support blocked or J2K compressed output"));
             }
 
-            // We will use the ImageWriter provided by NITRO so that we can
-            // take advantage of the built-in compression capabilities
-            nitf::ImageWriter iWriter = 
-                mWriter.newImageWriter(i, mCompressionOptions);
-            iWriter.setWriteCaching(1);
-
-            nitf::ImageSource iSource;
-            size_t bandSize = numCols * info->getData()->getNumRows();
-
-            for (size_t j = 0; j < numChannels; ++j)
+            for (size_t jj = 0; jj < numIS; ++jj)
             {
-                nitf::MemorySource ms((char *)imageData[i], bandSize, 
-                                      bandSize * j, pixelSize, 0);
-                iSource.addBand(ms);
+                // We will use the ImageWriter provided by NITRO so that we can
+                // take advantage of the built-in compression capabilities
+                nitf::ImageWriter iWriter =
+                    mWriter.newImageWriter(info.getStartIndex() + jj,
+                                           mCompressionOptions);
+                iWriter.setWriteCaching(1);
+
+                nitf::ImageSource iSource;
+                const size_t bandSize = numCols * info.getData()->getNumRows();
+
+                for (size_t chan = 0; chan < numChannels; ++chan)
+                {
+                    nitf::MemorySource ms(imageData[i], bandSize,
+                                          bandSize * chan, pixelSize, 0);
+                    iSource.addBand(ms);
+                }
+                iWriter.attachSource(iSource);
             }
-            iWriter.attachSource(iSource);
         }
         else
         {
             // this bypasses the normal NITF ImageWriter and streams directly
             // to the output
-            for (size_t j = 0; j < numIS; ++j)
+            for (size_t jj = 0; jj < numIS; ++jj)
             {
-                NITFSegmentInfo segmentInfo = imageSegments[j];
+                const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
                 mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
-                    new MemoryWriteHandler (segmentInfo, imageData[i],
-                                            segmentInfo.firstRow, numCols,
-                                            numChannels, pixelSize, doByteSwap));
+                    new MemoryWriteHandler(segmentInfo, imageData[i],
+                                           segmentInfo.firstRow, numCols,
+                                           numChannels, pixelSize, doByteSwap));
                 // Could set start index here
-                mWriter.setImageWriteHandler(info->getStartIndex() + j,
+                mWriter.setImageWriteHandler(info.getStartIndex() + jj,
                                              writeHandler);
             }
+        }
+
+        const Legend* const legend = mContainer->getLegend(i);
+        if (legend)
+        {
+            if (legend->mDims.row * legend->mDims.col != legend->mImage.size())
+            {
+                throw except::Exception(Ctxt("Legend dimensions don't match"));
+            }
+
+            if (legend->mImage.empty())
+            {
+                throw except::Exception(Ctxt("Empty legend"));
+            }
+
+            nitf::ImageSource iSource;
+
+            nitf::MemorySource memSource(&legend->mImage[0],
+                                         legend->mImage.size(),
+                                         0,
+                                         sizeof(sys::ubyte),
+                                         0);
+
+            iSource.addBand(memSource);
+
+            nitf::ImageWriter iWriter =
+                mWriter.newImageWriter(info.getStartIndex() + numIS);
+            iWriter.setWriteCaching(1);
+            iWriter.attachSource(iSource);
         }
     }
 
@@ -935,4 +1082,5 @@ void NITFWriteControl::addUserDefinedSubheader(
                 "six::loadPluginDir()"));
     }
     subheader.setSubheaderFields(tre);
+}
 }

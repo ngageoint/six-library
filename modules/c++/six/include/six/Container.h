@@ -22,12 +22,13 @@
 #ifndef __SIX_CONTAINER_H__
 #define __SIX_CONTAINER_H__
 
-#include "six/Data.h"
-#include "six/Utilities.h"
-#include <import/xml/lite.h>
-#include <import/io.h>
-#include <list>
 #include <memory>
+#include <vector>
+#include <utility>
+
+#include <mem/ScopedCloneablePtr.h>
+#include <six/Legend.h>
+#include <six/Data.h>
 
 namespace six
 {
@@ -38,15 +39,11 @@ namespace six
  *
  *  A container is storage for the Data objects, and determines how these
  *  components are laid out in whatever file is being written.  The Container
- *  takes ownership of its Data objects
+ *  takes ownership of its Data objects.
  */
 class Container
 {
-
 public:
-
-    //! Container type is going to contain either 'NITF' or 'GeoTIFF'
-    //std::string getContainerType() const { return mContainerType; }
 
     /*! 
      *  The data class is either COMPLEX or DERIVED
@@ -65,24 +62,13 @@ public:
      *  or DERIVED (for SIDD products).
      *
      */
-    Container(DataType dataType) :
-        mDataType(dataType)
-    {
-    }
-
-    //!  Copy constructor
-    Container(const Container& c);
-
-    //!  Assignment operator
-    Container& operator=(const Container& c);
+    Container(DataType dataType);
 
     //! Destructor
     virtual ~Container();
 
     /*!
      *  Add a new Data object to the back of this container.
-     *  If you leave the data in the container and do not remove
-     *  it we delete it for you (TODO: should we?).
      *
      *  \param data Add the data
      *
@@ -91,13 +77,17 @@ public:
 
     /*!
      *  Add a new Data object to the back of this container.
-     *  If you leave the data in the container and do not remove
-     *  it we delete it for you (TODO: should we?).
      *
      *  \param data Add the data
      *
      */
     void addData(std::auto_ptr<Data> data);
+
+    /*!
+     * Same as above but also supports passing in a legend.  Only valid for
+     * derived data.
+     */
+    void addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend);
 
     /*!
      *  Set the data item at location i.  If there is an item in the
@@ -114,7 +104,7 @@ public:
      */
     Data* getData(size_t i)
     {
-        return this->mData[i];
+        return mData[i].first.get();
     }
 
     /*!
@@ -123,55 +113,50 @@ public:
      */
     const Data* getData(size_t i) const
     {
-        return this->mData[i];
+        return mData[i].first.get();
+    }
+
+    /*!
+     *  Get the legend, if present, living in the ith slot.
+     *  \return The legend
+     */
+    const Legend* getLegend(size_t i) const
+    {
+    	return mData[i].second.get();
     }
 
     /*!
      *  Get the item from the ImageSubheader field IID1.
      *  \return The data
      */
-    Data* getData(const std::string& iid, size_t numImages)
-    {
-        if (!str::startsWith(iid, "SICD") && !str::startsWith(iid, "SIDD") &&
-            iid.length() >= 7)
-        {
-            throw except::Exception(Ctxt(
-                    "This is not a properly formed IID1 field"));
-        }
-
-        //! Index is 1-based except for SICDs with one image segment --
-        //  In this case it's 0-based
-        size_t dataID = str::toType<size_t>(iid.substr(4, 6));
-        if (str::startsWith(iid, "SICD") && numImages > 1)
-        {
-            --dataID;
-        }
-
-        return getData(dataID);
-    }
+    Data* getData(const std::string& iid, size_t numImages);
 
     size_t getNumData() const
     {
-        return this->mData.size();
+        return mData.size();
     }
 
-    /*!
-     *  We need to go through the list and eliminate any
-     *  data references as well.
-     *
-     */
     void removeData(const Data* data);
 
 protected:
-    std::vector<Data*> mData;
+    typedef std::pair<mem::ScopedCloneablePtr<Data>,
+    		          mem::ScopedCopyablePtr<Legend> > DataPair;
+
+    typedef std::vector<DataPair> DataVec;
+
     DataType mDataType;
-    typedef std::vector<Data*>::iterator DataIterator;
-    typedef std::vector<Data*>::const_iterator ConstDataIterator;
+    DataVec mData;
 
-    void cleanup();
+private:
+    static
+    mem::ScopedCopyablePtr<Legend> nullLegend()
+    {
+    	return mem::ScopedCopyablePtr<Legend>(NULL);
+    }
 
+    void addData(std::auto_ptr<Data> data,
+    	         mem::ScopedCopyablePtr<Legend> legend);
 };
-
 }
 
 #endif

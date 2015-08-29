@@ -23,6 +23,8 @@
 #define __SIX_NITF_WRITE_CONTROL_H__
 
 #include <map>
+
+#include <mem/SharedPtr.h>
 #include "six/Types.h"
 #include "six/Container.h"
 #include "six/WriteControl.h"
@@ -50,8 +52,6 @@ public:
     NITFWriteControl()
     {
     }
-    //!  Destructor
-    ~NITFWriteControl();
 
     //!  We are a 'NITF'
     std::string getFileType() const
@@ -185,7 +185,7 @@ public:
 protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
-    std::vector<NITFImageInfo*> mInfos;
+    std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
     std::map<std::string, void*> mCompressionOptions;
 
     void writeNITF(nitf::IOInterface& os);
@@ -345,6 +345,18 @@ private:
 
     void addUserDefinedSubheader(const six::Data& data,
                                  nitf::DESubheader& subheader) const;
+
+    static
+    std::string getComplexIID(size_t segmentNum, size_t numImageSegments);
+
+    static
+    std::string getDerivedIID(size_t segmentNum, size_t productNum);
+
+    static
+	std::string getIID(DataType dataType,
+			           size_t segmentNum,
+			           size_t numImageSegments,
+			           size_t productNum);
 
     std::string mOrganizationId;
     std::string mLocationId;
