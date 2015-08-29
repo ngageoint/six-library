@@ -22,23 +22,14 @@
 
 /**
  *  This test serves as an example to show how one can construct and write
- *  a SIDD NITF from scratch, using only a memory buffer.
+ *  a SIDD NITF with legends from scratch, using only a memory buffer.
  *
- *  The caller may optionally pass in a SICD XML file (XML only please),
- *  in which case that data will be read into ComplexData, and placed
- *  at the end of the Container.
- *
- *  NITF and GeoTIFF support are builtin.  If the suffix is .nitf or .ntf,
- *  the test will write a NITF.  Otherwise, if tiff support is enabled, it
- *  will attempt to write a GeoTIFF.  If tiff support is disabled in the
- *  library an exception will be thrown.  NITF is always written
- *  in big-endian.  Tiff output will always be in native endian.
+ *  It creates NITFs with and without blocking and adds derived products of
+ *  varying numbers of image segments with and without legends.
  *
  *  The usage is extremely simple:
  *
- *  $ test_create_sidd_from_mem <output>.<nitf|tiff> (sicd-xml)
- *
- *
+ *  $ test_create_sidd_legend <output NITF prefix>
  *
  */
 
