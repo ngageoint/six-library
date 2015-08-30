@@ -170,6 +170,12 @@ public:
     double getMultiPathAngle() const;
 
     /*!
+     * CCW angle from increasing row direction to ground track at the center of
+     * the image
+     */
+    double getGroundTrackAngle() const;
+
+    /*!
      * The angle to vec (in [0, 360) degrees CW+) in the output plane from the
      * y vector of the output plane
      */
