@@ -277,6 +277,11 @@ double SceneGeometry::getMultiPathAngle() const
     return getImageAngle(getMultiPathVector());
 }
 
+double SceneGeometry::getGroundTrackAngle() const
+{
+    return getImageAngle(getGroundTrack());
+}
+
 double SceneGeometry::getOPAngle(const Vector3& vec) const
 {
     // Use the vector's projections onto the OP X, Y vectors
