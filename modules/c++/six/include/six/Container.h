@@ -39,12 +39,16 @@ namespace six
  *
  *  A container is storage for the Data objects, and determines how these
  *  components are laid out in whatever file is being written.  The Container
- *  takes ownership of its Data objects.
+ *  takes ownership of its Data objects.  Callers should make all
+ *  desired modifications to their Data objects prior to adding them to the
+ *  Container.
+ *
+ *  Compiler-generated copy constructor and assignment operator are
+ *  sufficient.
  */
 class Container
 {
 public:
-
     /*! 
      *  The data class is either COMPLEX or DERIVED
      *  This just tells us what kind of container.  Note that, in 
@@ -70,7 +74,8 @@ public:
     /*!
      *  Add a new Data object to the back of this container.
      *
-     *  \param data Add the data
+     *  \param data Pointer to the data to add.  Note that the container
+     *  takes ownership of the data, so the caller should not delete it.
      *
      */
     void addData(Data* data);
@@ -78,7 +83,7 @@ public:
     /*!
      *  Add a new Data object to the back of this container.
      *
-     *  \param data Add the data
+     *  \param data Pointer to the data to add
      *
      */
     void addData(std::auto_ptr<Data> data);
@@ -94,7 +99,8 @@ public:
      *  slot already, we delete it.
      *
      *  \param i The slot number
-     *  \param data A pointer to the data object
+     *  \param data Pointer to the data to set.  Note that the container takes
+     *  ownership of the data, so the caller should not delete it.
      */
     void setData(size_t i, Data* data);
 
@@ -136,6 +142,9 @@ public:
         return mData.size();
     }
 
+    /*!
+     * Removes data from the container that matches this pointer
+     */
     void removeData(const Data* data);
 
 protected:
