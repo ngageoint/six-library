@@ -1,0 +1,18 @@
+*.pyc
+*~
+
+# Eclipse
+.cproject
+.project
+
+# Waf
+.lock-waf*
+.waf*
+
+# Build artifacts
+target/
+install/
+
+# Drivers
+projects/csm/external/csm-master/
+projects/csm/external/vts_301_0/
