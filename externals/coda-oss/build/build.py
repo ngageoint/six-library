@@ -842,7 +842,7 @@ def configureCompilerOptions(self):
         if re.match(solarisRegex, sys_platform):
             self.env.append_value('LIB_SOCKET', 'socket')
 
-        warningFlags = '-Wall'
+        warningFlags = '-Wall -Wno-deprecated-declarations'
         if Options.options.warningsAsErrors:
             warningFlags += ' -Wfatal-errors'
 
@@ -1396,6 +1396,10 @@ def process_swig_linkage(tsk):
 @task_gen
 @feature('python_package')
 def python_package(tg):
+
+    # make sure we actually need to install stuff
+    if not 'install' in tg.bld.cmd:
+        return
 
     # setup some paths
     # we'll create our __init__.py right in our build directory
