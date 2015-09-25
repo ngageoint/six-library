@@ -116,33 +116,6 @@ public:
     getSensorVelocity(const csm::ImageCoord& imagePt) const = 0;
 
     virtual csm::EcefVector getSensorVelocity(double time) const = 0;
-
-protected:
-    virtual types::RowCol<double> getSampleSpacing() const = 0;
-
-    /**
-     * Transforms the given l, s values from units of pixels from upper left
-     * to meters with the origin at the center of the image.
-     *
-     * \param[in] l     Line position in terms of pixels from upper left
-     * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A types::RowCol<double> containing the distance in meters from
-     *     the center of the image
-     */
-    virtual
-    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const = 0;
-
-    /**
-     * Transforms the given l, s values from units of meters with the origin
-     * at the center of the image to pixels from upper left.
-     *
-     * \param[in] l     Line position in terms of meters from the image center
-     * \param[in] s     Sample position in terms of meters from the image center
-     * \return A types::RowCol<double> containing the distance in pixels from
-     *     the upper left of the image
-     */
-    virtual
-    types::RowCol<double> toPixel(const types::RowCol<double>& pos) const = 0;
 };
 }
 }

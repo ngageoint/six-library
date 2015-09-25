@@ -32,6 +32,7 @@
 #include <six/sidd/Utilities.h>
 #include <six/csm/Utilities.h>
 #include <six/csm/SIDDProjectionModelBasedHelper.h>
+#include <six/csm/SIDDPolyProjectionHelper.h>
 
 namespace six
 {
@@ -405,6 +406,7 @@ void SIDDSensorModel::reinitialize()
             mData->measurement->projection->projectionType;
     if (gridType == six::ProjectionType::POLYNOMIAL)
     {
+        mHelper.reset(new SIDDPolyProjectionHelper(mData));
     }
     else
     {
