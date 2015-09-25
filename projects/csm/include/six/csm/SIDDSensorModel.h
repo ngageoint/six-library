@@ -23,15 +23,13 @@
 #ifndef __SIX_CSM_SIDD_SENSOR_MODEL_H__
 #define __SIX_CSM_SIDD_SENSOR_MODEL_H__
 
-#include <memory>
 #include <vector>
 
 #include "NitfIsd.h"
 
-#include <six/csm/SIXSensorModel.h>
-#include <scene/SceneGeometry.h>
+#include <mem/SharedPtr.h>
 #include <six/sidd/DerivedData.h>
-#include <scene/ProjectionModel.h>
+#include <six/csm/SIXSensorModel.h>
 
 namespace six
 {
@@ -156,20 +154,6 @@ protected:
     virtual six::DateTime getReferenceDateAndTimeImpl() const;
 
 private:
-    /**
-     * Transforms the given l, s values from units of pixels from upper left
-     * to meters with the origin at the center of the image.
-     *
-     * \param[in] l     Line position in terms of pixels from upper left
-     * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A types::RowCol<double> containing the distance in meters from the center of the image
-     */
-    virtual types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
-
-    virtual types::RowCol<double> toPixel(const types::RowCol<double>& pos) const;
-
-    const six::sidd::MeasurableProjection* getProjection() const;
-
     void replaceModelStateImpl(const std::string& sensorModelState);
 
     void initializeFromFile(const std::string& pathname, size_t imageIndex);
@@ -178,10 +162,8 @@ private:
 
     void reinitialize();
 
-    virtual types::RowCol<double> getSampleSpacing() const;
-
 private:
-    std::auto_ptr<six::sidd::DerivedData> mData;
+    mem::SharedPtr<six::sidd::DerivedData> mData;
 };
 }
 }

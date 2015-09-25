@@ -1,6 +1,6 @@
 ./results/test/test_script_sidd.csv
 
-vtsRead21ISDFile path/to/sidd.nitf
+vtsRead21ISDFile /data/u/asylvest/observera_sidd/24AUG15TS0107001_100922_SS3698L_55N056W_001X___SHH_0101_OBS_IMAG_null_fixed.nitf
 # Set this for multi-image SIDDs to test different images
 #vtsAddIsdParam IMAGE_INDEX 3
 makeModelListFromISD SIDD_SENSOR_MODEL SIX

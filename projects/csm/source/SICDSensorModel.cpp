@@ -30,12 +30,14 @@
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/csm/Utilities.h>
+#include <six/csm/SICDSensorModelHelper.h>
 
 namespace six
 {
 namespace CSM
 {
-const csm::Version SICDSensorModel::VERSION(1, 1, 1);
+const csm::Version SICDSensorModel::VERSION(1, 1, 2);
 const char SICDSensorModel::NAME[] = "SICD_SENSOR_MODEL";
 
 SICDSensorModel::SICDSensorModel(const csm::Isd& isd,
@@ -310,45 +312,6 @@ six::DateTime SICDSensorModel::getReferenceDateAndTimeImpl() const
     return mData->timeline->collectStart;
 }
 
-types::RowCol<double>
-SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
-{
-    const six::sicd::ImageData& imageData(*mData->imageData);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
-
-    const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
-
-    return types::RowCol<double>(
-            (pos.row / mData->grid->row->sampleSpacing) + offset.row,
-            (pos.col / mData->grid->col->sampleSpacing) + offset.col);
-}
-
-types::RowCol<double>
-SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
-{
-    const six::sicd::ImageData& imageData(*mData->imageData);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
-
-    const types::RowCol<double> adjustedPos(
-            pos.line - (imageData.scpPixel.row - aoiOffset.row),
-            pos.samp - (imageData.scpPixel.col - aoiOffset.col));
-
-    return types::RowCol<double>(
-            adjustedPos.row * mData->grid->row->sampleSpacing,
-            adjustedPos.col * mData->grid->col->sampleSpacing);
-}
-
-types::RowCol<double>
-SICDSensorModel::getSampleSpacing() const
-{
-    return types::RowCol<double>(mData->grid->row->sampleSpacing,
-                                 mData->grid->col->sampleSpacing);
-}
-
 csm::ImageVector SICDSensorModel::getImageSize() const
 {
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
@@ -409,17 +372,11 @@ void SICDSensorModel::reinitialize()
 {
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
 
-    mProjection.reset(six::sicd::Utilities::getProjectionModel(
-            mData.get(),
-            mGeometry.get()));
-
     std::fill_n(mAdjustableTypes,
                 static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
                 csm::param::REAL);
 
-    // NOTE: See member variable definition in header for why we're doing this
-    mSensorCovariance = mProjection->getErrorCovariance(
-            mGeometry->getReferencePosition());
+    mHelper.reset(new SICDSensorModelHelper(mData, *mGeometry));
 }
 }
 }

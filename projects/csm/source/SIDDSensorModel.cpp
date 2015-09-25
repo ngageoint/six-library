@@ -30,12 +30,14 @@
 #include <six/NITFReadControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
+#include <six/csm/Utilities.h>
+#include <six/csm/SIDDProjectionModelBasedHelper.h>
 
 namespace six
 {
 namespace CSM
 {
-const csm::Version SIDDSensorModel::VERSION(1, 1, 1);
+const csm::Version SIDDSensorModel::VERSION(1, 1, 2);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
@@ -332,56 +334,6 @@ six::DateTime SIDDSensorModel::getReferenceDateAndTimeImpl() const
             collectionDateTime;
 }
 
-types::RowCol<double>
-SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
-{
-    const types::RowCol<double> posRC(pos.line, pos.samp);
-    types::RowCol<double> fullScenePos;
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // The point that was passed in was with respect to the chip
-        // ctrPt below will be with respect to the full image, so need to
-        // adjust
-        fullScenePos = mData->downstreamReprocessing->geometricChip->
-                getFullImageCoordinateFromChip(posRC);
-    }
-    else
-    {
-        fullScenePos = posRC;
-    }
-
-    const six::sidd::MeasurableProjection* projection(getProjection());
-    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
-
-    return types::RowCol<double>(
-            (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
-            (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
-}
-
-types::RowCol<double>
-SIDDSensorModel::toPixel(const types::RowCol<double>& pos) const
-{
-    const six::sidd::MeasurableProjection* const projection(getProjection());
-    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
-
-    const types::RowCol<double> fullScenePos =
-            pos / projection->sampleSpacing + ctrPt;
-
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // 'fullScenePos' is with respect to the original full image, but we
-        // need it with respect to the chip that this SIDD actually represents
-        return mData->downstreamReprocessing->geometricChip->
-                getChipCoordinateFromFullImage(fullScenePos);
-    }
-    else
-    {
-        return fullScenePos;
-    }
-}
-
 csm::ImageVector SIDDSensorModel::getImageSize() const
 {
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
@@ -438,41 +390,26 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     }
 }
 
-const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
-{
-    if (!mData->measurement->projection->isMeasurable())
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           "Image projection type is not measurable",
-                           "SIDDSensorModel::getProjection");
-    }
-
-    const six::sidd::MeasurableProjection* const projection =
-            reinterpret_cast<six::sidd::MeasurableProjection*>(
-                    mData->measurement->projection.get());
-    return projection;
-}
-
 void SIDDSensorModel::reinitialize()
 {
+    std::fill_n(mAdjustableTypes,
+                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
+                csm::param::REAL);
+
     // This goofiness is for Sun Studio 11 which can't figure out an auto_ptr
     // assignment here
     mGeometry.reset(
             six::sidd::Utilities::getSceneGeometry(mData.get()).release());
 
-    mProjection = six::sidd::Utilities::getProjectionModel(mData.get());
-    std::fill_n(mAdjustableTypes,
-                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
-                csm::param::REAL);
-
-    // NOTE: See member variable definition in header for why we're doing this
-    mSensorCovariance = mProjection->getErrorCovariance(
-            mGeometry->getReferencePosition());
-}
-
-types::RowCol<double> SIDDSensorModel::getSampleSpacing() const
-{
-    return types::RowCol<double>(getProjection()->sampleSpacing);
+    const six::ProjectionType gridType =
+            mData->measurement->projection->projectionType;
+    if (gridType == six::ProjectionType::POLYNOMIAL)
+    {
+    }
+    else
+    {
+        mHelper.reset(new SIDDProjectionModelBasedHelper(mData, *mGeometry));
+    }
 }
 }
 }

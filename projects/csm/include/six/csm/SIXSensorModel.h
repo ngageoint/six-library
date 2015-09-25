@@ -32,6 +32,7 @@
 #include <scene/ProjectionModel.h>
 #include <scene/ECEFToLLATransform.h>
 #include <six/Types.h>
+#include <six/csm/SensorModelHelper.h>
 
 namespace six
 {
@@ -615,68 +616,10 @@ public:
 protected:
     virtual six::DateTime getReferenceDateAndTimeImpl() const = 0;
 
-    /**
-     * Transforms the given l, s values from units of meters with the origin
-     * at the center of the image to pixels from upper left.
-     *
-     * \param[in] l     Line position in terms of meters from the image center
-     * \param[in] s     Sample position in terms of meters from the image center
-     * \return A types::RowCol<double> containing the distance in pixels from
-     * the upper left of the image
-     */
-    virtual
-    types::RowCol<double> toPixel(const types::RowCol<double>& pos) const = 0;
-
-    /**
-     * Transforms the given l, s values from units of pixels from upper left
-     * to meters with the origin at the center of the image.
-     *
-     * \param[in] l     Line position in terms of pixels from upper left
-     * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A types::RowCol<double> containing the distance in meters from
-     * the center of the image
-     */
-    virtual
-    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const = 0;
-
     virtual
     void replaceModelStateImpl(const std::string& sensorModelState) = 0;
 
-    virtual types::RowCol<double> getSampleSpacing() const = 0;
-
     virtual void setSchemaDir(const std::string& schemaDir);
-
-    virtual csm::ImageCoord groundToImageImpl(const csm::EcefCoord& groundPt,
-                                      double desiredPrecision,
-                                      double* achievedPrecision) const;
-
-    static
-    scene::Vector3 toVector3(const csm::EcefCoord& pt)
-    {
-        scene::Vector3 vec;
-        vec[0] = pt.x;
-        vec[1] = pt.y;
-        vec[2] = pt.z;
-        return vec;
-    }
-
-    static
-    csm::EcefVector toEcefVector(const scene::Vector3& vec)
-    {
-        return csm::EcefVector(vec[0], vec[1], vec[2]);
-    }
-
-    static
-    csm::EcefCoord toEcefCoord(const scene::Vector3& vec)
-    {
-        return csm::EcefCoord(vec[0], vec[1], vec[2]);
-    }
-
-    static
-    csm::ImageCoord toImageCoord(const types::RowCol<double>& pt)
-    {
-        return csm::ImageCoord(pt.row, pt.col);
-    }
 
 protected:
     const scene::ECEFToLLATransform mECEFToLLA;
@@ -684,20 +627,9 @@ protected:
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
-    std::auto_ptr<scene::ProjectionModel> mProjection;
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 
-    // NOTE: This is computed just at the SCP once each time a new SICD is
-    //       loaded rather than being recomputed for each ground point (which
-    //       the scene module does support).  This is due to avoiding a
-    //       mismatch between what the imageToGround() / groundToImage()
-    //       overloadings that compute covariance use (where you do have a
-    //       point)  and getParameterCovariance() / setParameterCovariance()
-    //       where you do not.  Given the current CSM API, the only other
-    //       solution would be to increase the number of adjustable parameters
-    //       and the covariance matrix size to 9 and not fold in the
-    //       tropo/iono error covariance into the ephemeric error covariance.
-    math::linear::MatrixMxN<7, 7> mSensorCovariance;
+    std::auto_ptr<SensorModelHelper> mHelper;
 };
 }
 }
