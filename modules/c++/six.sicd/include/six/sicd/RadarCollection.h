@@ -152,9 +152,6 @@ struct AreaDirectionParameters
     //!  Clone (copy) params
     AreaDirectionParameters* clone() const;
 
-    //!  Dont have to delete anything here
-    ~AreaDirectionParameters() {}
-
     //!  The unit vector in the geo-referenced plane's direction
     Vector3 unitVector;
 
@@ -166,6 +163,13 @@ struct AreaDirectionParameters
 
     //!  The first element in this direction (SICD FirstLine/FirstSample)
     size_t first;
+
+    //! Returns the extent in meters
+    double getExtentInMeters() const
+    {
+        // meters/pixel * numPixels
+        return (spacing * elements);
+    }
 
     bool operator==(const AreaDirectionParameters& other) const
     {

@@ -201,6 +201,13 @@ def java_module(bld, **modArgs):
 
            lib.install_path = installPath or '${PREFIX}/lib'
 
+       confDir = path.make_node('conf')
+       if os.path.exists(confDir.abspath()) :
+           jar.targets_to_add.append(
+               bld(features='install_tgt', dir=confDir, pattern='**',
+                   install_path='${PREFIX}/conf/%s/' % modArgs['name'],
+                   copy_to_source_dir=True))
+
        return jar
 
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
