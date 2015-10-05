@@ -1004,6 +1004,11 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getMultiPathAngle(self)
 
 
+    def getGroundTrackAngle(self):
+        """getGroundTrackAngle(SceneGeometry self) -> double"""
+        return _scene.SceneGeometry_getGroundTrackAngle(self)
+
+
     def getOPAngle(self, vec):
         """getOPAngle(SceneGeometry self, Vector3 vec) -> double"""
         return _scene.SceneGeometry_getOPAngle(self, vec)

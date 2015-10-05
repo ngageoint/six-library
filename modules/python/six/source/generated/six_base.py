@@ -1539,12 +1539,13 @@ class MagnificationMethod(_object):
     __repr__ = _swig_repr
     NEAREST_NEIGHBOR = _six_base.MagnificationMethod_NEAREST_NEIGHBOR
     BILINEAR = _six_base.MagnificationMethod_BILINEAR
+    LAGRANGE = _six_base.MagnificationMethod_LAGRANGE
     NOT_SET = _six_base.MagnificationMethod_NOT_SET
 
     def __init__(self, *args):
         """
         __init__(six::MagnificationMethod self) -> MagnificationMethod
-        __init__(six::MagnificationMethod self, std::string s) -> MagnificationMethod
+        __init__(six::MagnificationMethod self, std::string const & s) -> MagnificationMethod
         __init__(six::MagnificationMethod self, int i) -> MagnificationMethod
         """
         this = _six_base.new_MagnificationMethod(*args)

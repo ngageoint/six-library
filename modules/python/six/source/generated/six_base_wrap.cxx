@@ -24906,24 +24906,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string arg1 ;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   six::MagnificationMethod *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_MagnificationMethod",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string""'"); 
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string const &""'"); 
     }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
   }
   {
     try
     {
-      result = (six::MagnificationMethod *)new six::MagnificationMethod(arg1);
+      result = (six::MagnificationMethod *)new six::MagnificationMethod((std::string const &)*arg1);
     } 
     catch (const std::exception& e)
     {
@@ -24952,8 +24955,10 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_1(PyObject *SWIGUNUSEDP
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MagnificationMethod, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -25046,7 +25051,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_MagnificationMethod'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    six::MagnificationMethod::MagnificationMethod()\n"
-    "    six::MagnificationMethod::MagnificationMethod(std::string)\n"
+    "    six::MagnificationMethod::MagnificationMethod(std::string const &)\n"
     "    six::MagnificationMethod::MagnificationMethod(int)\n");
   return 0;
 }
@@ -72101,7 +72106,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageFormationType_swigregister", ImageFormationType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_MagnificationMethod", _wrap_new_MagnificationMethod, METH_VARARGS, (char *)"\n"
 		"MagnificationMethod()\n"
-		"MagnificationMethod(std::string s)\n"
+		"MagnificationMethod(std::string const & s)\n"
 		"new_MagnificationMethod(int i) -> MagnificationMethod\n"
 		""},
 	 { (char *)"delete_MagnificationMethod", _wrap_delete_MagnificationMethod, METH_VARARGS, (char *)"delete_MagnificationMethod(MagnificationMethod self)"},
@@ -74503,6 +74508,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ImageFormationType_NOT_SET",SWIG_From_int(static_cast< int >(six::ImageFormationType::NOT_SET)));
   SWIG_Python_SetConstant(d, "MagnificationMethod_NEAREST_NEIGHBOR",SWIG_From_int(static_cast< int >(six::MagnificationMethod::NEAREST_NEIGHBOR)));
   SWIG_Python_SetConstant(d, "MagnificationMethod_BILINEAR",SWIG_From_int(static_cast< int >(six::MagnificationMethod::BILINEAR)));
+  SWIG_Python_SetConstant(d, "MagnificationMethod_LAGRANGE",SWIG_From_int(static_cast< int >(six::MagnificationMethod::LAGRANGE)));
   SWIG_Python_SetConstant(d, "MagnificationMethod_NOT_SET",SWIG_From_int(static_cast< int >(six::MagnificationMethod::NOT_SET)));
   SWIG_Python_SetConstant(d, "OrientationType_UP",SWIG_From_int(static_cast< int >(six::OrientationType::UP)));
   SWIG_Python_SetConstant(d, "OrientationType_DOWN",SWIG_From_int(static_cast< int >(six::OrientationType::DOWN)));
