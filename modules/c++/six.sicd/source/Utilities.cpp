@@ -130,6 +130,166 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
+six::NITFReadControl six::sicd::Utilities::getLoadedNITFReadControl(
+        const std::string& sicdPathname,
+        const std::vector<std::string>& schemaPaths)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<
+            six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(sicdPathname, schemaPaths); 
+    return reader;
+}
+    
+
+six::sicd::Utilities::SicdContents
+    six::sicd::Utilities::readSicd(const std::string& sicdPathname,
+             const std::vector<std::string>& schemaPaths)
+{
+    six::NITFReadControl reader = Utilities::getLoadedNITFReadControl(
+            sicdPathname,
+            schemaPaths);
+    
+    ComplexData* complexData = getComplexData(reader);
+    std::complex<float>* buffer = getWidebandData(reader, *complexData);
+    SicdContents retv;
+
+    // The reader's Container keeps ownership of the Data object
+    // so we're forced to make a copy (we can't remove the object
+    // from the container either since internally they are stored
+    // as cloneable pointers - removeData() deletes the object)
+    // TODO: shared pointers
+    retv.complexData = reinterpret_cast<ComplexData*>(complexData->clone());
+    retv.widebandData = buffer;
+    return retv;
+}
+
+ComplexData* six::sicd::Utilities::getComplexData(NITFReadControl& reader)
+{
+    // TODO: generalize this to multi-image SICDs
+    six::Data* data = reader.getContainer()->getData(0);
+    if(data->getDataType() != six::DataType::COMPLEX)
+    {
+        throw except::Exception(Ctxt(data->getName() + " is not a SICD"));
+    }
+
+    return reinterpret_cast<six::sicd::ComplexData*>(data);
+
+}
+
+std::complex<float>* six::sicd::Utilities::getWidebandData(
+        NITFReadControl& reader,
+        const ComplexData& complexData,
+        size_t bufferNumBytes,
+        std::complex<float>* buffer
+        )
+{
+    const PixelType pixelType = complexData.getPixelType();
+    const size_t imageNumber = 0;
+    const size_t startRow = 0;
+    const size_t startCol = 0;
+    const size_t numRows = complexData.getNumRows();
+    const size_t numCols = complexData.getNumCols();
+
+    std::complex<float>* returnBuffer = 0;
+    const size_t requiredBufferBytes = sizeof(std::complex<float>) 
+                                            * numRows * numCols;
+    
+
+    if(bufferNumBytes && requiredBufferBytes > bufferNumBytes)
+    {
+        // We'll take bufferNumBytes == 0 as a request for us to 
+        // allocate the buffer. If we do have bufferNumBytes, 
+        // though, make sure it's big enough. Don't do anything 
+        // sneaky where they give us a buffer but we don't use it.
+        // Throw if the given buffer isn't big enough. 
+        
+        throw except::Exception(Ctxt("Buffer provided to getWidebandData was "
+                    + str::toString(bufferNumBytes) 
+                    + " bytes, needed " 
+                    + str::toString(requiredBufferBytes) 
+                    + " bytes"));
+    }
+    else if(bufferNumBytes && !buffer)
+    {
+        // We were provided a buffer size but for some reason
+        // the buffer is still null.
+        
+        throw except::Exception(Ctxt("Null buffer provided to getWidebandData"
+                    + std::string(" when a ")
+                    + str::toString(bufferNumBytes)
+                    + std::string(" byte buffer was expected")));
+    }
+    else if(bufferNumBytes && buffer)
+    {
+        // We have buffer size AND buffer
+        returnBuffer = buffer;
+    }
+    else
+    {
+        // We do not have a buffer size, we need to make our own
+        returnBuffer = new std::complex<float>[numRows*numCols];
+    }
+
+    if(pixelType == PixelType::RE32F_IM32F)
+    {
+        six::Region region;
+        region.setStartRow(startRow);
+        region.setStartCol(startCol);
+        region.setNumRows(numRows);
+        region.setNumCols(numCols);
+        region.setBuffer(reinterpret_cast<UByte*>(returnBuffer));
+        reader.interleaved(region, imageNumber);
+    }
+    else if(pixelType == PixelType::RE16I_IM16I)
+    {
+        const size_t elementsPerRow = numCols*2;
+        const size_t rowsAtATime = 
+            (32000000 / (elementsPerRow * sizeof(short))) + 1;
+        std::vector<short> tempVector(elementsPerRow * rowsAtATime);
+        short* const tempBuffer = &tempVector[0];
+
+        for(size_t row = startRow, rowsToRead = rowsAtATime; 
+                row < numRows; 
+                row += rowsToRead)
+        {
+            if(row + rowsToRead > numRows)
+            {
+                rowsToRead = numRows - row;
+            }
+
+            six::Region region;
+            region.setStartRow(row);
+            region.setStartCol(startCol);
+            region.setNumRows(rowsToRead);
+            region.setNumCols(numCols);
+            region.setBuffer(reinterpret_cast<UByte*>(tempBuffer));
+            reader.interleaved(region, imageNumber);
+
+            //Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
+            float* bufferPtr = reinterpret_cast<float*>(returnBuffer) + (row * elementsPerRow);
+            for(size_t index = 0; index < elementsPerRow * rowsToRead; index++)
+            {
+                bufferPtr[index] = tempBuffer[index];
+            }
+        }
+    }
+    else
+    {
+        throw except::Exception(Ctxt(complexData.getName() + " has an unknown pixel type"));
+    }
+
+    return returnBuffer;
+}
+
+//
+// Old interface below
+//
+
 std::auto_ptr<ComplexData> Utilities::getComplexData(
         const std::string& sicdPathname,
         const std::vector<std::string>& schemaPaths)
@@ -234,5 +394,6 @@ void Utilities::getWidebandData(
         throw except::Exception(Ctxt(sicdPathname + " has an unknown pixel type"));
     }
 }
+
 }
 }
