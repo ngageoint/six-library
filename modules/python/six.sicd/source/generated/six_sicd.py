@@ -959,8 +959,6 @@ class AreaDirectionParameters(_object):
         """clone(AreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.AreaDirectionParameters_clone(self)
 
-    __swig_destroy__ = _six_sicd.delete_AreaDirectionParameters
-    __del__ = lambda self: None
     __swig_setmethods__["unitVector"] = _six_sicd.AreaDirectionParameters_unitVector_set
     __swig_getmethods__["unitVector"] = _six_sicd.AreaDirectionParameters_unitVector_get
     if _newclass:
@@ -978,6 +976,11 @@ class AreaDirectionParameters(_object):
     if _newclass:
         first = _swig_property(_six_sicd.AreaDirectionParameters_first_get, _six_sicd.AreaDirectionParameters_first_set)
 
+    def getExtentInMeters(self):
+        """getExtentInMeters(AreaDirectionParameters self) -> double"""
+        return _six_sicd.AreaDirectionParameters_getExtentInMeters(self)
+
+
     def __eq__(self, other):
         """__eq__(AreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.AreaDirectionParameters___eq__(self, other)
@@ -987,6 +990,8 @@ class AreaDirectionParameters(_object):
         """__ne__(AreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.AreaDirectionParameters___ne__(self, other)
 
+    __swig_destroy__ = _six_sicd.delete_AreaDirectionParameters
+    __del__ = lambda self: None
 AreaDirectionParameters_swigregister = _six_sicd.AreaDirectionParameters_swigregister
 AreaDirectionParameters_swigregister(AreaDirectionParameters)
 
@@ -5085,6 +5090,11 @@ class ScopedCloneableAreaDirectionParameters(_object):
     __swig_getmethods__["first"] = _six_sicd.ScopedCloneableAreaDirectionParameters_first_get
     if _newclass:
         first = _swig_property(_six_sicd.ScopedCloneableAreaDirectionParameters_first_get, _six_sicd.ScopedCloneableAreaDirectionParameters_first_set)
+
+    def getExtentInMeters(self):
+        """getExtentInMeters(ScopedCloneableAreaDirectionParameters self) -> double"""
+        return _six_sicd.ScopedCloneableAreaDirectionParameters_getExtentInMeters(self)
+
 
     def __eq__(self, other):
         """__eq__(ScopedCloneableAreaDirectionParameters self, AreaDirectionParameters other) -> bool"""

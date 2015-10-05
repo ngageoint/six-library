@@ -13872,6 +13872,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundTrackAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getGroundTrackAngle",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getGroundTrackAngle" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  {
+    try
+    {
+      result = (double)((scene::SceneGeometry const *)arg1)->getGroundTrackAngle();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SceneGeometry_getOPAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
@@ -25380,6 +25432,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getRotationAngle", _wrap_SceneGeometry_getRotationAngle, METH_VARARGS, (char *)"SceneGeometry_getRotationAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getMultiPathVector", _wrap_SceneGeometry_getMultiPathVector, METH_VARARGS, (char *)"SceneGeometry_getMultiPathVector(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getMultiPathAngle", _wrap_SceneGeometry_getMultiPathAngle, METH_VARARGS, (char *)"SceneGeometry_getMultiPathAngle(SceneGeometry self) -> double"},
+	 { (char *)"SceneGeometry_getGroundTrackAngle", _wrap_SceneGeometry_getGroundTrackAngle, METH_VARARGS, (char *)"SceneGeometry_getGroundTrackAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPAngle", _wrap_SceneGeometry_getOPAngle, METH_VARARGS, (char *)"SceneGeometry_getOPAngle(SceneGeometry self, Vector3 vec) -> double"},
 	 { (char *)"SceneGeometry_getOPNorthAngle", _wrap_SceneGeometry_getOPNorthAngle, METH_VARARGS, (char *)"SceneGeometry_getOPNorthAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPLayoverAngle", _wrap_SceneGeometry_getOPLayoverAngle, METH_VARARGS, (char *)"SceneGeometry_getOPLayoverAngle(SceneGeometry self) -> double"},
