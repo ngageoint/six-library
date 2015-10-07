@@ -2384,14 +2384,6 @@ class SixSicdUtilities(_object):
         getProjectionModel = staticmethod(getProjectionModel)
     __swig_getmethods__["getProjectionModel"] = lambda x: getProjectionModel
 
-    def getLoadedNITFReadControl(sicdPathname, schemaPaths):
-        """getLoadedNITFReadControl(std::string const & sicdPathname, VectorString schemaPaths) -> NITFReadControl"""
-        return _six_sicd.SixSicdUtilities_getLoadedNITFReadControl(sicdPathname, schemaPaths)
-
-    if _newclass:
-        getLoadedNITFReadControl = staticmethod(getLoadedNITFReadControl)
-    __swig_getmethods__["getLoadedNITFReadControl"] = lambda x: getLoadedNITFReadControl
-
     def readSicd(sicdPathname, schemaPaths):
         """readSicd(std::string const & sicdPathname, VectorString schemaPaths) -> six::sicd::Utilities::SicdContents"""
         return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths)
@@ -2405,6 +2397,7 @@ class SixSicdUtilities(_object):
         getWidebandData(NITFReadControl & reader, ComplexData complexData, size_t bufferNumBytes=0, std::complex< float > * buffer=None) -> std::complex< float >
         getWidebandData(NITFReadControl & reader, ComplexData complexData, size_t bufferNumBytes=0) -> std::complex< float >
         getWidebandData(NITFReadControl & reader, ComplexData complexData) -> std::complex< float >
+        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
         getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
         """
         return _six_sicd.SixSicdUtilities_getWidebandData(*args)
@@ -2433,10 +2426,6 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
-def SixSicdUtilities_getLoadedNITFReadControl(sicdPathname, schemaPaths):
-    """SixSicdUtilities_getLoadedNITFReadControl(std::string const & sicdPathname, VectorString schemaPaths) -> NITFReadControl"""
-    return _six_sicd.SixSicdUtilities_getLoadedNITFReadControl(sicdPathname, schemaPaths)
-
 def SixSicdUtilities_readSicd(sicdPathname, schemaPaths):
     """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths) -> six::sicd::Utilities::SicdContents"""
     return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths)
@@ -2446,6 +2435,7 @@ def SixSicdUtilities_getWidebandData(*args):
     getWidebandData(NITFReadControl & reader, ComplexData complexData, size_t bufferNumBytes=0, std::complex< float > * buffer=None) -> std::complex< float >
     getWidebandData(NITFReadControl & reader, ComplexData complexData, size_t bufferNumBytes=0) -> std::complex< float >
     getWidebandData(NITFReadControl & reader, ComplexData complexData) -> std::complex< float >
+    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
     SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
     """
     return _six_sicd.SixSicdUtilities_getWidebandData(*args)

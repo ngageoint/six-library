@@ -130,9 +130,9 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
-six::NITFReadControl six::sicd::Utilities::getLoadedNITFReadControl(
-        const std::string& sicdPathname,
-        const std::vector<std::string>& schemaPaths)
+six::sicd::Utilities::SicdContents
+    six::sicd::Utilities::readSicd(const std::string& sicdPathname,
+             const std::vector<std::string>& schemaPaths)
 {
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -142,42 +142,24 @@ six::NITFReadControl six::sicd::Utilities::getLoadedNITFReadControl(
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname, schemaPaths); 
-    return reader;
-}
-    
 
-six::sicd::Utilities::SicdContents
-    six::sicd::Utilities::readSicd(const std::string& sicdPathname,
-             const std::vector<std::string>& schemaPaths)
-{
-    six::NITFReadControl reader = Utilities::getLoadedNITFReadControl(
-            sicdPathname,
-            schemaPaths);
-    
-    ComplexData* complexData = getComplexData(reader);
-    std::complex<float>* buffer = getWidebandData(reader, *complexData);
     SicdContents retv;
+    retv.complexData = getComplexData(reader);
+    getWidebandData(reader, *(retv.complexData.get()), retv.widebandData);
 
-    // The reader's Container keeps ownership of the Data object
-    // so we're forced to make a copy (we can't remove the object
-    // from the container either since internally they are stored
-    // as cloneable pointers - removeData() deletes the object)
-    // TODO: shared pointers
-    retv.complexData = reinterpret_cast<ComplexData*>(complexData->clone());
-    retv.widebandData = buffer;
     return retv;
 }
 
-ComplexData* six::sicd::Utilities::getComplexData(NITFReadControl& reader)
+std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(NITFReadControl& reader)
 {
-    // TODO: generalize this to multi-image SICDs
     six::Data* data = reader.getContainer()->getData(0);
     if(data->getDataType() != six::DataType::COMPLEX)
     {
         throw except::Exception(Ctxt(data->getName() + " is not a SICD"));
     }
 
-    return reinterpret_cast<six::sicd::ComplexData*>(data);
+    return std::auto_ptr<ComplexData>
+        (reinterpret_cast<six::sicd::ComplexData*>(data->clone()));
 
 }
 
@@ -284,6 +266,18 @@ std::complex<float>* six::sicd::Utilities::getWidebandData(
     }
 
     return returnBuffer;
+}
+
+void Utilities::getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                std::vector<std::complex<float> >& buffer)
+{
+    size_t requiredNumElements = complexData.getNumCols() * complexData.getNumRows();
+    buffer.resize(requiredNumElements);
+    Utilities::getWidebandData(reader,
+            complexData,
+            requiredNumElements*sizeof(std::complex<float>),
+            &(buffer[0]));
 }
 
 //

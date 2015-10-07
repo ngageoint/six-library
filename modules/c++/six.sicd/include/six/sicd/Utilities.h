@@ -45,35 +45,46 @@ public:
     static scene::ProjectionModel* getProjectionModel(const ComplexData* data, 
             const scene::SceneGeometry* geom);
 
-   
-    /*
-     * getLoadedNitfReadControl creates and loads a NITFReadControl for the
-     * specified file.
-     *
-     * \param sicdPathname SICD NITF pathname
-     * \param schemaPaths One or more files or directories containing SICD
-     * schemas
-     *
-     * \return a NITFReadControl 'load()'ed with the given SICD
-     *
-     */
-    static
-    NITFReadControl getLoadedNITFReadControl(const std::string& sicdPathname,
-                                 const std::vector<std::string>& schemaPaths);
-
     /*
      * SicdContents is a helper object for readSicdContents
      *
-     * This class is a simple wrapper around dynamically allocated
-     * SICD information designed to allow access to either or both 
-     * variables returned by readSicdContents.
+     * This class is a simple wrapper around SICD information 
+     * designed to allow safe access to the multiple variables 
+     * returned by readSicdContents.
      *
      */
     struct SicdContents {
-        // allocated with new
-        ComplexData * complexData;
-        // allocated with new[]
-        std::complex<float>* widebandData;
+    
+        SicdContents()
+            : complexData(0),
+              widebandData()
+        {
+        }
+
+        SicdContents(const SicdContents& other)
+            : complexData(0),
+              widebandData(other.widebandData)
+        {
+            if(other.complexData.get())
+            {
+                complexData.reset(reinterpret_cast<ComplexData*>
+                                    (other.complexData->clone()));
+            }
+        }
+
+        SicdContents& operator=(const SicdContents& other)
+        {
+            if(other.complexData.get())
+            {
+                complexData.reset(reinterpret_cast<ComplexData*>
+                                    (other.complexData->clone()));
+                widebandData = other.widebandData;
+            }
+            return *this;
+        }
+
+        std::auto_ptr<ComplexData> complexData;
+        std::vector<std::complex<float> > widebandData;
     };
 
     /*
@@ -108,7 +119,7 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static ComplexData* getComplexData(NITFReadControl& reader);
+    static std::auto_ptr<ComplexData> getComplexData(NITFReadControl& reader);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this 
@@ -138,6 +149,26 @@ public:
             const ComplexData& complexData,
             size_t bufferNumBytes = 0,
             std::complex<float>* buffer = 0
+            );
+
+    /*
+     *
+     * Given a loaded NITFReadControl and a ComplexData object, this 
+     * function loads the wideband data associated with the reader 
+     * and ComplexData object.
+     *
+     * This function allows the user to provide a vector to be resized
+     * to fit the whole image in.
+     *
+     * \param reader A loaded NITFReadControl associated with the SICD
+     * \param complexData complexData associated with the SICD
+     * \param buffer The functions output, will contain the image
+     *
+     */
+    static void getWidebandData(
+            NITFReadControl& reader,
+            const ComplexData& complexData,
+            std::vector<std::complex<float> >& buffer
             );
 
     /*

@@ -64,25 +64,20 @@ int main(int argc, char** argv)
 
         std::cout << "Loaded!" << std::endl;
 
-        six::sicd::ComplexData* complexData = c.complexData;
-        std::complex<float>* widebandData = c.widebandData;
 
-        size_t nl = complexData->getNumRows();
-        size_t ne = complexData->getNumCols();
+        size_t nl = c.complexData->getNumRows();
+        size_t ne = c.complexData->getNumCols();
 
         double sumMag   = 0.0;
         double sumPhase = 0.0;
         for(size_t ii = 0; ii < nl*ne; ++ii) 
         {
-            sumMag   += std::abs(widebandData[ii]);
-            sumPhase += std::arg(widebandData[ii]);
+            sumMag   += std::abs(c.widebandData[ii]);
+            sumPhase += std::arg(c.widebandData[ii]);
         }
 
         std::cout << "Average pixel magnitude: " << sumMag / (nl*ne) << std::endl;
         std::cout << "Average pixel phase: " << sumPhase / (nl*ne) << std::endl;
-
-        delete complexData;
-        delete[] widebandData;
 
         return 0;
     }
