@@ -47,6 +47,13 @@ int main(int argc, char **argv)
         std::cout << "The delimiter on this platform: " << os.getDelimiter()
                 << std::endl;
         std::cout << "The process id: " << os.getProcessId() << std::endl;
+
+        size_t freeMemory = 0;
+        size_t physMemory = 0;
+        os.getMemInfo(physMemory, freeMemory);
+        std::cout << "Total physical memory (MB): " << physMemory << std::endl;
+        std::cout << "Total free memory (MB): " << freeMemory << std::endl;
+
         //std::cout << "The user is: " << os.getUsername() << std::endl;
         /////////////////////////////////////////////
         // File exists check!!!

@@ -30,6 +30,17 @@
 #include <sstream>
 #include <limits.h>
 
+#if defined(__APPLE__)
+
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <mach/vm_statistics.h>
+#include <mach/mach_types.h>
+#include <mach/mach_init.h>
+#include <mach/mach_host.h>
+
+#endif
+
 #include "sys/OSUnix.h"
 #include "sys/File.h"
 
@@ -275,12 +286,47 @@ size_t sysconfCaller(int name)
 
 void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
 {
+    // Unfortunately sysctl is the best way to do this on OSX,
+    // but sysctl is deprecated in favor of sysconf on linux
+#if defined(__APPLE__)
+    long long physMem = 0;
+    size_t size = sizeof(physMem);
+    int status = sysctlbyname("hw.memsize", &physMem, &length, 0, 0);
+    if(status)
+    {
+        throw sys::SystemException(Ctxt("Call to sysctl() has failed"));
+    }
+
+    mach_port_t            machPort = mach_host_self();
+    mach_msg_type_number_t count     = HOST_VM_INFO_COUNT;
+    vm_size_t              pageSize = 0;
+    vm_statistics_data_t   vmstat;
+
+    if(KERN_SUCCESS != host_statistics(machPort, HOST_VM_INFO, 
+                (host_info_t) &vmstat, &count))
+    {
+        throw sys::SystemException(Ctxt("Call to host_statistics() has failed"));
+    }
+
+    if(KERN_SUCCESS != host_page_size(machPort, &pageSize))
+    {
+        throw sys::SystemException(Ctxt("Call to host_page_size has failed"));
+    }
+
+    long long freeBytes = vmstat.free_count * pageSize;
+    
+    totalPhysMem = physMem / 1024 / 1024;
+    freePhysMem = freeBytes / 1024 / 1024;
+
+#else
     long long pageSize = sysconfCaller(_SC_PAGESIZE);
     long long totalNumPages = sysconfCaller(_SC_PHYS_PAGES);
     long long availNumPages = sysconfCaller(_SC_AVPHYS_PAGES);
 
     totalPhysMem = (pageSize*totalNumPages/1024)/1024;
     freePhysMem = (pageSize*availNumPages/1024)/1024;
+
+#endif
 }
 
 void sys::DirectoryUnix::close()
