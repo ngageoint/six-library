@@ -5,6 +5,7 @@ PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
+from waflib import Errors
 
 DIRS = 'external'
 
@@ -22,6 +23,7 @@ def configure(conf):
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
+    osxRegex = r'darwin'
     if re.match(linuxRegex, sys.platform):
         platformName = 'linux'
     elif re.match(solarisRegex, sys.platform):
@@ -37,6 +39,8 @@ def configure(conf):
         #       For example, if you're building with VS 2008 Express, use:
         #       --enable-32bit "--msvc_version=msvc 9.0Exp" 
         platformName = 'winVC' + str(conf.env['MSVC_VERSION']).replace('.', '')
+    elif re.match(osxRegex,sys.platform):
+        platformName='darwin'
     else:
         raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
