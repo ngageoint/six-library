@@ -291,7 +291,7 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
 #if defined(__APPLE__)
     long long physMem = 0;
     size_t size = sizeof(physMem);
-    int status = sysctlbyname("hw.memsize", &physMem, &length, 0, 0);
+    int status = sysctlbyname("hw.memsize", &physMem, &size, 0, 0);
     if(status)
     {
         throw sys::SystemException(Ctxt("Call to sysctl() has failed"));
