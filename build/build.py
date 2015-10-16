@@ -1288,9 +1288,13 @@ def process_swig_linkage(tsk):
     # first we need to setup some platform specific
     # options for specifying soname and passing linker
     # flags
+
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+    darwinRegex = r'darwin'
+
     platform = getPlatform(default=Options.platform)
     compiler = tsk.env['COMPILER_CXX']
+
     if compiler == 'msvc':
         # TODO
         # MSVC doesn't need this feature, apparently
@@ -1313,6 +1317,10 @@ def process_swig_linkage(tsk):
         soname_pattern = '-h%s'
         rpath_pattern = '-Rpath%s'
 
+    # overrides for osx
+    if re.match(darwinRegex,platform):
+        soname_pattern = '-install_name,%s'
+
     # so swig can find .i files to import
     incstr = ''
     for nod in tsk.includes:
@@ -1334,7 +1342,7 @@ def process_swig_linkage(tsk):
             libname = libpattern % lib
             searchstr = lib[6:].replace('_','.')
         elif lib.startswith('_'):
-            libname = lib + '.so'
+            libname = libpattern % lib
             searchstr = lib[1:].replace('_','.')
         else:
             # this isnt a python library, ignore it
