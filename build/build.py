@@ -1319,7 +1319,9 @@ def process_swig_linkage(tsk):
 
     # overrides for osx
     if re.match(darwinRegex,platform):
-        soname_pattern = '-install_name,%s'
+        tsk.env.LINKFLAGS.append('-dynamiclib')
+        soname_pattern='-install_name,%s'
+        rpath_pattern='-Wl,-rpath,%s'
 
     # so swig can find .i files to import
     incstr = ''
