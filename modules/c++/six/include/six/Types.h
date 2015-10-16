@@ -178,7 +178,7 @@ struct Constants
 
     static const char DES_USER_DEFINED_SUBHEADER_TAG[];
     static const char DES_USER_DEFINED_SUBHEADER_ID[];
-    static const size_t DES_USER_DEFINED_SUBHEADER_LENGTH;
+    static const sys::Uint64_T DES_USER_DEFINED_SUBHEADER_LENGTH;
 
     enum
     {

@@ -148,7 +148,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
                 // case there is no subheader (in which case
                 // subheader.getSubheaderFields() will throw with a
                 // NITRO-specific message).
-                const size_t
+                const sys::Uint64_T
                         subheaderLength(subheader.getSubheaderFieldsLength());
                 if (subheaderLength !=
                             Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
