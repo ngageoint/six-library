@@ -1,4 +1,4 @@
-import sys, os, shutil
+import sys, os, shutil, re
 from build import unzipper
 from waflib import Options
 
@@ -26,6 +26,8 @@ def configure(conf):
         conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master') 
 
 def build(bld):
+    osxRegex = r'darwin'
+
     if 'HAVE_CSM' in bld.env:
         csmDir = 'csm-master'
         bld(features = 'cxx cshlib',
@@ -41,12 +43,15 @@ def build(bld):
         #       dependency, we could recompile in the CSM source code that we
         #       need to use.
         vtsDir = 'vts_301_0'
-        bld.program(target='vts', name='vts',
-                    includes='include',
-                    source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-                    use='CSMAPI THREAD DL',
-                    path=bld.path.find_dir(vtsDir),
-                    install_path=bld.env['install_bindir'])
+        if not re.match(osxRegex, sys.platform):
+            # Made sure we're not on OSX since 
+            # we can't build there
+            bld.program(target='vts', name='vts',
+                        includes='include',
+                        source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
+                        use='CSMAPI THREAD DL',
+                        path=bld.path.find_dir(vtsDir),
+                        install_path=bld.env['install_bindir'])
 
 def distclean(context):
     # remove the unzipped directory
