@@ -130,9 +130,10 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
-six::sicd::Utilities::SicdContents
-    six::sicd::Utilities::readSicd(const std::string& sicdPathname,
-             const std::vector<std::string>& schemaPaths)
+void six::sicd::Utilities::readSicd(const std::string& sicdPathname,
+             const std::vector<std::string>& schemaPaths,
+             std::auto_ptr<ComplexData>& complexData,
+             std::vector<std::complex<float> >& widebandData)
 {
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -143,14 +144,16 @@ six::sicd::Utilities::SicdContents
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname, schemaPaths); 
 
-    SicdContents retv;
-    retv.complexData = getComplexData(reader);
-    getWidebandData(reader, *(retv.complexData.get()), retv.widebandData);
+    getComplexData(reader, complexData);
+    getWidebandData(reader, *(complexData.get()), widebandData);
 
-    return retv;
+    
+
 }
 
-std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(NITFReadControl& reader)
+std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(
+        NITFReadControl& reader,
+        std::auto_ptr<ComplexData>&  complexData)
 {
     six::Data* data = reader.getContainer()->getData(0);
     if(data->getDataType() != six::DataType::COMPLEX)
@@ -158,7 +161,7 @@ std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(NITFReadControl&
         throw except::Exception(Ctxt(data->getName() + " is not a SICD"));
     }
 
-    return std::auto_ptr<ComplexData>
+    complexData.reset(
         (reinterpret_cast<six::sicd::ComplexData*>(data->clone()));
 
 }
