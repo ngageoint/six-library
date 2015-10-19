@@ -32,11 +32,18 @@ int main(int argc, char **argv)
         std::string testMessage("Scream!");
 
         if (argc > 1)
-            cmd = std::string(argv[1]);
+        {
+            for (size_t ii = 1; ii < argc; ++ii)
+            {
+                cmd += std::string(argv[ii]) + " ";
+            }
+        }
         else
+        {
             cmd = "echo " + testMessage;
+        }
 
-        io::PipeStream ps(cmd);
+        io::PipeStream ps(cmd, 1);
 
         io::StandardOutStream stdo;
         size_t ioSize = ps.streamTo(stdo);
