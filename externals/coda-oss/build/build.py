@@ -1290,7 +1290,7 @@ def process_swig_linkage(tsk):
     # flags
 
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
-    darwinRegex = r'darwin'
+    darwinRegex = r'i.86-apple-.*'
 
     platform = getPlatform(default=Options.platform)
     compiler = tsk.env['COMPILER_CXX']
@@ -1319,7 +1319,7 @@ def process_swig_linkage(tsk):
 
     # overrides for osx
     if re.match(darwinRegex,platform):
-        if '-bundle' in tsk.env.LINKFLAGS:
+        while '-bundle' in tsk.env.LINKFLAGS:
             tsk.env.LINKFLAGS.remove('-bundle')
         tsk.env.LINKFLAGS.append('-dynamiclib')
         soname_pattern='-install_name,%s'
