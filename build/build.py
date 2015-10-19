@@ -1319,6 +1319,8 @@ def process_swig_linkage(tsk):
 
     # overrides for osx
     if re.match(darwinRegex,platform):
+        if '-bundle' in tsk.env.LINKFLAGS:
+            tsk.env.LINKFLAGS.remove('-bundle')
         tsk.env.LINKFLAGS.append('-dynamiclib')
         soname_pattern='-install_name,%s'
         rpath_pattern='-Wl,-rpath,%s'
