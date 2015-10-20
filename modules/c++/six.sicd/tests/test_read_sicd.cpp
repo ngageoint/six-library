@@ -22,12 +22,15 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <memory>
+#include <complex>
 
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <io/StandardStreams.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/sicd/ComplexData.h>
 
 int main(int argc, char** argv)
 {
@@ -59,21 +62,24 @@ int main(int argc, char** argv)
             schemaPaths.push_back(sys::Path::absolutePath(schemaPath));
         }
 
-        six::sicd::Utilities::SicdContents c = 
-            six::sicd::Utilities::readSicd(sicdPathname, schemaPaths);
+        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::vector<std::complex<float> > widebandData;
+        six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, 
+                complexData, widebandData);
 
         std::cout << "Loaded!" << std::endl;
 
-
-        size_t nl = c.complexData->getNumRows();
-        size_t ne = c.complexData->getNumCols();
+        // We're just going to take the average of some data
+        // to show that we've loaded things...
+        size_t nl = complexData->getNumRows();
+        size_t ne = complexData->getNumCols();
 
         double sumMag   = 0.0;
         double sumPhase = 0.0;
         for(size_t ii = 0; ii < nl*ne; ++ii) 
         {
-            sumMag   += std::abs(c.widebandData[ii]);
-            sumPhase += std::arg(c.widebandData[ii]);
+            sumMag   += std::abs(widebandData[ii]);
+            sumPhase += std::arg(widebandData[ii]);
         }
 
         std::cout << "Average pixel magnitude: " << sumMag / (nl*ne) << std::endl;
@@ -97,3 +103,4 @@ int main(int argc, char** argv)
         return 1;
     }
 }
+

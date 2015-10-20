@@ -99,7 +99,7 @@ public:
      *         the buffer pointer is null
      *
      */
-    static std::complex<float>* getWidebandData(
+    static void getWidebandData(
             NITFReadControl& reader,
             const ComplexData& complexData,
             std::complex<float>* buffer

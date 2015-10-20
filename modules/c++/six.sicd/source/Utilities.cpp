@@ -147,11 +147,13 @@ void six::sicd::Utilities::readSicd(const std::string& sicdPathname,
     getComplexData(reader, complexData);
     getWidebandData(reader, *(complexData.get()), widebandData);
 
-    
+    // This tells the reader that it doesn't
+    // own an XMLControlRegistry
+    reader.setXMLControlRegistry(NULL); 
 
 }
 
-std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(
+void six::sicd::Utilities::getComplexData(
         NITFReadControl& reader,
         std::auto_ptr<ComplexData>&  complexData)
 {
@@ -161,15 +163,32 @@ std::auto_ptr<ComplexData> six::sicd::Utilities::getComplexData(
         throw except::Exception(Ctxt(data->getName() + " is not a SICD"));
     }
 
+    // Container owns data currently so we need to clone it
     complexData.reset(
-        (reinterpret_cast<six::sicd::ComplexData*>(data->clone()));
+        (reinterpret_cast<six::sicd::ComplexData*>(data->clone())));
 
 }
 
-std::complex<float>* six::sicd::Utilities::getWidebandData(
+namespace 
+{
+template <typename ValueType>
+six::Region buildRegion(size_t firstRow, size_t firstCol, 
+                        size_t numRows, size_t numCols,
+                        ValueType* buffer)
+{
+    six::Region retv;
+    retv.setStartRow(firstRow);
+    retv.setStartCol(firstCol);
+    retv.setNumRows(numRows);
+    retv.setNumCols(numCols);
+    retv.setBuffer(reinterpret_cast<six::UByte*>(buffer));
+    return retv;
+}
+}
+
+void six::sicd::Utilities::getWidebandData(
         NITFReadControl& reader,
         const ComplexData& complexData,
-        size_t bufferNumBytes,
         std::complex<float>* buffer
         )
 {
@@ -180,54 +199,24 @@ std::complex<float>* six::sicd::Utilities::getWidebandData(
     const size_t numRows = complexData.getNumRows();
     const size_t numCols = complexData.getNumCols();
 
-    std::complex<float>* returnBuffer = 0;
     const size_t requiredBufferBytes = sizeof(std::complex<float>) 
                                             * numRows * numCols;
     
 
-    if(bufferNumBytes && requiredBufferBytes > bufferNumBytes)
+    if(!buffer)
     {
-        // We'll take bufferNumBytes == 0 as a request for us to 
-        // allocate the buffer. If we do have bufferNumBytes, 
-        // though, make sure it's big enough. Don't do anything 
-        // sneaky where they give us a buffer but we don't use it.
-        // Throw if the given buffer isn't big enough. 
-        
-        throw except::Exception(Ctxt("Buffer provided to getWidebandData was "
-                    + str::toString(bufferNumBytes) 
-                    + " bytes, needed " 
-                    + str::toString(requiredBufferBytes) 
-                    + " bytes"));
-    }
-    else if(bufferNumBytes && !buffer)
-    {
-        // We were provided a buffer size but for some reason
-        // the buffer is still null.
-        
+        // for some reason we don't have a buffer
+
         throw except::Exception(Ctxt("Null buffer provided to getWidebandData"
                     + std::string(" when a ")
-                    + str::toString(bufferNumBytes)
+                    + str::toString(requiredBufferBytes)
                     + std::string(" byte buffer was expected")));
     }
-    else if(bufferNumBytes && buffer)
-    {
-        // We have buffer size AND buffer
-        returnBuffer = buffer;
-    }
-    else
-    {
-        // We do not have a buffer size, we need to make our own
-        returnBuffer = new std::complex<float>[numRows*numCols];
-    }
-
+    
     if(pixelType == PixelType::RE32F_IM32F)
     {
-        six::Region region;
-        region.setStartRow(startRow);
-        region.setStartCol(startCol);
-        region.setNumRows(numRows);
-        region.setNumCols(numCols);
-        region.setBuffer(reinterpret_cast<UByte*>(returnBuffer));
+        six::Region region = buildRegion(startRow, startCol,
+                numRows, numCols, buffer);
         reader.interleaved(region, imageNumber);
     }
     else if(pixelType == PixelType::RE16I_IM16I)
@@ -247,16 +236,12 @@ std::complex<float>* six::sicd::Utilities::getWidebandData(
                 rowsToRead = numRows - row;
             }
 
-            six::Region region;
-            region.setStartRow(row);
-            region.setStartCol(startCol);
-            region.setNumRows(rowsToRead);
-            region.setNumCols(numCols);
-            region.setBuffer(reinterpret_cast<UByte*>(tempBuffer));
+            six::Region region = buildRegion(row, startCol,
+                    rowsToRead, numCols, tempBuffer);
             reader.interleaved(region, imageNumber);
 
             //Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
-            float* bufferPtr = reinterpret_cast<float*>(returnBuffer) + (row * elementsPerRow);
+            float* bufferPtr = reinterpret_cast<float*>(buffer) + (row * elementsPerRow);
             for(size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
                 bufferPtr[index] = tempBuffer[index];
@@ -268,7 +253,6 @@ std::complex<float>* six::sicd::Utilities::getWidebandData(
         throw except::Exception(Ctxt(complexData.getName() + " has an unknown pixel type"));
     }
 
-    return returnBuffer;
 }
 
 void Utilities::getWidebandData(NITFReadControl& reader,
@@ -276,11 +260,17 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::vector<std::complex<float> >& buffer)
 {
     size_t requiredNumElements = complexData.getNumCols() * complexData.getNumRows();
-    buffer.resize(requiredNumElements);
+
+    if(0 == requiredNumElements)
+    {
+        buffer.clear();
+        return;
+    }
+
+    buffer.resize(requiredNumElements);    
     Utilities::getWidebandData(reader,
             complexData,
-            requiredNumElements*sizeof(std::complex<float>),
-            &(buffer[0]));
+            &buffer[0]);
 }
 
 //
@@ -341,12 +331,8 @@ void Utilities::getWidebandData(
 
     if (pixelType == PixelType::RE32F_IM32F)
     {
-        six::Region region;
-        region.setStartRow(startRow);
-        region.setStartCol(startCol);
-        region.setNumRows(numRows);
-        region.setNumCols(numCols);
-        region.setBuffer(reinterpret_cast<UByte*>(buffer));
+        six::Region region = buildRegion(startRow, startCol,
+                numRows, numCols, buffer);
         reader.interleaved(region, imageNumber);
     }
     else if (pixelType == PixelType::RE16I_IM16I)
@@ -370,12 +356,8 @@ void Utilities::getWidebandData(
             }
 
             // Read into the temp buffer
-            six::Region region;
-            region.setStartRow(row);
-            region.setStartCol(startCol);
-            region.setNumRows(rowsToRead);
-            region.setNumCols(numCols);
-            region.setBuffer(reinterpret_cast<UByte*>(tempBuffer));
+            six::Region region = buildRegion(row, startCol,
+                    rowsToRead, numCols, tempBuffer);
             reader.interleaved(region, imageNumber);
 
             //Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
@@ -394,3 +376,4 @@ void Utilities::getWidebandData(
 
 }
 }
+
