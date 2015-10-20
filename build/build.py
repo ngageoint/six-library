@@ -1322,7 +1322,7 @@ def process_swig_linkage(tsk):
         while '-bundle' in tsk.env.LINKFLAGS:
             tsk.env.LINKFLAGS.remove('-bundle')
         tsk.env.LINKFLAGS.append('-dynamiclib')
-        soname_pattern='-install_name,%s'
+        soname_pattern='-install_name,@rpath/%s'
         rpath_pattern='-Wl,-rpath,%s'
 
     # so swig can find .i files to import
@@ -1376,6 +1376,7 @@ def process_swig_linkage(tsk):
         # finally add the path to the referenced python library
         tsk.env.LINKFLAGS.append(libpath) 
 
+
     # We need to explicitly set our soname otherwise modules that
     # link to *us* in the above fashion will not be able to do it 
     # without the same path 
@@ -1388,12 +1389,15 @@ def process_swig_linkage(tsk):
 
     # finally, we want to bake the library search paths straight in to
     # our python extensions so we don't need to set an LD_LIBRARY_PATH
-    package_set = set(package_list)
-    base_path = os.path.join(':${ORIGIN}', '..')
-    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
-    if dirlist:
-        rpath_str = rpath_pattern % (dirlist)
-        tsk.env.LINKFLAGS.append(rpath_str)
+    # (but only if we're not on OSX because that functionality is in
+    # -install_name)
+    if not re.match(darwinRegex, platform):
+        package_set = set(package_list)
+        base_path = os.path.join(':${ORIGIN}', '..')
+        dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+        if dirlist:
+            rpath_str = rpath_pattern % (dirlist)
+            tsk.env.LINKFLAGS.append(rpath_str)
   
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
