@@ -1310,6 +1310,7 @@ def process_swig_linkage(tsk):
     linkarg_pattern = '-Wl,%s'
     rpath_pattern = '-Wl,-rpath=%s'
     soname_pattern = '-soname=%s'
+    package_name = os.path.basename(tsk.install_path)
 
     # overrides for solaris's cc and ld
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
@@ -1322,7 +1323,7 @@ def process_swig_linkage(tsk):
         while '-bundle' in tsk.env.LINKFLAGS:
             tsk.env.LINKFLAGS.remove('-bundle')
         tsk.env.LINKFLAGS.append('-dynamiclib')
-        soname_pattern='-install_name,@rpath/%s'
+        soname_pattern='-install_name,@rpath/../'+package_name+'/%s'
         rpath_pattern='-Wl,-rpath,%s'
 
     # so swig can find .i files to import
