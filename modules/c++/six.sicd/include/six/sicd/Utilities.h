@@ -61,75 +61,9 @@ public:
      *
      */
     static void readSicd(const std::string& sicdPathname,
-                                 const std::vector<std::string>& schemaPaths,
-                                 std::auto_ptr<ComplexData>& complexData,
-                                 std::vector<std::complex<float> >& widebandData);
-
-    /*
-     * Given a reference to a loaded NITFReadControl, this function
-     * parses the SICD's XML and returns a new ComplexData object.
-     *
-     * \param reader A NITFReadControl loaded with the desired SICD
-     * \param complexData reference to a smart pointer to complexData,
-     * to be filled in with the loaded complexData
-     *
-     * \throws except::Exception if the provided reader is not a SICD
-     *
-     */
-    static void getComplexData(NITFReadControl& reader,
-                               std::auto_ptr<ComplexData>& complexData);
-
-    /*
-     * Given a loaded NITFReadControl and a ComplexData object, this 
-     * function loads the wideband data associated with the reader 
-     * and ComplexData object.
-     *
-     * Optionally, a buffer can be provided to read the data into.
-     * If no buffer is provided, this function will allocate its 
-     * own memory with new[].
-     *
-     * \param reader A loaded NITFReadControl associated with the SICD
-     * \param complexData complexData associated with the SICD
-     * \param buffer A pointer to the buffer to load data into
-     *
-     * \return a pointer to the loaded data.
-     *
-     * \throws except::Exception if the pixel type of the SICD is not a
-     *           complex float32 or complex int64, or
-     *         the buffer pointer is null
-     *
-     */
-    static void getWidebandData(
-            NITFReadControl& reader,
-            const ComplexData& complexData,
-            std::complex<float>* buffer
-            );
-
-    /*
-     *
-     * Given a loaded NITFReadControl and a ComplexData object, this 
-     * function loads the wideband data associated with the reader 
-     * and ComplexData object.
-     *
-     * This function allows the user to provide a vector to be resized
-     * to fit the whole image in.
-     *
-     * \param reader A loaded NITFReadControl associated with the SICD
-     * \param complexData complexData associated with the SICD
-     * \param buffer The functions output, will contain the image
-     *
-     */
-    static void getWidebandData(
-            NITFReadControl& reader,
-            const ComplexData& complexData,
-            std::vector<std::complex<float> >& buffer
-            );
-
-    /*
-     * This interface is more suitable if you need just
-     * the complexData, or if you conditionally need the
-     * wideband data.
-     */
+                         const std::vector<std::string>& schemaPaths,
+                         std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData);
 
     /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -147,6 +81,58 @@ public:
     std::auto_ptr<ComplexData> getComplexData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths);
+
+    /*
+     * Given a reference to a loaded NITFReadControl, this function
+     * parses the SICD's XML and returns a new ComplexData object.
+     *
+     * \param reader A NITFReadControl loaded with the desired SICD
+     *
+     * \return ComplexData associated with the SICD NITF
+     *
+     * \throws except::Exception if the provided reader is not a SICD
+     *
+     */
+    static std::auto_ptr<ComplexData> getComplexData(NITFReadControl& reader);
+
+    /*
+     * Given a loaded NITFReadControl and a ComplexData object, this 
+     * function loads the wideband data associated with the reader 
+     * and ComplexData object.
+     *
+     * \param reader A loaded NITFReadControl associated with the SICD
+     * \param complexData complexData associated with the SICD
+     * \param buffer A pointer to the buffer to load data into.  Must be
+     *   at least complexData.getNumCols() * complexData.getNumRows() pixels
+     *
+     * \return a pointer to the loaded data.
+     *
+     * \throws except::Exception if the pixel type of the SICD is not a
+     *           complex float32 or complex int64, or
+     *         the buffer pointer is null
+     *
+     */
+    static void getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                std::complex<float>* buffer);
+
+    /*
+     *
+     * Given a loaded NITFReadControl and a ComplexData object, this 
+     * function loads the wideband data associated with the reader 
+     * and ComplexData object.
+     *
+     * This function allows the user to provide a vector to be resized
+     * to fit the whole image in.
+     *
+     * \param reader A loaded NITFReadControl associated with the SICD
+     * \param complexData complexData associated with the SICD
+     * \param buffer The functions output, will contain the image
+     *
+     */
+    static void getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                std::vector<std::complex<float> >& buffer);
 
     /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -167,7 +153,6 @@ public:
             const std::vector<std::string>& schemaPaths,
             const ComplexData& complexData,
             std::complex<float>* buffer);
-
 };
 }
 }
