@@ -255,9 +255,10 @@ int main(int argc, char** argv)
                                              maxSize);
         }
 
-        // Means its little endian stream
-        const bool needsByteSwap = sys::isBigEndianSystem()
-                && fileHeader->isDifferentByteOrdering();
+        // NITF data is always big endian, so check if we need to swap
+        const bool needsByteSwap =
+            (sys::isBigEndianSystem() && fileHeader->isDifferentByteOrdering())
+         || (!sys::isBigEndianSystem() && !fileHeader->isDifferentByteOrdering());
 
         writer.getOptions().setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,
