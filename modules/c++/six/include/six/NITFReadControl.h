@@ -43,6 +43,8 @@ namespace six
  *  This class takes advantage of optimizations in NITRO specific to
  *  pixel-interleaved, or single band data.
  *
+ *  This class is not copyable.
+ *
  */
 class NITFReadControl : public ReadControl
 {
@@ -152,6 +154,11 @@ protected:
             std::map<std::string, void*>& )
     {
     }
+
+private:
+    // Unimplemented - NITFReadControl is not copyable
+    NITFReadControl(const NITFReadControl& other);
+    NITFReadControl& operator=(const NITFReadControl& other);
 };
 
 
