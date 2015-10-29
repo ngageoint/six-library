@@ -704,22 +704,17 @@ void NITFWriteControl::save(SourceList& imageData,
     bufferedIO.close();
 }
 
-void NITFWriteControl::save(
-        SourceList& imageData,
-        nitf::IOInterface& outputFile,
-        const std::vector<std::string>& schemaPaths)
+bool NITFWriteControl::shouldByteSwap() const
 {
-
-    mWriter.prepareIO(outputFile, mRecord);
     bool doByteSwap;
 
-    int byteSwapping =
+    const int byteSwapping =
         (int) mOptions.getParameter(OPT_BYTE_SWAP,
                                     Parameter((int) ByteSwapping::SWAP_AUTO));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
-        // Have to if its not a BE machine
+        // Have to if it's not a BE machine
         doByteSwap = !sys::isBigEndianSystem();
     }
     else
@@ -728,6 +723,18 @@ void NITFWriteControl::save(
         // unless you know what you're doing anyway!
         doByteSwap = byteSwapping ? true : false;
     }
+
+    return doByteSwap;
+}
+
+void NITFWriteControl::save(
+        SourceList& imageData,
+        nitf::IOInterface& outputFile,
+        const std::vector<std::string>& schemaPaths)
+{
+
+    mWriter.prepareIO(outputFile, mRecord);
+    const bool doByteSwap = shouldByteSwap();
 
     if (mInfos.size() != imageData.size())
     {
@@ -788,11 +795,8 @@ void NITFWriteControl::save(
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths)
 {
-
     mWriter.prepareIO(outputFile, mRecord);
-
-    // Have to if its not a BE machine
-    bool doByteSwap = !sys::isBigEndianSystem();
+    const bool doByteSwap = shouldByteSwap();
 
     if (mInfos.size() != imageData.size())
         throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
