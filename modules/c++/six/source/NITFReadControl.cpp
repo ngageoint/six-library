@@ -237,7 +237,9 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
     // Now go through every image and figure out what clump its attached
     // to and use that for the measurements
-    for (size_t i = 0; imageIter != images.end(); ++imageIter, ++i)
+    for (size_t nitfSegmentIdx = 0;
+         imageIter != images.end();
+         ++imageIter, ++nitfSegmentIdx)
     {
         // Get a segment ref
         nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
@@ -258,7 +260,8 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         }
 
         NITFImageInfo* const currentInfo = mInfos[imageAndSegment.first];
-        int j = imageAndSegment.second;
+
+        const size_t productSegmentIdx = imageAndSegment.second;
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
@@ -276,15 +279,17 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         std::vector < NITFSegmentInfo > imageSegments
                 = currentInfo->getImageSegments();
 
-        if (j != 0)
-        {
-            si.rowOffset = imageSegments[j - 1].numRows;
-            si.firstRow = imageSegments[j - 1].firstRow + si.rowOffset;
-        }
-        else
+        if (productSegmentIdx == 0)
         {
             si.rowOffset = 0;
             si.firstRow = 0;
+            currentInfo->setStartIndex(nitfSegmentIdx);
+        }
+        else
+        {
+            si.rowOffset = imageSegments[productSegmentIdx - 1].numRows;
+            si.firstRow = imageSegments[productSegmentIdx - 1].firstRow +
+                    si.rowOffset;
         }
         subheader.getCornersAsLatLons(corners);
         for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
