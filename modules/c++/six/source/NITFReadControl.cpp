@@ -237,7 +237,9 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
     // Now go through every image and figure out what clump its attached
     // to and use that for the measurements
-    for (size_t i = 0; imageIter != images.end(); ++imageIter, ++i)
+    for (size_t nitfSegmentIdx = 0;
+         imageIter != images.end();
+         ++imageIter, ++nitfSegmentIdx)
     {
         // Get a segment ref
         nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
@@ -258,11 +260,21 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         }
 
         NITFImageInfo* const currentInfo = mInfos[imageAndSegment.first];
-        int j = imageAndSegment.second;
+
+        const size_t productSegmentIdx = imageAndSegment.second;
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
-        validateSegment(subheader, currentInfo);
+        // But, we don't do this for legends since their size has nothing to
+        // do with the size of the pixel data
+        std::string iCat = subheader.getImageCategory();
+        str::trim(iCat);
+        const bool isLegend = (iCat == "LEG");
+
+        if (!isLegend)
+        {
+            validateSegment(subheader, currentInfo);
+        }
 
         // We are propagating the last segment's
         // security markings through.  This should be okay, since, if you
@@ -276,22 +288,30 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         std::vector < NITFSegmentInfo > imageSegments
                 = currentInfo->getImageSegments();
 
-        if (j != 0)
-        {
-            si.rowOffset = imageSegments[j - 1].numRows;
-            si.firstRow = imageSegments[j - 1].firstRow + si.rowOffset;
-        }
-        else
+        if (productSegmentIdx == 0)
         {
             si.rowOffset = 0;
             si.firstRow = 0;
+            currentInfo->setStartIndex(nitfSegmentIdx);
         }
-        subheader.getCornersAsLatLons(corners);
-        for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+        else
         {
-            si.corners.getCorner(kk).setLat(corners[kk][0]);
-            si.corners.getCorner(kk).setLon(corners[kk][1]);
+            si.rowOffset = imageSegments[productSegmentIdx - 1].numRows;
+            si.firstRow = imageSegments[productSegmentIdx - 1].firstRow +
+                    si.rowOffset;
         }
+
+        // Legends don't set lat/lons
+        if (!isLegend)
+        {
+            subheader.getCornersAsLatLons(corners);
+            for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+            {
+                si.corners.getCorner(kk).setLat(corners[kk][0]);
+                si.corners.getCorner(kk).setLon(corners[kk][1]);
+            }
+        }
+
         currentInfo->addSegment(si);
     }
 }
