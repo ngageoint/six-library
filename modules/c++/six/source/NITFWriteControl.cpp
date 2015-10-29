@@ -421,8 +421,11 @@ void NITFWriteControl::setBlocking(const std::string& imode,
             throw except::Exception(Ctxt("SICDs do not support blocking"));
         }
 
-        numRowsPerBlock = static_cast<sys::Uint32_T>(
+        const size_t optNumRowsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
+
+        numRowsPerBlock = static_cast<sys::Uint32_T>(
+                std::min(optNumRowsPerBlock, segmentDims.row));
     }
     else
     {
@@ -439,8 +442,11 @@ void NITFWriteControl::setBlocking(const std::string& imode,
             throw except::Exception(Ctxt("SICDs do not support blocking"));
         }
 
-        numColsPerBlock = static_cast<sys::Uint32_T>(
+        const size_t optNumColsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
+
+        numColsPerBlock = static_cast<sys::Uint32_T>(
+                std::min(optNumColsPerBlock, segmentDims.col));
     }
     else
     {
