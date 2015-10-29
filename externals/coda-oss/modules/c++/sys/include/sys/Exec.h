@@ -31,13 +31,6 @@
 #include "sys/Err.h"
 #include "sys/ProcessInterface.h"
 
-#ifdef _WIN32
-#define popen _popen
-#define pclose _pclose
-#define fileno _fileno
-#endif
-
-
 namespace sys
 {
 
@@ -109,7 +102,7 @@ public:
     //! start the child process and connect the pipe
     virtual void run() 
     {
-        mOutStream = popen(mCmd.c_str(), "r");
+        mOutStream = openPipe(mCmd, "r");
         if (mOutStream == NULL)
         {
             sys::Err err;
@@ -125,14 +118,14 @@ public:
         {
             try 
             {
-                closePipe();
+                killProcess();
             }
             catch (...)
             {
             }
         }
     }
-    
+
     //! make available the pipe
     const FILE* getPipe() const { return mOutStream; }
 
@@ -140,12 +133,26 @@ public:
     FILE* getPipe() { return mOutStream; }
 
     //! closes the stream connected to the child process --
-    //! platform specific implementation 
+    //  this is a blocking call until the process is complete
     int closePipe();
 
 protected:
 
+#ifdef _WIN32
+    STARTUPINFO mStartInfo;
+    PROCESS_INFORMATION mProcessInfo;
+#else
+    pid_t mProcess;
+#endif
+
     FILE* mOutStream;
+
+    //! popen with user access to process id
+    FILE* openPipe(const std::string& command,
+                   const std::string& type);
+
+    //! forcefully kill the process and call closePipe
+    int killProcess();
 
 private:
 

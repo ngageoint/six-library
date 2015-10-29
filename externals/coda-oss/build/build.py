@@ -1288,9 +1288,13 @@ def process_swig_linkage(tsk):
     # first we need to setup some platform specific
     # options for specifying soname and passing linker
     # flags
+
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+    darwinRegex = r'i.86-apple-.*'
+
     platform = getPlatform(default=Options.platform)
     compiler = tsk.env['COMPILER_CXX']
+
     if compiler == 'msvc':
         # TODO
         # MSVC doesn't need this feature, apparently
@@ -1305,9 +1309,21 @@ def process_swig_linkage(tsk):
     libpattern = tsk.env['cshlib_PATTERN']
     linkarg_pattern = '-Wl,%s'
     rpath_pattern = '-Wl,-rpath=%s'
+    soname_pattern = '-soname=%s'
+
+    # overrides for solaris's cc and ld
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
         linkarg_pattern = '%s'
+        soname_pattern = '-h%s'
         rpath_pattern = '-Rpath%s'
+
+    # overrides for osx
+    if re.match(darwinRegex,platform):
+        while '-bundle' in tsk.env.LINKFLAGS:
+            tsk.env.LINKFLAGS.remove('-bundle')
+        tsk.env.LINKFLAGS.append('-dynamiclib')
+        soname_pattern='-install_name,%s'
+        rpath_pattern='-Wl,-rpath,%s'
 
     # so swig can find .i files to import
     incstr = ''
@@ -1330,7 +1346,7 @@ def process_swig_linkage(tsk):
             libname = libpattern % lib
             searchstr = lib[6:].replace('_','.')
         elif lib.startswith('_'):
-            libname = lib + '.so'
+            libname = libpattern % lib
             searchstr = lib[1:].replace('_','.')
         else:
             # this isnt a python library, ignore it
@@ -1364,10 +1380,10 @@ def process_swig_linkage(tsk):
     # link to *us* in the above fashion will not be able to do it 
     # without the same path 
     # (ie python dependencies at runtime after installation)
-    # TODO use of the -h option changes slightly sometime after ld 2.17
-    #      would be a good idea to verify that this will work with later
-    #      versions
-    soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
+    
+    # This builds a soname_str suitable for hopefully any platform,
+    # compiler, and linker
+    soname_str = linkarg_pattern % (soname_pattern % (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
 
     # finally, we want to bake the library search paths straight in to
