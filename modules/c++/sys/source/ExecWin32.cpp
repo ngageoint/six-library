@@ -23,10 +23,96 @@
 
 #if defined(WIN32)
 
-#include "sys/Err.h"
-#include "sys/Exec.h"
+#include <sys/Exec.h>
+#include <str/Manip.h>
 
-int sys::ExecPipe::closePipe()
+#include <fcntl.h>
+#include <io.h>
+
+namespace
+{
+static const size_t READ_PIPE = 0;
+static const size_t WRITE_PIPE = 1;
+}
+
+namespace sys
+{
+
+FILE* ExecPipe::openPipe(const std::string& command,
+                         const std::string& type)
+{
+    FILE* ioFile;
+    HANDLE outIO[2] = {NULL, NULL};
+
+    //! inherit the pipe handles
+    SECURITY_ATTRIBUTES saAttr; 
+    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+    saAttr.bInheritHandle = TRUE;
+    saAttr.lpSecurityDescriptor = NULL; 
+    if (!CreatePipe(&outIO[READ_PIPE], &outIO[WRITE_PIPE], &saAttr, 0))
+    {
+        return NULL;
+    }
+
+    // check the pipes themselves are not inherited
+    if (!SetHandleInformation(outIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0))
+    {
+        return NULL;
+    }
+
+    // the startInfo structure is where the pipes are connected 
+    ZeroMemory(&mProcessInfo, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&mStartInfo, sizeof(STARTUPINFO));
+    mStartInfo.cb = sizeof(STARTUPINFO); 
+    mStartInfo.hStdOutput = outIO[WRITE_PIPE];
+    mStartInfo.hStdError = outIO[WRITE_PIPE];
+
+    //! attach the parent's stdin pipe --
+    //  it is assumed all (other than command line arguments) will
+    //  be provided via the parent's stdin pipe.
+    mStartInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+    mStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+
+    //! create the subprocess --
+    //  this is equivalent to a fork + exec
+    if (CreateProcess(NULL, const_cast<char*>(command.c_str()),
+                      NULL, NULL, TRUE, 0, NULL, NULL,
+                      &mStartInfo, &mProcessInfo) == 0)
+    {
+        return NULL;
+    }
+
+    //  connect the pipes currently connected in the subprocess
+    //  to the FILE* handle. Close the unwanted handle.
+    //  NOTE: we do not support the 'w' modes and instead assume
+    //        the stdin will come from the parent's stdin pipe
+    if (type == "r")
+    {
+        int readDescriptor = 0;
+        if ((readDescriptor = _open_osfhandle(
+                (intptr_t)outIO[READ_PIPE], _O_RDONLY)) == -1)
+        {
+            return NULL;
+        }
+        ioFile = _fdopen(readDescriptor, type.c_str());
+        CloseHandle(outIO[WRITE_PIPE]);
+    }
+
+    return ioFile;
+}
+
+int ExecPipe::killProcess()
+{
+    //! issue a forceful removal of the process
+    TerminateProcess(mProcessInfo.hProcess, PROCESS_TERMINATE);
+
+    //! now clean up the process --
+    //  wait needs to be called to remove the
+    //  zombie process.
+    return closePipe();
+}
+
+int ExecPipe::closePipe()
 {
     if (!mOutStream)
     {
@@ -38,7 +124,14 @@ int sys::ExecPipe::closePipe()
     FILE* tmp = mOutStream;
     mOutStream = NULL;
 
-    const int exitStatus  = pclose(tmp);
+    DWORD dwMillisec = INFINITE;
+    DWORD dwWaitStatus = 
+        WaitForSingleObject(mProcessInfo.hProcess, dwMillisec);
+
+    //! get the exit code
+    DWORD exitCode = NULL;
+    GetExitCodeProcess(mProcessInfo.hProcess, &exitCode);
+    const int exitStatus = static_cast<int>(exitCode);
     if (exitStatus == -1)
     {
         sys::SocketErr err;
@@ -49,6 +142,8 @@ int sys::ExecPipe::closePipe()
     }
 
     return exitStatus;
+}
+
 }
 
 #endif
