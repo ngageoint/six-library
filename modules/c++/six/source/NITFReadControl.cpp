@@ -34,12 +34,68 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
     {
         nitf::IOHandle inFile(fromFile);
         nitf::Record rec = mReader.read(inFile);
+
+        nitf::List des = rec.getDataExtensions();
+        nitf::ListIterator desIter = des.begin();
+
+        for (size_t i = 0; desIter != des.end(); ++desIter, ++i)
+        {
+            // Get a segment ref
+            nitf::DESegment segment = (nitf::DESegment) * desIter;
+            nitf::DESubheader subheader = segment.getSubheader();
+            std::string desid = subheader.getTypeID().toString();
+            str::trim(desid);
+
+            // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
+            // Older versions of the spec specified it as SICD_XML/SIDD_XML
+            // Here we'll accept any of these under the assumption that it's not
+            // such an old version of the spec that the XML layout itself has
+            // changed (if it did, XMLControl will end up throwing anyway)
+            if (desid == "SICD_XML")
+            {
+                return DataType::COMPLEX;
+            }
+            else if (desid == "SIDD_XML")
+            {
+                return DataType::DERIVED;
+            }
+            else if (desid == "XML_DATA_CONTENT")
+            {
+                // TODO: Will want a better check like we have in the
+                //       write control to check if we have this TRE on our
+                //       plugin path
+
+                // TODO: Will want a revamped version of this function that
+                //       takes in a nitf::Record so we don't have to duplicate
+                //       this.  There's a second spot where FTITLE is checked
+                //       further below that still needs replacing.
+                nitf::TRE tre = subheader.getSubheaderFields();
+
+                const std::string specId = tre.getField("DESSHSI");
+                if (specId.substr(0, 4) == "SICD")
+                {
+                    return DataType::COMPLEX;
+                }
+                else if (specId.substr(0, 4) == "SIDD")
+                {
+                    return DataType::DERIVED;
+                }
+                else
+                {
+                    throw except::Exception("Something's wrong!");
+                }
+            }
+        }
+
+        // Can't count on FTITLE anymore!
+        /*
         inFile.close();
         std::string title = rec.getHeader().getFileTitle().toString();
         if (str::startsWith(title, "SICD"))
             return DataType::COMPLEX;
         else if (str::startsWith(title, "SIDD"))
             return DataType::DERIVED;
+            */
     }
     return DataType::NOT_SET;
 }
