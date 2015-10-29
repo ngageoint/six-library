@@ -265,7 +265,16 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
-        validateSegment(subheader, currentInfo);
+        // But, we don't do this for legends since their size has nothing to
+        // do with the size of the pixel data
+        std::string iCat = subheader.getImageCategory();
+        str::trim(iCat);
+        const bool isLegend = (iCat == "LEG");
+
+        if (!isLegend)
+        {
+            validateSegment(subheader, currentInfo);
+        }
 
         // We are propagating the last segment's
         // security markings through.  This should be okay, since, if you
@@ -291,12 +300,18 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
             si.firstRow = imageSegments[productSegmentIdx - 1].firstRow +
                     si.rowOffset;
         }
-        subheader.getCornersAsLatLons(corners);
-        for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+
+        // Legends don't set lat/lons
+        if (!isLegend)
         {
-            si.corners.getCorner(kk).setLat(corners[kk][0]);
-            si.corners.getCorner(kk).setLon(corners[kk][1]);
+            subheader.getCornersAsLatLons(corners);
+            for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+            {
+                si.corners.getCorner(kk).setLat(corners[kk][0]);
+                si.corners.getCorner(kk).setLon(corners[kk][1]);
+            }
         }
+
         currentInfo->addSegment(si);
     }
 }
