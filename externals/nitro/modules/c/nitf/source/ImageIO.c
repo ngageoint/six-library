@@ -5944,7 +5944,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numRowsFR > (nitf->numRows + rowSkip - 1) || numRowsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of rows %ld (Full resolution) (limit is %ld)",
+                         "Invalid number of rows %u (Full resolution) (limit is %ld)",
                          numRowsFR, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -5952,7 +5952,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numColsFR > (nitf->numColumns + colSkip - 1) || numColsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of columns %ld (Full resolution) (limit is %ld)",
+                         "Invalid number of columns %u (Full resolution) (limit is %ld)",
                          numColsFR, nitf->numColumns);
         return NITF_FAILURE;
     }
