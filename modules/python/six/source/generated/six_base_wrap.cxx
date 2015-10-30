@@ -4838,13 +4838,6 @@ SWIG_From_unsigned_SS_short  (unsigned short value)
   return SWIG_From_unsigned_SS_long  (value);
 }
 
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
 SWIGINTERN void six_Parameter_setValue(six::Parameter *self,std::string const &str){
       self->setValue<std::string>(str);
     }
@@ -4857,6 +4850,13 @@ SWIGINTERN long six_Parameter___int__(six::Parameter *self){
 SWIGINTERN double six_Parameter___float__(six::Parameter *self){
       return str::toType<double>(self->str());
     }
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
 SWIGINTERN six::Parameter &six_ParameterCollection___getitem__(six::ParameterCollection *self,size_t i){
       return (*self)[i];
     }
@@ -40760,7 +40760,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get(vo
   {
     try
     {
-      pyobj = SWIG_From_size_t(static_cast< size_t >(six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH));
+      pyobj = SWIG_NewPointerObj(SWIG_as_voidptr(&six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH), SWIGTYPE_p_uint64_t,  0 );
     } 
     catch (const std::exception& e)
     {
