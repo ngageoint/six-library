@@ -85,33 +85,6 @@ void getSensorCovariance(const six::PosVelError& error,
 
 using namespace six;
 
-double six::remapZeroTo360(double degree)
-{
-    double delta = degree;
-    while (delta < 0.) 
-    { 
-        delta += 360.;
-        if (degree == delta)
-        {
-            throw except::Exception(Ctxt(
-                "Value [" + str::toString(degree) + 
-                "] is too small to remap into the [0:360] range"));
-        }
-    }
-    while (delta > 360.) 
-    { 
-        delta -= 360.; 
-        if (degree == delta)
-        {
-            throw except::Exception(Ctxt(
-                "Value [" + str::toString(degree) + 
-                "] is too large to remap into the [0:360] range"));
-        }
-    }
-    return delta;
-}
-
-
 template<> BooleanType six::toType<BooleanType>(const std::string& s)
 {
     std::string type(s);

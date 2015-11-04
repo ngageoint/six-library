@@ -31,6 +31,7 @@
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
 #include "six/Init.h"
+#include <scene/Utilities.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
 #include <import/str.h>
@@ -54,7 +55,11 @@ namespace six
  *      [-90:90]
  *      [-180:180]
  */
-double remapZeroTo360(double degree);
+inline
+double remapZeroTo360(double degree)
+{
+    return scene::Utilities::remapZeroTo360(degree);
+}
 
 
 // TODO eventually replace enum toString/toType methods below directly in the

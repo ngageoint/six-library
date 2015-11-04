@@ -578,6 +578,14 @@ class Utilities(_object):
         ecefToLatLon = staticmethod(ecefToLatLon)
     __swig_getmethods__["ecefToLatLon"] = lambda x: ecefToLatLon
 
+    def remapZeroTo360(degree):
+        """remapZeroTo360(double degree) -> double"""
+        return _scene.Utilities_remapZeroTo360(degree)
+
+    if _newclass:
+        remapZeroTo360 = staticmethod(remapZeroTo360)
+    __swig_getmethods__["remapZeroTo360"] = lambda x: remapZeroTo360
+
     def __init__(self):
         """__init__(scene::Utilities self) -> Utilities"""
         this = _scene.new_Utilities()
@@ -600,6 +608,10 @@ def Utilities_latLonToECEF(*args):
 def Utilities_ecefToLatLon(vec):
     """Utilities_ecefToLatLon(Vector3 vec) -> LatLonAlt"""
     return _scene.Utilities_ecefToLatLon(vec)
+
+def Utilities_remapZeroTo360(degree):
+    """Utilities_remapZeroTo360(double degree) -> double"""
+    return _scene.Utilities_remapZeroTo360(degree)
 
 class CoordinateTransform(_object):
     """Proxy of C++ scene::CoordinateTransform class"""
