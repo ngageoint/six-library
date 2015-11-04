@@ -127,51 +127,136 @@ public:
     // TRE-based NITF with the appropriate metadata, you want to use the OP
     // (Output Plane) versions of these functions.
 
+    /*
+     * Returns the grazing angle with respect to an arbitrary normal vector in
+     * [-90, 90] degrees
+     */
     double getGrazingAngle(const Vector3& normalVec) const;
+
+    /*
+     * Returns the grazing angle with respect to the ETP in [-90, 90] degrees
+     *
+     * This implements Section 4.9 of SICD / Section 6.4.4 of SIDD and can
+     * be assigned directly to sicdData.scpcoa->grazeAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->graze
+     */
     double getETPGrazingAngle() const
     {
         return getGrazingAngle(mZg);
     }
+
+    /*
+     * Returns the grazing angle with respect to the output plane in [-90, 90]
+     * degrees
+     */
     double getOPGrazingAngle() const
     {
         return getGrazingAngle(getOPZVector());
     }
 
+    /*
+     * Returns the tilt (or twist) angle with respect to an arbitrary normal
+     * vector in [-180, 180] degrees
+     */
     double getTiltAngle(const Vector3& normalVec) const;
+
+    /*
+     * Returns the tilt (or twist) angle with respect to the ETP in
+     * [-180, 180] degrees
+     *
+     * This implements Section 4.9 of SICD / Section 6.4.5 of SIDD and can be
+     * assigned directly to sicdData.scpCoa->twistAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->tilt
+     */
     double getETPTiltAngle() const
     {
         return getTiltAngle(mZg);
     }
+
+    /*
+     * Returns the tilt (or twist) angle with respect to the output plane in
+     * [-180, 180] degrees
+     */
     double getOPTiltAngle() const
     {
         return getTiltAngle(getOPZVector());
     }
 
+    /*
+     * Returns the doppler cone angle in [0, 180] degrees
+     *
+     * This implements Section 4.9 of SICD and can be assigned directly to
+     * sicdData.scpCoa->dopplerConeAngle
+     */
     double getDopplerConeAngle() const;
 
-    // This is what the SIDD spec calls the ground plane squint angle
-    // Defined as zero looking straight forward, +90 at broadside, and +180
-    // looking straight backwards regardless of looking to the right or left
+    /*
+     * Returns the ground plane squint angle in [0, 180] degrees
+     *
+     * Defined as zero looking straight forward, +90 at broadside, and +180
+     * looking straight backwards regardless of looking to the right or left
+     *
+     * This implements the ground plane squint angle in Section 6.4.3 of SIDD
+     * and can be assigned directly to
+     * siddData.exploitationFeatures->collections[idx]->geometry->squint
+     */
     double getSquintAngle() const;
 
+    /*
+     * Returns the slope angle with respect to an arbitrary normal vector in
+     * [0, 180] degrees
+     */
     double getSlopeAngle(const Vector3& normalVec) const;
+
+    /*
+     * Returns the slope angle with respect to the ETP in [0, 180] degrees
+     *
+     * This implements Section 4.9 of SICD / Section 6.4.2 of SIDD and can be
+     * assigned directly to sicdData.scpCoa->slopeAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->slope
+     */
     double getETPSlopeAngle() const
     {
         return getSlopeAngle(mZg);
     }
+
+    /*
+     * Returns the slope angle with respect to the output plane in [0, 180]
+     * degrees
+     */
     double getOPSlopeAngle() const
     {
         return getSlopeAngle(getOPZVector());
     }
 
+    /*
+     * Returns the azimuth angle in [0, 360] degrees
+     *
+     * This implements Section 4.9 of SICD / Section 6.4.1 of SIDD and can be
+     * assigned directly to sicdData.scpCoa->azimuthAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->azimuth
+     */
     double getAzimuthAngle() const;
+
     double getRotationAngle() const;
+
     Vector3 getMultiPathVector() const;
+
+    /*
+     * Returns the multipath angle in [-180, 180] degrees
+     *
+     * This implements Section 6.5.5 of SIDD and can be assigned directly to
+     * siddData.exploitationFeatures->collections[idx]->phenomenology->multiPath
+     */
     double getMultiPathAngle() const;
 
     /*!
-     * CCW angle from increasing row direction to ground track at the center of
-     * the image
+     *
+     * Returns the CCW angle from increasing row direction to ground track at
+     * the center of the image in [-180, 180] degrees
+     *
+     * This implements Section 6.5.6 of SIDD and can be assigned directly to
+     * siddData.exploitationFeatures->collections[idx]->phenomenology->groundTrack
      */
     double getGroundTrackAngle() const;
 
@@ -198,7 +283,10 @@ public:
     }
 
     /*!
-     * The north angle (in [-180, 180] degrees) in the pixel grid
+     * The north angle in [-180, 180] degrees in the pixel grid
+     *
+     * This implements Section 6.5.3 of SIDD and can be assigned directly to
+     * siddData.exploitationFeatures->product.north
      */
     double getNorthAngle() const;
 
@@ -219,17 +307,32 @@ public:
     /*!
      * The layover angle (in [-180, 180] degrees) and magnitude in the pixel
      * grid
+     *
+     * This implements Section 6.5.2 of SIDD and can be assigned directly to
+     * siddData.exploitationFeatures->collections[idx]->phenomenology->layover
      */
     AngleMagnitude getLayover() const;
 
     /*
      * The layover angle (in [-180, 180] degrees) in the earth tangent plane
      * (ETP)
+     *
+     * This implements Section 4.9 of SICD but with a different angle
+     * convention: use remapZeroTo360() before assigning to
+     * assigned directly to sicdData.scpCoa->layoverAngle
      */
     double getETPLayoverAngle() const;
 
     Vector3 getShadowVector() const;
+
+    /*
+     * The shadow angle and magnitude
+     *
+     * This implements Section 6.5.1 of SIDD and can be assigned directly to
+     * siddData.exploitationFeatures->collections[idx]->phenomenology->shadow
+     */
     AngleMagnitude getShadow() const;
+
     types::RowCol<double>
     getGroundResolution(const types::RgAz<double>& res) const;
 
