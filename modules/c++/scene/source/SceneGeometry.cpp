@@ -270,7 +270,9 @@ double SceneGeometry::getRotationAngle() const
 
 Vector3 SceneGeometry::getMultiPathVector() const
 {
-    double scale = mXs.dot(mZg) / mZs.dot(mZg);
+    const Vector3 opZ = getOPZVector();
+
+    const double scale = mXs.dot(opZ) / mZs.dot(opZ);
     return mXs - (mZs * scale);
 }
 
