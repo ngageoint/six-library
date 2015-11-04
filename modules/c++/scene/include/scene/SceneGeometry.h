@@ -112,7 +112,19 @@ public:
     Vector3 getARPPosition() const { return mPa; }
     Vector3 getARPVelocity() const { return mVa; }
     Vector3 getReferencePosition() const { return mPo; }
-    Vector3 getGroundTrack() const { return mVg; }
+
+    Vector3 getGroundTrack(const Vector3& normalVec) const;
+
+    Vector3 getETPGroundTrack() const
+    {
+        return getGroundTrack(mZg);
+    }
+
+    Vector3 getOPGroundTrack() const
+    {
+        return getGroundTrack(getOPZVector());
+    }
+
     Vector3 getGroundRange() const { return mRg; }
     SideOfTrack getSideOfTrack() const;
     double getImageAngle(const Vector3& vec) const;
@@ -258,7 +270,7 @@ public:
      * This implements Section 6.5.6 of SIDD and can be assigned directly to
      * siddData.exploitationFeatures->collections[idx]->phenomenology->groundTrack
      */
-    double getGroundTrackAngle() const;
+    double getOPGroundTrackAngle() const;
 
     /*!
      * The angle to vec (in [0, 360) degrees CW+) in the output plane from the

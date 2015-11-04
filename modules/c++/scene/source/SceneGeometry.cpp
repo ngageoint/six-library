@@ -129,7 +129,12 @@ void SceneGeometry::initialize()
     mRg *= -1;
 
     // Calculate ground track
-    mVg = mVa - mZg * (mVa.dot(mZg));
+    mVg = getETPGroundTrack();
+}
+
+Vector3 SceneGeometry::getGroundTrack(const Vector3& normalVec) const
+{
+    return mVa - normalVec * (mVa.dot(normalVec));
 }
 
 void SceneGeometry::setImageVectors(const Vector3& row,
@@ -281,9 +286,9 @@ double SceneGeometry::getMultiPathAngle() const
     return getImageAngle(getMultiPathVector());
 }
 
-double SceneGeometry::getGroundTrackAngle() const
+double SceneGeometry::getOPGroundTrackAngle() const
 {
-    return getImageAngle(getGroundTrack());
+    return getImageAngle(getOPGroundTrack());
 }
 
 double SceneGeometry::getOPAngle(const Vector3& vec) const
