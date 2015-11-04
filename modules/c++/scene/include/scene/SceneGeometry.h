@@ -314,12 +314,13 @@ public:
     AngleMagnitude getLayover() const;
 
     /*
-     * The layover angle (in [-180, 180] degrees) in the earth tangent plane
-     * (ETP)
+     * The layover angle (in [0, 360] degrees) in the earth tangent plane
+     * (ETP).  Note that this is different than the angle component of the
+     * getLayover() method above for convenience when using to assign SICD
+     * metadata.
      *
-     * This implements Section 4.9 of SICD but with a different angle
-     * convention: use remapZeroTo360() before assigning to
-     * assigned directly to sicdData.scpCoa->layoverAngle
+     * This implements Section 4.9 of SICD and can be assigned directly to
+     * sicdData.scpCoa->layoverAngle
      */
     double getETPLayoverAngle() const;
 

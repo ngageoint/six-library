@@ -369,7 +369,8 @@ double SceneGeometry::getETPLayoverAngle() const
     const double etpLayoverAngleRad =
             atan2(east.dot(layoverDir), mNorth.dot(layoverDir));
 
-    return (etpLayoverAngleRad * math::Constants::RADIANS_TO_DEGREES);
+    return Utilities::remapZeroTo360(
+            etpLayoverAngleRad * math::Constants::RADIANS_TO_DEGREES);
 }
 
 Vector3 SceneGeometry::getShadowVector() const
