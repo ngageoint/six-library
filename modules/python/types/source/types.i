@@ -46,3 +46,4 @@
 %template(RgAzDouble) types::RgAz<double>;
 
 %template(VectorRowColInt) std::vector<types::RowCol<sys::SSize_T> >;
+%template(VectorSizeT) std::vector<size_t>;
