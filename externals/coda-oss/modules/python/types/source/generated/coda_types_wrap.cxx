@@ -10240,7 +10240,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT___setslice__(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[5];
+  PyObject *argv[5] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -10557,7 +10559,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT___delitem__(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[3];
+  PyObject *argv[3] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -10641,7 +10645,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT___getitem__(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[3];
+  PyObject *argv[3] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -10735,7 +10741,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT___setitem__(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[4] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -11256,7 +11264,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT_erase(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[4] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -11340,7 +11350,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_VectorSizeT(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[3];
+  PyObject *argv[3] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -11557,7 +11569,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT_resize(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[4] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
@@ -11716,7 +11730,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_VectorSizeT_insert(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[5];
+  PyObject *argv[5] = {
+    0
+  };
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
