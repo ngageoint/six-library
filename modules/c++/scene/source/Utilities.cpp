@@ -19,12 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "scene/Utilities.h"
-#include "scene/LLAToECEFTransform.h"
-#include "scene/ECEFToLLATransform.h"
 
-using namespace scene;
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <str/Convert.h>
+#include <scene/Utilities.h>
+#include <scene/LLAToECEFTransform.h>
+#include <scene/ECEFToLLATransform.h>
 
+namespace scene
+{
 Vector3 Utilities::latLonToECEF(LatLonAlt latLon)
 {
     scene::LLAToECEFTransform toECEF;
@@ -43,3 +47,29 @@ LatLonAlt Utilities::ecefToLatLon(Vector3 vec)
     return toLLA.transform(vec);
 }
 
+double Utilities::remapZeroTo360(double degree)
+{
+    double delta = degree;
+    while (delta < 0.)
+    {
+        delta += 360.;
+        if (degree == delta)
+        {
+            throw except::Exception(Ctxt(
+                "Value [" + str::toString(degree) +
+                "] is too small to remap into the [0:360] range"));
+        }
+    }
+    while (delta > 360.)
+    {
+        delta -= 360.;
+        if (degree == delta)
+        {
+            throw except::Exception(Ctxt(
+                "Value [" + str::toString(degree) +
+                "] is too large to remap into the [0:360] range"));
+        }
+    }
+    return delta;
+}
+}

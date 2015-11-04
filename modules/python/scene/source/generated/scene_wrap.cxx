@@ -9830,6 +9830,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Utilities_remapZeroTo360(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Utilities_remapZeroTo360",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Utilities_remapZeroTo360" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  {
+    try
+    {
+      result = (double)scene::Utilities::remapZeroTo360(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_Utilities(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::Utilities *result = 0 ;
@@ -25442,6 +25494,7 @@ static PyMethodDef SwigMethods[] = {
 		"Utilities_latLonToECEF(LatLon latLon) -> Vector3\n"
 		""},
 	 { (char *)"Utilities_ecefToLatLon", _wrap_Utilities_ecefToLatLon, METH_VARARGS, (char *)"Utilities_ecefToLatLon(Vector3 vec) -> LatLonAlt"},
+	 { (char *)"Utilities_remapZeroTo360", _wrap_Utilities_remapZeroTo360, METH_VARARGS, (char *)"Utilities_remapZeroTo360(double degree) -> double"},
 	 { (char *)"new_Utilities", _wrap_new_Utilities, METH_VARARGS, (char *)"new_Utilities() -> Utilities"},
 	 { (char *)"delete_Utilities", _wrap_delete_Utilities, METH_VARARGS, (char *)"delete_Utilities(Utilities self)"},
 	 { (char *)"Utilities_swigregister", Utilities_swigregister, METH_VARARGS, NULL},

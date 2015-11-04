@@ -51,6 +51,21 @@ struct Utilities
      */
     static LatLonAlt ecefToLatLon(Vector3 vec);
 
+    /*!
+     *  Remaps angles into [0:360]
+     *
+     *  Others ranges are explicitly unsupported because
+     *  of remapping issues, and that angles outside those
+     *  ranges generally indicate errors. For instance a
+     *  Latitude value outside of the [-90:90] range would
+     *  be considered an error.
+     *
+     *  Unsupported ranges are:
+     *      [0:90]
+     *      [-90:90]
+     *      [-180:180]
+     */
+    static double remapZeroTo360(double degree);
 };
 
 }

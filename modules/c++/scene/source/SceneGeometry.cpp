@@ -252,7 +252,9 @@ double SceneGeometry::getSlopeAngle(const Vector3& normalVec) const
 double SceneGeometry::getAzimuthAngle() const
 {
     Vector3 east = math::linear::cross(mNorth, mZg);
-    return atan2(east.dot(mXs), mNorth.dot(mXs)) * math::Constants::RADIANS_TO_DEGREES;
+    return Utilities::remapZeroTo360(
+            atan2(east.dot(mXs), mNorth.dot(mXs)) *
+            math::Constants::RADIANS_TO_DEGREES);
 }
 
 double SceneGeometry::getHeadingAngle() const
