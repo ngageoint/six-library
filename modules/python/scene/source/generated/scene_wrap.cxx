@@ -12744,21 +12744,137 @@ fail:
 SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundTrack(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  scene::Vector3 *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
   scene::Vector3 result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getGroundTrack",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:SceneGeometry_getGroundTrack",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getGroundTrack" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
   }
   arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SceneGeometry_getGroundTrack" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SceneGeometry_getGroundTrack" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
   {
     try
     {
-      result = ((scene::SceneGeometry const *)arg1)->getGroundTrack();
+      result = ((scene::SceneGeometry const *)arg1)->getGroundTrack((scene::Vector3 const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getETPGroundTrack(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  scene::Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getETPGroundTrack",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getETPGroundTrack" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  {
+    try
+    {
+      result = ((scene::SceneGeometry const *)arg1)->getETPGroundTrack();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getOPGroundTrack(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  scene::Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getOPGroundTrack",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getOPGroundTrack" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  {
+    try
+    {
+      result = ((scene::SceneGeometry const *)arg1)->getOPGroundTrack();
     } 
     catch (const std::exception& e)
     {
@@ -13985,7 +14101,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundTrackAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SceneGeometry_getOPGroundTrackAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
   void *argp1 = 0 ;
@@ -13993,16 +14109,16 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundTrackAngle(PyObject *SWIGUNUSE
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getGroundTrackAngle",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:SceneGeometry_getOPGroundTrackAngle",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getGroundTrackAngle" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getOPGroundTrackAngle" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
   }
   arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
   {
     try
     {
-      result = (double)((scene::SceneGeometry const *)arg1)->getGroundTrackAngle();
+      result = (double)((scene::SceneGeometry const *)arg1)->getOPGroundTrackAngle();
     } 
     catch (const std::exception& e)
     {
@@ -25557,7 +25673,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getARPPosition", _wrap_SceneGeometry_getARPPosition, METH_VARARGS, (char *)"SceneGeometry_getARPPosition(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getARPVelocity", _wrap_SceneGeometry_getARPVelocity, METH_VARARGS, (char *)"SceneGeometry_getARPVelocity(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getReferencePosition", _wrap_SceneGeometry_getReferencePosition, METH_VARARGS, (char *)"SceneGeometry_getReferencePosition(SceneGeometry self) -> Vector3"},
-	 { (char *)"SceneGeometry_getGroundTrack", _wrap_SceneGeometry_getGroundTrack, METH_VARARGS, (char *)"SceneGeometry_getGroundTrack(SceneGeometry self) -> Vector3"},
+	 { (char *)"SceneGeometry_getGroundTrack", _wrap_SceneGeometry_getGroundTrack, METH_VARARGS, (char *)"SceneGeometry_getGroundTrack(SceneGeometry self, Vector3 normalVec) -> Vector3"},
+	 { (char *)"SceneGeometry_getETPGroundTrack", _wrap_SceneGeometry_getETPGroundTrack, METH_VARARGS, (char *)"SceneGeometry_getETPGroundTrack(SceneGeometry self) -> Vector3"},
+	 { (char *)"SceneGeometry_getOPGroundTrack", _wrap_SceneGeometry_getOPGroundTrack, METH_VARARGS, (char *)"SceneGeometry_getOPGroundTrack(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getGroundRange", _wrap_SceneGeometry_getGroundRange, METH_VARARGS, (char *)"SceneGeometry_getGroundRange(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getSideOfTrack", _wrap_SceneGeometry_getSideOfTrack, METH_VARARGS, (char *)"SceneGeometry_getSideOfTrack(SceneGeometry self) -> scene::SideOfTrack"},
 	 { (char *)"SceneGeometry_getImageAngle", _wrap_SceneGeometry_getImageAngle, METH_VARARGS, (char *)"SceneGeometry_getImageAngle(SceneGeometry self, Vector3 vec) -> double"},
@@ -25580,7 +25698,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getRotationAngle", _wrap_SceneGeometry_getRotationAngle, METH_VARARGS, (char *)"SceneGeometry_getRotationAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getMultiPathVector", _wrap_SceneGeometry_getMultiPathVector, METH_VARARGS, (char *)"SceneGeometry_getMultiPathVector(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getMultiPathAngle", _wrap_SceneGeometry_getMultiPathAngle, METH_VARARGS, (char *)"SceneGeometry_getMultiPathAngle(SceneGeometry self) -> double"},
-	 { (char *)"SceneGeometry_getGroundTrackAngle", _wrap_SceneGeometry_getGroundTrackAngle, METH_VARARGS, (char *)"SceneGeometry_getGroundTrackAngle(SceneGeometry self) -> double"},
+	 { (char *)"SceneGeometry_getOPGroundTrackAngle", _wrap_SceneGeometry_getOPGroundTrackAngle, METH_VARARGS, (char *)"SceneGeometry_getOPGroundTrackAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPAngle", _wrap_SceneGeometry_getOPAngle, METH_VARARGS, (char *)"SceneGeometry_getOPAngle(SceneGeometry self, Vector3 vec) -> double"},
 	 { (char *)"SceneGeometry_getOPNorthAngle", _wrap_SceneGeometry_getOPNorthAngle, METH_VARARGS, (char *)"SceneGeometry_getOPNorthAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPLayoverAngle", _wrap_SceneGeometry_getOPLayoverAngle, METH_VARARGS, (char *)"SceneGeometry_getOPLayoverAngle(SceneGeometry self) -> double"},

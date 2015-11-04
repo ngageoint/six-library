@@ -901,9 +901,19 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getReferencePosition(self)
 
 
-    def getGroundTrack(self):
-        """getGroundTrack(SceneGeometry self) -> Vector3"""
-        return _scene.SceneGeometry_getGroundTrack(self)
+    def getGroundTrack(self, normalVec):
+        """getGroundTrack(SceneGeometry self, Vector3 normalVec) -> Vector3"""
+        return _scene.SceneGeometry_getGroundTrack(self, normalVec)
+
+
+    def getETPGroundTrack(self):
+        """getETPGroundTrack(SceneGeometry self) -> Vector3"""
+        return _scene.SceneGeometry_getETPGroundTrack(self)
+
+
+    def getOPGroundTrack(self):
+        """getOPGroundTrack(SceneGeometry self) -> Vector3"""
+        return _scene.SceneGeometry_getOPGroundTrack(self)
 
 
     def getGroundRange(self):
@@ -1016,9 +1026,9 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getMultiPathAngle(self)
 
 
-    def getGroundTrackAngle(self):
-        """getGroundTrackAngle(SceneGeometry self) -> double"""
-        return _scene.SceneGeometry_getGroundTrackAngle(self)
+    def getOPGroundTrackAngle(self):
+        """getOPGroundTrackAngle(SceneGeometry self) -> double"""
+        return _scene.SceneGeometry_getOPGroundTrackAngle(self)
 
 
     def getOPAngle(self, vec):

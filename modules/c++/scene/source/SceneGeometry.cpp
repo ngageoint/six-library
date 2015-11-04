@@ -129,7 +129,12 @@ void SceneGeometry::initialize()
     mRg *= -1;
 
     // Calculate ground track
-    mVg = mVa - mZg * (mVa.dot(mZg));
+    mVg = getETPGroundTrack();
+}
+
+Vector3 SceneGeometry::getGroundTrack(const Vector3& normalVec) const
+{
+    return mVa - normalVec * (mVa.dot(normalVec));
 }
 
 void SceneGeometry::setImageVectors(const Vector3& row,
@@ -270,7 +275,9 @@ double SceneGeometry::getRotationAngle() const
 
 Vector3 SceneGeometry::getMultiPathVector() const
 {
-    double scale = mXs.dot(mZg) / mZs.dot(mZg);
+    const Vector3 opZ = getOPZVector();
+
+    const double scale = mXs.dot(opZ) / mZs.dot(opZ);
     return mXs - (mZs * scale);
 }
 
@@ -279,9 +286,9 @@ double SceneGeometry::getMultiPathAngle() const
     return getImageAngle(getMultiPathVector());
 }
 
-double SceneGeometry::getGroundTrackAngle() const
+double SceneGeometry::getOPGroundTrackAngle() const
 {
-    return getImageAngle(getGroundTrack());
+    return getImageAngle(getOPGroundTrack());
 }
 
 double SceneGeometry::getOPAngle(const Vector3& vec) const
@@ -367,7 +374,8 @@ double SceneGeometry::getETPLayoverAngle() const
     const double etpLayoverAngleRad =
             atan2(east.dot(layoverDir), mNorth.dot(layoverDir));
 
-    return (etpLayoverAngleRad * math::Constants::RADIANS_TO_DEGREES);
+    return Utilities::remapZeroTo360(
+            etpLayoverAngleRad * math::Constants::RADIANS_TO_DEGREES);
 }
 
 Vector3 SceneGeometry::getShadowVector() const

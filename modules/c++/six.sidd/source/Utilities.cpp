@@ -378,8 +378,8 @@ void Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
     }
     if (collection->phenomenology->groundTrack == Init::undefined<double>())
     {
-        collection->phenomenology->groundTrack
-                = sceneGeom.getImageAngle(sceneGeom.getGroundTrack());
+        collection->phenomenology->groundTrack =
+                sceneGeom.getOPGroundTrackAngle();
     }
 
     if (collection->phenomenology->shadow == Init::undefined<AngleMagnitude>())
