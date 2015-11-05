@@ -267,7 +267,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         // columns match, and the pixel type, etc.
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
-        std::string iCat = subheader.getImageCategory();
+        std::string iCat = subheader.getImageCategory().toString();
         str::trim(iCat);
         const bool isLegend = (iCat == "LEG");
 
