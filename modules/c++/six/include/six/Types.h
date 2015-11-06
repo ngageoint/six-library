@@ -318,6 +318,15 @@ struct LUT
     {
     }
 
+    bool operator==(const LUT& rhs) const
+    {
+        return (numEntries == rhs.numEntries &&
+                elementSize == rhs.elementSize &&
+                std::equal(table.get(),
+                           table.get() + numEntries * elementSize,
+                           rhs.table.get()));
+    }
+
     //!  Clone the LUT table
     virtual LUT* clone() const
     {
