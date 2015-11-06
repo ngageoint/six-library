@@ -31,7 +31,7 @@ def build(bld):
         if bld.is_defined('HAVE_MEX_H'):
             bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
         if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
-            bld.targets += ',six.sicd-python,xml.lite-python,logging-python'
+            bld.targets += ',sio.lite-python,six.sicd-python,xml.lite-python,logging-python'
 
 def distclean(context):
     context.recurse('modules projects')
