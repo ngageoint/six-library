@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-from pysix import six_sicd
+from pysix import six_base, six_sicd
 from coda import sio_lite
 
 if __name__ == '__main__':
@@ -14,7 +14,9 @@ if __name__ == '__main__':
         print "Usage: python " + sys.argv[0] + " <NITF path> <Schema path>"
         sys.exit(0)
 
-    widebandData, complexData = six_sicd.read(nitfPath)
+    schemaPaths = six_base.VectorString()
+    schemaPaths.push_back(schemaPath)
+    widebandData, complexData = six_sicd.read(nitfPath, schemaPaths)
     sio_lite.write(widebandData, sioPath)
 
     print "Wrote " + sioPath
