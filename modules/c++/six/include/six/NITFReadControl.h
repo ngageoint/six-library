@@ -130,10 +130,11 @@ protected:
      *    are the segment #
      *
      *  NOTE: We are using the image # to populate the Data ID.  Therefore
-     *  it is only unique when its Complex data.
+     *  it is only unique when it's Complex data.
      *
      */
-    std::pair<int, int> getIndices(nitf::ImageSubheader& subheader);
+    std::pair<size_t, size_t>
+    getIndices(nitf::ImageSubheader& subheader) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
@@ -159,6 +160,18 @@ private:
     // Unimplemented - NITFReadControl is not copyable
     NITFReadControl(const NITFReadControl& other);
     NITFReadControl& operator=(const NITFReadControl& other);
+
+private:
+    std::auto_ptr<Legend> findLegend(size_t productNum);
+
+    static
+    bool isLegend(nitf::ImageSubheader& subheader)
+    {
+        std::string iCat = subheader.getImageCategory().toString();
+        str::trim(iCat);
+
+        return (iCat == "LEG");
+    }
 };
 
 

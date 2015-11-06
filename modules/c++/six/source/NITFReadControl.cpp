@@ -19,14 +19,28 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <sstream>
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
 
-using namespace six;
+namespace
+{
+types::RowCol<size_t> parseILOC(const std::string& str)
+{
+    // First 5 digits are the row
+    // Next 5 are the column
+    types::RowCol<size_t> iLoc;
+    iLoc.row = str::toType<size_t>(str.substr(0, 5));
+    iLoc.col = str::toType<size_t>(str.substr(5, 5));
+    return iLoc;
+}
+}
 
+namespace six
+{
 DataType NITFReadControl::getDataType(const std::string& fromFile) const
 {
     // Could cache this
@@ -122,7 +136,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     nitf::List des = mRecord.getDataExtensions();
     nitf::ListIterator desIter = des.begin();
 
-    for (size_t i = 0; desIter != des.end(); ++desIter, ++i)
+    for (size_t i = 0, productNum = 0; desIter != des.end(); ++desIter, ++i)
     {
         // Get a segment ref
         nitf::DESegment segment = (nitf::DESegment) * desIter;
@@ -187,7 +201,16 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
             // is one DES per data, so it's safe to do this
             addDEClassOptions(subheader, data->getClassification());
 
-            mContainer->addData(data);
+            if (data->getDataType() == six::DataType::DERIVED)
+            {
+                mContainer->addData(data, findLegend(productNum));
+            }
+            else
+            {
+                mContainer->addData(data);
+            }
+
+            ++productNum;
         }
     }
 
@@ -235,7 +258,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     nitf::List images = mRecord.getImages();
     nitf::ListIterator imageIter = images.begin();
 
-    // Now go through every image and figure out what clump its attached
+    // Now go through every image and figure out what clump it's attached
     // to and use that for the measurements
     for (size_t nitfSegmentIdx = 0;
          imageIter != images.end();
@@ -251,8 +274,9 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         size_t numRowsSeg = (nitf::Uint32) subheader.getNumRows();
 
         // This function should throw if the data does not exist
-        std::pair<int, int> imageAndSegment = getIndices(subheader);
-        if (static_cast<size_t>(imageAndSegment.first) >= mInfos.size())
+        const std::pair<size_t, size_t> imageAndSegment =
+                getIndices(subheader);
+        if (imageAndSegment.first >= mInfos.size())
         {
             throw except::Exception(Ctxt(
                     "Image " + str::toString(imageAndSegment.first) +
@@ -267,11 +291,9 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         // columns match, and the pixel type, etc.
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
-        std::string iCat = subheader.getImageCategory().toString();
-        str::trim(iCat);
-        const bool isLegend = (iCat == "LEG");
+        const bool segIsLegend = isLegend(subheader);
 
-        if (!isLegend)
+        if (!segIsLegend)
         {
             validateSegment(subheader, currentInfo);
         }
@@ -302,7 +324,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         }
 
         // Legends don't set lat/lons
-        if (!isLegend)
+        if (!segIsLegend)
         {
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -432,17 +454,18 @@ void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
                           (const char*) p)));
 }
 
-std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
+std::pair<size_t, size_t>
+NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
 {
-
     std::string imageID = subheader.getImageId().toString();
     str::trim(imageID);
+
     // There is definitely something in here
-    std::pair<int, int> imageAndSegment;
+    std::pair<size_t, size_t> imageAndSegment;
     imageAndSegment.first = 0;
     imageAndSegment.second = 0;
 
-    int iid = str::toType<int>(imageID.substr(4, 3));
+    const size_t iid = str::toType<size_t>(imageID.substr(4, 3));
 
     /*
      *  Always first = 0, second = N - 1 (where N is numSegments)
@@ -463,11 +486,12 @@ std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
      */
     else
     {
-        // If its SIDD, we need to check the first three
+        // If it's SIDD, we need to check the first three
         // digits within the IID
         imageAndSegment.first = iid - 1;
-        imageAndSegment.second = str::toType<int>(imageID.substr(7)) - 1;
+        imageAndSegment.second = str::toType<size_t>(imageID.substr(7)) - 1;
     }
+
     return imageAndSegment;
 }
 
@@ -582,6 +606,95 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     return buffer;
 }
 
+std::auto_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
+{
+    std::auto_ptr<Legend> legend;
+
+    nitf::List images = mRecord.getImages();
+    nitf::ListIterator imageIter = images.begin();
+
+    for (size_t imageSeg = 0;
+         imageIter != images.end();
+         ++imageIter, ++imageSeg)
+    {
+        nitf::ImageSegment segment = (nitf::ImageSegment) *imageIter;
+        nitf::ImageSubheader subheader = segment.getSubheader();
+
+        if (productNum == getIndices(subheader).first && isLegend(subheader))
+        {
+            // It's an image segment associated with the product we care
+            // about and it's a legend (for simplicity right now we're going
+            // to just assume there are not multiple legends associated with
+            // one product, though the spec does allow for this)
+
+            const types::RowCol<size_t> dims(
+                    static_cast<nitf::Uint32>(subheader.getNumRows()),
+                    static_cast<nitf::Uint32>(subheader.getNumCols()));
+
+            legend.reset(new Legend());
+            legend->setDims(dims);
+
+            std::string iRep = subheader.getImageRepresentation().toString();
+            str::trim(iRep);
+            if (iRep == "MONO")
+            {
+                legend->mType = PixelType::MONO8I;
+            }
+            else if (iRep == "RGB/LUT")
+            {
+                legend->mType = PixelType::RGB8LU;
+            }
+            else
+            {
+                throw except::Exception(Ctxt(
+                        "Unexpected image representation '" + iRep + "'"));
+            }
+
+            legend->mLocation =
+                    parseILOC(subheader.getImageLocation().toString());
+
+            if (legend->mType == PixelType::RGB8LU)
+            {
+                nitf::LookupTable lut =
+                        subheader.getBandInfo(0).getLookupTable();
+
+                legend->mLUT.reset(new LUT(lut.getEntries(), lut.getTables()));
+
+                const unsigned char* const table = lut.getTable();
+
+                for (size_t ii = 0, kk = 0; ii < lut.getEntries(); ++ii)
+                {
+                    for (size_t jj = 0; jj < lut.getTables(); ++jj, ++kk)
+                    {
+                        // Need to transpose the lookup table entries
+                        legend->mLUT->table[kk] =
+                                table[jj * lut.getEntries() + ii];
+                    }
+                }
+            }
+
+            // Read the legend pixel data
+            nitf::Uint32 bandList(0);
+            nitf::SubWindow sw;
+            sw.setStartRow(0);
+            sw.setStartCol(0);
+            sw.setNumRows(dims.row);
+            sw.setNumCols(dims.col);
+            sw.setNumBands(1);
+            sw.setBandList(&bandList);
+
+            int padded;
+            nitf::Uint8* bufferPtr = &legend->mImage[0];
+            nitf::ImageReader imageReader = mReader.newImageReader(imageSeg);
+            imageReader.read(sw, &bufferPtr, &padded);
+
+            break;
+        }
+    }
+
+    return legend;
+}
+
 void NITFReadControl::reset()
 {
     for (size_t ii = 0; ii < mInfos.size(); ++ii)
@@ -611,4 +724,5 @@ bool NITFReadControlCreator::supports(const std::string& filename) const
     {
         return false;
     }
+}
 }
