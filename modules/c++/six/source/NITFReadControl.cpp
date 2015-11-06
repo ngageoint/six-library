@@ -37,6 +37,46 @@ types::RowCol<size_t> parseILOC(const std::string& str)
     iLoc.col = str::toType<size_t>(str.substr(5, 5));
     return iLoc;
 }
+
+void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
+{
+    nitf::LookupTable lut =
+            subheader.getBandInfo(0).getLookupTable();
+
+    legend.mLUT.reset(new six::LUT(lut.getEntries(), lut.getTables()));
+
+    const unsigned char* const table = lut.getTable();
+
+    for (size_t ii = 0, kk = 0; ii < lut.getEntries(); ++ii)
+    {
+        for (size_t jj = 0; jj < lut.getTables(); ++jj, ++kk)
+        {
+            // Need to transpose the lookup table entries
+            legend.mLUT->table[kk] =
+                    table[jj * lut.getEntries() + ii];
+        }
+    }
+}
+
+six::PixelType getPixelType(nitf::ImageSubheader& subheader)
+{
+    std::string iRep = subheader.getImageRepresentation().toString();
+    str::trim(iRep);
+
+    if (iRep == "MONO")
+    {
+        return six::PixelType::MONO8I;
+    }
+    else if (iRep == "RGB/LUT")
+    {
+        return six::PixelType::RGB8LU;
+    }
+    else
+    {
+        throw except::Exception(Ctxt(
+                "Unexpected image representation '" + iRep + "'"));
+    }
+}
 }
 
 namespace six
@@ -627,72 +667,52 @@ std::auto_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
             // to just assume there are not multiple legends associated with
             // one product, though the spec does allow for this)
 
-            const types::RowCol<size_t> dims(
-                    static_cast<nitf::Uint32>(subheader.getNumRows()),
-                    static_cast<nitf::Uint32>(subheader.getNumCols()));
-
             legend.reset(new Legend());
-            legend->setDims(dims);
-
-            std::string iRep = subheader.getImageRepresentation().toString();
-            str::trim(iRep);
-            if (iRep == "MONO")
-            {
-                legend->mType = PixelType::MONO8I;
-            }
-            else if (iRep == "RGB/LUT")
-            {
-                legend->mType = PixelType::RGB8LU;
-            }
-            else
-            {
-                throw except::Exception(Ctxt(
-                        "Unexpected image representation '" + iRep + "'"));
-            }
+            legend->mType = getPixelType(subheader);
 
             legend->mLocation =
                     parseILOC(subheader.getImageLocation().toString());
 
             if (legend->mType == PixelType::RGB8LU)
             {
-                nitf::LookupTable lut =
-                        subheader.getBandInfo(0).getLookupTable();
-
-                legend->mLUT.reset(new LUT(lut.getEntries(), lut.getTables()));
-
-                const unsigned char* const table = lut.getTable();
-
-                for (size_t ii = 0, kk = 0; ii < lut.getEntries(); ++ii)
-                {
-                    for (size_t jj = 0; jj < lut.getTables(); ++jj, ++kk)
-                    {
-                        // Need to transpose the lookup table entries
-                        legend->mLUT->table[kk] =
-                                table[jj * lut.getEntries() + ii];
-                    }
-                }
+                assignLUT(subheader, *legend);
             }
 
-            // Read the legend pixel data
-            nitf::Uint32 bandList(0);
-            nitf::SubWindow sw;
-            sw.setStartRow(0);
-            sw.setStartCol(0);
-            sw.setNumRows(dims.row);
-            sw.setNumCols(dims.col);
-            sw.setNumBands(1);
-            sw.setBandList(&bandList);
-
-            int padded;
-            nitf::Uint8* bufferPtr = &legend->mImage[0];
-            nitf::ImageReader imageReader = mReader.newImageReader(imageSeg);
-            imageReader.read(sw, &bufferPtr, &padded);
+            readLegendPixelData(subheader, imageSeg, *legend);
 
             break;
         }
     }
 
     return legend;
+}
+
+void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
+                                          size_t imageSeg,
+                                          Legend& legend)
+{
+    const types::RowCol<size_t> dims(
+            static_cast<nitf::Uint32>(subheader.getNumRows()),
+            static_cast<nitf::Uint32>(subheader.getNumCols()));
+
+    legend.setDims(dims);
+
+    nitf::Uint32 bandList(0);
+    nitf::SubWindow sw;
+    sw.setStartRow(0);
+    sw.setStartCol(0);
+    sw.setNumRows(dims.row);
+    sw.setNumCols(dims.col);
+    sw.setNumBands(1);
+    sw.setBandList(&bandList);
+
+    if (!legend.mImage.empty())
+    {
+        int padded;
+        nitf::Uint8* bufferPtr = &legend.mImage[0];
+        nitf::ImageReader imageReader = mReader.newImageReader(imageSeg);
+        imageReader.read(sw, &bufferPtr, &padded);
+    }
 }
 
 void NITFReadControl::reset()

@@ -164,6 +164,10 @@ private:
 private:
     std::auto_ptr<Legend> findLegend(size_t productNum);
 
+    void readLegendPixelData(nitf::ImageSubheader& subheader,
+                             size_t imageSeg,
+                             Legend& legend);
+
     static
     bool isLegend(nitf::ImageSubheader& subheader)
     {
