@@ -281,6 +281,12 @@ struct AreaPlane
     AreaPlane* clone() const;
 
     /*!
+     * Provides the reference point as pixel-centered 0-based and taking
+     * the FirstLine/FirstSample offsets into account
+     */
+    types::RowCol<double> getAdjustedReferencePoint() const;
+
+    /*!
      *  SICD RefPt. Represents the reference point
      */
     ReferencePoint referencePoint;

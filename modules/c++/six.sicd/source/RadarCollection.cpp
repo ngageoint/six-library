@@ -118,6 +118,22 @@ AreaPlane* AreaPlane::clone() const
     return new AreaPlane(*this);
 }
 
+types::RowCol<double> AreaPlane::getAdjustedReferencePoint() const
+{
+    types::RowCol<double> refPt = referencePoint.rowCol;
+
+    // NOTE: The calculation done by SICD producers appears to be
+    //       orpRow = (numRows + 1) / 2.0
+    //       This gives you a pixel-centered, 1-based ORP.  We want
+    //       pixel-centered 0-based.  More generally than this, we need to
+    //       account for the SICD FirstLine/FirstSample offset
+    //
+    refPt.row -= xDirection->first;
+    refPt.col -= yDirection->first;
+
+    return refPt;
+}
+
 Area::Area()
 {
     const LatLonAlt initial = Init::undefined<LatLonAlt>();
