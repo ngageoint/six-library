@@ -51,5 +51,45 @@ DateTime ComplexData::getCollectionStartDateTime() const
 {
     return timeline->collectStart;
 }
+
+void ComplexData::getOutputPlaneOffsetAndExtent(
+        types::RowCol<size_t>& offset,
+        types::RowCol<size_t>& extent) const
+{
+    offset.row = offset.col = 0;
+
+    const six::sicd::AreaPlane& areaPlane =
+        *radarCollection->area->plane;
+    extent.row = areaPlane.xDirection->elements;
+    extent.col = areaPlane.yDirection->elements;
+
+    if (imageFormation.get())
+    {
+        const std::string& segmentID =
+                imageFormation->segmentIdentifier;
+
+        const std::vector<mem::ScopedCloneablePtr<six::sicd::Segment> >&
+                segmentList = radarCollection->area->plane->segmentList;
+
+        for (size_t ii = 0; ii < segmentList.size(); ++ii)
+        {
+            const six::sicd::Segment& segment(*(segmentList[ii]));
+            if (segment.identifier == segmentID)
+            {
+                // TODO: These should be offset by areaPlane.xDirection->first
+                //       and areaPlane.yDirection->first, but the problem is
+                //       that SICD producers are currently doing this
+                //       incorrectly - they're setting the
+                //       FirstLine/FirstSample values to 1 but then setting
+                //       startLine and startSample to 0.
+                offset.row = segment.startLine;
+                offset.col = segment.startSample;
+                extent.row = segment.getNumLines();
+                extent.col = segment.getNumSamples();
+                break;
+            }
+        }
+    }
+}
 }
 }

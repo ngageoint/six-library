@@ -24,6 +24,7 @@
 
 #include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
+#include <types/RowCol.h>
 
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
@@ -306,6 +307,17 @@ public:
     {
         mVersion = version;
     }
+
+    /*
+     * Provides the output plane offset and extent.  If this is a single
+     * segment SICD, this is simply an offset of 0 and an extent determined
+     * by radarCollection->area->plane.  If this is a multiple segment SICD,
+     * this is determined by the radarCollection->area->plane->segmentList
+     * entry that corresponds to the imageFormation->segmentIdentifier.
+     */
+    void getOutputPlaneOffsetAndExtent(
+            types::RowCol<size_t>& offset,
+            types::RowCol<size_t>& extent) const;
 
 private:
     static const char VENDOR_ID[];
