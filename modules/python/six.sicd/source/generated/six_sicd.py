@@ -1070,6 +1070,11 @@ class AreaPlane(_object):
         """clone(AreaPlane self) -> AreaPlane"""
         return _six_sicd.AreaPlane_clone(self)
 
+
+    def getAdjustedReferencePoint(self):
+        """getAdjustedReferencePoint(AreaPlane self) -> RowColDouble"""
+        return _six_sicd.AreaPlane_getAdjustedReferencePoint(self)
+
     __swig_setmethods__["referencePoint"] = _six_sicd.AreaPlane_referencePoint_set
     __swig_getmethods__["referencePoint"] = _six_sicd.AreaPlane_referencePoint_get
     if _newclass:
@@ -2329,6 +2334,11 @@ class ComplexData(pysix.six_base.Data):
         """setVersion(ComplexData self, std::string const & version)"""
         return _six_sicd.ComplexData_setVersion(self, version)
 
+
+    def getOutputPlaneOffsetAndExtent(self, offset, extent):
+        """getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)"""
+        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, offset, extent)
+
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 
@@ -2384,6 +2394,14 @@ class SixSicdUtilities(_object):
         getProjectionModel = staticmethod(getProjectionModel)
     __swig_getmethods__["getProjectionModel"] = lambda x: getProjectionModel
 
+    def getValidDataPolygon(sicdData, projection, validData):
+        """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > & validData)"""
+        return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
+
+    if _newclass:
+        getValidDataPolygon = staticmethod(getValidDataPolygon)
+    __swig_getmethods__["getValidDataPolygon"] = lambda x: getValidDataPolygon
+
     def readSicd(sicdPathname, schemaPaths, complexData, widebandData):
         """readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
         return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
@@ -2423,6 +2441,10 @@ def SixSicdUtilities_getSceneGeometry(data):
 def SixSicdUtilities_getProjectionModel(data, geom):
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
+
+def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
+    """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > & validData)"""
+    return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
 def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):
     """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
@@ -5017,6 +5039,11 @@ class ScopedCloneableAreaPlane(_object):
     def clone(self):
         """clone(ScopedCloneableAreaPlane self) -> AreaPlane"""
         return _six_sicd.ScopedCloneableAreaPlane_clone(self)
+
+
+    def getAdjustedReferencePoint(self):
+        """getAdjustedReferencePoint(ScopedCloneableAreaPlane self) -> RowColDouble"""
+        return _six_sicd.ScopedCloneableAreaPlane_getAdjustedReferencePoint(self)
 
     __swig_setmethods__["referencePoint"] = _six_sicd.ScopedCloneableAreaPlane_referencePoint_set
     __swig_getmethods__["referencePoint"] = _six_sicd.ScopedCloneableAreaPlane_referencePoint_get
