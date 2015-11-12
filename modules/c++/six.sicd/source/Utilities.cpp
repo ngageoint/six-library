@@ -192,6 +192,117 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
+void Utilities::getValidDataPolygon(
+        const ComplexData& sicdData,
+        const scene::ProjectionModel& projection,
+        std::vector<types::RowCol<double> >& validData)
+{
+    validData.clear();
+
+    const std::vector<six::RowColInt>& origValidData =
+            sicdData.imageData->validData;
+
+    if (!origValidData.empty())
+    {
+        // Life is easy - we're just casting
+        validData.resize(origValidData.size());
+        for (size_t ii = 0; ii < origValidData.size(); ++ii)
+        {
+            validData[ii] = origValidData[ii];
+        }
+    }
+    else if (sicdData.radarCollection->area.get() &&
+             sicdData.radarCollection->area->plane.get())
+    {
+        // We have an output plane defined, so project the four output plane
+        // corners back to the slant plane and that should approximate the
+        // valid data polygon
+
+        // Output plane corners
+        types::RowCol<size_t> opOffset;
+        types::RowCol<size_t> opDims;
+        sicdData.getOutputPlaneOffsetAndExtent(opOffset, opDims);
+
+        const types::RowCol<double> lastOPPixel(opOffset + opDims - 1);
+
+        std::vector<types::RowCol<double> > opCorners(4);
+        opCorners[0] = opOffset;
+        opCorners[1] = types::RowCol<double>(opOffset.row, lastOPPixel.col);
+        opCorners[2] = types::RowCol<double>(lastOPPixel.row, opOffset.col);
+        opCorners[3] = lastOPPixel;
+
+        const six::sicd::AreaPlane& areaPlane =
+                *sicdData.radarCollection->area->plane;
+
+        const six::sicd::AreaDirectionParameters& x(*areaPlane.xDirection);
+        const six::sicd::AreaDirectionParameters& y(*areaPlane.yDirection);
+
+        // Normalize the output plane unit vectors just in case
+        six::Vector3 opRowUnitVector = x.unitVector;
+        six::Vector3 opColUnitVector = y.unitVector;
+        opRowUnitVector.normalize();
+        opColUnitVector.normalize();
+
+        const scene::PlanarGridECEFTransform gridTransform(
+                types::RowCol<double>(x.spacing, y.spacing),
+                areaPlane.getAdjustedReferencePoint(),
+                opRowUnitVector,
+                opColUnitVector,
+                areaPlane.referencePoint.ecef);
+
+        const types::RowCol<double> spSCP(sicdData.imageData->scpPixel);
+        const types::RowCol<double> spOrigOffset(sicdData.imageData->firstRow,
+                                                 sicdData.imageData->firstCol);
+
+        const types::RowCol<double> spOffset(
+                spSCP.row - spOrigOffset.row,
+                spSCP.col - spOrigOffset.col);
+
+        const six::sicd::Grid& grid(*sicdData.grid);
+        const types::RowCol<double> spSampleSpacing(grid.row->sampleSpacing,
+                                                    grid.col->sampleSpacing);
+
+        validData.resize(opCorners.size());
+        bool spCornerIsInBounds = false;
+        for (size_t ii = 0; ii < opCorners.size(); ++ii)
+        {
+            // Convert OP pixel to ECEF
+            const scene::Vector3 sPos = gridTransform.rowColToECEF(opCorners[ii]);
+
+            // Convert this to a continuous surface point in the slant plane
+            double timeCOA(0.0);
+            const types::RowCol<double> imagePt =
+                    projection.sceneToImage(sPos, &timeCOA);
+
+            // Convert this to pixels
+            // Need to offset by both the SCP and account for an AOI SICD
+            types::RowCol<double>& spCorner(validData[ii]);
+            spCorner = (imagePt / spSampleSpacing + spOffset);
+
+            if (spCorner.row >= 0 &&
+                spCorner.row < sicdData.imageData->numRows &&
+                spCorner.col >= 0 &&
+                spCorner.col < sicdData.imageData->numCols)
+            {
+                spCornerIsInBounds = true;
+            }
+        }
+
+        // If all of the points are out of bounds, the whole image is valid,
+        // so don't bother to keep this
+        if (!spCornerIsInBounds)
+        {
+            validData.clear();
+        }
+    }
+
+    // NOTE: If we don't have an output plane defined, do nothing.  Note that
+    //       usually if an output plane isn't defined in the SICD, we define
+    //       one ourselves by projecting the slant plane corners into the
+    //       output plane.  So projecting those back into the slant plane
+    //       isn't going to tell us anything new...
+}
+
 void Utilities::readSicd(const std::string& sicdPathname,
              const std::vector<std::string>& schemaPaths,
              std::auto_ptr<ComplexData>& complexData,

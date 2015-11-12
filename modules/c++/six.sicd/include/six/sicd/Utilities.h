@@ -46,6 +46,19 @@ public:
             const scene::SceneGeometry* geom);
 
     /*
+     * If the SICD contains a valid data polygon, provides this.
+     * If the SICD does not contain a valid data polygon, but it does contain
+     * a radarCollection->area->plane block that defines the output plane,
+     * projects the four output plane corners back into the slant plane and
+     * uses this to approxiate the valid data polygon.
+     */
+    static void getValidDataPolygon(
+            const ComplexData& sicdData,
+            const scene::ProjectionModel& projection,
+            std::vector<types::RowCol<double> >& validData);
+
+
+    /*
      * Given a SICD path name and a list of schema, this function reads
      * and parses the SICD in order to provide the wideband data as well
      * as the ComplexData associated with the image..
