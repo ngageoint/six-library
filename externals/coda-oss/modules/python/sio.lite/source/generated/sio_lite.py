@@ -742,7 +742,7 @@ class FileHeader(_object):
 
 
     def userDataFieldExists(self, key):
-        """userDataFieldExists(FileHeader self, std::string key) -> bool"""
+        """userDataFieldExists(FileHeader self, std::string const & key) -> bool"""
         return _sio_lite.FileHeader_userDataFieldExists(self, key)
 
 
@@ -757,7 +757,7 @@ class FileHeader(_object):
 
 
     def getUserData(self, key):
-        """getUserData(FileHeader self, std::string key) -> std::vector< sys::byte > &"""
+        """getUserData(FileHeader self, std::string const & key) -> std::vector< sys::byte > &"""
         return _sio_lite.FileHeader_getUserData(self, key)
 
 
@@ -816,7 +816,7 @@ class FileWriter(_object):
         write(FileWriter self, FileHeader header, void const * data)
         write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, void const * data, int numBands=1)
         write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, void const * data)
-        write(FileWriter self, FileHeader header, size_t data)
+        write(FileWriter self, FileHeader header, long long data)
         """
         return _sio_lite.FileWriter_write(self, *args)
 
@@ -886,7 +886,7 @@ class StreamReader(InputStream):
     def read(self, *args):
         """
         read(StreamReader self, sys::byte * b, size_t size) -> sys::SSize_T
-        read(StreamReader self, size_t data, size_t size) -> sys::SSize_T
+        read(StreamReader self, long long data, long long size) -> sys::SSize_T
         """
         return _sio_lite.StreamReader_read(self, *args)
 

@@ -8,9 +8,20 @@
     #include "import/sio/lite.h"
 %}
 
+// NOTE: In the cases below, need to use 'long long' rather
+//       than 'size_t'.  Otherwise, Swig will generate code
+//       using PyInt_FromLong().  This will work fine on
+//       64-bit Unix where sizeof(long) == 8 and works fine
+//       on 64-bit Windows where sizeof(long) == 4... until
+//       a value gets too large to represent in 4 bytes at
+//       which point you'll get cryptic/confusing runtime
+//       errors.  This happens in particular when trying to
+//       send NumPy arrays to/from C++ when you allocate an
+//       array > 4 GB.  It seems like Swig should be smarter
+//       in what it auto-generates to avoid this.
 %extend sio::lite::FileWriter
 {
-    void write(sio::lite::FileHeader* header, size_t data)
+    void write(sio::lite::FileHeader* header, long long data)
     {
         const void* buffer = reinterpret_cast<const void*>(data);
         $self->write(header, buffer);
@@ -19,7 +30,7 @@
 
 %extend sio::lite::StreamReader
 {
-    sys::SSize_T read(size_t data, size_t size)
+    sys::SSize_T read(long long data, long long size)
     {
         sys::byte* buffer = reinterpret_cast<sys::byte*>(data);
         return $self->read(buffer, size);
