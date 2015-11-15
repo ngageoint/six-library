@@ -7884,7 +7884,7 @@ VectorTimelineSet_swigregister(VectorTimelineSet)
 
 
 def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
-    """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long arrayBuffer)"""
+    """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long arrayBuffer)"""
     return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
 
 import numpy as np
