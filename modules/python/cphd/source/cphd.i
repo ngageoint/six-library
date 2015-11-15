@@ -101,6 +101,18 @@ using six::Vector3;
     }
 }
 
+// NOTE: In the cases below, need to use 'long long' rather
+//       than 'size_t' for things involving pointers.
+//       Otherwise, Swig will generate code using
+//       PyInt_FromLong().  This will work fine on
+//       64-bit Unix where sizeof(long) == 8 and works fine
+//       on 64-bit Windows where sizeof(long) == 4... until
+//       a value gets too large to represent in 4 bytes at
+//       which point you'll get cryptic/confusing runtime
+//       errors.  This happens in particular when trying to
+//       send NumPy arrays to/from C++ when you allocate an
+//       array > 4 GB.  It seems like Swig should be smarter
+//       in what it auto-generates to avoid this.
 %extend cphd::Wideband
 {
     // We need to expose a way to read into a raw buffer
@@ -111,7 +123,7 @@ using six::Vector3;
                   size_t lastSample,
                   size_t numThreads,
                   const types::RowCol<size_t>& dims,
-                  size_t data)
+                  long long data)
     {
         $self->read(channel,
                     firstVector,
