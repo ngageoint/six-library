@@ -81,7 +81,7 @@ long sio::lite::FileHeader::getLength() const
 }
 
 
-bool sio::lite::FileHeader::userDataFieldExists( std::string key ) const
+bool sio::lite::FileHeader::userDataFieldExists(const std::string& key) const
 {
     return userData.exists(key);
 }
@@ -94,7 +94,7 @@ void sio::lite::FileHeader::getAllUserDataFields(
         keys.push_back(p->first);
 }
 
-std::vector<sys::byte>& sio::lite::FileHeader::getUserData( std::string key )
+std::vector<sys::byte>& sio::lite::FileHeader::getUserData(const std::string& key)
     throw (except::NoSuchKeyException)
 {
     if (!userData.exists(key))

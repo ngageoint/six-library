@@ -152,7 +152,7 @@ public:
      * @param key The key to search for in our hash table
      * @return true if it exists
      */
-    bool userDataFieldExists( std::string key ) const;
+    bool userDataFieldExists(const std::string& key) const;
 
     /**
      *  Get all of the user data field names
@@ -170,7 +170,7 @@ public:
      *  Get the raw byte user data for a given user data ID.
      *  @return An array of user data for a given key
      */
-    std::vector<sys::byte>& getUserData( std::string key )
+    std::vector<sys::byte>& getUserData(const std::string& key)
         throw (except::NoSuchKeyException);
 
     /**
