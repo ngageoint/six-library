@@ -81,9 +81,15 @@ public:
         return buffer.release();
     }
 
-    std::vector<sys::ubyte*> get() const
+    std::vector<const sys::ubyte*> get() const
     {
-        return mBuffers;
+        std::vector<const sys::ubyte*> buffers(mBuffers.size());
+        for (size_t ii = 0; ii < buffers.size(); ++ii)
+        {
+            buffers[ii] = mBuffers[ii];
+        }
+
+        return buffers;
     }
 
 private:
