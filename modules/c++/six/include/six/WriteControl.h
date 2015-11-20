@@ -36,7 +36,7 @@ namespace six
 typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
-typedef std::vector<UByte*> BufferList;
+typedef std::vector<const UByte*> BufferList;
 
 /*!
  *  \class WriteControl
