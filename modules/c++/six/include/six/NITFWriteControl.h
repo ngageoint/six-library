@@ -101,7 +101,8 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(SourceList& imageData, const std::string& outputFile,
+    virtual void save(const SourceList& imageData,
+                      const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
     /*!
@@ -127,7 +128,32 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(BufferList& imageData, const std::string& outputFile,
+    virtual void save(const BufferList& imageData,
+                      const std::string& outputFile,
+                      const std::vector<std::string>& schemaPaths);
+
+    void save(const NonConstBufferList& imageData,
+              const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(imageData), outputFile, schemaPaths);
+    }
+
+    /*!
+     *  Bind an interleaved (IQIQIQIQ) input stream
+     *  to this record and write out a SICD/SIDD.  We do
+     *  automatic byte swapping unless you tell us otherwise.
+     *
+     *  This means that if the system is little endian, we
+     *  swap the source.
+     *
+     *  If you are using a big endian file as the supply stream,
+     *  you should set SWAP_OFF, and if you are using a little
+     *  endian file as the supply stream, you should set BYTE_SWAP to
+     *  on.
+     */
+    virtual void save(const SourceList& list,
+                      nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
     /*!
@@ -143,24 +169,16 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    virtual void save(SourceList& list, nitf::IOInterface& outputFile,
+    virtual void save(const BufferList& list,
+                      nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
-    /*!
-     *  Bind an interleaved (IQIQIQIQ) input stream
-     *  to this record and write out a SICD/SIDD.  We do
-     *  automatic byte swapping unless you tell us otherwise.
-     *
-     *  This means that if the system is little endian, we
-     *  swap the source.
-     *
-     *  If you are using a big endian file as the supply stream,
-     *  you should set SWAP_OFF, and if you are using a little
-     *  endian file as the supply stream, you should set BYTE_SWAP to
-     *  on.
-     */
-    virtual void save(BufferList& list, nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+    void save(const NonConstBufferList& list,
+              nitf::IOInterface& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(list), outputFile, schemaPaths);
+    }
 
     /*!
      *  This function sets the organization ID (the 40 character DESSHRP field

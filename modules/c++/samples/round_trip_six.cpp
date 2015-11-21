@@ -81,15 +81,9 @@ public:
         return buffer.release();
     }
 
-    std::vector<const sys::ubyte*> get() const
+    std::vector<sys::ubyte*> get() const
     {
-        std::vector<const sys::ubyte*> buffers(mBuffers.size());
-        for (size_t ii = 0; ii < buffers.size(); ++ii)
-        {
-            buffers[ii] = mBuffers[ii];
-        }
-
-        return buffers;
+        return mBuffers;
     }
 
 private:
@@ -343,8 +337,7 @@ int main(int argc, char** argv)
         writer.setLogger(&log);
         writer.initialize(container);
         writer.setXMLControlRegistry(&xmlRegistry);
-        six::BufferList images = buffers.get();
-        writer.save(images, outputFile, schemaPaths);
+        writer.save(buffers.get(), outputFile, schemaPaths);
     }
     catch (const std::exception& ex)
     {

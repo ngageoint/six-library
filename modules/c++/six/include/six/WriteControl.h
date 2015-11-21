@@ -38,6 +38,10 @@ typedef std::vector<io::InputStream*> SourceList;
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
 
+//!  Same as above but used in overloadings to help the compiler out when
+//   it's convenient for the caller to put non-const pointers in the vector
+typedef std::vector<UByte*> NonConstBufferList;
+
 /*!
  *  \class WriteControl
  *  \brief Defines the interface for a SICD/SIDD writer
@@ -101,11 +105,12 @@ public:
      *  \param toFile file name to write out
      *  \param schemaPaths Directories or files of schema locations
      */
-    void save(SourceList& sources, const std::string& toFile)
+    void save(const SourceList& sources, const std::string& toFile)
     {
         save(sources, toFile, std::vector<std::string>());
     }
-    virtual void save(SourceList& sources, const std::string& toFile,
+
+    virtual void save(const SourceList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
@@ -117,12 +122,27 @@ public:
      *  \param toFile file name to write out
      *  \param schemaPaths Directories or files of schema locations
      */
-    void save(BufferList& sources, const std::string& toFile)
+    void save(const BufferList& sources, const std::string& toFile)
     {
         save(sources, toFile, std::vector<std::string>());
     }
-    virtual void save(BufferList& sources, const std::string& toFile,
+
+    virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
+
+    // For convenience since the compiler can't implicitly convert
+    // std::vector<T*> to std::vector<const T*>
+    void save(const NonConstBufferList& sources, const std::string& toFile)
+    {
+        save(convertBufferList(sources), toFile);
+    }
+
+    void save(const NonConstBufferList& sources,
+              const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(sources), toFile, schemaPaths);
+    }
 
     /*!
      *  Utility for Writing out one InputStream only.
@@ -142,11 +162,11 @@ public:
     /*!
      *  Utility for Writing out one buffer image only.
      */
-    void save(UByte* buffer, const std::string& toFile)
+    void save(const UByte* buffer, const std::string& toFile)
     {
         save(buffer, toFile, std::vector<std::string>());
     }
-    void save(UByte* buffer, const std::string& toFile,
+    void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
         BufferList sources;
@@ -204,6 +224,19 @@ public:
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
+    }
+
+    static
+    inline
+    BufferList convertBufferList(const NonConstBufferList& buffers)
+    {
+        BufferList constBuffers(buffers.size());
+        for (size_t ii = 0; ii < buffers.size(); ++ii)
+        {
+            constBuffers[ii] = buffers[ii];
+        }
+
+        return constBuffers;
     }
 
 protected:

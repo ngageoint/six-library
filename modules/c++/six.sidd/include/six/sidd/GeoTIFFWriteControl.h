@@ -75,7 +75,7 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    void save(SourceList& imageData, const std::string& outputFile,
+    void save(const SourceList& imageData, const std::string& outputFile,
               const std::vector<std::string>& schemaPaths);
 
     /*
@@ -85,7 +85,7 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    void save(BufferList& sources, const std::string& outputFile,
+    void save(const BufferList& sources, const std::string& outputFile,
               const std::vector<std::string>& schemaPaths);
 
     /*!

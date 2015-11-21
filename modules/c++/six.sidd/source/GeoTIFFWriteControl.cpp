@@ -76,7 +76,8 @@ void GeoTIFFWriteControl::initialize(Container* container)
 
 }
 
-void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile,
+void GeoTIFFWriteControl::save(const SourceList& sources,
+                               const std::string& toFile,
                                const std::vector<std::string>& schemaPaths)
 {
     tiff::FileWriter tiffWriter(toFile);
@@ -236,7 +237,8 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
 }
 
-void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile,
+void GeoTIFFWriteControl::save(const BufferList& sources,
+                               const std::string& toFile,
                                const std::vector<std::string>& schemaPaths)
 {
     tiff::FileWriter tiffWriter(toFile);

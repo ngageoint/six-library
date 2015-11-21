@@ -690,7 +690,7 @@ void NITFWriteControl::updateFileHeaderSecurity()
     }
 }
 
-void NITFWriteControl::save(SourceList& imageData,
+void NITFWriteControl::save(const SourceList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -728,7 +728,7 @@ bool NITFWriteControl::shouldByteSwap() const
 }
 
 void NITFWriteControl::save(
-        SourceList& imageData,
+        const SourceList& imageData,
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths)
 {
@@ -776,7 +776,7 @@ void NITFWriteControl::save(
 
 }
 
-void NITFWriteControl::save(BufferList& imageData,
+void NITFWriteControl::save(const BufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -791,7 +791,7 @@ void NITFWriteControl::save(BufferList& imageData,
 }
 
 void NITFWriteControl::save(
-        BufferList& imageData,
+        const BufferList& imageData,
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths)
 {

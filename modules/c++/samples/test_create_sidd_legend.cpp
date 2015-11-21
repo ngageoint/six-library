@@ -197,12 +197,6 @@ int main(int argc, char** argv)
         container.addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());
 
-        six::BufferList bufferList(buffers.size());
-        for (size_t ii = 0; ii < buffers.size(); ++ii)
-        {
-            bufferList[ii] = buffers[ii];
-        }
-
         // Write it out
         {
             six::NITFWriteControl writer;
@@ -214,7 +208,7 @@ int main(int argc, char** argv)
             writer.setXMLControlRegistry(&xmlRegistry);
             writer.initialize(&container);
 
-            writer.save(bufferList, outPathnamePrefix + "_unblocked.nitf");
+            writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
         }
 
         // Write it out with blocking
@@ -237,7 +231,7 @@ int main(int argc, char** argv)
             writer.setXMLControlRegistry(&xmlRegistry);
             writer.initialize(&container);
 
-            writer.save(bufferList, outPathnamePrefix + "_blocked.nitf");
+            writer.save(buffers, outPathnamePrefix + "_blocked.nitf");
         }
 
         return 0;
