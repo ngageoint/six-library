@@ -23,8 +23,8 @@
 #ifndef __MATH_POLY_TWOD_H__
 #define __MATH_POLY_TWOD_H__
 
-#include "math/poly/OneD.h"
-#include "math/linear/Matrix2D.h"
+#include <math/poly/OneD.h>
+#include <math/linear/Matrix2D.h>
 
 namespace math
 {
@@ -243,6 +243,15 @@ public:
     
     template<typename _TT>
         friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
+
+    /*!
+     *  serialize out to a boost stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int  /*version*/)
+    {
+        ar & mCoef;
+    }
 };
 
 } // poly

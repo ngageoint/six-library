@@ -44,22 +44,22 @@ def configure(conf):
             }
             '''
 
-   # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-   # both in here to make sure we have full C++11 support... otherwise,
-   # long-term we may need multiple separate configure checks and
-   # corresponding defines
-	cpp11_str = '''
-		int main()
-		{
-			constexpr void* FOO = nullptr;
-		}
-		'''
+        # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
+        # both in here to make sure we have full C++11 support... otherwise,
+        # long-term we may need multiple separate configure checks and
+        # corresponding defines
+        cpp11_str = '''
+            int main()
+            {
+                constexpr void* FOO = nullptr;
+            }
+            '''
         #find out the size of some types, etc.
         # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
         #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
         #    erroneously be 8 here.
         output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
-	t = Utils.str_to_dict(output or '')
+        t = Utils.str_to_dict(output or '')
         for k, v in t.iteritems():
             try:
                 v = int(v)
