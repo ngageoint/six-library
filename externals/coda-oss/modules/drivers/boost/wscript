@@ -1,0 +1,76 @@
+import os, sys
+from os.path import join
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import writeConfig, getConfigFilename
+
+build = distclean = lambda x: None
+
+boost_guard = 'boost'
+
+def options(opt):
+    opt.add_option('--with-boost-home', action='store', dest='boost_home',
+                   help='Specify the Boost Home - where the Boost library is installed')
+    opt.add_option('--with-boost-version', action='store', dest='boost_version',
+                   help='Specify the Boost Version in the format "1_58" or "1_30"')
+
+def configure(conf):
+    boostHome = Options.options.boost_home
+
+    # for now we only support pre-built libraries
+    if boostHome is not None:
+        debug = Options.options.debugging
+        if 'win' in sys.platform :
+
+            # we assume this is the windows pre-built libraries
+            ccbin = conf.env['CC'][0]
+            arch = 'lib64-msvc-' if conf.env['IS64BIT'] else 'lib32-msvc-'
+            msvcVersions = [('14.0', 'vc140', '2015'),
+                            ('12.0', 'vc120', '2013'),
+                            ('11.0', 'vc110', '2012'),
+                            ('10.0', 'vc100', '2010'),
+                            ('9.0',  'vc90',  '2008'),
+                            ('8.0',  'vc80',  '2005')]
+            staticLink = '/MT' in conf.env['CXXFLAGS'] or '/MTd' in conf.env['CXXFLAGS']
+            msvcVer = [x for x in msvcVersions if x[0] in ccbin][0]
+            linkType = 's' if staticLink else ''
+            libType = 'gd' if debug else ''
+            boostVer = Options.options.boost_version
+            libName = ['libboost_serialization', msvcVer[1], 'mt', 
+                       linkType + libType, boostVer]
+            libName = '-'.join(filter(lambda x: x is not '', libName))
+            incPath = boostHome
+            libPath = join(boostHome, arch + msvcVer[0])
+        else :
+            # we assume the library was built with symlinks
+            libName = 'boost_serialization'
+            incPath = join(boostHome, 'include')
+            libPath = join(boostHome, 'lib')
+
+        # link the serialization library
+        libSer = conf.check(lib=libName,
+                            uselib_store='BOOST_SERIALIZATION', 
+                            header_name='boost/archive/tmpdir.hpp',
+                            function_name='boost::archive::tmpdir',
+                            libpath=libPath, includes=incPath,
+                            msg='Checking for library boost serialization',
+                            okmsg=boostHome,
+                            mandatory=False)
+        # leave a breadcrumb
+        conf.env['HAVE_BOOST'] = True
+    else :
+        conf.env['HAVE_BOOST'] = False
+
+    # create a boost_config.h for the define we created
+    def boost_callback (conf) :
+        conf.define('HAVE_BOOST', 1 if conf.env['HAVE_BOOST'] else 0)
+    writeConfig(conf, boost_callback, boost_guard)
+
+def build (bld) :
+    # install the boost_config.h file
+    b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith(boost_guard)][0]
+    targetPath = bld.root.find_dir(join(bld.bldnode.abspath(), b[1])).path_from(bld.path)
+    bld(name='boost_config', features='install_tgt',
+        files=[getConfigFilename(boost_guard)],
+        dir=bld.path.make_node(targetPath),
+        install_path=join(bld.env['install_includedir'], boost_guard))
