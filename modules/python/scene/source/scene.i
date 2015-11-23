@@ -91,3 +91,51 @@
       $self->mParams[idx] = val;
     }
 };
+
+
+%extend scene::ProjectionModel
+{
+  /* Extend the Python interface to imageToScene to take a sequence of  */
+  /* row indices and a sequence of column indices and return a list of  */
+  /* projected points                                                   */
+  PyObject* imageToScene(PyObject* row_seq,
+                         PyObject* col_seq,
+                         math::linear::VectorN<3,double> ground_ref_point,
+                         math::linear::VectorN<3,double> ground_plane_normal)
+  {
+    if (!PySequence_Check(row_seq))
+    {
+      PyErr_SetString(PyExc_TypeError,"Expecting a sequence of row indices.");
+      return NULL;
+    }
+    if (!PySequence_Check(col_seq))
+    {
+      PyErr_SetString(PyExc_TypeError,"Expecting a sequence of column indices.");
+      return NULL;
+    }
+    int N = PyObject_Length(row_seq);
+    if (N != PyObject_Length(col_seq))
+    {
+      PyErr_SetString(PyExc_ValueError,"Input row and column sequences must have same length.");
+      return NULL;
+    }
+    math::linear::VectorN<3,double>* vec_ptr;
+    PyObject* pyresult = PyList_New(N);
+    PyObject* pytmp;
+    for (int i = 0; i < N; ++i)
+    {
+      PyObject* o1 = PySequence_GetItem(row_seq, i);
+      PyObject* o2 = PySequence_GetItem(col_seq, i);
+      types::RowCol<double> rc(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
+      math::linear::VectorN<3,double> tmp = (*self).imageToScene(rc, 
+                                                                 ground_ref_point, 
+                                                                 ground_plane_normal);
+      vec_ptr = new math::linear::VectorN<3,double>(tmp);
+      pytmp = SWIG_NewPointerObj(SWIG_as_voidptr(vec_ptr),
+                                 SWIGTYPE_p_math__linear__VectorNT_3_double_t,
+                                 0 | 0);
+      PyList_SetItem(pyresult, i, pytmp);
+    }
+    return pyresult;
+  }
+}
