@@ -4720,7 +4720,7 @@ SWIGINTERN PyObject *scene_ProjectionModel_imageToScene__SWIG_8(scene::Projectio
       PyErr_SetString(PyExc_TypeError,"Expecting a sequence of column indices.");
       return NULL;
     }
-    int N = PyObject_Length(row_seq);
+    Py_ssize_t N = PyObject_Length(row_seq);
     if (N != PyObject_Length(col_seq))
     {
       PyErr_SetString(PyExc_ValueError,"Input row and column sequences must have same length.");
@@ -4729,7 +4729,7 @@ SWIGINTERN PyObject *scene_ProjectionModel_imageToScene__SWIG_8(scene::Projectio
     math::linear::VectorN<3,double>* vec_ptr;
     PyObject* pyresult = PyList_New(N);
     PyObject* pytmp;
-    for (int i = 0; i < N; ++i)
+    for (Py_ssize_t i = 0; i < N; ++i)
     {
       PyObject* o1 = PySequence_GetItem(row_seq, i);
       PyObject* o2 = PySequence_GetItem(col_seq, i);
