@@ -309,4 +309,32 @@ except:
 
 test_assert('Test PlanarGridGeometry for \'no solution\'...', except_caught)
 
+#
+# Eighth test
+#
+
+# Reuse RangeAzimProjectionModel object, groundRefPoint, and groundPlaneNormal
+# Decrease row,col indices until solution exists
+rows = [0.00005*i for i in range(10)]
+cols = [0.00005*i for i in range(10)]
+
+except_caught = False
+try:
+  scns = rapm.imageToScene(rows, cols, groundRefPoint, groundPlaneNormal)
+except:
+  except_caught = True
+
+# Verify that the list-evaluated scene points are identical to the
+# per-evaluation scene points
+trials = [not except_caught]
+if not except_caught:
+  for r,c,s in zip(rows, cols, scns):
+    rowcol = RowColDouble(r,c)
+    scn = rapm.imageToScene(rowcol, groundRefPoint, groundPlaneNormal)
+    trials.append(scn.vals() == s.vals())
+
+test_assert('Test Python interface extension to imageToScene',
+            all(trials))
+
 print "TODO: real tests for ProjectionModel and GridGeometry"
+
