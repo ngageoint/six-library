@@ -91,5 +91,24 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
         }
     }
 }
+
+types::RowCol<double>
+ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
+{
+    const types::RowCol<double> scpPixel(imageData->scpPixel);
+    const types::RowCol<double> aoiOffset(imageData->firstRow,
+                                          imageData->firstCol);
+
+    const types::RowCol<double> offset(scpPixel - aoiOffset);
+
+    const types::RowCol<double> sampleSpacing(grid->row->sampleSpacing,
+                                              grid->col->sampleSpacing);
+
+    const types::RowCol<double> imagePt(
+            (pixelLoc.row - offset.row) * sampleSpacing.row,
+            (pixelLoc.col - offset.col) * sampleSpacing.col);
+
+    return imagePt;
+}
 }
 }

@@ -38,52 +38,6 @@
 
 namespace
 {
-types::RowCol<double> pixelToImagePoint(const six::sicd::ComplexData& data,
-                                        const types::RowCol<double>& pixelLoc)
-{
-    const six::sicd::ImageData& imageData(*data.imageData);
-    const types::RowCol<double> scpPixel(imageData.scpPixel);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
-
-    const types::RowCol<double> offset(scpPixel - aoiOffset);
-
-    const types::RowCol<double> sampleSpacing(
-            data.grid->row->sampleSpacing,
-            data.grid->col->sampleSpacing);
-
-    const types::RowCol<double> imagePt(
-            (pixelLoc.row - offset.row) * sampleSpacing.row,
-            (pixelLoc.col - offset.col) * sampleSpacing.col);
-
-    return imagePt;
-}
-
-types::RowCol<double> pixelToImagePoint(const six::sidd::DerivedData& data,
-                                        const types::RowCol<double>& pixelLoc)
-{
-    const types::RowCol<double> posRC(pixelLoc);
-    types::RowCol<double> fullScenePos;
-    if (data.downstreamReprocessing.get() &&
-            data.downstreamReprocessing->geometricChip.get())
-    {
-        fullScenePos = data.downstreamReprocessing->geometricChip->
-                getFullImageCoordinateFromChip(posRC);
-    }
-    else
-    {
-        fullScenePos = posRC;
-    }
-
-    const six::sidd::MeasurableProjection* projection(reinterpret_cast<six::sidd::MeasurableProjection*>(
-            data.measurement->projection.get()));
-    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
-
-    return types::RowCol<double>(
-            (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
-            (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
-}
-
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& lla)
 {
     os << "(" << lla.getLat() << ", " << lla.getLon() << ", "
@@ -138,7 +92,7 @@ int main(int argc, char** argv)
             geom.reset(six::sicd::Utilities::getSceneGeometry(data));
             projection.reset(six::sicd::Utilities::getProjectionModel(
                     data, geom.get()));
-            imagePt = pixelToImagePoint(*data, pixelLoc);
+            imagePt = data->pixelToImagePoint(pixelLoc);
         }
         else if (container->getDataType() == six::DataType::DERIVED)
         {
@@ -148,7 +102,7 @@ int main(int argc, char** argv)
             projection = six::sidd::Utilities::getProjectionModel(data);
             geom = six::sidd::Utilities::getSceneGeometry(data);
             std::cout << geom->getReferencePosition() << std::endl;
-            imagePt = pixelToImagePoint(*data, pixelLoc);
+            imagePt = data->pixelToImagePoint(pixelLoc);
         }
         else
         {

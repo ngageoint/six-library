@@ -319,6 +319,12 @@ public:
             types::RowCol<size_t>& offset,
             types::RowCol<size_t>& extent) const;
 
+    /*
+     * Convert the slant plane pixel location into meters from the SCP
+     */
+    types::RowCol<double>
+    pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
+
 private:
     static const char VENDOR_ID[];
 

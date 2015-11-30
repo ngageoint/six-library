@@ -19,7 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sidd/DerivedData.h"
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <six/sidd/DerivedData.h>
 
 namespace six
 {
@@ -47,6 +49,38 @@ DateTime DerivedData::getCollectionStartDateTime() const
     }
 
     return exploitationFeatures->collections[0]->information->collectionDateTime;
+}
+
+types::RowCol<double>
+DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
+{
+    const types::RowCol<double> posRC(pixelLoc);
+    types::RowCol<double> fullScenePos;
+    if (downstreamReprocessing.get() &&
+            downstreamReprocessing->geometricChip.get())
+    {
+        fullScenePos = downstreamReprocessing->geometricChip->
+                getFullImageCoordinateFromChip(posRC);
+    }
+    else
+    {
+        fullScenePos = posRC;
+    }
+
+    if (!measurement->projection->isMeasurable())
+    {
+        throw except::Exception(Ctxt(
+                "Currently require a measurable projection type"));
+    }
+
+    const six::sidd::MeasurableProjection* projection =
+            reinterpret_cast<six::sidd::MeasurableProjection*>(
+                    measurement->projection.get());
+    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
+
+    return types::RowCol<double>(
+            (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
+            (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
 }
 }
 }
