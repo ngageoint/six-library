@@ -2339,6 +2339,11 @@ class ComplexData(pysix.six_base.Data):
         """getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)"""
         return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, offset, extent)
 
+
+    def pixelToImagePoint(self, pixelLoc):
+        """pixelToImagePoint(ComplexData self, RowColDouble pixelLoc) -> RowColDouble"""
+        return _six_sicd.ComplexData_pixelToImagePoint(self, pixelLoc)
+
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 

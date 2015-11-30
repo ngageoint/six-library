@@ -305,6 +305,13 @@ struct DerivedData: public Data
         mVersion = version;
     }
 
+    /*
+     * Convert the output plane pixel location into meters from the reference
+     * point
+     */
+    types::RowCol<double>
+    pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
+
 private:
     static const char VENDOR_ID[];
 
