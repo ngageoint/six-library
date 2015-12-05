@@ -95,6 +95,18 @@ public:
      *  R/Rdot Contour Ground Plane Intersection
      *
      */
+    static Vector3
+        contourToGroundPlane(double rCOA, double rDotCOA,
+                             const Vector3& arpCOA,
+                             const Vector3& velCOA,
+                             const Vector3& groundPlaneNormal,
+                             const Vector3& groundRefPoint,
+                             int look);
+    /*!
+     *  Calculations for section 5.2 in SICD Image Projections:
+     *  R/Rdot Contour Ground Plane Intersection
+     *
+     */
     Vector3
         contourToGroundPlane(double rCOA, double rDotCOA,
                              const Vector3& arpCOA,
@@ -409,6 +421,19 @@ public:
                                 const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
+
+    static types::RowCol<double> fullContourToImageCoord(const math::poly::OneD<Vector3>& arpPoly,
+                                                     const Vector3& scp,
+                                                     const math::poly::OneD<double>& polarAnglePoly,
+                                                     const math::poly::OneD<double>& ksfPoly,
+                                                     double rTarget,
+                                                     double rDotTarget,
+                                                     double timeCOA);
+
+    // TODO Should eventually be defined in the base class
+    virtual types::RowCol<double> contourToImageCoord(double rTarget,
+                                                    double rDotTarget,
+                                                    double timeCOA) const;
 
 private:
     math::poly::OneD<double> mPolarAnglePoly;

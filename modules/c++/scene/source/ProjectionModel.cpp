@@ -91,6 +91,16 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                                       const Vector3& groundPlaneNormal,
                                       const Vector3& groundRefPoint) const
 {
+    return contourToGroundPlane(rCOA, rDotCOA, arpCOA, velCOA, groundPlaneNormal, groundRefPoint, mLookDir);
+}
+Vector3
+ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
+                                      const Vector3& arpCOA,
+                                      const Vector3& velCOA,
+                                      const Vector3& groundPlaneNormal,
+                                      const Vector3& groundRefPoint,
+                                      int look)
+{
     // Compute the ARP distance from the plane (ARP Z)
     Vector3 tmp(arpCOA - groundRefPoint);
     const double arpZ = tmp.dot(groundPlaneNormal);
@@ -142,7 +152,7 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
     }
     
     const double sinAzimuth =
-        mLookDir * sqrt(1.0 - cosAzimuth * cosAzimuth);
+        look * sqrt(1.0 - cosAzimuth * cosAzimuth);
     
     return Vector3(arpGround + unitX * groundRange * cosAzimuth +
                           unitY * groundRange * sinAzimuth);
@@ -844,6 +854,72 @@ computeContour(const Vector3& arpCOA,
     
 }
 
+/*!
+ *  Calculations for yet unnamed section of SICD Image Projections:
+ *  R/Rdot Contour To Image Coordinate
+ *
+ */
+types::RowCol<double>
+RangeAzimProjectionModel::
+fullContourToImageCoord(const math::poly::OneD<Vector3>& arpPoly,
+                    const Vector3& scp,
+                    const math::poly::OneD<double>& polarAnglePoly,
+                    const math::poly::OneD<double>& ksfPoly,
+                    double rTarget,
+                    double rDotTarget,
+                    double timeCOA) 
+{
+    // Calculate COA Parameters
+    const Vector3 arpCOA = arpPoly( timeCOA );
+    const math::poly::OneD<Vector3> varpPoly = arpPoly.derivative();
+    const Vector3 varpCOA = varpPoly( timeCOA );
+
+    // compute range and range rate from aperture position to
+    // the scene center point
+    const Vector3 los = arpCOA - scp;
+    const double arpRangeToSCP = los.norm();
+    const double arpRangeDotToSCP = varpCOA.dot(los.unit());
+    
+    // compute the range and range rate from the SCP to the target
+    const double scpRangeToTgt = rTarget - arpRangeToSCP;
+    const double scpRangeDotToTgt = rDotTarget - arpRangeDotToSCP;
+         
+    // compute the polar angle, polar angle rate, scale factor, and scale factor rate
+    // by evaluating polys at timeCOA
+    const double polarAngle = polarAnglePoly( timeCOA );
+    const math::poly::OneD<double> d_paPoly = polarAnglePoly.derivative();
+    const double d_polarAngle = d_paPoly( timeCOA );
+
+    const double ksf = ksfPoly( polarAngle );
+    const math::poly::OneD<double> d_ksfPoly = ksfPoly.derivative();
+    const double d_ksf = d_ksfPoly( polarAngle );
+
+    // compute the polar angle relative point position
+    types::RowCol<double> polarAnglePosition;
+    polarAnglePosition.row = scpRangeToTgt / ksf;
+    polarAnglePosition.col = (scpRangeDotToTgt / d_polarAngle - d_ksf * polarAnglePosition.row) / ksf;
+
+    // rotate the point to the image x/y coordinates by the
+    // aperture polar angle at this point because the range and range rate
+    // of a target is relative to the polar angle of its center of aperture,
+    // not the range and range rate of the SCP.
+    types::RowCol<double> imageCoord;
+    imageCoord.row = polarAnglePosition.row  * cos(-1.0 * polarAngle) +
+                    polarAnglePosition.col * sin(-1.0 * polarAngle);
+    imageCoord.col = -polarAnglePosition.row * sin(-1.0 * polarAngle) +
+                     polarAnglePosition.col * cos(-1.0 * polarAngle);
+                     
+    return imageCoord;
+}
+
+types::RowCol<double>
+RangeAzimProjectionModel::
+contourToImageCoord(double rTarget,
+                    double rDotTarget,
+                    double timeCOA) const
+{
+   return fullContourToImageCoord(mARPPoly, mSCP, mPolarAnglePoly, mKSFPoly, rTarget, rDotTarget, timeCOA);
+}
 
 RangeZeroProjectionModel::
 RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
