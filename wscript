@@ -11,7 +11,7 @@ out  = 'target'
 
 TOOLS = 'build swig matlabtool pythontool'
 TOOLS_DIR = join('externals', 'coda-oss', 'build')
-DIRS = 'externals modules projects'
+DIRS = 'externals six'
 
 def options(opt):
     opt.load(TOOLS, tooldir=TOOLS_DIR)
@@ -22,16 +22,8 @@ def configure(conf):
     conf.recurse(DIRS)
     
 def build(bld):
+    bld.launch_dir = join(bld.launch_dir, 'six')
     bld.recurse(DIRS)
-
-    if not bld.targets:
-        bld.targets = 'cphd-c++,six.sicd-c++,six.sidd-c++,six-samples'
-        if 'HAVE_CSM' in bld.env:
-            bld.targets += ',six-csm,vts'
-        if bld.is_defined('HAVE_MEX_H'):
-            bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
-        if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
-            bld.targets += ',sio.lite-python,six.sicd-python,xml.lite-python,logging-python'
 
 def distclean(context):
     context.recurse('modules projects')
