@@ -3,7 +3,7 @@ from os.path import join
 from waflib import Scripting, Options, Context
 from build import CPPOptionsContext
 
-VERSION = '1.0'
+VERSION = '2.1.4-alpha'
 APPNAME = 'SIX'
 Context.APPNAME = APPNAME
 top  = '.'
@@ -18,6 +18,7 @@ def options(opt):
     opt.recurse(DIRS)
 
 def configure(conf):
+    conf.env['VERSION'] = VERSION
     conf.load(TOOLS, tooldir=TOOLS_DIR)
     conf.recurse(DIRS)
     

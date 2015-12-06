@@ -35,47 +35,8 @@
 #include "scene/FrameType.h"
 #include "six/Enums.h"
 
-/*!
- *  \macro SIX_LIB_VERSION 
- *
- *  This will be a string containing major and minor
- *  versions of the library.  Micro will probably not be included in
- *  this string.  For those comparisons, use specific number macros
- *
- *  This string should match the number of the FFDD and D&E docs
- */
-#define SIX_LIB_VERSION "2.1"
-
-/*!
- *  \macro SIX_MAJOR_VERSION_NUMBER 
- *
- *  This is the major version of the library.  It annotates major
- *  library or specification overhauls, in conjunction with the
- *  specification
- */
-#define SIX_MAJOR_VERSION_NUMBER 2
-
-/*!
- *  \macro SIX_MINOR_VERSION_NUMBER 
- *
- *  This is the minor version of the library.  It annotates minor
- *  library changes, in conjunction with updates to the file format
- */
-
-#define SIX_MINOR_VERSION_NUMBER 1
-
-/*!
- *  \macro SIX_MICRO_VERSION_NUMBER 
- *
- *  This is the micro version of the library.  It annotates minimal
- *  library or specification overhauls associated with the file
- *  format
- */
-#define SIX_MICRO_VERSION_NUMBER 3
-
 namespace six
 {
-
 static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
 
 /*!
@@ -454,7 +415,6 @@ typedef Corners<LatLonAlt> LatLonAltCorners;
  *         undefined, etc.
  */
 DECLARE_EXCEPTION(MissingRequired)
-
 }
 
 #endif
