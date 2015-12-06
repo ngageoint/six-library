@@ -1,0 +1,16 @@
+NAME            = 'six.sidd'
+MAINTAINER      = 'adam.sylvester@mdaus.com'
+MODULE_DEPS     = 'scene tiff nitf xml.lite six mem'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    bld.module(**modArgs)
+
+    # install the schemas
+    lib = bld.get_tgen_by_name('six.sidd-c++')
+    lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                                  dir=bld.path.make_node('conf/schema'),
+                                  install_path='${PREFIX}/conf/schema/six/'))

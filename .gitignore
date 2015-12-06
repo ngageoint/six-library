@@ -14,5 +14,5 @@ target/
 install/
 
 # Drivers
-projects/csm/external/csm-master/
-projects/csm/external/vts_301_0/
+six/projects/csm/external/csm-master/
+six/projects/csm/external/vts_301_0/

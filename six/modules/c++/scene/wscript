@@ -1,0 +1,11 @@
+NAME            = 'scene'
+MAINTAINER      = 'adam.sylvester@mdaus.com'
+MODULE_DEPS     = 'io math math.linear math.poly types'
+TEST_FILTER     = 'test_scene.cpp'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    bld.module(**modArgs)
