@@ -182,6 +182,13 @@ struct DRAHistogramOverrides
     }
 };
 
+struct BandInformation
+{
+    std::vector<std::string> bands;
+    size_t bitsPerPixel;
+    size_t displayFlag; // Which band to display by default
+};
+
 /*
  *  The Display grouping contains information required for 
  *  proper display of the imagery. The parameters in this block 

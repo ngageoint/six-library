@@ -31,10 +31,8 @@ namespace six
 {
 namespace sidd
 {
-
 class DerivedXMLParser : public six::XMLParser
 {
-
 public:
     DerivedXMLParser(const std::string& version,
                      logging::Logger* log = NULL,
@@ -45,7 +43,6 @@ public:
     DerivedData* fromXML(const xml::lite::Document* doc) const;
 
 protected:
-
     const six::SICommonXMLParser& common() const
     {
         return *(mCommon.get());

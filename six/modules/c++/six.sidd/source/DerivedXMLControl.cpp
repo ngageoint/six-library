@@ -22,7 +22,8 @@
 
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
-#include <six/sidd/DerivedXMLParser.h>
+#include <six/sidd/DerivedXMLParser100.h>
+#include <six/sidd/DerivedXMLParser110.h>
 
 namespace six
 {
@@ -35,8 +36,7 @@ DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    DerivedXMLParser parser(getVersionFromURI(doc), mLog, false);
-    return parser.fromXML(doc);
+    return getParser(getVersionFromURI(doc))->fromXML(doc);
 }
 
 xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
@@ -46,9 +46,51 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    DerivedXMLParser parser(data->getVersion(), mLog, false);
-    return parser.toXML(reinterpret_cast<const DerivedData*>(data));
-}
-}
+    const DerivedData* const sidd(reinterpret_cast<const DerivedData*>(data));
+    return getParser(data->getVersion())->toXML(sidd);
 }
 
+std::auto_ptr<DerivedXMLParser>
+DerivedXMLControl::getParser(const std::string& version) const
+{
+    std::auto_ptr<DerivedXMLParser> parser;
+
+    std::vector<std::string> versionParts;
+    splitVersion(version, versionParts);
+
+    if (versionParts.size() != 3)
+    {
+        throw except::Exception(
+            Ctxt("Unsupported SIDD Version: " + version));
+    }
+
+    const std::string& majorVersion(versionParts[0]);
+    const std::string& minorVersion(versionParts[1]);
+    const std::string& patchVersion(versionParts[2]);
+
+    // six.sidd only currently supports --
+    //   SIDD 1.0.0
+    //   SIDD 1.1.0
+    if (majorVersion == "1" && patchVersion == "0")
+    {
+        if (minorVersion == "0")
+        {
+            parser.reset(new DerivedXMLParser100(mLog));
+        }
+        else if (minorVersion == "1")
+        {
+            parser.reset(new DerivedXMLParser110(mLog));
+        }
+    }
+
+    // Validation check that we found a suitable Parser
+    if (parser.get() == NULL)
+    {
+        throw except::Exception(
+            Ctxt("Unsupported SIDD Version: " + version));
+    }
+
+    return parser;
+}
+}
+}
