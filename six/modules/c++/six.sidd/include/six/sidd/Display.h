@@ -22,12 +22,13 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
-#include <import/mem.h>
-
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
+#include <mem/ScopedCopyablePtr.h>
+#include <mem/ScopedCloneablePtr.h>
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
+#include <six/sidd/Enums.h>
 
 namespace six
 {
@@ -182,11 +183,172 @@ struct DRAHistogramOverrides
     }
 };
 
+struct Kernel
+{
+    struct Predefined
+    {
+        Predefined() :
+            kernelFamily(six::Init::undefined<size_t>()),
+            kernelMember(six::Init::undefined<size_t>())
+        {
+        }
+
+        // Exactly one of dbName or kernelFamiy+kernelMember must be set
+
+        //! Database name of filter to use
+        KernelDatabaseName dbName;
+
+        //! Index specifying the kernel family
+        size_t kernelFamily;
+
+        //! Index specifying the member for the kernel family
+        size_t kernelMember;
+    };
+
+    struct Custom
+    {
+        /*! General indicates the same kernel is used for the entire operation
+            Filterbank indicates that the kernel is spatially variant
+         */
+        KernelCustomType type;
+
+        //! Size of the kernel
+        RowColInt kernelSize;
+
+        /*! For KernelType=General, populate with the coefficients for the
+            kernelSize kernel.  For KernelType=FilterBank, each row should
+            contain the coefficients for that phasing.
+         */
+        std::vector<double> kernelCoef;
+    };
+
+    //! Name of the filter
+    std::string kernelName;
+
+    // Exactly one of Predefined or Custom
+    mem::ScopedCopyablePtr<Predefined> predefined;
+    mem::ScopedCopyablePtr<Custom> custom;
+
+    /*! Specifies if the kernel is to be applied using convolution or
+        correlation
+     */
+    KernelOperation operation;
+};
+
 struct BandInformation
 {
     std::vector<std::string> bands;
     size_t bitsPerPixel;
     size_t displayFlag; // Which band to display by default
+};
+
+struct BandEqualization
+{
+    std::string algorithm; // TODO: This is supposed to be an enum??
+    mem::ScopedCloneablePtr<LUT> bandLUT;
+};
+
+struct RRDS
+{
+    //! Algorithm used to perform RRDS downsampling
+    DownsamplingMethod downsamplingMethod;
+
+    //! Anti-aliasing kernel.  Only include if downsamplingMethod = DECIMATE.
+    mem::ScopedCopyablePtr<Kernel> antiAliasing;
+
+    //! Interpolation kernel.  Only include if downsamplingMethod = DECIMATE.
+    mem::ScopedCopyablePtr<Kernel> interpolation;
+};
+
+struct ProductGenerationOptions
+{
+    mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
+    Kernel modularTransferFunction;
+
+    mem::ScopedCloneablePtr<Remap> dataRemapping;
+
+    mem::ScopedCopyablePtr<Kernel> asymmetricPixelCorrection;
+};
+
+struct NonInteractiveProcessing
+{
+    ProductGenerationOptions productGenerationOptions;
+    RRDS rrds;
+};
+
+struct Scaling
+{
+    Kernel antiAlias;
+    Kernel interpolation;
+};
+
+struct Orientation
+{
+    Orientation() :
+        rotationAngle(six::Init::undefined<double>())
+    {
+    }
+
+    DerivedOrientationType orientationType;
+
+    /*!
+     * In degrees.  Only include if orientationType == ANGLE.  Positive angles
+     * are CW and negative angles are CCW.
+     */
+    double rotationAngle;
+};
+
+struct SharpnessEnhancement
+{
+    // TODO: This section seems messed up.  Might only be one of these
+    Kernel mtfc;
+    Kernel mtfe;
+};
+
+struct ColorSpaceTransform
+{
+    // TODO: Needs another look
+    RenderingIntent renderingIntent;
+    std::string sourceProfile;
+    std::string displayProfile;
+    std::string iccProfile;
+};
+
+struct GeometricTransform
+{
+    Scaling scaling;
+    Orientation orientation;
+};
+
+struct DynamicRangeAdjustment
+{
+    DynamicRangeAdjustment() :
+        pMin(six::Init::undefined<double>()),
+        pMax(six::Init::undefined<double>()),
+        a(six::Init::undefined<double>()),
+        b(six::Init::undefined<double>()),
+        subtractor(six::Init::undefined<double>()),
+        multiplier(six::Init::undefined<double>())
+    {
+    }
+
+    DRAType algorithmType; //! Algorithm used for dynamic range adjustment
+    double pMin; //! DRA clip low point
+    double pMax; //! DRA clip high point
+
+    double a; //! eMin modifier
+    double b; //! eMax modifier
+    double subtractor; //! Subtractor value used to reduce haze in the image
+    double multiplier; //! Multiplier value used to brighten the image data
+};
+
+struct InteractiveProcessing
+{
+    GeometricTransform geometricTransform;
+    SharpnessEnhancement sharpnessEnhancement;
+    ColorSpaceTransform colorSpaceTransform;
+    DynamicRangeAdjustment dynamicRangeAdjustment;
+    mem::ScopedCopyablePtr<Kernel> TTC;
 };
 
 /*
@@ -201,6 +363,7 @@ struct BandInformation
 struct Display
 {
     Display();
+
     virtual ~Display()
     {
     }
