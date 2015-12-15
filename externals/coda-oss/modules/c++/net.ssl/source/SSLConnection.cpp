@@ -20,11 +20,10 @@
  *
  */
 
+#include <net/ssl/SSLConnection.h>
+#include <net/ssl/SSLExceptions.h>
 #if defined(USE_OPENSSL)
  
-#include "net/ssl/SSLConnection.h"
-#include "net/ssl/SSLExceptions.h"
-
 net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket, 
                                        SSL_CTX * ctx,
                                        bool serverAuth,
