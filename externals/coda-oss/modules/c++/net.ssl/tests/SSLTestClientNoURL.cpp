@@ -34,7 +34,7 @@ using namespace sys;
 
 const static std::string SEND_THIS = "Hello, Server";
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
 #if defined(USE_OPENSSL)
     try
@@ -73,6 +73,9 @@ int main(int, char**)
         cout << t.toString() << endl;
         exit(EXIT_FAILURE);
     }
+#else
+    (void)argc;
+    (void)argv;
 #endif
 }
 
