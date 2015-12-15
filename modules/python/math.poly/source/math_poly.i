@@ -70,6 +70,24 @@ typedef math::linear::Vector<double> VectorDouble;
     {
         return math::poly::OneD<double>(*$self);
     }
+
+    PyObject* __call__(PyObject* input)
+    {
+        if (!PySequence_Check(input))
+        {
+            PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
+            return NULL;
+        }
+        Py_ssize_t N = PyObject_Length(input);
+        PyObject* pyresult = PyList_New(N);
+        for (Py_ssize_t i = 0; i < N; ++i)
+        {
+            PyObject* o = PySequence_GetItem(input, i);
+            double val = (*self)(PyFloat_AsDouble(o));
+            PyList_SetItem(pyresult, i, PyFloat_FromDouble(val));
+        }
+        return pyresult;
+    }
 }
 
 %include "math/poly/TwoD.h"
@@ -129,6 +147,35 @@ typedef math::linear::Vector<double> VectorDouble;
     {
         return math::poly::TwoD<double>(*$self);
     }
+
+    PyObject* __call__(PyObject* x_input, PyObject* y_input)
+    {
+        if (!PySequence_Check(x_input))
+        {
+            PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
+            return NULL;
+        }
+        if (!PySequence_Check(y_input))
+        {
+            PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
+            return NULL;
+        }
+        Py_ssize_t N = PyObject_Length(x_input);
+        if (N != PyObject_Length(y_input))
+        {
+            PyErr_SetString(PyExc_ValueError,"Input sequences must have same length");
+            return NULL;
+        }
+        PyObject* pyresult = PyList_New(N);
+        for (Py_ssize_t i = 0; i < N; ++i)
+        {
+            PyObject* ox = PySequence_GetItem(x_input, i);
+            PyObject* oy = PySequence_GetItem(y_input, i);
+            double val = (*self)(PyFloat_AsDouble(ox), PyFloat_AsDouble(oy));
+            PyList_SetItem(pyresult, i, PyFloat_FromDouble(val));
+        }
+        return pyresult;
+    }
 }
 
 %include "math/poly/Fit.h"
@@ -159,6 +206,29 @@ typedef math::linear::Vector<double> VectorDouble;
         math::poly::OneD<Vector3> __deepcopy__(PyObject* memo)
         {
             return math::poly::OneD<Vector3>(*$self);
+        }
+
+	PyObject* __call__(PyObject* input)
+        {
+            if (!PySequence_Check(input))
+            {
+                PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
+                return NULL;
+            }
+            Vector3* vec_ptr;
+            PyObject* pytmp = 0;
+            Py_ssize_t N = PyObject_Length(input);
+            PyObject* pyresult = PyList_New(N);
+            for (Py_ssize_t i = 0; i < N; ++i)
+            {
+                PyObject* o = PySequence_GetItem(input, i);
+                vec_ptr = (Vector3*)new Vector3( (*self)(PyFloat_AsDouble(o)) );
+                pytmp = SWIG_NewPointerObj(SWIG_as_voidptr(vec_ptr),
+                                           SWIGTYPE_p_math__linear__VectorNT_3_double_t,
+                                           0 | 0);
+                PyList_SetItem(pyresult, i, pytmp);
+            }
+	    return pyresult;
         }
 };
 

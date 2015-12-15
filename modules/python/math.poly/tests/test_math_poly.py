@@ -25,7 +25,7 @@
 """
 
 import sys
-from coda.math_linear import VectorDouble, MatrixDouble
+from coda.math_linear import VectorDouble, MatrixDouble, Vector3
 from coda.math_poly import *
 
 if __name__ == '__main__':
@@ -282,3 +282,94 @@ if __name__ == '__main__':
     fit2D = fit(xObs, yObs, zObs, 1, 1)
     print "2D Fit from Matrices:"
     print fit2D
+
+    ##########################################
+    # Test polynomial evaluation using lists #
+    ##########################################
+    
+    input_data = [1.0, 2.0, -3.0, 5.0]
+
+    #--------#
+    # Poly1D #
+    #--------#
+    p1 = Poly1D(2)
+    p1[0] =  1.0
+    p1[1] =  0.0
+    p1[2] = -3.0
+
+    threw = False
+    try:
+        vals1 = p1(input_data)
+    except TypeError:
+        threw = True
+        
+    if threw:
+        print "Poly1D error: polynomial evaluation using a Python list failed."
+    else:
+        for x,val in zip(input_data, vals1):
+            if val != p1(x):
+                raise ValueError("Poly1D error: polynomial evaluation with " +
+                                 "Python list does not return the same " +
+                                 "value as scalar evaluation.")
+        print "\nPoly1D evaluation using a Python list passed:"
+        print p1
+        print "input  : ", input_data
+        print "output : ", vals1
+
+
+    #--------#
+    # Poly2D #
+    #--------#
+    p2 = Poly2D(1,1)
+    p2[0,0] =  5.0
+    p2[0,1] =  0.0
+    p2[1,0] = -1.0
+    p2[1,1] =  1.0
+
+    threw = False
+    try:
+        vals2 = p2(input_data, input_data)
+    except TypeError:
+        threw = True
+    
+    if threw:
+        print "Poly2D error: polynomial evaluation using Python lists failed."
+    else:
+        for x,val in zip(input_data, vals2):
+            if val != p2(x,x):
+                raise ValueError("Poly2D error: polynomial evaluation with " +
+                                 "Python list does not return the same " +
+                                 "value as scalar evaluation.")
+        print "\nPoly2D evaluation using Python lists passed:"
+        print p2
+        print "input  : ", input_data, ",", input_data
+        print "output : ", vals2
+    
+    #-------------#
+    # PolyVector3 #
+    #-------------#
+    p3 = PolyVector3(2)
+    p3[0] = Vector3([ 1.0,  0.0, 3.0])
+    p3[1] = Vector3([-1.0,  2.0, 0.0])
+    p3[2] = Vector3([ 0.0, -5.0, 0.0])
+
+    threw = False
+    try:
+        vals3 = p3(input_data)
+    except TypeError:
+        threw = True
+
+    if threw:
+        print "PolyVector3 error: polynomial evaluation using a Python list failed."
+    else:
+        for x,val in zip(input_data, vals3):
+            if not all([a == b for a,b in zip(val.vals(), p3(x).vals())]):
+                raise ValueError("PolyVector3 error: polynomial evaluation "+
+                                 "with Python list does not return the same " +
+                                 "value as scalar evaluation.")
+        print "\nPolyVector3 evaluation using a Python list passed:"
+        print p3
+        print "input  : ", input_data
+        print "output : ", [p.vals() for p in vals3]
+
+    

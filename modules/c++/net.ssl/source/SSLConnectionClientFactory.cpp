@@ -51,8 +51,13 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
 #if defined(USE_OPENSSL)
     SSL_library_init();
     SSL_load_error_strings();
-    
+
+#if defined(OPENSSL_0_9_8)
     SSL_METHOD *method = SSLv23_client_method();
+#else
+    const SSL_METHOD *method = SSLv23_client_method();
+#endif
+
     if(method == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
