@@ -28,9 +28,9 @@
  *  \brief Contains class for creating client socket connections
  *  This class hides the details of client creation.
  */
- 
-#include "net/NetConnectionClientFactory.h"
-#include "net/ssl/SSLConnection.h"
+
+#include <net/NetConnectionClientFactory.h>
+#include <net/ssl/SSLConnection.h>
 
 namespace net
 {
@@ -76,12 +76,12 @@ public:
      */
     virtual ~SSLConnectionClientFactory() 
     {
-#               if defined(USE_OPENSSL)	
+# if defined(USE_OPENSSL)	
         if(mCtx != NULL)
         {
             SSL_CTX_free(mCtx);
         }
-#              endif
+# endif
     }
 
 protected:
