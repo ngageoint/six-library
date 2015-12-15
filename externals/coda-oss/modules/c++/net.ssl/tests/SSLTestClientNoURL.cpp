@@ -49,7 +49,8 @@ int main(int argc, char **argv)
         cout << port << endl;
 
         cout << "Connecting to: " << host << ":" << port << endl;
-        URL url(host, port);
+        URL url(host);
+        url.setPort(port);
 
         net::ssl::SSLConnectionClientFactory clientBuilder;
         NetConnection * toUrl = clientBuilder.create(url);
