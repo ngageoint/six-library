@@ -59,7 +59,7 @@ public:
 };
 
 
-int main (int argc, char* argv[])
+int main (int, char**)
 {
    DemoThread *threads[MAX_THREADS];
    for (int i = 0 ; i < MAX_THREADS ; i++ ) {

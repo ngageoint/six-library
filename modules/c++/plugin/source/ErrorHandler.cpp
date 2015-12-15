@@ -50,7 +50,7 @@ void plugin::DefaultErrorHandler::onPluginVersionUnsupported(const std::string& 
 {
     std::cout << "Warning: " << message << std::endl;
 }
-void plugin::DefaultErrorHandler::onPluginError(except::Context& c)
+void plugin::DefaultErrorHandler::onPluginError(except::Context&)
 {
 }
 

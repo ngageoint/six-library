@@ -21,7 +21,7 @@
  */
 #if defined(__APPLE_CC__)
 #include <iostream>
-int main (int argc, char *argv[])
+int main (int, char**)
 {
     std::cout << "Sorry no semaphores" << std::endl;
     return 0;
@@ -213,7 +213,7 @@ public:
     }
 };
 
-int main(int argc, char *argv[])
+int main(int, char**)
 {
     try
     {
