@@ -256,6 +256,15 @@ public:
     {
         return !(*this == p);
     }
+
+    /*!
+     *  serialize out to a boost stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & mCoef;
+    }
 };
 
 } // poly
