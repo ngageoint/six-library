@@ -249,11 +249,10 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
-    // first, validate the arguments
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
-            mArgs.begin(); it != mArgs.end(); ++it)
+    for (mem::VectorOfSharedpointers<cli::Argument>::const_iterator argIt =
+            mArgs.begin(); argIt != mArgs.end(); ++argIt)
     {
-        cli::Argument *arg = it->get();
+        cli::Argument *arg = argIt->get();
         std::string argVar = arg->getVariable();
 
         if (arg->isPositional())

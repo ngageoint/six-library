@@ -291,13 +291,13 @@ public:
     ~XercesContentHandler()
     {}
 
-    virtual void ignorableWhitespace(const XMLCh* const chars,
-                                     const XercesSize_T length)
+    virtual void ignorableWhitespace(const XMLCh* const /*chars*/,
+                                     const XercesSize_T /*length*/)
     {}
-    virtual void  processingInstruction(const XMLCh* const target,
-                                        const XMLCh* const data)
+    virtual void  processingInstruction(const XMLCh* const /*target*/,
+                                        const XMLCh* const /*data*/)
     {}
-    virtual void  setDocumentLocator(const Locator* const locator)
+    virtual void  setDocumentLocator(const Locator* const /*locator*/)
     {}
 
     /*!
@@ -326,7 +326,7 @@ public:
                             const XMLCh* const localName,
                             const XMLCh* const qname);
 
-    virtual void skippedEntity (const XMLCh* const name)
+    virtual void skippedEntity (const XMLCh* const /*name*/)
     {}
 
     //! Fire off the start document notification
@@ -351,8 +351,8 @@ public:
      *  \param prefix The prefix to start mapping
      *  \param uri The corresponding uri
      */
-    virtual void startPrefixMapping (const XMLCh* const prefix,
-                                     const XMLCh* const uri)
+    virtual void startPrefixMapping (const XMLCh* const /*prefix*/,
+                                     const XMLCh* const /*uri*/)
     {
     }
 
@@ -360,7 +360,7 @@ public:
      *  End prefix mapping.  Transfer string types
      *  \param prefix The prefix to stop mapping
      */
-    virtual void endPrefixMapping (const XMLCh* const prefix)
+    virtual void endPrefixMapping (const XMLCh* const /*prefix*/)
     {
     }
 

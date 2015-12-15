@@ -53,7 +53,7 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
-                                             const std::string & localName,
+                                             const std::string & /*localName*/,
                                              const std::string & qname,
                                              const xml::lite::Attributes & atts)
 {
@@ -110,9 +110,9 @@ void xml::lite::MinidomHandler::trim(std::string & s)
         s.erase(i + 1);
 }
 
-void xml::lite::MinidomHandler::endElement(const std::string & uri,
-                                           const std::string & localName,
-                                           const std::string & qname)
+void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,
+                                           const std::string & /*localName*/,
+                                           const std::string & /*qname*/)
 {
     // Pop current off top
     xml::lite::Element * current = nodeStack.top();

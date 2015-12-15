@@ -83,7 +83,7 @@ TEST_CASE(testForcefulMove)
 
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);

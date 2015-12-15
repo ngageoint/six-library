@@ -90,7 +90,7 @@ TEST_CASE(test2DPolyfit)
     TEST_ASSERT_EQ(poly, truth);
 }
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
 
     TEST_CHECK(test1DPolyfit);

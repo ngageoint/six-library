@@ -22,7 +22,7 @@
 
 #if defined(__APPLE_CC__)
 #include <iostream>
-int main (int argc, char *argv[])
+int main (int, char**)
 {
     std::cout << "Sorry no semaphores" << std::endl;
     return 0;
@@ -74,7 +74,7 @@ protected:
 typedef Singleton<Counter> AutoIncrementer; //this does NOT get deleted at exit
 
 
-int main (int argc, char *argv[])
+int main (int, char**)
 {
     AutoIncrementer::getInstance().sayCount();
     AutoIncrementer::getInstance().sayCount();

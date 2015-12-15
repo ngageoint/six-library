@@ -97,7 +97,7 @@ public:
 
     virtual void parse(const char* header, int length)
     {
-        mHeader = std::string(request, length);
+        mHeader = std::string(header, length);
         if (!parseRequest())
             if (!parseResponse())
                 assert(0);

@@ -34,7 +34,7 @@ using namespace sys;
 
 const static std::string SEND_THIS = "Hello, Server";
 
-int main(int argc, char **argv)
+int main(int, char**)
 {
 #if defined(USE_OPENSSL)
     try
