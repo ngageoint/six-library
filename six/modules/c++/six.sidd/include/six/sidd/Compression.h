@@ -28,10 +28,6 @@ struct J2KCompression
 
 struct Compression
 {
-    Compression();
-
-    size_t originalCompressedDataFlag; // TODO: Is this really a #??
-
     J2KCompression original;
     mem::ScopedCopyablePtr<J2KCompression> parsed;
 };

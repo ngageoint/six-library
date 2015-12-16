@@ -14,10 +14,5 @@ J2KCompression::J2KCompression() :
     numBands(0)
 {
 }
-
-Compression::Compression() :
-    originalCompressedDataFlag(0)
-{
-}
 }
 }
