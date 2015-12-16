@@ -337,7 +337,7 @@ XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
     //! optional field in 0.4
     if (array)
     {
-        XMLElem arrXML = newElement("Array", apXML);
+        XMLElem arrXML = newElement(name, apXML);
         common().createPoly2D("GainPoly", array->gainPoly, arrXML);
         common().createPoly2D("PhasePoly", array->phasePoly, arrXML);
         return arrXML;
@@ -451,8 +451,8 @@ void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem,
     parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
 }
 
-void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem rmcrElem, 
-                                           RMCR* rmcr) const
+void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem, 
+                                           RMCR*) const
 {
     // did not exist in 0.4
     throw except::Exception(Ctxt("RMA=>RMCR is not available in 0.4"));
