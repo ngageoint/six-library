@@ -105,8 +105,8 @@ struct RenderingIntent
     {
         PERCEPTUAL = 0,
         SATURATION,
-        RELATIVE,
-        ABSOLUTE,
+        RELATIVE_INTENT,
+        ABSOLUTE_INTENT,
         NOT_SET = six::NOT_SET_VALUE
     };
 
