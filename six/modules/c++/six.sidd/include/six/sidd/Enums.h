@@ -151,6 +151,23 @@ struct DRAType
 
     int value;
 };
+
+struct CoordinateSystemType
+{
+    enum
+    {
+        GCS = 0,
+        UTM,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    CoordinateSystemType() :
+        value(NOT_SET)
+    {
+    }
+
+    int value;
+};
 }
 
 #endif
