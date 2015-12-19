@@ -63,7 +63,7 @@ struct DerivedData: public Data
      *  Contains information on the parameters needed to display
      *  the product in an exploitation tool
      */
-    mem::ScopedCloneablePtr<Display> display;
+    mem::ScopedCopyablePtr<Display> display;
 
     /*!
      *  Contains generic and extensible targeting and geographic

@@ -59,6 +59,22 @@ struct KernelOperation
     int value;
 };
 
+struct BandEqualizationAlgorithm
+{
+    enum
+    {
+        LUT_1D = 0,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    BandEqualizationAlgorithm() :
+        value(NOT_SET)
+    {
+    }
+
+    int value;
+};
+
 struct DownsamplingMethod
 {
     enum

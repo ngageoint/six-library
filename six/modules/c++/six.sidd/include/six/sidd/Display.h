@@ -29,6 +29,7 @@
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
 #include <six/sidd/Enums.h>
+#include <six/sidd/Kernel.h>
 
 namespace six
 {
@@ -50,6 +51,7 @@ struct Remap
         remapLUT(lut)
     {
     }
+
     virtual ~Remap()
     {
     }
@@ -58,7 +60,6 @@ struct Remap
     mem::ScopedCloneablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
 
     virtual Remap* clone() const = 0;
-
 };
 
 /*!
@@ -80,9 +81,6 @@ struct MonochromeDisplayRemap : public Remap
     {
         this->displayType = DisplayType::MONO;
     }
-    virtual ~MonochromeDisplayRemap()
-    {
-    }
 
     /*!
      *  Clone this object, and any sub-LUT
@@ -98,7 +96,6 @@ struct MonochromeDisplayRemap : public Remap
 
     //!  Remap parameters
     ParameterCollection remapParameters;
-
 };
 
 /*!
@@ -115,9 +112,6 @@ struct ColorDisplayRemap : public Remap
         Remap(lut)
     {
         this->displayType = DisplayType::COLOR;
-    }
-    virtual ~ColorDisplayRemap()
-    {
     }
 
     //!  Clone the remap
@@ -136,19 +130,11 @@ struct ColorDisplayRemap : public Remap
  */
 struct MonitorCompensationApplied
 {
+    //! Constructor
+    MonitorCompensationApplied();
+
     double gamma;
     double xMin;
-    //! Constructor
-    MonitorCompensationApplied()
-    {
-        gamma = Init::undefined<double>();
-        xMin = Init::undefined<double>();
-    }
-    //! Copy this
-    MonitorCompensationApplied* clone() const
-    {
-        return new MonitorCompensationApplied(*this);
-    }
 };
 
 /*!
@@ -158,6 +144,8 @@ struct MonitorCompensationApplied
  */
 struct DRAHistogramOverrides
 {
+    DRAHistogramOverrides();
+
     /*!
      *  Suggested override for the low clip point in the
      *  ELT DRA application.  Referred to as Pmin in SIPS docs.
@@ -170,73 +158,12 @@ struct DRAHistogramOverrides
      *
      */
     int clipMax;
-
-    DRAHistogramOverrides()
-    {
-        clipMin = Init::undefined<int>();
-        clipMax = Init::undefined<int>();
-    }
-
-    DRAHistogramOverrides* clone() const
-    {
-        return new DRAHistogramOverrides(*this);
-    }
-};
-
-struct Kernel
-{
-    struct Predefined
-    {
-        Predefined() :
-            kernelFamily(six::Init::undefined<size_t>()),
-            kernelMember(six::Init::undefined<size_t>())
-        {
-        }
-
-        // Exactly one of dbName or kernelFamiy+kernelMember must be set
-
-        //! Database name of filter to use
-        KernelDatabaseName dbName;
-
-        //! Index specifying the kernel family
-        size_t kernelFamily;
-
-        //! Index specifying the member for the kernel family
-        size_t kernelMember;
-    };
-
-    struct Custom
-    {
-        /*! General indicates the same kernel is used for the entire operation
-            Filterbank indicates that the kernel is spatially variant
-         */
-        KernelCustomType type;
-
-        //! Size of the kernel
-        RowColInt kernelSize;
-
-        /*! For KernelType=General, populate with the coefficients for the
-            kernelSize kernel.  For KernelType=FilterBank, each row should
-            contain the coefficients for that phasing.
-         */
-        std::vector<double> kernelCoef;
-    };
-
-    //! Name of the filter
-    std::string kernelName;
-
-    // Exactly one of Predefined or Custom
-    mem::ScopedCopyablePtr<Predefined> predefined;
-    mem::ScopedCopyablePtr<Custom> custom;
-
-    /*! Specifies if the kernel is to be applied using convolution or
-        correlation
-     */
-    KernelOperation operation;
 };
 
 struct BandInformation
 {
+    BandInformation();
+
     std::vector<std::string> bands;
     size_t bitsPerPixel;
     size_t displayFlag; // Which band to display by default
@@ -244,7 +171,7 @@ struct BandInformation
 
 struct BandEqualization
 {
-    std::string algorithm; // TODO: This is supposed to be an enum??
+    BandEqualizationAlgorithm algorithm;
     mem::ScopedCloneablePtr<LUT> bandLUT;
 };
 
@@ -263,7 +190,7 @@ struct RRDS
 struct ProductGenerationOptions
 {
     mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
-    Kernel modularTransferFunction;
+    Kernel modularTransferFunctionRestoration;
 
     mem::ScopedCloneablePtr<Remap> dataRemapping;
 
@@ -284,10 +211,7 @@ struct Scaling
 
 struct Orientation
 {
-    Orientation() :
-        rotationAngle(six::Init::undefined<double>())
-    {
-    }
+    Orientation();
 
     DerivedOrientationType orientationType;
 
@@ -300,18 +224,23 @@ struct Orientation
 
 struct SharpnessEnhancement
 {
-    // TODO: This section seems messed up.  Might only be one of these
-    Kernel mtfc;
-    Kernel mtfe;
+    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionCompensation;
+    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionRestoration;
+};
+
+struct ColorManagementModule
+{
+    RenderingIntent renderingIntent;
+
+    // TODO: Just assume these are strings for now... this will likely change
+    std::string sourceProfile;
+    std::string displayProfile;
+    std::string iccProfile;
 };
 
 struct ColorSpaceTransform
 {
-    // TODO: Needs another look
-    RenderingIntent renderingIntent;
-    std::string sourceProfile;
-    std::string displayProfile;
-    std::string iccProfile;
+    ColorManagementModule colorManagementModule;
 };
 
 struct GeometricTransform
@@ -322,33 +251,37 @@ struct GeometricTransform
 
 struct DynamicRangeAdjustment
 {
-    DynamicRangeAdjustment() :
-        pMin(six::Init::undefined<double>()),
-        pMax(six::Init::undefined<double>()),
-        a(six::Init::undefined<double>()),
-        b(six::Init::undefined<double>()),
-        subtractor(six::Init::undefined<double>()),
-        multiplier(six::Init::undefined<double>())
+    struct Modifiers
     {
-    }
+        Modifiers();
+
+        double eMin; //! eMin modifier
+        double eMax; //! eMax modifier
+        double subtractor; //! Subtractor value used to reduce haze in the image
+        double multiplier; //! Multiplier value used to brighten the image data
+    };
+
+    DynamicRangeAdjustment();
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
     double pMin; //! DRA clip low point
     double pMax; //! DRA clip high point
 
-    double a; //! eMin modifier
-    double b; //! eMax modifier
-    double subtractor; //! Subtractor value used to reduce haze in the image
-    double multiplier; //! Multiplier value used to brighten the image data
+    Modifiers modifiers;
+};
+
+struct OneDimensionalLookup
+{
+    Kernel ttc;
 };
 
 struct InteractiveProcessing
 {
     GeometricTransform geometricTransform;
     SharpnessEnhancement sharpnessEnhancement;
-    ColorSpaceTransform colorSpaceTransform;
-    DynamicRangeAdjustment dynamicRangeAdjustment;
-    mem::ScopedCopyablePtr<Kernel> TTC;
+    mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
+    mem::ScopedCopyablePtr<DynamicRangeAdjustment> dynamicRangeAdjustment;
+    mem::ScopedCopyablePtr<OneDimensionalLookup> oneDimensionalLookup;
 };
 
 /*
@@ -363,16 +296,6 @@ struct InteractiveProcessing
 struct Display
 {
     Display();
-
-    virtual ~Display()
-    {
-    }
-
-    /*!
-     *  Contract requires Display to clone itself properly, irrespective
-     *  of whether it is color or mono data.
-     */
-    Display* clone() const;
 
     /*!
      *  Defines the pixel type, based on enumeration and definition in
@@ -396,15 +319,14 @@ struct Display
      */
     DecimationMethod decimationMethod;
 
-    mem::ScopedCloneablePtr<DRAHistogramOverrides> histogramOverrides;
+    mem::ScopedCopyablePtr<DRAHistogramOverrides> histogramOverrides;
 
-    mem::ScopedCloneablePtr<MonitorCompensationApplied> 
+    mem::ScopedCopyablePtr<MonitorCompensationApplied>
             monitorCompensationApplied;
 
     ParameterCollection displayExtensions;
 };
+}
+}
 
-}
-}
 #endif
-
