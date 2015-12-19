@@ -303,6 +303,8 @@ struct Display
      */
     PixelType pixelType;
 
+    // Beginning of SIDD 1.0-only section
+
     /*!
      *  (Optional) Information regarding the encoding of the pixel data.
      *  Used for 8-bit pixel types.
@@ -310,20 +312,40 @@ struct Display
     mem::ScopedCloneablePtr<Remap> remapInformation;
 
     /*!
-     *  Recommended ELT magnification method for this data.
+     *  (Optional) Recommended ELT magnification method for this data.
      */
     MagnificationMethod magnificationMethod;
 
     /*!
-     *  Recommended ELT decimation method for this data.
+     *  (Optional) Recommended ELT decimation method for this data.
      */
     DecimationMethod decimationMethod;
 
+    /*!
+     * (Optional) Recommended ELT DRA overrides.
+     */
     mem::ScopedCopyablePtr<DRAHistogramOverrides> histogramOverrides;
 
+    /*!
+     * (Optional) Describes monitor compensation that may have been applied to
+     * the product during processing.
+     */
     mem::ScopedCopyablePtr<MonitorCompensationApplied>
             monitorCompensationApplied;
 
+    // End of SIDD 1.0-only section
+    // Beginning of SIDD 1.1-only section
+
+    mem::ScopedCopyablePtr<BandInformation> bandInformation;
+    mem::ScopedCopyablePtr<NonInteractiveProcessing> nonInteractiveProcessing;
+    mem::ScopedCopyablePtr<InteractiveProcessing> interactiveProcessing;
+
+    // End of SIDD 1.1-only section
+
+    /*!
+     * Extensible parameters used to support profile-specific needs related to
+     * product display.
+     */
     ParameterCollection displayExtensions;
 };
 }
