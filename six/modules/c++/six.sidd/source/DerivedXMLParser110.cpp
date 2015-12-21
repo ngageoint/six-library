@@ -22,6 +22,12 @@
 
 #include <six/sidd/DerivedXMLParser110.h>
 
+namespace
+{
+typedef xml::lite::Element* XMLElem;
+typedef xml::lite::Attributes XMLAttributes;
+}
+
 namespace six
 {
 namespace sidd
@@ -30,6 +36,169 @@ DerivedXMLParser110::DerivedXMLParser110(logging::Logger* log,
                                          bool ownLog) :
     DerivedXMLParser("1.1.0", log, ownLog)
 {
+}
+
+void DerivedXMLParser110::parseDerivedClassificationFromXML(
+        const XMLElem classificationXML,
+        DerivedClassification& classification) const
+{
+    throw except::Exception(Ctxt("IMPLEMENT ME"));
+}
+
+XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
+        const DerivedClassification& classification,
+        XMLElem parent) const
+{
+    XMLElem classXML = newElement("Classification", parent);
+
+    common().addParameters("SecurityExtension",
+                           classification.securityExtensions,
+                           classXML);
+
+    //! from ism:ISMRootNodeAttributeGroup
+    // SIDD 1.1 is tied to IC-ISM v13
+    setAttribute(classXML, "DESVersion", "13", ISM_URI);
+
+    // So far as I can tell this should just be 1
+    setAttribute(classXML, "ISMCATCESVersion", "1", ISM_URI);
+
+    //! from ism:ResourceNodeAttributeGroup
+    setAttribute(classXML, "resourceElement", "true", ISM_URI);
+    setAttribute(classXML, "createDate",
+                 classification.createDate.format("%Y-%m-%d"), ISM_URI);
+    // required (was optional in SIDD 1.0)
+    setAttributeList(classXML, "compliesWith", classification.compliesWith,
+                     ISM_URI);
+
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "exemptFrom",
+                           classification.exemptFrom,
+                           ISM_URI);
+
+    //! from ism:SecurityAttributesGroup
+    //  -- referenced in ism::ResourceNodeAttributeGroup
+    setAttribute(classXML, "classification", classification.classification,
+                 ISM_URI);
+    setAttributeList(classXML, "ownerProducer", classification.ownerProducer,
+                     ISM_URI, true);
+
+    // optional
+    setAttributeIfNonEmpty(classXML, "joint", classification.joint, ISM_URI);
+
+    // optional
+    setAttributeList(classXML, "SCIcontrols", classification.sciControls,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML, "SARIdentifier", classification.sarIdentifier,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML,
+                     "atomicEnergyMarkings",
+                     classification.atomicEnergyMarkings,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML,
+                     "disseminationControls",
+                     classification.disseminationControls,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML,
+                     "displayOnlyTo",
+                     classification.displayOnlyTo,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML, "FGIsourceOpen", classification.fgiSourceOpen,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML,
+                     "FGIsourceProtected",
+                     classification.fgiSourceProtected,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML, "releasableTo", classification.releasableTo,
+                     ISM_URI);
+    // optional
+    setAttributeList(classXML, "nonICmarkings", classification.nonICMarkings,
+                     ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "classifiedBy",
+                           classification.classifiedBy,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "compilationReason",
+                           classification.compilationReason,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "derivativelyClassifiedBy",
+                           classification.derivativelyClassifiedBy,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "classificationReason",
+                           classification.classificationReason,
+                           ISM_URI);
+    // optional
+    setAttributeList(classXML, "nonUSControls", classification.nonUSControls,
+                     ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "derivedFrom",
+                           classification.derivedFrom,
+                           ISM_URI);
+    // optional
+    if (classification.declassDate.get())
+    {
+        setAttributeIfNonEmpty(
+                classXML, "declassDate",
+                classification.declassDate->format("%Y-%m-%d"),
+                ISM_URI);
+    }
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "declassEvent",
+                           classification.declassEvent,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "declassException",
+                           classification.declassException,
+                           ISM_URI);
+
+    //! from ism:NoticeAttributesGroup
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "noticeType",
+                           classification.noticeType,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "noticeReason",
+                           classification.noticeReason,
+                           ISM_URI);
+    // optional
+    if (classification.noticeDate.get())
+    {
+        setAttributeIfNonEmpty(
+                classXML, "noticeDate",
+                classification.noticeDate->format("%Y-%m-%d"),
+                ISM_URI);
+    }
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "unregisteredNoticeType",
+                           classification.unregisteredNoticeType,
+                           ISM_URI);
+    // optional
+    setAttributeIfNonEmpty(classXML,
+                           "externalNotice",
+                           classification.externalNotice,
+                           ISM_URI);
+
+    return classXML;
 }
 }
 }

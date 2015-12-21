@@ -135,7 +135,6 @@ struct Constants
 
     // DESVER is 2 byte BCS-N
     static const sys::Int32_T DES_VERSION;
-    static const char DES_VERSION_STR[];
 
     static const char DES_USER_DEFINED_SUBHEADER_TAG[];
     static const char DES_USER_DEFINED_SUBHEADER_ID[];

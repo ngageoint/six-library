@@ -217,7 +217,6 @@ void DerivedClassification::putImpl(const std::string& name,
     }
 }
 
-
 void DerivedClassification::putImpl(const std::string& name,
                                     const DateTime* date,
                                     std::ostream& os)
@@ -234,7 +233,6 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
 {
     putImpl("Security Extensions", securityExtensions, os);
 
-    os << "DES Version: " << desVersion << "\n";
     putImpl("Create Date", &createDate, os);
 
     putImpl("Complies With", compliesWith, os);
@@ -270,4 +268,3 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
 }
 }
 }
-

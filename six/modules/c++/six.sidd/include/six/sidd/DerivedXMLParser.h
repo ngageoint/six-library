@@ -43,103 +43,14 @@ public:
     DerivedData* fromXML(const xml::lite::Document* doc) const;
 
 protected:
-    const six::SICommonXMLParser& common() const
-    {
-        return *(mCommon.get());
-    }
-
-private:
     static const char SI_COMMON_URI[];
     static const char SFA_URI[];
     static const char ISM_URI[];
 
-    XMLElem createLUT(const std::string& name, const LUT *l,
-            XMLElem parent = NULL) const;
-    XMLElem createFootprint(const std::string& name,
-                            const std::string& cornerName,
-                            const LatLonCorners& corners,
-                            XMLElem parent = NULL) const;
-
-    XMLElem createFootprint(const std::string& name,
-                            const std::string& cornerName,
-                            const LatLonAltCorners& corners,
-                            XMLElem parent = NULL) const;
-
-    XMLElem createSFAPoint(const std::string& localName, 
-                           const SFAPoint* point,
-                           XMLElem parent = NULL) const;
-
-    XMLElem createSFALine(const std::string& localName, 
-                          const SFALineString* lineStr,
-                          XMLElem parent) const;
-
-    XMLElem createSFADatum(const std::string& name, 
-                           const six::sidd::SFADatum& datum,
-                           XMLElem parent = NULL) const;
-
-    XMLElem convertProductCreationToXML(const ProductCreation* productCreation, 
-                                        XMLElem parent = NULL) const;
-    XMLElem convertProcessorInformationToXML(const ProcessorInformation* processorInformation, 
-                                             XMLElem parent) const;
-    XMLElem convertDerivedClassificationToXML(const DerivedClassification& classification, 
-                                              XMLElem parent = NULL) const;
-    XMLElem convertProductProcessingToXML(const ProductProcessing* productProcessing, 
-                                          XMLElem parent = NULL) const;
-    XMLElem convertProcessingModuleToXML(const ProcessingModule* procMod, 
-                                         XMLElem parent = NULL) const;
-    XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d, 
-                                               XMLElem parent = NULL) const;
-    XMLElem convertDisplayToXML(const Display* display, 
-                                XMLElem parent = NULL) const;
-    XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
-                                         XMLElem parent = NULL) const;
-    XMLElem convertGeographicCoverageToXML(const std::string& localName,
-                                           const GeographicCoverage* g, 
-                                           XMLElem parent = NULL) const;
-    XMLElem convertMeasurementToXML(const Measurement* measurement, 
-                                    XMLElem parent = NULL) const;
-    XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
-                                             XMLElem parent = NULL) const;
-    XMLElem convertAnnotationToXML(const Annotation *a, 
-                                   XMLElem parent = NULL) const;
-    XMLElem convertSFAGeometryToXML(const SFAGeometry *g,
-                                    XMLElem parent = NULL) const;
-    XMLElem convertGeographicCoordinateSystemToXML(
-            const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
-            XMLElem parent) const;
-
-
-    void parseProductCreationFromXML(const XMLElem productCreationXML,
-                                     ProductCreation* productCreation) const;
-    void parseProductCreationFromXML(const XMLElem informationXML,
-                                     ProcessorInformation* processorInformation) const;
-    void parseDerivedClassificationFromXML(const XMLElem classificationXML,
-                                           DerivedClassification& classification) const;
-    void parseProductProcessingFromXML(const XMLElem elem, 
-                                       ProductProcessing* productProcessing) const;
-    void parseProcessingModuleFromXML(const XMLElem elem, 
-                                      ProcessingModule* procMod) const;
-    void parseDownstreamReprocessingFromXML(const XMLElem elem, 
-                                            DownstreamReprocessing* downstreamReproc) const;
-    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
-    void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    void parseGeographicTargetFromXML(const XMLElem elem, 
-                                      GeographicAndTarget* geographicAndTarget) const;
-    void parseGeographicCoverageFromXML(const XMLElem elem, 
-                                        GeographicCoverage* geoCoverage) const;
-    void parseMeasurementFromXML(const XMLElem measurementXML, 
-                                 Measurement* measurement) const;
-    void parseExploitationFeaturesFromXML(const XMLElem elem, 
-                                          ExploitationFeatures* exFeatures) const;
-    void parseAnnotationFromXML(const XMLElem annotationXML, 
-                                Annotation* a) const;
-    void parseSFAGeometryFromXML(const XMLElem elem, 
-                                 SFAGeometry* g) const;
-    void parseGeographicCoordinateSystemFromXML(
-            const XMLElem coorSysElem, 
-            SFAGeographicCoordinateSystem* coordSys) const;
-
-    void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
+    const six::SICommonXMLParser& common() const
+    {
+        return *(mCommon.get());
+    }
 
     static
     void getAttributeList(const xml::lite::Attributes& attributes,
@@ -175,10 +86,107 @@ private:
                                 const std::string& uri = "");
 
     static
+    void setAttributeIfNonEmpty(XMLElem element,
+                                const std::string& name,
+                                six::BooleanType value,
+                                const std::string& uri = "");
+
+    static
     void setAttributeIfNonNull(XMLElem element,
                                const std::string& name,
                                const DateTime* value,
                                const std::string& uri = "");
+
+    virtual void parseDerivedClassificationFromXML(
+            const XMLElem classificationXML,
+            DerivedClassification& classification) const = 0;
+
+    virtual XMLElem convertDerivedClassificationToXML(
+            const DerivedClassification& classification,
+            XMLElem parent = NULL) const = 0;
+
+private:
+    XMLElem createLUT(const std::string& name, const LUT *l,
+            XMLElem parent = NULL) const;
+    XMLElem createFootprint(const std::string& name,
+                            const std::string& cornerName,
+                            const LatLonCorners& corners,
+                            XMLElem parent = NULL) const;
+
+    XMLElem createFootprint(const std::string& name,
+                            const std::string& cornerName,
+                            const LatLonAltCorners& corners,
+                            XMLElem parent = NULL) const;
+
+    XMLElem createSFAPoint(const std::string& localName, 
+                           const SFAPoint* point,
+                           XMLElem parent = NULL) const;
+
+    XMLElem createSFALine(const std::string& localName, 
+                          const SFALineString* lineStr,
+                          XMLElem parent) const;
+
+    XMLElem createSFADatum(const std::string& name, 
+                           const six::sidd::SFADatum& datum,
+                           XMLElem parent = NULL) const;
+
+    XMLElem convertProductCreationToXML(const ProductCreation* productCreation, 
+                                        XMLElem parent = NULL) const;
+    XMLElem convertProcessorInformationToXML(const ProcessorInformation* processorInformation, 
+                                             XMLElem parent) const;
+    XMLElem convertProductProcessingToXML(const ProductProcessing* productProcessing, 
+                                          XMLElem parent = NULL) const;
+    XMLElem convertProcessingModuleToXML(const ProcessingModule* procMod, 
+                                         XMLElem parent = NULL) const;
+    XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d, 
+                                               XMLElem parent = NULL) const;
+    XMLElem convertDisplayToXML(const Display* display, 
+                                XMLElem parent = NULL) const;
+    XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
+                                         XMLElem parent = NULL) const;
+    XMLElem convertGeographicCoverageToXML(const std::string& localName,
+                                           const GeographicCoverage* g, 
+                                           XMLElem parent = NULL) const;
+    XMLElem convertMeasurementToXML(const Measurement* measurement, 
+                                    XMLElem parent = NULL) const;
+    XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
+                                             XMLElem parent = NULL) const;
+    XMLElem convertAnnotationToXML(const Annotation *a, 
+                                   XMLElem parent = NULL) const;
+    XMLElem convertSFAGeometryToXML(const SFAGeometry *g,
+                                    XMLElem parent = NULL) const;
+    XMLElem convertGeographicCoordinateSystemToXML(
+            const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
+            XMLElem parent) const;
+    void parseProductCreationFromXML(const XMLElem productCreationXML,
+                                     ProductCreation* productCreation) const;
+    void parseProductCreationFromXML(const XMLElem informationXML,
+                                     ProcessorInformation* processorInformation) const;
+    void parseProductProcessingFromXML(const XMLElem elem, 
+                                       ProductProcessing* productProcessing) const;
+    void parseProcessingModuleFromXML(const XMLElem elem, 
+                                      ProcessingModule* procMod) const;
+    void parseDownstreamReprocessingFromXML(const XMLElem elem, 
+                                            DownstreamReprocessing* downstreamReproc) const;
+    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
+    void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
+    void parseGeographicTargetFromXML(const XMLElem elem, 
+                                      GeographicAndTarget* geographicAndTarget) const;
+    void parseGeographicCoverageFromXML(const XMLElem elem, 
+                                        GeographicCoverage* geoCoverage) const;
+    void parseMeasurementFromXML(const XMLElem measurementXML, 
+                                 Measurement* measurement) const;
+    void parseExploitationFeaturesFromXML(const XMLElem elem, 
+                                          ExploitationFeatures* exFeatures) const;
+    void parseAnnotationFromXML(const XMLElem annotationXML, 
+                                Annotation* a) const;
+    void parseSFAGeometryFromXML(const XMLElem elem, 
+                                 SFAGeometry* g) const;
+    void parseGeographicCoordinateSystemFromXML(
+            const XMLElem coorSysElem, 
+            SFAGeographicCoordinateSystem* coordSys) const;
+
+    void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
 
     static
     std::string versionToURI(const std::string& version)
@@ -188,10 +196,8 @@ private:
 
 private:
     std::auto_ptr<six::SICommonXMLParser> mCommon;
-
 };
 }
 }
 
 #endif
-

@@ -34,6 +34,15 @@ class DerivedXMLParser110 : public DerivedXMLParser
 public:
     DerivedXMLParser110(logging::Logger* log = NULL,
                         bool ownLog = false);
+
+protected:
+    virtual void parseDerivedClassificationFromXML(
+            const XMLElem classificationXML,
+            DerivedClassification& classification) const;
+
+    virtual XMLElem convertDerivedClassificationToXML(
+            const DerivedClassification& classification,
+            XMLElem parent = NULL) const;
 };
 }
 }
