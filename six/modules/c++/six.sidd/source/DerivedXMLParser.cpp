@@ -46,7 +46,7 @@ const char DerivedXMLParser::ISM_URI[] = "urn:us:gov:ic:ism";
 DerivedXMLParser::DerivedXMLParser(const std::string& version,
                                    logging::Logger* log,
                                    bool ownLog) :
-    XMLParser(versionToURI(version), false, log),
+    XMLParser(versionToURI(version), false, log, ownLog),
     mCommon(new six::SICommonXMLParser01x(
                 versionToURI(version), false, 
                 SI_COMMON_URI, log))

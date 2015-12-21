@@ -91,7 +91,7 @@ inverse(const math::linear::MatrixMxN<3, 3>& mat)
     {
         invMat = math::linear::inverse(mat);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Exception&)
     {
         invMat = pseudoInverse(mat);
     }
