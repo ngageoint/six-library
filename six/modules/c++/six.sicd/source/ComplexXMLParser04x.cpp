@@ -330,14 +330,14 @@ XMLElem ComplexXMLParser04x::convertHPBWToXML(
 }
 
 XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
-    const std::string& name,
+    const std::string& /*name*/,
     const GainAndPhasePolys* array,
     XMLElem apXML) const
 {
     //! optional field in 0.4
     if (array)
     {
-        XMLElem arrXML = newElement(name, apXML);
+        XMLElem arrXML = newElement("Array", apXML);
         common().createPoly2D("GainPoly", array->gainPoly, arrXML);
         common().createPoly2D("PhasePoly", array->phasePoly, arrXML);
         return arrXML;
