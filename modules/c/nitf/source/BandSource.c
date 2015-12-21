@@ -55,8 +55,9 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         MemorySourceImpl* memorySource,
         void* buf,
         nitf_Off size,
-        nitf_Error* error)
+        nitf_Error* e)
 {
+	(void) e; //Suppresses a warning. Param seems to exist for consistency purposes. Not used.
     memcpy(buf,
            (const nitf_Uint8*)memorySource->data + memorySource->mark,
            (size_t)size);
@@ -69,8 +70,9 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         MemorySourceImpl* memorySource,
         void* buf,
         nitf_Off size,
-        nitf_Error * error)
+        nitf_Error* e)
 {
+	(void) e;
     size_t destOffset = 0;
     const nitf_Uint8* const src = (const nitf_Uint8*)memorySource->data;
     nitf_Uint8* const dest = (nitf_Uint8*)buf;
@@ -121,8 +123,9 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
+NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error* e)
 {
+	(void) e;
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     return memorySource ? memorySource->size : 0;
 }
@@ -221,8 +224,9 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
     }
 }
 
-NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error *e)
+NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error* e)
 {
+	(void) e;
     IOSourceImpl *source = (IOSourceImpl *) data;
     return source ? (nitf_Off)source->size : 0;
 }
