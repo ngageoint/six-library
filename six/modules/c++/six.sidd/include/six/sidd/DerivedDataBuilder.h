@@ -138,6 +138,13 @@ public:
     virtual DerivedDataBuilder& addRadiometric();
 
     /*!
+     *  Add the optional compression component.
+     *
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addCompression();
+
+    /*!
      *  Get the pointer to the object that is being built, but do not
      *  take ownership
      *

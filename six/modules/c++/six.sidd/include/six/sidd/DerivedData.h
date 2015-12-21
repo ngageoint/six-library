@@ -36,6 +36,7 @@
 #include "six/sidd/DownstreamReprocessing.h"
 #include "six/Radiometric.h"
 #include "six/sidd/Annotations.h"
+#include "six/sidd/Compression.h"
 
 namespace six
 {
@@ -103,6 +104,11 @@ struct DerivedData: public Data
      *  (Optional) Contains radiometric calibration params
      */
     mem::ScopedCopyablePtr<Radiometric> radiometric;
+
+    /*!
+     * (Optional) Contains compression structures
+     */
+    mem::ScopedCopyablePtr<Compression> compression; 
 
     /*!
      * (Optional) Contains SFA annotations

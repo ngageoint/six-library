@@ -68,6 +68,8 @@ DerivedData* DerivedXMLParser::fromXML(
     XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
     XMLElem radiometricXML            = getOptional(root, "Radiometric");
     XMLElem annotationsXML            = getOptional(root, "Annotations");
+    XMLElem compressionXML            = getOptional(root, "Compression");
+
 
     DerivedDataBuilder builder;
     DerivedData *data = builder.steal(); //steal it
@@ -148,6 +150,12 @@ DerivedData* DerivedXMLParser::fromXML(
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
         }
     }
+    if (compressionXML)
+    {
+        builder.addCompression();
+        parseCompressionFromXML(compressionXML, data->compression.get());
+    }
+        
 
     return data;
 }
@@ -196,6 +204,12 @@ xml::lite::Document* DerivedXMLParser::toXML(const DerivedData* derived) const
             convertAnnotationToXML(derived->annotations[i].get(), 
                                    annotationsElem);
         }
+    }
+
+    // optional
+    if (derived->compression.get())
+    {
+        convertCompressionToXML(derived->compression.get(), root);
     }
 
     //set the XMLNS
@@ -2120,6 +2134,45 @@ void DerivedXMLParser::parseAnnotationFromXML(
     }
 }
 
+void DerivedXMLParser::parseCompressionFromXML(const XMLElem compressionXML,
+                                               Compression* c) const
+{
+    XMLElem j2kElem = getFirstAndOnly(compressionXML, "J2K");
+    XMLElem originalElem = getFirstAndOnly(j2kElem, "Original");
+    XMLElem parsedElem   = getOptional(j2kElem, "Parsed");
+    
+    parseJ2KCompression(originalElem, &(c->original));
+    if (parsedElem)
+    {
+        J2KCompression* parsed = (c->parsed.get());
+        parseJ2KCompression(parsedElem, parsed);
+        c->parsed.reset(parsed);
+    }
+}
+
+void DerivedXMLParser::parseJ2KCompression(const XMLElem j2kXML, 
+                                           J2KCompression* c) const
+{
+    parseInt(getFirstAndOnly(j2kXML, "NumWaveletLevels"),
+            c->numWaveletLevels);
+    parseInt(getFirstAndOnly(j2kXML, "NumBands"),
+            c->numBands);
+
+    XMLElem layerInfoXML = getFirstAndOnly(j2kXML, "LayerInfo");
+    std::vector<XMLElem> layersXML;
+    layerInfoXML->getElementsByTagName("Layer", layersXML);
+    for (size_t i = 0; i <= layersXML.size(); ++i)
+    {
+        double bitRate;
+        parseDouble(getFirstAndOnly(layersXML[i], "Bitrate"),
+                    bitRate);
+        J2KCompression::Layer layer;
+        layer.bitRate = bitRate;
+        c->layerInfo.push_back(layer);
+    }
+}
+
+
 void DerivedXMLParser::parseDatum(const XMLElem datumXML, SFADatum& datum) const
 {
     XMLElem spheroidXML = getFirstAndOnly(datumXML, "Spheroid");
@@ -2257,6 +2310,43 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     }
     return annXML;
 }
+
+XMLElem DerivedXMLParser::convertCompressionToXML(const Compression* c, 
+                                                  XMLElem parent) const
+{
+    XMLElem compressionXML = newElement("Compression", parent);
+    XMLElem j2kXML         = newElement("J2K", compressionXML);
+    XMLElem originalXML    = newElement("Original", j2kXML);
+    convertJ2KToXML(&(c->original), originalXML); 
+
+    if (c->parsed.get())
+    {
+        XMLElem parsedXML = newElement("Parsed", j2kXML);
+        convertJ2KToXML(c->parsed.get(), parsedXML);
+    }
+
+
+    
+    return compressionXML;
+}
+
+void DerivedXMLParser::convertJ2KToXML(const J2KCompression* c, 
+                                       XMLElem& parent) const
+{ 
+    createInt("NumWaveletLevels", c->numWaveletLevels, parent);
+    createInt("NumBands", c->numBands, parent);
+
+    XMLElem layerInfoXML = newElement("LayerInfo", parent);
+    setAttribute(layerInfoXML, "numLayers", toString(c->layerInfo.size()));
+
+    for (size_t i = 0; i <= c->layerInfo.size(); ++i)
+    {
+        XMLElem layerXML = newElement("Layer", layerInfoXML);
+        setAttribute(layerXML, "index", toString(i));
+        createDouble("Bitrate", c->layerInfo[i].bitRate, layerXML);
+    }
+}
+
 
 void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *g) const
 {
