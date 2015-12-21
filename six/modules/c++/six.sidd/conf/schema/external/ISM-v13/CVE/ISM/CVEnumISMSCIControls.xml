@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!--This is a generated file. DO NOT EDIT!--><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" xmlns="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="13" ism:ISMCATCESVersion="2" ism:resourceElement="true" CVEVersion="2" ism:createDate="2014-05-02" xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
+    
+    <cve:IRM>
+        <ddms:identifier ddms:qualifier="name" ddms:value="urn:us:gov:ic:cvenum:ism:scicontrols"/>
+        <ddms:title ism:ownerProducer="USA" ism:classification="U">CVEnumISMSCIControls</ddms:title>
+        <ddms:description ism:ownerProducer="USA" ism:classification="U">All currently valid SCI controls from the published register</ddms:description>
+        
+        <Created>2014-05-02T17:55:04.921-04:00</Created>
+        
+        <ddms:source ddms:value="CAPCO Register"/>
+        <ddms:pointOfContact>
+            <ddms:organization>
+                <ddms:name>Office IC CIO</ddms:name>
+                <ddms:email>ic-standards-support@intelink.gov</ddms:email>
+            </ddms:organization>
+        </ddms:pointOfContact>
+    </cve:IRM>
+    
+    <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+        
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">EL</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">ENDSEAL</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">EL-EU</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">ECRU</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">EL-NK</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">NONBOOK</ddms:description>
+        </Term>  
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">HCS</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">HCS</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">HCS-O</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">HCS-O</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">HCS-P</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">HCS-P</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">KDK</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KLONDIKE</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">KDK-BLFH</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK BLUEFISH</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">KDK-IDIT</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK IDITAROD</ddms:description>
+        </Term>        
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">KDK-KAND</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK KANDIK</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">KDK-BLFH-[A-Z0-9]{1,6}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK-BLFH-xxxxxx, xxxxxx represents up to 6 alphanumeric characters indicating a sub BLUEFISH compartment</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">KDK-IDIT-[A-Z0-9]{1,6}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK-IDIT-xxxxxx, xxxxxx represents up to 6 alphanumeric characters indicating a sub IDITAROD compartment</ddms:description>
+        </Term>        
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">KDK-KAND-[A-Z0-9]{1,6}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">KDK-KAND-xxxxxx, xxxxxx represents up to 6 alphanumeric characters indicating a sub KANDIK compartment</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">RSV</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">RESERVE</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">RSV-[A-Z0-9]{3}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">RSV-XXX, XXX represents 3 alpha numeric characters to indicate sub Reserve compartments</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">SI</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">SPECIAL INTELLIGENCE</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">SI-G</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">SI-GAMMA</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">SI-G-[A-Z]{4}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">G-AAAA, AAAA represents 4 alpha characters to indicate sub Gamma compartments</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">SI-[A-Z]{3}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">SPECIAL INTELLIGENCE compartment</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">SI-[A-Z]{3}-[A-Z]{4}</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">SPECIAL INTELLIGENCE sub-compartment</ddms:description>
+        </Term>
+        <Term ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">TK</Value>
+            <ddms:description ism:classification="U" ism:ownerProducer="USA">TALENT KEYHOLE</ddms:description>
+        </Term>
+        
+    </cve:Enumeration>
+    
+</cve:CVE>

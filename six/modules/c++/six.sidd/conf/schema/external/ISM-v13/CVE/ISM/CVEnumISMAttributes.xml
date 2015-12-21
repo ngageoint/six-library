@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         ism:compliesWith="USGov USIC"
+         
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="13"
+         ism:ISMCATCESVersion="2"
+         ism:resourceElement="true"
+         CVEVersion="1"
+         ism:createDate="2011-09-01"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
+
+	  <cve:IRM>
+		    <ddms:identifier xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:qualifier="name"
+                       ddms:value="urn:us:gov:ic:cvenum:ism:attributes"/>
+		    <ddms:title xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                  ism:classification="U">CVEnumISMAttributes</ddms:title>
+		    <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                        ism:classification="U">All currently authorized ISM attribute names</ddms:description>
+
+		    <cve:Created>2010-05-30T16:52:00-04:00</cve:Created>
+
+		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:value="ISM schema"/>
+		    <ddms:pointOfContact xmlns:ddms="urn:us:mil:ces:metadata:ddms:5">
+			      <ddms:organization>
+				        <ddms:name>Office IC CIO</ddms:name>
+				        <ddms:email>ic-standards-support@intelink.gov</ddms:email>
+			      </ddms:organization>
+		    </ddms:pointOfContact>
+	  </cve:IRM>
+
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">compliesWith</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">compliesWith attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classification</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">classification attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">ownerProducer</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">ownerProducer attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">SCIcontrols</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">SCIcontrols attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">SARIdentifier</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">SARIdentifier attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">atomicEnergyMarkings</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">atomicEnergyMarkings attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">disseminationControls</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">disseminationControls attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FGIsourceOpen</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FGIsourceOpen attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FGIsourceProtected</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FGIsourceProtected attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">releasableTo</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">releasableTo attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">displayOnlyTo</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">displayOnlyTo attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">nonICmarkings</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">nonICmarkings attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classifiedBy</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">classifiedBy attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">derivativelyClassifiedBy</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">derivativelyClassifiedBy attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classificationReason</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">classificationReason attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">nonUSControls</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">nonUSControls attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">derivedFrom</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">derivedFrom attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassDate</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">declassDate attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassEvent</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">declassEvent attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassException</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">declassException attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">resourceElement</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">resourceElement attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">excludeFromRollup</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">excludeFromRollup attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">createDate</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">createDate attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">compilationReason</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">compilationReason attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeType</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">noticeType attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">externalNotice</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">externalNotice attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DESVersion</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DESVersion attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">ISMCATCESVersion</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">ISMCATCESVersion attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeDate</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">notice date attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeReason</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">notice Reason attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">exemptFrom</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">exemptFrom attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">unregisteredNoticeType</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">unregisteredNoticeType attribute</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">pocType</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">Specifies a point-of contact for a security-related
+				requirement.</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">joint</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">Indicator that multiple ownerProducers should be interpreted
+				as JOINT.</ddms:description>
+		    </Term>
+	  </cve:Enumeration>
+
+</cve:CVE>
