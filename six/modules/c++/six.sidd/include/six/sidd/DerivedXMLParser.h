@@ -152,6 +152,9 @@ protected:
                                              XMLElem parent = NULL) const;
     XMLElem convertAnnotationToXML(const Annotation *a, 
                                    XMLElem parent = NULL) const;
+    XMLElem convertCompressionToXML(const Compression *c,
+                                    XMLElem parent = NULL) const;
+    void    convertJ2KToXML(const J2KCompression* c, XMLElem& parent) const;
     XMLElem convertSFAGeometryToXML(const SFAGeometry *g,
                                     XMLElem parent = NULL) const;
     XMLElem convertGeographicCoordinateSystemToXML(
@@ -184,7 +187,9 @@ protected:
     void parseGeographicCoordinateSystemFromXML(
             const XMLElem coorSysElem, 
             SFAGeographicCoordinateSystem* coordSys) const;
-
+    void parseCompressionFromXML(const XMLElem compressionXML,
+                                 Compression* c) const;
+    void parseJ2KCompression(const XMLElem j2kElem, J2KCompression* c) const;
     void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
 
     static

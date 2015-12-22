@@ -46,7 +46,7 @@ DerivedXMLParser110::toXML(const DerivedData* derived) const
     doc->setRootElement(root);
 
     convertProductCreationToXML(derived->productCreation.get(), root);
-    XMLElem display = convertDisplayToXML(derived->display.get(), root);
+    convertDisplayToXML(derived->display.get(), root);
 
     convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
     convertMeasurementToXML(derived->measurement.get(), root);

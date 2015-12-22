@@ -1866,7 +1866,7 @@ int main(int argc, char** argv)
         // Here is how you can cascade them
         siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
                                                                                               1);
-
+        siddBuilder.addCompression();
         //---------------------------------------------------------
         // Take ownership of the SIDD data, the builder still can
         // manipulate the same pointer after this happens if you
@@ -1964,6 +1964,30 @@ int main(int argc, char** argv)
         parent->information->sensorName = "";
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
+
+        siddData->compression->original.numWaveletLevels = 5;
+        siddData->compression->original.numBands = 1;
+        for (size_t i = 0; i <= 3; ++i) 
+        {
+            six::sidd::J2KCompression::Layer layer;
+            layer.bitRate = (i + 1.0) / 7.0;
+            siddData->compression->original.layerInfo.push_back(layer);
+        }
+
+        bool hasParsedAttribute = false;  //toggle to test SIDD w/o parsed
+        if (hasParsedAttribute)
+        {
+           siddData->compression->parsed.reset(new six::sidd::J2KCompression());
+           six::sidd::J2KCompression* parsed = siddData->compression->parsed.get();
+           parsed->numWaveletLevels = 5;
+           parsed->numBands = 1;
+           for (size_t i = 0; i <= 3; ++i)
+           {
+               six::sidd::J2KCompression::Layer layer;
+               layer.bitRate = (i + 1.0) / 7.0;
+               parsed->layerInfo.push_back(layer);
+           }
+        }
 
         //--------------------------------------------------------
         // Since our SIDD has a parent SICD XML as well, we need

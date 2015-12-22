@@ -98,6 +98,12 @@ DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 
     return *this;
 }
+DerivedDataBuilder& DerivedDataBuilder::addCompression()
+{
+    mData->compression.reset(new Compression());
+
+    return *this;
+}
 
 DerivedData* DerivedDataBuilder::get()
 {
