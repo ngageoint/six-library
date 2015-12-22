@@ -27,6 +27,7 @@
 #include <xml/lite/Element.h>
 #include <logging/Logger.h>
 #include <six/Types.h>
+#include <six/Init.h>
 
 namespace six
 {
@@ -72,6 +73,22 @@ protected:
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
             XMLElem parent = NULL) const;
+
+    template <typename T>
+    XMLElem createStringFromEnum(const std::string& name,
+                                 const T& enumVal,
+                                 XMLElem parent) const
+    {
+        if (six::Init::isUndefined(enumVal.value))
+        {
+            throw six::UninitializedValueException(
+                Ctxt("Attempted use of uninitialized value"));
+        }
+
+        return createString(name,
+                            enumVal.toString(),
+                            parent);
+    }
 
     XMLElem createInt(const std::string& name, const std::string& uri,
            int p = 0, XMLElem parent = NULL) const;
