@@ -57,7 +57,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         nitf_Off size,
         nitf_Error* error)
 {
-    (void) e; /* Suppresses a warning. Param seems to exist for consistency purposes. Not used. */
+    (void) error; /* Suppresses a warning. Param seems to exist for consistency purposes. Not used. */
     memcpy(buf,
     (const nitf_Uint8*)memorySource->data + memorySource->mark,
             (size_t)size);
@@ -72,7 +72,7 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         nitf_Off size,
         nitf_Error* error)
 {
-    (void) e;
+    (void) error;
     size_t destOffset = 0;
     const nitf_Uint8* const src = (const nitf_Uint8*)memorySource->data;
     nitf_Uint8* const dest = (nitf_Uint8*)buf;
@@ -125,7 +125,7 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error* error)
 {
-    (void) e;
+    (void) error;
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     return memorySource ? memorySource->size : 0;
 }
@@ -226,7 +226,7 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error* error)
 {
-    (void) e;
+    (void) error;
     IOSourceImpl *source = (IOSourceImpl *) data;
     return source ? (nitf_Off)source->size : 0;
 }
@@ -237,7 +237,7 @@ NITFPRIV(NITF_BOOL) IOSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error
     IOSourceImpl *source = (IOSourceImpl *) data;
     if (!source)
     {
-        nitf_Error_init(e, "Null pointer reference",
+        nitf_Error_init(error, "Null pointer reference",
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;
     }
