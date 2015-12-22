@@ -259,5 +259,61 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
 
     return classXML;
 }
+
+xml::lite::Document*
+DerivedXMLParser100::toXML(const DerivedData* derived) const
+{
+    xml::lite::Document* doc = new xml::lite::Document();
+    XMLElem root = newElement("SIDD");
+    doc->setRootElement(root);
+
+    convertProductCreationToXML(derived->productCreation.get(), root);
+    convertDisplayToXML(derived->display.get(), root);
+    convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
+    convertMeasurementToXML(derived->measurement.get(), root);
+    convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
+                                     root);
+
+    // optional
+    if (derived->productProcessing.get())
+    {
+        convertProductProcessingToXML(derived->productProcessing.get(), root);
+    }
+    // optional
+    if (derived->downstreamReprocessing.get())
+    {
+        convertDownstreamReprocessingToXML(
+                derived->downstreamReprocessing.get(), root);
+    }
+    // optional
+    if (derived->errorStatistics.get())
+    {
+        common().convertErrorStatisticsToXML(derived->errorStatistics.get(),
+                                             root);
+    }
+    // optional
+    if (derived->radiometric.get())
+    {
+        common().convertRadiometryToXML(derived->radiometric.get(), root);
+    }
+    // optional
+    if (!derived->annotations.empty())
+    {
+        XMLElem annotationsElem = newElement("Annotations", root);
+        for (size_t i = 0, num = derived->annotations.size(); i < num; ++i)
+        {
+            convertAnnotationToXML(derived->annotations[i].get(),
+                                   annotationsElem);
+        }
+    }
+
+    //set the XMLNS
+    root->setNamespacePrefix("", getDefaultURI());
+    root->setNamespacePrefix("si", SI_COMMON_URI);
+    root->setNamespacePrefix("sfa", SFA_URI);
+    root->setNamespacePrefix("ism", ISM_URI);
+
+    return doc;
+}
 }
 }

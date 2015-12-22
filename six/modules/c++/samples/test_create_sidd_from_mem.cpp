@@ -1784,6 +1784,8 @@ int main(int argc, char** argv)
 
     try
     {
+        // TODO: Temporarily disable this to skip schema validation
+        /*
         try
         {
             sys::OS().getEnv(six::SCHEMA_PATH);
@@ -1794,6 +1796,7 @@ int main(int argc, char** argv)
                     "Must specify SIDD schema path via " +
                     std::string(six::SCHEMA_PATH) + " environment variable"));
         }
+        */
 
         six::XMLControlFactory::getInstance().addCreator(
                 DataType::COMPLEX,
@@ -1871,6 +1874,8 @@ int main(int argc, char** argv)
         // out of scope if you steal() it.
         //---------------------------------------------------------
         six::sidd::DerivedData* siddData = siddBuilder.steal();
+
+        siddData->setVersion("1.1.0");
 
         // These things are essential to forming the file
         siddData->setNumRows(IMAGE.height);

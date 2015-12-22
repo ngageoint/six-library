@@ -35,6 +35,8 @@ public:
     DerivedXMLParser100(logging::Logger* log = NULL,
                         bool ownLog = false);
 
+    virtual xml::lite::Document* toXML(const DerivedData* data) const;
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const XMLElem classificationXML,

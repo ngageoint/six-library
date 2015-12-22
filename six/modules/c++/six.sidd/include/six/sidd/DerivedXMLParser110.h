@@ -35,6 +35,8 @@ public:
     DerivedXMLParser110(logging::Logger* log = NULL,
                         bool ownLog = false);
 
+    virtual xml::lite::Document* toXML(const DerivedData* data) const;
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const XMLElem classificationXML,
@@ -43,6 +45,14 @@ protected:
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
+
+private:
+    XMLElem convertNonInteractiveProcessingToXML(
+            const NonInteractiveProcessing& processing,
+            XMLElem parent = NULL) const;
+
+    XMLElem convertKernelToXML(const Kernel& kernel,
+                               XMLElem parent = NULL) const;
 };
 }
 }

@@ -38,7 +38,7 @@ public:
                      logging::Logger* log = NULL,
                      bool ownLog = false);
 
-    xml::lite::Document* toXML(const DerivedData* data) const;
+    virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
 
     DerivedData* fromXML(const xml::lite::Document* doc) const;
 
@@ -105,7 +105,6 @@ protected:
             const DerivedClassification& classification,
             XMLElem parent = NULL) const = 0;
 
-private:
     XMLElem createLUT(const std::string& name, const LUT *l,
             XMLElem parent = NULL) const;
     XMLElem createFootprint(const std::string& name,

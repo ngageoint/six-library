@@ -23,7 +23,6 @@ struct KernelDatabaseName
 
     int value;
 };
-}
 
 struct KernelCustomType
 {
@@ -54,6 +53,42 @@ struct KernelOperation
     KernelOperation() :
         value(NOT_SET)
     {
+    }
+
+    KernelOperation(int inValue)
+    {
+        switch (inValue)
+        {
+        case 0:
+            value = CONVOLUTION;
+            break;
+        case 1:
+            value = CORRELATION;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(inValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return "CONVOLUTION";
+        case 1:
+            return "CORRELATION";
+        case six::NOT_SET_VALUE:
+            return "NOT_SET";
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(value)));
+        }
     }
 
     int value;
@@ -168,6 +203,7 @@ struct CoordinateSystemType
 
     int value;
 };
+}
 }
 
 #endif
