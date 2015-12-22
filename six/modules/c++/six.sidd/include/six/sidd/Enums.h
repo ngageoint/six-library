@@ -153,6 +153,37 @@ struct BandEqualizationAlgorithm
     {
     }
 
+    BandEqualizationAlgorithm(int inValue)
+    {
+        switch (inValue)
+        {
+        case 0:
+            value = LUT_1D;
+            break;
+        case NOT_SET:
+            value = six::NOT_SET_VALUE;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(inValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return "1DLUT";
+        case six::NOT_SET_VALUE:
+            return "NOT_SET";
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(value)));
+        }
+    }
+
     int value;
 };
 
@@ -169,6 +200,47 @@ struct DownsamplingMethod
     DownsamplingMethod() :
         value(NOT_SET)
     {
+    }
+
+    DownsamplingMethod(int inValue)
+    {
+        switch (inValue)
+        {
+        case 0:
+            value = DECIMATE;
+            break;
+        case 1:
+            value = MAX_PIXEL;
+            break;
+        case 2:
+            value = AVERAGE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(inValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return "DECIMATE";
+        case 1:
+            return "MAX_PIXEL";
+        case 2:
+            return "AVERAGE";
+        case six::NOT_SET_VALUE:
+            return "NOT_SET";
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(value)));
+        }
     }
 
     int value;

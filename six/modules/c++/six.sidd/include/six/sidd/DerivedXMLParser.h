@@ -141,6 +141,7 @@ protected:
                                                XMLElem parent = NULL) const;
     XMLElem convertDisplayToXML(const Display* display, 
                                 XMLElem parent = NULL) const;
+    void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
                                          XMLElem parent = NULL) const;
     XMLElem convertGeographicCoverageToXML(const std::string& localName,

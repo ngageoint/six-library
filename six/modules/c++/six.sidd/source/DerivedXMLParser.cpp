@@ -936,6 +936,34 @@ XMLElem DerivedXMLParser::convertProductCreationToXML(
     return productCreationXML;
 }
 
+void DerivedXMLParser::convertRemapToXML(const Remap& remap,
+                                         XMLElem parent) const
+{
+    if (remap.displayType == DisplayType::COLOR)
+    {
+        XMLElem remapXML = newElement("ColorDisplayRemap", parent);
+        if (remap.remapLUT.get())
+            createLUT("RemapLUT",
+                      remap.remapLUT.get(), remapXML);
+    }
+    else if (remap.displayType == DisplayType::MONO)
+    {
+        XMLElem remapXML = newElement("MonochromeDisplayRemap",
+                                      parent);
+        // a little risky, but let's assume the displayType is correct
+        const MonochromeDisplayRemap& mdr =
+                reinterpret_cast<const MonochromeDisplayRemap&>(remap);
+        createString("RemapType", mdr.remapType, remapXML);
+        if (mdr.remapLUT.get())
+        {
+            createLUT("RemapLUT", mdr.remapLUT.get(), remapXML);
+        }
+
+        common().addParameters("RemapParameter", mdr.remapParameters,
+                               remapXML);
+    }
+}
+
 XMLElem DerivedXMLParser::convertDisplayToXML(
         const Display* display, 
         XMLElem parent) const
@@ -948,26 +976,7 @@ XMLElem DerivedXMLParser::convertDisplayToXML(
     if (display->remapInformation.get())
     {
         XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
-
-        if (display->remapInformation->displayType == DisplayType::COLOR)
-        {
-            XMLElem remapXML = newElement("ColorDisplayRemap", remapInfoXML);
-            if (display->remapInformation->remapLUT.get())
-                createLUT("RemapLUT", 
-                          display->remapInformation->remapLUT.get(), remapXML);
-        }
-        else if (display->remapInformation->displayType == DisplayType::MONO)
-        {
-            XMLElem remapXML = newElement("MonochromeDisplayRemap",
-                                          remapInfoXML);
-            // a little risky, but let's assume the displayType is correct
-            MonochromeDisplayRemap* mdr =
-                    (MonochromeDisplayRemap*) display->remapInformation.get();
-            createString("RemapType", mdr->remapType, remapXML);
-            if (mdr->remapLUT.get())
-                createLUT("RemapLUT", mdr->remapLUT.get(), remapXML);
-            common().addParameters("RemapParameter", mdr->remapParameters, remapXML);
-        }
+        convertRemapToXML(*display->remapInformation, remapInfoXML);
     }
 
     // optional

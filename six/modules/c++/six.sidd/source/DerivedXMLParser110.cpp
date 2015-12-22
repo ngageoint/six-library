@@ -278,7 +278,52 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 {
     XMLElem processingXML = newElement("NonInteractiveProcessing", parent);
 
+    // ProductGenerationOptions
+    XMLElem prodGenXML = newElement("ProductGenerationOptions",
+                                    processingXML);
 
+    const ProductGenerationOptions& prodGen =
+            processing.productGenerationOptions;
+
+    if (prodGen.bandEqualization.get())
+    {
+        const BandEqualization& bandEq = *prodGen.bandEqualization;
+
+        XMLElem bandEqXML = newElement("BandEqualization", prodGenXML);
+        createStringFromEnum("Algorithm", bandEq.algorithm, bandEqXML);
+        createLUT("BandLUT", bandEq.bandLUT.get(), bandEqXML);
+    }
+
+    convertKernelToXML(prodGen.modularTransferFunctionRestoration,
+                       prodGenXML);
+
+    if (prodGen.dataRemapping.get())
+    {
+        XMLElem dataRemappingXML = newElement("DataRemapping", prodGenXML);
+        convertRemapToXML(*prodGen.dataRemapping, dataRemappingXML);
+    }
+
+    if (prodGen.asymmetricPixelCorrection.get())
+    {
+        convertKernelToXML(*prodGen.asymmetricPixelCorrection, prodGenXML);
+    }
+
+    // RRDS
+    XMLElem rrdsXML = newElement("RRDS", processingXML);
+
+    const RRDS& rrds = processing.rrds;
+    createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
+                         rrdsXML);
+
+    if (rrds.antiAliasing.get())
+    {
+        convertKernelToXML(*rrds.antiAliasing, rrdsXML);
+    }
+
+    if (rrds.interpolation.get())
+    {
+        convertKernelToXML(*rrds.interpolation, rrdsXML);
+    }
 
     return processingXML;
 }
