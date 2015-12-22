@@ -102,20 +102,11 @@ struct DerivedData: public Data
     /*!
      *  (Optional) Contains radiometric calibration params
      */
-<<<<<<< HEAD
-    mem::ScopedCopyablePtr<Radiometric> radiometric;
-
-    /*!
-     * (Optional) Contains compression structures
-     */
-    mem::ScopedCopyablePtr<Compression> compression; 
-=======
-    mem::ScopedCopyablePtr<Radiometric> radiometric;
+   mem::ScopedCopyablePtr<Radiometric> radiometric;
 
     // TODO: Not sure where these belong
     mem::ScopedCopyablePtr<Compression> compression;
     mem::ScopedCopyablePtr<DigitalElevationData> digitalElevationData;
->>>>>>> be3bac23117a5a02e108df58b0eab9e7d5be1e5e
 
     /*!
      * (Optional) Contains SFA annotations
