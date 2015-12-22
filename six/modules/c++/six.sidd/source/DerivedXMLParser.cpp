@@ -2144,6 +2144,7 @@ void DerivedXMLParser::parseCompressionFromXML(const XMLElem compressionXML,
     parseJ2KCompression(originalElem, &(c->original));
     if (parsedElem)
     {
+        c->parsed.reset(new J2KCompression());
         J2KCompression* parsed = (c->parsed.get());
         parseJ2KCompression(parsedElem, parsed);
         c->parsed.reset(parsed);
@@ -2161,7 +2162,7 @@ void DerivedXMLParser::parseJ2KCompression(const XMLElem j2kXML,
     XMLElem layerInfoXML = getFirstAndOnly(j2kXML, "LayerInfo");
     std::vector<XMLElem> layersXML;
     layerInfoXML->getElementsByTagName("Layer", layersXML);
-    for (size_t i = 0; i <= layersXML.size(); ++i)
+    for (size_t i = 0; i != layersXML.size(); ++i)
     {
         double bitRate;
         parseDouble(getFirstAndOnly(layersXML[i], "Bitrate"),
@@ -2324,22 +2325,21 @@ XMLElem DerivedXMLParser::convertCompressionToXML(const Compression* c,
         XMLElem parsedXML = newElement("Parsed", j2kXML);
         convertJ2KToXML(c->parsed.get(), parsedXML);
     }
-
-
-    
     return compressionXML;
 }
-
+    
+    
 void DerivedXMLParser::convertJ2KToXML(const J2KCompression* c, 
                                        XMLElem& parent) const
 { 
+
     createInt("NumWaveletLevels", c->numWaveletLevels, parent);
     createInt("NumBands", c->numBands, parent);
 
     XMLElem layerInfoXML = newElement("LayerInfo", parent);
     setAttribute(layerInfoXML, "numLayers", toString(c->layerInfo.size()));
 
-    for (size_t i = 0; i <= c->layerInfo.size(); ++i)
+    for (size_t i = 0; i != c->layerInfo.size(); ++i)
     {
         XMLElem layerXML = newElement("Layer", layerInfoXML);
         setAttribute(layerXML, "index", toString(i));
