@@ -59,7 +59,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
 {
     (void) error; /* Suppresses a warning. Param seems to exist for consistency purposes. Not used. */
     memcpy(buf,
-    (const nitf_Uint8*)memorySource->data + memorySource->mark,
+            (const nitf_Uint8*)memorySource->data + memorySource->mark,
             (size_t)size);
     memorySource->mark += size;
     return NITF_SUCCESS;
