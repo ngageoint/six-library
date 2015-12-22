@@ -1052,6 +1052,11 @@ void NITFWriteControl::addUserDefinedSubheader(
                 specVers = "1.0";
                 specDT = "2011-08-01T00:00:00Z";
             }
+            else if (version == "1.1.0")
+            {
+                specVers = "1.1";
+                specDT = "2015-12-22T00:00:00Z";
+            }
         }
 
         // spec version
