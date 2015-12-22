@@ -51,6 +51,10 @@ private:
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
 
+    XMLElem convertInteractiveProcessingToXML(
+            const InteractiveProcessing& processing,
+            XMLElem parent = NULL) const;
+
     XMLElem convertPredefinedKernelToXML(
             const Kernel::Predefined& predefined,
             XMLElem parent = NULL) const;
@@ -59,7 +63,8 @@ private:
             const Kernel::Custom& custom,
             XMLElem parent = NULL) const;
 
-    XMLElem convertKernelToXML(const Kernel& kernel,
+    XMLElem convertKernelToXML(const std::string& name,
+                               const Kernel& kernel,
                                XMLElem parent = NULL) const;
 };
 }

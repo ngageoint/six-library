@@ -294,7 +294,8 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         createLUT("BandLUT", bandEq.bandLUT.get(), bandEqXML);
     }
 
-    convertKernelToXML(prodGen.modularTransferFunctionRestoration,
+    convertKernelToXML("ModularTransferFunctionRestoration",
+                       prodGen.modularTransferFunctionRestoration,
                        prodGenXML);
 
     if (prodGen.dataRemapping.get())
@@ -305,7 +306,8 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 
     if (prodGen.asymmetricPixelCorrection.get())
     {
-        convertKernelToXML(*prodGen.asymmetricPixelCorrection, prodGenXML);
+        convertKernelToXML("AsymmetricPixelCorrection",
+                           *prodGen.asymmetricPixelCorrection, prodGenXML);
     }
 
     // RRDS
@@ -315,14 +317,81 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
     createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
                          rrdsXML);
 
-    if (rrds.antiAliasing.get())
+    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE)
     {
-        convertKernelToXML(*rrds.antiAliasing, rrdsXML);
+        if (rrds.antiAlias.get() == NULL)
+        {
+            throw except::Exception(Ctxt(
+                    "antiAlias must be populated for DECIMATE downsampling"));
+        }
+        convertKernelToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
+
+        if (rrds.interpolation.get() == NULL)
+        {
+            throw except::Exception(Ctxt(
+                    "interpoliation must be populated for DECIMATE downsampling"));
+        }
+        convertKernelToXML("Interpolation", *rrds.interpolation, rrdsXML);
     }
 
-    if (rrds.interpolation.get())
+    return processingXML;
+}
+
+XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
+        const InteractiveProcessing& processing,
+        XMLElem parent) const
+{
+    XMLElem processingXML = newElement("InteractiveProcessing", parent);
+
+    // GeometricTransform
+    const GeometricTransform& geoTransform(processing.geometricTransform);
+    XMLElem geoTransformXML = newElement("GeometricTransform", processingXML);
+
+    XMLElem scalingXML = newElement("Scaling", geoTransformXML);
+    convertKernelToXML("AntiAlias", geoTransform.scaling.antiAlias,
+                       scalingXML);
+    convertKernelToXML("Interpolation", geoTransform.scaling.interpolation,
+                       scalingXML);
+
+    XMLElem orientationXML = newElement("Orientation", geoTransformXML);
+    createStringFromEnum("OrientationType",
+                         geoTransform.orientation.orientationType,
+                         orientationXML);
+    if (geoTransform.orientation.orientationType ==
+                DerivedOrientationType::ANGLE)
     {
-        convertKernelToXML(*rrds.interpolation, rrdsXML);
+        createDouble("RotationAngle", geoTransform.orientation.rotationAngle,
+                     orientationXML);
+    }
+
+    // SharpnessEnhancement
+    const SharpnessEnhancement& sharpness(processing.sharpnessEnhancement);
+    XMLElem sharpXML = newElement("SharpnessEnhancement", processingXML);
+
+    bool ok = false;
+    if (sharpness.modularTransferFunctionCompensation.get())
+    {
+        if (sharpness.modularTransferFunctionRestoration.get() == NULL)
+        {
+            ok = true;
+            convertKernelToXML("ModularTransferFunctionCompensation",
+                               *sharpness.modularTransferFunctionCompensation,
+                               sharpXML);
+        }
+    }
+    else if (sharpness.modularTransferFunctionRestoration.get())
+    {
+        ok = true;
+        convertKernelToXML("ModularTransferFunctionRestoration",
+                           *sharpness.modularTransferFunctionRestoration,
+                           sharpXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of modularTransferFunctionCompensation or "
+                "modularTransferFunctionRestoration must be set"));
     }
 
     return processingXML;
@@ -400,10 +469,11 @@ XMLElem DerivedXMLParser110::convertCustomKernelToXML(
     return customXML;
 }
 
-XMLElem DerivedXMLParser110::convertKernelToXML(const Kernel& kernel,
-                                             XMLElem parent) const
+XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
+                                                const Kernel& kernel,
+                                                XMLElem parent) const
 {
-    XMLElem kernelXML = newElement("Kernel", parent);
+    XMLElem kernelXML = newElement(name, parent);
 
     createString("KernelName", kernel.kernelName, kernelXML);
 

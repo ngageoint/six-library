@@ -224,6 +224,8 @@ struct DownsamplingMethod
         }
     }
 
+    operator int() const { return value; }
+
     //! Returns string representation of the value
     std::string toString() const
     {
@@ -263,6 +265,69 @@ struct DerivedOrientationType
     DerivedOrientationType() :
         value(NOT_SET)
     {
+    }
+
+    operator int() const { return value; }
+
+    DerivedOrientationType(int inValue)
+    {
+        switch (inValue)
+        {
+        case 0:
+            value = UP;
+            break;
+        case 1:
+            value = SHADOWS_DOWN;
+            break;
+        case 2:
+            value = NORTH;
+            break;
+        case 3:
+            value = SOUTH;
+            break;
+        case 4:
+            value = EAST;
+            break;
+        case 5:
+            value = WEST;
+            break;
+        case 6:
+            value = ANGLE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(inValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return "UP";
+        case 1:
+            return "SHADOWS_DOWN";
+        case 2:
+            return "NORTH";
+        case 3:
+            return "SOUTH";
+        case 4:
+            return "EAST";
+        case 5:
+            return "WEST";
+        case 6:
+            return "ANGLE";
+        case six::NOT_SET_VALUE:
+            return "NOT_SET";
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(value)));
+        }
     }
 
     int value;
