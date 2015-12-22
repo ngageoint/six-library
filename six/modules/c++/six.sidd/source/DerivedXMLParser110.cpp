@@ -20,12 +20,26 @@
  *
  */
 
+#include <sstream>
+
 #include <six/sidd/DerivedXMLParser110.h>
 
 namespace
 {
 typedef xml::lite::Element* XMLElem;
 typedef xml::lite::Attributes XMLAttributes;
+
+template <typename T>
+bool isDefined(const T& enumVal)
+{
+    return six::Init::isDefined(enumVal.value);
+}
+
+template <typename T>
+bool isUndefined(const T& enumVal)
+{
+    return six::Init::isUndefined(enumVal.value);
+}
 }
 
 namespace six
@@ -269,12 +283,106 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
     return processingXML;
 }
 
+XMLElem DerivedXMLParser110::convertPredefinedKernelToXML(
+        const Kernel::Predefined& predefined,
+        XMLElem parent) const
+{
+    XMLElem predefinedXML = newElement("Predefined", parent);
+
+    // Make sure either DBName or KernelFamily+KernelMember are defined
+    bool ok = false;
+    if (isDefined(predefined.dbName))
+    {
+        if (six::Init::isUndefined(predefined.kernelFamily) &&
+            six::Init::isUndefined(predefined.kernelMember))
+        {
+            ok = true;
+
+            createStringFromEnum("DBName", predefined.dbName, predefinedXML);
+        }
+    }
+    else if (six::Init::isDefined(predefined.kernelFamily) &&
+             six::Init::isDefined(predefined.kernelMember))
+    {
+        ok = true;
+
+        createInt("KernelFamily", predefined.kernelFamily, predefinedXML);
+        createInt("KernelMember", predefined.kernelMember, predefinedXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of either dbName or kernelFamily and "
+                "kernelMember must be defined"));
+    }
+
+    return predefinedXML;
+}
+
+XMLElem DerivedXMLParser110::convertCustomKernelToXML(
+        const Kernel::Custom& custom,
+        XMLElem parent) const
+{
+    XMLElem customXML = newElement("Custom", parent);
+
+    XMLElem kernelSize = newElement("KernelSize", customXML);
+    createInt("Row", custom.kernelSize.row, kernelSize);
+    createInt("Col", custom.kernelSize.col, kernelSize);
+
+    if (custom.kernelCoef.size() !=
+        static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
+    {
+        std::ostringstream ostr;
+        ostr << "Kernel size is " << custom.kernelSize.row << " rows x "
+             << custom.kernelSize.col << " cols but have "
+             << custom.kernelCoef.size() << " coefficients";
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    XMLElem kernelCoef = newElement("KernelCoef", customXML);
+    for (sys::SSize_T row = 0, idx = 0; row < custom.kernelSize.row; ++row)
+    {
+        for (sys::SSize_T col = 0; col < custom.kernelSize.col; ++col, ++idx)
+        {
+            XMLElem coefXML = createDouble("Coef", custom.kernelCoef[idx],
+                                           kernelCoef);
+            setAttribute(coefXML, "row", str::toString(row));
+            setAttribute(coefXML, "col", str::toString(col));
+        }
+    }
+
+    return customXML;
+}
+
 XMLElem DerivedXMLParser110::convertKernelToXML(const Kernel& kernel,
                                              XMLElem parent) const
 {
     XMLElem kernelXML = newElement("Kernel", parent);
 
     createString("KernelName", kernel.kernelName, kernelXML);
+
+    // Exactly one of Predefined or Custom should be set
+    bool ok = false;
+    if (kernel.predefined.get())
+    {
+        if (kernel.custom.get() == NULL)
+        {
+            ok = true;
+            convertPredefinedKernelToXML(*kernel.predefined, kernelXML);
+        }
+    }
+    else if (kernel.custom.get())
+    {
+        ok = true;
+        convertCustomKernelToXML(*kernel.custom, kernelXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of predefined or custom must be set"));
+    }
 
     createStringFromEnum("Operation", kernel.operation, kernelXML);
 

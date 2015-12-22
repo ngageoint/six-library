@@ -21,6 +21,52 @@ struct KernelDatabaseName
     {
     }
 
+    KernelDatabaseName(int inValue)
+    {
+        switch (inValue)
+        {
+        case 0:
+            value = BILINEAR;
+            break;
+        case 1:
+            value = CUBIC;
+            break;
+        case 2:
+            value = LAGRANGE;
+            break;
+        case 3:
+            value = NEAREST_NEIGHBOR;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(inValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return "BILINEAR";
+        case 1:
+            return "CUBIC";
+        case 2:
+            return "LAGRANGE";
+        case 3:
+            return "NEAREST_NEIGHBOR";
+        case six::NOT_SET_VALUE:
+            return "NOT_SET";
+        default:
+            throw except::InvalidFormatException(Ctxt("Invalid enum value: " +
+                    str::toString(value)));
+        }
+    }
+
     int value;
 };
 
