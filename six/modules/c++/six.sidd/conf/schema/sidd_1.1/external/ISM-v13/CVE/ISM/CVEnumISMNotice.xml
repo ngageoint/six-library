@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         ism:compliesWith="USGov USIC"
+         
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="13"
+         ism:ISMCATCESVersion="2"
+         ism:resourceElement="true"
+         CVEVersion="1"
+         ism:createDate="2011-09-01"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
+	
+	  <cve:IRM>
+		    <ddms:identifier xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:qualifier="name"
+                       ddms:value="urn:us:gov:ic:cvenum:ism:notice"/>
+		    <ddms:title xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                  ism:classification="U">CVEnumISMNotice</ddms:title>
+		    <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                        ism:classification="U">All currently authorized Notice values</ddms:description>
+		
+		    <cve:Created>2010-03-12T11:29:00-04:00</cve:Created>
+		
+		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5"
+                   ddms:value="Marking Classified National Security Information Directive No. 1"/>
+		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5"
+                   ddms:value="Marking Classified National Security Information Marking Booklet"/>
+		    <ddms:pointOfContact xmlns:ddms="urn:us:mil:ces:metadata:ddms:5">
+			      <ddms:organization>
+				        <ddms:name>Office IC CIO</ddms:name>
+				        <ddms:email>ic-standards-support@intelink.gov</ddms:email>
+			      </ddms:organization>
+		    </ddms:pointOfContact>
+	  </cve:IRM>
+	
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FISA</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FISA Warning statement</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">IMC</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">IMCON Warning statement</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">CNWDI</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">Controled Nuclear Weapon Design Information Warning statement</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">RD</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">RD Warning statement</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FRD</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FRD Warning statement</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DS</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">LIMDIS caveat</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">LES</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">LES Notice</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">LES-NF</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">LES-NF Notice</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DSEN</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DSEN Notice</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-A</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement A from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-B</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement B from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-C</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement C from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-D</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement D from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-E</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement E from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-F</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement F from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DoD-Dist-X</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DoD Distribution statement X from DoD Directive 5230.24</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">US-Person</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">US Person info Notice</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">pre13526ORCON</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">Indicates that an instance document must abide by rules pertaining to ORIGINATOR CONTROLLED data issued prior to Executive Order 13526.</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">POC</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">Indicates that the contents of this notice specify the contact information for a required point-of-contact.</ddms:description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">COMSEC</Value>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">COMSEC Notice</ddms:description>
+		    </Term>
+	  </cve:Enumeration>
+	
+</cve:CVE>

@@ -47,7 +47,6 @@ const char Constants::GT_XML_TAG[] = "XMLTag";
 // TODO  SIDD spec says to mark the DES version as "01" in the NITF but
 //       IC-ISM.xsd says the DESVersion attribute is fixed at 4
 const sys::Int32_T Constants::DES_VERSION = 4;
-const char Constants::DES_VERSION_STR[] = "01";
 
 const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";

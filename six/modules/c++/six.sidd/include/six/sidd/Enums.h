@@ -59,6 +59,22 @@ struct KernelOperation
     int value;
 };
 
+struct BandEqualizationAlgorithm
+{
+    enum
+    {
+        LUT_1D = 0,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    BandEqualizationAlgorithm() :
+        value(NOT_SET)
+    {
+    }
+
+    int value;
+};
+
 struct DownsamplingMethod
 {
     enum
@@ -105,8 +121,8 @@ struct RenderingIntent
     {
         PERCEPTUAL = 0,
         SATURATION,
-        RELATIVE,
-        ABSOLUTE,
+        RELATIVE_INTENT,
+        ABSOLUTE_INTENT,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -129,6 +145,23 @@ struct DRAType
     };
 
     DRAType() :
+        value(NOT_SET)
+    {
+    }
+
+    int value;
+};
+
+struct CoordinateSystemType
+{
+    enum
+    {
+        GCS = 0,
+        UTM,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    CoordinateSystemType() :
         value(NOT_SET)
     {
     }

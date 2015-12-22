@@ -315,6 +315,17 @@ void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
     }
 }
 
+void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
+                                              const std::string& name,
+                                              BooleanType value,
+                                              const std::string& uri)
+{
+    if (!Init::isUndefined(value))
+    {
+        setAttribute(element, name, value, uri);
+    }
+}
+
 void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
                                              const std::string& name,
                                              const DateTime* value,
@@ -374,109 +385,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
                              productCreation->productCreationExtensions);
 }
 
-void DerivedXMLParser::parseDerivedClassificationFromXML(
-        const XMLElem classificationXML,
-        DerivedClassification& classification) const
-{
-    // optional to unbounded
-    common().parseParameters(classificationXML, "SecurityExtension", 
-                             classification.securityExtensions);
 
-    const XMLAttributes& classificationAttributes 
-            = classificationXML->getAttributes();
-
-    //! from ism:ISMRootNodeAttributeGroup
-    classification.desVersion = toType<sys::Int32_T>(
-            classificationAttributes.getValue("ism:DESVersion"));
-
-    //! from ism:ResourceNodeAttributeGroup
-    // NOTE: "resouceElement" is fixed to true so it isn't saved here
-    classification.createDate = toType<DateTime>(
-            classificationAttributes.getValue("ism:createDate"));
-    // optional
-    getAttributeListIfExists(classificationAttributes, 
-                             "ism:compliesWith",
-                             classification.compliesWith);
-
-    //! from ism:SecurityAttributesGroup 
-    //  -- referenced in ism::ResourceNodeAttributeGroup
-    classification.classification 
-            = classificationAttributes.getValue("ism:classification");
-    getAttributeList(classificationAttributes,
-                     "ism:ownerProducer",
-                     classification.ownerProducer);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:SCIcontrols",
-                             classification.sciControls);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:SARIdentifier",
-                             classification.sarIdentifier);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:disseminationControls", 
-                             classification.disseminationControls);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-            "ism:FGIsourceOpen", classification.fgiSourceOpen);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:FGIsourceProtected", 
-                             classification.fgiSourceProtected);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:releasableTo",
-                             classification.releasableTo);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:nonICmarkings",
-                             classification.nonICMarkings);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:classifiedBy",
-                         classification.classifiedBy);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:compilationReason",
-                         classification.compilationReason);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:derivativelyClassifiedBy",
-                         classification.derivativelyClassifiedBy);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:classificationReason",
-                         classification.classificationReason);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:nonUSControls",
-                             classification.nonUSControls);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:derivedFrom",
-                         classification.derivedFrom);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassDate",
-                         classification.declassDate);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassEvent",
-                         classification.declassEvent);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassException",
-                         classification.declassException);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:typeOfExemptedSource",
-                         classification.exemptedSourceType);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:dateOfExemptedSource",
-                         classification.exemptedSourceDate);
-}
 
 Remap* DerivedXMLParser::parseRemapChoiceFromXML(
         const XMLElem remapInformationXML) const
@@ -1052,121 +961,7 @@ XMLElem DerivedXMLParser::convertProcessorInformationToXML(
     return procInfoXML;
 }
 
-XMLElem DerivedXMLParser::convertDerivedClassificationToXML(
-        const DerivedClassification& classification,
-        XMLElem parent) const
-{
-    XMLElem classXML = newElement("Classification", parent);
 
-    common().addParameters("SecurityExtension", 
-                           classification.securityExtensions, 
-                           classXML); 
-
-    //! from ism:ISMRootNodeAttributeGroup
-    setAttribute(classXML, "DESVersion", toString(classification.desVersion), 
-                 ISM_URI);
-
-    //! from ism:ResourceNodeAttributeGroup
-    setAttribute(classXML, "resourceElement", "true", ISM_URI);
-    setAttribute(classXML, "createDate", 
-                 classification.createDate.format("%Y-%m-%d"), ISM_URI);
-    // optional
-    setAttributeList(classXML, "compliesWith", classification.compliesWith,
-                     ISM_URI);
-
-    //! from ism:SecurityAttributesGroup 
-    //  -- referenced in ism::ResourceNodeAttributeGroup
-    setAttribute(classXML, "classification", classification.classification,
-                 ISM_URI);
-    setAttributeList(classXML, "ownerProducer", classification.ownerProducer,
-                     ISM_URI, true);
-    // optional
-    setAttributeList(classXML, "SCIcontrols", classification.sciControls,
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML, "SARIdentifier", classification.sarIdentifier, 
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML,
-                     "disseminationControls",
-                     classification.disseminationControls, 
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML, "FGIsourceOpen", classification.fgiSourceOpen,
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML,
-                     "FGIsourceProtected",
-                     classification.fgiSourceProtected, 
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML, "releasableTo", classification.releasableTo, 
-                     ISM_URI);
-    // optional
-    setAttributeList(classXML, "nonICmarkings", classification.nonICMarkings, 
-                     ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "classifiedBy",
-                           classification.classifiedBy, 
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "compilationReason",
-                           classification.compilationReason, 
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "derivativelyClassifiedBy",
-                           classification.derivativelyClassifiedBy, 
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "classificationReason",
-                           classification.classificationReason, 
-                           ISM_URI);
-    // optional
-    setAttributeList(classXML, "nonUSControls", classification.nonUSControls, 
-                     ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "derivedFrom",
-                           classification.derivedFrom, 
-                           ISM_URI);
-    // optional
-    if (classification.declassDate.get())
-    {
-        setAttributeIfNonEmpty(
-                classXML, "declassDate",
-                classification.declassDate->format("%Y-%m-%d"), 
-                ISM_URI);
-    }
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "declassEvent",
-                           classification.declassEvent, 
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "declassException",
-                           classification.declassException, 
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classXML,
-                           "typeOfExemptedSource",
-                           classification.exemptedSourceType, 
-                           ISM_URI);
-    // optional
-    if (classification.exemptedSourceDate.get())
-    {
-        setAttributeIfNonEmpty(
-                classXML, "dateOfExemptedSource",
-                classification.exemptedSourceDate->format("%Y-%m-%d"), 
-                ISM_URI);
-    }
-
-    return classXML;
-}
 
 XMLElem DerivedXMLParser::convertProductCreationToXML(
         const ProductCreation* productCreation,

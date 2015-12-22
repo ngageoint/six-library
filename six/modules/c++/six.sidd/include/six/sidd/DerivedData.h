@@ -25,22 +25,22 @@
 #include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
 
-#include "six/Data.h"
-#include "six/ErrorStatistics.h"
-#include "six/sidd/ProductCreation.h"
-#include "six/sidd/Display.h"
-#include "six/sidd/GeographicAndTarget.h"
-#include "six/sidd/Measurement.h"
-#include "six/sidd/ExploitationFeatures.h"
-#include "six/sidd/ProductProcessing.h"
-#include "six/sidd/DownstreamReprocessing.h"
-#include "six/Radiometric.h"
-#include "six/sidd/Annotations.h"
-#include "six/sidd/Compression.h"
+#include <six/Data.h>
+#include <six/ErrorStatistics.h>
+#include <six/sidd/ProductCreation.h>
+#include <six/sidd/Display.h>
+#include <six/sidd/GeographicAndTarget.h>
+#include <six/sidd/Measurement.h>
+#include <six/sidd/ExploitationFeatures.h>
+#include <six/sidd/ProductProcessing.h>
+#include <six/sidd/DownstreamReprocessing.h>
+#include <six/Radiometric.h>
+#include <six/sidd/Compression.h>
+#include <six/sidd/DigitalElevationData.h>
+#include <six/sidd/Annotations.h>
 
 namespace six
 {
-
 namespace sidd
 {
 /*!
@@ -53,7 +53,6 @@ namespace sidd
  */
 struct DerivedData: public Data
 {
-
     /*!
      *  Information related to processor, classification,
      *  and product type
@@ -64,7 +63,7 @@ struct DerivedData: public Data
      *  Contains information on the parameters needed to display
      *  the product in an exploitation tool
      */
-    mem::ScopedCloneablePtr<Display> display;
+    mem::ScopedCopyablePtr<Display> display;
 
     /*!
      *  Contains generic and extensible targeting and geographic
@@ -103,12 +102,20 @@ struct DerivedData: public Data
     /*!
      *  (Optional) Contains radiometric calibration params
      */
+<<<<<<< HEAD
     mem::ScopedCopyablePtr<Radiometric> radiometric;
 
     /*!
      * (Optional) Contains compression structures
      */
     mem::ScopedCopyablePtr<Compression> compression; 
+=======
+    mem::ScopedCopyablePtr<Radiometric> radiometric;
+
+    // TODO: Not sure where these belong
+    mem::ScopedCopyablePtr<Compression> compression;
+    mem::ScopedCopyablePtr<DigitalElevationData> digitalElevationData;
+>>>>>>> be3bac23117a5a02e108df58b0eab9e7d5be1e5e
 
     /*!
      * (Optional) Contains SFA annotations

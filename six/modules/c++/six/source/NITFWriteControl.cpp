@@ -354,7 +354,7 @@ void NITFWriteControl::initialize(Container* container)
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
         subheader.getTypeID().set(getDesTypeID(data));
-        subheader.getVersion().set(Constants::DES_VERSION_STR);
+        subheader.getVersion().set("01");
 
         if (needUserDefinedSubheader(data))
         {

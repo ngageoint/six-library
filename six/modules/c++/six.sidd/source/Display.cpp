@@ -21,22 +21,52 @@
  */
 #include "six/sidd/Display.h"
 
-using namespace six;
-using namespace six::sidd;
+namespace six
+{
+namespace sidd
+{
+MonitorCompensationApplied::MonitorCompensationApplied() :
+    gamma(six::Init::undefined<double>()),
+    xMin(six::Init::undefined<double>())
+{
+}
+
+DRAHistogramOverrides::DRAHistogramOverrides() :
+    clipMin(six::Init::undefined<int>()),
+    clipMax(six::Init::undefined<int>())
+{
+}
+
+BandInformation::BandInformation() :
+    bitsPerPixel(six::Init::undefined<size_t>()),
+    displayFlag(six::Init::undefined<size_t>())
+{
+}
+
+Orientation::Orientation() :
+    rotationAngle(six::Init::undefined<double>())
+{
+}
+
+DynamicRangeAdjustment::Modifiers::Modifiers() :
+    eMin(six::Init::undefined<double>()),
+    eMax(six::Init::undefined<double>()),
+    subtractor(six::Init::undefined<double>()),
+    multiplier(six::Init::undefined<double>())
+{
+}
+
+DynamicRangeAdjustment::DynamicRangeAdjustment() :
+    pMin(six::Init::undefined<double>()),
+    pMax(six::Init::undefined<double>())
+{
+}
 
 Display::Display() :
     pixelType(PixelType::NOT_SET),
-    remapInformation(NULL), 
     magnificationMethod(MagnificationMethod::NOT_SET),
-    decimationMethod(DecimationMethod::NOT_SET),
-    histogramOverrides(NULL),
-    monitorCompensationApplied(NULL)
+    decimationMethod(DecimationMethod::NOT_SET)
 {
 }
-
-Display* Display::clone() const
-{
-    return new Display(*this);
 }
-
-
+}
