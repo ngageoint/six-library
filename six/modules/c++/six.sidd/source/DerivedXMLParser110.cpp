@@ -85,6 +85,12 @@ DerivedXMLParser110::toXML(const DerivedData* derived) const
                                    annotationsElem);
         }
     }
+    // optional
+    if (derived->compression.get())
+    {
+       XMLElem compressionElem = newElement("Compression", root);
+       convertCompressionToXML(derived->compression.get(), compressionElem);
+    }
 
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
