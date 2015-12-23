@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
 <!-- SIDD v0.1.1 -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:SICommon:0.1" targetNamespace="urn:SICommon:0.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:SICommon:1.0" targetNamespace="urn:SICommon:1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--=-->
 	<xsd:complexType name="XYZType">
 		<xsd:sequence>
@@ -287,32 +287,15 @@
 	</xsd:simpleType>
 	<xsd:complexType name="ErrorStatisticsType">
 		<xsd:sequence>
-			<xsd:element name="CompositeSCP" minOccurs="0">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:choice>
-							<xsd:element name="RgAzErr" minOccurs="0">
-								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:element name="Rg" type="xsd:double"/>
-										<xsd:element name="Az" type="xsd:double"/>
-										<xsd:element name="RgAz" type="xsd:double"/>
-									</xsd:sequence>
-								</xsd:complexType>
-							</xsd:element>
-							<xsd:element name="RowColErr" minOccurs="0">
-								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:element name="Row" type="xsd:double"/>
-										<xsd:element name="Col" type="xsd:double"/>
-										<xsd:element name="RowCol" type="xsd:double"/>
-									</xsd:sequence>
-								</xsd:complexType>
-							</xsd:element>
-						</xsd:choice>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
+         <xs:element name="CompositeSCP" minOccurs="0">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element name="Rg" type="xs:double"/>
+                  <xs:element name="Az" type="xs:double"/>
+                  <xs:element name="RgAz" type="xs:double"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
 			<xsd:element name="Components" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -445,9 +428,7 @@
 			<xsd:element name="RCSSFPoly" type="Poly2DType" minOccurs="0"/>
 			<xsd:element name="BetaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
 			<xsd:element name="SigmaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
-			<xsd:element name="SigmaZeroSFIncidenceMap" type="SigmaZeroSFIncidenceMapType" minOccurs="0"/>
 			<xsd:element name="GammaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
-			<xsd:element name="GammaZeroSFIncidenceMap" type="GammaZeroSFIncidenceMapType" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- SIDD added types -->
