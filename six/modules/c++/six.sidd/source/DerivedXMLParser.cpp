@@ -21,6 +21,7 @@
  */
 
 #include <string.h>
+#include <sstream>
 
 #include <sys/Conf.h>
 #include <str/Manip.h>
@@ -1389,8 +1390,9 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         }
         else
         {
-            throw except::Exception(Ctxt(FmtX("Invalid element size [%d]",
-                                              lut->elementSize)));
+            std::ostringstream ostr;
+            ostr << "Invalid element size [" << lut->elementSize << "]";
+            throw except::Exception(Ctxt(ostr.str()));
         }
         if ((lut->numEntries - 1) != i)
             oss << ' ';
