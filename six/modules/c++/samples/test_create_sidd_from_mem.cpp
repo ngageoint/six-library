@@ -1805,12 +1805,9 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
     prodGenOptions.bandEqualization->algorithm =
             six::sidd::BandEqualizationAlgorithm::LUT_1D;
-    prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 1));
-    for (size_t ii = 0; ii < 256; ++ii)
-    {
-        prodGenOptions.bandEqualization->bandLUT->table[ii] =
-                static_cast<sys::ubyte>(ii);
-    }
+    prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 3));
+    std::fill_n(prodGenOptions.bandEqualization->bandLUT->table.get(), 0,
+                256 * 3);
     createPredefinedKernel(prodGenOptions.modularTransferFunctionRestoration);
 
     std::auto_ptr<six::LUT> lut(new six::LUT(256, 3));
@@ -1827,6 +1824,49 @@ void initDisplay(six::sidd::Display& display)
     display.nonInteractiveProcessing->rrds.interpolation.reset(
             createPredefinedKernel());
 
+    // InteractiveProcessing
+    display.interactiveProcessing.reset(
+            new six::sidd::InteractiveProcessing());
+    six::sidd::GeometricTransform& geoTransform =
+            display.interactiveProcessing->geometricTransform;
+    createPredefinedKernel(geoTransform.scaling.antiAlias);
+    createCustomKernel(geoTransform.scaling.interpolation);
+    geoTransform.orientation.orientationType =
+            six::sidd::DerivedOrientationType::ANGLE;
+    geoTransform.orientation.rotationAngle = 15.0;
+    display.interactiveProcessing->sharpnessEnhancement.
+            modularTransferFunctionCompensation.reset(createCustomKernel());
+
+    display.interactiveProcessing->colorSpaceTransform.reset(
+            new six::sidd::ColorSpaceTransform());
+    six::sidd::ColorManagementModule& cmm = display.interactiveProcessing->
+            colorSpaceTransform->colorManagementModule;
+    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
+    cmm.sourceProfile = "Some source profile";
+    cmm.displayProfile = "Some display profile";
+    cmm.iccProfile = "Some ICC profile";
+
+    display.interactiveProcessing->dynamicRangeAdjustment.reset(
+            new six::sidd::DynamicRangeAdjustment());
+    six::sidd::DynamicRangeAdjustment& dra =
+            *display.interactiveProcessing->dynamicRangeAdjustment;
+    dra.algorithmType = six::sidd::DRAType::AUTO;
+    dra.pMin = 0.2;
+    dra.pMax = 0.8;
+    dra.modifiers.eMin = 0.1;
+    dra.modifiers.eMax = 0.9;
+    dra.modifiers.subtractor = 15;
+    dra.modifiers.multiplier = 777;
+
+    display.interactiveProcessing->oneDimensionalLookup.reset(
+            new six::sidd::OneDimensionalLookup());
+    createPredefinedKernel(
+            display.interactiveProcessing->oneDimensionalLookup->ttc);
+
+    six::Parameter param;
+    param.setName("Some name");
+    param.setValue("Some value");
+    display.displayExtensions.push_back(param);
 }
 }
 
