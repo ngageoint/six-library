@@ -21,6 +21,7 @@
  */
 
 #include <string.h>
+#include <sstream>
 
 #include <sys/Conf.h>
 #include <str/Manip.h>
@@ -855,94 +856,6 @@ void DerivedXMLParser::convertRemapToXML(const Remap& remap,
     }
 }
 
-XMLElem DerivedXMLParser::convertDisplayToXML(
-        const Display* display,
-        XMLElem parent) const
-{
-    XMLElem displayXML = newElement("Display", parent);
-
-    createString("PixelType", six::toString(display->pixelType), displayXML);
-
-    // optional
-    if (display->remapInformation.get())
-    {
-        XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
-        convertRemapToXML(*display->remapInformation, remapInfoXML);
-    }
-
-    // optional
-    if (display->magnificationMethod != MagnificationMethod::NOT_SET)
-    {
-        createString("MagnificationMethod",
-                     six::toString(display->magnificationMethod), displayXML);
-    }
-
-    // optional
-    if (display->decimationMethod != DecimationMethod::NOT_SET)
-    {
-        createString("DecimationMethod",
-                     six::toString(display->decimationMethod), displayXML);
-    }
-
-    // optional
-    if (display->histogramOverrides.get())
-    {
-        XMLElem histo = newElement("DRAHistogramOverrides", displayXML);
-        createInt("ClipMin", display->histogramOverrides->clipMin, histo);
-        createInt("ClipMax", display->histogramOverrides->clipMax, histo);
-    }
-
-    // optional
-    if (display->monitorCompensationApplied.get())
-    {
-        XMLElem monComp = newElement("MonitorCompensationApplied", displayXML);
-        createDouble("Gamma", display->monitorCompensationApplied->gamma,
-                     monComp);
-        createDouble("XMin", display->monitorCompensationApplied->xMin, monComp);
-    }
-
-    // optional to unbounded
-    common().addParameters("DisplayExtension", display->displayExtensions, displayXML);
-
-    return displayXML;
-}
-
-XMLElem DerivedXMLParser::convertGeographicTargetToXML(
-        const GeographicAndTarget* geographicAndTarget,
-        XMLElem parent) const
-{
-    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
-
-    convertGeographicCoverageToXML(
-            "GeographicCoverage",
-            &geographicAndTarget->geographicCoverage,
-            geographicAndTargetXML);
-
-    // optional to unbounded
-    for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
-            const_iterator it = geographicAndTarget->targetInformation.begin();
-            it != geographicAndTarget->targetInformation.end(); ++it)
-    {
-        TargetInformation* ti = (*it).get();
-        XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
-
-        // 1 to unbounded
-        common().addParameters("Identifier", ti->identifiers, tiXML);
-
-        // optional
-        if (ti->footprint.get())
-        {
-            createFootprint("Footprint", "Vertex", *ti->footprint, tiXML);
-        }
-
-        // optional to unbounded
-        common().addParameters("TargetInformationExtension",
-                               ti->targetInformationExtensions, tiXML);
-    }
-
-    return geographicAndTargetXML;
-}
-
 XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
         const std::string& localName,
         const GeographicCoverage* geoCoverage,
@@ -1332,8 +1245,9 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         }
         else
         {
-            throw except::Exception(Ctxt(FmtX("Invalid element size [%d]",
-                                              lut->elementSize)));
+            std::ostringstream ostr;
+            ostr << "Invalid element size [" << lut->elementSize << "]";
+            throw except::Exception(Ctxt(ostr.str()));
         }
         if ((lut->numEntries - 1) != i)
             oss << ' ';

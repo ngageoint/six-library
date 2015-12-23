@@ -55,6 +55,18 @@ protected:
                                         XMLElem parent = NULL) const = 0;
 
 protected:
+    virtual void parseDerivedClassificationFromXML(
+            const XMLElem classificationXML,
+            DerivedClassification& classification) const = 0;
+
+    virtual XMLElem convertDerivedClassificationToXML(
+            const DerivedClassification& classification,
+            XMLElem parent = NULL) const = 0;
+
+    virtual XMLElem convertDisplayToXML(const Display& display,
+                                        XMLElem parent = NULL) const = 0;
+
+protected:
     static const char SI_COMMON_URI[];
     static const char SFA_URI[];
     static const char ISM_URI[];
@@ -148,6 +160,8 @@ protected:
     void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g,
                                          XMLElem parent = NULL) const;
+    void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
+
     XMLElem convertGeographicCoverageToXML(const std::string& localName,
                                            const GeographicCoverage* g,
                                            XMLElem parent = NULL) const;

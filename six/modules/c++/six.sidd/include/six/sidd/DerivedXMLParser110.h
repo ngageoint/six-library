@@ -85,6 +85,9 @@ private:
                             XMLElem& parent) const;
 
     };
+    XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
+                                         XMLElem parent = NULL) const;
+};
 }
 }
 

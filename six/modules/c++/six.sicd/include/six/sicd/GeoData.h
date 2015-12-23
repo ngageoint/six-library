@@ -22,68 +22,22 @@
 #ifndef __SIX_GEO_DATA_H__
 #define __SIX_GEO_DATA_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
-#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
+#include <six/Types.h>
+#include <six/GeoInfo.h>
 
 namespace six
 {
 namespace sicd
 {
-
-/*!
- *  \struct GeoInfo
- *  \brief (Optional) SICD GeoInfo parameters
- *
- *  Parameters describing geographic features.
- *  Note: the GeoInfo block may be used as a block within
- *  itself
- */
-class GeoInfo
-{
-public:
-    //!  Constructor
-    GeoInfo()
-    {
-    }
-
-    /*!  Destructor (this may be required by some old compilers that otherwise
-     *   can't handle a ScopedCloneablePtr of the same object being a member
-     *   variable)
-     */
-
-    ~GeoInfo()
-    {
-    }
-
-    //!  Clone, including all sub-nodes
-    GeoInfo* clone() const;
-
-    //!  (Optional) name of a geographic feature
-    std::string name;
-
-    //! (Optional) sub-nodes
-    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
-
-    //! (Optional) description of geographic feature
-    ParameterCollection desc;
-
-    /*!
-     *  This could be a point if one, a line if 2, or a polygon if > 2
-     *  In other words, this simultaneously represents SICD's 
-     *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
-     */
-    std::vector<LatLon> geometryLatLon;
-};
-
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block
  *
  *  This block describes the geographic coordinates of the region
  *  covered by the image
+ *
+ *  Compiler-generated copy constructor and assignment operator are sufficient
  */
 class GeoData
 {
@@ -94,9 +48,6 @@ public:
     {
     }
 
-    //!  Clone, including non-NULL GeoInfo objects
-    GeoData* clone();
-
     /*!
      *  Identifies the earth model used for 
      *  latitude, longitude and height parameters.  All
@@ -105,7 +56,7 @@ public:
     EarthModelType earthModel;
 
     /*!
-     *  Scene Center Point in fulll image.  This is the
+     *  Scene Center Point in full image.  This is the
      *  precise location
      */
     SCP scp;
@@ -129,10 +80,9 @@ public:
      *  (Optional) Parameters that describe geographic features.
      *  Note that this may be used as a block inside of a block.
      */
-    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
+    std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
 };
+}
+}
 
-}
-}
 #endif
-

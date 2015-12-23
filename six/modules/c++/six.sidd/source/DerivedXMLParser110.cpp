@@ -41,6 +41,23 @@ bool isUndefined(const T& enumVal)
 {
     return six::Init::isUndefined(enumVal.value);
 }
+
+template <typename SmartPtrT>
+void confirmNonNull(const SmartPtrT& ptr,
+                    const std::string& name,
+                    const std::string& suffix = "")
+{
+    if (ptr.get() == NULL)
+    {
+        std::string msg = name + " is required";
+        if (!suffix.empty())
+        {
+            msg += " " + suffix;
+        }
+
+        throw except::Exception(Ctxt(msg));
+    }
+}
 }
 
 namespace six
@@ -166,9 +183,9 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
     doc->setRootElement(root);
 
     convertProductCreationToXML(derived->productCreation.get(), root);
-    convertDisplayToXML(derived->display.get(), root);
+    convertDisplayToXML(*derived->display, root);
 
-    convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
+    convertGeographicTargetToXML(*derived->geographicAndTarget, root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -469,18 +486,12 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 
     if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE)
     {
-        if (rrds.antiAlias.get() == NULL)
-        {
-            throw except::Exception(Ctxt(
-                    "antiAlias must be populated for DECIMATE downsampling"));
-        }
+        confirmNonNull(rrds.antiAlias, "antiAlias",
+                       "for DECIMATE downsampling");
         convertKernelToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
 
-        if (rrds.interpolation.get() == NULL)
-        {
-            throw except::Exception(Ctxt(
-                    "interpoliation must be populated for DECIMATE downsampling"));
-        }
+        confirmNonNull(rrds.interpolation, "interpolation",
+                       "for DECIMATE downsampling");
         convertKernelToXML("Interpolation", *rrds.interpolation, rrdsXML);
     }
 
@@ -542,6 +553,61 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
         throw except::Exception(Ctxt(
                 "Exactly one of modularTransferFunctionCompensation or "
                 "modularTransferFunctionRestoration must be set"));
+    }
+
+    // ColorSpaceTransform
+    if (processing.colorSpaceTransform.get())
+    {
+        const ColorManagementModule& cmm =
+                processing.colorSpaceTransform->colorManagementModule;
+
+        XMLElem colorSpaceTransformXML =
+                newElement("ColorSpaceTransform", processingXML);
+        XMLElem cmmXML =
+                newElement("ColorManagementModule", colorSpaceTransformXML);
+
+        createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmXML);
+
+        // TODO: Not sure what this'll actually look like
+        createString("SourceProfile", cmm.sourceProfile, cmmXML);
+        createString("DisplayProfile", cmm.displayProfile, cmmXML);
+
+        if (!cmm.iccProfile.empty())
+        {
+            createString("ICCProfile", cmm.iccProfile, cmmXML);
+        }
+    }
+
+    // DynamicRangeAdjustment
+    if (processing.dynamicRangeAdjustment.get())
+    {
+        const DynamicRangeAdjustment& adjust =
+                *processing.dynamicRangeAdjustment;
+
+        XMLElem adjustXML =
+                newElement("DynamicRangeAdjustment", processingXML);
+
+        createStringFromEnum("AlgorithmType", adjust.algorithmType,
+                             adjustXML);
+
+        createDouble("Pmin", adjust.pMin, adjustXML);
+        createDouble("Pmax", adjust.pMax, adjustXML);
+
+        XMLElem modXML = newElement("Modifiers", adjustXML);
+        createDouble("Emin", adjust.modifiers.eMin, modXML);
+        createDouble("Emax", adjust.modifiers.eMax, modXML);
+        if (six::Init::isDefined(adjust.modifiers.subtractor))
+        {
+            createDouble("Subtractor", adjust.modifiers.subtractor, modXML);
+            createDouble("Multiplier", adjust.modifiers.multiplier, modXML);
+        }
+    }
+
+    if (processing.oneDimensionalLookup.get())
+    {
+        XMLElem lutXML = newElement("OneDimensionalLookup", processingXML);
+        convertKernelToXML("TTC", processing.oneDimensionalLookup->ttc,
+                           lutXML);
     }
 
     return processingXML;
@@ -687,6 +753,88 @@ void DerivedXMLParser110::convertJ2KToXML(const J2KCompression& j2k,
         setAttribute(layerXML, "index", toString(ii));
         createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerXML);
     }
+}
+
+XMLElem DerivedXMLParser110::convertDisplayToXML(
+        const Display& display,
+        XMLElem parent) const
+{
+    // NOTE: In several spots here, there are fields which are required in
+    //       SIDD 1.1 but a pointer in the Display class since it didn't exist
+    //       in SIDD 1.0, so need to confirm it's allocated
+
+    XMLElem displayXML = newElement("Display", parent);
+
+    createString("PixelType", six::toString(display.pixelType), displayXML);
+
+    // BandInformation
+    XMLElem bandInfoXML = newElement("BandInformation", displayXML);
+    confirmNonNull(display.bandInformation, "bandInformation");
+    createInt("NumBands", display.bandInformation->bands.size());
+    for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
+    {
+        XMLElem bandXML = createString("Band",
+                                       display.bandInformation->bands[ii],
+                                       bandInfoXML);
+        setAttribute(bandXML, "index", str::toString(ii));
+    }
+    createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
+              bandInfoXML);
+    createInt("DisplayFlag", display.bandInformation->displayFlag,
+              bandInfoXML);
+
+    // NonInteractiveProcessing
+    confirmNonNull(display.nonInteractiveProcessing,
+                   "nonInteractiveProcessing");
+    convertNonInteractiveProcessingToXML(*display.nonInteractiveProcessing,
+                                         displayXML);
+
+    // InteractiveProcessing
+    confirmNonNull(display.interactiveProcessing, "interactiveProcessing");
+    convertInteractiveProcessingToXML(*display.interactiveProcessing,
+                                      displayXML);
+
+    // optional to unbounded
+    common().addParameters("DisplayExtension", display.displayExtensions,
+                           displayXML);
+
+    return displayXML;
+}
+
+XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
+        const GeographicAndTarget& geographicAndTarget,
+        XMLElem parent) const
+{
+    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
+
+    common().createLatLonFootprint("ImageCorners", "ICP",
+                                   geographicAndTarget.imageCorners,
+                                   geographicAndTargetXML);
+
+    //only if 3+ vertices
+    const size_t numVertices = geographicAndTarget.validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", geographicAndTargetXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML =
+                    common().createLatLon("Vertex",
+                                          geographicAndTarget.validData[ii],
+                                          vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
+    }
+
+    for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
+    {
+        common().convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
+                                     geographicAndTargetXML);
+    }
+
+    return geographicAndTargetXML;
 }
 }
 }

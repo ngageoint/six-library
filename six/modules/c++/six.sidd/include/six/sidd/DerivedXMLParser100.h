@@ -48,6 +48,10 @@ protected:
 
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
+
+private:
+    XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
+                                         XMLElem parent = NULL) const;
 };
 }
 }
