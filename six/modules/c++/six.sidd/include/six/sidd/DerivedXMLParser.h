@@ -43,6 +43,18 @@ public:
     DerivedData* fromXML(const xml::lite::Document* doc) const;
 
 protected:
+    virtual void parseDerivedClassificationFromXML(
+            const XMLElem classificationXML,
+            DerivedClassification& classification) const = 0;
+
+    virtual XMLElem convertDerivedClassificationToXML(
+            const DerivedClassification& classification,
+            XMLElem parent = NULL) const = 0;
+
+    virtual XMLElem convertDisplayToXML(const Display& display,
+                                        XMLElem parent = NULL) const = 0;
+
+protected:
     static const char SI_COMMON_URI[];
     static const char SFA_URI[];
     static const char ISM_URI[];
@@ -97,14 +109,6 @@ protected:
                                const DateTime* value,
                                const std::string& uri = "");
 
-    virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationXML,
-            DerivedClassification& classification) const = 0;
-
-    virtual XMLElem convertDerivedClassificationToXML(
-            const DerivedClassification& classification,
-            XMLElem parent = NULL) const = 0;
-
     XMLElem createLUT(const std::string& name, const LUT *l,
             XMLElem parent = NULL) const;
     XMLElem createFootprint(const std::string& name,
@@ -139,8 +143,6 @@ protected:
                                          XMLElem parent = NULL) const;
     XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d, 
                                                XMLElem parent = NULL) const;
-    XMLElem convertDisplayToXML(const Display* display, 
-                                XMLElem parent = NULL) const;
     void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
                                          XMLElem parent = NULL) const;

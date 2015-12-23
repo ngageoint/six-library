@@ -40,6 +40,23 @@ bool isUndefined(const T& enumVal)
 {
     return six::Init::isUndefined(enumVal.value);
 }
+
+template <typename SmartPtrT>
+void confirmNonNull(const SmartPtrT& ptr,
+                    const std::string& name,
+                    const std::string& suffix = "")
+{
+    if (ptr.get() == NULL)
+    {
+        std::string msg = name + " is required";
+        if (!suffix.empty())
+        {
+            msg += " " + suffix;
+        }
+
+        throw except::Exception(Ctxt(msg));
+    }
+}
 }
 
 namespace six
@@ -60,7 +77,7 @@ DerivedXMLParser110::toXML(const DerivedData* derived) const
     doc->setRootElement(root);
 
     convertProductCreationToXML(derived->productCreation.get(), root);
-    convertDisplayToXML(derived->display.get(), root);
+    convertDisplayToXML(*derived->display, root);
 
     convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
     convertMeasurementToXML(derived->measurement.get(), root);
@@ -319,18 +336,12 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 
     if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE)
     {
-        if (rrds.antiAlias.get() == NULL)
-        {
-            throw except::Exception(Ctxt(
-                    "antiAlias must be populated for DECIMATE downsampling"));
-        }
+        confirmNonNull(rrds.antiAlias, "antiAlias",
+                       "for DECIMATE downsampling");
         convertKernelToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
 
-        if (rrds.interpolation.get() == NULL)
-        {
-            throw except::Exception(Ctxt(
-                    "interpoliation must be populated for DECIMATE downsampling"));
-        }
+        confirmNonNull(rrds.interpolation, "interpolation",
+                       "for DECIMATE downsampling");
         convertKernelToXML("Interpolation", *rrds.interpolation, rrdsXML);
     }
 
@@ -557,6 +568,52 @@ XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
     createStringFromEnum("Operation", kernel.operation, kernelXML);
 
     return kernelXML;
+}
+
+XMLElem DerivedXMLParser110::convertDisplayToXML(
+        const Display& display,
+        XMLElem parent) const
+{
+    // NOTE: In several spots here, there are fields which are required in
+    //       SIDD 1.1 but a pointer in the Display class since it didn't exist
+    //       in SIDD 1.0, so need to confirm it's allocated
+
+    XMLElem displayXML = newElement("Display", parent);
+
+    createString("PixelType", six::toString(display.pixelType), displayXML);
+
+    // BandInformation
+    XMLElem bandInfoXML = newElement("BandInformation", displayXML);
+    confirmNonNull(display.bandInformation, "bandInformation");
+    createInt("NumBands", display.bandInformation->bands.size());
+    for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
+    {
+        XMLElem bandXML = createString("Band",
+                                       display.bandInformation->bands[ii],
+                                       bandInfoXML);
+        setAttribute(bandXML, "index", str::toString(ii));
+    }
+    createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
+              bandInfoXML);
+    createInt("DisplayFlag", display.bandInformation->displayFlag,
+              bandInfoXML);
+
+    // NonInteractiveProcessing
+    confirmNonNull(display.nonInteractiveProcessing,
+                   "nonInteractiveProcessing");
+    convertNonInteractiveProcessingToXML(*display.nonInteractiveProcessing,
+                                         displayXML);
+
+    // InteractiveProcessing
+    confirmNonNull(display.interactiveProcessing, "interactiveProcessing");
+    convertInteractiveProcessingToXML(*display.interactiveProcessing,
+                                      displayXML);
+
+    // optional to unbounded
+    common().addParameters("DisplayExtension", display.displayExtensions,
+                           displayXML);
+
+    return displayXML;
 }
 }
 }

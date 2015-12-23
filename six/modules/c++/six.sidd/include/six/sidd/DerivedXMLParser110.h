@@ -46,6 +46,9 @@ protected:
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
 
+    virtual XMLElem convertDisplayToXML(const Display& display,
+                                        XMLElem parent = NULL) const;
+
 private:
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,

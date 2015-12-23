@@ -964,58 +964,6 @@ void DerivedXMLParser::convertRemapToXML(const Remap& remap,
     }
 }
 
-XMLElem DerivedXMLParser::convertDisplayToXML(
-        const Display* display, 
-        XMLElem parent) const
-{
-    XMLElem displayXML = newElement("Display", parent);
-
-    createString("PixelType", six::toString(display->pixelType), displayXML);
-
-    // optional
-    if (display->remapInformation.get())
-    {
-        XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
-        convertRemapToXML(*display->remapInformation, remapInfoXML);
-    }
-
-    // optional
-    if (display->magnificationMethod != MagnificationMethod::NOT_SET)
-    {
-        createString("MagnificationMethod",
-                     six::toString(display->magnificationMethod), displayXML);
-    }
-
-    // optional
-    if (display->decimationMethod != DecimationMethod::NOT_SET)
-    {
-        createString("DecimationMethod",
-                     six::toString(display->decimationMethod), displayXML);
-    }
-
-    // optional
-    if (display->histogramOverrides.get())
-    {
-        XMLElem histo = newElement("DRAHistogramOverrides", displayXML);
-        createInt("ClipMin", display->histogramOverrides->clipMin, histo);
-        createInt("ClipMax", display->histogramOverrides->clipMax, histo);
-    }
-
-    // optional
-    if (display->monitorCompensationApplied.get())
-    {
-        XMLElem monComp = newElement("MonitorCompensationApplied", displayXML);
-        createDouble("Gamma", display->monitorCompensationApplied->gamma,
-                     monComp);
-        createDouble("XMin", display->monitorCompensationApplied->xMin, monComp);
-    }
-
-    // optional to unbounded
-    common().addParameters("DisplayExtension", display->displayExtensions, displayXML);
-
-    return displayXML;
-}
-
 XMLElem DerivedXMLParser::convertGeographicTargetToXML(
         const GeographicAndTarget* geographicAndTarget, 
         XMLElem parent) const
