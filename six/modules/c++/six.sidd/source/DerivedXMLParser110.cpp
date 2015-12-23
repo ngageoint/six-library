@@ -455,7 +455,7 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
 
     if (processing.oneDimensionalLookup.get())
     {
-        XMLElem lutXML = newElement("OneDimensionalLookup, processingXML");
+        XMLElem lutXML = newElement("OneDimensionalLookup", processingXML);
         convertKernelToXML("TTC", processing.oneDimensionalLookup->ttc,
                            lutXML);
     }
