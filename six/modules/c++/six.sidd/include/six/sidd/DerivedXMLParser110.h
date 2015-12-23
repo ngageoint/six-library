@@ -37,6 +37,8 @@ public:
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
 
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const;
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const XMLElem classificationXML,
@@ -45,6 +47,12 @@ protected:
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
+
+    virtual void parseCompressionFromXML(const XMLElem compressionXML,
+                                         Compression& compression) const;
+
+    virtual XMLElem convertCompressionToXML(const Compression& compression,
+                                    XMLElem parent = NULL) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
@@ -70,6 +78,13 @@ private:
                                const Kernel& kernel,
                                XMLElem parent = NULL) const;
 
+    void parseJ2KCompression(const XMLElem j2kElem,
+                             J2KCompression& j2k) const;
+
+    void convertJ2KToXML(const J2KCompression& j2k,
+                            XMLElem& parent) const;
+
+    };
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 };

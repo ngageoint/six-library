@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -31,7 +31,7 @@
  *  NITF and GeoTIFF support are builtin.  If the suffix is .nitf or .ntf,
  *  the test will write a NITF.  Otherwise, if tiff support is enabled, it
  *  will attempt to write a GeoTIFF.  If tiff support is disabled in the
- *  library an exception will be thrown.  NITF is always written 
+ *  library an exception will be thrown.  NITF is always written
  *  in big-endian.  Tiff output will always be in native endian.
  *
  *  The usage is extremely simple:
@@ -1933,8 +1933,8 @@ int main(int argc, char** argv)
             std::auto_ptr<logging::Logger> log (new logging::NullLogger());
             sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
                 six::XMLControlFactory::getInstance().newXMLControl(
-                    six::DataType::COMPLEX, 
-                    log.get())->fromXML(parser.getDocument(), 
+                    six::DataType::COMPLEX,
+                    log.get())->fromXML(parser.getDocument(),
                                         std::vector<std::string>())));
 
         }
@@ -2066,7 +2066,7 @@ int main(int argc, char** argv)
 
         siddData->compression->original.numWaveletLevels = 5;
         siddData->compression->original.numBands = 1;
-        for (size_t i = 0; i <= 3; ++i) 
+        for (size_t i = 0; i < 4; ++i)
         {
             six::sidd::J2KCompression::Layer layer;
             layer.bitRate = (i + 1.0) / 7.0;

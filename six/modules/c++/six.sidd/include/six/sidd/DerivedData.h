@@ -102,7 +102,7 @@ struct DerivedData: public Data
     /*!
      *  (Optional) Contains radiometric calibration params
      */
-   mem::ScopedCopyablePtr<Radiometric> radiometric;
+    mem::ScopedCopyablePtr<Radiometric> radiometric;
 
     // TODO: Not sure where these belong
     mem::ScopedCopyablePtr<Compression> compression;
@@ -231,8 +231,8 @@ struct DerivedData: public Data
     {
         // TODO throw exception instead of returning empty string?
         return (exploitationFeatures.get()
-                && !exploitationFeatures->collections.empty() ? 
-                    exploitationFeatures->collections[0]->information->sensorName : 
+                && !exploitationFeatures->collections.empty() ?
+                    exploitationFeatures->collections[0]->information->sensorName :
                     std::string(""));
     }
 
@@ -243,17 +243,17 @@ struct DerivedData: public Data
     virtual void setSource(std::string name)
     {
         // TODO throw exception if cannot set?
-        if (exploitationFeatures.get() && 
+        if (exploitationFeatures.get() &&
             !exploitationFeatures->collections.empty())
         {
-            exploitationFeatures->collections[0]->information->sensorName = 
+            exploitationFeatures->collections[0]->information->sensorName =
                 name;
         }
     }
 
     /*!
      *  Maps to:
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual DateTime getCreationTime() const
     {
@@ -262,14 +262,14 @@ struct DerivedData: public Data
 
     /*!
      *  Maps to:
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual void setCreationTime(DateTime creationTime)
     {
         productCreation->processorInformation->processingDateTime
                 = creationTime;
     }
-    
+
     /*!
      *  Maps to: /SIDD/ExploitationFeatures/Collection[0]/Information/CollectionDateTime
      */
