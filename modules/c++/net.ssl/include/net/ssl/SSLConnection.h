@@ -20,12 +20,13 @@
  *
  */
 
-#if defined(USE_OPENSSL)
  
 #ifndef __NET_SSL_CONNECTION_H__
 #define __NET_SSL_CONNECTION_H__
 
-#include "net/NetConnection.h"
+#include <net/ssl/net_ssl_config.h>
+#if defined(USE_OPENSSL)
+#include <net/NetConnection.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 

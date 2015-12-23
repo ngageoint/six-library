@@ -28,7 +28,7 @@ using namespace io;
 using namespace except;
 using namespace std;
 
-int main(int argc, char *argv[])
+int main(int, char**)
 {
     try
     {

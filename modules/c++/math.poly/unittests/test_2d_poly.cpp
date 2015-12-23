@@ -421,7 +421,7 @@ TEST_CASE(testOperators)
 }
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     srand(176);
     TEST_CHECK(testScaleVariable);
