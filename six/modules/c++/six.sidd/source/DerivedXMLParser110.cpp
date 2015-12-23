@@ -394,6 +394,61 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
                 "modularTransferFunctionRestoration must be set"));
     }
 
+    // ColorSpaceTransform
+    if (processing.colorSpaceTransform.get())
+    {
+        const ColorManagementModule& cmm =
+                processing.colorSpaceTransform->colorManagementModule;
+
+        XMLElem colorSpaceTransformXML =
+                newElement("ColorSpaceTransform", processingXML);
+        XMLElem cmmXML =
+                newElement("ColorManagementModule", colorSpaceTransformXML);
+
+        createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmXML);
+
+        // TODO: Not sure what this'll actually look like
+        createString("SourceProfile", cmm.sourceProfile, cmmXML);
+        createString("DisplayProfile", cmm.displayProfile, cmmXML);
+
+        if (!cmm.iccProfile.empty())
+        {
+            createString("ICCProfile", cmm.iccProfile, cmmXML);
+        }
+    }
+
+    // DynamicRangeAdjustment
+    if (processing.dynamicRangeAdjustment.get())
+    {
+        const DynamicRangeAdjustment& adjust =
+                *processing.dynamicRangeAdjustment;
+
+        XMLElem adjustXML =
+                newElement("DynamicRangeAdjustment", processingXML);
+
+        createStringFromEnum("AlgorithmType", adjust.algorithmType,
+                             adjustXML);
+
+        createDouble("Pmin", adjust.pMin, adjustXML);
+        createDouble("Pmax", adjust.pMax, adjustXML);
+
+        XMLElem modXML = newElement("Modifiers", adjustXML);
+        createDouble("Emin", adjust.modifiers.eMin, modXML);
+        createDouble("Emax", adjust.modifiers.eMax, modXML);
+        if (six::Init::isDefined(adjust.modifiers.subtractor))
+        {
+            createDouble("Subtractor", adjust.modifiers.subtractor, modXML);
+            createDouble("Multiplier", adjust.modifiers.multiplier, modXML);
+        }
+    }
+
+    if (processing.oneDimensionalLookup.get())
+    {
+        XMLElem lutXML = newElement("OneDimensionalLookup, processingXML");
+        convertKernelToXML("TTC", processing.oneDimensionalLookup->ttc,
+                           lutXML);
+    }
+
     return processingXML;
 }
 
