@@ -79,7 +79,7 @@ DerivedXMLParser110::toXML(const DerivedData* derived) const
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
 
-    convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
+    convertGeographicTargetToXML(*derived->geographicAndTarget, root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -614,6 +614,42 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
                            displayXML);
 
     return displayXML;
+}
+
+XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
+        const GeographicAndTarget& geographicAndTarget,
+        XMLElem parent) const
+{
+    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
+
+    common().createLatLonFootprint("ImageCorners", "ICP",
+                                   geographicAndTarget.imageCorners,
+                                   geographicAndTargetXML);
+
+    //only if 3+ vertices
+    const size_t numVertices = geographicAndTarget.validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", geographicAndTargetXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML =
+                    common().createLatLon("Vertex",
+                                          geographicAndTarget.validData[ii],
+                                          vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
+    }
+
+    for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
+    {
+        common().convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
+                                     geographicAndTargetXML);
+    }
+
+    return geographicAndTargetXML;
 }
 }
 }

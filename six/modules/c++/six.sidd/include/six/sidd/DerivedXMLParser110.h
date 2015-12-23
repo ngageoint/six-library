@@ -69,6 +69,9 @@ private:
     XMLElem convertKernelToXML(const std::string& name,
                                const Kernel& kernel,
                                XMLElem parent = NULL) const;
+
+    XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
+                                         XMLElem parent = NULL) const;
 };
 }
 }

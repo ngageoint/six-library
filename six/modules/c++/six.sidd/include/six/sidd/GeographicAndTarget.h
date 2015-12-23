@@ -28,6 +28,7 @@
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/ParameterCollection.h>
+#include <six/GeoInfo.h>
 
 namespace six
 {
@@ -130,6 +131,28 @@ public:
 
     //!  (Optional, Unbounded) Provides target specific geo information
     std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
+
+    // TODO: Finalize what this looks like for SIDD 1.1
+    /*!
+     *  Parameters apply to image corners of the
+     *  product projected to the same height as the SCP.
+     *  These corners are an approximate geographic location
+     *  not intended for analytical use
+     */
+    LatLonCorners imageCorners;
+
+    /*!
+     *  (Optional) indicates the full image includes both
+     *  valid data and some zero-filled pixels.  Vector size
+     *  is the number of vertices.
+     */
+    std::vector<LatLon> validData;
+
+    /*!
+     *  (Optional) Parameters that describe geographic features.
+     *  Note that this may be used as a block inside of a block.
+     */
+    std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
 };
 }
 }

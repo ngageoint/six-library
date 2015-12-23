@@ -269,7 +269,7 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeographicTargetToXML(derived->geographicAndTarget.get(), root);
+    convertGeographicTargetToXML(*derived->geographicAndTarget, root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -366,6 +366,42 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
     common().addParameters("DisplayExtension", display.displayExtensions, displayXML);
 
     return displayXML;
+}
+
+XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
+        const GeographicAndTarget& geographicAndTarget,
+        XMLElem parent) const
+{
+    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
+
+    convertGeographicCoverageToXML(
+            "GeographicCoverage",
+            &geographicAndTarget.geographicCoverage,
+            geographicAndTargetXML);
+
+    // optional to unbounded
+    for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
+            const_iterator it = geographicAndTarget.targetInformation.begin();
+            it != geographicAndTarget.targetInformation.end(); ++it)
+    {
+        TargetInformation* ti = (*it).get();
+        XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
+
+        // 1 to unbounded
+        common().addParameters("Identifier", ti->identifiers, tiXML);
+
+        // optional
+        if (ti->footprint.get())
+        {
+            createFootprint("Footprint", "Vertex", *ti->footprint, tiXML);
+        }
+
+        // optional to unbounded
+        common().addParameters("TargetInformationExtension",
+                               ti->targetInformationExtensions, tiXML);
+    }
+
+    return geographicAndTargetXML;
 }
 }
 }

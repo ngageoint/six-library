@@ -144,8 +144,6 @@ protected:
     XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d, 
                                                XMLElem parent = NULL) const;
     void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
-    XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
-                                         XMLElem parent = NULL) const;
     XMLElem convertGeographicCoverageToXML(const std::string& localName,
                                            const GeographicCoverage* g, 
                                            XMLElem parent = NULL) const;

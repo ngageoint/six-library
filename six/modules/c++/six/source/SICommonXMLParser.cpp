@@ -182,6 +182,73 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     return polyXML;
 }
 
+XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
+                                               XMLElem parent) const
+{
+    //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
+    XMLElem geoInfoXML = newElement("GeoInfo", getSICommonURI(), parent);
+
+    addParameters("Desc", geoInfo.desc, geoInfoXML);
+
+    const size_t numLatLons = geoInfo.geometryLatLon.size();
+    if (numLatLons == 1)
+    {
+        createLatLon("Point", geoInfo.geometryLatLon[0], geoInfoXML);
+    }
+    else if (numLatLons >= 2)
+    {
+        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
+                                         getSICommonURI(),
+                                         geoInfoXML);
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+
+        for (size_t ii = 0; ii < numLatLons; ++ii)
+        {
+            XMLElem v = createLatLon(
+                    numLatLons == 2 ? "Endpoint" : "Vertex",
+                    geoInfo.geometryLatLon[ii],
+                    linePolyXML);
+
+            setAttribute(v, "index", str::toString(ii + 1));
+        }
+    }
+
+    if (!geoInfo.name.empty())
+    {
+        setAttribute(geoInfoXML, "name", geoInfo.name);
+    }
+
+    for (size_t ii = 0; ii < geoInfo.geoInfos.size(); ++ii)
+    {
+        convertGeoInfoToXML(*geoInfo.geoInfos[ii], geoInfoXML);
+    }
+
+    return geoInfoXML;
+}
+
+XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
+                                                 const std::string& cornerName,
+                                                 const LatLonCorners& corners,
+                                                 XMLElem parent) const
+{
+    XMLElem footprint = newElement(name, parent);
+
+    // Write the corners in CW order
+    XMLElem vertex = createLatLon(cornerName, corners.upperLeft, footprint);
+    setAttribute(vertex, "index", "1:FRFC");
+
+    vertex = createLatLon(cornerName, corners.upperRight, footprint);
+    setAttribute(vertex, "index", "2:FRLC");
+
+    vertex = createLatLon(cornerName, corners.lowerRight, footprint);
+    setAttribute(vertex, "index", "3:LRLC");
+
+    vertex = createLatLon(cornerName, corners.lowerLeft, footprint);
+    setAttribute(vertex, "index", "4:LRFC");
+
+    return footprint;
+}
+
 void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
 {
     int order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
@@ -191,7 +258,7 @@ void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1;
-    for (int i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
     {
         XMLElem element = coeffsXML[i];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
@@ -210,7 +277,7 @@ void SICommonXMLParser::parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1, exp2;
-    for (int i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
     {
         XMLElem element = coeffsXML[i];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));

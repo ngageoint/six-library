@@ -82,7 +82,7 @@ public:
     mem::ScopedCloneablePtr<ImageData> imageData;
 
     //!  Describes the geographic coords of the region covered by the image
-    mem::ScopedCloneablePtr<GeoData> geoData;
+    mem::ScopedCopyablePtr<GeoData> geoData;
 
     //!  Block of parameters describes the image sample grid
     mem::ScopedCloneablePtr<Grid> grid;

@@ -1915,22 +1915,7 @@ XMLElem ComplexXMLParser::createLatLonFootprint(const std::string& name,
                                                 const LatLonCorners& corners,
                                                 XMLElem parent) const
 {
-    XMLElem footprint = newElement(name, parent);
-
-    // Write the corners in CW order
-    XMLElem vertex = common().createLatLon(cornerName, corners.upperLeft, footprint);
-    setAttribute(vertex, "index", "1:FRFC");
-
-    vertex = common().createLatLon(cornerName, corners.upperRight, footprint);
-    setAttribute(vertex, "index", "2:FRLC");
-
-    vertex = common().createLatLon(cornerName, corners.lowerRight, footprint);
-    setAttribute(vertex, "index", "3:LRLC");
-
-    vertex = common().createLatLon(cornerName, corners.lowerLeft, footprint);
-    setAttribute(vertex, "index", "4:LRFC");
-
-    return footprint;
+    return common().createLatLonFootprint(name, cornerName, corners, parent);
 }
 
 XMLElem ComplexXMLParser::createLatLonAltFootprint(const std::string& name,

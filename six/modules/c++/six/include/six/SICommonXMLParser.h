@@ -28,6 +28,7 @@
 #include <six/ParameterCollection.h>
 #include <six/ErrorStatistics.h>
 #include <six/Radiometric.h>
+#include <six/GeoInfo.h>
 
 namespace six
 {
@@ -101,6 +102,15 @@ public:
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
 
+    // TODO: Can make this virtual if we ever need it
+    //       This is the implementation for SICD 1.x / SIDD 1.1+
+    XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo, XMLElem parent) const;
+
+    XMLElem createLatLonFootprint(const std::string& name,
+                                  const std::string& cornerName,
+                                  const LatLonCorners& corners,
+                                  XMLElem parent) const;
+
     void parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const;
     void parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const;
     void parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ) const;
@@ -151,7 +161,6 @@ public:
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML, 
         Radiometric *obj) const = 0;
-
 
 protected:
 
