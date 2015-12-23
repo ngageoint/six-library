@@ -20,12 +20,27 @@
  *
  */
 
+#include <sstream>
+
+#include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser110.h>
 
 namespace
 {
 typedef xml::lite::Element* XMLElem;
 typedef xml::lite::Attributes XMLAttributes;
+
+template <typename T>
+bool isDefined(const T& enumVal)
+{
+    return six::Init::isDefined(enumVal.value);
+}
+
+template <typename T>
+bool isUndefined(const T& enumVal)
+{
+    return six::Init::isUndefined(enumVal.value);
+}
 }
 
 namespace six
@@ -38,8 +53,113 @@ DerivedXMLParser110::DerivedXMLParser110(logging::Logger* log,
 {
 }
 
-xml::lite::Document*
-DerivedXMLParser110::toXML(const DerivedData* derived) const
+DerivedData* DerivedXMLParser110::fromXML(
+        const xml::lite::Document* doc) const
+{
+    XMLElem root = doc->getRootElement();
+
+    XMLElem productCreationXML        = getFirstAndOnly(root, "ProductCreation");
+    XMLElem displayXML                = getFirstAndOnly(root, "Display");
+    XMLElem measurementXML            = getFirstAndOnly(root, "Measurement");
+    XMLElem exploitationFeaturesXML   = getFirstAndOnly(root, "ExploitationFeatures");
+    XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem productProcessingXML      = getOptional(root, "ProductProcessing");
+    XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
+    XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
+    XMLElem radiometricXML            = getOptional(root, "Radiometric");
+    XMLElem annotationsXML            = getOptional(root, "Annotations");
+    XMLElem compressionXML            = getOptional(root, "Compression");
+
+
+    DerivedDataBuilder builder;
+    DerivedData *data = builder.steal(); //steal it
+
+    // see if PixelType has MONO or RGB
+    PixelType pixelType = six::toType<PixelType>(
+            getFirstAndOnly(displayXML, "PixelType")->getCharacterData());
+    builder.addDisplay(pixelType);
+
+    RegionType regionType = RegionType::SUB_REGION;
+    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetXML,
+                                      "GeographicCoverage");
+
+    // create GeographicAndTarget
+    if (getOptional(tmpElem, "SubRegion"))
+        regionType = RegionType::SUB_REGION;
+    else if (getOptional(tmpElem, "GeographicInfo"))
+        regionType = RegionType::GEOGRAPHIC_INFO;
+    builder.addGeographicAndTarget(regionType);
+
+    // create Measurement
+    six::ProjectionType projType = ProjectionType::NOT_SET;
+    if (getOptional(measurementXML, "GeographicProjection"))
+        projType = ProjectionType::GEOGRAPHIC;
+    else if (getOptional(measurementXML, "CylindricalProjection"))
+            projType = ProjectionType::CYLINDRICAL;
+    else if (getOptional(measurementXML, "PlaneProjection"))
+        projType = ProjectionType::PLANE;
+    else if (getOptional(measurementXML, "PolynomialProjection"))
+        projType = ProjectionType::POLYNOMIAL;
+    builder.addMeasurement(projType);
+
+    // create ExploitationFeatures
+    std::vector<XMLElem> elements;
+    exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
+                                                  elements);
+    builder.addExploitationFeatures(elements.size());
+
+    parseProductCreationFromXML(productCreationXML, data->productCreation.get());
+    parseDisplayFromXML(displayXML, data->display.get());
+    parseGeographicTargetFromXML(geographicAndTargetXML, data->geographicAndTarget.get());
+    parseMeasurementFromXML(measurementXML, data->measurement.get());
+    parseExploitationFeaturesFromXML(exploitationFeaturesXML, data->exploitationFeatures.get());
+
+    if (productProcessingXML)
+    {
+        builder.addProductProcessing();
+        parseProductProcessingFromXML(productProcessingXML,
+                                      data->productProcessing.get());
+    }
+    if (downstreamReprocessingXML)
+    {
+        builder.addDownstreamReprocessing();
+        parseDownstreamReprocessingFromXML(downstreamReprocessingXML,
+                                           data->downstreamReprocessing.get());
+    }
+    if (errorStatisticsXML)
+    {
+        builder.addErrorStatistics();
+        common().parseErrorStatisticsFromXML(errorStatisticsXML,
+                                             data->errorStatistics.get());
+    }
+    if (radiometricXML)
+    {
+        builder.addRadiometric();
+        common().parseRadiometryFromXML(radiometricXML,
+                                        data->radiometric.get());
+    }
+    if (annotationsXML)
+    {
+        // 1 to unbounded
+        std::vector<XMLElem> annChildren;
+        annotationsXML->getElementsByTagName("Annotation", annChildren);
+        data->annotations.resize(annChildren.size());
+        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        {
+            data->annotations[i].reset(new Annotation());
+            parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
+        }
+    }
+    if (compressionXML)
+    {
+        builder.addCompression();
+        parseCompressionFromXML(compressionXML, *(data->compression.get()));
+    }
+
+    return data;
+}
+
+xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) const
 {
     xml::lite::Document* doc = new xml::lite::Document();
     XMLElem root = newElement("SIDD");
@@ -88,8 +208,7 @@ DerivedXMLParser110::toXML(const DerivedData* derived) const
     // optional
     if (derived->compression.get())
     {
-       XMLElem compressionElem = newElement("Compression", root);
-       convertCompressionToXML(derived->compression.get(), compressionElem);
+       convertCompressionToXML(*(derived->compression.get()), root);
     }
 
     //set the XMLNS
@@ -108,6 +227,45 @@ void DerivedXMLParser110::parseDerivedClassificationFromXML(
     throw except::Exception(Ctxt("IMPLEMENT ME"));
 }
 
+void DerivedXMLParser110::parseCompressionFromXML(const XMLElem compressionXML,
+                                                 Compression& compression) const
+{
+    XMLElem j2kElem = getFirstAndOnly(compressionXML, "J2K");
+    XMLElem originalElem = getFirstAndOnly(j2kElem, "Original");
+    XMLElem parsedElem   = getOptional(j2kElem, "Parsed");
+
+    parseJ2KCompression(originalElem, compression.original);
+    if (parsedElem)
+    {
+        compression.parsed.reset(new J2KCompression());
+        parseJ2KCompression(parsedElem, *(compression.parsed));
+    }
+}
+
+void DerivedXMLParser110::parseJ2KCompression(const XMLElem j2kXML,
+                                           J2KCompression& j2k) const
+{
+    parseInt(getFirstAndOnly(j2kXML, "NumWaveletLevels"),
+            j2k.numWaveletLevels);
+    parseInt(getFirstAndOnly(j2kXML, "NumBands"),
+            j2k.numBands);
+
+    XMLElem layerInfoXML = getFirstAndOnly(j2kXML, "LayerInfo");
+    std::vector<XMLElem> layersXML;
+    layerInfoXML->getElementsByTagName("Layer", layersXML);
+
+    size_t numLayers = layersXML.size();
+    j2k.layerInfo.resize(numLayers);
+
+    for (size_t ii = 0; ii != layersXML.size(); ++ii)
+    {
+        double bitRate;
+        parseDouble(getFirstAndOnly(layersXML[ii], "Bitrate"),
+                    bitRate);
+        j2k.layerInfo[ii].bitRate = bitRate;
+    }
+}
+
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
         XMLElem parent) const
@@ -115,7 +273,7 @@ XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
     XMLElem classXML = newElement("Classification", parent);
 
     common().addParameters("SecurityExtension",
-                           classification.securityExtensions,
+                    classification.securityExtensions,
                            classXML);
 
     //! from ism:ISMRootNodeAttributeGroup
@@ -270,21 +428,265 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 {
     XMLElem processingXML = newElement("NonInteractiveProcessing", parent);
 
+    // ProductGenerationOptions
+    XMLElem prodGenXML = newElement("ProductGenerationOptions",
+                                    processingXML);
 
+    const ProductGenerationOptions& prodGen =
+            processing.productGenerationOptions;
+
+    if (prodGen.bandEqualization.get())
+    {
+        const BandEqualization& bandEq = *prodGen.bandEqualization;
+
+        XMLElem bandEqXML = newElement("BandEqualization", prodGenXML);
+        createStringFromEnum("Algorithm", bandEq.algorithm, bandEqXML);
+        createLUT("BandLUT", bandEq.bandLUT.get(), bandEqXML);
+    }
+
+    convertKernelToXML("ModularTransferFunctionRestoration",
+                       prodGen.modularTransferFunctionRestoration,
+                       prodGenXML);
+
+    if (prodGen.dataRemapping.get())
+    {
+        XMLElem dataRemappingXML = newElement("DataRemapping", prodGenXML);
+        convertRemapToXML(*prodGen.dataRemapping, dataRemappingXML);
+    }
+
+    if (prodGen.asymmetricPixelCorrection.get())
+    {
+        convertKernelToXML("AsymmetricPixelCorrection",
+                           *prodGen.asymmetricPixelCorrection, prodGenXML);
+    }
+
+    // RRDS
+    XMLElem rrdsXML = newElement("RRDS", processingXML);
+
+    const RRDS& rrds = processing.rrds;
+    createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
+                         rrdsXML);
+
+    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE)
+    {
+        if (rrds.antiAlias.get() == NULL)
+        {
+            throw except::Exception(Ctxt(
+                    "antiAlias must be populated for DECIMATE downsampling"));
+        }
+        convertKernelToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
+
+        if (rrds.interpolation.get() == NULL)
+        {
+            throw except::Exception(Ctxt(
+                    "interpoliation must be populated for DECIMATE downsampling"));
+        }
+        convertKernelToXML("Interpolation", *rrds.interpolation, rrdsXML);
+    }
 
     return processingXML;
 }
 
-XMLElem DerivedXMLParser110::convertKernelToXML(const Kernel& kernel,
-                                             XMLElem parent) const
+XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
+        const InteractiveProcessing& processing,
+        XMLElem parent) const
 {
-    XMLElem kernelXML = newElement("Kernel", parent);
+    XMLElem processingXML = newElement("InteractiveProcessing", parent);
+
+    // GeometricTransform
+    const GeometricTransform& geoTransform(processing.geometricTransform);
+    XMLElem geoTransformXML = newElement("GeometricTransform", processingXML);
+
+    XMLElem scalingXML = newElement("Scaling", geoTransformXML);
+    convertKernelToXML("AntiAlias", geoTransform.scaling.antiAlias,
+                       scalingXML);
+    convertKernelToXML("Interpolation", geoTransform.scaling.interpolation,
+                       scalingXML);
+
+    XMLElem orientationXML = newElement("Orientation", geoTransformXML);
+    createStringFromEnum("OrientationType",
+                         geoTransform.orientation.orientationType,
+                         orientationXML);
+    if (geoTransform.orientation.orientationType ==
+                DerivedOrientationType::ANGLE)
+    {
+        createDouble("RotationAngle", geoTransform.orientation.rotationAngle,
+                     orientationXML);
+    }
+
+    // SharpnessEnhancement
+    const SharpnessEnhancement& sharpness(processing.sharpnessEnhancement);
+    XMLElem sharpXML = newElement("SharpnessEnhancement", processingXML);
+
+    bool ok = false;
+    if (sharpness.modularTransferFunctionCompensation.get())
+    {
+        if (sharpness.modularTransferFunctionRestoration.get() == NULL)
+        {
+            ok = true;
+            convertKernelToXML("ModularTransferFunctionCompensation",
+                               *sharpness.modularTransferFunctionCompensation,
+                               sharpXML);
+        }
+    }
+    else if (sharpness.modularTransferFunctionRestoration.get())
+    {
+        ok = true;
+        convertKernelToXML("ModularTransferFunctionRestoration",
+                           *sharpness.modularTransferFunctionRestoration,
+                           sharpXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of modularTransferFunctionCompensation or "
+                "modularTransferFunctionRestoration must be set"));
+    }
+
+    return processingXML;
+}
+
+XMLElem DerivedXMLParser110::convertPredefinedKernelToXML(
+        const Kernel::Predefined& predefined,
+        XMLElem parent) const
+{
+    XMLElem predefinedXML = newElement("Predefined", parent);
+
+    // Make sure either DBName or KernelFamily+KernelMember are defined
+    bool ok = false;
+    if (isDefined(predefined.dbName))
+    {
+        if (six::Init::isUndefined(predefined.kernelFamily) &&
+            six::Init::isUndefined(predefined.kernelMember))
+        {
+            ok = true;
+
+            createStringFromEnum("DBName", predefined.dbName, predefinedXML);
+        }
+    }
+    else if (six::Init::isDefined(predefined.kernelFamily) &&
+             six::Init::isDefined(predefined.kernelMember))
+    {
+        ok = true;
+
+        createInt("KernelFamily", predefined.kernelFamily, predefinedXML);
+        createInt("KernelMember", predefined.kernelMember, predefinedXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of either dbName or kernelFamily and "
+                "kernelMember must be defined"));
+    }
+
+    return predefinedXML;
+}
+
+XMLElem DerivedXMLParser110::convertCustomKernelToXML(
+        const Kernel::Custom& custom,
+        XMLElem parent) const
+{
+    XMLElem customXML = newElement("Custom", parent);
+
+    XMLElem kernelSize = newElement("KernelSize", customXML);
+    createInt("Row", custom.kernelSize.row, kernelSize);
+    createInt("Col", custom.kernelSize.col, kernelSize);
+
+    if (custom.kernelCoef.size() !=
+        static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
+    {
+        std::ostringstream ostr;
+        ostr << "Kernel size is " << custom.kernelSize.row << " rows x "
+             << custom.kernelSize.col << " cols but have "
+             << custom.kernelCoef.size() << " coefficients";
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    XMLElem kernelCoef = newElement("KernelCoef", customXML);
+    for (sys::SSize_T row = 0, idx = 0; row < custom.kernelSize.row; ++row)
+    {
+        for (sys::SSize_T col = 0; col < custom.kernelSize.col; ++col, ++idx)
+        {
+            XMLElem coefXML = createDouble("Coef", custom.kernelCoef[idx],
+                                           kernelCoef);
+            setAttribute(coefXML, "row", str::toString(row));
+            setAttribute(coefXML, "col", str::toString(col));
+        }
+    }
+
+    return customXML;
+}
+
+XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
+                                                const Kernel& kernel,
+                                                XMLElem parent) const
+{
+    XMLElem kernelXML = newElement(name, parent);
 
     createString("KernelName", kernel.kernelName, kernelXML);
+
+    // Exactly one of Predefined or Custom should be set
+    bool ok = false;
+    if (kernel.predefined.get())
+    {
+        if (kernel.custom.get() == NULL)
+        {
+            ok = true;
+            convertPredefinedKernelToXML(*kernel.predefined, kernelXML);
+        }
+    }
+    else if (kernel.custom.get())
+    {
+        ok = true;
+        convertCustomKernelToXML(*kernel.custom, kernelXML);
+    }
+
+    if (!ok)
+    {
+        throw except::Exception(Ctxt(
+                "Exactly one of predefined or custom must be set"));
+    }
 
     createStringFromEnum("Operation", kernel.operation, kernelXML);
 
     return kernelXML;
+}
+
+XMLElem DerivedXMLParser110::convertCompressionToXML(
+        const Compression& compression,
+        XMLElem parent) const
+{
+    XMLElem compressionXML = newElement("Compression", parent);
+    XMLElem j2kXML         = newElement("J2K", compressionXML);
+    XMLElem originalXML    = newElement("Original", j2kXML);
+    convertJ2KToXML(compression.original, originalXML);
+
+    if (compression.parsed.get())
+    {
+        XMLElem parsedXML = newElement("Parsed", j2kXML);
+        convertJ2KToXML(*(compression.parsed.get()), parsedXML);
+    }
+    return compressionXML;
+}
+
+void DerivedXMLParser110::convertJ2KToXML(const J2KCompression& j2k,
+                                       XMLElem& parent) const
+{
+    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
+    createInt("NumBands", j2k.numBands, parent);
+
+    size_t numLayers = j2k.layerInfo.size();
+    XMLElem layerInfoXML = newElement("LayerInfo", parent);
+    setAttribute(layerInfoXML, "numLayers", toString(numLayers));
+
+    for (size_t ii = 0; ii < numLayers; ++ii)
+    {
+        XMLElem layerXML = newElement("Layer", layerInfoXML);
+        setAttribute(layerXML, "index", toString(ii));
+        createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerXML);
+    }
 }
 }
 }

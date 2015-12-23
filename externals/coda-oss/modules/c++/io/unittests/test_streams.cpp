@@ -202,14 +202,14 @@ TEST_CASE(testRotateReset)
         out.write("0");
         TEST_FAIL("Stream is closed; should throw.");
     }
-    catch(except::Exception& ex)
+    catch(except::Exception&)
     {
     }
 
     cleanupFiles( outFile);
 }
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     TEST_CHECK(testStringStream);
     TEST_CHECK(testByteStream);

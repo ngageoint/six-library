@@ -2563,18 +2563,6 @@ class XYZEnum(_object):
 XYZEnum_swigregister = _six_base.XYZEnum_swigregister
 XYZEnum_swigregister(XYZEnum)
 
-
-_six_base.SIX_LIB_VERSION_swigconstant(_six_base)
-SIX_LIB_VERSION = _six_base.SIX_LIB_VERSION
-
-_six_base.SIX_MAJOR_VERSION_NUMBER_swigconstant(_six_base)
-SIX_MAJOR_VERSION_NUMBER = _six_base.SIX_MAJOR_VERSION_NUMBER
-
-_six_base.SIX_MINOR_VERSION_NUMBER_swigconstant(_six_base)
-SIX_MINOR_VERSION_NUMBER = _six_base.SIX_MINOR_VERSION_NUMBER
-
-_six_base.SIX_MICRO_VERSION_NUMBER_swigconstant(_six_base)
-SIX_MICRO_VERSION_NUMBER = _six_base.SIX_MICRO_VERSION_NUMBER
 class DESValidationException(coda.coda_except.Exception):
     """Proxy of C++ six::DESValidationException class"""
     __swig_setmethods__ = {}
@@ -2681,7 +2669,6 @@ Constants.GT_SIZE_MAX = _six_base.cvar.Constants_GT_SIZE_MAX
 Constants.GT_XML_KEY = _six_base.cvar.Constants_GT_XML_KEY
 Constants.GT_XML_TAG = _six_base.cvar.Constants_GT_XML_TAG
 Constants.DES_VERSION = _six_base.cvar.Constants_DES_VERSION
-Constants.DES_VERSION_STR = _six_base.cvar.Constants_DES_VERSION_STR
 Constants.DES_USER_DEFINED_SUBHEADER_TAG = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_TAG
 Constants.DES_USER_DEFINED_SUBHEADER_ID = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_ID
 Constants.DES_USER_DEFINED_SUBHEADER_LENGTH = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_LENGTH

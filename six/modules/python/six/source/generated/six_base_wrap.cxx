@@ -39283,50 +39283,6 @@ SWIGINTERN PyObject *XYZEnum_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *SIX_LIB_VERSION_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *module;
-  PyObject *d;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
-  d = PyModule_GetDict(module);
-  if (!d) return NULL;
-  SWIG_Python_SetConstant(d, "SIX_LIB_VERSION",SWIG_FromCharPtr("2.1"));
-  return SWIG_Py_Void();
-}
-
-
-SWIGINTERN PyObject *SIX_MAJOR_VERSION_NUMBER_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *module;
-  PyObject *d;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
-  d = PyModule_GetDict(module);
-  if (!d) return NULL;
-  SWIG_Python_SetConstant(d, "SIX_MAJOR_VERSION_NUMBER",SWIG_From_int(static_cast< int >(2)));
-  return SWIG_Py_Void();
-}
-
-
-SWIGINTERN PyObject *SIX_MINOR_VERSION_NUMBER_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *module;
-  PyObject *d;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
-  d = PyModule_GetDict(module);
-  if (!d) return NULL;
-  SWIG_Python_SetConstant(d, "SIX_MINOR_VERSION_NUMBER",SWIG_From_int(static_cast< int >(1)));
-  return SWIG_Py_Void();
-}
-
-
-SWIGINTERN PyObject *SIX_MICRO_VERSION_NUMBER_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *module;
-  PyObject *d;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
-  d = PyModule_GetDict(module);
-  if (!d) return NULL;
-  SWIG_Python_SetConstant(d, "SIX_MICRO_VERSION_NUMBER",SWIG_From_int(static_cast< int >(3)));
-  return SWIG_Py_Void();
-}
-
-
 SWIGINTERN int Swig_var_SCHEMA_PATH_set(PyObject *) {
   SWIG_Error(SWIG_AttributeError,"Variable SCHEMA_PATH is read-only.");
   return 1;
@@ -40577,52 +40533,6 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_VERSION_get(void) {
     try
     {
       pyobj = SWIG_NewPointerObj(SWIG_as_voidptr(&six::Constants::DES_VERSION), SWIGTYPE_p_int32_t,  0 );
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_Constants_DES_VERSION_STR_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable Constants_DES_VERSION_STR is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_Constants_DES_VERSION_STR_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_FromCharPtr(six::Constants::DES_VERSION_STR);
     } 
     catch (const std::exception& e)
     {
@@ -72721,10 +72631,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XYZEnum_value_set", _wrap_XYZEnum_value_set, METH_VARARGS, (char *)"XYZEnum_value_set(XYZEnum self, int value)"},
 	 { (char *)"XYZEnum_value_get", _wrap_XYZEnum_value_get, METH_VARARGS, (char *)"XYZEnum_value_get(XYZEnum self) -> int"},
 	 { (char *)"XYZEnum_swigregister", XYZEnum_swigregister, METH_VARARGS, NULL},
-	 { (char *)"SIX_LIB_VERSION_swigconstant", SIX_LIB_VERSION_swigconstant, METH_VARARGS, NULL},
-	 { (char *)"SIX_MAJOR_VERSION_NUMBER_swigconstant", SIX_MAJOR_VERSION_NUMBER_swigconstant, METH_VARARGS, NULL},
-	 { (char *)"SIX_MINOR_VERSION_NUMBER_swigconstant", SIX_MINOR_VERSION_NUMBER_swigconstant, METH_VARARGS, NULL},
-	 { (char *)"SIX_MICRO_VERSION_NUMBER_swigconstant", SIX_MICRO_VERSION_NUMBER_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"new_DESValidationException", _wrap_new_DESValidationException, METH_VARARGS, (char *)"\n"
 		"DESValidationException()\n"
 		"DESValidationException(Context c)\n"
@@ -74890,7 +74796,6 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_GT_XML_KEY",Swig_var_Constants_GT_XML_KEY_get, Swig_var_Constants_GT_XML_KEY_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_GT_XML_TAG",Swig_var_Constants_GT_XML_TAG_get, Swig_var_Constants_GT_XML_TAG_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_VERSION",Swig_var_Constants_DES_VERSION_get, Swig_var_Constants_DES_VERSION_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_VERSION_STR",Swig_var_Constants_DES_VERSION_STR_get, Swig_var_Constants_DES_VERSION_STR_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_TAG",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_TAG_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_TAG_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_ID",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_ID_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_ID_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_LENGTH",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_set);

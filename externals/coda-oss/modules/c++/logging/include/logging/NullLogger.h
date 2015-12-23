@@ -55,7 +55,7 @@ protected:
     {
         // does nothing...
     }
-    void emitRecord(const LogRecord* record)
+    void emitRecord(const LogRecord*)
     {
         // does nothing...
     }

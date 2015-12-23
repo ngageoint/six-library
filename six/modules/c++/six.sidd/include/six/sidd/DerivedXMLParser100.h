@@ -45,6 +45,9 @@ protected:
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
+
+    virtual XMLElem convertDisplayToXML(const Display& display,
+                                        XMLElem parent = NULL) const;
 };
 }
 }

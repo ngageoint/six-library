@@ -40,7 +40,19 @@ public:
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
 
-    DerivedData* fromXML(const xml::lite::Document* doc) const;
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
+
+protected:
+    virtual void parseDerivedClassificationFromXML(
+            const XMLElem classificationXML,
+            DerivedClassification& classification) const = 0;
+
+    virtual XMLElem convertDerivedClassificationToXML(
+            const DerivedClassification& classification,
+            XMLElem parent = NULL) const = 0;
+
+    virtual XMLElem convertDisplayToXML(const Display& display,
+                                        XMLElem parent = NULL) const = 0;
 
 protected:
     static const char SI_COMMON_URI[];
@@ -97,14 +109,6 @@ protected:
                                const DateTime* value,
                                const std::string& uri = "");
 
-    virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationXML,
-            DerivedClassification& classification) const = 0;
-
-    virtual XMLElem convertDerivedClassificationToXML(
-            const DerivedClassification& classification,
-            XMLElem parent = NULL) const = 0;
-
     XMLElem createLUT(const std::string& name, const LUT *l,
             XMLElem parent = NULL) const;
     XMLElem createFootprint(const std::string& name,
@@ -117,40 +121,41 @@ protected:
                             const LatLonAltCorners& corners,
                             XMLElem parent = NULL) const;
 
-    XMLElem createSFAPoint(const std::string& localName, 
+    XMLElem createSFAPoint(const std::string& localName,
                            const SFAPoint* point,
                            XMLElem parent = NULL) const;
 
-    XMLElem createSFALine(const std::string& localName, 
+    XMLElem createSFALine(const std::string& localName,
                           const SFALineString* lineStr,
                           XMLElem parent) const;
 
-    XMLElem createSFADatum(const std::string& name, 
+    XMLElem createSFADatum(const std::string& name,
                            const six::sidd::SFADatum& datum,
                            XMLElem parent = NULL) const;
 
-    XMLElem convertProductCreationToXML(const ProductCreation* productCreation, 
+    XMLElem convertProductCreationToXML(const ProductCreation* productCreation,
                                         XMLElem parent = NULL) const;
-    XMLElem convertProcessorInformationToXML(const ProcessorInformation* processorInformation, 
+    XMLElem convertProcessorInformationToXML(const ProcessorInformation* processorInformation,
                                              XMLElem parent) const;
-    XMLElem convertProductProcessingToXML(const ProductProcessing* productProcessing, 
+    XMLElem convertProductProcessingToXML(const ProductProcessing* productProcessing,
                                           XMLElem parent = NULL) const;
-    XMLElem convertProcessingModuleToXML(const ProcessingModule* procMod, 
+    XMLElem convertProcessingModuleToXML(const ProcessingModule* procMod,
                                          XMLElem parent = NULL) const;
-    XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d, 
+    XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d,
                                                XMLElem parent = NULL) const;
-    XMLElem convertDisplayToXML(const Display* display, 
+    XMLElem convertDisplayToXML(const Display* display,
                                 XMLElem parent = NULL) const;
-    XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g, 
+    void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
+    XMLElem convertGeographicTargetToXML(const GeographicAndTarget* g,
                                          XMLElem parent = NULL) const;
     XMLElem convertGeographicCoverageToXML(const std::string& localName,
-                                           const GeographicCoverage* g, 
+                                           const GeographicCoverage* g,
                                            XMLElem parent = NULL) const;
-    XMLElem convertMeasurementToXML(const Measurement* measurement, 
+    XMLElem convertMeasurementToXML(const Measurement* measurement,
                                     XMLElem parent = NULL) const;
     XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
                                              XMLElem parent = NULL) const;
-    XMLElem convertAnnotationToXML(const Annotation *a, 
+    XMLElem convertAnnotationToXML(const Annotation *a,
                                    XMLElem parent = NULL) const;
     XMLElem convertCompressionToXML(const Compression *c,
                                     XMLElem parent = NULL) const;
@@ -164,32 +169,29 @@ protected:
                                      ProductCreation* productCreation) const;
     void parseProductCreationFromXML(const XMLElem informationXML,
                                      ProcessorInformation* processorInformation) const;
-    void parseProductProcessingFromXML(const XMLElem elem, 
+    void parseProductProcessingFromXML(const XMLElem elem,
                                        ProductProcessing* productProcessing) const;
-    void parseProcessingModuleFromXML(const XMLElem elem, 
+    void parseProcessingModuleFromXML(const XMLElem elem,
                                       ProcessingModule* procMod) const;
-    void parseDownstreamReprocessingFromXML(const XMLElem elem, 
+    void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    void parseGeographicTargetFromXML(const XMLElem elem, 
+    void parseGeographicTargetFromXML(const XMLElem elem,
                                       GeographicAndTarget* geographicAndTarget) const;
-    void parseGeographicCoverageFromXML(const XMLElem elem, 
+    void parseGeographicCoverageFromXML(const XMLElem elem,
                                         GeographicCoverage* geoCoverage) const;
-    void parseMeasurementFromXML(const XMLElem measurementXML, 
+    void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
-    void parseExploitationFeaturesFromXML(const XMLElem elem, 
+    void parseExploitationFeaturesFromXML(const XMLElem elem,
                                           ExploitationFeatures* exFeatures) const;
-    void parseAnnotationFromXML(const XMLElem annotationXML, 
+    void parseAnnotationFromXML(const XMLElem annotationXML,
                                 Annotation* a) const;
-    void parseSFAGeometryFromXML(const XMLElem elem, 
+    void parseSFAGeometryFromXML(const XMLElem elem,
                                  SFAGeometry* g) const;
     void parseGeographicCoordinateSystemFromXML(
-            const XMLElem coorSysElem, 
+            const XMLElem coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
-    void parseCompressionFromXML(const XMLElem compressionXML,
-                                 Compression* c) const;
-    void parseJ2KCompression(const XMLElem j2kElem, J2KCompression* c) const;
     void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
 
     static

@@ -36,7 +36,7 @@ sys::SSize_T io::InputStream::streamTo(io::OutputStream& soi, sys::SSize_T bytes
     sys::SSize_T bytesRead = 0;
     sys::SSize_T totalBytesTransferred = 0;
 
-    int sizeOfVec = (bytesToPipe <= DEFAULT_CHUNK_SIZE) ? (bytesToPipe) : (DEFAULT_CHUNK_SIZE);
+    sys::SSize_T sizeOfVec = (bytesToPipe <= DEFAULT_CHUNK_SIZE) ? (bytesToPipe) : (DEFAULT_CHUNK_SIZE);
     sys::byte vec[DEFAULT_CHUNK_SIZE];
     memset(vec, 0, DEFAULT_CHUNK_SIZE);
 

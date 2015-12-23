@@ -51,6 +51,8 @@
 
 using namespace six;
 
+namespace
+{
 static const struct
 {
     unsigned int width;
@@ -1737,35 +1739,6 @@ std::auto_ptr<six::WriteControl> getWriteControl(std::string outputName)
     return writer;
 }
 
-/*!
- *  Read a SICD XML into a data structure.  If this was in a NITF
- *  you wouldn't bother with this step, since the ReadControl would
- *  do this for you.
- *
- */
-six::sicd::ComplexData* getComplexData(const std::string& sicdXMLName)
-{
-    // Create a file input stream
-    io::FileInputStream sicdXMLFile(sicdXMLName);
-
-    // Create an XML parser
-    xml::lite::MinidomParser xmlParser;
-
-    // Parse the SICD XML input file
-    xmlParser.parse(sicdXMLFile);
-
-    // Get the SICD DOM
-    xml::lite::Document *doc = xmlParser.getDocument();
-
-    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
-    std::auto_ptr<six::XMLControl> xmlControl(
-            six::XMLControlFactory::getInstance().newXMLControl(
-                    DataType::COMPLEX, log.get()));
-
-    six::Data* data = xmlControl->fromXML(doc, std::vector<std::string>());
-    return (six::sicd::ComplexData*) data;
-}
-
 // Encapsulation of initialization for demo purposes
 void initProcessorInformation(
     six::sidd::ProcessorInformation& processorInformation)
@@ -1773,6 +1746,88 @@ void initProcessorInformation(
     processorInformation.application = "ProcessorName";
     processorInformation.profile = "Profile";
     processorInformation.site = "Ypsilanti, MI";
+}
+
+void createPredefinedKernel(six::sidd::Kernel& kernel)
+{
+    kernel.kernelName = "Some predefined kernel";
+    kernel.predefined.reset(new six::sidd::Kernel::Predefined());
+    kernel.predefined->dbName = six::sidd::KernelDatabaseName::LAGRANGE;
+    kernel.operation = six::sidd::KernelOperation::CONVOLUTION;
+}
+
+std::auto_ptr<six::sidd::Kernel> createPredefinedKernel()
+{
+    std::auto_ptr<six::sidd::Kernel> kernel(new six::sidd::Kernel());
+    createPredefinedKernel(*kernel);
+    return kernel;
+}
+
+void createCustomKernel(six::sidd::Kernel& kernel)
+{
+    kernel.kernelName = "Some custom kernel";
+    kernel.custom.reset(new six::sidd::Kernel::Custom());
+    kernel.custom->type = six::sidd::KernelCustomType::GENERAL;
+    kernel.custom->kernelSize.row = 2;
+    kernel.custom->kernelSize.col = 3;
+    kernel.custom->kernelCoef.resize(kernel.custom->kernelSize.normL1());
+    for (size_t ii = 0, end = kernel.custom->kernelCoef.size();
+         ii < end;
+         ++ii)
+    {
+        kernel.custom->kernelCoef[ii] = ii * 1.5;
+    }
+    kernel.operation = six::sidd::KernelOperation::CORRELATION;
+}
+
+std::auto_ptr<six::sidd::Kernel> createCustomKernel()
+{
+    std::auto_ptr<six::sidd::Kernel> kernel(new six::sidd::Kernel());
+    createCustomKernel(*kernel);
+    return kernel;
+}
+
+void initDisplay(six::sidd::Display& display)
+{
+    // BandInformation
+    display.bandInformation.reset(new six::sidd::BandInformation());
+    display.bandInformation->bands.push_back("Red");
+    display.bandInformation->bands.push_back("Green");
+    display.bandInformation->bands.push_back("Blue");
+    display.bandInformation->bitsPerPixel = 8;
+    display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
+
+    // NonInteractiveProcessing
+    display.nonInteractiveProcessing.reset(
+            new six::sidd::NonInteractiveProcessing());
+    six::sidd::ProductGenerationOptions& prodGenOptions =
+            display.nonInteractiveProcessing->productGenerationOptions;
+    prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
+    prodGenOptions.bandEqualization->algorithm =
+            six::sidd::BandEqualizationAlgorithm::LUT_1D;
+    prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 1));
+    for (size_t ii = 0; ii < 256; ++ii)
+    {
+        prodGenOptions.bandEqualization->bandLUT->table[ii] =
+                static_cast<sys::ubyte>(ii);
+    }
+    createPredefinedKernel(prodGenOptions.modularTransferFunctionRestoration);
+
+    std::auto_ptr<six::LUT> lut(new six::LUT(256, 3));
+    std::fill_n(lut->table.get(), 0, lut->numEntries * lut->elementSize);
+    prodGenOptions.dataRemapping.reset(
+            new six::sidd::ColorDisplayRemap(lut.release()));
+
+    prodGenOptions.asymmetricPixelCorrection.reset(createCustomKernel());
+
+    display.nonInteractiveProcessing->rrds.downsamplingMethod =
+            six::sidd::DownsamplingMethod::DECIMATE;
+    display.nonInteractiveProcessing->rrds.antiAlias.reset(
+            createCustomKernel());
+    display.nonInteractiveProcessing->rrds.interpolation.reset(
+            createPredefinedKernel());
+
+}
 }
 
 int main(int argc, char** argv)
@@ -1892,10 +1947,14 @@ int main(int argc, char** argv)
             *siddData-> productCreation-> processorInformation);
 
         // Or directly if preferred
+        // (This is SIDD 1.0 stuff)
         siddData->display->decimationMethod
                 = DecimationMethod::BRIGHTEST_PIXEL;
         siddData->display->magnificationMethod
                 = MagnificationMethod::NEAREST_NEIGHBOR;
+
+        // (This is SIDD 1.1 stuff)
+        initDisplay(*siddData->display);
 
         //---------------------------------------------------------------
         // We can only do this because we know it's PGD in this example

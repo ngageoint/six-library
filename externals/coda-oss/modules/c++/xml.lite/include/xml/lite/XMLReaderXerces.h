@@ -110,7 +110,7 @@ public:
 
 private:
 
-    void write(const sys::byte *b, sys::Size_T len)
+    void write(const sys::byte*, sys::Size_T)
     {
         throw xml::lite::XMLException(Ctxt("Im not sure how you got here!"));
     }

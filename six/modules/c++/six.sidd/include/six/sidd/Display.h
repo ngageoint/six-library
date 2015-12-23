@@ -181,7 +181,7 @@ struct RRDS
     DownsamplingMethod downsamplingMethod;
 
     //! Anti-aliasing kernel.  Only include if downsamplingMethod = DECIMATE.
-    mem::ScopedCopyablePtr<Kernel> antiAliasing;
+    mem::ScopedCopyablePtr<Kernel> antiAlias;
 
     //! Interpolation kernel.  Only include if downsamplingMethod = DECIMATE.
     mem::ScopedCopyablePtr<Kernel> interpolation;
