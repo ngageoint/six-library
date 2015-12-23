@@ -30,7 +30,6 @@ typedef xml::lite::Element* XMLElem;
 
 namespace six
 {
-
 SICommonXMLParser10x::SICommonXMLParser10x(
     const std::string& defaultURI,
     bool addClassAttributes,
@@ -166,6 +165,4 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
         parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
     }
 }
-
 }
-
