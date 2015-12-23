@@ -86,7 +86,7 @@ public:
    ReadWriteThread(std::string name) : Thread(name) {};
 };
 
-int main (int argc, char* argv[])
+int main (int, char**)
 {
    Thread *threads[MAX_THREADS];
    for (int i = 0 ; i < MAX_THREADS ; i++ ) {

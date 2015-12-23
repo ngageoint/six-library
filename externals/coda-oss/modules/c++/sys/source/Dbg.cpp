@@ -31,6 +31,8 @@ void sys::dbgPrintf(const char *format, ...)
     fprintf(DEBUG_STREAM, "<DBG> ");
     vfprintf(DEBUG_STREAM, format, args);
     va_end(args);
+#else
+    (void)format; //suppress unreferenced formal parameter warning when __DEBUG not defined
 #endif
 }
 

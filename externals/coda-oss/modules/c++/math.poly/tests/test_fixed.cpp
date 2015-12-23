@@ -34,7 +34,7 @@ typedef Fixed2D<3, 3> Cubic2D;
 typedef Fixed2D<4, 4> Quartic2D;
 
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     // first, lets do a one-d polynomial test...
     Cubic1D lOneDTst;

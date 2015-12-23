@@ -100,7 +100,7 @@ public:
             int errNum = 0) :
         XMLException(message)
     {
-        form(row, column);
+        form(row, column, errNum);
     }
 
     /*!
@@ -114,7 +114,7 @@ public:
             int errNum = 0) :
         XMLException(c)
     {
-        form(row, column);
+        form(row, column, errNum);
     }
 
     /*!
@@ -129,7 +129,7 @@ public:
             int row = 0, int column = 0, int errNum = 0) :
         XMLException(t, c)
     {
-        form(row, column);
+        form(row, column, errNum);
     }
 
     //! Destructor
@@ -145,9 +145,15 @@ private:
      *  \param col As reported by the constructor
      *
      */
-    void form(int row, int column)
+    void form(int row, int column, int errNum = 0)
     {
         std::ostringstream oss;
+	    
+	if (errNum > 0)
+	{
+	    oss << "Error #" << errNum << ":";
+	}
+	
         oss << " (" << row << ',' << column << "): " << mMessage;
         mMessage = oss.str();
     }

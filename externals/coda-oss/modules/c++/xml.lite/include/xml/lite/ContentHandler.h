@@ -116,7 +116,7 @@ public:
      *  This isnt in SAX 2.0, but I think it might be useful
      *  \param c The comment
      */
-    virtual void comment(const std::string & c)
+    virtual void comment(const std::string &)
     {
     }
 };
