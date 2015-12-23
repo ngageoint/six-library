@@ -84,7 +84,6 @@ private:
     void convertJ2KToXML(const J2KCompression& j2k,
                             XMLElem& parent) const;
 
-    };
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 };

@@ -37,6 +37,8 @@ public:
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
 
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const;
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const XMLElem classificationXML,

@@ -38,6 +38,11 @@ DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
 {
 }
 
+DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
+{
+    throw except::Exception(Ctxt("Implement me"));
+}
+
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
         const XMLElem classificationXML,
         DerivedClassification& classification) const
