@@ -1806,12 +1806,12 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization->algorithm =
             six::sidd::BandEqualizationAlgorithm::LUT_1D;
     prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 3));
-    std::fill_n(prodGenOptions.bandEqualization->bandLUT->table.get(), 0,
-                256 * 3);
+    std::fill_n(prodGenOptions.bandEqualization->bandLUT->table.get(),
+                256 * 3, 0);
     createPredefinedKernel(prodGenOptions.modularTransferFunctionRestoration);
 
     std::auto_ptr<six::LUT> lut(new six::LUT(256, 3));
-    std::fill_n(lut->table.get(), 0, lut->numEntries * lut->elementSize);
+    std::fill_n(lut->table.get(), lut->numEntries * lut->elementSize, 0);
     prodGenOptions.dataRemapping.reset(
             new six::sidd::ColorDisplayRemap(lut.release()));
 
