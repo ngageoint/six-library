@@ -107,16 +107,8 @@ DerivedData* DerivedXMLParser110::fromXML(
             getFirstAndOnly(displayXML, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
-    RegionType regionType = RegionType::SUB_REGION;
-    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetXML,
-                                      "GeographicCoverage");
-
     // create GeographicAndTarget
-    if (getOptional(tmpElem, "SubRegion"))
-        regionType = RegionType::SUB_REGION;
-    else if (getOptional(tmpElem, "GeographicInfo"))
-        regionType = RegionType::GEOGRAPHIC_INFO;
-    builder.addGeographicAndTarget(regionType);
+    builder.addGeographicAndTarget();
 
     // create Measurement
     six::ProjectionType projType = ProjectionType::NOT_SET;
@@ -818,8 +810,10 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
+    confirmNonNull(geographicAndTarget.imageCorners,
+                   "geographicAndTarget.imageCorners");
     common().createLatLonFootprint("ImageCorners", "ICP",
-                                   geographicAndTarget.imageCorners,
+                                   *geographicAndTarget.imageCorners,
                                    geographicAndTargetXML);
 
     //only if 3+ vertices
@@ -846,6 +840,14 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
     }
 
     return geographicAndTargetXML;
+}
+
+void DerivedXMLParser110::parseGeographicTargetFromXML(
+        const XMLElem elem,
+        GeographicAndTarget* geographicAndTarget) const
+{
+    // This block will look a lot like the ComplexXMLParser version
+    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
 }
 }
 }

@@ -79,7 +79,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::DerivedDataBuilder siddBuilder;
     siddBuilder.addDisplay(pixelType);
-    siddBuilder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+    siddBuilder.addGeographicAndTarget();
     siddBuilder.addMeasurement(six::ProjectionType::PLANE).
             addExploitationFeatures(1);
 

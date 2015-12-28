@@ -67,14 +67,19 @@ public:
     virtual DerivedDataBuilder& addDisplay(PixelType pixelType);
 
     /*!
+     *  Add geographic and target information.  Use this for SIDD 1.1.
+     */
+    virtual DerivedDataBuilder& addGeographicAndTarget();
+
+    /*!
      *  Add geographic and target information.  This requires that the
      *  user provide us with a RegionType, in order to properly initialize
-     *  the block.
+     *  the block.  Use this for SIDD 1.0
      *
      *  \param regionType What kind of region type scheme does the product use
      *  \return Reference to self
      */
-    virtual DerivedDataBuilder& addGeographicAndTarget(RegionType regionType);
+    virtual DerivedDataBuilder& addGeographicAndTargetOld(RegionType regionType);
 
     /*!
      *  Add the block containing the meta-data for doing measurements.

@@ -189,21 +189,17 @@ struct DerivedData: public Data
 
     /*!
      *  Maps to:
-     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
+     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
+     *  /SIDD/GeographicAndTarget/ImageCorners in 1.1
      */
-    virtual LatLonCorners getImageCorners() const
-    {
-        return geographicAndTarget->geographicCoverage.footprint;
-    }
+    virtual LatLonCorners getImageCorners() const;
 
     /*!
      *  Maps to:
-     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
+     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
+     *  /SIDD/GeographicAndTarget/ImageCorners in 1.1
      */
-    virtual void setImageCorners(const LatLonCorners& imageCorners)
-    {
-        geographicAndTarget->geographicCoverage.footprint = imageCorners;
-    }
+    virtual void setImageCorners(const LatLonCorners& imageCorners);
 
     /*!
      *  Maps to:

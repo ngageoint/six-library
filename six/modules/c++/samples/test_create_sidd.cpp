@@ -275,7 +275,7 @@ int main(int argc, char** argv)
             six::sidd::DerivedData* data = builder.steal(); //steal it
 
             builder.addDisplay(pixelType);
-            builder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+            builder.addGeographicAndTarget();
             builder.addMeasurement(six::ProjectionType::PLANE);
             builder.addExploitationFeatures(1);
 

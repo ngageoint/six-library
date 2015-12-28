@@ -32,10 +32,5 @@ GeographicCoverage::GeographicCoverage(RegionType rt) :
     if (regionType == RegionType::GEOGRAPHIC_INFO)
         geographicInformation.reset(new GeographicInformation());
 }
-
-GeographicAndTarget::GeographicAndTarget(RegionType regionType) :
-    geographicCoverage(regionType)
-{
-}
 }
 }

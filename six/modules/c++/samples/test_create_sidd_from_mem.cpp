@@ -1956,7 +1956,11 @@ int main(int argc, char** argv)
         // the other.  Here is how you add them individually
         //-----------------------------------------------------------
         siddBuilder.addDisplay(pixelType);
-        siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
+
+        // Note: You'd normally just set one or the other of these (based on
+        //       if you're creating a SIDD 1.0 vs. 1.1 product)
+        siddBuilder.addGeographicAndTargetOld(RegionType::GEOGRAPHIC_INFO);
+        siddBuilder.addGeographicAndTarget();
 
         // Here is how you can cascade them
         siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(

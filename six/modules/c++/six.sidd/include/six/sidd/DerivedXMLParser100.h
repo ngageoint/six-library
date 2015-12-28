@@ -57,6 +57,14 @@ private:
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
+
+    void parseGeographicTargetFromXML(
+            const XMLElem elem,
+            GeographicAndTarget* geographicAndTarget) const;
+
+    void parseGeographicCoverageFromXML(
+            const XMLElem elem,
+            GeographicCoverage* geoCoverage) const;
 };
 }
 }

@@ -27,7 +27,6 @@
 #include <str/Manip.h>
 #include <except/Exception.h>
 #include <six/sidd/DerivedXMLParser.h>
-#include <six/sidd/DerivedDataBuilder.h>
 
 namespace
 {
@@ -357,105 +356,6 @@ void DerivedXMLParser::parseDisplayFromXML(
     // optional
     common().parseParameters(displayXML, "DisplayExtension",
                              display->displayExtensions);
-}
-
-void DerivedXMLParser::parseGeographicTargetFromXML(
-        const XMLElem geographicAndTargetXML,
-        GeographicAndTarget* geographicAndTarget) const
-{
-    parseGeographicCoverageFromXML(
-            getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
-            &geographicAndTarget->geographicCoverage);
-
-    // optional to unbounded
-    std::vector<XMLElem> targetInfosXML;
-    geographicAndTargetXML->getElementsByTagName("TargetInformation",
-                                                 targetInfosXML);
-    geographicAndTarget->targetInformation.resize(targetInfosXML.size());
-    for (size_t i = 0; i < targetInfosXML.size(); ++i)
-    {
-        geographicAndTarget->targetInformation[i].reset(
-                new TargetInformation());
-
-        TargetInformation* ti
-                = geographicAndTarget->targetInformation[i].get();
-
-        // unbounded
-        common().parseParameters(targetInfosXML[i], "Identifier",
-                                 ti->identifiers);
-
-        // optional
-        XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
-        if (tmpXML)
-        {
-            ti->footprint.reset(new six::LatLonCorners());
-            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
-        }
-
-        // optional
-        common().parseParameters(targetInfosXML[i],
-                                 "TargetInformationExtension",
-                                 ti->targetInformationExtensions);
-    }
-}
-
-void DerivedXMLParser::parseGeographicCoverageFromXML(
-        const XMLElem geographicCoverageXML,
-        GeographicCoverage* geographicCoverage) const
-{
-    // optional and unbounded
-    common().parseParameters(geographicCoverageXML, "GeoregionIdentifier",
-                             geographicCoverage->georegionIdentifiers);
-
-    common().parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
-                            "Vertex", geographicCoverage->footprint);
-
-    // If there are subregions, recurse
-    std::vector<XMLElem> subRegionsXML;
-    geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
-
-    geographicCoverage->subRegion.resize(subRegionsXML.size());
-    for (size_t i = 0; i < subRegionsXML.size(); ++i)
-    {
-        geographicCoverage->subRegion[i].reset(
-                new GeographicCoverage(RegionType::SUB_REGION));
-        parseGeographicCoverageFromXML(
-                subRegionsXML[i], geographicCoverage->subRegion[i].get());
-    }
-
-    // Otherwise read the GeographicInfo
-    if (subRegionsXML.size() == 0)
-    {
-        XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
-                                                    "GeographicInfo");
-
-        geographicCoverage->geographicInformation.reset(
-            new GeographicInformation());
-
-        // optional to unbounded
-        std::vector<XMLElem> countryCodes;
-        geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
-        for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
-                != countryCodes.end(); ++it)
-        {
-            geographicCoverage->geographicInformation->
-                    countryCodes.push_back((*it)->getCharacterData());
-        }
-
-        // optional
-        XMLElem securityInformationXML = getOptional(geographicInfoXML,
-                                                     "SecurityInfo");
-        if (securityInformationXML)
-        {
-            parseString(securityInformationXML, geographicCoverage->
-                    geographicInformation->securityInformation);
-        }
-
-        // optional to unbounded
-        common().parseParameters(geographicInfoXML, "GeographicInfoExtension",
-                geographicCoverage->geographicInformation->
-                        geographicInformationExtensions);
-    }
 }
 
 // This function ASSUMES that the measurement projection has already been set!

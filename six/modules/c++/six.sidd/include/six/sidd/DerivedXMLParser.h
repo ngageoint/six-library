@@ -175,10 +175,6 @@ protected:
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    void parseGeographicTargetFromXML(const XMLElem elem,
-                                      GeographicAndTarget* geographicAndTarget) const;
-    void parseGeographicCoverageFromXML(const XMLElem elem,
-                                        GeographicCoverage* geoCoverage) const;
     void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
     void parseExploitationFeaturesFromXML(const XMLElem elem,
