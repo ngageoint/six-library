@@ -58,6 +58,9 @@ protected:
                                         XMLElem parent = NULL) const;
 
 private:
+    static const char VERSION[];
+    static const char SI_COMMON_URI[];
+
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;

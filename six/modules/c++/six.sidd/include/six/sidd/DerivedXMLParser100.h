@@ -52,6 +52,9 @@ protected:
                                         XMLElem parent = NULL) const;
 
 private:
+    static const char VERSION[];
+    static const char SI_COMMON_URI[];
+
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 };
