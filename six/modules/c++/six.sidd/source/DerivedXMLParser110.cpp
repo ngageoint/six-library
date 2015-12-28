@@ -86,6 +86,7 @@ DerivedData* DerivedXMLParser110::fromXML(
     XMLElem radiometricXML            = getOptional(root, "Radiometric");
     XMLElem annotationsXML            = getOptional(root, "Annotations");
     XMLElem compressionXML            = getOptional(root, "Compression");
+    XMLElem displayXML                = getOptional(root, "Display");
 
 
     DerivedDataBuilder builder;
@@ -281,6 +282,153 @@ void DerivedXMLParser110::parseJ2KCompression(const XMLElem j2kXML,
                     bitRate);
         j2k.layerInfo[ii].bitRate = bitRate;
     }
+}
+
+void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
+                                              Display& display) const
+{
+    //pixelType previously set
+
+    parseBandInformationFromXML(getFirstAndOnly(displayXML, "BandInformation"),
+                                display.bandInformation.get());
+
+    parseNonInteractiveProcessingFromXML(getFirstAndOnly(displayXML,
+           "NonInteractiveProcessing"), display.nonInteractiveProcessing.get());
+
+    parseInteractiveProcessingFromXML(getFirstAndOnly(displayXML,
+           "InteractiveProcessing"), display.interactiveProcessing.get());
+
+    std::vector<XMLElem> extensions;
+    displayXML.getElementsByTagName("DisplayExtention", extensions);
+    for (size_t ii = 0; ii < extensions.size(); ++i)
+    {
+        std::string name = extensions[ii].getAttribute("name");
+        std::string value;
+        parseString(extensions[ii], value);
+        Parameter parameter(value);
+        parameter.setName(name);
+        display.displayExtensions[ii].push_back(parameter);
+    }
+}
+
+void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
+            BandInformation& bandInformation) const
+{
+    std::vector<XMLElem> bands;
+    bandXML.getElementsByTagName("Band", bands);
+    bandInformation.bands.resize(bands.size());
+
+    for (size_t ii = 0; ii < bands.size(); ++i)
+    {
+        parseString(bands[ii], bandInfo.bands[ii]);
+        parseInt(getFirstAndOnly(bandXML, "BitsPerPixel"),
+                bandInfo.bitsPerPixel);
+        parseInt(getFirstAndOnly(bandXML, "DisplayFlag"), bandInfo.displayFlag);
+
+    }
+
+}
+
+void DerivedXMLParser110::parseNonInteractiveProcessingFromXML(
+            const XMLElem procElem,
+            NonInteractiveProcessing& nonInteractiveProcessing) const
+{
+    XMLElem productGenerationOptions = getFirstAndOnly(procElem,
+            "ProductGenerationOptions");
+    XMLElem rrdsElem = getFirstAndOnly(procElem, "RRDS");
+
+    parseProductGenerationOptionsFromXML(productGenerationOptions,
+        nonInteractiveProcessing.productGenerationOptions);
+
+    parseRRDSFromXML(rrdsElem, nonInteractiveProcessing.rrds);
+}
+
+void parseProductGenerationOptionsFromXML(XMLElem optionsElem,
+            ProductGenerationOptions& options) const
+{
+    XMLElem bandElem = getOptional(options, "BandEqualization");
+    XMLElem restoration = getFirstAndOnly(options,
+            "ModularTransferFunctionRestoration");
+    XMLElem remapElem = getOptional(options, "DataRemapping");
+    XMLElem correctionElem = getOptional(options, "AsymmetricPixelCorrection");
+
+    if (bandElem)
+    {
+        parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
+    }
+    parseKernelFromXML(restoration, options.modularTransferFunctionRestoration);
+    if (remapElem)
+    {
+        parsedataRemappingFromXML(remapElem, *options.dataRemapping);
+    }
+    if (correctionElem)
+    {
+        parseKernelFromXML(correctionElem, *options.asymmetricPixelCorrection);
+    }
+}
+
+void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
+            RRDS& rrds) const
+{
+    std::string methodType;
+    parseString(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), methodType);
+    DownsamplingMethod downsamplingMethod(methodType);
+    rrds.downsamplingMethod = downsamplingMethod;
+
+    if (methodType != "DECIMATE")
+    {
+        return;
+    }
+
+    parseKernelFromXML(getFirstAndOnly(rrdsElem, "AntiAlias"), *rrds.antiAlias);
+    parseKernelFromXML(getFirstAndOnly(rrdsElem, "Interpolation"),
+            *rrds.interpolation);
+}
+
+void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
+                                             Kerenl& kernel)
+{
+    parseString(getFirstAndOnly(kernelElem, "KernelName"), kernel.kernelName);
+    XMLElem customElem = getOptional(kernelElem, "Custom");
+    XMLElem predefinedElem = getOptional(kernelElem, "Predefined");
+
+    if (customElem)
+    {
+        //TODO: KernelCustomType
+
+        XMLElem kernelSize = getFirstAndOnly(kernelElem, "KernelSize");
+        parseInt(getFirstAndOnly(kernelSize, "Row"),
+                kernel.predefined.kernelSize.row);
+        parseInt(getFirstAndOnly(kernelSize, "Col"),
+                kernel.predefined.kernelSize.col);
+
+        XMLElem kernelCoef = getFirstAndOnly(kernelElem, "KernelCoef");
+        std::vector<XMLElem> coefficients;
+        kernelCoef.getElementsByTagName("Coef", coefficients);
+        size_t numCoefs = coefficients.size();
+        kernel.kernelCoef.resize(numCoefs);
+        for (size_t ii = 0; ii < numCoefs; ++ii)
+        {
+            parseDouble(coefficients[ii], kernel.predefined.kernelCoef[ii]);
+        }
+    }
+    else if (predefinedElem)
+    {
+        XMLElem dbNameElem = getOptional("DBName");
+        XMLElem familyElem = getOptional("KernelFamily");
+        XMLElem kernelMember = getOptional("KernelMember");
+
+        if (dbNameElem)
+        {
+            parseString(dbNameElem, kernel.predefined.dbName);
+        }
+        else
+        {
+            parseInt(familyElem, kernel.predefined.kernelFamily);
+            parseInt(familyElem, kernel.predefined.kernelMember);
+        }
+    }
+    parseString(getFirstAndOnly(kernelElem, "Operation"), kernel.operation);
 }
 
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(

@@ -57,6 +57,12 @@ protected:
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
 
+    virtual void parseDisplayFromXML(const XMLElem displayXML,
+                                     Display& display) const;
+
+    virtual void parseBandInformationFromXML(const XMLElem bandXML,
+            BandInformation& bandInformation) const;
+
 private:
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,

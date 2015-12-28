@@ -139,7 +139,7 @@ struct MonitorCompensationApplied
 
 /*!
  *  \struct DRAHistogramOverrides
- *  \brief 
+ *  \brief
  *
  */
 struct DRAHistogramOverrides
@@ -285,12 +285,12 @@ struct InteractiveProcessing
 };
 
 /*
- *  The Display grouping contains information required for 
- *  proper display of the imagery. The parameters in this block 
+ *  The Display grouping contains information required for
+ *  proper display of the imagery. The parameters in this block
  *  are expected to be utilized in conjunction with a viewer compliant
- *  with the NGA Softcopy Image Processing Standard (SIPS) v2.1. In 
- *  addition, it also describes any remaps or monitor compensations 
- *  applied to the data, as well as, differentiating whether a color 
+ *  with the NGA Softcopy Image Processing Standard (SIPS) v2.1. In
+ *  addition, it also describes any remaps or monitor compensations
+ *  applied to the data, as well as, differentiating whether a color
  *  remap or monochrome remap was applied to the data.
  */
 struct Display
