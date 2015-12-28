@@ -46,11 +46,12 @@ struct Geopositioning
 
     CoordinateSystemType coordinateSystemType;
 
-    // TODO: These might be enums
+    // These four are filled out for you in the constructor to what the
+    // standard/schema requires
     std::string geodeticDatum;
     std::string referenceEllipsoid;
     std::string verticalDatum;
-    std::string soundingDatum; // TODO: Might be optional
+    std::string soundingDatum;
 
     size_t falseOrigin;
 
@@ -61,7 +62,7 @@ struct PositionalAccuracy
 {
     PositionalAccuracy();
 
-    size_t positionalAccuracyRegions;
+    size_t numRegions;
 
     double absoluteAccuracyHorizontal;
     double absoluteAccuracyVertical;
@@ -72,9 +73,13 @@ struct PositionalAccuracy
 
 struct DigitalElevationData
 {
+    DigitalElevationData();
+
     GeographicCoordinates geographicCoordinates;
     Geopositioning geopositioning;
     PositionalAccuracy positionalAccuracy;
+
+    sys::Int64_T nullValue;
 };
 }
 }

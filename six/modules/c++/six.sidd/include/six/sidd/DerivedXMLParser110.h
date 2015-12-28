@@ -81,18 +81,24 @@ private:
                                const Kernel& kernel,
                                XMLElem parent = NULL) const;
 
-    void parseJ2KCompression(const XMLElem j2kElem,
-                             J2KCompression& j2k) const;
-
     void convertJ2KToXML(const J2KCompression& j2k,
                             XMLElem& parent) const;
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 
+    XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded,
+                                             XMLElem parent = NULL) const;
+
+    void parseJ2KCompression(const XMLElem j2kElem,
+                             J2KCompression& j2k) const;
+
     void parseGeographicTargetFromXML(
             const XMLElem elem,
             GeographicAndTarget* geographicAndTarget) const;
+
+    void parseDigitalElevationDataFromXML(const XMLElem elem,
+                                          DigitalElevationData& ded) const;
 };
 }
 }

@@ -220,7 +220,12 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
     {
        convertCompressionToXML(*derived->compression, root);
     }
-
+    // optional
+    if (derived->digitalElevationData.get())
+    {
+        convertDigitalElevationDataToXML(*derived->digitalElevationData,
+                                         root);
+    }
     // optional
     if (!derived->annotations.empty())
     {
@@ -280,9 +285,8 @@ void DerivedXMLParser110::parseJ2KCompression(const XMLElem j2kXML,
 
     for (size_t ii = 0; ii < layersXML.size(); ++ii)
     {
-        double bitRate;
         parseDouble(getFirstAndOnly(layersXML[ii], "Bitrate"),
-                j2k.layerInfo[ii].bitRate);
+                    j2k.layerInfo[ii].bitRate);
     }
 }
 
@@ -842,11 +846,85 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
     return geographicAndTargetXML;
 }
 
+XMLElem DerivedXMLParser110::convertDigitalElevationDataToXML(
+        const DigitalElevationData& ded,
+        XMLElem parent) const
+{
+    XMLElem dedXML = newElement("DigitalElevationData", parent);
+
+    // GeographicCoordinates
+    XMLElem geoCoordXML = newElement("GeographicCoordinates", dedXML);
+    createDouble("LongitudeDensity",
+                 ded.geographicCoordinates.longitudeDensity,
+                 geoCoordXML);
+    createDouble("LatitudeDensity",
+                 ded.geographicCoordinates.latitudeDensity,
+                 geoCoordXML);
+    common().createLatLon("ReferenceOrigin",
+                          ded.geographicCoordinates.referenceOrigin,
+                          geoCoordXML);
+
+    // Geopositioning
+    XMLElem geoposXML = newElement("Geopositioning", dedXML);
+    createStringFromEnum("CoordinateSystemType",
+                         ded.geopositioning.coordinateSystemType,
+                         geoposXML);
+    createString("GeodeticDatum", ded.geopositioning.geodeticDatum,
+                 geoposXML);
+    createString("ReferenceEllipsoid", ded.geopositioning.referenceEllipsoid,
+                 geoposXML);
+    createString("VerticalDatum", ded.geopositioning.verticalDatum,
+                 geoposXML);
+    createString("SoundingDatum", ded.geopositioning.soundingDatum,
+                 geoposXML);
+    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposXML);
+    if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
+    {
+        createInt("UTMGridZoneNumber",
+                  ded.geopositioning.utmGridZoneNumber,
+                  geoposXML);
+    }
+
+    // PositionalAccuracy
+    XMLElem posAccXML = newElement("PositionalAccuracy", dedXML);
+    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccXML);
+
+    XMLElem absAccXML = newElement("AbsoluteAccuracy", posAccXML);
+    createDouble("Horizontal",
+                 ded.positionalAccuracy.absoluteAccuracyHorizontal,
+                 absAccXML);
+    createDouble("Vertical",
+                 ded.positionalAccuracy.absoluteAccuracyVertical,
+                 absAccXML);
+
+    XMLElem p2pAccXML = newElement("PointToPointAccuracy", posAccXML);
+    createDouble("Horizontal",
+                 ded.positionalAccuracy.pointToPointAccuracyHorizontal,
+                 p2pAccXML);
+    createDouble("Vertical",
+                 ded.positionalAccuracy.pointToPointAccuracyVertical,
+                 p2pAccXML);
+
+    if (six::Init::isDefined(ded.nullValue))
+    {
+        createInt("NullValue", ded.nullValue, dedXML);
+    }
+
+    return dedXML;
+}
+
 void DerivedXMLParser110::parseGeographicTargetFromXML(
         const XMLElem elem,
         GeographicAndTarget* geographicAndTarget) const
 {
     // This block will look a lot like the ComplexXMLParser version
+    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
+}
+
+void DerivedXMLParser110::parseDigitalElevationDataFromXML(
+        const XMLElem elem,
+        DigitalElevationData& ded) const
+{
     throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
 }
 }

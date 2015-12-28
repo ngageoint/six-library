@@ -1868,6 +1868,29 @@ void initDisplay(six::sidd::Display& display)
     param.setValue("Some value");
     display.displayExtensions.push_back(param);
 }
+
+void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded)
+{
+    ded.reset(new six::sidd::DigitalElevationData());
+
+    ded->geographicCoordinates.longitudeDensity = 1;
+    ded->geographicCoordinates.latitudeDensity = 2;
+    ded->geographicCoordinates.referenceOrigin.setLat(42);
+    ded->geographicCoordinates.referenceOrigin.setLon(-83);
+
+    ded->geopositioning.coordinateSystemType =
+            six::sidd::CoordinateSystemType::UTM;
+    ded->geopositioning.falseOrigin = 0;
+    ded->geopositioning.utmGridZoneNumber = 15;
+
+    ded->positionalAccuracy.numRegions = 3;
+    ded->positionalAccuracy.absoluteAccuracyHorizontal = 4;
+    ded->positionalAccuracy.absoluteAccuracyVertical = 5;
+    ded->positionalAccuracy.pointToPointAccuracyHorizontal = 6;
+    ded->positionalAccuracy.pointToPointAccuracyVertical = 7;
+
+    ded->nullValue = -32768;
+}
 }
 
 int main(int argc, char** argv)
@@ -1988,7 +2011,8 @@ int main(int argc, char** argv)
 
         // Can certainly be init'ed in a function
         initProcessorInformation(
-            *siddData-> productCreation-> processorInformation);
+            *siddData->productCreation->processorInformation);
+        initDED(siddData->digitalElevationData);
 
         // Or directly if preferred
         // (This is SIDD 1.0 stuff)

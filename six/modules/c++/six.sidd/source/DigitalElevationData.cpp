@@ -36,17 +36,26 @@ GeographicCoordinates::GeographicCoordinates() :
 }
 
 Geopositioning::Geopositioning() :
+    geodeticDatum("World Geodetic System 1984"),
+    referenceEllipsoid("World Geodetic System 1984"),
+    verticalDatum("Mean Sea Level"),
+    soundingDatum("Mean Sea Level"),
     falseOrigin(six::Init::undefined<size_t>()),
     utmGridZoneNumber(six::Init::undefined<size_t>())
 {
 }
 
 PositionalAccuracy::PositionalAccuracy() :
-    positionalAccuracyRegions(six::Init::undefined<size_t>()),
+    numRegions(six::Init::undefined<size_t>()),
     absoluteAccuracyHorizontal(six::Init::undefined<double>()),
     absoluteAccuracyVertical(six::Init::undefined<double>()),
     pointToPointAccuracyHorizontal(six::Init::undefined<double>()),
     pointToPointAccuracyVertical(six::Init::undefined<double>())
+{
+}
+
+DigitalElevationData::DigitalElevationData() :
+    nullValue(six::Init::undefined<sys::Int64_T>())
 {
 }
 }
