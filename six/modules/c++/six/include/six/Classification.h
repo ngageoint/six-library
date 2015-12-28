@@ -62,9 +62,9 @@ public:
         return (!level.empty() && ::toupper(level[0]) == 'U');
     }
 
-    virtual void setSecurity(const std::string& prefix,
-                             logging::Logger& log,
-                             nitf::FileSecurity security) const
+    virtual void setSecurity(const std::string& /*prefix*/,
+                             logging::Logger& /*log*/,
+                             nitf::FileSecurity /*security*/) const
     {
     }
 

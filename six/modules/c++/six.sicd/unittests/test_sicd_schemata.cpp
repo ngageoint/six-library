@@ -280,7 +280,7 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
 }
 
 
-std::string  initGeoDataXML(unsigned int version, size_t numInfos = 4, size_t numPoints = 4)
+std::string  initGeoDataXML(unsigned int version, size_t numInfos = 4)
 {
     std::string xmlText("");
 

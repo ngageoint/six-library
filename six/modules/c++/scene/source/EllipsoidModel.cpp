@@ -192,13 +192,13 @@ void WGS84EllipsoidModel::initRadiusValues()
     }
 }
 
-void WGS84EllipsoidModel::setEquatorialRadius(double val)
+void WGS84EllipsoidModel::setEquatorialRadius(double)
 {
     //can't change the value - do some error
     throw except::Exception(Ctxt("Tried to change the equatorial radius - not supported"));
 }
 
-void WGS84EllipsoidModel::setPolarRadius(double val)
+void WGS84EllipsoidModel::setPolarRadius(double)
 {
     throw except::Exception(Ctxt("Tried to change the polar radius - not supported"));
 

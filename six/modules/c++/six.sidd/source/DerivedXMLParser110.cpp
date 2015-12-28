@@ -173,7 +173,7 @@ DerivedData* DerivedXMLParser110::fromXML(
     if (compressionXML)
     {
         builder.addCompression();
-        parseCompressionFromXML(compressionXML, *(data->compression.get()));
+        parseCompressionFromXML(compressionXML, *data->compression);
     }
 
     return data;
@@ -216,6 +216,12 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
         common().convertRadiometryToXML(derived->radiometric.get(), root);
     }
     // optional
+    if (derived->compression.get())
+    {
+       convertCompressionToXML(*derived->compression, root);
+    }
+
+    // optional
     if (!derived->annotations.empty())
     {
         XMLElem annotationsElem = newElement("Annotations", root);
@@ -224,11 +230,6 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
             convertAnnotationToXML(derived->annotations[i].get(),
                                    annotationsElem);
         }
-    }
-    // optional
-    if (derived->compression.get())
-    {
-       convertCompressionToXML(*(derived->compression.get()), root);
     }
 
     //set the XMLNS
@@ -258,12 +259,12 @@ void DerivedXMLParser110::parseCompressionFromXML(const XMLElem compressionXML,
     if (parsedElem)
     {
         compression.parsed.reset(new J2KCompression());
-        parseJ2KCompression(parsedElem, *(compression.parsed));
+        parseJ2KCompression(parsedElem, *compression.parsed);
     }
 }
 
 void DerivedXMLParser110::parseJ2KCompression(const XMLElem j2kXML,
-                                           J2KCompression& j2k) const
+                                              J2KCompression& j2k) const
 {
     parseInt(getFirstAndOnly(j2kXML, "NumWaveletLevels"),
             j2k.numWaveletLevels);
@@ -277,12 +278,11 @@ void DerivedXMLParser110::parseJ2KCompression(const XMLElem j2kXML,
     size_t numLayers = layersXML.size();
     j2k.layerInfo.resize(numLayers);
 
-    for (size_t ii = 0; ii != layersXML.size(); ++ii)
+    for (size_t ii = 0; ii < layersXML.size(); ++ii)
     {
         double bitRate;
         parseDouble(getFirstAndOnly(layersXML[ii], "Bitrate"),
-                    bitRate);
-        j2k.layerInfo[ii].bitRate = bitRate;
+                j2k.layerInfo[ii].bitRate);
     }
 }
 
@@ -728,20 +728,20 @@ XMLElem DerivedXMLParser110::convertCompressionToXML(
         XMLElem parent) const
 {
     XMLElem compressionXML = newElement("Compression", parent);
-    XMLElem j2kXML         = newElement("J2K", compressionXML);
-    XMLElem originalXML    = newElement("Original", j2kXML);
+    XMLElem j2kXML = newElement("J2K", compressionXML);
+    XMLElem originalXML = newElement("Original", j2kXML);
     convertJ2KToXML(compression.original, originalXML);
 
     if (compression.parsed.get())
     {
         XMLElem parsedXML = newElement("Parsed", j2kXML);
-        convertJ2KToXML(*(compression.parsed.get()), parsedXML);
+        convertJ2KToXML(*compression.parsed, parsedXML);
     }
     return compressionXML;
 }
 
 void DerivedXMLParser110::convertJ2KToXML(const J2KCompression& j2k,
-                                       XMLElem& parent) const
+                                          XMLElem& parent) const
 {
     createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     createInt("NumBands", j2k.numBands, parent);

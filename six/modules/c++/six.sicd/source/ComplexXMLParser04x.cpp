@@ -330,7 +330,7 @@ XMLElem ComplexXMLParser04x::convertHPBWToXML(
 }
 
 XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
-    const std::string& name,
+    const std::string& /*name*/,
     const GainAndPhasePolys* array,
     XMLElem apXML) const
 {
@@ -451,8 +451,8 @@ void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem,
     parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
 }
 
-void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem rmcrElem, 
-                                           RMCR* rmcr) const
+void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem, 
+                                           RMCR*) const
 {
     // did not exist in 0.4
     throw except::Exception(Ctxt("RMA=>RMCR is not available in 0.4"));

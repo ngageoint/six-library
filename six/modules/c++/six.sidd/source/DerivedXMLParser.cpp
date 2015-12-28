@@ -46,7 +46,7 @@ DerivedXMLParser::DerivedXMLParser(
         std::auto_ptr<six::SICommonXMLParser> comParser,
         logging::Logger* log,
         bool ownLog) :
-    XMLParser(versionToURI(version), false, log),
+    XMLParser(versionToURI(version), false, log, ownLog),
     mCommon(comParser)
 {
 }

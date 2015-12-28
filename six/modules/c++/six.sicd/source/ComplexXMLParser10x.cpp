@@ -288,8 +288,8 @@ XMLElem ComplexXMLParser10x::convertRMATToXML(
 }
 
 XMLElem ComplexXMLParser10x::convertHPBWToXML(
-    const HalfPowerBeamwidths* halfPowerBeamwidths, 
-    XMLElem parent) const
+    const HalfPowerBeamwidths*, 
+    XMLElem) const
 {
     //! this field was deprecated in 1.0.0
     return NULL;
