@@ -3041,9 +3041,9 @@ class Classification(_object):
         return _six_base.Classification_isUnclassified(self)
 
 
-    def setSecurity(self, prefix, log, security):
-        """setSecurity(Classification self, std::string const & prefix, logging::Logger & log, nitf::FileSecurity security)"""
-        return _six_base.Classification_setSecurity(self, prefix, log, security)
+    def setSecurity(self, arg2, arg3, arg4):
+        """setSecurity(Classification self, std::string const & arg2, logging::Logger & arg3, nitf::FileSecurity arg4)"""
+        return _six_base.Classification_setSecurity(self, arg2, arg3, arg4)
 
 
     def put(self, os):

@@ -73665,7 +73665,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Classification", _wrap_delete_Classification, METH_VARARGS, (char *)"delete_Classification(Classification self)"},
 	 { (char *)"Classification_getLevel", _wrap_Classification_getLevel, METH_VARARGS, (char *)"Classification_getLevel(Classification self) -> std::string"},
 	 { (char *)"Classification_isUnclassified", _wrap_Classification_isUnclassified, METH_VARARGS, (char *)"Classification_isUnclassified(Classification self) -> bool"},
-	 { (char *)"Classification_setSecurity", _wrap_Classification_setSecurity, METH_VARARGS, (char *)"Classification_setSecurity(Classification self, std::string const & prefix, logging::Logger & log, nitf::FileSecurity security)"},
+	 { (char *)"Classification_setSecurity", _wrap_Classification_setSecurity, METH_VARARGS, (char *)"Classification_setSecurity(Classification self, std::string const & arg3, logging::Logger & arg4, nitf::FileSecurity arg5)"},
 	 { (char *)"Classification_put", _wrap_Classification_put, METH_VARARGS, (char *)"Classification_put(Classification self, std::ostream & os) -> std::ostream &"},
 	 { (char *)"Classification_fileOptions_set", _wrap_Classification_fileOptions_set, METH_VARARGS, (char *)"Classification_fileOptions_set(Classification self, Options fileOptions)"},
 	 { (char *)"Classification_fileOptions_get", _wrap_Classification_fileOptions_get, METH_VARARGS, (char *)"Classification_fileOptions_get(Classification self) -> Options"},
