@@ -466,6 +466,14 @@ void DerivedXMLParser::parseMeasurementFromXML(
 
     common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
                           measurement->arpPoly);
+
+    XMLElem validDataXML = getOptional(measurementXML, "ValidData");
+    if (validDataXML)
+    {
+        common().parseRowColInts(validDataXML,
+                                 "Vertex",
+                                 measurement->validData);
+    }
 }
 
 void DerivedXMLParser::parseExploitationFeaturesFromXML(
@@ -935,6 +943,21 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     common().createPolyXYZ("ARPPoly",
                            measurement->arpPoly,
                            measurementXML);
+
+    //only if 3+ vertices
+    const size_t numVertices = measurement->validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", measurementXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML = common().createRowCol(
+                    "Vertex", measurement->validData[ii], vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
+    }
 
     return measurementXML;
 }
