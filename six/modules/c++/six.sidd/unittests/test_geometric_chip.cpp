@@ -38,7 +38,7 @@ TEST_CASE(testGeometricChip)
 }
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     TEST_CHECK(testGeometricChip);
     return 0;
