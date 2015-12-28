@@ -109,7 +109,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 SCOPED_CLONEABLE(six::sicd, CollectionInformation)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_CLONEABLE(six::sicd, ImageData)
-SCOPED_CLONEABLE(six::sicd, GeoData)
+SCOPED_COPYABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
 SCOPED_COPYABLE(six::sicd, Timeline)
 SCOPED_COPYABLE(six::sicd, Position)
@@ -124,8 +124,8 @@ SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
 SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-SCOPED_CLONEABLE(six::sicd, GeoInfo) 
-%template(VectorScopedCloneableGeoInfo) std::vector<mem::ScopedCloneablePtr<six::sicd::GeoInfo> >;
+SCOPED_COPYABLE(six, GeoInfo) 
+%template(VectorScopedCopyableGeoInfo) std::vector<mem::ScopedCopyablePtr<six::GeoInfo> >;
 %template(VectorLatLon) std::vector<scene::LatLon>;
 
 SCOPED_COPYABLE(six::sicd, AntennaParameters)

@@ -28,7 +28,6 @@
 #include <except/Exception.h>
 #include <six/sidd/DerivedXMLParser.h>
 #include <six/sidd/DerivedDataBuilder.h>
-#include <six/SICommonXMLParser01x.h>
 
 namespace
 {
@@ -40,17 +39,16 @@ namespace six
 {
 namespace sidd
 {
-const char DerivedXMLParser::SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 const char DerivedXMLParser::ISM_URI[] = "urn:us:gov:ic:ism";
 
-DerivedXMLParser::DerivedXMLParser(const std::string& version,
-                                   logging::Logger* log,
-                                   bool ownLog) :
+DerivedXMLParser::DerivedXMLParser(
+        const std::string& version,
+        std::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log,
+        bool ownLog) :
     XMLParser(versionToURI(version), false, log, ownLog),
-    mCommon(new six::SICommonXMLParser01x(
-                versionToURI(version), false,
-                SI_COMMON_URI, log))
+    mCommon(comParser)
 {
 }
 

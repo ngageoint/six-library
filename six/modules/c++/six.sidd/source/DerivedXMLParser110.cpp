@@ -22,6 +22,7 @@
 
 #include <sstream>
 
+#include <six/SICommonXMLParser10x.h>
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser110.h>
 
@@ -64,9 +65,19 @@ namespace six
 {
 namespace sidd
 {
+const char DerivedXMLParser110::VERSION[] = "1.1.0";
+const char DerivedXMLParser110::SI_COMMON_URI[] = "urn:SICommon:1.0";
+
 DerivedXMLParser110::DerivedXMLParser110(logging::Logger* log,
                                          bool ownLog) :
-    DerivedXMLParser("1.1.0", log, ownLog)
+    DerivedXMLParser(VERSION,
+                     std::auto_ptr<six::SICommonXMLParser>(
+                         new six::SICommonXMLParser10x(versionToURI(VERSION),
+                                                       false,
+                                                       SI_COMMON_URI,
+                                                       log)),
+                     log,
+                     ownLog)
 {
 }
 
