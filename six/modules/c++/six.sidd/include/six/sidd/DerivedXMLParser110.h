@@ -60,10 +60,9 @@ protected:
     virtual void parseDisplayFromXML(const XMLElem displayXML,
                                      Display& display) const;
 
-    virtual void parseBandInformationFromXML(const XMLElem bandXML,
-            BandInformation& bandInformation) const;
 
 private:
+
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
@@ -88,10 +87,47 @@ private:
                              J2KCompression& j2k) const;
 
     void convertJ2KToXML(const J2KCompression& j2k,
-                            XMLElem& parent) const;
+                         XMLElem& parent) const;
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
+
+    void parseBandInformationFromXML(const XMLElem bandXML,
+         BandInformation& bandInformation) const;
+
+    void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
+         NonInteractiveProcessing& nonInteractiveProcessing) const;
+
+    void parseProductGenerationOptionsFromXML(const XMLElem optionsElem,
+         ProductGenerationOptions& options) const;
+
+    void parseBandEqualizationFromXML(const XMLElem bandElem,
+         BandEqualization& band) const;
+
+    void parseLUT(const XMLElem LUTElem, LUT& lut) const;
+
+    void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
+
+    void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
+
+    void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
+         InteractiveProcessing& interactive) const;
+
+    void parseGeometricTransformFromXML(const XMLElem geomElem,
+         GeometricTransform& transform) const;
+
+    void parseSharpnessEnhancementFromXML(const XMLElem sharpElem,
+         SharpnessEnhancement& sharpness) const;
+
+    void parseColorSpaceTransformFromXML(const XMLElem colorElem,
+         ColorSpaceTransform& transform) const;
+
+    void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
+         DynamicRangeAdjustment& rangeAdjustment) const;
+
+    void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
+         OneDimensionalLookup& lookup) const;
+
 };
 }
 }
