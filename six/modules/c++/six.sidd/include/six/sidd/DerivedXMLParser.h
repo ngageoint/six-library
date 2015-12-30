@@ -174,7 +174,7 @@ protected:
     void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
-    void parseSingleLUT(const XMLElem elem, LUT* lut) const;
+    std::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
     void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;

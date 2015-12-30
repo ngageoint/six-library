@@ -384,7 +384,7 @@ void DerivedXMLParser110::parseBandEqualizationFromXML(const XMLElem bandElem,
     XMLElem LUTElem = getOptional(bandElem, "BandLUT");
     if (LUTElem)
     {
-        parseSingleLUT(LUTElem, band.bandLUT.get());
+        band.bandLUT.reset(parseSingleLUT(LUTElem));
     }
 }
 
