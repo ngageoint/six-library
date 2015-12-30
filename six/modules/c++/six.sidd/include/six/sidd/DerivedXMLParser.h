@@ -174,6 +174,7 @@ protected:
     void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
+    void parseSingleLUT(const XMLElem elem, LUT* lut) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
     void parseGeographicTargetFromXML(const XMLElem elem,
                                       GeographicAndTarget* geographicAndTarget) const;

@@ -265,20 +265,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             XMLElem remapLUTXML = getOptional(monoRemapXML, "RemapLUT");
             if (remapLUTXML)
             {
-                //get size attribute
-                int size = str::toType<int>(remapLUTXML->attribute("size"));
-
-                std::string lutStr = "";
-                parseString(remapLUTXML, lutStr);
-                std::vector<std::string> lutVals = str::split(lutStr, " ");
-                remapLUT.reset(new LUT(size, sizeof(short)));
-
-                for (size_t ii = 0; ii < lutVals.size(); ++ii)
-                {
-                    const short lutVal = str::toType<short>(lutVals[ii]);
-                    ::memcpy(&(remapLUT->table[ii * remapLUT->elementSize]),
-                             &lutVal, sizeof(short));
-                }
+                parseSingleLUT(remapLUTXML, remapLUT.get());
             }
 
             std::auto_ptr<MonochromeDisplayRemap> monoRemap(
@@ -304,6 +291,28 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     else
     {
         return NULL;
+    }
+}
+
+void DerivedXMLParser::parseSingleLUT(const XMLElem elem, LUT* lut) const
+{
+    //get size attribute
+    int size = str::toType<int>(elem->attribute("size"));
+
+    std::string lutStr = "";
+    parseString(elem, lutStr);
+    std::vector<std::string> lutVals = str::split(lutStr, " ");
+    if (lut != NULL)
+    {
+        delete lut;
+    }
+    lut = new LUT(size, sizeof(short));
+
+    for (size_t ii = 0; ii < lutVals.size(); ++ii)
+    {
+        const short lutVal = str::toType<short>(lutVals[ii]);
+        ::memcpy(&(lut->table[ii * lut->elementSize]),
+                 &lutVal, sizeof(short));
     }
 }
 
