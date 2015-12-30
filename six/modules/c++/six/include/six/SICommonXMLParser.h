@@ -29,6 +29,7 @@
 #include <six/ErrorStatistics.h>
 #include <six/Radiometric.h>
 #include <six/GeoInfo.h>
+#include <six/MatchInformation.h>
 
 namespace six
 {
@@ -161,6 +162,10 @@ public:
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML, 
         Radiometric *obj) const = 0;
+
+    virtual XMLElem convertMatchInformationToXML(
+        const MatchInformation& matchInfo,
+        XMLElem parent) const = 0;
 
 protected:
 

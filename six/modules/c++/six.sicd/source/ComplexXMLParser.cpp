@@ -172,7 +172,9 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
         common().convertErrorStatisticsToXML(sicd->errorStatistics.get(), root);
     }
     if (sicd->matchInformation.get() && !sicd->matchInformation->types.empty())
-        convertMatchInformationToXML(sicd->matchInformation.get(), root);
+    {
+        convertMatchInformationToXML(*sicd->matchInformation, root);
+    }
 
     // parse the choice per version
     convertImageFormationAlgoToXML(sicd->pfa.get(), sicd->rma.get(), sicd->rgAzComp.get(), root);
@@ -1095,7 +1097,6 @@ void ComplexXMLParser::parseGeoDataFromXML(
         geoData->geoInfos[idx].reset(new GeoInfo());
         parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
     }
-
 }
 
 void ComplexXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const
@@ -1969,6 +1970,12 @@ void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
     value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
 
+XMLElem ComplexXMLParser::convertMatchInformationToXML(
+    const MatchInformation& matchInfo,
+    XMLElem parent) const
+{
+    return common().convertMatchInformationToXML(matchInfo, parent);
+}
 }
 }
 

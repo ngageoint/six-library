@@ -27,6 +27,7 @@
 
 #include <six/Data.h>
 #include <six/ErrorStatistics.h>
+#include <six/MatchInformation.h>
 #include <six/sidd/ProductCreation.h>
 #include <six/sidd/Display.h>
 #include <six/sidd/GeographicAndTarget.h>
@@ -104,8 +105,13 @@ struct DerivedData: public Data
      */
     mem::ScopedCopyablePtr<Radiometric> radiometric;
 
-    // TODO: Not sure where these belong
+    //!  (Optional) Params describing other related imaging collections
+    mem::ScopedCopyablePtr<MatchInformation> matchInformation;
+
+    //!  (Optional) Params describing compression
     mem::ScopedCopyablePtr<Compression> compression;
+
+    //!  (Optional) Params describing digital elevation data
     mem::ScopedCopyablePtr<DigitalElevationData> digitalElevationData;
 
     /*!

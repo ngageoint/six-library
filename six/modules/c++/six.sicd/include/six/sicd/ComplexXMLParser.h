@@ -64,9 +64,6 @@ protected:
                                                    const RgAzComp* rgAzComp, 
                                                    XMLElem parent = NULL) const = 0;
 
-    virtual XMLElem convertMatchInformationToXML(const MatchInformation *obj, 
-                                                 XMLElem parent = NULL) const = 0;
-
     virtual XMLElem convertRMAToXML(const RMA* obj, XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, XMLElem parent = NULL) const = 0;
@@ -134,6 +131,9 @@ protected:
     virtual XMLElem convertSCPCOAToXML(const SCPCOA *obj, 
                                        XMLElem parent = NULL) const;
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;
+
+    virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,
+                                                 XMLElem parent = NULL) const;
 
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;

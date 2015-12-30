@@ -45,6 +45,10 @@ public:
         const XMLElem radiometricXML, 
         Radiometric *obj) const;
 
+    virtual XMLElem convertMatchInformationToXML(
+        const MatchInformation& matchInfo,
+        XMLElem parent) const;
+
 protected:
 
     virtual XMLElem convertCompositeSCPToXML(

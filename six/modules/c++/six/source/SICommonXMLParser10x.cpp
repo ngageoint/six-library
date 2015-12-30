@@ -165,4 +165,37 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
         parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
     }
 }
+
+XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
+    const MatchInformation& matchInfo,
+    XMLElem parent) const
+{
+    // This is SICD 1.x, SIDD 1.1 format
+    XMLElem matchInfoXML = newElement("MatchInfo", parent);
+
+    createInt("NumMatchTypes", matchInfo.types.size(), matchInfoXML);
+
+    for (size_t i = 0; i < matchInfo.types.size(); ++i)
+    {
+        const MatchType& mt = matchInfo.types[i];
+        XMLElem mtXML = newElement("MatchType", matchInfoXML);
+        setAttribute(mtXML, "index", str::toString(i + 1));
+
+        createString("TypeID", mt.typeID, mtXML);
+        createInt("CurrentIndex", mt.currentIndex, mtXML);
+        createInt("NumMatchCollections", mt.matchCollects.size(), mtXML);
+
+        for (size_t j = 0; j < mt.matchCollects.size(); ++j)
+        {
+            XMLElem mcXML = newElement("MatchCollection", mtXML);
+            setAttribute(mcXML, "index", str::toString(j + 1));
+
+            createString("CoreName", mt.matchCollects[j].coreName, mcXML);
+            createInt("MatchIndex", mt.matchCollects[j].matchIndex, mcXML);
+            addParameters("Parameter", mt.matchCollects[j].parameters, mcXML);
+        }
+    }
+
+    return matchInfoXML;
+}
 }

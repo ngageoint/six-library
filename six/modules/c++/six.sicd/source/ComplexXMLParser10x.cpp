@@ -93,41 +93,6 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
     return radarXML;
 }
 
-XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
-    const MatchInformation* matchInfo, 
-    XMLElem parent) const
-{
-    XMLElem matchInfoXML = newElement("MatchInfo", parent);
-
-    createInt("NumMatchTypes", 
-              matchInfo->types.size(),
-              matchInfoXML);
-
-    for (size_t i = 0; i < matchInfo->types.size(); ++i)
-    {
-        const MatchType& mt = matchInfo->types[i];
-        XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
-
-        createString("TypeID", mt.typeID, mtXML);
-        createInt("CurrentIndex", mt.currentIndex, mtXML);
-        createInt("NumMatchCollections", mt.matchCollects.size(), mtXML);
-
-        for (size_t j = 0; j < mt.matchCollects.size(); ++j)
-        {
-            XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(j + 1));
-
-            createString("CoreName", mt.matchCollects[j].coreName, mcXML);
-            createInt("MatchIndex", mt.matchCollects[j].matchIndex, mcXML);
-            common().addParameters("Parameter", 
-                mt.matchCollects[j].parameters, mcXML);
-        }
-    }
-
-    return matchInfoXML;
-}
-
 XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     const ImageFormation* imageFormation, 
     XMLElem parent) const

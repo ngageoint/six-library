@@ -252,13 +252,33 @@ void ComplexXMLParser050::parseWeightTypeFromXML(
 }
 
 XMLElem ComplexXMLParser050::convertMatchInformationToXML(
-    const MatchInformation* matchInfo, 
+    const MatchInformation& matchInfo,
     XMLElem parent) const
 {
-    XMLElem matchInfoXML =
-            ComplexXMLParser04x::convertMatchInformationToXML(
-                    matchInfo, parent);
-    setAttribute(matchInfoXML, "size", str::toString(matchInfo->types.size()));
+    XMLElem matchInfoXML = newElement("MatchInfo", parent);
+
+    for (size_t i = 0; i < matchInfo.types.size(); ++i)
+    {
+        const MatchType& mt = matchInfo.types[i];
+        XMLElem mtXML = newElement("Collect", matchInfoXML);
+        setAttribute(mtXML, "index", str::toString(i + 1));
+
+        createString("CollectorName", mt.collectorName, mtXML);
+        if (!mt.illuminatorName.empty())
+            createString("IlluminatorName", mt.illuminatorName, mtXML);
+        createString("CoreName", mt.matchCollects[0].coreName, mtXML);
+
+        for (std::vector<std::string>::const_iterator it =
+                mt.matchType.begin(); it != mt.matchType.end(); ++it)
+        {
+            createString("MatchType", *it, mtXML);
+        }
+        common().addParameters("Parameter", mt.matchCollects[0].parameters, mtXML);
+    }
+
+    // This is the one difference between SICD 0.4 and 0.5
+    setAttribute(matchInfoXML, "size", str::toString(matchInfo.types.size()));
+
     return matchInfoXML;
 }
 }
