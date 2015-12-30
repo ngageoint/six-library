@@ -3013,114 +3013,123 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[40]
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[41]
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[42]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[43]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[44]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[45]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[46]
-#define SWIGTYPE_p_nitf_DateTime swig_types[47]
-#define SWIGTYPE_p_nitf__DateTime swig_types[48]
-#define SWIGTYPE_p_nitf__FileSecurity swig_types[49]
-#define SWIGTYPE_p_nitf__NITFException swig_types[50]
-#define SWIGTYPE_p_off_t swig_types[51]
-#define SWIGTYPE_p_p_PyObject swig_types[52]
-#define SWIGTYPE_p_pid_t swig_types[53]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[54]
-#define SWIGTYPE_p_scene__Errors swig_types[55]
-#define SWIGTYPE_p_scene__FrameType swig_types[56]
-#define SWIGTYPE_p_scene__LatLon swig_types[57]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[58]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[59]
-#define SWIGTYPE_p_six__AmplitudeTable swig_types[60]
-#define SWIGTYPE_p_six__AppliedType swig_types[61]
-#define SWIGTYPE_p_six__AutofocusType swig_types[62]
-#define SWIGTYPE_p_six__BooleanType swig_types[63]
-#define SWIGTYPE_p_six__ByteSwapping swig_types[64]
-#define SWIGTYPE_p_six__Classification swig_types[65]
-#define SWIGTYPE_p_six__CollectType swig_types[66]
-#define SWIGTYPE_p_six__ComplexImageGridType swig_types[67]
-#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[68]
-#define SWIGTYPE_p_six__Components swig_types[69]
-#define SWIGTYPE_p_six__CompositeSCP swig_types[70]
-#define SWIGTYPE_p_six__Constants swig_types[71]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[72]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[73]
-#define SWIGTYPE_p_six__CorrCoefs swig_types[74]
-#define SWIGTYPE_p_six__DESValidationException swig_types[75]
-#define SWIGTYPE_p_six__Data swig_types[76]
-#define SWIGTYPE_p_six__DataType swig_types[77]
-#define SWIGTYPE_p_six__DecimationMethod swig_types[78]
-#define SWIGTYPE_p_six__DecorrType swig_types[79]
-#define SWIGTYPE_p_six__DemodType swig_types[80]
-#define SWIGTYPE_p_six__DisplayType swig_types[81]
-#define SWIGTYPE_p_six__DualPolarizationType swig_types[82]
-#define SWIGTYPE_p_six__EarthModelType swig_types[83]
-#define SWIGTYPE_p_six__ErrorStatistics swig_types[84]
-#define SWIGTYPE_p_six__FFTSign swig_types[85]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[86]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[87]
-#define SWIGTYPE_p_six__Init swig_types[88]
-#define SWIGTYPE_p_six__IonoError swig_types[89]
-#define SWIGTYPE_p_six__LUT swig_types[90]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[91]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[92]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[93]
-#define SWIGTYPE_p_six__Options swig_types[94]
-#define SWIGTYPE_p_six__OrientationType swig_types[95]
-#define SWIGTYPE_p_six__Parameter swig_types[96]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[97]
-#define SWIGTYPE_p_six__PixelType swig_types[98]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[99]
-#define SWIGTYPE_p_six__PolarizationType swig_types[100]
-#define SWIGTYPE_p_six__PosVelError swig_types[101]
-#define SWIGTYPE_p_six__ProjectionType swig_types[102]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[103]
-#define SWIGTYPE_p_six__RadarModeType swig_types[104]
-#define SWIGTYPE_p_six__RadarSensor swig_types[105]
-#define SWIGTYPE_p_six__Radiometric swig_types[106]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[107]
-#define SWIGTYPE_p_six__RegionType swig_types[108]
-#define SWIGTYPE_p_six__RowColEnum swig_types[109]
-#define SWIGTYPE_p_six__SCP swig_types[110]
-#define SWIGTYPE_p_six__SCPType swig_types[111]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[112]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[113]
-#define SWIGTYPE_p_six__TropoError swig_types[114]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[115]
-#define SWIGTYPE_p_six__XMLControl swig_types[116]
-#define SWIGTYPE_p_six__XYZEnum swig_types[117]
-#define SWIGTYPE_p_size_t swig_types[118]
-#define SWIGTYPE_p_size_type swig_types[119]
-#define SWIGTYPE_p_ssize_t swig_types[120]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[121]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[122]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[123]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[124]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[125]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[126]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[127]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[128]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[129]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[130]
-#define SWIGTYPE_p_std__invalid_argument swig_types[131]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[132]
-#define SWIGTYPE_p_std__ostream swig_types[133]
-#define SWIGTYPE_p_std__string swig_types[134]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[135]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[136]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[137]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[138]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[139]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[140]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[141]
-#define SWIGTYPE_p_uint16_t swig_types[142]
-#define SWIGTYPE_p_uint32_t swig_types[143]
-#define SWIGTYPE_p_uint64_t swig_types[144]
-#define SWIGTYPE_p_uint8_t swig_types[145]
-#define SWIGTYPE_p_unsigned_char swig_types[146]
-#define SWIGTYPE_p_value_type swig_types[147]
-#define SWIGTYPE_p_xml__lite__Document swig_types[148]
-static swig_type_info *swig_types[150];
-static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t swig_types[43]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[44]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[45]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[46]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[47]
+#define SWIGTYPE_p_nitf_DateTime swig_types[48]
+#define SWIGTYPE_p_nitf__DateTime swig_types[49]
+#define SWIGTYPE_p_nitf__FileSecurity swig_types[50]
+#define SWIGTYPE_p_nitf__NITFException swig_types[51]
+#define SWIGTYPE_p_off_t swig_types[52]
+#define SWIGTYPE_p_p_PyObject swig_types[53]
+#define SWIGTYPE_p_pid_t swig_types[54]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[55]
+#define SWIGTYPE_p_scene__Errors swig_types[56]
+#define SWIGTYPE_p_scene__FrameType swig_types[57]
+#define SWIGTYPE_p_scene__LatLon swig_types[58]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[59]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[60]
+#define SWIGTYPE_p_six__AmplitudeTable swig_types[61]
+#define SWIGTYPE_p_six__AppliedType swig_types[62]
+#define SWIGTYPE_p_six__AutofocusType swig_types[63]
+#define SWIGTYPE_p_six__BooleanType swig_types[64]
+#define SWIGTYPE_p_six__ByteSwapping swig_types[65]
+#define SWIGTYPE_p_six__Classification swig_types[66]
+#define SWIGTYPE_p_six__CollectType swig_types[67]
+#define SWIGTYPE_p_six__ComplexImageGridType swig_types[68]
+#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[69]
+#define SWIGTYPE_p_six__Components swig_types[70]
+#define SWIGTYPE_p_six__CompositeSCP swig_types[71]
+#define SWIGTYPE_p_six__Constants swig_types[72]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[73]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[74]
+#define SWIGTYPE_p_six__CorrCoefs swig_types[75]
+#define SWIGTYPE_p_six__DESValidationException swig_types[76]
+#define SWIGTYPE_p_six__Data swig_types[77]
+#define SWIGTYPE_p_six__DataType swig_types[78]
+#define SWIGTYPE_p_six__DecimationMethod swig_types[79]
+#define SWIGTYPE_p_six__DecorrType swig_types[80]
+#define SWIGTYPE_p_six__DemodType swig_types[81]
+#define SWIGTYPE_p_six__DisplayType swig_types[82]
+#define SWIGTYPE_p_six__DualPolarizationType swig_types[83]
+#define SWIGTYPE_p_six__EarthModelType swig_types[84]
+#define SWIGTYPE_p_six__ErrorStatistics swig_types[85]
+#define SWIGTYPE_p_six__FFTSign swig_types[86]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[87]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[88]
+#define SWIGTYPE_p_six__Init swig_types[89]
+#define SWIGTYPE_p_six__IonoError swig_types[90]
+#define SWIGTYPE_p_six__LUT swig_types[91]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[92]
+#define SWIGTYPE_p_six__MatchCollect swig_types[93]
+#define SWIGTYPE_p_six__MatchInformation swig_types[94]
+#define SWIGTYPE_p_six__MatchType swig_types[95]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[96]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[97]
+#define SWIGTYPE_p_six__Options swig_types[98]
+#define SWIGTYPE_p_six__OrientationType swig_types[99]
+#define SWIGTYPE_p_six__Parameter swig_types[100]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[101]
+#define SWIGTYPE_p_six__PixelType swig_types[102]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[103]
+#define SWIGTYPE_p_six__PolarizationType swig_types[104]
+#define SWIGTYPE_p_six__PosVelError swig_types[105]
+#define SWIGTYPE_p_six__ProjectionType swig_types[106]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[107]
+#define SWIGTYPE_p_six__RadarModeType swig_types[108]
+#define SWIGTYPE_p_six__RadarSensor swig_types[109]
+#define SWIGTYPE_p_six__Radiometric swig_types[110]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[111]
+#define SWIGTYPE_p_six__RegionType swig_types[112]
+#define SWIGTYPE_p_six__RowColEnum swig_types[113]
+#define SWIGTYPE_p_six__SCP swig_types[114]
+#define SWIGTYPE_p_six__SCPType swig_types[115]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[116]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[117]
+#define SWIGTYPE_p_six__TropoError swig_types[118]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[119]
+#define SWIGTYPE_p_six__XMLControl swig_types[120]
+#define SWIGTYPE_p_six__XYZEnum swig_types[121]
+#define SWIGTYPE_p_size_t swig_types[122]
+#define SWIGTYPE_p_size_type swig_types[123]
+#define SWIGTYPE_p_ssize_t swig_types[124]
+#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[125]
+#define SWIGTYPE_p_std__allocatorT_six__MatchType_t swig_types[126]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[127]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[128]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[129]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[130]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[131]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[132]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[133]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[134]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[135]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[136]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[137]
+#define SWIGTYPE_p_std__invalid_argument swig_types[138]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[139]
+#define SWIGTYPE_p_std__ostream swig_types[140]
+#define SWIGTYPE_p_std__string swig_types[141]
+#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[142]
+#define SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t swig_types[143]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[144]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[145]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[146]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[147]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[148]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[149]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[150]
+#define SWIGTYPE_p_uint16_t swig_types[151]
+#define SWIGTYPE_p_uint32_t swig_types[152]
+#define SWIGTYPE_p_uint64_t swig_types[153]
+#define SWIGTYPE_p_uint8_t swig_types[154]
+#define SWIGTYPE_p_unsigned_char swig_types[155]
+#define SWIGTYPE_p_value_type swig_types[156]
+#define SWIGTYPE_p_xml__lite__Document swig_types[157]
+static swig_type_info *swig_types[159];
+static swig_module_info swig_module = {swig_types, 158, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3608,6 +3617,7 @@ using std::ptrdiff_t;
 
 /* this isn't imported by the above include */
 #include "six/Radiometric.h"
+#include "six/MatchInformation.h"
 
 #include "import/nitf.hpp"
 
@@ -5120,6 +5130,218 @@ SWIGINTERN std::vector< std::string >::iterator std_vector_Sl_std_string_Sg__era
 SWIGINTERN std::vector< std::string >::iterator std_vector_Sl_std_string_Sg__insert__SWIG_0(std::vector< std::string > *self,std::vector< std::string >::iterator pos,std::vector< std::string >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_std_string_Sg__insert__SWIG_1(std::vector< std::string > *self,std::vector< std::string >::iterator pos,std::vector< std::string >::size_type n,std::vector< std::string >::value_type const &x){ self->insert(pos, n, x); }
 
+  namespace swig {
+    template <>  struct traits<six::MatchCollect > {
+      typedef pointer_category category;
+      static const char* type_name() { return"six::MatchCollect"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<six::MatchCollect, std::allocator< six::MatchCollect > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "six::MatchCollect" "," "std::allocator< six::MatchCollect >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_six_MatchCollect_Sg__iterator(std::vector< six::MatchCollect > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_six_MatchCollect_Sg____nonzero__(std::vector< six::MatchCollect > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_six_MatchCollect_Sg____bool__(std::vector< six::MatchCollect > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< six::MatchCollect >::size_type std_vector_Sl_six_MatchCollect_Sg____len__(std::vector< six::MatchCollect > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< six::MatchCollect >::value_type std_vector_Sl_six_MatchCollect_Sg__pop(std::vector< six::MatchCollect > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *std_vector_Sl_six_MatchCollect_Sg____getslice__(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::difference_type i,std::vector< six::MatchCollect >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____setslice____SWIG_0(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::difference_type i,std::vector< six::MatchCollect >::difference_type j,std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &v=std::vector< six::MatchCollect,std::allocator< six::MatchCollect > >()){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____delslice__(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::difference_type i,std::vector< six::MatchCollect >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____delitem____SWIG_0(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::difference_type i){
+      self->erase(swig::getpos(self,i));
+    }
+SWIGINTERN std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *std_vector_Sl_six_MatchCollect_Sg____getitem____SWIG_0(std::vector< six::MatchCollect > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type id = i;
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_0(std::vector< six::MatchCollect > *self,PySliceObject *slice,std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type id = i;
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_1(std::vector< six::MatchCollect > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type id = i;
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____delitem____SWIG_1(std::vector< six::MatchCollect > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type id = i;
+      std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< six::MatchCollect >::value_type const &std_vector_Sl_six_MatchCollect_Sg____getitem____SWIG_1(std::vector< six::MatchCollect > const *self,std::vector< six::MatchCollect >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_2(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::difference_type i,std::vector< six::MatchCollect >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg__append(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< six::MatchCollect >::iterator std_vector_Sl_six_MatchCollect_Sg__erase__SWIG_0(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< six::MatchCollect >::iterator std_vector_Sl_six_MatchCollect_Sg__erase__SWIG_1(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::iterator first,std::vector< six::MatchCollect >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< six::MatchCollect >::iterator std_vector_Sl_six_MatchCollect_Sg__insert__SWIG_0(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::iterator pos,std::vector< six::MatchCollect >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_six_MatchCollect_Sg__insert__SWIG_1(std::vector< six::MatchCollect > *self,std::vector< six::MatchCollect >::iterator pos,std::vector< six::MatchCollect >::size_type n,std::vector< six::MatchCollect >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits<six::MatchType > {
+      typedef pointer_category category;
+      static const char* type_name() { return"six::MatchType"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<six::MatchType, std::allocator< six::MatchType > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "six::MatchType" "," "std::allocator< six::MatchType >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_six_MatchType_Sg__iterator(std::vector< six::MatchType > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_six_MatchType_Sg____nonzero__(std::vector< six::MatchType > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_six_MatchType_Sg____bool__(std::vector< six::MatchType > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< six::MatchType >::size_type std_vector_Sl_six_MatchType_Sg____len__(std::vector< six::MatchType > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< six::MatchType >::value_type std_vector_Sl_six_MatchType_Sg__pop(std::vector< six::MatchType > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN std::vector< six::MatchType,std::allocator< six::MatchType > > *std_vector_Sl_six_MatchType_Sg____getslice__(std::vector< six::MatchType > *self,std::vector< six::MatchType >::difference_type i,std::vector< six::MatchType >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____setslice____SWIG_0(std::vector< six::MatchType > *self,std::vector< six::MatchType >::difference_type i,std::vector< six::MatchType >::difference_type j,std::vector< six::MatchType,std::allocator< six::MatchType > > const &v=std::vector< six::MatchType,std::allocator< six::MatchType > >()){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____delslice__(std::vector< six::MatchType > *self,std::vector< six::MatchType >::difference_type i,std::vector< six::MatchType >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____delitem____SWIG_0(std::vector< six::MatchType > *self,std::vector< six::MatchType >::difference_type i){
+      self->erase(swig::getpos(self,i));
+    }
+SWIGINTERN std::vector< six::MatchType,std::allocator< six::MatchType > > *std_vector_Sl_six_MatchType_Sg____getitem____SWIG_0(std::vector< six::MatchType > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type id = i;
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____setitem____SWIG_0(std::vector< six::MatchType > *self,PySliceObject *slice,std::vector< six::MatchType,std::allocator< six::MatchType > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type id = i;
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____setitem____SWIG_1(std::vector< six::MatchType > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type id = i;
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____delitem____SWIG_1(std::vector< six::MatchType > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type id = i;
+      std::vector<six::MatchType,std::allocator< six::MatchType > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< six::MatchType >::value_type const &std_vector_Sl_six_MatchType_Sg____getitem____SWIG_1(std::vector< six::MatchType > const *self,std::vector< six::MatchType >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg____setitem____SWIG_2(std::vector< six::MatchType > *self,std::vector< six::MatchType >::difference_type i,std::vector< six::MatchType >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg__append(std::vector< six::MatchType > *self,std::vector< six::MatchType >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< six::MatchType >::iterator std_vector_Sl_six_MatchType_Sg__erase__SWIG_0(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< six::MatchType >::iterator std_vector_Sl_six_MatchType_Sg__erase__SWIG_1(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator first,std::vector< six::MatchType >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< six::MatchType >::iterator std_vector_Sl_six_MatchType_Sg__insert__SWIG_0(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator pos,std::vector< six::MatchType >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_six_MatchType_Sg__insert__SWIG_1(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator pos,std::vector< six::MatchType >::size_type n,std::vector< six::MatchType >::value_type const &x){ self->insert(pos, n, x); }
+
 mem::ScopedCopyablePtr< six::Radiometric > makeScopedCopyableRadiometric()
 {
     return mem::ScopedCopyablePtr< six::Radiometric >(new six::Radiometric ());
@@ -5171,6 +5393,12 @@ mem::ScopedCopyablePtr< six::CompositeSCP > makeScopedCopyableCompositeSCP()
 mem::ScopedCopyablePtr< six::Components > makeScopedCopyableComponents()
 {
     return mem::ScopedCopyablePtr< six::Components >(new six::Components ());
+} 
+
+
+mem::ScopedCopyablePtr< six::MatchInformation > makeScopedCopyableMatchInformation()
+{
+    return mem::ScopedCopyablePtr< six::MatchInformation >(new six::MatchInformation ());
 } 
 
 #ifdef __cplusplus
@@ -52900,6 +53128,1457 @@ SWIGINTERN PyObject *Radiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_MatchCollect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MatchCollect")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::MatchCollect *)new six::MatchCollect();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_coreName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchCollect_coreName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_coreName_set" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchCollect_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatchCollect_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->coreName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_coreName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchCollect_coreName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_coreName_get" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->coreName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_matchIndex_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchCollect_matchIndex_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_matchIndex_set" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MatchCollect_matchIndex_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try
+    {
+      if (arg1) (arg1)->matchIndex = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_matchIndex_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchCollect_matchIndex_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_matchIndex_get" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  {
+    try
+    {
+      result = (int) ((arg1)->matchIndex);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchCollect_parameters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_parameters_set" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchCollect_parameters_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->parameters = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchCollect_parameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchCollect_parameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchCollect_parameters_get" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((arg1)->parameters);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MatchCollect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchCollect *arg1 = (six::MatchCollect *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MatchCollect",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchCollect, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MatchCollect" "', argument " "1"" of type '" "six::MatchCollect *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchCollect * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MatchCollect_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchCollect, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_MatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MatchType")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::MatchType *)new six::MatchType();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_collectorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_collectorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_collectorName_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchType_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatchType_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->collectorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_collectorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_collectorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_collectorName_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->collectorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_illuminatorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_illuminatorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_illuminatorName_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchType_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatchType_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->illuminatorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_illuminatorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_illuminatorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_illuminatorName_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->illuminatorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_matchType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = (std::vector< std::string,std::allocator< std::string > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_matchType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_matchType_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchType_matchType_set" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->matchType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_matchType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_matchType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_matchType_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< std::string,std::allocator< std::string > > *)& ((arg1)->matchType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_typeID_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_typeID_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_typeID_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchType_typeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatchType_typeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->typeID = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_typeID_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_typeID_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_typeID_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->typeID);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_currentIndex_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_currentIndex_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_currentIndex_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MatchType_currentIndex_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try
+    {
+      if (arg1) (arg1)->currentIndex = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_currentIndex_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_currentIndex_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_currentIndex_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (int) ((arg1)->currentIndex);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_matchCollects_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *arg2 = (std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchType_matchCollects_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_matchCollects_set" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchType_matchCollects_set" "', argument " "2"" of type '" "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->matchCollects = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchType_matchCollects_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchType_matchCollects_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchType_matchCollects_get" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *)& ((arg1)->matchCollects);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchType *arg1 = (six::MatchType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MatchType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchType, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MatchType" "', argument " "1"" of type '" "six::MatchType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchType * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchType, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_MatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MatchInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::MatchInformation *)new six::MatchInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchInformation_types_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchInformation *arg1 = (six::MatchInformation *) 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *arg2 = (std::vector< six::MatchType,std::allocator< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatchInformation_types_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchInformation_types_set" "', argument " "1"" of type '" "six::MatchInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatchInformation_types_set" "', argument " "2"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType,std::allocator< six::MatchType > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->types = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MatchInformation_types_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchInformation *arg1 = (six::MatchInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatchInformation_types_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatchInformation_types_get" "', argument " "1"" of type '" "six::MatchInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType,std::allocator< six::MatchType > > *)& ((arg1)->types);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchInformation *arg1 = (six::MatchInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MatchInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchInformation, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MatchInformation" "', argument " "1"" of type '" "six::MatchInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchInformation * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchInformation, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_delete_Data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Data *arg1 = (six::Data *) 0 ;
@@ -60409,6 +62088,6472 @@ SWIGINTERN PyObject *LatLonAltCorners_swigregister(PyObject *SWIGUNUSEDPARM(self
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_iterator" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_six_MatchCollect_Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___nonzero__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_MatchCollect_Sg____nonzero__((std::vector< six::MatchCollect > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___bool__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_MatchCollect_Sg____bool__((std::vector< six::MatchCollect > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___len__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchCollect_Sg____len__((std::vector< six::MatchCollect > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_pop" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_six_MatchCollect_Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::MatchCollect >::value_type(static_cast< const std::vector< six::MatchCollect >::value_type& >(result))), SWIGTYPE_p_six__MatchCollect, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  std::vector< six::MatchCollect >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___getslice__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___getslice__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchCollect___getslice__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchCollect >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *)std_vector_Sl_six_MatchCollect_Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  std::vector< six::MatchCollect >::difference_type arg3 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorMatchCollect___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___setslice__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___setslice__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchCollect___setslice__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchCollect >::difference_type >(val3);
+  {
+    std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *ptr = (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorMatchCollect___setslice__" "', argument " "4"" of type '" "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect___setslice__" "', argument " "4"" of type '" "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  std::vector< six::MatchCollect >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___setslice__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___setslice__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchCollect___setslice__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchCollect >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorMatchCollect___setslice____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorMatchCollect___setslice____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::__setslice__(std::vector< six::MatchCollect >::difference_type,std::vector< six::MatchCollect >::difference_type,std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &)\n"
+    "    std::vector< six::MatchCollect >::__setslice__(std::vector< six::MatchCollect >::difference_type,std::vector< six::MatchCollect >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  std::vector< six::MatchCollect >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___delslice__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___delslice__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchCollect___delslice__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchCollect >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___delitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___delitem__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___getitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *)std_vector_Sl_six_MatchCollect_Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *ptr = (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchCollect___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___delitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::__delitem__(std::vector< six::MatchCollect >::difference_type)\n"
+    "    std::vector< six::MatchCollect >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchCollect >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___getitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___getitem__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchCollect >::value_type *) &std_vector_Sl_six_MatchCollect_Sg____getitem____SWIG_1((std::vector< six::MatchCollect > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::__getitem__(PySliceObject *)\n"
+    "    std::vector< six::MatchCollect >::__getitem__(std::vector< six::MatchCollect >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::difference_type arg2 ;
+  std::vector< six::MatchCollect >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect___setitem__" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchCollect___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchCollect_Sg____setitem____SWIG_2(arg1,arg2,(six::MatchCollect const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchCollect___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchCollect, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchCollect___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::__setitem__(PySliceObject *,std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > const &)\n"
+    "    std::vector< six::MatchCollect >::__setitem__(PySliceObject *)\n"
+    "    std::vector< six::MatchCollect >::__setitem__(std::vector< six::MatchCollect >::difference_type,std::vector< six::MatchCollect >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_append" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchCollect_append" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_append" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_six_MatchCollect_Sg__append(arg1,(six::MatchCollect const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorMatchCollect")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect > *)new std::vector< six::MatchCollect >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorMatchCollect",&obj0)) SWIG_fail;
+  {
+    std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *ptr = (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorMatchCollect" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorMatchCollect" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect > *)new std::vector< six::MatchCollect >((std::vector< six::MatchCollect > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_empty" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< six::MatchCollect > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_size" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchCollect > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_clear" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_swap" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchCollect_swap" "', argument " "2"" of type '" "std::vector< six::MatchCollect > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_swap" "', argument " "2"" of type '" "std::vector< six::MatchCollect > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< six::MatchCollect > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_get_allocator" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchCollect > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::MatchCollect >::allocator_type(static_cast< const std::vector< six::MatchCollect >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_six__MatchCollect_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_begin" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_end" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_rbegin" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_rend" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorMatchCollect",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorMatchCollect" "', argument " "1"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::MatchCollect >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect > *)new std::vector< six::MatchCollect >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_pop_back" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_resize" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect_resize" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchCollect >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_erase" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchCollect_Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::iterator arg2 ;
+  std::vector< six::MatchCollect >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchCollect >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_erase" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_erase" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchCollect_Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorMatchCollect_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorMatchCollect_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::erase(std::vector< six::MatchCollect >::iterator)\n"
+    "    std::vector< six::MatchCollect >::erase(std::vector< six::MatchCollect >::iterator,std::vector< six::MatchCollect >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect >::size_type arg1 ;
+  std::vector< six::MatchCollect >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchCollect > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorMatchCollect",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorMatchCollect" "', argument " "1"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::MatchCollect >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorMatchCollect" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorMatchCollect" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect > *)new std::vector< six::MatchCollect >(arg1,(std::vector< six::MatchCollect >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchCollect(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorMatchCollect__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorMatchCollect__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorMatchCollect__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_six__MatchCollect, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorMatchCollect__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorMatchCollect'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::vector()\n"
+    "    std::vector< six::MatchCollect >::vector(std::vector< six::MatchCollect > const &)\n"
+    "    std::vector< six::MatchCollect >::vector(std::vector< six::MatchCollect >::size_type)\n"
+    "    std::vector< six::MatchCollect >::vector(std::vector< six::MatchCollect >::size_type,std::vector< six::MatchCollect >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_push_back" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchCollect_push_back" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_push_back" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< six::MatchCollect >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_front" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect >::value_type *) &((std::vector< six::MatchCollect > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_back" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchCollect >::value_type *) &((std::vector< six::MatchCollect > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::size_type arg2 ;
+  std::vector< six::MatchCollect >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_assign" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect_assign" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchCollect_assign" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_assign" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< six::MatchCollect >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::size_type arg2 ;
+  std::vector< six::MatchCollect >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_resize" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect_resize" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchCollect_resize" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_resize" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< six::MatchCollect >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchCollect_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchCollect, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchCollect_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::resize(std::vector< six::MatchCollect >::size_type)\n"
+    "    std::vector< six::MatchCollect >::resize(std::vector< six::MatchCollect >::size_type,std::vector< six::MatchCollect >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::iterator arg2 ;
+  std::vector< six::MatchCollect >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchCollect >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchCollect_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_insert" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_insert" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_insert" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchCollect_insert" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_insert" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchCollect_Sg__insert__SWIG_0(arg1,arg2,(six::MatchCollect const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchCollect >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::iterator arg2 ;
+  std::vector< six::MatchCollect >::size_type arg3 ;
+  std::vector< six::MatchCollect >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorMatchCollect_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_insert" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_insert" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchCollect_insert" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchCollect_insert" "', argument " "3"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchCollect >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_six__MatchCollect,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorMatchCollect_insert" "', argument " "4"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchCollect_insert" "', argument " "4"" of type '" "std::vector< six::MatchCollect >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< six::MatchCollect >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_six_MatchCollect_Sg__insert__SWIG_1(arg1,arg2,arg3,(six::MatchCollect const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchCollect, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchCollect_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchCollect,std::allocator< six::MatchCollect > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_six__MatchCollect, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorMatchCollect_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchCollect_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchCollect >::insert(std::vector< six::MatchCollect >::iterator,std::vector< six::MatchCollect >::value_type const &)\n"
+    "    std::vector< six::MatchCollect >::insert(std::vector< six::MatchCollect >::iterator,std::vector< six::MatchCollect >::size_type,std::vector< six::MatchCollect >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  std::vector< six::MatchCollect >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchCollect_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_reserve" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchCollect_reserve" "', argument " "2"" of type '" "std::vector< six::MatchCollect >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchCollect >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchCollect_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchCollect >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchCollect_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchCollect_capacity" "', argument " "1"" of type '" "std::vector< six::MatchCollect > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchCollect > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorMatchCollect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchCollect > *arg1 = (std::vector< six::MatchCollect > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorMatchCollect",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorMatchCollect" "', argument " "1"" of type '" "std::vector< six::MatchCollect > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchCollect > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorMatchCollect_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_iterator" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_six_MatchType_Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___nonzero__" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_MatchType_Sg____nonzero__((std::vector< six::MatchType > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___bool__" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_six_MatchType_Sg____bool__((std::vector< six::MatchType > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___len__" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchType_Sg____len__((std::vector< six::MatchType > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_pop" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_six_MatchType_Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::MatchType >::value_type(static_cast< const std::vector< six::MatchType >::value_type& >(result))), SWIGTYPE_p_six__MatchType, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  std::vector< six::MatchType >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___getslice__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___getslice__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchType___getslice__" "', argument " "3"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchType >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchType,std::allocator< six::MatchType > > *)std_vector_Sl_six_MatchType_Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  std::vector< six::MatchType >::difference_type arg3 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorMatchType___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___setslice__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___setslice__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchType___setslice__" "', argument " "3"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchType >::difference_type >(val3);
+  {
+    std::vector<six::MatchType,std::allocator< six::MatchType > > *ptr = (std::vector<six::MatchType,std::allocator< six::MatchType > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorMatchType___setslice__" "', argument " "4"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType___setslice__" "', argument " "4"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< six::MatchType,std::allocator< six::MatchType > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  std::vector< six::MatchType >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___setslice__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___setslice__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchType___setslice__" "', argument " "3"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchType >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setslice__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorMatchType___setslice____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorMatchType___setslice____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::__setslice__(std::vector< six::MatchType >::difference_type,std::vector< six::MatchType >::difference_type,std::vector< six::MatchType,std::allocator< six::MatchType > > const &)\n"
+    "    std::vector< six::MatchType >::__setslice__(std::vector< six::MatchType >::difference_type,std::vector< six::MatchType >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  std::vector< six::MatchType >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___delslice__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___delslice__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchType___delslice__" "', argument " "3"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchType >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___delitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___delitem__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___getitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchType,std::allocator< six::MatchType > > *)std_vector_Sl_six_MatchType_Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector<six::MatchType,std::allocator< six::MatchType > > *ptr = (std::vector<six::MatchType,std::allocator< six::MatchType > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchType___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< six::MatchType,std::allocator< six::MatchType > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___delitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___delitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::__delitem__(std::vector< six::MatchType >::difference_type)\n"
+    "    std::vector< six::MatchType >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchType >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___getitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___getitem__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< six::MatchType >::value_type *) &std_vector_Sl_six_MatchType_Sg____getitem____SWIG_1((std::vector< six::MatchType > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___getitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::__getitem__(PySliceObject *)\n"
+    "    std::vector< six::MatchType >::__getitem__(std::vector< six::MatchType >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::difference_type arg2 ;
+  std::vector< six::MatchType >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType___setitem__" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType___setitem__" "', argument " "2"" of type '" "std::vector< six::MatchType >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchType___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType___setitem__" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_six_MatchType_Sg____setitem____SWIG_2(arg1,arg2,(six::MatchType const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchType___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchType, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchType___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::__setitem__(PySliceObject *,std::vector< six::MatchType,std::allocator< six::MatchType > > const &)\n"
+    "    std::vector< six::MatchType >::__setitem__(PySliceObject *)\n"
+    "    std::vector< six::MatchType >::__setitem__(std::vector< six::MatchType >::difference_type,std::vector< six::MatchType >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_append" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchType_append" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_append" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_six_MatchType_Sg__append(arg1,(six::MatchType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorMatchType")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< six::MatchType > *)new std::vector< six::MatchType >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorMatchType",&obj0)) SWIG_fail;
+  {
+    std::vector<six::MatchType,std::allocator< six::MatchType > > *ptr = (std::vector<six::MatchType,std::allocator< six::MatchType > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorMatchType" "', argument " "1"" of type '" "std::vector< six::MatchType > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorMatchType" "', argument " "1"" of type '" "std::vector< six::MatchType > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< six::MatchType > *)new std::vector< six::MatchType >((std::vector< six::MatchType > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_empty" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< six::MatchType > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_size" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchType > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_clear" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_swap" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchType_swap" "', argument " "2"" of type '" "std::vector< six::MatchType > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_swap" "', argument " "2"" of type '" "std::vector< six::MatchType > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< six::MatchType > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_get_allocator" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchType > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< six::MatchType >::allocator_type(static_cast< const std::vector< six::MatchType >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_six__MatchType_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_begin" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_end" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_rbegin" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_rend" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorMatchType",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorMatchType" "', argument " "1"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::MatchType >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType > *)new std::vector< six::MatchType >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_pop_back" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_resize" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType_resize" "', argument " "2"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchType >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_erase" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchType_Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::iterator arg2 ;
+  std::vector< six::MatchType >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchType >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_erase" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "3"" of type '" "std::vector< six::MatchType >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_erase" "', argument " "3"" of type '" "std::vector< six::MatchType >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchType_Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorMatchType_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorMatchType_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::erase(std::vector< six::MatchType >::iterator)\n"
+    "    std::vector< six::MatchType >::erase(std::vector< six::MatchType >::iterator,std::vector< six::MatchType >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType >::size_type arg1 ;
+  std::vector< six::MatchType >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< six::MatchType > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorMatchType",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorMatchType" "', argument " "1"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< six::MatchType >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorMatchType" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorMatchType" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType > *)new std::vector< six::MatchType >(arg1,(std::vector< six::MatchType >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorMatchType(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorMatchType__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorMatchType__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorMatchType__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_six__MatchType, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorMatchType__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorMatchType'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::vector()\n"
+    "    std::vector< six::MatchType >::vector(std::vector< six::MatchType > const &)\n"
+    "    std::vector< six::MatchType >::vector(std::vector< six::MatchType >::size_type)\n"
+    "    std::vector< six::MatchType >::vector(std::vector< six::MatchType >::size_type,std::vector< six::MatchType >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_push_back" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorMatchType_push_back" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_push_back" "', argument " "2"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< six::MatchType >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_front" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType >::value_type *) &((std::vector< six::MatchType > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_back" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType >::value_type *) &((std::vector< six::MatchType > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::size_type arg2 ;
+  std::vector< six::MatchType >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_assign" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType_assign" "', argument " "2"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchType_assign" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_assign" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< six::MatchType >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::size_type arg2 ;
+  std::vector< six::MatchType >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_resize" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType_resize" "', argument " "2"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchType_resize" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_resize" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< six::MatchType >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorMatchType_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchType, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchType_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::resize(std::vector< six::MatchType >::size_type)\n"
+    "    std::vector< six::MatchType >::resize(std::vector< six::MatchType >::size_type,std::vector< six::MatchType >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::iterator arg2 ;
+  std::vector< six::MatchType >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< six::MatchType >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorMatchType_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_insert" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_insert" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_insert" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorMatchType_insert" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_insert" "', argument " "3"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_six_MatchType_Sg__insert__SWIG_0(arg1,arg2,(six::MatchType const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< six::MatchType >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::iterator arg2 ;
+  std::vector< six::MatchType >::size_type arg3 ;
+  std::vector< six::MatchType >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorMatchType_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_insert" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_insert" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorMatchType_insert" "', argument " "2"" of type '" "std::vector< six::MatchType >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorMatchType_insert" "', argument " "3"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< six::MatchType >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_six__MatchType,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorMatchType_insert" "', argument " "4"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorMatchType_insert" "', argument " "4"" of type '" "std::vector< six::MatchType >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< six::MatchType >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_six_MatchType_Sg__insert__SWIG_1(arg1,arg2,arg3,(six::MatchType const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_insert(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__MatchType, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorMatchType_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<six::MatchType,std::allocator< six::MatchType > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_six__MatchType, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorMatchType_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorMatchType_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< six::MatchType >::insert(std::vector< six::MatchType >::iterator,std::vector< six::MatchType >::value_type const &)\n"
+    "    std::vector< six::MatchType >::insert(std::vector< six::MatchType >::iterator,std::vector< six::MatchType >::size_type,std::vector< six::MatchType >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  std::vector< six::MatchType >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorMatchType_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_reserve" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorMatchType_reserve" "', argument " "2"" of type '" "std::vector< six::MatchType >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< six::MatchType >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorMatchType_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorMatchType_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorMatchType_capacity" "', argument " "1"" of type '" "std::vector< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< six::MatchType > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< six::MatchType > *arg1 = (std::vector< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorMatchType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorMatchType" "', argument " "1"" of type '" "std::vector< six::MatchType > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -72815,6 +80960,825 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::MatchInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoMatchInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< six::MatchInformation > *)new std::auto_ptr< six::MatchInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::MatchInformation > *arg1 = (std::auto_ptr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoMatchInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchInformation" "', argument " "1"" of type '" "std::auto_ptr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoMatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::MatchInformation *arg1 = (six::MatchInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< six::MatchInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableMatchInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableMatchInformation" "', argument " "1"" of type '" "six::MatchInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::MatchInformation * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::MatchInformation > *)new mem::ScopedCopyablePtr< six::MatchInformation >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableMatchInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::MatchInformation > *)new mem::ScopedCopyablePtr< six::MatchInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< six::MatchInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableMatchInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableMatchInformation" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableMatchInformation" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::MatchInformation > *)new mem::ScopedCopyablePtr< six::MatchInformation >((mem::ScopedCopyablePtr< six::MatchInformation > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableMatchInformation__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__MatchInformation, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableMatchInformation__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableMatchInformation__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableMatchInformation'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< six::MatchInformation >::ScopedCopyablePtr(six::MatchInformation *)\n"
+    "    mem::ScopedCopyablePtr< six::MatchInformation >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< six::MatchInformation >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::MatchInformation > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::MatchInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::MatchInformation *)((mem::ScopedCopyablePtr< six::MatchInformation > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::MatchInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::MatchInformation *) &((mem::ScopedCopyablePtr< six::MatchInformation > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::MatchInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::MatchInformation *)((mem::ScopedCopyablePtr< six::MatchInformation > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  six::MatchInformation *arg2 = (six::MatchInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableMatchInformation_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__MatchInformation, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableMatchInformation_reset" "', argument " "2"" of type '" "six::MatchInformation *""'"); 
+  }
+  arg2 = reinterpret_cast< six::MatchInformation * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableMatchInformation_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__MatchInformation, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableMatchInformation_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableMatchInformation_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< six::MatchInformation >::reset(six::MatchInformation *)\n"
+    "    mem::ScopedCopyablePtr< six::MatchInformation >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableMatchInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableMatchInformation" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_types_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *arg2 = (std::vector< six::MatchType,std::allocator< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableMatchInformation_types_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation_types_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableMatchInformation_types_set" "', argument " "2"" of type '" "std::vector< six::MatchType,std::allocator< six::MatchType > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::MatchType,std::allocator< six::MatchType > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->types = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_types_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::MatchType,std::allocator< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation_types_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation_types_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::MatchType,std::allocator< six::MatchType > > *)& ((*arg1)->types);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableMatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCopyableMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCopyableMatchInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCopyableMatchInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::MatchInformation >(static_cast< const mem::ScopedCopyablePtr< six::MatchInformation >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, (char *)"delete_SwigPyIterator(SwigPyIterator self)"},
@@ -73813,6 +82777,35 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_get", _wrap_Radiometric_gammaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
 	 { (char *)"delete_Radiometric", _wrap_delete_Radiometric, METH_VARARGS, (char *)"delete_Radiometric(Radiometric self)"},
 	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MatchCollect", _wrap_new_MatchCollect, METH_VARARGS, (char *)"new_MatchCollect() -> MatchCollect"},
+	 { (char *)"MatchCollect_coreName_set", _wrap_MatchCollect_coreName_set, METH_VARARGS, (char *)"MatchCollect_coreName_set(MatchCollect self, std::string const & coreName)"},
+	 { (char *)"MatchCollect_coreName_get", _wrap_MatchCollect_coreName_get, METH_VARARGS, (char *)"MatchCollect_coreName_get(MatchCollect self) -> std::string const &"},
+	 { (char *)"MatchCollect_matchIndex_set", _wrap_MatchCollect_matchIndex_set, METH_VARARGS, (char *)"MatchCollect_matchIndex_set(MatchCollect self, int matchIndex)"},
+	 { (char *)"MatchCollect_matchIndex_get", _wrap_MatchCollect_matchIndex_get, METH_VARARGS, (char *)"MatchCollect_matchIndex_get(MatchCollect self) -> int"},
+	 { (char *)"MatchCollect_parameters_set", _wrap_MatchCollect_parameters_set, METH_VARARGS, (char *)"MatchCollect_parameters_set(MatchCollect self, ParameterCollection parameters)"},
+	 { (char *)"MatchCollect_parameters_get", _wrap_MatchCollect_parameters_get, METH_VARARGS, (char *)"MatchCollect_parameters_get(MatchCollect self) -> ParameterCollection"},
+	 { (char *)"delete_MatchCollect", _wrap_delete_MatchCollect, METH_VARARGS, (char *)"delete_MatchCollect(MatchCollect self)"},
+	 { (char *)"MatchCollect_swigregister", MatchCollect_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MatchType", _wrap_new_MatchType, METH_VARARGS, (char *)"new_MatchType() -> MatchType"},
+	 { (char *)"MatchType_collectorName_set", _wrap_MatchType_collectorName_set, METH_VARARGS, (char *)"MatchType_collectorName_set(MatchType self, std::string const & collectorName)"},
+	 { (char *)"MatchType_collectorName_get", _wrap_MatchType_collectorName_get, METH_VARARGS, (char *)"MatchType_collectorName_get(MatchType self) -> std::string const &"},
+	 { (char *)"MatchType_illuminatorName_set", _wrap_MatchType_illuminatorName_set, METH_VARARGS, (char *)"MatchType_illuminatorName_set(MatchType self, std::string const & illuminatorName)"},
+	 { (char *)"MatchType_illuminatorName_get", _wrap_MatchType_illuminatorName_get, METH_VARARGS, (char *)"MatchType_illuminatorName_get(MatchType self) -> std::string const &"},
+	 { (char *)"MatchType_matchType_set", _wrap_MatchType_matchType_set, METH_VARARGS, (char *)"MatchType_matchType_set(MatchType self, VectorString matchType)"},
+	 { (char *)"MatchType_matchType_get", _wrap_MatchType_matchType_get, METH_VARARGS, (char *)"MatchType_matchType_get(MatchType self) -> VectorString"},
+	 { (char *)"MatchType_typeID_set", _wrap_MatchType_typeID_set, METH_VARARGS, (char *)"MatchType_typeID_set(MatchType self, std::string const & typeID)"},
+	 { (char *)"MatchType_typeID_get", _wrap_MatchType_typeID_get, METH_VARARGS, (char *)"MatchType_typeID_get(MatchType self) -> std::string const &"},
+	 { (char *)"MatchType_currentIndex_set", _wrap_MatchType_currentIndex_set, METH_VARARGS, (char *)"MatchType_currentIndex_set(MatchType self, int currentIndex)"},
+	 { (char *)"MatchType_currentIndex_get", _wrap_MatchType_currentIndex_get, METH_VARARGS, (char *)"MatchType_currentIndex_get(MatchType self) -> int"},
+	 { (char *)"MatchType_matchCollects_set", _wrap_MatchType_matchCollects_set, METH_VARARGS, (char *)"MatchType_matchCollects_set(MatchType self, VectorMatchCollect matchCollects)"},
+	 { (char *)"MatchType_matchCollects_get", _wrap_MatchType_matchCollects_get, METH_VARARGS, (char *)"MatchType_matchCollects_get(MatchType self) -> VectorMatchCollect"},
+	 { (char *)"delete_MatchType", _wrap_delete_MatchType, METH_VARARGS, (char *)"delete_MatchType(MatchType self)"},
+	 { (char *)"MatchType_swigregister", MatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MatchInformation", _wrap_new_MatchInformation, METH_VARARGS, (char *)"new_MatchInformation() -> MatchInformation"},
+	 { (char *)"MatchInformation_types_set", _wrap_MatchInformation_types_set, METH_VARARGS, (char *)"MatchInformation_types_set(MatchInformation self, VectorMatchType types)"},
+	 { (char *)"MatchInformation_types_get", _wrap_MatchInformation_types_get, METH_VARARGS, (char *)"MatchInformation_types_get(MatchInformation self) -> VectorMatchType"},
+	 { (char *)"delete_MatchInformation", _wrap_delete_MatchInformation, METH_VARARGS, (char *)"delete_MatchInformation(MatchInformation self)"},
+	 { (char *)"MatchInformation_swigregister", MatchInformation_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Data", _wrap_delete_Data, METH_VARARGS, (char *)"delete_Data(Data self)"},
 	 { (char *)"Data_clone", _wrap_Data_clone, METH_VARARGS, (char *)"Data_clone(Data self) -> Data"},
 	 { (char *)"Data_getDataType", _wrap_Data_getDataType, METH_VARARGS, (char *)"Data_getDataType(Data self) -> DataType"},
@@ -73959,6 +82952,128 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_LatLonAltCorners", _wrap_new_LatLonAltCorners, METH_VARARGS, (char *)"new_LatLonAltCorners() -> LatLonAltCorners"},
 	 { (char *)"delete_LatLonAltCorners", _wrap_delete_LatLonAltCorners, METH_VARARGS, (char *)"delete_LatLonAltCorners(LatLonAltCorners self)"},
 	 { (char *)"LatLonAltCorners_swigregister", LatLonAltCorners_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorMatchCollect_iterator", _wrap_VectorMatchCollect_iterator, METH_VARARGS, (char *)"VectorMatchCollect_iterator(VectorMatchCollect self) -> SwigPyIterator"},
+	 { (char *)"VectorMatchCollect___nonzero__", _wrap_VectorMatchCollect___nonzero__, METH_VARARGS, (char *)"VectorMatchCollect___nonzero__(VectorMatchCollect self) -> bool"},
+	 { (char *)"VectorMatchCollect___bool__", _wrap_VectorMatchCollect___bool__, METH_VARARGS, (char *)"VectorMatchCollect___bool__(VectorMatchCollect self) -> bool"},
+	 { (char *)"VectorMatchCollect___len__", _wrap_VectorMatchCollect___len__, METH_VARARGS, (char *)"VectorMatchCollect___len__(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"},
+	 { (char *)"VectorMatchCollect_pop", _wrap_VectorMatchCollect_pop, METH_VARARGS, (char *)"VectorMatchCollect_pop(VectorMatchCollect self) -> MatchCollect"},
+	 { (char *)"VectorMatchCollect___getslice__", _wrap_VectorMatchCollect___getslice__, METH_VARARGS, (char *)"VectorMatchCollect___getslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j) -> VectorMatchCollect"},
+	 { (char *)"VectorMatchCollect___setslice__", _wrap_VectorMatchCollect___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j, VectorMatchCollect v)\n"
+		"VectorMatchCollect___setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)\n"
+		""},
+	 { (char *)"VectorMatchCollect___delslice__", _wrap_VectorMatchCollect___delslice__, METH_VARARGS, (char *)"VectorMatchCollect___delslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)"},
+	 { (char *)"VectorMatchCollect___delitem__", _wrap_VectorMatchCollect___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< six::MatchCollect >::difference_type i)\n"
+		"VectorMatchCollect___delitem__(VectorMatchCollect self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorMatchCollect___getitem__", _wrap_VectorMatchCollect___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorMatchCollect\n"
+		"VectorMatchCollect___getitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i) -> MatchCollect\n"
+		""},
+	 { (char *)"VectorMatchCollect___setitem__", _wrap_VectorMatchCollect___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorMatchCollect v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorMatchCollect___setitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, MatchCollect x)\n"
+		""},
+	 { (char *)"VectorMatchCollect_append", _wrap_VectorMatchCollect_append, METH_VARARGS, (char *)"VectorMatchCollect_append(VectorMatchCollect self, MatchCollect x)"},
+	 { (char *)"VectorMatchCollect_empty", _wrap_VectorMatchCollect_empty, METH_VARARGS, (char *)"VectorMatchCollect_empty(VectorMatchCollect self) -> bool"},
+	 { (char *)"VectorMatchCollect_size", _wrap_VectorMatchCollect_size, METH_VARARGS, (char *)"VectorMatchCollect_size(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"},
+	 { (char *)"VectorMatchCollect_clear", _wrap_VectorMatchCollect_clear, METH_VARARGS, (char *)"VectorMatchCollect_clear(VectorMatchCollect self)"},
+	 { (char *)"VectorMatchCollect_swap", _wrap_VectorMatchCollect_swap, METH_VARARGS, (char *)"VectorMatchCollect_swap(VectorMatchCollect self, VectorMatchCollect v)"},
+	 { (char *)"VectorMatchCollect_get_allocator", _wrap_VectorMatchCollect_get_allocator, METH_VARARGS, (char *)"VectorMatchCollect_get_allocator(VectorMatchCollect self) -> std::vector< six::MatchCollect >::allocator_type"},
+	 { (char *)"VectorMatchCollect_begin", _wrap_VectorMatchCollect_begin, METH_VARARGS, (char *)"VectorMatchCollect_begin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"},
+	 { (char *)"VectorMatchCollect_end", _wrap_VectorMatchCollect_end, METH_VARARGS, (char *)"VectorMatchCollect_end(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"},
+	 { (char *)"VectorMatchCollect_rbegin", _wrap_VectorMatchCollect_rbegin, METH_VARARGS, (char *)"VectorMatchCollect_rbegin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"},
+	 { (char *)"VectorMatchCollect_rend", _wrap_VectorMatchCollect_rend, METH_VARARGS, (char *)"VectorMatchCollect_rend(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"},
+	 { (char *)"VectorMatchCollect_pop_back", _wrap_VectorMatchCollect_pop_back, METH_VARARGS, (char *)"VectorMatchCollect_pop_back(VectorMatchCollect self)"},
+	 { (char *)"VectorMatchCollect_erase", _wrap_VectorMatchCollect_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< six::MatchCollect >::iterator pos) -> std::vector< six::MatchCollect >::iterator\n"
+		"VectorMatchCollect_erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator first, std::vector< six::MatchCollect >::iterator last) -> std::vector< six::MatchCollect >::iterator\n"
+		""},
+	 { (char *)"new_VectorMatchCollect", _wrap_new_VectorMatchCollect, METH_VARARGS, (char *)"\n"
+		"VectorMatchCollect()\n"
+		"VectorMatchCollect(VectorMatchCollect arg2)\n"
+		"VectorMatchCollect(std::vector< six::MatchCollect >::size_type size)\n"
+		"new_VectorMatchCollect(std::vector< six::MatchCollect >::size_type size, MatchCollect value) -> VectorMatchCollect\n"
+		""},
+	 { (char *)"VectorMatchCollect_push_back", _wrap_VectorMatchCollect_push_back, METH_VARARGS, (char *)"VectorMatchCollect_push_back(VectorMatchCollect self, MatchCollect x)"},
+	 { (char *)"VectorMatchCollect_front", _wrap_VectorMatchCollect_front, METH_VARARGS, (char *)"VectorMatchCollect_front(VectorMatchCollect self) -> MatchCollect"},
+	 { (char *)"VectorMatchCollect_back", _wrap_VectorMatchCollect_back, METH_VARARGS, (char *)"VectorMatchCollect_back(VectorMatchCollect self) -> MatchCollect"},
+	 { (char *)"VectorMatchCollect_assign", _wrap_VectorMatchCollect_assign, METH_VARARGS, (char *)"VectorMatchCollect_assign(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n, MatchCollect x)"},
+	 { (char *)"VectorMatchCollect_resize", _wrap_VectorMatchCollect_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< six::MatchCollect >::size_type new_size)\n"
+		"VectorMatchCollect_resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size, MatchCollect x)\n"
+		""},
+	 { (char *)"VectorMatchCollect_insert", _wrap_VectorMatchCollect_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< six::MatchCollect >::iterator pos, MatchCollect x) -> std::vector< six::MatchCollect >::iterator\n"
+		"VectorMatchCollect_insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, std::vector< six::MatchCollect >::size_type n, MatchCollect x)\n"
+		""},
+	 { (char *)"VectorMatchCollect_reserve", _wrap_VectorMatchCollect_reserve, METH_VARARGS, (char *)"VectorMatchCollect_reserve(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n)"},
+	 { (char *)"VectorMatchCollect_capacity", _wrap_VectorMatchCollect_capacity, METH_VARARGS, (char *)"VectorMatchCollect_capacity(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"},
+	 { (char *)"delete_VectorMatchCollect", _wrap_delete_VectorMatchCollect, METH_VARARGS, (char *)"delete_VectorMatchCollect(VectorMatchCollect self)"},
+	 { (char *)"VectorMatchCollect_swigregister", VectorMatchCollect_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorMatchType_iterator", _wrap_VectorMatchType_iterator, METH_VARARGS, (char *)"VectorMatchType_iterator(VectorMatchType self) -> SwigPyIterator"},
+	 { (char *)"VectorMatchType___nonzero__", _wrap_VectorMatchType___nonzero__, METH_VARARGS, (char *)"VectorMatchType___nonzero__(VectorMatchType self) -> bool"},
+	 { (char *)"VectorMatchType___bool__", _wrap_VectorMatchType___bool__, METH_VARARGS, (char *)"VectorMatchType___bool__(VectorMatchType self) -> bool"},
+	 { (char *)"VectorMatchType___len__", _wrap_VectorMatchType___len__, METH_VARARGS, (char *)"VectorMatchType___len__(VectorMatchType self) -> std::vector< six::MatchType >::size_type"},
+	 { (char *)"VectorMatchType_pop", _wrap_VectorMatchType_pop, METH_VARARGS, (char *)"VectorMatchType_pop(VectorMatchType self) -> MatchType"},
+	 { (char *)"VectorMatchType___getslice__", _wrap_VectorMatchType___getslice__, METH_VARARGS, (char *)"VectorMatchType___getslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j) -> VectorMatchType"},
+	 { (char *)"VectorMatchType___setslice__", _wrap_VectorMatchType___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j, VectorMatchType v)\n"
+		"VectorMatchType___setslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)\n"
+		""},
+	 { (char *)"VectorMatchType___delslice__", _wrap_VectorMatchType___delslice__, METH_VARARGS, (char *)"VectorMatchType___delslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)"},
+	 { (char *)"VectorMatchType___delitem__", _wrap_VectorMatchType___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< six::MatchType >::difference_type i)\n"
+		"VectorMatchType___delitem__(VectorMatchType self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorMatchType___getitem__", _wrap_VectorMatchType___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorMatchType\n"
+		"VectorMatchType___getitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i) -> MatchType\n"
+		""},
+	 { (char *)"VectorMatchType___setitem__", _wrap_VectorMatchType___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorMatchType v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorMatchType___setitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, MatchType x)\n"
+		""},
+	 { (char *)"VectorMatchType_append", _wrap_VectorMatchType_append, METH_VARARGS, (char *)"VectorMatchType_append(VectorMatchType self, MatchType x)"},
+	 { (char *)"VectorMatchType_empty", _wrap_VectorMatchType_empty, METH_VARARGS, (char *)"VectorMatchType_empty(VectorMatchType self) -> bool"},
+	 { (char *)"VectorMatchType_size", _wrap_VectorMatchType_size, METH_VARARGS, (char *)"VectorMatchType_size(VectorMatchType self) -> std::vector< six::MatchType >::size_type"},
+	 { (char *)"VectorMatchType_clear", _wrap_VectorMatchType_clear, METH_VARARGS, (char *)"VectorMatchType_clear(VectorMatchType self)"},
+	 { (char *)"VectorMatchType_swap", _wrap_VectorMatchType_swap, METH_VARARGS, (char *)"VectorMatchType_swap(VectorMatchType self, VectorMatchType v)"},
+	 { (char *)"VectorMatchType_get_allocator", _wrap_VectorMatchType_get_allocator, METH_VARARGS, (char *)"VectorMatchType_get_allocator(VectorMatchType self) -> std::vector< six::MatchType >::allocator_type"},
+	 { (char *)"VectorMatchType_begin", _wrap_VectorMatchType_begin, METH_VARARGS, (char *)"VectorMatchType_begin(VectorMatchType self) -> std::vector< six::MatchType >::iterator"},
+	 { (char *)"VectorMatchType_end", _wrap_VectorMatchType_end, METH_VARARGS, (char *)"VectorMatchType_end(VectorMatchType self) -> std::vector< six::MatchType >::iterator"},
+	 { (char *)"VectorMatchType_rbegin", _wrap_VectorMatchType_rbegin, METH_VARARGS, (char *)"VectorMatchType_rbegin(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"},
+	 { (char *)"VectorMatchType_rend", _wrap_VectorMatchType_rend, METH_VARARGS, (char *)"VectorMatchType_rend(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"},
+	 { (char *)"VectorMatchType_pop_back", _wrap_VectorMatchType_pop_back, METH_VARARGS, (char *)"VectorMatchType_pop_back(VectorMatchType self)"},
+	 { (char *)"VectorMatchType_erase", _wrap_VectorMatchType_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< six::MatchType >::iterator pos) -> std::vector< six::MatchType >::iterator\n"
+		"VectorMatchType_erase(VectorMatchType self, std::vector< six::MatchType >::iterator first, std::vector< six::MatchType >::iterator last) -> std::vector< six::MatchType >::iterator\n"
+		""},
+	 { (char *)"new_VectorMatchType", _wrap_new_VectorMatchType, METH_VARARGS, (char *)"\n"
+		"VectorMatchType()\n"
+		"VectorMatchType(VectorMatchType arg2)\n"
+		"VectorMatchType(std::vector< six::MatchType >::size_type size)\n"
+		"new_VectorMatchType(std::vector< six::MatchType >::size_type size, MatchType value) -> VectorMatchType\n"
+		""},
+	 { (char *)"VectorMatchType_push_back", _wrap_VectorMatchType_push_back, METH_VARARGS, (char *)"VectorMatchType_push_back(VectorMatchType self, MatchType x)"},
+	 { (char *)"VectorMatchType_front", _wrap_VectorMatchType_front, METH_VARARGS, (char *)"VectorMatchType_front(VectorMatchType self) -> MatchType"},
+	 { (char *)"VectorMatchType_back", _wrap_VectorMatchType_back, METH_VARARGS, (char *)"VectorMatchType_back(VectorMatchType self) -> MatchType"},
+	 { (char *)"VectorMatchType_assign", _wrap_VectorMatchType_assign, METH_VARARGS, (char *)"VectorMatchType_assign(VectorMatchType self, std::vector< six::MatchType >::size_type n, MatchType x)"},
+	 { (char *)"VectorMatchType_resize", _wrap_VectorMatchType_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< six::MatchType >::size_type new_size)\n"
+		"VectorMatchType_resize(VectorMatchType self, std::vector< six::MatchType >::size_type new_size, MatchType x)\n"
+		""},
+	 { (char *)"VectorMatchType_insert", _wrap_VectorMatchType_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< six::MatchType >::iterator pos, MatchType x) -> std::vector< six::MatchType >::iterator\n"
+		"VectorMatchType_insert(VectorMatchType self, std::vector< six::MatchType >::iterator pos, std::vector< six::MatchType >::size_type n, MatchType x)\n"
+		""},
+	 { (char *)"VectorMatchType_reserve", _wrap_VectorMatchType_reserve, METH_VARARGS, (char *)"VectorMatchType_reserve(VectorMatchType self, std::vector< six::MatchType >::size_type n)"},
+	 { (char *)"VectorMatchType_capacity", _wrap_VectorMatchType_capacity, METH_VARARGS, (char *)"VectorMatchType_capacity(VectorMatchType self) -> std::vector< six::MatchType >::size_type"},
+	 { (char *)"delete_VectorMatchType", _wrap_delete_VectorMatchType, METH_VARARGS, (char *)"delete_VectorMatchType(VectorMatchType self)"},
+	 { (char *)"VectorMatchType_swigregister", VectorMatchType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StdAutoRadiometric", _wrap_new_StdAutoRadiometric, METH_VARARGS, (char *)"new_StdAutoRadiometric() -> StdAutoRadiometric"},
 	 { (char *)"delete_StdAutoRadiometric", _wrap_delete_StdAutoRadiometric, METH_VARARGS, (char *)"delete_StdAutoRadiometric(StdAutoRadiometric self)"},
 	 { (char *)"StdAutoRadiometric_swigregister", StdAutoRadiometric_swigregister, METH_VARARGS, NULL},
@@ -74229,6 +83344,26 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableComponents_ionoError_get", _wrap_ScopedCopyableComponents_ionoError_get, METH_VARARGS, (char *)"ScopedCopyableComponents_ionoError_get(ScopedCopyableComponents self) -> ScopedCopyableIonoError"},
 	 { (char *)"ScopedCopyableComponents_swigregister", ScopedCopyableComponents_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableComponents", _wrap_makeScopedCopyableComponents, METH_VARARGS, (char *)"makeScopedCopyableComponents() -> ScopedCopyableComponents"},
+	 { (char *)"new_StdAutoMatchInformation", _wrap_new_StdAutoMatchInformation, METH_VARARGS, (char *)"new_StdAutoMatchInformation() -> StdAutoMatchInformation"},
+	 { (char *)"delete_StdAutoMatchInformation", _wrap_delete_StdAutoMatchInformation, METH_VARARGS, (char *)"delete_StdAutoMatchInformation(StdAutoMatchInformation self)"},
+	 { (char *)"StdAutoMatchInformation_swigregister", StdAutoMatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCopyableMatchInformation", _wrap_new_ScopedCopyableMatchInformation, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableMatchInformation(MatchInformation ptr=None)\n"
+		"ScopedCopyableMatchInformation()\n"
+		"new_ScopedCopyableMatchInformation(ScopedCopyableMatchInformation rhs) -> ScopedCopyableMatchInformation\n"
+		""},
+	 { (char *)"ScopedCopyableMatchInformation_get", _wrap_ScopedCopyableMatchInformation_get, METH_VARARGS, (char *)"ScopedCopyableMatchInformation_get(ScopedCopyableMatchInformation self) -> MatchInformation"},
+	 { (char *)"ScopedCopyableMatchInformation___ref__", _wrap_ScopedCopyableMatchInformation___ref__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___ref__(ScopedCopyableMatchInformation self) -> MatchInformation"},
+	 { (char *)"ScopedCopyableMatchInformation___deref__", _wrap_ScopedCopyableMatchInformation___deref__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___deref__(ScopedCopyableMatchInformation self) -> MatchInformation"},
+	 { (char *)"ScopedCopyableMatchInformation_reset", _wrap_ScopedCopyableMatchInformation_reset, METH_VARARGS, (char *)"\n"
+		"reset(MatchInformation ptr=None)\n"
+		"ScopedCopyableMatchInformation_reset(ScopedCopyableMatchInformation self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableMatchInformation", _wrap_delete_ScopedCopyableMatchInformation, METH_VARARGS, (char *)"delete_ScopedCopyableMatchInformation(ScopedCopyableMatchInformation self)"},
+	 { (char *)"ScopedCopyableMatchInformation_types_set", _wrap_ScopedCopyableMatchInformation_types_set, METH_VARARGS, (char *)"ScopedCopyableMatchInformation_types_set(ScopedCopyableMatchInformation self, VectorMatchType types)"},
+	 { (char *)"ScopedCopyableMatchInformation_types_get", _wrap_ScopedCopyableMatchInformation_types_get, METH_VARARGS, (char *)"ScopedCopyableMatchInformation_types_get(ScopedCopyableMatchInformation self) -> VectorMatchType"},
+	 { (char *)"ScopedCopyableMatchInformation_swigregister", ScopedCopyableMatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCopyableMatchInformation", _wrap_makeScopedCopyableMatchInformation, METH_VARARGS, (char *)"makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -74389,6 +83524,7 @@ static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t = {"
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t = {"_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t", "mem::ScopedCopyablePtr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t = {"_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t", "mem::ScopedCopyablePtr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t = {"_p_mem__ScopedCopyablePtrT_six__IonoError_t", "mem::ScopedCopyablePtr< six::IonoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t = {"_p_mem__ScopedCopyablePtrT_six__MatchInformation_t", "mem::ScopedCopyablePtr< six::MatchInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__PosVelError_t = {"_p_mem__ScopedCopyablePtrT_six__PosVelError_t", "mem::ScopedCopyablePtr< six::PosVelError > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__RadarSensor_t = {"_p_mem__ScopedCopyablePtrT_six__RadarSensor_t", "mem::ScopedCopyablePtr< six::RadarSensor > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__Radiometric_t = {"_p_mem__ScopedCopyablePtrT_six__Radiometric_t", "mem::ScopedCopyablePtr< six::Radiometric > *", 0, 0, (void*)0, 0};
@@ -74438,6 +83574,9 @@ static swig_type_info _swigt__p_six__Init = {"_p_six__Init", "six::Init *", 0, 0
 static swig_type_info _swigt__p_six__IonoError = {"_p_six__IonoError", "six::IonoError *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__LUT = {"_p_six__LUT", "six::LUT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__MagnificationMethod = {"_p_six__MagnificationMethod", "six::MagnificationMethod *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__MatchCollect = {"_p_six__MatchCollect", "std::vector< six::MatchCollect >::value_type *|six::MatchCollect *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__MatchInformation = {"_p_six__MatchInformation", "six::MatchInformation *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__MatchType = {"_p_six__MatchType", "six::MatchType *|std::vector< six::MatchType >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__MissingRequiredException = {"_p_six__MissingRequiredException", "six::MissingRequiredException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__NoiseLevel = {"_p_six__NoiseLevel", "six::NoiseLevel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Options = {"_p_six__Options", "six::Options *", 0, 0, (void*)0, 0};
@@ -74467,12 +83606,15 @@ static swig_type_info _swigt__p_six__XYZEnum = {"_p_six__XYZEnum", "six::XYZEnum
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_six__MatchCollect_t = {"_p_std__allocatorT_six__MatchCollect_t", "std::vector< six::MatchCollect >::allocator_type *|std::allocator< six::MatchCollect > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_six__MatchType_t = {"_p_std__allocatorT_six__MatchType_t", "std::vector< six::MatchType >::allocator_type *|std::allocator< six::MatchType > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "std::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "std::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "std::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "std::auto_ptr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "std::auto_ptr< six::IonoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "std::auto_ptr< six::MatchInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__PosVelError_t = {"_p_std__auto_ptrT_six__PosVelError_t", "std::auto_ptr< six::PosVelError > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__RadarSensor_t = {"_p_std__auto_ptrT_six__RadarSensor_t", "std::auto_ptr< six::RadarSensor > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__Radiometric_t = {"_p_std__auto_ptrT_six__Radiometric_t", "std::auto_ptr< six::Radiometric > *", 0, 0, (void*)0, 0};
@@ -74481,6 +83623,8 @@ static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argume
 static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t = {"_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t", "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *|std::vector< six::MatchCollect > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t = {"_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t", "std::vector< six::MatchType,std::allocator< six::MatchType > > *|std::vector< six::MatchType > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *|std::vector< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
@@ -74540,6 +83684,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t,
+  &_swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__PosVelError_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__RadarSensor_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__Radiometric_t,
@@ -74589,6 +83734,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__IonoError,
   &_swigt__p_six__LUT,
   &_swigt__p_six__MagnificationMethod,
+  &_swigt__p_six__MatchCollect,
+  &_swigt__p_six__MatchInformation,
+  &_swigt__p_six__MatchType,
   &_swigt__p_six__MissingRequiredException,
   &_swigt__p_six__NoiseLevel,
   &_swigt__p_six__Options,
@@ -74618,12 +83766,15 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
+  &_swigt__p_std__allocatorT_six__MatchCollect_t,
+  &_swigt__p_std__allocatorT_six__MatchType_t,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__auto_ptrT_six__Components_t,
   &_swigt__p_std__auto_ptrT_six__CompositeSCP_t,
   &_swigt__p_std__auto_ptrT_six__CorrCoefs_t,
   &_swigt__p_std__auto_ptrT_six__ErrorStatistics_t,
   &_swigt__p_std__auto_ptrT_six__IonoError_t,
+  &_swigt__p_std__auto_ptrT_six__MatchInformation_t,
   &_swigt__p_std__auto_ptrT_six__PosVelError_t,
   &_swigt__p_std__auto_ptrT_six__RadarSensor_t,
   &_swigt__p_std__auto_ptrT_six__Radiometric_t,
@@ -74632,6 +83783,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   &_swigt__p_std__ostream,
   &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t,
+  &_swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t,
   &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_types__RgAzT_double_t,
@@ -74691,6 +83844,7 @@ static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t[] = 
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__IonoError_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__MatchInformation_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__PosVelError_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__PosVelError_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__RadarSensor_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__RadarSensor_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__Radiometric_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__Radiometric_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -74740,6 +83894,9 @@ static swig_cast_info _swigc__p_six__Init[] = {  {&_swigt__p_six__Init, 0, 0, 0}
 static swig_cast_info _swigc__p_six__IonoError[] = {  {&_swigt__p_six__IonoError, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__LUT[] = {  {&_swigt__p_six__LUT, 0, 0, 0},  {&_swigt__p_six__AmplitudeTable, _p_six__AmplitudeTableTo_p_six__LUT, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__MagnificationMethod[] = {  {&_swigt__p_six__MagnificationMethod, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__MatchCollect[] = {  {&_swigt__p_six__MatchCollect, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__MatchInformation[] = {  {&_swigt__p_six__MatchInformation, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__MatchType[] = {  {&_swigt__p_six__MatchType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__MissingRequiredException[] = {  {&_swigt__p_six__MissingRequiredException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__NoiseLevel[] = {  {&_swigt__p_six__NoiseLevel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Options[] = {  {&_swigt__p_six__Options, 0, 0, 0},{0, 0, 0, 0}};
@@ -74769,12 +83926,15 @@ static swig_cast_info _swigc__p_six__XYZEnum[] = {  {&_swigt__p_six__XYZEnum, 0,
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_six__MatchCollect_t[] = {  {&_swigt__p_std__allocatorT_six__MatchCollect_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_six__MatchType_t[] = {  {&_swigt__p_std__allocatorT_six__MatchType_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__Components_t[] = {  {&_swigt__p_std__auto_ptrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CompositeSCP_t[] = {  {&_swigt__p_std__auto_ptrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CorrCoefs_t[] = {  {&_swigt__p_std__auto_ptrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__ErrorStatistics_t[] = {  {&_swigt__p_std__auto_ptrT_six__ErrorStatistics_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__IonoError_t[] = {  {&_swigt__p_std__auto_ptrT_six__IonoError_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_six__MatchInformation_t[] = {  {&_swigt__p_std__auto_ptrT_six__MatchInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__PosVelError_t[] = {  {&_swigt__p_std__auto_ptrT_six__PosVelError_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__RadarSensor_t[] = {  {&_swigt__p_std__auto_ptrT_six__RadarSensor_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__Radiometric_t[] = {  {&_swigt__p_std__auto_ptrT_six__Radiometric_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -74783,6 +83943,8 @@ static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__in
 static swig_cast_info _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator[] = {  {&_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t[] = {  {&_swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t[] = {  {&_swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RgAzT_double_t[] = {  {&_swigt__p_types__RgAzT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -74842,6 +84004,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__IonoError_t,
+  _swigc__p_mem__ScopedCopyablePtrT_six__MatchInformation_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__PosVelError_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__RadarSensor_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__Radiometric_t,
@@ -74891,6 +84054,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__IonoError,
   _swigc__p_six__LUT,
   _swigc__p_six__MagnificationMethod,
+  _swigc__p_six__MatchCollect,
+  _swigc__p_six__MatchInformation,
+  _swigc__p_six__MatchType,
   _swigc__p_six__MissingRequiredException,
   _swigc__p_six__NoiseLevel,
   _swigc__p_six__Options,
@@ -74920,12 +84086,15 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_ssize_t,
+  _swigc__p_std__allocatorT_six__MatchCollect_t,
+  _swigc__p_std__allocatorT_six__MatchType_t,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__auto_ptrT_six__Components_t,
   _swigc__p_std__auto_ptrT_six__CompositeSCP_t,
   _swigc__p_std__auto_ptrT_six__CorrCoefs_t,
   _swigc__p_std__auto_ptrT_six__ErrorStatistics_t,
   _swigc__p_std__auto_ptrT_six__IonoError_t,
+  _swigc__p_std__auto_ptrT_six__MatchInformation_t,
   _swigc__p_std__auto_ptrT_six__PosVelError_t,
   _swigc__p_std__auto_ptrT_six__RadarSensor_t,
   _swigc__p_std__auto_ptrT_six__Radiometric_t,
@@ -74934,6 +84103,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   _swigc__p_std__ostream,
   _swigc__p_std__string,
+  _swigc__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t,
+  _swigc__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t,
   _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_types__RgAzT_double_t,

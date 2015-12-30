@@ -38,6 +38,7 @@ using std::ptrdiff_t;
 
 /* this isn't imported by the above include */
 #include "six/Radiometric.h"
+#include "six/MatchInformation.h"
 
 #include "import/nitf.hpp"
 
@@ -91,6 +92,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
 %include "six/Radiometric.h"
+%include "six/MatchInformation.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
@@ -145,9 +147,11 @@ def setValue(self, *args):
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-%template(VectorString) std::vector<std::string>;
-%template(LatLonCorners) six::Corners<scene::LatLon>;
-%template(LatLonAltCorners) six::Corners<scene::LatLonAlt>;
+%template(VectorString)       std::vector<std::string>;
+%template(LatLonCorners)      six::Corners<scene::LatLon>;
+%template(LatLonAltCorners)   six::Corners<scene::LatLonAlt>;
+%template(VectorMatchCollect) std::vector<six::MatchCollect>;
+%template(VectorMatchType)    std::vector<six::MatchType>;
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
@@ -158,3 +162,4 @@ SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
+SCOPED_COPYABLE(six, MatchInformation)

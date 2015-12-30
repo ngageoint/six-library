@@ -105,23 +105,23 @@ XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
 
     for (size_t i = 0; i < matchInfo->types.size(); ++i)
     {
-        const MatchType* mt = matchInfo->types[i].get();
+        const MatchType& mt = matchInfo->types[i];
         XMLElem mtXML = newElement("MatchType", matchInfoXML);
         setAttribute(mtXML, "index", str::toString(i + 1));
 
-        createString("TypeID", mt->typeID, mtXML);
-        createInt("CurrentIndex", mt->currentIndex, mtXML);
-        createInt("NumMatchCollections", mt->matchCollects.size(), mtXML);
+        createString("TypeID", mt.typeID, mtXML);
+        createInt("CurrentIndex", mt.currentIndex, mtXML);
+        createInt("NumMatchCollections", mt.matchCollects.size(), mtXML);
 
-        for (size_t j = 0; j < mt->matchCollects.size(); ++j)
+        for (size_t j = 0; j < mt.matchCollects.size(); ++j)
         {
             XMLElem mcXML = newElement("MatchCollection", mtXML);
             setAttribute(mcXML, "index", str::toString(j + 1));
 
-            createString("CoreName", mt->matchCollects[j].coreName, mcXML);
-            createInt("MatchIndex", mt->matchCollects[j].matchIndex, mcXML);
+            createString("CoreName", mt.matchCollects[j].coreName, mcXML);
+            createInt("MatchIndex", mt.matchCollects[j].matchIndex, mcXML);
             common().addParameters("Parameter", 
-                mt->matchCollects[j].parameters, mcXML);
+                mt.matchCollects[j].parameters, mcXML);
         }
     }
 
@@ -383,24 +383,18 @@ void ComplexXMLParser10x::parseMatchInformationFromXML(
             Ctxt("NumMatchTypes does not match number of MatchType fields"));
     }
 
+    matchInfo->types.resize(typesXML.size());
     for (size_t i = 0; i < typesXML.size(); i++)
     {
-        // The MatchInformation object was given a MatchType when
-        // it was instantiated.  The first time through, just populate it.
-        if (i != 0)
-        {
-            matchInfo->types.push_back(
-                mem::ScopedCopyablePtr<MatchType>(new MatchType()));
-        }
-        MatchType* type = matchInfo->types[i].get();
+        MatchType& type = matchInfo->types[i];
 
-        parseString(getFirstAndOnly(typesXML[i], "TypeID"), type->typeID);
+        parseString(getFirstAndOnly(typesXML[i], "TypeID"), type.typeID);
 
         XMLElem curIndexElem = getOptional(typesXML[i], "CurrentIndex");
         if (curIndexElem)
         {
             //optional
-            parseInt(curIndexElem, type->currentIndex);
+            parseInt(curIndexElem, type.currentIndex);
         }
 
         int numMatchCollections = 0;
@@ -422,10 +416,10 @@ void ComplexXMLParser10x::parseMatchInformationFromXML(
         // Need to make sure this is resized properly - at MatchType
         // construction time, matchCollects is initialized to size 1, but in
         // SICD 1.1 this entire block may be missing.
-        type->matchCollects.resize(matchCollectionsXML.size());
+        type.matchCollects.resize(matchCollectionsXML.size());
         for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
         {
-            MatchCollect& collect(type->matchCollects[jj]);
+            MatchCollect& collect(type.matchCollects[jj]);
 
             parseString(getFirstAndOnly(
                 matchCollectionsXML[jj], "CoreName"), collect.coreName);

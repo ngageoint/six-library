@@ -95,7 +95,6 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 %include "six/sicd/ImageFormation.h"
 %include "six/sicd/SCPCOA.h"
 %include "six/sicd/Antenna.h"
-%include "six/sicd/MatchInformation.h"
 %include "six/sicd/PFA.h"
 %include "six/sicd/RMA.h"
 %include "six/sicd/RgAzComp.h"
@@ -118,7 +117,6 @@ SCOPED_CLONEABLE(six::sicd, RadarCollection)
 SCOPED_COPYABLE(six::sicd, ImageFormation)
 SCOPED_COPYABLE(six::sicd, SCPCOA)
 SCOPED_COPYABLE(six::sicd, Antenna)
-SCOPED_COPYABLE(six::sicd, MatchInformation)
 SCOPED_COPYABLE(six::sicd, SlowTimeDeskew)
 SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
@@ -133,7 +131,6 @@ SCOPED_COPYABLE(six::sicd, ElectricalBoresight)
 SCOPED_COPYABLE(six::sicd, HalfPowerBeamwidths)
 SCOPED_COPYABLE(six::sicd, GainAndPhasePolys)
 
-SCOPED_COPYABLE(six::sicd, MatchType)
 SCOPED_COPYABLE(six::sicd, WeightType)
 
 %template(VectorPolyXYZ) std::vector<math::poly::OneD<Vector3> >;
@@ -156,9 +153,6 @@ SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
 SCOPED_COPYABLE(six::sicd, Distortion)
-
-%template(VectorMatchCollect)                      std::vector<six::sicd::MatchCollect>;
-%template(VectorScopedCopyableMatchType)           std::vector<mem::ScopedCopyablePtr<six::sicd::MatchType> >;
 
 SCOPED_COPYABLE(six::sicd, RMAT)
 SCOPED_COPYABLE(six::sicd, RMCR)

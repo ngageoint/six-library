@@ -132,22 +132,22 @@ XMLElem ComplexXMLParser04x::convertMatchInformationToXML(
 
     for (size_t i = 0; i < matchInfo->types.size(); ++i)
     {
-        const MatchType* mt = matchInfo->types[i].get();
+        const MatchType& mt = matchInfo->types[i];
         XMLElem mtXML = newElement("Collect", matchInfoXML);
         setAttribute(mtXML, "index", str::toString(i + 1));
 
-        createString("CollectorName", mt->collectorName, mtXML);
-        if (!mt->illuminatorName.empty())
-            createString("IlluminatorName", mt->illuminatorName, mtXML);
-        createString("CoreName", mt->matchCollects[0].coreName, mtXML);
+        createString("CollectorName", mt.collectorName, mtXML);
+        if (!mt.illuminatorName.empty())
+            createString("IlluminatorName", mt.illuminatorName, mtXML);
+        createString("CoreName", mt.matchCollects[0].coreName, mtXML);
 
         for (std::vector<std::string>::const_iterator it =
-                mt->matchType.begin(); it != mt->matchType.end(); ++it)
+                mt.matchType.begin(); it != mt.matchType.end(); ++it)
         {
             createString("MatchType", *it, mtXML);
         }
         common().addParameters("Parameter", 
-            mt->matchCollects[0].parameters, mtXML);
+            mt.matchCollects[0].parameters, mtXML);
     }
 
     return matchInfoXML;
@@ -396,41 +396,36 @@ void ComplexXMLParser04x::parseMatchInformationFromXML(
     //TODO make sure there is at least one
     std::vector < XMLElem > typesXML;
     matchInfoXML->getElementsByTagName("Collect", typesXML);
+
+    matchInfo->types.resize(typesXML.size());
     for (size_t i = 0; i < typesXML.size(); i++)
     {
-        // The MatchInformation object was given a MatchCollection when
-        // it was instantiated.  The first time through, just populate it.
-        if (i != 0)
-        {
-            matchInfo->types.push_back(
-                mem::ScopedCopyablePtr<MatchType>(new MatchType()));
-        }
-        MatchType* type = matchInfo->types[i].get();
+        MatchType& type = matchInfo->types[i];
 
-        parseString(getFirstAndOnly(typesXML[i], "CollectorName"), type->collectorName);
+        parseString(getFirstAndOnly(typesXML[i], "CollectorName"), type.collectorName);
 
         XMLElem illuminatorElem = getOptional(typesXML[i], "IlluminatorName");
         if (illuminatorElem)
         {
             //optional
-            parseString(illuminatorElem, type->illuminatorName);
+            parseString(illuminatorElem, type.illuminatorName);
         }
 
         // in version 0.4 we use the matchCollect object
-        parseString(getFirstAndOnly(typesXML[i], "CoreName"), type->matchCollects[0].coreName);
+        parseString(getFirstAndOnly(typesXML[i], "CoreName"), type.matchCollects[0].coreName);
 
         //optional
         std::vector < XMLElem > matchTypesXML;
         typesXML[i]->getElementsByTagName("MatchType", matchTypesXML);
-        type->matchType.resize(matchTypesXML.size());
+        type.matchType.resize(matchTypesXML.size());
         for (size_t j = 0; j < matchTypesXML.size(); j++)
         {
-            parseString(matchTypesXML[j], type->matchType[j]);
+            parseString(matchTypesXML[j], type.matchType[j]);
         }
 
         //optional --
         // in version 0.4 we use the matchCollect object
-        common().parseParameters(typesXML[i], "Parameter", type->matchCollects[0].parameters);
+        common().parseParameters(typesXML[i], "Parameter", type.matchCollects[0].parameters);
     }
 }
 

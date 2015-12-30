@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of six-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -22,24 +22,20 @@
 #ifndef __SIX_MATCH_INFORMATION_H__
 #define __SIX_MATCH_INFORMATION_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
-#include <mem/ScopedCopyablePtr.h>
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
 
 namespace six
 {
-namespace sicd
-{
-
 /*!
  *  \struct MatchCollect
  *  \brief  Block containing information about match collection. Block repeated
  *          for match collection = 1 to NumMatchCollections.
  *
- *  Added in 1.0.0 
- *  This object is used for fields previously in 0.4.1
+ *  Added in SICD 1.0.0
+ *  This object is used for fields previously in SICD 0.4.1
  *      - coreName
  *      - parameters
  */
@@ -52,7 +48,7 @@ struct MatchCollect
     std::string coreName;
 
     //! Collection sequence index for the match collection.
-    //  Added in 1.0.0
+    //  Added in SICD 1.0.0
     int matchIndex;
 
     //! Relevant match parameter. Attribute name identifies the parameter.
@@ -61,7 +57,7 @@ struct MatchCollect
 
 /*!
  *  \struct MatchCollection
- *  \brief SICD MatchInfoo/Collect
+ *  \brief SICD and SIDD MatchInfo/Collect
  *
  *  Block containing information about the n'th matched
  *  collection.  Match types are text strings describing the
@@ -73,23 +69,23 @@ struct MatchType
     MatchType();
 
     //! Platform id.  List rcv only platform for bistatic colls
-    //  only exists in 0.4.1
+    //  only exists in SICD 0.4.1
     std::string collectorName;
 
     //! Optional - tx platform identifier for bistatic match colls
-    //  only exists in 0.4.1
+    //  only exists in SICD 0.4.1
     std::string illuminatorName;
 
     //! Match type is a string describing the collect
-    //  only exists in 0.4.1
+    //  only exists in SICD 0.4.1
     std::vector<std::string> matchType;
 
     //! Text string identifying the match type. Examples: COHERENT, STEREO
-    //  added in 1.0.0
+    //  added in SICD 1.0.0, present in SIDD 1.1.0
     std::string typeID;
 
     //! Optional - Collection sequence index for the current collection.
-    //  added in 1.0.0
+    //  added in SICD 1.0.0, present in SIDD 1.1.0
     int currentIndex;
 
     //! Block containing information about match collection. Block repeated
@@ -99,28 +95,25 @@ struct MatchType
 
 /*!
  *  \struct MatchInformation
- *  \brief SICD MatchInfo
+ *  \brief SICD and SIDD (starting in 1.1) MatchInfo
  *
  *  Parameters describing other imaging collections that are matched
  *  or related to this collection.  This parameter block is optional
- *  in the SICD spec.
+ *  in the SICD and SIDD specs.
  */
 struct MatchInformation
 {
 public:
-
     //!  Constructor.  Creates a single default-constructed collection.
     MatchInformation();
 
     /*!
      *  At least one is mandatory.
-     *  called "Collect" in 0.4.x
-     *  called "MatchType" in 1.x
+     *  called "Collect" in SICD 0.4.x
+     *  called "MatchType" in SICD/SIDD 1.x
      */
-    std::vector<mem::ScopedCopyablePtr<MatchType> > types;
+    std::vector<MatchType> types;
 };
+}
 
-}
-}
 #endif
-

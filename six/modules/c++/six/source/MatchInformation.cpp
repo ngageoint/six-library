@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of six-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -19,13 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/MatchInformation.h"
+#include <six/MatchInformation.h>
 
 namespace six
 {
-namespace sicd
-{
-
 MatchCollect::MatchCollect() :
     coreName(Init::undefined<std::string>()),
     matchIndex(Init::undefined<int>())
@@ -41,13 +38,8 @@ MatchType::MatchType() :
 {
 }
 
-//! One is maditory
 MatchInformation::MatchInformation() :
-    types(1)
+    types(1) //! One is mandatory
 {
-    types[0].reset(new MatchType());
-}
-
 }
 }
-

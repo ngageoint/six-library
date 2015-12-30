@@ -29,6 +29,7 @@
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
 #include "six/Radiometric.h"
+#include "six/MatchInformation.h"
 #include "six/sicd/CollectionInformation.h"
 #include "six/sicd/ImageCreation.h"
 #include "six/sicd/ImageData.h"
@@ -43,7 +44,6 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/RgAzComp.h"
-#include "six/sicd/MatchInformation.h"
 
 namespace six
 {
@@ -127,8 +127,6 @@ public:
     mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
     ComplexData();
-
-    ~ComplexData(){}
 
     /*!
      *  Returns COMPLEX.  This is used by Read/Write to determine
