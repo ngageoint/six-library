@@ -210,6 +210,12 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
                                              root);
     }
     // optional
+    if (derived->matchInformation.get())
+    {
+        common().convertMatchInformationToXML(*derived->matchInformation,
+                                              root);
+    }
+    // optional
     if (derived->radiometric.get())
     {
         common().convertRadiometryToXML(derived->radiometric.get(), root);
@@ -1229,6 +1235,16 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
         const XMLElem elem,
         DigitalElevationData& ded) const
 {
+    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
+}
+
+void DerivedXMLParser110::parseMatchInformationFromXML(
+        const XMLElem matchInfoXML,
+        MatchInformation& obj) const
+{
+    // Probably want to move the parsing logic into the SICommonXMLParser
+    // similar to what I did for the convert function... then this method goes
+    // away altogether
     throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
 }
 }
