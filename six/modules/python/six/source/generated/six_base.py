@@ -3041,9 +3041,9 @@ class Classification(_object):
         return _six_base.Classification_isUnclassified(self)
 
 
-    def setSecurity(self, prefix, log, security):
-        """setSecurity(Classification self, std::string const & prefix, logging::Logger & log, nitf::FileSecurity security)"""
-        return _six_base.Classification_setSecurity(self, prefix, log, security)
+    def setSecurity(self, arg2, arg3, arg4):
+        """setSecurity(Classification self, std::string const & arg2, logging::Logger & arg3, nitf::FileSecurity arg4)"""
+        return _six_base.Classification_setSecurity(self, arg2, arg3, arg4)
 
 
     def put(self, os):
@@ -4043,6 +4043,26 @@ class LatLonAltCorners(_object):
 LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister
 LatLonAltCorners_swigregister(LatLonAltCorners)
 
+class StdAutoRadiometric(_object):
+    """Proxy of C++ std::auto_ptr<(six::Radiometric)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadiometric, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoRadiometric, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::Radiometric)> self) -> StdAutoRadiometric"""
+        this = _six_base.new_StdAutoRadiometric()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoRadiometric
+    __del__ = lambda self: None
+StdAutoRadiometric_swigregister = _six_base.StdAutoRadiometric_swigregister
+StdAutoRadiometric_swigregister(StdAutoRadiometric)
+
 class ScopedCopyableRadiometric(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::Radiometric)> class"""
     __swig_setmethods__ = {}
@@ -4078,12 +4098,12 @@ class ScopedCopyableRadiometric(_object):
         return _six_base.ScopedCopyableRadiometric___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableRadiometric self, Radiometric ptr=None)
         reset(ScopedCopyableRadiometric self)
         """
-        return _six_base.ScopedCopyableRadiometric_reset(self, ptr)
+        return _six_base.ScopedCopyableRadiometric_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableRadiometric
     __del__ = lambda self: None
@@ -4128,6 +4148,26 @@ ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
 def makeScopedCopyableRadiometric():
     """makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"""
     return _six_base.makeScopedCopyableRadiometric()
+class StdAutoErrorStatistics(_object):
+    """Proxy of C++ std::auto_ptr<(six::ErrorStatistics)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoErrorStatistics, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoErrorStatistics, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::ErrorStatistics)> self) -> StdAutoErrorStatistics"""
+        this = _six_base.new_StdAutoErrorStatistics()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoErrorStatistics
+    __del__ = lambda self: None
+StdAutoErrorStatistics_swigregister = _six_base.StdAutoErrorStatistics_swigregister
+StdAutoErrorStatistics_swigregister(StdAutoErrorStatistics)
+
 class ScopedCopyableErrorStatistics(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::ErrorStatistics)> class"""
     __swig_setmethods__ = {}
@@ -4163,12 +4203,12 @@ class ScopedCopyableErrorStatistics(_object):
         return _six_base.ScopedCopyableErrorStatistics___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableErrorStatistics self, ErrorStatistics ptr=None)
         reset(ScopedCopyableErrorStatistics self)
         """
-        return _six_base.ScopedCopyableErrorStatistics_reset(self, ptr)
+        return _six_base.ScopedCopyableErrorStatistics_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableErrorStatistics
     __del__ = lambda self: None
@@ -4191,6 +4231,26 @@ ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 def makeScopedCopyableErrorStatistics():
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
+class StdAutoCorrCoefs(_object):
+    """Proxy of C++ std::auto_ptr<(six::CorrCoefs)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCorrCoefs, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCorrCoefs, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CorrCoefs)> self) -> StdAutoCorrCoefs"""
+        this = _six_base.new_StdAutoCorrCoefs()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCorrCoefs
+    __del__ = lambda self: None
+StdAutoCorrCoefs_swigregister = _six_base.StdAutoCorrCoefs_swigregister
+StdAutoCorrCoefs_swigregister(StdAutoCorrCoefs)
+
 class ScopedCopyableCorrCoefs(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::CorrCoefs)> class"""
     __swig_setmethods__ = {}
@@ -4226,12 +4286,12 @@ class ScopedCopyableCorrCoefs(_object):
         return _six_base.ScopedCopyableCorrCoefs___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableCorrCoefs self, CorrCoefs ptr=None)
         reset(ScopedCopyableCorrCoefs self)
         """
-        return _six_base.ScopedCopyableCorrCoefs_reset(self, ptr)
+        return _six_base.ScopedCopyableCorrCoefs_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableCorrCoefs
     __del__ = lambda self: None
@@ -4302,6 +4362,26 @@ ScopedCopyableCorrCoefs_swigregister(ScopedCopyableCorrCoefs)
 def makeScopedCopyableCorrCoefs():
     """makeScopedCopyableCorrCoefs() -> ScopedCopyableCorrCoefs"""
     return _six_base.makeScopedCopyableCorrCoefs()
+class StdAutoPosVelError(_object):
+    """Proxy of C++ std::auto_ptr<(six::PosVelError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPosVelError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoPosVelError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::PosVelError)> self) -> StdAutoPosVelError"""
+        this = _six_base.new_StdAutoPosVelError()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoPosVelError
+    __del__ = lambda self: None
+StdAutoPosVelError_swigregister = _six_base.StdAutoPosVelError_swigregister
+StdAutoPosVelError_swigregister(StdAutoPosVelError)
+
 class ScopedCopyablePosVelError(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::PosVelError)> class"""
     __swig_setmethods__ = {}
@@ -4337,12 +4417,12 @@ class ScopedCopyablePosVelError(_object):
         return _six_base.ScopedCopyablePosVelError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyablePosVelError self, PosVelError ptr=None)
         reset(ScopedCopyablePosVelError self)
         """
-        return _six_base.ScopedCopyablePosVelError_reset(self, ptr)
+        return _six_base.ScopedCopyablePosVelError_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyablePosVelError
     __del__ = lambda self: None
@@ -4389,6 +4469,26 @@ ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 def makeScopedCopyablePosVelError():
     """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
     return _six_base.makeScopedCopyablePosVelError()
+class StdAutoRadarSensor(_object):
+    """Proxy of C++ std::auto_ptr<(six::RadarSensor)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadarSensor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoRadarSensor, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::RadarSensor)> self) -> StdAutoRadarSensor"""
+        this = _six_base.new_StdAutoRadarSensor()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoRadarSensor
+    __del__ = lambda self: None
+StdAutoRadarSensor_swigregister = _six_base.StdAutoRadarSensor_swigregister
+StdAutoRadarSensor_swigregister(StdAutoRadarSensor)
+
 class ScopedCopyableRadarSensor(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::RadarSensor)> class"""
     __swig_setmethods__ = {}
@@ -4424,12 +4524,12 @@ class ScopedCopyableRadarSensor(_object):
         return _six_base.ScopedCopyableRadarSensor___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableRadarSensor self, RadarSensor ptr=None)
         reset(ScopedCopyableRadarSensor self)
         """
-        return _six_base.ScopedCopyableRadarSensor_reset(self, ptr)
+        return _six_base.ScopedCopyableRadarSensor_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableRadarSensor
     __del__ = lambda self: None
@@ -4456,6 +4556,26 @@ ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
 def makeScopedCopyableRadarSensor():
     """makeScopedCopyableRadarSensor() -> ScopedCopyableRadarSensor"""
     return _six_base.makeScopedCopyableRadarSensor()
+class StdAutoTropoError(_object):
+    """Proxy of C++ std::auto_ptr<(six::TropoError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTropoError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoTropoError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::TropoError)> self) -> StdAutoTropoError"""
+        this = _six_base.new_StdAutoTropoError()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoTropoError
+    __del__ = lambda self: None
+StdAutoTropoError_swigregister = _six_base.StdAutoTropoError_swigregister
+StdAutoTropoError_swigregister(StdAutoTropoError)
+
 class ScopedCopyableTropoError(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::TropoError)> class"""
     __swig_setmethods__ = {}
@@ -4491,12 +4611,12 @@ class ScopedCopyableTropoError(_object):
         return _six_base.ScopedCopyableTropoError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableTropoError self, TropoError ptr=None)
         reset(ScopedCopyableTropoError self)
         """
-        return _six_base.ScopedCopyableTropoError_reset(self, ptr)
+        return _six_base.ScopedCopyableTropoError_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableTropoError
     __del__ = lambda self: None
@@ -4519,6 +4639,26 @@ ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
 def makeScopedCopyableTropoError():
     """makeScopedCopyableTropoError() -> ScopedCopyableTropoError"""
     return _six_base.makeScopedCopyableTropoError()
+class StdAutoIonoError(_object):
+    """Proxy of C++ std::auto_ptr<(six::IonoError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoIonoError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoIonoError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::IonoError)> self) -> StdAutoIonoError"""
+        this = _six_base.new_StdAutoIonoError()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoIonoError
+    __del__ = lambda self: None
+StdAutoIonoError_swigregister = _six_base.StdAutoIonoError_swigregister
+StdAutoIonoError_swigregister(StdAutoIonoError)
+
 class ScopedCopyableIonoError(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::IonoError)> class"""
     __swig_setmethods__ = {}
@@ -4554,12 +4694,12 @@ class ScopedCopyableIonoError(_object):
         return _six_base.ScopedCopyableIonoError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableIonoError self, IonoError ptr=None)
         reset(ScopedCopyableIonoError self)
         """
-        return _six_base.ScopedCopyableIonoError_reset(self, ptr)
+        return _six_base.ScopedCopyableIonoError_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableIonoError
     __del__ = lambda self: None
@@ -4586,6 +4726,26 @@ ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
 def makeScopedCopyableIonoError():
     """makeScopedCopyableIonoError() -> ScopedCopyableIonoError"""
     return _six_base.makeScopedCopyableIonoError()
+class StdAutoCompositeSCP(_object):
+    """Proxy of C++ std::auto_ptr<(six::CompositeSCP)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCompositeSCP, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCompositeSCP, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CompositeSCP)> self) -> StdAutoCompositeSCP"""
+        this = _six_base.new_StdAutoCompositeSCP()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCompositeSCP
+    __del__ = lambda self: None
+StdAutoCompositeSCP_swigregister = _six_base.StdAutoCompositeSCP_swigregister
+StdAutoCompositeSCP_swigregister(StdAutoCompositeSCP)
+
 class ScopedCopyableCompositeSCP(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::CompositeSCP)> class"""
     __swig_setmethods__ = {}
@@ -4621,12 +4781,12 @@ class ScopedCopyableCompositeSCP(_object):
         return _six_base.ScopedCopyableCompositeSCP___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableCompositeSCP self, CompositeSCP ptr=None)
         reset(ScopedCopyableCompositeSCP self)
         """
-        return _six_base.ScopedCopyableCompositeSCP_reset(self, ptr)
+        return _six_base.ScopedCopyableCompositeSCP_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableCompositeSCP
     __del__ = lambda self: None
@@ -4653,6 +4813,26 @@ ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
 def makeScopedCopyableCompositeSCP():
     """makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"""
     return _six_base.makeScopedCopyableCompositeSCP()
+class StdAutoComponents(_object):
+    """Proxy of C++ std::auto_ptr<(six::Components)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComponents, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComponents, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
+        this = _six_base.new_StdAutoComponents()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoComponents
+    __del__ = lambda self: None
+StdAutoComponents_swigregister = _six_base.StdAutoComponents_swigregister
+StdAutoComponents_swigregister(StdAutoComponents)
+
 class ScopedCopyableComponents(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class"""
     __swig_setmethods__ = {}
@@ -4688,12 +4868,12 @@ class ScopedCopyableComponents(_object):
         return _six_base.ScopedCopyableComponents___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableComponents self, Components ptr=None)
         reset(ScopedCopyableComponents self)
         """
-        return _six_base.ScopedCopyableComponents_reset(self, ptr)
+        return _six_base.ScopedCopyableComponents_reset(self, *args)
 
     __swig_destroy__ = _six_base.delete_ScopedCopyableComponents
     __del__ = lambda self: None

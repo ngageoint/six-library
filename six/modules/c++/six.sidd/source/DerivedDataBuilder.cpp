@@ -47,10 +47,20 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
     return *this;
 }
 
-DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
-                                                               RegionType regionType)
+DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget()
 {
-    mData->geographicAndTarget.reset(new GeographicAndTarget(regionType));
+    mData->geographicAndTarget.reset(new GeographicAndTarget());
+    mData->geographicAndTarget->imageCorners.reset(new LatLonCorners());
+
+    return *this;
+}
+
+DerivedDataBuilder&
+DerivedDataBuilder::addGeographicAndTargetOld(RegionType regionType)
+{
+    mData->geographicAndTarget.reset(new GeographicAndTarget());
+    mData->geographicAndTarget->geographicCoverage.reset(
+            new GeographicCoverage(regionType));
 
     return *this;
 }

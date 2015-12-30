@@ -57,7 +57,14 @@ protected:
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
 
+    virtual void parseDisplayFromXML(const XMLElem displayXML,
+                                     Display& display) const;
+
+
 private:
+    static const char VERSION[];
+    static const char SI_COMMON_URI[];
+
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
@@ -78,14 +85,60 @@ private:
                                const Kernel& kernel,
                                XMLElem parent = NULL) const;
 
-    void parseJ2KCompression(const XMLElem j2kElem,
-                             J2KCompression& j2k) const;
-
     void convertJ2KToXML(const J2KCompression& j2k,
-                            XMLElem& parent) const;
+                         XMLElem& parent) const;
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
+
+    XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded,
+                                             XMLElem parent = NULL) const;
+
+    void parseJ2KCompression(const XMLElem j2kElem,
+                             J2KCompression& j2k) const;
+
+    void parseGeographicTargetFromXML(
+            const XMLElem elem,
+            GeographicAndTarget* geographicAndTarget) const;
+
+    void parseDigitalElevationDataFromXML(const XMLElem elem,
+                                          DigitalElevationData& ded) const;
+
+    void parseBandInformationFromXML(const XMLElem bandXML,
+         BandInformation& bandInformation) const;
+
+    void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
+         NonInteractiveProcessing& nonInteractiveProcessing) const;
+
+    void parseProductGenerationOptionsFromXML(const XMLElem optionsElem,
+         ProductGenerationOptions& options) const;
+
+    void parseBandEqualizationFromXML(const XMLElem bandElem,
+         BandEqualization& band) const;
+
+    void parseLUT(const XMLElem LUTElem, LUT& lut) const;
+
+    void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
+
+    void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
+
+    void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
+         InteractiveProcessing& interactive) const;
+
+    void parseGeometricTransformFromXML(const XMLElem geomElem,
+         GeometricTransform& transform) const;
+
+    void parseSharpnessEnhancementFromXML(const XMLElem sharpElem,
+         SharpnessEnhancement& sharpness) const;
+
+    void parseColorSpaceTransformFromXML(const XMLElem colorElem,
+         ColorSpaceTransform& transform) const;
+
+    void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
+         DynamicRangeAdjustment& rangeAdjustment) const;
+
+    void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
+         OneDimensionalLookup& lookup) const;
 };
 }
 }

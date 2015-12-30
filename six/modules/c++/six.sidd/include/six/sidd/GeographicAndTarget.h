@@ -119,27 +119,36 @@ public:
  *  Contains generic and extensible targeting and geographic region
  *  information
  *
+ *  NOTE: This block looks completely different between SIDD 1.0 and SIDD 1.1
+ *        (SIDD 1.1 was changed to more closely resemble SICD).  If a block is
+ *        marked as required below, it is required only for the particular
+ *        version of SIDD that it's associated with (everything in this class
+ *        is a pointer or vector even when required since we don't know if
+ *        we're dealing with 1.0 or 1.1)
+ *
  */
 class GeographicAndTarget
 {
 public:
-    //!  Constructor requires a RegionType to properly initialize
-    GeographicAndTarget(RegionType regionType);
+    // This section is used for SIDD 1.0
 
     //!  SIDD GeographicCoverage: Provides geo coverage information
-    GeographicCoverage geographicCoverage;
+    //   Required for SIDD 1.0
+    mem::ScopedCopyablePtr<GeographicCoverage> geographicCoverage;
 
     //!  (Optional, Unbounded) Provides target specific geo information
     std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
 
-    // TODO: Finalize what this looks like for SIDD 1.1
+    // This section is used for SIDD 1.1
     /*!
      *  Parameters apply to image corners of the
      *  product projected to the same height as the SCP.
      *  These corners are an approximate geographic location
      *  not intended for analytical use
+     *
+     *  Required for SIDD 1.1
      */
-    LatLonCorners imageCorners;
+    mem::ScopedCopyablePtr<LatLonCorners> imageCorners;
 
     /*!
      *  (Optional) indicates the full image includes both

@@ -35,6 +35,7 @@ class DerivedXMLParser : public six::XMLParser
 {
 public:
     DerivedXMLParser(const std::string& version,
+                     std::auto_ptr<six::SICommonXMLParser> comParser,
                      logging::Logger* log = NULL,
                      bool ownLog = false);
 
@@ -54,7 +55,6 @@ protected:
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const = 0;
 
-    static const char SI_COMMON_URI[];
     static const char SFA_URI[];
     static const char ISM_URI[];
 
@@ -176,10 +176,6 @@ protected:
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
     void parseSingleLUT(const XMLElem elem, LUT* lut) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    void parseGeographicTargetFromXML(const XMLElem elem,
-                                      GeographicAndTarget* geographicAndTarget) const;
-    void parseGeographicCoverageFromXML(const XMLElem elem,
-                                        GeographicCoverage* geoCoverage) const;
     void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
     void parseExploitationFeaturesFromXML(const XMLElem elem,

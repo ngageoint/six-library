@@ -89,7 +89,7 @@ struct ImageData
     //!  Scene center (in global scene)
     RowColInt scpPixel;
 
-    // If this doesnt have at least 3 vertices, its not going to get written
+    // If this doesn't have at least 3 vertices, it's not going to get written
     std::vector<RowColInt> validData;
 
 };

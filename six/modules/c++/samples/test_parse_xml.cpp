@@ -277,15 +277,15 @@ xml::lite::Element* createPath(const six::LatLonCorners& coords,
     }
 
     xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
-                                                           KML_URI, oss.str());
+                                                           envelopeURI, oss.str());
     xml::lite::Element* envelopeXML = new xml::lite::Element(envelopeType,
-                                                             KML_URI);
+                                                             envelopeURI);
     envelopeXML->addChild(coordsXML);
 
     xml::lite::Element* placemarkXML = new xml::lite::Element("Placemark",
-                                                              KML_URI);
-    placemarkXML->addChild(new xml::lite::Element("name", KML_URI, name));
-    placemarkXML->addChild(new xml::lite::Element("styleUrl", KML_URI,
+                                                              envelopeURI);
+    placemarkXML->addChild(new xml::lite::Element("name", envelopeURI, name));
+    placemarkXML->addChild(new xml::lite::Element("styleUrl", envelopeURI,
                                                   std::string("#") + name));
     placemarkXML->addChild(envelopeXML);
 
@@ -324,15 +324,15 @@ xml::lite::Element* createPath(const std::vector<six::LatLonAlt>& coords,
     }
 
     xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
-                                                           KML_URI, oss.str());
+                                                           envelopeURI, oss.str());
     xml::lite::Element* envelopeXML = new xml::lite::Element(envelopeType,
-                                                             KML_URI);
+                                                             envelopeURI);
     envelopeXML->addChild(coordsXML);
 
     xml::lite::Element* placemarkXML = new xml::lite::Element("Placemark",
-                                                              KML_URI);
-    placemarkXML->addChild(new xml::lite::Element("name", KML_URI, name));
-    placemarkXML->addChild(new xml::lite::Element("styleUrl", KML_URI,
+                                                              envelopeURI);
+    placemarkXML->addChild(new xml::lite::Element("name", envelopeURI, name));
+    placemarkXML->addChild(new xml::lite::Element("styleUrl", envelopeURI,
                                                   std::string("#") + name));
     placemarkXML->addChild(envelopeXML);
 

@@ -20,7 +20,9 @@
  *
  */
 
+#include <six/SICommonXMLParser01x.h>
 #include <six/sidd/DerivedXMLParser100.h>
+#include <six/sidd/DerivedDataBuilder.h>
 
 namespace
 {
@@ -32,15 +34,118 @@ namespace six
 {
 namespace sidd
 {
+const char DerivedXMLParser100::VERSION[] = "1.0.0";
+const char DerivedXMLParser100::SI_COMMON_URI[] = "urn:SICommon:0.1";
+
 DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
                                          bool ownLog) :
-    DerivedXMLParser("1.0.0", log, ownLog)
+    DerivedXMLParser(VERSION,
+                     std::auto_ptr<six::SICommonXMLParser>(
+                         new six::SICommonXMLParser01x(versionToURI(VERSION),
+                                                       false,
+                                                       SI_COMMON_URI,
+                                                       log)),
+                     log,
+                     ownLog)
 {
 }
 
 DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
-    throw except::Exception(Ctxt("Implement me"));
+    XMLElem root = doc->getRootElement();
+
+    XMLElem productCreationXML        = getFirstAndOnly(root, "ProductCreation");
+    XMLElem displayXML                = getFirstAndOnly(root, "Display");
+    XMLElem measurementXML            = getFirstAndOnly(root, "Measurement");
+    XMLElem exploitationFeaturesXML   = getFirstAndOnly(root, "ExploitationFeatures");
+    XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem productProcessingXML      = getOptional(root, "ProductProcessing");
+    XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
+    XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
+    XMLElem radiometricXML            = getOptional(root, "Radiometric");
+    XMLElem annotationsXML            = getOptional(root, "Annotations");
+
+    DerivedDataBuilder builder;
+    DerivedData *data = builder.steal(); //steal it
+
+    // see if PixelType has MONO or RGB
+    PixelType pixelType = six::toType<PixelType>(
+            getFirstAndOnly(displayXML, "PixelType")->getCharacterData());
+    builder.addDisplay(pixelType);
+
+    RegionType regionType = RegionType::SUB_REGION;
+    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetXML,
+                                      "GeographicCoverage");
+
+    // create GeographicAndTarget
+    if (getOptional(tmpElem, "SubRegion"))
+        regionType = RegionType::SUB_REGION;
+    else if (getOptional(tmpElem, "GeographicInfo"))
+        regionType = RegionType::GEOGRAPHIC_INFO;
+    builder.addGeographicAndTargetOld(regionType);
+
+    // create Measurement
+    six::ProjectionType projType = ProjectionType::NOT_SET;
+    if (getOptional(measurementXML, "GeographicProjection"))
+        projType = ProjectionType::GEOGRAPHIC;
+    else if (getOptional(measurementXML, "CylindricalProjection"))
+        projType = ProjectionType::CYLINDRICAL;
+    else if (getOptional(measurementXML, "PlaneProjection"))
+        projType = ProjectionType::PLANE;
+    else if (getOptional(measurementXML, "PolynomialProjection"))
+        projType = ProjectionType::POLYNOMIAL;
+    builder.addMeasurement(projType);
+
+    // create ExploitationFeatures
+    std::vector<XMLElem> elements;
+    exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
+                                                  elements);
+    builder.addExploitationFeatures(elements.size());
+
+    parseProductCreationFromXML(productCreationXML, data->productCreation.get());
+    parseDisplayFromXML(displayXML, data->display.get());
+    parseGeographicTargetFromXML(geographicAndTargetXML, data->geographicAndTarget.get());
+    parseMeasurementFromXML(measurementXML, data->measurement.get());
+    parseExploitationFeaturesFromXML(exploitationFeaturesXML, data->exploitationFeatures.get());
+
+    if (productProcessingXML)
+    {
+        builder.addProductProcessing();
+        parseProductProcessingFromXML(productProcessingXML,
+                                      data->productProcessing.get());
+    }
+    if (downstreamReprocessingXML)
+    {
+        builder.addDownstreamReprocessing();
+        parseDownstreamReprocessingFromXML(downstreamReprocessingXML,
+                                           data->downstreamReprocessing.get());
+    }
+    if (errorStatisticsXML)
+    {
+        builder.addErrorStatistics();
+        common().parseErrorStatisticsFromXML(errorStatisticsXML,
+                                             data->errorStatistics.get());
+    }
+    if (radiometricXML)
+    {
+        builder.addRadiometric();
+        common().parseRadiometryFromXML(radiometricXML,
+                                        data->radiometric.get());
+    }
+    if (annotationsXML)
+    {
+        // 1 to unbounded
+        std::vector<XMLElem> annChildren;
+        annotationsXML->getElementsByTagName("Annotation", annChildren);
+        data->annotations.resize(annChildren.size());
+        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        {
+            data->annotations[i].reset(new Annotation());
+            parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
+        }
+    }
+
+    return data;
 }
 
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
@@ -379,9 +484,14 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
+    if (geographicAndTarget.geographicCoverage.get() == NULL)
+    {
+        throw except::Exception(Ctxt("geographicCoverage is required"));
+    }
+
     convertGeographicCoverageToXML(
             "GeographicCoverage",
-            &geographicAndTarget.geographicCoverage,
+            geographicAndTarget.geographicCoverage.get(),
             geographicAndTargetXML);
 
     // optional to unbounded
@@ -407,6 +517,105 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
     }
 
     return geographicAndTargetXML;
+}
+
+void DerivedXMLParser100::parseGeographicTargetFromXML(
+        const XMLElem geographicAndTargetXML,
+        GeographicAndTarget* geographicAndTarget) const
+{
+    parseGeographicCoverageFromXML(
+            getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
+            geographicAndTarget->geographicCoverage.get());
+
+    // optional to unbounded
+    std::vector<XMLElem> targetInfosXML;
+    geographicAndTargetXML->getElementsByTagName("TargetInformation",
+                                                 targetInfosXML);
+    geographicAndTarget->targetInformation.resize(targetInfosXML.size());
+    for (size_t i = 0; i < targetInfosXML.size(); ++i)
+    {
+        geographicAndTarget->targetInformation[i].reset(
+                new TargetInformation());
+
+        TargetInformation* ti
+                = geographicAndTarget->targetInformation[i].get();
+
+        // unbounded
+        common().parseParameters(targetInfosXML[i], "Identifier",
+                                 ti->identifiers);
+
+        // optional
+        XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
+        if (tmpXML)
+        {
+            ti->footprint.reset(new six::LatLonCorners());
+            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
+        }
+
+        // optional
+        common().parseParameters(targetInfosXML[i],
+                                 "TargetInformationExtension",
+                                 ti->targetInformationExtensions);
+    }
+}
+
+void DerivedXMLParser100::parseGeographicCoverageFromXML(
+        const XMLElem geographicCoverageXML,
+        GeographicCoverage* geographicCoverage) const
+{
+    // optional and unbounded
+    common().parseParameters(geographicCoverageXML, "GeoregionIdentifier",
+                             geographicCoverage->georegionIdentifiers);
+
+    common().parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
+                            "Vertex", geographicCoverage->footprint);
+
+    // If there are subregions, recurse
+    std::vector<XMLElem> subRegionsXML;
+    geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
+
+    geographicCoverage->subRegion.resize(subRegionsXML.size());
+    for (size_t i = 0; i < subRegionsXML.size(); ++i)
+    {
+        geographicCoverage->subRegion[i].reset(
+                new GeographicCoverage(RegionType::SUB_REGION));
+        parseGeographicCoverageFromXML(
+                subRegionsXML[i], geographicCoverage->subRegion[i].get());
+    }
+
+    // Otherwise read the GeographicInfo
+    if (subRegionsXML.size() == 0)
+    {
+        XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
+                                                    "GeographicInfo");
+
+        geographicCoverage->geographicInformation.reset(
+            new GeographicInformation());
+
+        // optional to unbounded
+        std::vector<XMLElem> countryCodes;
+        geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
+        for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
+                != countryCodes.end(); ++it)
+        {
+            geographicCoverage->geographicInformation->
+                    countryCodes.push_back((*it)->getCharacterData());
+        }
+
+        // optional
+        XMLElem securityInformationXML = getOptional(geographicInfoXML,
+                                                     "SecurityInfo");
+        if (securityInformationXML)
+        {
+            parseString(securityInformationXML, geographicCoverage->
+                    geographicInformation->securityInformation);
+        }
+
+        // optional to unbounded
+        common().parseParameters(geographicInfoXML, "GeographicInfoExtension",
+                geographicCoverage->geographicInformation->
+                        geographicInformationExtensions);
+    }
 }
 }
 }

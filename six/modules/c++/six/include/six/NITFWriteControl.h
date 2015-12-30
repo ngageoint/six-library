@@ -350,7 +350,7 @@ protected:
     //  to be cleaned up elsewhere. There is no access
     //  to deallocation in NITFWriteControl directly
     virtual void createCompressionOptions(
-            std::map<std::string, void*>& options)
+            std::map<std::string, void*>& /*options*/)
     {
     }
 

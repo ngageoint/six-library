@@ -27,8 +27,6 @@
 #include <str/Manip.h>
 #include <except/Exception.h>
 #include <six/sidd/DerivedXMLParser.h>
-#include <six/sidd/DerivedDataBuilder.h>
-#include <six/SICommonXMLParser01x.h>
 
 namespace
 {
@@ -40,17 +38,16 @@ namespace six
 {
 namespace sidd
 {
-const char DerivedXMLParser::SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 const char DerivedXMLParser::ISM_URI[] = "urn:us:gov:ic:ism";
 
-DerivedXMLParser::DerivedXMLParser(const std::string& version,
-                                   logging::Logger* log,
-                                   bool ownLog) :
-    XMLParser(versionToURI(version), false, log),
-    mCommon(new six::SICommonXMLParser01x(
-                versionToURI(version), false,
-                SI_COMMON_URI, log))
+DerivedXMLParser::DerivedXMLParser(
+        const std::string& version,
+        std::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log,
+        bool ownLog) :
+    XMLParser(versionToURI(version), false, log, ownLog),
+    mCommon(comParser)
 {
 }
 
@@ -370,105 +367,6 @@ void DerivedXMLParser::parseDisplayFromXML(
                              display->displayExtensions);
 }
 
-void DerivedXMLParser::parseGeographicTargetFromXML(
-        const XMLElem geographicAndTargetXML,
-        GeographicAndTarget* geographicAndTarget) const
-{
-    parseGeographicCoverageFromXML(
-            getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
-            &geographicAndTarget->geographicCoverage);
-
-    // optional to unbounded
-    std::vector<XMLElem> targetInfosXML;
-    geographicAndTargetXML->getElementsByTagName("TargetInformation",
-                                                 targetInfosXML);
-    geographicAndTarget->targetInformation.resize(targetInfosXML.size());
-    for (size_t i = 0; i < targetInfosXML.size(); ++i)
-    {
-        geographicAndTarget->targetInformation[i].reset(
-                new TargetInformation());
-
-        TargetInformation* ti
-                = geographicAndTarget->targetInformation[i].get();
-
-        // unbounded
-        common().parseParameters(targetInfosXML[i], "Identifier",
-                                 ti->identifiers);
-
-        // optional
-        XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
-        if (tmpXML)
-        {
-            ti->footprint.reset(new six::LatLonCorners());
-            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
-        }
-
-        // optional
-        common().parseParameters(targetInfosXML[i],
-                                 "TargetInformationExtension",
-                                 ti->targetInformationExtensions);
-    }
-}
-
-void DerivedXMLParser::parseGeographicCoverageFromXML(
-        const XMLElem geographicCoverageXML,
-        GeographicCoverage* geographicCoverage) const
-{
-    // optional and unbounded
-    common().parseParameters(geographicCoverageXML, "GeoregionIdentifier",
-                             geographicCoverage->georegionIdentifiers);
-
-    common().parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
-                            "Vertex", geographicCoverage->footprint);
-
-    // If there are subregions, recurse
-    std::vector<XMLElem> subRegionsXML;
-    geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
-
-    geographicCoverage->subRegion.resize(subRegionsXML.size());
-    for (size_t i = 0; i < subRegionsXML.size(); ++i)
-    {
-        geographicCoverage->subRegion[i].reset(
-                new GeographicCoverage(RegionType::SUB_REGION));
-        parseGeographicCoverageFromXML(
-                subRegionsXML[i], geographicCoverage->subRegion[i].get());
-    }
-
-    // Otherwise read the GeographicInfo
-    if (subRegionsXML.size() == 0)
-    {
-        XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
-                                                    "GeographicInfo");
-
-        geographicCoverage->geographicInformation.reset(
-            new GeographicInformation());
-
-        // optional to unbounded
-        std::vector<XMLElem> countryCodes;
-        geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
-        for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
-                != countryCodes.end(); ++it)
-        {
-            geographicCoverage->geographicInformation->
-                    countryCodes.push_back((*it)->getCharacterData());
-        }
-
-        // optional
-        XMLElem securityInformationXML = getOptional(geographicInfoXML,
-                                                     "SecurityInfo");
-        if (securityInformationXML)
-        {
-            parseString(securityInformationXML, geographicCoverage->
-                    geographicInformation->securityInformation);
-        }
-
-        // optional to unbounded
-        common().parseParameters(geographicInfoXML, "GeographicInfoExtension",
-                geographicCoverage->geographicInformation->
-                        geographicInformationExtensions);
-    }
-}
-
 // This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLParser::parseMeasurementFromXML(
         const XMLElem measurementXML,
@@ -577,6 +475,14 @@ void DerivedXMLParser::parseMeasurementFromXML(
 
     common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
                           measurement->arpPoly);
+
+    XMLElem validDataXML = getOptional(measurementXML, "ValidData");
+    if (validDataXML)
+    {
+        common().parseRowColInts(validDataXML,
+                                 "Vertex",
+                                 measurement->validData);
+    }
 }
 
 void DerivedXMLParser::parseExploitationFeaturesFromXML(
@@ -1046,6 +952,21 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     common().createPolyXYZ("ARPPoly",
                            measurement->arpPoly,
                            measurementXML);
+
+    //only if 3+ vertices
+    const size_t numVertices = measurement->validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", measurementXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML = common().createRowCol(
+                    "Vertex", measurement->validData[ii], vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
+    }
 
     return measurementXML;
 }

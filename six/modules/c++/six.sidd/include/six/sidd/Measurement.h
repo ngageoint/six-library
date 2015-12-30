@@ -247,6 +247,14 @@ struct Measurement
     //!  The ARP Polynomial
     PolyXYZ arpPoly;
 
+    /*! Indicates the full image includes both valid data and some zero-filled
+     *  pixels.
+     *  New (and optional) in SIDD 1.1
+     *  If this doesn't have at least 3 vertices, it's not going to get
+     *  written
+     */
+    std::vector<RowColInt> validData;
+
     /*!
      *  To initialize a measurenet, we need a product projection
      *  definition.  The currently available are geographic, plane

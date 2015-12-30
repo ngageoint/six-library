@@ -40,6 +40,46 @@ Data* DerivedData::clone() const
     return new DerivedData(*this);
 }
 
+LatLonCorners DerivedData::getImageCorners() const
+{
+    if (geographicAndTarget.get())
+    {
+        // SIDD 1.1
+        if (geographicAndTarget->imageCorners.get())
+        {
+            return *geographicAndTarget->imageCorners;
+        }
+
+        // SIDD 1.0
+        if (geographicAndTarget->geographicCoverage.get())
+        {
+            geographicAndTarget->geographicCoverage->footprint;
+        }
+    }
+
+    throw except::Exception(Ctxt(
+            "GeographicAndTarget fields aren't set to provide image corners"));
+}
+
+void DerivedData::setImageCorners(const LatLonCorners& imageCorners)
+{
+    if (geographicAndTarget.get() && geographicAndTarget->imageCorners.get())
+    {
+        *geographicAndTarget->imageCorners = imageCorners;
+    }
+    else if (geographicAndTarget.get() &&
+             geographicAndTarget->geographicCoverage.get())
+    {
+        geographicAndTarget->geographicCoverage->footprint = imageCorners;
+    }
+    else
+    {
+        throw except::Exception(Ctxt(
+                "GeographicAndTarget fields aren't allocated to set image "
+                "corners"));
+    }
+}
+
 DateTime DerivedData::getCollectionStartDateTime() const
 {
     if (!exploitationFeatures.get() ||

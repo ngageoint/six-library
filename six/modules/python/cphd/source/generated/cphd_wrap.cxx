@@ -2975,112 +2975,115 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_ParameterCollectionIteratorT swig_types[2]
 #define SWIGTYPE_p_ParameterIter swig_types[3]
 #define SWIGTYPE_p_ParameterMap swig_types[4]
-#define SWIGTYPE_p_T swig_types[5]
-#define SWIGTYPE_p_allocator_type swig_types[6]
-#define SWIGTYPE_p_char swig_types[7]
-#define SWIGTYPE_p_cphd__Antenna swig_types[8]
-#define SWIGTYPE_p_cphd__AreaPlane swig_types[9]
-#define SWIGTYPE_p_cphd__ArraySize swig_types[10]
-#define SWIGTYPE_p_cphd__CPHDReader swig_types[11]
-#define SWIGTYPE_p_cphd__CPHDXMLControl swig_types[12]
-#define SWIGTYPE_p_cphd__Channel swig_types[13]
-#define SWIGTYPE_p_cphd__ChannelParameters swig_types[14]
-#define SWIGTYPE_p_cphd__Data swig_types[15]
-#define SWIGTYPE_p_cphd__DomainType swig_types[16]
-#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[17]
-#define SWIGTYPE_p_cphd__FileHeader swig_types[18]
-#define SWIGTYPE_p_cphd__FxParameters swig_types[19]
-#define SWIGTYPE_p_cphd__Global swig_types[20]
-#define SWIGTYPE_p_cphd__ImageArea swig_types[21]
-#define SWIGTYPE_p_cphd__Metadata swig_types[22]
-#define SWIGTYPE_p_cphd__PhaseSGN swig_types[23]
-#define SWIGTYPE_p_cphd__SRP swig_types[24]
-#define SWIGTYPE_p_cphd__SRPType swig_types[25]
-#define SWIGTYPE_p_cphd__SampleType swig_types[26]
-#define SWIGTYPE_p_cphd__TOAParameters swig_types[27]
-#define SWIGTYPE_p_cphd__VBM swig_types[28]
-#define SWIGTYPE_p_cphd__VectorParameters swig_types[29]
-#define SWIGTYPE_p_cphd__Wideband swig_types[30]
-#define SWIGTYPE_p_difference_type swig_types[31]
-#define SWIGTYPE_p_except__Context swig_types[32]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[33]
-#define SWIGTYPE_p_int swig_types[34]
-#define SWIGTYPE_p_int16_t swig_types[35]
-#define SWIGTYPE_p_int32_t swig_types[36]
-#define SWIGTYPE_p_int64_t swig_types[37]
-#define SWIGTYPE_p_int8_t swig_types[38]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[39]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[40]
-#define SWIGTYPE_p_logging__Logger swig_types[41]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[42]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[43]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[44]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[45]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[46]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[47]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[48]
-#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[49]
-#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[50]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[51]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[52]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[53]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[54]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[55]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[56]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[57]
-#define SWIGTYPE_p_nitf__DateTime swig_types[58]
-#define SWIGTYPE_p_off_t swig_types[59]
-#define SWIGTYPE_p_p_PyObject swig_types[60]
-#define SWIGTYPE_p_pid_t swig_types[61]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[62]
-#define SWIGTYPE_p_scene__FrameType swig_types[63]
-#define SWIGTYPE_p_scene__LatLon swig_types[64]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[65]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[66]
-#define SWIGTYPE_p_six__BooleanType swig_types[67]
-#define SWIGTYPE_p_six__CollectType swig_types[68]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[69]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[70]
-#define SWIGTYPE_p_six__DataType swig_types[71]
-#define SWIGTYPE_p_six__FFTSign swig_types[72]
-#define SWIGTYPE_p_six__RadarModeType swig_types[73]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[74]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[75]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[76]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[77]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[78]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[79]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[80]
-#define SWIGTYPE_p_size_t swig_types[81]
-#define SWIGTYPE_p_size_type swig_types[82]
-#define SWIGTYPE_p_ssize_t swig_types[83]
-#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[84]
-#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[85]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[86]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[87]
-#define SWIGTYPE_p_std__invalid_argument swig_types[88]
-#define SWIGTYPE_p_std__ostream swig_types[89]
-#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[90]
-#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[91]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[92]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[93]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[94]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[95]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[96]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[97]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[98]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[99]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[100]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[101]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[102]
-#define SWIGTYPE_p_uint16_t swig_types[103]
-#define SWIGTYPE_p_uint32_t swig_types[104]
-#define SWIGTYPE_p_uint64_t swig_types[105]
-#define SWIGTYPE_p_uint8_t swig_types[106]
-#define SWIGTYPE_p_unsigned_char swig_types[107]
-#define SWIGTYPE_p_value_type swig_types[108]
-static swig_type_info *swig_types[110];
-static swig_module_info swig_module = {swig_types, 109, 0, 0, 0, 0};
+#define SWIGTYPE_p_allocator_type swig_types[5]
+#define SWIGTYPE_p_char swig_types[6]
+#define SWIGTYPE_p_cphd__Antenna swig_types[7]
+#define SWIGTYPE_p_cphd__AreaPlane swig_types[8]
+#define SWIGTYPE_p_cphd__ArraySize swig_types[9]
+#define SWIGTYPE_p_cphd__CPHDReader swig_types[10]
+#define SWIGTYPE_p_cphd__CPHDXMLControl swig_types[11]
+#define SWIGTYPE_p_cphd__Channel swig_types[12]
+#define SWIGTYPE_p_cphd__ChannelParameters swig_types[13]
+#define SWIGTYPE_p_cphd__Data swig_types[14]
+#define SWIGTYPE_p_cphd__DomainType swig_types[15]
+#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[16]
+#define SWIGTYPE_p_cphd__FileHeader swig_types[17]
+#define SWIGTYPE_p_cphd__FxParameters swig_types[18]
+#define SWIGTYPE_p_cphd__Global swig_types[19]
+#define SWIGTYPE_p_cphd__ImageArea swig_types[20]
+#define SWIGTYPE_p_cphd__Metadata swig_types[21]
+#define SWIGTYPE_p_cphd__PhaseSGN swig_types[22]
+#define SWIGTYPE_p_cphd__SRP swig_types[23]
+#define SWIGTYPE_p_cphd__SRPType swig_types[24]
+#define SWIGTYPE_p_cphd__SampleType swig_types[25]
+#define SWIGTYPE_p_cphd__TOAParameters swig_types[26]
+#define SWIGTYPE_p_cphd__VBM swig_types[27]
+#define SWIGTYPE_p_cphd__VectorParameters swig_types[28]
+#define SWIGTYPE_p_cphd__Wideband swig_types[29]
+#define SWIGTYPE_p_difference_type swig_types[30]
+#define SWIGTYPE_p_except__Context swig_types[31]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[32]
+#define SWIGTYPE_p_int swig_types[33]
+#define SWIGTYPE_p_int16_t swig_types[34]
+#define SWIGTYPE_p_int32_t swig_types[35]
+#define SWIGTYPE_p_int64_t swig_types[36]
+#define SWIGTYPE_p_int8_t swig_types[37]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[38]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[39]
+#define SWIGTYPE_p_logging__Logger swig_types[40]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[41]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[42]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[43]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[44]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[45]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[46]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[47]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[48]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[49]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[50]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[51]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[52]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[53]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[54]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[55]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[56]
+#define SWIGTYPE_p_nitf__DateTime swig_types[57]
+#define SWIGTYPE_p_off_t swig_types[58]
+#define SWIGTYPE_p_p_PyObject swig_types[59]
+#define SWIGTYPE_p_pid_t swig_types[60]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[61]
+#define SWIGTYPE_p_scene__FrameType swig_types[62]
+#define SWIGTYPE_p_scene__LatLon swig_types[63]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[64]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[65]
+#define SWIGTYPE_p_six__BooleanType swig_types[66]
+#define SWIGTYPE_p_six__CollectType swig_types[67]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[68]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[69]
+#define SWIGTYPE_p_six__DataType swig_types[70]
+#define SWIGTYPE_p_six__FFTSign swig_types[71]
+#define SWIGTYPE_p_six__RadarModeType swig_types[72]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[73]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[74]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[75]
+#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[76]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[77]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[78]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[79]
+#define SWIGTYPE_p_size_t swig_types[80]
+#define SWIGTYPE_p_size_type swig_types[81]
+#define SWIGTYPE_p_ssize_t swig_types[82]
+#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[83]
+#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[84]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[85]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[86]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t swig_types[87]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t swig_types[88]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t swig_types[89]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t swig_types[90]
+#define SWIGTYPE_p_std__invalid_argument swig_types[91]
+#define SWIGTYPE_p_std__ostream swig_types[92]
+#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[93]
+#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[94]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[95]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[96]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[97]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[98]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[99]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[100]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[101]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[102]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[103]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[104]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[105]
+#define SWIGTYPE_p_uint16_t swig_types[106]
+#define SWIGTYPE_p_uint32_t swig_types[107]
+#define SWIGTYPE_p_uint64_t swig_types[108]
+#define SWIGTYPE_p_uint8_t swig_types[109]
+#define SWIGTYPE_p_unsigned_char swig_types[110]
+#define SWIGTYPE_p_value_type swig_types[111]
+static swig_type_info *swig_types[113];
+static swig_module_info swig_module = {swig_types, 112, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -45443,6 +45446,107 @@ SWIGINTERN PyObject *VectorAntennaParameters_swigregister(PyObject *SWIGUNUSEDPA
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::DwellTimeParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoDwellTimeParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< cphd::DwellTimeParameters > *)new std::auto_ptr< cphd::DwellTimeParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::DwellTimeParameters > *arg1 = (std::auto_ptr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoDwellTimeParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoDwellTimeParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< cphd::DwellTimeParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoDwellTimeParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_ScopedCopyableDwellTimeParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::DwellTimeParameters *arg1 = (cphd::DwellTimeParameters *) 0 ;
@@ -47583,6 +47687,107 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::FxParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoFxParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< cphd::FxParameters > *)new std::auto_ptr< cphd::FxParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::FxParameters > *arg1 = (std::auto_ptr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoFxParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoFxParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< cphd::FxParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoFxParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_ScopedCopyableFxParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::FxParameters *arg1 = (cphd::FxParameters *) 0 ;
@@ -48765,6 +48970,107 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::TOAParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTOAParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< cphd::TOAParameters > *)new std::auto_ptr< cphd::TOAParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::TOAParameters > *arg1 = (std::auto_ptr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoTOAParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTOAParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoTOAParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_ScopedCopyableTOAParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::TOAParameters *arg1 = (cphd::TOAParameters *) 0 ;
@@ -49722,6 +50028,107 @@ fail:
   return NULL;
 }
 
+
+SWIGINTERN PyObject *_wrap_new_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::Antenna > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCphdAntenna")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< cphd::Antenna > *)new std::auto_ptr< cphd::Antenna >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< cphd::Antenna > *arg1 = (std::auto_ptr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCphdAntenna",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCphdAntenna" "', argument " "1"" of type '" "std::auto_ptr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< cphd::Antenna > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoCphdAntenna_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
 
 SWIGINTERN PyObject *_wrap_new_ScopedCopyableCphdAntenna__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -51872,6 +52279,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorAntennaParameters_capacity", _wrap_VectorAntennaParameters_capacity, METH_VARARGS, (char *)"VectorAntennaParameters_capacity(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"},
 	 { (char *)"delete_VectorAntennaParameters", _wrap_delete_VectorAntennaParameters, METH_VARARGS, (char *)"delete_VectorAntennaParameters(VectorAntennaParameters self)"},
 	 { (char *)"VectorAntennaParameters_swigregister", VectorAntennaParameters_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_StdAutoDwellTimeParameters", _wrap_new_StdAutoDwellTimeParameters, METH_VARARGS, (char *)"new_StdAutoDwellTimeParameters() -> StdAutoDwellTimeParameters"},
+	 { (char *)"delete_StdAutoDwellTimeParameters", _wrap_delete_StdAutoDwellTimeParameters, METH_VARARGS, (char *)"delete_StdAutoDwellTimeParameters(StdAutoDwellTimeParameters self)"},
+	 { (char *)"StdAutoDwellTimeParameters_swigregister", StdAutoDwellTimeParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ScopedCopyableDwellTimeParameters", _wrap_new_ScopedCopyableDwellTimeParameters, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableDwellTimeParameters(DwellTimeParameters ptr=None)\n"
 		"ScopedCopyableDwellTimeParameters()\n"
@@ -51918,6 +52328,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableAreaPlane_dwellTime_get", _wrap_ScopedCopyableAreaPlane_dwellTime_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_dwellTime_get(ScopedCopyableAreaPlane self) -> ScopedCopyableDwellTimeParameters"},
 	 { (char *)"ScopedCopyableAreaPlane_swigregister", ScopedCopyableAreaPlane_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableAreaPlane", _wrap_makeScopedCopyableAreaPlane, METH_VARARGS, (char *)"makeScopedCopyableAreaPlane() -> ScopedCopyableAreaPlane"},
+	 { (char *)"new_StdAutoFxParameters", _wrap_new_StdAutoFxParameters, METH_VARARGS, (char *)"new_StdAutoFxParameters() -> StdAutoFxParameters"},
+	 { (char *)"delete_StdAutoFxParameters", _wrap_delete_StdAutoFxParameters, METH_VARARGS, (char *)"delete_StdAutoFxParameters(StdAutoFxParameters self)"},
+	 { (char *)"StdAutoFxParameters_swigregister", StdAutoFxParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ScopedCopyableFxParameters", _wrap_new_ScopedCopyableFxParameters, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableFxParameters(FxParameters ptr=None)\n"
 		"ScopedCopyableFxParameters()\n"
@@ -51943,6 +52356,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableFxParameters_Fx2_get", _wrap_ScopedCopyableFxParameters_Fx2_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx2_get(ScopedCopyableFxParameters self) -> size_t"},
 	 { (char *)"ScopedCopyableFxParameters_swigregister", ScopedCopyableFxParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableFxParameters", _wrap_makeScopedCopyableFxParameters, METH_VARARGS, (char *)"makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"},
+	 { (char *)"new_StdAutoTOAParameters", _wrap_new_StdAutoTOAParameters, METH_VARARGS, (char *)"new_StdAutoTOAParameters() -> StdAutoTOAParameters"},
+	 { (char *)"delete_StdAutoTOAParameters", _wrap_delete_StdAutoTOAParameters, METH_VARARGS, (char *)"delete_StdAutoTOAParameters(StdAutoTOAParameters self)"},
+	 { (char *)"StdAutoTOAParameters_swigregister", StdAutoTOAParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ScopedCopyableTOAParameters", _wrap_new_ScopedCopyableTOAParameters, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableTOAParameters(TOAParameters ptr=None)\n"
 		"ScopedCopyableTOAParameters()\n"
@@ -51964,6 +52380,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableTOAParameters_toaSS_get", _wrap_ScopedCopyableTOAParameters_toaSS_get, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_toaSS_get(ScopedCopyableTOAParameters self) -> size_t"},
 	 { (char *)"ScopedCopyableTOAParameters_swigregister", ScopedCopyableTOAParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableTOAParameters", _wrap_makeScopedCopyableTOAParameters, METH_VARARGS, (char *)"makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"},
+	 { (char *)"new_StdAutoCphdAntenna", _wrap_new_StdAutoCphdAntenna, METH_VARARGS, (char *)"new_StdAutoCphdAntenna() -> StdAutoCphdAntenna"},
+	 { (char *)"delete_StdAutoCphdAntenna", _wrap_delete_StdAutoCphdAntenna, METH_VARARGS, (char *)"delete_StdAutoCphdAntenna(StdAutoCphdAntenna self)"},
+	 { (char *)"StdAutoCphdAntenna_swigregister", StdAutoCphdAntenna_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ScopedCopyableCphdAntenna", _wrap_new_ScopedCopyableCphdAntenna, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableCphdAntenna(CphdAntenna ptr=None)\n"
 		"ScopedCopyableCphdAntenna()\n"
@@ -52010,7 +52429,6 @@ static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)
 static swig_type_info _swigt__p_ParameterCollectionIteratorT = {"_p_ParameterCollectionIteratorT", "ParameterCollectionIteratorT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ParameterIter = {"_p_ParameterIter", "ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ParameterMap = {"_p_ParameterMap", "ParameterMap *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_T = {"_p_T", "T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Antenna = {"_p_cphd__Antenna", "cphd::Antenna *", 0, 0, (void*)0, 0};
@@ -52093,6 +52511,10 @@ static swig_type_info _swigt__p_std__allocatorT_cphd__ArraySize_t = {"_p_std__al
 static swig_type_info _swigt__p_std__allocatorT_cphd__ChannelParameters_t = {"_p_std__allocatorT_cphd__ChannelParameters_t", "std::vector< cphd::ChannelParameters >::allocator_type *|std::allocator< cphd::ChannelParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t = {"_p_std__allocatorT_math__linear__VectorNT_3_double_t_t", "std::vector< math::linear::VectorN< 3,double > >::allocator_type *|std::allocator< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__sicd__AntennaParameters_t = {"_p_std__allocatorT_six__sicd__AntennaParameters_t", "std::allocator< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters >::allocator_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd__Antenna_t = {"_p_std__auto_ptrT_cphd__Antenna_t", "std::auto_ptr< cphd::Antenna > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd__DwellTimeParameters_t = {"_p_std__auto_ptrT_cphd__DwellTimeParameters_t", "std::auto_ptr< cphd::DwellTimeParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd__FxParameters_t = {"_p_std__auto_ptrT_cphd__FxParameters_t", "std::auto_ptr< cphd::FxParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd__TOAParameters_t = {"_p_std__auto_ptrT_cphd__TOAParameters_t", "std::auto_ptr< cphd::TOAParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t = {"_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t", "std::vector< cphd::ArraySize > *|std::vector< cphd::ArraySize,std::allocator< cphd::ArraySize > > *", 0, 0, (void*)0, 0};
@@ -52121,7 +52543,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ParameterCollectionIteratorT,
   &_swigt__p_ParameterIter,
   &_swigt__p_ParameterMap,
-  &_swigt__p_T,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_cphd__Antenna,
@@ -52204,6 +52625,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_cphd__ChannelParameters_t,
   &_swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_std__allocatorT_six__sicd__AntennaParameters_t,
+  &_swigt__p_std__auto_ptrT_cphd__Antenna_t,
+  &_swigt__p_std__auto_ptrT_cphd__DwellTimeParameters_t,
+  &_swigt__p_std__auto_ptrT_cphd__FxParameters_t,
+  &_swigt__p_std__auto_ptrT_cphd__TOAParameters_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__ostream,
   &_swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t,
@@ -52232,7 +52657,6 @@ static swig_cast_info _swigc__p_Like_T[] = {  {&_swigt__p_Like_T, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_ParameterCollectionIteratorT[] = {  {&_swigt__p_ParameterCollectionIteratorT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ParameterIter[] = {  {&_swigt__p_ParameterIter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ParameterMap[] = {  {&_swigt__p_ParameterMap, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_T[] = {  {&_swigt__p_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__Antenna[] = {  {&_swigt__p_cphd__Antenna, 0, 0, 0},{0, 0, 0, 0}};
@@ -52315,6 +52739,10 @@ static swig_cast_info _swigc__p_std__allocatorT_cphd__ArraySize_t[] = {  {&_swig
 static swig_cast_info _swigc__p_std__allocatorT_cphd__ChannelParameters_t[] = {  {&_swigt__p_std__allocatorT_cphd__ChannelParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_six__sicd__AntennaParameters_t[] = {  {&_swigt__p_std__allocatorT_six__sicd__AntennaParameters_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_cphd__Antenna_t[] = {  {&_swigt__p_std__auto_ptrT_cphd__Antenna_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_cphd__DwellTimeParameters_t[] = {  {&_swigt__p_std__auto_ptrT_cphd__DwellTimeParameters_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_cphd__FxParameters_t[] = {  {&_swigt__p_std__auto_ptrT_cphd__FxParameters_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_cphd__TOAParameters_t[] = {  {&_swigt__p_std__auto_ptrT_cphd__TOAParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t[] = {  {&_swigt__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -52343,7 +52771,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ParameterCollectionIteratorT,
   _swigc__p_ParameterIter,
   _swigc__p_ParameterMap,
-  _swigc__p_T,
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_cphd__Antenna,
@@ -52426,6 +52853,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_cphd__ChannelParameters_t,
   _swigc__p_std__allocatorT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_std__allocatorT_six__sicd__AntennaParameters_t,
+  _swigc__p_std__auto_ptrT_cphd__Antenna_t,
+  _swigc__p_std__auto_ptrT_cphd__DwellTimeParameters_t,
+  _swigc__p_std__auto_ptrT_cphd__FxParameters_t,
+  _swigc__p_std__auto_ptrT_cphd__TOAParameters_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__ostream,
   _swigc__p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t,
