@@ -379,32 +379,12 @@ void DerivedXMLParser110::parseBandEqualizationFromXML(const XMLElem bandElem,
 {
     std::string algorithmName;
     parseString(getFirstAndOnly(bandElem, "Algorithm"), algorithmName);
-    BandEqualizationAlgorithm algorithm(algorithmName);
-    band.algorithm = algorithm;
+    band.algorithm = BandEqualizationAlgorithm(algorithmName);
 
     XMLElem LUTElem = getOptional(bandElem, "BandLUT");
     if (LUTElem)
     {
-        parseLUT(LUTElem, *band.bandLUT);
-    }
-}
-
-//I'm assuming these are all tables of ints?
-void DerivedXMLParser110::parseLUT(const XMLElem LUTElem, LUT& lut) const
-{
-    std::string input;
-    parseString(LUTElem, input);
-    std::string numString;
-    getAttributeIfExists(LUTElem->getAttributes(), "size", numString);
-    size_t numEntries = atoi(numString.c_str());
-    lut.table.reset(new unsigned char[numEntries * sizeof(int)]);
-
-    std::stringstream istream(input);
-    size_t ii = 0;
-    while (std::getline(istream, input, ',') && ii < numEntries)
-    {
-        *lut[ii] = atoi(input.c_str());
-        ++ii;
+        parseSingleLUT(LUTElem, band.bandLUT.get());
     }
 }
 
@@ -413,8 +393,7 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
 {
     std::string methodType;
     parseString(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), methodType);
-    DownsamplingMethod downsamplingMethod(methodType);
-    rrds.downsamplingMethod = downsamplingMethod;
+    rrds.downsamplingMethod = DownsamplingMethod(methodType);
 
     if (methodType != "DECIMATE")
     {
@@ -435,8 +414,9 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
 
     if (customElem)
     {
-        //TODO: KernelCustomType appears in Kernel.h, but nowhere else
-
+        std::string type;
+        parseString(kernelElem, type);
+        kernel.custom->type = KernelCustomType(type);
         XMLElem kernelSize = getFirstAndOnly(kernelElem, "KernelSize");
         parseInt(getFirstAndOnly(kernelSize, "Row"),
                 kernel.custom->kernelSize.row);
@@ -468,8 +448,7 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
 
                 std::string name;
                 parseString(dbNameElem, name);
-                KernelDatabaseName dbName(name);
-                kernel.predefined->dbName = dbName;
+                kernel.predefined->dbName = KernelDatabaseName(name);
             }
         }
         else if (familyElem && kernelMember)
@@ -488,8 +467,7 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
     }
     std::string opName;
     parseString(getFirstAndOnly(kernelElem, "Operation"), opName);
-    KernelOperation operation(opName);
-    kernel.operation = operation;
+    kernel.operation = KernelOperation(opName);
 }
 
 void DerivedXMLParser110::parseInteractiveProcessingFromXML(
@@ -535,8 +513,7 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
     XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
     std::string typeName;
     parseString(getFirstAndOnly(orientationElem, "OrientationType"), typeName);
-    DerivedOrientationType orientation(typeName);
-    transform.orientation.orientationType = orientation;
+    transform.orientation.orientationType = DerivedOrientationType(typeName);
     parseDouble(getFirstAndOnly(orientationElem, "RotatingAngle"),
                 transform.orientation.rotationAngle);
 }
@@ -552,9 +529,12 @@ void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
                                    "ModularTransferFunctionRestoration");
     if (mTFCElem)
     {
-        ok = true;
-        parseKernelFromXML(mTFCElem,
-                           *sharpness.modularTransferFunctionCompensation);
+        if (!mTFRElem)
+        {
+            ok = true;
+            parseKernelFromXML(mTFCElem,
+                               *sharpness.modularTransferFunctionCompensation);
+        }
     }
     else if (mTFRElem)
     {
@@ -576,8 +556,8 @@ void DerivedXMLParser110::parseColorSpaceTransformFromXML(
     XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
     std::string intentName;
     parseString(getFirstAndOnly(manageElem, "RenderingIntent"), intentName);
-    RenderingIntent intent(intentName);
-    transform.colorManagementModule.renderingIntent = intent;
+    transform.colorManagementModule.renderingIntent =
+            RenderingIntent(intentName);
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
     parseString(getFirstAndOnly(manageElem, "DisplayProfile"),
@@ -592,8 +572,7 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
 {
     std::string algTypeName;
     parseString(getFirstAndOnly(rangeElem, "AlgorithmType"), algTypeName);
-    DRAType algorithmType(algTypeName);
-    rangeAdjustment.algorithmType = algorithmType;
+    rangeAdjustment.algorithmType = DRAType(algTypeName);
     parseDouble(getFirstAndOnly(rangeElem, "Pmin"), rangeAdjustment.pMin);
     parseDouble(getFirstAndOnly(rangeElem, "Pmax"), rangeAdjustment.pMax);
 

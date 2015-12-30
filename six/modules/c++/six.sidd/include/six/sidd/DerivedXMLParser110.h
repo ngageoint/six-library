@@ -116,8 +116,6 @@ private:
     void parseBandEqualizationFromXML(const XMLElem bandElem,
          BandEqualization& band) const;
 
-    void parseLUT(const XMLElem LUTElem, LUT& lut) const;
-
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
     void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
