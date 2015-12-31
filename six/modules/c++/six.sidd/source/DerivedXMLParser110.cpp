@@ -255,7 +255,51 @@ void DerivedXMLParser110::parseDerivedClassificationFromXML(
         const XMLElem classificationXML,
         DerivedClassification& classification) const
 {
-    throw except::Exception(Ctxt("IMPLEMENT ME"));
+	DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
+
+	const XMLAttributes& classificationAttributes
+		= classificationXML->getAttributes();
+
+	getAttributeList(classificationAttributes,
+		"ism:compliesWith",
+		classification.compliesWith);
+
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:exemptFrom",
+		classification.exemptFrom);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:joint",
+		classification.joint);
+	// optional
+	getAttributeListIfExists(classificationAttributes,
+		"ism:atomicEnergyMarkings",
+		classification.atomicEnergyMarkings);
+	// optional
+	getAttributeListIfExists(classificationAttributes,
+		"ism:displayOnlyTo",
+		classification.displayOnlyTo);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:noticeType",
+		classification.noticeType);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:noticeReason",
+		classification.noticeReason);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:noticeDate",
+		classification.noticeDate);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:unregisteredNoticeType",
+		classification.unregisteredNoticeType);
+	// optional
+	getAttributeIfExists(classificationAttributes,
+		"ism:externalNotice",
+		classification.externalNotice);
 }
 
 void DerivedXMLParser110::parseCompressionFromXML(const XMLElem compressionXML,

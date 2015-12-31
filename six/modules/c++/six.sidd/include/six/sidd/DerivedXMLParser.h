@@ -46,7 +46,7 @@ public:
 protected:
     virtual void parseDerivedClassificationFromXML(
             const XMLElem classificationXML,
-            DerivedClassification& classification) const = 0;
+            DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
@@ -82,6 +82,11 @@ protected:
     void getAttributeIfExists(const xml::lite::Attributes& attributes,
                               const std::string& attributeName,
                               mem::ScopedCopyablePtr<DateTime>& date);
+
+	static
+	void getAttributeIfExists(const xml::lite::Attributes& attributes,
+			                  const std::string& attributeName,
+			                  BooleanType boolean);
 
     static
     void setAttributeList(XMLElem element,

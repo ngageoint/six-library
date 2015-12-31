@@ -152,99 +152,15 @@ void DerivedXMLParser100::parseDerivedClassificationFromXML(
         const XMLElem classificationXML,
         DerivedClassification& classification) const
 {
-    // optional to unbounded
-    common().parseParameters(classificationXML, "SecurityExtension",
-                             classification.securityExtensions);
+	DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
 
-    const XMLAttributes& classificationAttributes
-            = classificationXML->getAttributes();
-
-    //! from ism:ISMRootNodeAttributeGroup
-    // Could do
-    // toType<sys::Int32_T>(
-    //        classificationAttributes.getValue("ism:DESVersion"));
-    // here if we needed to verify this for any reason
-
-    //! from ism:ResourceNodeAttributeGroup
-    // NOTE: "resouceElement" is fixed to true so it isn't saved here
-    classification.createDate = toType<DateTime>(
-            classificationAttributes.getValue("ism:createDate"));
-    // optional
+	const XMLAttributes& classificationAttributes
+		= classificationXML->getAttributes();
+ 
     getAttributeListIfExists(classificationAttributes,
                              "ism:compliesWith",
                              classification.compliesWith);
-
-    //! from ism:SecurityAttributesGroup
-    //  -- referenced in ism::ResourceNodeAttributeGroup
-    classification.classification
-            = classificationAttributes.getValue("ism:classification");
-    getAttributeList(classificationAttributes,
-                     "ism:ownerProducer",
-                     classification.ownerProducer);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:SCIcontrols",
-                             classification.sciControls);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:SARIdentifier",
-                             classification.sarIdentifier);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:disseminationControls",
-                             classification.disseminationControls);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-            "ism:FGIsourceOpen", classification.fgiSourceOpen);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:FGIsourceProtected",
-                             classification.fgiSourceProtected);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:releasableTo",
-                             classification.releasableTo);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:nonICmarkings",
-                             classification.nonICMarkings);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:classifiedBy",
-                         classification.classifiedBy);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:compilationReason",
-                         classification.compilationReason);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:derivativelyClassifiedBy",
-                         classification.derivativelyClassifiedBy);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:classificationReason",
-                         classification.classificationReason);
-    // optional
-    getAttributeListIfExists(classificationAttributes,
-                             "ism:nonUSControls",
-                             classification.nonUSControls);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:derivedFrom",
-                         classification.derivedFrom);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassDate",
-                         classification.declassDate);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassEvent",
-                         classification.declassEvent);
-    // optional
-    getAttributeIfExists(classificationAttributes,
-                         "ism:declassException",
-                         classification.declassException);
-    // optional
+	// optional
     getAttributeIfExists(classificationAttributes,
                          "ism:typeOfExemptedSource",
                          classification.exemptedSourceType);
