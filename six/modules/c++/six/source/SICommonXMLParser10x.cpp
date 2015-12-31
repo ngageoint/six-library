@@ -207,7 +207,6 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
 	int numMatchTypes = 0;
 	parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
 
-	//TODO make sure there is at least one
 	std::vector < XMLElem > typesXML;
 	matchInfoXML->getElementsByTagName("MatchType", typesXML);
 
@@ -216,6 +215,12 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
 	{
 		throw except::Exception(
 			Ctxt("NumMatchTypes does not match number of MatchType fields"));
+	}
+
+	if (typesXML.size() == 0)
+	{
+		throw except::Exception(
+			Ctxt("Must be at least one MatchType"));
 	}
 
 	matchInfo->types.resize(typesXML.size());
