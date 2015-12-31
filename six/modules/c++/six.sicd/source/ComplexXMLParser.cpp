@@ -1095,50 +1095,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
             != geoInfosXML.end(); ++it, ++idx)
     {
         geoData->geoInfos[idx].reset(new GeoInfo());
-        parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
-    }
-}
-
-void ComplexXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const
-{
-    std::vector < XMLElem > geoInfosXML;
-    geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
-    geoInfo->name = geoInfoXML->getAttributes().getValue("name");
-
-    //optional
-    size_t idx(geoInfo->geoInfos.size());
-    geoInfo->geoInfos.resize(idx + geoInfosXML.size());
-
-    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
-            != geoInfosXML.end(); ++it, ++idx)
-    {
-        geoInfo->geoInfos[idx].reset(new GeoInfo());
-        parseGeoInfoFromXML(*it, geoInfo->geoInfos[idx].get());
-    }
-
-    //optional
-    common().parseParameters(geoInfoXML, "Desc", geoInfo->desc);
-
-    XMLElem tmpElem = getOptional(geoInfoXML, "Point");
-    if (tmpElem)
-    {
-        LatLon ll;
-        common().parseLatLon(tmpElem, ll);
-        geoInfo->geometryLatLon.push_back(ll);
-    }
-    else
-    {
-        std::string pointName = "Endpoint";
-        tmpElem = getOptional(geoInfoXML, "Line");
-        if (!tmpElem)
-        {
-            pointName = "Vertex";
-            tmpElem = getOptional(geoInfoXML, "Polygon");
-        }
-        if (tmpElem)
-        {
-            common().parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon);
-        }
+        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
     }
 }
 

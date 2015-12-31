@@ -129,7 +129,7 @@ DerivedData* DerivedXMLParser110::fromXML(
 
     parseProductCreationFromXML(productCreationXML, data->productCreation.get());
     parseDisplayFromXML(displayXML, *data->display);
-    parseGeographicTargetFromXML(geographicAndTargetXML, data->geographicAndTarget.get());
+    parseGeographicTargetFromXML(geographicAndTargetXML, *data->geographicAndTarget);
     parseMeasurementFromXML(measurementXML, data->measurement.get());
     parseExploitationFeaturesFromXML(exploitationFeaturesXML, data->exploitationFeatures.get());
 
@@ -1268,11 +1268,31 @@ XMLElem DerivedXMLParser110::convertDigitalElevationDataToXML(
 }
 
 void DerivedXMLParser110::parseGeographicTargetFromXML(
-        const XMLElem elem,
-        GeographicAndTarget* geographicAndTarget) const
+	const XMLElem geographicElem,
+	GeographicAndTarget& geographicAndTarget) const
 {
-    // This block will look a lot like the ComplexXMLParser version
-    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
+	common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
+		*geographicAndTarget.imageCorners);
+
+	XMLElem dataElem = getOptional(geographicElem, "ValidData");
+	if (dataElem)
+	{
+		common().parseLatLons(dataElem, "Vertex", geographicAndTarget.validData);
+	}
+
+	std::vector<XMLElem> geoInfosXML;
+	geographicElem->getElementsByTagName("GeoInfo", geoInfosXML);
+
+	//optional
+	size_t idx(geographicAndTarget.geoInfos.size());
+	geographicAndTarget.geoInfos.resize(idx + geoInfosXML.size());
+
+	for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+		!= geoInfosXML.end(); ++it, ++idx)
+	{
+		geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
+		common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
+	}
 }
 
 void DerivedXMLParser110::parseDigitalElevationDataFromXML(

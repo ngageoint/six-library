@@ -86,7 +86,7 @@ protected:
 	static
 	void getAttributeIfExists(const xml::lite::Attributes& attributes,
 			                  const std::string& attributeName,
-			                  BooleanType boolean);
+			                  BooleanType& boolean);
 
     static
     void setAttributeList(XMLElem element,

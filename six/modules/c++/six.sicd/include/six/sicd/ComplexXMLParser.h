@@ -196,7 +196,6 @@ private:
     void parseImageDataFromXML(const XMLElem imageDataXML, 
                                ImageData *obj) const;
     void parseGeoDataFromXML(const XMLElem geoDataXML, GeoData *obj) const;
-    void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo *obj) const;
     void parseGridFromXML(const XMLElem gridXML, Grid *obj) const;
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;

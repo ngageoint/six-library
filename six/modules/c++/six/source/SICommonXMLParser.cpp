@@ -226,6 +226,49 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
     return geoInfoXML;
 }
 
+void SICommonXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const
+{
+	std::vector < XMLElem > geoInfosXML;
+	geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
+	geoInfo->name = geoInfoXML->getAttributes().getValue("name");
+
+	//optional
+	size_t idx(geoInfo->geoInfos.size());
+	geoInfo->geoInfos.resize(idx + geoInfosXML.size());
+
+	for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+		!= geoInfosXML.end(); ++it, ++idx)
+	{
+		geoInfo->geoInfos[idx].reset(new GeoInfo());
+		parseGeoInfoFromXML(*it, geoInfo->geoInfos[idx].get());
+	}
+
+	//optional
+	parseParameters(geoInfoXML, "Desc", geoInfo->desc);
+
+	XMLElem tmpElem = getOptional(geoInfoXML, "Point");
+	if (tmpElem)
+	{
+		LatLon ll;
+		parseLatLon(tmpElem, ll);
+		geoInfo->geometryLatLon.push_back(ll);
+	}
+	else
+	{
+		std::string pointName = "Endpoint";
+		tmpElem = getOptional(geoInfoXML, "Line");
+		if (!tmpElem)
+		{
+			pointName = "Vertex";
+			tmpElem = getOptional(geoInfoXML, "Polygon");
+		}
+		if (tmpElem)
+		{
+			parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon);
+		}
+	}
+}
+
 XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
                                                  const std::string& cornerName,
                                                  const LatLonCorners& corners,

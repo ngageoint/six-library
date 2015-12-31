@@ -105,9 +105,10 @@ void DerivedXMLParser::getAttributeIfExists(
     }
 }
 
-void getAttributeIfExists(const xml::lite::Attributes& attributes,
+void DerivedXMLParser::getAttributeIfExists(
+	const xml::lite::Attributes& attributes,
 	const std::string& attributeName,
-	BooleanType boolean)
+	BooleanType& boolean)
 {
 	if (attributes.contains(attributeName))
 	{

@@ -99,7 +99,7 @@ private:
 
     void parseGeographicTargetFromXML(
             const XMLElem elem,
-            GeographicAndTarget* geographicAndTarget) const;
+            GeographicAndTarget& geographicAndTarget) const;
 
     void parseDigitalElevationDataFromXML(const XMLElem elem,
                                           DigitalElevationData& ded) const;
