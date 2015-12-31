@@ -79,9 +79,6 @@ protected:
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
                         mem::ScopedCopyablePtr<WeightType>& obj) const = 0;
 
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML, 
-                                              MatchInformation *obj) const = 0;
-
     virtual void parsePolarizationCalibrationFromXML(const XMLElem polCalXML,
                          six::sicd::PolarizationCalibration* obj) const = 0;
 
@@ -137,6 +134,8 @@ protected:
 
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
+	virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
+		                                      MatchInformation *obj) const;
 
     virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
                                              RadarCollection *obj) const = 0;

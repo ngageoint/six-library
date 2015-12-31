@@ -108,11 +108,25 @@ DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 
     return *this;
 }
+DerivedDataBuilder& DerivedDataBuilder::addMatchInformation()
+{
+	mData->matchInformation.reset(new MatchInformation()); 
+
+	return *this;
+}
+
 DerivedDataBuilder& DerivedDataBuilder::addCompression()
 {
     mData->compression.reset(new Compression());
 
     return *this;
+}
+
+DerivedDataBuilder& DerivedDataBuilder::addDigitalElevationData()
+{
+	mData->digitalElevationData.reset(new DigitalElevationData());
+
+	return *this;
 }
 
 DerivedData* DerivedDataBuilder::get()

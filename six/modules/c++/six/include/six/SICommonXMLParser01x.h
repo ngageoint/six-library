@@ -48,6 +48,10 @@ public:
     virtual XMLElem convertMatchInformationToXML(
         const MatchInformation& matchInfo,
         XMLElem parent) const;
+	
+	virtual void parseMatchInformationFromXML(
+		const XMLElem matchInfoXML,
+		MatchInformation* info) const;
 
 protected:
 

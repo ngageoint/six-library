@@ -88,15 +88,18 @@ DerivedData* DerivedXMLParser110::fromXML(
 
     XMLElem productCreationXML        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayXML                = getFirstAndOnly(root, "Display");
+	XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
     XMLElem measurementXML            = getFirstAndOnly(root, "Measurement");
     XMLElem exploitationFeaturesXML   = getFirstAndOnly(root, "ExploitationFeatures");
-    XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
     XMLElem productProcessingXML      = getOptional(root, "ProductProcessing");
     XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
     XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
     XMLElem radiometricXML            = getOptional(root, "Radiometric");
+	XMLElem matchInfoXML             = getOptional(root, "MatchInfo");
+	XMLElem compressionXML            = getOptional(root, "Compression");
+	XMLElem dedXML                    = getOptional(root, "DigitalElevationData");
     XMLElem annotationsXML            = getOptional(root, "Annotations");
-    XMLElem compressionXML            = getOptional(root, "Compression");
+    
 
     DerivedDataBuilder builder;
     DerivedData *data = builder.steal(); //steal it
@@ -157,6 +160,21 @@ DerivedData* DerivedXMLParser110::fromXML(
         common().parseRadiometryFromXML(radiometricXML,
                                         data->radiometric.get());
     }
+	if (matchInfoXML)
+	{
+		builder.addMatchInformation();
+		common().parseMatchInformationFromXML(matchInfoXML, data->matchInformation.get());
+	}
+	if (compressionXML)
+	{
+		builder.addCompression();
+		parseCompressionFromXML(compressionXML, *data->compression);
+	}
+	if (dedXML)
+	{
+		builder.addDigitalElevationData();
+		parseDigitalElevationDataFromXML(dedXML, *data->digitalElevationData);
+	}
     if (annotationsXML)
     {
         // 1 to unbounded
@@ -168,11 +186,6 @@ DerivedData* DerivedXMLParser110::fromXML(
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
         }
-    }
-    if (compressionXML)
-    {
-        builder.addCompression();
-        parseCompressionFromXML(compressionXML, *data->compression);
     }
 
     return data;
@@ -1299,7 +1312,26 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
         const XMLElem elem,
         DigitalElevationData& ded) const
 {
-    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
+	XMLElem coordXML = getFirstAndOnly(elem, "GeographicCoordinates");
+	parseDouble(getFirstAndOnly(coordXML, "LongitudeDensity"), ded.geographicCoordinates.longitudeDensity);
+	parseDouble(getFirstAndOnly(coordXML, "LatitudeDensity"), ded.geographicCoordinates.latitudeDensity);
+	common().parseLatLon(getFirstAndOnly(coordXML, "ReferenceOrigin"), ded.geographicCoordinates.referenceOrigin);
+
+	XMLElem posXML = getFirstAndOnly(elem, "Geopositioning");
+	std::string coordSystemType;
+	parseString(getFirstAndOnly(posXML, "CoordinateSystemType"), coordSystemType);
+	ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
+	parseUInt(getFirstAndOnly(posXML, "FalseOrigin"), ded.geopositioning.falseOrigin);
+	parseUInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
+
+	XMLElem posAccuracyXML = getFirstAndOnly(elem, "PositionalAccuracy");
+	parseUInt(getFirstAndOnly(posAccuracyXML, "PositionalAccuracyRegions"), ded.positionalAccuracy.numRegions);
+	XMLElem absoluteXML = getFirstAndOnly(posAccuracyXML, "AbsoluteAccuracy");
+	parseDouble(getFirstAndOnly(absoluteXML, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
+	parseDouble(getFirstAndOnly(absoluteXML, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);
+	XMLElem pointXML = getFirstAndOnly(posAccuracyXML, "PointToPointAccuracy");
+	parseDouble(getFirstAndOnly(pointXML, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
+	parseDouble(getFirstAndOnly(pointXML, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
 void DerivedXMLParser110::parseMatchInformationFromXML(

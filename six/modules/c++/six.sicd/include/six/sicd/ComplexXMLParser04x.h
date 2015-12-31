@@ -73,8 +73,6 @@ protected:
         six::sicd::PolarizationCalibration* obj) const;
     virtual void parseTxRcvPolFromXML(const XMLElem parent,
                          six::DualPolarizationType& obj) const;
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML, 
-                                              MatchInformation *obj) const;
     virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const;
     virtual void parseAntennaParamArrayFromXML(
         const XMLElem antennaParamsXML, 

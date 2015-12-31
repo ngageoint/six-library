@@ -49,6 +49,10 @@ public:
         const MatchInformation& matchInfo,
         XMLElem parent) const;
 
+	virtual void parseMatchInformationFromXML(
+		const XMLElem matchInfoXML,
+		MatchInformation* matchInfo) const;
+
 protected:
 
     virtual XMLElem convertCompositeSCPToXML(

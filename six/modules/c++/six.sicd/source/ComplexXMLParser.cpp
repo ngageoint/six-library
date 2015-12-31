@@ -1927,6 +1927,13 @@ void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
     value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
 
+void ComplexXMLParser::parseMatchInformationFromXML(
+	const XMLElem matchInfoXML,
+	MatchInformation* matchInfo) const
+{
+	return common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
+}
+
 XMLElem ComplexXMLParser::convertMatchInformationToXML(
     const MatchInformation& matchInfo,
     XMLElem parent) const

@@ -168,6 +168,10 @@ public:
         const MatchInformation& matchInfo,
         XMLElem parent) const = 0;
 
+	virtual void parseMatchInformationFromXML(
+		const XMLElem matchInfoXML,
+		MatchInformation* info) const = 0;
+
 protected:
 
     virtual XMLElem convertCompositeSCPToXML(

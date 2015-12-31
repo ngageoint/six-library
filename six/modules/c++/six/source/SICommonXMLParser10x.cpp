@@ -198,4 +198,77 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
 
     return matchInfoXML;
 }
+
+void SICommonXMLParser10x::parseMatchInformationFromXML(
+	const XMLElem matchInfoXML,
+	MatchInformation* matchInfo) const
+{
+	//This is the SICD 1.x, SIDD 1.1 format
+	int numMatchTypes = 0;
+	parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
+
+	//TODO make sure there is at least one
+	std::vector < XMLElem > typesXML;
+	matchInfoXML->getElementsByTagName("MatchType", typesXML);
+
+	//! validate the numMatchTypes
+	if (typesXML.size() != (size_t)numMatchTypes)
+	{
+		throw except::Exception(
+			Ctxt("NumMatchTypes does not match number of MatchType fields"));
+	}
+
+	matchInfo->types.resize(typesXML.size());
+	for (size_t i = 0; i < typesXML.size(); i++)
+	{
+		MatchType& type = matchInfo->types[i];
+
+		parseString(getFirstAndOnly(typesXML[i], "TypeID"), type.typeID);
+
+		XMLElem curIndexElem = getOptional(typesXML[i], "CurrentIndex");
+		if (curIndexElem)
+		{
+			//optional
+			parseInt(curIndexElem, type.currentIndex);
+		}
+
+		int numMatchCollections = 0;
+		parseInt(getFirstAndOnly(typesXML[i], "NumMatchCollections"),
+			numMatchCollections);
+
+		std::vector < XMLElem > matchCollectionsXML;
+		typesXML[i]->getElementsByTagName("MatchCollection", matchCollectionsXML);
+
+		//! validate the numMatchTypes
+		if (matchCollectionsXML.size() !=
+			static_cast<size_t>(numMatchCollections))
+		{
+			throw except::Exception(
+				Ctxt("NumMatchCollections does not match number of " \
+					"MatchCollect fields"));
+		}
+
+		// Need to make sure this is resized properly - at MatchType
+		// construction time, matchCollects is initialized to size 1, but in
+		// SICD 1.1 this entire block may be missing.
+		type.matchCollects.resize(matchCollectionsXML.size());
+		for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
+		{
+			MatchCollect& collect(type.matchCollects[jj]);
+
+			parseString(getFirstAndOnly(
+				matchCollectionsXML[jj], "CoreName"), collect.coreName);
+
+			XMLElem matchIndexXML =
+				getOptional(matchCollectionsXML[jj], "MatchIndex");
+			if (matchIndexXML)
+			{
+				parseInt(matchIndexXML, collect.matchIndex);
+			}
+
+			parseParameters(
+				matchCollectionsXML[jj], "Parameter", collect.parameters);
+		}
+	}
+}
 }

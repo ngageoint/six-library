@@ -360,47 +360,6 @@ void ComplexXMLParser04x::parseTxRcvPolFromXML(
     }
 }
 
-void ComplexXMLParser04x::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML, 
-    MatchInformation* matchInfo) const
-{
-    //TODO make sure there is at least one
-    std::vector < XMLElem > typesXML;
-    matchInfoXML->getElementsByTagName("Collect", typesXML);
-
-    matchInfo->types.resize(typesXML.size());
-    for (size_t i = 0; i < typesXML.size(); i++)
-    {
-        MatchType& type = matchInfo->types[i];
-
-        parseString(getFirstAndOnly(typesXML[i], "CollectorName"), type.collectorName);
-
-        XMLElem illuminatorElem = getOptional(typesXML[i], "IlluminatorName");
-        if (illuminatorElem)
-        {
-            //optional
-            parseString(illuminatorElem, type.illuminatorName);
-        }
-
-        // in version 0.4 we use the matchCollect object
-        parseString(getFirstAndOnly(typesXML[i], "CoreName"), type.matchCollects[0].coreName);
-
-        //optional
-        std::vector < XMLElem > matchTypesXML;
-        typesXML[i]->getElementsByTagName("MatchType", matchTypesXML);
-        type.matchType.resize(matchTypesXML.size());
-        for (size_t j = 0; j < matchTypesXML.size(); j++)
-        {
-            parseString(matchTypesXML[j], type.matchType[j]);
-        }
-
-        //optional --
-        // in version 0.4 we use the matchCollect object
-        common().parseParameters(typesXML[i], "Parameter", type.matchCollects[0].parameters);
-    }
-}
-
-
 void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem, 
                                            RMAT* rmat) const
 {

@@ -75,8 +75,6 @@ protected:
                          six::DualPolarizationType& obj) const;
     virtual void parseSCPCOAFromXML(
         const XMLElem scpcoaXML, SCPCOA *obj) const;
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML, 
-                                              MatchInformation *obj) const;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
     virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const;
     virtual void parseAntennaParamArrayFromXML(
