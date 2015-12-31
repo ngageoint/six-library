@@ -1329,7 +1329,7 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
 	parseString(getFirstAndOnly(posXML, "CoordinateSystemType"), coordSystemType);
 	ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
 	parseUInt(getFirstAndOnly(posXML, "FalseOrigin"), ded.geopositioning.falseOrigin);
-	parseUInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
+	parseInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
 
 	XMLElem posAccuracyXML = getFirstAndOnly(elem, "PositionalAccuracy");
 	parseUInt(getFirstAndOnly(posAccuracyXML, "PositionalAccuracyRegions"), ded.positionalAccuracy.numRegions);
