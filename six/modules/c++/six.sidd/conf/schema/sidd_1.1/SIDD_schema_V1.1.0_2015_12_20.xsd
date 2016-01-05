@@ -1156,6 +1156,89 @@ NRL                N/A                        0,255 (Supposed to be display read
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+  <xs:complexType name="MatchInfoType">
+    <xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MatchType">
+    <xs:annotation>
+      <xs:documentation>Block containing information about the match type mt. Block repeated for mt=1 to NumMatchTypes.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+    <xs:element name="TypeID">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="STEREO"/>
+          <xs:enumeration value="MULTI-LOOK"/>
+          <xs:enumeration value="MULTI-IMAGE"/>
+          <xs:enumeration value="COHERENT"/>
+          <xs:enumeration value="GEOLOCATION"/>
+          <xs:enumeration value="MULTI-VIEW"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:element>
+      <xs:element name="CurrentIndex" type="xs:int" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Collection sequence for the current collection
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="MatchCollection" type="MatchCollectionType">
+        <xs:annotation>
+          <xs:documentation>
+            Block containing information about match collection mc. Block repeated for mc=1 to NumMatchCollection
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Index" type="xs:int"/>
+  </xs:complexType>
+  <xs:complexType name="MatchCollectionType">
+    <xs:annotation>
+      <xs:documentation>
+        Block containing information about match collection mc. Block repeated for mc=1 to NumMatchCollection
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="CoreName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            Test string that uniquely identifies the matching collection
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="MatchIndex" type="xs:int">
+        <xs:annotation>
+          <xs:documentation>
+            Collection sequence index for the match collection
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CoreName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            Test string that uniquely identifies the matching collection
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Parameter">
+        <xs:annotation>
+          <xs:documentation>
+            Relevant match parrameter. Attribute name identifies the parameter.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="index" type="xs:int"/>
+          </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
 	<xs:complexType name="ProductProcessingType">
 		<xs:annotation>
       <xs:documentation>
@@ -1546,6 +1629,13 @@ NRL                N/A                        0,255 (Supposed to be display read
 						<xs:documentation>Radiometric information about the product.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+        <xs:element name="MatchInfo" type="MatchInfoType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              Information about other collections that are matched to the current collection. The current collection is the collection from which this SIDD product was generated.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
 				<xs:element name="Annotations" type="AnnotationsType" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>List of annotations for the imagery.</xs:documentation>
