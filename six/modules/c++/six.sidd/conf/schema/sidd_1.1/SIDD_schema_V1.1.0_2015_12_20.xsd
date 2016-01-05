@@ -689,6 +689,20 @@ NRL                N/A                        0,255 (Supposed to be display read
 							<xs:documentation>Radius of Curvature defined at scene center.  If not present, the radius of curvature will be derived based upon the equations provided in the Design and Exploitation Document</xs:documentation>
 						</xs:annotation>
 					</xs:element>
+          <xs:element name="PixelFootprint" type="sicommon:RowColIntType">
+            <xs:annotation>
+              <xs:documentation>
+                Size of the image in pixels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PixelStart" type="sicommon:RowColIntType">
+            <xs:annotation>
+              <xs:documentation>
+                First pixel of array in each direction.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -720,16 +734,30 @@ NRL                N/A                        0,255 (Supposed to be display read
 					</xs:annotation>
 				</xs:element>
 			</xs:choice>
-			<xs:element name="PixelFootprint" type="sicommon:RowColIntType">
-				<xs:annotation>
-					<xs:documentation>Size of the image.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+      <xs:element name="ARPFlag" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Flag indicating whether ARP polynomial is based on the best available ("collect time" or "predicted") ephemeris.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="COLLECT_TIME" />
+            <xs:enumeration value="PREDICTED" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
 			<xs:element name="ARPPoly" type="sicommon:XYZPolyType">
 				<xs:annotation>
 					<xs:documentation>Center of aperture polynomial (units = m) based upon time into the collect.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+      <xs:element name="ValidData" type="ValidDataType">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates the full image includes both valid data and some zero filled pixels.
+            Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="AcheivedResolutionType">
@@ -952,6 +980,11 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="GeoInfo" type="GeoInfoType">
+        <xs:annotation>
+          <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
   <xs:simpleType name="EarthModelType">
@@ -1001,17 +1034,23 @@ NRL                N/A                        0,255 (Supposed to be display read
     </xs:sequence>
     <xs:attribute name="Size" type="xs:int" use="required"/>
   </xs:complexType>
-  <xs:complexType name="GeoInfo">
+  <xs:complexType name="GeoInfoType">
     <xs:annotation>
       <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="Desc" type="xs:string" minOccurs="0">
+      <xs:element name="Desc" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Used to specify a name and description of a geographic feature.
           </xs:documentation>
-          <!-- TODO: Add attribute-->
         </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="Name" type="xs:string" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
       </xs:element>
       <xs:element name="Point" type="sicommon:LatLonType" minOccurs="0">
         <xs:annotation>
