@@ -287,15 +287,15 @@
 	</xsd:simpleType>
 	<xsd:complexType name="ErrorStatisticsType">
 		<xsd:sequence>
-         <xs:element name="CompositeSCP" minOccurs="0">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element name="Rg" type="xs:double"/>
-                  <xs:element name="Az" type="xs:double"/>
-                  <xs:element name="RgAz" type="xs:double"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
+         <xsd:element name="CompositeSCP" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Rg" type="xsd:double"/>
+                  <xsd:element name="Az" type="xsd:double"/>
+                  <xsd:element name="RgAz" type="xsd:double"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
 			<xsd:element name="Components" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
