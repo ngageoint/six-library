@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SIDD v1.1.0 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.1.0" targetNamespace="urn:SIDD:1.1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:import namespace="urn:SICommon:1.0" schemaLocation="SICommonTypes_V1.0.xsd"/>
-	<xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism" xmlns:sicommon="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.1.0" targetNamespace="urn:SIDD:1.1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:import namespace="urn:SICommon:1.0" schemaLocation="SICommonTypes_V1.0.xsd"/>
+  <xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
 	<xs:import namespace="urn:us:gov:ic:ism" schemaLocation="external/ISM-v13/Schema/ISM/IC-ISM.xsd"/>
 	<xs:simpleType name="LUTListType">
 		<xs:list itemType="xs:int"/>
@@ -176,11 +176,11 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Optional extensible parameters used to support profile-specific needs related to product display. Predefined filter types.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-          <xs:complexContent>
+          <xs:simpleContent>
             <xs:extension base="xs:string">
               <xs:attribute name="name" type="xs:string" use="required"/>
             </xs:extension>
-          </xs:complexContent>
+          </xs:simpleContent>
         </xs:complexType>
       </xs:element>
 		</xs:sequence>
@@ -216,7 +216,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="NonInteractiveProcessing">
+  <xs:complexType name="NonInteractiveProcessingType">
     <xs:sequence>
       <xs:element name="ProductGenerationOptions" type="ProductGenerationOptionsType">
         <xs:annotation>
@@ -339,6 +339,12 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="CUBIC"/>
       <xs:enumeration value="LAGRANGE"/>
       <xs:enumeration value="NEAREST_NEIGHBOR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KernelOperationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CONVOLUTION"/>
+      <xs:enumeration value="CORRELATION"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="BandEqualizationType">
@@ -920,20 +926,114 @@ NRL                N/A                        0,255 (Supposed to be display read
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="GeographicAndTargetType">
-		<xs:sequence>
-			<xs:element name="GeographicCoverage" type="GeographicCoverageType">
-				<xs:annotation>
-					<xs:documentation>Provides geographic coverage information.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="TargetInformation" type="TargetInformationType" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Provides target specific geographic information.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
+  <xs:complexType name="GeographicAndTargetType">
+    <xs:annotation>
+      <xs:documentation>This block describes the geographic coordinates of the region covered by the image.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="EarthModel" type="EarthModelType">
+        <xs:annotation>
+          <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ImageCorners" type="ImageCornersType">
+        <xs:annotation>
+          <xs:documentation>
+            Parameters apply to image corners of the product projected to the same height as the SCP.
+            These corners are an approximate geographic location that is not intended for analytical use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ValidData" type="ValidDataType">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates the full image includes both valid data and some zero filled pixels.
+            Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="EarthModelType">
+    <xs:annotation>
+      <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WGX_84"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ImageCornersType">
+    <xs:annotation>
+      <xs:documentation>Parameters apply to image corners of the product projected to the same height as the SCP. 
+      These corners are an approximate geographic location that is not intended for analytical use.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+     <xs:element name="ICP" minOccurs="4" maxOccurs="4">
+      <xs:annotation>
+       <xs:documentation>Image Corner Point (ICP) data for the 4 corners in product. ICPs indexed x = 1, 2, 3, 4, clockwise.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:complexContent>
+        <xs:extension base="sicommon:LatLonType">
+         <xs:attribute name="index" type="sicommon:CornerStringType" use="required"/>
+        </xs:extension>
+       </xs:complexContent>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidDataType">
+    <xs:annotation>
+      <xs:documentation>
+        Indicates the full image includes both valid data and some zero filled pixels. 
+        Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="3" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            Vertices indexed n = 1, 2, ..., NumVertices. NumVertices >= 3. Vertex 1 is determined by (1) minimum row index, (2) minimum column index if 2 vertices with minimum row index, 
+            1st and last vertices are connected to form the polygon.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Size" type="xs:int" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="GeoInfo">
+    <xs:annotation>
+      <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Desc" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Used to specify a name and description of a geographic feature.
+          </xs:documentation>
+          <!-- TODO: Add attribute-->
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Point" type="sicommon:LatLonType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Used to specify a single point. Range: -90.0 &lt;= Lat &lt;= 90.0, -190.0 &lt;= Lon &lt;= 180.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Line" type="sicommon:LineType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Used to specify a "linear" feature with connected line segments. The size attribute represents the number of endpoints (NumEndPoints).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Polygon" type="sicommon:PolygonType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Used to specify a polygon. The size attribute represents the number of endpoints.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
 	<xs:complexType name="GeometricChipType">
 		<xs:annotation>
 			<xs:documentation/>
@@ -1073,18 +1173,18 @@ NRL                N/A                        0,255 (Supposed to be display read
 			<xs:documentation>Computed metadata regarding the collect.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="Collection" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Metadata regarding one of the input collections.</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="ExploitationFeaturesCollectionType">
-							<xs:attribute name="identifier" type="xs:string" use="required"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+      <xs:element name="Collection" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Metadata regarding one of the input collections.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="ExploitationFeaturesCollectionType">
+              <xs:attribute name="identifier" type="xs:string" use="required"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
 			<xs:element name="Product" type="ExploitationFeaturesProductType">
 				<xs:annotation>
 					<xs:documentation>Metadata regarding the product.</xs:documentation>
