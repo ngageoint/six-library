@@ -1030,9 +1030,10 @@ XMLElem DerivedXMLParser110::convertCustomKernelToXML(
 {
     XMLElem customXML = newElement("Custom", parent);
 
-    XMLElem kernelSize = newElement("KernelSize", customXML);
-    createInt("Row", custom.kernelSize.row, kernelSize);
-    createInt("Col", custom.kernelSize.col, kernelSize);
+    //XMLElem kernelSize = newElement("KernelSize", customXML);
+    //createInt("Row", custom.kernelSize.row, kernelSize);
+    //createInt("Col", custom.kernelSize.col, kernelSize);
+	common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize);
 
     if (custom.kernelCoef.size() !=
         static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
