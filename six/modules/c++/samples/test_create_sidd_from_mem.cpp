@@ -2024,6 +2024,8 @@ int main(int argc, char** argv)
         // (This is SIDD 1.1 stuff)
         initDisplay(*siddData->display);
 
+		siddData->geographicAndTarget->earthModel = EarthModelType("WGS84");
+
         //---------------------------------------------------------------
         // We can only do this because we know it's PGD in this example
         // If you don't know which it is, you don't need to use a
@@ -2126,10 +2128,10 @@ int main(int argc, char** argv)
 
         if (sicdData.get())
             container.addData(sicdData.release());
-
+		
         // Init the container
         writer->initialize(&container);
-
+		
         // Save the file
         writer->save((UByte*) IMAGE.data, outputName);
     }
