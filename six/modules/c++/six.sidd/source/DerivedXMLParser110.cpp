@@ -1184,7 +1184,7 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
 
 	createStringFromEnum("EarthModel",
 		geographicAndTarget.earthModel,
-		parent);
+		geographicAndTargetXML);
 
     confirmNonNull(geographicAndTarget.imageCorners,
                    "geographicAndTarget.imageCorners");

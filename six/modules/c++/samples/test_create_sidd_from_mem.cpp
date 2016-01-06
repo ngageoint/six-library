@@ -1988,6 +1988,7 @@ int main(int argc, char** argv)
         // Here is how you can cascade them
         siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
                                                                                               1);
+		siddBuilder.addProductProcessing();
         siddBuilder.addCompression();
         //---------------------------------------------------------
         // Take ownership of the SIDD data, the builder still can
@@ -2093,6 +2094,10 @@ int main(int argc, char** argv)
         parent->information->sensorName = "";
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
+
+
+		siddData->productProcessing->processingModules[0]->moduleName.setName("Name");
+		siddData->productProcessing->processingModules[0]->moduleName.setValue("Value");
 
         siddData->compression->original.numWaveletLevels = 5;
         siddData->compression->original.numBands = 1;

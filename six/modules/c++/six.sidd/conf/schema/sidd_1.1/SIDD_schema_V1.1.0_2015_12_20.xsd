@@ -979,7 +979,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ValidData" type="ValidDataType">
+      <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Indicates the full image includes both valid data and some zero filled pixels.
@@ -987,7 +987,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="GeoInfo" type="GeoInfoType">
+      <xs:element name="GeoInfo" type="GeoInfoType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
         </xs:annotation>
@@ -999,7 +999,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:enumeration value="WGX_84"/>
+      <xs:enumeration value="WGS84"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ImageCornersType">
@@ -1629,7 +1629,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ReferenceOrigin" type="sicommon:LatLonCornerType">
+      <xs:element name="ReferenceOrigin" type="sicommon:LatLonType">
         <xs:annotation>
           <xs:documentation>
             Northwest corner Latitude/Longitude - product NW corner
@@ -1653,28 +1653,28 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
-      <xs:element name="GeodeticDatumCode">
+      <xs:element name="GeodeticDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
             <xs:enumeration value="WGE"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
-      <xs:element name="EllipsoidCode">
+      <xs:element name="ReferenceEllipsoid">
         <xs:simpleType>
           <xs:restriction base="xs:string">
             <xs:enumeration value="WE"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
-      <xs:element name="VerticalDatumCode">
+      <xs:element name="VerticalDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
             <xs:enumeration value="MSL"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
-      <xs:element name="SoundingDatumCode">
+      <xs:element name="SoundingDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
             <xs:enumeration value="MSL"/>
@@ -1702,7 +1702,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="PositionalAccuracyRegions" type="xs:int">
+      <xs:element name="NumRegions" type="xs:int">
         <xs:annotation>
           <xs:documentation>
             Number of positional accuracy regions.
@@ -1710,7 +1710,7 @@ NRL                N/A                        0,255 (Supposed to be display read
         </xs:annotation>
       </xs:element>
       <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
-      <xs:element name="PointtoPointAccuracy" type="AccuracyType"/>
+      <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
       <xs:element name="BoundingRectangleNumber" type="xs:int">
         <xs:annotation>
           <xs:documentation>
