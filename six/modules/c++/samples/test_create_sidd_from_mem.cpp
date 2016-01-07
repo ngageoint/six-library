@@ -2095,9 +2095,17 @@ int main(int argc, char** argv)
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
 
+		mem::ScopedCloneablePtr<six::sidd::ProcessingModule> module;
+		module.reset(new six::sidd::ProcessingModule());
+		six::Parameter moduleParameter;
+		moduleParameter.setName("Name");
+		moduleParameter.setValue("Value");
+		module->moduleName = moduleParameter;
 
-		siddData->productProcessing->processingModules[0]->moduleName.setName("Name");
-		siddData->productProcessing->processingModules[0]->moduleName.setValue("Value");
+		module->moduleParameters.push_back(moduleParameter);
+		siddData->productProcessing->processingModules.push_back(module);
+		//siddData->productProcessing->processingModules[0]->moduleName.setName("Name");
+		//siddData->productProcessing->processingModules[0]->moduleName.setValue("Value");
 
         siddData->compression->original.numWaveletLevels = 5;
         siddData->compression->original.numBands = 1;
