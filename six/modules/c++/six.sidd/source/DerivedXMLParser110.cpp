@@ -1033,7 +1033,7 @@ XMLElem DerivedXMLParser110::convertCustomKernelToXML(
     //XMLElem kernelSize = newElement("KernelSize", customXML);
     //createInt("Row", custom.kernelSize.row, kernelSize);
     //createInt("Col", custom.kernelSize.col, kernelSize);
-	common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize);
+	common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize, customXML);
 
     if (custom.kernelCoef.size() !=
         static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
@@ -1145,7 +1145,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     // BandInformation
     XMLElem bandInfoXML = newElement("BandInformation", displayXML);
     confirmNonNull(display.bandInformation, "bandInformation");
-    createInt("NumBands", display.bandInformation->bands.size());
+    createInt("NumBands", display.bandInformation->bands.size(), bandInfoXML);
     for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
     {
         XMLElem bandXML = createString("Band",

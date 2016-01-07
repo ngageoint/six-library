@@ -192,7 +192,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Number of bands contained in the product.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Band">
+      <xs:element name="Band" maxOccurs="unbounded">
         <xs:annotation>
           <xs:documentation>Specifies what Band[k] represents.</xs:documentation>
         </xs:annotation>
@@ -247,7 +247,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ModularTransferFunction" type="KernelType">
+      <xs:element name="ModularTransferFunctionRestoration" type="KernelType">
         <xs:annotation>
           <xs:documentation>Kernel must be no larger than 15x15.</xs:documentation>
         </xs:annotation>
@@ -309,7 +309,7 @@ NRL                N/A                        0,255 (Supposed to be display read
   <xs:complexType name="CustomKernelType">
     <xs:sequence>
       <xs:element name="Type" type="KernelCustomType" minOccurs="0"></xs:element>
-      <xs:element name="KernelSize" type="sicommon:RowColDoubleType"></xs:element>
+      <xs:element name="KernelSize" type="sicommon:RowColIntType"></xs:element>
       <xs:element name="KernelCoef" type="KernelCoefType"></xs:element>
     </xs:sequence>
   </xs:complexType>
@@ -360,7 +360,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Allowed values: 1DLUT</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="BandLUT" type="LookupTableType"></xs:element>
+      <xs:element name="BandLUT" type="Lookup3TableType"></xs:element>
     </xs:sequence>
   </xs:complexType>
   <xs:simpleType name="EqualizationAlgorithmType">
@@ -696,20 +696,6 @@ NRL                N/A                        0,255 (Supposed to be display read
 							<xs:documentation>Radius of Curvature defined at scene center.  If not present, the radius of curvature will be derived based upon the equations provided in the Design and Exploitation Document</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-          <xs:element name="PixelFootprint" type="sicommon:RowColIntType">
-            <xs:annotation>
-              <xs:documentation>
-                Size of the image in pixels.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PixelStart" type="sicommon:RowColIntType">
-            <xs:annotation>
-              <xs:documentation>
-                First pixel of array in each direction.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -741,6 +727,13 @@ NRL                N/A                        0,255 (Supposed to be display read
 					</xs:annotation>
 				</xs:element>
 			</xs:choice>
+      <xs:element name="PixelFootprint" type="sicommon:RowColIntType">
+        <xs:annotation>
+          <xs:documentation>
+            Size of the image in pixels.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="ARPFlag" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Flag indicating whether ARP polynomial is based on the best available ("collect time" or "predicted") ephemeris.</xs:documentation>
@@ -757,7 +750,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>Center of aperture polynomial (units = m) based upon time into the collect.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-      <xs:element name="ValidData" type="ValidDataType">
+      <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Indicates the full image includes both valid data and some zero filled pixels.
@@ -1606,6 +1599,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="NullValue" type="xs:int" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GeographicCoordinatesType">
@@ -1615,14 +1609,14 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="LongitudeDensity" type="xs:int">
+      <xs:element name="LongitudeDensity" type="xs:double">
         <xs:annotation>
           <xs:documentation>
             Pixel ground spacing in E/W direction that is the number of pixels or element intervals in 360 degrees.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="LatitudeDensity" type="xs:int">
+      <xs:element name="LatitudeDensity" type="xs:double">
         <xs:annotation>
           <xs:documentation>
             Pixel ground spacing in N/S direction that is the number of pixels or element intervals in 360 degrees.
@@ -1648,36 +1642,36 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:element name="CoordinateSystemType">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="GEO"/>
-            <xs:enumeration value="MAP"/>
+            <xs:enumeration value="GCS"/>
+            <xs:enumeration value="UTM"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
       <xs:element name="GeodeticDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="WGE"/>
+            <xs:enumeration value="World Geodetic System 1984"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
       <xs:element name="ReferenceEllipsoid">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="WE"/>
+            <xs:enumeration value="World Geodetic System 1984"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
       <xs:element name="VerticalDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="MSL"/>
+            <xs:enumeration value="Mean Sea Level"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
       <xs:element name="SoundingDatum">
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="MSL"/>
+            <xs:enumeration value="Mean Sea Level"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>
@@ -1711,7 +1705,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:element>
       <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
       <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
-      <xs:element name="BoundingRectangleNumber" type="xs:int">
+      <xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Number of points (coordinate paris) used to define the bounding polygon of the nth region of position accuracy. (Field does not apply).
@@ -1722,8 +1716,8 @@ NRL                N/A                        0,255 (Supposed to be display read
   </xs:complexType>
   <xs:complexType name="AccuracyType">
     <xs:sequence>
-      <xs:element name="Horizontal" type="xs:int" maxOccurs="unbounded"/>
-      <xs:element name="Vertical" type="xs:int" maxOccurs="unbounded" />
+      <xs:element name="Horizontal" type="xs:double" maxOccurs="unbounded"/>
+      <xs:element name="Vertical" type="xs:double" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
 	<xs:complexType name="AnnotationsType">
