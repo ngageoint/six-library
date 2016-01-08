@@ -1989,7 +1989,6 @@ int main(int argc, char** argv)
         siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
                                                                                               1);
 		siddBuilder.addDownstreamReprocessing();
-		siddBuilder.addMatchInformation();
         siddBuilder.addCompression();
 		siddBuilder.addProductProcessing();
         //---------------------------------------------------------

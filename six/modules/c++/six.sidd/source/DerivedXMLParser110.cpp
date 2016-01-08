@@ -205,11 +205,7 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
 
-    // optional
-    if (derived->productProcessing.get())
-    {
-        convertProductProcessingToXML(derived->productProcessing.get(), root);
-    }
+
     // optional
     if (derived->downstreamReprocessing.get())
     {
@@ -244,6 +240,11 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
         convertDigitalElevationDataToXML(*derived->digitalElevationData,
                                          root);
     }
+	// optional
+	if (derived->productProcessing.get())
+	{
+		convertProductProcessingToXML(derived->productProcessing.get(), root);
+	}
     // optional
     if (!derived->annotations.empty())
     {

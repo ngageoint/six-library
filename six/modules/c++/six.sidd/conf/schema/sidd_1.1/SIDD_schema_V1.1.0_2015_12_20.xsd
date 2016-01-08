@@ -1830,11 +1830,6 @@ NRL                N/A                        0,255 (Supposed to be display read
 						<xs:documentation>Computed metadata regarding the input collections and final product.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="ProductProcessing" type="ProductProcessingType" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>Contains metadata related to algorithms used during product generation.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
 				<xs:element name="DownstreamReprocessing" type="DownstreamReprocessingType" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Contains metadata related to downstream processing of the product.</xs:documentation>
@@ -1869,6 +1864,11 @@ NRL                N/A                        0,255 (Supposed to be display read
             <xs:documentation>
               This block describes the Digital ElevatioNData when it is included with the SIDD product.
             </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ProductProcessing" type="ProductProcessingType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Contains metadata related to algorithms used during product generation.</xs:documentation>
           </xs:annotation>
         </xs:element>
 				<xs:element name="Annotations" type="AnnotationsType" minOccurs="0">
