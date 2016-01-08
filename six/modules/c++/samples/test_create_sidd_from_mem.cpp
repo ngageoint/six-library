@@ -1988,8 +1988,10 @@ int main(int argc, char** argv)
         // Here is how you can cascade them
         siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
                                                                                               1);
-		siddBuilder.addProductProcessing();
+		siddBuilder.addDownstreamReprocessing();
+		siddBuilder.addMatchInformation();
         siddBuilder.addCompression();
+		siddBuilder.addProductProcessing();
         //---------------------------------------------------------
         // Take ownership of the SIDD data, the builder still can
         // manipulate the same pointer after this happens if you
@@ -2094,6 +2096,23 @@ int main(int argc, char** argv)
         parent->information->sensorName = "";
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
+
+		//Set DownStreamReprocessing data
+		siddData->downstreamReprocessing->geometricChip.reset(new six::sidd::GeometricChip());
+		siddData->downstreamReprocessing->geometricChip->chipSize = RowColInt(1, 2);
+		siddData->downstreamReprocessing->geometricChip->originalUpperLeftCoordinate = RowColDouble(1.4, 2.9);
+		siddData->downstreamReprocessing->geometricChip->originalUpperRightCoordinate = RowColDouble(1.4, 2.9);
+		siddData->downstreamReprocessing->geometricChip->originalLowerLeftCoordinate = RowColDouble(1.4, 2.9);
+		siddData->downstreamReprocessing->geometricChip->originalLowerRightCoordinate = RowColDouble(1.4, 2.9);
+
+		siddData->downstreamReprocessing->processingEvents.push_back(mem::ScopedCopyablePtr<six::sidd::ProcessingEvent>(new six::sidd::ProcessingEvent()));
+		siddData->downstreamReprocessing->processingEvents[0]->applicationName = "Processing Event";
+		siddData->downstreamReprocessing->processingEvents[0]->appliedDateTime = six::DateTime();
+
+		six::Parameter eventParameter;
+		eventParameter.setName("Name");
+		eventParameter.setValue("Value");
+		siddData->downstreamReprocessing->processingEvents[0]->descriptor.push_back(eventParameter);
 
 		mem::ScopedCloneablePtr<six::sidd::ProcessingModule> module;
 		module.reset(new six::sidd::ProcessingModule());
