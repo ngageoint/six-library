@@ -92,7 +92,7 @@ TEST_CASE(Runnable1DWithCopiesTest)
 }
 }
 
-int main(int argc, char *argv[])
+int main(int, char**)
 {
     TEST_CHECK(Runnable1DTest);
     TEST_CHECK(Runnable1DWithCopiesTest);

@@ -193,11 +193,9 @@ public:
      *  Socket read functionality
      *  \param b The byte buffer to recv into
      *  \param len The number of bytes to read
-     *  \param flags (optional) Addtional flags (not common)
+     *  \param flags (optional) Additional flags (not common)
      */
-    sys::SSize_T recv(sys::byte* b,
-                      sys::Size_T len,
-                      int flags = 0);
+    size_t recv(void* b, size_t len, int flags = 0);
 
     /*!
      *  Same as recv, except from a specified socket address.  Only
@@ -209,10 +207,10 @@ public:
      *  \param len The number of bytes read
      *  \param flags The flags (usually not specified)
      */
-    sys::SSize_T recvFrom(SocketAddress& address,
-                          sys::byte* b,
-                          sys::Size_T len,
-                          int flags = 0);
+    size_t recvFrom(SocketAddress& address,
+                    void* b,
+                    size_t len,
+                    int flags = 0);
 
 
     /*!
@@ -221,8 +219,8 @@ public:
      *  \param len The number of bytes.
      *  \param flags The flags (usually not specified)
      */
-    void send(const sys::byte* b,
-              sys::Size_T len,
+    void send(const void* b,
+              size_t len,
               int flags = 0);
 
     /*!
@@ -236,8 +234,8 @@ public:
      *  \param flags The flags (usually not specified)
      */
     void sendTo(const SocketAddress& address,
-                const sys::byte* b,
-                sys::Size_T len,
+                const void* b,
+                size_t len,
                 int flags = 0);
 
     /*!

@@ -92,13 +92,13 @@ public:
     }
 
     template<typename T>
-    T operator [](unsigned int index) const
+    T operator [](size_t index) const
     {
         return at<T>(index);
     }
 
     template<typename T>
-    T at(unsigned int index = 0) const
+    T at(size_t index = 0) const
     {
         if (index >= mValues.size())
             throw except::IndexOutOfRangeException(
@@ -110,7 +110,7 @@ public:
     }
 
     template<typename T>
-    T get(unsigned int index = 0) const
+    T get(size_t index = 0) const
     {
         return at<T>(index);
     }

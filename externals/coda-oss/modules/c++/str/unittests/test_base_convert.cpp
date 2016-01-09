@@ -42,7 +42,7 @@ TEST_CASE(testBadConvert)
     TEST_EXCEPTION(str::toType<short>("0xFFFFF", 16));
 }
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     TEST_CHECK(testConvert);
     TEST_CHECK(testBadConvert);

@@ -68,11 +68,16 @@ void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
     if (mPosition < 0)
         throw except::Exception(Ctxt("Invalid write on eof"));
 
-    sys::Size_T newPos = mPosition + size;
-    if (newPos >= mData.size())
-        mData.resize(newPos);
-    std::copy(b, b+size, &mData[mPosition]);
-    mPosition = newPos;
+    // Guard against &mData[mPosition] below indexing out of bounds
+    // when mPosition is still 0
+    if (size > 0)
+    {
+        sys::Size_T newPos = mPosition + size;
+        if (newPos >= mData.size())
+            mData.resize(newPos);
+        std::copy(b, b+size, &mData[mPosition]);
+        mPosition = newPos;
+    }
 }
 
 sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)

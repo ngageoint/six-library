@@ -63,7 +63,7 @@ public:
      */
     DbgStream(OutputStream* s, bool on = false)
     {
-        set(s, false);
+        set(s, on);
     }
 
     using OutputStream::write;

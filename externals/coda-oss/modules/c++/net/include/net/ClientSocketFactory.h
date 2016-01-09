@@ -94,7 +94,7 @@ public:
      * Sets socket options for the protocol (none by default).
      * \param s The socket
      */
-    virtual void setOptions(Socket& s)
+    virtual void setOptions(Socket&)
     {}
 
 protected:

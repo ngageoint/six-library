@@ -155,7 +155,7 @@ TEST_CASE(testRoundDouble)
     TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
 }
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     TEST_CHECK( testTrim);
     TEST_CHECK( testUpper);
