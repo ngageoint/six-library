@@ -65,8 +65,8 @@ public:
         }
     }
 
-    void setTracefile(const std::string& tracefile) {}
-    void setPidfile(const std::string& pidfile) {}
+    void setTracefile(const std::string&) {}
+    void setPidfile(const std::string&) {}
     std::string getTracefile() const { return ""; }
     std::string getPidfile() const { return ""; }
 };

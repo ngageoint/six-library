@@ -90,19 +90,10 @@ FILE* ExecPipe::openPipe(const std::string& command,
                 close(pIO[WRITE_PIPE]);
             }
 
-            //! prepare the command and its arguments
-            std::vector<std::string> splitCmd = str::split(command, " ");
-            std::vector<char*> args;
-            for (size_t ii = 0; ii < splitCmd.size(); ++ii)
-            {
-                args.push_back(const_cast<char*>(splitCmd[ii].c_str()));
-            }
-            args.push_back(NULL);
-
             //! call our command --
             //  this command replaces the forked process with
             //  command the user specified
-            execvp(splitCmd[0].c_str(), &args[0]);
+            execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
 
             //! exit the subprocess once it has completed
             exit(127);

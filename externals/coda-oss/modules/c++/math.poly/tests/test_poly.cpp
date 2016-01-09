@@ -22,7 +22,7 @@
             
 #include <import/math/poly.h>
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     // first, lets do a one-d polynomial test...
     math::poly::OneD<double> lOneDTst(3);
