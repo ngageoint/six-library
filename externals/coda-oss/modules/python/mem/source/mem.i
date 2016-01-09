@@ -30,6 +30,8 @@
 
 %feature("autodoc", "1");
 
+%include "std_auto_ptr.i"
+
 %{
 #include "import/mem.h"
 using namespace mem;
@@ -52,37 +54,14 @@ using namespace mem;
  * Use like this in your Swig interface file:
  * SCOPED_COPYABLE(myNamespace, MyType)
  */
-%define SCOPED_COPYABLE(namespace, type)
-%template(ScopedCopyable##type) mem::ScopedCopyablePtr<namespace##::##type>;
-%{
-mem::ScopedCopyablePtr< namespace##::##type > makeScopedCopyable##type()
-{
-    return mem::ScopedCopyablePtr< namespace##::##type >(new namespace##::##type ());
-} 
-%}
-
-mem::ScopedCopyablePtr< namespace##::##type > makeScopedCopyable##type();
-%enddef
-
-/*
- * Same as above but for ScopedCloneablePtr
- */
-%define SCOPED_CLONEABLE(namespace, type)
-%template(ScopedCloneable##type) mem::ScopedCloneablePtr<namespace##::##type>;
-%{
-mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type()
-{
-    return mem::ScopedCloneablePtr< namespace##::##type >(new namespace##::##type ());
-} 
-%}
-
-mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type();
-%enddef
 
 /*
  * Permits renaming the python type, copyable
  */
 %define SCOPED_COPYABLE_RENAME(namespace, CppType, PyType)
+%ignore mem::ScopedCopyablePtr< namespace##::##CppType >::ScopedCopyablePtr(std::auto_ptr< namespace##::##CppType >);
+%ignore mem::ScopedCopyablePtr< namespace##::##CppType >::reset(std::auto_ptr< namespace##::##CppType >);
+%template(StdAuto##PyType) std::auto_ptr< namespace##::##CppType >;
 %template(ScopedCopyable##PyType) mem::ScopedCopyablePtr<namespace##::##CppType>;
 %{
 mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType()
@@ -98,6 +77,9 @@ mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType();
  * Permits renaming the python type, cloneable
  */
 %define SCOPED_CLONEABLE_RENAME(namespace, CppType, PyType)
+%ignore mem::ScopedCloneablePtr< namespace##::##CppType >::ScopedCloneablePtr(std::auto_ptr< namespace##::##CppType >);
+%ignore mem::ScopedCloneablePtr< namespace##::##CppType >::reset(std::auto_ptr< namespace##::##CppType >);
+%template(StdAuto##PyType) std::auto_ptr< namespace##::##CppType >;
 %template(ScopedCloneable##PyType) mem::ScopedCloneablePtr<namespace##::##CppType>;
 %{
 mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType()
@@ -106,5 +88,18 @@ mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType()
 } 
 %}
 
-mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedClonable##PyType();
+mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType();
+%enddef
+
+
+
+%define SCOPED_COPYABLE(namespace, type)
+SCOPED_COPYABLE_RENAME(namespace, type, type)
+%enddef
+
+/*
+ * Same as above but for ScopedCloneablePtr
+ */
+%define SCOPED_CLONEABLE(namespace, type)
+SCOPED_CLONEABLE_RENAME(namespace, type, type)
 %enddef
