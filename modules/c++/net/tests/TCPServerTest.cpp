@@ -62,10 +62,10 @@ int main(int argc, char** argv)
         std::auto_ptr<Socket> client = listener->accept(clientAddress);
         // Print client address here!!
         my_packet_t packet;
-        client->recv((char*)&packet, sizeof(my_packet_t));
+        client->recv(&packet, sizeof(my_packet_t));
         std::cout << "(in packet: #" << packet.packet_no << ")" << std::endl;
         int one = 1;
-        client->send((const char*)&one, 4);
+        client->send(&one, sizeof(int));
         client->close();
         listener->close();
 

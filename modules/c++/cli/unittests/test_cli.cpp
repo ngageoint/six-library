@@ -89,7 +89,7 @@ TEST_CASE(testChoices)
         results.reset(parser.parse(str::split("-t type2 -t type1", " ")));
         TEST_FAIL("Shouldn't allow multiple types");
     }
-    catch(except::Exception& ex)
+    catch(except::Exception&)
     {
     }
     results.reset(parser.parse(str::split("-t type2", " ")));
@@ -175,7 +175,7 @@ TEST_CASE(testRequired)
     TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
     TEST_CHECK( testValue);
     TEST_CHECK( testChoices);

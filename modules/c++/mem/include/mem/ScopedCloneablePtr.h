@@ -51,8 +51,13 @@ template <class T>
 class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCloneablePtr(T* ptr = NULL)
-    : mPtr(ptr)
+    explicit ScopedCloneablePtr(T* ptr = NULL) :
+        mPtr(ptr)
+    {
+    }
+
+    explicit ScopedCloneablePtr(std::auto_ptr<T> ptr) :
+        mPtr(ptr)
     {
     }
 
@@ -100,6 +105,11 @@ public:
     void reset(T* ptr = NULL)
     {
         mPtr.reset(ptr);
+    }
+
+    void reset(std::auto_ptr<T> ptr)
+    {
+        mPtr = ptr;
     }
 
 private:
