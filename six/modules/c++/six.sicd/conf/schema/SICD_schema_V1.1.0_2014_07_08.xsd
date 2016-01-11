@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-   elementFormDefault="qualified" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
    attributeFormDefault="unqualified"
+   xmlns:sicommon="urn:SICommon:1.0"
+   xmlns="urn:SICD:1.1.0"
    targetNamespace="urn:SICD:1.1.0"
-   xmlns="urn:SICD:1.1.0">
+   >
 
-<!-- SICD TYPES -->
+    <xs:import namespace="urn:SICommon:1.0" schemaLocation="..\..\..\six.sidd\conf\schema\SICommonTypes_V1.0.xsd"/>
+
+    <!-- SICD TYPES -->
 
    <xs:simpleType name="ZeroTo90Type">
       <xs:restriction base="xs:double">
@@ -63,13 +67,6 @@
          <xs:element name="Lat" type="Neg90To90Type"/>
          <xs:element name="Lon" type="Neg180To180Type"/>
          <xs:element name="HAE" type="xs:double"/>
-      </xs:sequence>
-   </xs:complexType>
-
-   <xs:complexType name="LatLonRestrictionType">
-      <xs:sequence>
-         <xs:element name="Lat" type="Neg90To90Type"/>
-         <xs:element name="Lon" type="Neg180To180Type"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -218,7 +215,7 @@
          <xs:element name="Vertex" minOccurs="3" maxOccurs="unbounded">
             <xs:complexType>
                <xs:complexContent>  
-                  <xs:extension base="LatLonRestrictionType">
+                  <xs:extension base="sicommon:LatLonRestrictionType">
                      <xs:attribute name="index" type="xs:int" use="required"/>
                   </xs:extension>
                </xs:complexContent>  
@@ -389,20 +386,6 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-
-   <xs:complexType name="GeoInfoType">
-      <xs:sequence>
-         <xs:element name="Desc" type="ParameterType" minOccurs="0" maxOccurs="unbounded"/>
-         <xs:choice minOccurs="0">
-            <xs:element name="Point" type="LatLonRestrictionType"/>
-            <xs:element name="Line" type="LineType"/>
-            <xs:element name="Polygon" type="PolygonType"/>
-         </xs:choice>
-         <xs:element name="GeoInfo" type="GeoInfoType" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="name" type="xs:string" use="required"/>
-   </xs:complexType>
-
    <xs:complexType name="GeoDataType">
       <xs:sequence>
          <xs:element name="EarthModel">
@@ -428,7 +411,7 @@
             </xs:complexType>
          </xs:element>
          <xs:element name="ValidData" type="PolygonType" minOccurs="0"/>
-         <xs:element name="GeoInfo" type="GeoInfoType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -971,32 +954,6 @@
       </xs:sequence>
    </xs:complexType>
 
-   <xs:complexType name="MatchInfoType">
-      <xs:sequence>
-         <xs:element name="NumMatchTypes" type="xs:int"/>
-         <xs:element name="MatchType" maxOccurs="unbounded">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element name="TypeID" type="xs:string"/>
-                  <xs:element name="CurrentIndex" type="xs:int" minOccurs="0"/>
-                  <xs:element name="NumMatchCollections" type="xs:int"/>
-                  <xs:element name="MatchCollection" minOccurs="0" maxOccurs="unbounded">
-                     <xs:complexType>
-                        <xs:sequence>
-                           <xs:element name="CoreName" type="xs:string"/>
-                           <xs:element name="MatchIndex" type="xs:int" minOccurs="0"/>
-                           <xs:element name="Parameter" type="ParameterType" minOccurs="0" maxOccurs="unbounded"/>
-                        </xs:sequence>
-                        <xs:attribute name="index" type="xs:int" use="required"/>
-                     </xs:complexType>
-                  </xs:element>
-               </xs:sequence>
-               <xs:attribute name="index" type="xs:int" use="required"/>
-            </xs:complexType>
-         </xs:element>
-      </xs:sequence>
-   </xs:complexType>
-
    <xs:complexType name="RgAzCompType">
       <xs:sequence>
          <xs:element name="AzSF" type="xs:double"/>
@@ -1099,7 +1056,7 @@
             <xs:element name="Radiometric" type="RadiometricType" minOccurs="0"/>
             <xs:element name="Antenna" type="AntennaType" minOccurs="0"/>
             <xs:element name="ErrorStatistics" type="ErrorStatisticsType" minOccurs="0"/>
-            <xs:element name="MatchInfo" type="MatchInfoType" minOccurs="0"/>
+            <xs:element name="MatchInfo" type="sicommon:MatchInfoType" minOccurs="0"/>
             <xs:choice minOccurs="0">
                <xs:element name="RgAzComp" type="RgAzCompType"/>
                <xs:element name="PFA" type="PFAType"/>
