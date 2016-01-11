@@ -134,8 +134,8 @@ protected:
 
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
-	virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
-		                                      MatchInformation *obj) const;
+    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
+                                              MatchInformation *obj) const;
 
     virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
                                              RadarCollection *obj) const = 0;

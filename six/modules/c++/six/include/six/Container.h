@@ -128,7 +128,7 @@ public:
      */
     const Legend* getLegend(size_t i) const
     {
-    	return mData[i].second.get();
+        return mData[i].second.get();
     }
 
     /*!
@@ -149,7 +149,7 @@ public:
 
 protected:
     typedef std::pair<mem::ScopedCloneablePtr<Data>,
-    		          mem::ScopedCopyablePtr<Legend> > DataPair;
+                      mem::ScopedCopyablePtr<Legend> > DataPair;
 
     typedef std::vector<DataPair> DataVec;
 
@@ -160,11 +160,11 @@ private:
     static
     mem::ScopedCopyablePtr<Legend> nullLegend()
     {
-    	return mem::ScopedCopyablePtr<Legend>(NULL);
+        return mem::ScopedCopyablePtr<Legend>(NULL);
     }
 
     void addData(std::auto_ptr<Data> data,
-    	         mem::ScopedCopyablePtr<Legend> legend);
+                 mem::ScopedCopyablePtr<Legend> legend);
 };
 }
 

@@ -46,7 +46,7 @@ class NITFImageInfo
 public:
 
     NITFImageInfo(Data* d,
-    		      size_t maxRows = Constants::ILOC_MAX,
+                  size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
                   bool computeSegments = false) :
         data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)

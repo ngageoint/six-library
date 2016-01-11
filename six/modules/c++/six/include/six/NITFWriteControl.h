@@ -373,10 +373,10 @@ private:
     std::string getDerivedIID(size_t segmentNum, size_t productNum);
 
     static
-	std::string getIID(DataType dataType,
-			           size_t segmentNum,
-			           size_t numImageSegments,
-			           size_t productNum);
+    std::string getIID(DataType dataType,
+                       size_t segmentNum,
+                       size_t numImageSegments,
+                       size_t productNum);
 
     std::string mOrganizationId;
     std::string mLocationId;

@@ -124,9 +124,9 @@ DerivedDataBuilder& DerivedDataBuilder::addCompression()
 
 DerivedDataBuilder& DerivedDataBuilder::addDigitalElevationData()
 {
-	mData->digitalElevationData.reset(new DigitalElevationData());
+    mData->digitalElevationData.reset(new DigitalElevationData());
 
-	return *this;
+    return *this;
 }
 
 DerivedData* DerivedDataBuilder::get()

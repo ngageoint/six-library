@@ -88,16 +88,16 @@ DerivedData* DerivedXMLParser110::fromXML(
 
     XMLElem productCreationXML        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayXML                = getFirstAndOnly(root, "Display");
-	XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
     XMLElem measurementXML            = getFirstAndOnly(root, "Measurement");
     XMLElem exploitationFeaturesXML   = getFirstAndOnly(root, "ExploitationFeatures");
     XMLElem productProcessingXML      = getOptional(root, "ProductProcessing");
     XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
     XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
     XMLElem radiometricXML            = getOptional(root, "Radiometric");
-	XMLElem matchInfoXML             = getOptional(root, "MatchInfo");
-	XMLElem compressionXML            = getOptional(root, "Compression");
-	XMLElem dedXML                    = getOptional(root, "DigitalElevationData");
+    XMLElem matchInfoXML             = getOptional(root, "MatchInfo");
+    XMLElem compressionXML            = getOptional(root, "Compression");
+    XMLElem dedXML                    = getOptional(root, "DigitalElevationData");
     XMLElem annotationsXML            = getOptional(root, "Annotations");
     
 
@@ -160,21 +160,21 @@ DerivedData* DerivedXMLParser110::fromXML(
         common().parseRadiometryFromXML(radiometricXML,
                                         data->radiometric.get());
     }
-	if (matchInfoXML)
-	{
-		builder.addMatchInformation();
-		common().parseMatchInformationFromXML(matchInfoXML, data->matchInformation.get());
-	}
-	if (compressionXML)
-	{
-		builder.addCompression();
-		parseCompressionFromXML(compressionXML, *data->compression);
-	}
-	if (dedXML)
-	{
-		builder.addDigitalElevationData();
-		parseDigitalElevationDataFromXML(dedXML, *data->digitalElevationData);
-	}
+    if (matchInfoXML)
+    {
+        builder.addMatchInformation();
+        common().parseMatchInformationFromXML(matchInfoXML, data->matchInformation.get());
+    }
+    if (compressionXML)
+    {
+        builder.addCompression();
+        parseCompressionFromXML(compressionXML, *data->compression);
+    }
+    if (dedXML)
+    {
+        builder.addDigitalElevationData();
+        parseDigitalElevationDataFromXML(dedXML, *data->digitalElevationData);
+    }
     if (annotationsXML)
     {
         // 1 to unbounded
@@ -240,11 +240,11 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
         convertDigitalElevationDataToXML(*derived->digitalElevationData,
                                          root);
     }
-	// optional
-	if (derived->productProcessing.get())
-	{
-		convertProductProcessingToXML(derived->productProcessing.get(), root);
-	}
+    // optional
+    if (derived->productProcessing.get())
+    {
+        convertProductProcessingToXML(derived->productProcessing.get(), root);
+    }
     // optional
     if (!derived->annotations.empty())
     {
@@ -269,51 +269,51 @@ void DerivedXMLParser110::parseDerivedClassificationFromXML(
         const XMLElem classificationXML,
         DerivedClassification& classification) const
 {
-	DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
+    DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
 
-	const XMLAttributes& classificationAttributes
-		= classificationXML->getAttributes();
+    const XMLAttributes& classificationAttributes
+        = classificationXML->getAttributes();
 
-	getAttributeList(classificationAttributes,
-		"ism:compliesWith",
-		classification.compliesWith);
+    getAttributeList(classificationAttributes,
+        "ism:compliesWith",
+        classification.compliesWith);
 
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:exemptFrom",
-		classification.exemptFrom);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:joint",
-		classification.joint);
-	// optional
-	getAttributeListIfExists(classificationAttributes,
-		"ism:atomicEnergyMarkings",
-		classification.atomicEnergyMarkings);
-	// optional
-	getAttributeListIfExists(classificationAttributes,
-		"ism:displayOnlyTo",
-		classification.displayOnlyTo);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:noticeType",
-		classification.noticeType);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:noticeReason",
-		classification.noticeReason);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:noticeDate",
-		classification.noticeDate);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:unregisteredNoticeType",
-		classification.unregisteredNoticeType);
-	// optional
-	getAttributeIfExists(classificationAttributes,
-		"ism:externalNotice",
-		classification.externalNotice);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:exemptFrom",
+        classification.exemptFrom);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:joint",
+        classification.joint);
+    // optional
+    getAttributeListIfExists(classificationAttributes,
+        "ism:atomicEnergyMarkings",
+        classification.atomicEnergyMarkings);
+    // optional
+    getAttributeListIfExists(classificationAttributes,
+        "ism:displayOnlyTo",
+        classification.displayOnlyTo);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:noticeType",
+        classification.noticeType);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:noticeReason",
+        classification.noticeReason);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:noticeDate",
+        classification.noticeDate);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:unregisteredNoticeType",
+        classification.unregisteredNoticeType);
+    // optional
+    getAttributeIfExists(classificationAttributes,
+        "ism:externalNotice",
+        classification.externalNotice);
 }
 
 void DerivedXMLParser110::parseCompressionFromXML(const XMLElem compressionXML,
@@ -1034,7 +1034,7 @@ XMLElem DerivedXMLParser110::convertCustomKernelToXML(
     //XMLElem kernelSize = newElement("KernelSize", customXML);
     //createInt("Row", custom.kernelSize.row, kernelSize);
     //createInt("Col", custom.kernelSize.col, kernelSize);
-	common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize, customXML);
+    common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize, customXML);
 
     if (custom.kernelCoef.size() !=
         static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
@@ -1183,9 +1183,9 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
-	createStringFromEnum("EarthModel",
-		geographicAndTarget.earthModel,
-		geographicAndTargetXML);
+    createStringFromEnum("EarthModel",
+        geographicAndTarget.earthModel,
+        geographicAndTargetXML);
 
     confirmNonNull(geographicAndTarget.imageCorners,
                    "geographicAndTarget.imageCorners");
@@ -1287,60 +1287,60 @@ XMLElem DerivedXMLParser110::convertDigitalElevationDataToXML(
 }
 
 void DerivedXMLParser110::parseGeographicTargetFromXML(
-	const XMLElem geographicElem,
-	GeographicAndTarget& geographicAndTarget) const
+    const XMLElem geographicElem,
+    GeographicAndTarget& geographicAndTarget) const
 {
-	std::string model;
-	parseString(getFirstAndOnly(geographicElem, "EarthModel"), model);
-	geographicAndTarget.earthModel = EarthModelType(model);
-	common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
-		*geographicAndTarget.imageCorners);
+    std::string model;
+    parseString(getFirstAndOnly(geographicElem, "EarthModel"), model);
+    geographicAndTarget.earthModel = EarthModelType(model);
+    common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
+        *geographicAndTarget.imageCorners);
 
-	XMLElem dataElem = getOptional(geographicElem, "ValidData");
-	if (dataElem)
-	{
-		common().parseLatLons(dataElem, "Vertex", geographicAndTarget.validData);
-	}
+    XMLElem dataElem = getOptional(geographicElem, "ValidData");
+    if (dataElem)
+    {
+        common().parseLatLons(dataElem, "Vertex", geographicAndTarget.validData);
+    }
 
-	std::vector<XMLElem> geoInfosXML;
-	geographicElem->getElementsByTagName("GeoInfo", geoInfosXML);
+    std::vector<XMLElem> geoInfosXML;
+    geographicElem->getElementsByTagName("GeoInfo", geoInfosXML);
 
-	//optional
-	size_t idx(geographicAndTarget.geoInfos.size());
-	geographicAndTarget.geoInfos.resize(idx + geoInfosXML.size());
+    //optional
+    size_t idx(geographicAndTarget.geoInfos.size());
+    geographicAndTarget.geoInfos.resize(idx + geoInfosXML.size());
 
-	for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
-		!= geoInfosXML.end(); ++it, ++idx)
-	{
-		geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
-		common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
-	}
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+        != geoInfosXML.end(); ++it, ++idx)
+    {
+        geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
+        common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
+    }
 }
 
 void DerivedXMLParser110::parseDigitalElevationDataFromXML(
         const XMLElem elem,
         DigitalElevationData& ded) const
 {
-	XMLElem coordXML = getFirstAndOnly(elem, "GeographicCoordinates");
-	parseDouble(getFirstAndOnly(coordXML, "LongitudeDensity"), ded.geographicCoordinates.longitudeDensity);
-	parseDouble(getFirstAndOnly(coordXML, "LatitudeDensity"), ded.geographicCoordinates.latitudeDensity);
-	common().parseLatLon(getFirstAndOnly(coordXML, "ReferenceOrigin"), ded.geographicCoordinates.referenceOrigin);
+    XMLElem coordXML = getFirstAndOnly(elem, "GeographicCoordinates");
+    parseDouble(getFirstAndOnly(coordXML, "LongitudeDensity"), ded.geographicCoordinates.longitudeDensity);
+    parseDouble(getFirstAndOnly(coordXML, "LatitudeDensity"), ded.geographicCoordinates.latitudeDensity);
+    common().parseLatLon(getFirstAndOnly(coordXML, "ReferenceOrigin"), ded.geographicCoordinates.referenceOrigin);
 
-	XMLElem posXML = getFirstAndOnly(elem, "Geopositioning");
-	std::string coordSystemType;
-	parseString(getFirstAndOnly(posXML, "CoordinateSystemType"), coordSystemType);
-	ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
-	parseUInt(getFirstAndOnly(posXML, "FalseOrigin"), ded.geopositioning.falseOrigin);
-	parseInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
+    XMLElem posXML = getFirstAndOnly(elem, "Geopositioning");
+    std::string coordSystemType;
+    parseString(getFirstAndOnly(posXML, "CoordinateSystemType"), coordSystemType);
+    ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
+    parseUInt(getFirstAndOnly(posXML, "FalseOrigin"), ded.geopositioning.falseOrigin);
+    parseInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
 
-	XMLElem posAccuracyXML = getFirstAndOnly(elem, "PositionalAccuracy");
-	parseUInt(getFirstAndOnly(posAccuracyXML, "PositionalAccuracyRegions"), ded.positionalAccuracy.numRegions);
-	XMLElem absoluteXML = getFirstAndOnly(posAccuracyXML, "AbsoluteAccuracy");
-	parseDouble(getFirstAndOnly(absoluteXML, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
-	parseDouble(getFirstAndOnly(absoluteXML, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);
-	XMLElem pointXML = getFirstAndOnly(posAccuracyXML, "PointToPointAccuracy");
-	parseDouble(getFirstAndOnly(pointXML, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
-	parseDouble(getFirstAndOnly(pointXML, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
+    XMLElem posAccuracyXML = getFirstAndOnly(elem, "PositionalAccuracy");
+    parseUInt(getFirstAndOnly(posAccuracyXML, "PositionalAccuracyRegions"), ded.positionalAccuracy.numRegions);
+    XMLElem absoluteXML = getFirstAndOnly(posAccuracyXML, "AbsoluteAccuracy");
+    parseDouble(getFirstAndOnly(absoluteXML, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
+    parseDouble(getFirstAndOnly(absoluteXML, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);
+    XMLElem pointXML = getFirstAndOnly(posAccuracyXML, "PointToPointAccuracy");
+    parseDouble(getFirstAndOnly(pointXML, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
+    parseDouble(getFirstAndOnly(pointXML, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
 void DerivedXMLParser110::parseMatchInformationFromXML(

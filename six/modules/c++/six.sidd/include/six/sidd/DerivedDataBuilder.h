@@ -140,14 +140,14 @@ public:
      *
      *  \return Reference to self
      */
-	virtual DerivedDataBuilder& addRadiometric();
+    virtual DerivedDataBuilder& addRadiometric();
 
-	/*!
-	 * Add optional MatchInformation element
-	 * 
-	 * \return Reference to self
-	 */
-	virtual DerivedDataBuilder& addMatchInformation();
+    /*!
+     * Add optional MatchInformation element
+     * 
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addMatchInformation();
 
     /*!
      *  Add the optional compression component.
@@ -156,12 +156,12 @@ public:
      */
     virtual DerivedDataBuilder& addCompression();
 
-	/*!
-	*  Add the optional digital elevation data component.
-	*
-	* \return Reference to self
-	*/
-	virtual DerivedDataBuilder& addDigitalElevationData();
+    /*!
+    *  Add the optional digital elevation data component.
+    *
+    * \return Reference to self
+    */
+    virtual DerivedDataBuilder& addDigitalElevationData();
     /*!
      *  Get the pointer to the object that is being built, but do not
      *  take ownership

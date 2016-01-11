@@ -152,15 +152,15 @@ void DerivedXMLParser100::parseDerivedClassificationFromXML(
         const XMLElem classificationXML,
         DerivedClassification& classification) const
 {
-	DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
+    DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
 
-	const XMLAttributes& classificationAttributes
-		= classificationXML->getAttributes();
+    const XMLAttributes& classificationAttributes
+        = classificationXML->getAttributes();
  
     getAttributeListIfExists(classificationAttributes,
                              "ism:compliesWith",
                              classification.compliesWith);
-	// optional
+    // optional
     getAttributeIfExists(classificationAttributes,
                          "ism:typeOfExemptedSource",
                          classification.exemptedSourceType);

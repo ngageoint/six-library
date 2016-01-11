@@ -83,10 +83,10 @@ protected:
                               const std::string& attributeName,
                               mem::ScopedCopyablePtr<DateTime>& date);
 
-	static
-	void getAttributeIfExists(const xml::lite::Attributes& attributes,
-			                  const std::string& attributeName,
-			                  BooleanType& boolean);
+    static
+    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+                              const std::string& attributeName,
+                              BooleanType& boolean);
 
     static
     void setAttributeList(XMLElem element,

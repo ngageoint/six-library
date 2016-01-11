@@ -35,7 +35,7 @@ ImageData* ImageData::clone() const
     ImageData* d = new ImageData(*this);
     if (amplitudeTable)
     {
-	d->amplitudeTable = (AmplitudeTable*)amplitudeTable->clone();
+    d->amplitudeTable = (AmplitudeTable*)amplitudeTable->clone();
     }
     return d;
 }

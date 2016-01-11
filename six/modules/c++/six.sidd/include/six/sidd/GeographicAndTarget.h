@@ -141,7 +141,7 @@ public:
 
     // This section is used for SIDD 1.1
 
-	EarthModelType earthModel; //TODO: Verify which value this is supposed to take
+    EarthModelType earthModel; //TODO: Verify which value this is supposed to take
     /*!
      *  Parameters apply to image corners of the
      *  product projected to the same height as the SCP.

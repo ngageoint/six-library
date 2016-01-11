@@ -1928,10 +1928,10 @@ void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
 }
 
 void ComplexXMLParser::parseMatchInformationFromXML(
-	const XMLElem matchInfoXML,
-	MatchInformation* matchInfo) const
+    const XMLElem matchInfoXML,
+    MatchInformation* matchInfo) const
 {
-	return common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
+    return common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
 }
 
 XMLElem ComplexXMLParser::convertMatchInformationToXML(
