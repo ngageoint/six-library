@@ -72,10 +72,10 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         nitf_Off size,
         nitf_Error* error)
 {
-    (void) error;
     size_t destOffset = 0;
     const nitf_Uint8* const src = (const nitf_Uint8*)memorySource->data;
     nitf_Uint8* const dest = (nitf_Uint8*)buf;
+    (void) error;
 
     while (destOffset < (size_t)size)
     {
@@ -125,8 +125,8 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error* error)
 {
-    (void) error;
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
+    (void) error;
     return memorySource ? memorySource->size : 0;
 }
 
@@ -226,8 +226,8 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error* error)
 {
-    (void) error;
     IOSourceImpl *source = (IOSourceImpl *) data;
+    (void) error;
     return source ? (nitf_Off)source->size : 0;
 }
 
