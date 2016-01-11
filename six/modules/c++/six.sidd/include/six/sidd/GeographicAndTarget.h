@@ -132,6 +132,12 @@ class GeographicAndTarget
 public:
     // This section is used for SIDD 1.0
 
+    //! Default constructor initializes earthModel enum to only valid value
+    GeographicAndTarget()
+    {
+        earthModel = EarthModelType("WGS84");
+    }
+
     //!  SIDD GeographicCoverage: Provides geo coverage information
     //   Required for SIDD 1.0
     mem::ScopedCopyablePtr<GeographicCoverage> geographicCoverage;
