@@ -137,9 +137,6 @@ private:
 
     void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
          OneDimensionalLookup& lookup) const;
-
-    void parseMatchInformationFromXML(const XMLElem matchInfoXML,
-                                      MatchInformation& obj) const;
 };
 }
 }

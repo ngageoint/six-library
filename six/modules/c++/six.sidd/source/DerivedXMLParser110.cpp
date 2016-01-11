@@ -1342,15 +1342,5 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointXML, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
     parseDouble(getFirstAndOnly(pointXML, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
-
-void DerivedXMLParser110::parseMatchInformationFromXML(
-        const XMLElem matchInfoXML,
-        MatchInformation& obj) const
-{
-    // Probably want to move the parsing logic into the SICommonXMLParser
-    // similar to what I did for the convert function... then this method goes
-    // away altogether
-    throw except::Exception(Ctxt("TODO: IMPLEMENT ME"));
-}
 }
 }
