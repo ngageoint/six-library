@@ -18,7 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- * Simple program to round-trip SICD XML and verify the resulting XML matches
+ * Simple program to round-trip SI*D XML and verify the resulting XML matches
  */
 #include <iostream>
 #include <stdexcept>
@@ -28,7 +28,9 @@
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
+#include <six/XMLControl.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sidd/DerivedXMLControl.h>
 #include <six/Utilities.h>
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
@@ -38,7 +40,7 @@ namespace
 class XMLVerifier
 {
 public:
-    XMLVerifier();
+    XMLVerifier(std::string fileType);
 
     void verify(const std::string& pathname) const;
 
@@ -51,12 +53,15 @@ private:
     mutable logging::Logger mLog;
 
     mutable std::vector<char> mScratch;
+    six::DataType mType;
 };
 
-XMLVerifier::XMLVerifier()
+XMLVerifier::XMLVerifier(std::string fileType)
 {
     // Verify schema path is set
     sys::OS os;
+
+    mType = (fileType == "SICD" ? six::DataType::COMPLEX : six::DataType::DERIVED);
 
     try
     {
@@ -70,7 +75,7 @@ XMLVerifier::XMLVerifier()
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    mXmlRegistry.addCreator(six::DataType::COMPLEX,
+    mXmlRegistry.addCreator(mType,
                             new six::XMLControlCreatorT<
                                     six::sicd::ComplexXMLControl>());
 
@@ -111,14 +116,22 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     std::auto_ptr<six::Data> data(six::parseData(mXmlRegistry,
                                                  inStream,
-                                                 six::DataType::COMPLEX,
+                                                 mType,
                                                  mSchemaPaths,
                                                  mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
-    six::sicd::ComplexXMLControl xmlControl;
-    std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl.toXML(data.get(),
+    six:: XMLControl* xmlControl;
+    if (mType == six::DataType::COMPLEX)
+    {
+        xmlControl = new six::sicd::ComplexXMLControl();
+    }
+    else
+    {
+        xmlControl = new six::sidd::DerivedXMLControl();
+    }
+    std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
     io::StringStream outStream;
@@ -143,16 +156,17 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        if (argc < 2)
+        if (argc < 3 || !(strcmp(argv[1], "SICD") && !strcmp(argv[1], "SIDD")))
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
+                      << "\"SICD\" | \"SIDD\"\n"
                       << " <SICD XML pathname #1>"
                       << " <SICD XML pathname #2> ...\n";
             return 1;
         }
 
-        XMLVerifier verifier;
-        for (int ii = 1; ii < argc; ++ii)
+        XMLVerifier verifier(argv[1]);
+        for (int ii = 2; ii < argc; ++ii)
         {
             verifier.verify(argv[ii]);
         }
