@@ -18,7 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- * Simple program to round-trip SI*D XML and verify the resulting XML matches
+ * Simple program to round-trip SICD or SIDD XML and verify the resulting XML matches
  */
 #include <iostream>
 #include <stdexcept>
@@ -74,10 +74,18 @@ XMLVerifier::XMLVerifier(std::string fileType)
             << six::SCHEMA_PATH << " environment variable";
         throw except::Exception(Ctxt(oss.str()));
     }
-
-    mXmlRegistry.addCreator(mType,
-                            new six::XMLControlCreatorT<
-                                    six::sicd::ComplexXMLControl>());
+    if (mType == six::DataType::COMPLEX)
+    {
+        mXmlRegistry.addCreator(mType,
+            new six::XMLControlCreatorT<
+            six::sicd::ComplexXMLControl>());
+    }
+    else
+    {
+        mXmlRegistry.addCreator(mType,
+            new six::XMLControlCreatorT<
+            six::sidd::DerivedXMLControl>());
+    }
 
     mLog.addHandler(new logging::StreamHandler(logging::LogLevel::LOG_INFO),
                     true);
@@ -122,15 +130,7 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
-    six:: XMLControl* xmlControl;
-    if (mType == six::DataType::COMPLEX)
-    {
-        xmlControl = new six::sicd::ComplexXMLControl();
-    }
-    else
-    {
-        xmlControl = new six::sidd::DerivedXMLControl();
-    }
+    std::auto_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(mType, &mLog));
     std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
@@ -160,8 +160,8 @@ int main(int argc, char** argv)
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
                       << "\"SICD\" | \"SIDD\"\n"
-                      << " <SICD XML pathname #1>"
-                      << " <SICD XML pathname #2> ...\n";
+                      << " <SICD or SIDD XML pathname #1>"
+                      << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;
         }
 
