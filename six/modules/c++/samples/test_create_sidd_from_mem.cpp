@@ -2011,19 +2011,29 @@ int main(int argc, char** argv)
         siddData->productCreation->productClass = "Classy";
         siddData->productCreation->classification.classification = "U";
         siddData->productCreation->classification.compliesWith.push_back("USDOD");
+        siddData->productCreation->classification.compliesWith.push_back("USIC");
         siddData->productCreation->classification.ownerProducer.push_back("ABW");
+        siddData->productCreation->classification.ownerProducer.push_back("AIA");
         siddData->productCreation->classification.sciControls.push_back("EL-EU");
+        siddData->productCreation->classification.sciControls.push_back("EL-NK");
         siddData->productCreation->classification.sarIdentifier.push_back("EU");
+        siddData->productCreation->classification.sarIdentifier.push_back("BC");
         siddData->productCreation->classification.disseminationControls.push_back("FOUO");
+        siddData->productCreation->classification.disseminationControls.push_back("IMC");
         siddData->productCreation->classification.fgiSourceOpen.push_back("AIA");
+        siddData->productCreation->classification.fgiSourceOpen.push_back("ALB");
         siddData->productCreation->classification.fgiSourceProtected.push_back("AIA");
+        siddData->productCreation->classification.fgiSourceProtected.push_back("AND");
         siddData->productCreation->classification.releasableTo.push_back("ALB");
+        siddData->productCreation->classification.releasableTo.push_back("AX2");
         siddData->productCreation->classification.nonICMarkings.push_back("XD");
+        siddData->productCreation->classification.nonICMarkings.push_back("SSI");
         siddData->productCreation->classification.classifiedBy = "PVT Snuffy";
         siddData->productCreation->classification.compilationReason = "Testing purposes";
         siddData->productCreation->classification.derivativelyClassifiedBy = "Anna J. Stepp";
         siddData->productCreation->classification.classificationReason = "More testing";
         siddData->productCreation->classification.nonUSControls.push_back("BOHEMIA");
+        siddData->productCreation->classification.nonUSControls.push_back("BALK");
         siddData->productCreation->classification.derivedFrom = "Other documents";
         siddData->productCreation->classification.declassDate.reset(new six::DateTime());
         siddData->productCreation->classification.declassEvent = "N/A";
@@ -2031,7 +2041,9 @@ int main(int argc, char** argv)
         siddData->productCreation->classification.exemptFrom = "DOD_DISTRO_STATEMENT";
         siddData->productCreation->classification.joint = six::BooleanType("IS_TRUE");
         siddData->productCreation->classification.atomicEnergyMarkings.push_back("RD-CNWDI");
+        siddData->productCreation->classification.atomicEnergyMarkings.push_back("UCNI");
         siddData->productCreation->classification.displayOnlyTo.push_back("AND");
+        siddData->productCreation->classification.displayOnlyTo.push_back("ALB");
         siddData->productCreation->classification.noticeType = "LES";
         siddData->productCreation->classification.noticeReason = "None given";
         siddData->productCreation->classification.noticeDate.reset(new six::DateTime());
@@ -2139,16 +2151,18 @@ int main(int argc, char** argv)
         siddData->downstreamReprocessing->processingEvents[0]->descriptor.push_back(eventParameter);
 
         mem::ScopedCloneablePtr<six::sidd::ProcessingModule> module;
+        mem::ScopedCloneablePtr<six::sidd::ProcessingModule> nestedModule;
         module.reset(new six::sidd::ProcessingModule());
+        nestedModule.reset(new six::sidd::ProcessingModule());
         six::Parameter moduleParameter;
         moduleParameter.setName("Name");
         moduleParameter.setValue("Value");
-        module->moduleName = moduleParameter;
 
-        module->moduleParameters.push_back(moduleParameter);
+        module->moduleName = moduleParameter;
+        nestedModule->moduleName = moduleParameter;
+        nestedModule->moduleParameters.push_back(moduleParameter);
+        module->processingModules.push_back(nestedModule);
         siddData->productProcessing->processingModules.push_back(module);
-        //siddData->productProcessing->processingModules[0]->moduleName.setName("Name");
-        //siddData->productProcessing->processingModules[0]->moduleName.setValue("Value");
 
         siddData->compression->original.numWaveletLevels = 5;
         siddData->compression->original.numBands = 1;
