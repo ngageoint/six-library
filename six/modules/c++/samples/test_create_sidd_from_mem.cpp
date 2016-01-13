@@ -2011,6 +2011,32 @@ int main(int argc, char** argv)
         siddData->productCreation->productClass = "Classy";
         siddData->productCreation->classification.classification = "U";
         siddData->productCreation->classification.compliesWith.push_back("USDOD");
+        siddData->productCreation->classification.ownerProducer.push_back("ABW");
+        siddData->productCreation->classification.sciControls.push_back("EL-EU");
+        siddData->productCreation->classification.sarIdentifier.push_back("EU");
+        siddData->productCreation->classification.disseminationControls.push_back("FOUO");
+        siddData->productCreation->classification.fgiSourceOpen.push_back("AIA");
+        siddData->productCreation->classification.fgiSourceProtected.push_back("AIA");
+        siddData->productCreation->classification.releasableTo.push_back("ALB");
+        siddData->productCreation->classification.nonICMarkings.push_back("XD");
+        siddData->productCreation->classification.classifiedBy = "PVT Snuffy";
+        siddData->productCreation->classification.compilationReason = "Testing purposes";
+        siddData->productCreation->classification.derivativelyClassifiedBy = "Anna J. Stepp";
+        siddData->productCreation->classification.classificationReason = "More testing";
+        siddData->productCreation->classification.nonUSControls.push_back("BOHEMIA");
+        siddData->productCreation->classification.derivedFrom = "Other documents";
+        siddData->productCreation->classification.declassDate.reset(new six::DateTime());
+        siddData->productCreation->classification.declassEvent = "N/A";
+        siddData->productCreation->classification.declassException="25X1";
+        siddData->productCreation->classification.exemptFrom = "DOD_DISTRO_STATEMENT";
+        siddData->productCreation->classification.joint = six::BooleanType("IS_TRUE");
+        siddData->productCreation->classification.atomicEnergyMarkings.push_back("RD-CNWDI");
+        siddData->productCreation->classification.displayOnlyTo.push_back("AND");
+        siddData->productCreation->classification.noticeType = "LES";
+        siddData->productCreation->classification.noticeReason = "None given";
+        siddData->productCreation->classification.noticeDate.reset(new six::DateTime());
+        siddData->productCreation->classification.unregisteredNoticeType = "Other";
+        siddData->productCreation->classification.externalNotice = BooleanType("IS_FALSE");
 
         // Can certainly be init'ed in a function
         initProcessorInformation(
