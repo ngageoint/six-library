@@ -18,7 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- * Simple program to round-trip SICD XML and verify the resulting XML matches
+ * Simple program to round-trip SICD or SIDD XML and verify the resulting XML matches
  */
 #include <iostream>
 #include <stdexcept>
@@ -28,7 +28,9 @@
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
+#include <six/XMLControl.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sidd/DerivedXMLControl.h>
 #include <six/Utilities.h>
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
@@ -71,8 +73,11 @@ XMLVerifier::XMLVerifier()
     }
 
     mXmlRegistry.addCreator(six::DataType::COMPLEX,
-                            new six::XMLControlCreatorT<
-                                    six::sicd::ComplexXMLControl>());
+            new six::XMLControlCreatorT<
+                    six::sicd::ComplexXMLControl>());
+    mXmlRegistry.addCreator(six::DataType::DERIVED,
+            new six::XMLControlCreatorT<
+                    six::sidd::DerivedXMLControl>());
 
     mLog.addHandler(new logging::StreamHandler(logging::LogLevel::LOG_INFO),
                     true);
@@ -110,15 +115,14 @@ void XMLVerifier::verify(const std::string& pathname) const
                    inStr.length());
 
     std::auto_ptr<six::Data> data(six::parseData(mXmlRegistry,
-                                                 inStream,
-                                                 six::DataType::COMPLEX,
+                                                 pathname,
                                                  mSchemaPaths,
                                                  mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
-    six::sicd::ComplexXMLControl xmlControl;
-    std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl.toXML(data.get(),
+    std::auto_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(data->getDataType(), &mLog));
+    std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
     io::StringStream outStream;
@@ -146,8 +150,8 @@ int main(int argc, char** argv)
         if (argc < 2)
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
-                      << " <SICD XML pathname #1>"
-                      << " <SICD XML pathname #2> ...\n";
+                      << " <SICD or SIDD XML pathname #1>"
+                      << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;
         }
 
