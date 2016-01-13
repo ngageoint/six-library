@@ -40,7 +40,7 @@ namespace
 class XMLVerifier
 {
 public:
-    XMLVerifier(std::string fileType);
+    XMLVerifier();
 
     void verify(const std::string& pathname) const;
 
@@ -53,15 +53,12 @@ private:
     mutable logging::Logger mLog;
 
     mutable std::vector<char> mScratch;
-    six::DataType mType;
 };
 
-XMLVerifier::XMLVerifier(std::string fileType)
+XMLVerifier::XMLVerifier()
 {
     // Verify schema path is set
     sys::OS os;
-
-    mType = (fileType == "SICD" ? six::DataType::COMPLEX : six::DataType::DERIVED);
 
     try
     {
@@ -74,18 +71,13 @@ XMLVerifier::XMLVerifier(std::string fileType)
             << six::SCHEMA_PATH << " environment variable";
         throw except::Exception(Ctxt(oss.str()));
     }
-    if (mType == six::DataType::COMPLEX)
-    {
-        mXmlRegistry.addCreator(mType,
+
+    mXmlRegistry.addCreator(six::DataType::COMPLEX,
             new six::XMLControlCreatorT<
-            six::sicd::ComplexXMLControl>());
-    }
-    else
-    {
-        mXmlRegistry.addCreator(mType,
+                    six::sicd::ComplexXMLControl>());
+    mXmlRegistry.addCreator(six::DataType::DERIVED,
             new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
-    }
+                    six::sidd::DerivedXMLControl>());
 
     mLog.addHandler(new logging::StreamHandler(logging::LogLevel::LOG_INFO),
                     true);
@@ -123,14 +115,13 @@ void XMLVerifier::verify(const std::string& pathname) const
                    inStr.length());
 
     std::auto_ptr<six::Data> data(six::parseData(mXmlRegistry,
-                                                 inStream,
-                                                 mType,
+                                                 pathname,
                                                  mSchemaPaths,
                                                  mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
-    std::auto_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(mType, &mLog));
+    std::auto_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(data->getDataType(), &mLog));
     std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
@@ -156,17 +147,16 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        if (argc < 3 || !(strcmp(argv[1], "SICD") && !strcmp(argv[1], "SIDD")))
+        if (argc < 2)
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
-                      << "\"SICD\" | \"SIDD\"\n"
                       << " <SICD or SIDD XML pathname #1>"
                       << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;
         }
 
-        XMLVerifier verifier(argv[1]);
-        for (int ii = 2; ii < argc; ++ii)
+        XMLVerifier verifier;
+        for (int ii = 1; ii < argc; ++ii)
         {
             verifier.verify(argv[ii]);
         }
