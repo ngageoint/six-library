@@ -2010,6 +2010,7 @@ int main(int argc, char** argv)
         siddData->productCreation->productName = "ProductName";
         siddData->productCreation->productClass = "Classy";
         siddData->productCreation->classification.classification = "U";
+        siddData->productCreation->classification.compliesWith.push_back("USDOD");
 
         // Can certainly be init'ed in a function
         initProcessorInformation(

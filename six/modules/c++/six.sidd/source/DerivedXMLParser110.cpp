@@ -270,14 +270,12 @@ void DerivedXMLParser110::parseDerivedClassificationFromXML(
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
-
     const XMLAttributes& classificationAttributes
         = classificationXML->getAttributes();
 
     getAttributeList(classificationAttributes,
         "ism:compliesWith",
         classification.compliesWith);
-
     // optional
     getAttributeIfExists(classificationAttributes,
         "ism:exemptFrom",
@@ -357,13 +355,15 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
                                               Display& display) const
 {
     //pixelType previously set
-
+    display.bandInformation.reset(new BandInformation());
     parseBandInformationFromXML(getFirstAndOnly(displayXML, "BandInformation"),
                                 *display.bandInformation);
 
+    display.nonInteractiveProcessing.reset(new NonInteractiveProcessing());
     parseNonInteractiveProcessingFromXML(getFirstAndOnly(displayXML,
            "NonInteractiveProcessing"), *display.nonInteractiveProcessing);
 
+    display.interactiveProcessing.reset(new InteractiveProcessing());
     parseInteractiveProcessingFromXML(getFirstAndOnly(displayXML,
            "InteractiveProcessing"), *display.interactiveProcessing);
 
@@ -386,8 +386,8 @@ void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
 {
     std::vector<XMLElem> bands;
     bandXML->getElementsByTagName("Band", bands);
+    bandInformation.bands = std::vector<std::string>();
     bandInformation.bands.resize(bands.size());
-
     for (size_t ii = 0; ii < bands.size(); ++ii)
     {
         parseString(bands[ii], bandInformation.bands[ii]);
@@ -408,7 +408,6 @@ void DerivedXMLParser110::parseNonInteractiveProcessingFromXML(
 
     parseProductGenerationOptionsFromXML(productGenerationOptions,
         nonInteractiveProcessing.productGenerationOptions);
-
     parseRRDSFromXML(rrdsElem, nonInteractiveProcessing.rrds);
 }
 
@@ -425,15 +424,20 @@ void DerivedXMLParser110::parseProductGenerationOptionsFromXML(
 
     if (bandElem)
     {
+        options.bandEqualization.reset(new BandEqualization());
         parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
     }
+
     parseKernelFromXML(restoration, options.modularTransferFunctionRestoration);
+
     if (remapElem)
     {
         options.dataRemapping.reset(parseRemapChoiceFromXML(remapElem));
     }
+
     if (correctionElem)
     {
+        options.asymmetricPixelCorrection.reset(new Kernel());
         parseKernelFromXML(correctionElem, *options.asymmetricPixelCorrection);
     }
 }
@@ -463,31 +467,44 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
     {
         return;
     }
+    XMLElem antiAliasElem = getOptional(rrdsElem, "AntiAlias");
+    XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
 
-    parseKernelFromXML(getFirstAndOnly(rrdsElem, "AntiAlias"), *rrds.antiAlias);
-    parseKernelFromXML(getFirstAndOnly(rrdsElem, "Interpolation"),
-            *rrds.interpolation);
+    if (antiAliasElem)
+    {
+        rrds.antiAlias.reset(new Kernel());
+        parseKernelFromXML(antiAliasElem, *rrds.antiAlias);
+    }
+    if (interpolationElem)
+    {
+        rrds.interpolation.reset(new Kernel());
+        parseKernelFromXML(interpolationElem, *rrds.interpolation);
+    }
 }
 
 void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
                                              Kernel& kernel) const
 {
     parseString(getFirstAndOnly(kernelElem, "KernelName"), kernel.kernelName);
+
     XMLElem customElem = getOptional(kernelElem, "Custom");
     XMLElem predefinedElem = getOptional(kernelElem, "Predefined");
 
     if (customElem)
     {
-        std::string type;
-        parseString(kernelElem, type);
-        kernel.custom->type = KernelCustomType(type);
-        XMLElem kernelSize = getFirstAndOnly(kernelElem, "KernelSize");
-        parseInt(getFirstAndOnly(kernelSize, "Row"),
-                kernel.custom->kernelSize.row);
-        parseInt(getFirstAndOnly(kernelSize, "Col"),
-                kernel.custom->kernelSize.col);
+        kernel.custom.reset(new Kernel::Custom());
 
-        XMLElem kernelCoef = getFirstAndOnly(kernelElem, "KernelCoef");
+        XMLElem typeElem = getOptional(customElem, "Type");
+        if (typeElem)
+        {
+            std::string type;
+            parseString(typeElem, type);
+            kernel.custom->type = KernelCustomType(type);
+        }
+        XMLElem kernelSize = getFirstAndOnly(customElem, "KernelSize");
+        common().parseRowColInt(kernelSize, kernel.custom->kernelSize);
+
+        XMLElem kernelCoef = getFirstAndOnly(customElem, "KernelCoef");
         std::vector<XMLElem> coefficients;
         kernelCoef->getElementsByTagName("Coef", coefficients);
         size_t numCoefs = coefficients.size();
@@ -499,11 +516,11 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
     }
     else if (predefinedElem)
     {
+        kernel.predefined.reset(new Kernel::Predefined());
         bool ok = false;
         XMLElem dbNameElem = getOptional(predefinedElem, "DBName");
         XMLElem familyElem = getOptional(predefinedElem, "KernelFamily");
         XMLElem kernelMember = getOptional(predefinedElem, "KernelMember");
-
         if (dbNameElem)
         {
             if (!familyElem && !kernelMember)
@@ -518,7 +535,6 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
         else if (familyElem && kernelMember)
         {
             ok = true;
-
             parseInt(familyElem, kernel.predefined->kernelFamily);
             parseInt(familyElem, kernel.predefined->kernelMember);
         }
@@ -540,26 +556,33 @@ void DerivedXMLParser110::parseInteractiveProcessingFromXML(
 {
     XMLElem geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
     XMLElem sharpnessElem = getFirstAndOnly(interactiveElem,
-            "SharpnesEnhancement");
+            "SharpnessEnhancement");
     XMLElem colorElem = getOptional(interactiveElem, "ColorSpaceTransform");
     XMLElem dynamicElem = getOptional(interactiveElem, "DynamicRangeAdjustment");
     XMLElem lookupElem = getOptional(interactiveElem, "OneDimensionalLookup");
 
+    interactive.geometricTransform = GeometricTransform();
     parseGeometricTransformFromXML(geomElem, interactive.geometricTransform);
     parseSharpnessEnhancementFromXML(sharpnessElem,
                                      interactive.sharpnessEnhancement);
+
     if (colorElem)
     {
+        interactive.colorSpaceTransform.reset(new ColorSpaceTransform());
         parseColorSpaceTransformFromXML(colorElem,
                                         *interactive.colorSpaceTransform);
     }
+
     if (dynamicElem)
     {
+        interactive.dynamicRangeAdjustment.reset(new DynamicRangeAdjustment());
         parseDynamicRangeAdjustmentFromXML(dynamicElem,
                                            *interactive.dynamicRangeAdjustment);
     }
+
     if (lookupElem)
     {
+        interactive.oneDimensionalLookup.reset(new OneDimensionalLookup());
         parseOneDimensionalLookupFromXML(lookupElem,
                                          *interactive.oneDimensionalLookup);
     }
@@ -569,6 +592,11 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
              GeometricTransform& transform) const
 {
     XMLElem scalingElem = getFirstAndOnly(geomElem, "Scaling");
+    XMLElem test = getFirstAndOnly(scalingElem, "AntiAlias");
+
+    transform.scaling = Scaling();
+    transform.scaling.antiAlias = Kernel();
+
     parseKernelFromXML(getFirstAndOnly(scalingElem, "AntiAlias"),
         transform.scaling.antiAlias);
     parseKernelFromXML(getFirstAndOnly(scalingElem, "Interpolation"),
@@ -578,7 +606,7 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
     std::string typeName;
     parseString(getFirstAndOnly(orientationElem, "OrientationType"), typeName);
     transform.orientation.orientationType = DerivedOrientationType(typeName);
-    parseDouble(getFirstAndOnly(orientationElem, "RotatingAngle"),
+    parseDouble(getFirstAndOnly(orientationElem, "RotationAngle"),
                 transform.orientation.rotationAngle);
 }
 
@@ -596,6 +624,7 @@ void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
         if (!mTFRElem)
         {
             ok = true;
+            sharpness.modularTransferFunctionCompensation.reset(new Kernel());
             parseKernelFromXML(mTFCElem,
                                *sharpness.modularTransferFunctionCompensation);
         }
@@ -603,6 +632,7 @@ void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
     else if (mTFRElem)
     {
         ok = true;
+        sharpness.modularTransferFunctionRestoration.reset(new Kernel());
         parseKernelFromXML(mTFRElem,
                            *sharpness.modularTransferFunctionRestoration);
     }
@@ -1334,7 +1364,7 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
     parseInt(getFirstAndOnly(posXML, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
 
     XMLElem posAccuracyXML = getFirstAndOnly(elem, "PositionalAccuracy");
-    parseUInt(getFirstAndOnly(posAccuracyXML, "PositionalAccuracyRegions"), ded.positionalAccuracy.numRegions);
+    parseUInt(getFirstAndOnly(posAccuracyXML, "NumRegions"), ded.positionalAccuracy.numRegions);
     XMLElem absoluteXML = getFirstAndOnly(posAccuracyXML, "AbsoluteAccuracy");
     parseDouble(getFirstAndOnly(absoluteXML, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
     parseDouble(getFirstAndOnly(absoluteXML, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);

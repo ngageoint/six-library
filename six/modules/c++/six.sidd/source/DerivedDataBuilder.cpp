@@ -42,7 +42,7 @@ DerivedDataBuilder::~DerivedDataBuilder()
 
 DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 {
-    mData->display.reset(new Display);
+    mData->display.reset(new Display());
     mData->display->pixelType = pixelType;
     return *this;
 }
