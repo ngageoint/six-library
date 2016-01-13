@@ -56,7 +56,6 @@ protected:
                                         XMLElem parent = NULL) const = 0;
 
     static const char SFA_URI[];
-    static const char ISM_URI[];
 
     const six::SICommonXMLParser& common() const
     {

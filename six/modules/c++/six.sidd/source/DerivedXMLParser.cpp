@@ -39,7 +39,6 @@ namespace six
 namespace sidd
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
-const char DerivedXMLParser::ISM_URI[] = "urn:us:gov:ic:ism";
 
 DerivedXMLParser::DerivedXMLParser(
         const std::string& version,
@@ -167,7 +166,7 @@ void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
 {
     if (!Init::isUndefined(value))
     {
-        setAttribute(element, name, value, uri);
+        setAttribute(element, name, value == BooleanType::IS_TRUE ? "true" : "false", uri);
     }
 }
 
