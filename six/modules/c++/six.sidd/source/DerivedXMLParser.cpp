@@ -111,7 +111,21 @@ void DerivedXMLParser::getAttributeIfExists(
 {
     if (attributes.contains(attributeName))
     {
-        boolean = BooleanType(attributes.getValue(attributeName));
+        std::string name = attributes.getValue(attributeName);
+        if (name == "true")
+        {
+            boolean = BooleanType("IS_TRUE");
+        }
+        else if (name == "false")
+        {
+            boolean = BooleanType("IS_FALSE");
+        }
+        else
+        {
+            //This allows the function to continue parsing IS_TRUE, IS_FALSE as desired,
+            //as well as throwing an exception for undesired input
+            boolean = BooleanType(name);
+        }
     }
     else
     {
