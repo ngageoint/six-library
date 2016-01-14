@@ -112,11 +112,13 @@ void DerivedXMLParser::getAttributeIfExists(
     if (attributes.contains(attributeName))
     {
         std::string name = attributes.getValue(attributeName);
-        if (name == "true")
+        //I can't imagine we'd actually see this, but 0 and 1 are valid xsd:boolean values,
+        //So I'd think we should be able to parse that, too
+        if (name == "true" || name == "1")
         {
             boolean = BooleanType("IS_TRUE");
         }
-        else if (name == "false")
+        else if (name == "false" || name == "0")
         {
             boolean = BooleanType("IS_FALSE");
         }
