@@ -427,14 +427,14 @@ void DerivedXMLParser110::parseProductGenerationOptionsFromXML(
     {
         parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
     }
-    parseKernelFromXML(restoration, options.modularTransferFunctionRestoration);
+    parseFilterFromXML(restoration, options.modularTransferFunctionRestoration);
     if (remapElem)
     {
         options.dataRemapping.reset(parseRemapChoiceFromXML(remapElem));
     }
     if (correctionElem)
     {
-        parseKernelFromXML(correctionElem, *options.asymmetricPixelCorrection);
+        parseFilterFromXML(correctionElem, *options.asymmetricPixelCorrection);
     }
 }
 
@@ -464,74 +464,74 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
         return;
     }
 
-    parseKernelFromXML(getFirstAndOnly(rrdsElem, "AntiAlias"), *rrds.antiAlias);
-    parseKernelFromXML(getFirstAndOnly(rrdsElem, "Interpolation"),
+    parseFilterFromXML(getFirstAndOnly(rrdsElem, "AntiAlias"), *rrds.antiAlias);
+    parseFilterFromXML(getFirstAndOnly(rrdsElem, "Interpolation"),
             *rrds.interpolation);
 }
 
-void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
-                                             Kernel& kernel) const
+void DerivedXMLParser110::parseFilterFromXML(const XMLElem FilterElem,
+                                             Filter& Filter) const
 {
-    parseString(getFirstAndOnly(kernelElem, "KernelName"), kernel.kernelName);
-    XMLElem customElem = getOptional(kernelElem, "Custom");
-    XMLElem predefinedElem = getOptional(kernelElem, "Predefined");
+    parseString(getFirstAndOnly(FilterElem, "FilterName"), Filter.FilterName);
+    XMLElem customElem = getOptional(FilterElem, "Custom");
+    XMLElem predefinedElem = getOptional(FilterElem, "Predefined");
 
     if (customElem)
     {
         std::string type;
-        parseString(kernelElem, type);
-        kernel.custom->type = KernelCustomType(type);
-        XMLElem kernelSize = getFirstAndOnly(kernelElem, "KernelSize");
-        parseInt(getFirstAndOnly(kernelSize, "Row"),
-                kernel.custom->kernelSize.row);
-        parseInt(getFirstAndOnly(kernelSize, "Col"),
-                kernel.custom->kernelSize.col);
+        parseString(FilterElem, type);
+        Filter.custom->type = FilterCustomType(type);
+        XMLElem FilterSize = getFirstAndOnly(FilterElem, "FilterSize");
+        parseInt(getFirstAndOnly(FilterSize, "Row"),
+                Filter.custom->FilterSize.row);
+        parseInt(getFirstAndOnly(FilterSize, "Col"),
+                Filter.custom->FilterSize.col);
 
-        XMLElem kernelCoef = getFirstAndOnly(kernelElem, "KernelCoef");
+        XMLElem FilterCoef = getFirstAndOnly(FilterElem, "FilterCoef");
         std::vector<XMLElem> coefficients;
-        kernelCoef->getElementsByTagName("Coef", coefficients);
+        FilterCoef->getElementsByTagName("Coef", coefficients);
         size_t numCoefs = coefficients.size();
-        kernel.custom->kernelCoef.resize(numCoefs);
+        Filter.custom->FilterCoef.resize(numCoefs);
         for (size_t ii = 0; ii < numCoefs; ++ii)
         {
-            parseDouble(coefficients[ii], kernel.custom->kernelCoef[ii]);
+            parseDouble(coefficients[ii], Filter.custom->FilterCoef[ii]);
         }
     }
     else if (predefinedElem)
     {
         bool ok = false;
         XMLElem dbNameElem = getOptional(predefinedElem, "DBName");
-        XMLElem familyElem = getOptional(predefinedElem, "KernelFamily");
-        XMLElem kernelMember = getOptional(predefinedElem, "KernelMember");
+        XMLElem familyElem = getOptional(predefinedElem, "FilterFamily");
+        XMLElem FilterMember = getOptional(predefinedElem, "FilterMember");
 
         if (dbNameElem)
         {
-            if (!familyElem && !kernelMember)
+            if (!familyElem && !FilterMember)
             {
                 ok = true;
 
                 std::string name;
                 parseString(dbNameElem, name);
-                kernel.predefined->dbName = KernelDatabaseName(name);
+                Filter.predefined->dbName = FilterDatabaseName(name);
             }
         }
-        else if (familyElem && kernelMember)
+        else if (familyElem && FilterMember)
         {
             ok = true;
 
-            parseInt(familyElem, kernel.predefined->kernelFamily);
-            parseInt(familyElem, kernel.predefined->kernelMember);
+            parseInt(familyElem, Filter.predefined->FilterFamily);
+            parseInt(familyElem, Filter.predefined->FilterMember);
         }
         if (!ok)
         {
             throw except::Exception(Ctxt(
-                    "Exactly one of either dbName or kernelFamily and "
-                    "kernelMember must be defined"));
+                    "Exactly one of either dbName or FilterFamily and "
+                    "FilterMember must be defined"));
         }
     }
     std::string opName;
-    parseString(getFirstAndOnly(kernelElem, "Operation"), opName);
-    kernel.operation = KernelOperation(opName);
+    parseString(getFirstAndOnly(FilterElem, "Operation"), opName);
+    Filter.operation = FilterOperation(opName);
 }
 
 void DerivedXMLParser110::parseInteractiveProcessingFromXML(
@@ -569,9 +569,9 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
              GeometricTransform& transform) const
 {
     XMLElem scalingElem = getFirstAndOnly(geomElem, "Scaling");
-    parseKernelFromXML(getFirstAndOnly(scalingElem, "AntiAlias"),
+    parseFilterFromXML(getFirstAndOnly(scalingElem, "AntiAlias"),
         transform.scaling.antiAlias);
-    parseKernelFromXML(getFirstAndOnly(scalingElem, "Interpolation"),
+    parseFilterFromXML(getFirstAndOnly(scalingElem, "Interpolation"),
         transform.scaling.interpolation);
 
     XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
@@ -596,14 +596,14 @@ void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
         if (!mTFRElem)
         {
             ok = true;
-            parseKernelFromXML(mTFCElem,
+            parseFilterFromXML(mTFCElem,
                                *sharpness.modularTransferFunctionCompensation);
         }
     }
     else if (mTFRElem)
     {
         ok = true;
-        parseKernelFromXML(mTFRElem,
+        parseFilterFromXML(mTFRElem,
                            *sharpness.modularTransferFunctionRestoration);
     }
     if (!ok)
@@ -655,7 +655,7 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
 void DerivedXMLParser110::parseOneDimensionalLookupFromXML(
             const XMLElem lookupElem, OneDimensionalLookup& lookup) const
 {
-    parseKernelFromXML(getFirstAndOnly(lookupElem, "TTC"), lookup.ttc);
+    parseFilterFromXML(getFirstAndOnly(lookupElem, "TTC"), lookup.ttc);
 }
 
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
@@ -836,7 +836,7 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         createLUT("BandLUT", bandEq.bandLUT.get(), bandEqXML);
     }
 
-    convertKernelToXML("ModularTransferFunctionRestoration",
+    convertFilterToXML("ModularTransferFunctionRestoration",
                        prodGen.modularTransferFunctionRestoration,
                        prodGenXML);
 
@@ -848,7 +848,7 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
 
     if (prodGen.asymmetricPixelCorrection.get())
     {
-        convertKernelToXML("AsymmetricPixelCorrection",
+        convertFilterToXML("AsymmetricPixelCorrection",
                            *prodGen.asymmetricPixelCorrection, prodGenXML);
     }
 
@@ -863,11 +863,11 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
     {
         confirmNonNull(rrds.antiAlias, "antiAlias",
                        "for DECIMATE downsampling");
-        convertKernelToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
+        convertFilterToXML("AntiAlias", *rrds.antiAlias, rrdsXML);
 
         confirmNonNull(rrds.interpolation, "interpolation",
                        "for DECIMATE downsampling");
-        convertKernelToXML("Interpolation", *rrds.interpolation, rrdsXML);
+        convertFilterToXML("Interpolation", *rrds.interpolation, rrdsXML);
     }
 
     return processingXML;
@@ -884,9 +884,9 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     XMLElem geoTransformXML = newElement("GeometricTransform", processingXML);
 
     XMLElem scalingXML = newElement("Scaling", geoTransformXML);
-    convertKernelToXML("AntiAlias", geoTransform.scaling.antiAlias,
+    convertFilterToXML("AntiAlias", geoTransform.scaling.antiAlias,
                        scalingXML);
-    convertKernelToXML("Interpolation", geoTransform.scaling.interpolation,
+    convertFilterToXML("Interpolation", geoTransform.scaling.interpolation,
                        scalingXML);
 
     XMLElem orientationXML = newElement("Orientation", geoTransformXML);
@@ -910,7 +910,7 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
         if (sharpness.modularTransferFunctionRestoration.get() == NULL)
         {
             ok = true;
-            convertKernelToXML("ModularTransferFunctionCompensation",
+            convertFilterToXML("ModularTransferFunctionCompensation",
                                *sharpness.modularTransferFunctionCompensation,
                                sharpXML);
         }
@@ -918,7 +918,7 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     else if (sharpness.modularTransferFunctionRestoration.get())
     {
         ok = true;
-        convertKernelToXML("ModularTransferFunctionRestoration",
+        convertFilterToXML("ModularTransferFunctionRestoration",
                            *sharpness.modularTransferFunctionRestoration,
                            sharpXML);
     }
@@ -981,78 +981,78 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     if (processing.oneDimensionalLookup.get())
     {
         XMLElem lutXML = newElement("OneDimensionalLookup", processingXML);
-        convertKernelToXML("TTC", processing.oneDimensionalLookup->ttc,
+        convertFilterToXML("TTC", processing.oneDimensionalLookup->ttc,
                            lutXML);
     }
 
     return processingXML;
 }
 
-XMLElem DerivedXMLParser110::convertPredefinedKernelToXML(
-        const Kernel::Predefined& predefined,
+XMLElem DerivedXMLParser110::convertPredefinedFilterToXML(
+        const Filter::Predefined& predefined,
         XMLElem parent) const
 {
     XMLElem predefinedXML = newElement("Predefined", parent);
 
-    // Make sure either DBName or KernelFamily+KernelMember are defined
+    // Make sure either DBName or FilterFamily+FilterMember are defined
     bool ok = false;
     if (isDefined(predefined.dbName))
     {
-        if (six::Init::isUndefined(predefined.kernelFamily) &&
-            six::Init::isUndefined(predefined.kernelMember))
+        if (six::Init::isUndefined(predefined.FilterFamily) &&
+            six::Init::isUndefined(predefined.FilterMember))
         {
             ok = true;
 
             createStringFromEnum("DBName", predefined.dbName, predefinedXML);
         }
     }
-    else if (six::Init::isDefined(predefined.kernelFamily) &&
-             six::Init::isDefined(predefined.kernelMember))
+    else if (six::Init::isDefined(predefined.FilterFamily) &&
+             six::Init::isDefined(predefined.FilterMember))
     {
         ok = true;
 
-        createInt("KernelFamily", predefined.kernelFamily, predefinedXML);
-        createInt("KernelMember", predefined.kernelMember, predefinedXML);
+        createInt("FilterFamily", predefined.FilterFamily, predefinedXML);
+        createInt("FilterMember", predefined.FilterMember, predefinedXML);
     }
 
     if (!ok)
     {
         throw except::Exception(Ctxt(
-                "Exactly one of either dbName or kernelFamily and "
-                "kernelMember must be defined"));
+                "Exactly one of either dbName or FilterFamily and "
+                "FilterMember must be defined"));
     }
 
     return predefinedXML;
 }
 
-XMLElem DerivedXMLParser110::convertCustomKernelToXML(
-        const Kernel::Custom& custom,
+XMLElem DerivedXMLParser110::convertCustomFilterToXML(
+        const Filter::Custom& custom,
         XMLElem parent) const
 {
     XMLElem customXML = newElement("Custom", parent);
 
-    //XMLElem kernelSize = newElement("KernelSize", customXML);
-    //createInt("Row", custom.kernelSize.row, kernelSize);
-    //createInt("Col", custom.kernelSize.col, kernelSize);
-    common().createRowCol("KernelSize", "Row", "Col", custom.kernelSize, customXML);
+    //XMLElem FilterSize = newElement("FilterSize", customXML);
+    //createInt("Row", custom.FilterSize.row, FilterSize);
+    //createInt("Col", custom.FilterSize.col, FilterSize);
+    common().createRowCol("FilterSize", "Row", "Col", custom.FilterSize, customXML);
 
-    if (custom.kernelCoef.size() !=
-        static_cast<size_t>(custom.kernelSize.row) * custom.kernelSize.col)
+    if (custom.FilterCoef.size() !=
+        static_cast<size_t>(custom.FilterSize.row) * custom.FilterSize.col)
     {
         std::ostringstream ostr;
-        ostr << "Kernel size is " << custom.kernelSize.row << " rows x "
-             << custom.kernelSize.col << " cols but have "
-             << custom.kernelCoef.size() << " coefficients";
+        ostr << "Filter size is " << custom.FilterSize.row << " rows x "
+             << custom.FilterSize.col << " cols but have "
+             << custom.FilterCoef.size() << " coefficients";
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    XMLElem kernelCoef = newElement("KernelCoef", customXML);
-    for (sys::SSize_T row = 0, idx = 0; row < custom.kernelSize.row; ++row)
+    XMLElem FilterCoef = newElement("FilterCoef", customXML);
+    for (sys::SSize_T row = 0, idx = 0; row < custom.FilterSize.row; ++row)
     {
-        for (sys::SSize_T col = 0; col < custom.kernelSize.col; ++col, ++idx)
+        for (sys::SSize_T col = 0; col < custom.FilterSize.col; ++col, ++idx)
         {
-            XMLElem coefXML = createDouble("Coef", custom.kernelCoef[idx],
-                                           kernelCoef);
+            XMLElem coefXML = createDouble("Coef", custom.FilterCoef[idx],
+                                           FilterCoef);
             setAttribute(coefXML, "row", str::toString(row));
             setAttribute(coefXML, "col", str::toString(col));
         }
@@ -1061,28 +1061,28 @@ XMLElem DerivedXMLParser110::convertCustomKernelToXML(
     return customXML;
 }
 
-XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
-                                                const Kernel& kernel,
+XMLElem DerivedXMLParser110::convertFilterToXML(const std::string& name,
+                                                const Filter& Filter,
                                                 XMLElem parent) const
 {
-    XMLElem kernelXML = newElement(name, parent);
+    XMLElem FilterXML = newElement(name, parent);
 
-    createString("KernelName", kernel.kernelName, kernelXML);
+    createString("FilterName", Filter.FilterName, FilterXML);
 
     // Exactly one of Predefined or Custom should be set
     bool ok = false;
-    if (kernel.predefined.get())
+    if (Filter.predefined.get())
     {
-        if (kernel.custom.get() == NULL)
+        if (Filter.custom.get() == NULL)
         {
             ok = true;
-            convertPredefinedKernelToXML(*kernel.predefined, kernelXML);
+            convertPredefinedFilterToXML(*Filter.predefined, FilterXML);
         }
     }
-    else if (kernel.custom.get())
+    else if (Filter.custom.get())
     {
         ok = true;
-        convertCustomKernelToXML(*kernel.custom, kernelXML);
+        convertCustomFilterToXML(*Filter.custom, FilterXML);
     }
 
     if (!ok)
@@ -1091,9 +1091,9 @@ XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
                 "Exactly one of predefined or custom must be set"));
     }
 
-    createStringFromEnum("Operation", kernel.operation, kernelXML);
+    createStringFromEnum("Operation", Filter.operation, FilterXML);
 
-    return kernelXML;
+    return FilterXML;
 }
 
 XMLElem DerivedXMLParser110::convertCompressionToXML(

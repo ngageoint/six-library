@@ -20,20 +20,20 @@
  *
  */
 
-#include <six/sidd/Kernel.h>
+#include <six/sidd/Filter.h>
 
 namespace six
 {
 namespace sidd
 {
-Kernel::Predefined::Predefined() :
-    kernelFamily(six::Init::undefined<size_t>()),
-    kernelMember(six::Init::undefined<size_t>())
+Filter::Predefined::Predefined() :
+    FilterFamily(six::Init::undefined<size_t>()),
+    FilterMember(six::Init::undefined<size_t>())
 {
 }
 
-Kernel::Custom::Custom() :
-    kernelSize(six::Init::undefined<RowColInt>())
+Filter::Custom::Custom() :
+    FilterSize(six::Init::undefined<RowColInt>())
 {
 }
 }

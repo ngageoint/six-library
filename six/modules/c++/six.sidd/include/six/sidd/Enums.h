@@ -577,11 +577,11 @@ struct DownsamplingMethod
 
 
 /*!
- *  \struct KernelCustomType 
+ *  \struct FilterCustomType 
  *
- *  Enumeration used to represent KernelCustomTypes
+ *  Enumeration used to represent FilterCustomTypes
  */
-struct KernelCustomType
+struct FilterCustomType
 {
     //! The enumerations allowed
     enum
@@ -592,10 +592,10 @@ struct KernelCustomType
     };
 
     //! Default constructor
-    KernelCustomType(){ value = NOT_SET; }
+    FilterCustomType(){ value = NOT_SET; }
 
     //! string constructor
-    KernelCustomType(std::string s)
+    FilterCustomType(std::string s)
     {
         if (s == "GENERAL")
             value = GENERAL;
@@ -608,7 +608,7 @@ struct KernelCustomType
     }
 
     //! int constructor
-    KernelCustomType(int i)
+    FilterCustomType(int i)
     {
         switch(i)
         {
@@ -627,7 +627,7 @@ struct KernelCustomType
     }
 
     //! destructor
-    ~KernelCustomType(){}
+    ~FilterCustomType(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -646,7 +646,7 @@ struct KernelCustomType
     }
 
     //! assignment operator
-    KernelCustomType& operator=(const KernelCustomType& o)
+    FilterCustomType& operator=(const FilterCustomType& o)
     {
         if (&o != this)
         {
@@ -655,15 +655,15 @@ struct KernelCustomType
         return *this;
     }
 
-    bool operator==(const KernelCustomType& o) const { return value == o.value; }
-    bool operator!=(const KernelCustomType& o) const { return value != o.value; }
+    bool operator==(const FilterCustomType& o) const { return value == o.value; }
+    bool operator!=(const FilterCustomType& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    KernelCustomType& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelCustomType& o) const { return value < o.value; }
-    bool operator>(const KernelCustomType& o) const { return value > o.value; }
-    bool operator<=(const KernelCustomType& o) const { return value <= o.value; }
-    bool operator>=(const KernelCustomType& o) const { return value >= o.value; }
+    FilterCustomType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FilterCustomType& o) const { return value < o.value; }
+    bool operator>(const FilterCustomType& o) const { return value > o.value; }
+    bool operator<=(const FilterCustomType& o) const { return value <= o.value; }
+    bool operator>=(const FilterCustomType& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
@@ -675,11 +675,11 @@ struct KernelCustomType
 
 
 /*!
- *  \struct KernelDatabaseName 
+ *  \struct FilterDatabaseName 
  *
- *  Enumeration used to represent KernelDatabaseNames
+ *  Enumeration used to represent FilterDatabaseNames
  */
-struct KernelDatabaseName
+struct FilterDatabaseName
 {
     //! The enumerations allowed
     enum
@@ -692,10 +692,10 @@ struct KernelDatabaseName
     };
 
     //! Default constructor
-    KernelDatabaseName(){ value = NOT_SET; }
+    FilterDatabaseName(){ value = NOT_SET; }
 
     //! string constructor
-    KernelDatabaseName(std::string s)
+    FilterDatabaseName(std::string s)
     {
         if (s == "BILINEAR")
             value = BILINEAR;
@@ -712,7 +712,7 @@ struct KernelDatabaseName
     }
 
     //! int constructor
-    KernelDatabaseName(int i)
+    FilterDatabaseName(int i)
     {
         switch(i)
         {
@@ -737,7 +737,7 @@ struct KernelDatabaseName
     }
 
     //! destructor
-    ~KernelDatabaseName(){}
+    ~FilterDatabaseName(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -760,7 +760,7 @@ struct KernelDatabaseName
     }
 
     //! assignment operator
-    KernelDatabaseName& operator=(const KernelDatabaseName& o)
+    FilterDatabaseName& operator=(const FilterDatabaseName& o)
     {
         if (&o != this)
         {
@@ -769,15 +769,15 @@ struct KernelDatabaseName
         return *this;
     }
 
-    bool operator==(const KernelDatabaseName& o) const { return value == o.value; }
-    bool operator!=(const KernelDatabaseName& o) const { return value != o.value; }
+    bool operator==(const FilterDatabaseName& o) const { return value == o.value; }
+    bool operator!=(const FilterDatabaseName& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    KernelDatabaseName& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelDatabaseName& o) const { return value < o.value; }
-    bool operator>(const KernelDatabaseName& o) const { return value > o.value; }
-    bool operator<=(const KernelDatabaseName& o) const { return value <= o.value; }
-    bool operator>=(const KernelDatabaseName& o) const { return value >= o.value; }
+    FilterDatabaseName& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FilterDatabaseName& o) const { return value < o.value; }
+    bool operator>(const FilterDatabaseName& o) const { return value > o.value; }
+    bool operator<=(const FilterDatabaseName& o) const { return value <= o.value; }
+    bool operator>=(const FilterDatabaseName& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
@@ -789,11 +789,11 @@ struct KernelDatabaseName
 
 
 /*!
- *  \struct KernelOperation 
+ *  \struct FilterOperation 
  *
- *  Enumeration used to represent KernelOperations
+ *  Enumeration used to represent FilterOperations
  */
-struct KernelOperation
+struct FilterOperation
 {
     //! The enumerations allowed
     enum
@@ -804,10 +804,10 @@ struct KernelOperation
     };
 
     //! Default constructor
-    KernelOperation(){ value = NOT_SET; }
+    FilterOperation(){ value = NOT_SET; }
 
     //! string constructor
-    KernelOperation(std::string s)
+    FilterOperation(std::string s)
     {
         if (s == "CONVOLUTION")
             value = CONVOLUTION;
@@ -820,7 +820,7 @@ struct KernelOperation
     }
 
     //! int constructor
-    KernelOperation(int i)
+    FilterOperation(int i)
     {
         switch(i)
         {
@@ -839,7 +839,7 @@ struct KernelOperation
     }
 
     //! destructor
-    ~KernelOperation(){}
+    ~FilterOperation(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -858,7 +858,7 @@ struct KernelOperation
     }
 
     //! assignment operator
-    KernelOperation& operator=(const KernelOperation& o)
+    FilterOperation& operator=(const FilterOperation& o)
     {
         if (&o != this)
         {
@@ -867,15 +867,15 @@ struct KernelOperation
         return *this;
     }
 
-    bool operator==(const KernelOperation& o) const { return value == o.value; }
-    bool operator!=(const KernelOperation& o) const { return value != o.value; }
+    bool operator==(const FilterOperation& o) const { return value == o.value; }
+    bool operator!=(const FilterOperation& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    KernelOperation& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelOperation& o) const { return value < o.value; }
-    bool operator>(const KernelOperation& o) const { return value > o.value; }
-    bool operator<=(const KernelOperation& o) const { return value <= o.value; }
-    bool operator>=(const KernelOperation& o) const { return value >= o.value; }
+    FilterOperation& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FilterOperation& o) const { return value < o.value; }
+    bool operator>(const FilterOperation& o) const { return value > o.value; }
+    bool operator<=(const FilterOperation& o) const { return value <= o.value; }
+    bool operator>=(const FilterOperation& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 

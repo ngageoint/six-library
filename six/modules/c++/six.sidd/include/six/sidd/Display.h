@@ -29,7 +29,7 @@
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
 #include <six/sidd/Enums.h>
-#include <six/sidd/Kernel.h>
+#include <six/sidd/Filter.h>
 
 namespace six
 {
@@ -180,21 +180,21 @@ struct RRDS
     //! Algorithm used to perform RRDS downsampling
     DownsamplingMethod downsamplingMethod;
 
-    //! Anti-aliasing kernel.  Only include if downsamplingMethod = DECIMATE.
-    mem::ScopedCopyablePtr<Kernel> antiAlias;
+    //! Anti-aliasing Filter.  Only include if downsamplingMethod = DECIMATE.
+    mem::ScopedCopyablePtr<Filter> antiAlias;
 
-    //! Interpolation kernel.  Only include if downsamplingMethod = DECIMATE.
-    mem::ScopedCopyablePtr<Kernel> interpolation;
+    //! Interpolation Filter.  Only include if downsamplingMethod = DECIMATE.
+    mem::ScopedCopyablePtr<Filter> interpolation;
 };
 
 struct ProductGenerationOptions
 {
     mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
-    Kernel modularTransferFunctionRestoration;
+    Filter modularTransferFunctionRestoration;
 
     mem::ScopedCloneablePtr<Remap> dataRemapping;
 
-    mem::ScopedCopyablePtr<Kernel> asymmetricPixelCorrection;
+    mem::ScopedCopyablePtr<Filter> asymmetricPixelCorrection;
 };
 
 struct NonInteractiveProcessing
@@ -205,8 +205,8 @@ struct NonInteractiveProcessing
 
 struct Scaling
 {
-    Kernel antiAlias;
-    Kernel interpolation;
+    Filter antiAlias;
+    Filter interpolation;
 };
 
 struct Orientation
@@ -224,8 +224,8 @@ struct Orientation
 
 struct SharpnessEnhancement
 {
-    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionCompensation;
-    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionRestoration;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionCompensation;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
 };
 
 struct ColorManagementModule
@@ -272,7 +272,7 @@ struct DynamicRangeAdjustment
 
 struct OneDimensionalLookup
 {
-    Kernel ttc;
+    Filter ttc;
 };
 
 struct InteractiveProcessing

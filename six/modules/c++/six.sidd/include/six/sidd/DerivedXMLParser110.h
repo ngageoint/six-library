@@ -73,16 +73,16 @@ private:
             const InteractiveProcessing& processing,
             XMLElem parent = NULL) const;
 
-    XMLElem convertPredefinedKernelToXML(
-            const Kernel::Predefined& predefined,
+    XMLElem convertPredefinedFilterToXML(
+            const Filter::Predefined& predefined,
             XMLElem parent = NULL) const;
 
-    XMLElem convertCustomKernelToXML(
-            const Kernel::Custom& custom,
+    XMLElem convertCustomFilterToXML(
+            const Filter::Custom& custom,
             XMLElem parent = NULL) const;
 
-    XMLElem convertKernelToXML(const std::string& name,
-                               const Kernel& kernel,
+    XMLElem convertFilterToXML(const std::string& name,
+                               const Filter& Filter,
                                XMLElem parent = NULL) const;
 
     void convertJ2KToXML(const J2KCompression& j2k,
@@ -118,7 +118,7 @@ private:
 
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
-    void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
+    void parseFilterFromXML(const XMLElem FilterELem, Filter& Filter) const;
 
     void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
          InteractiveProcessing& interactive) const;

@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_KERNEL_H__
-#define __SIX_SIDD_KERNEL_H__
+#ifndef __SIX_SIDD_Filter_H__
+#define __SIX_SIDD_Filter_H__
 
 #include <six/Init.h>
 #include <six/sidd/Enums.h>
@@ -29,54 +29,54 @@ namespace six
 {
 namespace sidd
 {
-struct Kernel
+struct Filter
 {
     struct Predefined
     {
         Predefined();
 
-        // Exactly one of dbName or kernelFamiy+kernelMember must be set
+        // Exactly one of dbName or FilterFamiy+FilterMember must be set
 
         //! Database name of filter to use
-        KernelDatabaseName dbName;
+        FilterDatabaseName dbName;
 
-        //! Index specifying the kernel family
-        size_t kernelFamily;
+        //! Index specifying the Filter family
+        size_t FilterFamily;
 
-        //! Index specifying the member for the kernel family
-        size_t kernelMember;
+        //! Index specifying the member for the Filter family
+        size_t FilterMember;
     };
 
     struct Custom
     {
         Custom();
 
-        /*! General indicates the same kernel is used for the entire operation
-            Filterbank indicates that the kernel is spatially variant
+        /*! General indicates the same Filter is used for the entire operation
+            Filterbank indicates that the Filter is spatially variant
          */
-        KernelCustomType type;
+        FilterCustomType type;
 
-        //! Size of the kernel
-        RowColInt kernelSize;
+        //! Size of the Filter
+        RowColInt FilterSize;
 
-        /*! For KernelType=General, populate with the coefficients for the
-            kernelSize kernel.  For KernelType=FilterBank, each row should
+        /*! For FilterType=General, populate with the coefficients for the
+            FilterSize Filter.  For FilterType=FilterBank, each row should
             contain the coefficients for that phasing.
          */
-        std::vector<double> kernelCoef;
+        std::vector<double> FilterCoef;
     };
 
     //! Name of the filter
-    std::string kernelName;
+    std::string FilterName;
 
     // Exactly one of Predefined or Custom
     mem::ScopedCopyablePtr<Predefined> predefined;
     mem::ScopedCopyablePtr<Custom> custom;
 
-    /*! Specifies if the kernel is to be applied using convolution or
+    /*! Specifies if the Filter is to be applied using convolution or
         correlation
      */
-    KernelOperation operation;
+    FilterOperation operation;
 };
 }
 }

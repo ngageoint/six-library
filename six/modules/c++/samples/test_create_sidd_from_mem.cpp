@@ -1748,43 +1748,43 @@ void initProcessorInformation(
     processorInformation.site = "Ypsilanti, MI";
 }
 
-void createPredefinedKernel(six::sidd::Kernel& kernel)
+void createPredefinedFilter(six::sidd::Filter& Filter)
 {
-    kernel.kernelName = "Some predefined kernel";
-    kernel.predefined.reset(new six::sidd::Kernel::Predefined());
-    kernel.predefined->dbName = six::sidd::KernelDatabaseName::LAGRANGE;
-    kernel.operation = six::sidd::KernelOperation::CONVOLUTION;
+    Filter.FilterName = "Some predefined Filter";
+    Filter.predefined.reset(new six::sidd::Filter::Predefined());
+    Filter.predefined->dbName = six::sidd::FilterDatabaseName::LAGRANGE;
+    Filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
 
-std::auto_ptr<six::sidd::Kernel> createPredefinedKernel()
+std::auto_ptr<six::sidd::Filter> createPredefinedFilter()
 {
-    std::auto_ptr<six::sidd::Kernel> kernel(new six::sidd::Kernel());
-    createPredefinedKernel(*kernel);
-    return kernel;
+    std::auto_ptr<six::sidd::Filter> Filter(new six::sidd::Filter());
+    createPredefinedFilter(*Filter);
+    return Filter;
 }
 
-void createCustomKernel(six::sidd::Kernel& kernel)
+void createCustomFilter(six::sidd::Filter& Filter)
 {
-    kernel.kernelName = "Some custom kernel";
-    kernel.custom.reset(new six::sidd::Kernel::Custom());
-    kernel.custom->type = six::sidd::KernelCustomType::GENERAL;
-    kernel.custom->kernelSize.row = 2;
-    kernel.custom->kernelSize.col = 3;
-    kernel.custom->kernelCoef.resize(kernel.custom->kernelSize.normL1());
-    for (size_t ii = 0, end = kernel.custom->kernelCoef.size();
+    Filter.FilterName = "Some custom Filter";
+    Filter.custom.reset(new six::sidd::Filter::Custom());
+    Filter.custom->type = six::sidd::FilterCustomType::GENERAL;
+    Filter.custom->FilterSize.row = 2;
+    Filter.custom->FilterSize.col = 3;
+    Filter.custom->FilterCoef.resize(Filter.custom->FilterSize.normL1());
+    for (size_t ii = 0, end = Filter.custom->FilterCoef.size();
          ii < end;
          ++ii)
     {
-        kernel.custom->kernelCoef[ii] = ii * 1.5;
+        Filter.custom->FilterCoef[ii] = ii * 1.5;
     }
-    kernel.operation = six::sidd::KernelOperation::CORRELATION;
+    Filter.operation = six::sidd::FilterOperation::CORRELATION;
 }
 
-std::auto_ptr<six::sidd::Kernel> createCustomKernel()
+std::auto_ptr<six::sidd::Filter> createCustomFilter()
 {
-    std::auto_ptr<six::sidd::Kernel> kernel(new six::sidd::Kernel());
-    createCustomKernel(*kernel);
-    return kernel;
+    std::auto_ptr<six::sidd::Filter> Filter(new six::sidd::Filter());
+    createCustomFilter(*Filter);
+    return Filter;
 }
 
 void initDisplay(six::sidd::Display& display)
@@ -1808,34 +1808,34 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 3));
     std::fill_n(prodGenOptions.bandEqualization->bandLUT->table.get(),
                 256 * 3, 0);
-    createPredefinedKernel(prodGenOptions.modularTransferFunctionRestoration);
+    createPredefinedFilter(prodGenOptions.modularTransferFunctionRestoration);
 
     std::auto_ptr<six::LUT> lut(new six::LUT(256, 3));
     std::fill_n(lut->table.get(), lut->numEntries * lut->elementSize, 0);
     prodGenOptions.dataRemapping.reset(
             new six::sidd::ColorDisplayRemap(lut.release()));
 
-    prodGenOptions.asymmetricPixelCorrection.reset(createCustomKernel());
+    prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
 
     display.nonInteractiveProcessing->rrds.downsamplingMethod =
             six::sidd::DownsamplingMethod::DECIMATE;
     display.nonInteractiveProcessing->rrds.antiAlias.reset(
-            createCustomKernel());
+            createCustomFilter());
     display.nonInteractiveProcessing->rrds.interpolation.reset(
-            createPredefinedKernel());
+            createPredefinedFilter());
 
     // InteractiveProcessing
     display.interactiveProcessing.reset(
             new six::sidd::InteractiveProcessing());
     six::sidd::GeometricTransform& geoTransform =
             display.interactiveProcessing->geometricTransform;
-    createPredefinedKernel(geoTransform.scaling.antiAlias);
-    createCustomKernel(geoTransform.scaling.interpolation);
+    createPredefinedFilter(geoTransform.scaling.antiAlias);
+    createCustomFilter(geoTransform.scaling.interpolation);
     geoTransform.orientation.orientationType =
             six::sidd::DerivedOrientationType::ANGLE;
     geoTransform.orientation.rotationAngle = 15.0;
     display.interactiveProcessing->sharpnessEnhancement.
-            modularTransferFunctionCompensation.reset(createCustomKernel());
+            modularTransferFunctionCompensation.reset(createCustomFilter());
 
     display.interactiveProcessing->colorSpaceTransform.reset(
             new six::sidd::ColorSpaceTransform());
@@ -1860,7 +1860,7 @@ void initDisplay(six::sidd::Display& display)
 
     display.interactiveProcessing->oneDimensionalLookup.reset(
             new six::sidd::OneDimensionalLookup());
-    createPredefinedKernel(
+    createPredefinedFilter(
             display.interactiveProcessing->oneDimensionalLookup->ttc);
 
     six::Parameter param;
