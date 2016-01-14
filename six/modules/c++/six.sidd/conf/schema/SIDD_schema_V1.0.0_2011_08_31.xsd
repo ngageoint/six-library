@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
 <!-- SIDD v1.0.0 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism:4" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.0.0" targetNamespace="urn:SIDD:1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.0.0" targetNamespace="urn:SIDD:1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="urn:SICommon:0.1" schemaLocation="SICommonTypes.xsd"/>
 	<xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
-	<xs:import namespace="urn:us:gov:ic:ism:4" schemaLocation="external/ISM/Schema/IC-ISM.xsd"/>
+	<xs:import namespace="urn:us:gov:ic:ism" schemaLocation="external/ISM/Schema/IC-ISM.xsd"/>
 	<xs:simpleType name="LUTListType">
 		<xs:list itemType="xs:int"/>
 	</xs:simpleType>

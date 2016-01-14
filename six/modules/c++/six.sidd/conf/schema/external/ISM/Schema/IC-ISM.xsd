@@ -96,9 +96,9 @@
 <!-- **************************************************************** -->
 <xsd:schema 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns="urn:us:gov:ic:ism:4" 
+	xmlns="urn:us:gov:ic:ism" 
 	xmlns:iccve="urn:us:gov:ic:ism-cvenum"
-	targetNamespace="urn:us:gov:ic:ism:4" 
+	targetNamespace="urn:us:gov:ic:ism" 
 	elementFormDefault="qualified" 
 	xml:lang="en">
 	<xsd:annotation>
