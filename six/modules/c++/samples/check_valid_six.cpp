@@ -87,49 +87,6 @@ std::vector<std::string> getPathnames(const std::string& dirname)
                                    std::vector<std::string>(1, dirname),
                                    false);
 }
-
-// This is very similar to six::parseData(), but we don't want to have to
-// know if it's complex vs. derived before this call
-void parseXML(const six::XMLControlRegistry& xmlReg,
-              const std::string& pathname,
-              const std::vector<std::string>& schemaPaths,
-              logging::Logger& log)
-{
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
-    io::FileInputStream inStream(pathname);
-    try
-    {
-        xmlParser.parse(inStream);
-    }
-    catch(const except::Throwable& ex)
-    {
-        throw except::Exception(ex, Ctxt("Invalid XML data"));
-    }
-    const xml::lite::Document* const doc = xmlParser.getDocument();
-
-    //! Check the root localName for the XML type
-    const std::string xmlType = doc->getRootElement()->getLocalName();
-    six::DataType xmlDataType;
-    if (str::startsWith(xmlType, "SICD"))
-    {
-        xmlDataType = six::DataType::COMPLEX;
-    }
-    else if (str::startsWith(xmlType, "SIDD"))
-    {
-        xmlDataType = six::DataType::DERIVED;
-    }
-    else
-    {
-        throw except::Exception(Ctxt("Unexpected XML type"));
-    }
-
-    //! Create the correct type of XMLControl
-    const std::auto_ptr<six::XMLControl>
-        xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
-
-    std::auto_ptr<six::Data>(xmlControl->fromXML(doc, schemaPaths));
-}
 }
 
 int main(int argc, char** argv)
@@ -195,10 +152,10 @@ int main(int argc, char** argv)
                         NITF_VER_UNKNOWN)
                 {
                     // Assume it's just a text file containing XML
-                    parseXML(xmlRegistry,
-                             inputPathname,
-                             schemaPaths,
-                             *log);
+                    six::parseData(xmlRegistry,
+                                   inputPathname,
+                                   schemaPaths,
+                                   *log);
                 }
                 else
                 {

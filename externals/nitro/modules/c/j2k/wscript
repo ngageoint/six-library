@@ -68,22 +68,18 @@ def build(bld):
            
         # install j2k_config.h
         if env['install_headers']:
-            moduleName = 'j2k'
-            d = {}
             for line in env['header_builddir']:
                 split = line.split('=')
-                k = split[0]
-                v = join(bld.bldnode.abspath(), split[1])
-                d[k] = v
+                if split[0] == 'j2k':
+                    subdir = split[1]
+
+            hdrTarget = bld(features='install_tgt', 
+                            files=['j2k_config.h'],
+                            dir=bld.bldnode.make_node(subdir),
+                            install_path=join(env['install_includedir'], 'j2k'))
             
-            from shutil import copyfile            
-            installDir = join(bld.env['PREFIX'], 'include', 'j2k')
-            destFile = join(installDir, 'j2k_config.h')
-            sourceFile = join(bld.bldnode.abspath(), d[moduleName], 'j2k_config.h')            
-            if not exists(installDir):
-                makedirs(installDir)
-            if not exists(destFile):
-                copyfile(sourceFile, destFile)
+            lib.features += ' add_targets'
+            lib.targets_to_add = [hdrTarget]
             
         #j2k-only tests
         j2k_only_tests = ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',

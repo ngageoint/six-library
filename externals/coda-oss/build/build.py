@@ -67,7 +67,7 @@ class CPPContext(Context.Context):
                         dirs))
 
     def safeVersion(self, version):
-        return re.sub(r'[^\w]', '.', version)
+        return re.sub(r'[^\w]', '.', str(version))
     
     def __getDefines(self, env):
         defines = []

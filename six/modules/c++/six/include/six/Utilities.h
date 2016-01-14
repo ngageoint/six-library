@@ -175,6 +175,11 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
 
+std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log);
+
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
                scene::Errors& errors);
