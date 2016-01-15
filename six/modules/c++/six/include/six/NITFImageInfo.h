@@ -355,40 +355,40 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
         nitf::BandInfo band1;
 
         // TODO: Why do we need to byte swap here?  If it is required, could
-        //       we avoid the clone and byte swap and instead index into
+        //       we avoid the copy and byte swap and instead index into
         //       the LUT in the opposite order?
-        std::auto_ptr<LUT> lut(getDisplayLUT()->clone());
-        sys::byteSwap(reinterpret_cast<sys::byte*>(lut->table.get()),
-                      static_cast<unsigned short>(lut->elementSize),
-                      lut->numEntries);
+        LUT lut(*getDisplayLUT());
+        sys::byteSwap(reinterpret_cast<sys::byte*>(lut.get()),
+                      static_cast<unsigned short>(lut.elementSize),
+                      lut.numEntries);
 
-        if (lut->elementSize != sizeof(short))
+        if (lut.elementSize != sizeof(short))
         {
             throw except::Exception(Ctxt(
                 "Unexpected element size: " +
-                str::toString(lut->elementSize)));
+                str::toString(lut.elementSize)));
         }
 
-        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+        nitf::LookupTable lookupTable(lut.elementSize, lut.numEntries);
         unsigned char* const table(lookupTable.getTable());
 
-        for (size_t i = 0; i < lut->numEntries; ++i)
+        for (size_t i = 0; i < lut.numEntries; ++i)
         {
             // Need two LUTS in the nitf, with high order
             // bits in the first and low order in the second
-            const unsigned char* const entry = (*lut)[i];
+            const unsigned char* const entry = lut[i];
             table[i] = entry[0];
-            table[lut->numEntries + i] = entry[1];
+            table[lut.numEntries + i] = entry[1];
         }
 
         //         //I would like to set it this way but it does not seem to work.
         //         //Using the init function instead.
         //         //band1.getRepresentation().set("LU");
-        //         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
+        //         //band1.getLookupTable().setTable(table, 2, lut.numEntries);
 
         band1.init("LU", "", "", "",
-                   static_cast<nitf::Uint32>(lut->elementSize),
-                   static_cast<nitf::Uint32>(lut->numEntries),
+                   static_cast<nitf::Uint32>(lut.elementSize),
+                   static_cast<nitf::Uint32>(lut.numEntries),
                    lookupTable);
         bands.push_back(band1);
     }

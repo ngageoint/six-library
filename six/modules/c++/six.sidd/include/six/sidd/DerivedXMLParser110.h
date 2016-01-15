@@ -65,6 +65,7 @@ private:
     static const char VERSION[];
     static const char SI_COMMON_URI[];
 
+#ifdef DISPLAY_REDO_TODO
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
@@ -84,7 +85,7 @@ private:
     XMLElem convertKernelToXML(const std::string& name,
                                const Kernel& kernel,
                                XMLElem parent = NULL) const;
-
+#endif
     void convertJ2KToXML(const J2KCompression& j2k,
                          XMLElem& parent) const;
 
@@ -118,11 +119,12 @@ private:
 
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
+#ifdef DISPLAY_REDO_TODO
     void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
 
     void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
          InteractiveProcessing& interactive) const;
-
+#endif
     void parseGeometricTransformFromXML(const XMLElem geomElem,
          GeometricTransform& transform) const;
 
@@ -135,8 +137,10 @@ private:
     void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
          DynamicRangeAdjustment& rangeAdjustment) const;
 
+#ifdef DISPLAY_REDO_TODO
     void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
          OneDimensionalLookup& lookup) const;
+#endif
 };
 }
 }

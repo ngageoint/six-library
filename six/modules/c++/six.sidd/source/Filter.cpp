@@ -19,21 +19,27 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <six/sidd/Kernel.h>
+#include <six/Init.h>
+#include <six/sidd/Filter.h>
 
 namespace six
 {
 namespace sidd
 {
-Kernel::Predefined::Predefined() :
-    kernelFamily(six::Init::undefined<size_t>()),
-    kernelMember(six::Init::undefined<size_t>())
+Filter::Predefined::Predefined() :
+    filterFamily(six::Init::undefined<size_t>()),
+    filterMember(six::Init::undefined<size_t>())
 {
 }
 
-Kernel::Custom::Custom() :
-    kernelSize(six::Init::undefined<RowColInt>())
+Filter::Kernel::Custom::Custom() :
+    size(six::Init::undefined<RowColInt>())
+{
+}
+
+Filter::Bank::Custom::Custom() :
+    numPhasings(six::Init::undefined<size_t>()),
+    numPoints(six::Init::undefined<size_t>())
 {
 }
 }

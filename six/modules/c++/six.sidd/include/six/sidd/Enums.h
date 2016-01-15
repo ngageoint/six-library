@@ -34,9 +34,7 @@ namespace six
 {
 namespace sidd
 {
-
 const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
-
 
 /*!
  *  \struct BandEqualizationAlgorithm 
@@ -333,144 +331,6 @@ struct DRAType
 
 
 /*!
- *  \struct DerivedOrientationType 
- *
- *  Enumeration used to represent DerivedOrientationTypes
- */
-struct DerivedOrientationType
-{
-    //! The enumerations allowed
-    enum
-    {
-        UP = 0,
-        SHADOWS_DOWN = 1,
-        NORTH = 2,
-        SOUTH = 3,
-        EAST = 4,
-        WEST = 5,
-        ANGLE = 6,
-        NOT_SET = six::NOT_SET_VALUE
-    };
-
-    //! Default constructor
-    DerivedOrientationType(){ value = NOT_SET; }
-
-    //! string constructor
-    DerivedOrientationType(std::string s)
-    {
-        if (s == "UP")
-            value = UP;
-        else if (s == "SHADOWS_DOWN")
-            value = SHADOWS_DOWN;
-        else if (s == "NORTH")
-            value = NORTH;
-        else if (s == "SOUTH")
-            value = SOUTH;
-        else if (s == "EAST")
-            value = EAST;
-        else if (s == "WEST")
-            value = WEST;
-        else if (s == "ANGLE")
-            value = ANGLE;
-        else if (s == "NOT_SET")
-            value = NOT_SET;
-        else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-    }
-
-    //! int constructor
-    DerivedOrientationType(int i)
-    {
-        switch(i)
-        {
-        case 0:
-            value = UP;
-            break;
-        case 1:
-            value = SHADOWS_DOWN;
-            break;
-        case 2:
-            value = NORTH;
-            break;
-        case 3:
-            value = SOUTH;
-            break;
-        case 4:
-            value = EAST;
-            break;
-        case 5:
-            value = WEST;
-            break;
-        case 6:
-            value = ANGLE;
-            break;
-        case six::NOT_SET_VALUE:
-            value = NOT_SET;
-            break;
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-    }
-
-    //! destructor
-    ~DerivedOrientationType(){}
-
-    //! Returns string representation of the value
-    std::string toString() const
-    {
-        switch(value)
-        {
-        case 0:
-            return std::string("UP");
-        case 1:
-            return std::string("SHADOWS_DOWN");
-        case 2:
-            return std::string("NORTH");
-        case 3:
-            return std::string("SOUTH");
-        case 4:
-            return std::string("EAST");
-        case 5:
-            return std::string("WEST");
-        case 6:
-            return std::string("ANGLE");
-        case six::NOT_SET_VALUE:
-            return std::string("NOT_SET");
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-    }
-
-    //! assignment operator
-    DerivedOrientationType& operator=(const DerivedOrientationType& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
-    }
-
-    bool operator==(const DerivedOrientationType& o) const { return value == o.value; }
-    bool operator!=(const DerivedOrientationType& o) const { return value != o.value; }
-    bool operator==(const int& o) const { return value == o; }
-    bool operator!=(const int& o) const { return value != o; }
-    DerivedOrientationType& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const DerivedOrientationType& o) const { return value < o.value; }
-    bool operator>(const DerivedOrientationType& o) const { return value > o.value; }
-    bool operator<=(const DerivedOrientationType& o) const { return value <= o.value; }
-    bool operator>=(const DerivedOrientationType& o) const { return value >= o.value; }
-    operator int() const { return value; }
-    operator std::string() const { return toString(); }
-
-    static size_t size() { return 8; }
-
-    int value;
-
-};
-
-
-/*!
  *  \struct DownsamplingMethod 
  *
  *  Enumeration used to represent DownsamplingMethods
@@ -570,104 +430,6 @@ struct DownsamplingMethod
     operator std::string() const { return toString(); }
 
     static size_t size() { return 4; }
-
-    int value;
-
-};
-
-
-/*!
- *  \struct KernelCustomType 
- *
- *  Enumeration used to represent KernelCustomTypes
- */
-struct KernelCustomType
-{
-    //! The enumerations allowed
-    enum
-    {
-        GENERAL = 0,
-        FILTER_BANK = 1,
-        NOT_SET = six::NOT_SET_VALUE
-    };
-
-    //! Default constructor
-    KernelCustomType(){ value = NOT_SET; }
-
-    //! string constructor
-    KernelCustomType(std::string s)
-    {
-        if (s == "GENERAL")
-            value = GENERAL;
-        else if (s == "FILTER_BANK")
-            value = FILTER_BANK;
-        else if (s == "NOT_SET")
-            value = NOT_SET;
-        else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-    }
-
-    //! int constructor
-    KernelCustomType(int i)
-    {
-        switch(i)
-        {
-        case 0:
-            value = GENERAL;
-            break;
-        case 1:
-            value = FILTER_BANK;
-            break;
-        case six::NOT_SET_VALUE:
-            value = NOT_SET;
-            break;
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-    }
-
-    //! destructor
-    ~KernelCustomType(){}
-
-    //! Returns string representation of the value
-    std::string toString() const
-    {
-        switch(value)
-        {
-        case 0:
-            return std::string("GENERAL");
-        case 1:
-            return std::string("FILTER_BANK");
-        case six::NOT_SET_VALUE:
-            return std::string("NOT_SET");
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-    }
-
-    //! assignment operator
-    KernelCustomType& operator=(const KernelCustomType& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
-    }
-
-    bool operator==(const KernelCustomType& o) const { return value == o.value; }
-    bool operator!=(const KernelCustomType& o) const { return value != o.value; }
-    bool operator==(const int& o) const { return value == o; }
-    bool operator!=(const int& o) const { return value != o; }
-    KernelCustomType& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelCustomType& o) const { return value < o.value; }
-    bool operator>(const KernelCustomType& o) const { return value > o.value; }
-    bool operator<=(const KernelCustomType& o) const { return value <= o.value; }
-    bool operator>=(const KernelCustomType& o) const { return value >= o.value; }
-    operator int() const { return value; }
-    operator std::string() const { return toString(); }
-
-    static size_t size() { return 3; }
 
     int value;
 
@@ -1000,8 +762,128 @@ struct RenderingIntent
 };
 
 
-// code auto-generated 2015-12-23 09:51:37.999018
+/*!
+ *  \struct ShadowsDirection
+ *
+ *  Enumeration used to represent ShadowsDirections
+ */
+struct ShadowsDirection
+{
+    //! The enumerations allowed
+    enum
+    {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        ARBITRARY = 4,
+        NOT_SET = six::NOT_SET_VALUE
+    };
 
+    //! Default constructor
+    ShadowsDirection(){ value = NOT_SET; }
+
+    //! string constructor
+    ShadowsDirection(std::string s)
+    {
+        if (s == "UP")
+            value = UP;
+        else if (s == "DOWN")
+            value = DOWN;
+        else if (s == "LEFT")
+            value = LEFT;
+        else if (s == "RIGHT")
+            value = RIGHT;
+        else if (s == "ARBITRARY")
+            value = ARBITRARY;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+    }
+
+    //! int constructor
+    ShadowsDirection(int i)
+    {
+        switch(i)
+        {
+        case 0:
+            value = UP;
+            break;
+        case 1:
+            value = DOWN;
+            break;
+        case 2:
+            value = LEFT;
+            break;
+        case 3:
+            value = RIGHT;
+            break;
+        case 4:
+            value = ARBITRARY;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+        }
+    }
+
+    //! destructor
+    ~ShadowsDirection(){}
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 0:
+            return std::string("UP");
+        case 1:
+            return std::string("DOWN");
+        case 2:
+            return std::string("LEFT");
+        case 3:
+            return std::string("RIGHT");
+        case 4:
+            return std::string("ARBITRARY");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+    }
+
+    //! assignment operator
+    ShadowsDirection& operator=(const ShadowsDirection& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
+    }
+
+    bool operator==(const ShadowsDirection& o) const { return value == o.value; }
+    bool operator!=(const ShadowsDirection& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    ShadowsDirection& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const ShadowsDirection& o) const { return value < o.value; }
+    bool operator>(const ShadowsDirection& o) const { return value > o.value; }
+    bool operator<=(const ShadowsDirection& o) const { return value <= o.value; }
+    bool operator>=(const ShadowsDirection& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    static size_t size() { return 6; }
+
+    int value;
+
+};
+
+// code auto-generated 2016-01-14 08:15:28.495616
 }
 }
 

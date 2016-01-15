@@ -6,12 +6,6 @@ NEAREST_NEIGHBOR=3
 NOT_SET=six::NOT_SET_VALUE
 __default__=six::NOT_SET_VALUE
 
-[KernelCustomType]
-GENERAL=0
-FILTER_BANK=1
-NOT_SET=six::NOT_SET_VALUE
-__default__=six::NOT_SET_VALUE
-
 [KernelOperation]
 CONVOLUTION=0
 CORRELATION=1
@@ -30,14 +24,12 @@ AVERAGE=2
 NOT_SET=six::NOT_SET_VALUE
 __default__=six::NOT_SET_VALUE
 
-[DerivedOrientationType]
+[ShadowsDirection]
 UP=0
-SHADOWS_DOWN=1
-NORTH=2
-SOUTH=3
-EAST=4
-WEST=5
-ANGLE=6
+DOWN=1
+LEFT=2
+RIGHT=3
+ARBITRARY=4
 NOT_SET=six::NOT_SET_VALUE
 __default__=six::NOT_SET_VALUE
 

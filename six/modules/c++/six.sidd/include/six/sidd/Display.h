@@ -29,7 +29,8 @@
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
 #include <six/sidd/Enums.h>
-#include <six/sidd/Kernel.h>
+#include <six/sidd/Filter.h>
+#include <six/sidd/LookupTable.h>
 
 namespace six
 {
@@ -57,7 +58,7 @@ struct Remap
     }
 
     DisplayType displayType;
-    mem::ScopedCloneablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
+    mem::ScopedCopyablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
 
     virtual Remap* clone() const = 0;
 };
@@ -172,7 +173,7 @@ struct BandInformation
 struct BandEqualization
 {
     BandEqualizationAlgorithm algorithm;
-    mem::ScopedCloneablePtr<LUT> bandLUT;
+    mem::ScopedCopyablePtr<LookupTable> bandLUT;
 };
 
 struct RRDS
@@ -180,21 +181,28 @@ struct RRDS
     //! Algorithm used to perform RRDS downsampling
     DownsamplingMethod downsamplingMethod;
 
-    //! Anti-aliasing kernel.  Only include if downsamplingMethod = DECIMATE.
-    mem::ScopedCopyablePtr<Kernel> antiAlias;
+    /*!
+     * Anti-aliasing filter.  Included for all values except
+     * downsamplingMethod = DECIMATE or MAX_PIXEL.
+     */
+    mem::ScopedCopyablePtr<Filter> antiAlias;
 
-    //! Interpolation kernel.  Only include if downsamplingMethod = DECIMATE.
-    mem::ScopedCopyablePtr<Kernel> interpolation;
+    /*!
+     * Interpolation filter.  Included for all values except
+     * downsamplingMethod = DECIMATE or MAX_PIXEL.
+     */
+    mem::ScopedCopyablePtr<Filter> interpolation;
 };
 
 struct ProductGenerationOptions
 {
     mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
-    Kernel modularTransferFunctionRestoration;
+    Filter modularTransferFunctionRestoration;
 
-    mem::ScopedCloneablePtr<Remap> dataRemapping;
+    // Required
+    mem::ScopedCopyablePtr<LookupTable> dataRemapping;
 
-    mem::ScopedCopyablePtr<Kernel> asymmetricPixelCorrection;
+    mem::ScopedCopyablePtr<Filter> asymmetricPixelCorrection;
 };
 
 struct NonInteractiveProcessing
@@ -205,27 +213,22 @@ struct NonInteractiveProcessing
 
 struct Scaling
 {
-    Kernel antiAlias;
-    Kernel interpolation;
+    Filter antiAlias;
+    Filter interpolation;
 };
 
 struct Orientation
 {
-    Orientation();
-
-    DerivedOrientationType orientationType;
-
-    /*!
-     * In degrees.  Only include if orientationType == ANGLE.  Positive angles
-     * are CW and negative angles are CCW.
-     */
-    double rotationAngle;
+    //! Describes the shadow direction relative to the pixels in the file.
+    ShadowsDirection shadowsDirection;
 };
 
 struct SharpnessEnhancement
 {
-    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionCompensation;
-    mem::ScopedCopyablePtr<Kernel> modularTransferFunctionRestoration;
+    // Must include exactly one of modularTransferFunctionCompensation or
+    // modularTransferFunctionRestoration
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionCompensation;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
 };
 
 struct ColorManagementModule
@@ -251,28 +254,30 @@ struct GeometricTransform
 
 struct DynamicRangeAdjustment
 {
-    struct Modifiers
+    struct DRAParameters
     {
-        Modifiers();
+        DRAParameters();
 
-        double eMin; //! eMin modifier
-        double eMax; //! eMax modifier
+        double pMin; //! DRA clip low point
+        double pMax; //! DRA clip high point
+
+        double eMinModifier; //! eMin modifier
+        double eMaxModifier; //! eMax modifier
+    };
+
+    struct DRAOverrides
+    {
+        DRAOverrides();
+
         double subtractor; //! Subtractor value used to reduce haze in the image
         double multiplier; //! Multiplier value used to brighten the image data
     };
 
-    DynamicRangeAdjustment();
-
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    double pMin; //! DRA clip low point
-    double pMax; //! DRA clip high point
 
-    Modifiers modifiers;
-};
-
-struct OneDimensionalLookup
-{
-    Kernel ttc;
+    // Must include exactly one of draParameters or draOverrides
+    mem::ScopedCopyablePtr<DRAParameters> draParameters;
+    mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
 };
 
 struct InteractiveProcessing
@@ -281,7 +286,7 @@ struct InteractiveProcessing
     SharpnessEnhancement sharpnessEnhancement;
     mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
     mem::ScopedCopyablePtr<DynamicRangeAdjustment> dynamicRangeAdjustment;
-    mem::ScopedCopyablePtr<OneDimensionalLookup> oneDimensionalLookup;
+    mem::ScopedCopyablePtr<LookupTable> tonalTransferCurve;
 };
 
 /*

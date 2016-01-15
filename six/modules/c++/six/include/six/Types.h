@@ -22,6 +22,9 @@
 #ifndef __SIX_TYPES_H__
 #define __SIX_TYPES_H__
 
+#include <vector>
+#include <limits>
+
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
@@ -30,7 +33,7 @@
 #include <import/math/poly.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
-#include <limits>
+
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
@@ -251,27 +254,26 @@ struct SCP
  */
 struct LUT
 {
-    mem::ScopedArray<unsigned char> table;
+    std::vector<unsigned char> table;
     size_t numEntries;
     size_t elementSize;
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
+        table(entries * outputSpace),
         numEntries(entries),
         elementSize(outputSpace)
     {
     }
 
-    //!  Initialize with an existing LUT, which we clone
+    //!  Initialize with an existing LUT, which we copy
     LUT(const unsigned char* interleavedLUT,
         size_t entries,
         size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
+        table(interleavedLUT, interleavedLUT + entries * outputSpace),
         numEntries(entries),
         elementSize(outputSpace)
     {
-        memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
     }
 
     virtual ~LUT()
@@ -280,17 +282,9 @@ struct LUT
 
     bool operator==(const LUT& rhs) const
     {
-        return (numEntries == rhs.numEntries &&
-                elementSize == rhs.elementSize &&
-                std::equal(table.get(),
-                           table.get() + numEntries * elementSize,
-                           rhs.table.get()));
-    }
-
-    //!  Clone the LUT table
-    virtual LUT* clone() const
-    {
-        return new LUT(table.get(), numEntries, elementSize);
+        return (table == rhs.table &&
+                numEntries == rhs.numEntries &&
+                elementSize == rhs.elementSize);
     }
 
     //!  Gives back a pointer at table[i * elementSize]
@@ -303,6 +297,16 @@ struct LUT
     const unsigned char* operator[](size_t i) const
     {
         return &(table[i * elementSize]);
+    }
+
+    unsigned char* get()
+    {
+        return table.empty() ? NULL : &table[0];
+    }
+
+    const unsigned char* get() const
+    {
+        return table.empty() ? NULL : &table[0];
     }
 };
 

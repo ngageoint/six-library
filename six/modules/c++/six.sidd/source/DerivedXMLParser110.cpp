@@ -357,7 +357,7 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
                                               Display& display) const
 {
     //pixelType previously set
-
+#ifdef DISPLAY_REDO_TODO
     parseBandInformationFromXML(getFirstAndOnly(displayXML, "BandInformation"),
                                 *display.bandInformation);
 
@@ -379,8 +379,10 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
         parameter.setName(name);
         display.displayExtensions.push_back(parameter);
     }
+#endif
 }
 
+#ifdef DISPLAY_REDO_TODO
 void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
             BandInformation& bandInformation) const
 {
@@ -657,6 +659,7 @@ void DerivedXMLParser110::parseOneDimensionalLookupFromXML(
 {
     parseKernelFromXML(getFirstAndOnly(lookupElem, "TTC"), lookup.ttc);
 }
+#endif
 
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
@@ -814,6 +817,7 @@ XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
     return classXML;
 }
 
+#ifdef DISPLAY_REDO_TODO
 XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         const NonInteractiveProcessing& processing,
         XMLElem parent) const
@@ -1095,7 +1099,7 @@ XMLElem DerivedXMLParser110::convertKernelToXML(const std::string& name,
 
     return kernelXML;
 }
-
+#endif
 XMLElem DerivedXMLParser110::convertCompressionToXML(
         const Compression& compression,
         XMLElem parent) const
@@ -1141,6 +1145,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
 
     XMLElem displayXML = newElement("Display", parent);
 
+#ifdef DISPLAY_REDO_TODO
     createString("PixelType", six::toString(display.pixelType), displayXML);
 
     // BandInformation
@@ -1173,7 +1178,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     // optional to unbounded
     common().addParameters("DisplayExtension", display.displayExtensions,
                            displayXML);
-
+#endif
     return displayXML;
 }
 

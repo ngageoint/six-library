@@ -19,61 +19,80 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_KERNEL_H__
-#define __SIX_SIDD_KERNEL_H__
+#ifndef __SIX_SIDD_FILTER_H__
+#define __SIX_SIDD_FILTER_H__
 
-#include <six/Init.h>
 #include <six/sidd/Enums.h>
 
 namespace six
 {
 namespace sidd
 {
-struct Kernel
+struct Filter
 {
     struct Predefined
     {
         Predefined();
 
-        // Exactly one of dbName or kernelFamiy+kernelMember must be set
+        // Exactly one of databaseName or filterFamiy+filterMember must be set
 
         //! Database name of filter to use
-        KernelDatabaseName dbName;
+        KernelDatabaseName databaseName;
 
-        //! Index specifying the kernel family
-        size_t kernelFamily;
+        //! Index specifying the filter family
+        size_t filterFamily;
 
-        //! Index specifying the member for the kernel family
-        size_t kernelMember;
+        //! Index specifying the member for the filter family
+        size_t filterMember;
     };
 
-    struct Custom
+    // Used for spatially invariant filtering
+    struct Kernel
     {
-        Custom();
+        struct Custom
+        {
+            Custom();
 
-        /*! General indicates the same kernel is used for the entire operation
-            Filterbank indicates that the kernel is spatially variant
-         */
-        KernelCustomType type;
+            //! Size of the kernel
+            RowColInt size;
 
-        //! Size of the kernel
-        RowColInt kernelSize;
+            //! Coefficients for the kernelSize kernel.
+            std::vector<double> filterCoef;
+        };
 
-        /*! For KernelType=General, populate with the coefficients for the
-            kernelSize kernel.  For KernelType=FilterBank, each row should
-            contain the coefficients for that phasing.
-         */
-        std::vector<double> kernelCoef;
+        // Exactly one of Predefined or Custom
+        mem::ScopedCopyablePtr<Predefined> predefined;
+        mem::ScopedCopyablePtr<Custom> custom;
+    };
+
+    // Used for spatially variant filtering
+    struct Bank
+    {
+        struct Custom
+        {
+            Custom();
+
+            //! Size of the filter bank
+            size_t numPhasings;
+            size_t numPoints;
+
+            //! Coefficients for the numPhasings * numPoints filter bank.
+            std::vector<double> filterCoef;
+        };
+
+        // Exactly one of Predefined or Custom
+        mem::ScopedCopyablePtr<Predefined> predefined;
+        mem::ScopedCopyablePtr<Custom> custom;
     };
 
     //! Name of the filter
     std::string kernelName;
 
-    // Exactly one of Predefined or Custom
-    mem::ScopedCopyablePtr<Predefined> predefined;
-    mem::ScopedCopyablePtr<Custom> custom;
+    // Exactly one of filterKernel or filterBank
+    mem::ScopedCopyablePtr<Kernel> filterKernel;
+    mem::ScopedCopyablePtr<Bank> filterBank;
 
-    /*! Specifies if the kernel is to be applied using convolution or
+    /*! Specifies if the kernel/bank is to be applied using convolution or
         correlation
      */
     KernelOperation operation;
