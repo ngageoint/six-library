@@ -88,6 +88,9 @@ int main(int argc, char** argv)
         parser.addArgument("--schema", 
                            "Specify a schema or directory of schemas",
                            cli::STORE);
+        parser.addArgument("--version",
+                           "Override the SICD version that's created",
+                           cli::STORE);
         parser.addArgument("sio", "SIO input file", cli::STORE, "sio", "SIO",
                            1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -142,6 +145,12 @@ int main(int argc, char** argv)
         // TODO: Use a ComplexDataBuilder?
         six::sicd::ComplexData* data(new six::sicd::ComplexData());
         std::auto_ptr<six::Data> scopedData(data);
+
+        if (options->hasValue("version"))
+        {
+            data->setVersion(options->get<std::string>("version"));
+        }
+
         data->setPixelType(six::PixelType::RE32F_IM32F);
         data->setNumRows(fileHeader->getNumLines());
         data->setNumCols(fileHeader->getNumElements());
