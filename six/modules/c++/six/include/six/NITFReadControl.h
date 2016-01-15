@@ -63,6 +63,9 @@ public:
 
     virtual DataType getDataType(const std::string& fromFile) const;
 
+    static
+    DataType getDataType(nitf::Record& record);
+
     /*!
      *  Performs (Basic) validation when a segment is being
      *  read.  This function is able to test that the image

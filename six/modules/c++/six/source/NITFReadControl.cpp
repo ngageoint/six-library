@@ -81,21 +81,98 @@ six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 
 namespace six
 {
+DataType NITFReadControl::getDataType(nitf::Record& record)
+{
+    // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
+    //       SICD or SIDD, so for old files we could key off of that.  Since
+    //       that's not guaranteed for newer versions though, we now use the
+    //       DESID for really old versions and the DESSHSI from
+    //       XML_DATA_CONTENT for newer versions.
+
+    nitf::List des = record.getDataExtensions();
+    nitf::ListIterator desIter = des.begin();
+
+    for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
+    {
+        // Get a segment ref
+        nitf::DESegment segment = (nitf::DESegment) *desIter;
+        nitf::DESubheader subheader = segment.getSubheader();
+        std::string desid = subheader.getTypeID().toString();
+        str::trim(desid);
+
+        // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
+        // Older versions of the spec specified it as SICD_XML/SIDD_XML
+        // Here we'll accept any of these under the assumption that it's not
+        // such an old version of the spec that the XML layout itself has
+        // changed (if it did, XMLControl will end up throwing anyway)
+        if (desid == "SICD_XML")
+        {
+            return DataType::COMPLEX;
+        }
+        else if (desid == "SIDD_XML")
+        {
+            return DataType::DERIVED;
+        }
+        else if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+        {
+            // If we do have a SIDD that also contains SICD XML, the SIDD XML
+            // is guaranteed to come first
+            nitf::TRE tre = subheader.getSubheaderFields();
+
+            // If NITRO doesn't know this TRE (because our plugin path isn't
+            // set), we'll get a no such key exception.  Catch that so we can
+            // provide a better exception message
+            std::string specId;
+            try
+            {
+                specId = tre.getField("DESSHSI").toString();
+            }
+            catch (const except::NoSuchKeyException& )
+            {
+                throw except::NoSuchKeyException(Ctxt(
+                        "Must have '" +
+                        std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
+                        "' plugin on the plugin path.  Either set the "
+                        "NITF_PLUGIN_PATH environment variable or use "
+                        "six::loadPluginDir()"));
+            }
+
+            if (specId.substr(0, 4) == "SICD")
+            {
+                return DataType::COMPLEX;
+            }
+            else if (specId.substr(0, 4) == "SIDD")
+            {
+                return DataType::DERIVED;
+            }
+            else
+            {
+                // TODO: This will change if we allow arbitrary XML content in
+                //       here
+                throw except::Exception(Ctxt(
+                        "Unexpected DESSHSI value: '" + specId + "'"));
+            }
+        }
+    }
+
+    // If this is a valid SICD or SIDD, this will never happen
+    return DataType::NOT_SET;
+}
+
 DataType NITFReadControl::getDataType(const std::string& fromFile) const
 {
     // Could cache this
     if (mReader.getNITFVersion(fromFile) != NITF_VER_UNKNOWN)
     {
         nitf::IOHandle inFile(fromFile);
-        nitf::Record rec = mReader.read(inFile);
-        inFile.close();
-        std::string title = rec.getHeader().getFileTitle().toString();
-        if (str::startsWith(title, "SICD"))
-            return DataType::COMPLEX;
-        else if (str::startsWith(title, "SIDD"))
-            return DataType::DERIVED;
+        nitf::Record record = mReader.read(inFile);
+
+        return getDataType(record);
     }
-    return DataType::NOT_SET;
+    else
+    {
+        return DataType::NOT_SET;
+    }
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
@@ -160,15 +237,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     reset();
 
     mRecord = mReader.readIO(ioInterface);
-    const std::string title = mRecord.getHeader().getFileTitle().toString();
-
-    DataType dataType;
-    if (str::startsWith(title, "SICD"))
-        dataType = DataType::COMPLEX;
-    else if (str::startsWith(title, "SIDD"))
-        dataType = DataType::DERIVED;
-    else
-        throw except::Exception(Ctxt("Unexpected file type"));
+    const DataType dataType = getDataType(mRecord);
 
     mContainer = new Container(dataType);
 
