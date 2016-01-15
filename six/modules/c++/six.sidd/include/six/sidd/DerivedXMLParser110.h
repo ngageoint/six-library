@@ -65,7 +65,6 @@ private:
     static const char VERSION[];
     static const char SI_COMMON_URI[];
 
-#ifdef DISPLAY_REDO_TODO
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
@@ -74,18 +73,18 @@ private:
             const InteractiveProcessing& processing,
             XMLElem parent = NULL) const;
 
-    XMLElem convertPredefinedKernelToXML(
-            const Kernel::Predefined& predefined,
+    XMLElem convertPredefinedFilterToXML(
+            const Filter::Predefined& predefined,
             XMLElem parent = NULL) const;
 
-    XMLElem convertCustomKernelToXML(
-            const Kernel::Custom& custom,
+    XMLElem convertCustomFilterToXML(
+            const Filter::Custom& custom,
             XMLElem parent = NULL) const;
 
-    XMLElem convertKernelToXML(const std::string& name,
-                               const Kernel& kernel,
+    XMLElem convertFilterToXML(const std::string& name,
+                               const Filter& Filter,
                                XMLElem parent = NULL) const;
-#endif
+
     void convertJ2KToXML(const J2KCompression& j2k,
                          XMLElem& parent) const;
 
@@ -119,12 +118,11 @@ private:
 
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
-#ifdef DISPLAY_REDO_TODO
-    void parseKernelFromXML(const XMLElem kernelELem, Kernel& kernel) const;
+    void parseFilterFromXML(const XMLElem FilterELem, Filter& Filter) const;
 
     void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
          InteractiveProcessing& interactive) const;
-#endif
+
     void parseGeometricTransformFromXML(const XMLElem geomElem,
          GeometricTransform& transform) const;
 
@@ -136,11 +134,6 @@ private:
 
     void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
          DynamicRangeAdjustment& rangeAdjustment) const;
-
-#ifdef DISPLAY_REDO_TODO
-    void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
-         OneDimensionalLookup& lookup) const;
-#endif
 };
 }
 }

@@ -247,9 +247,9 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ModularTransferFunctionRestoration" type="KernelType">
+      <xs:element name="ModularTransferFunctionRestoration" type="FilterType">
         <xs:annotation>
-          <xs:documentation>Kernel must be no larger than 15x15.</xs:documentation>
+          <xs:documentation>Filter must be no larger than 15x15.</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="DataRemapping" type="RemapChoiceType">
@@ -258,7 +258,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="AsymmetricPixelCorrection" type="KernelType" minOccurs="0"></xs:element>
+      <xs:element name="AsymmetricPixelCorrection" type="FilterType" minOccurs="0"></xs:element>
     </xs:sequence>
   </xs:complexType>
   <xs:simpleType name="DownsamplingMethodType">
@@ -275,51 +275,51 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Algorithm used to perform RRDS downsampling</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="AntiAlias" type="KernelType" minOccurs="0">
+      <xs:element name="AntiAlias" type="FilterType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Interpolation" type="KernelType" minOccurs="0">
+      <xs:element name="Interpolation" type="FilterType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="KernelType">
+  <xs:complexType name="FilterType">
     <xs:sequence>
-      <xs:element name="KernelName" type="xs:string"></xs:element>
+      <xs:element name="FilterName" type="xs:string"></xs:element>
       <xs:choice>
-        <xs:element name="Predefined" type="PredefinedKernelType"></xs:element>
-        <xs:element name="Custom" type="CustomKernelType"></xs:element>
+        <xs:element name="Predefined" type="PredefinedFilterType"></xs:element>
+        <xs:element name="Custom" type="CustomFilterType"></xs:element>
       </xs:choice>
-      <xs:element name="Operation" type="KernelOperationType"></xs:element>
+      <xs:element name="Operation" type="FilterOperationType"></xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="PredefinedKernelType">
+  <xs:complexType name="PredefinedFilterType">
     <xs:choice>
-      <xs:element name="DBName" type="KernelDatabaseNameType"></xs:element>
+      <xs:element name="DBName" type="FilterDatabaseNameType"></xs:element>
       <xs:sequence>
-        <xs:element name="KernelFamily" type="xs:int"></xs:element>
-        <xs:element name="KernelMember" type="xs:int"></xs:element>
+        <xs:element name="FilterFamily" type="xs:int"></xs:element>
+        <xs:element name="FilterMember" type="xs:int"></xs:element>
       </xs:sequence>
     </xs:choice>
   </xs:complexType>
-  <xs:complexType name="CustomKernelType">
+  <xs:complexType name="CustomFilterType">
     <xs:sequence>
-      <xs:element name="Type" type="KernelCustomType" minOccurs="0"></xs:element>
-      <xs:element name="KernelSize" type="sicommon:RowColIntType"></xs:element>
-      <xs:element name="KernelCoef" type="KernelCoefType"></xs:element>
+      <xs:element name="Type" type="FilterCustomType" minOccurs="0"></xs:element>
+      <xs:element name="FilterSize" type="sicommon:RowColIntType"></xs:element>
+      <xs:element name="FilterCoef" type="FilterCoefType"></xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="KernelCustomType">
+  <xs:simpleType name="FilterCustomType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="GENERAL"/>
       <xs:enumeration value="FILTER_BANK"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="KernelCoefType">
+  <xs:complexType name="FilterCoefType">
     <xs:sequence>
       <xs:element name="Coef" maxOccurs="unbounded">
         <xs:complexType>
@@ -333,7 +333,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="KernelDatabaseNameType">
+  <xs:simpleType name="FilterDatabaseNameType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="BILINEAR"/>
       <xs:enumeration value="CUBIC"/>
@@ -341,7 +341,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="NEAREST_NEIGHBOR"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="KernelOperationType">
+  <xs:simpleType name="FilterOperationType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="CONVOLUTION"/>
       <xs:enumeration value="CORRELATION"/>
@@ -378,7 +378,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Parameter describing DRA</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="OneDimensionalLookup" type="OneDimensionalLookupType" minOccurs="0">
+      <xs:element name="TonalTransferCurve" type="Lookup3TableType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             The 1-D LUT element uses one or more 1-D LUTs to stretch or compress tome data in valorous regions within a digital image's dynamic range.
@@ -402,14 +402,14 @@ NRL                N/A                        0,255 (Supposed to be display read
   </xs:complexType>
   <xs:complexType name="ScalingType">
     <xs:sequence>
-      <xs:element name="AntiAlias" type="KernelType">
+      <xs:element name="AntiAlias" type="FilterType">
         <xs:annotation>
-          <xs:documentation>Anti-Alias Kernel</xs:documentation>
+          <xs:documentation>Anti-Alias Filter</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Interpolation" type="KernelType">
+      <xs:element name="Interpolation" type="FilterType">
         <xs:annotation>
-          <xs:documentation>Interpolation Kernel</xs:documentation>
+          <xs:documentation>Interpolation Filter</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
@@ -421,43 +421,34 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="OrientationType" type="OrientationType">
+      <xs:element name="ShadowDirection" type="ShadowDirectionType">
         <xs:annotation>
-          <xs:documentation>Default orientation used for display</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="RotationAngle" type="xs:double" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Include if OrientationType==ANGLE. Positive angles are clockwise and negative angles are counter-clockwise.
-          </xs:documentation>
+          <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="OrientationType">
+  <xs:simpleType name="ShadowDirectionType">
     <xs:annotation>
-      <xs:documentation>Default orientation used for display.</xs:documentation>
+      <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="UP"/>
-      <xs:enumeration value="SHADOWS_DOWN"/>
-      <xs:enumeration value="NORTH"/>
-      <xs:enumeration value="SOUTH"/>
-      <xs:enumeration value="EAST"/>
-      <xs:enumeration value="WEST"/>
-      <xs:enumeration value="ANGLE"/>
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="ARBITRARY"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="SharpnessEnhancementType">
     <xs:choice>
-      <xs:element name="ModularTransferFunctionCompensation" type="KernelType">
+      <xs:element name="ModularTransferFunctionCompensation" type="FilterType">
         <xs:annotation>
-          <xs:documentation>Note: If defining a custom kernel, it must be no larger than 5x5.</xs:documentation>
+          <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ModularTransferFunctionEnhancement" type="KernelType">
+      <xs:element name="ModularTransferFunctionEnhancement" type="FilterType">
         <xs:annotation>
-          <xs:documentation>Note: If defining a custom kernel, it must be no larger than 5x5.</xs:documentation>
+          <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:choice>
@@ -513,22 +504,39 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Pmin" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>
-            DRA clip low point. This is the cumulative histogram percentage value that defines the lower end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Pmax" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>
-            DRA clip high point. This is the cumulative histogram percentage value that defines the upper end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Modifiers" type="ModifiersType"></xs:element>
+      <xs:choice>
+          <xs:element name="DRAParameters" type="DRAParameters"/>
+          <xs:element name="DRAOverrides" type="DRAOverrides"/>
+      </xs:choice>
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DRAParameters">
+    <xs:sequence>
+        <xs:element name="Pmin" type="xs:double">
+            <xs:annotation>
+                <xs:documentation>
+                    DRA clip low point. This is the cumulative histogram percentage value that defines the lower end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
+                </xs:documentation>
+            </xs:annotation>
+        </xs:element>
+        <xs:element name="Pmax" type="xs:double">
+            <xs:annotation>
+                <xs:documentation>
+                    DRA clip high point. This is the cumulative histogram percentage value that defines the upper end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
+                </xs:documentation>
+            </xs:annotation>
+        </xs:element>
+        <xs:element name="EminModifier" type="xs:double">
+            <xs:annotation>
+                <xs:documentation>The pixel value corresponding to the Pmin percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
+            </xs:annotation>
+        </xs:element>
+        <xs:element name="EmaxModifier" type="xs:double">
+            <xs:annotation>
+                <xs:documentation>The pixel value corresponding to the Pmax percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
+            </xs:annotation>
+        </xs:element>
+    </xs:sequence>      
   </xs:complexType>
   <xs:simpleType name="RangeAdjustmentAlgorithmType">
     <xs:annotation>
@@ -540,18 +548,8 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="NON"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="ModifiersType">
+  <xs:complexType name="DRAOverrides">
     <xs:sequence>
-      <xs:element name="Emin" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>The pixel value corresponding to the Pmin percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Emax" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>The pixel value corresponding to the Pmax percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
-        </xs:annotation>
-      </xs:element>
       <xs:element name="Subtractor" type="xs:double">
         <xs:annotation>
           <xs:documentation>Subtractor value used to reduce haze in the image. Range: [0.0 to 2047.0]</xs:documentation>
@@ -564,18 +562,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="OneDimensionalLookupType">
-    <xs:annotation>
-      <!-- I'm not certain these are all the correct words... -->
-      <xs:documentation>The 1-D LUT element uses one or more 1-D LUTs to stretch or compress tome data in valorous regions within a digital image's dynamic range.
-      1-D LUT can be implemented using a Tonal Transfer Curve (TTC). There are 12 families of TTCs: Range = [0,11]. There are 64 members for each family: Range=[0, 63].
-    </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="TTC" type="KernelType"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-    <xs:complexType name="ProductPlaneType">
+  <xs:complexType name="ProductPlaneType">
         <xs:annotation>
             <xs:documentation>Plane definition for the product.</xs:documentation>
         </xs:annotation>
