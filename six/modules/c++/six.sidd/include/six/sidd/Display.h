@@ -211,15 +211,7 @@ struct Scaling
 
 struct Orientation
 {
-    Orientation();
-
-    DerivedOrientationType orientationType;
-
-    /*!
-     * In degrees.  Only include if orientationType == ANGLE.  Positive angles
-     * are CW and negative angles are CCW.
-     */
-    double rotationAngle;
+    ShadowDirection shadowDirection;
 };
 
 struct SharpnessEnhancement
@@ -251,12 +243,20 @@ struct GeometricTransform
 
 struct DynamicRangeAdjustment
 {
-    struct Modifiers
+    struct DRAParameters
     {
-        Modifiers();
+        DRAParameters();
 
-        double eMin; //! eMin modifier
-        double eMax; //! eMax modifier
+        double pMin; //! DRA clip low point
+        double pMax; //! DRA clip high point
+        double eMinModifier;
+        double eMaxModifier;
+    };
+
+    struct DRAOverrides
+    {
+        DRAOverrides();
+
         double subtractor; //! Subtractor value used to reduce haze in the image
         double multiplier; //! Multiplier value used to brighten the image data
     };
@@ -264,15 +264,8 @@ struct DynamicRangeAdjustment
     DynamicRangeAdjustment();
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    double pMin; //! DRA clip low point
-    double pMax; //! DRA clip high point
-
-    Modifiers modifiers;
-};
-
-struct OneDimensionalLookup
-{
-    Filter ttc;
+    mem::ScopedCopyablePtr<DRAParameters> draParameters;
+    mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
 };
 
 struct InteractiveProcessing
@@ -281,7 +274,7 @@ struct InteractiveProcessing
     SharpnessEnhancement sharpnessEnhancement;
     mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
     mem::ScopedCopyablePtr<DynamicRangeAdjustment> dynamicRangeAdjustment;
-    mem::ScopedCopyablePtr<OneDimensionalLookup> oneDimensionalLookup;
+    mem::ScopedCloneablePtr<LUT> tonalTransferCurve;
 };
 
 /*

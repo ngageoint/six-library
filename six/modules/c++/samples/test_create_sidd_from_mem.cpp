@@ -1831,9 +1831,9 @@ void initDisplay(six::sidd::Display& display)
             display.interactiveProcessing->geometricTransform;
     createPredefinedFilter(geoTransform.scaling.antiAlias);
     createCustomFilter(geoTransform.scaling.interpolation);
-    geoTransform.orientation.orientationType =
-            six::sidd::DerivedOrientationType::ANGLE;
-    geoTransform.orientation.rotationAngle = 15.0;
+    geoTransform.orientation.shadowDirection =
+            six::sidd::ShadowDirection::ARBITRARY;
+
     display.interactiveProcessing->sharpnessEnhancement.
             modularTransferFunctionCompensation.reset(createCustomFilter());
 
@@ -1851,17 +1851,14 @@ void initDisplay(six::sidd::Display& display)
     six::sidd::DynamicRangeAdjustment& dra =
             *display.interactiveProcessing->dynamicRangeAdjustment;
     dra.algorithmType = six::sidd::DRAType::AUTO;
-    dra.pMin = 0.2;
-    dra.pMax = 0.8;
-    dra.modifiers.eMin = 0.1;
-    dra.modifiers.eMax = 0.9;
-    dra.modifiers.subtractor = 15;
-    dra.modifiers.multiplier = 777;
+    dra.draParameters.reset(new six::sidd::DynamicRangeAdjustment::DRAParameters());
+    dra.draParameters->pMin = 0.2;
+    dra.draParameters->pMax = 0.8;
+    dra.draParameters->eMinModifier = 0.1;
+    dra.draParameters->eMaxModifier = 0.9;
 
-    display.interactiveProcessing->oneDimensionalLookup.reset(
-            new six::sidd::OneDimensionalLookup());
-    createPredefinedFilter(
-            display.interactiveProcessing->oneDimensionalLookup->ttc);
+    display.interactiveProcessing->tonalTransferCurve.reset(
+            new six::LUT(256, 3));
 
     six::Parameter param;
     param.setName("Some name");
@@ -1961,7 +1958,6 @@ int main(int argc, char** argv)
                                         std::vector<std::string>())));
 
         }
-
         // Create a file container
         six::Container container(DataType::DERIVED);
 
@@ -2010,6 +2006,7 @@ int main(int argc, char** argv)
         siddData->productCreation->productName = "ProductName";
         siddData->productCreation->productClass = "Classy";
         siddData->productCreation->classification.classification = "U";
+        siddData->productCreation->classification.compliesWith.push_back("USDOD");
 
         // Can certainly be init'ed in a function
         initProcessorInformation(

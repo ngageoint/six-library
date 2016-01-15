@@ -187,7 +187,6 @@ DerivedData* DerivedXMLParser110::fromXML(
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
         }
     }
-
     return data;
 }
 
@@ -384,6 +383,7 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
 void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
             BandInformation& bandInformation) const
 {
+    std::cerr << "Start band" << std::endl;
     std::vector<XMLElem> bands;
     bandXML->getElementsByTagName("Band", bands);
     bandInformation.bands.resize(bands.size());
@@ -543,7 +543,7 @@ void DerivedXMLParser110::parseInteractiveProcessingFromXML(
             "SharpnesEnhancement");
     XMLElem colorElem = getOptional(interactiveElem, "ColorSpaceTransform");
     XMLElem dynamicElem = getOptional(interactiveElem, "DynamicRangeAdjustment");
-    XMLElem lookupElem = getOptional(interactiveElem, "OneDimensionalLookup");
+    XMLElem ttcElem = getOptional(interactiveElem, "TonalTransferCurve");
 
     parseGeometricTransformFromXML(geomElem, interactive.geometricTransform);
     parseSharpnessEnhancementFromXML(sharpnessElem,
@@ -558,10 +558,9 @@ void DerivedXMLParser110::parseInteractiveProcessingFromXML(
         parseDynamicRangeAdjustmentFromXML(dynamicElem,
                                            *interactive.dynamicRangeAdjustment);
     }
-    if (lookupElem)
+    if (ttcElem)
     {
-        parseOneDimensionalLookupFromXML(lookupElem,
-                                         *interactive.oneDimensionalLookup);
+        interactive.tonalTransferCurve.reset(parseSingleLUT(ttcElem));
     }
 }
 
@@ -575,11 +574,9 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
         transform.scaling.interpolation);
 
     XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
-    std::string typeName;
-    parseString(getFirstAndOnly(orientationElem, "OrientationType"), typeName);
-    transform.orientation.orientationType = DerivedOrientationType(typeName);
-    parseDouble(getFirstAndOnly(orientationElem, "RotatingAngle"),
-                transform.orientation.rotationAngle);
+    std::string shadowDirection;
+    parseString(getFirstAndOnly(orientationElem, "ShadowDirection"), shadowDirection);
+    transform.orientation.shadowDirection = ShadowDirection(shadowDirection);
 }
 
 void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
@@ -637,25 +634,34 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
     std::string algTypeName;
     parseString(getFirstAndOnly(rangeElem, "AlgorithmType"), algTypeName);
     rangeAdjustment.algorithmType = DRAType(algTypeName);
-    parseDouble(getFirstAndOnly(rangeElem, "Pmin"), rangeAdjustment.pMin);
-    parseDouble(getFirstAndOnly(rangeElem, "Pmax"), rangeAdjustment.pMax);
 
-    //parse modifiers
-    XMLElem modifierElem = getFirstAndOnly(rangeElem, "Modifiers");
-    parseDouble(getFirstAndOnly(modifierElem, "Emin"),
-                rangeAdjustment.modifiers.eMin);
-    parseDouble(getFirstAndOnly(modifierElem, "Emax"),
-                rangeAdjustment.modifiers.eMax);
-    parseDouble(getFirstAndOnly(modifierElem, "Subtractor"),
-                rangeAdjustment.modifiers.subtractor);
-    parseDouble(getFirstAndOnly(modifierElem, "Multiplier"),
-                rangeAdjustment.modifiers.multiplier);
-}
+    bool ok = false;
+    XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
+    XMLElem overrideElem = getOptional(rangeElem, "DRAOverrides");
+    if (parameterElem)
+    {
+        if (!overrideElem)
+        {
+            ok = true;
 
-void DerivedXMLParser110::parseOneDimensionalLookupFromXML(
-            const XMLElem lookupElem, OneDimensionalLookup& lookup) const
-{
-    parseFilterFromXML(getFirstAndOnly(lookupElem, "TTC"), lookup.ttc);
+            parseDouble(getFirstAndOnly(parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
+            parseDouble(getFirstAndOnly(parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
+            parseDouble(getFirstAndOnly(parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
+            parseDouble(getFirstAndOnly(parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
+        }
+    }
+    else if (overrideElem)
+    {
+        ok = true;
+        parseDouble(getFirstAndOnly(overrideElem, "Subtractor"),
+            rangeAdjustment.draOverrides->subtractor);
+        parseDouble(getFirstAndOnly(overrideElem, "Multiplier"),
+            rangeAdjustment.draOverrides->multiplier);
+    }
+    if (!ok)
+    {
+        throw except::Exception(Ctxt("XML should have exactly one of DRAParameters and DRAOverrides"));
+    }
 }
 
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
@@ -890,15 +896,9 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
                        scalingXML);
 
     XMLElem orientationXML = newElement("Orientation", geoTransformXML);
-    createStringFromEnum("OrientationType",
-                         geoTransform.orientation.orientationType,
-                         orientationXML);
-    if (geoTransform.orientation.orientationType ==
-                DerivedOrientationType::ANGLE)
-    {
-        createDouble("RotationAngle", geoTransform.orientation.rotationAngle,
-                     orientationXML);
-    }
+    createStringFromEnum("ShadowDirection",
+        geoTransform.orientation.shadowDirection,
+        orientationXML);
 
     // SharpnessEnhancement
     const SharpnessEnhancement& sharpness(processing.sharpnessEnhancement);
@@ -965,24 +965,35 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
         createStringFromEnum("AlgorithmType", adjust.algorithmType,
                              adjustXML);
 
-        createDouble("Pmin", adjust.pMin, adjustXML);
-        createDouble("Pmax", adjust.pMax, adjustXML);
-
-        XMLElem modXML = newElement("Modifiers", adjustXML);
-        createDouble("Emin", adjust.modifiers.eMin, modXML);
-        createDouble("Emax", adjust.modifiers.eMax, modXML);
-        if (six::Init::isDefined(adjust.modifiers.subtractor))
+        bool ok = false;
+        if (adjust.draParameters.get())
         {
-            createDouble("Subtractor", adjust.modifiers.subtractor, modXML);
-            createDouble("Multiplier", adjust.modifiers.multiplier, modXML);
+            if (!adjust.draOverrides.get())
+            {
+                ok = true;
+                XMLElem paramXML = newElement("DRAParameters", adjustXML);
+                createDouble("Pmin", adjust.draParameters->pMin, paramXML);
+                createDouble("Pmax", adjust.draParameters->pMax, paramXML);
+                createDouble("EminModifier", adjust.draParameters->eMinModifier, paramXML);
+                createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramXML);
+            }
+        }
+        else if (adjust.draOverrides.get())
+        {
+            ok = true;
+            XMLElem overrideXML = newElement("DRAOverrides", adjustXML);
+            createDouble("Subtractor", adjust.draOverrides->subtractor, overrideXML);
+            createDouble("Multiplier", adjust.draOverrides->multiplier, overrideXML);
+        }
+        if (!ok)
+        {
+            throw except::Exception(Ctxt("Data must contain exactly one of DRAParameters and DRAOverrides"));
         }
     }
 
-    if (processing.oneDimensionalLookup.get())
+    if (processing.tonalTransferCurve.get())
     {
-        XMLElem lutXML = newElement("OneDimensionalLookup", processingXML);
-        convertFilterToXML("TTC", processing.oneDimensionalLookup->ttc,
-                           lutXML);
+        createLUT("TonalTransferCurve", processing.tonalTransferCurve.get(), processingXML);
     }
 
     return processingXML;

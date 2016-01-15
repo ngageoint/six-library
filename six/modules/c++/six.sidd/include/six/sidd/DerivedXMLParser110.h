@@ -134,9 +134,6 @@ private:
 
     void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
          DynamicRangeAdjustment& rangeAdjustment) const;
-
-    void parseOneDimensionalLookupFromXML(const XMLElem lookupElem,
-         OneDimensionalLookup& lookup) const;
 };
 }
 }

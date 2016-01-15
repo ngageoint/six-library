@@ -331,47 +331,40 @@ struct DRAType
 
 };
 
-
 /*!
- *  \struct DerivedOrientationType 
- *
- *  Enumeration used to represent DerivedOrientationTypes
- */
-struct DerivedOrientationType
+*  \struct ShadowDirection
+*
+*  Enumeration used to represent ShadowDirections
+*/
+struct ShadowDirection
 {
     //! The enumerations allowed
     enum
     {
         UP = 0,
-        SHADOWS_DOWN = 1,
-        NORTH = 2,
-        SOUTH = 3,
-        EAST = 4,
-        WEST = 5,
-        ANGLE = 6,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        ARBITRARY = 4,
         NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    DerivedOrientationType(){ value = NOT_SET; }
+    ShadowDirection() { value = NOT_SET; }
 
     //! string constructor
-    DerivedOrientationType(std::string s)
+    ShadowDirection(std::string s)
     {
         if (s == "UP")
             value = UP;
-        else if (s == "SHADOWS_DOWN")
-            value = SHADOWS_DOWN;
-        else if (s == "NORTH")
-            value = NORTH;
-        else if (s == "SOUTH")
-            value = SOUTH;
-        else if (s == "EAST")
-            value = EAST;
-        else if (s == "WEST")
-            value = WEST;
-        else if (s == "ANGLE")
-            value = ANGLE;
+        else if (s == "DOWN")
+            value = DOWN;
+        else if (s == "LEFT")
+            value = LEFT;
+        else if (s == "RIGHT")
+            value = RIGHT;
+        else if (s == "ARBITRARY")
+            value = ARBITRARY;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -379,30 +372,24 @@ struct DerivedOrientationType
     }
 
     //! int constructor
-    DerivedOrientationType(int i)
+    ShadowDirection(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = UP;
             break;
         case 1:
-            value = SHADOWS_DOWN;
+            value = DOWN;
             break;
         case 2:
-            value = NORTH;
+            value = LEFT;
             break;
         case 3:
-            value = SOUTH;
+            value = RIGHT;
             break;
         case 4:
-            value = EAST;
-            break;
-        case 5:
-            value = WEST;
-            break;
-        case 6:
-            value = ANGLE;
+            value = ARBITRARY;
             break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
@@ -413,27 +400,23 @@ struct DerivedOrientationType
     }
 
     //! destructor
-    ~DerivedOrientationType(){}
+    ~ShadowDirection() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("UP");
         case 1:
-            return std::string("SHADOWS_DOWN");
+            return std::string("DOWN");
         case 2:
-            return std::string("NORTH");
+            return std::string("LEFT");
         case 3:
-            return std::string("SOUTH");
+            return std::string("RIGHT");
         case 4:
-            return std::string("EAST");
-        case 5:
-            return std::string("WEST");
-        case 6:
-            return std::string("ANGLE");
+            return std::string("ARBITRARY");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
@@ -442,7 +425,7 @@ struct DerivedOrientationType
     }
 
     //! assignment operator
-    DerivedOrientationType& operator=(const DerivedOrientationType& o)
+    ShadowDirection& operator=(const ShadowDirection& o)
     {
         if (&o != this)
         {
@@ -451,15 +434,15 @@ struct DerivedOrientationType
         return *this;
     }
 
-    bool operator==(const DerivedOrientationType& o) const { return value == o.value; }
-    bool operator!=(const DerivedOrientationType& o) const { return value != o.value; }
+    bool operator==(const ShadowDirection& o) const { return value == o.value; }
+    bool operator!=(const ShadowDirection& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    DerivedOrientationType& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const DerivedOrientationType& o) const { return value < o.value; }
-    bool operator>(const DerivedOrientationType& o) const { return value > o.value; }
-    bool operator<=(const DerivedOrientationType& o) const { return value <= o.value; }
-    bool operator>=(const DerivedOrientationType& o) const { return value >= o.value; }
+    ShadowDirection& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const ShadowDirection& o) const { return value < o.value; }
+    bool operator>(const ShadowDirection& o) const { return value > o.value; }
+    bool operator<=(const ShadowDirection& o) const { return value <= o.value; }
+    bool operator>=(const ShadowDirection& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 

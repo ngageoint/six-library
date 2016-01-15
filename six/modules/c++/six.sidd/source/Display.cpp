@@ -43,22 +43,22 @@ BandInformation::BandInformation() :
 {
 }
 
-Orientation::Orientation() :
-    rotationAngle(six::Init::undefined<double>())
+DynamicRangeAdjustment::DRAParameters::DRAParameters() :
+    pMin(six::Init::undefined<double>()),
+    pMax(six::Init::undefined<double>()),
+    eMinModifier(six::Init::undefined<double>()),
+    eMaxModifier(six::Init::undefined<double>())
 {
 }
 
-DynamicRangeAdjustment::Modifiers::Modifiers() :
-    eMin(six::Init::undefined<double>()),
-    eMax(six::Init::undefined<double>()),
+DynamicRangeAdjustment::DRAOverrides::DRAOverrides() :
     subtractor(six::Init::undefined<double>()),
     multiplier(six::Init::undefined<double>())
 {
 }
 
 DynamicRangeAdjustment::DynamicRangeAdjustment() :
-    pMin(six::Init::undefined<double>()),
-    pMax(six::Init::undefined<double>())
+    algorithmType(DRAType::NOT_SET)
 {
 }
 
