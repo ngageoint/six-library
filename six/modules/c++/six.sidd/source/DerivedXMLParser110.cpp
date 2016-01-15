@@ -383,7 +383,6 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
 void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
             BandInformation& bandInformation) const
 {
-    std::cerr << "Start band" << std::endl;
     std::vector<XMLElem> bands;
     bandXML->getElementsByTagName("Band", bands);
     bandInformation.bands.resize(bands.size());
