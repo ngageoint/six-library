@@ -297,10 +297,10 @@ struct DerivedData: public Data
         {
             return display->remapInformation->remapLUT.get();
         }
-        else if (mVersion == "1.0.0")
+        /*else if (mVersion == "1.0.0")
         {
             return display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->remapLUT.get();
-        }
+        }*/
         else
         {
             throw except::Exception(Ctxt("Could not recognize SIDD Version: " + mVersion + ".\nExpect 1.0.0 or 1.1.0."));

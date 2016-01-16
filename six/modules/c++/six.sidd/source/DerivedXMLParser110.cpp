@@ -20,6 +20,7 @@
  *
  */
 
+#if 0
 #include <sstream>
 
 #include <six/SICommonXMLParser10x.h>
@@ -1359,3 +1360,4 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
 }
 }
 }
+#endif

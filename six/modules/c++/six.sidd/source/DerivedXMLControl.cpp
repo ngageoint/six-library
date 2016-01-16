@@ -23,7 +23,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
-#include <six/sidd/DerivedXMLParser110.h>
+//#include <six/sidd/DerivedXMLParser110.h>
 
 namespace six
 {
@@ -79,7 +79,7 @@ DerivedXMLControl::getParser(const std::string& version) const
         }
         else if (minorVersion == "1")
         {
-            parser.reset(new DerivedXMLParser110(mLog));
+            //parser.reset(new DerivedXMLParser110(mLog));
         }
     }
 
