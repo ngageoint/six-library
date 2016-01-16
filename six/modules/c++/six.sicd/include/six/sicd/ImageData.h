@@ -22,15 +22,15 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
+#include <mem/ScopedCopyablePtr.h>
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
 
 namespace six
 {
 namespace sicd
 {
-
 /*!
  *  \struct ImageData
  *  \brief SICD ImageData parameters
@@ -42,19 +42,12 @@ struct ImageData
     //!  Everything is undefined at this time
     ImageData() :
         pixelType(PixelType::NOT_SET),
-        amplitudeTable(NULL),
         numRows(Init::undefined<size_t>()),
         numCols(Init::undefined<size_t>()),
         firstRow(0),
         firstCol(0)
     {
     }
-
-    //!  Destructor, deletes amplitudeTable if non-NULL
-    ~ImageData();
-
-    //!  Clone this object, including amplitudeTable if non-NULL
-    ImageData* clone() const;
 
     /*!
      *  Indicates the pixel type and binary format of the data.
@@ -69,7 +62,7 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-    AmplitudeTable* amplitudeTable;
+    mem::ScopedCopyablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
     size_t numRows;
@@ -91,9 +84,8 @@ struct ImageData
 
     // If this doesn't have at least 3 vertices, it's not going to get written
     std::vector<RowColInt> validData;
-
 };
 }
 }
-#endif
 
+#endif

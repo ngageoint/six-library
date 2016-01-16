@@ -79,7 +79,7 @@ public:
     mem::ScopedCloneablePtr<ImageCreation> imageCreation;
 
     //!  Block describes the image pixel data
-    mem::ScopedCloneablePtr<ImageData> imageData;
+    mem::ScopedCopyablePtr<ImageData> imageData;
 
     //!  Describes the geographic coords of the region covered by the image
     mem::ScopedCopyablePtr<GeoData> geoData;
