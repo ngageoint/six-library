@@ -107,7 +107,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 
 SCOPED_CLONEABLE(six::sicd, CollectionInformation)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
-SCOPED_CLONEABLE(six::sicd, ImageData)
+SCOPED_COPYABLE(six::sicd, ImageData)
 SCOPED_COPYABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
 SCOPED_COPYABLE(six::sicd, Timeline)
