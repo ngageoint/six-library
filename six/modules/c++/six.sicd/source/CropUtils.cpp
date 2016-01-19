@@ -33,7 +33,6 @@
 #include <six/NITFWriteControl.h>
 #include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
-#include <six/sicd/ComplexData.h>
 
 namespace
 {
@@ -49,50 +48,6 @@ void updateMinMax(double val, double& curMin, double& curMax)
         curMax = val;
     }
 }
-
-class PixelToLatLon
-{
-public:
-    PixelToLatLon(const six::sicd::ComplexData& data,
-                  const scene::SceneGeometry& geom,
-                  const scene::ProjectionModel& projection) :
-        mGeom(geom),
-        mProjection(projection),
-        mOffset(data.imageData->scpPixel.row -
-                        static_cast<double>(data.imageData->firstRow),
-                data.imageData->scpPixel.col -
-                        static_cast<double>(data.imageData->firstCol)),
-        mSampleSpacing(data.grid->row->sampleSpacing,
-                       data.grid->col->sampleSpacing),
-        mGroundPlaneNormal(mGeom.getReferencePosition())
-    {
-        mGroundPlaneNormal.normalize();
-    }
-
-    scene::LatLon operator()(size_t row, size_t col) const
-    {
-        const types::RowCol<double> imagePt(
-                (row - mOffset.row) * mSampleSpacing.row,
-                (col - mOffset.col) * mSampleSpacing.col);
-
-        double timeCOA(0.0);
-        const scene::Vector3 groundPt =
-                mProjection.imageToScene(imagePt,
-                                         mGeom.getReferencePosition(),
-                                         mGroundPlaneNormal,
-                                         &timeCOA);
-
-        const scene::LatLonAlt latLon(scene::Utilities::ecefToLatLon(groundPt));
-        return scene::LatLon(latLon.getLat(), latLon.getLon());
-    }
-
-private:
-    const scene::SceneGeometry& mGeom;
-    const scene::ProjectionModel& mProjection;
-    const types::RowCol<double> mOffset;
-    const types::RowCol<double> mSampleSpacing;
-    scene::Vector3 mGroundPlaneNormal;
-};
 
 void cropSICD(six::NITFReadControl& reader,
               const std::vector<std::string>& schemaPaths,
@@ -145,7 +100,7 @@ void cropSICD(six::NITFReadControl& reader,
     const size_t firstCol(aoiData->imageData->firstCol);
     const size_t lastCol(firstCol + aoiDims.col - 1);
 
-    const PixelToLatLon pixelToLatLon(data, geom, projection);
+    const six::sicd::PixelToLatLon pixelToLatLon(data, geom, projection);
     six::LatLonCorners& corners(aoiData->geoData->imageCorners);
     corners.upperLeft = pixelToLatLon(firstRow, firstCol);
     corners.upperRight = pixelToLatLon(firstRow, lastCol);

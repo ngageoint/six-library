@@ -29,11 +29,59 @@
 #include <types/RowCol.h>
 #include <scene/Types.h>
 #include <six/NITFReadControl.h>
+#include <six/sicd/ComplexData.h>
 
 namespace six
 {
 namespace sicd
 {
+/*!
+ * Projects a slant plane pixel into ground plane LLA coordinates
+ */
+class PixelToLatLon
+{
+public:
+    PixelToLatLon(const six::sicd::ComplexData& data,
+                  const scene::SceneGeometry& geom,
+                  const scene::ProjectionModel& projection) :
+        mGeom(geom),
+        mProjection(projection),
+        mOffset(data.imageData->scpPixel.row -
+                        static_cast<double>(data.imageData->firstRow),
+                data.imageData->scpPixel.col -
+                        static_cast<double>(data.imageData->firstCol)),
+        mSampleSpacing(data.grid->row->sampleSpacing,
+                       data.grid->col->sampleSpacing),
+        mGroundPlaneNormal(mGeom.getReferencePosition())
+    {
+        mGroundPlaneNormal.normalize();
+    }
+
+    scene::LatLon operator()(size_t row, size_t col) const
+    {
+        const types::RowCol<double> imagePt(
+                (row - mOffset.row) * mSampleSpacing.row,
+                (col - mOffset.col) * mSampleSpacing.col);
+
+        double timeCOA(0.0);
+        const scene::Vector3 groundPt =
+                mProjection.imageToScene(imagePt,
+                                         mGeom.getReferencePosition(),
+                                         mGroundPlaneNormal,
+                                         &timeCOA);
+
+        const scene::LatLonAlt latLon(scene::Utilities::ecefToLatLon(groundPt));
+        return scene::LatLon(latLon.getLat(), latLon.getLon());
+    }
+
+private:
+    const scene::SceneGeometry& mGeom;
+    const scene::ProjectionModel& mProjection;
+    const types::RowCol<double> mOffset;
+    const types::RowCol<double> mSampleSpacing;
+    scene::Vector3 mGroundPlaneNormal;
+};
+
 /*
  * Reads in an AOI from a SICD and creates a cropped SICD, updating the
  * metadata as appropriate to reflect this
