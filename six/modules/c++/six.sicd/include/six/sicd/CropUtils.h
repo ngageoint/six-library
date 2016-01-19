@@ -43,36 +43,9 @@ class PixelToLatLon
 public:
     PixelToLatLon(const six::sicd::ComplexData& data,
                   const scene::SceneGeometry& geom,
-                  const scene::ProjectionModel& projection) :
-        mGeom(geom),
-        mProjection(projection),
-        mOffset(data.imageData->scpPixel.row -
-                        static_cast<double>(data.imageData->firstRow),
-                data.imageData->scpPixel.col -
-                        static_cast<double>(data.imageData->firstCol)),
-        mSampleSpacing(data.grid->row->sampleSpacing,
-                       data.grid->col->sampleSpacing),
-        mGroundPlaneNormal(mGeom.getReferencePosition())
-    {
-        mGroundPlaneNormal.normalize();
-    }
+                  const scene::ProjectionModel& projection);
 
-    scene::LatLon operator()(size_t row, size_t col) const
-    {
-        const types::RowCol<double> imagePt(
-                (row - mOffset.row) * mSampleSpacing.row,
-                (col - mOffset.col) * mSampleSpacing.col);
-
-        double timeCOA(0.0);
-        const scene::Vector3 groundPt =
-                mProjection.imageToScene(imagePt,
-                                         mGeom.getReferencePosition(),
-                                         mGroundPlaneNormal,
-                                         &timeCOA);
-
-        const scene::LatLonAlt latLon(scene::Utilities::ecefToLatLon(groundPt));
-        return scene::LatLon(latLon.getLat(), latLon.getLon());
-    }
+    scene::LatLon operator()(size_t row, size_t col) const;
 
 private:
     const scene::SceneGeometry& mGeom;
