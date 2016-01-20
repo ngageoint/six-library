@@ -357,7 +357,15 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
         // TODO: Why do we need to byte swap here?  If it is required, could
         //       we avoid the copy and byte swap and instead index into
         //       the LUT in the opposite order?
-        LUT lut(*getDisplayLUT());
+        std::auto_ptr<const LUT> lutPtr(getDisplayLUT());
+        if (lutPtr.get() == NULL)
+        {
+            nitf::BandInfo band1;
+            band1.getRepresentation().set("M");
+            bands.push_back(band1);
+            break;
+        }
+        LUT lut = *lutPtr;
         sys::byteSwap(reinterpret_cast<sys::byte*>(lut.get()),
                       static_cast<unsigned short>(lut.elementSize),
                       lut.numEntries);
@@ -402,7 +410,10 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
         if (!lut)
         {
-            getBandInfoImpl(PixelType::MONO8I, getDisplayLUT);
+            nitf::BandInfo band1;
+            band1.getRepresentation().set("M");
+            bands.push_back(band1);
+            break;
         }
         if (lut->elementSize != 3)
         {
