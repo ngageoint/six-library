@@ -125,6 +125,11 @@ public:
      *         the buffer pointer is null
      *
      */
+     static void getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                size_t startRow, size_t numRows,
+                                size_t startCol, size_t numCols,
+                                std::complex<float>* buffer);
     static void getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer);
@@ -143,6 +148,11 @@ public:
      * \param buffer The functions output, will contain the image
      *
      */
+     static void getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                size_t startRow, size_t numRows,
+                                size_t startCol, size_t numCols,
+                                std::vector<std::complex<float> >& buffer);
     static void getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::vector<std::complex<float> >& buffer);
@@ -160,12 +170,22 @@ public:
      * \throws except::Exception if the pixel type of the SICD is not a complex
      * float32 or complex int16
      */
+    static 
+    void getWidebandData(
+            const std::string& sicdPathname,
+            const std::vector<std::string>& schemaPaths,
+            const ComplexData& complexData,
+            size_t startRow, size_t numRows,
+            size_t startCol, size_t numCols,
+            std::complex<float>* buffer);   
     static
     void getWidebandData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths,
             const ComplexData& complexData,
             std::complex<float>* buffer);
+
+
 };
 }
 }

@@ -364,14 +364,12 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(
 
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
+                                size_t startRow, size_t numRows,
+                                size_t startCol, size_t numCols,
                                 std::complex<float>* buffer)
 {
     const PixelType pixelType = complexData.getPixelType();
     const size_t imageNumber = 0;
-    const size_t startRow = 0;
-    const size_t startCol = 0;
-    const size_t numRows = complexData.getNumRows();
-    const size_t numCols = complexData.getNumCols();
 
     const size_t requiredBufferBytes = sizeof(std::complex<float>) 
                                             * numRows * numCols;
@@ -409,25 +407,52 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
 
 }
+void Utilities::getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                std::complex<float>* buffer)
+{
+    const size_t startRow = 0;
+    const size_t startCol = 0;
+    const size_t numRows = complexData.getNumRows();
+    const size_t numCols = complexData.getNumCols();
+    getWidebandData(reader, complexData, startRow, numRows, startCol, numCols, buffer);
+}
+
+void Utilities::getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                size_t startRow, size_t numRows,
+                                size_t startCol, size_t numCols,
+                                std::vector<std::complex<float> >& buffer)
+{
+    const size_t requiredNumElements = numRows * numCols;
+    buffer.resize(requiredNumElements);
+    
+    if(requiredNumElements > 0)
+    {
+        getWidebandData(reader, complexData, 
+                startRow, numRows, startCol, numCols, &buffer[0]);
+    }
+}
 
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::vector<std::complex<float> >& buffer)
 {
-    const size_t requiredNumElements =
-            complexData.getNumCols() * complexData.getNumRows();
-    buffer.resize(requiredNumElements);
-
-    if (requiredNumElements > 0)
-    {
-        Utilities::getWidebandData(reader, complexData, &buffer[0]);
-    }
+    const size_t startRow = 0;
+    const size_t startCol = 0;
+    const size_t numRows = complexData.getNumRows();
+    const size_t numCols = complexData.getNumCols();
+    
+    getWidebandData(reader, complexData, 
+            startRow, numRows, startCol, numCols, buffer);
 }
 
 void Utilities::getWidebandData(
         const std::string& sicdPathname,
         const std::vector<std::string>& schemaPaths,
         const ComplexData& complexData,
+        size_t startRow, size_t numRows,
+        size_t startCol, size_t numCols,
         std::complex<float>* buffer)
 {
     six::XMLControlRegistry xmlRegistry;
@@ -436,10 +461,29 @@ void Utilities::getWidebandData(
                                    six::sicd::ComplexXMLControl>());
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(sicdPathname);
+    reader.load(sicdPathname); 
 
-    getWidebandData(reader, complexData, buffer);
+    getWidebandData(reader, complexData, 
+            startRow, numRows, startCol, numCols, buffer);
 }
+
+void Utilities::getWidebandData(
+        const std::string& sicdPathname,
+        const std::vector<std::string>& schemaPaths,
+        const ComplexData& complexData,
+        std::complex<float>* buffer)
+{
+    const size_t startRow = 0;
+    const size_t startCol = 0;
+    const size_t numRows = complexData.getNumRows();
+    const size_t numCols = complexData.getNumCols();
+
+    getWidebandData(sicdPathname, schemaPaths, complexData,
+            startRow, numRows, startCol, numCols, buffer);
+}
+
+
+
 }
 }
 
