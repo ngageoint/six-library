@@ -291,21 +291,7 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual LUT* getDisplayLUT()
-    {
-        if (mVersion == "1.0.0")
-        {
-            return display->remapInformation->remapLUT.get();
-        }
-        else if (mVersion == "1.0.0")
-        {
-            return display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->remapLUT.get();
-        }
-        else
-        {
-            throw except::Exception(Ctxt("Could not recognize SIDD Version: " + mVersion + ".\nExpect 1.0.0 or 1.1.0."));
-        }
-    }
+    virtual LUT* getDisplayLUT();
 
     virtual std::string getVendorID() const
     {

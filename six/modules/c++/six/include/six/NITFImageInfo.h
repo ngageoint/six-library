@@ -400,6 +400,10 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
         const LUT* const lut = getDisplayLUT();
 
+        if (!lut)
+        {
+            getBandInfoImpl(PixelType::MONO8I, getDisplayLUT);
+        }
         if (lut->elementSize != 3)
         {
             throw except::Exception(Ctxt(

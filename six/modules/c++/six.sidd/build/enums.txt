@@ -1,4 +1,4 @@
-[KernelDatabaseName]
+[FilterDatabaseName]
 BILINEAR=0
 CUBIC=1
 LAGRANGE=2
@@ -6,7 +6,7 @@ NEAREST_NEIGHBOR=3
 NOT_SET=six::NOT_SET_VALUE
 __default__=six::NOT_SET_VALUE
 
-[KernelOperation]
+[FilterOperation]
 CONVOLUTION=0
 CORRELATION=1
 NOT_SET=six::NOT_SET_VALUE

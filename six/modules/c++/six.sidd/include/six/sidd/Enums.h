@@ -37,10 +37,10 @@ namespace sidd
 const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 /*!
- *  \struct BandEqualizationAlgorithm 
- *
- *  Enumeration used to represent BandEqualizationAlgorithms
- */
+*  \struct BandEqualizationAlgorithm
+*
+*  Enumeration used to represent BandEqualizationAlgorithms
+*/
 struct BandEqualizationAlgorithm
 {
     //! The enumerations allowed
@@ -51,7 +51,7 @@ struct BandEqualizationAlgorithm
     };
 
     //! Default constructor
-    BandEqualizationAlgorithm(){ value = NOT_SET; }
+    BandEqualizationAlgorithm() { value = NOT_SET; }
 
     //! string constructor
     BandEqualizationAlgorithm(std::string s)
@@ -67,7 +67,7 @@ struct BandEqualizationAlgorithm
     //! int constructor
     BandEqualizationAlgorithm(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = LUT_1D;
@@ -81,12 +81,12 @@ struct BandEqualizationAlgorithm
     }
 
     //! destructor
-    ~BandEqualizationAlgorithm(){}
+    ~BandEqualizationAlgorithm() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("LUT_1D");
@@ -127,10 +127,10 @@ struct BandEqualizationAlgorithm
 
 
 /*!
- *  \struct CoordinateSystemType 
- *
- *  Enumeration used to represent CoordinateSystemTypes
- */
+*  \struct CoordinateSystemType
+*
+*  Enumeration used to represent CoordinateSystemTypes
+*/
 struct CoordinateSystemType
 {
     //! The enumerations allowed
@@ -142,7 +142,7 @@ struct CoordinateSystemType
     };
 
     //! Default constructor
-    CoordinateSystemType(){ value = NOT_SET; }
+    CoordinateSystemType() { value = NOT_SET; }
 
     //! string constructor
     CoordinateSystemType(std::string s)
@@ -160,7 +160,7 @@ struct CoordinateSystemType
     //! int constructor
     CoordinateSystemType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = GCS;
@@ -177,12 +177,12 @@ struct CoordinateSystemType
     }
 
     //! destructor
-    ~CoordinateSystemType(){}
+    ~CoordinateSystemType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("GCS");
@@ -225,10 +225,10 @@ struct CoordinateSystemType
 
 
 /*!
- *  \struct DRAType 
- *
- *  Enumeration used to represent DRATypes
- */
+*  \struct DRAType
+*
+*  Enumeration used to represent DRATypes
+*/
 struct DRAType
 {
     //! The enumerations allowed
@@ -241,7 +241,7 @@ struct DRAType
     };
 
     //! Default constructor
-    DRAType(){ value = NOT_SET; }
+    DRAType() { value = NOT_SET; }
 
     //! string constructor
     DRAType(std::string s)
@@ -261,7 +261,7 @@ struct DRAType
     //! int constructor
     DRAType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = AUTO;
@@ -281,12 +281,12 @@ struct DRAType
     }
 
     //! destructor
-    ~DRAType(){}
+    ~DRAType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("AUTO");
@@ -331,10 +331,10 @@ struct DRAType
 
 
 /*!
- *  \struct DownsamplingMethod 
- *
- *  Enumeration used to represent DownsamplingMethods
- */
+*  \struct DownsamplingMethod
+*
+*  Enumeration used to represent DownsamplingMethods
+*/
 struct DownsamplingMethod
 {
     //! The enumerations allowed
@@ -347,7 +347,7 @@ struct DownsamplingMethod
     };
 
     //! Default constructor
-    DownsamplingMethod(){ value = NOT_SET; }
+    DownsamplingMethod() { value = NOT_SET; }
 
     //! string constructor
     DownsamplingMethod(std::string s)
@@ -367,7 +367,7 @@ struct DownsamplingMethod
     //! int constructor
     DownsamplingMethod(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = DECIMATE;
@@ -387,12 +387,12 @@ struct DownsamplingMethod
     }
 
     //! destructor
-    ~DownsamplingMethod(){}
+    ~DownsamplingMethod() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("DECIMATE");
@@ -437,11 +437,11 @@ struct DownsamplingMethod
 
 
 /*!
- *  \struct KernelDatabaseName 
- *
- *  Enumeration used to represent KernelDatabaseNames
- */
-struct KernelDatabaseName
+*  \struct FilterDatabaseName
+*
+*  Enumeration used to represent FilterDatabaseNames
+*/
+struct FilterDatabaseName
 {
     //! The enumerations allowed
     enum
@@ -454,10 +454,10 @@ struct KernelDatabaseName
     };
 
     //! Default constructor
-    KernelDatabaseName(){ value = NOT_SET; }
+    FilterDatabaseName() { value = NOT_SET; }
 
     //! string constructor
-    KernelDatabaseName(std::string s)
+    FilterDatabaseName(std::string s)
     {
         if (s == "BILINEAR")
             value = BILINEAR;
@@ -474,9 +474,9 @@ struct KernelDatabaseName
     }
 
     //! int constructor
-    KernelDatabaseName(int i)
+    FilterDatabaseName(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = BILINEAR;
@@ -499,12 +499,12 @@ struct KernelDatabaseName
     }
 
     //! destructor
-    ~KernelDatabaseName(){}
+    ~FilterDatabaseName() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("BILINEAR");
@@ -522,7 +522,7 @@ struct KernelDatabaseName
     }
 
     //! assignment operator
-    KernelDatabaseName& operator=(const KernelDatabaseName& o)
+    FilterDatabaseName& operator=(const FilterDatabaseName& o)
     {
         if (&o != this)
         {
@@ -531,15 +531,15 @@ struct KernelDatabaseName
         return *this;
     }
 
-    bool operator==(const KernelDatabaseName& o) const { return value == o.value; }
-    bool operator!=(const KernelDatabaseName& o) const { return value != o.value; }
+    bool operator==(const FilterDatabaseName& o) const { return value == o.value; }
+    bool operator!=(const FilterDatabaseName& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    KernelDatabaseName& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelDatabaseName& o) const { return value < o.value; }
-    bool operator>(const KernelDatabaseName& o) const { return value > o.value; }
-    bool operator<=(const KernelDatabaseName& o) const { return value <= o.value; }
-    bool operator>=(const KernelDatabaseName& o) const { return value >= o.value; }
+    FilterDatabaseName& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FilterDatabaseName& o) const { return value < o.value; }
+    bool operator>(const FilterDatabaseName& o) const { return value > o.value; }
+    bool operator<=(const FilterDatabaseName& o) const { return value <= o.value; }
+    bool operator>=(const FilterDatabaseName& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
@@ -551,11 +551,11 @@ struct KernelDatabaseName
 
 
 /*!
- *  \struct KernelOperation 
- *
- *  Enumeration used to represent KernelOperations
- */
-struct KernelOperation
+*  \struct FilterOperation
+*
+*  Enumeration used to represent FilterOperations
+*/
+struct FilterOperation
 {
     //! The enumerations allowed
     enum
@@ -566,10 +566,10 @@ struct KernelOperation
     };
 
     //! Default constructor
-    KernelOperation(){ value = NOT_SET; }
+    FilterOperation() { value = NOT_SET; }
 
     //! string constructor
-    KernelOperation(std::string s)
+    FilterOperation(std::string s)
     {
         if (s == "CONVOLUTION")
             value = CONVOLUTION;
@@ -582,9 +582,9 @@ struct KernelOperation
     }
 
     //! int constructor
-    KernelOperation(int i)
+    FilterOperation(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = CONVOLUTION;
@@ -601,12 +601,12 @@ struct KernelOperation
     }
 
     //! destructor
-    ~KernelOperation(){}
+    ~FilterOperation() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("CONVOLUTION");
@@ -620,7 +620,7 @@ struct KernelOperation
     }
 
     //! assignment operator
-    KernelOperation& operator=(const KernelOperation& o)
+    FilterOperation& operator=(const FilterOperation& o)
     {
         if (&o != this)
         {
@@ -629,15 +629,15 @@ struct KernelOperation
         return *this;
     }
 
-    bool operator==(const KernelOperation& o) const { return value == o.value; }
-    bool operator!=(const KernelOperation& o) const { return value != o.value; }
+    bool operator==(const FilterOperation& o) const { return value == o.value; }
+    bool operator!=(const FilterOperation& o) const { return value != o.value; }
     bool operator==(const int& o) const { return value == o; }
     bool operator!=(const int& o) const { return value != o; }
-    KernelOperation& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const KernelOperation& o) const { return value < o.value; }
-    bool operator>(const KernelOperation& o) const { return value > o.value; }
-    bool operator<=(const KernelOperation& o) const { return value <= o.value; }
-    bool operator>=(const KernelOperation& o) const { return value >= o.value; }
+    FilterOperation& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FilterOperation& o) const { return value < o.value; }
+    bool operator>(const FilterOperation& o) const { return value > o.value; }
+    bool operator<=(const FilterOperation& o) const { return value <= o.value; }
+    bool operator>=(const FilterOperation& o) const { return value >= o.value; }
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
@@ -649,10 +649,10 @@ struct KernelOperation
 
 
 /*!
- *  \struct RenderingIntent 
- *
- *  Enumeration used to represent RenderingIntents
- */
+*  \struct RenderingIntent
+*
+*  Enumeration used to represent RenderingIntents
+*/
 struct RenderingIntent
 {
     //! The enumerations allowed
@@ -666,7 +666,7 @@ struct RenderingIntent
     };
 
     //! Default constructor
-    RenderingIntent(){ value = NOT_SET; }
+    RenderingIntent() { value = NOT_SET; }
 
     //! string constructor
     RenderingIntent(std::string s)
@@ -688,7 +688,7 @@ struct RenderingIntent
     //! int constructor
     RenderingIntent(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = PERCEPTUAL;
@@ -711,12 +711,12 @@ struct RenderingIntent
     }
 
     //! destructor
-    ~RenderingIntent(){}
+    ~RenderingIntent() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("PERCEPTUAL");
@@ -763,10 +763,10 @@ struct RenderingIntent
 
 
 /*!
- *  \struct ShadowsDirection
- *
- *  Enumeration used to represent ShadowsDirections
- */
+*  \struct ShadowsDirection
+*
+*  Enumeration used to represent ShadowsDirections
+*/
 struct ShadowsDirection
 {
     //! The enumerations allowed
@@ -781,7 +781,7 @@ struct ShadowsDirection
     };
 
     //! Default constructor
-    ShadowsDirection(){ value = NOT_SET; }
+    ShadowsDirection() { value = NOT_SET; }
 
     //! string constructor
     ShadowsDirection(std::string s)
@@ -805,7 +805,7 @@ struct ShadowsDirection
     //! int constructor
     ShadowsDirection(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = UP;
@@ -831,12 +831,12 @@ struct ShadowsDirection
     }
 
     //! destructor
-    ~ShadowsDirection(){}
+    ~ShadowsDirection() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("UP");
@@ -883,7 +883,9 @@ struct ShadowsDirection
 
 };
 
-// code auto-generated 2016-01-14 08:15:28.495616
+
+// code auto-generated 2016-01-15 12:05:51.088000
+
 }
 }
 

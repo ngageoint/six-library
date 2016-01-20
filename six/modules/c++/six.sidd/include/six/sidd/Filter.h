@@ -37,7 +37,7 @@ struct Filter
         // Exactly one of databaseName or filterFamiy+filterMember must be set
 
         //! Database name of filter to use
-        KernelDatabaseName databaseName;
+        FilterDatabaseName databaseName;
 
         //! Index specifying the filter family
         size_t filterFamily;
@@ -86,7 +86,7 @@ struct Filter
     };
 
     //! Name of the filter
-    std::string kernelName;
+    std::string filterName;
 
     // Exactly one of filterKernel or filterBank
     mem::ScopedCopyablePtr<Kernel> filterKernel;
@@ -95,7 +95,7 @@ struct Filter
     /*! Specifies if the kernel/bank is to be applied using convolution or
         correlation
      */
-    KernelOperation operation;
+    FilterOperation operation;
 };
 }
 }

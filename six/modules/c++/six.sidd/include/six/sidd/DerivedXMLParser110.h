@@ -65,6 +65,11 @@ private:
     static const char VERSION[];
     static const char SI_COMMON_URI[];
 
+    XMLElem convertLookupTableToXML(
+            const std::string& name,
+            const LookupTable& table,
+            XMLElem parent = NULL) const;
+
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = NULL) const;
@@ -77,8 +82,12 @@ private:
             const Filter::Predefined& predefined,
             XMLElem parent = NULL) const;
 
-    XMLElem convertCustomFilterToXML(
-            const Filter::Custom& custom,
+    XMLElem convertKernelToXML(
+            const Filter::Kernel& kernel,
+            XMLElem parent = NULL) const;
+
+    XMLElem convertBankToXML(
+            const Filter::Bank& bank,
             XMLElem parent = NULL) const;
 
     XMLElem convertFilterToXML(const std::string& name,
@@ -106,26 +115,34 @@ private:
 
     void parseBandInformationFromXML(const XMLElem bandXML,
          BandInformation& bandInformation) const;
-
+    
     void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
          NonInteractiveProcessing& nonInteractiveProcessing) const;
 
     void parseProductGenerationOptionsFromXML(const XMLElem optionsElem,
-         ProductGenerationOptions& options) const;
+         ProductGenerationOptions& options) const; 
 
     void parseBandEqualizationFromXML(const XMLElem bandElem,
          BandEqualization& band) const;
-
+    
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
-    void parseFilterFromXML(const XMLElem FilterELem, Filter& Filter) const;
+    void parsePredefinedFilterFromXML(const XMLElem predefinedElem,
+         Filter::Predefined& predefined) const;
+
+    void parseKernelFromXML(const XMLElem kernelElem, 
+         Filter::Kernel& kernel) const;
+
+    void parseBankFromXML(const XMLElem bankElem, Filter::Bank& bank) const;
+
+    void parseFilterFromXML(const XMLElem filterELem, Filter& filter) const;
 
     void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
          InteractiveProcessing& interactive) const;
 
     void parseGeometricTransformFromXML(const XMLElem geomElem,
          GeometricTransform& transform) const;
-
+         
     void parseSharpnessEnhancementFromXML(const XMLElem sharpElem,
          SharpnessEnhancement& sharpness) const;
 
@@ -134,6 +151,9 @@ private:
 
     void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
          DynamicRangeAdjustment& rangeAdjustment) const;
+
+    void parseLookupTableFromXML(const XMLElem lookupElem,
+          LookupTable& lookupTable) const;
 };
 }
 }

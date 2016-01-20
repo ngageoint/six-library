@@ -1748,43 +1748,44 @@ void initProcessorInformation(
     processorInformation.site = "Ypsilanti, MI";
 }
 
-void createPredefinedFilter(six::sidd::Filter& Filter)
+void createPredefinedFilter(six::sidd::Filter& filter)
 {
-    Filter.FilterName = "Some predefined Filter";
-    Filter.predefined.reset(new six::sidd::Filter::Predefined());
-    Filter.predefined->dbName = six::sidd::FilterDatabaseName::LAGRANGE;
-    Filter.operation = six::sidd::FilterOperation::CONVOLUTION;
+    filter.filterName = "Some predefined Filter";
+    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
+    filter.filterKernel->predefined.reset(new six::sidd::Filter::Predefined());
+    filter.filterKernel->predefined->databaseName = six::sidd::FilterDatabaseName::LAGRANGE;
+    filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
 
 std::auto_ptr<six::sidd::Filter> createPredefinedFilter()
 {
-    std::auto_ptr<six::sidd::Filter> Filter(new six::sidd::Filter());
-    createPredefinedFilter(*Filter);
-    return Filter;
+    std::auto_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
+    createPredefinedFilter(*filter);
+    return filter;
 }
 
-void createCustomFilter(six::sidd::Filter& Filter)
+void createCustomFilter(six::sidd::Filter& filter)
 {
-    Filter.FilterName = "Some custom Filter";
-    Filter.custom.reset(new six::sidd::Filter::Custom());
-    Filter.custom->type = six::sidd::FilterCustomType::GENERAL;
-    Filter.custom->FilterSize.row = 2;
-    Filter.custom->FilterSize.col = 3;
-    Filter.custom->FilterCoef.resize(Filter.custom->FilterSize.normL1());
-    for (size_t ii = 0, end = Filter.custom->FilterCoef.size();
+    filter.filterName = "Some custom Filter";
+    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
+    filter.filterKernel->custom.reset(new six::sidd::Filter::Kernel::Custom());
+    filter.filterKernel->custom->size.row = 2;
+    filter.filterKernel->custom->size.col = 3;
+    filter.filterKernel->custom->filterCoef.resize(filter.filterKernel->custom->size.normL1());
+    for (size_t ii = 0, end = filter.filterKernel->custom->filterCoef.size();
          ii < end;
          ++ii)
     {
-        Filter.custom->FilterCoef[ii] = ii * 1.5;
+        filter.filterKernel->custom->filterCoef[ii] = ii * 1.5;
     }
-    Filter.operation = six::sidd::FilterOperation::CORRELATION;
+    filter.operation = six::sidd::FilterOperation::CORRELATION;
 }
 
 std::auto_ptr<six::sidd::Filter> createCustomFilter()
 {
-    std::auto_ptr<six::sidd::Filter> Filter(new six::sidd::Filter());
-    createCustomFilter(*Filter);
-    return Filter;
+    std::auto_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
+    createCustomFilter(*filter);
+    return filter;
 }
 
 void initDisplay(six::sidd::Display& display)
@@ -1798,6 +1799,7 @@ void initDisplay(six::sidd::Display& display)
     display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
 
     // NonInteractiveProcessing
+    
     display.nonInteractiveProcessing.reset(
             new six::sidd::NonInteractiveProcessing());
     six::sidd::ProductGenerationOptions& prodGenOptions =
@@ -1805,15 +1807,18 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
     prodGenOptions.bandEqualization->algorithm =
             six::sidd::BandEqualizationAlgorithm::LUT_1D;
-    prodGenOptions.bandEqualization->bandLUT.reset(new six::LUT(256, 3));
-    std::fill_n(prodGenOptions.bandEqualization->bandLUT->table.get(),
-                256 * 3, 0);
+    prodGenOptions.bandEqualization->bandLUT.reset(new six::sidd::LookupTable());
+    prodGenOptions.bandEqualization->bandLUT->predefined.reset(new six::sidd::LookupTable::Predefined());
+    prodGenOptions.bandEqualization->bandLUT->predefined->databaseName = "database name";
+    prodGenOptions.bandEqualization->bandLUT->predefined->remapFamily = 5;
+    prodGenOptions.bandEqualization->bandLUT->predefined->remapMember = 3;
+
     createPredefinedFilter(prodGenOptions.modularTransferFunctionRestoration);
 
-    std::auto_ptr<six::LUT> lut(new six::LUT(256, 3));
-    std::fill_n(lut->table.get(), lut->numEntries * lut->elementSize, 0);
     prodGenOptions.dataRemapping.reset(
-            new six::sidd::ColorDisplayRemap(lut.release()));
+            new six::sidd::LookupTable());
+    prodGenOptions.dataRemapping->custom.reset(new six::sidd::LookupTable::Custom(256, 3));
+    std::fill_n(prodGenOptions.dataRemapping->custom->lut.table.begin(), prodGenOptions.dataRemapping->custom->lut.table.size(), 0);
 
     prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
 
@@ -1824,15 +1829,16 @@ void initDisplay(six::sidd::Display& display)
     display.nonInteractiveProcessing->rrds.interpolation.reset(
             createPredefinedFilter());
 
-    // InteractiveProcessing
+    // InteractiveProcessing 
+    
     display.interactiveProcessing.reset(
             new six::sidd::InteractiveProcessing());
     six::sidd::GeometricTransform& geoTransform =
             display.interactiveProcessing->geometricTransform;
     createPredefinedFilter(geoTransform.scaling.antiAlias);
     createCustomFilter(geoTransform.scaling.interpolation);
-    geoTransform.orientation.shadowDirection =
-            six::sidd::ShadowDirection::ARBITRARY;
+    geoTransform.orientation.shadowsDirection =
+            six::sidd::ShadowsDirection::ARBITRARY;
 
     display.interactiveProcessing->sharpnessEnhancement.
             modularTransferFunctionCompensation.reset(createCustomFilter());
@@ -1858,7 +1864,12 @@ void initDisplay(six::sidd::Display& display)
     dra.draParameters->eMaxModifier = 0.9;
 
     display.interactiveProcessing->tonalTransferCurve.reset(
-            new six::LUT(256, 3));
+            new six::sidd::LookupTable());
+    display.interactiveProcessing->tonalTransferCurve->lutName = "TTC Name";
+    display.interactiveProcessing->tonalTransferCurve->predefined.reset(new six::sidd::LookupTable::Predefined());
+    display.interactiveProcessing->tonalTransferCurve->predefined->databaseName = "TTC DB";
+    display.interactiveProcessing->tonalTransferCurve->predefined->remapFamily = 3;
+    display.interactiveProcessing->tonalTransferCurve->predefined->remapMember = 4;
 
     six::Parameter param;
     param.setName("Some name");
@@ -2015,10 +2026,10 @@ int main(int argc, char** argv)
 
         // Or directly if preferred
         // (This is SIDD 1.0 stuff)
-        siddData->display->decimationMethod
-                = DecimationMethod::BRIGHTEST_PIXEL;
-        siddData->display->magnificationMethod
-                = MagnificationMethod::NEAREST_NEIGHBOR;
+        //siddData->display->decimationMethod
+        //        = DecimationMethod::BRIGHTEST_PIXEL;
+        //siddData->display->magnificationMethod
+        //        = MagnificationMethod::NEAREST_NEIGHBOR;
 
         // (This is SIDD 1.1 stuff)
         initDisplay(*siddData->display);
@@ -2117,8 +2128,7 @@ int main(int argc, char** argv)
 
         module->moduleParameters.push_back(moduleParameter);
         siddData->productProcessing->processingModules.push_back(module);
-        //siddData->productProcessing->processingModules[0]->moduleName.setName("Name");
-        //siddData->productProcessing->processingModules[0]->moduleName.setValue("Value");
+
 
         siddData->compression->original.numWaveletLevels = 5;
         siddData->compression->original.numBands = 1;
@@ -2154,7 +2164,7 @@ int main(int argc, char** argv)
 
         if (sicdData.get())
             container.addData(sicdData.release());
-        
+
         // Init the container
         writer->initialize(&container);
         

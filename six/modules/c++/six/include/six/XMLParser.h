@@ -148,6 +148,14 @@ protected:
         parseInt<T>(element, value);
     }
 
+    template <typename T>
+    void parseEnum(XMLElem element, T& enumVal) const
+    {
+        std::string name;
+        parseString(element, name);
+        enumVal = T(name);
+    }
+
     void parseDouble(XMLElem element, double& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
