@@ -1808,8 +1808,8 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization->algorithm =
             six::sidd::BandEqualizationAlgorithm::LUT_1D;
     prodGenOptions.bandEqualization->bandLUT.reset(new six::sidd::LookupTable());
+    prodGenOptions.bandEqualization->bandLUT->lutName = "LUT Name";
     prodGenOptions.bandEqualization->bandLUT->predefined.reset(new six::sidd::LookupTable::Predefined());
-    prodGenOptions.bandEqualization->bandLUT->predefined->databaseName = "database name";
     prodGenOptions.bandEqualization->bandLUT->predefined->remapFamily = 5;
     prodGenOptions.bandEqualization->bandLUT->predefined->remapMember = 3;
 
@@ -1868,8 +1868,6 @@ void initDisplay(six::sidd::Display& display)
     display.interactiveProcessing->tonalTransferCurve->lutName = "TTC Name";
     display.interactiveProcessing->tonalTransferCurve->predefined.reset(new six::sidd::LookupTable::Predefined());
     display.interactiveProcessing->tonalTransferCurve->predefined->databaseName = "TTC DB";
-    display.interactiveProcessing->tonalTransferCurve->predefined->remapFamily = 3;
-    display.interactiveProcessing->tonalTransferCurve->predefined->remapMember = 4;
 
     six::Parameter param;
     param.setName("Some name");

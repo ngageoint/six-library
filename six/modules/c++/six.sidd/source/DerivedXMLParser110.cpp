@@ -505,8 +505,8 @@ void DerivedXMLParser110::parseFilterFromXML(const XMLElem filterElem,
     Filter& filter) const
 {
     parseString(getFirstAndOnly(filterElem, "FilterName"), filter.filterName);
-    XMLElem kernelElem = getOptional(filterElem, "Kernel");
-    XMLElem bankElem = getOptional(filterElem, "Bank");
+    XMLElem kernelElem = getOptional(filterElem, "FilterKernel");
+    XMLElem bankElem = getOptional(filterElem, "FilterBank");
 
     bool ok = false;
     if (kernelElem)
@@ -934,18 +934,37 @@ XMLElem DerivedXMLParser110::convertLookupTableToXML(
 {
     XMLElem lookupXML = newElement(name, parent);
     createString("LUTName", table.lutName, lookupXML);
-    
+
     bool ok = false;
     if (table.predefined.get())
     {
         if (table.custom.get() == NULL)
         {
             ok = true;
-
             XMLElem predefXML = newElement("Predefined", lookupXML);
-            createString("DatabaseName", table.predefined->databaseName, predefXML);
-            createInt("RemapFamily", table.predefined->remapFamily, predefXML);
-            createInt("RemapMember", table.predefined->remapMember, predefXML);
+
+            //exactly one of databaseName or (remapFamily and remapMember) can be set
+            bool innerOk = false;
+            if (table.predefined->databaseName == "")
+            {
+                if (table.predefined->remapFamily != six::Init::undefined<size_t>() &&
+                    table.predefined->remapMember != six::Init::undefined<size_t>())
+                {
+                    innerOk = true;
+                    createInt("RemapFamily", table.predefined->remapFamily, predefXML);
+                    createInt("RemapMember", table.predefined->remapMember, predefXML);
+                }
+            }
+            else if (table.predefined->remapFamily == six::Init::undefined<size_t>() &&
+                table.predefined->remapMember == six::Init::undefined<size_t>())
+            {
+                innerOk = true;
+                createString("DatabaseName", table.predefined->databaseName, predefXML);
+            }
+            if (innerOk == false)
+            {
+                throw except::Exception(Ctxt("Exactly one of databaseName or remapFamiy+remapMember must be set"));
+            }
         }
     }
     else if (table.custom.get())
@@ -1179,7 +1198,7 @@ XMLElem DerivedXMLParser110::convertKernelToXML(
         const Filter::Kernel& kernel,
         XMLElem parent) const
 {
-    XMLElem kernelXML = newElement("Kernel", parent);
+    XMLElem kernelXML = newElement("FilterKernel", parent);
 
     bool ok = false;
     if (kernel.predefined.get())
@@ -1230,7 +1249,7 @@ XMLElem DerivedXMLParser110::convertKernelToXML(
 XMLElem DerivedXMLParser110::convertBankToXML(const Filter::Bank& bank,
     XMLElem parent) const
 {
-    XMLElem bankXML = newElement("Bank", parent);
+    XMLElem bankXML = newElement("FilterBank", parent);
 
     bool ok = false;
     if (bank.predefined.get())
@@ -1383,12 +1402,12 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
                    "nonInteractiveProcessing");
     convertNonInteractiveProcessingToXML(*display.nonInteractiveProcessing,
                                          displayXML);
-    /*
+
     // InteractiveProcessing
     confirmNonNull(display.interactiveProcessing, "interactiveProcessing");
     convertInteractiveProcessingToXML(*display.interactiveProcessing,
                                       displayXML);
-    */
+
     // optional to unbounded
     common().addParameters("DisplayExtension", display.displayExtensions,
                            displayXML);

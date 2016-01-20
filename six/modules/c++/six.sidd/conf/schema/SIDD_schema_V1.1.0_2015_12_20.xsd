@@ -252,7 +252,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Filter must be no larger than 15x15.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="DataRemapping" type="RemapChoiceType">
+      <xs:element name="DataRemapping" type="NewLookupTableType">
         <xs:annotation>
           <xs:documentation>Data remapping refers to the specific need to convert the data of incoming, expanded or uncompressed image band data to non-mapped image data.
           </xs:documentation>
@@ -291,25 +291,43 @@ NRL                N/A                        0,255 (Supposed to be display read
     <xs:sequence>
       <xs:element name="FilterName" type="xs:string"></xs:element>
       <xs:choice>
-        <xs:element name="Predefined" type="PredefinedFilterType"></xs:element>
-        <xs:element name="Custom" type="CustomFilterType"></xs:element>
+        <xs:element name="FilterKernel" type="FilterKernelType"></xs:element>
+        <xs:element name="FilterBank" type="FilterBankType"></xs:element>
       </xs:choice>
       <xs:element name="Operation" type="FilterOperationType"></xs:element>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="FilterKernelType">
+    <xs:choice>
+      <xs:element name="Predefined" type="PredefinedFilterType"/>
+      <xs:element name="Custom" type="KernelCustomType"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="FilterBankType">
+    <xs:choice>
+      <xs:element name="Predefined" type="PredefinedFilterType"/>
+      <xs:element name="Custom" type="BankCustomType"/>
+    </xs:choice>
+  </xs:complexType>
+    <xs:complexType name="BankCustomType">
+        <xs:sequence>
+            <xs:element name="NumPhasings" type="xs:int"/>
+            <xs:element name="NumPoints" type="xs:int"/>
+            <xs:element name="FilterCoef" type="FilterCoefType"/>
+        </xs:sequence>
+    </xs:complexType>
   <xs:complexType name="PredefinedFilterType">
     <xs:choice>
-      <xs:element name="DBName" type="FilterDatabaseNameType"></xs:element>
+      <xs:element name="DatabaseName" type="FilterDatabaseNameType"></xs:element>
       <xs:sequence>
         <xs:element name="FilterFamily" type="xs:int"></xs:element>
         <xs:element name="FilterMember" type="xs:int"></xs:element>
       </xs:sequence>
     </xs:choice>
   </xs:complexType>
-  <xs:complexType name="CustomFilterType">
+  <xs:complexType name="KernelCustomType">
     <xs:sequence>
-      <xs:element name="Type" type="FilterCustomType" minOccurs="0"></xs:element>
-      <xs:element name="FilterSize" type="sicommon:RowColIntType"></xs:element>
+      <xs:element name="Size" type="sicommon:RowColIntType"></xs:element>
       <xs:element name="FilterCoef" type="FilterCoefType"></xs:element>
     </xs:sequence>
   </xs:complexType>
@@ -360,9 +378,50 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Allowed values: 1DLUT</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="BandLUT" type="Lookup3TableType"></xs:element>
+      <xs:element name="BandLUT" type="NewLookupTableType"></xs:element>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="NewLookupTableType">
+    <xs:sequence>
+      <xs:element name="LUTName" type="xs:string"/>
+      <xs:choice>
+          <xs:element name="Predefined" type="PredefinedLookupType"/>
+          <xs:element name="Custom" type="CustomLookupType"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PredefinedLookupType">
+      <xs:choice>
+          <xs:element name="DatabaseName" type="xs:string">
+              <xs:annotation>
+                  <xs:documentation>
+                      Database name of LUT to use.
+                  </xs:documentation>
+              </xs:annotation>
+          </xs:element>
+          <xs:sequence>
+              <xs:element name="RemapFamily" type="xs:int">
+                  <xs:annotation>
+                      <xs:documentation>
+                          Index specifying the remap family.
+                      </xs:documentation>
+                  </xs:annotation>
+              </xs:element>
+              <xs:element name="RemapMember" type="xs:int">
+                  <xs:annotation>
+                      <xs:documentation>
+                          Index specifying the member for the remap family.
+                      </xs:documentation>
+                  </xs:annotation>
+              </xs:element>
+          </xs:sequence>
+      </xs:choice>
+  </xs:complexType>
+    <xs:complexType name="CustomLookupType">
+        <xs:sequence>
+            <xs:element name="LUT" type="Lookup3TableType"/>
+        </xs:sequence>
+    </xs:complexType>
   <xs:simpleType name="EqualizationAlgorithmType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="LUT_1D"/>
@@ -378,7 +437,7 @@ NRL                N/A                        0,255 (Supposed to be display read
           <xs:documentation>Parameter describing DRA</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="TonalTransferCurve" type="Lookup3TableType" minOccurs="0">
+      <xs:element name="TonalTransferCurve" type="NewLookupTableType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             The 1-D LUT element uses one or more 1-D LUTs to stretch or compress tome data in valorous regions within a digital image's dynamic range.
