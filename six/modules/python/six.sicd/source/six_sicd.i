@@ -194,6 +194,7 @@ SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
 %}
 
 void getWidebandData(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long arrayBuffer);
+void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer);
 
 %pythoncode %{
 import numpy as np

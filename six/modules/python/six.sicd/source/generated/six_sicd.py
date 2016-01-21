@@ -8678,6 +8678,10 @@ def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
     """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long arrayBuffer)"""
     return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
 
+def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer):
+    """getWidebandRegion(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
+    return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
+
 import numpy as np
 from six_base import VectorString
 

@@ -71,14 +71,16 @@ void readAndConvertSICD(six::NITFReadControl& reader,
     std::vector<short> tempVector(elementsPerRow * rowsAtATime);
     short* const tempBuffer = &tempVector[0];
 
+    const size_t endRow = startRow+numRows;
+
     for (size_t row = startRow, rowsToRead = rowsAtATime;
-         row < numRows;
+         row < endRow;
          row += rowsToRead)
     {
         // If we would read beyond the input buffer, don't
-        if (row + rowsToRead > numRows)
+        if (row + rowsToRead > endRow)
         {
-            rowsToRead = numRows - row;
+            rowsToRead = endRow - row;
         }
 
         // Read into the temp buffer
@@ -89,8 +91,9 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         // Take each Int16 out of the temp buffer and put it into the real
         // buffer as a Float32
         float* const bufferPtr = reinterpret_cast<float*>(buffer) +
-                (row * elementsPerRow);
+                ((row-startRow) * elementsPerRow);
 
+        size_t nzelem = 0;
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempBuffer[index];
