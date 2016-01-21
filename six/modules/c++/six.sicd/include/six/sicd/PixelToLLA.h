@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SICD_PIXEL_TO_LAT_LON_H__
-#define __SIX_SICD_PIXEL_TO_LAT_LON_H__
+#ifndef __SIX_SICD_PIXEL_TO_LLA_H__
+#define __SIX_SICD_PIXEL_TO_LLA_H__
 
 #include <string>
 #include <vector>
@@ -38,13 +38,13 @@ namespace six
 namespace sicd
 {
 /*!
- *  \class PixelToLatLon
+ *  \class PixelToLLA
  *  \brief Projects a slant plane pixel into ground plane LLA coordinates
  *
  *  This class should be used to project coordinates between slant and 
  *  ground planes.
  */
-class PixelToLatLon
+class PixelToLLA
 {
 public:
     /*!
@@ -56,9 +56,9 @@ public:
      *  NOTE: ProjectionModel is stored by reference. Make sure
      *        this object survives this class and its usefulness.
      */
-    PixelToLatLon(const six::sicd::ComplexData& data,
-                  const scene::SceneGeometry& geom,
-                  const scene::ProjectionModel& projection);
+    PixelToLLA(const six::sicd::ComplexData& data,
+               const scene::SceneGeometry& geom,
+               const scene::ProjectionModel& projection);
 
     /*!
      *  \fn operator()

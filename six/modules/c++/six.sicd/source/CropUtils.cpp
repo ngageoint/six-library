@@ -30,7 +30,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
-#include <six/sicd/PixelToLatLon.h>
+#include <six/sicd/PixelToLLA.h>
 
 namespace
 {
@@ -98,20 +98,20 @@ void cropSICD(six::NITFReadControl& reader,
     const size_t firstCol(aoiData->imageData->firstCol);
     const size_t lastCol(firstCol + aoiDims.col - 1);
 
-    const six::sicd::PixelToLatLon pixelToLatLon(data, geom, projection);
+    const six::sicd::PixelToLLA pixelToLLA(data, geom, projection);
     six::LatLonCorners& corners(aoiData->geoData->imageCorners);
 
     six::LatLonAlt point = 
-        pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
+        pixelToLLA(types::RowCol<size_t>(firstRow, firstCol));
     corners.upperLeft = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
+    point = pixelToLLA(types::RowCol<size_t>(firstRow, firstCol));
     corners.upperRight = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
+    point = pixelToLLA(types::RowCol<size_t>(firstRow, firstCol));
     corners.lowerRight = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
+    point = pixelToLLA(types::RowCol<size_t>(firstRow, firstCol));
     corners.lowerLeft = six::LatLon(point.getLat(), point.getLon());
 
     // Write the AOI SICD out

@@ -27,16 +27,16 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
-#include <six/sicd/PixelToLatLon.h>
+#include <six/sicd/PixelToLLA.h>
 
 namespace six
 {
 namespace sicd
 {
 
-PixelToLatLon::PixelToLatLon(const six::sicd::ComplexData& data,
-                             const scene::SceneGeometry& geom,
-                             const scene::ProjectionModel& projection) :
+PixelToLLA::PixelToLLA(const six::sicd::ComplexData& data,
+                       const scene::SceneGeometry& geom,
+                       const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
     mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
@@ -45,7 +45,7 @@ PixelToLatLon::PixelToLatLon(const six::sicd::ComplexData& data,
     mGroundPlaneNormal.normalize();
 }
 
-scene::LatLonAlt PixelToLatLon::operator()(
+scene::LatLonAlt PixelToLLA::operator()(
     const types::RowCol<size_t>& pixel) const
 {
     //! convert slant pixel to meters from scene center
