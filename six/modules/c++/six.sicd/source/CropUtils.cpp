@@ -103,16 +103,17 @@ void cropSICD(six::NITFReadControl& reader,
     const six::sicd::PixelToLatLon pixelToLatLon(data, geom, projection);
     six::LatLonCorners& corners(aoiData->geoData->imageCorners);
 
-    six::LatLonAlt point = pixelToLatLon(firstRow, firstCol);
+    six::LatLonAlt point = 
+        pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
     corners.upperLeft = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(firstRow, firstCol);
+    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
     corners.upperRight = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(firstRow, firstCol);
+    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
     corners.lowerRight = six::LatLon(point.getLat(), point.getLon());
 
-    point = pixelToLatLon(firstRow, firstCol);
+    point = pixelToLatLon(types::RowCol<size_t>(firstRow, firstCol));
     corners.lowerLeft = six::LatLon(point.getLat(), point.getLon());
 
     // Write the AOI SICD out
@@ -135,23 +136,19 @@ PixelToLatLon::PixelToLatLon(const six::sicd::ComplexData& data,
                              const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
-    mOffset(data.imageData->scpPixel.row -
-                    static_cast<double>(data.imageData->firstRow),
-            data.imageData->scpPixel.col -
-                    static_cast<double>(data.imageData->firstCol)),
-    mSampleSpacing(data.grid->row->sampleSpacing,
-                   data.grid->col->sampleSpacing),
+    mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
     mGroundPlaneNormal(mGeom.getReferencePosition())
 {
     mGroundPlaneNormal.normalize();
 }
 
-scene::LatLonAlt PixelToLatLon::operator()(size_t row, size_t col) const
+scene::LatLonAlt PixelToLatLon::operator()(
+    const types::RowCol<size_t>& pixel) const
 {
-    const types::RowCol<double> imagePt(
-            (row - mOffset.row) * mSampleSpacing.row,
-            (col - mOffset.col) * mSampleSpacing.col);
+    //! convert slant pixel to meters from scene center
+    const types::RowCol<double> imagePt(mSicdData.pixelToImagePoint(pixel));
 
+    //! project into ground plane -- ecef coords
     double timeCOA(0.0);
     const scene::Vector3 groundPt =
             mProjection.imageToScene(imagePt,
@@ -159,6 +156,7 @@ scene::LatLonAlt PixelToLatLon::operator()(size_t row, size_t col) const
                                      mGroundPlaneNormal,
                                      &timeCOA);
 
+    //! translate to LLA
     return scene::Utilities::ecefToLatLon(groundPt);
 }
 

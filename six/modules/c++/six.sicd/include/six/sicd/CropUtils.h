@@ -36,22 +36,38 @@ namespace six
 namespace sicd
 {
 /*!
- * Projects a slant plane pixel into ground plane LLA coordinates
+ *  \class PixelToLatLon
+ *  \brief Projects a slant plane pixel into ground plane LLA coordinates
+ *
+ *  This class should be used to project coordinates between slant and 
+ *  ground planes.
  */
 class PixelToLatLon
 {
 public:
+    /*!
+     *  \fn Constructor
+     *  \param data       - ComplexData object
+     *  \param geom       - Geometry of slant to ground
+     *  \param projection - Projection type for translation
+     *
+     *  NOTE: ProjectionModel is stored by reference. Make sure
+     *        this object survives this class and its usefulness.
+     */
     PixelToLatLon(const six::sicd::ComplexData& data,
                   const scene::SceneGeometry& geom,
                   const scene::ProjectionModel& projection);
 
-    scene::LatLonAlt operator()(size_t row, size_t col) const;
+    /*!
+     *  \fn operator()
+     *  \param pixel - Slant Plane pixel with (row,col) index
+     */
+    scene::LatLonAlt operator()(const types::RowCol<size_t>& pixel) const;
 
 private:
-    const scene::SceneGeometry& mGeom;
+    const scene::SceneGeometry mGeom;
     const scene::ProjectionModel& mProjection;
-    const types::RowCol<double> mOffset;
-    const types::RowCol<double> mSampleSpacing;
+    const six::sicd::ComplexData mSicdData;
     scene::Vector3 mGroundPlaneNormal;
 };
 
