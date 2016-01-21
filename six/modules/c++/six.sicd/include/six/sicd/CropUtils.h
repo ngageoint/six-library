@@ -45,7 +45,7 @@ public:
                   const scene::SceneGeometry& geom,
                   const scene::ProjectionModel& projection);
 
-    scene::LatLon operator()(size_t row, size_t col) const;
+    scene::LatLonAlt operator()(size_t row, size_t col) const;
 
 private:
     const scene::SceneGeometry& mGeom;

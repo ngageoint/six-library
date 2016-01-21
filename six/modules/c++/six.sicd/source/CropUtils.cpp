@@ -102,10 +102,18 @@ void cropSICD(six::NITFReadControl& reader,
 
     const six::sicd::PixelToLatLon pixelToLatLon(data, geom, projection);
     six::LatLonCorners& corners(aoiData->geoData->imageCorners);
-    corners.upperLeft = pixelToLatLon(firstRow, firstCol);
-    corners.upperRight = pixelToLatLon(firstRow, lastCol);
-    corners.lowerRight = pixelToLatLon(lastRow, lastCol);
-    corners.lowerLeft = pixelToLatLon(lastRow, firstCol);
+
+    six::LatLonAlt point = pixelToLatLon(firstRow, firstCol);
+    corners.upperLeft = six::LatLon(point.getLat(), point.getLon());
+
+    point = pixelToLatLon(firstRow, firstCol);
+    corners.upperRight = six::LatLon(point.getLat(), point.getLon());
+
+    point = pixelToLatLon(firstRow, firstCol);
+    corners.lowerRight = six::LatLon(point.getLat(), point.getLon());
+
+    point = pixelToLatLon(firstRow, firstCol);
+    corners.lowerLeft = six::LatLon(point.getLat(), point.getLon());
 
     // Write the AOI SICD out
     six::Container container(six::DataType::COMPLEX);
@@ -138,7 +146,7 @@ PixelToLatLon::PixelToLatLon(const six::sicd::ComplexData& data,
     mGroundPlaneNormal.normalize();
 }
 
-scene::LatLon PixelToLatLon::operator()(size_t row, size_t col) const
+scene::LatLonAlt PixelToLatLon::operator()(size_t row, size_t col) const
 {
     const types::RowCol<double> imagePt(
             (row - mOffset.row) * mSampleSpacing.row,
@@ -151,8 +159,7 @@ scene::LatLon PixelToLatLon::operator()(size_t row, size_t col) const
                                      mGroundPlaneNormal,
                                      &timeCOA);
 
-    const scene::LatLonAlt latLon(scene::Utilities::ecefToLatLon(groundPt));
-    return scene::LatLon(latLon.getLat(), latLon.getLon());
+    return scene::Utilities::ecefToLatLon(groundPt);
 }
 
 void cropSICD(const std::string& inPathname,
