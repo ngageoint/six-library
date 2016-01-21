@@ -93,7 +93,6 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         float* const bufferPtr = reinterpret_cast<float*>(buffer) +
                 ((row-startRow) * elementsPerRow);
 
-        size_t nzelem = 0;
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempBuffer[index];
@@ -318,14 +317,14 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(sicdPathname, schemaPaths); 
+    reader.load(sicdPathname, schemaPaths);
 
     complexData = getComplexData(reader);
     getWidebandData(reader, *(complexData.get()), widebandData);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
-    reader.setXMLControlRegistry(NULL); 
+    reader.setXMLControlRegistry(NULL);
 }
 
 std::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
@@ -374,9 +373,9 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const PixelType pixelType = complexData.getPixelType();
     const size_t imageNumber = 0;
 
-    const size_t requiredBufferBytes = sizeof(std::complex<float>) 
+    const size_t requiredBufferBytes = sizeof(std::complex<float>)
                                             * numRows * numCols;
-    
+
     if(buffer == NULL)
     {
         // for some reason we don't have a buffer
@@ -386,7 +385,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                     + str::toString(requiredBufferBytes)
                     + std::string(" byte buffer was expected")));
     }
-    
+
     if(pixelType == PixelType::RE32F_IM32F)
     {
         six::Region region = buildRegion(startRow, startCol,
@@ -429,10 +428,10 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 {
     const size_t requiredNumElements = numRows * numCols;
     buffer.resize(requiredNumElements);
-    
+
     if(requiredNumElements > 0)
     {
-        getWidebandData(reader, complexData, 
+        getWidebandData(reader, complexData,
                 startRow, numRows, startCol, numCols, &buffer[0]);
     }
 }
@@ -445,8 +444,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const size_t startCol = 0;
     const size_t numRows = complexData.getNumRows();
     const size_t numCols = complexData.getNumCols();
-    
-    getWidebandData(reader, complexData, 
+
+    getWidebandData(reader, complexData,
             startRow, numRows, startCol, numCols, buffer);
 }
 
@@ -464,9 +463,9 @@ void Utilities::getWidebandData(
                                    six::sicd::ComplexXMLControl>());
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(sicdPathname); 
+    reader.load(sicdPathname);
 
-    getWidebandData(reader, complexData, 
+    getWidebandData(reader, complexData,
             startRow, numRows, startCol, numCols, buffer);
 }
 
@@ -484,8 +483,6 @@ void Utilities::getWidebandData(
     getWidebandData(sicdPathname, schemaPaths, complexData,
             startRow, numRows, startCol, numCols, buffer);
 }
-
-
 
 }
 }

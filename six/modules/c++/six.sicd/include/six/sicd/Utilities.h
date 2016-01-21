@@ -42,7 +42,7 @@ class Utilities
 public:
     static scene::SceneGeometry* getSceneGeometry(const ComplexData* data);
 
-    static scene::ProjectionModel* getProjectionModel(const ComplexData* data, 
+    static scene::ProjectionModel* getProjectionModel(const ComplexData* data,
             const scene::SceneGeometry* geom);
 
     /*
@@ -64,12 +64,12 @@ public:
      * as the ComplexData associated with the image..
      *
      * \param sicdPathname SICD NITF pathname
-     * \param schemaPaths One or more files or directories containing SICD 
+     * \param schemaPaths One or more files or directories containing SICD
      * schemas
      * \param ComplexData associated with the SICD NITF
      * \param widebandData, vector containing SICD wideband data
      *
-     * \throws See six::sicd::Utilities::getComplexData and 
+     * \throws See six::sicd::Utilities::getComplexData and
      *           six::sicd::Utilities::getWidebandData
      *
      */
@@ -109,8 +109,8 @@ public:
     static std::auto_ptr<ComplexData> getComplexData(NITFReadControl& reader);
 
     /*
-     * Given a loaded NITFReadControl and a ComplexData object, this 
-     * function loads the wideband data associated with the reader 
+     * Given a loaded NITFReadControl and a ComplexData object, this
+     * function loads the wideband data associated with the reader
      * and ComplexData object.
      *
      * \param reader A loaded NITFReadControl associated with the SICD
@@ -136,8 +136,8 @@ public:
 
     /*
      *
-     * Given a loaded NITFReadControl and a ComplexData object, this 
-     * function loads the wideband data associated with the reader 
+     * Given a loaded NITFReadControl and a ComplexData object, this
+     * function loads the wideband data associated with the reader
      * and ComplexData object.
      *
      * This function allows the user to provide a vector to be resized
@@ -170,21 +170,20 @@ public:
      * \throws except::Exception if the pixel type of the SICD is not a complex
      * float32 or complex int16
      */
-    static 
+    static
     void getWidebandData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths,
             const ComplexData& complexData,
             size_t startRow, size_t numRows,
             size_t startCol, size_t numCols,
-            std::complex<float>* buffer);   
+            std::complex<float>* buffer);
     static
     void getWidebandData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths,
             const ComplexData& complexData,
             std::complex<float>* buffer);
-
 
 };
 }
