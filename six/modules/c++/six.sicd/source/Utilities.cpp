@@ -417,7 +417,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const size_t startCol = 0;
     const size_t numRows = complexData.getNumRows();
     const size_t numCols = complexData.getNumCols();
-    getWidebandData(reader, complexData, startRow, numRows, startCol, numCols, buffer);
+    getWidebandData(reader, complexData, 
+            startRow, numRows, startCol, numCols, buffer);
 }
 
 void Utilities::getWidebandData(NITFReadControl& reader,
