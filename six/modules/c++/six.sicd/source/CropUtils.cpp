@@ -27,12 +27,10 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
-#include <scene/LLAToECEFTransform.h>
-#include <scene/SceneGeometry.h>
-#include <scene/ProjectionModel.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
+#include <six/sicd/PixelToLatLon.h>
 
 namespace
 {
@@ -130,36 +128,6 @@ namespace six
 {
 namespace sicd
 {
-
-PixelToLatLon::PixelToLatLon(const six::sicd::ComplexData& data,
-                             const scene::SceneGeometry& geom,
-                             const scene::ProjectionModel& projection) :
-    mGeom(geom),
-    mProjection(projection),
-    mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
-    mGroundPlaneNormal(mGeom.getReferencePosition())
-{
-    mGroundPlaneNormal.normalize();
-}
-
-scene::LatLonAlt PixelToLatLon::operator()(
-    const types::RowCol<size_t>& pixel) const
-{
-    //! convert slant pixel to meters from scene center
-    const types::RowCol<double> imagePt(mSicdData.pixelToImagePoint(pixel));
-
-    //! project into ground plane -- ecef coords
-    double timeCOA(0.0);
-    const scene::Vector3 groundPt =
-            mProjection.imageToScene(imagePt,
-                                     mGeom.getReferencePosition(),
-                                     mGroundPlaneNormal,
-                                     &timeCOA);
-
-    //! translate to LLA
-    return scene::Utilities::ecefToLatLon(groundPt);
-}
-
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const types::RowCol<size_t>& aoiOffset,
