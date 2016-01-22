@@ -189,7 +189,10 @@ SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
                             long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)
     {
         std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
-        Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, startRow, numRows, startCol, numCols, realBuffer);
+
+        types::RowCol<size_t> offset(startRow, startCol);
+        types::RowCol<size_t> extent(numRows, numCols);
+        Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, offset, extent, realBuffer);
     }
 %}
 
