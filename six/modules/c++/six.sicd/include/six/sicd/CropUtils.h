@@ -29,6 +29,7 @@
 #include <types/RowCol.h>
 #include <scene/Types.h>
 #include <six/NITFReadControl.h>
+#include <six/sicd/ComplexData.h>
 
 namespace six
 {
