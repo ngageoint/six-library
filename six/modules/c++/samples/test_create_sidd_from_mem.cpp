@@ -1813,7 +1813,9 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization->bandLUT->predefined->remapFamily = 5;
     prodGenOptions.bandEqualization->bandLUT->predefined->remapMember = 3;
 
-    createPredefinedFilter(prodGenOptions.modularTransferFunctionRestoration);
+    prodGenOptions.modularTransferFunctionRestoration.reset(
+            new six::sidd::Filter());
+    createPredefinedFilter(*prodGenOptions.modularTransferFunctionRestoration);
 
     prodGenOptions.dataRemapping.reset(
             new six::sidd::LookupTable());

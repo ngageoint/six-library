@@ -419,7 +419,7 @@ void DerivedXMLParser110::parseProductGenerationOptionsFromXML(
             ProductGenerationOptions& options) const
 {
     XMLElem bandElem = getOptional(optionsElem, "BandEqualization");
-    XMLElem restoration = getFirstAndOnly(optionsElem,
+    XMLElem restoration = getOptional(optionsElem,
             "ModularTransferFunctionRestoration");
     XMLElem remapElem = getOptional(optionsElem, "DataRemapping");
     XMLElem correctionElem = getOptional(optionsElem,
@@ -427,15 +427,26 @@ void DerivedXMLParser110::parseProductGenerationOptionsFromXML(
 
     if (bandElem)
     {
+        options.bandEqualization.reset(new BandEqualization());
         parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
     }
-    parseFilterFromXML(restoration, options.modularTransferFunctionRestoration);
+
+    if (restoration)
+    {
+        options.modularTransferFunctionRestoration.reset(new Filter());
+        parseFilterFromXML(restoration,
+                           *options.modularTransferFunctionRestoration);
+    }
+
     if (remapElem)
     {
+        options.dataRemapping.reset(new LookupTable());
         parseLookupTableFromXML(remapElem, *options.dataRemapping);
     }
+
     if (correctionElem)
     {
+        options.asymmetricPixelCorrection.reset(new Filter());
         parseFilterFromXML(correctionElem, *options.asymmetricPixelCorrection);
     }
 }
@@ -1002,13 +1013,17 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         convertLookupTableToXML("BandLUT", *bandEq.bandLUT, bandEqXML);
     }
 
-    convertFilterToXML("ModularTransferFunctionRestoration",
-                       prodGen.modularTransferFunctionRestoration,
-                       prodGenXML);
+    if (prodGen.modularTransferFunctionRestoration.get())
+    {
+        convertFilterToXML("ModularTransferFunctionRestoration",
+                           *prodGen.modularTransferFunctionRestoration,
+                           prodGenXML);
+    }
 
     if (prodGen.dataRemapping.get())
     {
-        convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping, prodGenXML);
+        convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
+                                prodGenXML);
     }
     
     if (prodGen.asymmetricPixelCorrection.get())
