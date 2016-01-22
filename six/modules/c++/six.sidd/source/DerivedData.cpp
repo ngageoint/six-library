@@ -108,7 +108,6 @@ LUT* DerivedData::getDisplayLUT()
             return NULL;
         }
     }
-    
     else
     {
         throw except::Exception(Ctxt("Unknown version. Expected 1.1.0 or 1.0.0"));
