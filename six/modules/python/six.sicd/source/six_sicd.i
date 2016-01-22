@@ -184,9 +184,20 @@ SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
         std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
         Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, realBuffer);
     }
+
+    void getWidebandRegion(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData,
+                            long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)
+    {
+        std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
+
+        types::RowCol<size_t> offset(startRow, startCol);
+        types::RowCol<size_t> extent(numRows, numCols);
+        Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, offset, extent, realBuffer);
+    }
 %}
 
 void getWidebandData(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long arrayBuffer);
+void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer);
 
 %pythoncode %{
 import numpy as np
@@ -201,5 +212,15 @@ def read(inputPathname, schemaPaths = VectorString()):
     
     getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
     
+    return widebandData, complexData
+
+def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths = VectorString()):
+    complexData = getComplexData(inputPathname, schemaPaths)
+    
+    widebandData = np.empty(shape = (numRows, numCols), dtype = "complex64")
+    widebandBuffer, ro = widebandData.__array_interface__["data"]
+
+    getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
+
     return widebandData, complexData
 %}

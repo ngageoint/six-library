@@ -135,6 +135,9 @@ def showInfo(cmplx):
 ###############################################################################
 ###############################################################################
 
+if 1 == len(sys.argv):
+    print "please provide a sicd or XML file"
+
 for arg in sys.argv:
   if (arg.endswith(".ntf") or arg.endswith(".nitf")):
     cmplx = loadSicd(arg)

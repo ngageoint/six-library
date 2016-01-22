@@ -2801,6 +2801,26 @@ class VectorAntennaParameters(_object):
 VectorAntennaParameters_swigregister = _cphd.VectorAntennaParameters_swigregister
 VectorAntennaParameters_swigregister(VectorAntennaParameters)
 
+class StdAutoDwellTimeParameters(_object):
+    """Proxy of C++ std::auto_ptr<(cphd::DwellTimeParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoDwellTimeParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoDwellTimeParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(cphd::DwellTimeParameters)> self) -> StdAutoDwellTimeParameters"""
+        this = _cphd.new_StdAutoDwellTimeParameters()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _cphd.delete_StdAutoDwellTimeParameters
+    __del__ = lambda self: None
+StdAutoDwellTimeParameters_swigregister = _cphd.StdAutoDwellTimeParameters_swigregister
+StdAutoDwellTimeParameters_swigregister(StdAutoDwellTimeParameters)
+
 class ScopedCopyableDwellTimeParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> class"""
     __swig_setmethods__ = {}
@@ -2836,12 +2856,12 @@ class ScopedCopyableDwellTimeParameters(_object):
         return _cphd.ScopedCopyableDwellTimeParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableDwellTimeParameters self, DwellTimeParameters ptr=None)
         reset(ScopedCopyableDwellTimeParameters self)
         """
-        return _cphd.ScopedCopyableDwellTimeParameters_reset(self, ptr)
+        return _cphd.ScopedCopyableDwellTimeParameters_reset(self, *args)
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableDwellTimeParameters
     __del__ = lambda self: None
@@ -2905,12 +2925,12 @@ class ScopedCopyableAreaPlane(_object):
         return _cphd.ScopedCopyableAreaPlane___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableAreaPlane self, AreaPlane ptr=None)
         reset(ScopedCopyableAreaPlane self)
         """
-        return _cphd.ScopedCopyableAreaPlane_reset(self, ptr)
+        return _cphd.ScopedCopyableAreaPlane_reset(self, *args)
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableAreaPlane
     __del__ = lambda self: None
@@ -2947,6 +2967,26 @@ ScopedCopyableAreaPlane_swigregister(ScopedCopyableAreaPlane)
 def makeScopedCopyableAreaPlane():
     """makeScopedCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
     return _cphd.makeScopedCopyableAreaPlane()
+class StdAutoFxParameters(_object):
+    """Proxy of C++ std::auto_ptr<(cphd::FxParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoFxParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoFxParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(cphd::FxParameters)> self) -> StdAutoFxParameters"""
+        this = _cphd.new_StdAutoFxParameters()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _cphd.delete_StdAutoFxParameters
+    __del__ = lambda self: None
+StdAutoFxParameters_swigregister = _cphd.StdAutoFxParameters_swigregister
+StdAutoFxParameters_swigregister(StdAutoFxParameters)
+
 class ScopedCopyableFxParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::FxParameters)> class"""
     __swig_setmethods__ = {}
@@ -2982,12 +3022,12 @@ class ScopedCopyableFxParameters(_object):
         return _cphd.ScopedCopyableFxParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableFxParameters self, FxParameters ptr=None)
         reset(ScopedCopyableFxParameters self)
         """
-        return _cphd.ScopedCopyableFxParameters_reset(self, ptr)
+        return _cphd.ScopedCopyableFxParameters_reset(self, *args)
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableFxParameters
     __del__ = lambda self: None
@@ -3024,6 +3064,26 @@ ScopedCopyableFxParameters_swigregister(ScopedCopyableFxParameters)
 def makeScopedCopyableFxParameters():
     """makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"""
     return _cphd.makeScopedCopyableFxParameters()
+class StdAutoTOAParameters(_object):
+    """Proxy of C++ std::auto_ptr<(cphd::TOAParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTOAParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoTOAParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(cphd::TOAParameters)> self) -> StdAutoTOAParameters"""
+        this = _cphd.new_StdAutoTOAParameters()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _cphd.delete_StdAutoTOAParameters
+    __del__ = lambda self: None
+StdAutoTOAParameters_swigregister = _cphd.StdAutoTOAParameters_swigregister
+StdAutoTOAParameters_swigregister(StdAutoTOAParameters)
+
 class ScopedCopyableTOAParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::TOAParameters)> class"""
     __swig_setmethods__ = {}
@@ -3059,12 +3119,12 @@ class ScopedCopyableTOAParameters(_object):
         return _cphd.ScopedCopyableTOAParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableTOAParameters self, TOAParameters ptr=None)
         reset(ScopedCopyableTOAParameters self)
         """
-        return _cphd.ScopedCopyableTOAParameters_reset(self, ptr)
+        return _cphd.ScopedCopyableTOAParameters_reset(self, *args)
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableTOAParameters
     __del__ = lambda self: None
@@ -3093,6 +3153,26 @@ ScopedCopyableTOAParameters_swigregister(ScopedCopyableTOAParameters)
 def makeScopedCopyableTOAParameters():
     """makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"""
     return _cphd.makeScopedCopyableTOAParameters()
+class StdAutoCphdAntenna(_object):
+    """Proxy of C++ std::auto_ptr<(cphd::Antenna)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCphdAntenna, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCphdAntenna, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(cphd::Antenna)> self) -> StdAutoCphdAntenna"""
+        this = _cphd.new_StdAutoCphdAntenna()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _cphd.delete_StdAutoCphdAntenna
+    __del__ = lambda self: None
+StdAutoCphdAntenna_swigregister = _cphd.StdAutoCphdAntenna_swigregister
+StdAutoCphdAntenna_swigregister(StdAutoCphdAntenna)
+
 class ScopedCopyableCphdAntenna(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::Antenna)> class"""
     __swig_setmethods__ = {}
@@ -3128,12 +3208,12 @@ class ScopedCopyableCphdAntenna(_object):
         return _cphd.ScopedCopyableCphdAntenna___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, *args):
         """
         reset(ScopedCopyableCphdAntenna self, CphdAntenna ptr=None)
         reset(ScopedCopyableCphdAntenna self)
         """
-        return _cphd.ScopedCopyableCphdAntenna_reset(self, ptr)
+        return _cphd.ScopedCopyableCphdAntenna_reset(self, *args)
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableCphdAntenna
     __del__ = lambda self: None
