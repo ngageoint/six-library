@@ -1418,7 +1418,7 @@ void DerivedXMLParser110::convertJ2KToXML(const J2KCompression& j2k,
     for (size_t ii = 0; ii < numLayers; ++ii)
     {
         XMLElem layerXML = newElement("Layer", layerInfoXML);
-        setAttribute(layerXML, "index", toString(ii));
+        setAttribute(layerXML, "index", toString(ii + 1));
         createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerXML);
     }
 }
@@ -1445,7 +1445,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
         XMLElem bandXML = createString("Band",
                                        display.bandInformation->bands[ii],
                                        bandInfoXML);
-        setAttribute(bandXML, "index", str::toString(ii));
+        setAttribute(bandXML, "index", str::toString(ii + 1));
     }
     createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
               bandInfoXML);

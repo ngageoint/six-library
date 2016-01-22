@@ -199,7 +199,7 @@ NRL                N/A                        0,255 (Supposed to be display read
         <xs:complexType>
           <xs:simpleContent>
             <xs:extension base="xs:string">
-              <xs:attribute name="index" type="xs:int" use="required"/>
+              <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
             </xs:extension>
           </xs:simpleContent>
         </xs:complexType>
@@ -1493,7 +1493,7 @@ NRL                N/A                        0,255 (Supposed to be display read
         </xs:annotation>
       </xs:element>
     </xs:sequence>
-    <xs:attribute name="index" type="xs:int" use="required"/>
+    <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
   </xs:complexType>
   <xs:complexType name="DigitalElevationDataType">
     <xs:annotation>
