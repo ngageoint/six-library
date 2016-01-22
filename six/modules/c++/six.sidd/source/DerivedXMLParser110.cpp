@@ -945,7 +945,7 @@ XMLElem DerivedXMLParser110::convertLookupTableToXML(
 
             //exactly one of databaseName or (remapFamily and remapMember) can be set
             bool innerOk = false;
-            if (table.predefined->databaseName == "")
+            if (table.predefined->databaseName.empty())
             {
                 if (table.predefined->remapFamily != six::Init::undefined<size_t>() &&
                     table.predefined->remapMember != six::Init::undefined<size_t>())

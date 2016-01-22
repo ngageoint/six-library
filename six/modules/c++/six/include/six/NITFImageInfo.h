@@ -353,54 +353,57 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
     case PixelType::MONO8LU:
     {
         nitf::BandInfo band1;
-
-        // TODO: Why do we need to byte swap here?  If it is required, could
-        //       we avoid the copy and byte swap and instead index into
-        //       the LUT in the opposite order?
-        std::auto_ptr<const LUT> lutPtr(getDisplayLUT());
-        if (lutPtr.get() == NULL)
+        const LUT* lutPtr = getDisplayLUT();
+        //If LUT is NULL, we have a predefined LookupTable. 
+        //No LUT to write into NITF, so setting to MONO
+        if (lutPtr == NULL)
         {
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");
             bands.push_back(band1);
-            break;
         }
-        LUT lut = *lutPtr;
-        sys::byteSwap(reinterpret_cast<sys::byte*>(lut.get()),
-                      static_cast<unsigned short>(lut.elementSize),
-                      lut.numEntries);
-
-        if (lut.elementSize != sizeof(short))
+        else
         {
-            throw except::Exception(Ctxt(
-                "Unexpected element size: " +
-                str::toString(lut.elementSize)));
+            LUT lut(*lutPtr);
+            // TODO: Why do we need to byte swap here?  If it is required, could
+            //       we avoid the copy and byte swap and instead index into
+            //       the LUT in the opposite order?
+            sys::byteSwap(reinterpret_cast<sys::byte*>(lut.get()),
+                static_cast<unsigned short>(lut.elementSize),
+                lut.numEntries);
+
+            if (lut.elementSize != sizeof(short))
+            {
+                throw except::Exception(Ctxt(
+                    "Unexpected element size: " +
+                    str::toString(lut.elementSize)));
+            }
+
+            nitf::LookupTable lookupTable(lut.elementSize, lut.numEntries);
+            unsigned char* const table(lookupTable.getTable());
+
+            for (size_t i = 0; i < lut.numEntries; ++i)
+            {
+                // Need two LUTS in the nitf, with high order
+                // bits in the first and low order in the second
+                const unsigned char* const entry = lut[i];
+                table[i] = entry[0];
+                table[lut.numEntries + i] = entry[1];
+            }
+
+            //         //I would like to set it this way but it does not seem to work.
+            //         //Using the init function instead.
+            //         //band1.getRepresentation().set("LU");
+            //         //band1.getLookupTable().setTable(table, 2, lut.numEntries);
+
+            band1.init("LU", "", "", "",
+                static_cast<nitf::Uint32>(lut.elementSize),
+                static_cast<nitf::Uint32>(lut.numEntries),
+                lookupTable);
+            bands.push_back(band1);
         }
-
-        nitf::LookupTable lookupTable(lut.elementSize, lut.numEntries);
-        unsigned char* const table(lookupTable.getTable());
-
-        for (size_t i = 0; i < lut.numEntries; ++i)
-        {
-            // Need two LUTS in the nitf, with high order
-            // bits in the first and low order in the second
-            const unsigned char* const entry = lut[i];
-            table[i] = entry[0];
-            table[lut.numEntries + i] = entry[1];
-        }
-
-        //         //I would like to set it this way but it does not seem to work.
-        //         //Using the init function instead.
-        //         //band1.getRepresentation().set("LU");
-        //         //band1.getLookupTable().setTable(table, 2, lut.numEntries);
-
-        band1.init("LU", "", "", "",
-                   static_cast<nitf::Uint32>(lut.elementSize),
-                   static_cast<nitf::Uint32>(lut.numEntries),
-                   lookupTable);
-        bands.push_back(band1);
     }
-        break;
+    break;
 
     case PixelType::RGB8LU:
     {
@@ -408,44 +411,48 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
         const LUT* const lut = getDisplayLUT();
 
-        if (!lut)
+        if (lut == NULL)
         {
+            //If LUT is NULL, we have a predefined LookupTable. 
+            //No LUT to write into NITF, so setting to MONO
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");
             bands.push_back(band1);
-            break;
         }
-        if (lut->elementSize != 3)
+        else
         {
-            throw except::Exception(Ctxt(
-                "Unexpected element size: " +
-                str::toString(lut->elementSize)));
-        }
-
-        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
-        unsigned char* const table(lookupTable.getTable());
-
-        for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
-        {
-            for (size_t j = 0; j < lut->elementSize; ++j, ++k)
+            if (lut->elementSize != 3)
             {
-                // Need to transpose the lookup table entries
-                table[j * lut->numEntries + i] = lut->table[k];
+                throw except::Exception(Ctxt(
+                    "Unexpected element size: " +
+                    str::toString(lut->elementSize)));
             }
+
+            nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+            unsigned char* const table(lookupTable.getTable());
+
+            for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
+            {
+                for (size_t j = 0; j < lut->elementSize; ++j, ++k)
+                {
+                    // Need to transpose the lookup table entries
+                    table[j * lut->numEntries + i] = lut->table[k];
+                }
+            }
+
+            //I would like to set it this way but it does not seem to work.
+            //Using the init function instead.
+            //band1.getRepresentation().set("LU");
+            //band1.getLookupTable().setTable(table, 3, lut->numEntries);
+
+            band1.init("LU", "", "", "",
+                static_cast<nitf::Uint32>(lut->elementSize),
+                static_cast<nitf::Uint32>(lut->numEntries),
+                lookupTable);
+            bands.push_back(band1);
         }
-
-        //I would like to set it this way but it does not seem to work.
-        //Using the init function instead.
-        //band1.getRepresentation().set("LU");
-        //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-
-        band1.init("LU", "", "", "",
-                   static_cast<nitf::Uint32>(lut->elementSize),
-                   static_cast<nitf::Uint32>(lut->numEntries),
-                   lookupTable);
-        bands.push_back(band1);
     }
-        break;
+    break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));
