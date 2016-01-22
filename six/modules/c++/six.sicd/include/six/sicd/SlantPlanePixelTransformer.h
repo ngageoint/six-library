@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SICD_PIXEL_TO_LLA_H__
-#define __SIX_SICD_PIXEL_TO_LLA_H__
+#ifndef __SIX_SICD_SLANT_PLANE_PIXEL_TRANSFORMER_H__
+#define __SIX_SICD_SLANT_PLANE_PIXEL_TRANSFORMER_H__
 
 #include <string>
 #include <vector>
@@ -38,13 +38,13 @@ namespace six
 namespace sicd
 {
 /*!
- *  \class PixelToLLA
- *  \brief Projects a slant plane pixel into ground plane LLA coordinates
+ *  \class SlantPlanePixelTransformer
+ *  \brief Projects a slant plane pixel into various ground plane coordinates
  *
  *  This class should be used to project coordinates between slant and 
  *  ground planes.
  */
-class PixelToLLA
+class SlantPlanePixelTransformer
 {
 public:
     /*!
@@ -56,15 +56,30 @@ public:
      *  NOTE: ProjectionModel is stored by reference. Make sure
      *        this object survives this class and its usefulness.
      */
-    PixelToLLA(const six::sicd::ComplexData& data,
-               const scene::SceneGeometry& geom,
-               const scene::ProjectionModel& projection);
+    SlantPlanePixelTransformer(const six::sicd::ComplexData& data,
+                               const scene::SceneGeometry& geom,
+                               const scene::ProjectionModel& projection);
 
     /*!
-     *  \fn operator()
+     *  \fn toECEF
      *  \param pixel - Slant Plane pixel with (row,col) index
+     *  \return      - Returns the ground plane location in ECEF
      */
-    scene::LatLonAlt operator()(const types::RowCol<size_t>& pixel) const;
+    scene::Vector3 toECEF(const types::RowCol<size_t>& pixel) const;
+
+    /*!
+     *  \fn toLLA
+     *  \param pixel - Slant Plane pixel with (row,col) index
+     *  \return      - Returns the ground plane location in LLA
+     */
+    scene::LatLonAlt toLLA(const types::RowCol<size_t>& pixel) const;
+
+    /*!
+     *  \fn toLatLon
+     *  \param pixel - Slant Plane pixel with (row,col) index
+     *  \return      - Returns the ground plane location in LatLon
+     */
+    scene::LatLon toLatLon(const types::RowCol<size_t>& pixel) const;
 
 private:
     const scene::SceneGeometry mGeom;

@@ -27,16 +27,17 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
-#include <six/sicd/PixelToLLA.h>
+#include <six/sicd/SlantPlanePixelTransformer.h>
 
 namespace six
 {
 namespace sicd
 {
 
-PixelToLLA::PixelToLLA(const six::sicd::ComplexData& data,
-                       const scene::SceneGeometry& geom,
-                       const scene::ProjectionModel& projection) :
+SlantPlanePixelTransformer::SlantPlanePixelTransformer(
+    const six::sicd::ComplexData& data,
+    const scene::SceneGeometry& geom,
+    const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
     mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
@@ -45,7 +46,7 @@ PixelToLLA::PixelToLLA(const six::sicd::ComplexData& data,
     mGroundPlaneNormal.normalize();
 }
 
-scene::LatLonAlt PixelToLLA::operator()(
+scene::Vector3 SlantPlanePixelTransformer::toECEF(
     const types::RowCol<size_t>& pixel) const
 {
     //! convert slant pixel to meters from scene center
@@ -53,14 +54,25 @@ scene::LatLonAlt PixelToLLA::operator()(
 
     //! project into ground plane -- ecef coords
     double timeCOA(0.0);
-    const scene::Vector3 groundPt =
-            mProjection.imageToScene(imagePt,
-                                     mGeom.getReferencePosition(),
-                                     mGroundPlaneNormal,
-                                     &timeCOA);
+    return mProjection.imageToScene(imagePt,
+                                    mGeom.getReferencePosition(),
+                                    mGroundPlaneNormal,
+                                    &timeCOA);
+}
 
-    //! translate to LLA
-    return scene::Utilities::ecefToLatLon(groundPt);
+scene::LatLonAlt SlantPlanePixelTransformer::toLLA(
+    const types::RowCol<size_t>& pixel) const
+{
+    //! project then convert ECEF to LLA
+    return scene::Utilities::ecefToLatLon(toECEF(pixel));
+}
+
+scene::LatLon SlantPlanePixelTransformer::toLatLon(
+    const types::RowCol<size_t>& pixel) const
+{
+    //! project then convert LLA to LatLon
+    scene::LatLonAlt lla = toLLA(pixel);
+    return scene::LatLon(lla.getLat(), lla.getLon());
 }
 
 }
