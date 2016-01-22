@@ -378,13 +378,6 @@ class ImageData(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_ImageData
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(ImageData self) -> ImageData"""
-        return _six_sicd.ImageData_clone(self)
-
     __swig_setmethods__["pixelType"] = _six_sicd.ImageData_pixelType_set
     __swig_getmethods__["pixelType"] = _six_sicd.ImageData_pixelType_get
     if _newclass:
@@ -421,6 +414,8 @@ class ImageData(_object):
     __swig_getmethods__["validData"] = _six_sicd.ImageData_validData_get
     if _newclass:
         validData = _swig_property(_six_sicd.ImageData_validData_get, _six_sicd.ImageData_validData_set)
+    __swig_destroy__ = _six_sicd.delete_ImageData
+    __del__ = lambda self: None
 ImageData_swigregister = _six_sicd.ImageData_swigregister
 ImageData_swigregister(ImageData)
 
@@ -2551,98 +2546,93 @@ class StdAutoImageData(_object):
 StdAutoImageData_swigregister = _six_sicd.StdAutoImageData_swigregister
 StdAutoImageData_swigregister(StdAutoImageData)
 
-class ScopedCloneableImageData(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ImageData)> class"""
+class ScopedCopyableImageData(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::ImageData)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableImageData, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableImageData, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableImageData, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableImageData, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self, ImageData ptr=None) -> ScopedCloneableImageData
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self) -> ScopedCloneableImageData
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self, ScopedCloneableImageData rhs) -> ScopedCloneableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self, ImageData ptr=None) -> ScopedCopyableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self) -> ScopedCopyableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self, ScopedCopyableImageData rhs) -> ScopedCopyableImageData
         """
-        this = _six_sicd.new_ScopedCloneableImageData(*args)
+        this = _six_sicd.new_ScopedCopyableImageData(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData_get(self)
+        """get(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData___ref__(self)
+        """__ref__(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData___deref__(self)
+        """__deref__(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData___deref__(self)
 
 
     def reset(self, *args):
         """
-        reset(ScopedCloneableImageData self, ImageData ptr=None)
-        reset(ScopedCloneableImageData self)
+        reset(ScopedCopyableImageData self, ImageData ptr=None)
+        reset(ScopedCopyableImageData self)
         """
-        return _six_sicd.ScopedCloneableImageData_reset(self, *args)
+        return _six_sicd.ScopedCopyableImageData_reset(self, *args)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableImageData
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableImageData
     __del__ = lambda self: None
-
-    def clone(self):
-        """clone(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData_clone(self)
-
-    __swig_setmethods__["pixelType"] = _six_sicd.ScopedCloneableImageData_pixelType_set
-    __swig_getmethods__["pixelType"] = _six_sicd.ScopedCloneableImageData_pixelType_get
+    __swig_setmethods__["pixelType"] = _six_sicd.ScopedCopyableImageData_pixelType_set
+    __swig_getmethods__["pixelType"] = _six_sicd.ScopedCopyableImageData_pixelType_get
     if _newclass:
-        pixelType = _swig_property(_six_sicd.ScopedCloneableImageData_pixelType_get, _six_sicd.ScopedCloneableImageData_pixelType_set)
-    __swig_setmethods__["amplitudeTable"] = _six_sicd.ScopedCloneableImageData_amplitudeTable_set
-    __swig_getmethods__["amplitudeTable"] = _six_sicd.ScopedCloneableImageData_amplitudeTable_get
+        pixelType = _swig_property(_six_sicd.ScopedCopyableImageData_pixelType_get, _six_sicd.ScopedCopyableImageData_pixelType_set)
+    __swig_setmethods__["amplitudeTable"] = _six_sicd.ScopedCopyableImageData_amplitudeTable_set
+    __swig_getmethods__["amplitudeTable"] = _six_sicd.ScopedCopyableImageData_amplitudeTable_get
     if _newclass:
-        amplitudeTable = _swig_property(_six_sicd.ScopedCloneableImageData_amplitudeTable_get, _six_sicd.ScopedCloneableImageData_amplitudeTable_set)
-    __swig_setmethods__["numRows"] = _six_sicd.ScopedCloneableImageData_numRows_set
-    __swig_getmethods__["numRows"] = _six_sicd.ScopedCloneableImageData_numRows_get
+        amplitudeTable = _swig_property(_six_sicd.ScopedCopyableImageData_amplitudeTable_get, _six_sicd.ScopedCopyableImageData_amplitudeTable_set)
+    __swig_setmethods__["numRows"] = _six_sicd.ScopedCopyableImageData_numRows_set
+    __swig_getmethods__["numRows"] = _six_sicd.ScopedCopyableImageData_numRows_get
     if _newclass:
-        numRows = _swig_property(_six_sicd.ScopedCloneableImageData_numRows_get, _six_sicd.ScopedCloneableImageData_numRows_set)
-    __swig_setmethods__["numCols"] = _six_sicd.ScopedCloneableImageData_numCols_set
-    __swig_getmethods__["numCols"] = _six_sicd.ScopedCloneableImageData_numCols_get
+        numRows = _swig_property(_six_sicd.ScopedCopyableImageData_numRows_get, _six_sicd.ScopedCopyableImageData_numRows_set)
+    __swig_setmethods__["numCols"] = _six_sicd.ScopedCopyableImageData_numCols_set
+    __swig_getmethods__["numCols"] = _six_sicd.ScopedCopyableImageData_numCols_get
     if _newclass:
-        numCols = _swig_property(_six_sicd.ScopedCloneableImageData_numCols_get, _six_sicd.ScopedCloneableImageData_numCols_set)
-    __swig_setmethods__["firstRow"] = _six_sicd.ScopedCloneableImageData_firstRow_set
-    __swig_getmethods__["firstRow"] = _six_sicd.ScopedCloneableImageData_firstRow_get
+        numCols = _swig_property(_six_sicd.ScopedCopyableImageData_numCols_get, _six_sicd.ScopedCopyableImageData_numCols_set)
+    __swig_setmethods__["firstRow"] = _six_sicd.ScopedCopyableImageData_firstRow_set
+    __swig_getmethods__["firstRow"] = _six_sicd.ScopedCopyableImageData_firstRow_get
     if _newclass:
-        firstRow = _swig_property(_six_sicd.ScopedCloneableImageData_firstRow_get, _six_sicd.ScopedCloneableImageData_firstRow_set)
-    __swig_setmethods__["firstCol"] = _six_sicd.ScopedCloneableImageData_firstCol_set
-    __swig_getmethods__["firstCol"] = _six_sicd.ScopedCloneableImageData_firstCol_get
+        firstRow = _swig_property(_six_sicd.ScopedCopyableImageData_firstRow_get, _six_sicd.ScopedCopyableImageData_firstRow_set)
+    __swig_setmethods__["firstCol"] = _six_sicd.ScopedCopyableImageData_firstCol_set
+    __swig_getmethods__["firstCol"] = _six_sicd.ScopedCopyableImageData_firstCol_get
     if _newclass:
-        firstCol = _swig_property(_six_sicd.ScopedCloneableImageData_firstCol_get, _six_sicd.ScopedCloneableImageData_firstCol_set)
-    __swig_setmethods__["fullImage"] = _six_sicd.ScopedCloneableImageData_fullImage_set
-    __swig_getmethods__["fullImage"] = _six_sicd.ScopedCloneableImageData_fullImage_get
+        firstCol = _swig_property(_six_sicd.ScopedCopyableImageData_firstCol_get, _six_sicd.ScopedCopyableImageData_firstCol_set)
+    __swig_setmethods__["fullImage"] = _six_sicd.ScopedCopyableImageData_fullImage_set
+    __swig_getmethods__["fullImage"] = _six_sicd.ScopedCopyableImageData_fullImage_get
     if _newclass:
-        fullImage = _swig_property(_six_sicd.ScopedCloneableImageData_fullImage_get, _six_sicd.ScopedCloneableImageData_fullImage_set)
-    __swig_setmethods__["scpPixel"] = _six_sicd.ScopedCloneableImageData_scpPixel_set
-    __swig_getmethods__["scpPixel"] = _six_sicd.ScopedCloneableImageData_scpPixel_get
+        fullImage = _swig_property(_six_sicd.ScopedCopyableImageData_fullImage_get, _six_sicd.ScopedCopyableImageData_fullImage_set)
+    __swig_setmethods__["scpPixel"] = _six_sicd.ScopedCopyableImageData_scpPixel_set
+    __swig_getmethods__["scpPixel"] = _six_sicd.ScopedCopyableImageData_scpPixel_get
     if _newclass:
-        scpPixel = _swig_property(_six_sicd.ScopedCloneableImageData_scpPixel_get, _six_sicd.ScopedCloneableImageData_scpPixel_set)
-    __swig_setmethods__["validData"] = _six_sicd.ScopedCloneableImageData_validData_set
-    __swig_getmethods__["validData"] = _six_sicd.ScopedCloneableImageData_validData_get
+        scpPixel = _swig_property(_six_sicd.ScopedCopyableImageData_scpPixel_get, _six_sicd.ScopedCopyableImageData_scpPixel_set)
+    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableImageData_validData_set
+    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableImageData_validData_get
     if _newclass:
-        validData = _swig_property(_six_sicd.ScopedCloneableImageData_validData_get, _six_sicd.ScopedCloneableImageData_validData_set)
-ScopedCloneableImageData_swigregister = _six_sicd.ScopedCloneableImageData_swigregister
-ScopedCloneableImageData_swigregister(ScopedCloneableImageData)
+        validData = _swig_property(_six_sicd.ScopedCopyableImageData_validData_get, _six_sicd.ScopedCopyableImageData_validData_set)
+ScopedCopyableImageData_swigregister = _six_sicd.ScopedCopyableImageData_swigregister
+ScopedCopyableImageData_swigregister(ScopedCopyableImageData)
 
 
-def makeScopedCloneableImageData():
-    """makeScopedCloneableImageData() -> ScopedCloneableImageData"""
-    return _six_sicd.makeScopedCloneableImageData()
+def makeScopedCopyableImageData():
+    """makeScopedCopyableImageData() -> ScopedCopyableImageData"""
+    return _six_sicd.makeScopedCopyableImageData()
 class StdAutoGeoData(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::GeoData)> class"""
     __swig_setmethods__ = {}

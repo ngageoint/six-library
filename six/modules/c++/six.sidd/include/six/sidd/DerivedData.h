@@ -291,10 +291,7 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual LUT* getDisplayLUT()
-    {
-        return display->remapInformation->remapLUT.get();
-    }
+    virtual LUT* getDisplayLUT();
 
     virtual std::string getVendorID() const
     {

@@ -27,7 +27,7 @@
 
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
 #include <six/Types.h>
 
 namespace six
@@ -74,7 +74,7 @@ public:
 
     //! LUT associated with image pixels.  Must be present if pixel type is
     //  RGB8LU.
-    mem::ScopedCloneablePtr<LUT> mLUT;
+    mem::ScopedCopyablePtr<LUT> mLUT;
 };
 }
 

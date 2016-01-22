@@ -257,12 +257,12 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
     XMLElem imageDataXML = newElement("ImageData", parent);
 
     createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
-    if (imageData->amplitudeTable)
+    if (imageData->amplitudeTable.get())
     {
-        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+        const AmplitudeTable& ampTable = *imageData->amplitudeTable;
         XMLElem ampTableXML = newElement("AmpTable", imageDataXML);
         setAttribute(ampTableXML, "size", str::toString(ampTable.numEntries));
-        for (unsigned int i = 0; i < ampTable.numEntries; ++i)
+        for (size_t i = 0; i < ampTable.numEntries; ++i)
         {
             XMLElem ampXML = createDouble("Amplitude", *(double*) ampTable[i],
                                           ampTableXML);
@@ -1016,9 +1016,9 @@ void ComplexXMLParser::parseImageDataFromXML(
     {
         std::vector < XMLElem > ampsXML;
         ampTableXML->getElementsByTagName("Amplitude", ampsXML);
-        imageData->amplitudeTable = new AmplitudeTable();
+        imageData->amplitudeTable.reset(new AmplitudeTable());
 
-        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+        AmplitudeTable& ampTable = *imageData->amplitudeTable;
         for (std::vector<XMLElem>::const_iterator it = ampsXML.begin(); it
                 != ampsXML.end(); ++it)
         {

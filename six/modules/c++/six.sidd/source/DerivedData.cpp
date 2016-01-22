@@ -91,6 +91,29 @@ DateTime DerivedData::getCollectionStartDateTime() const
     return exploitationFeatures->collections[0]->information->collectionDateTime;
 }
 
+LUT* DerivedData::getDisplayLUT()
+{
+    if (mVersion == "1.0.0")
+    {
+        return display->remapInformation->remapLUT.get();
+    }
+    else if (mVersion == "1.1.0")
+    {
+        if (display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->custom.get())
+        {
+            return &(display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->custom->lut);
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Unknown version. Expected 1.1.0 or 1.0.0"));
+    }
+}
+
 types::RowCol<double>
 DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 {
