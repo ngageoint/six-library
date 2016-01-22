@@ -197,7 +197,7 @@ struct RRDS
 struct ProductGenerationOptions
 {
     mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
-    Filter modularTransferFunctionRestoration;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
 
     // Required
     mem::ScopedCopyablePtr<LookupTable> dataRemapping;
