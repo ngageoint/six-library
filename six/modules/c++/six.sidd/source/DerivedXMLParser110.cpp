@@ -1334,9 +1334,9 @@ XMLElem DerivedXMLParser110::convertBankToXML(const Filter::Bank& bank,
         }
 
         XMLElem filterCoef = newElement("FilterCoef", customXML);
-        for (sys::SSize_T row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
+        for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
         {
-            for (sys::SSize_T col = 0; col < bank.custom->numPoints; ++col, ++idx)
+            for (size_t col = 0; col < bank.custom->numPoints; ++col, ++idx)
             {
                 XMLElem coefXML = createDouble("Coef", bank.custom->filterCoef[idx],
                     filterCoef);
