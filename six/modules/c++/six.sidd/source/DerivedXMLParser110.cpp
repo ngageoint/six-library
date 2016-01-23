@@ -728,9 +728,9 @@ void DerivedXMLParser110::parseGeometricTransformFromXML(const XMLElem geomElem,
         transform.scaling.interpolation);
 
     XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
-    std::string shadowsDirection;
-    parseString(getFirstAndOnly(orientationElem, "ShadowsDirection"), shadowsDirection);
-    transform.orientation.shadowsDirection = ShadowsDirection(shadowsDirection);
+    std::string shadowDirection;
+    parseString(getFirstAndOnly(orientationElem, "ShadowDirection"), shadowDirection);
+    transform.orientation.shadowDirection = ShadowDirection(shadowDirection);
 }
 
 void DerivedXMLParser110::parseSharpnessEnhancementFromXML(
@@ -1109,8 +1109,8 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
                        scalingXML);
 
     XMLElem orientationXML = newElement("Orientation", geoTransformXML);
-    createStringFromEnum("ShadowsDirection",
-        geoTransform.orientation.shadowsDirection,
+    createStringFromEnum("ShadowDirection",
+        geoTransform.orientation.shadowDirection,
         orientationXML);
 
     // SharpnessEnhancement

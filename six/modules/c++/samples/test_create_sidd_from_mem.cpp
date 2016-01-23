@@ -1839,8 +1839,8 @@ void initDisplay(six::sidd::Display& display)
             display.interactiveProcessing->geometricTransform;
     createPredefinedFilter(geoTransform.scaling.antiAlias);
     createCustomFilter(geoTransform.scaling.interpolation);
-    geoTransform.orientation.shadowsDirection =
-            six::sidd::ShadowsDirection::ARBITRARY;
+    geoTransform.orientation.shadowDirection =
+            six::sidd::ShadowDirection::ARBITRARY;
 
     display.interactiveProcessing->sharpnessEnhancement.
             modularTransferFunctionCompensation.reset(createCustomFilter());

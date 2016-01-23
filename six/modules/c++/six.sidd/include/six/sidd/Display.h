@@ -220,7 +220,7 @@ struct Scaling
 struct Orientation
 {
     //! Describes the shadow direction relative to the pixels in the file.
-    ShadowsDirection shadowsDirection;
+    ShadowDirection shadowDirection;
 };
 
 struct SharpnessEnhancement
