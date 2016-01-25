@@ -1825,7 +1825,7 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
 
     display.nonInteractiveProcessing->rrds.downsamplingMethod =
-            six::sidd::DownsamplingMethod::DECIMATE;
+            six::sidd::DownsamplingMethod::LAGRANGE;
     display.nonInteractiveProcessing->rrds.antiAlias.reset(
             createCustomFilter());
     display.nonInteractiveProcessing->rrds.interpolation.reset(

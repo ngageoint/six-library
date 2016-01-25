@@ -389,11 +389,11 @@ void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
     for (size_t ii = 0; ii < bands.size(); ++ii)
     {
         parseString(bands[ii], bandInformation.bands[ii]);
-        parseInt(getFirstAndOnly(bandXML, "BitsPerPixel"),
-                bandInformation.bitsPerPixel);
-        parseInt(getFirstAndOnly(bandXML, "DisplayFlag"),
-                 bandInformation.displayFlag);
     }
+    parseInt(getFirstAndOnly(bandXML, "BitsPerPixel"),
+        bandInformation.bitsPerPixel);
+    parseInt(getFirstAndOnly(bandXML, "DisplayFlag"),
+        bandInformation.displayFlag);
 }
 
 void DerivedXMLParser110::parseNonInteractiveProcessingFromXML(
@@ -445,7 +445,6 @@ void DerivedXMLParser110::parseProductGenerationOptionsFromXML(
         parseFilterFromXML(correctionElem, *options.asymmetricPixelCorrection);
     }
 }
-
 
 void DerivedXMLParser110::parseLookupTableFromXML(
             const XMLElem lookupElem,
@@ -503,9 +502,6 @@ void DerivedXMLParser110::parseLookupTableFromXML(
 void DerivedXMLParser110::parseBandEqualizationFromXML(const XMLElem bandElem,
                                                        BandEqualization& band) const
 {
-    //std::string algorithmName;
-    //parseString(getFirstAndOnly(bandElem, "Algorithm"), algorithmName);
-    //band.algorithm = BandEqualizationAlgorithm(algorithmName);
     parseEnum(getFirstAndOnly(bandElem, "Algorithm"), band.algorithm);
 
     XMLElem LUTElem = getOptional(bandElem, "BandLUT");
@@ -519,17 +515,26 @@ void DerivedXMLParser110::parseBandEqualizationFromXML(const XMLElem bandElem,
 void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
             RRDS& rrds) const
 {
-    std::string methodType;
-    parseString(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), methodType);
-    rrds.downsamplingMethod = DownsamplingMethod(methodType);
+    parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
 
-    if (methodType != "DECIMATE")
+    bool hasMoreFields = true;
+    if (rrds.downsamplingMethod.toString() == "DECIMATE" || rrds.downsamplingMethod.toString() == "MAX_PIXEL")
     {
-        return;
+        hasMoreFields = false;
     }
     XMLElem antiAliasElem = getOptional(rrdsElem, "AntiAlias");
     XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
 
+    if (hasMoreFields && (antiAliasElem == NULL || interpolationElem == NULL))
+    {
+        throw except::Exception(Ctxt("Both AntiAlias and Interpolation required unless DownsamplingMethod = DECIMATE or MAX_PIXEL"));
+    }
+    if (hasMoreFields == false && (antiAliasElem || interpolationElem))
+    {
+        throw except::Exception(Ctxt("If DownsamplingMethod = DECIMATE or MAX_PIXEL, neither AntiAlias nor Interpolation allowed"));
+    }
+
+    bool ok = false;
     if (antiAliasElem)
     {
         rrds.antiAlias.reset(new Filter());
@@ -607,7 +612,6 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
      Filter::Kernel& kernel) const
 {
     XMLElem predefinedElem = getOptional(kernelElem, "Predefined");
-
     XMLElem customElem = getOptional(kernelElem, "Custom");
 
     bool ok = false;
@@ -769,10 +773,9 @@ void DerivedXMLParser110::parseColorSpaceTransformFromXML(
             const XMLElem colorElem, ColorSpaceTransform& transform) const
 {
     XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
-    std::string intentName;
-    parseString(getFirstAndOnly(manageElem, "RenderingIntent"), intentName);
-    transform.colorManagementModule.renderingIntent =
-            RenderingIntent(intentName);
+
+    parseEnum(getFirstAndOnly(manageElem, "RenderingIntent"),
+            transform.colorManagementModule.renderingIntent);
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
     parseString(getFirstAndOnly(manageElem, "DisplayProfile"),
@@ -785,9 +788,7 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
             const XMLElem rangeElem,
             DynamicRangeAdjustment& rangeAdjustment) const
 {
-    std::string algTypeName;
-    parseString(getFirstAndOnly(rangeElem, "AlgorithmType"), algTypeName);
-    rangeAdjustment.algorithmType = DRAType(algTypeName);
+    parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
 
     bool ok = false;
     XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
@@ -818,7 +819,6 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
         throw except::Exception(Ctxt("XML should have exactly one of DRAParameters and DRAOverrides"));
     }
 }
-
 
 XMLElem DerivedXMLParser110::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
@@ -1077,7 +1077,7 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
     createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
                          rrdsXML);
 
-    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE)
+    if (rrds.downsamplingMethod != DownsamplingMethod::DECIMATE && rrds.downsamplingMethod != DownsamplingMethod::MAX_PIXEL)
     {
         confirmNonNull(rrds.antiAlias, "antiAlias",
                        "for DECIMATE downsampling");
