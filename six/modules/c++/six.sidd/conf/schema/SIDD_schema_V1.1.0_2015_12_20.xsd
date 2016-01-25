@@ -266,6 +266,9 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="DECIMATE"/>
       <xs:enumeration value="MAX-PIXEL"/>
       <xs:enumeration value="AVERAGE"/>
+      <xs:enumeration value="NEAREST_NEIGHBOR"/>
+      <xs:enumeration value="BILINEAR"/>
+      <xs:enumeration value="LAGRANGE"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="RRDSType">
@@ -480,19 +483,20 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="ShadowsDirection" type="ShadowsDirectionType">
+      <xs:element name="OrientationType" type="OrientationType">
         <xs:annotation>
           <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="ShadowsDirectionType">
+  <xs:simpleType name="OrientationType">
     <xs:annotation>
       <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="UP"/>
+      <xs:enumeration value="DOWN"/>
       <xs:enumeration value="LEFT"/>
       <xs:enumeration value="RIGHT"/>
       <xs:enumeration value="ARBITRARY"/>

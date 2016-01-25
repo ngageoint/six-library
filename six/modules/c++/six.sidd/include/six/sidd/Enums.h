@@ -40,10 +40,10 @@ const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 
 /*!
- *  \struct BandEqualizationAlgorithm 
- *
- *  Enumeration used to represent BandEqualizationAlgorithms
- */
+*  \struct BandEqualizationAlgorithm
+*
+*  Enumeration used to represent BandEqualizationAlgorithms
+*/
 struct BandEqualizationAlgorithm
 {
     //! The enumerations allowed
@@ -54,7 +54,7 @@ struct BandEqualizationAlgorithm
     };
 
     //! Default constructor
-    BandEqualizationAlgorithm(){ value = NOT_SET; }
+    BandEqualizationAlgorithm() { value = NOT_SET; }
 
     //! string constructor
     BandEqualizationAlgorithm(std::string s)
@@ -70,7 +70,7 @@ struct BandEqualizationAlgorithm
     //! int constructor
     BandEqualizationAlgorithm(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = LUT_1D;
@@ -84,12 +84,12 @@ struct BandEqualizationAlgorithm
     }
 
     //! destructor
-    ~BandEqualizationAlgorithm(){}
+    ~BandEqualizationAlgorithm() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("LUT_1D");
@@ -130,10 +130,10 @@ struct BandEqualizationAlgorithm
 
 
 /*!
- *  \struct CoordinateSystemType 
- *
- *  Enumeration used to represent CoordinateSystemTypes
- */
+*  \struct CoordinateSystemType
+*
+*  Enumeration used to represent CoordinateSystemTypes
+*/
 struct CoordinateSystemType
 {
     //! The enumerations allowed
@@ -145,7 +145,7 @@ struct CoordinateSystemType
     };
 
     //! Default constructor
-    CoordinateSystemType(){ value = NOT_SET; }
+    CoordinateSystemType() { value = NOT_SET; }
 
     //! string constructor
     CoordinateSystemType(std::string s)
@@ -163,7 +163,7 @@ struct CoordinateSystemType
     //! int constructor
     CoordinateSystemType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = GCS;
@@ -180,12 +180,12 @@ struct CoordinateSystemType
     }
 
     //! destructor
-    ~CoordinateSystemType(){}
+    ~CoordinateSystemType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("GCS");
@@ -228,10 +228,10 @@ struct CoordinateSystemType
 
 
 /*!
- *  \struct DRAType 
- *
- *  Enumeration used to represent DRATypes
- */
+*  \struct DRAType
+*
+*  Enumeration used to represent DRATypes
+*/
 struct DRAType
 {
     //! The enumerations allowed
@@ -244,7 +244,7 @@ struct DRAType
     };
 
     //! Default constructor
-    DRAType(){ value = NOT_SET; }
+    DRAType() { value = NOT_SET; }
 
     //! string constructor
     DRAType(std::string s)
@@ -264,7 +264,7 @@ struct DRAType
     //! int constructor
     DRAType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = AUTO;
@@ -284,12 +284,12 @@ struct DRAType
     }
 
     //! destructor
-    ~DRAType(){}
+    ~DRAType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("AUTO");
@@ -334,10 +334,10 @@ struct DRAType
 
 
 /*!
- *  \struct DownsamplingMethod 
- *
- *  Enumeration used to represent DownsamplingMethods
- */
+*  \struct DownsamplingMethod
+*
+*  Enumeration used to represent DownsamplingMethods
+*/
 struct DownsamplingMethod
 {
     //! The enumerations allowed
@@ -346,11 +346,14 @@ struct DownsamplingMethod
         DECIMATE = 0,
         MAX_PIXEL = 1,
         AVERAGE = 2,
+        NEAREST_NEIGHBOR = 3,
+        BILINEAR = 4,
+        LAGRANGE = 5,
         NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    DownsamplingMethod(){ value = NOT_SET; }
+    DownsamplingMethod() { value = NOT_SET; }
 
     //! string constructor
     DownsamplingMethod(std::string s)
@@ -361,6 +364,12 @@ struct DownsamplingMethod
             value = MAX_PIXEL;
         else if (s == "AVERAGE")
             value = AVERAGE;
+        else if (s == "NEAREST_NEIGHBOR")
+            value = NEAREST_NEIGHBOR;
+        else if (s == "BILINEAR")
+            value = BILINEAR;
+        else if (s == "LAGRANGE")
+            value = LAGRANGE;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -370,7 +379,7 @@ struct DownsamplingMethod
     //! int constructor
     DownsamplingMethod(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = DECIMATE;
@@ -381,6 +390,15 @@ struct DownsamplingMethod
         case 2:
             value = AVERAGE;
             break;
+        case 3:
+            value = NEAREST_NEIGHBOR;
+            break;
+        case 4:
+            value = BILINEAR;
+            break;
+        case 5:
+            value = LAGRANGE;
+            break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
             break;
@@ -390,12 +408,12 @@ struct DownsamplingMethod
     }
 
     //! destructor
-    ~DownsamplingMethod(){}
+    ~DownsamplingMethod() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("DECIMATE");
@@ -403,6 +421,12 @@ struct DownsamplingMethod
             return std::string("MAX_PIXEL");
         case 2:
             return std::string("AVERAGE");
+        case 3:
+            return std::string("NEAREST_NEIGHBOR");
+        case 4:
+            return std::string("BILINEAR");
+        case 5:
+            return std::string("LAGRANGE");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
@@ -432,7 +456,7 @@ struct DownsamplingMethod
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
-    static size_t size() { return 4; }
+    static size_t size() { return 7; }
 
     int value;
 
@@ -440,10 +464,10 @@ struct DownsamplingMethod
 
 
 /*!
- *  \struct FilterDatabaseName 
- *
- *  Enumeration used to represent FilterDatabaseNames
- */
+*  \struct FilterDatabaseName
+*
+*  Enumeration used to represent FilterDatabaseNames
+*/
 struct FilterDatabaseName
 {
     //! The enumerations allowed
@@ -457,7 +481,7 @@ struct FilterDatabaseName
     };
 
     //! Default constructor
-    FilterDatabaseName(){ value = NOT_SET; }
+    FilterDatabaseName() { value = NOT_SET; }
 
     //! string constructor
     FilterDatabaseName(std::string s)
@@ -479,7 +503,7 @@ struct FilterDatabaseName
     //! int constructor
     FilterDatabaseName(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = BILINEAR;
@@ -502,12 +526,12 @@ struct FilterDatabaseName
     }
 
     //! destructor
-    ~FilterDatabaseName(){}
+    ~FilterDatabaseName() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("BILINEAR");
@@ -554,10 +578,10 @@ struct FilterDatabaseName
 
 
 /*!
- *  \struct FilterOperation 
- *
- *  Enumeration used to represent FilterOperations
- */
+*  \struct FilterOperation
+*
+*  Enumeration used to represent FilterOperations
+*/
 struct FilterOperation
 {
     //! The enumerations allowed
@@ -569,7 +593,7 @@ struct FilterOperation
     };
 
     //! Default constructor
-    FilterOperation(){ value = NOT_SET; }
+    FilterOperation() { value = NOT_SET; }
 
     //! string constructor
     FilterOperation(std::string s)
@@ -587,7 +611,7 @@ struct FilterOperation
     //! int constructor
     FilterOperation(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = CONVOLUTION;
@@ -604,12 +628,12 @@ struct FilterOperation
     }
 
     //! destructor
-    ~FilterOperation(){}
+    ~FilterOperation() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("CONVOLUTION");
@@ -652,10 +676,132 @@ struct FilterOperation
 
 
 /*!
- *  \struct RenderingIntent 
- *
- *  Enumeration used to represent RenderingIntents
- */
+*  \struct OrientationType
+*
+*  Enumeration used to represent OrientationTypes
+*/
+struct OrientationType
+{
+    //! The enumerations allowed
+    enum
+    {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        ARBITRARY = 4,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    OrientationType() { value = NOT_SET; }
+
+    //! string constructor
+    OrientationType(std::string s)
+    {
+        if (s == "UP")
+            value = UP;
+        else if (s == "DOWN")
+            value = DOWN;
+        else if (s == "LEFT")
+            value = LEFT;
+        else if (s == "RIGHT")
+            value = RIGHT;
+        else if (s == "ARBITRARY")
+            value = ARBITRARY;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+    }
+
+    //! int constructor
+    OrientationType(int i)
+    {
+        switch (i)
+        {
+        case 0:
+            value = UP;
+            break;
+        case 1:
+            value = DOWN;
+            break;
+        case 2:
+            value = LEFT;
+            break;
+        case 3:
+            value = RIGHT;
+            break;
+        case 4:
+            value = ARBITRARY;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+        }
+    }
+
+    //! destructor
+    ~OrientationType() {}
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return std::string("UP");
+        case 1:
+            return std::string("DOWN");
+        case 2:
+            return std::string("LEFT");
+        case 3:
+            return std::string("RIGHT");
+        case 4:
+            return std::string("ARBITRARY");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+    }
+
+    //! assignment operator
+    OrientationType& operator=(const OrientationType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
+    }
+
+    bool operator==(const OrientationType& o) const { return value == o.value; }
+    bool operator!=(const OrientationType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    OrientationType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const OrientationType& o) const { return value < o.value; }
+    bool operator>(const OrientationType& o) const { return value > o.value; }
+    bool operator<=(const OrientationType& o) const { return value <= o.value; }
+    bool operator>=(const OrientationType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    static size_t size() { return 6; }
+
+    int value;
+
+};
+
+
+/*!
+*  \struct RenderingIntent
+*
+*  Enumeration used to represent RenderingIntents
+*/
 struct RenderingIntent
 {
     //! The enumerations allowed
@@ -669,7 +815,7 @@ struct RenderingIntent
     };
 
     //! Default constructor
-    RenderingIntent(){ value = NOT_SET; }
+    RenderingIntent() { value = NOT_SET; }
 
     //! string constructor
     RenderingIntent(std::string s)
@@ -691,7 +837,7 @@ struct RenderingIntent
     //! int constructor
     RenderingIntent(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = PERCEPTUAL;
@@ -714,12 +860,12 @@ struct RenderingIntent
     }
 
     //! destructor
-    ~RenderingIntent(){}
+    ~RenderingIntent() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("PERCEPTUAL");
@@ -765,129 +911,10 @@ struct RenderingIntent
 };
 
 
-/*!
- *  \struct ShadowDirection 
- *
- *  Enumeration used to represent ShadowDirections
- */
-struct ShadowDirection
-{
-    //! The enumerations allowed
-    enum
-    {
-        UP = 0,
-        DOWN = 1,
-        LEFT = 2,
-        RIGHT = 3,
-        ARBITRARY = 4,
-        NOT_SET = six::NOT_SET_VALUE
-    };
-
-    //! Default constructor
-    ShadowDirection(){ value = NOT_SET; }
-
-    //! string constructor
-    ShadowDirection(std::string s)
-    {
-        if (s == "UP")
-            value = UP;
-        else if (s == "DOWN")
-            value = DOWN;
-        else if (s == "LEFT")
-            value = LEFT;
-        else if (s == "RIGHT")
-            value = RIGHT;
-        else if (s == "ARBITRARY")
-            value = ARBITRARY;
-        else if (s == "NOT_SET")
-            value = NOT_SET;
-        else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-    }
-
-    //! int constructor
-    ShadowDirection(int i)
-    {
-        switch(i)
-        {
-        case 0:
-            value = UP;
-            break;
-        case 1:
-            value = DOWN;
-            break;
-        case 2:
-            value = LEFT;
-            break;
-        case 3:
-            value = RIGHT;
-            break;
-        case 4:
-            value = ARBITRARY;
-            break;
-        case six::NOT_SET_VALUE:
-            value = NOT_SET;
-            break;
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-    }
-
-    //! destructor
-    ~ShadowDirection(){}
-
-    //! Returns string representation of the value
-    std::string toString() const
-    {
-        switch(value)
-        {
-        case 0:
-            return std::string("UP");
-        case 1:
-            return std::string("DOWN");
-        case 2:
-            return std::string("LEFT");
-        case 3:
-            return std::string("RIGHT");
-        case 4:
-            return std::string("ARBITRARY");
-        case six::NOT_SET_VALUE:
-            return std::string("NOT_SET");
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-    }
-
-    //! assignment operator
-    ShadowDirection& operator=(const ShadowDirection& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
-    }
-
-    bool operator==(const ShadowDirection& o) const { return value == o.value; }
-    bool operator!=(const ShadowDirection& o) const { return value != o.value; }
-    bool operator==(const int& o) const { return value == o; }
-    bool operator!=(const int& o) const { return value != o; }
-    ShadowDirection& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const ShadowDirection& o) const { return value < o.value; }
-    bool operator>(const ShadowDirection& o) const { return value > o.value; }
-    bool operator<=(const ShadowDirection& o) const { return value <= o.value; }
-    bool operator>=(const ShadowDirection& o) const { return value >= o.value; }
-    operator int() const { return value; }
-    operator std::string() const { return toString(); }
-
-    static size_t size() { return 6; }
-
-    int value;
-
-};
+// code auto-generated 2016-01-25 08:14:46.054000
 
 
-// code auto-generated 2016-01-23 11:25:33.014751
+// code auto-generated 2016-01-25 08:07:19.984000
 
 }
 }
