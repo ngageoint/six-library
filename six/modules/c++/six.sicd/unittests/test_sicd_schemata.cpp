@@ -20,8 +20,8 @@
  *
  */
 #include <iostream>
-#include <string> 
-#include <stdio.h> 
+#include <string>
+#include <stdio.h>
 
 #include <import/cli.h>
 #include <import/six.h>
@@ -71,8 +71,8 @@ enum { FRMT_0_4_0 = 0, FRMT_0_4_1 = 1, FRMT_1_0_0 = 2};
 std::string  initCollectionInformationXML(unsigned int version)
 {
     std::string xmlText("");
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<CollectionInfo>")+
         std::string("<CollectorName>CollectorName</CollectorName>")+
         std::string("<IlluminatorName>IlluminatorName</IlluminatorName>")+
@@ -95,8 +95,8 @@ std::string  initCollectionInformationXML(unsigned int version)
         std::string("<Parameter name=\"CollectInfoParamName5\">CollectInfoParamVal5</Parameter>")+
         std::string("</CollectionInfo>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<CollectionInfo>")+
         std::string("<CollectorName class=\"xs:string\">CollectorName</CollectorName>")+
         std::string("<IlluminatorName class=\"xs:string\">IlluminatorName</IlluminatorName>")+
@@ -126,8 +126,8 @@ std::string  initCollectionInformationXML(unsigned int version)
 std::string  initImageCreationXML(unsigned int version)
 {
     std::string xmlText("");
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<ImageCreation>")+
         std::string("<Application>Application</Application>")+
         std::string("<DateTime>2012-10-04T20:42:08.609000Z</DateTime>")+
@@ -135,8 +135,8 @@ std::string  initImageCreationXML(unsigned int version)
         std::string("<Profile>Profile</Profile>")+
         std::string("</ImageCreation>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<ImageCreation>")+
         std::string("<Application class=\"xs:string\">Application</Application>")+
         std::string("<DateTime class=\"xs:dateTime\">2012-10-04T20:42:07.172000Z</DateTime>")+
@@ -153,19 +153,19 @@ std::string  initImageDataXML(unsigned int version)
     std::string xmlText("");
     char amplText[120];
 
-    if (version == FRMT_1_0_0) 
+    if (version == FRMT_1_0_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<ImageData>")+
             std::string("<PixelType>RE32F_IM32F</PixelType>")+
             std::string("<AmpTable size=\"256\">");
-        for (unsigned int i=0; i<256; ++i) 
+        for (unsigned int i=0; i<256; ++i)
         {
-            sprintf(amplText, "<Amplitude index=\"%d\">%s</Amplitude>", 
+            sprintf(amplText, "<Amplitude index=\"%d\">%s</Amplitude>",
                 i, six::toString((double)i).c_str());
             xmlText += std::string(amplText);
         }
-        xmlText += 
+        xmlText +=
             std::string("</AmpTable>")+
             std::string("<NumRows>1000</NumRows>")+
             std::string("<NumCols>1000</NumCols>")+
@@ -196,19 +196,19 @@ std::string  initImageDataXML(unsigned int version)
             std::string("</ImageData>");
     }
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)  
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<ImageData>")+
             std::string("<PixelType class=\"xs:string\">RE32F_IM32F</PixelType>")+
             std::string("<AmpTable size=\"256\">");
-        for (unsigned int i=0; i<256; ++i) 
+        for (unsigned int i=0; i<256; ++i)
         {
-            sprintf(amplText, "<Amplitude class=\"xs:double\" index=\"%d\">%s</Amplitude>", 
+            sprintf(amplText, "<Amplitude class=\"xs:double\" index=\"%d\">%s</Amplitude>",
                 i, six::toString((double)i).c_str());
             xmlText += std::string(amplText);
         }
-        xmlText += 
+        xmlText +=
             std::string("</AmpTable>")+
             std::string("<NumRows class=\"xs:int\">1000</NumRows>")+
             std::string("<NumCols class=\"xs:int\">1000</NumCols>")+
@@ -248,29 +248,29 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
     std::string xmlText("");
     char  geoText[256];
 
-    if (version == FRMT_1_0_0) 
+    if (version == FRMT_1_0_0)
     {
-        for (unsigned int i=0,n=1; i<numParams; ++i,++n) 
+        for (unsigned int i=0,n=1; i<numParams; ++i,++n)
         {
-            sprintf(geoText, "<Desc name=\"GeoInfoParamName%d\">GeoInfoParamVal%d</Desc>", n,n);
+            sprintf(geoText, "<Desc name=\"GeoInfoParamName%u\">GeoInfoParamVal%u</Desc>", n,n);
             xmlText += std::string(geoText);
         }
         xmlText += "</GeoInfo>";
     }
-    
-    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+
+    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        sprintf(geoText, "<GeoInfo name=\"geoinfo%d\">", numInfos);
+        sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
         xmlText = std::string(geoText);
-        for (unsigned int i=0; i<numInfos; ++i) 
+        for (unsigned int i=0; i<numInfos; ++i)
             xmlText += initGeoInfoXML(version, numInfos-1, numParams);
     }
 
-    if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        for (unsigned int i=0,n=1; i<numParams; ++i,++n) 
+        for (unsigned int i=0,n=1; i<numParams; ++i,++n)
         {
-            sprintf(geoText, "<Desc class=\"xs:string\" name=\"GeoInfoParamName%d\">GeoInfoParamVal%d</Desc>", n,n);
+            sprintf(geoText, "<Desc class=\"xs:string\" name=\"GeoInfoParamName%u\">GeoInfoParamVal%u</Desc>", n,n);
             xmlText += std::string(geoText);
         }
         xmlText += "</GeoInfo>";
@@ -284,9 +284,9 @@ std::string  initGeoDataXML(unsigned int version, size_t numInfos = 4)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
+    if (version == FRMT_1_0_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<GeoData>")+
             std::string("<EarthModel>WGS_84</EarthModel>")+
             std::string("<SCP>")+
@@ -321,9 +321,9 @@ std::string  initGeoDataXML(unsigned int version, size_t numInfos = 4)
             std::string("</ImageCorners>");
     }
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<GeoData>")+
             std::string("<EarthModel class=\"xs:string\">WGS_84</EarthModel>")+
             std::string("<SCP>")+
@@ -358,9 +358,9 @@ std::string  initGeoDataXML(unsigned int version, size_t numInfos = 4)
             std::string("</ImageCorners>");
     }
 
-    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        for (unsigned int i=0; i<numInfos; ++i) 
+        for (unsigned int i=0; i<numInfos; ++i)
             xmlText += initGeoInfoXML(version, numInfos-1, 5);
         xmlText += "</GeoData>";
     }
@@ -373,9 +373,9 @@ std::string  initGridXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
+    if (version == FRMT_1_0_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<Grid>")+
             std::string("<ImagePlane>GROUND</ImagePlane>")+
             std::string("<Type>XRGYCR</Type>")+
@@ -391,9 +391,9 @@ std::string  initGridXML(unsigned int version)
             std::string("</TimeCOAPoly>");
     }
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        xmlText = 
+        xmlText =
             std::string("<Grid>")+
             std::string("<ImagePlane class=\"xs:string\">GROUND</ImagePlane>")+
             std::string("<Type class=\"xs:string\">XRGYCR</Type>")+
@@ -409,14 +409,14 @@ std::string  initGridXML(unsigned int version)
             std::string("</TimeCOAPoly>");
     }
 
-    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        for (unsigned int k=0; k<2; ++k) 
+        for (unsigned int k=0; k<2; ++k)
         {
             xmlText += (k==0) ? "<Row>" : "<Col>";
 
-            if (version == FRMT_1_0_0) 
-                xmlText += 
+            if (version == FRMT_1_0_0)
+                xmlText +=
                 std::string("<UVectECF>")+
                 std::string("<X>1.000000000000000E001</X>")+
                 std::string("<Y>1.000000000000000E001</Y>")+
@@ -463,8 +463,8 @@ std::string  initGridXML(unsigned int version)
                 std::string("<Wgt index=\"9\">8.000000000000000E000</Wgt>")+
                 std::string("</WgtFunct>");
 
-            else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-                xmlText += 
+            else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+                xmlText +=
                 std::string("<UVectECF>")+
                 std::string("<X class=\"xs:double\">1.000000000000000E001</X>")+
                 std::string("<Y class=\"xs:double\">1.000000000000000E001</Y>")+
@@ -518,8 +518,8 @@ std::string  initTimelineXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<Timeline>")+
         std::string("<CollectStart>2012-10-04T20:42:08.609000Z</CollectStart>")+
         std::string("<CollectDuration>1.112223330000000E002</CollectDuration>")+
@@ -560,8 +560,8 @@ std::string  initTimelineXML(unsigned int version)
         std::string("</IPP>")+
         std::string("</Timeline>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<Timeline>")+
         std::string("<CollectStart class=\"xs:dateTime\">2012-10-04T20:42:07.172000Z</CollectStart>")+
         std::string("<CollectDuration class=\"xs:double\">1.112223330000000E002</CollectDuration>")+
@@ -610,8 +610,8 @@ std::string  initPositionXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<Position>")+
         std::string("<ARPPoly>")+
         std::string("<X order1=\"0\">")+
@@ -690,8 +690,8 @@ std::string  initPositionXML(unsigned int version)
         std::string("</RcvAPC>")+
         std::string("</Position>");
 
-    if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<Position>")+
         std::string("<ARPPoly>")+
         std::string("<X order1=\"0\">")+
@@ -778,8 +778,8 @@ std::string  initRadarCollectionXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<RadarCollection>")+
         std::string("<TxFrequency>")+
         std::string("<Min>-1.230000000000000E002</Min>")+
@@ -922,8 +922,8 @@ std::string  initRadarCollectionXML(unsigned int version)
         std::string("<Parameter name=\"RadarCollectionParamName4\">RadarCollectionParamVal4</Parameter>")+
         std::string("</RadarCollection>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<RadarCollection>")+
         std::string("<RefFreqIndex class=\"xs:int\">12345</RefFreqIndex>")+
         std::string("<TxFrequency>")+
@@ -1081,8 +1081,8 @@ std::string  initImageFormationXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<ImageFormation>")+
         std::string("<RcvChanProc>")+
         std::string("<NumChanProc>1</NumChanProc>")+
@@ -1169,8 +1169,8 @@ std::string  initImageFormationXML(unsigned int version)
         std::string("</PolarizationCalibration>")+
         std::string("</ImageFormation>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<ImageFormation>")+
         std::string("<SegmentIdentifier class=\"xs:string\">abcdef</SegmentIdentifier>")+
         std::string("<RcvChanProc>")+
@@ -1266,8 +1266,8 @@ std::string  initSCPCOAXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<SCPCOA>")+
         std::string("<SCPTime>1.560574314284600E007</SCPTime>")+
         std::string("<ARPPos>")+
@@ -1297,8 +1297,8 @@ std::string  initSCPCOAXML(unsigned int version)
         std::string("<LayoverAng>8.800000000000000E001</LayoverAng>")+
         std::string("</SCPCOA>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<SCPCOA>")+
         std::string("<SCPTime class=\"xs:double\">1.560574314284600E007</SCPTime>")+
         std::string("<ARPPos>")+
@@ -1334,8 +1334,8 @@ std::string  initRadiometricXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<Radiometric>")+
         std::string("<NoiseLevel>")+
         std::string("<NoiseLevelType>ABSOLUTE</NoiseLevelType>")+
@@ -1402,8 +1402,8 @@ std::string  initRadiometricXML(unsigned int version)
         std::string("</GammaZeroSFPoly>")+
         std::string("</Radiometric>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<Radiometric>")+
         std::string("<NoisePoly order1=\"1\" order2=\"4\">")+
         std::string("<Coef class=\"xs:double\" exponent1=\"0\" exponent2=\"0\">1.000000000000000E000</Coef>")+
@@ -1477,14 +1477,14 @@ std::string  initAntennaXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
+    if (version == FRMT_1_0_0)
     {
         xmlText = "<Antenna>";
-        for (unsigned int k=0; k<3; ++k) 
+        for (unsigned int k=0; k<3; ++k)
         {
             xmlText += (k==0) ? "<Tx>" : (k==1) ? "<Rcv>" : "<TwoWay>";
 
-            xmlText += 
+            xmlText +=
                 std::string("<XAxisPoly>")+
                 std::string("<X order1=\"0\">")+
                 std::string("<Coef exponent1=\"0\">1.111100000000000E002</Coef>")+
@@ -1591,10 +1591,10 @@ std::string  initAntennaXML(unsigned int version)
         xmlText += "</Antenna>";
     }
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
         xmlText = "<Antenna>";
-        for (unsigned int k=0; k<3; ++k) 
+        for (unsigned int k=0; k<3; ++k)
         {
             xmlText += (k==0) ? "<Tx>" : (k==1) ? "<Rcv>" : "<TwoWay>";
 
@@ -1716,8 +1716,8 @@ std::string  initErrorStatisticsXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<ErrorStatistics>")+
         std::string("<CompositeSCP>")+
         std::string("<Rg>1.230000000000000E001</Rg>")+
@@ -1790,8 +1790,8 @@ std::string  initErrorStatisticsXML(unsigned int version)
         std::string("</AdditionalParms>")+
         std::string("</ErrorStatistics>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<ErrorStatistics>")+
         std::string("<CompositeSCP>")+
         std::string("<RgAzErr>")+
@@ -1875,7 +1875,7 @@ std::string  initMatchInformationXML(unsigned int version)
     std::string xmlText("");
 
     if (version == FRMT_1_0_0)
-        xmlText = 
+        xmlText =
         std::string("<MatchInfo>")+
         std::string("<NumMatchTypes>2</NumMatchTypes>")+
         std::string("<MatchType index=\"1\">")+
@@ -1910,8 +1910,8 @@ std::string  initMatchInformationXML(unsigned int version)
         std::string("</MatchType>")+
         std::string("</MatchInfo>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<MatchInfo>")+
         std::string("<Collect index=\"1\">")+
         std::string("<CollectorName class=\"xs:string\">collector name</CollectorName>")+
@@ -1939,8 +1939,8 @@ std::string  initPFAXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<PFA>")+
         std::string("<FPN>")+
         std::string("<X>1.000000000000000E001</X>")+
@@ -1989,8 +1989,8 @@ std::string  initPFAXML(unsigned int version)
         std::string("</STDeskew>")+
         std::string("</PFA>");
 
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
+        xmlText =
         std::string("<PFA>")+
         std::string("<FPN>")+
         std::string("<X class=\"xs:double\">1.000000000000000E001</X>")+
@@ -2047,8 +2047,8 @@ std::string  initRMA_INCAXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType>OMEGA_K</RMAlgoType>")+
         std::string("<ImageType>INCA</ImageType>")+
@@ -2093,8 +2093,8 @@ std::string  initRMA_INCAXML(unsigned int version)
         std::string("</INCA>")+
         std::string("</RMA>");
 
-    else if (version == FRMT_0_4_1) 
-        xmlText = 
+    else if (version == FRMT_0_4_1)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType class=\"xs:string\">OMEGA_K</RMAlgoType>")+
         std::string("<ImageType class=\"xs:string\">INCA</ImageType>")+
@@ -2139,8 +2139,8 @@ std::string  initRMA_INCAXML(unsigned int version)
         std::string("</INCA>")+
         std::string("</RMA>");
 
-    else if (version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_0)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType class=\"xs:string\">OMEGA_K</RMAlgoType>")+
         std::string("<ImageType class=\"xs:string\">INCA</ImageType>")+
@@ -2183,8 +2183,8 @@ std::string  initRMA_RMATXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType>OMEGA_K</RMAlgoType>")+
         std::string("<ImageType>RMAT</ImageType>")+
@@ -2203,8 +2203,8 @@ std::string  initRMA_RMATXML(unsigned int version)
         std::string("</RMAT>")+
         std::string("</RMA>");
 
-    else if (version == FRMT_0_4_1) 
-        xmlText = 
+    else if (version == FRMT_0_4_1)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType class=\"xs:string\">OMEGA_K</RMAlgoType>")+
         std::string("<ImageType class=\"xs:string\">RMAT</ImageType>")+
@@ -2247,8 +2247,8 @@ std::string  initRMA_RMATXML(unsigned int version)
         std::string("</RMAT>")+
         std::string("</RMA>");
 
-    else if (version == FRMT_0_4_0) 
-        xmlText = 
+    else if (version == FRMT_0_4_0)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType class=\"xs:string\">OMEGA_K</RMAlgoType>")+
         std::string("<ImageType class=\"xs:string\">RMAT</ImageType>")+
@@ -2293,8 +2293,8 @@ std::string  initRMA_RMCRXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<RMA>")+
         std::string("<RMAlgoType>OMEGA_K</RMAlgoType>")+
         std::string("<ImageType>RMCR</ImageType>")+
@@ -2321,8 +2321,8 @@ std::string  initRgAzCompXML(unsigned int version)
 {
     std::string xmlText("");
 
-    if (version == FRMT_1_0_0) 
-        xmlText = 
+    if (version == FRMT_1_0_0)
+        xmlText =
         std::string("<RgAzComp>")+
         std::string("<AzSF>1.300000000000000E001</AzSF>")+
         std::string("<KazPoly order1=\"3\">")+
@@ -2340,11 +2340,11 @@ std::string  initRgAzCompXML(unsigned int version)
 std::string  initComplexDataXML(unsigned int version, std::string tag1 = "PFA", std::string tag2 = "")
 {
     std::string xmlText("");
-    if (version == FRMT_0_4_0) 
+    if (version == FRMT_0_4_0)
         xmlText = "<SICD xmlns=\"urn:SICD:0.4.0\">";
-    else if (version == FRMT_0_4_1) 
+    else if (version == FRMT_0_4_1)
         xmlText = "<SICD xmlns=\"urn:SICD:0.4.1\">";
-    else // if (version == FRMT_1_0_0) 
+    else // if (version == FRMT_1_0_0)
         xmlText = "<SICD xmlns=\"urn:SICD:1.0.0\">";  // default version
 
     xmlText += initCollectionInformationXML(version);
@@ -2362,17 +2362,17 @@ std::string  initComplexDataXML(unsigned int version, std::string tag1 = "PFA", 
     xmlText += initErrorStatisticsXML(version);
     xmlText += initMatchInformationXML(version);
 
-    if (tag1 == "PFA") 
+    if (tag1 == "PFA")
         xmlText += initPFAXML(version);
     else if (tag1 == "RgAzComp")
         xmlText += initRgAzCompXML(version);
-    else if (tag1 == "RMA") 
+    else if (tag1 == "RMA")
     {
-        if (tag2 == "INCA")  
+        if (tag2 == "INCA")
             xmlText += initRMA_INCAXML(version);
-        else if (tag2 == "RMAT")  
+        else if (tag2 == "RMAT")
             xmlText += initRMA_RMATXML(version);
-        else if (tag2 == "RMCR")  
+        else if (tag2 == "RMCR")
             xmlText += initRMA_RMCRXML(version);
     }
 
@@ -2380,16 +2380,16 @@ std::string  initComplexDataXML(unsigned int version, std::string tag1 = "PFA", 
     return xmlText;
 }
 
-void diffXMLs(std::string label1, std::string xml1, 
-              std::string label2, std::string xml2, 
+void diffXMLs(std::string label1, std::string xml1,
+              std::string label2, std::string xml2,
               unsigned int dispCnt=-1, unsigned int size=60)
 {
     if (dispCnt != 0)
-        for (unsigned int i=0,n=0; i<=xml1.size()/size; ++i) 
+        for (unsigned int i=0,n=0; i<=xml1.size()/size; ++i)
         {
-            if (xml1.substr(i*size,size) != xml2.substr(i*size,size)) 
+            if (xml1.substr(i*size,size) != xml2.substr(i*size,size))
             {
-                std::cout << label1 << " " << i*size << ": " << xml1.substr(i*size,size) << std::endl 
+                std::cout << label1 << " " << i*size << ": " << xml1.substr(i*size,size) << std::endl
                     << label2 << " " << i*size << ": " << xml2.substr(i*size,size) << std::endl
                     << std::endl;
                 if (dispCnt>0 && (++n)>=dispCnt) break;
@@ -2399,9 +2399,9 @@ void diffXMLs(std::string label1, std::string xml1,
 }
 
 
-bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "", 
+bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
                       bool verbose = false, unsigned int debugLineCnt = 10)
-{ 
+{
     try
     {
         // parse the programetically generated SICD XML string
@@ -2418,13 +2418,13 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
 
         std::auto_ptr<logging::Logger> log(new logging::NullLogger());
 
-        // translate XML into Complex Data structure 
+        // translate XML into Complex Data structure
         const std::auto_ptr<six::XMLControl> xmlControl(
             six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX, log.get()));
         six::sicd::ComplexData* data = (
             six::sicd::ComplexData*)xmlControl->fromXML(doc, std::vector<std::string>());
 
-        // translate data structure to XML string 
+        // translate data structure to XML string
         const std::auto_ptr<xml::lite::Document> rtDoc(
             xmlControl->toXML((six::sicd::ComplexData*)data, std::vector<std::string>()));
         oss.reset();
@@ -2432,12 +2432,12 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         std::string postRTxml(oss.stream().str());
 
         // if output path provided, write out XML results to files
-        if (!xmlPath.empty()) 
+        if (!xmlPath.empty())
         {
             std::string  baseName = xmlPath + std::string("\\") + data->getVersion();
             if (data->pfa.get() != NULL)
                 baseName += "_PFA";
-            else if (data->rma.get() != NULL) 
+            else if (data->rma.get() != NULL)
             {
                 if (data->rma->inca.get() != NULL)
                     baseName += "_RMA_INCA";
@@ -2460,18 +2460,18 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
             // pretty-print the round-tripped XML string to file
             outName = baseName + std::string(".RT.xml");
             if (verbose) std::cout << "RoundTrip XML file: " << outName << std::endl;
-            io::FileOutputStream rtOs(outName); 
+            io::FileOutputStream rtOs(outName);
             rtDoc->getRootElement()->prettyPrint(rtOs);
         }
 
-        // for unit test, compare internally generated XML string to the parsed XML string 
-        //   and also compare to the parsed XML string generated after "round-trip" data 
-        if (xmlText != preRTxml) 
+        // for unit test, compare internally generated XML string to the parsed XML string
+        //   and also compare to the parsed XML string generated after "round-trip" data
+        if (xmlText != preRTxml)
         {
             if (verbose) diffXMLs("Input    ", xmlText,  "Parsed   ", preRTxml,  debugLineCnt);
             return false;
         }
-        if (preRTxml != postRTxml) 
+        if (preRTxml != postRTxml)
         {
             if (verbose) diffXMLs("Parsed   ", preRTxml, "RoundTrip", postRTxml, debugLineCnt);
             return false;
@@ -2487,59 +2487,59 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
 }
 
 
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_PFA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_PFA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_0, "PFA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_RMA_INCA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_RMA_INCA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_0, "RMA", "INCA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_RMA_RMAT) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_0_RMA_RMAT)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_0, "RMA", "RMAT"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_PFA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_PFA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_1, "PFA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_RMA_INCA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_RMA_INCA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_1, "RMA", "INCA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_RMA_RMAT) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_0_4_1_RMA_RMAT)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_0_4_1, "RMA", "RMAT"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_PFA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_PFA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_1_0_0, "PFA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_INCA) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_INCA)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_1_0_0, "RMA", "INCA"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_RMAT) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_RMAT)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_1_0_0, "RMA", "RMAT"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_RMCR) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RMA_RMCR)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_1_0_0, "RMA", "RMCR"), params[0], params[1]=="true"));
 }
-MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RgAzComp) 
+MYTEST_CASE_PARAMS(RoundTrip_XML_1_0_0_RgAzComp)
 {
-    TEST_ASSERT_GREATER_EQ(params.size(), 2); 
+    TEST_ASSERT_GREATER_EQ(params.size(), 2);
     TEST_ASSERT(cmpRoundTripXMLs(initComplexDataXML(FRMT_1_0_0, "RgAzComp"), params[0], params[1]=="true"));
 }
 
@@ -2552,9 +2552,9 @@ int main(int argc, char** argv)
         cli::ArgumentParser parser;
         parser.setDescription("Unit-tests for SCID NITF Round Trip code, \
                               with option to write output XML files.");
-        parser.addArgument("xmlPath",  "output XML path",  cli::STORE, 
+        parser.addArgument("xmlPath",  "output XML path",  cli::STORE,
             "xmlPath", "xmlPath")->setDefault("");
-        parser.addArgument("-d",  "enable verbose output",  cli::STORE_TRUE, 
+        parser.addArgument("-d",  "enable verbose output",  cli::STORE_TRUE,
             "verbose", "verbose")->setDefault("");
         cli::Results *options = parser.parse(argc, (const char**) argv);
         std::vector<std::string> params;
@@ -2564,7 +2564,7 @@ int main(int argc, char** argv)
         six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-        // Validate that the resultant XML data from SICD Complex Data 
+        // Validate that the resultant XML data from SICD Complex Data
         //   matches before and after round-trip for each format and algorithm
 
         MYTEST_CHECK_PARAMS( RoundTrip_XML_1_0_0_PFA      );
