@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of six.sicd-python 
+ * This file is part of six.sicd-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * six.sicd-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -39,20 +39,83 @@ using namespace six;
 six::sicd::ComplexData * asComplexData(six::Data* data);
 
 /* Need this because we can't really do it on the python side of things */
-six::sicd::ComplexData * asComplexData(six::Data* data) 
+six::sicd::ComplexData * asComplexData(six::Data* data)
 {
   six::sicd::ComplexData * complexData = dynamic_cast<six::sicd::ComplexData*>(data);
   if( !complexData )
   {
     throw except::BadCastException();
   }
-  else 
+  else
   {
     return complexData;
   }
 }
 
+void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
+        six::sicd::ComplexData* data, long long imageAdr);
 
+void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
+        six::sicd::ComplexData* data, long long imageAdr)
+{
+    std::complex<float>* image = reinterpret_cast< std::complex<float>* >(
+            imageAdr);
+
+    six::XMLControlFactory::getInstance().addCreator(
+            six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    six::Container container(six::DataType::COMPLEX);
+    std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
+
+    container.addData(data);
+
+    six::NITFWriteControl writer;
+    writer.initialize(&container);
+    writer.setLogger(logger.get());
+
+    six::BufferList buffers;
+    buffers.push_back(reinterpret_cast<const six::UByte*>(image));
+
+    writer.save(buffers, fileName, schemaPaths);
+}
+
+Data* readNITF(std::string fileName,
+        std::vector<std::string> schemaPaths);
+
+Data* readNITF(std::string fileName,
+        std::vector<std::string> schemaPaths)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+                           new six::XMLControlCreatorT<
+                                   six::sicd::ComplexXMLControl>());
+    logging::Logger log;
+    six::NITFReadControl reader;
+    reader.setLogger(&log);
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(fileName, schemaPaths);
+    six::Container* container = reader.getContainer();
+
+    six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+
+    six::Data* const data = container->getData(0);
+    const types::RowCol<size_t> extent(data->getNumRows(),
+                                       data->getNumCols());
+    const size_t numPixels(extent.row * extent.col);
+    size_t numBytesPerPixel = data->getNumBytesPerPixel();
+    size_t offset = 0;
+
+    mem::ScopedArray<sys::ubyte> buffer(
+            new sys::ubyte[numPixels * numBytesPerPixel]);
+
+    region.setNumRows(extent.row);
+    region.setNumCols(extent.col);
+    region.setBuffer(buffer.get() + offset);
+    return reinterpret_cast<Data*>(reader.interleaved(region, 0));
+}
 %}
 
 %include "std_vector.i"
@@ -66,7 +129,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
 %import "mem.i"
 
 /* wrap around auto_ptr */
-%inline 
+%inline
 %{
 six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const std::vector<std::string>& schemaPaths ) {
   std::auto_ptr<six::sicd::ComplexData> retv = Utilities::getComplexData(sicdPathname, schemaPaths);
@@ -76,6 +139,13 @@ six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const 
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
+
+void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
+        six::sicd::ComplexData* data, long long imageAdr);
+
+Data* readNITF(std::string fileName,
+        std::vector<std::string> schemaPaths);
+
 
 /* this version of the function returns the auto_ptr, ignore it */
 %rename ("$ignore", fullname=1) "six::sicd::Utilities::getComplexData";
@@ -124,7 +194,7 @@ SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
 SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-SCOPED_CLONEABLE(six::sicd, GeoInfo) 
+SCOPED_CLONEABLE(six::sicd, GeoInfo)
 %template(VectorScopedCloneableGeoInfo) std::vector<mem::ScopedCloneablePtr<six::sicd::GeoInfo> >;
 %template(VectorLatLon) std::vector<scene::LatLon>;
 
@@ -194,12 +264,21 @@ from six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)
-    
+
     #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
     widebandBuffer, ro = widebandData.__array_interface__["data"]
-    
+
     getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
-    
+
     return widebandData, complexData
+
+def writeAsNITF(outFile, schemaPaths, complexData, image):
+    writeNITF(outFile, schemaPaths, complexData,
+        image.__array_interface__["data"][0])
+
+def readFromNITF(fileName, schemaPaths):
+    fileName = fileName + ".nitf"
+    return readNITF(fileName, schemaPaths)
+
 %}
