@@ -213,6 +213,14 @@ def getComplexData(sicdPathname, schemaPaths):
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
+
+def writeNITF(fileName, schemaPaths, data, imageAdr):
+    """writeNITF(std::string fileName, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
+    return _six_sicd.writeNITF(fileName, schemaPaths, data, imageAdr)
+
+def readNITF(fileName, schemaPaths):
+    """readNITF(std::string fileName, VectorString schemaPaths) -> Data *"""
+    return _six_sicd.readNITF(fileName, schemaPaths)
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class"""
     __swig_setmethods__ = {}
@@ -8705,6 +8713,14 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
     getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
+def writeAsNITF(outFile, schemaPaths, complexData, image):
+    writeNITF(outFile, schemaPaths, complexData,
+        image.__array_interface__["data"][0])
+
+def readFromNITF(fileName, schemaPaths):
+    fileName = fileName + ".nitf"
+    return readNITF(fileName, schemaPaths)
+
 
 # This file is compatible with both classic and new-style classes.
 

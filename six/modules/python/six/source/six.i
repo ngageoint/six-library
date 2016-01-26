@@ -96,7 +96,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/Utilities.h"
 %include "six/Options.h"
 
-
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
 def setValue(self, *args):
