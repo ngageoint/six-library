@@ -91,7 +91,7 @@ NRL                N/A                        0,255 (Supposed to be display read
             <xs:documentation>Default ELT magnification method for this data.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:enumeration value="NEAREST_NEIGHBOR"/>
+            <xs:enumeration value="NEAREST NEIGHBOR"/>
             <xs:enumeration value="BILINEAR"/>
             <xs:enumeration value="LAGRANGE"/>
         </xs:restriction>
@@ -101,9 +101,9 @@ NRL                N/A                        0,255 (Supposed to be display read
             <xs:documentation>Default ELT decimation method for this data. Also used as default for reduced resolution dataset generation (if applicable).</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:enumeration value="NEAREST_NEIGHBOR"/>
+            <xs:enumeration value="NEAREST NEIGHBOR"/>
             <xs:enumeration value="BILINEAR"/>
-            <xs:enumeration value="BRIGHTEST_PIXEL"/>
+            <xs:enumeration value="BRIGHTEST PIXEL"/>
             <xs:enumeration value="LAGRANGE"/>
         </xs:restriction>
     </xs:simpleType>
@@ -266,7 +266,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="DECIMATE"/>
       <xs:enumeration value="MAX-PIXEL"/>
       <xs:enumeration value="AVERAGE"/>
-      <xs:enumeration value="NEAREST_NEIGHBOR"/>
+      <xs:enumeration value="NEAREST NEIGHBOR"/>
       <xs:enumeration value="BILINEAR"/>
       <xs:enumeration value="LAGRANGE"/>
     </xs:restriction>
@@ -337,7 +337,7 @@ NRL                N/A                        0,255 (Supposed to be display read
   <xs:simpleType name="FilterCustomType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="GENERAL"/>
-      <xs:enumeration value="FILTER_BANK"/>
+      <xs:enumeration value="FILTER BANK"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="FilterCoefType">
@@ -359,7 +359,7 @@ NRL                N/A                        0,255 (Supposed to be display read
       <xs:enumeration value="BILINEAR"/>
       <xs:enumeration value="CUBIC"/>
       <xs:enumeration value="LAGRANGE"/>
-      <xs:enumeration value="NEAREST_NEIGHBOR"/>
+      <xs:enumeration value="NEAREST NEIGHBOR"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="FilterOperationType">
@@ -427,7 +427,7 @@ NRL                N/A                        0,255 (Supposed to be display read
     </xs:complexType>
   <xs:simpleType name="EqualizationAlgorithmType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="LUT_1D"/>
+      <xs:enumeration value="LUT 1D"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="InteractiveProcessingType">
@@ -483,14 +483,14 @@ NRL                N/A                        0,255 (Supposed to be display read
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="OrientationType" type="OrientationType">
+      <xs:element name="ShadowsDirection" type="ShadowsDirectionType">
         <xs:annotation>
           <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="OrientationType">
+  <xs:simpleType name="ShadowsDirectionType">
     <xs:annotation>
       <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
     </xs:annotation>
@@ -553,8 +553,8 @@ NRL                N/A                        0,255 (Supposed to be display read
     <xs:restriction base="xs:string">
       <xs:enumeration value="PERCEPTUAL"/>
       <xs:enumeration value="SATURATION"/>
-      <xs:enumeration value="RELATIVE_INTENT"/>
-      <xs:enumeration value="ABSOLUTE_INTENT"/>
+      <xs:enumeration value="RELATIVE INTENT"/>
+      <xs:enumeration value="ABSOLUTE INTENT"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="DynamicRangeAdjustmentType">
@@ -790,7 +790,7 @@ NRL                N/A                        0,255 (Supposed to be display read
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:string">
-            <xs:enumeration value="COLLECT_TIME" />
+            <xs:enumeration value="COLLECT TIME" />
             <xs:enumeration value="PREDICTED" />
           </xs:restriction>
         </xs:simpleType>
