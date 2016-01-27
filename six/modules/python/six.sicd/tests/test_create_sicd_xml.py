@@ -728,9 +728,9 @@ def initData(cmplx, includeNITF):
     # Following four attributes not assigned due to restrictions
     # Just building them up to make sure they work
     initRMA()
+    initRgAzComp()
     initRMCR()
     initINCA()
-    initRgAzComp()
     return cmplx
 
 def writeXML(name, schemaPaths, cmplxData):
@@ -760,14 +760,21 @@ def readXML(pathNameBase, schemaPaths):
     return cmplxReadBackIn
 
 if __name__ == '__main__':
-    includeNITF = False
-    if len(sys.argv) == 2 and sys.argv[1] == "--includeNITF":
-        includeNITF = True
-    elif len(sys.argv) > 1:
-        sys.exit('Usage: {0} [--includeNITF]'.format(sys.argv[0]))
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate a SICD XML '
+        '(and optionally NITF) and round-trip it.')
+    parser.add_argument('--includeNITF', action='store_true',
+            help='Round-trip a NITF as well as an XML file')
+    parser.add_argument('-v', '--version', default='1.1.0',
+            choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0'],
+            help='Version of SICD to generate')
+    args = parser.parse_args()
+    includeNITF = args.includeNITF
 
     # Build up a giant ComplexData from scratch with everything populated
     cmplx = initData(ComplexData(), includeNITF)
+    cmplx.setVersion(args.version)
 
     ### Now format it as XML and write it out to a file ###
     vs = VectorString()
