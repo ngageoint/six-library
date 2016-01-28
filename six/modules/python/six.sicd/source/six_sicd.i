@@ -52,14 +52,14 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
   }
 }
 
-void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
-        six::sicd::ComplexData* data, long long imageAdr);
+void writeNITF(const std::string& pathName, const std::vector<std::string>&
+        schemaPaths, six::sicd::ComplexData* data, long long imageAdr);
 
-void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
-        six::sicd::ComplexData* data, long long imageAdr)
+void writeNITF(const std::string& pathName, const std::vector<std::string>&
+        schemaPaths, six::sicd::ComplexData* data, long long imageAdr)
 {
-    std::complex<float>* image = reinterpret_cast< std::complex<float>* >(
-            imageAdr);
+    const std::complex<float>* image = reinterpret_cast<
+            std::complex<float>* >(imageAdr);
 
     six::XMLControlFactory::getInstance().addCreator(
             six::DataType::COMPLEX,
@@ -68,7 +68,7 @@ void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
     six::Container container(six::DataType::COMPLEX);
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-    container.addData(data);
+    container.addData(data->clone());
 
     six::NITFWriteControl writer;
     writer.initialize(&container);
@@ -77,14 +77,14 @@ void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<const six::UByte*>(image));
 
-    writer.save(buffers, fileName, schemaPaths);
+    writer.save(buffers, pathName, schemaPaths);
 }
 
-Data* readNITF(std::string fileName,
-        std::vector<std::string> schemaPaths);
+Data* readNITF(const std::string& pathName,
+        const std::vector<std::string>& schemaPaths);
 
-Data* readNITF(std::string fileName,
-        std::vector<std::string> schemaPaths)
+Data* readNITF(const std::string& pathName,
+        const std::vector<std::string>& schemaPaths)
 {
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -94,7 +94,7 @@ Data* readNITF(std::string fileName,
     six::NITFReadControl reader;
     reader.setLogger(&log);
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(fileName, schemaPaths);
+    reader.load(pathName, schemaPaths);
     six::Container* container = reader.getContainer();
 
     six::Region region;
@@ -140,11 +140,11 @@ six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
 
-void writeNITF(std::string fileName, std::vector<std::string> schemaPaths,
-        six::sicd::ComplexData* data, long long imageAdr);
+void writeNITF(const std::string& pathName, const std::vector<std::string>&
+        schemaPaths, six::sicd::ComplexData* data, long long imageAdr);
 
-Data* readNITF(std::string fileName,
-        std::vector<std::string> schemaPaths);
+Data* readNITF(const std::string& pathName,
+        const std::vector<std::string>& schemaPaths);
 
 
 /* this version of the function returns the auto_ptr, ignore it */
@@ -297,8 +297,8 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
-def readFromNITF(fileName, schemaPaths):
-    fileName = fileName + ".nitf"
-    return readNITF(fileName, schemaPaths)
+def readFromNITF(pathName, schemaPaths):
+    pathName = pathName + ".nitf"
+    return readNITF(pathName, schemaPaths)
 
 %}
