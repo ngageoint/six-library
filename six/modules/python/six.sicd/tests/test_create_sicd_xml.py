@@ -779,7 +779,8 @@ if __name__ == '__main__':
     ### Now format it as XML and write it out to a file ###
     vs = VectorString()
     vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-    origPathnameBase = 'test_create_sicd'
+    origPathnameBase = 'test_create_sicd_{0}'.format(
+        args.version)
     writeXML(origPathnameBase, vs, cmplx)
     if includeNITF:
         writeNITF(origPathnameBase, vs, cmplx)
