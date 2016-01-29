@@ -52,11 +52,11 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
   }
 }
 
-void writeNITF(const std::string& pathName, const std::vector<std::string>&
-        schemaPaths, six::sicd::ComplexData* data, long long imageAdr);
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
 
-void writeNITF(const std::string& pathName, const std::vector<std::string>&
-        schemaPaths, six::sicd::ComplexData* data, long long imageAdr)
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr)
 {
     const std::complex<float>* image = reinterpret_cast<
             std::complex<float>* >(imageAdr);
@@ -68,7 +68,7 @@ void writeNITF(const std::string& pathName, const std::vector<std::string>&
     six::Container container(six::DataType::COMPLEX);
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-    container.addData(data->clone());
+    container.addData(data.clone());
 
     six::NITFWriteControl writer;
     writer.initialize(&container);
@@ -77,13 +77,13 @@ void writeNITF(const std::string& pathName, const std::vector<std::string>&
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<const six::UByte*>(image));
 
-    writer.save(buffers, pathName, schemaPaths);
+    writer.save(buffers, pathname, schemaPaths);
 }
 
-Data* readNITF(const std::string& pathName,
+Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-Data* readNITF(const std::string& pathName,
+Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
     six::XMLControlRegistry xmlRegistry;
@@ -94,7 +94,7 @@ Data* readNITF(const std::string& pathName,
     six::NITFReadControl reader;
     reader.setLogger(&log);
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(pathName, schemaPaths);
+    reader.load(pathname, schemaPaths);
     six::Container* container = reader.getContainer();
 
     six::Region region;
@@ -140,10 +140,10 @@ six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
 
-void writeNITF(const std::string& pathName, const std::vector<std::string>&
-        schemaPaths, six::sicd::ComplexData* data, long long imageAdr);
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
 
-Data* readNITF(const std::string& pathName,
+Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
 
@@ -297,8 +297,8 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
-def readFromNITF(pathName, schemaPaths):
-    pathName = pathName + ".nitf"
-    return readNITF(pathName, schemaPaths)
+def readFromNITF(pathname, schemaPaths):
+    pathname = pathname + ".nitf"
+    return readNITF(pathname, schemaPaths)
 
 %}
