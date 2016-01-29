@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SIDD v1.1.0 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism:13" xmlns:sicommon="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.1.0" targetNamespace="urn:SIDD:1.1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
-  <xs:import namespace="urn:SICommon:1.0" schemaLocation="SICommonTypes_V1.0.xsd"/>
-  <xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
+    <xs:import namespace="urn:SICommon:1.0" schemaLocation="SICommonTypes_V1.0.xsd"/>
+    <xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
     <xs:import namespace="urn:us:gov:ic:ism:13" schemaLocation="external/ISM-v13/Schema/ISM/IC-ISM.xsd"/>
     <xs:simpleType name="LUTListType">
         <xs:list itemType="xs:int"/>
@@ -54,18 +54,19 @@
     </xs:complexType>
     <xs:complexType name="MonochromeDisplayRemapType">
         <xs:annotation>
-            <xs:documentation>This remap works by taking the input space and using the LUT to map it to a log space (for 8-bit only).
-From the log space the C0 and Ch fields are applied to get to display-ready density space.
-The density should then be rendered by the TTC and monitor comp.
-This means that the default DRA should not apply anything besides the clip points.
-If a different contrast/brightness is applied it should be done through modification of the clip points via DRA.
-Examples:
-Remap                LUT                    Clips
-=============================
-PEDF            PEDF->D                0,255
-LLG            LLG->A->LogA        C0,Ch
-Log                N/A                         C0,Ch
-NRL                N/A                        0,255 (Supposed to be display ready)
+            <xs:documentation>
+                This remap works by taking the input space and using the LUT to map it to a log space (for 8-bit only).
+                From the log space the C0 and Ch fields are applied to get to display-ready density space.
+                The density should then be rendered by the TTC and monitor comp.
+                This means that the default DRA should not apply anything besides the clip points.
+                If a different contrast/brightness is applied it should be done through modification of the clip points via DRA.
+                Examples:
+                Remap                LUT                    Clips
+                =============================
+                PEDF            PEDF->D                0,255
+                LLG            LLG->A->LogA        C0,Ch
+                Log                N/A                         C0,Ch
+                NRL                N/A                        0,255 (Supposed to be display ready)
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -74,52 +75,9 @@ NRL                N/A                        0,255 (Supposed to be display read
                     <xs:documentation>Name of remap applied (for informational purposes only).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="RemapLUT" type="LookupTableType" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>Lookup table for remap to log amplitude for display.  Used during the "Product Generation Option" portion of the SIPS display chain. Required for 8-bit data. Not to be used for 16-bit data.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="RemapParameter" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Textual remap parameter. Filled based upon remap type (for informational purposes only).  For example, if the data is linlog encoded a RemapParameter could be used to describe any amplitude scaling that was performed prior to linlog encoding the data.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:simpleType name="MagnificationMethodType">
-        <xs:annotation>
-            <xs:documentation>Default ELT magnification method for this data.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="NEAREST NEIGHBOR"/>
-            <xs:enumeration value="BILINEAR"/>
-            <xs:enumeration value="LAGRANGE"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:simpleType name="DecimationMethodType">
-        <xs:annotation>
-            <xs:documentation>Default ELT decimation method for this data. Also used as default for reduced resolution dataset generation (if applicable).</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="NEAREST NEIGHBOR"/>
-            <xs:enumeration value="BILINEAR"/>
-            <xs:enumeration value="BRIGHTEST PIXEL"/>
-            <xs:enumeration value="LAGRANGE"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:complexType name="MonitorCompensationAppliedType">
-        <xs:annotation>
-            <xs:documentation>Describes monitor compensation that may have been applied to the product during processing.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="Gamma" type="xs:double">
-                <xs:annotation>
-                    <xs:documentation>Gamma value for monitor compensation pre-applied to the image.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="XMin" type="xs:double">
-                <xs:annotation>
-                    <xs:documentation>Xmin value for monitor compensation pre-applied to the image.</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -171,147 +129,151 @@ NRL                N/A                        0,255 (Supposed to be display read
             </xs:element>
             <xs:element name="InteractiveProcessing" type="InteractiveProcessingType">
             </xs:element>
-      <xs:element name="DisplayExtension" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>Optional extensible parameters used to support profile-specific needs related to product display. Predefined filter types.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="name" type="xs:string" use="required"/>
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
+            <xs:element name="DisplayExtension" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Optional extensible parameters used to support profile-specific needs related to product display. Predefined filter types.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
-  <xs:complexType name="BandInformationType">
-    <xs:sequence>
-      <xs:element name="NumBands" type="xs:int">
+    <xs:complexType name="BandInformationType">
+        <xs:sequence>
+            <xs:element name="NumBands" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Number of bands contained in the product.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Band" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Specifies what Band[k] represents.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="BitsPerPixel" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Bits per pixel per band</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DisplayFlag" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Indicates which band to display by default. Valid range = 1 to NumBands.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="NonInteractiveProcessingType">
+        <xs:sequence>
+            <xs:element name="ProductGenerationOptions" type="ProductGenerationOptionsType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Performs several key actions on an image to prepare it for necessary additional processing to achieve the desired output product.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RRDS" type="RRDSType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Creates a set of sub-sampled versions of an image to provide processing chains with quick access to lower mangification values
+                        for faster computation speeds and performance.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProductGenerationOptionsType">
         <xs:annotation>
-          <xs:documentation>Number of bands contained in the product.</xs:documentation>
+            <xs:documentation>
+                Performs several key actions on an image to prepare it for necessary additional processing to achieve the desired output product.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="Band" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>Specifies what Band[k] represents.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="BitsPerPixel" type="xs:int">
-        <xs:annotation>
-          <xs:documentation>Bits per pixel per band</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="DisplayFlag" type="xs:int">
-        <xs:annotation>
-          <xs:documentation>Indicates which band to display by default. Valid range = 1 to NumBands.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="NonInteractiveProcessingType">
-    <xs:sequence>
-      <xs:element name="ProductGenerationOptions" type="ProductGenerationOptionsType">
-        <xs:annotation>
-          <xs:documentation>Performs several key actions on an image to prepare it for necessary additional processing to achieve the desired output product.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="RRDS" type="RRDSType">
-        <xs:annotation>
-          <xs:documentation>Creates a set of sub-sampled versions of an image to provide processing chains with quick access to lower mangification values 
-          for faster computation speeds and performance.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ProductGenerationOptionsType">
-    <xs:annotation>
-      <xs:documentation>
-        Performs several key actions on an image to prepare it for necessary additional processing to achieve the desired output product.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="BandEqualization" type="BandEqualizationType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Band equalization ensures that real-world neutral colors have equal digital count values 
-          (i.e. are represented as neutral colors) across the dynamic range of the imaged scene.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ModularTransferFunctionRestoration" type="FilterType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Filter must be no larger than 15x15.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="DataRemapping" type="NewLookupTableType">
-        <xs:annotation>
-          <xs:documentation>Data remapping refers to the specific need to convert the data of incoming, expanded or uncompressed image band data to non-mapped image data.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="AsymmetricPixelCorrection" type="FilterType" minOccurs="0"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="DownsamplingMethodType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="DECIMATE"/>
-      <xs:enumeration value="MAX-PIXEL"/>
-      <xs:enumeration value="AVERAGE"/>
-      <xs:enumeration value="NEAREST NEIGHBOR"/>
-      <xs:enumeration value="BILINEAR"/>
-      <xs:enumeration value="LAGRANGE"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="RRDSType">
-    <xs:sequence>
-      <xs:element name="DownsamplingMethod" type="DownsamplingMethodType">
-        <xs:annotation>
-          <xs:documentation>Algorithm used to perform RRDS downsampling</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="AntiAlias" type="FilterType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Interpolation" type="FilterType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="FilterType">
-    <xs:sequence>
-      <xs:element name="FilterName" type="xs:string"></xs:element>
-      <xs:choice>
-        <xs:element name="FilterKernel" type="FilterKernelType"></xs:element>
-        <xs:element name="FilterBank" type="FilterBankType"></xs:element>
-      </xs:choice>
-      <xs:element name="Operation" type="FilterOperationType"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="FilterKernelType">
-    <xs:choice>
-      <xs:element name="Predefined" type="PredefinedFilterType"/>
-      <xs:element name="Custom" type="KernelCustomType"/>
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="FilterBankType">
-    <xs:choice>
-      <xs:element name="Predefined" type="PredefinedFilterType"/>
-      <xs:element name="Custom" type="BankCustomType"/>
-    </xs:choice>
-  </xs:complexType>
+        <xs:sequence>
+            <xs:element name="BandEqualization" type="BandEqualizationType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Band equalization ensures that real-world neutral colors have equal digital count values
+                        (i.e. are represented as neutral colors) across the dynamic range of the imaged scene.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ModularTransferFunctionRestoration" type="FilterType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Filter must be no larger than 15x15.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DataRemapping" type="NewLookupTableType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Data remapping refers to the specific need to convert the data of incoming, expanded or uncompressed image band data to non-mapped image data.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AsymmetricPixelCorrection" type="FilterType" minOccurs="0"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="DownsamplingMethodType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DECIMATE"/>
+            <xs:enumeration value="MAX-PIXEL"/>
+            <xs:enumeration value="AVERAGE"/>
+            <xs:enumeration value="NEAREST NEIGHBOR"/>
+            <xs:enumeration value="BILINEAR"/>
+            <xs:enumeration value="LAGRANGE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="RRDSType">
+        <xs:sequence>
+            <xs:element name="DownsamplingMethod" type="DownsamplingMethodType">
+                <xs:annotation>
+                    <xs:documentation>Algorithm used to perform RRDS downsampling</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AntiAlias" type="FilterType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Interpolation" type="FilterType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Only included if DownSamplingMethod=DECIMET</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FilterType">
+        <xs:sequence>
+            <xs:element name="FilterName" type="xs:string"></xs:element>
+            <xs:choice>
+                <xs:element name="FilterKernel" type="FilterKernelType"></xs:element>
+                <xs:element name="FilterBank" type="FilterBankType"></xs:element>
+            </xs:choice>
+            <xs:element name="Operation" type="FilterOperationType"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FilterKernelType">
+        <xs:choice>
+            <xs:element name="Predefined" type="PredefinedFilterType"/>
+            <xs:element name="Custom" type="KernelCustomType"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="FilterBankType">
+        <xs:choice>
+            <xs:element name="Predefined" type="PredefinedFilterType"/>
+            <xs:element name="Custom" type="BankCustomType"/>
+        </xs:choice>
+    </xs:complexType>
     <xs:complexType name="BankCustomType">
         <xs:sequence>
             <xs:element name="NumPhasings" type="xs:int"/>
@@ -319,313 +281,313 @@ NRL                N/A                        0,255 (Supposed to be display read
             <xs:element name="FilterCoef" type="FilterCoefType"/>
         </xs:sequence>
     </xs:complexType>
-  <xs:complexType name="PredefinedFilterType">
-    <xs:choice>
-      <xs:element name="DatabaseName" type="FilterDatabaseNameType"></xs:element>
-      <xs:sequence>
-        <xs:element name="FilterFamily" type="xs:int"></xs:element>
-        <xs:element name="FilterMember" type="xs:int"></xs:element>
-      </xs:sequence>
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="KernelCustomType">
-    <xs:sequence>
-      <xs:element name="Size" type="sicommon:RowColIntType"></xs:element>
-      <xs:element name="FilterCoef" type="FilterCoefType"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="FilterCustomType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="GENERAL"/>
-      <xs:enumeration value="FILTER BANK"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="FilterCoefType">
-    <xs:sequence>
-      <xs:element name="Coef" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:double">
-              <xs:attribute name="row" type="xs:int" use="required"/>
-              <xs:attribute name="col" type="xs:int" use="required"/>
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="FilterDatabaseNameType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="BILINEAR"/>
-      <xs:enumeration value="CUBIC"/>
-      <xs:enumeration value="LAGRANGE"/>
-      <xs:enumeration value="NEAREST NEIGHBOR"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="FilterOperationType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="CONVOLUTION"/>
-      <xs:enumeration value="CORRELATION"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="BandEqualizationType">
-    <xs:annotation>
-      <xs:documentation>
-        Band equalization ensures that real-world neutral colors have equal digital count values
-        (i.e. are represented as neutral colors) across the dynamic range of the imaged scene.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="Algorithm" type="EqualizationAlgorithmType">
+    <xs:complexType name="PredefinedFilterType">
+        <xs:choice>
+            <xs:element name="DatabaseName" type="FilterDatabaseNameType"></xs:element>
+            <xs:sequence>
+                <xs:element name="FilterFamily" type="xs:int"></xs:element>
+                <xs:element name="FilterMember" type="xs:int"></xs:element>
+            </xs:sequence>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="KernelCustomType">
+        <xs:sequence>
+            <xs:element name="Size" type="sicommon:RowColIntType"></xs:element>
+            <xs:element name="FilterCoef" type="FilterCoefType"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="FilterCustomType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="GENERAL"/>
+            <xs:enumeration value="FILTER BANK"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="FilterCoefType">
+        <xs:sequence>
+            <xs:element name="Coef" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:double">
+                            <xs:attribute name="row" type="xs:int" use="required"/>
+                            <xs:attribute name="col" type="xs:int" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="FilterDatabaseNameType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BILINEAR"/>
+            <xs:enumeration value="CUBIC"/>
+            <xs:enumeration value="LAGRANGE"/>
+            <xs:enumeration value="NEAREST NEIGHBOR"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="FilterOperationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CONVOLUTION"/>
+            <xs:enumeration value="CORRELATION"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="BandEqualizationType">
         <xs:annotation>
-          <xs:documentation>Allowed values: 1DLUT</xs:documentation>
+            <xs:documentation>
+                Band equalization ensures that real-world neutral colors have equal digital count values
+                (i.e. are represented as neutral colors) across the dynamic range of the imaged scene.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="BandLUT" type="NewLookupTableType"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="NewLookupTableType">
-    <xs:sequence>
-      <xs:element name="LUTName" type="xs:string"/>
-      <xs:choice>
-          <xs:element name="Predefined" type="PredefinedLookupType"/>
-          <xs:element name="Custom" type="CustomLookupType"/>
-      </xs:choice>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PredefinedLookupType">
-      <xs:choice>
-          <xs:element name="DatabaseName" type="xs:string">
-              <xs:annotation>
-                  <xs:documentation>
-                      Database name of LUT to use.
-                  </xs:documentation>
-              </xs:annotation>
-          </xs:element>
-          <xs:sequence>
-              <xs:element name="RemapFamily" type="xs:int">
-                  <xs:annotation>
-                      <xs:documentation>
-                          Index specifying the remap family.
-                      </xs:documentation>
-                  </xs:annotation>
-              </xs:element>
-              <xs:element name="RemapMember" type="xs:int">
-                  <xs:annotation>
-                      <xs:documentation>
-                          Index specifying the member for the remap family.
-                      </xs:documentation>
-                  </xs:annotation>
-              </xs:element>
-          </xs:sequence>
-      </xs:choice>
-  </xs:complexType>
+        <xs:sequence>
+            <xs:element name="Algorithm" type="EqualizationAlgorithmType">
+                <xs:annotation>
+                    <xs:documentation>Allowed values: 1DLUT</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="BandLUT" type="NewLookupTableType"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="NewLookupTableType">
+        <xs:sequence>
+            <xs:element name="LUTName" type="xs:string"/>
+            <xs:choice>
+                <xs:element name="Predefined" type="PredefinedLookupType"/>
+                <xs:element name="Custom" type="CustomLookupType"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PredefinedLookupType">
+        <xs:choice>
+            <xs:element name="DatabaseName" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Database name of LUT to use.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:sequence>
+                <xs:element name="RemapFamily" type="xs:int">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Index specifying the remap family.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RemapMember" type="xs:int">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Index specifying the member for the remap family.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:choice>
+    </xs:complexType>
     <xs:complexType name="CustomLookupType">
         <xs:sequence>
             <xs:element name="LUT" type="Lookup3TableType"/>
         </xs:sequence>
     </xs:complexType>
-  <xs:simpleType name="EqualizationAlgorithmType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="LUT 1D"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="InteractiveProcessingType">
-    <xs:sequence>
-      <xs:element name="GeometricTransform" type="GeometricTransformType"></xs:element>
-      <xs:element name="SharpnessEnhancement" type="SharpnessEnhancementType"></xs:element>
-      <xs:element name="ColorSpaceTransform" type="ColorSpaceTransformType" minOccurs="0"></xs:element>
-      <xs:element name="DynamicRangeAdjustment" type="DynamicRangeAdjustmentType" minOccurs="0">
+    <xs:simpleType name="EqualizationAlgorithmType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LUT 1D"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="InteractiveProcessingType">
+        <xs:sequence>
+            <xs:element name="GeometricTransform" type="GeometricTransformType"></xs:element>
+            <xs:element name="SharpnessEnhancement" type="SharpnessEnhancementType"></xs:element>
+            <xs:element name="ColorSpaceTransform" type="ColorSpaceTransformType" minOccurs="0"></xs:element>
+            <xs:element name="DynamicRangeAdjustment" type="DynamicRangeAdjustmentType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Parameter describing DRA</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TonalTransferCurve" type="NewLookupTableType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The 1-D LUT element uses one or more 1-D LUTs to stretch or compress tome data in valorous regions within a digital image's dynamic range.
+                        1-D LUT can be implemented using a Tonal Transfer Curve (TTC). There are 12 families of TTCs: Range = [0,11]. There are 64 members for each family: Range=[0, 63].
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GeometricTransformType">
+        <xs:sequence>
+            <xs:element name="Scaling" type="ScalingType"></xs:element>
+            <xs:element name="Orientation" type="Orientation">
+                <xs:annotation>
+                    <xs:documentation>
+                        Parameters describing the default orientation of the product
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ScalingType">
+        <xs:sequence>
+            <xs:element name="AntiAlias" type="FilterType">
+                <xs:annotation>
+                    <xs:documentation>Anti-Alias Filter</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Interpolation" type="FilterType">
+                <xs:annotation>
+                    <xs:documentation>Interpolation Filter</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Orientation">
         <xs:annotation>
-          <xs:documentation>Parameter describing DRA</xs:documentation>
+            <xs:documentation>
+                Parameters describing the default orientation of the product
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="TonalTransferCurve" type="NewLookupTableType" minOccurs="0">
+        <xs:sequence>
+            <xs:element name="ShadowsDirection" type="ShadowsDirectionType">
+                <xs:annotation>
+                    <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ShadowsDirectionType">
         <xs:annotation>
-          <xs:documentation>
-            The 1-D LUT element uses one or more 1-D LUTs to stretch or compress tome data in valorous regions within a digital image's dynamic range.
-            1-D LUT can be implemented using a Tonal Transfer Curve (TTC). There are 12 families of TTCs: Range = [0,11]. There are 64 members for each family: Range=[0, 63].
-          </xs:documentation>
+            <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GeometricTransformType">
-    <xs:sequence>
-      <xs:element name="Scaling" type="ScalingType"></xs:element>
-      <xs:element name="Orientation" type="Orientation">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="UP"/>
+            <xs:enumeration value="DOWN"/>
+            <xs:enumeration value="LEFT"/>
+            <xs:enumeration value="RIGHT"/>
+            <xs:enumeration value="ARBITRARY"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="SharpnessEnhancementType">
+        <xs:choice>
+            <xs:element name="ModularTransferFunctionCompensation" type="FilterType">
+                <xs:annotation>
+                    <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ModularTransferFunctionEnhancement" type="FilterType">
+                <xs:annotation>
+                    <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="ColorSpaceTransformType">
+        <xs:sequence>
+            <xs:element name="ColorManagementModule" type="ColorManagementModuleType">
+                <xs:annotation>
+                    <xs:documentation>Parameters describing the Color Management Module (CMM).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ColorManagementModuleType">
         <xs:annotation>
-          <xs:documentation>
-            Parameters describing the default orientation of the product
-          </xs:documentation>
+            <xs:documentation>Parameters describing the Color Management Module (CMM).</xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ScalingType">
-    <xs:sequence>
-      <xs:element name="AntiAlias" type="FilterType">
+        <xs:sequence>
+            <xs:element name="RenderingIntent" type="RenderingIntentType"></xs:element>
+            <!-- TODO: strings for SourceProfile, DisplayProfile, and ICCProfile may need to be upgraded to Enums -->
+            <xs:element name="SourceProfile" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Name of sensor profile in ICC Profile database.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DisplayProfile" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Name of display profile in ICC Profile database.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ICCProfile" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Profile embedded in metadata.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="RenderingIntentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PERCEPTUAL"/>
+            <xs:enumeration value="SATURATION"/>
+            <xs:enumeration value="RELATIVE INTENT"/>
+            <xs:enumeration value="ABSOLUTE INTENT"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="DynamicRangeAdjustmentType">
         <xs:annotation>
-          <xs:documentation>Anti-Alias Filter</xs:documentation>
+            <xs:documentation>Parameter describing DRA.</xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="Interpolation" type="FilterType">
+        <xs:sequence>
+            <xs:element name="AlgorithmType" type="RangeAdjustmentAlgorithmType">
+                <xs:annotation>
+                    <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="DRAParameters" type="DRAParameters"/>
+                <xs:element name="DRAOverrides" type="DRAOverrides"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DRAParameters">
+        <xs:sequence>
+            <xs:element name="Pmin" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>
+                        DRA clip low point. This is the cumulative histogram percentage value that defines the lower end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Pmax" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>
+                        DRA clip high point. This is the cumulative histogram percentage value that defines the upper end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="EminModifier" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>The pixel value corresponding to the Pmin percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="EmaxModifier" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>The pixel value corresponding to the Pmax percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="RangeAdjustmentAlgorithmType">
         <xs:annotation>
-          <xs:documentation>Interpolation Filter</xs:documentation>
+            <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="Orientation">
-    <xs:annotation>
-      <xs:documentation>
-        Parameters describing the default orientation of the product
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="ShadowsDirection" type="ShadowsDirectionType">
-        <xs:annotation>
-          <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="ShadowsDirectionType">
-    <xs:annotation>
-      <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="UP"/>
-      <xs:enumeration value="DOWN"/>
-      <xs:enumeration value="LEFT"/>
-      <xs:enumeration value="RIGHT"/>
-      <xs:enumeration value="ARBITRARY"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="SharpnessEnhancementType">
-    <xs:choice>
-      <xs:element name="ModularTransferFunctionCompensation" type="FilterType">
-        <xs:annotation>
-          <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ModularTransferFunctionEnhancement" type="FilterType">
-        <xs:annotation>
-          <xs:documentation>Note: If defining a custom Filter, it must be no larger than 5x5.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="ColorSpaceTransformType">
-    <xs:sequence>
-      <xs:element name="ColorManagementModule" type="ColorManagementModuleType">
-        <xs:annotation>
-          <xs:documentation>Parameters describing the Color Management Module (CMM).</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ColorManagementModuleType">
-    <xs:annotation>
-      <xs:documentation>Parameters describing the Color Management Module (CMM).</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="RenderingIntent" type="RenderingIntentType"></xs:element>
-      <!-- TODO: strings for SourceProfile, DisplayProfile, and ICCProfile may need to be upgraded to Enums -->
-      <xs:element name="SourceProfile" type="xs:string">
-        <xs:annotation>
-          <xs:documentation>Name of sensor profile in ICC Profile database.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="DisplayProfile" type="xs:string">
-        <xs:annotation>
-          <xs:documentation>Name of display profile in ICC Profile database.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ICCProfile" type="xs:string">
-        <xs:annotation>
-          <xs:documentation>Profile embedded in metadata.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="RenderingIntentType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="PERCEPTUAL"/>
-      <xs:enumeration value="SATURATION"/>
-      <xs:enumeration value="RELATIVE INTENT"/>
-      <xs:enumeration value="ABSOLUTE INTENT"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="DynamicRangeAdjustmentType">
-    <xs:annotation>
-      <xs:documentation>Parameter describing DRA.</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="AlgorithmType" type="RangeAdjustmentAlgorithmType">
-        <xs:annotation>
-          <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:choice>
-          <xs:element name="DRAParameters" type="DRAParameters"/>
-          <xs:element name="DRAOverrides" type="DRAOverrides"/>
-      </xs:choice>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DRAParameters">
-    <xs:sequence>
-        <xs:element name="Pmin" type="xs:double">
-            <xs:annotation>
-                <xs:documentation>
-                    DRA clip low point. This is the cumulative histogram percentage value that defines the lower end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
-                </xs:documentation>
-            </xs:annotation>
-        </xs:element>
-        <xs:element name="Pmax" type="xs:double">
-            <xs:annotation>
-                <xs:documentation>
-                    DRA clip high point. This is the cumulative histogram percentage value that defines the upper end-point of the dynamic range to be displayed. Range: [0.0 to 1.0]
-                </xs:documentation>
-            </xs:annotation>
-        </xs:element>
-        <xs:element name="EminModifier" type="xs:double">
-            <xs:annotation>
-                <xs:documentation>The pixel value corresponding to the Pmin percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
-            </xs:annotation>
-        </xs:element>
-        <xs:element name="EmaxModifier" type="xs:double">
-            <xs:annotation>
-                <xs:documentation>The pixel value corresponding to the Pmax percentage poitn in the image histogram. Range: [0.0 to 1.0]/</xs:documentation>
-            </xs:annotation>
-        </xs:element>
-    </xs:sequence>      
-  </xs:complexType>
-  <xs:simpleType name="RangeAdjustmentAlgorithmType">
-    <xs:annotation>
-      <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="AUTO"/>
-      <xs:enumeration value="MANUAL"/>
-      <xs:enumeration value="NON"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="DRAOverrides">
-    <xs:sequence>
-      <xs:element name="Subtractor" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>Subtractor value used to reduce haze in the image. Range: [0.0 to 2047.0]</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Multiplier" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>Multiplier value used to reduce haze in the image. Range: [0.0 to 2047.0]</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ProductPlaneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AUTO"/>
+            <xs:enumeration value="MANUAL"/>
+            <xs:enumeration value="NON"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="DRAOverrides">
+        <xs:sequence>
+            <xs:element name="Subtractor" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>Subtractor value used to reduce haze in the image. Range: [0.0 to 2047.0]</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Multiplier" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>Multiplier value used to reduce haze in the image. Range: [0.0 to 2047.0]</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProductPlaneType">
         <xs:annotation>
             <xs:documentation>Plane definition for the product.</xs:documentation>
         </xs:annotation>
@@ -777,37 +739,37 @@ NRL                N/A                        0,255 (Supposed to be display read
                     </xs:annotation>
                 </xs:element>
             </xs:choice>
-      <xs:element name="PixelFootprint" type="sicommon:RowColIntType">
-        <xs:annotation>
-          <xs:documentation>
-            Size of the image in pixels.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ARPFlag" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Flag indicating whether ARP polynomial is based on the best available ("collect time" or "predicted") ephemeris.</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="COLLECT TIME" />
-            <xs:enumeration value="PREDICTED" />
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
+            <xs:element name="PixelFootprint" type="sicommon:RowColIntType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Size of the image in pixels.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ARPFlag" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Flag indicating whether ARP polynomial is based on the best available ("collect time" or "predicted") ephemeris.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="COLLECT TIME" />
+                        <xs:enumeration value="PREDICTED" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
             <xs:element name="ARPPoly" type="sicommon:XYZPolyType">
                 <xs:annotation>
                     <xs:documentation>Center of aperture polynomial (units = m) based upon time into the collect.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-      <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>
-            Indicates the full image includes both valid data and some zero filled pixels.
-            Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
+            <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Indicates the full image includes both valid data and some zero filled pixels.
+                        Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="AcheivedResolutionType">
@@ -855,23 +817,6 @@ NRL                N/A                        0,255 (Supposed to be display read
         </xs:sequence>
         <xs:attributeGroup ref="ism:ISMRootNodeAttributeGroup"/>
         <xs:attributeGroup ref="ism:ResourceNodeAttributeGroup"/>
-        <!--
-            <xs:element name="Level" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>The classification level (examples: Unclassified, Secret, Top Secret, etc.).</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="SecurityMarkings" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Specialized control markings (if required).</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="Guidance" type="ClassificationGuidanceType" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>Classification guidance authority (only if file is classified).</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            -->
     </xs:complexType>
     <xs:complexType name="ProcessorInformationType">
         <xs:sequence>
@@ -934,156 +879,88 @@ NRL                N/A                        0,255 (Supposed to be display read
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="FootprintType">
+    <xs:complexType name="GeographicAndTargetType">
+        <xs:annotation>
+            <xs:documentation>This block describes the geographic coordinates of the region covered by the image.</xs:documentation>
+        </xs:annotation>
         <xs:sequence>
-            <xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="4" maxOccurs="4"/>
-        </xs:sequence>
-        <xs:attribute name="size" type="xs:int" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="TargetInformationType">
-        <xs:sequence>
-            <xs:element name="Identifier" type="sicommon:ParameterType" maxOccurs="unbounded">
+            <xs:element name="EarthModel" type="EarthModelType">
                 <xs:annotation>
-                    <xs:documentation>Target may have one or more identifiers.  Examples: names, BE numbers, etc. Use the "name" attribute to describe what this is.</xs:documentation>
+                    <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Footprint" type="FootprintType" minOccurs="0">
+            <xs:element name="ImageCorners" type="ImageCornersType">
                 <xs:annotation>
-                    <xs:documentation>Target footprint as defined by polygonal shape.</xs:documentation>
+                    <xs:documentation>
+                        Parameters apply to image corners of the product projected to the same height as the SCP.
+                        These corners are an approximate geographic location that is not intended for analytical use.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="TargetInformationExtension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Generic extension.  Could be used to indicate type of target, terrain, etc.</xs:documentation>
+                    <xs:documentation>
+                        Indicates the full image includes both valid data and some zero filled pixels.
+                        Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="GeographicInformationType">
-        <xs:sequence>
-            <xs:element name="CountryCode" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Country identifier for this geographic region.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="SecurityInfo" type="xs:string" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>Specifies classification level or special handling designators for this geographic region</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="GeographicInfoExtension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Implementation specific geographic information.</xs:documentation>
+                    <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="GeographicCoverageType">
+    <xs:simpleType name="EarthModelType">
+        <xs:annotation>
+            <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="WGS84"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ImageCornersType">
+        <xs:annotation>
+            <xs:documentation>
+                Parameters apply to image corners of the product projected to the same height as the SCP.
+                These corners are an approximate geographic location that is not intended for analytical use.
+            </xs:documentation>
+        </xs:annotation>
         <xs:sequence>
-            <xs:element name="GeoregionIdentifier" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="ICP" minOccurs="4" maxOccurs="4">
                 <xs:annotation>
-                    <xs:documentation>Identifier for the georegion.</xs:documentation>
+                    <xs:documentation>Image Corner Point (ICP) data for the 4 corners in product. ICPs indexed x = 1, 2, 3, 4, clockwise.</xs:documentation>
                 </xs:annotation>
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="sicommon:LatLonType">
+                            <xs:attribute name="index" type="sicommon:CornerStringType" use="required"/>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
             </xs:element>
-            <xs:element name="Footprint" type="FootprintType">
-                <xs:annotation>
-                    <xs:documentation>Estimated ground footprint of the product.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:choice>
-                <xs:element name="SubRegion" type="GeographicCoverageType" minOccurs="0" maxOccurs="unbounded">
-                    <xs:annotation>
-                        <xs:documentation>Used to represent hierarchical decomposition into sub-regions.</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="GeographicInfo" type="GeographicInformationType">
-                    <xs:annotation>
-                        <xs:documentation>Specifics about the georegion.</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-            </xs:choice>
         </xs:sequence>
     </xs:complexType>
-  <xs:complexType name="GeographicAndTargetType">
-    <xs:annotation>
-      <xs:documentation>This block describes the geographic coordinates of the region covered by the image.</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="EarthModel" type="EarthModelType">
+    <xs:complexType name="ValidDataType">
         <xs:annotation>
-          <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
+            <xs:documentation>
+                Indicates the full image includes both valid data and some zero filled pixels.
+                Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="ImageCorners" type="ImageCornersType">
-        <xs:annotation>
-          <xs:documentation>
-            Parameters apply to image corners of the product projected to the same height as the SCP.
-            These corners are an approximate geographic location that is not intended for analytical use.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ValidData" type="ValidDataType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>
-            Indicates the full image includes both valid data and some zero filled pixels.
-            Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="EarthModelType">
-    <xs:annotation>
-      <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="WGS84"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="ImageCornersType">
-    <xs:annotation>
-      <xs:documentation>Parameters apply to image corners of the product projected to the same height as the SCP. 
-      These corners are an approximate geographic location that is not intended for analytical use.</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-     <xs:element name="ICP" minOccurs="4" maxOccurs="4">
-      <xs:annotation>
-       <xs:documentation>Image Corner Point (ICP) data for the 4 corners in product. ICPs indexed x = 1, 2, 3, 4, clockwise.</xs:documentation>
-      </xs:annotation>
-      <xs:complexType>
-       <xs:complexContent>
-        <xs:extension base="sicommon:LatLonType">
-         <xs:attribute name="index" type="sicommon:CornerStringType" use="required"/>
-        </xs:extension>
-       </xs:complexContent>
-      </xs:complexType>
-     </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ValidDataType">
-    <xs:annotation>
-      <xs:documentation>
-        Indicates the full image includes both valid data and some zero filled pixels. 
-        Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="3" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>
-            Vertices indexed n = 1, 2, ..., NumVertices. NumVertices >= 3. Vertex 1 is determined by (1) minimum row index, (2) minimum column index if 2 vertices with minimum row index, 
-            1st and last vertices are connected to form the polygon.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="Size" type="xs:int" use="required"/>
-  </xs:complexType>
+        <xs:sequence>
+            <xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="3" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Vertices indexed n = 1, 2, ..., NumVertices. NumVertices >= 3. Vertex 1 is determined by (1) minimum row index, (2) minimum column index if 2 vertices with minimum row index,
+                        1st and last vertices are connected to form the polygon.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Size" type="xs:int" use="required"/>
+    </xs:complexType>
     <xs:complexType name="GeometricChipType">
         <xs:annotation>
             <xs:documentation/>
@@ -1162,9 +1039,9 @@ NRL                N/A                        0,255 (Supposed to be display read
     </xs:complexType>
     <xs:complexType name="ProductProcessingType">
         <xs:annotation>
-      <xs:documentation>
-        Computed metadata regarding one or more of the input collections and final product.
-      </xs:documentation>
+            <xs:documentation>
+                Computed metadata regarding one or more of the input collections and final product.
+            </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="ProcessingModule" type="ProcessingModuleType" maxOccurs="unbounded">
@@ -1225,18 +1102,18 @@ NRL                N/A                        0,255 (Supposed to be display read
             <xs:documentation>Computed metadata regarding the collect.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-      <xs:element name="Collection" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>Metadata regarding one of the input collections.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:complexContent>
-            <xs:extension base="ExploitationFeaturesCollectionType">
-              <xs:attribute name="identifier" type="xs:string" use="required"/>
-            </xs:extension>
-          </xs:complexContent>
-        </xs:complexType>
-      </xs:element>
+            <xs:element name="Collection" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Metadata regarding one of the input collections.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="ExploitationFeaturesCollectionType">
+                            <xs:attribute name="identifier" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="Product" type="ExploitationFeaturesProductType">
                 <xs:annotation>
                     <xs:documentation>Metadata regarding the product.</xs:documentation>
@@ -1420,234 +1297,234 @@ NRL                N/A                        0,255 (Supposed to be display read
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-  <xs:complexType name="CompressionType">
-    <xs:annotation>
-      <xs:documentation>
-        Contains information regarding any compression that has occured to the image data.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="J2K" type="J2KType"></xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="J2KType">
-    <xs:sequence>
-      <xs:element name="Original" type="J2KSubtype"/>
-      <xs:element name="Parsed" type="J2KSubtype" minOccurs="0">
+    <xs:complexType name="CompressionType">
         <xs:annotation>
-          <xs:documentation>
-            Conditional fields that exist only for parsed images.
-          </xs:documentation>
+            <xs:documentation>
+                Contains information regarding any compression that has occured to the image data.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="J2KSubtype">
-    <xs:sequence>
-      <xs:element name="NumWaveletLevels" type="xs:int">
+        <xs:sequence>
+            <xs:element name="J2K" type="J2KType"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="J2KType">
+        <xs:sequence>
+            <xs:element name="Original" type="J2KSubtype"/>
+            <xs:element name="Parsed" type="J2KSubtype" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Conditional fields that exist only for parsed images.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="J2KSubtype">
+        <xs:sequence>
+            <xs:element name="NumWaveletLevels" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>
+                        The default number of wavelet decompositionlevels performed per tile in the original image out of the processors.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NumBands" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>
+                        The number of spectral bands in the original image out of the processors.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="LayerInfo" type="LayerInfoType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Original Layer Information. The following fileds repeat for all layers in (0, 1, ..., numLayers - 1).
+                        The default number of layers per tile in original image out of the original processor.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LayerInfoType">
         <xs:annotation>
-          <xs:documentation>
-            The default number of wavelet decompositionlevels performed per tile in the original image out of the processors.
-          </xs:documentation>
+            <xs:documentation>
+                Original Layer Information. The following fileds repeat for all layers in (0, 1, ..., numLayers - 1).
+                The default number of layers per tile in original image out of the original processor.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="NumBands" type="xs:int">
+        <xs:sequence>
+            <xs:element name="Layer" type="LayerType" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Layer Index Number indicates the number of layers being described. Layers are numbered from 0 to (numLayers - 1).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="numLayers" type="xs:int" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="LayerType">
+        <xs:sequence>
+            <xs:element name="Bitrate" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>
+                        The bit rate target associated with the layer. It may happen that the bit rate was not achieved due to data characteristics.
+                        Note: for JPEG 2000 numerically lossless quality, the bit rate for the final layer is an expected value, based on performance.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="DigitalElevationDataType">
         <xs:annotation>
-          <xs:documentation>
-            The number of spectral bands in the original image out of the processors.
-          </xs:documentation>
+            <xs:documentation>
+                This block describes the Digital ElevatioNData when it is included with the SIDD product.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-      <xs:element name="LayerInfo" type="LayerInfoType" minOccurs="0">
+        <xs:sequence>
+            <xs:element name="GeographicCoordinates" type="GeographicCoordinatesType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Describes the Local Geographic Coordinate system linking row/column to the absolute geographic coordinate (lat/lon)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Geopositioning" type="GeopositioningType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Describes the absolute coordinate system to which the data is referenced.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PositionalAccuracy" type="PositionalAccuracyType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Describes the horizontal and vertical point and regional information for the DED.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NullValue" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GeographicCoordinatesType">
         <xs:annotation>
-          <xs:documentation>
-            Original Layer Information. The following fileds repeat for all layers in (0, 1, ..., numLayers - 1).
-            The default number of layers per tile in original image out of the original processor.
-          </xs:documentation>
+            <xs:documentation>
+                Describes the Local Geographic Coordinate system linking row/column to the absolute geographic coordinate (lat/lon)
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="LayerInfoType">
-    <xs:annotation>
-      <xs:documentation>
-        Original Layer Information. The following fileds repeat for all layers in (0, 1, ..., numLayers - 1). 
-      The default number of layers per tile in original image out of the original processor.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="Layer" type="LayerType" maxOccurs="unbounded">
+        <xs:sequence>
+            <xs:element name="LongitudeDensity" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>
+                        Pixel ground spacing in E/W direction that is the number of pixels or element intervals in 360 degrees.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="LatitudeDensity" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>
+                        Pixel ground spacing in N/S direction that is the number of pixels or element intervals in 360 degrees.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ReferenceOrigin" type="sicommon:LatLonType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Northwest corner Latitude/Longitude - product NW corner
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GeopositioningType">
         <xs:annotation>
-          <xs:documentation>
-            Layer Index Number indicates the number of layers being described. Layers are numbered from 0 to (numLayers - 1).
-          </xs:documentation>
+            <xs:documentation>
+                Describes the absolute coordinate system to which the data is referenced.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="numLayers" type="xs:int" use="required"/>
-  </xs:complexType>
-  <xs:complexType name="LayerType">
-    <xs:sequence>
-      <xs:element name="Bitrate" type="xs:double">
+        <xs:sequence>
+            <xs:element name="CoordinateSystemType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="GCS"/>
+                        <xs:enumeration value="UTM"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="GeodeticDatum">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="World Geodetic System 1984"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ReferenceEllipsoid">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="World Geodetic System 1984"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="VerticalDatum">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Mean Sea Level"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SoundingDatum">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Mean Sea Level"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="FalseOrigin" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Z values false origin</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="UTMGridZoneNumber" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Gride zone number, required for UTM, not include for GCS. (4 character field) Values: +001 to +060 (northern hemisphere) -001 to -060 (southern hemisphere)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PositionalAccuracyType">
         <xs:annotation>
-          <xs:documentation>
-            The bit rate target associated with the layer. It may happen that the bit rate was not achieved due to data characteristics.
-            Note: for JPEG 2000 numerically lossless quality, the bit rate for the final layer is an expected value, based on performance.
-          </xs:documentation>
+            <xs:documentation>
+                Describes the horizontal and vertical point and regional information for the DED.
+            </xs:documentation>
         </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
-  </xs:complexType>
-  <xs:complexType name="DigitalElevationDataType">
-    <xs:annotation>
-      <xs:documentation>
-        This block describes the Digital ElevatioNData when it is included with the SIDD product.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="GeographicCoordinates" type="GeographicCoordinatesType">
-        <xs:annotation>
-          <xs:documentation>
-            Describes the Local Geographic Coordinate system linking row/column to the absolute geographic coordinate (lat/lon)
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="Geopositioning" type="GeopositioningType">
-        <xs:annotation>
-          <xs:documentation>
-            Describes the absolute coordinate system to which the data is referenced.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="PositionalAccuracy" type="PositionalAccuracyType">
-        <xs:annotation>
-          <xs:documentation>
-            Describes the horizontal and vertical point and regional information for the DED.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="NullValue" type="xs:int" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GeographicCoordinatesType">
-    <xs:annotation>
-      <xs:documentation>
-        Describes the Local Geographic Coordinate system linking row/column to the absolute geographic coordinate (lat/lon)
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="LongitudeDensity" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>
-            Pixel ground spacing in E/W direction that is the number of pixels or element intervals in 360 degrees.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="LatitudeDensity" type="xs:double">
-        <xs:annotation>
-          <xs:documentation>
-            Pixel ground spacing in N/S direction that is the number of pixels or element intervals in 360 degrees.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="ReferenceOrigin" type="sicommon:LatLonType">
-        <xs:annotation>
-          <xs:documentation>
-            Northwest corner Latitude/Longitude - product NW corner
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GeopositioningType">
-    <xs:annotation>
-      <xs:documentation>
-        Describes the absolute coordinate system to which the data is referenced.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="CoordinateSystemType">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="GCS"/>
-            <xs:enumeration value="UTM"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="GeodeticDatum">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="World Geodetic System 1984"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="ReferenceEllipsoid">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="World Geodetic System 1984"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="VerticalDatum">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="Mean Sea Level"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="SoundingDatum">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="Mean Sea Level"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="FalseOrigin" type="xs:int">
-        <xs:annotation>
-          <xs:documentation>Z values false origin</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="UTMGridZoneNumber" type="xs:int" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>
-            Gride zone number, required for UTM, not include for GCS. (4 character field) Values: +001 to +060 (northern hemisphere) -001 to -060 (southern hemisphere)
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PositionalAccuracyType">
-    <xs:annotation>
-      <xs:documentation>
-        Describes the horizontal and vertical point and regional information for the DED.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="NumRegions" type="xs:int">
-        <xs:annotation>
-          <xs:documentation>
-            Number of positional accuracy regions.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
-      <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
-      <xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>
-            Number of points (coordinate paris) used to define the bounding polygon of the nth region of position accuracy. (Field does not apply).
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="AccuracyType">
-    <xs:sequence>
-      <xs:element name="Horizontal" type="xs:double" maxOccurs="unbounded"/>
-      <xs:element name="Vertical" type="xs:double" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
+        <xs:sequence>
+            <xs:element name="NumRegions" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>
+                        Number of positional accuracy regions.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
+            <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
+            <xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Number of points (coordinate paris) used to define the bounding polygon of the nth region of position accuracy. (Field does not apply).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AccuracyType">
+        <xs:sequence>
+            <xs:element name="Horizontal" type="xs:double" maxOccurs="unbounded"/>
+            <xs:element name="Vertical" type="xs:double" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="AnnotationsType">
         <xs:sequence>
             <xs:element name="Annotation" type="AnnotationType" maxOccurs="unbounded">
@@ -1773,32 +1650,32 @@ NRL                N/A                        0,255 (Supposed to be display read
                         <xs:documentation>Radiometric information about the product.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-        <xs:element name="MatchInfo" type="sicommon:MatchInfoType" minOccurs="0">
-          <xs:annotation>
-            <xs:documentation>
-              Information about other collections that are matched to the current collection. The current collection is the collection from which this SIDD product was generated.
-            </xs:documentation>
-          </xs:annotation>
-        </xs:element>
-        <xs:element name="Compression" type="CompressionType" minOccurs="0">
-          <xs:annotation>
-            <xs:documentation>
-              Contains information regarding any compression that has occured to the image data.
-            </xs:documentation>
-          </xs:annotation>
-        </xs:element>
-        <xs:element name="DigitalElevationData" type="DigitalElevationDataType" minOccurs="0">
-          <xs:annotation>
-            <xs:documentation>
-              This block describes the Digital ElevatioNData when it is included with the SIDD product.
-            </xs:documentation>
-          </xs:annotation>
-        </xs:element>
-        <xs:element name="ProductProcessing" type="ProductProcessingType" minOccurs="0">
-          <xs:annotation>
-            <xs:documentation>Contains metadata related to algorithms used during product generation.</xs:documentation>
-          </xs:annotation>
-        </xs:element>
+                <xs:element name="MatchInfo" type="sicommon:MatchInfoType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Information about other collections that are matched to the current collection. The current collection is the collection from which this SIDD product was generated.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Compression" type="CompressionType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Contains information regarding any compression that has occured to the image data.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="DigitalElevationData" type="DigitalElevationDataType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            This block describes the Digital ElevatioNData when it is included with the SIDD product.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="ProductProcessing" type="ProductProcessingType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Contains metadata related to algorithms used during product generation.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="Annotations" type="AnnotationsType" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>List of annotations for the imagery.</xs:documentation>
