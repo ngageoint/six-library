@@ -25,6 +25,8 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
+#include <types/RowCol.h>
+
 namespace
 {
 void getErrors(const six::sicd::ComplexData& data,
@@ -37,15 +39,15 @@ void getErrors(const six::sicd::ComplexData& data,
 }
 
 template <typename ValueType>
-six::Region buildRegion(size_t firstRow, size_t firstCol,
-                        size_t numRows, size_t numCols,
+six::Region buildRegion(const types::RowCol<size_t>& offset,
+                        const types::RowCol<size_t>& extent,
                         ValueType* buffer)
 {
     six::Region retv;
-    retv.setStartRow(firstRow);
-    retv.setStartCol(firstCol);
-    retv.setNumRows(numRows);
-    retv.setNumCols(numCols);
+    retv.setStartRow(offset.row);
+    retv.setStartCol(offset.col);
+    retv.setNumRows(extent.row);
+    retv.setNumCols(extent.col);
     retv.setBuffer(reinterpret_cast<six::UByte*>(buffer));
     return retv;
 }
@@ -54,14 +56,14 @@ six::Region buildRegion(size_t firstRow, size_t firstCol,
 // going until reads everything
 void readAndConvertSICD(six::NITFReadControl& reader,
                         size_t imageNumber,
-                        size_t startRow,
-                        size_t numRows,
-                        size_t startCol,
-                        size_t numCols,
+                        const types::RowCol<size_t>& offset,
+                        const types::RowCol<size_t>& extent,
                         std::complex<float>* buffer)
 {
+
+
     // One for the real component, one for imaginary of each pixel
-    const size_t elementsPerRow = numCols * 2;
+    const size_t elementsPerRow = extent.col * 2;
 
     // Get at least 32MB per read
     const size_t rowsAtATime =
@@ -71,25 +73,29 @@ void readAndConvertSICD(six::NITFReadControl& reader,
     std::vector<short> tempVector(elementsPerRow * rowsAtATime);
     short* const tempBuffer = &tempVector[0];
 
-    for (size_t row = startRow, rowsToRead = rowsAtATime;
-         row < numRows;
+    const size_t endRow = offset.row + extent.row;
+
+    for (size_t row = offset.row, rowsToRead = rowsAtATime;
+         row < endRow;
          row += rowsToRead)
     {
-        // If we would read beyond the input buffer, don't
-        if (row + rowsToRead > numRows)
-        {
-            rowsToRead = numRows - row;
-        }
 
+        // If we would read beyond the input buffer, don't
+        if (row + rowsToRead > endRow)
+        {
+            rowsToRead = endRow - row;
+        }
+        
         // Read into the temp buffer
-        six::Region region = buildRegion(row, startCol,
-                rowsToRead, numCols, tempBuffer);
+        types::RowCol<size_t> swathOffset(row, offset.col);
+        types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer);
         reader.interleaved(region, imageNumber);
 
         // Take each Int16 out of the temp buffer and put it into the real
         // buffer as a Float32
         float* const bufferPtr = reinterpret_cast<float*>(buffer) +
-                (row * elementsPerRow);
+                ((row - offset.row) * elementsPerRow);
 
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
@@ -315,14 +321,14 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(sicdPathname, schemaPaths); 
+    reader.load(sicdPathname, schemaPaths);
 
     complexData = getComplexData(reader);
     getWidebandData(reader, *(complexData.get()), widebandData);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
-    reader.setXMLControlRegistry(NULL); 
+    reader.setXMLControlRegistry(NULL);
 }
 
 std::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
@@ -364,19 +370,17 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(
 
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
+                                const types::RowCol<size_t>& offset,
+                                const types::RowCol<size_t>& extent,
                                 std::complex<float>* buffer)
 {
     const PixelType pixelType = complexData.getPixelType();
     const size_t imageNumber = 0;
-    const size_t startRow = 0;
-    const size_t startCol = 0;
-    const size_t numRows = complexData.getNumRows();
-    const size_t numCols = complexData.getNumCols();
 
-    const size_t requiredBufferBytes = sizeof(std::complex<float>) 
-                                            * numRows * numCols;
-    
-    if(buffer == NULL)
+    const size_t requiredBufferBytes = sizeof(std::complex<float>)
+                                            * extent.normL1();
+
+    if (buffer == NULL)
     {
         // for some reason we don't have a buffer
 
@@ -385,21 +389,18 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                     + str::toString(requiredBufferBytes)
                     + std::string(" byte buffer was expected")));
     }
-    
-    if(pixelType == PixelType::RE32F_IM32F)
+
+    if (pixelType == PixelType::RE32F_IM32F)
     {
-        six::Region region = buildRegion(startRow, startCol,
-                numRows, numCols, buffer);
+        six::Region region = buildRegion(offset, extent, buffer);
         reader.interleaved(region, imageNumber);
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
         readAndConvertSICD(reader,
                            imageNumber,
-                           startRow,
-                           numRows,
-                           startCol,
-                           numCols,
+                           offset,
+                           extent,
                            buffer);
     }
     else
@@ -409,25 +410,55 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
 
 }
+void Utilities::getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                std::complex<float>* buffer)
+{
+    types::RowCol<size_t> offset(0,0);
+
+    types::RowCol<size_t> extent(
+            complexData.getNumRows(),
+            complexData.getNumCols()
+            );
+
+    getWidebandData(reader, complexData, offset, extent, buffer);
+}
+
+void Utilities::getWidebandData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                const types::RowCol<size_t>& offset,
+                                const types::RowCol<size_t>& extent,
+                                std::vector<std::complex<float> >& buffer)
+{
+    const size_t requiredNumElements = extent.normL1();
+    buffer.resize(requiredNumElements);
+
+    if (requiredNumElements > 0)
+    {
+        getWidebandData(reader, complexData, offset, extent, &buffer[0]);
+    }
+}
 
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::vector<std::complex<float> >& buffer)
 {
-    const size_t requiredNumElements =
-            complexData.getNumCols() * complexData.getNumRows();
-    buffer.resize(requiredNumElements);
+    types::RowCol<size_t> offset;
 
-    if (requiredNumElements > 0)
-    {
-        Utilities::getWidebandData(reader, complexData, &buffer[0]);
-    }
+    types::RowCol<size_t> extent(
+            complexData.getNumRows(),
+            complexData.getNumCols()
+            );
+
+    getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
 void Utilities::getWidebandData(
         const std::string& sicdPathname,
         const std::vector<std::string>& schemaPaths,
         const ComplexData& complexData,
+        const types::RowCol<size_t>& offset,
+        const types::RowCol<size_t>& extent,
         std::complex<float>* buffer)
 {
     six::XMLControlRegistry xmlRegistry;
@@ -438,8 +469,26 @@ void Utilities::getWidebandData(
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname);
 
-    getWidebandData(reader, complexData, buffer);
+    getWidebandData(reader, complexData, offset, extent, buffer);
 }
+
+void Utilities::getWidebandData(
+        const std::string& sicdPathname,
+        const std::vector<std::string>& schemaPaths,
+        const ComplexData& complexData,
+        std::complex<float>* buffer)
+{
+    types::RowCol<size_t> offset(0,0);
+
+    types::RowCol<size_t> extent(
+            complexData.getNumRows(),
+            complexData.getNumCols()
+            );
+
+    getWidebandData(sicdPathname, schemaPaths, complexData,
+            offset, extent, buffer);
+}
+
 }
 }
 
