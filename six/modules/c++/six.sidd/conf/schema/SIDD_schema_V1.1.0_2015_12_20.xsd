@@ -1534,32 +1534,6 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <!--
-    <xs:complexType name="PixelRepresentationType">
-        <xs:annotation>
-            <xs:documentation>Pixel representation of the footprint of the annotation.</xs:documentation>
-        </xs:annotation>
-        <xs:choice>
-            <xs:element name="SVGRepresentation" type="svg:svgType" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>SVG Representation of the object</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:choice>
-    </xs:complexType>
-    <xs:complexType name="GeographicalRepresentationType">
-        <xs:annotation>
-            <xs:documentation>Geographical representation of the footprint of the annotation.</xs:documentation>
-        </xs:annotation>
-        <xs:choice>
-            <xs:element name="KMLRepresentation" type="kml:KmlType" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>KML Representation of the object</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:choice>
-    </xs:complexType>
--->
     <xs:complexType name="AnnotationObjectType">
         <xs:annotation>
             <xs:documentation>Geometrical representation of the annotation.</xs:documentation>
@@ -1569,9 +1543,7 @@
             <xs:element name="Line" type="sfa:LineType"/>
             <xs:element name="LinearRing" type="sfa:LinearRingType"/>
             <xs:element name="Polygon" type="sfa:PolygonType"/>
-            <!--xs:element name="Triangle" type="sfa:TriangleType"/-->
             <xs:element name="PolyhedralSurface" type="sfa:PolyhedralSurfaceType"/>
-            <!--xs:element name="TriangulatedIrregularNetwork" type="sfa:TriangulatedIrregularNetworkType"/-->
             <xs:element name="MultiPolygon" type="sfa:MultiPolygonType"/>
             <xs:element name="MultiLineString" type="sfa:MultiLineStringType"/>
             <xs:element name="MultiPoint" type="sfa:MultiPointType"/>
@@ -1592,11 +1564,6 @@
                     <xs:documentation>Spatial reference system of the annotation.  Assumed to be WGS-84 geographic coordinate system if not specified with (lat, lon, h) units in (arc-sec, arc-sec, meters above ellipsoid). </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <!--<xs:element name="MeasureReferenceSystem" type="sfa:ReferenceSystemType" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>Measure reference system</xs:documentation>
-                </xs:annotation>
-            </xs:element>-->
             <xs:element name="Object" type="AnnotationObjectType" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>The geometrical representation of the annotation.</xs:documentation>
