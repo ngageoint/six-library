@@ -534,7 +534,6 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
         throw except::Exception(Ctxt("If DownsamplingMethod = DECIMATE or MAX_PIXEL, neither AntiAlias nor Interpolation allowed"));
     }
 
-    bool ok = false;
     if (antiAliasElem)
     {
         rrds.antiAlias.reset(new Filter());
