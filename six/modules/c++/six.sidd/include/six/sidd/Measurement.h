@@ -22,8 +22,9 @@
 #ifndef __SIX_SIDD_MEASUREMENT_H__
 #define __SIX_SIDD_MEASUREMENT_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/sidd/Enums.h>
 
 namespace six
 {
@@ -226,8 +227,6 @@ struct PlaneProjection : public MeasurableProjection
 
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
-
-
 };
 
 /*!
@@ -244,6 +243,13 @@ struct Measurement
     //!  Number of rows/cols in the SIDD product
     RowColInt pixelFootprint;
 
+    /*!
+     * Flag indicating whether ARP polynomial is based on the best available
+     * ("collect time") or "predicted" ephemeris
+     * New (and optional) in SIDD 1.1
+     */
+    ARPFlag arpFlag;
+
     //!  The ARP Polynomial
     PolyXYZ arpPoly;
 
@@ -256,15 +262,11 @@ struct Measurement
     std::vector<RowColInt> validData;
 
     /*!
-     *  To initialize a measurenet, we need a product projection
+     *  To initialize a measurement, we need a product projection
      *  definition.  The currently available are geographic, plane
      *  and cylindrical (see ProjectionType).
      */
     Measurement(ProjectionType projectionType);
-
-    //!  Deep copy including projection
-    Measurement* clone();
-
 };
 
 }

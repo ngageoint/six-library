@@ -76,7 +76,7 @@ struct DerivedData: public Data
      *  Contains the meta-data necessary for performing
      *  measurements
      */
-    mem::ScopedCloneablePtr<Measurement> measurement;
+    mem::ScopedCopyablePtr<Measurement> measurement;
 
     /*!
      *  Computed metadata for collections
