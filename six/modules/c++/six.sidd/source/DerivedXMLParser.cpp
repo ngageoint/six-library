@@ -222,7 +222,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
 {
     parseProductCreationFromXML(
             getFirstAndOnly(productCreationXML, "ProcessorInformation"),
-            productCreation->processorInformation.get());
+            &productCreation->processorInformation);
 
     parseDerivedClassificationFromXML(
             getFirstAndOnly(productCreationXML, "Classification"),
@@ -628,7 +628,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                 = collectionXML->getAttributes().getValue("identifier");
 
         // parse Information
-        Information* info = coll->information.get();
+        Information* info = &coll->information;
         XMLElem informationXML = getFirstAndOnly(collectionXML, "Information");
 
         parseString(getFirstAndOnly(informationXML, "SensorName"),
@@ -837,7 +837,7 @@ XMLElem DerivedXMLParser::convertProductCreationToXML(
     XMLElem productCreationXML = newElement("ProductCreation", parent);
 
     convertProcessorInformationToXML(
-            productCreation->processorInformation.get(), productCreationXML);
+            &productCreation->processorInformation, productCreationXML);
 
     convertDerivedClassificationToXML(
             productCreation->classification, productCreationXML);
@@ -1118,57 +1118,57 @@ XMLElem DerivedXMLParser::convertExploitationFeaturesToXML(
         XMLElem informationXML = newElement("Information", collectionXML);
 
         createString("SensorName",
-                     collection->information->sensorName,
+                     collection->information.sensorName,
                      informationXML);
         XMLElem radarModeXML = newElement("RadarMode", informationXML);
         createString("ModeType",
                      common().getSICommonURI(),
-                     six::toString(collection->information->radarMode),
+                     six::toString(collection->information.radarMode),
                      radarModeXML);
         // optional
-        if (collection->information->radarModeID
+        if (collection->information.radarModeID
                 != Init::undefined<std::string>())
             createString("ModeID",
                          common().getSICommonURI(),
-                         collection->information->radarModeID,
+                         collection->information.radarModeID,
                          radarModeXML);
         createDateTime("CollectionDateTime",
-                       collection->information->collectionDateTime,
+                       collection->information.collectionDateTime,
                        informationXML);
         // optional
-        if (collection->information->localDateTime != Init::undefined<
+        if (collection->information.localDateTime != Init::undefined<
                 std::string>())
         {
             createDateTime("LocalDateTime",
-                           collection->information->localDateTime,
+                           collection->information.localDateTime,
                            informationXML);
         }
         createDouble("CollectionDuration",
-                     collection->information->collectionDuration,
+                     collection->information.collectionDuration,
                      informationXML);
         // optional
-        if (!Init::isUndefined(collection->information->resolution))
+        if (!Init::isUndefined(collection->information.resolution))
         {
             common().createRangeAzimuth("Resolution",
-                                        collection->information->resolution,
+                                        collection->information.resolution,
                                         informationXML);
         }
         // optional
-        if (collection->information->inputROI.get())
+        if (collection->information.inputROI.get())
         {
             XMLElem roiXML = newElement("InputROI", informationXML);
             common().createRowCol("Size",
-                                  collection->information->inputROI->size,
+                                  collection->information.inputROI->size,
                                   roiXML);
             common().createRowCol("UpperLeft",
-                                  collection->information->inputROI->upperLeft,
+                                  collection->information.inputROI->upperLeft,
                                   roiXML);
         }
         // optional to unbounded
         for (size_t n = 0, nElems =
-                collection->information->polarization.size(); n < nElems; ++n)
+                collection->information.polarization.size(); n < nElems; ++n)
         {
-            TxRcvPolarization *p = collection->information->polarization[n].get();
+            TxRcvPolarization *p = collection->information.polarization[n].get();
             XMLElem polXML = newElement("Polarization", informationXML);
 
             createString("TxPolarization",
@@ -1393,7 +1393,7 @@ XMLElem DerivedXMLParser::convertProductProcessingToXML(
     }
 
     // one to unbounded
-    for (std::vector<mem::ScopedCloneablePtr<ProcessingModule> >::
+    for (std::vector<mem::ScopedCopyablePtr<ProcessingModule> >::
             const_iterator it = productProcessing->processingModules.begin();
             it != productProcessing->processingModules.end(); ++it)
     {
@@ -1415,7 +1415,7 @@ XMLElem DerivedXMLParser::convertProcessingModuleToXML(
     if (!procMod->processingModules.empty())
     {
         // one to unbounded
-        for (std::vector<mem::ScopedCloneablePtr<ProcessingModule> >::
+        for (std::vector<mem::ScopedCopyablePtr<ProcessingModule> >::
                 const_iterator it = procMod->processingModules.begin();
                 it != procMod->processingModules.end(); ++it)
         {

@@ -2059,7 +2059,7 @@ int main(int argc, char** argv)
 
         // Can certainly be init'ed in a function
         initProcessorInformation(
-            *siddData->productCreation->processorInformation);
+            siddData->productCreation->processorInformation);
         initDED(siddData->digitalElevationData);
 
         // Or directly if preferred
@@ -2129,14 +2129,14 @@ int main(int argc, char** argv)
         // values would mirror what was in the SICD XML
         // Here they are dummy values
         //--------------------------------------------------------
-        parent->information->resolution.rg = 0;
-        parent->information->resolution.az = 0;
-        parent->information->collectionDuration = 0;
+        parent->information.resolution.rg = 0;
+        parent->information.resolution.az = 0;
+        parent->information.collectionDuration = 0;
 
         // This demo sets the collection time to now (not true)
-        parent->information->collectionDateTime = six::DateTime();
-        parent->information->radarMode = RadarModeType::SPOTLIGHT;
-        parent->information->sensorName = "";
+        parent->information.collectionDateTime = six::DateTime();
+        parent->information.radarMode = RadarModeType::SPOTLIGHT;
+        parent->information.sensorName.clear();
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
 
@@ -2157,8 +2157,8 @@ int main(int argc, char** argv)
         eventParameter.setValue("Value");
         siddData->downstreamReprocessing->processingEvents[0]->descriptor.push_back(eventParameter);
 
-        mem::ScopedCloneablePtr<six::sidd::ProcessingModule> module;
-        mem::ScopedCloneablePtr<six::sidd::ProcessingModule> nestedModule;
+        mem::ScopedCopyablePtr<six::sidd::ProcessingModule> module;
+        mem::ScopedCopyablePtr<six::sidd::ProcessingModule> nestedModule;
         module.reset(new six::sidd::ProcessingModule());
         nestedModule.reset(new six::sidd::ProcessingModule());
         six::Parameter moduleParameter;

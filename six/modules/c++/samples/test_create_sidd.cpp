@@ -287,7 +287,7 @@ int main(int argc, char** argv)
             data->productCreation->classification.classification = "U";
 
             six::sidd::ProcessorInformation& processorInformation =
-                *data->productCreation->processorInformation;
+                data->productCreation->processorInformation;
 
             processorInformation.application = "ProcessorName";
             processorInformation.profile = "Profile";
@@ -326,12 +326,12 @@ int main(int argc, char** argv)
             six::sidd::Collection* parent =
                 data->exploitationFeatures->collections[0].get();
 
-            parent->information->resolution.rg = 0;
-            parent->information->resolution.az = 0;
-            parent->information->collectionDuration = 0;
-            parent->information->collectionDateTime = six::DateTime();
-            parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-            parent->information->sensorName = "the sensor";
+            parent->information.resolution.rg = 0;
+            parent->information.resolution.az = 0;
+            parent->information.collectionDuration = 0;
+            parent->information.collectionDateTime = six::DateTime();
+            parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+            parent->information.sensorName = "the sensor";
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;
 

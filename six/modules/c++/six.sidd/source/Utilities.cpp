@@ -39,7 +39,7 @@ double getCenterTime(const six::sidd::DerivedData& derived)
     {
         // we estimate...
         centerTime =
-                derived.exploitationFeatures->collections[0]->information->collectionDuration
+                derived.exploitationFeatures->collections[0]->information.collectionDuration
                         / 2;
     }
 

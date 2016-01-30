@@ -52,15 +52,12 @@ struct ProcessingModule
     ParameterCollection moduleParameters;
 
     /*!
-     *  ProcessingModule is a repeatabl structure within
+     *  ProcessingModule is a repeatable structure within
      *  itself to create an algorithm as a subset of another
      *  algorithm
      *
      */
-    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
-
-    //!  Clone
-    ProcessingModule* clone() const;
+    std::vector<mem::ScopedCopyablePtr<ProcessingModule> > processingModules;
 };
 
 /*!
@@ -72,13 +69,9 @@ struct ProcessingModule
  */
 struct ProductProcessing
 {
-    //!  Clone
-    ProductProcessing* clone() const;
-
     //!  Contains only a set of ProcessingModule components
-    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
+    std::vector<mem::ScopedCopyablePtr<ProcessingModule> > processingModules;
 };
-
 }
 }
 #endif

@@ -22,9 +22,7 @@
 #ifndef __SIX_DERIVED_DATA_H__
 #define __SIX_DERIVED_DATA_H__
 
-#include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
-
 #include <six/Data.h>
 #include <six/ErrorStatistics.h>
 #include <six/MatchInformation.h>
@@ -58,7 +56,7 @@ struct DerivedData: public Data
      *  Information related to processor, classification,
      *  and product type
      */
-    mem::ScopedCloneablePtr<ProductCreation> productCreation;
+    mem::ScopedCopyablePtr<ProductCreation> productCreation;
 
     /*!
      *  Contains information on the parameters needed to display
@@ -81,13 +79,13 @@ struct DerivedData: public Data
     /*!
      *  Computed metadata for collections
      */
-    mem::ScopedCloneablePtr<ExploitationFeatures> exploitationFeatures;
+    mem::ScopedCopyablePtr<ExploitationFeatures> exploitationFeatures;
 
     /*!
      *  (Optional) Contains meta-data related to algorithms used
      *  during product generation
      */
-    mem::ScopedCloneablePtr<ProductProcessing> productProcessing;
+    mem::ScopedCopyablePtr<ProductProcessing> productProcessing;
 
     /*!
      *  (Optional) Contains meta-data related to downstream
@@ -234,7 +232,7 @@ struct DerivedData: public Data
         // TODO throw exception instead of returning empty string?
         return (exploitationFeatures.get()
                 && !exploitationFeatures->collections.empty() ?
-                    exploitationFeatures->collections[0]->information->sensorName :
+                    exploitationFeatures->collections[0]->information.sensorName :
                     std::string(""));
     }
 
@@ -248,7 +246,7 @@ struct DerivedData: public Data
         if (exploitationFeatures.get() &&
             !exploitationFeatures->collections.empty())
         {
-            exploitationFeatures->collections[0]->information->sensorName =
+            exploitationFeatures->collections[0]->information.sensorName =
                 name;
         }
     }
@@ -259,7 +257,7 @@ struct DerivedData: public Data
      */
     virtual DateTime getCreationTime() const
     {
-        return productCreation->processorInformation->processingDateTime;
+        return productCreation->processorInformation.processingDateTime;
     }
 
     /*!
@@ -268,7 +266,7 @@ struct DerivedData: public Data
      */
     virtual void setCreationTime(DateTime creationTime)
     {
-        productCreation->processorInformation->processingDateTime
+        productCreation->processorInformation.processingDateTime
                 = creationTime;
     }
 

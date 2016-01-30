@@ -181,7 +181,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     addStringArray(ifd,
                    "Software",
-                   data->productCreation->processorInformation->application);
+                   data->productCreation->processorInformation.application);
 
     char date[256];
     date[255] = 0;
@@ -191,7 +191,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     addStringArray(ifd,
                    "Artist",
-                   data->productCreation->processorInformation->site);
+                   data->productCreation->processorInformation.site);
 
     ifd->addEntry(tiff::KnownTags::COMPRESSION,
                   (unsigned short) tiff::Const::CompressionType::NO_COMPRESSION);

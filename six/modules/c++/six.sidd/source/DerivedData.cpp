@@ -88,7 +88,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
         throw except::Exception(Ctxt("Must add a collection first"));
     }
 
-    return exploitationFeatures->collections[0]->information->collectionDateTime;
+    return exploitationFeatures->collections[0]->information.collectionDateTime;
 }
 
 LUT* DerivedData::getDisplayLUT()
