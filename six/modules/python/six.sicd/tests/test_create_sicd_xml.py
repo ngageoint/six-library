@@ -777,10 +777,6 @@ if __name__ == '__main__':
     if includeNITF:
         writeNITF(origPathnameBase, vs, cmplx)
 
-        cmplx.thisown = 0 # This prevents SWIG from destroying a null pointer
-        cmplx = None # writeAsNITF deletes cmplx as side-effect,
-                     # so don't use it again
-
     # If we made it to here, all the Python bindings must be present and
     # what we wrote out must have passed schema validation
     # We can't tell if for some reason some of the XML just didn't
