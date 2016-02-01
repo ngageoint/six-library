@@ -804,16 +804,20 @@ if __name__ == '__main__':
     if includeNITF:
         writeNITF(newPathnameBase, vs, cmplxReadBackIn)
 
+    successCode = 0
     # These should match #
     if filecmp.cmp(origPathnameBase + ".xml", newPathnameBase + ".xml"):
 	print 'XML round trip succeeded!'
     else:
+        successCode = 1
 	print 'NITF round trip failed'
 
     if includeNITF:
         if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
     	    print 'Round trip succeeded!'
         else:
+            successCode = 1
             print 'Round trip failed'
+    sys.exit(successCode)
 
     # If we made it to here, the read side appears to be working properly too

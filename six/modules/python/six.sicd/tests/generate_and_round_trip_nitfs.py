@@ -46,13 +46,8 @@ def createNITF(version='1.1.0'):
         raise Exception("Please call test from six-library/ or "
                 "six-library/six/modules/python/six.sicd/tests")
 
-    call(['python', test_file, '--includeNITF',
+    return call(['python', test_file, '--includeNITF',
           '--version={0}'.format(version)])
-
-    # test_create_sicd_xml.py doesn't communicate the filenames,
-    # so we'll have to build and return directly here
-    nitf = 'test_create_sicd_{0}.nitf'.format(version)
-    return nitf
 
 def clean(nitfName, thorough=False):
     xmlName = nitfName.replace('nitf', 'xml')
@@ -66,11 +61,17 @@ if __name__ == '__main__':
     import sys
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
 
+    successCode = 0
     for version in sicdVersions:
         print "Testing version {0}:".format(version)
+        if createNITF(version) == False:
+            successCode = 1
+
+        outputName = "test_create_sicd_{0}.nitf".format(version)
         # The output from the script createNITF runs should give us
         # the desired testing output
         if len(sys.argv) > 1 and sys.argv[1] == '--clean':
             clean(createNITF(version), thorough=True)
         else:
             clean(createNITF(version))
+    sys.exit(successCode)

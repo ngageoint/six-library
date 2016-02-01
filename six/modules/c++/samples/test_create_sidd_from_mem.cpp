@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -31,7 +31,7 @@
  *  NITF and GeoTIFF support are builtin.  If the suffix is .nitf or .ntf,
  *  the test will write a NITF.  Otherwise, if tiff support is enabled, it
  *  will attempt to write a GeoTIFF.  If tiff support is disabled in the
- *  library an exception will be thrown.  NITF is always written 
+ *  library an exception will be thrown.  NITF is always written
  *  in big-endian.  Tiff output will always be in native endian.
  *
  *  The usage is extremely simple:
@@ -42,6 +42,7 @@
  *
  */
 
+#include <import/cli.h>
 #include <import/six/sidd.h>
 #include <import/six/sicd.h>
 #include <import/nitf.h>
@@ -1775,15 +1776,183 @@ void initProcessorInformation(
     processorInformation.site = "Ypsilanti, MI";
 }
 
+std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
+                                               bool smallImage)
+{
+    //-----------------------------------------------------------
+    // Make the object.  You could do this directly, but this way
+    // is less error prone, and more flexible
+    //-----------------------------------------------------------
+    six::sidd::DerivedDataBuilder siddBuilder;
+
+    // We know our input image in the default example is RGB data
+    six::PixelType pixelType = PixelType::RGB24I;
+    if (!smallImage && lutType == "Mono")
+    {
+        throw except::Exception(Ctxt("Built-in image has a Color lut."
+        "Pass --smallImage flag to use dummy image and set Mono lut."));
+    }
+    else if (lutType == "Mono")
+    {
+        pixelType = PixelType::MONO8I;
+    }
+
+    //-----------------------------------------------------------
+    // You can cascade these operators, or call them one after
+    // the other.  Here is how you add them individually
+    //-----------------------------------------------------------
+    siddBuilder.addDisplay(pixelType);
+    siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
+
+    // Here is how you can cascade them
+    siddBuilder.addMeasurement(ProjectionType::PLANE).
+            addExploitationFeatures(1);
+
+    //---------------------------------------------------------
+    // Take ownership of the SIDD data, the builder still can
+    // manipulate the same pointer after this happens if you
+    // want it to, but it won't try to release it when it goes
+    // out of scope if you steal() it.
+    //---------------------------------------------------------
+    return  std::auto_ptr<six::sidd::DerivedData>(siddBuilder.steal());
+}
+
+void populateData(six::sidd::DerivedData& siddData, const std::string&
+        lutType)
+{
+
+    // These things are essential to forming the file
+    siddData.setNumRows(IMAGE.height);
+    siddData.setNumCols(IMAGE.width);
+    siddData.setImageCorners(makeUpCornersFromDMS());
+
+    // Dummy data for example
+    siddData.productCreation->productName = "ProductName";
+    siddData.productCreation->productClass = "Classy";
+    siddData.productCreation->classification.classification = "U";
+
+    // Can certainly be init'ed in a function
+    initProcessorInformation(
+        *siddData.productCreation->processorInformation);
+
+    // Or directly if preferred
+    siddData.display->decimationMethod
+            = DecimationMethod::BRIGHTEST_PIXEL;
+    siddData.display->magnificationMethod
+            = MagnificationMethod::NEAREST_NEIGHBOR;
+
+   if (lutType == "Mono")
+   {
+        siddData.display->remapInformation.reset(
+            new six::sidd::MonochromeDisplayRemap("Some mono type",
+            new LUT(256, 2)));
+    }
+    else
+    {
+        siddData.display->remapInformation.reset(
+                new six::sidd::ColorDisplayRemap(new LUT(256, 3)));
+    }
+
+    //---------------------------------------------------------------
+    // We can only do this because we know it's PGD in this example
+    // If you don't know which it is, you don't need to use a
+    // dynamic_cast<> since there is an enum in projection for this:
+    // siddData.measurement->projection->projectionType
+    // In this case:
+    //    == six::PLANE
+    //---------------------------------------------------------------
+    six::sidd::PlaneProjection* planeProjection =
+            (six::sidd::PlaneProjection*) siddData.measurement->
+            projection.get();
+
+    //--------------------------------------------------
+    // This is creating a constant-term polynomial 2D
+    // 2D Polynomials are laid out as a matrix of terms
+    // e.g.,
+    // 2*x^n + 3*y^1*x^1 + 7 =
+    //
+    //     | y^0  y^1 ... y^n
+    //-------------------------------
+    // x^0 |  7    0   0   0
+    // x^1 |  0    3   0   0
+    // ... |  0    0   0   0
+    // x^n |  2    0   0   0
+    //--------------------------------------------------
+    planeProjection->timeCOAPoly = six::Poly2D(0, 0);
+    planeProjection->timeCOAPoly[0][0] = 1;
+
+    //--------------------------------------------------
+    // This is creating a constant-term polynomial of vectors
+    // In this case, an index into the polynomial yields a
+    // six::Vector3
+    //--------------------------------------------------
+    siddData.measurement->arpPoly = six::PolyXYZ(0);
+
+    // The constant term is a vector.  Each component is 0
+    siddData.measurement->arpPoly[0] = six::Vector3(0.0);
+
+    //----------------------------------------------------
+    // The basis vectors are dummied, each component is 0
+    // This works because Vector3 supports assignment from
+    // a scalar, assuming that each component should be
+    // set to that value.  This is not really math, just
+    // C++ syntactic sugar.  Vector3 supports most math
+    // operations that one would expect
+    //----------------------------------------------------
+    planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
+    planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
+
+    // The first collection is corresponds to the parent image
+    six::sidd::Collection* parent =
+            siddData.exploitationFeatures->collections[0].get();
+
+    //--------------------------------------------------------
+    // Creating this stuff from a SICD source, normally these
+    // values would mirror what was in the SICD XML
+    // Here they are dummy values
+    //--------------------------------------------------------
+    parent->information->resolution.rg = 0;
+    parent->information->resolution.az = 0;
+    parent->information->collectionDuration = 0;
+
+    // This demo sets the collection time to now (not true)
+    parent->information->collectionDateTime = six::DateTime();
+    parent->information->radarMode = RadarModeType::SPOTLIGHT;
+    parent->information->sensorName = "";
+    siddData.exploitationFeatures->product.resolution.row = 0;
+    siddData.exploitationFeatures->product.resolution.col = 0;
+}
+
 int main(int argc, char** argv)
 {
-    if (argc != 2 && argc != 3)
-    {
-        die_printf("Usage: %s <output-file> (sicd-xml)\n", argv[0]);
-    }
+    cli::ArgumentParser parser;
+    parser.setDescription("Generate a NITF from specified options");
+    parser.addArgument("--lut", "Specify no lut, mono lut, or color lut",
+            cli::STORE, "lut", "None, Mono, or Color", 0, 1)->
+            setChoices(str::split("None Mono Color"))->setDefault("None");
+    parser.addArgument("--multipleSegments",
+            "Single image, multiple segments", cli::STORE_TRUE,
+            "multipleSegments", "", 0, 1);
+    parser.addArgument("--multipleImages",
+            "Add multiple images to NITF", cli::STORE_TRUE,
+            "multipleImages", "", 0, 1);
+    parser.addArgument("--smallImage", "Use 2x2 image with dummy data",
+            cli::STORE_TRUE, "smallImage", "", 0, 1);
+    parser.addArgument("output", "File to write to", cli::STORE, "output",
+            "output-file", 1, 1, true);
+    parser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
+            "sicdXML", "sicd-xml", 0, 1);
 
     try
     {
+        std::auto_ptr<cli::Results> options(parser.parse(argc,
+                (const char**) argv));
+        if (options->get<bool>("smallImage") &&
+                options->get<bool>("multipleSegments"))
+        {
+            throw except::Exception(Ctxt(
+                "Small image too small to segment"));
+        }
         try
         {
             sys::OS().getEnv(six::SCHEMA_PATH);
@@ -1794,6 +1963,8 @@ int main(int argc, char** argv)
                     "Must specify SIDD schema path via " +
                     std::string(six::SCHEMA_PATH) + " environment variable"));
         }
+
+        bool smallImage = options->get<bool>("smallImage");
 
         six::XMLControlFactory::getInstance().addCreator(
                 DataType::COMPLEX,
@@ -1806,23 +1977,38 @@ int main(int argc, char** argv)
                         six::sidd::DerivedXMLControl>());
 
         // Output file name
-        std::string outputName(argv[1]);
+        std::string outputName(options->get<std::string>("output"));
 
         //  Get a NITF or GeoTIFF writer
         std::auto_ptr<six::WriteControl> writer(getWriteControl(outputName));
+        if (writer->getFileType() == "NITF" &&
+                options->get<bool>("multipleSegments"))
+        {
+            if (!smallImage)
+            {
+            writer->getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    IMAGE.width * IMAGE.height / 2);
+            }
+            else
+            {
+            writer->getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, 2);
+            }
+
+        }
 
         //---------------------------------------------------------
         // We might also need to write out a SICD XML section
         // in the container, if it was provided
         //---------------------------------------------------------
 
-
         std::auto_ptr<six::sicd::ComplexData> sicdData;
 
-        if (argc == 3)
+        if (options->hasValue("sicdXML"))
         {
             // Get a Complex Data structure from an XML file
-            io::FileInputStream fis(argv[2]);
+            io::FileInputStream fis(options->get<std::string>("sicdXML"));
             xml::lite::MinidomParser parser;
             parser.parse(fis);
 
@@ -1835,130 +2021,44 @@ int main(int argc, char** argv)
             std::auto_ptr<logging::Logger> log (new logging::NullLogger());
             sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
                 six::XMLControlFactory::getInstance().newXMLControl(
-                    six::DataType::COMPLEX, 
-                    log.get())->fromXML(parser.getDocument(), 
+                    six::DataType::COMPLEX,
+                    log.get())->fromXML(parser.getDocument(),
                                         std::vector<std::string>())));
 
         }
 
+        unsigned char smallData[4] = {0, 0, 0, 0};
+
         // Create a file container
         six::Container container(DataType::DERIVED);
 
-        // We know our input image in this example is RGB data
-        six::PixelType pixelType = PixelType::RGB24I;
+        std::vector<const UByte*> buffers;
+        size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
+        buffers.resize(numImages);
+        for (size_t ii = 0; ii < numImages; ++ii)
+        {
 
-        //-----------------------------------------------------------
-        // Make the object.  You could do this directly, but this way
-        // is less error prone, and more flexible
-        //-----------------------------------------------------------
-        six::sidd::DerivedDataBuilder siddBuilder;
+            std::string lutType = "None";
+            if (options->hasValue("lut"))
+            {
+                lutType = options->get<std::string>("lut");
+            }
+            bool smallImage = options->get<bool>("smallImage");
 
-        //-----------------------------------------------------------
-        // You can cascade these operators, or call them one after
-        // the other.  Here is how you add them individually
-        //-----------------------------------------------------------
-        siddBuilder.addDisplay(pixelType);
-        siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
+            std::auto_ptr<six::sidd::DerivedData> siddData =
+                    initData(lutType, smallImage);
 
-        // Here is how you can cascade them
-        siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
-                                                                                              1);
-
-        //---------------------------------------------------------
-        // Take ownership of the SIDD data, the builder still can
-        // manipulate the same pointer after this happens if you
-        // want it to, but it won't try to release it when it goes
-        // out of scope if you steal() it.
-        //---------------------------------------------------------
-        six::sidd::DerivedData* siddData = siddBuilder.steal();
-
-        // These things are essential to forming the file
-        siddData->setNumRows(IMAGE.height);
-        siddData->setNumCols(IMAGE.width);
-        siddData->setImageCorners(makeUpCornersFromDMS());
-
-        // Dummy data for example
-        siddData->productCreation->productName = "ProductName";
-        siddData->productCreation->productClass = "Classy";
-        siddData->productCreation->classification.classification = "U";
-
-        // Can certainly be init'ed in a function
-        initProcessorInformation(
-            *siddData-> productCreation-> processorInformation);
-
-        // Or directly if preferred
-        siddData->display->decimationMethod
-                = DecimationMethod::BRIGHTEST_PIXEL;
-        siddData->display->magnificationMethod
-                = MagnificationMethod::NEAREST_NEIGHBOR;
-
-        //---------------------------------------------------------------
-        // We can only do this because we know it's PGD in this example
-        // If you don't know which it is, you don't need to use a
-        // dynamic_cast<> since there is an enum in projection for this:
-        // siddData->measurement->projection->projectionType
-        // In this case:
-        //    == six::PLANE
-        //---------------------------------------------------------------
-        six::sidd::PlaneProjection* planeProjection =
-            (six::sidd::PlaneProjection*) siddData->measurement->projection.get();
-
-        //--------------------------------------------------
-        // This is creating a constant-term polynomial 2D
-        // 2D Polynomials are laid out as a matrix of terms
-        // e.g.,
-        // 2*x^n + 3*y^1*x^1 + 7 =
-        //
-        //     | y^0  y^1 ... y^n
-        //-------------------------------
-        // x^0 |  7    0   0   0
-        // x^1 |  0    3   0   0
-        // ... |  0    0   0   0
-        // x^n |  2    0   0   0
-        //--------------------------------------------------
-        planeProjection->timeCOAPoly = six::Poly2D(0, 0);
-        planeProjection->timeCOAPoly[0][0] = 1;
-
-        //--------------------------------------------------
-        // This is creating a constant-term polynomial of vectors
-        // In this case, an index into the polynomial yields a
-        // six::Vector3
-        //--------------------------------------------------
-        siddData->measurement->arpPoly = six::PolyXYZ(0);
-
-        // The constant term is a vector.  Each component is 0
-        siddData->measurement->arpPoly[0] = six::Vector3(0.0);
-
-        //----------------------------------------------------
-        // The basis vectors are dummied, each component is 0
-        // This works because Vector3 supports assignment from
-        // a scalar, assuming that each component should be
-        // set to that value.  This is not really math, just
-        // C++ syntactic sugar.  Vector3 supports most math
-        // operations that one would expect
-        //----------------------------------------------------
-        planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
-        planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
-
-        // The first collection is corresponds to the parent image
-        six::sidd::Collection* parent =
-                siddData->exploitationFeatures->collections[0].get();
-
-        //--------------------------------------------------------
-        // Creating this stuff from a SICD source, normally these
-        // values would mirror what was in the SICD XML
-        // Here they are dummy values
-        //--------------------------------------------------------
-        parent->information->resolution.rg = 0;
-        parent->information->resolution.az = 0;
-        parent->information->collectionDuration = 0;
-
-        // This demo sets the collection time to now (not true)
-        parent->information->collectionDateTime = six::DateTime();
-        parent->information->radarMode = RadarModeType::SPOTLIGHT;
-        parent->information->sensorName = "";
-        siddData->exploitationFeatures->product.resolution.row = 0;
-        siddData->exploitationFeatures->product.resolution.col = 0;
+            populateData(*siddData, lutType);
+            container.addData(siddData->clone());
+            if (!smallImage)
+            {
+                buffers[ii] = (UByte*) IMAGE.data;
+            }
+            else
+            {
+                buffers[ii] = (UByte*) smallData;
+            }
+        }
 
         //--------------------------------------------------------
         // Since our SIDD has a parent SICD XML as well, we need
@@ -1966,8 +2066,6 @@ int main(int argc, char** argv)
         // then add the SICD data.  The container takes ownership
         // of the data.
         //--------------------------------------------------------
-        container.addData(siddData);
-
         if (sicdData.get())
             container.addData(sicdData.release());
 
@@ -1975,7 +2073,7 @@ int main(int argc, char** argv)
         writer->initialize(&container);
 
         // Save the file
-        writer->save((UByte*) IMAGE.data, outputName);
+        writer->save(buffers, outputName);
     }
     catch (const except::Exception& e)
     {
