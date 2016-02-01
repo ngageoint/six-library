@@ -547,5 +547,15 @@ XMLElem DerivedXMLParser100::convertMeasurementToXML(
 
     return measurementXML;
 }
+
+void DerivedXMLParser100::parseMeasurementFromXML(
+    const XMLElem measurementXML,
+    Measurement* measurement) const
+{
+    DerivedXMLParser::parseMeasurementFromXML(measurementXML, measurement);
+
+    common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
+        measurement->arpPoly);
+}
 }
 }

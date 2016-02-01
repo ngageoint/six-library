@@ -201,6 +201,10 @@ protected:
             const XMLElem coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
     void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
+    XMLElem parsePolynomialProjection(XMLElem projElem, Measurement& measurement) const;
+    XMLElem parseGeographicProjection(XMLElem projElem, Measurement& measurement) const;
+    XMLElem parsePlaneProjection(XMLElem projElem, Measurement& measurement) const;
+    XMLElem parseCylindricalProjection(XMLElem projElem, Measurement& measurement) const;
 
     static
     std::string versionToURI(const std::string& version)

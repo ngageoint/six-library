@@ -517,94 +517,130 @@ void DerivedXMLParser::parseDisplayFromXML(
                              display->displayExtensions);
 }
 
+XMLElem DerivedXMLParser::parsePolynomialProjection(
+        XMLElem measurementXML,
+        Measurement& measurement) const
+{
+    XMLElem projXML = getFirstAndOnly(measurementXML, "PolynomialProjection");
+
+    PolynomialProjection* polyProj
+        = (PolynomialProjection*)measurement.projection.get();
+
+    // Get a bunch of 2D polynomials
+    common().parsePoly2D(getFirstAndOnly(projXML, "RowColToLat"),
+        polyProj->rowColToLat);
+    common().parsePoly2D(getFirstAndOnly(projXML, "RowColToLon"),
+        polyProj->rowColToLon);
+
+    XMLElem optionalAltPolyXML = getOptional(projXML, "RowColToAlt");
+    if (optionalAltPolyXML)
+    {
+        common().parsePoly2D(optionalAltPolyXML, polyProj->rowColToAlt);
+    }
+
+    common().parsePoly2D(getFirstAndOnly(projXML, "LatLonToRow"),
+        polyProj->latLonToRow);
+    common().parsePoly2D(getFirstAndOnly(projXML, "LatLonToCol"),
+        polyProj->latLonToCol);
+
+    return projXML;
+}
+
+XMLElem DerivedXMLParser::parseGeographicProjection(
+        XMLElem measurementXML,
+        Measurement& measurement) const
+{
+    XMLElem projXML = getFirstAndOnly(measurementXML, "GeographicProjection");
+
+    GeographicProjection* geographicProj
+        = (GeographicProjection*)measurement.projection.get();
+
+    // measureableProjectionType
+    common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+        geographicProj->sampleSpacing);
+    common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+        geographicProj->timeCOAPoly);
+
+    return projXML;
+}
+
+XMLElem DerivedXMLParser::parsePlaneProjection(
+        XMLElem measurementXML,
+    Measurement& measurement) const
+{
+    XMLElem projXML = getFirstAndOnly(measurementXML, "PlaneProjection");
+
+    PlaneProjection* planeProj
+        = (PlaneProjection*)measurement.projection.get();
+
+    // measureableProjectionType
+    common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+        planeProj->sampleSpacing);
+    common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+        planeProj->timeCOAPoly);
+
+    // productPlaneType
+    XMLElem prodPlaneXML = getFirstAndOnly(projXML, "ProductPlane");
+    common().parseVector3D(getFirstAndOnly(prodPlaneXML, "RowUnitVector"),
+        planeProj->productPlane.rowUnitVector);
+    common().parseVector3D(getFirstAndOnly(prodPlaneXML, "ColUnitVector"),
+        planeProj->productPlane.colUnitVector);
+
+    return projXML;
+}
+
+XMLElem DerivedXMLParser::parseCylindricalProjection(
+    XMLElem measurementXML,
+    Measurement& measurement) const
+{
+    XMLElem projXML = getFirstAndOnly(measurementXML, "CylindricalProjection");
+
+    CylindricalProjection* cylindricalProj
+        = (CylindricalProjection*)measurement.projection.get();
+
+    // measureableProjectionType
+    common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+        cylindricalProj->sampleSpacing);
+    common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+        cylindricalProj->timeCOAPoly);
+
+    common().parseVector3D(getFirstAndOnly(projXML, "StripmapDirection"),
+        cylindricalProj->stripmapDirection);
+    // optional
+    XMLElem curvRadiusXML = getOptional(projXML, "CurvatureRadius");
+    if (curvRadiusXML)
+    {
+        parseDouble(curvRadiusXML, cylindricalProj->curvatureRadius);
+    }
+
+    return projXML;
+}
+
 // This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLParser::parseMeasurementFromXML(
         const XMLElem measurementXML,
         Measurement* measurement) const
 {
+    XMLElem projXML = NULL;
     //  choice: ProjectionType --
     //  this is first parsed in fromXML()
-    XMLElem projXML = NULL;
     if (measurement->projection->projectionType == ProjectionType::POLYNOMIAL)
     {
-        projXML = getFirstAndOnly(measurementXML, "PolynomialProjection");
-
-        PolynomialProjection* polyProj
-                = (PolynomialProjection*) measurement->projection.get();
-
-        // Get a bunch of 2D polynomials
-        common().parsePoly2D(getFirstAndOnly(projXML, "RowColToLat"),
-                             polyProj->rowColToLat);
-        common().parsePoly2D(getFirstAndOnly(projXML, "RowColToLon"),
-                             polyProj->rowColToLon);
-
-        XMLElem optionalAltPolyXML = getOptional(projXML, "RowColToAlt");
-        if (optionalAltPolyXML)
-        {
-            common().parsePoly2D(optionalAltPolyXML, polyProj->rowColToAlt);
-        }
-
-        common().parsePoly2D(getFirstAndOnly(projXML, "LatLonToRow"),
-                             polyProj->latLonToRow);
-        common().parsePoly2D(getFirstAndOnly(projXML, "LatLonToCol"),
-                             polyProj->latLonToCol);
+        projXML = parsePolynomialProjection(measurementXML, *measurement);
     }
     else if (measurement->projection->projectionType
             == ProjectionType::GEOGRAPHIC)
     {
-        projXML = getFirstAndOnly(measurementXML, "GeographicProjection");
-
-        GeographicProjection* geographicProj
-                = (GeographicProjection*) measurement->projection.get();
-
-        // measureableProjectionType
-        common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
-                                   geographicProj->sampleSpacing);
-        common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
-                             geographicProj->timeCOAPoly);
+        projXML = parseGeographicProjection(measurementXML, *measurement);
     }
     else if (measurement->projection->projectionType == ProjectionType::PLANE)
     {
-        projXML = getFirstAndOnly(measurementXML, "PlaneProjection");
-
-        PlaneProjection* planeProj
-                = (PlaneProjection*) measurement->projection.get();
-
-        // measureableProjectionType
-        common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
-                                   planeProj->sampleSpacing);
-        common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
-                             planeProj->timeCOAPoly);
-
-        // productPlaneType
-        XMLElem prodPlaneXML = getFirstAndOnly(projXML, "ProductPlane");
-        common().parseVector3D(getFirstAndOnly(prodPlaneXML, "RowUnitVector"),
-                               planeProj->productPlane.rowUnitVector);
-        common().parseVector3D(getFirstAndOnly(prodPlaneXML, "ColUnitVector"),
-                               planeProj->productPlane.colUnitVector);
+        projXML = parsePlaneProjection(measurementXML, *measurement);
     }
     else if (measurement->projection->projectionType
             == ProjectionType::CYLINDRICAL)
     {
-        projXML = getFirstAndOnly(measurementXML, "CylindricalProjection");
-
-        CylindricalProjection* cylindricalProj
-                = (CylindricalProjection*) measurement->projection.get();
-
-        // measureableProjectionType
-        common().parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
-                                   cylindricalProj->sampleSpacing);
-        common().parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
-                             cylindricalProj->timeCOAPoly);
-
-        common().parseVector3D(getFirstAndOnly(projXML, "StripmapDirection"),
-                               cylindricalProj->stripmapDirection);
-        // optional
-        XMLElem curvRadiusXML = getOptional(projXML, "CurvatureRadius");
-        if (curvRadiusXML)
-        {
-            parseDouble(curvRadiusXML, cylindricalProj->curvatureRadius);
-        }
+        projXML = parseCylindricalProjection(measurementXML, *measurement);
     }
     else
         throw except::Exception(Ctxt("Unknown projection type"));
@@ -618,8 +654,6 @@ void DerivedXMLParser::parseMeasurementFromXML(
                            measurement->projection->referencePoint.ecef);
     common().parseRowColDouble(getFirstAndOnly(refXML, "Point"),
                                measurement->projection->referencePoint.rowCol);
-
-
     common().parseRowColInt(getFirstAndOnly(measurementXML, "PixelFootprint"),
                             measurement->pixelFootprint);
     common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),

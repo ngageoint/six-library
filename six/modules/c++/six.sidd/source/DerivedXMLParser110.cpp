@@ -1648,18 +1648,21 @@ void DerivedXMLParser110::parseGeographicTargetFromXML(
 }
 
 void DerivedXMLParser110::parseMeasurementFromXML(
-        const XMLElem elem,
+        const XMLElem measurementXML,
         Measurement* measurement) const
 {
-    DerivedXMLParser::parseMeasurementFromXML(elem, measurement);
+    DerivedXMLParser::parseMeasurementFromXML(measurementXML, measurement);
 
-    XMLElem arpFlagElem = getOptional(elem, "ARPFlag");
+    XMLElem arpFlagElem = getOptional(measurementXML, "ARPFlag");
     if (arpFlagElem)
     {
         parseEnum(arpFlagElem, measurement->arpFlag);
     }
 
-    XMLElem validDataXML = getOptional(elem, "ValidData");
+    common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
+        measurement->arpPoly);
+
+    XMLElem validDataXML = getOptional(measurementXML, "ValidData");
     if (validDataXML)
     {
         common().parseRowColInts(validDataXML,

@@ -60,11 +60,13 @@ protected:
     virtual void parseDisplayFromXML(const XMLElem displayXML,
                                      Display& display) const;
 
-    virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
-        XMLElem parent = NULL) const;
+    virtual XMLElem convertMeasurementToXML(
+            const Measurement* measurement,
+            XMLElem parent = NULL) const;
 
-    virtual void parseMeasurementFromXML(const XMLElem elem,
-        Measurement* measurement) const;
+    virtual void parseMeasurementFromXML(
+            const XMLElem measurementXML,
+            Measurement* measurement) const;
 
 
 private:
