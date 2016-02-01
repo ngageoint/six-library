@@ -1441,6 +1441,10 @@ XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurem
         createStringFromEnum("ARPFlag", measurement->arpFlag, measurementXML);
     }
 
+    common().createPolyXYZ("ARPPoly",
+        measurement->arpPoly,
+        measurementXML);
+
     //only if 3+ vertices
     const size_t numVertices = measurement->validData.size();
     if (numVertices >= 3)

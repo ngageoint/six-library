@@ -48,6 +48,9 @@ protected:
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
 
+    virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
+        XMLElem parent = NULL) const;
+
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
 

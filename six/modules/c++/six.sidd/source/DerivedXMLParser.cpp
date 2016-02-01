@@ -1091,10 +1091,6 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
                           measurement->pixelFootprint,
                           measurementXML);
 
-    common().createPolyXYZ("ARPPoly",
-                           measurement->arpPoly,
-                           measurementXML);
-
     return measurementXML;
 }
 

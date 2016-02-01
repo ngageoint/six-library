@@ -534,5 +534,18 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
                         geographicInformationExtensions);
     }
 }
+
+XMLElem DerivedXMLParser100::convertMeasurementToXML(
+    const Measurement* measurement,
+    XMLElem parent) const
+{
+    XMLElem measurementXML = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
+
+    common().createPolyXYZ("ARPPoly",
+        measurement->arpPoly,
+        measurementXML);
+
+    return measurementXML;
+}
 }
 }
