@@ -276,9 +276,7 @@
     </xs:complexType>
     <xs:complexType name="BankCustomType">
         <xs:sequence>
-            <xs:element name="NumPhasings" type="xs:int"/>
-            <xs:element name="NumPoints" type="xs:int"/>
-            <xs:element name="FilterCoef" type="FilterCoefType"/>
+            <xs:element name="FilterCoefficinets" type="FilterBankCoefType"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="PredefinedFilterType">
@@ -292,8 +290,7 @@
     </xs:complexType>
     <xs:complexType name="KernelCustomType">
         <xs:sequence>
-            <xs:element name="Size" type="sicommon:RowColIntType"></xs:element>
-            <xs:element name="FilterCoef" type="FilterCoefType"></xs:element>
+            <xs:element name="FilterCoefficients" type="FilterKernelCoefType"></xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="FilterCustomType">
@@ -302,7 +299,7 @@
             <xs:enumeration value="FILTER BANK"/>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="FilterCoefType">
+    <xs:complexType name="FilterKernelCoefType">
         <xs:sequence>
             <xs:element name="Coef" maxOccurs="unbounded">
                 <xs:complexType>
@@ -315,6 +312,24 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+        <xs:attribute name="row" type="xs:int" use="required"/>
+        <xs:attribute name="col" type="xs:int" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="FilterBankCoefType">
+    <xs:sequence>
+        <xs:element name="Coef" maxOccurs="unbounded">
+            <xs:complexType>
+                <xs:simpleContent>
+                    <xs:extension base="xs:double">
+                        <xs:attribute name="phasing" type="xs:int" use="required"/>
+                        <xs:attribute name="point" type="xs:int" use="required"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+    <xs:attribute name="phasing" type="xs:int" use="required"/>
+    <xs:attribute name="point" type="xs:int" use="required"/>
     </xs:complexType>
     <xs:simpleType name="FilterDatabaseNameType">
         <xs:restriction base="xs:string">

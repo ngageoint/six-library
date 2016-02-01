@@ -63,6 +63,9 @@ protected:
     virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
         XMLElem parent = NULL) const;
 
+    virtual void parseMeasurementFromXML(const XMLElem elem,
+        Measurement* measurement) const;
+
 
 private:
     static const char VERSION[];

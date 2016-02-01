@@ -627,10 +627,16 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
     {
         ok = true;
         kernel.custom.reset(new Filter::Kernel::Custom());
-        XMLElem sizeElem = getFirstAndOnly(customElem, "Size");
-        common().parseRowColInt(sizeElem, kernel.custom->size);
+        XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
+        const XMLAttributes& attributes = filterCoef->getAttributes();
+        getAttributeIfExists(attributes, "row", kernel.custom->size.row);
+        getAttributeIfExists(attributes, "col", kernel.custom->size.col);
 
-        XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoef");
+        if (six::Init::isUndefined(kernel.custom->size.row) || six::Init::isUndefined(kernel.custom->size.col))
+        {
+            throw except::Exception("Expected row and col attributes in FilterCoefficients element of Custom");
+        }
+
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
         size_t numCoefs = coefficients.size();
@@ -663,12 +669,14 @@ void DerivedXMLParser110::parseBankFromXML(const XMLElem bankElem,
     }
     else if (customElem)
     {
-        ok = true;
         bank.custom.reset(new Filter::Bank::Custom());
-        parseInt(getFirstAndOnly(customElem, "NumPhasings"), bank.custom->numPhasings);
-        parseInt(getFirstAndOnly(customElem, "NumPoints"), bank.custom->numPoints);
+        ok = true;
 
-        XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoef");
+        XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
+        const XMLAttributes& attributes = filterCoef->getAttributes();
+        getAttributeIfExists(attributes, "phasing", bank.custom->numPhasings);
+        getAttributeIfExists(attributes, "point", bank.custom->numPoints);
+
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
         size_t numCoefs = coefficients.size();
@@ -995,16 +1003,16 @@ XMLElem DerivedXMLParser110::convertLookupTableToXML(
             bool innerOk = false;
             if (table.predefined->databaseName.empty())
             {
-                if (table.predefined->remapFamily != six::Init::undefined<size_t>() &&
-                    table.predefined->remapMember != six::Init::undefined<size_t>())
+                if (six::Init::isDefined(table.predefined->remapFamily) &&
+                    six::Init::isDefined(table.predefined->remapMember))
                 {
                     innerOk = true;
                     createInt("RemapFamily", table.predefined->remapFamily, predefXML);
                     createInt("RemapMember", table.predefined->remapMember, predefXML);
                 }
             }
-            else if (table.predefined->remapFamily == six::Init::undefined<size_t>() &&
-                table.predefined->remapMember == six::Init::undefined<size_t>())
+            else if (six::Init::isUndefined(table.predefined->remapFamily) &&
+                     six::Init::isUndefined(table.predefined->remapMember))
             {
                 innerOk = true;
                 createString("DatabaseName", table.predefined->databaseName, predefXML);
@@ -1428,6 +1436,11 @@ XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurem
 {
     XMLElem measurementXML = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
 
+    if (six::Init::isDefined(measurement->arpFlag))
+    {
+        createStringFromEnum("ARPFlag", measurement->arpFlag, measurementXML);
+    }
+
     //only if 3+ vertices
     const size_t numVertices = measurement->validData.size();
     if (numVertices >= 3)
@@ -1627,6 +1640,27 @@ void DerivedXMLParser110::parseGeographicTargetFromXML(
     {
         geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
         common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
+    }
+}
+
+void DerivedXMLParser110::parseMeasurementFromXML(
+        const XMLElem elem,
+        Measurement* measurement) const
+{
+    DerivedXMLParser::parseMeasurementFromXML(elem, measurement);
+
+    XMLElem arpFlagElem = getOptional(elem, "ARPFlag");
+    if (arpFlagElem)
+    {
+        parseEnum(arpFlagElem, measurement->arpFlag);
+    }
+
+    XMLElem validDataXML = getOptional(elem, "ValidData");
+    if (validDataXML)
+    {
+        common().parseRowColInts(validDataXML,
+            "Vertex",
+            measurement->validData);
     }
 }
 

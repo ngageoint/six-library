@@ -76,6 +76,15 @@ protected:
     void getAttributeIfExists(const xml::lite::Attributes& attributes,
                               const std::string& attributeName,
                               std::string& value);
+    static
+    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+                              const std::string& attributeName,
+                              sys::SSize_T& value);
+
+    static
+    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+                              const std::string& attributeName,
+                              size_t& value);
 
     static
     void getAttributeIfExists(const xml::lite::Attributes& attributes,
@@ -180,7 +189,7 @@ protected:
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
     std::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    void parseMeasurementFromXML(const XMLElem measurementXML,
+    virtual void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
     void parseExploitationFeaturesFromXML(const XMLElem elem,
                                           ExploitationFeatures* exFeatures) const;
