@@ -226,7 +226,7 @@
     <xs:simpleType name="DownsamplingMethodType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="DECIMATE"/>
-            <xs:enumeration value="MAX-PIXEL"/>
+            <xs:enumeration value="MAX PIXEL"/>
             <xs:enumeration value="AVERAGE"/>
             <xs:enumeration value="NEAREST NEIGHBOR"/>
             <xs:enumeration value="BILINEAR"/>

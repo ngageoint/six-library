@@ -60,6 +60,9 @@ protected:
     virtual void parseDisplayFromXML(const XMLElem displayXML,
                                      Display& display) const;
 
+    virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
+        XMLElem parent = NULL) const;
+
 
 private:
     static const char VERSION[];

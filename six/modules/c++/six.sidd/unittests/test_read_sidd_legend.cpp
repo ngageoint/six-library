@@ -94,9 +94,9 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->productCreation->productClass = "Classy";
     siddData->productCreation->classification.classification = "U";
 
-    siddData->productCreation->processorInformation->application = "ProcessorName";
-    siddData->productCreation->processorInformation->profile = "Profile";
-    siddData->productCreation->processorInformation->site = "Ypsilanti, MI";
+    siddData->productCreation->processorInformation.application = "ProcessorName";
+    siddData->productCreation->processorInformation.profile = "Profile";
+    siddData->productCreation->processorInformation.site = "Ypsilanti, MI";
 
     siddData->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;
     siddData->display->magnificationMethod =
@@ -116,13 +116,13 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::Collection* const parent =
             siddData->exploitationFeatures->collections[0].get();
-    parent->information->resolution.rg = 0;
-    parent->information->resolution.az = 0;
-    parent->information->collectionDuration = 0;
+    parent->information.resolution.rg = 0;
+    parent->information.resolution.az = 0;
+    parent->information.collectionDuration = 0;
 
-    parent->information->collectionDateTime = six::DateTime();
-    parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-    parent->information->sensorName.clear();
+    parent->information.collectionDateTime = six::DateTime();
+    parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+    parent->information.sensorName.clear();
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
 

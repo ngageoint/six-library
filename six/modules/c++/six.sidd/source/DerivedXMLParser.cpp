@@ -1069,24 +1069,13 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     common().createRowCol("PixelFootprint",
                           measurement->pixelFootprint,
                           measurementXML);
+    if (six::Init::isDefined(measurement->arpFlag))
+    {
+        createStringFromEnum("ARPFlag", measurement->arpFlag, measurementXML);
+    }
     common().createPolyXYZ("ARPPoly",
                            measurement->arpPoly,
                            measurementXML);
-
-    //only if 3+ vertices
-    const size_t numVertices = measurement->validData.size();
-    if (numVertices >= 3)
-    {
-        XMLElem vXML = newElement("ValidData", measurementXML);
-        setAttribute(vXML, "size", str::toString(numVertices));
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexXML = common().createRowCol(
-                    "Vertex", measurement->validData[ii], vXML);
-            setAttribute(vertexXML, "index", str::toString(ii + 1));
-        }
-    }
 
     return measurementXML;
 }

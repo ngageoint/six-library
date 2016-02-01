@@ -1266,7 +1266,6 @@ XMLElem DerivedXMLParser110::convertKernelToXML(
         ok = true;
 
         XMLElem customXML = newElement("Custom", kernelXML);
-        common().createRowCol("Size", "Row", "Col", kernel.custom->size, customXML);
 
         if (kernel.custom->filterCoef.size() !=
             static_cast<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
@@ -1278,7 +1277,10 @@ XMLElem DerivedXMLParser110::convertKernelToXML(
             throw except::Exception(Ctxt(ostr.str()));
         }
 
-        XMLElem filterCoef = newElement("FilterCoef", customXML);
+        XMLElem filterCoef = newElement("FilterCoefficients", customXML);
+        setAttribute(filterCoef, "row", str::toString(kernel.custom->size.row));
+        setAttribute(filterCoef, "col", str::toString(kernel.custom->size.col));
+
         for (sys::SSize_T row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
             for (sys::SSize_T col = 0; col < kernel.custom->size.col; ++col, ++idx)
@@ -1317,8 +1319,6 @@ XMLElem DerivedXMLParser110::convertBankToXML(const Filter::Bank& bank,
         ok = true;
 
         XMLElem customXML = newElement("Custom", bankXML);
-        createDouble("NumPhasings", bank.custom->numPhasings, customXML);
-        createDouble("NumPoints", bank.custom->numPoints, customXML);
 
         if (bank.custom->filterCoef.size() !=
             static_cast<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
@@ -1330,15 +1330,18 @@ XMLElem DerivedXMLParser110::convertBankToXML(const Filter::Bank& bank,
             throw except::Exception(Ctxt(ostr.str()));
         }
 
-        XMLElem filterCoef = newElement("FilterCoef", customXML);
+        XMLElem filterCoef = newElement("FilterCoefficients", customXML);
+        setAttribute(filterCoef, "phasings", str::toString(bank.custom->numPhasings));
+        setAttribute(filterCoef, "point", str::toString(bank.custom->numPoints));
+
         for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
         {
             for (size_t col = 0; col < bank.custom->numPoints; ++col, ++idx)
             {
                 XMLElem coefXML = createDouble("Coef", bank.custom->filterCoef[idx],
                     filterCoef);
-                setAttribute(coefXML, "row", str::toString(row));
-                setAttribute(coefXML, "col", str::toString(col));
+                setAttribute(coefXML, "phasing", str::toString(row));
+                setAttribute(coefXML, "point", str::toString(col));
             }
         }
     }
@@ -1417,6 +1420,27 @@ void DerivedXMLParser110::convertJ2KToXML(const J2KCompression& j2k,
         XMLElem layerXML = newElement("Layer", layerInfoXML);
         setAttribute(layerXML, "index", toString(ii + 1));
         createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerXML);
+    }
+}
+
+XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurement,
+    XMLElem parent) const
+{
+    XMLElem measurementXML = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
+
+    //only if 3+ vertices
+    const size_t numVertices = measurement->validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", measurementXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML = common().createRowCol(
+                "Vertex", measurement->validData[ii], vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
     }
 }
 

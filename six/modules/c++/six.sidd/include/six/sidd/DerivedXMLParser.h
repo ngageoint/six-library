@@ -153,7 +153,7 @@ protected:
     XMLElem convertGeographicCoverageToXML(const std::string& localName,
                                            const GeographicCoverage* g,
                                            XMLElem parent = NULL) const;
-    XMLElem convertMeasurementToXML(const Measurement* measurement,
+    virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
                                     XMLElem parent = NULL) const;
     XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
                                              XMLElem parent = NULL) const;
