@@ -214,13 +214,13 @@ def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
 
-def writeNITF(fileName, schemaPaths, data, imageAdr):
-    """writeNITF(std::string fileName, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
-    return _six_sicd.writeNITF(fileName, schemaPaths, data, imageAdr)
+def writeNITF(pathname, schemaPaths, data, imageAdr):
+    """writeNITF(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
+    return _six_sicd.writeNITF(pathname, schemaPaths, data, imageAdr)
 
-def readNITF(fileName, schemaPaths):
-    """readNITF(std::string fileName, VectorString schemaPaths) -> Data *"""
-    return _six_sicd.readNITF(fileName, schemaPaths)
+def readNITF(pathname, schemaPaths):
+    """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
+    return _six_sicd.readNITF(pathname, schemaPaths)
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class"""
     __swig_setmethods__ = {}
@@ -8717,9 +8717,9 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
-def readFromNITF(fileName, schemaPaths):
-    fileName = fileName + ".nitf"
-    return readNITF(fileName, schemaPaths)
+def readFromNITF(pathname, schemaPaths):
+    pathname = pathname + ".nitf"
+    return readNITF(pathname, schemaPaths)
 
 
 # This file is compatible with both classic and new-style classes.
