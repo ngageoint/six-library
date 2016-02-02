@@ -167,7 +167,9 @@ struct BandInformation
 
     std::vector<std::string> bands;
     size_t bitsPerPixel;
-    size_t displayFlag; // Which band to display by default
+
+    //! (Optional) Which band to display by default
+    size_t displayFlag;
 };
 
 struct BandEqualization
