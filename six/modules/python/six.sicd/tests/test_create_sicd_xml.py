@@ -71,7 +71,7 @@ def initImageCreation(cmplx):
 def initImageDataFull(cmplx):
     imageData = makeScopedCloneableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
-    # TODO: Fill in amplitudeTable
+    #TODO: fill in amp table
     imageData.numRows = 123
     imageData.numCols = 456
     imageData.firstRow = 9
@@ -91,6 +91,8 @@ def initImageDataFull(cmplx):
 def initImageDataNITF(cmplx):
     imageData = makeScopedCloneableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
+    #TODO: fill in amp table. May need to fiddle with SWIG?
+    #PixelType "AMP8I_PHS8I" for amp table not currently supported
     imageData.numRows = 2
     imageData.numCols = 2
     imageData.firstRow = 1
@@ -163,6 +165,8 @@ def initGrid(cmplx):
             grid.row.deltaKCOAPoly[(i, j)] = i + j
     grid.row.weightType = makeScopedCopyableWeightType()
     grid.row.weightType.windowName = 'UNIFORM'
+    for ii in xrange(5):
+        grid.row.weights.push_back(ii / 2.0)
 
     grid.col = makeScopedCloneableDirectionParameters()
     for i in range(3):
@@ -180,6 +184,8 @@ def initGrid(cmplx):
             grid.col.deltaKCOAPoly[(i, j)] = i + j
     grid.col.weightType = makeScopedCopyableWeightType()
     grid.col.weightType.windowName = 'UNIFORM'
+    for ii in xrange(5):
+        grid.col.weights.push_back(ii / 2.0)
 
     cmplx.grid = grid
     return cmplx
@@ -231,12 +237,15 @@ def initRadarCollection(cmplx):
     radarCollection.txFrequencyMin = -99
     radarCollection.txFrequencyMax = 99
     radarCollection.txPolarization = PolarizationSequenceType('V')
-
+    radarCollection.polarizationHVAnglePoly = Poly1D(3)
+    for index in xrange(4):
+        radarCollection.polarizationHVAnglePoly[index] = index * 10
+            
     txStep = makeScopedCloneableTxStep()
     txStep.waveformIndex = 1
     txStep.txPolarization = PolarizationType('V')
     radarCollection.txSequence.push_back(txStep)
-
+    
     wfParams = makeScopedCloneableWaveformParameters()
     wfParams.txPulseLength = 11
     wfParams.txRFBandwidth = 22
@@ -306,7 +315,7 @@ def initRadarCollection(cmplx):
     cmplx.radarCollection = radarCollection
     return cmplx
 
-def initImageFormation(cmplx):
+def initImageFormation(cmplx, alg):
     imageFormation = makeScopedCopyableImageFormation()
     imageFormation.segmentIdentifier = 'AA'
 
@@ -317,7 +326,7 @@ def initImageFormation(cmplx):
     imageFormation.rcvChannelProcessed = rcvChannelProcessed
 
     imageFormation.txRcvPolarizationProc = DualPolarizationType('V_V')
-    imageFormation.imageFormationAlgorithm = ImageFormationType('PFA')
+    imageFormation.imageFormationAlgorithm = ImageFormationType(alg)
     imageFormation.tStartProc = 57
     imageFormation.tEndProc = 68
     imageFormation.txFrequencyProcMin = 789
@@ -358,6 +367,7 @@ def initImageFormation(cmplx):
 
     cmplx.imageFormation = imageFormation
     return cmplx
+
 def initSCPCOA(cmplx):
     scpcoa = makeScopedCopyableSCPCOA()
     scpcoa.scpTime = 123
@@ -373,6 +383,8 @@ def initSCPCOA(cmplx):
     scpcoa.incidenceAngle = 44
     scpcoa.twistAngle = 33
     scpcoa.slopeAngle = 22
+
+    #Added after 0.4.0
     scpcoa.azimAngle = 11
     scpcoa.layoverAngle = 14
 
@@ -655,9 +667,26 @@ def initPFA(cmplx):
     cmplx.pfa = pfa
     return cmplx
 
-def initRMA():
+def initRMA(cmplx, version, imageType):
     rma = makeScopedCopyableRMA()
     rma.algoType = RMAlgoType('OMEGA_K')
+
+    if imageType == 'INCA':
+        rma = initINCA(rma)
+
+    elif imageType == 'RMCR':
+        if version.startswith('1'):
+            rma = initRMCR(rma)
+        else:
+            raise ValueError(
+                'RMCR image type not present in version {0}'.format(version))
+    elif imageType == 'RMAT':
+        rma = initRMAT(rma)
+        
+    cmplx.rma = rma
+    return cmplx
+
+def initRMAT(rma):
     rma.rmat = makeScopedCopyableRMAT()
     rma.rmat.refTime = 12
     for i in range(3):
@@ -677,36 +706,42 @@ def initRMA():
     rma.rmat.dopConeAngleRef = 5
     return rma
 
-def initRMCR():
+def initRMCR(rma):
     rmcr = makeScopedCopyableRMCR()
     for i in range(3):
 	rmcr.refPos[i] = i
 	rmcr.refVel[i] = i * 2
     rmcr.dopConeAngleRef = 9
+    rma.rmcr = rmcr
+    return rma
 
-def initINCA():
+def initINCA(rma):
     inca = makeScopedCopyableINCA()
     inca.timeCAPoly = Poly1D(3)
     for i in range(3):
 	inca.timeCAPoly[i] = i
     inca.rangeCA = 5
     inca.freqZero = 10
-    inca.dopplerRateScaleFactorPoly = Poly2D(3, 3)
+    inca.dopplerRateScaleFactorPoly = Poly2D(0, 3)
     inca.dopplerCentroidPoly = Poly2D(3, 3)
     for i in range(4):
 	for j in range(4):
-	    inca.dopplerRateScaleFactorPoly[(i, j)] = 9 * i
+	    inca.dopplerRateScaleFactorPoly[(0, i)] = 9 * i
 	    inca.dopplerCentroidPoly[(i, j)] = 10 * i
     inca.dopplerCentroidCOA = BooleanType('IS_TRUE')
+    rma.inca = inca
+    return rma
 
-def initRgAzComp():
+def initRgAzComp(cmplx):
     rgAzComp = makeScopedCopyableRgAzComp()
     rgAzComp.azSF = 123
     rgAzComp.kazPoly = Poly1D(3)
     for i in range(4):
         rgAzComp.kazPoly[i] = i * 100
+    cmplx.rgAzComp = rgAzComp
+    return cmplx
 
-def initData(cmplx, includeNITF):
+def initData(cmplx, includeNITF, version, alg, imageType=''):
     cmplx = initCollectionInfo(cmplx)
     cmplx = initImageCreation(cmplx)
     if includeNITF:
@@ -718,19 +753,23 @@ def initData(cmplx, includeNITF):
     cmplx = initTimeline(cmplx)
     cmplx = initPosition(cmplx)
     cmplx = initRadarCollection(cmplx)
-    cmplx = initImageFormation(cmplx)
+    cmplx = initImageFormation(cmplx, alg)
     cmplx = initSCPCOA(cmplx)
     cmplx = initRadiometric(cmplx)
     cmplx = initAntenna(cmplx)
     cmplx = initErrorStats(cmplx)
     cmplx = initMatchInfo(cmplx)
-    cmplx = initPFA(cmplx)
-    # Following four attributes not assigned due to restrictions
-    # Just building them up to make sure they work
-    initRMA()
-    initRgAzComp()
-    initRMCR()
-    initINCA()
+    if alg == 'PFA':
+        cmplx = initPFA(cmplx)
+    elif alg == 'RMA':
+        cmplx = initRMA(cmplx, version, imageType)
+    elif alg == 'RGAZCOMP':
+        if not version.startswith('1'): #TODO: verify version cutoff
+            raise ValueError(
+                'RgAzComp algorithm not defined'
+                ' for version {0}'.format(version))
+        cmplx = initRgAzComp(cmplx)
+
     return cmplx
 
 def writeXML(name, schemaPaths, cmplxData):
@@ -769,18 +808,27 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', default='1.1.0',
             choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0'],
             help='Version of SICD to generate')
+    parser.add_argument('-a', '--alg', default='PFA',
+            choices=['PFA', 'RMA', 'RGAZCOMP'], help='Image formation algorithm'
+                        ' to use')
+    parser.add_argument('-i', '--imageType', default='',
+            choices=['RMAT', 'RMCR', 'INCA', ''], help='Image type for RMAT')
     args = parser.parse_args()
     includeNITF = args.includeNITF
 
     # Build up a giant ComplexData from scratch with everything populated
-    cmplx = initData(ComplexData(), includeNITF)
+    try:
+        cmplx = initData(ComplexData(), includeNITF, args.version, args.alg,
+                         args.imageType)
+    except ValueError:
+        sys.exit(2)
     cmplx.setVersion(args.version)
 
     ### Now format it as XML and write it out to a file ###
     vs = VectorString()
     vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-    origPathnameBase = 'test_create_sicd_{0}'.format(
-        args.version)
+    origPathnameBase = 'test_create_sicd_{0}({1}){2}'.format(
+        args.version, args.alg, args.imageType)
     writeXML(origPathnameBase, vs, cmplx)
     if includeNITF:
         writeNITF(origPathnameBase, vs, cmplx)
@@ -806,14 +854,14 @@ if __name__ == '__main__':
 	print 'XML round trip succeeded!'
     else:
         successCode = 1
-	print 'NITF round trip failed'
+	print 'XML round trip failed'
 
     if includeNITF:
         if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'Round trip succeeded!'
+    	    print 'NITF round trip succeeded!'
         else:
             successCode = 1
-            print 'Round trip failed'
+            print 'NITF round trip failed'
     sys.exit(successCode)
 
     # If we made it to here, the read side appears to be working properly too

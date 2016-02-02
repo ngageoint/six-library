@@ -25,7 +25,7 @@
 import os
 from subprocess import call
 
-def createNITF(version='1.1.0'):
+def createNITF(version='1.1.0', alg='PFA', imageType=''):
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
     assert version in sicdVersions, "Invalid SICD versions"
 
@@ -43,35 +43,67 @@ def createNITF(version='1.1.0'):
         test_file = test_file_name
 
     else:
-        raise Exception("Please call test from six-library/ or "
-                "six-library/six/modules/python/six.sicd/tests")
+        raise Exception("Please call test from six-library/")
 
     return call(['python', test_file, '--includeNITF',
-          '--version={0}'.format(version)])
+          '--version={0}'.format(version), '--alg={0}'.format(alg),
+          '--imageType={0}'.format(imageType)])
 
-def clean(nitfName, thorough=False):
-    xmlName = nitfName.replace('nitf', 'xml')
+
+def clean(baseName):
+    xmlName = baseName + '.xml'
+    nitfName = baseName + '.nitf'
     os.remove(xmlName)
     os.remove(xmlName.replace('.xml', '_rt.xml'))
-    if thorough:
-        os.remove(nitfName)
-        os.remove(nitfName.replace('.nitf', '_rt.nitf'))
+    os.remove(nitfName)
+    os.remove(nitfName.replace('.nitf', '_rt.nitf'))
+
+def setPythonPath():
+    try:
+        import pysix.scene
+    except ImportError:
+        import platform
+        if platform.system() == 'Windows':
+            os.environ['PYTHONPATH'] += os.path.join(
+                os.getcwd(), "install", "lib", "site-packages")
+        elif platform.system() == 'Linux':
+            os.environ['PYTHONPATH'] += os.path.join(
+                os.getcwd(), "install", "lib", "python2.7", "site-packages")
+                                                     
+def test_and_clean(version, alg, imageType=''):
+    message = "Testing version {0} with {1} algorithm".format(version, alg)
+    if imageType != '' :
+        message += " and image type {0}".format(imageType)
+    print message
+
+    successCode = createNITF(version, alg, imageType)
+    if successCode == 2:
+        print "Skipping test with invalid arguments"
+        return successCode
+    elif successCode == 0:
+        outputName = "test_create_sicd_{0}({1}){2}".format(version, alg, imageType)
+        clean(outputName)
+    else:
+        print "Test failed"
 
 if __name__ == '__main__':
+    setPythonPath()
     import sys
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
+    formationAlgs = ['PFA', 'RMA', 'RGAZCOMP']
+    imageTypes = ['RMAT', 'RMCR', 'INCA']
 
     successCode = 0
     for version in sicdVersions:
-        print "Testing version {0}:".format(version)
-        if createNITF(version) == False:
-            successCode = 1
-
-        outputName = "test_create_sicd_{0}.nitf".format(version)
-        # The output from the script createNITF runs should give us
-        # the desired testing output
-        if len(sys.argv) > 1 and sys.argv[1] == '--clean':
-            clean(createNITF(version), thorough=True)
-        else:
-            clean(createNITF(version))
+        for alg in formationAlgs:
+            if alg == 'RMA':
+                for imageType in imageTypes:
+                    code = test_and_clean(version, alg, imageType)
+                    if code == 1:
+                        successCode = 1
+            else:
+                code = test_and_clean(version, alg)
+                if code == 1:
+                    successCode = 1
+                
     sys.exit(successCode)
