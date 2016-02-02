@@ -49,8 +49,9 @@ struct ARPFlag
     //! The enumerations allowed
     enum
     {
-        COLLECT_TIME = 0,
+        REALTIME = 0,
         PREDICTED = 1,
+        POST_PROCESSED = 2,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -60,10 +61,12 @@ struct ARPFlag
     //! string constructor
     ARPFlag(std::string s)
     {
-        if (s == "COLLECT TIME")
-            value = COLLECT_TIME;
+        if (s == "REALTIME")
+            value = REALTIME;
         else if (s == "PREDICTED")
             value = PREDICTED;
+        else if (s == "POST PROCESSED")
+            value = POST_PROCESSED;
         else if (s == "NOT SET")
             value = NOT_SET;
         else
@@ -76,10 +79,13 @@ struct ARPFlag
         switch(i)
         {
         case 0:
-            value = COLLECT_TIME;
+            value = REALTIME;
             break;
         case 1:
             value = PREDICTED;
+            break;
+        case 2:
+            value = POST_PROCESSED;
             break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
@@ -98,9 +104,11 @@ struct ARPFlag
         switch(value)
         {
         case 0:
-            return std::string("COLLECT TIME");
+            return std::string("REALTIME");
         case 1:
             return std::string("PREDICTED");
+        case 2:
+            return std::string("POST PROCESSED");
         case six::NOT_SET_VALUE:
             return std::string("NOT SET");
         default:
@@ -130,7 +138,7 @@ struct ARPFlag
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
-    static size_t size() { return 3; }
+    static size_t size() { return 4; }
 
     int value;
 
@@ -1009,7 +1017,7 @@ struct ShadowsDirection
 };
 
 
-// code auto-generated 2016-01-30 09:43:27.091445
+// code auto-generated 2016-02-02 17:45:47.852249
 
 }
 }
