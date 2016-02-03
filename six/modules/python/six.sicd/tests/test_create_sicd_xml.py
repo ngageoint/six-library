@@ -165,6 +165,10 @@ def initGrid(cmplx):
             grid.row.deltaKCOAPoly[(i, j)] = i + j
     grid.row.weightType = makeScopedCopyableWeightType()
     grid.row.weightType.windowName = 'UNIFORM'
+    param = Parameter()
+    param.setName('WeightType Param')
+    param.setValue('334')
+    grid.row.weightType.parameters.push_back(param)
     for ii in xrange(5):
         grid.row.weights.push_back(ii / 2.0)
 
@@ -184,6 +188,10 @@ def initGrid(cmplx):
             grid.col.deltaKCOAPoly[(i, j)] = i + j
     grid.col.weightType = makeScopedCopyableWeightType()
     grid.col.weightType.windowName = 'UNIFORM'
+    param = Parameter()
+    param.setName('WeightType Param')
+    param.setValue('334')
+    grid.col.weightType.parameters.push_back(param)
     for ii in xrange(5):
         grid.col.weights.push_back(ii / 2.0)
 
