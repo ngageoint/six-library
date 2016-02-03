@@ -557,5 +557,19 @@ void DerivedXMLParser100::parseMeasurementFromXML(
     common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
         measurement->arpPoly);
 }
+
+XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
+    const ExploitationFeatures* exFeatures,
+    XMLElem parent) const
+{
+    XMLElem exploitationXML = DerivedXMLParser::convertExploitationFeaturesToXML(exFeatures, parent);
+    XMLElem productXML = getFirstAndOnly(exploitationXML, "Product");
+
+    common().addParameters("Extension",
+        exFeatures->product.extensions,
+        productXML);
+
+    return exploitationXML;
+}
 }
 }

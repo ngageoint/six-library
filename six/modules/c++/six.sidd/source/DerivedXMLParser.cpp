@@ -1302,9 +1302,6 @@ XMLElem DerivedXMLParser::convertExploitationFeaturesToXML(
     if (exploitationFeatures->product.north != Init::undefined<double>())
         createDouble("North", exploitationFeatures->product.north, productXML);
     // optional to unbounded
-    common().addParameters("Extension",
-                           exploitationFeatures->product.extensions,
-                           productXML);
 
     return exploitationFeaturesXML;
 }

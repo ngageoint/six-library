@@ -392,8 +392,16 @@ void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandXML,
     }
     parseInt(getFirstAndOnly(bandXML, "BitsPerPixel"),
         bandInformation.bitsPerPixel);
-    parseInt(getFirstAndOnly(bandXML, "DisplayFlag"),
-        bandInformation.displayFlag);
+
+    XMLElem displayFlagXML = getOptional(bandXML, "DisplayFlag");
+    if (displayFlagXML)
+    {
+        parseInt(displayFlagXML, bandInformation.displayFlag);
+    }
+    else
+    {
+        bandInformation.displayFlag = six::Init::undefined<size_t>();
+    }
 }
 
 void DerivedXMLParser110::parseNonInteractiveProcessingFromXML(
@@ -1459,6 +1467,26 @@ XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurem
             setAttribute(vertexXML, "index", str::toString(ii + 1));
         }
     }
+    return measurementXML;
+}
+
+XMLElem DerivedXMLParser110::convertExploitationFeaturesToXML(
+    const ExploitationFeatures* exFeatures,
+    XMLElem parent) const
+{
+    XMLElem exploitationXML = DerivedXMLParser::convertExploitationFeaturesToXML(exFeatures, parent);
+    XMLElem productXML = getFirstAndOnly(exploitationXML, "Product");
+
+    if (!exFeatures->product.qualityPoly.empty())
+    {
+        common().createPoly2D("QualityPoly", exFeatures->product.qualityPoly, productXML);
+    }
+
+    common().addParameters("Extension",
+        exFeatures->product.extensions,
+        productXML);
+
+    return exploitationXML;
 }
 
 XMLElem DerivedXMLParser110::convertDisplayToXML(
@@ -1487,8 +1515,11 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     }
     createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
               bandInfoXML);
-    createInt("DisplayFlag", display.bandInformation->displayFlag,
-              bandInfoXML);
+    if (six::Init::isDefined<size_t>(display.bandInformation->displayFlag))
+    {
+        createInt("DisplayFlag", display.bandInformation->displayFlag,
+            bandInfoXML);
+    }
 
     // NonInteractiveProcessing
     confirmNonNull(display.nonInteractiveProcessing,
@@ -1668,6 +1699,19 @@ void DerivedXMLParser110::parseMeasurementFromXML(
         common().parseRowColInts(validDataXML,
             "Vertex",
             measurement->validData);
+    }
+}
+
+void DerivedXMLParser110::parseExploitationFeaturesFromXML(
+    const XMLElem exploitationXML,
+    ExploitationFeatures* exFeatures) const
+{
+    DerivedXMLParser::parseExploitationFeaturesFromXML(
+        exploitationXML, exFeatures);
+    XMLElem qualityXML = getOptional(exploitationXML, "QualityPoly");
+    if (qualityXML)
+    {
+        common().parsePoly2D(qualityXML, exFeatures->product.qualityPoly);
     }
 }
 

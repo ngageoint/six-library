@@ -2139,6 +2139,11 @@ int main(int argc, char** argv)
         parent->information.sensorName.clear();
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
+        siddData->exploitationFeatures->product.qualityPoly = six::Poly2D(2, 2);
+        six::Parameter param;
+        param.setName("Name");
+        param.setValue("Value");
+        siddData->exploitationFeatures->product.extensions.push_back(param);
 
         //Set DownStreamReprocessing data
         siddData->downstreamReprocessing->geometricChip.reset(new six::sidd::GeometricChip());

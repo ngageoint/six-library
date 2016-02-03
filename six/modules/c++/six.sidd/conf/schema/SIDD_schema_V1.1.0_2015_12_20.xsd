@@ -167,7 +167,7 @@
                     <xs:documentation>Bits per pixel per band</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="DisplayFlag" type="xs:int">
+            <xs:element name="DisplayFlag" type="xs:int" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>Indicates which band to display by default. Valid range = 1 to NumBands.</xs:documentation>
                 </xs:annotation>
@@ -1105,6 +1105,7 @@
                     <xs:documentation>Counter-clockwise angle from increasing row direction to north at the center of the image.</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="QualityPoly" type="sicommon:Poly2DType" minOccurs="0"></xs:element>
             <xs:element name="Extension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Exploitation feature extension for the end product</xs:documentation>

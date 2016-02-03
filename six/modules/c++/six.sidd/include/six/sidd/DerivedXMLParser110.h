@@ -68,6 +68,14 @@ protected:
             const XMLElem measurementXML,
             Measurement* measurement) const;
 
+    virtual void parseExploitationFeaturesFromXML(
+        const XMLElem exploitationXML,
+        ExploitationFeatures* exFeatures) const;
+
+    virtual XMLElem convertExploitationFeaturesToXML(
+        const ExploitationFeatures* exFeatures,
+        XMLElem parent = NULL) const;
+
 
 private:
     static const char VERSION[];

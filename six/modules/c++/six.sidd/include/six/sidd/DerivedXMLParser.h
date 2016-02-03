@@ -164,8 +164,8 @@ protected:
                                            XMLElem parent = NULL) const;
     virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
                                     XMLElem parent = NULL) const;
-    XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
-                                             XMLElem parent = NULL) const;
+    virtual XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
+                                                     XMLElem parent = NULL) const;
     XMLElem convertAnnotationToXML(const Annotation *a,
                                    XMLElem parent = NULL) const;
     XMLElem convertCompressionToXML(const Compression *c,
@@ -191,7 +191,7 @@ protected:
     void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
     virtual void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
-    void parseExploitationFeaturesFromXML(const XMLElem elem,
+    virtual void parseExploitationFeaturesFromXML(const XMLElem elem,
                                           ExploitationFeatures* exFeatures) const;
     void parseAnnotationFromXML(const XMLElem annotationXML,
                                 Annotation* a) const;
