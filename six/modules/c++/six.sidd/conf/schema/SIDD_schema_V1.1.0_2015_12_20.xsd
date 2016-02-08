@@ -276,7 +276,7 @@
     </xs:complexType>
     <xs:complexType name="BankCustomType">
         <xs:sequence>
-            <xs:element name="FilterCoefficinets" type="FilterBankCoefType"/>
+            <xs:element name="FilterCoefficients" type="FilterBankCoefType"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="PredefinedFilterType">
