@@ -1787,12 +1787,8 @@ std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
 
     // We know our input image in the default example is RGB data
     six::PixelType pixelType = PixelType::RGB24I;
-    if (!smallImage && lutType == "Mono")
-    {
-        throw except::Exception(Ctxt("Built-in image has a Color lut."
-        "Pass --smallImage flag to use dummy image and set Mono lut."));
-    }
-    else if (lutType == "Mono")
+
+    if (lutType == "Mono")
     {
         pixelType = PixelType::MONO8I;
     }
@@ -1818,12 +1814,20 @@ std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType)
+        lutType, bool smallImage)
 {
 
     // These things are essential to forming the file
-    siddData.setNumRows(IMAGE.height);
-    siddData.setNumCols(IMAGE.width);
+    if (smallImage)
+    {
+        siddData.setNumRows(2);
+        siddData.setNumCols(2);
+    }
+    else
+    {
+        siddData.setNumRows(IMAGE.height);
+        siddData.setNumCols(IMAGE.width);
+    }
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Dummy data for example
@@ -2027,7 +2031,7 @@ int main(int argc, char** argv)
 
         }
 
-        unsigned char smallData[4] = {0, 0, 0, 0};
+        char smallData[4] = {'a','b', 'c', 'd'};
 
         // Create a file container
         six::Container container(DataType::DERIVED);
@@ -2048,7 +2052,7 @@ int main(int argc, char** argv)
             std::auto_ptr<six::sidd::DerivedData> siddData =
                     initData(lutType, smallImage);
 
-            populateData(*siddData, lutType);
+            populateData(*siddData, lutType, smallImage);
             container.addData(siddData->clone());
             if (!smallImage)
             {

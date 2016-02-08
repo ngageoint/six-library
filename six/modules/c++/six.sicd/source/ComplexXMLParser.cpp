@@ -1316,6 +1316,22 @@ void ComplexXMLParser::parseImageFormationFromXML(
     ImageFormation *imageFormation) const
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
+    XMLElem segmentElem = NULL;
+    XMLElem areaElem = getOptional(getFirstAndOnly(imageFormationXML->getParent(), "RadarCollection"), "Area");
+    if (areaElem) 
+    {
+        XMLElem planeElem = getOptional(areaElem, "Plane");
+        if (planeElem) 
+        {
+            segmentElem = getOptional(planeElem, "SegmentList");
+        }
+    }
+    if (!tmpElem && segmentElem)
+    {
+        std::cerr <<
+            " !!! " << std::endl;
+        throw except::Exception(Ctxt("SegmentList must be included when a radarCollection->area->plane::segmentList is included."));
+    }
     if (tmpElem)
     {
         //optional

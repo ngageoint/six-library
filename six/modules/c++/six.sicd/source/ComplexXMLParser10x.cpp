@@ -181,6 +181,21 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
+    XMLElem segmentElem = NULL;
+    XMLElem areaElem = getOptional(getFirstAndOnly(parent, "RadarCollection"), "Area");
+    if (areaElem)
+    {
+        XMLElem planeElem = getOptional(areaElem, "Plane");
+        if (planeElem)
+        {
+            segmentElem = getOptional(planeElem, "SegmentList");
+        }
+    }
+    if (segmentElem && imageFormation->segmentIdentifier.empty())
+    {
+        throw except::Exception(Ctxt("SegmentList must be included when a radarCollection->area->plane::segmentList is included."));
+    }
+
     //! updated location in 1.0.0
     if (!imageFormation->segmentIdentifier.empty())
         createString("SegmentIdentifier", imageFormation->segmentIdentifier,

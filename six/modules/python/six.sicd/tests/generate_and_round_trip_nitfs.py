@@ -42,8 +42,7 @@ def checkArgs(version, alg, imageType):
         return False
     return True
     
-def test_and_clean(version, alg, imageType=''):
-    from test_create_sicd_xml import initData, doRoundTrip
+def test_and_clean(version, alg, imageType='', cmplx=None):
     if not checkArgs(version, alg, imageType):
         return 2
     
@@ -53,9 +52,11 @@ def test_and_clean(version, alg, imageType=''):
     print message
 
     outputName = "test_create_sicd_{0}({1}){2}".format(version, alg, imageType)
-    successCode = doRoundTrip(initData(includeNITF=True, version=version,
-                                       alg=alg, imageType=imageType),
-                              includeNITF=True, outputFilename=outputName) 
+    if not cmplx:
+        cmplx = initData(includeNITF=False, version=version, alg=alg,
+                         imageType=imageType)
+    successCode = doRoundTrip(cmplx, includeNITF=True,
+                              outputFilename=outputName) 
         
     if successCode == 0:
         clean(outputName)
@@ -81,6 +82,7 @@ if __name__ == '__main__':
     import sys
 
     checkPythonPath()
+    from test_create_sicd_xml import initData, doRoundTrip
 
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
     formationAlgs = ['PFA', 'RMA', 'RGAZCOMP']
@@ -92,5 +94,14 @@ if __name__ == '__main__':
         if code == 1:
             successCode = 1
 
+    # We're hoping these cases throw exceptions
+    try:
+        cmplx = initData()
+        cmplx.setVersion('1.0.0')
+        cmplx.imageFormation.segmentIdentifier = ''
+        test_and_clean('1.0.0', 'PFA', cmplx=cmplx)
+        successCode = 1 #Because the above line should throw
+    except RuntimeError:
+        print 'Expected failure occured.'
                 
     sys.exit(successCode)

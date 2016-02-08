@@ -160,11 +160,23 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     //! this segment was recreated completely because the ordering of
     //! a lot of the variables has been updated
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
-
+    XMLElem segmentElem = NULL;
+    XMLElem areaElem = getOptional(getFirstAndOnly(parent, "RadarCollection"), "Area");
+    if (areaElem)
+    {
+        XMLElem planeElem = getOptional(areaElem, "Plane");
+        if (planeElem)
+        {
+            segmentElem = getOptional(planeElem, "SegmentList");
+        }
+    }
+    if (segmentElem && imageFormation->segmentIdentifier.empty())
+    {
+        throw except::Exception(Ctxt("SegmentList must be included when a radarCollection->area->plane::segmentList is included."));
+    }
     if (!imageFormation->segmentIdentifier.empty())
         createString("SegmentIdentifier", imageFormation->segmentIdentifier,
-                     imageFormationXML);
-
+            imageFormationXML);
     convertRcvChanProcToXML("0.4", imageFormation->rcvChannelProcessed.get(), 
                             imageFormationXML);
 
