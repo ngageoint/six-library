@@ -103,5 +103,5 @@ if __name__ == '__main__':
         successCode = 1 #Because the above line should throw
     except RuntimeError:
         print 'Expected failure occured.'
-                
+
     sys.exit(successCode)

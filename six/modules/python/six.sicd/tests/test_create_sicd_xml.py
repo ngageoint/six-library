@@ -165,10 +165,12 @@ def initGrid(cmplx):
             grid.row.deltaKCOAPoly[(i, j)] = i + j
     grid.row.weightType = makeScopedCopyableWeightType()
     grid.row.weightType.windowName = 'UNIFORM'
+
     param = Parameter()
     param.setName('WeightType Param')
     param.setValue('334')
     grid.row.weightType.parameters.push_back(param)
+
     for ii in xrange(5):
         grid.row.weights.push_back(ii / 2.0)
 
@@ -750,6 +752,7 @@ def initRgAzComp(cmplx):
     cmplx.rgAzComp = rgAzComp
     return cmplx
 
+
 def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
     cmplx = ComplexData()
     cmplx.setVersion(version)
@@ -808,6 +811,7 @@ def readXML(pathNameBase, schemaPaths):
     data = xml_ctrl.fromXML(in_doc, schemaPaths)
     cmplxReadBackIn = asComplexData(data)
     return cmplxReadBackIn
+
 
 def doRoundTrip(cmplx, includeNITF, outputFilename):
     vs = VectorString()
