@@ -561,6 +561,7 @@ def initErrorStats(cmplx):
     errorStats.compositeSCP.xErr = 12
     errorStats.compositeSCP.yErr = 34
     errorStats.compositeSCP.xyErr = 56
+    #TODO: Check SCPType for SICD 4/5
 
     errorStats.components = makeScopedCopyableComponents()
 
@@ -749,7 +750,9 @@ def initRgAzComp(cmplx):
     cmplx.rgAzComp = rgAzComp
     return cmplx
 
-def initData(cmplx, includeNITF, version, alg, imageType=''):
+def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
+    cmplx = ComplexData()
+    cmplx.setVersion(version)
     cmplx = initCollectionInfo(cmplx)
     cmplx = initImageCreation(cmplx)
     if includeNITF:
@@ -806,6 +809,47 @@ def readXML(pathNameBase, schemaPaths):
     cmplxReadBackIn = asComplexData(data)
     return cmplxReadBackIn
 
+def doRoundTrip(cmplx, includeNITF, outputFilename):
+    vs = VectorString()
+    vs.push_back(os.environ['SIX_SCHEMA_PATH'])
+    writeXML(outputFilename, vs, cmplx)
+    if includeNITF:
+        writeNITF(outputFilename, vs, cmplx)
+        
+    # If we made it to here, all the Python bindings must be present and
+    # what we wrote out must have passed schema validation
+    # We can't tell if for some reason some of the XML just didn't
+    # get written out though
+
+    ### Now read it back in again ###
+    cmplxReadBackIn = readXML(outputFilename, vs)
+    if includeNITF:
+        cmplxFromNITF = readFromNITF(outputFilename, vs)
+    # And then write it out one more time #
+    newPathnameBase = '{0}_rt'.format(outputFilename)
+    writeXML(newPathnameBase, vs, cmplxReadBackIn)
+    if includeNITF:
+        writeNITF(newPathnameBase, vs, cmplxReadBackIn)
+
+    successCode = 0
+    # These should match #
+    if filecmp.cmp(outputFilename + ".xml", newPathnameBase + ".xml"):
+	print 'XML round trip succeeded!'
+    else:
+        successCode = 1
+	print 'XML round trip failed'
+
+    if includeNITF:
+        if filecmp.cmp(outputFilename + ".nitf", newPathnameBase + ".nitf"):
+    	    print 'NITF round trip succeeded!'
+        else:
+            successCode = 1
+            print 'NITF round trip failed'
+    return successCode
+
+    # If we made it to here, the read side appears to be working properly too
+
+    
 if __name__ == '__main__':
     import argparse
 
@@ -816,60 +860,13 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', default='1.1.0',
             choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0'],
             help='Version of SICD to generate')
-    parser.add_argument('-a', '--alg', default='PFA',
-            choices=['PFA', 'RMA', 'RGAZCOMP'], help='Image formation algorithm'
-                        ' to use')
-    parser.add_argument('-i', '--imageType', default='',
-            choices=['RMAT', 'RMCR', 'INCA', ''], help='Image type for RMAT')
+
     args = parser.parse_args()
     includeNITF = args.includeNITF
 
     # Build up a giant ComplexData from scratch with everything populated
-    try:
-        cmplx = initData(ComplexData(), includeNITF, args.version, args.alg,
-                         args.imageType)
-    except ValueError:
-        sys.exit(2)
-    cmplx.setVersion(args.version)
+    cmplx = initData(includeNITF, args.version)
+    successCode = doRoundTrip(cmplx, includeNITF, 'test_create_sicd')
+    sys.exit(successCode)    
 
-    ### Now format it as XML and write it out to a file ###
-    vs = VectorString()
-    vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-    origPathnameBase = 'test_create_sicd_{0}({1}){2}'.format(
-        args.version, args.alg, args.imageType)
-    writeXML(origPathnameBase, vs, cmplx)
-    if includeNITF:
-        writeNITF(origPathnameBase, vs, cmplx)
-
-    # If we made it to here, all the Python bindings must be present and
-    # what we wrote out must have passed schema validation
-    # We can't tell if for some reason some of the XML just didn't
-    # get written out though
-
-    ### Now read it back in again ###
-    cmplxReadBackIn = readXML(origPathnameBase, vs)
-    if includeNITF:
-        cmplxFromNITF = readFromNITF(origPathnameBase, vs)
-    # And then write it out one more time #
-    newPathnameBase = '{0}_rt'.format(origPathnameBase)
-    writeXML(newPathnameBase, vs, cmplxReadBackIn)
-    if includeNITF:
-        writeNITF(newPathnameBase, vs, cmplxReadBackIn)
-
-    successCode = 0
-    # These should match #
-    if filecmp.cmp(origPathnameBase + ".xml", newPathnameBase + ".xml"):
-	print 'XML round trip succeeded!'
-    else:
-        successCode = 1
-	print 'XML round trip failed'
-
-    if includeNITF:
-        if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'NITF round trip succeeded!'
-        else:
-            successCode = 1
-            print 'NITF round trip failed'
-    sys.exit(successCode)
-
-    # If we made it to here, the read side appears to be working properly too
+   
