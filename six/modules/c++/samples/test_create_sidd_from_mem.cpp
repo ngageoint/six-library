@@ -1774,6 +1774,7 @@ void initProcessorInformation(
     processorInformation.application = "ProcessorName";
     processorInformation.profile = "Profile";
     processorInformation.site = "Ypsilanti, MI";
+    processorInformation.processingDateTime = six::DateTime();
 }
 
 std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
@@ -1855,6 +1856,10 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     {
         siddData.display->remapInformation.reset(
                 new six::sidd::ColorDisplayRemap(new LUT(256, 3)));
+        for (size_t ii = 0; ii < 50; ++ii)
+        {
+            *(*siddData.display->remapInformation->remapLUT)[ii] = 125;
+        }
     }
 
     //---------------------------------------------------------------

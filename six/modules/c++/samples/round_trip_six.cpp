@@ -189,6 +189,9 @@ int main(int argc, char** argv)
         parser.addArgument("-s --schema", 
                            "Specify a schema or directory of schemas",
                            cli::STORE);
+        parser.addArgument("--retainDateTime",
+                           "Keep the original datetime in roundtripped file",
+                           cli::STORE_TRUE, "retainDateTime");
         parser.addArgument("input", "Input SICD/SIDD", cli::STORE, "input",
                            "INPUT", 1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -200,6 +203,7 @@ int main(int argc, char** argv)
         const std::string outputFile(options->get<std::string> ("output"));
         const bool expand(options->get<bool> ("expand"));
         const bool convertToInt(options->get<bool>("convertToInt"));
+        const bool retainDateTime(options->get<bool>("retainDateTime"));
         const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
         std::vector<std::string> schemaPaths;
@@ -252,10 +256,13 @@ int main(int argc, char** argv)
         six::Container* container = reader.getContainer();
 
         // Update the XML to reflect the creation time as right now
-        const six::DateTime now;
-        for (size_t ii = 0; ii < container->getNumData(); ++ii)
+        if (!retainDateTime)
         {
-            container->getData(ii)->setCreationTime(now);
+            const six::DateTime now;
+            for (size_t ii = 0; ii < container->getNumData(); ++ii)
+            {
+                container->getData(ii)->setCreationTime(now);
+            }
         }
 
         // For SICD, there's only one image (container->getNumData() == 1)
