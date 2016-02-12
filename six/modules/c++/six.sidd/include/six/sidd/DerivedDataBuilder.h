@@ -100,7 +100,7 @@ public:
      *  to one)
      *  \return Refrence to self
      */
-    virtual DerivedDataBuilder& addExploitationFeatures(unsigned int num = 1);
+    virtual DerivedDataBuilder& addExploitationFeatures(size_t num = 1);
 
     /*!
      *  Add the Optional ProductProcessing block to the SIDD Data object.

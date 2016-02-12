@@ -64,7 +64,7 @@ DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addExploitationFeatures(
-                                                                unsigned int num)
+                                                                size_t num)
 {
     mData->exploitationFeatures.reset(new ExploitationFeatures(num));
 

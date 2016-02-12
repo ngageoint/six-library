@@ -43,7 +43,7 @@ public:
 
 protected:
     std::string mType;
-    SFATyped(std::string typeName) :
+    SFATyped(const std::string& typeName) :
         mType(typeName)
     {
     }
@@ -51,13 +51,13 @@ protected:
 
 struct SFAGeometry : public SFATyped
 {
-public:
-    virtual ~SFAGeometry()
+    virtual SFAGeometry* clone() const
     {
+        return new SFAGeometry(*this);
     }
 
 protected:
-    SFAGeometry(std::string typeName) :
+    SFAGeometry(const std::string& typeName) :
         SFATyped(typeName)
     {
     }
@@ -88,8 +88,9 @@ struct SFAPoint : public SFAGeometry
     {
     }
 
-    virtual ~SFAPoint()
+    virtual SFAPoint* clone() const
     {
+        return new SFAPoint(*this);
     }
 
     static const char TYPE_NAME[];
@@ -98,12 +99,8 @@ struct SFAPoint : public SFAGeometry
 //! Abstract type
 struct SFACurve : public SFAGeometry
 {
-public:
-    virtual ~SFACurve()
-    {
-    }
 protected:
-    SFACurve(std::string typeName) :
+    SFACurve(const std::string& typeName) :
         SFAGeometry(typeName)
     {
     }
@@ -116,10 +113,10 @@ public:
         SFACurve(TYPE_NAME)
     {
     }
-    virtual ~SFALineString()
+    virtual SFALineString* clone() const
     {
+        return new SFALineString(*this);
     }
-
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 };
@@ -132,10 +129,10 @@ public:
     {
         mType = TYPE_NAME;
     }
-    virtual ~SFALine()
+    virtual SFALine* clone() const
     {
+        return new SFALine(*this);
     }
-
     static const char TYPE_NAME[];
 };
 
@@ -147,22 +144,18 @@ public:
     {
         mType = TYPE_NAME;
     }
-    virtual ~SFALinearRing()
+    virtual SFALinearRing* clone() const
     {
+        return new SFALinearRing(*this);
     }
-
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFASurface : public SFAGeometry
 {
-public:
-    virtual ~SFASurface()
-    {
-    }
 protected:
-    SFASurface(std::string typeName) :
+    SFASurface(const std::string& typeName) :
         SFAGeometry(typeName)
     {
     }
@@ -175,8 +168,9 @@ public:
         SFASurface(TYPE_NAME)
     {
     }
-    virtual ~SFAPolygon()
+    virtual SFAPolygon* clone() const
     {
+        return new SFAPolygon(*this);
     }
 
     std::vector<mem::ScopedCopyablePtr<SFALinearRing> > rings;
@@ -191,8 +185,10 @@ public:
     {
         mType = TYPE_NAME;
     }
-    virtual ~SFATriangle()
+
+    virtual SFATriangle* clone() const
     {
+        return new SFATriangle(*this);
     }
 
     static const char TYPE_NAME[];
@@ -205,8 +201,10 @@ public:
         SFASurface(TYPE_NAME)
     {
     }
-    virtual ~SFAPolyhedralSurface()
+
+    virtual SFAPolyhedralSurface* clone() const
     {
+        return new SFAPolyhedralSurface(*this);
     }
 
     std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
@@ -222,8 +220,10 @@ public:
         SFASurface(TYPE_NAME)
     {
     }
-    virtual ~SFATriangulatedIrregularNetwork()
+
+    virtual SFATriangulatedIrregularNetwork* clone() const
     {
+        return new SFATriangulatedIrregularNetwork(*this);
     }
 
     std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
@@ -233,13 +233,8 @@ public:
 //! Abstract type
 struct SFAGeometryCollection : public SFAGeometry
 {
-public:
-    virtual ~SFAGeometryCollection() 
-    {
-    }
-
 protected:
-    SFAGeometryCollection(std::string typeName) :
+    SFAGeometryCollection(const std::string& typeName) :
         SFAGeometry(typeName)
     {
     }
@@ -252,10 +247,10 @@ public:
         SFAGeometryCollection(TYPE_NAME)
     {
     }
-    virtual ~SFAMultiPoint()
+    virtual SFAMultiPoint* clone() const
     {
+        return new SFAMultiPoint(*this);
     }
-
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 };
@@ -263,13 +258,8 @@ public:
 //! Abstract type
 struct SFAMultiCurve : public SFAGeometryCollection
 {
-public:
-    virtual ~SFAMultiCurve()
-    {
-    }
-
 protected:
-    SFAMultiCurve(std::string typeName) :
+    SFAMultiCurve(const std::string& typeName) :
         SFAGeometryCollection(typeName)
     {
     }
@@ -282,8 +272,10 @@ public:
         SFAMultiCurve(TYPE_NAME)
     {
     }
-    virtual ~SFAMultiLineString()
+
+    virtual SFAMultiLineString* clone() const
     {
+        return new SFAMultiLineString(*this);
     }
 
     std::vector<mem::ScopedCopyablePtr<SFALineString> > elements;
@@ -293,12 +285,8 @@ public:
 //! Abstract type
 struct SFAMultiSurface : public SFAGeometryCollection
 {
-public:
-    virtual ~SFAMultiSurface()
-    {
-    }
 protected:
-    SFAMultiSurface(std::string typeName) :
+    SFAMultiSurface(const std::string& typeName) :
         SFAGeometryCollection(typeName)
     {
     }
@@ -311,8 +299,10 @@ public:
         SFAMultiSurface(TYPE_NAME)
     {
     }
-    virtual ~SFAMultiPolygon()
+
+    virtual SFAMultiPolygon* clone() const
     {
+        return new SFAMultiPolygon(*this);
     }
 
     std::vector<mem::ScopedCopyablePtr<SFAPolygon> > elements;
@@ -322,12 +312,13 @@ public:
 struct SFACoordinateSystem : public SFATyped
 {
 public:
-    virtual ~SFACoordinateSystem()
+    virtual SFACoordinateSystem* clone() const
     {
+        return new SFACoordinateSystem(*this);
     }
 
 protected:
-    SFACoordinateSystem(std::string typeName) :
+    SFACoordinateSystem(const std::string& typeName) :
         SFATyped(typeName)
     {
     }
@@ -374,6 +365,11 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
     {
     }
 
+    virtual SFAGeocentricCoordinateSystem* clone() const
+    {
+        return new SFAGeocentricCoordinateSystem(*this); 
+    }
+
     static const char TYPE_NAME[];
 };
 
@@ -388,6 +384,11 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
     SFAGeographicCoordinateSystem() :
         SFACoordinateSystem(TYPE_NAME)
     {
+    }
+
+    virtual SFAGeographicCoordinateSystem* clone() const
+    {
+        return new SFAGeographicCoordinateSystem(*this);
     }
 
     static const char TYPE_NAME[];
@@ -406,6 +407,11 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
     {
     }
 
+    virtual SFAProjectedCoordinateSystem* clone() const
+    {
+        return new SFAProjectedCoordinateSystem(*this);
+    }
+
     static const char TYPE_NAME[];
 };
 
@@ -414,9 +420,14 @@ struct SFAReferenceSystem
     mem::ScopedCopyablePtr<SFACoordinateSystem> coordinateSystem;
     std::vector<std::string> axisNames;
 
-    SFAReferenceSystem()
+    SFAReferenceSystem(const SFAReferenceSystem& other)
     {
+        coordinateSystem.reset(other.coordinateSystem->clone());
+        axisNames = other.axisNames;
     }
+
+    SFAReferenceSystem() {}
+
 };
 
 }
