@@ -36,6 +36,8 @@ public:
     {
     }
 
+    virtual SFATyped* clone() const = 0;
+
     inline std::string getType() const
     {
         return mType;
@@ -68,16 +70,18 @@ struct SFAPoint : public SFAGeometry
     double x, y, z, m;
 
     SFAPoint() :
-        SFAGeometry(TYPE_NAME)
+        SFAGeometry(TYPE_NAME), x(0), y(0),
+        z(::six::Init::undefined<double>()),
+        m(::six::Init::undefined<double>())
     {
-        x = 0;
-        y = 0;
         z = ::six::Init::undefined<double>();
         m = ::six::Init::undefined<double>();
     }
     
     SFAPoint(double _x, double _y) :
-        SFAGeometry(TYPE_NAME), x(_x), y(_y)
+        SFAGeometry(TYPE_NAME), x(_x), y(_y),
+        z(::six::Init::undefined<double>()),
+        m(::six::Init::undefined<double>())
     {
         z = ::six::Init::undefined<double>();
         m = ::six::Init::undefined<double>();
@@ -207,7 +211,7 @@ public:
         return new SFAPolyhedralSurface(*this);
     }
 
-    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
+    std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 };
 
@@ -226,7 +230,7 @@ public:
         return new SFATriangulatedIrregularNetwork(*this);
     }
 
-    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
+    std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 };
 
@@ -305,7 +309,7 @@ public:
         return new SFAMultiPolygon(*this);
     }
 
-    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > elements;
+    std::vector<mem::ScopedCloneablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
 };
 
