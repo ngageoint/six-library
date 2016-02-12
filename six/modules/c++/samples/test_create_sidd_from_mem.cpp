@@ -1803,7 +1803,11 @@ std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType)
     // Here is how you can cascade them
     siddBuilder.addMeasurement(ProjectionType::PLANE).
             addExploitationFeatures(1);
-    //siddBuilder.addProductProcessing()'//.addDownstreamReprocessing();
+
+    siddBuilder.addProductProcessing();
+    siddBuilder.addDownstreamReprocessing();
+    siddBuilder.addErrorStatistics();
+    siddBuilder.addRadiometric();
 
     //---------------------------------------------------------
     // Take ownership of the SIDD data, the builder still can
@@ -2043,6 +2047,83 @@ void initDownstreamReprocessing(six::sidd::DownstreamReprocessing& reprocess)
     reprocess.processingEvents[0]->descriptor.push_back(eventParameter);
 }
 
+void initErrorStatistics(six::ErrorStatistics& err)
+{
+    err.compositeSCP.reset(new six::CompositeSCP());
+    err.compositeSCP->xErr = 0.12;
+    err.compositeSCP->yErr = 0.73;
+    err.compositeSCP->xyErr = 9.84;
+
+    err.components.reset(new six::Components());
+    err.components->posVelError.reset(new six::PosVelError());
+    err.components->posVelError->frame = six::FrameType("ECF");
+    err.components->posVelError->p1 = 1.1;
+    err.components->posVelError->p2 = 1.1;
+    err.components->posVelError->p3 = 1.1;
+    err.components->posVelError->v1 = 1.1;
+    err.components->posVelError->v2 = 1.1;
+    err.components->posVelError->v3 = 1.1;
+
+    err.components->posVelError->corrCoefs.reset(new six::CorrCoefs());
+    err.components->posVelError->corrCoefs->p1p2 = 6.2;
+    err.components->posVelError->corrCoefs->p1p3 = 6.2;
+    err.components->posVelError->corrCoefs->p1v1 = 6.2;
+    err.components->posVelError->corrCoefs->p1v2 = 6.2;
+    err.components->posVelError->corrCoefs->p1v3 = 6.2;
+    err.components->posVelError->corrCoefs->p2p3 = 6.2;
+    err.components->posVelError->corrCoefs->p2v1 = 6.2;
+    err.components->posVelError->corrCoefs->p2v2 = 6.2;
+    err.components->posVelError->corrCoefs->p2v3 = 6.2;
+    err.components->posVelError->corrCoefs->p3v1 = 6.2;
+    err.components->posVelError->corrCoefs->p3v2 = 6.2;
+    err.components->posVelError->corrCoefs->p3v3 = 6.2;
+    err.components->posVelError->corrCoefs->v1v2 = 6.2;
+    err.components->posVelError->corrCoefs->v1v3 = 6.2;
+    err.components->posVelError->corrCoefs->v2v3 = 6.2;
+
+    err.components->posVelError->positionDecorr.corrCoefZero = 48.17;
+    err.components->posVelError->positionDecorr.decorrRate = 113.965;
+
+    err.components->radarSensor.reset(new six::RadarSensor());
+    err.components->radarSensor->rangeBias = 43.5;
+    err.components->radarSensor->clockFreqSF = 1111.1;
+    err.components->radarSensor->transmitFreqSF = 85;
+    err.components->radarSensor->rangeBiasDecorr.corrCoefZero = 123;
+    err.components->radarSensor->rangeBiasDecorr.decorrRate = .03;
+
+    err.components->tropoError.reset(new six::TropoError());
+    err.components->tropoError->tropoRangeVertical = .00289;
+    err.components->tropoError->tropoRangeSlant = 777;
+    err.components->tropoError->tropoRangeDecorr.corrCoefZero = 0;
+    err.components->tropoError->tropoRangeDecorr.decorrRate = 98.7;
+
+    err.components->ionoError.reset(new six::IonoError());
+    err.components->ionoError->ionoRangeVertical = 1.2;
+    err.components->ionoError->ionoRangeRateVertical = 77632;
+    err.components->ionoError->ionoRgRgRateCC = .072;
+    err.components->ionoError->ionoRangeVertDecorr.corrCoefZero = 48.16;
+    err.components->ionoError->ionoRangeVertDecorr.decorrRate = 113.964;
+
+    six::Parameter param;
+    param.setName("ErrorStatisticsParameterName");
+    param.setValue("Error StatisticsParameterValue");
+
+    err.additionalParameters.push_back(param);
+}
+
+void initRadiometric(six::Radiometric& radiometric)
+{
+    radiometric.noiseLevel.noiseType = "Noise type";
+    radiometric.noiseLevel.noisePoly = six::Poly2D(0, 0);
+    
+    radiometric.rcsSFPoly = six::Poly2D(0, 0);
+    radiometric.betaZeroSFPoly = six::Poly2D(1, 3);
+    radiometric.sigmaZeroSFPoly = six::Poly2D(0, 0);
+    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType("IS_TRUE");
+    radiometric.gammaZeroSFPoly = six::Poly2D(0, 0);
+    radiometric.gammaZeroSFIncidenceMap = six::AppliedType("IS_FALSE");
+}
+
 void initAnnotations(six::sidd::Annotations& annotations)
 {
     mem::ScopedCopyablePtr<six::sidd::Annotation> annotation(
@@ -2145,8 +2226,10 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
     initExploitationFeatures(*siddData.exploitationFeatures);
-    //initProductProcessing(*siddData.productProcessing);
-    //initDownstreamReprocessing(*siddData.downstreamReprocessing);
+    initProductProcessing(*siddData.productProcessing);
+    initDownstreamReprocessing(*siddData.downstreamReprocessing);
+    initErrorStatistics(*siddData.errorStatistics);
+    initRadiometric(*siddData.radiometric);
     initAnnotations(siddData.annotations);
 }
 

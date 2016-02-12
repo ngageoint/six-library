@@ -41,7 +41,7 @@ def findTestsDir():
     test_path = os.path.join(os.getcwd(), 'install', 'bin')
 
     if not os.path.exists(test_path):
-        raise IOError('Could not find test file {0}'.format(test_path))
+        raise IOError('Could not find test directory {0}'.format(test_path))
 
     return test_path
 
