@@ -34,12 +34,7 @@ struct Annotation
 {
     std::string identifier;
     mem::ScopedCopyablePtr<SFAReferenceSystem> spatialReferenceSystem;
-    std::vector<mem::ScopedCopyablePtr<SFAGeometry> > objects;
-
-    Annotation() :
-        identifier(""), spatialReferenceSystem(NULL)
-    {
-    }
+    std::vector<mem::ScopedCloneablePtr<SFAGeometry> > objects;
 };
 
 typedef std::vector<mem::ScopedCopyablePtr<Annotation> > Annotations;
