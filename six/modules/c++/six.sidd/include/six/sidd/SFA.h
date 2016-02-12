@@ -56,6 +56,11 @@ public:
     {
     }
 
+    virtual SFAGeometry* clone() const
+    {
+        return new SFAGeometry(*this);
+    }
+
 protected:
     SFAGeometry(std::string typeName) :
         SFATyped(typeName)
@@ -86,6 +91,11 @@ struct SFAPoint : public SFAGeometry
     SFAPoint(double _x, double _y, double _z, double _m) :
         SFAGeometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
     {
+    }
+
+    virtual SFAPoint* clone() const
+    {
+        return new SFAPoint(*this);
     }
 
     virtual ~SFAPoint()
@@ -326,6 +336,11 @@ public:
     {
     }
 
+    virtual SFACoordinateSystem* clone() const
+    {
+        return new SFACoordinateSystem(*this);
+    }
+
 protected:
     SFACoordinateSystem(std::string typeName) :
         SFATyped(typeName)
@@ -374,6 +389,11 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
     {
     }
 
+    virtual SFAGeocentricCoordinateSystem* clone() const
+    {
+        return new SFAGeocentricCoordinateSystem(*this); 
+    }
+
     static const char TYPE_NAME[];
 };
 
@@ -417,6 +437,13 @@ struct SFAReferenceSystem
     SFAReferenceSystem()
     {
     }
+
+    SFAReferenceSystem(const SFAReferenceSystem& other)
+    {
+        coordinateSystem.reset(other.coordinateSystem->clone());
+        axisNames = other.axisNames;
+    }
+
 };
 
 }

@@ -1777,8 +1777,7 @@ void initProcessorInformation(
     processorInformation.processingDateTime = six::DateTime();
 }
 
-std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
-                                               bool smallImage)
+std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType)
 {
     //-----------------------------------------------------------
     // Make the object.  You could do this directly, but this way
@@ -1799,11 +1798,12 @@ std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
     // the other.  Here is how you add them individually
     //-----------------------------------------------------------
     siddBuilder.addDisplay(pixelType);
-    siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
+    siddBuilder.addGeographicAndTarget(RegionType::SUB_REGION);
 
     // Here is how you can cascade them
     siddBuilder.addMeasurement(ProjectionType::PLANE).
             addExploitationFeatures(1);
+    //siddBuilder.addProductProcessing()'//.addDownstreamReprocessing();
 
     //---------------------------------------------------------
     // Take ownership of the SIDD data, the builder still can
@@ -1814,8 +1814,260 @@ std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType,
     return  std::auto_ptr<six::sidd::DerivedData>(siddBuilder.steal());
 }
 
+void initProductCreation(six::sidd::ProductCreation& productCreation)
+{
+    productCreation.productName = "ProductName";
+    productCreation.productClass = "Classy";
+    productCreation.classification.classification = "U";
+    productCreation.classification.compliesWith.push_back("ICD-710");
+    productCreation.classification.ownerProducer.push_back("ABW");
+    productCreation.classification.ownerProducer.push_back("AIA");
+    productCreation.classification.sciControls.push_back("HCS");
+    productCreation.classification.sciControls.push_back("SI");
+    productCreation.classification.sarIdentifier.push_back("EU");
+    productCreation.classification.sarIdentifier.push_back("BC");
+    productCreation.classification.disseminationControls.push_back("FOUO");
+    productCreation.classification.disseminationControls.push_back("IMC");
+    productCreation.classification.fgiSourceOpen.push_back("AIA");
+    productCreation.classification.fgiSourceOpen.push_back("ALB");
+    productCreation.classification.fgiSourceProtected.push_back("AIA");
+    productCreation.classification.fgiSourceProtected.push_back("AND");
+    productCreation.classification.releasableTo.push_back("ABW");
+    productCreation.classification.releasableTo.push_back("AFG");
+    productCreation.classification.nonICMarkings.push_back("SINFO");
+    productCreation.classification.nonICMarkings.push_back("DS");
+    productCreation.classification.classifiedBy = "PVT Snuffy";
+    productCreation.classification.compilationReason = "Testing purposes";
+    productCreation.classification.derivativelyClassifiedBy = "Anna J. Stepp";
+    productCreation.classification.classificationReason = "More testing";
+    productCreation.classification.nonUSControls.push_back("BOHEMIA");
+    productCreation.classification.nonUSControls.push_back("BALK");
+    productCreation.classification.derivedFrom = "Other documents";
+    productCreation.classification.declassDate.reset(new six::DateTime());
+    productCreation.classification.declassEvent = "N/A";
+    productCreation.classification.declassException = "25X1";
+
+    //SIDD 1.0 only
+    productCreation.classification.exemptedSourceType = "X8";
+    productCreation.classification.exemptedSourceDate.reset(new six::DateTime());
+
+    /*
+    This is SIDD_1.1 stuff.
+    productCreation.classification.exemptFrom = "DOD_DISTRO_STATEMENT";
+    productCreation.classification.joint = six::BooleanType("IS_TRUE");
+    productCreation.classification.atomicEnergyMarkings.push_back("RD-CNWDI");
+    productCreation.classification.atomicEnergyMarkings.push_back("UCNI");
+    productCreation.classification.displayOnlyTo.push_back("AND");
+    productCreation.classification.displayOnlyTo.push_back("ALB");
+    productCreation.classification.noticeType = "LES";
+    productCreation.classification.noticeReason = "None given";
+    productCreation.classification.noticeDate.reset(new six::DateTime());
+    productCreation.classification.unregisteredNoticeType = "Other";
+    productCreation.classification.externalNotice = BooleanType("IS_FALSE");
+    */
+
+    initProcessorInformation(*productCreation.processorInformation);
+
+}
+
+void initDisplay100(six::sidd::Display& display, const std::string& lutType)
+{
+    //pixelType set in iniData() function
+    if (lutType == "Mono")
+    {
+        display.remapInformation.reset(
+            new six::sidd::MonochromeDisplayRemap("Some mono type",
+                new LUT(256, 2)));
+    }
+    else
+    {
+        display.remapInformation.reset(
+            new six::sidd::ColorDisplayRemap(new LUT(256, 3)));
+        for (size_t ii = 0; ii < 50; ++ii)
+        {
+            *(*display.remapInformation->remapLUT)[ii] = 125;
+        }
+    }
+    //magnificationMethod and decimationMethod set in populateData() function
+
+    display.histogramOverrides.reset(new six::sidd::DRAHistogramOverrides());
+    display.histogramOverrides->clipMin = 1;
+    display.histogramOverrides->clipMax = 500;
+
+    display.monitorCompensationApplied.reset(new six::sidd::MonitorCompensationApplied());
+    display.monitorCompensationApplied->gamma = 5.9;
+    display.monitorCompensationApplied->xMin = 0.87;
+
+}
+void initDisplay(six::sidd::Display& display, const std::string& lutType,
+        const std::string& version)
+{
+    if (version == "1.0.0")
+    {
+        initDisplay100(display, lutType);
+    }
+    /*
+    else if (version == '1.1.0')
+    {
+        initDisplay110(display, lutType);
+    }
+    */
+
+    six::Parameter param;
+    param.setName("name");
+    param.setValue("val");
+    display.displayExtensions.push_back(param);
+}
+
+void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget)
+{
+    six::Parameter param;
+    param.setName("GeoName");
+    param.setValue("GeoValue");
+    geographicAndTarget.geographicCoverage.georegionIdentifiers.push_back(param);
+
+    mem::ScopedCopyablePtr<six::sidd::GeographicCoverage> geoCoverage(
+        new six::sidd::GeographicCoverage(RegionType::GEOGRAPHIC_INFO));
+    geoCoverage->georegionIdentifiers.push_back(param);
+
+    mem::ScopedCopyablePtr<six::sidd::GeographicInformation> geoInfo(new six::sidd::GeographicInformation());
+    geoInfo->countryCodes.push_back("US");
+    geoInfo->countryCodes.push_back("GB");
+    geoInfo->securityInformation = "SInformation";
+    geoInfo->geographicInformationExtensions.push_back(param);
+
+    geoCoverage->geographicInformation = geoInfo;
+    geographicAndTarget.geographicCoverage.subRegion.push_back(geoCoverage);
+
+    mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
+    targetInfo->identifiers.push_back(param);
+    targetInfo->footprint.reset(new six::LatLonCorners());
+    targetInfo->targetInformationExtensions.push_back(param);
+    geographicAndTarget.targetInformation.push_back(targetInfo);
+}
+
+void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
+{
+    // The first collection is corresponds to the parent image
+    six::sidd::Collection& collection =
+        *exFeatures.collections[0];
+
+    collection.identifier = "ExCollection";
+
+    //--------------------------------------------------------
+    // Creating this stuff from a SICD source, normally these
+    // values would mirror what was in the SICD XML
+    // Here they are dummy values
+    //--------------------------------------------------------
+    collection.information->resolution.rg = 0;
+    collection.information->resolution.az = 0;
+    collection.information->collectionDuration = 0;
+
+    // This demo sets the collection time to now (not true)
+    collection.information->collectionDateTime = six::DateTime();
+    collection.information->radarMode = RadarModeType::SPOTLIGHT;
+    collection.information->radarModeID = "RMID";
+    collection.information->sensorName = "Sensor Name";
+    collection.information->localDateTime = six::toString<DateTime>(six::DateTime());
+
+    collection.information->inputROI.reset(new six::sidd::InputROI());
+    collection.information->inputROI->size.row = 5;
+    collection.information->inputROI->size.col = 10;
+    collection.information->inputROI->upperLeft.row = 9;
+    collection.information->inputROI->upperLeft.col = 3;
+
+    mem::ScopedCloneablePtr<six::sidd::TxRcvPolarization> polarization(new six::sidd::TxRcvPolarization());
+    polarization->txPolarization = six::PolarizationType::V;
+    polarization->rcvPolarization = six::PolarizationType::OTHER;
+    polarization->rcvPolarizationOffset = 1.37;
+    polarization->processed = six::BooleanType("IS_TRUE");
+    collection.information->polarization.push_back(polarization);
+
+    collection.geometry.reset(new six::sidd::Geometry());
+    collection.geometry->azimuth = 1.2;
+    collection.geometry->slope = 3.4;
+    collection.geometry->squint = 5.6;
+    collection.geometry->graze = 7.8;
+    collection.geometry->tilt = 9.1;
+    six::Parameter param;
+    param.setName("Extension");
+    param.setValue("Parameter");
+    collection.geometry->extensions.push_back(param);
+
+    collection.phenomenology.reset(new six::sidd::Phenomenology());
+    collection.phenomenology->shadow = six::AngleMagnitude(1.5, 3.7);
+    collection.phenomenology->layover = six::AngleMagnitude(10.13, 50.9);
+    collection.phenomenology->multiPath = 3.79;
+    collection.phenomenology->groundTrack = 8.11;
+    collection.phenomenology->extensions.push_back(param);
+
+    exFeatures.product.resolution.row = 0;
+    exFeatures.product.resolution.col = 0;
+    exFeatures.product.north = 58.332;
+    exFeatures.product.extensions.push_back(param);
+}
+
+void initProductProcessing(six::sidd::ProductProcessing& processing)
+{
+    mem::ScopedCloneablePtr<six::sidd::ProcessingModule> module(new six::sidd::ProcessingModule());
+    mem::ScopedCloneablePtr<six::sidd::ProcessingModule> nestedModule(new six::sidd::ProcessingModule());
+    six::Parameter moduleParameter;
+    moduleParameter.setName("Name");
+    moduleParameter.setValue("Value");
+
+    module->moduleName = moduleParameter;
+    nestedModule->moduleName = moduleParameter;
+    nestedModule->moduleParameters.push_back(moduleParameter);
+
+    module->processingModules.push_back(nestedModule);
+    processing.processingModules.push_back(module);
+
+}
+
+void initDownstreamReprocessing(six::sidd::DownstreamReprocessing& reprocess)
+{
+    reprocess.geometricChip.reset(new six::sidd::GeometricChip());
+    reprocess.geometricChip->chipSize = RowColInt(1, 2);
+    reprocess.geometricChip->originalUpperLeftCoordinate = RowColDouble(1.4, 2.9);
+    reprocess.geometricChip->originalUpperRightCoordinate = RowColDouble(1.4, 2.9);
+    reprocess.geometricChip->originalLowerLeftCoordinate = RowColDouble(1.4, 2.9);
+    reprocess.geometricChip->originalLowerRightCoordinate = RowColDouble(1.4, 2.9);
+
+    reprocess.processingEvents.push_back(mem::ScopedCopyablePtr<six::sidd::ProcessingEvent>(new six::sidd::ProcessingEvent()));
+    reprocess.processingEvents[0]->applicationName = "Processing Event";
+    reprocess.processingEvents[0]->appliedDateTime = six::DateTime();
+
+    six::Parameter eventParameter;
+    eventParameter.setName("Name");
+    eventParameter.setValue("Value");
+    reprocess.processingEvents[0]->descriptor.push_back(eventParameter);
+}
+
+void initAnnotations(six::sidd::Annotations& annotations)
+{
+    mem::ScopedCopyablePtr<six::sidd::Annotation> annotation(
+        new six::sidd::Annotation());
+    annotation->identifier = "Annotation identifier";
+
+    annotation->spatialReferenceSystem.reset(new six::sidd::SFAReferenceSystem());
+    annotation->spatialReferenceSystem->axisNames.push_back("Axis 1");
+    annotation->spatialReferenceSystem->coordinateSystem.reset(new six::sidd::SFAGeocentricCoordinateSystem());
+    six::sidd::SFAGeocentricCoordinateSystem* system = (six::sidd::SFAGeocentricCoordinateSystem*) annotation->spatialReferenceSystem->coordinateSystem.get();
+    system->csName = "CS Name";
+    system->datum.spheroid.name = "Spheroid";
+    system->datum.spheroid.semiMajorAxis = 69.03;
+    system->datum.spheroid.inverseFlattening = 71.473;
+    system->primeMeridian.name = "Prime Meridian";
+    system->primeMeridian.longitude = 11.11;
+    system->linearUnit = "Unit";
+
+    annotation->objects.resize(1);
+    annotation->objects[0].reset(new six::sidd::SFAPoint(2.4, 3.5, 4.55, 5.757));
+    annotations.push_back(annotation);
+}
+
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage)
+        lutType, const bool smallImage, const std::string& version)
 {
 
     // These things are essential to forming the file
@@ -1831,14 +2083,8 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     }
     siddData.setImageCorners(makeUpCornersFromDMS());
 
-    // Dummy data for example
-    siddData.productCreation->productName = "ProductName";
-    siddData.productCreation->productClass = "Classy";
-    siddData.productCreation->classification.classification = "U";
-
     // Can certainly be init'ed in a function
-    initProcessorInformation(
-        *siddData.productCreation->processorInformation);
+    initProductCreation(*siddData.productCreation);
 
     // Or directly if preferred
     siddData.display->decimationMethod
@@ -1846,21 +2092,8 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.display->magnificationMethod
             = MagnificationMethod::NEAREST_NEIGHBOR;
 
-   if (lutType == "Mono")
-   {
-        siddData.display->remapInformation.reset(
-            new six::sidd::MonochromeDisplayRemap("Some mono type",
-            new LUT(256, 2)));
-    }
-    else
-    {
-        siddData.display->remapInformation.reset(
-                new six::sidd::ColorDisplayRemap(new LUT(256, 3)));
-        for (size_t ii = 0; ii < 50; ++ii)
-        {
-            *(*siddData.display->remapInformation->remapLUT)[ii] = 125;
-        }
-    }
+    initDisplay(*siddData.display, lutType, version);
+    initGeographicAndTarget(*siddData.geographicAndTarget);
 
     //---------------------------------------------------------------
     // We can only do this because we know it's PGD in this example
@@ -1911,50 +2144,38 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    // The first collection is corresponds to the parent image
-    six::sidd::Collection* parent =
-            siddData.exploitationFeatures->collections[0].get();
-
-    //--------------------------------------------------------
-    // Creating this stuff from a SICD source, normally these
-    // values would mirror what was in the SICD XML
-    // Here they are dummy values
-    //--------------------------------------------------------
-    parent->information->resolution.rg = 0;
-    parent->information->resolution.az = 0;
-    parent->information->collectionDuration = 0;
-
-    // This demo sets the collection time to now (not true)
-    parent->information->collectionDateTime = six::DateTime();
-    parent->information->radarMode = RadarModeType::SPOTLIGHT;
-    parent->information->sensorName = "";
-    siddData.exploitationFeatures->product.resolution.row = 0;
-    siddData.exploitationFeatures->product.resolution.col = 0;
+    initExploitationFeatures(*siddData.exploitationFeatures);
+    //initProductProcessing(*siddData.productProcessing);
+    //initDownstreamReprocessing(*siddData.downstreamReprocessing);
+    initAnnotations(siddData.annotations);
 }
 
 int main(int argc, char** argv)
 {
-    cli::ArgumentParser parser;
-    parser.setDescription("Generate a NITF from specified options");
-    parser.addArgument("--lut", "Specify no lut, mono lut, or color lut",
+    cli::ArgumentParser argParser;
+    argParser.setDescription("Generate a NITF from specified options");
+    argParser.addArgument("--lut", "Specify no lut, mono lut, or color lut",
             cli::STORE, "lut", "None, Mono, or Color", 0, 1)->
             setChoices(str::split("None Mono Color"))->setDefault("None");
-    parser.addArgument("--multipleSegments",
+    argParser.addArgument("--multipleSegments",
             "Single image, multiple segments", cli::STORE_TRUE,
             "multipleSegments", "", 0, 1);
-    parser.addArgument("--multipleImages",
+    argParser.addArgument("--multipleImages",
             "Add multiple images to NITF", cli::STORE_TRUE,
             "multipleImages", "", 0, 1);
-    parser.addArgument("--smallImage", "Use 2x2 image with dummy data",
+    argParser.addArgument("--smallImage", "Use 2x2 image with dummy data",
             cli::STORE_TRUE, "smallImage", "", 0, 1);
-    parser.addArgument("output", "File to write to", cli::STORE, "output",
+    argParser.addArgument("output", "File to write to", cli::STORE, "output",
             "output-file", 1, 1, true);
-    parser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
+    argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
             "sicdXML", "sicd-xml", 0, 1);
+
+    //We'll get this from command line args once it matters
+    const std::string version("1.0.0");
 
     try
     {
-        std::auto_ptr<cli::Results> options(parser.parse(argc,
+        std::auto_ptr<cli::Results> options(argParser.parse(argc,
                 (const char**) argv));
         if (options->get<bool>("smallImage") &&
                 options->get<bool>("multipleSegments"))
@@ -1973,7 +2194,7 @@ int main(int argc, char** argv)
                     std::string(six::SCHEMA_PATH) + " environment variable"));
         }
 
-        bool smallImage = options->get<bool>("smallImage");
+        const bool smallImage = options->get<bool>("smallImage");
 
         six::XMLControlFactory::getInstance().addCreator(
                 DataType::COMPLEX,
@@ -2036,7 +2257,7 @@ int main(int argc, char** argv)
 
         }
 
-        char smallData[4] = {'a','b', 'c', 'd'};
+        const char smallData[4] = {'a','b', 'c', 'd'};
 
         // Create a file container
         six::Container container(DataType::DERIVED);
@@ -2052,12 +2273,11 @@ int main(int argc, char** argv)
             {
                 lutType = options->get<std::string>("lut");
             }
-            bool smallImage = options->get<bool>("smallImage");
 
             std::auto_ptr<six::sidd::DerivedData> siddData =
-                    initData(lutType, smallImage);
+                    initData(lutType);
 
-            populateData(*siddData, lutType, smallImage);
+            populateData(*siddData, lutType, smallImage, version);
             container.addData(siddData->clone());
             if (!smallImage)
             {

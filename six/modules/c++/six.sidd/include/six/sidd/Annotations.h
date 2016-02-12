@@ -40,6 +40,17 @@ struct Annotation
         identifier(""), spatialReferenceSystem(NULL)
     {
     }
+
+    Annotation(const Annotation& other)
+    {
+        identifier = other.identifier;
+        spatialReferenceSystem = other.spatialReferenceSystem;
+        objects.resize(other.objects.size());
+        for (size_t ii = 0; ii < other.objects.size(); ++ii)
+        {
+            objects[ii].reset(other.objects[ii]->clone());
+        }
+    }
 };
 
 typedef std::vector<mem::ScopedCopyablePtr<Annotation> > Annotations;
