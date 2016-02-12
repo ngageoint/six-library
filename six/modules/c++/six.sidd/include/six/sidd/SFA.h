@@ -282,7 +282,7 @@ public:
         return new SFAMultiLineString(*this);
     }
 
-    std::vector<mem::ScopedCopyablePtr<SFALineString> > elements;
+    std::vector<mem::ScopedCloneablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
 };
 
