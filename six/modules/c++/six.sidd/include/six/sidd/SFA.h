@@ -70,25 +70,29 @@ struct SFAPoint : public SFAGeometry
     double x, y, z, m;
 
     SFAPoint() :
-        SFAGeometry(TYPE_NAME), x(0), y(0),
+        SFAGeometry(TYPE_NAME), 
+        x(0), 
+        y(0),
         z(::six::Init::undefined<double>()),
         m(::six::Init::undefined<double>())
     {
-        z = ::six::Init::undefined<double>();
-        m = ::six::Init::undefined<double>();
     }
     
     SFAPoint(double _x, double _y) :
-        SFAGeometry(TYPE_NAME), x(_x), y(_y),
+        SFAGeometry(TYPE_NAME), 
+        x(_x), 
+        y(_y),
         z(::six::Init::undefined<double>()),
         m(::six::Init::undefined<double>())
     {
-        z = ::six::Init::undefined<double>();
-        m = ::six::Init::undefined<double>();
     }
     
     SFAPoint(double _x, double _y, double _z, double _m) :
-        SFAGeometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
+        SFAGeometry(TYPE_NAME), 
+        x(_x), 
+        y(_y), 
+        z(_z), 
+        m(_m)
     {
     }
 
@@ -428,4 +432,3 @@ struct SFAReferenceSystem
 }
 }
 #endif
-
