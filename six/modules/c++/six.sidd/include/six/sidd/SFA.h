@@ -417,17 +417,8 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
 
 struct SFAReferenceSystem
 {
-    mem::ScopedCopyablePtr<SFACoordinateSystem> coordinateSystem;
+    mem::ScopedCloneablePtr<SFACoordinateSystem> coordinateSystem;
     std::vector<std::string> axisNames;
-
-    SFAReferenceSystem(const SFAReferenceSystem& other)
-    {
-        coordinateSystem.reset(other.coordinateSystem->clone());
-        axisNames = other.axisNames;
-    }
-
-    SFAReferenceSystem() {}
-
 };
 
 }
