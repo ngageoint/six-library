@@ -704,7 +704,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         // optional
         tmpElem = getOptional(informationXML, "LocalDateTime");
         if (tmpElem)
-            parseString(tmpElem, info->localDateTime);
+            parseDateTime(tmpElem, info->localDateTime);
 
         parseDouble(getFirstAndOnly(informationXML, "CollectionDuration"),
                     info->collectionDuration);
@@ -1174,7 +1174,7 @@ XMLElem DerivedXMLParser::convertExploitationFeaturesToXML(
                        informationXML);
         // optional
         if (collection->information.localDateTime != Init::undefined<
-                std::string>())
+                six::DateTime>())
         {
             createDateTime("LocalDateTime",
                            collection->information.localDateTime,
