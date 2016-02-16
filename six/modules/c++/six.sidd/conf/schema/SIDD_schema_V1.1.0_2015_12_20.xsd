@@ -129,17 +129,10 @@
             </xs:element>
             <xs:element name="InteractiveProcessing" type="InteractiveProcessingType">
             </xs:element>
-            <xs:element name="DisplayExtension" maxOccurs="unbounded">
+            <xs:element name="DisplayExtension" type="sicommon:ParameterType" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Optional extensible parameters used to support profile-specific needs related to product display. Predefined filter types.</xs:documentation>
                 </xs:annotation>
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="name" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -417,12 +410,19 @@
     </xs:simpleType>
     <xs:complexType name="InteractiveProcessingType">
         <xs:sequence>
-            <xs:element name="GeometricTransform" type="GeometricTransformType"></xs:element>
+            <xs:element name="GeometricTransform" type="GeometricTransformType">
+                <xs:annotation>
+                    <xs:documentation>
+                        The geometric transform element is used to perform various geometric distortions to each band of image data. These distortions 
+                        include image chipping, scaling, rotation, shearing, etc.
+                </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="SharpnessEnhancement" type="SharpnessEnhancementType"></xs:element>
             <xs:element name="ColorSpaceTransform" type="ColorSpaceTransformType" minOccurs="0"></xs:element>
-            <xs:element name="DynamicRangeAdjustment" type="DynamicRangeAdjustmentType" minOccurs="0">
+            <xs:element name="DynamicRangeAdjustment" type="DynamicRangeAdjustmentType">
                 <xs:annotation>
-                    <xs:documentation>Parameter describing DRA</xs:documentation>
+                    <xs:documentation>Specifies the recommended ELT DRA overrides</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="TonalTransferCurve" type="NewLookupTableType" minOccurs="0">
@@ -437,6 +437,12 @@
     </xs:complexType>
     <xs:complexType name="GeometricTransformType">
         <xs:sequence>
+            <xs:annotation>
+                <xs:documentation>
+                    The geometric transform element is used to perform various geometric distortions to each band of image data. These distortions
+                    include image chipping, scaling, rotation, shearing, etc.
+                </xs:documentation>
+            </xs:annotation>
             <xs:element name="Scaling" type="ScalingType"></xs:element>
             <xs:element name="Orientation" type="Orientation">
                 <xs:annotation>
@@ -451,12 +457,18 @@
         <xs:sequence>
             <xs:element name="AntiAlias" type="FilterType">
                 <xs:annotation>
-                    <xs:documentation>Anti-Alias Filter</xs:documentation>
+                    <xs:documentation>
+                        Anti-Alias Filter used for scaling.
+                        Refer to program-specific documentation for population guidance
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="Interpolation" type="FilterType">
                 <xs:annotation>
-                    <xs:documentation>Interpolation Filter</xs:documentation>
+                    <xs:documentation>
+                        Interpolation Filter used for scaling.
+                        Refer to program-specific documentation for population guidance.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -529,7 +541,7 @@
             </xs:element>
             <xs:element name="ICCProfile" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>Profile embedded in metadata.</xs:documentation>
+                    <xs:documentation>Valid ICC profile signature.</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -593,7 +605,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="AUTO"/>
             <xs:enumeration value="MANUAL"/>
-            <xs:enumeration value="NON"/>
+            <xs:enumeration value="NONE"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="DRAOverrides">

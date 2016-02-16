@@ -712,7 +712,7 @@ void DerivedXMLParser110::parseInteractiveProcessingFromXML(
     XMLElem sharpnessElem = getFirstAndOnly(interactiveElem,
             "SharpnessEnhancement");
     XMLElem colorElem = getOptional(interactiveElem, "ColorSpaceTransform");
-    XMLElem dynamicElem = getOptional(interactiveElem, "DynamicRangeAdjustment");
+    XMLElem dynamicElem = getFirstAndOnly(interactiveElem, "DynamicRangeAdjustment");
     XMLElem ttcElem = getOptional(interactiveElem, "TonalTransferCurve");
 
     interactive.geometricTransform = GeometricTransform();
@@ -727,12 +727,8 @@ void DerivedXMLParser110::parseInteractiveProcessingFromXML(
                                         *interactive.colorSpaceTransform);
     }
 
-    if (dynamicElem)
-    {
-        interactive.dynamicRangeAdjustment.reset(new DynamicRangeAdjustment());
-        parseDynamicRangeAdjustmentFromXML(dynamicElem,
-                                           *interactive.dynamicRangeAdjustment);
-    }
+    parseDynamicRangeAdjustmentFromXML(dynamicElem,
+                                       interactive.dynamicRangeAdjustment);
 
     if (ttcElem)
     {
@@ -1195,41 +1191,39 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     }
 
     // DynamicRangeAdjustment
-    if (processing.dynamicRangeAdjustment.get())
+    
+    const DynamicRangeAdjustment& adjust =
+            processing.dynamicRangeAdjustment;
+
+    XMLElem adjustXML =
+        newElement("DynamicRangeAdjustment", processingXML);
+
+    createStringFromEnum("AlgorithmType", adjust.algorithmType,
+        adjustXML);
+
+    ok = false;
+    if (adjust.draParameters.get())
     {
-        const DynamicRangeAdjustment& adjust =
-                *processing.dynamicRangeAdjustment;
-
-        XMLElem adjustXML =
-                newElement("DynamicRangeAdjustment", processingXML);
-
-        createStringFromEnum("AlgorithmType", adjust.algorithmType,
-                             adjustXML);
-
-        ok = false;
-        if (adjust.draParameters.get())
-        {
-            if (!adjust.draOverrides.get())
-            {
-                ok = true;
-                XMLElem paramXML = newElement("DRAParameters", adjustXML);
-                createDouble("Pmin", adjust.draParameters->pMin, paramXML);
-                createDouble("Pmax", adjust.draParameters->pMax, paramXML);
-                createDouble("EminModifier", adjust.draParameters->eMinModifier, paramXML);
-                createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramXML);
-            }
-        }
-        else if (adjust.draOverrides.get())
+        if (!adjust.draOverrides.get())
         {
             ok = true;
-            XMLElem overrideXML = newElement("DRAOverrides", adjustXML);
-            createDouble("Subtractor", adjust.draOverrides->subtractor, overrideXML);
-            createDouble("Multiplier", adjust.draOverrides->multiplier, overrideXML);
+            XMLElem paramXML = newElement("DRAParameters", adjustXML);
+            createDouble("Pmin", adjust.draParameters->pMin, paramXML);
+            createDouble("Pmax", adjust.draParameters->pMax, paramXML);
+            createDouble("EminModifier", adjust.draParameters->eMinModifier, paramXML);
+            createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramXML);
         }
-        if (!ok)
-        {
-            throw except::Exception(Ctxt("Data must contain exactly one of DRAParameters and DRAOverrides"));
-        }
+    }
+    else if (adjust.draOverrides.get())
+    {
+        ok = true;
+        XMLElem overrideXML = newElement("DRAOverrides", adjustXML);
+        createDouble("Subtractor", adjust.draOverrides->subtractor, overrideXML);
+        createDouble("Multiplier", adjust.draOverrides->multiplier, overrideXML);
+    }
+    if (!ok)
+    {
+        throw except::Exception(Ctxt("Data must contain exactly one of DRAParameters and DRAOverrides"));
     }
 
     if (processing.tonalTransferCurve.get())

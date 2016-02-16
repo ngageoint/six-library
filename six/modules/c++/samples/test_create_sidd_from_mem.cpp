@@ -1854,10 +1854,8 @@ void initDisplay(six::sidd::Display& display)
     cmm.displayProfile = "Some display profile";
     cmm.iccProfile = "Some ICC profile";
 
-    display.interactiveProcessing->dynamicRangeAdjustment.reset(
-            new six::sidd::DynamicRangeAdjustment());
     six::sidd::DynamicRangeAdjustment& dra =
-            *display.interactiveProcessing->dynamicRangeAdjustment;
+            display.interactiveProcessing->dynamicRangeAdjustment;
     dra.algorithmType = six::sidd::DRAType::AUTO;
     dra.draParameters.reset(new six::sidd::DynamicRangeAdjustment::DRAParameters());
     dra.draParameters->pMin = 0.2;

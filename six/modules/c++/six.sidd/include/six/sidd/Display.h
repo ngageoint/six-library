@@ -287,7 +287,7 @@ struct InteractiveProcessing
     GeometricTransform geometricTransform;
     SharpnessEnhancement sharpnessEnhancement;
     mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
-    mem::ScopedCopyablePtr<DynamicRangeAdjustment> dynamicRangeAdjustment;
+    DynamicRangeAdjustment dynamicRangeAdjustment;
     mem::ScopedCopyablePtr<LookupTable> tonalTransferCurve;
 };
 
