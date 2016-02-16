@@ -358,7 +358,15 @@
                     <xs:documentation>Allowed values: 1DLUT</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="BandLUT" type="NewLookupTableType"></xs:element>
+            <xs:element name="BandLUT" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="NewLookupTableType">
+                            <xs:attribute name="k" type="xs:positiveInteger" use="required"></xs:attribute>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="NewLookupTableType">
@@ -887,6 +895,12 @@
                     <xs:documentation>Type of sub-product. (examples: Frame #, Reference, Match, etc.). This field is only needed if there is a suite of associated products.</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="ProductSubType" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Omit if no sub-types</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Compression" type="xs:string" minOccurs="0"/>
             <xs:element name="ProductCreationExtension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Extensible parameters used to support profile-specific needs related to product creation.</xs:documentation>

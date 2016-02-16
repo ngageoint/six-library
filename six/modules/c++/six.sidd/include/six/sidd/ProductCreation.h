@@ -65,10 +65,16 @@ public:
     std::string productClass;
 
     /*! 
-     *  (Optional) type of sub-product. 
-     *  Leave this blank if none
+     *  (Optional) Information on the type of prodcut
+     *  Omit if a single product suite
      */
     std::string productType;
+
+    /*!
+     *  (Optional) type of sub-product.
+     *  Leave this blank if none
+     */
+    std::string productSubtype;
 
     /*!
      *  (Optional, Unbounded) Extensible params used to support

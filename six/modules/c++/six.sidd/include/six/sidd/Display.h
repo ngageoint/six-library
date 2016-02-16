@@ -175,7 +175,7 @@ struct BandInformation
 struct BandEqualization
 {
     BandEqualizationAlgorithm algorithm;
-    mem::ScopedCopyablePtr<LookupTable> bandLUT;
+    std::vector<mem::ScopedCopyablePtr<LookupTable> > bandLUTs;
 };
 
 struct RRDS

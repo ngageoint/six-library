@@ -1806,11 +1806,12 @@ void initDisplay(six::sidd::Display& display)
     prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
     prodGenOptions.bandEqualization->algorithm =
             six::sidd::BandEqualizationAlgorithm::LUT_1D;
-    prodGenOptions.bandEqualization->bandLUT.reset(new six::sidd::LookupTable());
-    prodGenOptions.bandEqualization->bandLUT->lutName = "LUT Name";
-    prodGenOptions.bandEqualization->bandLUT->predefined.reset(new six::sidd::LookupTable::Predefined());
-    prodGenOptions.bandEqualization->bandLUT->predefined->remapFamily = 5;
-    prodGenOptions.bandEqualization->bandLUT->predefined->remapMember = 3;
+    prodGenOptions.bandEqualization->bandLUTs.resize(1);
+    prodGenOptions.bandEqualization->bandLUTs[0].reset(new six::sidd::LookupTable());
+    prodGenOptions.bandEqualization->bandLUTs[0]->lutName = "LUT Name";
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined.reset(new six::sidd::LookupTable::Predefined());
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapFamily = 5;
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapMember = 3;
 
     prodGenOptions.modularTransferFunctionRestoration.reset(
             new six::sidd::Filter());

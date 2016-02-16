@@ -514,11 +514,13 @@ void DerivedXMLParser110::parseBandEqualizationFromXML(const XMLElem bandElem,
 {
     parseEnum(getFirstAndOnly(bandElem, "Algorithm"), band.algorithm);
 
-    XMLElem LUTElem = getOptional(bandElem, "BandLUT");
-    if (LUTElem)
+    std::vector<XMLElem> lutElems;
+    bandElem->getElementsByTagName("BandLUT", lutElems);
+    band.bandLUTs.resize(lutElems.size());
+    for (size_t ii = 0; ii < lutElems.size(); ++ii)
     {
-        band.bandLUT.reset(new LookupTable());
-        parseLookupTableFromXML(LUTElem, *band.bandLUT);
+        band.bandLUTs[ii].reset(new LookupTable());
+        parseLookupTableFromXML(lutElems[ii], *band.bandLUTs[ii]);
     }
 }
 
@@ -1065,7 +1067,18 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         const BandEqualization& bandEq = *prodGen.bandEqualization;
         XMLElem bandEqXML = newElement("BandEqualization", prodGenXML);
         createStringFromEnum("Algorithm", bandEq.algorithm, bandEqXML);
-        convertLookupTableToXML("BandLUT", *bandEq.bandLUT, bandEqXML);
+        for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
+        {
+            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqXML);
+        }
+
+        //add the attribute to each of the LUTs
+        std::vector<XMLElem> LUTElems;
+        bandEqXML->getElementsByTagName("BandLUT", LUTElems);
+        for (size_t ii = 0; ii < LUTElems.size(); ++ii)
+        {
+            setAttribute(LUTElems[ii], "k", str::toString(ii+1));
+        }
     }
 
     if (prodGen.modularTransferFunctionRestoration.get())
