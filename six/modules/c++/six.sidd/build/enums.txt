@@ -34,7 +34,7 @@ LAGRANGE=5
 NOT SET=six::NOT_SET_VALUE
 __default__=six::NOT_SET_VALUE
 
-[ShadowsDirection]
+[ShadowDirection]
 UP=0
 DOWN=1
 LEFT=2

@@ -460,14 +460,14 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="ShadowsDirection" type="ShadowsDirectionType">
+            <xs:element name="ShadowDirection" type="ShadowDirectionType">
                 <xs:annotation>
                     <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:simpleType name="ShadowsDirectionType">
+    <xs:simpleType name="ShadowDirectionType">
         <xs:annotation>
             <xs:documentation>Descirbes the shadow direciton relative to the pixels in the file.</xs:documentation>
         </xs:annotation>
