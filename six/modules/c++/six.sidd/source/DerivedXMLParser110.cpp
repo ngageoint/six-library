@@ -96,7 +96,7 @@ DerivedData* DerivedXMLParser110::fromXML(
     XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
     XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
     XMLElem radiometricXML            = getOptional(root, "Radiometric");
-    XMLElem matchInfoXML             = getOptional(root, "MatchInfo");
+    XMLElem matchInfoXML              = getOptional(root, "MatchInfo");
     XMLElem compressionXML            = getOptional(root, "Compression");
     XMLElem dedXML                    = getOptional(root, "DigitalElevationData");
     XMLElem annotationsXML            = getOptional(root, "Annotations");
@@ -199,7 +199,6 @@ xml::lite::Document* DerivedXMLParser110::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-
     convertGeographicTargetToXML(*derived->geographicAndTarget, root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
@@ -354,9 +353,12 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayXML,
                                               Display& display) const
 {
     //pixelType previously set
-    display.bandInformation.reset(new BandInformation());
-    parseBandInformationFromXML(getFirstAndOnly(displayXML, "BandInformation"),
-                                *display.bandInformation);
+    XMLElem bandInfoXML = getOptional(displayXML, "BandInformation");
+    if (bandInfoXML)
+    {
+        display.bandInformation.reset(new BandInformation());
+        parseBandInformationFromXML(bandInfoXML, *display.bandInformation);
+    }
 
     display.nonInteractiveProcessing.reset(new NonInteractiveProcessing());
     parseNonInteractiveProcessingFromXML(getFirstAndOnly(displayXML,
@@ -1502,23 +1504,25 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
 
     createString("PixelType", six::toString(display.pixelType), displayXML);
 
-    // BandInformation
-    XMLElem bandInfoXML = newElement("BandInformation", displayXML);
-    confirmNonNull(display.bandInformation, "bandInformation");
-    createInt("NumBands", display.bandInformation->bands.size(), bandInfoXML);
-    for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
+    // BandInformation (Optional)
+    if (display.bandInformation.get() != NULL)
     {
-        XMLElem bandXML = createString("Band",
-                                       display.bandInformation->bands[ii],
-                                       bandInfoXML);
-        setAttribute(bandXML, "index", str::toString(ii + 1));
-    }
-    createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
-              bandInfoXML);
-    if (six::Init::isDefined<size_t>(display.bandInformation->displayFlag))
-    {
-        createInt("DisplayFlag", display.bandInformation->displayFlag,
+        XMLElem bandInfoXML = newElement("BandInformation", displayXML);
+        createInt("NumBands", display.bandInformation->bands.size(), bandInfoXML);
+        for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
+        {
+            XMLElem bandXML = createString("Band",
+                display.bandInformation->bands[ii],
+                bandInfoXML);
+            setAttribute(bandXML, "index", str::toString(ii + 1));
+        }
+        createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
             bandInfoXML);
+        if (six::Init::isDefined<size_t>(display.bandInformation->displayFlag))
+        {
+            createInt("DisplayFlag", display.bandInformation->displayFlag,
+                bandInfoXML);
+        }
     }
 
     // NonInteractiveProcessing

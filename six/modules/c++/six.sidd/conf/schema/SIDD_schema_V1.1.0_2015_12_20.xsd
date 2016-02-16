@@ -120,7 +120,7 @@
                     <xs:documentation>Defines the pixel type, based on enumeration and definition in Design and Exploitation document.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="BandInformation" type="BandInformationType">
+            <xs:element name="BandInformation" type="BandInformationType" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>Information regarding the bands contained in the product.</xs:documentation>
                 </xs:annotation>

@@ -343,7 +343,10 @@ struct Display
     // End of SIDD 1.0-only section
     // Beginning of SIDD 1.1-only section
 
+    //Optional
     mem::ScopedCopyablePtr<BandInformation> bandInformation;
+
+    //Required
     mem::ScopedCopyablePtr<NonInteractiveProcessing> nonInteractiveProcessing;
     mem::ScopedCopyablePtr<InteractiveProcessing> interactiveProcessing;
 

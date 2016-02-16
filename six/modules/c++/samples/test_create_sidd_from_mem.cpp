@@ -1799,7 +1799,6 @@ void initDisplay(six::sidd::Display& display)
     display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
 
     // NonInteractiveProcessing
-    
     display.nonInteractiveProcessing.reset(
             new six::sidd::NonInteractiveProcessing());
     six::sidd::ProductGenerationOptions& prodGenOptions =
@@ -1944,7 +1943,6 @@ int main(int argc, char** argv)
         // We might also need to write out a SICD XML section
         // in the container, if it was provided
         //---------------------------------------------------------
-
 
         std::auto_ptr<six::sicd::ComplexData> sicdData;
 
