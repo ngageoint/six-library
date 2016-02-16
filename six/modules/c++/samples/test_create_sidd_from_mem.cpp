@@ -2135,6 +2135,8 @@ int main(int argc, char** argv)
         parent->information.collectionDateTime = six::DateTime();
         parent->information.radarMode = RadarModeType::SPOTLIGHT;
         parent->information.sensorName.clear();
+        parent->geometry.reset(new six::sidd::Geometry());
+        parent->geometry->dopplerConeAngle = 45.8;
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
         siddData->exploitationFeatures->product.qualityPoly = six::Poly2D(2, 2);

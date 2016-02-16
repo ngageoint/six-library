@@ -164,8 +164,8 @@ protected:
                                            XMLElem parent = NULL) const;
     virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
                                     XMLElem parent = NULL) const;
-    virtual XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exFeatures,
-                                                     XMLElem parent = NULL) const;
+    virtual XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exploitationFeatures,
+                                                     XMLElem parent = NULL) const = 0;
     XMLElem convertAnnotationToXML(const Annotation *a,
                                    XMLElem parent = NULL) const;
     XMLElem convertCompressionToXML(const Compression *c,
@@ -192,7 +192,7 @@ protected:
     virtual void parseMeasurementFromXML(const XMLElem measurementXML,
                                  Measurement* measurement) const;
     virtual void parseExploitationFeaturesFromXML(const XMLElem elem,
-                                          ExploitationFeatures* exFeatures) const;
+                                          ExploitationFeatures* exploitationFeatures) const;
     void parseAnnotationFromXML(const XMLElem annotationXML,
                                 Annotation* a) const;
     void parseSFAGeometryFromXML(const XMLElem elem,

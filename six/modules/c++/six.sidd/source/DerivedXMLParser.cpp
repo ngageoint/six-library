@@ -680,18 +680,18 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         Collection* coll = exploitationFeatures->collections[i].get();
 
         coll->identifier
-                = collectionXML->getAttributes().getValue("identifier");
+            = collectionXML->getAttributes().getValue("identifier");
 
         // parse Information
         Information* info = &coll->information;
         XMLElem informationXML = getFirstAndOnly(collectionXML, "Information");
 
         parseString(getFirstAndOnly(informationXML, "SensorName"),
-                    info->sensorName);
+            info->sensorName);
 
         XMLElem radarModeXML = getFirstAndOnly(informationXML, "RadarMode");
         info->radarMode = six::toType<RadarModeType>(
-                getFirstAndOnly(radarModeXML, "ModeType")->getCharacterData());
+            getFirstAndOnly(radarModeXML, "ModeType")->getCharacterData());
         tmpElem = getOptional(radarModeXML, "ModeID");
         if (tmpElem)
         {
@@ -699,7 +699,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         }
 
         parseDateTime(getFirstAndOnly(informationXML, "CollectionDateTime"),
-                      info->collectionDateTime);
+            info->collectionDateTime);
 
         // optional
         tmpElem = getOptional(informationXML, "LocalDateTime");
@@ -707,7 +707,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             parseDateTime(tmpElem, info->localDateTime);
 
         parseDouble(getFirstAndOnly(informationXML, "CollectionDuration"),
-                    info->collectionDuration);
+            info->collectionDuration);
 
         // optional
         XMLElem resXML = getOptional(informationXML, "Resolution");
@@ -721,9 +721,9 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             info->inputROI.reset(new InputROI());
 
             common().parseRowColInt(getFirstAndOnly(roiXML, "Size"),
-                                    info->inputROI->size);
+                info->inputROI->size);
             common().parseRowColInt(getFirstAndOnly(roiXML, "UpperLeft"),
-                                    info->inputROI->upperLeft);
+                info->inputROI->upperLeft);
         }
 
         // optional and unbounded
@@ -737,11 +737,11 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             TxRcvPolarization* p = info->polarization[jj].get();
 
             p->txPolarization = six::toType<PolarizationType>(
-                    getFirstAndOnly(polXML, "TxPolarization")->
-                            getCharacterData());
+                getFirstAndOnly(polXML, "TxPolarization")->
+                getCharacterData());
             p->rcvPolarization = six::toType<PolarizationType>(
-                    getFirstAndOnly(polXML, "RcvPolarization")->
-                            getCharacterData());
+                getFirstAndOnly(polXML, "RcvPolarization")->
+                getCharacterData());
 
             // optional
             tmpElem = getOptional(polXML, "RcvPolarizationOffset");
@@ -755,7 +755,6 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                 parseBooleanType(tmpElem, p->processed);
             }
         }
-
 
         // parse Geometry -- optional
         XMLElem geometryXML = getOptional(collectionXML, "Geometry");
@@ -790,7 +789,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
 
             // optional to unbounded
             common().parseParameters(geometryXML, "Extension",
-                                     coll->geometry->extensions);
+                coll->geometry->extensions);
         }
 
         // parse Phenomenology -- optional
@@ -804,9 +803,9 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             if (tmpElem)
             {
                 parseDouble(getFirstAndOnly(tmpElem, "Angle"),
-                            coll->phenomenology->shadow.angle);
+                    coll->phenomenology->shadow.angle);
                 parseDouble(getFirstAndOnly(tmpElem, "Magnitude"),
-                            coll->phenomenology->shadow.magnitude);
+                    coll->phenomenology->shadow.magnitude);
             }
 
             // optional
@@ -814,9 +813,9 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             if (tmpElem)
             {
                 parseDouble(getFirstAndOnly(tmpElem, "Angle"),
-                            coll->phenomenology->layover.angle);
+                    coll->phenomenology->layover.angle);
                 parseDouble(getFirstAndOnly(tmpElem, "Magnitude"),
-                            coll->phenomenology->layover.magnitude);
+                    coll->phenomenology->layover.magnitude);
             }
 
             // optional
@@ -835,14 +834,14 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
 
             // optional to unbounded
             common().parseParameters(phenomenologyXML, "Extension",
-                                     coll->phenomenology->extensions);
+                coll->phenomenology->extensions);
         }
     }
 
     XMLElem productXML = getFirstAndOnly(exploitationFeaturesXML, "Product");
 
     common().parseRowColDouble(getFirstAndOnly(productXML, "Resolution"),
-                               exploitationFeatures->product.resolution);
+        exploitationFeatures->product.resolution);
     // optional
     tmpElem = getOptional(productXML, "North");
     if (tmpElem)
@@ -852,7 +851,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
 
     // optional to unbounded
     common().parseParameters(productXML, "Extension",
-                             exploitationFeatures->product.extensions);
+        exploitationFeatures->product.extensions);
 }
 
 XMLElem DerivedXMLParser::convertProcessorInformationToXML(
@@ -1127,185 +1126,6 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
 
     return measurementXML;
 }
-
-XMLElem DerivedXMLParser::convertExploitationFeaturesToXML(
-        const ExploitationFeatures* exploitationFeatures,
-        XMLElem parent) const
-{
-
-    XMLElem exploitationFeaturesXML =
-            newElement("ExploitationFeatures", parent);
-
-    if (exploitationFeatures->collections.size() < 1)
-    {
-        throw except::Exception(Ctxt(FmtX(
-                "ExploitationFeatures must have at least [1] Collection, " \
-                "only [%d] found", exploitationFeatures->collections.size())));
-    }
-
-    // 1 to unbounded
-    for (size_t i = 0; i < exploitationFeatures->collections.size(); ++i)
-    {
-        Collection* collection = exploitationFeatures->collections[i].get();
-        XMLElem collectionXML = newElement("Collection",
-                                           exploitationFeaturesXML);
-        setAttribute(collectionXML, "identifier", collection->identifier);
-
-        // create Information
-        XMLElem informationXML = newElement("Information", collectionXML);
-
-        createString("SensorName",
-                     collection->information.sensorName,
-                     informationXML);
-        XMLElem radarModeXML = newElement("RadarMode", informationXML);
-        createString("ModeType",
-                     common().getSICommonURI(),
-                     six::toString(collection->information.radarMode),
-                     radarModeXML);
-        // optional
-        if (collection->information.radarModeID
-                != Init::undefined<std::string>())
-            createString("ModeID",
-                         common().getSICommonURI(),
-                         collection->information.radarModeID,
-                         radarModeXML);
-        createDateTime("CollectionDateTime",
-                       collection->information.collectionDateTime,
-                       informationXML);
-        // optional
-        if (collection->information.localDateTime != Init::undefined<
-                six::DateTime>())
-        {
-            createDateTime("LocalDateTime",
-                           collection->information.localDateTime,
-                           informationXML);
-        }
-        createDouble("CollectionDuration",
-                     collection->information.collectionDuration,
-                     informationXML);
-        // optional
-        if (!Init::isUndefined(collection->information.resolution))
-        {
-            common().createRangeAzimuth("Resolution",
-                                        collection->information.resolution,
-                                        informationXML);
-        }
-        // optional
-        if (collection->information.inputROI.get())
-        {
-            XMLElem roiXML = newElement("InputROI", informationXML);
-            common().createRowCol("Size",
-                                  collection->information.inputROI->size,
-                                  roiXML);
-            common().createRowCol("UpperLeft",
-                                  collection->information.inputROI->upperLeft,
-                                  roiXML);
-        }
-        // optional to unbounded
-        for (size_t n = 0, nElems =
-                collection->information.polarization.size(); n < nElems; ++n)
-        {
-            TxRcvPolarization *p = collection->information.polarization[n].get();
-            XMLElem polXML = newElement("Polarization", informationXML);
-
-            createString("TxPolarization",
-                         six::toString(p->txPolarization),
-                         polXML);
-            createString("RcvPolarization",
-                         six::toString(p->rcvPolarization),
-                         polXML);
-            // optional
-            if (!Init::isUndefined(p->rcvPolarizationOffset))
-            {
-                createDouble("RcvPolarizationOffset",
-                             p->rcvPolarizationOffset,
-                             polXML);
-            }
-            // optional
-            if (!Init::isUndefined(p->processed))
-            {
-                createString("Processed", six::toString(p->processed), polXML);
-            }
-        }
-
-        // create Geometry -- optional
-        Geometry* geom = collection->geometry.get();
-        if (geom != NULL)
-        {
-            XMLElem geometryXML = newElement("Geometry", collectionXML);
-
-            // optional
-            if (geom->azimuth != Init::undefined<double>())
-                createDouble("Azimuth", geom->azimuth, geometryXML);
-            // optional
-            if (geom->slope != Init::undefined<double>())
-                createDouble("Slope", geom->slope, geometryXML);
-            // optional
-            if (geom->squint != Init::undefined<double>())
-                createDouble("Squint", geom->squint, geometryXML);
-            // optional
-            if (geom->graze != Init::undefined<double>())
-                createDouble("Graze", geom->graze, geometryXML);
-            // optional
-            if (geom->tilt != Init::undefined<double>())
-                createDouble("Tilt", geom->tilt, geometryXML);
-            // optional to unbounded
-            common().addParameters("Extension", geom->extensions,
-                                   geometryXML);
-        }
-
-        // create Phenomenology -- optional
-        Phenomenology* phenom = collection->phenomenology.get();
-        if (phenom != NULL)
-        {
-            XMLElem phenomenologyXML = newElement("Phenomenology",
-                                                  collectionXML);
-
-            // optional
-            if (phenom->shadow != Init::undefined<AngleMagnitude>())
-            {
-                XMLElem shadow = newElement("Shadow", phenomenologyXML);
-                createDouble("Angle", common().getSICommonURI(),
-                             phenom->shadow.angle, shadow);
-                createDouble("Magnitude", common().getSICommonURI(),
-                             phenom->shadow.magnitude, shadow);
-            }
-            // optional
-            if (phenom->layover != Init::undefined<AngleMagnitude>())
-            {
-                XMLElem layover = newElement("Layover", phenomenologyXML);
-                createDouble("Angle", common().getSICommonURI(),
-                             phenom->layover.angle, layover);
-                createDouble("Magnitude", common().getSICommonURI(),
-                             phenom->layover.magnitude, layover);
-            }
-            // optional
-            if (phenom->multiPath != Init::undefined<double>())
-                createDouble("MultiPath", phenom->multiPath, phenomenologyXML);
-            // optional
-            if (phenom->groundTrack != Init::undefined<double>())
-                createDouble("GroundTrack", phenom->groundTrack,
-                             phenomenologyXML);
-            // optional to unbounded
-            common().addParameters("Extension", phenom->extensions,
-                                   phenomenologyXML);
-        }
-    }
-
-    // create Product
-    XMLElem productXML = newElement("Product", exploitationFeaturesXML);
-
-    common().createRowCol("Resolution",
-                          exploitationFeatures->product.resolution,
-                          productXML);
-    // optional
-    if (exploitationFeatures->product.north != Init::undefined<double>())
-        createDouble("North", exploitationFeatures->product.north, productXML);
-    // optional to unbounded
-
-    return exploitationFeaturesXML;
-}
-
 
 XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const

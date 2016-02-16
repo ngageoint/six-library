@@ -57,7 +57,7 @@ protected:
             Measurement* measurement) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
-        const ExploitationFeatures* exFeatures,
+        const ExploitationFeatures* exploitationFeatures,
         XMLElem parent = NULL) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,

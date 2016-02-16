@@ -197,8 +197,9 @@ public:
     /*
      * Returns the doppler cone angle in [0, 180] degrees
      *
-     * This implements Section 4.9 of SICD and can be assigned directly to
-     * sicdData.scpCoa->dopplerConeAngle
+     * This implements Section 4.9 of SICD / Section 7.5.3 of SIDD 1.1
+     * and can be assigned directly to sicdData.scpCoa->dopplerConeAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->dopplerConeAngle
      */
     double getDopplerConeAngle() const;
 

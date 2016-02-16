@@ -69,11 +69,11 @@ protected:
             Measurement* measurement) const;
 
     virtual void parseExploitationFeaturesFromXML(
-        const XMLElem exploitationXML,
-        ExploitationFeatures* exFeatures) const;
+        const XMLElem exploitationFeaturesXML,
+        ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
-        const ExploitationFeatures* exFeatures,
+        const ExploitationFeatures* exploitationFeatures,
         XMLElem parent = NULL) const;
 
 
