@@ -312,8 +312,8 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-        <xs:attribute name="row" type="xs:int" use="required"/>
-        <xs:attribute name="col" type="xs:int" use="required"/>
+        <xs:attribute name="numRows" type="xs:int" use="required"/>
+        <xs:attribute name="numCols" type="xs:int" use="required"/>
     </xs:complexType>
     <xs:complexType name="FilterBankCoefType">
     <xs:sequence>
@@ -328,8 +328,8 @@
             </xs:complexType>
         </xs:element>
     </xs:sequence>
-    <xs:attribute name="phasing" type="xs:int" use="required"/>
-    <xs:attribute name="point" type="xs:int" use="required"/>
+    <xs:attribute name="numPhasings" type="xs:int" use="required"/>
+    <xs:attribute name="numPoints" type="xs:int" use="required"/>
     </xs:complexType>
     <xs:simpleType name="FilterDatabaseNameType">
         <xs:restriction base="xs:string">

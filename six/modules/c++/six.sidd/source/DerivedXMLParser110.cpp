@@ -639,8 +639,8 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
         kernel.custom.reset(new Filter::Kernel::Custom());
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
         const XMLAttributes& attributes = filterCoef->getAttributes();
-        getAttributeIfExists(attributes, "row", kernel.custom->size.row);
-        getAttributeIfExists(attributes, "col", kernel.custom->size.col);
+        getAttributeIfExists(attributes, "numRows", kernel.custom->size.row);
+        getAttributeIfExists(attributes, "numCols", kernel.custom->size.col);
 
         if (six::Init::isUndefined(kernel.custom->size.row) || six::Init::isUndefined(kernel.custom->size.col))
         {
@@ -684,8 +684,8 @@ void DerivedXMLParser110::parseBankFromXML(const XMLElem bankElem,
 
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
         const XMLAttributes& attributes = filterCoef->getAttributes();
-        getAttributeIfExists(attributes, "phasing", bank.custom->numPhasings);
-        getAttributeIfExists(attributes, "point", bank.custom->numPoints);
+        getAttributeIfExists(attributes, "numPhasings", bank.custom->numPhasings);
+        getAttributeIfExists(attributes, "numPoints", bank.custom->numPoints);
 
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
@@ -1296,8 +1296,8 @@ XMLElem DerivedXMLParser110::convertKernelToXML(
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customXML);
-        setAttribute(filterCoef, "row", str::toString(kernel.custom->size.row));
-        setAttribute(filterCoef, "col", str::toString(kernel.custom->size.col));
+        setAttribute(filterCoef, "numRows", str::toString(kernel.custom->size.row));
+        setAttribute(filterCoef, "numCols", str::toString(kernel.custom->size.col));
 
         for (sys::SSize_T row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
@@ -1349,8 +1349,8 @@ XMLElem DerivedXMLParser110::convertBankToXML(const Filter::Bank& bank,
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customXML);
-        setAttribute(filterCoef, "phasings", str::toString(bank.custom->numPhasings));
-        setAttribute(filterCoef, "point", str::toString(bank.custom->numPoints));
+        setAttribute(filterCoef, "numPhasings", str::toString(bank.custom->numPhasings));
+        setAttribute(filterCoef, "numPoints", str::toString(bank.custom->numPoints));
 
         for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
         {
