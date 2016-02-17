@@ -1011,7 +1011,12 @@
     </xs:complexType>
     <xs:complexType name="GeometricChipType">
         <xs:annotation>
-            <xs:documentation/>
+            <xs:documentation>
+                Contains information related to downstream chipping of the product. There is only one instance, and the instance is updated with respect to the full image parameters. 
+                For example, if an image is chipped out of a smaller chip, the new chip needs to be updated to the original full image corners.
+                Since this relationship is linear, bi-linear interpolation is sufficient to determine an arbitrary chip coordinate in terms 
+                of the original full image coordinates. Chipping is typically done using an exploitation tool, and should not be done in the initial product creation.
+            </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="ChipSize" type="sicommon:RowColIntType">
@@ -1260,7 +1265,7 @@
     </xs:complexType>
     <xs:complexType name="ExploitationFeaturesCollectionGeometryType">
         <xs:annotation>
-            <xs:documentation>Key geometry parameters independent of product processing.</xs:documentation>
+            <xs:documentation>Key geometry parameters independent of product processing. All values computed at the center time of the full collection.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="Azimuth" type="xs:double" minOccurs="0">
@@ -1302,7 +1307,7 @@
     </xs:complexType>
     <xs:complexType name="ExploitationFeaturesCollectionPhenomenologyType">
         <xs:annotation>
-            <xs:documentation>Phenomenology related to both the geometry and the final product processing.</xs:documentation>
+            <xs:documentation>Phenomenology related to both the geometry and the final product processing. All values computed at the center time of the full collection.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="Shadow" type="sicommon:AngleMagnitudeType" minOccurs="0">
@@ -1564,13 +1569,7 @@
             </xs:element>
             <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
             <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
-            <xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        Number of points (coordinate paris) used to define the bounding polygon of the nth region of position accuracy. (Field does not apply).
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
+            <!--<xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0"/>-->
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="AccuracyType">
