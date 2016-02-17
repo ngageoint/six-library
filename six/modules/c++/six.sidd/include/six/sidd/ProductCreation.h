@@ -71,12 +71,6 @@ public:
     std::string productType;
 
     /*!
-     *  (Optional) type of sub-product.
-     *  Leave this blank if none
-     */
-    std::string productSubtype;
-
-    /*!
      *  (Optional, Unbounded) Extensible params used to support
      *  profile-specific needs related to product creation
      */

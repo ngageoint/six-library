@@ -128,9 +128,6 @@ protected:
             const std::string& s, XMLElem parent = NULL) const;
     XMLElem createDate(const std::string& name, const DateTime& p,
             XMLElem parent = NULL) const;
-    XMLElem createEarthModelType(const std::string& name,
-            const EarthModelType& value,
-            XMLElem parent = NULL) const;
 
     template <typename T>
     void parseInt(XMLElem element, T& value) const
@@ -165,7 +162,6 @@ protected:
     void parseBooleanType(XMLElem element, BooleanType& value) const;
 
     void parseDateTime(XMLElem element, DateTime& value) const;
-    void parseEarthModelType(XMLElem element, EarthModelType& value) const;
 
     static
     void setAttribute(XMLElem e, const std::string& name,
