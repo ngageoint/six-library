@@ -1725,9 +1725,7 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
-    createStringFromEnum("EarthModel",
-        geographicAndTarget.earthModel,
-        geographicAndTargetXML);
+    common().createEarthModelType("EarthModel", geographicAndTarget.earthModel, geographicAndTargetXML);
 
     confirmNonNull(geographicAndTarget.imageCorners,
                    "geographicAndTarget.imageCorners");
@@ -1833,8 +1831,8 @@ void DerivedXMLParser110::parseGeographicTargetFromXML(
     GeographicAndTarget& geographicAndTarget) const
 {
     std::string model;
-    parseString(getFirstAndOnly(geographicElem, "EarthModel"), model);
-    geographicAndTarget.earthModel = EarthModelType(model);
+
+    common().parseEarthModelType(getFirstAndOnly(geographicElem, "EarthModel"), geographicAndTarget.earthModel);
     common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
         *geographicAndTarget.imageCorners);
 

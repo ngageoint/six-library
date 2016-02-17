@@ -787,8 +787,21 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:enumeration value="COLLECT TIME" />
-                        <xs:enumeration value="PREDICTED" />
+                        <xs:enumeration value="REALTIME">
+                            <xs:annotation>
+                                <xs:documentation>Based on ephemeries at time of collect</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="PREDICTED">
+                            <xs:annotation>
+                                <xs:documentation>Based on predicted ephemeries (i.e. pre-collect)</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="POST PROCESSED">
+                            <xs:annotation>
+                                <xs:documentation>Ephemeris has been refined after data collection</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
@@ -958,7 +971,7 @@
             <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:enumeration value="WGS84"/>
+            <xs:enumeration value="WGS_84"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="ImageCornersType">

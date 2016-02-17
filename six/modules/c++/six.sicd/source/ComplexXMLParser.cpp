@@ -300,7 +300,7 @@ XMLElem ComplexXMLParser::convertGeoDataToXML(
 {
     XMLElem geoDataXML = newElement("GeoData", parent);
 
-    createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
+    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
 
     XMLElem scpXML = newElement("SCP", geoDataXML);
     common().createVector3D("ECF", geoData->scp.ecf, scpXML);
@@ -1068,7 +1068,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
     const XMLElem geoDataXML, 
     GeoData *geoData) const
 {
-    parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
                         geoData->earthModel);
 
     XMLElem tmpElem = getFirstAndOnly(geoDataXML, "SCP");
@@ -1900,25 +1900,11 @@ XMLElem ComplexXMLParser::createLatLonAltFootprint(const std::string& name,
     return footprint;
 }
 
-
-XMLElem ComplexXMLParser::createEarthModelType(const std::string& name,
-                                               const EarthModelType& value,
-                                               XMLElem parent) const
-{
-    return createString(name, six::toString(value), parent);
-}
-
 XMLElem ComplexXMLParser::createSideOfTrackType(const std::string& name,
                                                 const SideOfTrackType& value,
                                                 XMLElem parent) const
 {
     return createString(name, six::toString(value), parent);
-}
-
-void ComplexXMLParser::parseEarthModelType(XMLElem element,
-                                           EarthModelType& value) const
-{
-    value = six::toType<EarthModelType>(element->getCharacterData());
 }
 
 void ComplexXMLParser::parseSideOfTrackType(XMLElem element,

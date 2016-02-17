@@ -269,6 +269,18 @@ void SICommonXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* g
     }
 }
 
+XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
+    const EarthModelType& value,
+    XMLElem parent) const
+{
+    return createString(name, six::toString(value), parent);
+}
+void SICommonXMLParser::parseEarthModelType(XMLElem element,
+    EarthModelType& value) const
+{
+    value = six::toType<EarthModelType>(element->getCharacterData());
+}
+
 XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
                                                  const std::string& cornerName,
                                                  const LatLonCorners& corners,

@@ -237,7 +237,6 @@ struct ColorManagementModule
 {
     RenderingIntent renderingIntent;
 
-    // TODO: Just assume these are strings for now... this will likely change
     std::string sourceProfile;
     std::string displayProfile;
     std::string iccProfile;

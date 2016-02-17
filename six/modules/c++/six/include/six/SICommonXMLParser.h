@@ -108,6 +108,12 @@ public:
     XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo, XMLElem parent) const;
     void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const;
 
+    void parseEarthModelType(XMLElem element, EarthModelType& value) const;
+
+    XMLElem createEarthModelType(const std::string& name,
+            const EarthModelType& value,
+            XMLElem parent = NULL) const;
+
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
                                   const LatLonCorners& corners,
