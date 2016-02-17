@@ -784,7 +784,7 @@
          <xs:element name="NoiseLevelType" minOccurs="0" maxOccurs="1">
             <xs:simpleType>
                <xs:restriction base="xs:string">
-                  <xs:enumeration value="ABSOULTE"/>
+                  <xs:enumeration value="ABSOLUTE"/>
                   <xs:enumeration value="RELATIVE"/>
                </xs:restriction>
             </xs:simpleType>
