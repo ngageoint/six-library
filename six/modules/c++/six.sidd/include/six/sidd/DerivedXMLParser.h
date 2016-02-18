@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_H__
+#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_H__
+#define __SIX_SIDD_DERIVED_Elem_PARSER_H__
 
 #include <six/XMLControl.h>
 #include <six/sidd/DerivedData.h>
@@ -45,7 +45,7 @@ public:
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationXML,
+            const XMLElem classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -176,9 +176,9 @@ protected:
     XMLElem convertGeographicCoordinateSystemToXML(
             const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
             XMLElem parent) const;
-    void parseProductCreationFromXML(const XMLElem productCreationXML,
+    void parseProductCreationFromXML(const XMLElem productCreationElem,
                                      ProductCreation* productCreation) const;
-    void parseProductCreationFromXML(const XMLElem informationXML,
+    void parseProductCreationFromXML(const XMLElem informationElem,
                                      ProcessorInformation* processorInformation) const;
     void parseProductProcessingFromXML(const XMLElem elem,
                                        ProductProcessing* productProcessing) const;
@@ -186,21 +186,21 @@ protected:
                                       ProcessingModule* procMod) const;
     void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
-    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationXML) const;
+    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationElem) const;
     std::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
-    void parseDisplayFromXML(const XMLElem displayXML, Display* display) const;
-    virtual void parseMeasurementFromXML(const XMLElem measurementXML,
+    void parseDisplayFromXML(const XMLElem displayElem, Display* display) const;
+    virtual void parseMeasurementFromXML(const XMLElem measurementElem,
                                  Measurement* measurement) const;
     virtual void parseExploitationFeaturesFromXML(const XMLElem elem,
                                           ExploitationFeatures* exploitationFeatures) const;
-    void parseAnnotationFromXML(const XMLElem annotationXML,
+    void parseAnnotationFromXML(const XMLElem annotationElem,
                                 Annotation* a) const;
     void parseSFAGeometryFromXML(const XMLElem elem,
                                  SFAGeometry* g) const;
     void parseGeographicCoordinateSystemFromXML(
             const XMLElem coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
-    void parseDatum(const XMLElem datumXML, SFADatum& datum) const;
+    void parseDatum(const XMLElem datumElem, SFADatum& datum) const;
     XMLElem parsePolynomialProjection(XMLElem projElem, Measurement& measurement) const;
     XMLElem parseGeographicProjection(XMLElem projElem, Measurement& measurement) const;
     XMLElem parsePlaneProjection(XMLElem projElem, Measurement& measurement) const;

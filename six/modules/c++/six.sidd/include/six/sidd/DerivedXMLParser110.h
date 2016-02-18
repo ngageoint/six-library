@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_110_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_110_H__
+#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_110_H__
+#define __SIX_SIDD_DERIVED_Elem_PARSER_110_H__
 
 #include <six/sidd/DerivedXMLParser.h>
 
@@ -41,14 +41,14 @@ public:
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationXML,
+            const XMLElem classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
 
-    virtual void parseCompressionFromXML(const XMLElem compressionXML,
+    virtual void parseCompressionFromXML(const XMLElem compressionElem,
                                          Compression& compression) const;
 
     virtual XMLElem convertCompressionToXML(const Compression& compression,
@@ -57,7 +57,7 @@ protected:
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
 
-    virtual void parseDisplayFromXML(const XMLElem displayXML,
+    virtual void parseDisplayFromXML(const XMLElem displayElem,
                                      Display& display) const;
 
     virtual XMLElem convertMeasurementToXML(
@@ -65,11 +65,11 @@ protected:
             XMLElem parent = NULL) const;
 
     virtual void parseMeasurementFromXML(
-            const XMLElem measurementXML,
+            const XMLElem measurementElem,
             Measurement* measurement) const;
 
     virtual void parseExploitationFeaturesFromXML(
-        const XMLElem exploitationFeaturesXML,
+        const XMLElem exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
@@ -130,7 +130,7 @@ private:
     void parseDigitalElevationDataFromXML(const XMLElem elem,
                                           DigitalElevationData& ded) const;
 
-    void parseBandInformationFromXML(const XMLElem bandXML,
+    void parseBandInformationFromXML(const XMLElem bandElem,
          BandInformation& bandInformation) const;
     
     void parseNonInteractiveProcessingFromXML(const XMLElem procElem,

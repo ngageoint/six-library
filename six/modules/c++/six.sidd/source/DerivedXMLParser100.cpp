@@ -27,7 +27,7 @@
 namespace
 {
 typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes XMLAttributes;
+typedef xml::lite::Attributes ElemAttributes;
 }
 
 namespace six
@@ -55,27 +55,27 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
     XMLElem root = doc->getRootElement();
 
-    XMLElem productCreationXML        = getFirstAndOnly(root, "ProductCreation");
-    XMLElem displayXML                = getFirstAndOnly(root, "Display");
-    XMLElem measurementXML            = getFirstAndOnly(root, "Measurement");
-    XMLElem exploitationFeaturesXML   = getFirstAndOnly(root, "ExploitationFeatures");
-    XMLElem geographicAndTargetXML    = getFirstAndOnly(root, "GeographicAndTarget");
-    XMLElem productProcessingXML      = getOptional(root, "ProductProcessing");
-    XMLElem downstreamReprocessingXML = getOptional(root, "DownstreamReprocessing");
-    XMLElem errorStatisticsXML        = getOptional(root, "ErrorStatistics");
-    XMLElem radiometricXML            = getOptional(root, "Radiometric");
-    XMLElem annotationsXML            = getOptional(root, "Annotations");
+    XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
+    XMLElem displayElem                = getFirstAndOnly(root, "Display");
+    XMLElem measurementElem            = getFirstAndOnly(root, "Measurement");
+    XMLElem exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
+    XMLElem geographicAndTargetElem    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem productProcessingElem      = getOptional(root, "ProductProcessing");
+    XMLElem downstreamReprocessingElem = getOptional(root, "DownstreamReprocessing");
+    XMLElem errorStatisticsElem        = getOptional(root, "ErrorStatistics");
+    XMLElem radiometricElem            = getOptional(root, "Radiometric");
+    XMLElem annotationsElem            = getOptional(root, "Annotations");
 
     DerivedDataBuilder builder;
     DerivedData *data = builder.steal(); //steal it
 
     // see if PixelType has MONO or RGB
     PixelType pixelType = six::toType<PixelType>(
-            getFirstAndOnly(displayXML, "PixelType")->getCharacterData());
+            getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
     RegionType regionType = RegionType::SUB_REGION;
-    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetXML,
+    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetElem,
                                       "GeographicCoverage");
 
     // create GeographicAndTarget
@@ -87,57 +87,57 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 
     // create Measurement
     six::ProjectionType projType = ProjectionType::NOT_SET;
-    if (getOptional(measurementXML, "GeographicProjection"))
+    if (getOptional(measurementElem, "GeographicProjection"))
         projType = ProjectionType::GEOGRAPHIC;
-    else if (getOptional(measurementXML, "CylindricalProjection"))
+    else if (getOptional(measurementElem, "CylindricalProjection"))
         projType = ProjectionType::CYLINDRICAL;
-    else if (getOptional(measurementXML, "PlaneProjection"))
+    else if (getOptional(measurementElem, "PlaneProjection"))
         projType = ProjectionType::PLANE;
-    else if (getOptional(measurementXML, "PolynomialProjection"))
+    else if (getOptional(measurementElem, "PolynomialProjection"))
         projType = ProjectionType::POLYNOMIAL;
     builder.addMeasurement(projType);
 
     // create ExploitationFeatures
     std::vector<XMLElem> elements;
-    exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
+    exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
                                                   elements);
     builder.addExploitationFeatures(elements.size());
 
-    parseProductCreationFromXML(productCreationXML, data->productCreation.get());
-    parseDisplayFromXML(displayXML, data->display.get());
-    parseGeographicTargetFromXML(geographicAndTargetXML, data->geographicAndTarget.get());
-    parseMeasurementFromXML(measurementXML, data->measurement.get());
-    parseExploitationFeaturesFromXML(exploitationFeaturesXML, data->exploitationFeatures.get());
+    parseProductCreationFromXML(productCreationElem, data->productCreation.get());
+    parseDisplayFromXML(displayElem, data->display.get());
+    parseGeographicTargetFromXML(geographicAndTargetElem, data->geographicAndTarget.get());
+    parseMeasurementFromXML(measurementElem, data->measurement.get());
+    parseExploitationFeaturesFromXML(exploitationFeaturesElem, data->exploitationFeatures.get());
 
-    if (productProcessingXML)
+    if (productProcessingElem)
     {
         builder.addProductProcessing();
-        parseProductProcessingFromXML(productProcessingXML,
+        parseProductProcessingFromXML(productProcessingElem,
                                       data->productProcessing.get());
     }
-    if (downstreamReprocessingXML)
+    if (downstreamReprocessingElem)
     {
         builder.addDownstreamReprocessing();
-        parseDownstreamReprocessingFromXML(downstreamReprocessingXML,
+        parseDownstreamReprocessingFromXML(downstreamReprocessingElem,
                                            data->downstreamReprocessing.get());
     }
-    if (errorStatisticsXML)
+    if (errorStatisticsElem)
     {
         builder.addErrorStatistics();
-        common().parseErrorStatisticsFromXML(errorStatisticsXML,
+        common().parseErrorStatisticsFromXML(errorStatisticsElem,
                                              data->errorStatistics.get());
     }
-    if (radiometricXML)
+    if (radiometricElem)
     {
         builder.addRadiometric();
-        common().parseRadiometryFromXML(radiometricXML,
+        common().parseRadiometryFromXML(radiometricElem,
                                         data->radiometric.get());
     }
-    if (annotationsXML)
+    if (annotationsElem)
     {
         // 1 to unbounded
         std::vector<XMLElem> annChildren;
-        annotationsXML->getElementsByTagName("Annotation", annChildren);
+        annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
         for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
         {
@@ -150,13 +150,13 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 }
 
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
-        const XMLElem classificationXML,
+        const XMLElem classificationElem,
         DerivedClassification& classification) const
 {
-    DerivedXMLParser::parseDerivedClassificationFromXML(classificationXML, classification);
+    DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
 
-    const XMLAttributes& classificationAttributes
-        = classificationXML->getAttributes();
+    const ElemAttributes& classificationAttributes
+        = classificationElem->getAttributes();
  
     getAttributeListIfExists(classificationAttributes,
                              "ism:compliesWith",
@@ -175,80 +175,80 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
         XMLElem parent) const
 {
-    XMLElem classXML = newElement("Classification", parent);
+    XMLElem classElem = newElement("Classification", parent);
 
     common().addParameters("SecurityExtension",
                            classification.securityExtensions,
-                           classXML);
+                           classElem);
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 1.0 is tied to IC-ISM v4
-    setAttribute(classXML, "DESVersion", "4", ISM_URI);
+    setAttribute(classElem, "DESVersion", "4", ISM_URI);
 
     //! from ism:ResourceNodeAttributeGroup
-    setAttribute(classXML, "resourceElement", "true", ISM_URI);
-    setAttribute(classXML, "createDate",
+    setAttribute(classElem, "resourceElement", "true", ISM_URI);
+    setAttribute(classElem, "createDate",
                  classification.createDate.format("%Y-%m-%d"), ISM_URI);
     // optional
-    setAttributeList(classXML, "compliesWith", classification.compliesWith,
+    setAttributeList(classElem, "compliesWith", classification.compliesWith,
                      ISM_URI);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
-    setAttribute(classXML, "classification", classification.classification,
+    setAttribute(classElem, "classification", classification.classification,
                  ISM_URI);
-    setAttributeList(classXML, "ownerProducer", classification.ownerProducer,
+    setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
                      ISM_URI, true);
     // optional
-    setAttributeList(classXML, "SCIcontrols", classification.sciControls,
+    setAttributeList(classElem, "SCIcontrols", classification.sciControls,
                      ISM_URI);
     // optional
-    setAttributeList(classXML, "SARIdentifier", classification.sarIdentifier,
+    setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
                      ISM_URI);
     // optional
-    setAttributeList(classXML,
+    setAttributeList(classElem,
                      "disseminationControls",
                      classification.disseminationControls,
                      ISM_URI);
     // optional
-    setAttributeList(classXML, "FGIsourceOpen", classification.fgiSourceOpen,
+    setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
                      ISM_URI);
     // optional
-    setAttributeList(classXML,
+    setAttributeList(classElem,
                      "FGIsourceProtected",
                      classification.fgiSourceProtected,
                      ISM_URI);
     // optional
-    setAttributeList(classXML, "releasableTo", classification.releasableTo,
+    setAttributeList(classElem, "releasableTo", classification.releasableTo,
                      ISM_URI);
     // optional
-    setAttributeList(classXML, "nonICmarkings", classification.nonICMarkings,
+    setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
                      ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "classifiedBy",
                            classification.classifiedBy,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "compilationReason",
                            classification.compilationReason,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "derivativelyClassifiedBy",
                            classification.derivativelyClassifiedBy,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "classificationReason",
                            classification.classificationReason,
                            ISM_URI);
     // optional
-    setAttributeList(classXML, "nonUSControls", classification.nonUSControls,
+    setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
                      ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "derivedFrom",
                            classification.derivedFrom,
                            ISM_URI);
@@ -256,22 +256,22 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
     if (classification.declassDate.get())
     {
         setAttributeIfNonEmpty(
-                classXML, "declassDate",
+                classElem, "declassDate",
                 classification.declassDate->format("%Y-%m-%d"),
                 ISM_URI);
     }
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "declassEvent",
                            classification.declassEvent,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "declassException",
                            classification.declassException,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classXML,
+    setAttributeIfNonEmpty(classElem,
                            "typeOfExemptedSource",
                            classification.exemptedSourceType,
                            ISM_URI);
@@ -279,12 +279,12 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
     if (classification.exemptedSourceDate.get())
     {
         setAttributeIfNonEmpty(
-                classXML, "dateOfExemptedSource",
+                classElem, "dateOfExemptedSource",
                 classification.exemptedSourceDate->format("%Y-%m-%d"),
                 ISM_URI);
     }
 
-    return classXML;
+    return classElem;
 }
 
 xml::lite::Document*
@@ -334,7 +334,7 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
         }
     }
 
-    //set the XMLNS
+    //set the ElemNS
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", SI_COMMON_URI);
     root->setNamespacePrefix("sfa", SFA_URI);
@@ -347,35 +347,35 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
         const Display& display,
         XMLElem parent) const
 {
-    XMLElem displayXML = newElement("Display", parent);
+    XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", six::toString(display.pixelType), displayXML);
+    createString("PixelType", six::toString(display.pixelType), displayElem);
 
     // optional
     if (display.remapInformation.get())
     {
-        XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
-        convertRemapToXML(*display.remapInformation, remapInfoXML);
+        XMLElem remapInfoElem = newElement("RemapInformation", displayElem);
+        convertRemapToXML(*display.remapInformation, remapInfoElem);
     }
 
     // optional
     if (display.magnificationMethod != MagnificationMethod::NOT_SET)
     {
         createString("MagnificationMethod",
-                     six::toString(display.magnificationMethod), displayXML);
+                     six::toString(display.magnificationMethod), displayElem);
     }
 
     // optional
     if (display.decimationMethod != DecimationMethod::NOT_SET)
     {
         createString("DecimationMethod",
-                     six::toString(display.decimationMethod), displayXML);
+                     six::toString(display.decimationMethod), displayElem);
     }
 
     // optional
     if (display.histogramOverrides.get())
     {
-        XMLElem histo = newElement("DRAHistogramOverrides", displayXML);
+        XMLElem histo = newElement("DRAHistogramOverrides", displayElem);
         createInt("ClipMin", display.histogramOverrides->clipMin, histo);
         createInt("ClipMax", display.histogramOverrides->clipMax, histo);
     }
@@ -383,23 +383,23 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
     // optional
     if (display.monitorCompensationApplied.get())
     {
-        XMLElem monComp = newElement("MonitorCompensationApplied", displayXML);
+        XMLElem monComp = newElement("MonitorCompensationApplied", displayElem);
         createDouble("Gamma", display.monitorCompensationApplied->gamma,
                      monComp);
         createDouble("XMin", display.monitorCompensationApplied->xMin, monComp);
     }
 
     // optional to unbounded
-    common().addParameters("DisplayExtension", display.displayExtensions, displayXML);
+    common().addParameters("DisplayExtension", display.displayExtensions, displayElem);
 
-    return displayXML;
+    return displayElem;
 }
 
 XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
         const GeographicAndTarget& geographicAndTarget,
         XMLElem parent) const
 {
-    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
+    XMLElem geographicAndTargetElem = newElement("GeographicAndTarget", parent);
 
     if (geographicAndTarget.geographicCoverage.get() == NULL)
     {
@@ -409,7 +409,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
     convertGeographicCoverageToXML(
             "GeographicCoverage",
             geographicAndTarget.geographicCoverage.get(),
-            geographicAndTargetXML);
+            geographicAndTargetElem);
 
     // optional to unbounded
     for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
@@ -417,39 +417,39 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
             it != geographicAndTarget.targetInformation.end(); ++it)
     {
         TargetInformation* ti = (*it).get();
-        XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
+        XMLElem tiElem = newElement("TargetInformation", geographicAndTargetElem);
 
         // 1 to unbounded
-        common().addParameters("Identifier", ti->identifiers, tiXML);
+        common().addParameters("Identifier", ti->identifiers, tiElem);
 
         // optional
         if (ti->footprint.get())
         {
-            createFootprint("Footprint", "Vertex", *ti->footprint, tiXML);
+            createFootprint("Footprint", "Vertex", *ti->footprint, tiElem);
         }
 
         // optional to unbounded
         common().addParameters("TargetInformationExtension",
-                               ti->targetInformationExtensions, tiXML);
+                               ti->targetInformationExtensions, tiElem);
     }
 
-    return geographicAndTargetXML;
+    return geographicAndTargetElem;
 }
 
 void DerivedXMLParser100::parseGeographicTargetFromXML(
-        const XMLElem geographicAndTargetXML,
+        const XMLElem geographicAndTargetElem,
         GeographicAndTarget* geographicAndTarget) const
 {
     parseGeographicCoverageFromXML(
-            getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
+            getFirstAndOnly(geographicAndTargetElem, "GeographicCoverage"),
             geographicAndTarget->geographicCoverage.get());
 
     // optional to unbounded
-    std::vector<XMLElem> targetInfosXML;
-    geographicAndTargetXML->getElementsByTagName("TargetInformation",
-                                                 targetInfosXML);
-    geographicAndTarget->targetInformation.resize(targetInfosXML.size());
-    for (size_t i = 0; i < targetInfosXML.size(); ++i)
+    std::vector<XMLElem> targetInfosElem;
+    geographicAndTargetElem->getElementsByTagName("TargetInformation",
+                                                 targetInfosElem);
+    geographicAndTarget->targetInformation.resize(targetInfosElem.size());
+    for (size_t i = 0; i < targetInfosElem.size(); ++i)
     {
         geographicAndTarget->targetInformation[i].reset(
                 new TargetInformation());
@@ -458,52 +458,52 @@ void DerivedXMLParser100::parseGeographicTargetFromXML(
                 = geographicAndTarget->targetInformation[i].get();
 
         // unbounded
-        common().parseParameters(targetInfosXML[i], "Identifier",
+        common().parseParameters(targetInfosElem[i], "Identifier",
                                  ti->identifiers);
 
         // optional
-        XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
-        if (tmpXML)
+        XMLElem tmpElem = getOptional(targetInfosElem[i], "Footprint");
+        if (tmpElem)
         {
             ti->footprint.reset(new six::LatLonCorners());
-            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
+            common().parseFootprint(tmpElem, "Vertex", *ti->footprint);
         }
 
         // optional
-        common().parseParameters(targetInfosXML[i],
+        common().parseParameters(targetInfosElem[i],
                                  "TargetInformationExtension",
                                  ti->targetInformationExtensions);
     }
 }
 
 void DerivedXMLParser100::parseGeographicCoverageFromXML(
-        const XMLElem geographicCoverageXML,
+        const XMLElem geographicCoverageElem,
         GeographicCoverage* geographicCoverage) const
 {
     // optional and unbounded
-    common().parseParameters(geographicCoverageXML, "GeoregionIdentifier",
+    common().parseParameters(geographicCoverageElem, "GeoregionIdentifier",
                              geographicCoverage->georegionIdentifiers);
 
-    common().parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
+    common().parseFootprint(getFirstAndOnly(geographicCoverageElem, "Footprint"),
                             "Vertex", geographicCoverage->footprint);
 
     // If there are subregions, recurse
-    std::vector<XMLElem> subRegionsXML;
-    geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
+    std::vector<XMLElem> subRegionsElem;
+    geographicCoverageElem->getElementsByTagName("SubRegion", subRegionsElem);
 
-    geographicCoverage->subRegion.resize(subRegionsXML.size());
-    for (size_t i = 0; i < subRegionsXML.size(); ++i)
+    geographicCoverage->subRegion.resize(subRegionsElem.size());
+    for (size_t i = 0; i < subRegionsElem.size(); ++i)
     {
         geographicCoverage->subRegion[i].reset(
                 new GeographicCoverage(RegionType::SUB_REGION));
         parseGeographicCoverageFromXML(
-                subRegionsXML[i], geographicCoverage->subRegion[i].get());
+                subRegionsElem[i], geographicCoverage->subRegion[i].get());
     }
 
     // Otherwise read the GeographicInfo
-    if (subRegionsXML.size() == 0)
+    if (subRegionsElem.size() == 0)
     {
-        XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
+        XMLElem geographicInfoElem = getFirstAndOnly(geographicCoverageElem,
                                                     "GeographicInfo");
 
         geographicCoverage->geographicInformation.reset(
@@ -511,7 +511,7 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
 
         // optional to unbounded
         std::vector<XMLElem> countryCodes;
-        geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
+        geographicInfoElem->getElementsByTagName("CountryCode", countryCodes);
         for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
                 != countryCodes.end(); ++it)
         {
@@ -520,16 +520,16 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
         }
 
         // optional
-        XMLElem securityInformationXML = getOptional(geographicInfoXML,
+        XMLElem securityInformationElem = getOptional(geographicInfoElem,
                                                      "SecurityInfo");
-        if (securityInformationXML)
+        if (securityInformationElem)
         {
-            parseString(securityInformationXML, geographicCoverage->
+            parseString(securityInformationElem, geographicCoverage->
                     geographicInformation->securityInformation);
         }
 
         // optional to unbounded
-        common().parseParameters(geographicInfoXML, "GeographicInfoExtension",
+        common().parseParameters(geographicInfoElem, "GeographicInfoExtension",
                 geographicCoverage->geographicInformation->
                         geographicInformationExtensions);
     }
@@ -539,22 +539,22 @@ XMLElem DerivedXMLParser100::convertMeasurementToXML(
     const Measurement* measurement,
     XMLElem parent) const
 {
-    XMLElem measurementXML = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
+    XMLElem measurementElem = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
 
     common().createPolyXYZ("ARPPoly",
         measurement->arpPoly,
-        measurementXML);
+        measurementElem);
 
-    return measurementXML;
+    return measurementElem;
 }
 
 void DerivedXMLParser100::parseMeasurementFromXML(
-    const XMLElem measurementXML,
+    const XMLElem measurementElem,
     Measurement* measurement) const
 {
-    DerivedXMLParser::parseMeasurementFromXML(measurementXML, measurement);
+    DerivedXMLParser::parseMeasurementFromXML(measurementElem, measurement);
 
-    common().parsePolyXYZ(getFirstAndOnly(measurementXML, "ARPPoly"),
+    common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"),
         measurement->arpPoly);
 }
 
@@ -562,7 +562,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     const ExploitationFeatures* exploitationFeatures,
     XMLElem parent) const
 {
-    XMLElem exploitationFeaturesXML =
+    XMLElem exploitationFeaturesElem =
         newElement("ExploitationFeatures", parent);
 
     if (exploitationFeatures->collections.size() < 1)
@@ -576,84 +576,84 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     for (size_t i = 0; i < exploitationFeatures->collections.size(); ++i)
     {
         Collection* collection = exploitationFeatures->collections[i].get();
-        XMLElem collectionXML = newElement("Collection",
-            exploitationFeaturesXML);
-        setAttribute(collectionXML, "identifier", collection->identifier);
+        XMLElem collectionElem = newElement("Collection",
+            exploitationFeaturesElem);
+        setAttribute(collectionElem, "identifier", collection->identifier);
 
         // create Information
-        XMLElem informationXML = newElement("Information", collectionXML);
+        XMLElem informationElem = newElement("Information", collectionElem);
 
         createString("SensorName",
             collection->information.sensorName,
-            informationXML);
-        XMLElem radarModeXML = newElement("RadarMode", informationXML);
+            informationElem);
+        XMLElem radarModeElem = newElement("RadarMode", informationElem);
         createString("ModeType",
             common().getSICommonURI(),
             six::toString(collection->information.radarMode),
-            radarModeXML);
+            radarModeElem);
         // optional
         if (collection->information.radarModeID
             != Init::undefined<std::string>())
             createString("ModeID",
                 common().getSICommonURI(),
                 collection->information.radarModeID,
-                radarModeXML);
+                radarModeElem);
         createDateTime("CollectionDateTime",
             collection->information.collectionDateTime,
-            informationXML);
+            informationElem);
         // optional
         if (collection->information.localDateTime != Init::undefined<
             six::DateTime>())
         {
             createDateTime("LocalDateTime",
                 collection->information.localDateTime,
-                informationXML);
+                informationElem);
         }
         createDouble("CollectionDuration",
             collection->information.collectionDuration,
-            informationXML);
+            informationElem);
         // optional
         if (!Init::isUndefined(collection->information.resolution))
         {
             common().createRangeAzimuth("Resolution",
                 collection->information.resolution,
-                informationXML);
+                informationElem);
         }
         // optional
         if (collection->information.inputROI.get())
         {
-            XMLElem roiXML = newElement("InputROI", informationXML);
+            XMLElem roiElem = newElement("InputROI", informationElem);
             common().createRowCol("Size",
                 collection->information.inputROI->size,
-                roiXML);
+                roiElem);
             common().createRowCol("UpperLeft",
                 collection->information.inputROI->upperLeft,
-                roiXML);
+                roiElem);
         }
         // optional to unbounded
         for (size_t n = 0, nElems =
             collection->information.polarization.size(); n < nElems; ++n)
         {
             TxRcvPolarization *p = collection->information.polarization[n].get();
-            XMLElem polXML = newElement("Polarization", informationXML);
+            XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
                 six::toString(p->txPolarization),
-                polXML);
+                polElem);
             createString("RcvPolarization",
                 six::toString(p->rcvPolarization),
-                polXML);
+                polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
             {
                 createDouble("RcvPolarizationOffset",
                     p->rcvPolarizationOffset,
-                    polXML);
+                    polElem);
             }
             // optional
             if (!Init::isUndefined(p->processed))
             {
-                createString("Processed", six::toString(p->processed), polXML);
+                createString("Processed", six::toString(p->processed), polElem);
             }
         }
 
@@ -661,39 +661,39 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         Geometry* geom = collection->geometry.get();
         if (geom != NULL)
         {
-            XMLElem geometryXML = newElement("Geometry", collectionXML);
+            XMLElem geometryElem = newElement("Geometry", collectionElem);
 
             // optional
             if (geom->azimuth != Init::undefined<double>())
-                createDouble("Azimuth", geom->azimuth, geometryXML);
+                createDouble("Azimuth", geom->azimuth, geometryElem);
             // optional
             if (geom->slope != Init::undefined<double>())
-                createDouble("Slope", geom->slope, geometryXML);
+                createDouble("Slope", geom->slope, geometryElem);
             // optional
             if (geom->squint != Init::undefined<double>())
-                createDouble("Squint", geom->squint, geometryXML);
+                createDouble("Squint", geom->squint, geometryElem);
             // optional
             if (geom->graze != Init::undefined<double>())
-                createDouble("Graze", geom->graze, geometryXML);
+                createDouble("Graze", geom->graze, geometryElem);
             // optional
             if (geom->tilt != Init::undefined<double>())
-                createDouble("Tilt", geom->tilt, geometryXML);
+                createDouble("Tilt", geom->tilt, geometryElem);
             // optional to unbounded
             common().addParameters("Extension", geom->extensions,
-                geometryXML);
+                geometryElem);
         }
 
         // create Phenomenology -- optional
         Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != NULL)
         {
-            XMLElem phenomenologyXML = newElement("Phenomenology",
-                collectionXML);
+            XMLElem phenomenologyElem = newElement("Phenomenology",
+                collectionElem);
 
             // optional
             if (phenom->shadow != Init::undefined<AngleMagnitude>())
             {
-                XMLElem shadow = newElement("Shadow", phenomenologyXML);
+                XMLElem shadow = newElement("Shadow", phenomenologyElem);
                 createDouble("Angle", common().getSICommonURI(),
                     phenom->shadow.angle, shadow);
                 createDouble("Magnitude", common().getSICommonURI(),
@@ -702,7 +702,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             // optional
             if (phenom->layover != Init::undefined<AngleMagnitude>())
             {
-                XMLElem layover = newElement("Layover", phenomenologyXML);
+                XMLElem layover = newElement("Layover", phenomenologyElem);
                 createDouble("Angle", common().getSICommonURI(),
                     phenom->layover.angle, layover);
                 createDouble("Magnitude", common().getSICommonURI(),
@@ -710,33 +710,33 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             }
             // optional
             if (phenom->multiPath != Init::undefined<double>())
-                createDouble("MultiPath", phenom->multiPath, phenomenologyXML);
+                createDouble("MultiPath", phenom->multiPath, phenomenologyElem);
             // optional
             if (phenom->groundTrack != Init::undefined<double>())
                 createDouble("GroundTrack", phenom->groundTrack,
-                    phenomenologyXML);
+                    phenomenologyElem);
             // optional to unbounded
             common().addParameters("Extension", phenom->extensions,
-                phenomenologyXML);
+                phenomenologyElem);
         }
     }
 
     // create Product
-    XMLElem productXML = newElement("Product", exploitationFeaturesXML);
+    XMLElem productElem = newElement("Product", exploitationFeaturesElem);
 
     common().createRowCol("Resolution",
         exploitationFeatures->product.resolution,
-        productXML);
+        productElem);
     // optional
     if (exploitationFeatures->product.north != Init::undefined<double>())
-        createDouble("North", exploitationFeatures->product.north, productXML);
+        createDouble("North", exploitationFeatures->product.north, productElem);
     // optional to unbounded
 
     common().addParameters("Extension",
         exploitationFeatures->product.extensions,
-        productXML);
+        productElem);
 
-    return exploitationFeaturesXML;
+    return exploitationFeaturesElem;
 }
 }
 }

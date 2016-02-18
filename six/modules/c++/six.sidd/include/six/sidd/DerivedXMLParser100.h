@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_100_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_100_H__
+#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_100_H__
+#define __SIX_SIDD_DERIVED_Elem_PARSER_100_H__
 
 #include <six/sidd/DerivedXMLParser.h>
 
@@ -41,7 +41,7 @@ public:
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationXML,
+            const XMLElem classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -53,7 +53,7 @@ protected:
             XMLElem parent = NULL) const;
 
     virtual void parseMeasurementFromXML(
-            const XMLElem measruementXML,
+            const XMLElem measruementElem,
             Measurement* measurement) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
