@@ -528,7 +528,6 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="RenderingIntent" type="RenderingIntentType"></xs:element>
-            <!-- TODO: strings for SourceProfile, DisplayProfile, and ICCProfile may need to be upgraded to Enums -->
             <xs:element name="SourceProfile" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Name of sensor profile in ICC Profile database.</xs:documentation>
@@ -1569,7 +1568,6 @@
             </xs:element>
             <xs:element name="AbsoluteAccuracy" type="AccuracyType"/>
             <xs:element name="PointToPointAccuracy" type="AccuracyType"/>
-            <!--<xs:element name="BoundingRectangleNumber" type="xs:int" minOccurs="0"/>-->
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="AccuracyType">
