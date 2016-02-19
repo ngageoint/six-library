@@ -53,7 +53,7 @@ LatLonCorners DerivedData::getImageCorners() const
         // SIDD 1.0
         if (geographicAndTarget->geographicCoverage.get())
         {
-            geographicAndTarget->geographicCoverage->footprint;
+            return geographicAndTarget->geographicCoverage->footprint;
         }
     }
 
