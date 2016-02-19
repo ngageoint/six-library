@@ -2,9 +2,9 @@
 
 #
 # =========================================================================
-# This file is part of six.sicd-python 
+# This file is part of six.sicd-python
 # =========================================================================
-# 
+#
 # (C) Copyright 2004 - 2015, MDA Information Systems LLC
 #
 # six.sicd-python is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU Lesser General Public 
-# License along with this program; If not, 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
 # see <http://www.gnu.org/licenses/>.
 #
 
@@ -68,7 +68,7 @@ imageCreation.profile = 'Some profile'
 cmplx.imageCreation = imageCreation
 
 ### Image Data ###
-imageData = makeScopedCloneableImageData()
+imageData = makeScopedCopyableImageData()
 imageData.pixelType = PixelType('RE32F_IM32F')
 # TODO: Fill in amplitudeTable
 imageData.numRows = 123
@@ -86,7 +86,7 @@ imageData.validData.push_back(RowColInt(50, 60))
 cmplx.imageData = imageData
 
 ### GeoData ###
-geoData = makeScopedCloneableGeoData()
+geoData = makeScopedCopyableGeoData()
 geoData.earthModel = EarthModelType('WGS84')
 geoData.scp.ecf[0] = 100
 geoData.scp.ecf[1] = 200
@@ -100,7 +100,7 @@ geoData.imageCorners.lowerLeft = LatLon(44, 55)
 for i in range(4):
     geoData.validData.push_back(LatLon(i * 11, i * 11 + 13))
 
-geoInfo = makeScopedCloneableGeoInfo()
+geoInfo = makeScopedCopyableGeoInfo()
 geoInfo.name = 'My name'
 param.setName('Some GeoData param')
 param.setValue('Some GeoData value')
@@ -567,7 +567,7 @@ cmplx.errorStatistics = errorStats
 ### Match Information ###
 matchInfo = makeScopedCopyableMatchInformation()
 
-matchType = makeScopedCopyableMatchType()
+matchType = MatchType()
 matchType.collectorName = 'Collector'
 matchType.illuminatorName = 'Illuminator'
 matchType.matchType.push_back('Some match type')
@@ -678,7 +678,7 @@ for i in range(4):
 ### Now format it as XML and write it out to a file ###
 vs = VectorString()
 vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-  
+
 xml_ctrl = ComplexXMLControl()
 origPathname = 'test_create_sicd.xml'
 fos = FileOutputStream(origPathname)
@@ -700,7 +700,7 @@ xmlparser.preserveCharacterData(True)
 xmlparser.parse(fis)
 in_doc = xmlparser.getDocument()
 
-data = xml_ctrl.fromXML(in_doc, vs) 
+data = xml_ctrl.fromXML(in_doc, vs)
 cmplxReadBackIn = asComplexData(data)
 
 # And then write it out one more time #

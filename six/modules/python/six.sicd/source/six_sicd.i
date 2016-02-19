@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of six.sicd-python 
+ * This file is part of six.sicd-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * six.sicd-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -39,14 +39,14 @@ using namespace six;
 six::sicd::ComplexData * asComplexData(six::Data* data);
 
 /* Need this because we can't really do it on the python side of things */
-six::sicd::ComplexData * asComplexData(six::Data* data) 
+six::sicd::ComplexData * asComplexData(six::Data* data)
 {
   six::sicd::ComplexData * complexData = dynamic_cast<six::sicd::ComplexData*>(data);
   if( !complexData )
   {
     throw except::BadCastException();
   }
-  else 
+  else
   {
     return complexData;
   }
@@ -66,7 +66,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
 %import "mem.i"
 
 /* wrap around auto_ptr */
-%inline 
+%inline
 %{
 six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const std::vector<std::string>& schemaPaths ) {
   std::auto_ptr<six::sicd::ComplexData> retv = Utilities::getComplexData(sicdPathname, schemaPaths);
@@ -83,6 +83,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
+%include "six/GeoInfo.h"
 %include "six/sicd/ComplexClassification.h"
 %include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
@@ -122,7 +123,7 @@ SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
 SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-SCOPED_COPYABLE(six, GeoInfo) 
+SCOPED_COPYABLE(six, GeoInfo)
 %template(VectorScopedCopyableGeoInfo) std::vector<mem::ScopedCopyablePtr<six::GeoInfo> >;
 %template(VectorLatLon) std::vector<scene::LatLon>;
 
@@ -188,12 +189,12 @@ from six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)
-    
+
     #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
     widebandBuffer, ro = widebandData.__array_interface__["data"]
-    
+
     getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
-    
+
     return widebandData, complexData
 %}

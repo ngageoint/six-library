@@ -213,6 +213,42 @@ def getComplexData(sicdPathname, schemaPaths):
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
+class GeoInfo(_object):
+    """Proxy of C++ six::GeoInfo class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::GeoInfo self) -> GeoInfo"""
+        this = _six_sicd.new_GeoInfo()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_GeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_sicd.GeoInfo_name_set
+    __swig_getmethods__["name"] = _six_sicd.GeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_sicd.GeoInfo_name_get, _six_sicd.GeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_sicd.GeoInfo_geoInfos_get, _six_sicd.GeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_sicd.GeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_sicd.GeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_sicd.GeoInfo_desc_get, _six_sicd.GeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_sicd.GeoInfo_geometryLatLon_get, _six_sicd.GeoInfo_geometryLatLon_set)
+GeoInfo_swigregister = _six_sicd.GeoInfo_swigregister
+GeoInfo_swigregister(GeoInfo)
+
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class"""
     __swig_setmethods__ = {}
@@ -3904,7 +3940,7 @@ class ScopedCopyableGeoInfo(_object):
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, six::GeoInfo * ptr=None) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, GeoInfo ptr=None) -> ScopedCopyableGeoInfo
         __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self) -> ScopedCopyableGeoInfo
         __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo
         """
@@ -3915,29 +3951,45 @@ class ScopedCopyableGeoInfo(_object):
             self.this = this
 
     def get(self):
-        """get(ScopedCopyableGeoInfo self) -> six::GeoInfo *"""
+        """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCopyableGeoInfo self) -> six::GeoInfo &"""
+        """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCopyableGeoInfo self) -> six::GeoInfo *"""
+        """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo___deref__(self)
 
 
     def reset(self, *args):
         """
-        reset(ScopedCopyableGeoInfo self, six::GeoInfo * ptr=None)
+        reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
         reset(ScopedCopyableGeoInfo self)
         """
         return _six_sicd.ScopedCopyableGeoInfo_reset(self, *args)
 
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoInfo
     __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_sicd.ScopedCopyableGeoInfo_name_set
+    __swig_getmethods__["name"] = _six_sicd.ScopedCopyableGeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_sicd.ScopedCopyableGeoInfo_name_get, _six_sicd.ScopedCopyableGeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geoInfos_get, _six_sicd.ScopedCopyableGeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_sicd.ScopedCopyableGeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_sicd.ScopedCopyableGeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_sicd.ScopedCopyableGeoInfo_desc_get, _six_sicd.ScopedCopyableGeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set)
 ScopedCopyableGeoInfo_swigregister = _six_sicd.ScopedCopyableGeoInfo_swigregister
 ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
 

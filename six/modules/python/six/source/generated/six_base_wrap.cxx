@@ -3627,7 +3627,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
                       ::io::InputStream& xmlStream,
                       DataType dataType,
                       const std::vector<std::string>& schemaPaths,
-                      logging::Logger& log) 
+                      logging::Logger& log)
 {
   std::auto_ptr<Data> retv = six::parseData(xmlReg, xmlStream, dataType, schemaPaths, log);
   return retv.release();
