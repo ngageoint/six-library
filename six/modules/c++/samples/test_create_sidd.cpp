@@ -339,7 +339,7 @@ int main(int argc, char** argv)
                     six::sidd::Annotation>(new six::sidd::Annotation));
             six::sidd::Annotation *ann = (*data->annotations.rbegin()).get();
             ann->identifier = "1st Annotation";
-            ann->objects.push_back(mem::ScopedCopyablePtr<
+            ann->objects.push_back(mem::ScopedCloneablePtr<
                     six::sidd::SFAGeometry>(new six::sidd::SFAPoint));
 
             sources.push_back(sioReader);
