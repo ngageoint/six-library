@@ -786,21 +786,31 @@ def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
 
     return cmplx
 
-def writeXML(name, schemaPaths, cmplxData):
+def writeXML(name, cmplxData):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     xml_ctrl = ComplexXMLControl()
     pathName = '{0}.xml'.format(name)
     fos = FileOutputStream(pathName)
-    out_doc = xml_ctrl.toXML(cmplxData, schemaPaths)
-    root = out_doc.getRootElement()
-    root.prettyPrint(fos)
-    fos.close()
+    try:
+        out_doc = xml_ctrl.toXML(cmplxData, schemaPaths)
+        root = out_doc.getRootElement()
+        root.prettyPrint(fos)
+    except RuntimeError:
+        pass
+    finally:
+        fos.close()
 
-def writeNITF(pathName, schemaPaths, cmplxData):
+def writeNITF(pathName, cmplxData):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     imageBuffer = np.array([[1. + 2.j, 7.j], [8., 0.]])
     writeAsNITF('{0}.nitf'.format(pathName), schemaPaths,
             cmplxData, imageBuffer)
 
-def readXML(pathNameBase, schemaPaths):
+def readXML(pathNameBase):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     fis = FileInputStream('{0}.xml'.format(pathNameBase))
     xmlparser = MinidomParser()
     xmlparser.preserveCharacterData(True)
@@ -814,11 +824,10 @@ def readXML(pathNameBase, schemaPaths):
 
 
 def doRoundTrip(cmplx, includeNITF, outputFilename):
-    vs = VectorString()
-    vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-    writeXML(outputFilename, vs, cmplx)
+
+    writeXML(outputFilename, cmplx)
     if includeNITF:
-        writeNITF(outputFilename, vs, cmplx)
+        writeNITF(outputFilename, cmplx)
         
     # If we made it to here, all the Python bindings must be present and
     # what we wrote out must have passed schema validation
@@ -826,14 +835,14 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
     # get written out though
 
     ### Now read it back in again ###
-    cmplxReadBackIn = readXML(outputFilename, vs)
+    cmplxReadBackIn = readXML(outputFilename)
     if includeNITF:
-        cmplxFromNITF = readFromNITF(outputFilename, vs)
+        cmplxFromNITF = readFromNITF(outputFilename)
     # And then write it out one more time #
     newPathnameBase = '{0}_rt'.format(outputFilename)
-    writeXML(newPathnameBase, vs, cmplxReadBackIn)
+    writeXML(newPathnameBase, cmplxReadBackIn)
     if includeNITF:
-        writeNITF(newPathnameBase, vs, cmplxReadBackIn)
+        writeNITF(newPathnameBase, cmplxReadBackIn)
 
     successCode = 0
     # These should match #
