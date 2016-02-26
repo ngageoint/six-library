@@ -274,11 +274,13 @@ void CPHDWriter::writeCPHDData<std::complex<float> >(
         const std::complex<float>* data,
         size_t numElements);
 
-void CPHDWriter::write(const std::string& pathname)
+void CPHDWriter::write(const std::string& pathname,
+                       const std::string& classification,
+                       const std::string& releaseInfo)
 {
     mFile.create(pathname);
 
-    writeMetadata(mVBMSize, mCPHDSize);
+    writeMetadata(mVBMSize, mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mVBMData.size(); ++ii)
     {

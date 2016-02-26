@@ -84,15 +84,15 @@ public:
      *         data in chunks. Otherwise you should use addImage and write.
      *         This will internally set the number of bytes per VBP.
      *
-     *  \pathname The desired pathname of the file.
-     *  \vbm The vector based metadata to write.
-     *  \classification The classification of the file
-     *  \releaseInfo The release information for the file
+     *  \param pathname The desired pathname of the file.
+     *  \param vbm The vector based metadata to write.
+     *  \param classification The classification of the file
+     *  \param releaseInfo The release information for the file
      */
     void writeMetadata(const std::string& pathname,
                        const VBM& vbm,
-                       const std::string& classification="",
-                       const std::string& releaseInfo="");
+                       const std::string& classification = "",
+                       const std::string& releaseInfo = "");
 
     /*
      *  \func writeCPHDData
@@ -120,8 +120,12 @@ public:
      *         if you are writing using addImage.
      *
      *  \param pathname The desired pathname of the file.
+     *  \param classification The classification of the file
+     *  \param releaseInfo The release information for the file
      */
-    void write(const std::string& pathname);
+    void write(const std::string& pathname,
+               const std::string& classification = "",
+               const std::string& releaseInfo = "");
 
     void close()
     {
@@ -134,8 +138,8 @@ public:
 private:
     void writeMetadata(size_t vbmSize,
                        size_t cphdSize,
-                       const std::string& classification="",
-                       const std::string& releaseInfo="");
+                       const std::string& classification = "",
+                       const std::string& releaseInfo = "");
 
     void writeVBMData(const sys::ubyte* vbm,
                       size_t index);
