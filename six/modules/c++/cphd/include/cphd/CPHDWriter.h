@@ -86,9 +86,13 @@ public:
      *
      *  \pathname The desired pathname of the file.
      *  \vbm The vector based metadata to write.
+     *  \classification The classification of the file
+     *  \releaseInfo The release information for the file
      */
     void writeMetadata(const std::string& pathname,
-                       const VBM& vbm);
+                       const VBM& vbm,
+                       const std::string& classification="",
+                       const std::string& releaseInfo="");
 
     /*
      *  \func writeCPHDData
@@ -129,7 +133,9 @@ public:
 
 private:
     void writeMetadata(size_t vbmSize,
-                       size_t cphdSize);
+                       size_t cphdSize,
+                       const std::string& classification="",
+                       const std::string& releaseInfo="");
 
     void writeVBMData(const sys::ubyte* vbm,
                       size_t index);
