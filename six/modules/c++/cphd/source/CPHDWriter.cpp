@@ -173,11 +173,11 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
 
     FileHeader header;
     header.set(xmlMetadata.size(), vbmSize, cphdSize);
-    if (classification != "")
+    if (!classification.empty())
     {
         header.setClassification(classification);
     }
-    if (releaseInfo != "")
+    if (!releaseInfo.empty())
     {
         header.setReleaseInfo(releaseInfo);
     }

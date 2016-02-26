@@ -86,8 +86,10 @@ public:
      *
      *  \param pathname The desired pathname of the file.
      *  \param vbm The vector based metadata to write.
-     *  \param classification The classification of the file
-     *  \param releaseInfo The release information for the file
+     *  \param classification The classification of the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     *  \param releaseInfo The release information for the file. Optional
+     *         By default, CPHD will not be populated with this value.
      */
     void writeMetadata(const std::string& pathname,
                        const VBM& vbm,
@@ -120,8 +122,10 @@ public:
      *         if you are writing using addImage.
      *
      *  \param pathname The desired pathname of the file.
-     *  \param classification The classification of the file
-     *  \param releaseInfo The release information for the file
+     *  \param classification The classification of the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     *  \param releaseInfo The release information for the file. Optional
+     *         By default, CPHD will not be populated with this value.
      */
     void write(const std::string& pathname,
                const std::string& classification = "",
