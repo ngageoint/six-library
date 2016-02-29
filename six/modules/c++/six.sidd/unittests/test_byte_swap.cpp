@@ -97,7 +97,7 @@ void write(six::UByte* data, bool useStream, bool byteSwap)
     {
         io::ByteStream stream;
         stream.write((sys::byte*)data, DATA_SIZE_IN_BYTES);
-        stream.seek(0, io::Seekable::Whence::START);
+        stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
         writer.save(streams, OUTPUT_NAME);
