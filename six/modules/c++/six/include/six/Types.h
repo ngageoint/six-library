@@ -410,6 +410,25 @@ typedef Corners<LatLon> LatLonCorners;
 typedef Corners<LatLonAlt> LatLonAltCorners;
 
 /*!
+ *   \enum ImageMode
+ *
+ *   Enumeration used to represent frame vs. scan mode.  Note that this is a
+ *   simpler version of RadarModeType.
+ */
+enum ImageMode
+{
+    FRAME_MODE = 0,
+    SCAN_MODE
+};
+
+/*!
+ * \param radarMode The radar mode type
+ *
+ * \return Whether this corresponds to frame or scan mode
+ */
+ImageMode getImageMode(RadarModeType radarMode);
+
+/*!
  *  \class MissingRequiredException
  *  \brief Throwable related to a required element being null,
  *         undefined, etc.

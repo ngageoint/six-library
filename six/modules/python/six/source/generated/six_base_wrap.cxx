@@ -42496,6 +42496,88 @@ SWIGINTERN PyObject *AmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self),
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *FRAME_MODE_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "FRAME_MODE",SWIG_From_int(static_cast< int >(six::FRAME_MODE)));
+  return SWIG_Py_Void();
+}
+
+
+SWIGINTERN PyObject *SCAN_MODE_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "SCAN_MODE",SWIG_From_int(static_cast< int >(six::SCAN_MODE)));
+  return SWIG_Py_Void();
+}
+
+
+SWIGINTERN PyObject *_wrap_getImageMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::RadarModeType arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ImageMode result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:getImageMode",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_six__RadarModeType,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getImageMode" "', argument " "1"" of type '" "six::RadarModeType""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "getImageMode" "', argument " "1"" of type '" "six::RadarModeType""'");
+    } else {
+      six::RadarModeType * temp = reinterpret_cast< six::RadarModeType * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  {
+    try
+    {
+      result = (six::ImageMode)six::getImageMode(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_MissingRequiredException__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::MissingRequiredException *result = 0 ;
@@ -73649,6 +73731,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_AmplitudeTable", _wrap_new_AmplitudeTable, METH_VARARGS, (char *)"new_AmplitudeTable() -> AmplitudeTable"},
 	 { (char *)"delete_AmplitudeTable", _wrap_delete_AmplitudeTable, METH_VARARGS, (char *)"delete_AmplitudeTable(AmplitudeTable self)"},
 	 { (char *)"AmplitudeTable_swigregister", AmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"FRAME_MODE_swigconstant", FRAME_MODE_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"SCAN_MODE_swigconstant", SCAN_MODE_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"getImageMode", _wrap_getImageMode, METH_VARARGS, (char *)"getImageMode(RadarModeType radarMode) -> six::ImageMode"},
 	 { (char *)"new_MissingRequiredException", _wrap_new_MissingRequiredException, METH_VARARGS, (char *)"\n"
 		"MissingRequiredException()\n"
 		"MissingRequiredException(Context c)\n"
