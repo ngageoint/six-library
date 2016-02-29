@@ -2776,6 +2776,16 @@ class AmplitudeTable(_object):
 AmplitudeTable_swigregister = _six_base.AmplitudeTable_swigregister
 AmplitudeTable_swigregister(AmplitudeTable)
 
+
+_six_base.FRAME_MODE_swigconstant(_six_base)
+FRAME_MODE = _six_base.FRAME_MODE
+
+_six_base.SCAN_MODE_swigconstant(_six_base)
+SCAN_MODE = _six_base.SCAN_MODE
+
+def getImageMode(radarMode):
+    """getImageMode(RadarModeType radarMode) -> six::ImageMode"""
+    return _six_base.getImageMode(radarMode)
 class MissingRequiredException(coda.coda_except.Exception):
     """Proxy of C++ six::MissingRequiredException class"""
     __swig_setmethods__ = {}
