@@ -32,6 +32,7 @@ namespace
 static const std::string OUTPUT_NAME("ByteSwapTest");
 static const size_t DATA_LENGTH = 100;
 static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(std::complex<float>) / sizeof(six::UByte);
+static const size_t BYTES_PER_PIXEL = 2; //I'm not sure why
 
 void generateData(std::complex<float>* data)
 {
@@ -44,6 +45,8 @@ void generateData(std::complex<float>* data)
 six::sidd::DerivedData* createData()
 {
     six::sidd::DerivedData* derivedData = new six::sidd::DerivedData();
+    derivedData->productCreation.reset(new six::sidd::ProductCreation());
+    derivedData->productCreation->classification.classification = "C";
     derivedData->measurement.reset(new six::sidd::Measurement(six::ProjectionType::PLANE));
     six::sidd::PlaneProjection* planeProjection =
         (six::sidd::PlaneProjection*) derivedData->measurement->projection.get();
@@ -54,9 +57,9 @@ six::sidd::DerivedData* createData()
     derivedData->measurement->arpPoly = six::PolyXYZ(0);
     derivedData->measurement->arpPoly[0] = six::Vector3(0.0);
     derivedData->display.reset(new six::sidd::Display());
-    derivedData->display->pixelType = six::PixelType::RE32F_IM32F;
+    derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
-    derivedData->setNumCols(10);
+    derivedData->setNumCols(40);
     derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
     //derivedData->geographicAndTarget->imageCorners.reset(new six::LatLonCorners());
     //derivedData->geographicAndTarget->geographicCoverage.reset(new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
@@ -78,7 +81,6 @@ six::sidd::DerivedData* createData()
     parent->geometry.reset(new six::sidd::Geometry());
     //parent->geometry->dopplerConeAngle = 45.8;
 
-    derivedData->productCreation.reset(new six::sidd::ProductCreation());
     return derivedData;
 }
 
@@ -94,14 +96,14 @@ void write(six::UByte* data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.read((sys::byte*)data, 800);
+        stream.write((sys::byte*)data, DATA_SIZE_IN_BYTES);
+        stream.seek(0, io::Seekable::Whence::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
         writer.save(streams, OUTPUT_NAME);
     }
     else
     {
-        std::cerr << "Using buffer" << std::endl;
         writer.save(data, OUTPUT_NAME);
     }
 }
@@ -131,6 +133,33 @@ void read(const std::string& filename, six::UByte* data)
         data[ii] = result[ii];
     }
 }
+
+bool run(bool useStream = false, bool byteswap = false)
+{
+    std::complex<float> complexData[DATA_LENGTH];
+    generateData(complexData);
+
+    six::UByte* sourceData = reinterpret_cast<six::UByte*>(&complexData[0]);
+    six::UByte testData[DATA_SIZE_IN_BYTES];
+    memcpy(testData, sourceData, DATA_SIZE_IN_BYTES);
+
+    if (!sys::isBigEndianSystem() && !byteswap || sys::isBigEndianSystem() && byteswap)
+    {
+        sys::byteSwap(sourceData, BYTES_PER_PIXEL, DATA_SIZE_IN_BYTES / BYTES_PER_PIXEL);
+    }
+
+    write(testData, useStream, byteswap);
+    read(OUTPUT_NAME, testData);
+
+    for (size_t ii = 0; ii < DATA_SIZE_IN_BYTES; ++ii)
+    {
+        if (sourceData[ii] != testData[ii])
+        {
+            return false;
+        }
+    }
+    return true;
+}
 }
 
 int main(int argc, char** argv)
@@ -140,32 +169,26 @@ int main(int argc, char** argv)
         new six::XMLControlCreatorT<
         six::sidd::DerivedXMLControl>());
 
-    std::complex<float> sourceComplex[100];
-    generateData(sourceComplex);
-    six::UByte sourceData[DATA_SIZE_IN_BYTES];
-    for (size_t ii = 0; ii < DATA_SIZE_IN_BYTES; ++ii)
+    try
     {
-        sourceData[ii] = *(((six::UByte*)&sourceComplex[0]) + ii);
-    }
-    six::UByte testData[DATA_SIZE_IN_BYTES];
-    std::copy(std::begin(sourceData), std::end(sourceData), std::begin(testData));
+        bool success = run(false, false) && run(true, false) &&
+            run(false, true) && run(false, false);
 
-    write(testData, false, false);
-    for (size_t ii = 0; ii <DATA_SIZE_IN_BYTES; ++ii)
+        if (success) {
+            return 0;
+        }
+    }
+    catch (const except::Exception& ex)
     {
-        testData[ii] = (six::UByte)0;
+        std::cerr << ex.toString() << std::endl;
     }
-    std::cerr << "Written" << std::endl;
-    read(OUTPUT_NAME, testData);
-
-    for (size_t ii = 0; ii < DATA_SIZE_IN_BYTES; ++ii)
+    catch (const std::exception& e)
     {
-        //if (sourceData[ii] == testData[ii])
-        //{
-            std::cerr << (int)sourceData[ii] << " " << (int)testData[ii] << std::endl;
-            //std::cerr << "Not equal" << std::endl;
-        //}
+        std::cerr << e.what() << std::endl;
     }
-
-    return 0;
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
+    }
+    return 1;
 }
