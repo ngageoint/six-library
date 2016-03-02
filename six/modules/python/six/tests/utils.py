@@ -48,7 +48,7 @@ def setPaths():
     sixSchemaPath = os.path.join(findSixHome(), 'install', 'conf', 'schema',
                                  'six')
 
-    pythonPath = os.path.join(findSixHome(), 'install', 'lib', 'python-2.7',
+    pythonPath = os.path.join(findSixHome(), 'install', 'lib', 'python2.7',
                                       'site-packages')
     if platform.system() == 'Windows':
         pythonPath = os.path.join(findSixHome(), 'install', 'lib',
