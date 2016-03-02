@@ -33,7 +33,8 @@ def findSixHome():
     while os.path.basename(currentPath) != 'six-library':
         parent = os.path.abspath(os.path.join(currentPath, os.pardir))
         if parent == currentPath:
-            raise IOError('Please run this program from within six-library dir')
+            raise IOError(os.getcwd())
+            #raise IOError('Please run this program from within six-library dir')
         currentPath = parent
 
     return currentPath
