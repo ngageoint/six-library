@@ -50,6 +50,7 @@ def run():
     binDir = os.path.join(utils.findSixHome(), 'install', 'bin')
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
+    print os.listdir(binDir)
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
