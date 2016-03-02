@@ -61,7 +61,6 @@ def setPaths():
     # and with os.environ so it's set for child processes
     sys.path.append(pythonPath)
     os.environ['PYTHONPATH'] = pythonPath
-    sys.exit(os.environ['PYTHONPATH'])
 
 def executableName(pathname):
 
