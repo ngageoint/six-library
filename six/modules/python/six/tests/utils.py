@@ -23,6 +23,10 @@
 #
 
 import os
+import platform
+import sys
+
+from subprocess import call
 
 def findSixHome():
     currentPath = os.getcwd()
@@ -31,22 +35,31 @@ def findSixHome():
         if parent == currentPath:
             raise IOError('Please run this program from within six-library dir')
         currentPath = parent
-        
+
     return currentPath
 
 def setPaths():
-	nitfPluginPath = os.path.join(findSixHome(), 'install', 'share', 'nitf', 'plugin')
-	sixSchemaPath = os.path.join(findSixHome(), 'install', 'conf', 'schema', 'six')
-	if platform.system() == 'Windows':
-	    call(['set', 'NITF_PLUGIN_PATH={0}'.format(nitfPluginPath)])
-	    call(['set', 'SIX_SCHEMA_PATH={0}'.format(sixSchemaPath)])
-	elif platform.system() == 'Linux':
-	    call(['setenv', 'NITF_PLUGIN_PATH' nitfPluginPath])
-	    call(['setenv', 'SIX_SCHEMA_PATH', sixSchemaPath])
-		
+    nitfPluginPath = os.path.join(findSixHome(), 'install', 'share', 'nitf',
+                                  'plugins')
+    sixSchemaPath = os.path.join(findSixHome(), 'install', 'conf', 'schema',
+                                 'six')
+
+    pythonPath = os.path.join(findSixHome(), 'install', 'lib', 'python-2.7',
+                                      'site-packages')
+    if platform.system() == 'Windows':
+        pythonPath = os.path.join(findSixHome(), 'install', 'lib',
+                                  'site-packages')
+        
+    os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
+    os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
+
+    # We set the pythonpath with sys.path so it's set for the current script
+    # and with os.environ so it's set for child processes
+    sys.path.append(pythonPath)
+    os.environ['PYTHONPATH'] = pythonPath
+
 def executableName(pathname):
-    import platform
-    
+
     if platform.system() == 'Windows':
         return pathname + '.exe'
     if pathname.startswith('/'):
