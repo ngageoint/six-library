@@ -29,6 +29,8 @@ import sys
 from subprocess import call
 
 def findSixHome():
+    return os.getcwd()
+    '''
     currentPath = os.getcwd()
     while os.path.basename(currentPath) != 'six-library':
         parent = os.path.abspath(os.path.join(currentPath, os.pardir))
@@ -38,6 +40,7 @@ def findSixHome():
         currentPath = parent
 
     return currentPath
+    '''
 
 def setPaths():
     nitfPluginPath = os.path.join(findSixHome(), 'install', 'share', 'nitf',
