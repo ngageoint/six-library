@@ -39,10 +39,10 @@ def setPaths():
 	sixSchemaPath = os.path.join(findSixHome(), 'install', 'conf', 'schema', 'six')
 	if platform.system() == 'Windows':
 	    call(['set', 'NITF_PLUGIN_PATH={0}'.format(nitfPluginPath)])
-		call(['set', 'SIX_SCHEMA_PATH={0}'.format(sixSchemaPath)])
+	    call(['set', 'SIX_SCHEMA_PATH={0}'.format(sixSchemaPath)])
 	elif platform.system() == 'Linux':
-		call(['setenv', 'NITF_PLUGIN_PATH' nitfPluginPath])
-		call(['setenv', 'SIX_SCHEMA_PATH', sixSchemaPath])
+	    call(['setenv', 'NITF_PLUGIN_PATH' nitfPluginPath])
+	    call(['setenv', 'SIX_SCHEMA_PATH', sixSchemaPath])
 		
 def executableName(pathname):
     import platform
