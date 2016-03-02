@@ -44,7 +44,7 @@ def moveToOutputDir(source, outdir):
 def run():
     outdir = os.path.join(utils.findSixHome(), 'regression_files', 'six.sidd')
     if not os.path.isdir(outdir):
-        os.mkdirs(outdir)
+        os.makedirs(outdir)
 
     # Make siddLegend
     binDir = os.path.join(utils.findSixHome(), 'install', 'bin')
