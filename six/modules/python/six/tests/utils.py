@@ -29,8 +29,8 @@ import sys
 from subprocess import call
 
 def findSixHome():
-    if 'JENKINS_HOME' in os.environ:
-        return os.getcwd()
+    if 'WORKSPACE' in os.environ:
+        return os.environ['WORKSPACE']
 
     currentPath = os.getcwd()
     while os.path.basename(currentPath) != 'six-library':
@@ -39,20 +39,32 @@ def findSixHome():
             raise IOError(os.getcwd())
             #raise IOError('Please run this program from within six-library dir')
         currentPath = parent
-
+        
     return currentPath
+
+def installPath():
+    home = findSixHome()
+    children = ['remove_foss.csh', 'README.md', 'six', 'wscript',
+                'sync_externals.csh', 'externals', '.git', 'processFiles.py',
+                'docs', 'waf', '.gitignore', 'LICENSE']
+
+    for child in os.listdir(home):
+        if child not in children and os.path.isdir(child):
+            subdirs = os.listdir(child)
+            if 'tests' in subdirs and 'bin' in subdirs:
+                return child
 
 
 def setPaths():
-    nitfPluginPath = os.path.join(findSixHome(), 'install', 'share', 'nitf',
+    nitfPluginPath = os.path.join(installPath(), 'share', 'nitf',
                                   'plugins')
-    sixSchemaPath = os.path.join(findSixHome(), 'install', 'conf', 'schema',
+    sixSchemaPath = os.path.join(installPath(), 'conf', 'schema',
                                  'six')
 
-    pythonPath = os.path.join(findSixHome(), 'install', 'lib', 'python2.7',
+    pythonPath = os.path.join(installPath(), 'lib', 'python2.7',
                                       'site-packages')
     if platform.system() == 'Windows':
-        pythonPath = os.path.join(findSixHome(), 'install', 'lib',
+        pythonPath = os.path.join(installPath(), 'lib',
                                   'site-packages')
         
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath

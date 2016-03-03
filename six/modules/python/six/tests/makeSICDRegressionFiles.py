@@ -37,9 +37,9 @@ def checkPythonPath():
     except ImportError:
         pythonpath = ''
         if platform.system() == 'Windows':
-            pythonpath = os.path.join('install', 'lib', 'site-packages')
+            pythonpath = os.path.join(utils.installPath(), 'lib', 'site-packages')
         else:
-            pythonpath = os.path.join('install', 'lib', 'python2.7',
+            pythonpath = os.path.join(utils.installPath(), 'lib', 'python2.7',
                                       'site-packages')
         raise ImportError('Please set PYTHONPATH to six-library{0}{1}'.format(
                 os.sep, pythonpath))

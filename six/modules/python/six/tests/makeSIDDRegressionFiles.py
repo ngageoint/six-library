@@ -47,11 +47,10 @@ def run():
         os.makedirs(outdir)
 
     # Make siddLegend
-    binDir = os.path.join(utils.findSixHome(), 'install', 'bin')
+    binDir = os.path.join(utils.installPath(), 'bin')
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
-    print os.listdir(os.environ['WORKSPACE'])
-    print os.listdir(os.environ['JENKINS_HOME'])
+
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 

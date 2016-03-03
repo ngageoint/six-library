@@ -28,7 +28,7 @@ import utils
 
 from subprocess import call
 
-binDir = os.path.join(utils.findSixHome(), 'install', 'bin')
+binDir = os.path.join(utils.installPath(), 'bin')
 
 def roundTrippedName(pathname):
     return os.path.basename(pathname.replace('.nitf', '_rt.nitf'))
