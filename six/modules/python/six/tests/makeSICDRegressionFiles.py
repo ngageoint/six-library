@@ -72,6 +72,8 @@ def run():
     formationAlgs = ['PFA', 'RMA', 'RGAZCOMP']
     imageTypes = ['RMAT', 'RMCR', 'INCA']
 
+    if not os.path.isdir(os.path.join(utils.findSixHome(), 'regression_files', 'six.sicd')):
+        os.makedirs(os.path.join(utils.findSixHome(), 'regression_files', 'six.sicd'))
     for args in product(sicdVersions, formationAlgs, imageTypes):
         if args[1] != 'RMA':
             args = (args[0], args[1], '')
