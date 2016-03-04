@@ -51,7 +51,7 @@ def run(pathfinder):
     binDir = os.path.join(pathfinder.installPath(), 'bin')
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
-
+    print binDir
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
