@@ -105,7 +105,7 @@ public:
     EarthModelType earthModel;
 
     /*!
-     *  Scene Center Point in fulll image.  This is the
+     *  Scene Center Point in full image.  This is the
      *  precise location
      */
     SCP scp;

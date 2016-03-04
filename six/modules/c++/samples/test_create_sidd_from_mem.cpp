@@ -1916,7 +1916,7 @@ int main(int argc, char** argv)
         // ... |  0    0   0   0
         // x^n |  2    0   0   0
         //--------------------------------------------------
-        planeProjection->timeCOAPoly = six::Poly2D(0, 0);
+        planeProjection->timeCOAPoly = six::Poly2D(3, 3);
         planeProjection->timeCOAPoly[0][0] = 1;
 
         //--------------------------------------------------

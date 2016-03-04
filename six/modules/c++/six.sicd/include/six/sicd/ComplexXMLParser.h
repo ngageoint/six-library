@@ -161,6 +161,8 @@ protected:
         return ("urn:SICD:" + version);
     }
 
+    virtual void validate(const ComplexData& sicd) const;
+
 private:
     XMLElem convertCollectionInformationToXML(const CollectionInformation *obj,
                                               XMLElem parent = NULL) const;
@@ -233,6 +235,8 @@ private:
     XMLElem createSideOfTrackType(const std::string& name,
                                   const SideOfTrackType& value, XMLElem parent =
                                           NULL) const;
+
+    double eps(double val) const;
 
 private:
     std::auto_ptr<SICommonXMLParser> mCommon;

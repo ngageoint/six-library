@@ -24,6 +24,7 @@
 #include <six/sicd/ComplexDataBuilder.h>
 #include <six/Utilities.h>
 
+
 namespace
 {
 typedef xml::lite::Element* XMLElem;
@@ -41,6 +42,719 @@ ComplexXMLParser::ComplexXMLParser(const std::string& version,
     XMLParser(versionToURI(version), addClassAttributes, log, ownLog),
     mCommon(comParser.release())
 {
+}
+
+/*
+std::vector<std::vector<double> > raised_cos_fun(size_t n, double coef)
+{
+    std::vector<std::vector<double> > ret;
+    ret.resize(2);
+    std::vector<double> w;
+    for (size_t ii = 0; ii < std::ceil(n / 2); ++ii)
+    {
+        w.push_back(coef - (1 - coef) * std::cos(2 * M_PI * ii) / (n - 1));
+    }
+    ret.push_back(w);
+    if (n % 2 == 1)
+    {
+        ret[1].resize(w.size());
+        std::reverse_copy(w.begin(), w.end(), ret[1].begin());
+    }
+    else
+    {
+        ret[1].resize(w.size() - 1);
+        std::reverse_copy(w.begin(), w.end() - 1, ret[1].begin());
+    }
+    return ret;
+}
+
+std::vector<double> kaiserNosptb(size_t L, double beta=0.5)
+{
+    std::vector<double> k;
+    if (L == 0)
+    {
+        throw except::Exception(Ctxt("L must be positive"));
+    }
+    if (L == 1)
+    {
+        k.push_back(1);
+        return k;
+    }
+    else
+    {
+        Bessel besseli0(0);
+        size_t m = L - 1;
+        for (size_t ii = 0; ii < L; ++ii)
+        {
+            double temp = 2 * beta / m * std::sqrt(ii * (m - ii));
+            k.push_back(besseli0(temp) / besseli0(beta));
+        }
+        return k;
+    }
+}
+
+std::vector<std::vector<double> > weightFn(const DirectionParameters& params, size_t n)
+{
+    std::vector<std::vector<double> > ret;
+    if (params.weightType.get() != NULL)
+    {
+        const std::string& windowName = params.weightType->windowName;
+        if (windowName == "UNIFORM")
+        {
+            return ret;
+        }
+        else if (windowName == "HAMMING")
+        {
+            double value = 0.54;
+            if (!params.weightType->parameters.empty() && !params.weightType->parameters[0].str().empty())
+            {
+                //A Hamming window is defined in many places as a raised cosine of weight .54,
+                //so this is the default. However, some data use a generalized raised cosine and
+                //call it HAMMING, so we allow for both uses.
+                value = str::toType<double>(params.weightType->parameters[0].str());
+            }
+            return raised_cos_fun(n, value);
+        }
+        else if (windowName == "HANNING")
+        {
+            return raised_cos_fun(n, 0.5);
+        }
+        else if (windowName == "KAISER")
+        {
+            ret.push_back(kaiserNosptb(n, str::toType<double>(params.weightType->parameters[0].str())));
+            return ret;
+        }
+        else if (windowName == "TAYLOR")
+        {
+            const six::ParameterCollection collection& = params.weightType->parameters;
+            double nbar = str::toType<double>(collection.findParameter("NBAR").str());
+            double sll = str::toType<double>(collection.findParameter("SLL").str());
+            sll = -1 * std::abs(sll);
+        }
+    }
+}
+*/
+
+void ComplexXMLParser::validate(const ComplexData& sicd) const
+{
+    // Check for internal consistency of data
+    // Most comments (and section numbers) taken from a 'validate_sicd.m' MATLAB file
+    //2.1. Scalar TimeCOAPoly means SPOTLIGHT data
+    if (sicd.grid.get() == NULL)
+    {
+        throw except::Exception(Ctxt("ComplexData.Grid required but not found"));
+    }
+    const Poly2D timeCOAPoly = sicd.grid->timeCOAPoly;
+    const std::string mode = sicd.collectionInformation->radarMode.toString();
+    bool isScalar = true;
+
+    for (size_t ii = 0; ii <= timeCOAPoly.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= timeCOAPoly.orderY(); ++jj)
+        {
+            if (ii == 0 && jj == 0)
+            {
+                continue;
+            }
+            if (timeCOAPoly[ii][jj] != 0)
+            {
+                isScalar = false;
+                break;
+            }
+        }
+    }
+
+    if (mode == "SPOTLIGHT" && !isScalar)
+    {
+        log()->error("SPOTLIGHT data should only have scalar TimeCOAPoly.");
+    }
+
+    if (mode != "SPOTLIGHT" && isScalar)
+    {
+        log()->warn("Non-SPOTLIGHT data will generally have more than one nonzero"
+            "term in TimeCOAPoly unless \"formed as spotlight\".");
+    }
+
+    //2.2. FFT signs in both dimensions almost certainly have to be equal
+
+    //We've already checked that grid is non-null
+    if (sicd.grid->row.get() == NULL || sicd.grid->col.get() == NULL)
+    {
+        throw except::Exception(Ctxt("ComplexData.Grid.Row and ComplexData.Grid.Col required but not found"));
+    }
+
+    if (sicd.grid->row->sign != sicd.grid->col->sign)
+    {
+        log()->error("FFT signs in row and column direction should be the same");
+    }
+    //2.3. Frequencey support parameters
+    // We add the epsilons in all these tests to handle numerical precision issues 
+    // for two values that are very nearly equal
+    std::ostringstream details;
+    //Bounds checking with grid->row/col
+    //2.3.1
+    const std::string boundsErrorMessage = "Violation of spatial frequency extent bounds.";
+    if (sicd.grid->col->deltaK2 <= sicd.grid->col->deltaK1)
+    {
+        details << boundsErrorMessage << "\n"
+            << "Expect SICD.Grid.Col.DeltaK2 > SICD.Grid.Col.DeltaK1\n"
+            << "DeltaK2: " << sicd.grid->col->deltaK2 << "\n"
+            << "DetalK1: " << sicd.grid->col->deltaK1 << "\n";
+        log()->error(details.str());
+    }
+    else
+    {
+        //2.3.2
+        if (sicd.grid->col->deltaK2 > 1 / (2 * sicd.grid->col->sampleSpacing + std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.DeltaK2 > 1/(2*Grid.Col.SampleSpacing)\n"
+                << "DeltaK2: " << sicd.grid->col->deltaK2 << "\n"
+                << "SampleSpacing: " << sicd.grid->col->sampleSpacing << "\n";
+            log()->error(details.str());
+        }
+        //2.3.3
+        if (sicd.grid->col->deltaK1 < -1 / (2 * sicd.grid->col->sampleSpacing - std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.DeltaK1 < -1/(2*Grid.Col.SampleSpacing)\n"
+                << "DeltaK1: " << sicd.grid->col->deltaK1 << "\n"
+                << "SampleSpacing: " << sicd.grid->col->sampleSpacing << "\n";
+            log()->error(details.str());
+        }
+        //2.3.4
+        if (sicd.grid->col->impulseResponseBandwidth > sicd.grid->col->deltaK2 - sicd.grid->col->deltaK1 + std::numeric_limits<double>::epsilon())
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.impulseResponseBandwidth > SICD.Grid.Col.DeltaK2 - SICD.Grid.Col.DeltaK2)\n"
+                << "ImpulseResponseBandwidth: " << sicd.grid->col->impulseResponseBandwidth << "\n"
+                << "DeltaK2: " << sicd.grid->col->deltaK2 << "\n"
+                << "DeltaK1: " << sicd.grid->col->deltaK1 << "\n";
+            log()->error(details.str());
+        }
+    }
+
+    //2.3.5
+    if (sicd.grid->row->deltaK2 <= sicd.grid->row->deltaK1)
+    {
+        details << boundsErrorMessage << "\n"
+            << "Expect SICD.Grid.Col.DeltaK2 > SICD.Grid.Col.DeltaK1\n"
+            << "DeltaK2: " << sicd.grid->row->deltaK2 << "\n"
+            << "DetalK1: " << sicd.grid->row->deltaK1 << "\n";
+        log()->error(details.str());
+    }
+    else
+    {
+        //2.3.6
+        if (sicd.grid->row->deltaK2 > 1 / (2 * sicd.grid->row->sampleSpacing + std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.DeltaK2 > 1/(2*Grid.Col.SampleSpacing)\n"
+                << "DeltaK2: " << sicd.grid->row->deltaK2 << "\n"
+                << "SampleSpacing: " << sicd.grid->row->sampleSpacing << "\n";
+            log()->error(details.str());
+        }
+        //2.3.7
+        if (sicd.grid->row->deltaK1 < -1 / (2 * sicd.grid->row->sampleSpacing - std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.DeltaK1 < -1/(2*Grid.Col.SampleSpacing)\n"
+                << "DeltaK1: " << sicd.grid->row->deltaK1 << "\n"
+                << "SampleSpacing: " << sicd.grid->row->sampleSpacing << "\n";
+            log()->error(details.str());
+        }
+        //2.3.8
+        if (sicd.grid->row->impulseResponseBandwidth > sicd.grid->row->deltaK2 - sicd.grid->row->deltaK1 + std::numeric_limits<double>::epsilon())
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "\nExpect SICD.Grid.Col.impulseResponseBandwidth > SICD.Grid.Col.DeltaK2 - SICD.Grid.Col.DeltaK2)\n"
+                << "ImpulseResponseBandwidth: " << sicd.grid->row->impulseResponseBandwidth << "\n"
+                << "DeltaK2: " << sicd.grid->row->deltaK2 << "\n"
+                << "DeltaK1: " << sicd.grid->row->deltaK1 << "\n";
+            log()->error(details.str());
+        }
+    }
+
+    // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
+    // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
+    // on the vertices of the image, since it is smooth and monotonic in most cases--
+    // lathough in actuality this is not always the case.  To be totally generic, 
+    // we would have to search for an interior min and max as well
+    std::vector<std::vector<int> > vertices;
+    vertices.resize(2);
+
+    if (sicd.imageData->validData.size() != 0)
+    {
+        //test vertices
+        for (size_t ii = 0; ii < sicd.imageData->validData.size(); ++ii)
+        {
+            vertices[0].push_back(sicd.imageData->validData[ii].col);
+        }
+        for (size_t ii = 0; ii < sicd.imageData->validData.size(); ++ii)
+        {
+            vertices[1].push_back(sicd.imageData->validData[ii].row);
+        }
+    }
+    else
+    {
+        //use edges of full image
+        vertices[0].push_back(0);
+        vertices[0].push_back(sicd.imageData->validData.size() - 1);
+        vertices[0].push_back(sicd.imageData->validData.size() - 1);
+        vertices[0].push_back(0);
+        vertices[1].push_back(0);
+        vertices[1].push_back(0);
+        vertices[1].push_back(sicd.imageData->validData.size() - 1);
+        vertices[1].push_back(sicd.imageData->validData.size() - 1);
+    }
+
+    double minRowDk = 0;
+    double maxRowDk = 0;
+    double minColDk = 0;
+    double maxColDk = 0;
+    double currentDeltaK = 0;
+
+    if (!Init::isUndefined<Poly2D>(sicd.grid->row->deltaKCOAPoly))
+    {
+        minRowDk = -std::numeric_limits<double>::infinity();
+        maxRowDk = std::numeric_limits<double>::infinity();
+    }
+    if (!Init::isUndefined<Poly2D>(sicd.grid->col->deltaKCOAPoly))
+    {
+        minColDk = -std::numeric_limits<double>::infinity();
+        maxColDk = std::numeric_limits<double>::infinity();
+    }
+
+    for (size_t ii = 0; ii < vertices[0].size(); ++ii)
+    {
+        if (!Init::isUndefined<Poly2D>(sicd.grid->row->deltaKCOAPoly))
+        {
+            //TODO: Make sure I have the order right here
+            currentDeltaK = sicd.grid->row->deltaKCOAPoly.atY(vertices[0][ii])(vertices[1][ii]);
+            minRowDk = std::min(currentDeltaK, minRowDk);
+            maxRowDk = std::max(currentDeltaK, maxRowDk);
+        }
+        if (!Init::isUndefined<Poly2D>(sicd.grid->col->deltaKCOAPoly))
+        {
+            currentDeltaK = sicd.grid->col->deltaKCOAPoly.atY(vertices[0][ii])(vertices[1][ii]);
+            minColDk = std::min(currentDeltaK, minColDk);
+            maxColDk = std::max(currentDeltaK, maxColDk);
+        }
+    }
+    // Wrapped spectrum
+    if (minRowDk < -(1 / sicd.grid->row->sampleSpacing) / 2 || maxRowDk >(1 / sicd.grid->row->sampleSpacing) / 2)
+    {
+        minRowDk = -(1 / sicd.grid->row->sampleSpacing) / 2;
+        maxRowDk = -minRowDk;
+    }
+
+    if (minColDk < -(1 / sicd.grid->col->sampleSpacing) / 2 || maxColDk >(1 / sicd.grid->col->sampleSpacing) / 2)
+    {
+        minColDk = -(1 / sicd.grid->col->sampleSpacing) / 2;
+        maxColDk = -minColDk;
+    }
+
+    double DK_TOL = 0.01;
+    //2.3.9.1
+    if (std::abs(sicd.grid->row->deltaK1 / maxRowDk - 1) > DK_TOL)
+    {
+        details.str("");
+        details << boundsErrorMessage << "\n"
+            << "SICD.Grid.Row.DeltaK1: " << sicd.grid->row->deltaK1 << "\n"
+            << "Derived Grid.Row.DeltaK1: " << minRowDk << "\n";
+        log()->error(details.str());
+    }
+    //2.3.9.2
+    if (std::abs(sicd.grid->row->deltaK2 / maxRowDk - 1) > DK_TOL)
+    {
+        details.str("");
+        details << boundsErrorMessage << "\n"
+            << "SICD.Grid.Row.DeltaK2: " << sicd.grid->row->deltaK2 << "\n"
+            << "Derived Grid.Row.DeltaK2: " << minRowDk << "\n";
+        log()->error(details.str());
+    }
+    //2.3.8.3
+    if (std::abs(sicd.grid->col->deltaK1 / maxRowDk - 1) > DK_TOL)
+    {
+        details.str("");
+        details << boundsErrorMessage << "\n"
+            << "SICD.Grid.Col.DeltaK1: " << sicd.grid->col->deltaK1 << "\n"
+            << "Derived Grid.Col.DeltaK1: " << minRowDk << "\n";
+        log()->error(details.str());
+    }
+    //2.3.9.4
+    if (std::abs(sicd.grid->col->deltaK2 / maxRowDk - 1) > DK_TOL)
+    {
+        details.str("");
+        details << boundsErrorMessage << "\n"
+            << "SICD.Grid.Col.DeltaK2: " << sicd.grid->col->deltaK2 << "\n"
+            << "Derived Grid.Col.DeltaK2: " << minRowDk << "\n";
+        log()->error(details.str());
+    }
+
+    if (sicd.pfa.get() != NULL)
+    {
+        //Slow-time deskew would allow for PFA.Kaz2-PFA.Kaz1>(1/Grid.Col.SS),
+        //since Kaz bandwidth is compressed from original polar annulus.
+        if (sicd.pfa->slowTimeDeskew.get() == NULL || sicd.pfa->slowTimeDeskew->applied.toString() != "IS_TRUE")
+        {
+            //2.3.10
+            if (sicd.pfa->kaz2 - sicd.grid->col->kCenter > 1 / ((2 * sicd.grid->col->sampleSpacing) + std::numeric_limits<double>::epsilon()))
+            {
+                details.str("");
+                details << boundsErrorMessage << "\n"
+                    << "Expect 0.5 / SICD.Grid.Col.SampleSpacing >= PFA.Kaz2 - Grid.Col.KCenter\n"
+                    << "0.5/SICD.Grid.Col.SampleSpacing: " << 0.5 / sicd.grid->col->sampleSpacing << "\n"
+                    << "PFA.Kaz2 - Grid.Col.KCenter: " << sicd.pfa->kaz2 - sicd.grid->col->kCenter << "\n";
+                log()->error(details.str());
+            }
+            //2.3.11
+            if (sicd.pfa->kaz1 - sicd.grid->col->kCenter < -1 / ((2 * sicd.grid->col->sampleSpacing) - std::numeric_limits<double>::epsilon()))
+            {
+                details.str("");
+                details << boundsErrorMessage << "\n"
+                    << "Expect -0.5 / SICD.Grid.Col.SampleSpacing <= PFA.Kaz1 - Grid.Col.KCenter\n"
+                    << "-0.5/SICD.Grid.Col.SampleSpacing: " << -0.5 / sicd.grid->col->sampleSpacing << "\n"
+                    << "PFA.Kaz1 - Grid.Col.KCenter: " << sicd.pfa->kaz1 - sicd.grid->col->kCenter << "\n";
+                log()->error(details.str());
+            }
+        }
+        //2.3.12
+        if (sicd.pfa->krg2 - sicd.grid->row->kCenter > 1 / (2 * sicd.grid->row->sampleSpacing + std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "Expect PFA.Krg2 - Grid.Row.KCenter <= 0.5 / SICD.Grid.Row.SampleSpacing\n"
+                << "0.5/SICD.Grid.Row.SampleSpacing: " << 0.5 / sicd.grid->row->sampleSpacing << "\n"
+                << "PFA.Krg2 - Grid.Row.KCenter: " << sicd.pfa->krg2 - sicd.grid->row->kCenter << "\n";
+            log()->error(details.str());
+        }
+        //2.3.13
+        if (sicd.pfa->krg1 - sicd.grid->row->kCenter < -1 / (2 * sicd.grid->row->sampleSpacing - std::numeric_limits<double>::epsilon()))
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "Expect PFA.Krg1 - Grid.Row.KCenter <= -0.5 / SICD.Grid.Row.SampleSpacing\n"
+                << "-0.5/SICD.Grid.Row.SampleSpacing: " << -0.5 / sicd.grid->row->sampleSpacing << "\n"
+                << "PFA.Krg1 - Grid.Row.KCenter: " << sicd.pfa->krg1 - sicd.grid->row->kCenter << "\n";
+            log()->error(details.str());
+        }
+        //2.3.14
+        if (sicd.grid->col->impulseResponseBandwidth > sicd.pfa->kaz2 - sicd.pfa->kaz1 + std::numeric_limits<double>::epsilon())
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "Expect SICD.Grid.Col.ImpulseResponseBandwidth <= SICD.PFA.Kaz2 - SICD.PFA.Kaz1"
+                << "Grid.Col.ImpulseResponseBandwidth: " << sicd.grid->col->impulseResponseBandwidth << "\n"
+                << "SICD.PFA.Kaz2 - SICD.PFA.Kaz1: " << sicd.pfa->kaz2 - sicd.pfa->kaz1 << "\n";
+            log()->error(details.str());
+        }
+        //2.3.15
+        if (sicd.grid->col->impulseResponseBandwidth > sicd.pfa->krg2 - sicd.pfa->krg1 + std::numeric_limits<double>::epsilon())
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "Expect SICD.Grid.Col.ImpulseResponseBandwidth <= SICD.PFA.Krg2 - SICD.PFA.Krg1"
+                << "Grid.Col.ImpulseResponseBandwidth: " << sicd.grid->col->impulseResponseBandwidth << "\n"
+                << "SICD.PFA.Krg2 - SICD.PFA.Krg1: " << sicd.pfa->krg2 - sicd.pfa->krg1 << "\n";
+            log()->error(details.str());
+        }
+        //2.3.16
+        if (sicd.grid->col->kCenter != 0 && std::abs(sicd.grid->col->kCenter - (sicd.pfa->kaz1 + sicd.pfa->kaz2) / 2) > 1e-5)
+        {
+            details.str("");
+            details << boundsErrorMessage << "\n"
+                << "Expect SICD.Grid.Col.KCenter == 0 or |SICD.Grid.Col.KCenter - mean(SICD.PFA.Kaz1, SICD.PFA.Kaz2)| <= 1e-5"
+                << "Grid.Col.KCenter: " << sicd.grid->col->kCenter << "\n"
+                << "mean(SICD.PFA.Kaz1, SICD.PFA.Kaz2): " << (sicd.pfa->kaz1 + sicd.pfa->kaz2) / 2 << "\n";
+            log()->error(details.str());
+        }
+    }
+
+    // 2.4. Does WgtFunct agree with WgtType?
+    const int DEFAULT_WGT_SIZE = 512;
+    const double WGT_TOL = 1e-3;
+
+    // Skipping 2.4.1 and 2.4.2 because they're over my head
+    // 2.4.3
+    if (sicd.grid->col->weightType.get() != NULL && sicd.grid->col->weightType->windowName != "UNIFORM" &&
+        sicd.grid->col->weightType->windowName != "UNKNOWN" && sicd.grid->col->weights.size() == 0)
+    {
+        details.str("");
+        details << "Unrecognized weighting description\n" <<
+            "SICD.Grid.Col.WgtType.WindowName: " << sicd.grid->col->weightType->windowName
+            << std::endl;
+        log()->warn(details.str());
+    }
+
+    // 2.4.4
+    if (sicd.grid->row->weightType.get() != NULL && sicd.grid->row->weightType->windowName != "UNIFORM" &&
+        sicd.grid->row->weightType->windowName != "UNKNOWN" && sicd.grid->row->weights.size() == 0)
+    {
+        details.str("");
+        details << "Unrecognized weighting description\n" <<
+            "SICD.Grid.Row.WgtType.WindowName: " << sicd.grid->row->weightType->windowName
+            << std::endl;
+        log()->warn(details.str());
+    }
+
+    // 2.5 depends on something I didn't compute in 2.4.1/2.4.2.
+    // Omitting
+
+    // 2.6
+    if (sicd.position->arpPoly.order() < 2) // Must be able to derived at least position and velocity
+    {
+        details.str("");
+        details << "ARPPoly should have at least position and velocity terms."
+            << std::endl;
+        log()->error(details.str());
+    }
+
+    // Omitting 2.7
+    if (sicd.radarCollection.get() != NULL)
+    {
+        // 2.8 Waveform description consistency
+        const double WF_TOL = 1e-3; //Relative tolerance
+        const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+        double wfMin = std::numeric_limits<double>::infinity();
+        double wfMax = -std::numeric_limits<double>::infinity();
+
+        for (size_t ii = 0; ii < sicd.radarCollection->waveform.size(); ++ii)
+        {
+            if (sicd.radarCollection->waveform[ii].get() != NULL)
+            {
+                double wfCurrent = sicd.radarCollection->waveform[ii]->txFrequencyStart;
+                if (wfCurrent < wfMin)
+                {
+                    wfMin = wfCurrent;
+                }
+
+                wfCurrent += sicd.radarCollection->waveform[ii]->txRFBandwidth;
+                if (wfCurrent > wfMax)
+                {
+                    wfMax = wfCurrent;
+                }
+            }
+        }
+
+        // 2.8.1
+        if (wfMin != std::numeric_limits<double>::infinity())
+        {
+            if (std::abs(wfMin / sicd.radarCollection->txFrequencyMin - 1) > WF_TOL)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart: "
+                    << wfMin << std::endl
+                    << "SICD.RadarCollection.TxFrequency.Min: " << sicd.radarCollection->txFrequencyMin
+                    << std::endl;
+                log()->error(details.str());
+            }
+        }
+
+        //2.8.2
+        if (wfMin != std::numeric_limits<double>::infinity())
+        {
+            if (std::abs(wfMax / sicd.radarCollection->txFrequencyMax - 1) > WF_TOL)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart + TxFRBandwidth: "
+                    << wfMax << std::endl
+                    << "SICD.RadarCollection.TxFrequency.Max: " << sicd.radarCollection->txFrequencyMax
+                    << std::endl;
+                log()->error(details.str());
+            }
+        }
+
+        for (size_t ii = 0; ii < sicd.radarCollection->waveform.size(); ++ii)
+        {
+            if (sicd.radarCollection->waveform[ii].get() == NULL) 
+            {
+                continue;
+            }
+            six::sicd::WaveformParameters wfParam = *sicd.radarCollection->waveform[ii];
+            
+            //2.8.3
+            if (std::abs(wfParam.txRFBandwidth / (wfParam.txPulseLength * wfParam.txFMRate)) - 1 > WF_TOL)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.TxFRBandwidth: "
+                    << wfParam.txRFBandwidth << std::endl
+                    << "SICD.RadarCollection.TxFrequency.txFMRate * txPulseLength: "
+                    << wfParam.txFMRate * wfParam.txPulseLength << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.4
+            if (wfParam.rcvDemodType.toString() == "CHIRP" && wfParam.rcvFMRate != 0)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+                    << wfParam.rcvDemodType << std::endl
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
+                    << wfParam.rcvFMRate << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.5
+            if (wfParam.rcvDemodType.toString() == "STRETCH" &&
+                std::abs(wfParam.rcvFMRate / wfParam.txFMRate - 1) > WGT_TOL)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+                    << wfParam.rcvDemodType << std::endl
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
+                    << wfParam.rcvFMRate << std::endl
+                    << "SICD>RadarCollection.Waveform.WFParameters.TxFMRate: "
+                    << wfParam.txFMRate << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.6
+            //Absolute frequencies must be positive
+            if (six::Init::isUndefined<int>(sicd.radarCollection->refFrequencyIndex) && sicd.radarCollection->txFrequencyMin <= 0)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.txFrequencyMin: "
+                    << sicd.radarCollection->txFrequencyMin << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.7
+            //Absolute frequencies must be positive
+            if (six::Init::isUndefined<int>(sicd.radarCollection->refFrequencyIndex) && wfParam.txFrequencyStart <= 0)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.txFreqStart: "
+                    << wfParam.txFrequencyStart << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.8
+            //Absolute frequencies must be positive
+            if (six::Init::isUndefined<int>(sicd.radarCollection->refFrequencyIndex) && wfParam.rcvFrequencyStart <= 0)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.rcvFreqStart: "
+                    << wfParam.rcvFrequencyStart << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.9
+            if (wfParam.txPulseLength > wfParam.rcvWindowLength)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.TxPulseLength: "
+                    << wfParam.txPulseLength << std::endl
+                    << "SICD.RadarCollection.Waveform.WFPArameters.RcvWindowLength: "
+                    << wfParam.rcvWindowLength << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.10
+            if (wfParam.rcvIFBandwidth > wfParam.adcSampleRate)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvIFBandwidth: "
+                    << wfParam.rcvIFBandwidth << std::endl
+                    << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
+                    << wfParam.adcSampleRate << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.11
+            if (wfParam.rcvDemodType.toString() == "CHIRP" && wfParam.txRFBandwidth > wfParam.adcSampleRate)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+                    << wfParam.rcvDemodType.toString() << std::endl
+                    << "SICD.RadarCollection.Waveform.WFParameters.TxRFBandwidth: "
+                    << wfParam.txRFBandwidth << std::endl
+                    << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
+                    << wfParam.adcSampleRate << std::endl;
+                log()->error(details.str());
+            }
+
+            //2.8.12
+            double freq_tol = (wfParam.rcvWindowLength - wfParam.txPulseLength) * wfParam.txFMRate;
+            if (wfParam.rcvFrequencyStart >= (wfParam.txFrequencyStart + wfParam.txRFBandwidth + freq_tol) ||
+                wfParam.rcvFrequencyStart <= wfParam.txFrequencyStart - freq_tol)
+            {
+                details.str("");
+                details << WF_INCONSISTENT_STR
+                    << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
+                    << wfParam.rcvFrequencyStart << std::endl;
+                log()->error(details.str());
+            }
+        }
+    }
+
+    // Skipping 2.9
+
+    // 2.10 GeoData.SCP
+    const double SCPCOA_TOL = 1e-2;
+    if (sicd.geoData.get() != NULL)
+    {
+        SCP scp = sicd.geoData->scp;
+        scene::LLAToECEFTransform transformer;
+        Vector3 ecf2 = transformer.transform(scp.llh);
+        double ecf_diff = (scp.ecf - ecf2).norm();
+
+        if (ecf_diff > SCPCOA_TOL)
+        {
+            details.str("");
+            details << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent.\n"
+                << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
+                << ecf_diff << " (m)" << std::endl;
+            log()->error(details.str());
+        }
+    }
+
+    // 2.11 ValidData
+    // Both ImageData.ValidData and GeoData.ValidData are optional, 
+    // but are conditionally required upon each other. If one exists,
+    // the other must also
+    bool imageValidData = false; 
+    bool geoValidData = false;
+
+    if (sicd.imageData.get() != NULL && !sicd.imageData->validData.empty())
+    {
+        imageValidData = true;
+    }
+    if (sicd.geoData.get() != NULL && !sicd.geoData->validData.empty())
+    {
+        geoValidData = true;
+    }
+    if (imageValidData && !geoValidData)
+    {
+        details.str("");
+        details << "ImageData.ValidData/GeoData.ValidData required together.\n"
+            << "ImageData.ValidData exists, but GeoData.ValidData does not."
+        log()->error(details.str());
+    }
+    if (!imageValidData && geoValidData)
+    {
+        details.str("");
+        details << "ImageData.ValidData/GeoData.ValidData required together.\n"
+            << "GeoData.ValidData exists, but ImageData.ValidData does not."
+            log()->error(details.str());
+    }
 }
 
 ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
@@ -135,7 +849,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
         sicd->rgAzComp.reset(new RgAzComp());
         parseRgAzCompFromXML(rgAzCompXML, sicd->rgAzComp.get());
     }
-
+    validate(*sicd);
     return sicd;
 }
 
