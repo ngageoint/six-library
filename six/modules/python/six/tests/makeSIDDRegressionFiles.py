@@ -58,7 +58,8 @@ def run(pathfinder):
         print "No install"
     if not os.path.exists(utils.executableName(
         os.path.join(binDir, 'test_create_sidd_legend'))):
-        print "No executable"
+        print utils.executableName(os.path.join(binDir,
+                                                'test_create_sidd_legend'))
     print os.listdir(binDir)
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
