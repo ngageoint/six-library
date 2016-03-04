@@ -28,28 +28,33 @@ import utils
 
 from subprocess import call
 
-binDir = os.path.join(utils.installPath(), 'bin')
+class NITFChecker(object):
 
-def roundTrippedName(pathname):
-    return os.path.basename(pathname.replace('.nitf', '_rt.nitf'))
+    def __init__(self, pathfinder, path):
+        self.binDir = os.path.join(pathfinder.installPath(), 'bin')
+        self.path = path
+        self.outPath = self.roundTrippedName()
 
-def roundTripSix(pathname):
-    return call([utils.executableName(os.path.join(binDir, 'round_trip_six')),
-              pathname, roundTrippedName(pathname)]) == 0
+    def roundTrippedName(self):
+        return os.path.basename(self.path.replace('.nitf', '_rt.nitf'))
 
-def validate(pathname):
-    check_valid_six = utils.executableName(os.path.join(binDir,
-            'check_valid_six'))
+    def roundTripSix(self):
+        return call([utils.executableName(os.path.join(
+            self.binDir,'round_trip_six')), self.path, self.outPath]) == 0
+
+    def validate(pathname):
+        check_valid_six = utils.executableName(os.path.join(binDir,
+                'check_valid_six'))
     
-    return (call([check_valid_six, pathname], stdout=open(os.devnull, 'w')) and
-            call([check_valid_six, roundTrippedName(pathname)],
-            stdout=open(os.devnull, 'w'))) == 0
+        return (call([check_valid_six, pathname], stdout=open(os.devnull, 'w')) and
+                call([check_valid_six, roundTrippedName(pathname)],
+                stdout=open(os.devnull, 'w'))) == 0
 
 def clean(pathname):
     os.remove(roundTrippedName(pathname))
 
-def run():
-    regressionDir = os.path.join(utils.findSixHome(), 'regression_files')
+def run(pathfinder):
+    regressionDir = os.path.join(pathfinder.findSixHome(), 'regression_files')
     result = True
     for pathname in glob.iglob(os.path.join(regressionDir, '*', '*.nitf')):
         print pathname

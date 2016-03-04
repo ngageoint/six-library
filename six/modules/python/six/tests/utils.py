@@ -28,52 +28,40 @@ import sys
 
 from subprocess import call
 
-def findSixHome():
-    if 'WORKSPACE' in os.environ:
-        return os.environ['WORKSPACE']
 
-    currentPath = os.getcwd()
-    while os.path.basename(currentPath) != 'six-library':
-        parent = os.path.abspath(os.path.join(currentPath, os.pardir))
-        if parent == currentPath:
-            raise IOError(os.getcwd())
-            #raise IOError('Please run this program from within six-library dir')
-        currentPath = parent
+class Pathfinder(object):
+
+    def __init__(self, installDir='install'):
+        self.installDir = installDir
         
-    return currentPath
+    def findSixHome(self):
+        if 'WORKSPACE' in os.environ:
+            return os.environ['WORKSPACE']
+        
+        return os.getcwd()
 
-def installPath():
-    home = findSixHome()
-    children = ['remove_foss.csh', 'README.md', 'six', 'wscript',
-                'sync_externals.csh', 'externals', '.git', 'processFiles.py',
-                'docs', 'waf', '.gitignore', 'LICENSE']
+    def installPath(self):
+        return os.path.join(self.findSixHome(), self.installDir)
 
-    for child in os.listdir(home):
-        if child not in children and os.path.isdir(child):
-            subdirs = os.listdir(child)
-            if 'tests' in subdirs and 'bin' in subdirs:
-                return child
-
-
-def setPaths():
-    nitfPluginPath = os.path.join(installPath(), 'share', 'nitf',
+    def setPaths(self):
+        nitfPluginPath = os.path.join(self.installPath(), 'share', 'nitf',
                                   'plugins')
-    sixSchemaPath = os.path.join(installPath(), 'conf', 'schema',
+        sixSchemaPath = os.path.join(self.installPath(), 'conf', 'schema',
                                  'six')
 
-    pythonPath = os.path.join(installPath(), 'lib', 'python2.7',
+        pythonPath = os.path.join(self.installPath(), 'lib', 'python2.7',
                                       'site-packages')
-    if platform.system() == 'Windows':
-        pythonPath = os.path.join(installPath(), 'lib',
+        if platform.system() == 'Windows':
+            pythonPath = os.path.join(self.installPath(), 'lib',
                                   'site-packages')
         
-    os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
-    os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
+        os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
+        os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
 
-    # We set the pythonpath with sys.path so it's set for the current script
-    # and with os.environ so it's set for child processes
-    sys.path.append(pythonPath)
-    os.environ['PYTHONPATH'] = pythonPath
+        # We set the pythonpath with sys.path so it's set for the current script
+        # and with os.environ so it's set for child processes
+        sys.path.append(pythonPath)
+        os.environ['PYTHONPATH'] = pythonPath
 
 def executableName(pathname):
 
