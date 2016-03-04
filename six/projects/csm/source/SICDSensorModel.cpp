@@ -127,7 +127,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(2, NITF_DESTAG_SZ);
+            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
             str::trim(desId);
 
             if (!(desId == "XML_DATA_CONTENT" || desId == "SICD_XML"))
