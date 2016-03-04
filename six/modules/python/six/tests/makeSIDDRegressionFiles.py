@@ -52,6 +52,10 @@ def run(pathfinder):
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
     print binDir
+    if not os.path.exists(binDir):
+        print "No bin"
+    if not os.path.exists(pathfinder.installPath()):
+        print "No install"
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
