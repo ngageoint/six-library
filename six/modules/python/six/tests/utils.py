@@ -41,7 +41,7 @@ class Pathfinder(object):
         return os.getcwd()
 
     def installPath(self):
-        if 'WORKSPACE' in os.eviron:
+        if 'WORKSPACE' in os.environ:
             return self.installDir
         return os.path.join(self.findSixHome(), self.installDir)
 
