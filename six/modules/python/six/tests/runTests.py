@@ -30,7 +30,7 @@ import checkNITFs
 import utils
 
 parser = argparse.ArgumentParser()
-parser.addArgument('--install', default = 'install')
+parser.add_argument('--install', default = 'install')
 args = parser.parse_args()
 
 pathfinder = utils.Pathfinder(args.install)

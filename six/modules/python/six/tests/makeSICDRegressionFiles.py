@@ -28,21 +28,6 @@ import sys
 from subprocess import call
 from itertools import product
 
-import utils
-
-def checkPythonPath():
-    import platform
-    try:
-        import pysix.scene
-    except ImportError:
-        pythonpath = ''
-        if platform.system() == 'Windows':
-            pythonpath = os.path.join(utils.installPath(), 'lib', 'site-packages')
-        else:
-            pythonpath = os.path.join(utils.installPath(), 'lib', 'python2.7',
-                                      'site-packages')
-        raise ImportError('Please set PYTHONPATH to six-library{0}{1}'.format(
-                os.sep, pythonpath))
     
 def checkArgs(version, alg, imageType):
     if imageType != '' and alg != 'RMA':
@@ -53,30 +38,35 @@ def checkArgs(version, alg, imageType):
         return False
     return True
 
-def createNITFs(version, alg, imageType=''):
-    imp.load_source('test_create_sicd_xml', os.path.join(utils.findSixHome(), 'six',
-	    	'modules', 'python', 'six.sicd', 'tests', 'test_create_sicd_xml.py'))
+
+def createNITFs(version, alg, imageType, home):
+    imp.load_source('test_create_sicd_xml', os.path.join(home, 'six',
+	    	'modules', 'python', 'six.sicd', 'tests',
+                'test_create_sicd_xml.py'))
+    
     from test_create_sicd_xml import initData, writeNITF
     if not checkArgs(version, alg, imageType):
         return 
 
     outputName = "sicd_{0}({1}){2}".format(version, alg, imageType)
     print 'Creating file {}.nitf'.format(outputName)
+    
     cmplx = initData(includeNITF=True, version=version, alg=alg,
                      imageType=imageType)
-    writeNITF(os.path.join(utils.findSixHome(), 'regression_files', 'six.sicd', outputName), cmplx)
+    writeNITF(os.path.join(home, 'regression_files', 'six.sicd', outputName),
+              cmplx)
 
-def run():
-    checkPythonPath()
+def run(pathfinder):
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
     formationAlgs = ['PFA', 'RMA', 'RGAZCOMP']
     imageTypes = ['RMAT', 'RMCR', 'INCA']
 
-    if not os.path.isdir(os.path.join(utils.findSixHome(), 'regression_files', 'six.sicd')):
-        os.makedirs(os.path.join(utils.findSixHome(), 'regression_files', 'six.sicd'))
+    home = pathfinder.findSixHome()
+    if not os.path.isdir(os.path.join(home, 'regression_files', 'six.sicd')):
+        os.makedirs(os.path.join(home, 'regression_files', 'six.sicd'))
     for args in product(sicdVersions, formationAlgs, imageTypes):
         if args[1] != 'RMA':
             args = (args[0], args[1], '')
-        createNITFs(args[0], args[1], args[2])
+        createNITFs(args[0], args[1], args[2], home)
  
  

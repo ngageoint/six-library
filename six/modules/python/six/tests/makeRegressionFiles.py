@@ -22,11 +22,19 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
+
+import argparse
+
 import makeSIDDRegressionFiles
 import makeSICDRegressionFiles
 import utils
 
-utils.setPaths()
+parser = argparse.ArgumentParser()
+parser.add_argument('--install', default = 'install')
+args = parser.parse_args()
 
-makeSIDDRegressionFiles.run()
-makeSICDRegressionFiles.run()
+pathfinder = utils.Pathfinder(args.install)
+pathfinder.setPaths()
+
+makeSIDDRegressionFiles.run(pathfinder)
+makeSICDRegressionFiles.run(pathfinder)

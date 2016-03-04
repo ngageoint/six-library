@@ -41,13 +41,14 @@ def moveToOutputDir(source, outdir):
          
     move(os.path.join(os.getcwd(), source), outdir)
 
-def run():
-    outdir = os.path.join(utils.findSixHome(), 'regression_files', 'six.sidd')
+def run(pathfinder):
+    outdir = os.path.join(pathfinder.findSixHome(),
+                          'regression_files', 'six.sidd')
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
 
     # Make siddLegend
-    binDir = os.path.join(utils.installPath(), 'bin')
+    binDir = os.path.join(pathfinder.installPath(), 'bin')
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
 
