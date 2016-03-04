@@ -107,6 +107,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
 int main(int argc, char** argv)
 {
+    std::cerr << "Called" << std::endl;
     try
     {
         // Parse the command line
