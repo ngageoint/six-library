@@ -22,21 +22,15 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-import argparse
 import sys
 
 import runPythonScripts
 import checkNITFs
 import utils
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--install', default = 'install')
-args = parser.parse_args()
+utils.setPaths()
 
-pathfinder = utils.Pathfinder(args.install)
-pathfinder.setPaths()
-
-result = runPythonScripts.run(pathfinder) and checkNITFs.run(pathfinder)
+result = runPythonScripts.run() and checkNITFs.run()
 if result == True:
     print "All tests passed."
     sys.exit(0)

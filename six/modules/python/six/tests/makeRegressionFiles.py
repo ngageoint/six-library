@@ -23,18 +23,11 @@
 #
 
 
-import argparse
-
 import makeSIDDRegressionFiles
 import makeSICDRegressionFiles
 import utils
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--install', default = 'install')
-args = parser.parse_args()
+utils.setPaths()
 
-pathfinder = utils.Pathfinder(args.install)
-pathfinder.setPaths()
-
-makeSIDDRegressionFiles.run(pathfinder)
-makeSICDRegressionFiles.run(pathfinder)
+makeSIDDRegressionFiles.run()
+makeSICDRegressionFiles.run()

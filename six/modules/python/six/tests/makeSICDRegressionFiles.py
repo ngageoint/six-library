@@ -28,6 +28,8 @@ import sys
 from subprocess import call
 from itertools import product
 
+import utils
+
     
 def checkArgs(version, alg, imageType):
     if imageType != '' and alg != 'RMA':
@@ -56,12 +58,12 @@ def createNITFs(version, alg, imageType, home):
     writeNITF(os.path.join(home, 'regression_files', 'six.sicd', outputName),
               cmplx)
 
-def run(pathfinder):
+def run():
     sicdVersions = ['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0']
     formationAlgs = ['PFA', 'RMA', 'RGAZCOMP']
     imageTypes = ['RMAT', 'RMCR', 'INCA']
 
-    home = pathfinder.findSixHome()
+    home = utils.findSixHome()
     if not os.path.isdir(os.path.join(home, 'regression_files', 'six.sicd')):
         os.makedirs(os.path.join(home, 'regression_files', 'six.sicd'))
     for args in product(sicdVersions, formationAlgs, imageTypes):

@@ -41,26 +41,17 @@ def moveToOutputDir(source, outdir):
          
     move(os.path.join(os.getcwd(), source), outdir)
 
-def run(pathfinder):
-    outdir = os.path.join(pathfinder.findSixHome(),
+def run():
+    outdir = os.path.join(utils.findSixHome(),
                           'regression_files', 'six.sidd')
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
 
     # Make siddLegend
-    binDir = os.path.join(pathfinder.installPath(), 'bin')
+    binDir = os.path.join(utils.installPath(), 'bin')
     legendNameBase = 'siddLegend'
     print 'Creating SIDDs with legends'
-    print binDir
-    if not os.path.exists(binDir):
-        print "No bin"
-    if not os.path.exists(pathfinder.installPath()):
-        print "No install"
-    if not os.path.exists(utils.executableName(
-        os.path.join(binDir, 'test_create_sidd_legend'))):
-        print utils.executableName(os.path.join(binDir,
-                                                'test_create_sidd_legend'))
-    print os.listdir(binDir)
+
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
