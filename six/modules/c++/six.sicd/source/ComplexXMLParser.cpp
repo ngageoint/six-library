@@ -144,6 +144,7 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
     {
         throw except::Exception(Ctxt("ComplexData.Grid required but not found"));
     }
+    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
     const Poly2D timeCOAPoly = sicd.grid->timeCOAPoly;
     const std::string mode = sicd.collectionInformation->radarMode.toString();
     bool isScalar = true;
@@ -480,6 +481,7 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
     // 2.4. Does WgtFunct agree with WgtType?
     const int DEFAULT_WGT_SIZE = 512;
     const double WGT_TOL = 1e-3;
+    const double WF_TOL = 1e-3; //Relative tolerance
 
     // Skipping 2.4.1 and 2.4.2 because they're over my head
     // 2.4.3
@@ -520,8 +522,6 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
     if (sicd.radarCollection.get() != NULL)
     {
         // 2.8 Waveform description consistency
-        const double WF_TOL = 1e-3; //Relative tolerance
-        const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
         double wfMin = std::numeric_limits<double>::infinity();
         double wfMax = -std::numeric_limits<double>::infinity();
 
@@ -575,12 +575,12 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
 
         for (size_t ii = 0; ii < sicd.radarCollection->waveform.size(); ++ii)
         {
-            if (sicd.radarCollection->waveform[ii].get() == NULL) 
+            if (sicd.radarCollection->waveform[ii].get() == NULL)
             {
                 continue;
             }
             six::sicd::WaveformParameters wfParam = *sicd.radarCollection->waveform[ii];
-            
+
             //2.8.3
             if (std::abs(wfParam.txRFBandwidth / (wfParam.txPulseLength * wfParam.txFMRate)) - 1 > WF_TOL)
             {
@@ -730,7 +730,7 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
     // Both ImageData.ValidData and GeoData.ValidData are optional, 
     // but are conditionally required upon each other. If one exists,
     // the other must also
-    bool imageValidData = false; 
+    bool imageValidData = false;
     bool geoValidData = false;
 
     if (sicd.imageData.get() != NULL && !sicd.imageData->validData.empty())
@@ -745,15 +745,500 @@ void ComplexXMLParser::validate(const ComplexData& sicd) const
     {
         details.str("");
         details << "ImageData.ValidData/GeoData.ValidData required together.\n"
-            << "ImageData.ValidData exists, but GeoData.ValidData does not."
+            << "ImageData.ValidData exists, but GeoData.ValidData does not.";
         log()->error(details.str());
     }
     if (!imageValidData && geoValidData)
     {
         details.str("");
         details << "ImageData.ValidData/GeoData.ValidData required together.\n"
-            << "GeoData.ValidData exists, but ImageData.ValidData does not."
-            log()->error(details.str());
+            << "GeoData.ValidData exists, but ImageData.ValidData does not.";
+        log()->error(details.str());
+    }
+    /*
+        * As with the corner coordinates, we don't check for precision in the agreement
+        * between IMageData.ValidData and GeoData.ValidData here, sinc the spec allows
+        * from approximate Lat/Lons, and since it's not possible to know the HAE used
+        * to compute Lat/Lon for each corner. One could potentially use the SICD sensor
+        * model to check that the image coordinates and the resulting ground coordinates
+        * from projection to a flat plane (or constant HAE) roughly agreed with GeoData.
+        * ValidData to within a generous tolerance.
+        */
+
+        // 2.12 IFP-specific checks
+    if (sicd.geoData.get() != NULL && sicd.grid.get() != NULL && sicd.grid->row.get() != NULL && sicd.grid->col.get() != NULL && sicd.imageFormation.get() != NULL)
+    {
+        Vector3 scp = sicd.geoData->scp.ecf;
+        Vector3 rowUnitVector = sicd.grid->row->unitVector;
+        Vector3 colUnitVector = sicd.grid->col->unitVector;
+        const double UVECT_TOL = 1e-3;
+        const double IFP_POLY_TOL = 1e-5;
+
+        ImageFormationType formType = sicd.imageFormation->imageFormationAlgorithm;
+        if (formType.toString() == "RGAZCOMP")
+        {
+            // 2.12.1.1
+            if (sicd.grid->imagePlane.toString() != "SLANT")
+            {
+                details.str("");
+                details << "RGAZCOMP image formation should result in a SLANT plane image.\n"
+                    << "Grid.ImagePlane: " << sicd.grid->imagePlane.toString();
+                log()->error(details.str());
+            }
+
+            //2.12.1.2
+            if (sicd.grid->type.toString() != "RGAZIM")
+            {
+                details.str("");
+                details << "RGAZCOMP image formation should result in a RGAZIM grid.\n"
+                    << "Grid.Type: " << sicd.grid->type.toString();
+                log()->error(details.str());
+            }
+            if (sicd.scpcoa.get() != NULL)
+            {
+                Vector3 arp = sicd.scpcoa->arpPos;
+                Vector3 arpVel = sicd.scpcoa->arpVel;
+                Vector3 unitRG = (scp - arp) / (scp - arp).norm();
+                Vector3 left = cross((arp / arp.norm()), (arpVel / arp.norm()));
+                double look = 0;
+                if (left.dot(unitRG) > 0)
+                {
+                    look = 1;
+                }
+                else if (left.dot(unitRG) < 0)
+                {
+                    look = -1;
+                }
+                Vector3 spn = -look * cross(unitRG, arpVel);
+                spn = spn / spn.norm();
+
+                //2.12.1.3
+                if (sicd.rgAzComp.get() == NULL)
+                {
+                    details.str("");
+                    details << "RGAZCOMP image formation declared, but no RgAzComp metadata given.\n"
+                        << "No RgAzcomp filed in this SICD";
+                    log()->error(details.str());
+                }
+                else
+                {
+                    //2.12.1.4
+                    double derivedAzSF = -look * std::sin(M_PI / 180 * sicd.scpcoa->dopplerConeAngle) / sicd.scpcoa->slantRange;
+                    if (std::abs(sicd.rgAzComp->azSF - derivedAzSF) > 1e-6)
+                    {
+                        details.str("");
+                        details << "RGAZCOMP fields inconsistent.\n"
+                            << "RgAzComp.AzSF: " << sicd.rgAzComp->azSF << std::endl
+                            << "Derived RgAzComp.AzSF: " << derivedAzSF;
+                        log()->error(details.str());
+                    }
+                    //2.12.1.5 omitted
+                }
+                //2.12.1.6
+                Vector3 drvect = unitRG;
+                if ((drvect - rowUnitVector).norm() > UVECT_TOL)
+                {
+                    details.str("");
+                    details << "UVect fields inconsistent.\n"
+                        << "Grid.Row.UVectECEF: " << rowUnitVector << std::endl
+                        << "Derived Grid.Row.UVectECEF: " << drvect;
+                    log()->error(details.str());
+                }
+
+                //2.12.1.7
+                Vector3 dcvect = cross(spn, unitRG);
+                if ((dcvect - colUnitVector).norm() > UVECT_TOL)
+                {
+                    details.str("");
+                    details << "UVectr fields inconsistent.\n"
+                        << "Grid.Col.UVectECF: " << colUnitVector << std::endl
+                        << "Derived Grid.Col.UVectECF: " << dcvect;
+                    log()->error(details.str());
+                }
+
+                //2.12.1.8
+                if (!Init::isUndefined(sicd.grid->col->deltaKCOAPoly) &&
+                    sicd.grid->col->deltaKCOAPoly.orderX() == 1 && sicd.grid->col->deltaKCOAPoly.orderY() == 1
+                    && std::abs(sicd.grid->col->kCenter - (-sicd.grid->col->deltaKCOAPoly[0][0])) > std::numeric_limits<double>::epsilon())
+                {
+                    details.str("");
+                    details << "Grid.Col.KCenter must be equal to -Grid.Col.DeltaKCOAPoly for RGAZCOMP data.\n"
+                        << "Grid.Col.KCenter: " << sicd.grid->col->kCenter << std::endl
+                        << "Grid.Col.DeltaKCOAPoly: " << sicd.grid->col->deltaKCOAPoly[0][0];
+                    log()->error(details.str());
+                }
+
+                //2.12.1.9
+                if (sicd.radarCollection.get() == NULL || Init::isUndefined(sicd.radarCollection->refFrequencyIndex))
+                {
+                    double fcProc = (sicd.imageFormation->txFrequencyProcMin + sicd.imageFormation->txFrequencyProcMax) / 2;
+                    double kfc = fcProc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+                    if (!Init::isUndefined(sicd.grid->row->deltaKCOAPoly))
+                    {
+                        Poly2D poly = sicd.grid->row->deltaKCOAPoly;
+                        for (size_t ii = 0; ii < poly.orderX(); ++ii)
+                        {
+                            for (size_t jj = 0; jj < poly.orderY(); ++jj)
+                            {
+                                if (std::abs(sicd.grid->row->kCenter - (kfc - poly[ii][jj]) > std::numeric_limits<double>::epsilon()))
+                                {
+                                    details.str("");
+                                    details << WF_INCONSISTENT_STR
+                                        << "Grid.Col.KCenter: " << sicd.grid->col->kCenter << std::endl
+                                        << "Center frequency * 2/c - Grid.Row.DeltaKCOAPoly: "
+                                        << kfc - poly[ii][jj];
+                                    log()->error(details.str());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (std::abs(sicd.grid->row->kCenter - kfc) > std::numeric_limits<double>::epsilon())
+                    {
+                        details.str("");
+                        details << WF_INCONSISTENT_STR
+                            << "Grid.Col.KCenter: " << sicd.grid->col->kCenter << std::endl
+                            << "Center frequency * 2/c: " << kfc;
+                        log()->error(details.str());
+                    }
+                }
+
+                //2.12.1.10
+                if (!Init::isUndefined(sicd.grid->col->deltaKCOAPoly) && sicd.grid->col->deltaKCOAPoly.orderX() > 1)
+                {
+                    details.str("");
+                    details << "Grid.Col.DetlaKCOAPoly must be a single value for RGAZCOMP data";
+                    log()->error(details.str());
+                }
+
+                //2.12.1.11
+                if (!Init::isUndefined(sicd.grid->row->deltaKCOAPoly) && sicd.grid->row->deltaKCOAPoly.orderX() > 1)
+                {
+                    details.str("");
+                    details << "Grid.Row.DetlaKCOAPoly must be a single value for RGAZCOMP data";
+                    log()->error(details.str());
+                }
+            }
+        }
+        else if (formType.toString() == "PFA")
+        {
+            //2.12.2.1
+            if (sicd.grid->type.toString() != "RGAZIM")
+            {
+                details.str("");
+                details << "PFA image formation should result in a RGAZIM grid\n"
+                    << "Grid.Type: " << sicd.grid->type.toString();
+                log()->error(details.str());
+            }
+
+            //2.12.2.2
+            if (sicd.pfa.get() == NULL)
+            {
+                details.str("");
+                details << "PFA image formation declared, but no PFA metadata given.\n"
+                    << "No PFA field in this SICD";
+                log()->error(details.str());
+            }
+
+            else
+            {
+                //2.12.2.3
+                if (sicd.scpcoa.get() == NULL || sicd.pfa->polarAngleRefTime - sicd.scpcoa->scpTime > std::numeric_limits<double>::epsilon())
+                {
+                    details.str("");
+                    details << "Polar angle reference time and center of aperture time for center are usuallly the same.\n"
+                        << "PFA.PolarAngRefTime: " << sicd.pfa->polarAngleRefTime << std::endl
+                        << "SCPCOA.SCPTime: " << (sicd.scpcoa.get() == NULL ? "NULL" : str::toString(sicd.scpcoa->scpTime));
+                    log()->warn(details.str());
+                }
+
+                // Skipping to 2.12.2.10
+                // Make sure Row.kCtr is consistent with processed RF frequency bandwidth
+                if (sicd.radarCollection.get() == NULL || Init::isUndefined(sicd.radarCollection->refFrequencyIndex))
+                {
+                    if (sicd.imageFormation.get() != NULL)
+                    {
+                        double fcProc = (sicd.imageFormation->txFrequencyProcMin + sicd.imageFormation->txFrequencyProcMax) / 2;
+
+                        // PFA.SpatialFreqSFPoly affects Row.KCtr
+                        double kapCtr = fcProc * sicd.pfa->spatialFrequencyScaleFactorPoly[0] * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+                        // PFA inscription could cause kapCtr and Row.KCtr to be somewhat different
+                        double theta = std::atan((sicd.grid->col->impulseResponseBandwidth / 2) / sicd.grid->row->kCenter); // aperture angle
+                        double kCtrTol = 1 - std::cos(theta); // Difference between krg and Kap (Krg = cos(theta)*kap)
+                        kCtrTol = std::max(0.01, kCtrTol); // % .01 should be plenty of tolerance for precision issues at small angles
+
+                        if (std::abs(sicd.grid->row->kCenter / kapCtr) - 1 > kCtrTol)
+                        {
+                            details.str("");
+                            details << WF_INCONSISTENT_STR
+                                << "Grid.Row.KCtr: " << sicd.grid->row->kCenter << std::endl
+                                << "Derived KapCtr: " << kapCtr;
+                            log()->error(details.str());
+                        }
+                    }
+                }
+            }
+        }
+        else if (formType.toString() == "RMA")
+        {
+            //2.12.3.1
+            if (sicd.rma.get() == NULL)
+            {
+                details.str("");
+                details << "RMA image formation declared, but no RMA metadat given.\n"
+                    << "No RMA field in this SICD.";
+                log()->error(details.str());
+            }
+            else if (sicd.rma->algoType.toString() == "RMAT")
+            {
+                // 2.12.3.2.1
+                if (sicd.grid->type.toString() != "XCTYAT")
+                {
+                    details.str("");
+                    details << "RMA/RMAT image formation should result in a XCTYAT grid.\n"
+                        << "RMA.ImageType: RMAT, Grid.Type: " << sicd.grid->type.toString();
+                    log()->error(details.str());
+                }
+
+                // 2.12.3.2.2
+                if (sicd.rma->rmat.get() == NULL)
+                {
+                    details.str("");
+                    details << "RMA/RMAT image formation declared, but no RMAT metadata given.\n"
+                        << "No RMAT field in this SICD.";
+                    log()->error(details.str());
+                }
+                else
+                {
+                    //scp defined above. Given again here as reminder
+                    //scp = sicd.geoData->scp.ecf;
+                    Vector3 posRef = sicd.rma->rmat->refPos;
+                    Vector3 velRef = sicd.rma->rmat->refVel;
+                    Vector3 uLOS = (scp - posRef) / (scp - posRef).norm();
+                    Vector3 left = cross(posRef / posRef.norm(), velRef / velRef.norm());
+                    int look = 0;
+                    if (left.dot(uLOS) > 0)
+                    {
+                        look = 1;
+                    }
+                    else if (left.dot(uLOS) < 0)
+                    {
+                        look = -1;
+                    }
+                    Vector3 uYAT = (velRef / velRef.norm()) * look;
+                    Vector3 spn = cross(uLOS, uYAT);
+                    spn = spn / spn.norm();
+                    Vector3 uXCT = cross(uYAT, spn);
+                    double dcaRef = std::acos((velRef / velRef.norm()).dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
+
+                    // 2.12.3.2.3
+                    if ((rowUnitVector - uXCT).norm() > UVECT_TOL)
+                    {
+                        details.str("");
+                        details << "UVect fields inconsistent.\n"
+                            << "Grid.Row.UVectECF: " << rowUnitVector
+                            << "Derived grid.Row.UVectECT: " << uXCT;
+                        log()->error(details.str());
+                    }
+
+                    // 2.12.3.2.4
+                    if ((colUnitVector - uYAT).norm() > UVECT_TOL)
+                    {
+                        details.str("");
+                        details << "UVect fields inconsistent.\n"
+                            << "Grid.Col.UVectECF: " << colUnitVector
+                            << "Derived Grid.Col.UVectECF: " << uYAT;
+                        log()->error(details.str());
+                    }
+
+                    // 2.12.3.2.5
+                    if (std::abs(dcaRef - sicd.rma->rmat->dopConeAngleRef) > 1e-6)
+                    {
+                        details.str("");
+                        details << "RMA fields inconsistent.\n"
+                            << "RMA.RMAT.DopConeAngleRef: " << sicd.rma->rmat->dopConeAngleRef
+                            << std::endl << "Derived RMA.RMAT.DopConeAngleRef: " << dcaRef;
+                        log()->error(details.str());
+                    }
+                }
+                if (sicd.radarCollection.get() == NULL || Init::isUndefined(sicd.radarCollection->refFrequencyIndex))
+                {
+                    double fcProc = (sicd.imageFormation->txFrequencyProcMin + sicd.imageFormation->txFrequencyProcMax) / 2;
+                    double kfc = fcProc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+
+                    // 2.12.3.2.6
+                    if ((kfc * std::sin(sicd.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES) / sicd.grid->row->kCenter) - 1 > WF_TOL)
+                    {
+                        details.str("");
+                        details << WF_INCONSISTENT_STR
+                            << "Grid.Row.KCtr: " << sicd.grid->row->kCenter << std::endl
+                            << "Derived Grid.Row.KCtr: " << kfc * std::sin(sicd.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES);
+                        log()->warn(details.str());
+                    }
+
+                    // 2.12.3.2.7
+                    if ((kfc * std::cos(sicd.rma->rmat->dopConeAngleRef * math::Constants::DEGREES_TO_RADIANS) / sicd.grid->col->kCenter) - 1 > WF_TOL)
+                    {
+                        details.str("");
+                        details << WF_INCONSISTENT_STR
+                            << "Grid.Col.KCtr: " << sicd.grid->col->kCenter << std::endl
+                            << "Derived Grid.Col.KCtr: " << kfc * std::cos(sicd.rma->rmat->dopConeAngleRef * math::Constants::DEGREES_TO_RADIANS);
+                        log()->warn(details.str());
+                    }
+                }
+            }
+            else if (sicd.rma->algoType.toString() == "RMCR")
+            {
+                // 2.12.3.3.1
+                if (sicd.grid->type.toString() != "XRGYCR")
+                {
+                    details.str("");
+                    details << "RMA/RMCR image formation should result in a XRGYCR grid.\n"
+                        << "RMA.ImageType: RMCR, Grid.Type: " << sicd.grid->type.toString();
+                    log()->error(details.str());
+                }
+
+                // 2.12.3.3.2
+                if (sicd.rma->rmcr.get() == NULL)
+                {
+                    details.str("");
+                    details << "RMA/RMCR image formation declared, but no RMCR metadata given.\n"
+                        << "No RMCR field in this SICD.";
+                    log()->error(details.str());
+                }
+                else
+                {
+                    Vector3 posRef = sicd.rma->rmcr->refPos;
+                    Vector3 velRef = sicd.rma->rmcr->refVel;
+                    Vector3 uXRG = (scp - posRef) / (scp - posRef).norm();
+                    Vector3 left = cross(posRef / posRef.norm(), velRef / velRef.norm());
+                    int look = 0;
+                    if (left.dot(uXRG) > 0)
+                    {
+                        look = 1;
+                    }
+                    else if (left.dot(uXRG) < 0)
+                    {
+                        look = -1;
+                    }
+                    Vector3 spn = cross(velRef / velRef.norm(), uXRG);
+                    spn = spn / spn.norm();
+                    Vector3 uYCR = cross(spn, uXRG);
+                    double dcaRef = std::acos((velRef / velRef.norm()).dot(uXRG)) * math::Constants::RADIANS_TO_DEGREES;
+
+                    //2.12.3.3.3
+                    if ((rowUnitVector - uXRG).norm() > UVECT_TOL)
+                    {
+                        details.str("");
+                        details << "UVect fields inconsistent.\n"
+                            << "Grid.Row.UVectECF: " << rowUnitVector << std::endl
+                            << "Derived Grid.Row.UVectECF: " << uXRG;
+                        log()->error(details.str());
+                    }
+
+                    // 2.12.3.3.4
+                    if ((colUnitVector - uYCR).norm() > UVECT_TOL)
+                    {
+                        details.str("");
+                        details << "UVect fields inconsistent.\n"
+                            << "Grid.Col.UVectECF: " << colUnitVector << std::endl
+                            << "Derived Grid.Col.UVectECF: " << uYCR;
+                        log()->error(details.str());
+                    }
+
+                    // 2.12.3.3.5
+                    if (std::abs(dcaRef - sicd.rma->rmcr->dopConeAngleRef) > 1e-6)
+                    {
+                        details.str("");
+                        details << "RMA fields inconsistent.\n"
+                            << "RMA.RMCR.DopConeAngleRef: " << sicd.rma->rmcr->dopConeAngleRef << std::endl
+                            << "Derived RMA.RMCR.DopConeAngleRef: " << dcaRef;
+                        log()->error(details.str());
+                    }
+                }
+
+                // 2.12.3.3.6
+                if (sicd.grid->col->kCenter != 0)
+                {
+                    details.str("");
+                    details << "Grid.Col.KCtr must be zero for RMA/RMCR data.\n"
+                        << "Grid.Col.KCtr = " << sicd.grid->col->kCenter;
+                    log()->error(details.str());
+                }
+
+                // 2.12.3.3.7
+                if (sicd.radarCollection.get() == NULL || Init::isUndefined(sicd.radarCollection->refFrequencyIndex))
+                {
+                    double fcProc = (sicd.imageFormation->txFrequencyProcMin + sicd.imageFormation->txFrequencyProcMax) / 2;
+                    double kfc = fcProc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+                    if ((sicd.grid->row->kCenter / kfc) - 1 > WF_TOL)
+                    {
+                        details.str("");
+                        details << WF_INCONSISTENT_STR << std::endl
+                            << "Grid.Row.KCtr: " << sicd.grid->row->kCenter << std::endl
+                            << "Center frequency * 2/c: " << kfc;
+                        log()->warn(details.str());
+                    }
+                }
+            }
+            else if (sicd.rma->algoType.toString() == "INCA")
+            {
+                // 2.12.3.4.1
+                if (sicd.grid->type.toString() != "RGZERO")
+                {
+                    details.str("");
+                    details << "RMA/INCA image formation should result in a RGZERO grid.\n"
+                        << "Grid.Type: " << sicd.grid->type.toString();
+                    log()->error(details.str());
+                }
+
+                // 2.12.3.4.2
+                if (sicd.rma->inca.get() == NULL)
+                {
+                    details.str("");
+                    details << "RMA/INCA image formation declared, but no INCA metadata given.\n"
+                        << "No INCA field in this SICD.";
+                    log()->error(details.str());
+                }
+                else
+                {
+                    //2.12.3.4.3
+                    if (sicd.collectionInformation.get() != NULL)
+                    {
+                        if (sicd.collectionInformation->radarMode.toString() == "SPOTLIGHT" &&
+                            (!Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) ||
+                                !Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA)))
+                        {
+                            details.str("");
+                            details << "RMA.INCA fields inconsistent.\n"
+                                << "RMA.INCA.DopplerCentroidPoly/DopplerCentroidCOA not used for SPOTLIGHT collection.";
+                            log()->error(details.str());
+                        }
+                        //2.12.3.4.4
+                        else if (sicd.collectionInformation->radarMode.toString() != "SPOTLIGHT")
+                        {
+                            if (Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) || Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA))
+                            {
+                                details.str("");
+                                details << "RMA.INCA fields inconsistent.\n"
+                                    << "RMA.INCA.DopplerCentroidPoly/COA required for non-SPOTLIGHT collection.";
+                                log()->error(details.str());
+                            }
+
+                            // Skipping the rest of 2.12.3.4
+                        }
+                    }
+                }
+            }
+        }
+        else if (formType.toString() == "OTHER")
+        {
+            //2.12.3
+            details.str("");
+            details << "Image formation not fully defined.\n"
+                << "SICD.ImageFormation.ImageFormAlgo = OTHER.";
+            log()->warn(details.str());
+        }
     }
 }
 
