@@ -141,6 +141,27 @@ TEST_CASE(testSyntax)
     TEST_ASSERT_EQ(&*ptr, rawPtr);
     TEST_ASSERT_EQ(&(ptr->val1), &(rawPtr->val1));
 }
+
+TEST_CASE(testEqualityOperator)
+{
+    mem::ScopedCopyablePtr<int> ptr1;
+    mem::ScopedCopyablePtr<int> ptr2;
+
+    //Null smart pointers are equal
+    TEST_ASSERT(ptr1 == ptr2);
+
+    ptr1.reset(new int(4));
+
+    TEST_ASSERT(ptr1 != ptr2);
+
+    ptr2.reset(new int(5));
+
+    TEST_ASSERT_FALSE(ptr1 == ptr2);
+
+    ptr2.reset(new int(4));
+
+    TEST_ASSERT_FALSE(ptr1 != ptr2);
+}
 }
 
 int main(int, char**)
@@ -149,6 +170,7 @@ int main(int, char**)
     TEST_CHECK(testAssignmentOperator);
     TEST_CHECK(testDestructor);
     TEST_CHECK(testSyntax);
+    TEST_CHECK(testEqualityOperator);
 
     return 0;
 }
