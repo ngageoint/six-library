@@ -117,6 +117,10 @@ Data* readNITF(const std::string& pathname,
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
 %}
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
 
 %include "std_vector.i"
 %include "std_string.i"

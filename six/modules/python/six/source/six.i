@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of six-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * six-python is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -47,13 +47,18 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
                       ::io::InputStream& xmlStream,
                       DataType dataType,
                       const std::vector<std::string>& schemaPaths,
-                      logging::Logger& log) 
+                      logging::Logger& log)
 {
   std::auto_ptr<Data> retv = six::parseData(xmlReg, xmlStream, dataType, schemaPaths, log);
   return retv.release();
 }
 
 %}
+
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
 
 %import "types.i"
 %import "except.i"
@@ -66,11 +71,11 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 /* will probably want it eventually, but it looks like six.sicd doesn't use it */
 %ignore "LUT";
 
-/* auto_ptr causes problems, as well as 
- * xml factory stuff that we'll just 
+/* auto_ptr causes problems, as well as
+ * xml factory stuff that we'll just
  * put aside for now
  */
-%ignore parseData; 
+%ignore parseData;
 
 /* ignore some useless (in Python) functions in ParameterCollection */
 %ignore six::ParameterCollection::begin;
@@ -106,11 +111,11 @@ def setValue(self, *args):
 %}
 
 
-%extend six::Parameter 
+%extend six::Parameter
 {
 
   public:
-    void setValue(const std::string & str) 
+    void setValue(const std::string & str)
     {
       $self->setValue<std::string>(str);
     }
