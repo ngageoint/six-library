@@ -549,57 +549,59 @@
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
         nitf_Uint8 **buf = NULL;
         PyObject* result = NULL;
-        int i, padded, rowSkip, colSkip, subimageSize;
-        nitf_SubWindow* newWindow = nitf_SubWindow_construct(error);
+        int i, padded, rowSkip, colSkip, subimageSize, bandsMalloced;
+
+        bandsMalloced = 0;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
         subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
 
-        buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*));
+        buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
         if (!buf)
         {
             PyErr_NoMemory();
             goto CATCH_ERROR;
         }
 
-        /* copy the window */
-        newWindow->downsampler = window->downsampler;
-        newWindow->startRow = window->startRow;
-        newWindow->startCol = window->startCol;
-        newWindow->numRows = window->numRows;
-        newWindow->numCols = window->numCols;
-        newWindow->numBands = 1;
-
-        result = PyList_New(window->numBands);
-        for (i = 0; i < window->numBands; i++)
+        for (i = 0; i < window->numBands; ++i)
         {
-            PyObject* buffObj = PyBuffer_New(subimageSize * sizeof(nitf_Uint8));
-            if (!buffObj) goto CATCH_ERROR;
-            buffObj->ob_type->tp_as_buffer->bf_getwritebuffer(buffObj, 0, (void **)&buf[0]);
-
-            newWindow->bandList = &window->bandList[i];
-
-            //We need to renumber the band going in to make a check pass,
-            //since we tell it that numBands = 1
-            newWindow->bandList[0] = 0;
-            if (!nitf_ImageReader_read(reader, newWindow, buf, &padded, error))
+            buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
+            if (!buf[i])
             {
-                nitf_Error_print(error, stderr, "Read failed");
+                PyErr_NoMemory();
                 goto CATCH_ERROR;
             }
+
+            ++bandsMalloced;
+        }
+
+        result = PyList_New(window->numBands);
+
+        if (!nitf_ImageReader_read(reader, window, buf, &padded, error))
+        {
+            nitf_Error_print(error, stderr, "Read failed");
+            goto CATCH_ERROR;
+        }
+
+        for (i = 0; i < window->numBands; i++)
+        {
+            PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
             PyList_SetItem(result, i, buffObj);
         }
-        /* destroy temp window */
-        newWindow->bandList = NULL;
-        newWindow->downsampler = NULL;
-        nitf_SubWindow_destruct(&newWindow);
 
-        NITF_FREE(buf);
+        //The PyList now owns the memory, so not freeing the buffer here
         return result;
 
       CATCH_ERROR:
-        if (buf) NITF_FREE(buf);
+        if (buf)
+        {
+            for (i = 0; i < bandsMalloced; ++i)
+            {
+                NITF_FREE(buf[i]);
+            }
+            NITF_FREE(buf);
+        }
         if (result) Py_CLEAR(result);
         return NULL;
     }
