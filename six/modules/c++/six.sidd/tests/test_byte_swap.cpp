@@ -174,7 +174,8 @@ int main(int argc, char** argv)
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(false, false);
 
-        if (success) {
+        if (success) 
+        {
             return 0;
         }
     }

@@ -22,6 +22,8 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
+import os
+import subprocess
 import sys
 
 import runPythonScripts
@@ -30,9 +32,19 @@ import utils
 
 utils.setPaths()
 
-result = runPythonScripts.run() and checkNITFs.run()
-if result == True:
-    print "All tests passed."
-    sys.exit(0)
-print "Tests failed."
-sys.exit(1)
+if runPythonScripts.run() == False:
+    print "Error running a python script"
+    sys.exit(1)
+
+if checkNITFs.run() == False:
+    print "test in checkNITFS.py failed"
+    sys.exit(1)
+
+
+if subprocess.call([utils.executableName(os.path.join(
+        utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
+    print "Failed ByteSwap test in six.sidd/tests/test_byte_swap"
+    sys.exit(1)
+
+print "All passed"
+sys.exit(0)
