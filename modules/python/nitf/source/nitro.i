@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -50,7 +50,7 @@
             nitf_ListIterator_increment(&iter); \
             count++; \
         } \
-    } 
+    }
 
 
 %typemap(out) nitf_Uint32, nitf_Int32{$result = PyInt_FromLong($1);}
@@ -252,11 +252,11 @@
     #define PY_NITF_ACCESS_READONLY 1
     #define PY_NITF_ACCESS_WRITEONLY 2
     #define PY_NITF_ACCESS_READWRITE 3
-    
+
     #define  PY_NITF_SEEK_CUR 1
     #define  PY_NITF_SEEK_SET 2
     #define  PY_NITF_SEEK_END 3
-    
+
     nitf_IOHandle py_IOHandle_create(const char *fname,
             int accessFlag,
             int createFlag,
@@ -290,20 +290,20 @@
         {
           createInt = NITF_OPEN_EXISTING;
         }
-        
+
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
     }
-    
+
     nitf_Off py_IOHandle_seek(nitf_IOHandle handle,
             nitf_Off offset, int whence, nitf_Error * error)
     {
         int realWhence = NITF_SEEK_SET;
-        
+
         if (whence == PY_NITF_SEEK_CUR)
             realWhence = NITF_SEEK_CUR;
         else if (whence == PY_NITF_SEEK_END)
             realWhence = NITF_SEEK_END;
-        
+
         return nitf_IOHandle_seek(handle, offset, realWhence, error);
     }
 
@@ -322,13 +322,13 @@
         nitf_Field_get(field, (NITF_DATA*)buf, NITF_CONV_STRING, field->length + 1, error);
         return buf;
     }
-    
+
     nitf_Uint32 py_Field_getInt(nitf_Field *field, nitf_Error *error)
     {
         nitf_Uint32 intVal;
         NITF_TRY_GET_UINT32(field, &intVal, error);
         return intVal;
-        
+
       CATCH_ERROR:
         PyErr_SetString(PyExc_RuntimeError, "Unable to convert Field to int");
         return 0;
@@ -414,7 +414,7 @@
     {
         nitf_Record_destruct(&record);
     }
-    
+
     nitf_Version py_Record_getVersion(nitf_Record * record)
     {
 	    return nitf_Record_getVersion(record);
@@ -428,10 +428,10 @@
     nitf_ComponentInfo* py_FileHeader_getComponentInfo(nitf_FileHeader* header, int index, char* type, nitf_Error* error)
     {
         nitf_Uint32 num;
-        
+
         if (!type)
         	goto CATCH_ERROR;
-        
+
         if (strcmp(type, "image") == 0)
         {
         	NITF_TRY_GET_UINT32(header->numImages, &num, error);
@@ -468,7 +468,7 @@
         	if (index >= num) goto CATCH_ERROR;
         	return (nitf_ComponentInfo*)header->reservedExtensionInfo[index];
         }
-        	
+
         CATCH_ERROR:
           return NULL;
     }
@@ -488,9 +488,9 @@
     {
         /* TODO: Support taking in options here and converting it */
         nrt_HashTable* nullOptions = NULL;
-        return nitf_Writer_newImageWriter(writer, index, nullOptions, error);    
+        return nitf_Writer_newImageWriter(writer, index, nullOptions, error);
     }
-    
+
     nitf_BandSource* py_nitf_MemorySource_construct(PyObject* data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
     {
         /* TODO: I'm not convinced this is the right way to handle sending the data in
@@ -499,7 +499,7 @@
          */
         return nitf_MemorySource_construct(SWIG_as_voidptr(data), size, start, numBytesPerPixel, pixelSkip, error);
     }
-    
+
     /**
      * Helper function for the SubWindow constructor
      */
@@ -513,12 +513,12 @@
         window->numRows = numRows;
         window->numCols = numCols;
         window->downsampler = downSampler;
-        
+
         if (!PySequence_Check(bandList)) {
             PyErr_SetString(PyExc_ValueError,"Expected a sequence");
             return NULL;
           }
-        
+
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
         window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
@@ -527,20 +527,20 @@
             PyErr_NoMemory();
             return NULL;
         }
-        
+
       for (i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
         if (PyNumber_Check(o)) {
           window->bandList[i] = (int) PyInt_AsLong(o);
         } else {
-          PyErr_SetString(PyExc_ValueError,"Sequence elements must be numbers");      
+          PyErr_SetString(PyExc_ValueError,"Sequence elements must be numbers");
          /* TODO clean up memory */
           return NULL;
         }
         }
         return window;
     }
-    
+
     /**
      * Helper function for ImageReader_read ... necessary
      */
@@ -551,18 +551,18 @@
         PyObject* result = NULL;
         int i, padded, rowSkip, colSkip, subimageSize;
         nitf_SubWindow* newWindow = nitf_SubWindow_construct(error);
-        
+
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * NITF_NBPP_TO_BYTES(nbpp);
-        
+        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+
         buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*));
         if (!buf)
         {
             PyErr_NoMemory();
             goto CATCH_ERROR;
         }
-        
+
         /* copy the window */
         newWindow->downsampler = window->downsampler;
         newWindow->startRow = window->startRow;
@@ -570,14 +570,14 @@
         newWindow->numRows = window->numRows;
         newWindow->numCols = window->numCols;
         newWindow->numBands = 1;
-        
+
         result = PyList_New(window->numBands);
         for (i = 0; i < window->numBands; i++)
         {
             PyObject* buffObj = PyBuffer_New(subimageSize * sizeof(nitf_Uint8));
             if (!buffObj) goto CATCH_ERROR;
             buffObj->ob_type->tp_as_buffer->bf_getwritebuffer(buffObj, 0, (void **)&buf[0]);
-            
+
             newWindow->bandList = &window->bandList[i];
             if (!nitf_ImageReader_read(reader, newWindow, buf, &padded, error))
             {
@@ -590,23 +590,23 @@
         newWindow->bandList = NULL;
         newWindow->downsampler = NULL;
         nitf_SubWindow_destruct(&newWindow);
-        
+
         NITF_FREE(buf);
         return result;
-      
+
       CATCH_ERROR:
         if (buf) NITF_FREE(buf);
         if (result) Py_CLEAR(result);
         return NULL;
     }
-    
-    
+
+
     nitf_Field* py_Pair_getFieldData(nitf_Pair* pair)
     {
         return (nitf_Field*)pair->data;
     }
-    
-    
+
+
     PyObject* py_TREEnumerator_hasNext(nitf_TREEnumerator **it)
     {
         if (!(*it)) Py_RETURN_FALSE;
@@ -614,60 +614,60 @@
             Py_RETURN_TRUE;
         Py_RETURN_FALSE;
     }
-    
+
     nitf_Pair* py_TREEnumerator_next(nitf_TREEnumerator *it, nitf_Error *error)
     {
         if (!it) return NULL;
         return it->next(it, error);
     }
-    
-    
+
+
     PyObject* py_DataSource_read(nitf_DataSource* source, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        
+
         if (!buf)
         {
             PyErr_NoMemory();
             return NULL;
         }
-        
+
         source->iface->read(source->data, buf, size, error);
         bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
-    
+
     PyObject* py_SegmentReader_read(nitf_SegmentReader* reader, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        
+
         if (!buf)
         {
             PyErr_NoMemory();
             return NULL;
         }
-        
+
         nitf_SegmentReader_read(reader, buf, size, error);
         bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
-    
+
     PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        
+
         if (!buf)
         {
             PyErr_NoMemory();
             return NULL;
         }
-            
+
         nitf_IOHandle_read(handle, buf, size, error);
         bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
