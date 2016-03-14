@@ -27,7 +27,9 @@ import makeSIDDRegressionFiles
 import makeSICDRegressionFiles
 import utils
 
-utils.setPaths()
 
-makeSIDDRegressionFiles.run()
-makeSICDRegressionFiles.run()
+def run():
+    utils.setPaths()
+
+    makeSIDDRegressionFiles.run()
+    makeSICDRegressionFiles.run()

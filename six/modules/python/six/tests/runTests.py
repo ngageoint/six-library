@@ -26,6 +26,7 @@ import os
 import subprocess
 import sys
 
+import makeRegressionFiles
 import runPythonScripts
 import checkNITFs
 import utils
@@ -36,15 +37,20 @@ if runPythonScripts.run() == False:
     print "Error running a python script"
     sys.exit(1)
 
+if makeRegressionFiles.run() == False:
+    print "Error generating regression files"
+    sys.exit(1)
+
 if checkNITFs.run() == False:
     print "test in checkNITFS.py failed"
     sys.exit(1)
 
-
+print "Performing byte swap test"
 if subprocess.call([utils.executableName(os.path.join(
         utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
     print "Failed ByteSwap test in six.sidd/tests/test_byte_swap"
     sys.exit(1)
+print "Byte swap test succeeded"
 
 print "All passed"
 sys.exit(0)

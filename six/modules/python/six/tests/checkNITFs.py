@@ -50,6 +50,7 @@ def run():
     regressionDir = os.path.join(utils.findSixHome(), 'regression_files')
     result = True
     for pathname in glob.iglob(os.path.join(regressionDir, '*', '*.nitf')):
+        print 'Checking {0}'.format(os.path.basename(pathname))
         result = result and roundTripSix(pathname) and validate(pathname)
 
     # Clean up
