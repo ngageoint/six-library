@@ -579,6 +579,10 @@
             buffObj->ob_type->tp_as_buffer->bf_getwritebuffer(buffObj, 0, (void **)&buf[0]);
 
             newWindow->bandList = &window->bandList[i];
+
+            //We need to renumber the band going in to make a check pass,
+            //since we tell it that numBands = 1
+            newWindow->bandList[0] = 0;
             if (!nitf_ImageReader_read(reader, newWindow, buf, &padded, error))
             {
                 nitf_Error_print(error, stderr, "Read failed");
