@@ -52,4 +52,8 @@ def run():
     for pathname in glob.iglob(os.path.join(regressionDir, '*', '*.nitf')):
         result = result and roundTripSix(pathname) and validate(pathname)
 
+    # Clean up
+    for pathname in glob.iglob(os.path.join(os.getcwd(), '*.nitf')):
+        os.remove(pathname)
+
     return result
