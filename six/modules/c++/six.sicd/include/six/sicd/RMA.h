@@ -75,6 +75,13 @@ struct RMAT
     //! Reference Doppler Cone Angle (degrees)
     //  added in 1.0.0
     double dopConeAngleRef;
+
+    //! Equality operator
+    bool operator==(const RMAT& rhs) const;
+    bool operator!=(const RMAT& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -103,6 +110,18 @@ struct RMCR
 
     //! Reference Doppler Cone Angle (degrees)
     double dopConeAngleRef;
+
+    //! Equality operator
+    bool operator==(const RMCR& rhs) const
+    {
+        return (refPos == rhs.refPos & refVel == rhs.refVel && 
+            dopConeAngleRef == rhs.dopConeAngleRef);
+    }
+
+    bool operator!=(const RMCR& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -137,6 +156,13 @@ struct INCA
 
     //! (Optional) Flag indicating that the COA at peak signal.
     BooleanType dopplerCentroidCOA;
+
+    //! Equality operator
+    bool operator==(const INCA& rhs) const;
+    bool operator!=(const INCA& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -164,6 +190,17 @@ struct RMA
     //! (Choice) Parameter for imaging near closest approach image
     //  description -- if this is present, rmat & rmcr should be NULL.
     mem::ScopedCopyablePtr<INCA> inca;
+
+    bool operator==(const RMA& rhs) const
+    {
+        return (algoType == rhs.algoType && rmat == rhs.rmat &&
+            rmcr == rhs.rmcr && inca == rhs.inca);
+    }
+
+    bool operator!=(const RMA& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

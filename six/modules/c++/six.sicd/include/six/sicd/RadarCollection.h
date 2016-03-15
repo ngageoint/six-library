@@ -54,6 +54,17 @@ struct TxStep
 
     //! Transmit signal polarization for this step
     PolarizationType txPolarization;
+
+    //! Equality operator
+    bool operator==(const TxStep& rhs)
+    {
+        return waveformIndex == rhs.waveformIndex && txPolarization == txPolarization;
+    }
+
+    bool operator!=(const TxStep& rhs)
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -105,6 +116,13 @@ struct WaveformParameters
 
     //! Receive FM rate.  Set to 0 for demod = CHIRP
     double rcvFMRate;
+
+    //! Equality operator
+    bool operator==(const WaveformParameters& rhs) const;
+    bool operator!=(const WaveformParameters& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -134,6 +152,18 @@ struct ChannelParameters
      *  APC polynomials are included
      */
     int rcvAPCIndex;
+
+    //! Equality operator
+    bool operator==(const ChannelParameters& rhs) const
+    {
+        return (txRcvPolarization == rhs.txRcvPolarization &&
+            rcvAPCIndex == rhs.rcvAPCIndex);
+    }
+
+    bool operator!=(const ChannelParameters& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -256,6 +286,12 @@ struct Segment
      */
     std::string identifier;
 
+    //! Equality operator
+    bool operator==(const Segment& rhs) const;
+    bool operator!=(const Segment& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -317,6 +353,17 @@ struct AreaPlane
       * display plane defined above.
       */
     OrientationType orientation;
+
+    //! Equality operator
+    bool operator==(const AreaPlane& rhs) const
+    {
+        return (referencePoint == rhs.referencePoint && xDirection == rhs.xDirection &&
+            yDirection == rhs.yDirection && segmentList == rhs.segmentList);
+    }
+    bool operator!=(const AreaPlane& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -349,6 +396,16 @@ struct Area
      *  
      */
     mem::ScopedCloneablePtr<AreaPlane> plane;
+
+    //! Equality operator
+    bool operator==(const Area& rhs) const
+    {
+        return acpCorners == rhs.acpCorners && plane == rhs.plane;
+    }
+    bool operator!=(const Area& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -411,6 +468,13 @@ struct RadarCollection
 
     //!  (Optional) additional parameters
     ParameterCollection parameters;
+
+    //! Equality operator
+    bool operator==(const RadarCollection& rhs) const;
+    bool operator!=(const RadarCollection& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

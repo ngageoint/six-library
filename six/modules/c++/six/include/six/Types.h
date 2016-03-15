@@ -239,6 +239,16 @@ struct SCP
 {
     Vector3 ecf;
     LatLonAlt llh;
+
+    bool operator==(const SCP& rhs) const
+    {
+        return ecf == rhs.ecf && llh == rhs.llh;
+    }
+
+    bool operator!=(const SCP& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -388,6 +398,19 @@ struct Corners
             throw except::Exception(Ctxt("Invalid index " +
                                              str::toString(idx)));
         }
+    }
+
+    bool operator==(const Corners& rhs) const
+    {
+        return (upperLeft == rhs.upperLeft &&
+            upperRight == rhs.upperRight &&
+            lowerRight == rhs.lowerRight &&
+            lowerLeft == rhs.lowerLeft);
+    }
+
+    bool operator!=(const Corners& rhs) const
+    {
+        return !(*this == rhs);
     }
 
     LatLonT upperLeft;

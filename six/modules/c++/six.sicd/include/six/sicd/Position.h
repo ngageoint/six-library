@@ -46,6 +46,17 @@ struct RcvAPC
     }
 
     std::vector<PolyXYZ> rcvAPCPolys;
+    
+    //! Equality operator
+    bool operator==(const RcvAPC& rhs) const
+    {
+        return rcvAPCPolys == rhs.rcvAPCPolys;
+    }
+
+    bool operator!=(const RcvAPC& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -85,6 +96,17 @@ struct Position
     //!  Constructor
     Position();
 
+    //! Equality operator
+    bool operator==(const Position& rhs) const
+    {
+        return (arpPoly == rhs.arpPoly && grpPoly == rhs.grpPoly &&
+            txAPCPoly == rhs.txAPCPoly && rcvAPC == rhs.rcvAPC);
+    }
+
+    bool operator!=(const Position& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

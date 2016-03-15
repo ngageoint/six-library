@@ -46,6 +46,16 @@ public:
         return os;
     }
 
+    virtual bool operator==(const ComplexClassification& other) const
+    {
+        return (level == other.getLevel() && fileOptions == other.fileOptions);
+    }
+
+    virtual bool operator!=(const ComplexClassification& other) const
+    {
+        return !(*this == other);
+    }
+
     //! This is spelled out (i.e. 'UNCLASSIFIED')
     std::string level;
 };

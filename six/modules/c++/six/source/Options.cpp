@@ -57,4 +57,18 @@ bool Options::hasParameter(const std::string& option) const
     const ParameterIter p = mParameters.find(option);
     return (p != mParameters.end());
 }
+
+bool Options::operator==(const Options& rhs) const
+{
+    ParameterIter p = this->begin();
+    while (p != this->end())
+    {
+        if (!rhs.hasParameter(p->first) || rhs.getParameter(p->first) != p->second)
+        {
+            return false;
+        }
+        ++p;
+    }
+    return true;
+}
 }

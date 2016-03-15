@@ -76,6 +76,12 @@ public:
      *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
      */
     std::vector<LatLon> geometryLatLon;
+
+    bool operator==(const GeoInfo& rhs) const;
+    bool operator!=(const GeoInfo& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -130,6 +136,12 @@ public:
      *  Note that this may be used as a block inside of a block.
      */
     std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
+
+    bool operator==(const GeoData& rhs) const;
+    bool operator!=(const GeoData& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

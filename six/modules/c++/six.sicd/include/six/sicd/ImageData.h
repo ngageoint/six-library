@@ -92,6 +92,13 @@ struct ImageData
     // If this doesnt have at least 3 vertices, its not going to get written
     std::vector<RowColInt> validData;
 
+    //! Equality operators
+    bool operator==(const ImageData& rhs) const;
+    bool operator!=(const ImageData& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 }
 }

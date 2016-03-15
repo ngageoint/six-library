@@ -110,5 +110,26 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 
     return imagePt;
 }
+
+bool ComplexData::operator==(const ComplexData& rhs) const
+{
+    return (collectionInformation == rhs.collectionInformation &&
+        imageCreation == rhs.imageCreation &&
+        imageData == rhs.imageData &&
+        geoData == rhs.geoData &&
+        grid == rhs.grid &&
+        timeline == rhs.timeline &&
+        position == rhs.position &&
+        radarCollection == rhs.radarCollection &&
+        imageFormation == rhs.imageFormation &&
+        scpcoa == rhs.scpcoa &&
+        radiometric == rhs.radiometric &&
+        antenna == rhs.antenna &&
+        errorStatistics == rhs.errorStatistics &&
+        matchInformation == rhs.matchInformation &&
+        pfa == rhs.pfa &&
+        rma == rhs.rma &&
+        rgAzComp == rhs.rgAzComp);
+}
 }
 }
