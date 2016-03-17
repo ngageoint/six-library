@@ -260,7 +260,7 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
 
     if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
+        sprintf(geoText, "<GeoInfo name=\"geoinfo%zu\">", numInfos);
         xmlText = std::string(geoText);
         for (unsigned int i=0; i<numInfos; ++i)
             xmlText += initGeoInfoXML(version, numInfos-1, numParams);

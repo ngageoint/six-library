@@ -28,6 +28,7 @@
 #include <six/XMLParser.h>
 #include <six/SICommonXMLParser.h>
 #include <six/sicd/ComplexData.h>
+#include <six/sicd/ComplexXMLValidator.h>
 
 namespace six
 {
@@ -160,8 +161,6 @@ protected:
     {
         return ("urn:SICD:" + version);
     }
-
-    virtual void validate(const ComplexData& sicd) const;
 
 private:
     XMLElem convertCollectionInformationToXML(const CollectionInformation *obj,
