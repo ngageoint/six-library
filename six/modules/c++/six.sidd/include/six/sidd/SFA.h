@@ -29,6 +29,11 @@ namespace six
 namespace sidd
 {
 
+inline bool doubleEqual(double lhs, double rhs)
+{
+    return (lhs - rhs < 1e-4);
+}
+
 struct SFATyped
 {
 public:
@@ -43,11 +48,27 @@ public:
         return mType;
     }
 
+    friend bool operator==(const SFATyped& lhs, const SFATyped& rhs)
+    {
+        return lhs.equalTo(rhs);
+    }
+
+    friend bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
 protected:
     std::string mType;
     SFATyped(const std::string& typeName) :
         mType(typeName)
     {
+    }
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        //TODO: make pure virutal
+        return false;
     }
 };
 
@@ -99,6 +120,18 @@ struct SFAPoint : public SFAGeometry
     virtual SFAPoint* clone() const
     {
         return new SFAPoint(*this);
+    }
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAPoint const* point = dynamic_cast<SFAPoint const*>(&rhs);
+        if (point != NULL)
+        {
+            return (x == point->x && y == point->y &&
+                doubleEqual(z, point->z) && doubleEqual(m, point->m));
+        }
+        std::cerr << "Cast failed" << std::endl;
+        return false;
     }
 
     static const char TYPE_NAME[];
