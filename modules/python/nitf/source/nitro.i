@@ -491,13 +491,9 @@
         return nitf_Writer_newImageWriter(writer, index, nullOptions, error);
     }
 
-    nitf_BandSource* py_nitf_MemorySource_construct(PyObject* data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
+    nitf_BandSource* py_nitf_MemorySource_construct(long long data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
     {
-        /* TODO: I'm not convinced this is the right way to handle sending the data in
-                 If we are getting something like a Python string, I think we'll need
-                 to convert it differently
-         */
-        return nitf_MemorySource_construct(SWIG_as_voidptr(data), size, start, numBytesPerPixel, pixelSkip, error);
+        return nitf_MemorySource_construct((void*)(data), size, start, numBytesPerPixel, pixelSkip, error);
     }
 
     /**
@@ -549,9 +545,8 @@
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
         nitf_Uint8 **buf = NULL;
         PyObject* result = NULL;
-        int i, padded, rowSkip, colSkip, subimageSize, bandsMalloced;
-
-        bandsMalloced = 0;
+        int padded, rowSkip, colSkip, subimageSize;
+        nitf_Uint32 i;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
@@ -564,6 +559,8 @@
             goto CATCH_ERROR;
         }
 
+        memset(buf, 0, sizeof(nitf_Uint8*) * window->numBands);
+
         for (i = 0; i < window->numBands; ++i)
         {
             buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
@@ -572,8 +569,6 @@
                 PyErr_NoMemory();
                 goto CATCH_ERROR;
             }
-
-            ++bandsMalloced;
         }
 
         result = PyList_New(window->numBands);
@@ -590,13 +585,15 @@
             PyList_SetItem(result, i, buffObj);
         }
 
-        //The PyList now owns the memory, so not freeing the buffer here
+        //The PyList now owns the memory of the elements of buf,
+        //so only freeing buf itself.
+        NITF_FREE(buf);
         return result;
 
       CATCH_ERROR:
         if (buf)
         {
-            for (i = 0; i < bandsMalloced; ++i)
+            for (i = 0; i < window->numBands; ++i)
             {
                 NITF_FREE(buf[i]);
             }
@@ -634,6 +631,12 @@
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
 
+        if (!source)
+        {
+             PyErr_SetString(PyExc_RuntimeError,
+                 "NULL ptr passed to py_DataSource_read");
+             return NULL;
+        }
         if (!buf)
         {
             PyErr_NoMemory();
@@ -678,4 +681,5 @@
         bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
+
 %}

@@ -29,6 +29,7 @@ Python wrapper for the NITRO library
 import nitropy
 from nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
 import logging, types, new
+import numpy
 
 from nitropy import nrt_Error as Error
 Error.__repr__=lambda s: s.message
@@ -850,6 +851,7 @@ class DESubheader(Header):
         return fields.__iter__()
 
     def newSubheaderFields(self, tag, id = None):
+        print "Called"
         self.ref.subheaderFields = nitropy.nitf_TRE_construct(tag, id, self.error)
         if not self.ref.subheaderFields:
             raise Exception('Unable to create TRE with tag \'%s\'' % tag)
@@ -961,7 +963,8 @@ class TRE:
         The ref parameter is checked
         """
         self.error = Error()
-        if not ref or isinstance(ref, str):
+
+        if isinstance(ref, str):
             tag = ref
             ref = nitropy.nitf_TRE_construct(tag, None, self.error)
             if not ref:
@@ -1058,8 +1061,11 @@ class ImageSource:
         return band
 
     def __call__(self):
+        print "ImageSource.__call__"
         arr = []
+        print "Size: " + str(self.ref.size)
         for index in range(self.ref.size):
+            print index
             arr.append(self.getBand(index))
         return arr
 
@@ -1070,6 +1076,8 @@ class ImageSource:
 class DataSource:
     """ Base DataSource class """
     def __init__(self, ref):
+        #if not ref:
+        #    raise Exception("Unable to construct DataSource")
         self.ref = ref
         if not hasattr(self, 'error'):
             self.error = Error()
@@ -1098,9 +1106,15 @@ class MemoryBandSource(BandSource):
     """ BandSource derived from memory """
     def __init__(self, data, size=-1, start=0, nbpp=1, pixelskip=0):
         self.error = Error()
+
         if size == -1:
             size = len(data)
-        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(data, size, start, nbpp, pixelskip, self.error))
+
+        if size * nbpp > data.size * data.itemsize:
+            raise ValueError("Attempting to read {0} bytes from buffer "
+            "of size {1} bytes.", size * nbpp, data.size * data.itemsize)
+
+        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(data.__array_interface__['data'][0], size, start, nbpp, pixelskip, self.error))
 
 
 class FileBandSource(BandSource):
@@ -1108,6 +1122,7 @@ class FileBandSource(BandSource):
     def __init__(self, handle, start=0, nbpp=1, pixelskip=0):
         self.error = Error()
         self.handle = handle #must set this so it doesn't get ref-counted away
+        ref = nitropy.nitf_FileSource_construct(handle.ref, start, nbpp, pixelskip, self.error)
         BandSource.__init__(self, nitropy.nitf_FileSource_construct(handle.ref, start, nbpp, pixelskip, self.error))
 
 

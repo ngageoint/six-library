@@ -3766,13 +3766,9 @@ SWIGINTERNINLINE PyObject*
         return nitf_Writer_newImageWriter(writer, index, nullOptions, error);
     }
 
-    nitf_BandSource* py_nitf_MemorySource_construct(PyObject* data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
+    nitf_BandSource* py_nitf_MemorySource_construct(long long data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
     {
-        /* TODO: I'm not convinced this is the right way to handle sending the data in
-                 If we are getting something like a Python string, I think we'll need
-                 to convert it differently
-         */
-        return nitf_MemorySource_construct(SWIG_as_voidptr(data), size, start, numBytesPerPixel, pixelSkip, error);
+        return nitf_MemorySource_construct((void*)(data), size, start, numBytesPerPixel, pixelSkip, error);
     }
 
     /**
@@ -3824,9 +3820,8 @@ SWIGINTERNINLINE PyObject*
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
         nitf_Uint8 **buf = NULL;
         PyObject* result = NULL;
-        int i, padded, rowSkip, colSkip, subimageSize, bandsMalloced;
-
-        bandsMalloced = 0;
+        int padded, rowSkip, colSkip, subimageSize;
+        nitf_Uint32 i;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
@@ -3839,6 +3834,8 @@ SWIGINTERNINLINE PyObject*
             goto CATCH_ERROR;
         }
 
+        memset(buf, 0, sizeof(nitf_Uint8*) * window->numBands);
+
         for (i = 0; i < window->numBands; ++i)
         {
             buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
@@ -3847,8 +3844,6 @@ SWIGINTERNINLINE PyObject*
                 PyErr_NoMemory();
                 goto CATCH_ERROR;
             }
-
-            ++bandsMalloced;
         }
 
         result = PyList_New(window->numBands);
@@ -3865,13 +3860,15 @@ SWIGINTERNINLINE PyObject*
             PyList_SetItem(result, i, buffObj);
         }
 
-        //The PyList now owns the memory, so not freeing the buffer here
+        //The PyList now owns the memory of the elements of buf,
+        //so only freeing buf itself.
+        NITF_FREE(buf);
         return result;
 
       CATCH_ERROR:
         if (buf)
         {
-            for (i = 0; i < bandsMalloced; ++i)
+            for (i = 0; i < window->numBands; ++i)
             {
                 NITF_FREE(buf[i]);
             }
@@ -3909,6 +3906,12 @@ SWIGINTERNINLINE PyObject*
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
 
+        if (!source)
+        {
+             PyErr_SetString(PyExc_RuntimeError,
+                 "NULL ptr passed to py_DataSource_read");
+             return NULL;
+        }
         if (!buf)
         {
             PyErr_NoMemory();
@@ -3953,6 +3956,44 @@ SWIGINTERNINLINE PyObject*
         bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
+
+
+
+SWIGINTERN int
+SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    long long v = PyLong_AsLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+    }
+  } else {
+    long v;
+    res = SWIG_AsVal_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    const double mant_min = -mant_max;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, mant_min, mant_max)) {
+      if (val) *val = (long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -33585,12 +33626,14 @@ fail:
 
 SWIGINTERN PyObject *_wrap_py_nitf_MemorySource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  PyObject *arg1 = (PyObject *) 0 ;
+  long long arg1 ;
   nitf_Off arg2 ;
   nitf_Off arg3 ;
   int arg4 ;
   int arg5 ;
   nitf_Error *arg6 = (nitf_Error *) 0 ;
+  long long val1 ;
+  int ecode1 = 0 ;
   int val4 ;
   int ecode4 = 0 ;
   int val5 ;
@@ -33606,7 +33649,11 @@ SWIGINTERN PyObject *_wrap_py_nitf_MemorySource_construct(PyObject *SWIGUNUSEDPA
   nitf_BandSource *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOO:py_nitf_MemorySource_construct",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  arg1 = obj0;
+  ecode1 = SWIG_AsVal_long_SS_long(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_nitf_MemorySource_construct" "', argument " "1"" of type '" "long long""'");
+  } 
+  arg1 = (long long)(val1);
   {
     arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }

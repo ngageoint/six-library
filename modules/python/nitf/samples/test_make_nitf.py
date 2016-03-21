@@ -5,7 +5,7 @@
  * =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -35,6 +35,7 @@ decompressed raw bytes, using the PIL library.
 Notice how easy it is to change fields in the NITF
 """
 import os, sys, array, unittest, random
+import numpy
 from nitf import *
 from tempfile import mkstemp
 from datetime import datetime
@@ -49,16 +50,16 @@ NITF_21_DATE_FORMAT = '%Y%m%d%H%M%S'
 
 
 class TestCreator(unittest.TestCase):
-    
+
     def setUp(self):
         """ just sets up mappings of default field values """
         fieldmap = {}
         fieldmap['header'] = {
-            'fileHeader' : 'NITF', 
-            'fileVersion' : '02.10', 
-            'systemType' : 'BF01', 
-            'classification' : 'U', 
-            'originatorName' : 'Chuck Norris', 
+            'fileHeader' : 'NITF',
+            'fileVersion' : '02.10',
+            'systemType' : 'BF01',
+            'classification' : 'U',
+            'originatorName' : 'Chuck Norris',
             'complianceLevel' : 99,
             'encrypted' : 0,
             'originStationID' : 'MRDC',
@@ -69,7 +70,7 @@ class TestCreator(unittest.TestCase):
             'classificationSystem' : 'U',
             'imageDateAndTime' : datetime.now().strftime(NITF_21_DATE_FORMAT),
         }
-        
+
         fieldmap['graphic'] = {
             'filePartType' : 'SY',
             'securityClass' : 'U',
@@ -78,24 +79,24 @@ class TestCreator(unittest.TestCase):
             'stype' : 'C',
         }
         self.fieldmap = fieldmap
-        
+
         self.inputs = sys.argv[1:]
         self.hasInput = len(self.inputs) > 0
-        
-    
-    
+
+
+
     def test_make_image_nitf(self):
         self.make_image_nitf()
-    
-    
-    def make_image_nitf(self, numBands=1, width=256, height=256):
+
+
+    def make_image_nitf(self, numBands=2, width=256, height=256):
         """ makes a nitf, with artificial image data """
         record = Record()
         if self.fieldmap.has_key('header'):
             for field, value in self.fieldmap['header'].iteritems():
                 if field in record.header:
                     record.header[field] = str(value)
-        
+
         #create a random pattern size
         csize = random.randint(0, 255)
         alldata = []
@@ -104,22 +105,21 @@ class TestCreator(unittest.TestCase):
                 for k in range(numBands):
                     swap = (j % csize) % 2 != 0
                     alldata.append((j % csize) % 2 == 0 and (not swap and 255 or 0))
-        alldata = str(alldata)
-        
+
         #add an image segment
         segment = record.newImageSegment()
         if self.fieldmap.has_key('image'):
             for field, value in self.fieldmap['image'].iteritems():
                 if field in segment.subheader:
                     segment.subheader[field] = str(value)
-        
+
         #for now, I just put in these as defaults
         #obviously, too large of an image will cause problems with the block-size...
         segment.addBands(numBands)
         segment.subheader['numrows'] = height
         segment.subheader['numcols'] = width
-        segment.subheader['numBitsPerPixel'] = 8
-        segment.subheader['actualBitsPerPixel'] = 8
+        segment.subheader['numBitsPerPixel'] = 16
+        segment.subheader['actualBitsPerPixel'] = 16
         segment.subheader['pixelValueType'] = 'INT'
         segment.subheader['pixelJustification'] = 'R'
         segment.subheader['imageCompression'] = 'NC'
@@ -134,14 +134,15 @@ class TestCreator(unittest.TestCase):
         segment.subheader['numBlocksPerRow'] = 1
         segment.subheader['numPixelsPerHorizBlock'] = width
         segment.subheader['numPixelsPerVertBlock'] = height
-        
+
+        alldata = numpy.ascontiguousarray(alldata, dtype="int16")
         #setup image source
         imagesource = ImageSource()
         for i in range(numBands):
             imagesource.addBand(MemoryBandSource(alldata, len(alldata)/numBands, i, 1, numBands-1))
-        
+
         try:
-            handle, outfile = mkstemp(suffix='.ntf')
+            handle, outfile = mkstemp(dir = os.getcwd(), suffix='.ntf')
             os.close(handle)
             writer = Writer()
             outhandle = IOHandle(outfile, IOHandle.ACCESS_WRITEONLY, IOHandle.CREATE)
@@ -156,11 +157,29 @@ class TestCreator(unittest.TestCase):
             print e
         else:
             handle = IOHandle(outfile)
-            rec = Reader().read(handle)
-            logging.info(str(rec.header))
+            reader = Reader()
+            record = reader.read(handle)
+            logging.info(str(record.header))
+
+            # Read back in the band data to make sure the read/write
+            # went okay
+            subheader = record.getImages()[0].subheader
+            imageReader = reader.newImageReader(0)
+
+            window = SubWindow()
+            window.numRows = subheader['numRows'].intValue()
+            window.numCols = subheader['numCols'].intValue()
+            window.bandList = range(subheader.getBandCount())
+            nbpp = subheader['numBitsPerPixel'].intValue()
+            bandData = imageReader.read(window)
+            readData = []
+            for item in bandData[0]:
+                readData.append(ord(item))
+            assert (readData == alldata).all()
+
             handle.close()
             os.unlink(outfile)
 
-    
+
 if __name__ == '__main__':
     unittest.main(argv=sys.argv[0:1])
