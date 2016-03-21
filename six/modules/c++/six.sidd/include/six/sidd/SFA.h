@@ -65,19 +65,13 @@ protected:
     {
     }
 
-    virtual bool equalTo(const SFATyped& rhs) const
-    {
-        //TODO: make pure virutal
-        return false;
-    }
+    virtual bool equalTo(const SFATyped& rhs) const = 0;
 };
 
+//! Abstract type
 struct SFAGeometry : public SFATyped
 {
-    virtual SFAGeometry* clone() const
-    {
-        return new SFAGeometry(*this);
-    }
+    virtual SFAGeometry* clone() const = 0;
 
 protected:
     SFAGeometry(const std::string& typeName) :
@@ -130,7 +124,6 @@ struct SFAPoint : public SFAGeometry
             return (x == point->x && y == point->y &&
                 doubleEqual(z, point->z) && doubleEqual(m, point->m));
         }
-        std::cerr << "Cast failed" << std::endl;
         return false;
     }
 
@@ -160,6 +153,16 @@ public:
     }
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFALineString const* lineString = dynamic_cast<SFALineString const*>(&rhs);
+        if (lineString != NULL)
+        {
+            return (vertices == lineString->vertices);
+        }
+        return false;
+    }
 };
 
 struct SFALine : public SFALineString
@@ -175,6 +178,15 @@ public:
         return new SFALine(*this);
     }
     static const char TYPE_NAME[];
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFALine const* line = dynamic_cast<SFALine const*>(&rhs);
+        if (line != NULL)
+        {
+            return (vertices == line->vertices);
+        }
+        return false;
+    }
 };
 
 struct SFALinearRing : public SFALineString
@@ -190,6 +202,15 @@ public:
         return new SFALinearRing(*this);
     }
     static const char TYPE_NAME[];
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFALinearRing const* linearRing = dynamic_cast<SFALinearRing const*>(&rhs);
+        if (linearRing != NULL)
+        {
+            return (vertices == linearRing->vertices);
+        }
+        return false;
+    }
 };
 
 //! Abstract type
@@ -216,6 +237,16 @@ public:
 
     std::vector<mem::ScopedCopyablePtr<SFALinearRing> > rings;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAPolygon const* polygon = dynamic_cast<SFAPolygon const*>(&rhs);
+        if (polygon != NULL)
+        {
+            return (rings == polygon->rings);
+        }
+        return false;
+    }
 };
 
 struct SFATriangle : public SFAPolygon
@@ -233,6 +264,16 @@ public:
     }
 
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFATriangle const* triangle = dynamic_cast<SFATriangle const*>(&rhs);
+        if (triangle != NULL)
+        {
+            return (rings == triangle->rings);
+        }
+        return false;
+    }
 };
 
 struct SFAPolyhedralSurface : public SFASurface
@@ -250,6 +291,16 @@ public:
 
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAPolyhedralSurface const* surface = dynamic_cast<SFAPolyhedralSurface const*>(&rhs);
+        if (surface != NULL)
+        {
+            return (patches == surface->patches);
+        }
+        return false;
+    }
 };
 
 // note that we are deriving Surface rather than PolyhedralSurface
@@ -269,6 +320,16 @@ public:
 
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFATriangulatedIrregularNetwork const* network = dynamic_cast<SFATriangulatedIrregularNetwork const*>(&rhs);
+        if (network != NULL)
+        {
+            return (patches == network->patches);
+        }
+        return false;
+    }
 };
 
 //! Abstract type
@@ -294,6 +355,16 @@ public:
     }
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAMultiPoint const* multiPoint = dynamic_cast<SFAMultiPoint const*>(&rhs);
+        if (multiPoint != NULL)
+        {
+            return (vertices == multiPoint->vertices);
+        }
+        return false;
+    }
 };
 
 //! Abstract type
@@ -321,6 +392,16 @@ public:
 
     std::vector<mem::ScopedCloneablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAMultiLineString const* string = dynamic_cast<SFAMultiLineString const*>(&rhs);
+        if (string != NULL)
+        {
+            return (elements == string->elements);
+        }
+        return false;
+    }
 };
 
 //! Abstract type
@@ -348,15 +429,23 @@ public:
 
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAMultiPolygon const* polygon = dynamic_cast<SFAMultiPolygon const*>(&rhs);
+        if (polygon != NULL)
+        {
+            return (elements == polygon->elements);
+        }
+        return false;
+    }
 };
 
+//! Abstract type
 struct SFACoordinateSystem : public SFATyped
 {
 public:
-    virtual SFACoordinateSystem* clone() const
-    {
-        return new SFACoordinateSystem(*this);
-    }
+    virtual SFACoordinateSystem* clone() const = 0;
 
 protected:
     SFACoordinateSystem(const std::string& typeName) :
@@ -369,6 +458,15 @@ struct SFAPrimeMeridian
 {
     std::string name;
     double longitude;
+
+    bool operator==(const SFAPrimeMeridian& rhs) const
+    {
+        return name == rhs.name && longitude == rhs.longitude;
+    }
+    bool operator!=(const SFAPrimeMeridian& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SFASpheroid
@@ -376,22 +474,63 @@ struct SFASpheroid
     std::string name;
     double semiMajorAxis;
     double inverseFlattening;
+
+    bool operator==(const SFASpheroid& rhs) const
+    {
+        return (name == rhs.name && semiMajorAxis == rhs.semiMajorAxis &&
+            inverseFlattening == rhs.inverseFlattening);
+    }
+
+    bool operator!=(const SFASpheroid& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SFAParameter
 {
     std::string name;
     double value;
+
+    bool operator==(const SFAParameter& rhs) const
+    {
+        return name == rhs.name && value == rhs.value;
+    }
+
+    bool operator!=(const SFAParameter& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SFAProjection
 {
     std::string name;
+
+    bool operator==(const SFAProjection& rhs) const
+    {
+        return name == rhs.name;
+    }
+
+    bool operator!=(const SFAProjection& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SFADatum
 {
     SFASpheroid spheroid;
+
+    bool operator==(const SFADatum& rhs) const
+    {
+        return spheroid == rhs.spheroid;
+    }
+
+    bool operator!=(const SFADatum& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
@@ -412,6 +551,17 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
     }
 
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAGeocentricCoordinateSystem const* system = dynamic_cast<SFAGeocentricCoordinateSystem const*>(&rhs);
+        if (system != NULL)
+        {
+            return (csName == system->csName && datum == system->datum &&
+                primeMeridian == system->primeMeridian && linearUnit == system->linearUnit);
+        }
+        return false;
+    }
 };
 
 struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
@@ -433,6 +583,18 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
     }
 
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAGeographicCoordinateSystem const* system = dynamic_cast<SFAGeographicCoordinateSystem const*>(&rhs);
+        if (system != NULL)
+        {
+            return (csName == system->csName && datum == system->datum &&
+                primeMeridian == system->primeMeridian && linearUnit == system->linearUnit &&
+                angularUnit == system->angularUnit);
+        }
+        return false;
+    }
 };
 
 struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
@@ -454,12 +616,35 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
     }
 
     static const char TYPE_NAME[];
+
+    virtual bool equalTo(const SFATyped& rhs) const
+    {
+        SFAProjectedCoordinateSystem const* system = dynamic_cast<SFAProjectedCoordinateSystem const*>(&rhs);
+        if (system != NULL)
+        {
+            return (csName == system->csName && projection == system->projection &&
+                parameter == system->parameter && linearUnit == system->linearUnit &&
+                geographicCoordinateSystem == system->geographicCoordinateSystem);
+        }
+        return false;
+    }
 };
 
 struct SFAReferenceSystem
 {
     mem::ScopedCloneablePtr<SFACoordinateSystem> coordinateSystem;
     std::vector<std::string> axisNames;
+
+    virtual bool operator==(const SFAReferenceSystem& rhs) const
+    {
+        return (coordinateSystem == rhs.coordinateSystem &&
+            axisNames == rhs.axisNames);
+    }
+
+    virtual bool operator!=(const SFAReferenceSystem& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

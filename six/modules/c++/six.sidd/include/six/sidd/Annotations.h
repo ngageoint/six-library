@@ -35,6 +35,18 @@ struct Annotation
     std::string identifier;
     mem::ScopedCopyablePtr<SFAReferenceSystem> spatialReferenceSystem;
     std::vector<mem::ScopedCloneablePtr<SFAGeometry> > objects;
+
+    bool operator==(const Annotation& rhs) const
+    {
+        return (identifier == rhs.identifier &&
+            spatialReferenceSystem == rhs.spatialReferenceSystem &&
+            objects == rhs.objects);
+    }
+
+    bool operator!=(const Annotation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 typedef std::vector<mem::ScopedCopyablePtr<Annotation> > Annotations;

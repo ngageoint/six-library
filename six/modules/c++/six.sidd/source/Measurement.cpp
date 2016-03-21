@@ -24,6 +24,64 @@
 using namespace six;
 using namespace six::sidd;
 
+bool PolynomialProjection::equalTo(const Projection& rhs) const
+{
+    PolynomialProjection const* projection = dynamic_cast<PolynomialProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (rowColToLat == projection->rowColToLat &&
+            rowColToLon == projection->rowColToLon &&
+            rowColToAlt == projection->rowColToAlt &&
+            latLonToRow == projection->latLonToRow &&
+            latLonToCol == projection->latLonToCol);
+    }
+    return false;
+}
+
+bool MeasurableProjection::equalTo(const Projection& rhs) const
+{
+    MeasurableProjection const* projection = dynamic_cast<MeasurableProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (sampleSpacing == projection->sampleSpacing &&
+            timeCOAPoly == projection->timeCOAPoly && 
+            dynamic_cast<Projection const*>(this) == dynamic_cast<Projection const*>(projection));
+    }
+    return false;
+}
+
+bool GeographicProjection::equalTo(const Projection& rhs) const
+{
+    GeographicProjection const* projection = dynamic_cast<GeographicProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+    }
+    return false;
+}
+
+bool CylindricalProjection::equalTo(const Projection& rhs) const
+{
+    CylindricalProjection const* projection = dynamic_cast<CylindricalProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (stripmapDirection == projection->stripmapDirection && 
+            curvatureRadius == projection->curvatureRadius &&
+            dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+    }
+    return false;
+}
+
+bool PlaneProjection::equalTo(const Projection& rhs) const
+{
+    PlaneProjection const* projection = dynamic_cast<PlaneProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+    }
+    return false;
+}
+
 Measurement::Measurement(ProjectionType projectionType) :
     projection(NULL)
 {
