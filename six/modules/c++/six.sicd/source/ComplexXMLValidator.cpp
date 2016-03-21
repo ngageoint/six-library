@@ -250,7 +250,34 @@ bool ComplexXMLValidator::checkRGAZCOMP()
             valid = false;
         }
         // 2.12.1.5 omitted, polyval, polyder
-        // Poly1D probably has an easy way to do it
+        if (sicd.timeline.get() != NULL && sicd.timeline->interPulsePeriod.get() != NULL &&
+            sicd.timeline->interPulsePeriod->sets.size() == 1)
+        {
+            double krgCoa = sicd.grid->row->kCenter;
+            
+            // TODO: In the MATLAB code, krgCoa gets added to sicd.grid->row->deltaKCOAPoly if it exists
+            // I'm not sure that makes sense
+            Poly1D interPulsePeriodPoly = sicd.timeline->interPulsePeriod->sets[0].interPulsePeriodPoly;
+            double stRateCoa = interPulsePeriodPoly.derivative()(sicd.scpcoa->scpTime);
+            double deltaKazPerDeltvaV = look * krgCoa * (arpVel.norm() * std::sin(
+                     sicd.scpcoa->dopplerConeAngle * math::Constants::DEGREES_TO_RADIANS) / sicd.scpcoa->slantRange) / stRateCoa;
+            Poly1D derivedKazPoly = deltaKazPerDeltvaV * interPulsePeriodPoly;
+
+            double polyNorm = 0;
+            for (size_t ii = 0; ii < std::min(sicd.rgAzComp->kazPoly.size(), derivedKazPoly.size()); ++ii)
+            {
+                polyNorm += std::pow(sicd.rgAzComp->kazPoly[ii] - derivedKazPoly[ii], 2);
+            }
+            if (std::sqrt(polyNorm) > 1e-3 || sicd.rgAzComp->kazPoly.order() != derivedKazPoly.order())
+            {
+                messageBuilder.str("");
+                messageBuilder << "RGAZCOMP fields inconsistent." << std::endl
+                    << "RgAzComp.KazPoly: " << sicd.rgAzComp->kazPoly << std::endl
+                    << "Derived RgAzComp.KazPoly: " << derivedKazPoly;
+                mLog->error(messageBuilder.str());
+                valid = false;
+            }
+        }
     }
     //2.12.1.6
     Vector3 drvect = unitRG;
@@ -277,6 +304,34 @@ bool ComplexXMLValidator::checkRGAZCOMP()
     }
 
     return valid;
+}
+
+std::vector<double> ComplexXMLValidator::linspace(double start, double end, size_t count) const
+{
+    std::vector<double> ret;
+    double stepSize = (end - start) / (count-1);
+    ret[0] = start;
+    for (size_t ii = 1; ii < count; ++ii)
+    {
+        ret[ii] = ret[ii - 1] + stepSize;
+    }
+    return ret;
+}
+
+Poly1D ComplexXMLValidator::polyAt(PolyXYZ poly, size_t idx) const
+{
+    if (idx > 2)
+    {
+        throw except::Exception(Ctxt("Idx should be < 3"));
+    }
+
+    std::vector<double> coefs;
+    for (size_t ii = 0; ii < poly.size(); ++ii)
+    {
+        coefs.push_back(poly(ii)[idx]);
+    }
+    Poly1D ret(coefs);
+    return ret;
 }
 
 bool ComplexXMLValidator::checkPFA()
@@ -313,7 +368,30 @@ bool ComplexXMLValidator::checkPFA()
         valid = false;
     }
 
-    // Skipping to 2.12.2.10. Heavy polynomial manipulation
+    /* This is a start on the next few sections
+     * It requires reimplementation of polyfit, bsxfun, and pfa_polar_coords
+    size_t numPfaCoefs = sicd.pfa->polarAnglePoly.order();
+    std::vector<double> times = linspace(0, sicd.timeline->collectDuration, numPfaCoefs + 1);
+    std::vector<std::vector<double> > pos;
+    for (size_t ii = 0; ii < 3; ++ii)
+    {
+        std::vector<double> current;
+        Poly1D poly = polyAt(sicd.position->arpPoly, ii);
+        for (size_t jj = 0; jj < times.size(); ++jj)
+        {
+            current.push_back(poly(times[jj]));
+        }
+        pos.push_back(current);
+    }
+
+    std::vector<double> polRefPos;
+    for (size_t ii = 0; ii < 3; ++ii)
+    {
+        Poly1D poly = polyAt(sicd.position->arpPoly, ii);
+        polRefPos.push_back(poly(sicd.pfa->polarAngleRefTime));
+    }
+    */
+
     // Make sure Row.kCtr is consistent with processed RF frequency bandwidth
     if (sicd.radarCollection.get() == NULL || Init::isUndefined(sicd.radarCollection->refFrequencyIndex))
     {
@@ -583,14 +661,33 @@ bool ComplexXMLValidator::checkRMA()
                     mLog->error(messageBuilder.str());
                     valid = false;
                 }
-                /* Commenting out because I'm not sure how to turn a Polynomial into a Vector
                 else
                 {
+                    std::vector<std::vector<double> > difference;
+                    difference.resize(2);
+                    for (size_t ii = 0; ii < 2; ++ii)
+                    {
+                        Poly2D kcoaPoly = sicd.grid->col->deltaKCOAPoly;
+                        Poly2D centroidPoly = sicd.rma->inca->dopplerCentroidPoly;
+                        for (size_t jj = 0; jj < std::min(kcoaPoly.orderY(), centroidPoly.orderY()); ++jj)
+                        {
+                            double val = kcoaPoly[ii][jj] - (centroidPoly[ii][jj] * sicd.rma->inca->timeCAPoly(2));
+                            difference[ii].push_back(val);
+                        }
+                    }
+                    double norm = 0;
+                    for (size_t ii = 0; ii < difference.size(); ++ii)
+                    {
+                        for (size_t jj = 0; jj << difference[ii].size(); ++jj)
+                        {
+                            norm += (difference[ii][jj] * difference[ii][jj]);
+                        }
+                    }
+                    norm = std::sqrt(norm);
+
                     if (!Init::isUndefined(sicd.grid->col->deltaKCOAPoly) &&
                         sicd.rma->inca->dopplerCentroidCOA == BooleanType::IS_TRUE &&
-                        norm(sicd.grid->col->deltaKCOAPoly -
-                            (sicd.rma->inca->dopplerCentroidPoly * sicd.rma->inca->timeCAPoly(2)))
-                        > IFP_POLY_TOL)
+                        norm > IFP_POLY_TOL)
                     {
                         messageBuilder.str("");
                         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
@@ -598,9 +695,111 @@ bool ComplexXMLValidator::checkRMA()
                         mLog->error(messageBuilder.str());
                         valid = false;
                     }
-                }*/
+
+                }
             }
             // Skipping the rest of 2.12.3.4. Poly heavy
+            // INCA UVects are defined from closest approach position/velocity
+            // not center of aperture
+            std::vector<double> caPos;
+            caPos.resize(3);
+            for (size_t ii = 0; ii < 3; ++ii)
+            {
+                Poly1D poly = polyAt(sicd.position->arpPoly, ii);
+                caPos[ii] = poly(sicd.rma->inca->timeCAPoly(1));
+            }
+
+            std::vector<double> caVel;
+            caVel.resize(3);
+            for (size_t ii = 0; ii < 3; ++ii)
+            {
+                Poly1D poly = polyAt(sicd.position->arpPoly, ii).derivative();
+                caVel[ii] = poly(sicd.rma->inca->timeCAPoly(1));
+            }
+
+            Vector3 caPosVector(caPos);
+            Vector3 caVelVector(caVel);
+            Vector3 uRG = (scp - caPosVector) / (scp - caPosVector).norm();
+            Vector3 left = cross(caPosVector / caPosVector.norm(), caVelVector / caVelVector.norm());
+            int look = 0;
+            if (left.dot(uRG) < 0)
+            {
+                look = -1;
+            }
+            else if (left.dot(uRG) > 0)
+            {
+                look = 1;
+            }
+            Vector3 spn = cross(uRG, caVelVector) * -look;
+            spn = spn / spn.norm();
+            Vector3 uAZ = cross(spn, uRG);
+
+            // 2.12.3.4.6
+            if ((uRG - rowUnitVector).norm() > UVECT_TOL)
+            {
+                messageBuilder.str("");
+                messageBuilder << "UVectFields inconsistent" << std::endl
+                    << "Grid.Row.UVectECF: " << rowUnitVector
+                    << "Derived Grid.Row.UVectECF: " << uRG;
+                mLog->error(messageBuilder.str());
+                return false;
+            }
+
+            // 2.12.3.4.7
+            if ((uAZ - colUnitVector).norm() > UVECT_TOL)
+            {
+                messageBuilder.str("");
+                messageBuilder << "UVectFields inconsistent" << std::endl
+                    << "Grid.Col.UVectECF: " << colUnitVector
+                    << "Derived Grid.Col.UVectECF: " << uAZ;
+                mLog->error(messageBuilder.str());
+            }
+
+            // 2.12.3.4.8
+            if (sicd.grid->col->kCenter != 0)
+            {
+                messageBuilder.str("");
+                messageBuilder << "Grid.Col.KCtr  must be zero "
+                    << "for RMA/INCA data." << std::endl
+                    << "Grid.Col.KCtr: " << sicd.grid->col->kCenter;
+                mLog->error(messageBuilder.str());
+            }
+
+            // 2.12.3.4.9
+            double fc = (sicd.radarCollection->txFrequencyMin +
+                sicd.radarCollection->txFrequencyMax) / 2;
+            if ((sicd.rma->inca->freqZero / fc) - 1 > WF_TOL)
+            {
+                messageBuilder.str("");
+                messageBuilder << "RMA.INCA.FreqZero is typically the center transmit frequency" << std::endl
+                    << "RMA.INCA.FreqZero: " << sicd.rma->inca->freqZero
+                    << "Center transmit frequency: " << fc;
+                mLog->warn(messageBuilder.str());
+            }
+
+            // 2.12.3.4.10
+            // I'm not sure I'm transcribing R_CA_SCP -> rangeCA correctly
+            if ((caPosVector - scp).norm() - sicd.rma->inca->rangeCA > SCPCOA_TOL)
+            {
+                messageBuilder.str("");
+                messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+                    << "RMA.INCA.rangeCA: " << sicd.rma->inca->rangeCA
+                    << "Derived RMA.INCA.rangeCA: " << (caPosVector - scp).norm();
+                mLog->error(messageBuilder.str());
+            }
+
+            // 2.12.3.4.11
+            if (Init::isUndefined<int>(sicd.radarCollection->refFrequencyIndex) &&
+                std::abs(sicd.grid->row->kCenter - sicd.rma->inca->freqZero * 2 /
+                    math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) >
+                std::numeric_limits<double>::epsilon())
+            {
+                messageBuilder.str("");
+                messageBuilder << WF_INCONSISTENT_STR << std::endl
+                    << "RMA.INCA.FreqZero * 2 / c: " << sicd.rma->inca->freqZero * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC
+                    << "Grid.Row.KCenter: " << sicd.grid->row->kCenter;
+                mLog->error(messageBuilder.str());
+            }
         }
     }
     return valid;
@@ -665,7 +864,6 @@ bool ComplexXMLValidator::checkGeoData()
         return false;
     }
 
-    const double SCPCOA_TOL = 1e-2;
     SCP scp = sicd.geoData->scp;
 
     scene::LLAToECEFTransform transformer;

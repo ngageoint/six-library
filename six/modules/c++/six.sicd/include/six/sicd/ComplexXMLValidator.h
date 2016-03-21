@@ -56,6 +56,8 @@ private:
     bool checkRGAZCOMP();
     bool checkPFA();
     bool checkRMA();
+    std::vector<double> linspace(double start, double end, size_t count = 100) const;
+    Poly1D polyAt(PolyXYZ poly, size_t idx) const;
 
     template <class T>
     void assertExists(const T& type, const std::string& name)
@@ -74,6 +76,7 @@ private:
     const double WF_TOL = 1e-3; // Relative tolerance
     const double WGT_TOL = 1e-3;
     const double IFP_POLY_TOL = 1e-5;
+    const double SCPCOA_TOL = 1e-2;
 
     const ComplexData sicd;
     logging::Logger* mLog;
