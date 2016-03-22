@@ -58,19 +58,6 @@ bool ComplexXMLValidator::validate()
 
 bool ComplexXMLValidator::checkIFP()
 {
-    try
-    {
-        assertExists(sicd.geoData, "SICD.GeoData");
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.grid->row, "SICD.Grid.Row");
-        assertExists(sicd.grid->col, "SICD.Grid.Col");
-        assertExists(sicd.imageFormation, "SICD.ImageFormation");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     ImageFormationType formType = sicd.imageFormation->imageFormationAlgorithm;
 
     switch (formType)
@@ -196,18 +183,8 @@ bool ComplexXMLValidator::checkRGAZCOMP()
         valid = false;
     } 
 
-    try
-    {
-        assertExists(sicd.scpcoa, "SICD.SCPCOA");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     Vector3 rowUnitVector = sicd.grid->row->unitVector;
     Vector3 colUnitVector = sicd.grid->col->unitVector;
-    
 
     Vector3 scp = sicd.geoData->scp.ecf;
     Vector3 arp = sicd.scpcoa->arpPos;
@@ -636,75 +613,63 @@ bool ComplexXMLValidator::checkINCA()
 
     // 2.12.3.4.2 deals with the XML representation
 
-    if (sicd.collectionInformation.get() != NULL)
-    {
         //2.12.3.4.3
-        if (sicd.collectionInformation->radarMode == RadarModeType::SPOTLIGHT &&
-            (!Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) ||
-                !Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA)))
+    if (sicd.collectionInformation->radarMode == RadarModeType::SPOTLIGHT &&
+        (!Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) ||
+            !Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA)))
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+            << "RMA.INCA.DopplerCentroidPoly/DopplerCentroidCOA not used for SPOTLIGHT collection.";
+        mLog->error(messageBuilder.str());
+        valid = false;
+    }
+    //2.12.3.4.4
+    else if (sicd.collectionInformation->radarMode != RadarModeType::SPOTLIGHT)
+    {
+        if (Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) || Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA))
         {
             messageBuilder.str("");
             messageBuilder << "RMA.INCA fields inconsistent." << std::endl
-                << "RMA.INCA.DopplerCentroidPoly/DopplerCentroidCOA not used for SPOTLIGHT collection.";
+                << "RMA.INCA.DopplerCentroidPoly/COA required for non-SPOTLIGHT collection.";
             mLog->error(messageBuilder.str());
             valid = false;
         }
-        //2.12.3.4.4
-        else if (sicd.collectionInformation->radarMode != RadarModeType::SPOTLIGHT)
+        else
         {
-            if (Init::isUndefined(sicd.rma->inca->dopplerCentroidPoly) || Init::isUndefined(sicd.rma->inca->dopplerCentroidCOA))
+            std::vector<std::vector<double> > difference;
+            difference.resize(2);
+            for (size_t ii = 0; ii < 2; ++ii)
+            {
+                Poly2D kcoaPoly = sicd.grid->col->deltaKCOAPoly;
+                Poly2D centroidPoly = sicd.rma->inca->dopplerCentroidPoly;
+                for (size_t jj = 0; jj < std::min(kcoaPoly.orderY(), centroidPoly.orderY()); ++jj)
+                {
+                    double val = kcoaPoly[ii][jj] - (centroidPoly[ii][jj] * sicd.rma->inca->timeCAPoly(2));
+                    difference[ii].push_back(val);
+                }
+            }
+            double norm = 0;
+            for (size_t ii = 0; ii < difference.size(); ++ii)
+            {
+                for (size_t jj = 0; jj << difference[ii].size(); ++jj)
+                {
+                    norm += std::pow(difference[ii][jj], 2);
+                }
+            }
+            norm = std::sqrt(norm);
+
+            if (!Init::isUndefined(sicd.grid->col->deltaKCOAPoly) &&
+                sicd.rma->inca->dopplerCentroidCOA == BooleanType::IS_TRUE &&
+                norm > IFP_POLY_TOL)
             {
                 messageBuilder.str("");
                 messageBuilder << "RMA.INCA fields inconsistent." << std::endl
-                    << "RMA.INCA.DopplerCentroidPoly/COA required for non-SPOTLIGHT collection.";
+                    << "Compare Grid.Col.KCOAPoly to RMA.INCA.DopCentroidPoly * RMA.INCA.TimeCAPoly(2).";
                 mLog->error(messageBuilder.str());
                 valid = false;
             }
-            else
-            {
-                std::vector<std::vector<double> > difference;
-                difference.resize(2);
-                for (size_t ii = 0; ii < 2; ++ii)
-                {
-                    Poly2D kcoaPoly = sicd.grid->col->deltaKCOAPoly;
-                    Poly2D centroidPoly = sicd.rma->inca->dopplerCentroidPoly;
-                    for (size_t jj = 0; jj < std::min(kcoaPoly.orderY(), centroidPoly.orderY()); ++jj)
-                    {
-                        double val = kcoaPoly[ii][jj] - (centroidPoly[ii][jj] * sicd.rma->inca->timeCAPoly(2));
-                        difference[ii].push_back(val);
-                    }
-                }
-                double norm = 0;
-                for (size_t ii = 0; ii < difference.size(); ++ii)
-                {
-                    for (size_t jj = 0; jj << difference[ii].size(); ++jj)
-                    {
-                        norm += std::pow(difference[ii][jj], 2);
-                    }
-                }
-                norm = std::sqrt(norm);
-
-                if (!Init::isUndefined(sicd.grid->col->deltaKCOAPoly) &&
-                    sicd.rma->inca->dopplerCentroidCOA == BooleanType::IS_TRUE &&
-                    norm > IFP_POLY_TOL)
-                {
-                    messageBuilder.str("");
-                    messageBuilder << "RMA.INCA fields inconsistent." << std::endl
-                        << "Compare Grid.Col.KCOAPoly to RMA.INCA.DopCentroidPoly * RMA.INCA.TimeCAPoly(2).";
-                    mLog->error(messageBuilder.str());
-                    valid = false;
-                }
-            }
         }
-    }
-
-    try
-    {
-        assertExists(sicd.position, "SICD.Position");
-    }
-    catch (except::Exception&)
-    {
-        return false;
     }
 
     // INCA UVects are defined from closest approach position/velocity
@@ -785,15 +750,6 @@ bool ComplexXMLValidator::checkINCA()
             << "RMA.INCA.rangeCA: " << sicd.rma->inca->rangeCA
             << "Derived RMA.INCA.rangeCA: " << (caPosVector - scp).norm();
         mLog->error(messageBuilder.str());
-    }
-
-    try
-    {
-        assertExists(sicd.radarCollection, "SICD.RadarCollection");
-    }
-    catch (except::Exception&)
-    {
-        return false;
     }
 
     // 2.12.3.4.9
@@ -911,15 +867,6 @@ bool ComplexXMLValidator::checkValidData()
 bool ComplexXMLValidator::checkGeoData()
 {
     // 2.10 GeoData.SCP
-    try
-    {
-        assertExists(sicd.geoData, "SICD.GeoData");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     SCP scp = sicd.geoData->scp;
 
     scene::LLAToECEFTransform transformer;
@@ -950,15 +897,6 @@ double ComplexXMLValidator::nonZeroDenominator(double denominator)
 bool ComplexXMLValidator::checkWaveformDescription()
 {
     // 2.8 Waveform description consistency
-    try
-    {
-        assertExists(sicd.radarCollection, "SICD.RadarCollection");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     bool valid = true;
     double wfMin = std::numeric_limits<double>::infinity();
     double wfMax = -std::numeric_limits<double>::infinity();
@@ -1158,15 +1096,6 @@ bool ComplexXMLValidator::checkWaveformDescription()
 
 bool ComplexXMLValidator::checkARPPoly()
 {
-    try
-    {
-        assertExists(sicd.position, "SICD.Position");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     if (sicd.position->arpPoly.order() < 2)
     {
         messageBuilder.str("");
@@ -1180,16 +1109,6 @@ bool ComplexXMLValidator::checkARPPoly()
 bool ComplexXMLValidator::checkTimeCOAPoly()
 {
     bool valid = true;
-    try
-    {
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.collectionInformation, "SICD.CollectionInformation");
-    }
-
-    catch (except::Exception&)
-    {
-        return false;
-    }
 
     const Poly2D timeCOAPoly = sicd.grid->timeCOAPoly;
     const std::string mode = sicd.collectionInformation->radarMode.toString();
@@ -1234,17 +1153,6 @@ bool ComplexXMLValidator::checkTimeCOAPoly()
 
 bool ComplexXMLValidator::checkFFTSigns()
 {
-    try
-    {
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.grid->row, "SICD.Grid.Row");
-        assertExists(sicd.grid->col, "SICD.Grid.Col");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     //2.2. FFT signs in both dimensions almost certainly have to be equal
     FFTSign rowSign = sicd.grid->row->sign;
     FFTSign colSign = sicd.grid->col->sign;
@@ -1317,17 +1225,6 @@ bool ComplexXMLValidator::checkFrequencySupportParameters(const DirectionParamet
 
 bool ComplexXMLValidator::checkFrequencySupportParameters()
 {
-    try
-    {
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.grid->col, "SICD.Grid.Col");
-        assertExists(sicd.grid->row, "SICD.Grid.Row");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     bool valid = (checkFrequencySupportParameters(*sicd.grid->col, "Col") &&
         checkFrequencySupportParameters(*sicd.grid->row, "Row"));
 
@@ -1462,16 +1359,10 @@ bool ComplexXMLValidator::checkFrequencySupportParameters()
 
 bool ComplexXMLValidator::checkSupportParamsAgainstPFA()
 {
-    try
+    // field is conditional
+    if (sicd.pfa.get() == NULL)
     {
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.grid->col, "SICD.Grid.Col");
-        assertExists(sicd.grid->row, "SICD.Grid.Row");
-        assertExists(sicd.pfa, "SICD.PFA");
-    }
-    catch (except::Exception&)
-    {
-        return false;
+        return true;
     }
 
     bool valid = true;
@@ -1711,20 +1602,8 @@ bool ComplexXMLValidator::checkWeightFunctions(const DirectionParameters& direct
 
 bool ComplexXMLValidator::checkWeightFunctions()
 {
-    try
-    {
-        assertExists(sicd.grid, "SICD.Grid");
-        assertExists(sicd.grid->col, "SICD.Grid.Col");
-        assertExists(sicd.grid->row, "SICD.Grid.Row");
-    }
-    catch (except::Exception&)
-    {
-        return false;
-    }
-
     DirectionParameters row = *sicd.grid->row;
     DirectionParameters col = *sicd.grid->col;
-
 
     bool valid = true;
     // 2.4 Does WgtFunct agree with WgtType?
