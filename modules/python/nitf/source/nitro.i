@@ -497,6 +497,17 @@
     }
 
     /**
+     * Helper function for MemoryBandSourceconstructor
+     */
+    nitf_SegmentSource* py_nitf_SegmentMemorySource_construct(
+        long long data, nitf_Off size, nitf_Off start, int byteSkip,
+        NITF_BOOL copyData, nitf_Error *error)
+    {
+        return nitf_SegmentMemorySource_construct((char*)(data), size,
+            start, byteSkip, copyData, error);
+    }
+
+    /**
      * Helper function for the SubWindow constructor
      */
     nitf_SubWindow* py_SubWindow_construct(int startRow, int startCol, int numRows, int numCols, PyObject* bandList, nitf_DownSampler* downSampler, nitf_Error *error)

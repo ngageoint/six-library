@@ -3738,6 +3738,10 @@ def py_nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSki
     return _nitropy.py_nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, error)
 py_nitf_MemorySource_construct = _nitropy.py_nitf_MemorySource_construct
 
+def py_nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error):
+    return _nitropy.py_nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error)
+py_nitf_SegmentMemorySource_construct = _nitropy.py_nitf_SegmentMemorySource_construct
+
 def py_SubWindow_construct(startRow, startCol, numRows, numCols, bandList, downSampler, error):
     return _nitropy.py_SubWindow_construct(startRow, startCol, numRows, numCols, bandList, downSampler, error)
 py_SubWindow_construct = _nitropy.py_SubWindow_construct

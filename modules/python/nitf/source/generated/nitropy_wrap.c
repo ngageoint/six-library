@@ -3772,6 +3772,17 @@ SWIGINTERNINLINE PyObject*
     }
 
     /**
+     * Helper function for MemoryBandSourceconstructor
+     */
+    nitf_SegmentSource* py_nitf_SegmentMemorySource_construct(
+        long long data, nitf_Off size, nitf_Off start, int byteSkip,
+        NITF_BOOL copyData, nitf_Error *error)
+    {
+        return nitf_SegmentMemorySource_construct((char*)(data), size,
+            start, byteSkip, copyData, error);
+    }
+
+    /**
      * Helper function for the SubWindow constructor
      */
     nitf_SubWindow* py_SubWindow_construct(int startRow, int startCol, int numRows, int numCols, PyObject* bandList, nitf_DownSampler* downSampler, nitf_Error *error)
@@ -33683,6 +33694,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_py_nitf_SegmentMemorySource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  long long arg1 ;
+  nitf_Off arg2 ;
+  nitf_Off arg3 ;
+  int arg4 ;
+  int arg5 ;
+  nitf_Error *arg6 = (nitf_Error *) 0 ;
+  long long val1 ;
+  int ecode1 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  nitf_SegmentSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:py_nitf_SegmentMemorySource_construct",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  ecode1 = SWIG_AsVal_long_SS_long(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_nitf_SegmentMemorySource_construct" "', argument " "1"" of type '" "long long""'");
+  } 
+  arg1 = (long long)(val1);
+  {
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
+  }
+  {
+    arg3 = (nitf_Off)PyLong_AsLong(obj2);
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "py_nitf_SegmentMemorySource_construct" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "py_nitf_SegmentMemorySource_construct" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "py_nitf_SegmentMemorySource_construct" "', argument " "6"" of type '" "nitf_Error *""'"); 
+  }
+  arg6 = (nitf_Error *)(argp6);
+  result = (nitf_SegmentSource *)py_nitf_SegmentMemorySource_construct(arg1,arg2,arg3,arg4,arg5,arg6);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_py_SubWindow_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -35214,6 +35284,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"py_nitf_Reader_newImageReader", _wrap_py_nitf_Reader_newImageReader, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_Writer_newImageWriter", _wrap_py_nitf_Writer_newImageWriter, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_MemorySource_construct", _wrap_py_nitf_MemorySource_construct, METH_VARARGS, NULL},
+	 { (char *)"py_nitf_SegmentMemorySource_construct", _wrap_py_nitf_SegmentMemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"py_SubWindow_construct", _wrap_py_SubWindow_construct, METH_VARARGS, NULL},
 	 { (char *)"py_ImageReader_read", _wrap_py_ImageReader_read, METH_VARARGS, NULL},
 	 { (char *)"py_Pair_getFieldData", _wrap_py_Pair_getFieldData, METH_VARARGS, NULL},

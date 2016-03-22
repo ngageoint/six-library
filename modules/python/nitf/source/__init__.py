@@ -1134,16 +1134,21 @@ class SegmentSource:
 
     def __del__(self):
         logging.debug('destruct SegmentSource')
-        if self.ref: nitropy.nitf_SegmentSource_destruct(self.ref)
+        if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
 
 
 class MemorySegmentSource(SegmentSource):
     """ SegmentSource derived from memory """
     def __init__(self, data, size=-1, start=0, byteSkip=0):
         self.error = Error()
+        if not isinstance(data, numpy.ndarray):
+            try:
+                data = numpy.ascontiguousarray(data)
+            except:
+                raise ValueError("Data must convert to np array")
         if size == -1:
             size = len(data)
-        SegmentSource.__init__(self, nitropy.nitf_SegmentMemorySource_construct(data, size, start, byteSkip, self.error))
+        SegmentSource.__init__(self, nitropy.py_nitf_SegmentMemorySource_construct(data.__array_interface__['data'][0], size, start, byteSkip, True, self.error))
 
 
 class FileSegmentSource(SegmentSource):
