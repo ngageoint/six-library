@@ -851,7 +851,6 @@ class DESubheader(Header):
         return fields.__iter__()
 
     def newSubheaderFields(self, tag, id = None):
-        print "Called"
         self.ref.subheaderFields = nitropy.nitf_TRE_construct(tag, id, self.error)
         if not self.ref.subheaderFields:
             raise Exception('Unable to create TRE with tag \'%s\'' % tag)
