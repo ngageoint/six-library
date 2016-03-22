@@ -37,6 +37,8 @@ public:
     ComplexXMLValidator(const ComplexData& data, logging::Logger* log);
 
     bool validate();
+    static Poly1D polyAt(PolyXYZ poly, size_t idx);
+    static std::vector<double> linspace(double start, double end, size_t count = 100);
 
 private:
     bool checkTimeCOAPoly();
@@ -56,8 +58,9 @@ private:
     bool checkRGAZCOMP();
     bool checkPFA();
     bool checkRMA();
-    std::vector<double> linspace(double start, double end, size_t count = 100) const;
-    Poly1D polyAt(PolyXYZ poly, size_t idx) const;
+    bool checkRMAT();
+    bool checkRMCR();
+    bool checkINCA();
 
     template <class T>
     void assertExists(const T& type, const std::string& name)
