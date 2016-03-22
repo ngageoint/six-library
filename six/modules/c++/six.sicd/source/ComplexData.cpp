@@ -111,25 +111,30 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     return imagePt;
 }
 
-bool ComplexData::operator==(const ComplexData& rhs) const
+bool ComplexData::equalTo(const Data& rhs) const
 {
-    return (collectionInformation == rhs.collectionInformation &&
-        imageCreation == rhs.imageCreation &&
-        imageData == rhs.imageData &&
-        geoData == rhs.geoData &&
-        grid == rhs.grid &&
-        timeline == rhs.timeline &&
-        position == rhs.position &&
-        radarCollection == rhs.radarCollection &&
-        imageFormation == rhs.imageFormation &&
-        scpcoa == rhs.scpcoa &&
-        radiometric == rhs.radiometric &&
-        antenna == rhs.antenna &&
-        errorStatistics == rhs.errorStatistics &&
-        matchInformation == rhs.matchInformation &&
-        pfa == rhs.pfa &&
-        rma == rhs.rma &&
-        rgAzComp == rhs.rgAzComp);
+    ComplexData const* data = dynamic_cast<ComplexData const*>(&rhs);
+    if (data != NULL)
+    {
+        return (collectionInformation == data->collectionInformation &&
+            imageCreation == data->imageCreation &&
+            imageData == data->imageData &&
+            geoData == data->geoData &&
+            grid == data->grid &&
+            timeline == data->timeline &&
+            position == data->position &&
+            radarCollection == data->radarCollection &&
+            imageFormation == data->imageFormation &&
+            scpcoa == data->scpcoa &&
+            radiometric == data->radiometric &&
+            antenna == data->antenna &&
+            errorStatistics == data->errorStatistics &&
+            matchInformation == data->matchInformation &&
+            pfa == data->pfa &&
+            rma == data->rma &&
+            rgAzComp == data->rgAzComp);
+    }
+    return false;
 }
 }
 }

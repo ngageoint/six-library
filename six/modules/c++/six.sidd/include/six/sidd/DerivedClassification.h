@@ -176,6 +176,9 @@ public:
     // conjunction with the exemptedSourceType.
     mem::ScopedCopyablePtr<DateTime> exemptedSourceDate;
 
+    //! Equality operator
+    virtual bool equalTo(const Classification& rhs) const;
+
 private:
     static
     void putImpl(const std::string& name,

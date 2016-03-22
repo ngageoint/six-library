@@ -312,6 +312,8 @@ struct DerivedData: public Data
     types::RowCol<double>
     pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
 
+    bool equalTo(const Data& rhs) const;
+
 private:
     static const char VENDOR_ID[];
 

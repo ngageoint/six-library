@@ -24,6 +24,28 @@
 using namespace six;
 using namespace six::sidd;
 
+bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
+{
+    MonochromeDisplayRemap const* remap = dynamic_cast<MonochromeDisplayRemap const*>(&rhs);
+    if (remap != NULL)
+    {
+        return (remapType == remap->remapType &&
+            remapParameters == remap->remapParameters &&
+            remapLUT == remap->remapLUT);
+    }
+    return false;
+}
+
+bool ColorDisplayRemap::equalTo(const Remap& rhs) const
+{
+    ColorDisplayRemap const* remap = dynamic_cast<ColorDisplayRemap const*>(&rhs);
+    if (remap != NULL)
+    {
+        return remapLUT == remap->remapLUT;
+    }
+    return false;
+}
+
 Display::Display() :
     pixelType(PixelType::NOT_SET),
     remapInformation(NULL), 
@@ -32,6 +54,15 @@ Display::Display() :
     histogramOverrides(NULL),
     monitorCompensationApplied(NULL)
 {
+}
+bool Display::operator==(const Display& rhs) const
+{
+    return (pixelType == rhs.pixelType &&
+        remapInformation == rhs.remapInformation &&
+        magnificationMethod == rhs.magnificationMethod &&
+        decimationMethod == rhs.decimationMethod &&
+        histogramOverrides == rhs.histogramOverrides &&
+        monitorCompensationApplied == rhs.monitorCompensationApplied);
 }
 
 Display* Display::clone() const

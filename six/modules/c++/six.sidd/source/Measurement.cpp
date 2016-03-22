@@ -44,8 +44,7 @@ bool MeasurableProjection::equalTo(const Projection& rhs) const
     if (projection != NULL)
     {
         return (sampleSpacing == projection->sampleSpacing &&
-            timeCOAPoly == projection->timeCOAPoly && 
-            dynamic_cast<Projection const*>(this) == dynamic_cast<Projection const*>(projection));
+            timeCOAPoly == projection->timeCOAPoly);
     }
     return false;
 }

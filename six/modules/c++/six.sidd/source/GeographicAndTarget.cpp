@@ -33,6 +33,15 @@ GeographicCoverage::GeographicCoverage(RegionType rt) :
         geographicInformation.reset(new GeographicInformation());
 }
 
+bool GeographicCoverage::operator==(const GeographicCoverage& rhs) const
+{
+    return (regionType == rhs.regionType &&
+        georegionIdentifiers == rhs.georegionIdentifiers &&
+        footprint == rhs.footprint &&
+        subRegion == rhs.subRegion &&
+        geographicInformation == rhs.geographicInformation);
+}
+
 GeographicAndTarget::GeographicAndTarget(RegionType regionType) :
     geographicCoverage(regionType)
 {

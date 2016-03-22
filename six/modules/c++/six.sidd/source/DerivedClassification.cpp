@@ -268,6 +268,39 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
 
     return os;
 }
+
+bool DerivedClassification::equalTo(const Classification& rhs) const
+{
+    DerivedClassification const* derived = dynamic_cast<DerivedClassification const*>(&rhs);
+    if (derived != NULL)
+    {
+        return (securityExtensions == derived->securityExtensions &&
+            desVersion == derived->desVersion &&
+            createDate == derived->createDate &&
+            compliesWith == derived->compliesWith &&
+            classification == derived->classification &&
+            ownerProducer == derived->ownerProducer &&
+            sciControls == derived->sciControls &&
+            sarIdentifier == derived->sarIdentifier &&
+            disseminationControls == derived->disseminationControls &&
+            fgiSourceOpen == derived->fgiSourceOpen &&
+            fgiSourceProtected == derived->fgiSourceProtected &&
+            releasableTo == derived->releasableTo &&
+            nonICMarkings == derived->nonICMarkings &&
+            classifiedBy == derived->classifiedBy &&
+            compilationReason == derived->compilationReason &&
+            derivativelyClassifiedBy == derived->derivativelyClassifiedBy &&
+            classificationReason == derived->classificationReason &&
+            nonUSControls == derived->nonUSControls &&
+            derivedFrom == derived->derivedFrom &&
+            declassDate == derived->declassDate &&
+            declassEvent == derived->declassEvent &&
+            declassException == derived->declassException &&
+            exemptedSourceType == derived->exemptedSourceType &&
+            exemptedSourceDate == derived->exemptedSourceDate &&
+            fileOptions == derived->fileOptions);
+    }
+}
 }
 }
 
