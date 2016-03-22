@@ -698,7 +698,7 @@ bool ComplexXMLValidator::checkRMA()
 
                 }
             }
-            // Skipping the rest of 2.12.3.4. Poly heavy
+
             // INCA UVects are defined from closest approach position/velocity
             // not center of aperture
             std::vector<double> caPos;
@@ -1278,7 +1278,7 @@ bool ComplexXMLValidator::checkFrequencySupportParameters()
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
     // on the vertices of the image, since it is smooth and monotonic in most cases--
-    // lathough in actuality this is not always the case.  To be totally generic, 
+    // although in actuality this is not always the case.  To be totally generic, 
     // we would have to search for an interior min and max as well
     std::vector<std::vector<sys::SSize_T> > vertices;
     vertices.resize(2);
@@ -1643,7 +1643,7 @@ bool ComplexXMLValidator::checkWeightFunctions(const DirectionParameters& direct
         mLog->warn(messageBuilder.str());
     }
 
-    // TODO: 2.5 
+    // TODO: 2.5 (requires fzero)
 
     if (weightFunction)
     {
