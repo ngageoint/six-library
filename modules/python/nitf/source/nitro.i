@@ -593,6 +593,7 @@
         if (!nitf_ImageReader_read(reader, window, buf, &padded, error))
         {
             nitf_Error_print(error, stderr, "Read failed");
+            PyErr_SetString(PyExc_RuntimeError, "");
             goto CATCH_ERROR;
         }
 

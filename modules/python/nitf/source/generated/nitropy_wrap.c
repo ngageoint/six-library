@@ -3905,6 +3905,7 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         if (!nitf_ImageReader_read(reader, window, buf, &padded, error))
         {
             nitf_Error_print(error, stderr, "Read failed");
+            PyErr_SetString(PyExc_RuntimeError, "");
             goto CATCH_ERROR;
         }
 
