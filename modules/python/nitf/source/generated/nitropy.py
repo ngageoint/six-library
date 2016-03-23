@@ -3650,6 +3650,10 @@ def py_IOHandle_create(fname, accessFlag, createFlag, error):
     return _nitropy.py_IOHandle_create(fname, accessFlag, createFlag, error)
 py_IOHandle_create = _nitropy.py_IOHandle_create
 
+def py_IOHandle_write(handle, address, size, error):
+    return _nitropy.py_IOHandle_write(handle, address, size, error)
+py_IOHandle_write = _nitropy.py_IOHandle_write
+
 def py_IOHandle_seek(handle, offset, whence, error):
     return _nitropy.py_IOHandle_seek(handle, offset, whence, error)
 py_IOHandle_seek = _nitropy.py_IOHandle_seek

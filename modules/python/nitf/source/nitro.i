@@ -294,6 +294,12 @@
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
     }
 
+    NRT_BOOL py_IOHandle_write(nitf_IOHandle handle, long long address,
+        size_t size, nrt_Error* error)
+    {
+        return nrt_IOHandle_write(handle, (void*)(address), size, error);
+    }
+
     nitf_Off py_IOHandle_seek(nitf_IOHandle handle,
             nitf_Off offset, int whence, nitf_Error * error)
     {

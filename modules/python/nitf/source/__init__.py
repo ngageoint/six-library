@@ -129,6 +129,22 @@ IMAGE_SUBHEADER_FIELDS = [
     {'id' : 'IXSOFL', 'name' : 'extendedHeaderOverflow', },
 ]
 
+def _bufferFromData(data):
+    """Return a 2-tuple consistning of
+    1). The memory address of the beginning of an array-like data object.
+    2). The size of the buffer, in bytes
+
+    Raise ValueError if unable to convert data to Numpy array
+    """
+    buf = None
+    try:
+        buf = numpy.ascontiguousarray(data)
+    except:
+        raise ValueError("Cannot convert data to Numpy array")
+
+    address = buf.__array_interface__['data'][0]
+    size = buf.size * buf.itemsize
+    return address, size
 
 
 
@@ -164,9 +180,14 @@ class IOHandle:
         self.close()
 
     def write(self, data, size=-1):
+        address, bufferSize = _bufferFromData(data)
         if size == -1:
-            size = len(data)
-        return nitropy.nrt_IOHandle_write(self.ref, data, size, self.error) == 1
+            size = bufferSize
+        elif size > bufferSize:
+            raise ValueError("Attempting to write {0} bytes from {1} "
+                "bytes of data".format(size, bufferSize))
+        return nitropy.py_IOHandle_write(self.ref, address, size,
+            self.error) == 1
 
     def read(self, size):
         return nitropy.py_IOHandle_read(self.ref, size, self.error)

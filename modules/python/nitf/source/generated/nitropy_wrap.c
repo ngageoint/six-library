@@ -3581,6 +3581,12 @@ SWIGINTERNINLINE PyObject*
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
     }
 
+    NRT_BOOL py_IOHandle_write(nitf_IOHandle handle, long long address,
+        size_t size, nrt_Error* error)
+    {
+        return nrt_IOHandle_write(handle, (void*)(address), size, error);
+    }
+
     nitf_Off py_IOHandle_seek(nitf_IOHandle handle,
             nitf_Off offset, int whence, nitf_Error * error)
     {
@@ -3594,6 +3600,43 @@ SWIGINTERNINLINE PyObject*
         return nitf_IOHandle_seek(handle, offset, realWhence, error);
     }
 
+
+
+SWIGINTERN int
+SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    long long v = PyLong_AsLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+    }
+  } else {
+    long v;
+    res = SWIG_AsVal_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    const double mant_min = -mant_max;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, mant_min, mant_max)) {
+      if (val) *val = (long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
 
 
 
@@ -3968,43 +4011,6 @@ SWIGINTERNINLINE PyObject*
         return bufObj;
     }
 
-
-
-SWIGINTERN int
-SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
-{
-  int res = SWIG_TypeError;
-  if (PyLong_Check(obj)) {
-    long long v = PyLong_AsLongLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-    }
-  } else {
-    long v;
-    res = SWIG_AsVal_long (obj,&v);
-    if (SWIG_IsOK(res)) {
-      if (val) *val = v;
-      return res;
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    const double mant_max = 1LL << DBL_MANT_DIG;
-    const double mant_min = -mant_max;
-    double d;
-    res = SWIG_AsVal_double (obj,&d);
-    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, mant_min, mant_max)) {
-      if (val) *val = (long long)(d);
-      return SWIG_AddCast(res);
-    }
-    res = SWIG_TypeError;
-  }
-#endif
-  return res;
-}
 
 #ifdef __cplusplus
 extern "C" {
@@ -32949,6 +32955,55 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_py_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOHandle arg1 ;
+  long long arg2 ;
+  size_t arg3 ;
+  nrt_Error *arg4 = (nrt_Error *) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:py_IOHandle_write",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_write" "', argument " "1"" of type '" "nitf_IOHandle""'");
+  } 
+  arg1 = (nitf_IOHandle)(val1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "py_IOHandle_write" "', argument " "2"" of type '" "long long""'");
+  } 
+  arg2 = (long long)(val2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "py_IOHandle_write" "', argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = (size_t)(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "py_IOHandle_write" "', argument " "4"" of type '" "nrt_Error *""'"); 
+  }
+  arg4 = (nrt_Error *)(argp4);
+  result = (int)py_IOHandle_write(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
@@ -35262,6 +35317,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PY_NITF_SEEK_SET_swigconstant", PY_NITF_SEEK_SET_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"PY_NITF_SEEK_END_swigconstant", PY_NITF_SEEK_END_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_create", _wrap_py_IOHandle_create, METH_VARARGS, NULL},
+	 { (char *)"py_IOHandle_write", _wrap_py_IOHandle_write, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_seek", _wrap_py_IOHandle_seek, METH_VARARGS, NULL},
 	 { (char *)"py_Field_getString", _wrap_py_Field_getString, METH_VARARGS, NULL},
 	 { (char *)"py_Field_getInt", _wrap_py_Field_getInt, METH_VARARGS, NULL},
