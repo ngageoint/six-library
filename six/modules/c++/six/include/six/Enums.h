@@ -37,11 +37,11 @@ namespace six
 const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 
-/*!
-*  \struct AppliedType
-*
-*  Enumeration used to represent AppliedTypes
-*/
+                                      /*!
+                                      *  \struct AppliedType
+                                      *
+                                      *  Enumeration used to represent AppliedTypes
+                                      */
 struct AppliedType
 {
     //! The enumerations allowed
@@ -765,120 +765,6 @@ struct ComplexImagePlaneType
     operator std::string() const { return toString(); }
 
     static size_t size() { return 4; }
-
-    int value;
-
-};
-
-
-/*!
-*  \struct CornerIndex
-*
-*  Enumeration used to represent CornerIndexs
-*/
-struct CornerIndex
-{
-    //! The enumerations allowed
-    enum
-    {
-        FIRST_ROW_FIRST_COL = 0,
-        FIRST_ROW_LAST_COL = 1,
-        LAST_ROW_LAST_COL = 2,
-        LAST_ROW_FIRST_COL = 3,
-        NOT_SET = six::NOT_SET_VALUE
-    };
-
-    //! Default constructor
-    CornerIndex() { value = NOT_SET; }
-
-    //! string constructor
-    CornerIndex(std::string s)
-    {
-        if (s == "FIRST_ROW_FIRST_COL")
-            value = FIRST_ROW_FIRST_COL;
-        else if (s == "FIRST_ROW_LAST_COL")
-            value = FIRST_ROW_LAST_COL;
-        else if (s == "LAST_ROW_LAST_COL")
-            value = LAST_ROW_LAST_COL;
-        else if (s == "LAST_ROW_FIRST_COL")
-            value = LAST_ROW_FIRST_COL;
-        else if (s == "NOT_SET")
-            value = NOT_SET;
-        else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-    }
-
-    //! int constructor
-    CornerIndex(int i)
-    {
-        switch (i)
-        {
-        case 0:
-            value = FIRST_ROW_FIRST_COL;
-            break;
-        case 1:
-            value = FIRST_ROW_LAST_COL;
-            break;
-        case 2:
-            value = LAST_ROW_LAST_COL;
-            break;
-        case 3:
-            value = LAST_ROW_FIRST_COL;
-            break;
-        case six::NOT_SET_VALUE:
-            value = NOT_SET;
-            break;
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-    }
-
-    //! destructor
-    ~CornerIndex() {}
-
-    //! Returns string representation of the value
-    std::string toString() const
-    {
-        switch (value)
-        {
-        case 0:
-            return std::string("FIRST_ROW_FIRST_COL");
-        case 1:
-            return std::string("FIRST_ROW_LAST_COL");
-        case 2:
-            return std::string("LAST_ROW_LAST_COL");
-        case 3:
-            return std::string("LAST_ROW_FIRST_COL");
-        case six::NOT_SET_VALUE:
-            return std::string("NOT_SET");
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-    }
-
-    //! assignment operator
-    CornerIndex& operator=(const CornerIndex& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
-    }
-
-    bool operator==(const CornerIndex& o) const { return value == o.value; }
-    bool operator!=(const CornerIndex& o) const { return value != o.value; }
-    bool operator==(const int& o) const { return value == o; }
-    bool operator!=(const int& o) const { return value != o; }
-    CornerIndex& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const CornerIndex& o) const { return value < o.value; }
-    bool operator>(const CornerIndex& o) const { return value > o.value; }
-    bool operator<=(const CornerIndex& o) const { return value <= o.value; }
-    bool operator>=(const CornerIndex& o) const { return value >= o.value; }
-    operator int() const { return value; }
-    operator std::string() const { return toString(); }
-
-    static size_t size() { return 5; }
 
     int value;
 
@@ -2382,7 +2268,6 @@ struct PolarizationType
         H = 3,
         RHC = 4,
         LHC = 5,
-        UNKNOWN = 6,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -2402,8 +2287,6 @@ struct PolarizationType
             value = RHC;
         else if (s == "LHC")
             value = LHC;
-        else if (s == "UNKNOWN")
-            value = UNKNOWN;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -2429,9 +2312,6 @@ struct PolarizationType
             break;
         case 5:
             value = LHC;
-            break;
-        case 6:
-            value = UNKNOWN;
             break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
@@ -2459,8 +2339,6 @@ struct PolarizationType
             return std::string("RHC");
         case 5:
             return std::string("LHC");
-        case 6:
-            return std::string("UNKNOWN");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
@@ -2490,7 +2368,7 @@ struct PolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
-    static size_t size() { return 7; }
+    static size_t size() { return 6; }
 
     int value;
 
@@ -3435,8 +3313,7 @@ struct XYZEnum
 };
 
 
-// code auto-generated 2016-04-04 08:55:03.363000
-
+// code auto-generated 2016-04-04 15:24:36.590000
 
 }
 
