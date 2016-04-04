@@ -195,7 +195,7 @@ public:
     }
 
     /*
-     * Returns the doppler cone angle in [0, 180] degrees
+     * Returns the doppler cone angle in [0, 180) degrees
      *
      * This implements Section 4.9 of SICD / Section 7.5.3 of SIDD 1.1
      * and can be assigned directly to sicdData.scpCoa->dopplerConeAngle or
@@ -318,7 +318,7 @@ public:
     Vector3 getLayoverVector() const;
 
     /*!
-     * The layover angle (in [-180, 180] degrees) and magnitude in the pixel
+     * The layover angle (in [-180, 180) degrees) and magnitude in the pixel
      * grid
      *
      * This implements Section 6.5.2 of SIDD and can be assigned directly to
@@ -340,7 +340,7 @@ public:
     Vector3 getShadowVector() const;
 
     /*
-     * The shadow angle and magnitude
+     * The shadow angle (in [-180, 180) degrees) and magnitude
      *
      * This implements Section 6.5.1 of SIDD and can be assigned directly to
      * siddData.exploitationFeatures->collections[idx]->phenomenology->shadow
