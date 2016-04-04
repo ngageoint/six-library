@@ -36,7 +36,6 @@ def dump_image(subheader, index, imageReader, outDir=None, baseName=None):
     window = SubWindow()
     window.numRows = subheader['numRows'].intValue()
     window.numCols = subheader['numCols'].intValue()
-    sys.exit(window.numRows * window.numCols)
     window.bandList = range(subheader.getBandCount())
     nbpp = subheader['numBitsPerPixel'].intValue()
     bandData = imageReader.read(window)
