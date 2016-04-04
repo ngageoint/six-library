@@ -2138,7 +2138,6 @@ int main(int argc, char** argv)
         parent->geometry->dopplerConeAngle = 45.8;
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;
-        siddData->exploitationFeatures->product.qualityPoly = six::Poly2D(2, 2);
         six::Parameter param;
         param.setName("Name");
         param.setValue("Value");

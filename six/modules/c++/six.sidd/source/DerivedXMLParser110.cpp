@@ -1656,11 +1656,6 @@ XMLElem DerivedXMLParser110::convertExploitationFeaturesToXML(
         createDouble("North", exploitationFeatures->product.north, productElem);
     // optional to unbounded
 
-    if (!exploitationFeatures->product.qualityPoly.empty())
-    {
-        common().createPoly2D("QualityPoly", exploitationFeatures->product.qualityPoly, productElem);
-    }
-
     common().addParameters("Extension",
         exploitationFeatures->product.extensions,
         productElem);
@@ -1886,11 +1881,6 @@ void DerivedXMLParser110::parseExploitationFeaturesFromXML(
     ExploitationFeatures* exploitationFeatures) const
 {
     DerivedXMLParser::parseExploitationFeaturesFromXML(exploitationFeaturesElem, exploitationFeatures);
-    XMLElem qualityElem = getOptional(exploitationFeaturesElem, "QualityPoly");
-    if (qualityElem)
-    {
-        common().parsePoly2D(qualityElem, exploitationFeatures->product.qualityPoly);
-    }
 
     std::vector<XMLElem> collectionsElem;
     exploitationFeaturesElem->getElementsByTagName("Collection", collectionsElem);
