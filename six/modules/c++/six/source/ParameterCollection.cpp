@@ -37,13 +37,6 @@ ParameterCollection::containsParameter(const std::string& paramName) const
 bool
 ParameterCollection::operator==(const ParameterCollection& rhs) const
 {
-    for (size_t ii = 0; ii < mParams.size(); ++ii)
-    {
-        if (mParams[ii] != rhs.at(ii))
-        {
-            return false;
-        }
-    }
-    return true;
+    return mParams == rhs.mParams;
 }
 }

@@ -29,11 +29,6 @@ namespace six
 namespace sidd
 {
 
-inline bool doubleEqual(double lhs, double rhs)
-{
-    return (lhs - rhs < 1e-4);
-}
-
 struct SFATyped
 {
 public:
@@ -122,7 +117,7 @@ struct SFAPoint : public SFAGeometry
         if (point != NULL)
         {
             return (x == point->x && y == point->y &&
-                doubleEqual(z, point->z) && doubleEqual(m, point->m));
+                z == point->z && m == point->m);
         }
         return false;
     }

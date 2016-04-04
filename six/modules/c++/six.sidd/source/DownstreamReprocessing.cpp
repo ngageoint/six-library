@@ -79,7 +79,8 @@ GeometricChip::getChipCoordinateFromFullImage(const RowColDouble& full) const
 
 bool GeometricChip::operator==(const GeometricChip& rhs) const
 {
-    return (originalUpperLeftCoordinate == rhs.originalUpperLeftCoordinate &&
+    return (chipSize == rhs.chipSize &&
+        originalUpperLeftCoordinate == rhs.originalUpperLeftCoordinate &&
         originalUpperRightCoordinate == rhs.originalUpperRightCoordinate &&
         originalLowerLeftCoordinate == rhs.originalLowerLeftCoordinate &&
         originalLowerRightCoordinate == rhs.originalLowerRightCoordinate);

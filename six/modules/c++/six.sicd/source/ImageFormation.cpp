@@ -25,6 +25,23 @@ using namespace six;
 using namespace six::sicd;
 
 
+Distortion::Distortion() :
+    calibrationDate(Init::undefined<six::DateTime>()),
+    a(Init::undefined<double>()),
+    f1(Init::undefined<std::complex<double> >()),
+    q1(Init::undefined<std::complex<double> >()),
+    q2(Init::undefined<std::complex<double> >()),
+    f2(Init::undefined<std::complex<double> >()),
+    q3(Init::undefined<std::complex<double> >()),
+    q4(Init::undefined<std::complex<double> >()),
+    gainErrorA(Init::undefined<double>()),
+    gainErrorF1(Init::undefined<double>()),
+    gainErrorF2(Init::undefined<double>()),
+    phaseErrorF1(Init::undefined<double>()),
+    phaseErrorF2(Init::undefined<double>())
+{
+}
+
 bool Distortion::operator==(const Distortion& rhs) const
 {
     return (calibrationDate == rhs.calibrationDate &&

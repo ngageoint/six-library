@@ -64,7 +64,7 @@ struct FrameType
 
     bool operator==(const FrameType& rhs) const
     {
-        return (toString() == rhs.toString());
+        return (mValue == rhs.mValue);
     }
 
     bool operator!=(const FrameType& rhs) const

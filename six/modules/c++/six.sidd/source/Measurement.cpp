@@ -33,7 +33,9 @@ bool PolynomialProjection::equalTo(const Projection& rhs) const
             rowColToLon == projection->rowColToLon &&
             rowColToAlt == projection->rowColToAlt &&
             latLonToRow == projection->latLonToRow &&
-            latLonToCol == projection->latLonToCol);
+            latLonToCol == projection->latLonToCol &&
+            projectionType == projection->projectionType &&
+            referencePoint == projection->referencePoint);
     }
     return false;
 }
@@ -44,7 +46,9 @@ bool MeasurableProjection::equalTo(const Projection& rhs) const
     if (projection != NULL)
     {
         return (sampleSpacing == projection->sampleSpacing &&
-            timeCOAPoly == projection->timeCOAPoly);
+            timeCOAPoly == projection->timeCOAPoly &&
+            projectionType == projection->projectionType &&
+            referencePoint == projection->referencePoint);
     }
     return false;
 }
@@ -54,7 +58,7 @@ bool GeographicProjection::equalTo(const Projection& rhs) const
     GeographicProjection const* projection = dynamic_cast<GeographicProjection const*>(&rhs);
     if (projection != NULL)
     {
-        return (dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+        return *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection));
     }
     return false;
 }
@@ -66,7 +70,7 @@ bool CylindricalProjection::equalTo(const Projection& rhs) const
     {
         return (stripmapDirection == projection->stripmapDirection && 
             curvatureRadius == projection->curvatureRadius &&
-            dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+            *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection)));
     }
     return false;
 }
@@ -76,7 +80,7 @@ bool PlaneProjection::equalTo(const Projection& rhs) const
     PlaneProjection const* projection = dynamic_cast<PlaneProjection const*>(&rhs);
     if (projection != NULL)
     {
-        return (dynamic_cast<MeasurableProjection const*>(this) == dynamic_cast<MeasurableProjection const*>(projection));
+        return *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection));
     }
     return false;
 }

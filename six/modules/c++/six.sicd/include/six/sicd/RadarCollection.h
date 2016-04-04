@@ -358,7 +358,8 @@ struct AreaPlane
     bool operator==(const AreaPlane& rhs) const
     {
         return (referencePoint == rhs.referencePoint && xDirection == rhs.xDirection &&
-            yDirection == rhs.yDirection && segmentList == rhs.segmentList);
+            yDirection == rhs.yDirection && segmentList == rhs.segmentList &&
+            orientation == rhs.orientation);
     }
     bool operator!=(const AreaPlane& rhs) const
     {

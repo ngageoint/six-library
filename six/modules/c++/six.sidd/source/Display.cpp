@@ -62,7 +62,8 @@ bool Display::operator==(const Display& rhs) const
         magnificationMethod == rhs.magnificationMethod &&
         decimationMethod == rhs.decimationMethod &&
         histogramOverrides == rhs.histogramOverrides &&
-        monitorCompensationApplied == rhs.monitorCompensationApplied);
+        monitorCompensationApplied == rhs.monitorCompensationApplied &&
+        displayExtensions == rhs.displayExtensions);
 }
 
 Display* Display::clone() const

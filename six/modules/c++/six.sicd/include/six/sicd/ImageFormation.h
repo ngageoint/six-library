@@ -96,9 +96,7 @@ struct RcvChannelProcessed
 struct Distortion
 {
     //! Constructor
-    Distortion()
-    {
-    }
+    Distortion();
 
     /*!
      *  (Optional) Date of calibration of measurement
