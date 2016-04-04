@@ -500,6 +500,10 @@ template<> PolarizationType six::toType<PolarizationType>(const std::string& s)
     {
         return PolarizationType::LHC;
     }
+    else if (type == "UNKNOWN")
+    {
+        return PolarizationType::UNKNOWN;
+    }
     else
     {
         throw except::Exception(Ctxt(
@@ -521,6 +525,8 @@ template<> std::string six::toString(const PolarizationType& t)
         return "RHC";
     case PolarizationType::LHC:
         return "LHC";
+    case PolarizationType::UNKNOWN:
+        return "UNKNOWN";
     default:
         throw except::Exception(Ctxt(
                 "Unsupported conversion from polarization type"));
@@ -548,6 +554,8 @@ template<> DualPolarizationType six::toType<DualPolarizationType>(
         return DualPolarizationType::RHC_LHC;
     else if (type == "LHC:LHC")
         return DualPolarizationType::LHC_LHC;
+    else if (type == "UNKNOWN")
+        return DualPolarizationType::UNKNOWN;
     else
     {
         throw except::Exception(Ctxt(
@@ -575,6 +583,8 @@ template<> std::string six::toString(const DualPolarizationType& t)
         return "RHC:LHC";
     case DualPolarizationType::LHC_LHC:
         return "LHC:LHC";
+    case DualPolarizationType::UNKNOWN:
+        return "UNKNOWN";
     default:
         throw except::Exception(
                                 Ctxt(

@@ -1,10 +1,3 @@
-[FrameType]
-NOT_SET=six::NOT_SET_VALUE
-ECF=0
-RIC_ECF=1
-RIC_ECI=2
-__default__=six::NOT_SET_VALUE
-
 [SCPType]
 NOT_SET=six::NOT_SET_VALUE
 SCP_ROW_COL=0
@@ -80,6 +73,18 @@ V=2
 H=3
 RHC=4
 LHC=5
+UNKNOWN=6
+__default__=six::NOT_SET_VALUE
+
+[PolarizationSequenceType]
+NOT_SET=six::NOT_SET_VALUE
+OTHER=1
+V=2
+H=3
+RHC=4
+LHC=5
+UNKNOWN=6
+SEQUENCE=7
 __default__=six::NOT_SET_VALUE
 
 [DualPolarizationType]
@@ -93,6 +98,7 @@ RHC_RHC=6
 RHC_LHC=7
 LHC_RHC=8
 LHC_LHC=9
+UNKNOWN=10
 __default__=six::NOT_SET_VALUE
 
 [EarthModelType]
