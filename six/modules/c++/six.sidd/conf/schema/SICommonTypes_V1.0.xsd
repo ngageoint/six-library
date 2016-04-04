@@ -246,6 +246,12 @@
             <xsd:maxInclusive value="90"/>
         </xsd:restriction>
     </xsd:simpleType>
+    <xsd:simpleType name="ZeroToExclusive180Type">
+        <xsd:restriction base="xsd:double">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxExclusive value="180"/>
+        </xsd:restriction>
+    </xsd:simpleType>
     <xsd:simpleType name="Neg90To90Type">
         <xsd:restriction base="xsd:double">
             <xsd:minInclusive value="-90"/>

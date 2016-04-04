@@ -1292,7 +1292,7 @@
                     <xs:documentation>Angle between the ETP and the cross range vector. Also known as the twist angle.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="DopplerConeAngle" type="xs:double" minOccurs="0">
+            <xs:element name="DopplerConeAngle" type="sicommon:ZeroToExclusive180Type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>The angle between the velocity vector and the radar line-of-sight vector. Also known as the slant plane squint angle.</xs:documentation>
                 </xs:annotation>
