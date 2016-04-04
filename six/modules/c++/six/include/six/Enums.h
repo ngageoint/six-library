@@ -38,10 +38,10 @@ const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 
 /*!
- *  \struct AppliedType 
- *
- *  Enumeration used to represent AppliedTypes
- */
+*  \struct AppliedType
+*
+*  Enumeration used to represent AppliedTypes
+*/
 struct AppliedType
 {
     //! The enumerations allowed
@@ -53,7 +53,7 @@ struct AppliedType
     };
 
     //! Default constructor
-    AppliedType(){ value = NOT_SET; }
+    AppliedType() { value = NOT_SET; }
 
     //! string constructor
     AppliedType(std::string s)
@@ -71,7 +71,7 @@ struct AppliedType
     //! int constructor
     AppliedType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = IS_FALSE;
@@ -88,12 +88,12 @@ struct AppliedType
     }
 
     //! destructor
-    ~AppliedType(){}
+    ~AppliedType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("IS_FALSE");
@@ -128,15 +128,18 @@ struct AppliedType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct AutofocusType 
- *
- *  Enumeration used to represent AutofocusTypes
- */
+*  \struct AutofocusType
+*
+*  Enumeration used to represent AutofocusTypes
+*/
 struct AutofocusType
 {
     //! The enumerations allowed
@@ -149,7 +152,7 @@ struct AutofocusType
     };
 
     //! Default constructor
-    AutofocusType(){ value = NOT_SET; }
+    AutofocusType() { value = NOT_SET; }
 
     //! string constructor
     AutofocusType(std::string s)
@@ -169,7 +172,7 @@ struct AutofocusType
     //! int constructor
     AutofocusType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = NO;
@@ -189,12 +192,12 @@ struct AutofocusType
     }
 
     //! destructor
-    ~AutofocusType(){}
+    ~AutofocusType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("NO");
@@ -231,15 +234,18 @@ struct AutofocusType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct BooleanType 
- *
- *  Enumeration used to represent BooleanTypes
- */
+*  \struct BooleanType
+*
+*  Enumeration used to represent BooleanTypes
+*/
 struct BooleanType
 {
     //! The enumerations allowed
@@ -251,7 +257,7 @@ struct BooleanType
     };
 
     //! Default constructor
-    BooleanType(){ value = NOT_SET; }
+    BooleanType() { value = NOT_SET; }
 
     //! string constructor
     BooleanType(std::string s)
@@ -269,7 +275,7 @@ struct BooleanType
     //! int constructor
     BooleanType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = IS_FALSE;
@@ -286,12 +292,12 @@ struct BooleanType
     }
 
     //! destructor
-    ~BooleanType(){}
+    ~BooleanType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("IS_FALSE");
@@ -326,15 +332,18 @@ struct BooleanType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ByteSwapping 
- *
- *  Enumeration used to represent ByteSwappings
- */
+*  \struct ByteSwapping
+*
+*  Enumeration used to represent ByteSwappings
+*/
 struct ByteSwapping
 {
     //! The enumerations allowed
@@ -347,7 +356,7 @@ struct ByteSwapping
     };
 
     //! Default constructor
-    ByteSwapping(){ value = NOT_SET; }
+    ByteSwapping() { value = NOT_SET; }
 
     //! string constructor
     ByteSwapping(std::string s)
@@ -367,7 +376,7 @@ struct ByteSwapping
     //! int constructor
     ByteSwapping(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = SWAP_OFF;
@@ -387,12 +396,12 @@ struct ByteSwapping
     }
 
     //! destructor
-    ~ByteSwapping(){}
+    ~ByteSwapping() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("SWAP_OFF");
@@ -429,15 +438,18 @@ struct ByteSwapping
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct CollectType 
- *
- *  Enumeration used to represent CollectTypes
- */
+*  \struct CollectType
+*
+*  Enumeration used to represent CollectTypes
+*/
 struct CollectType
 {
     //! The enumerations allowed
@@ -449,7 +461,7 @@ struct CollectType
     };
 
     //! Default constructor
-    CollectType(){ value = NOT_SET; }
+    CollectType() { value = NOT_SET; }
 
     //! string constructor
     CollectType(std::string s)
@@ -467,7 +479,7 @@ struct CollectType
     //! int constructor
     CollectType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = MONOSTATIC;
@@ -484,12 +496,12 @@ struct CollectType
     }
 
     //! destructor
-    ~CollectType(){}
+    ~CollectType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("MONOSTATIC");
@@ -524,15 +536,18 @@ struct CollectType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ComplexImageGridType 
- *
- *  Enumeration used to represent ComplexImageGridTypes
- */
+*  \struct ComplexImageGridType
+*
+*  Enumeration used to represent ComplexImageGridTypes
+*/
 struct ComplexImageGridType
 {
     //! The enumerations allowed
@@ -547,7 +562,7 @@ struct ComplexImageGridType
     };
 
     //! Default constructor
-    ComplexImageGridType(){ value = NOT_SET; }
+    ComplexImageGridType() { value = NOT_SET; }
 
     //! string constructor
     ComplexImageGridType(std::string s)
@@ -571,7 +586,7 @@ struct ComplexImageGridType
     //! int constructor
     ComplexImageGridType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = RGAZIM;
@@ -597,12 +612,12 @@ struct ComplexImageGridType
     }
 
     //! destructor
-    ~ComplexImageGridType(){}
+    ~ComplexImageGridType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("RGAZIM");
@@ -643,15 +658,18 @@ struct ComplexImageGridType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 6; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ComplexImagePlaneType 
- *
- *  Enumeration used to represent ComplexImagePlaneTypes
- */
+*  \struct ComplexImagePlaneType
+*
+*  Enumeration used to represent ComplexImagePlaneTypes
+*/
 struct ComplexImagePlaneType
 {
     //! The enumerations allowed
@@ -664,7 +682,7 @@ struct ComplexImagePlaneType
     };
 
     //! Default constructor
-    ComplexImagePlaneType(){ value = NOT_SET; }
+    ComplexImagePlaneType() { value = NOT_SET; }
 
     //! string constructor
     ComplexImagePlaneType(std::string s)
@@ -684,7 +702,7 @@ struct ComplexImagePlaneType
     //! int constructor
     ComplexImagePlaneType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = OTHER;
@@ -704,12 +722,12 @@ struct ComplexImagePlaneType
     }
 
     //! destructor
-    ~ComplexImagePlaneType(){}
+    ~ComplexImagePlaneType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("OTHER");
@@ -746,15 +764,132 @@ struct ComplexImagePlaneType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DataType 
- *
- *  Enumeration used to represent DataTypes
- */
+*  \struct CornerIndex
+*
+*  Enumeration used to represent CornerIndexs
+*/
+struct CornerIndex
+{
+    //! The enumerations allowed
+    enum
+    {
+        FIRST_ROW_FIRST_COL = 0,
+        FIRST_ROW_LAST_COL = 1,
+        LAST_ROW_LAST_COL = 2,
+        LAST_ROW_FIRST_COL = 3,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    CornerIndex() { value = NOT_SET; }
+
+    //! string constructor
+    CornerIndex(std::string s)
+    {
+        if (s == "FIRST_ROW_FIRST_COL")
+            value = FIRST_ROW_FIRST_COL;
+        else if (s == "FIRST_ROW_LAST_COL")
+            value = FIRST_ROW_LAST_COL;
+        else if (s == "LAST_ROW_LAST_COL")
+            value = LAST_ROW_LAST_COL;
+        else if (s == "LAST_ROW_FIRST_COL")
+            value = LAST_ROW_FIRST_COL;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+    }
+
+    //! int constructor
+    CornerIndex(int i)
+    {
+        switch (i)
+        {
+        case 0:
+            value = FIRST_ROW_FIRST_COL;
+            break;
+        case 1:
+            value = FIRST_ROW_LAST_COL;
+            break;
+        case 2:
+            value = LAST_ROW_LAST_COL;
+            break;
+        case 3:
+            value = LAST_ROW_FIRST_COL;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+        }
+    }
+
+    //! destructor
+    ~CornerIndex() {}
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch (value)
+        {
+        case 0:
+            return std::string("FIRST_ROW_FIRST_COL");
+        case 1:
+            return std::string("FIRST_ROW_LAST_COL");
+        case 2:
+            return std::string("LAST_ROW_LAST_COL");
+        case 3:
+            return std::string("LAST_ROW_FIRST_COL");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+    }
+
+    //! assignment operator
+    CornerIndex& operator=(const CornerIndex& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
+    }
+
+    bool operator==(const CornerIndex& o) const { return value == o.value; }
+    bool operator!=(const CornerIndex& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    CornerIndex& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const CornerIndex& o) const { return value < o.value; }
+    bool operator>(const CornerIndex& o) const { return value > o.value; }
+    bool operator<=(const CornerIndex& o) const { return value <= o.value; }
+    bool operator>=(const CornerIndex& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    static size_t size() { return 5; }
+
+    int value;
+
+};
+
+
+/*!
+*  \struct DataType
+*
+*  Enumeration used to represent DataTypes
+*/
 struct DataType
 {
     //! The enumerations allowed
@@ -766,7 +901,7 @@ struct DataType
     };
 
     //! Default constructor
-    DataType(){ value = NOT_SET; }
+    DataType() { value = NOT_SET; }
 
     //! string constructor
     DataType(std::string s)
@@ -784,7 +919,7 @@ struct DataType
     //! int constructor
     DataType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = COMPLEX;
@@ -801,12 +936,12 @@ struct DataType
     }
 
     //! destructor
-    ~DataType(){}
+    ~DataType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("COMPLEX");
@@ -841,15 +976,18 @@ struct DataType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DecimationMethod 
- *
- *  Enumeration used to represent DecimationMethods
- */
+*  \struct DecimationMethod
+*
+*  Enumeration used to represent DecimationMethods
+*/
 struct DecimationMethod
 {
     //! The enumerations allowed
@@ -863,7 +1001,7 @@ struct DecimationMethod
     };
 
     //! Default constructor
-    DecimationMethod(){ value = NOT_SET; }
+    DecimationMethod() { value = NOT_SET; }
 
     //! string constructor
     DecimationMethod(std::string s)
@@ -885,7 +1023,7 @@ struct DecimationMethod
     //! int constructor
     DecimationMethod(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = NEAREST_NEIGHBOR;
@@ -908,12 +1046,12 @@ struct DecimationMethod
     }
 
     //! destructor
-    ~DecimationMethod(){}
+    ~DecimationMethod() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("NEAREST_NEIGHBOR");
@@ -952,15 +1090,18 @@ struct DecimationMethod
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DemodType 
- *
- *  Enumeration used to represent DemodTypes
- */
+*  \struct DemodType
+*
+*  Enumeration used to represent DemodTypes
+*/
 struct DemodType
 {
     //! The enumerations allowed
@@ -972,7 +1113,7 @@ struct DemodType
     };
 
     //! Default constructor
-    DemodType(){ value = NOT_SET; }
+    DemodType() { value = NOT_SET; }
 
     //! string constructor
     DemodType(std::string s)
@@ -990,7 +1131,7 @@ struct DemodType
     //! int constructor
     DemodType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = STRETCH;
@@ -1007,12 +1148,12 @@ struct DemodType
     }
 
     //! destructor
-    ~DemodType(){}
+    ~DemodType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("STRETCH");
@@ -1047,15 +1188,18 @@ struct DemodType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DisplayType 
- *
- *  Enumeration used to represent DisplayTypes
- */
+*  \struct DisplayType
+*
+*  Enumeration used to represent DisplayTypes
+*/
 struct DisplayType
 {
     //! The enumerations allowed
@@ -1067,7 +1211,7 @@ struct DisplayType
     };
 
     //! Default constructor
-    DisplayType(){ value = NOT_SET; }
+    DisplayType() { value = NOT_SET; }
 
     //! string constructor
     DisplayType(std::string s)
@@ -1085,7 +1229,7 @@ struct DisplayType
     //! int constructor
     DisplayType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = COLOR;
@@ -1102,12 +1246,12 @@ struct DisplayType
     }
 
     //! destructor
-    ~DisplayType(){}
+    ~DisplayType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("COLOR");
@@ -1142,15 +1286,18 @@ struct DisplayType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DualPolarizationType 
- *
- *  Enumeration used to represent DualPolarizationTypes
- */
+*  \struct DualPolarizationType
+*
+*  Enumeration used to represent DualPolarizationTypes
+*/
 struct DualPolarizationType
 {
     //! The enumerations allowed
@@ -1165,11 +1312,12 @@ struct DualPolarizationType
         RHC_LHC = 7,
         LHC_RHC = 8,
         LHC_LHC = 9,
+        UNKNOWN = 10,
         NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    DualPolarizationType(){ value = NOT_SET; }
+    DualPolarizationType() { value = NOT_SET; }
 
     //! string constructor
     DualPolarizationType(std::string s)
@@ -1192,6 +1340,8 @@ struct DualPolarizationType
             value = LHC_RHC;
         else if (s == "LHC_LHC")
             value = LHC_LHC;
+        else if (s == "UNKNOWN")
+            value = UNKNOWN;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -1201,7 +1351,7 @@ struct DualPolarizationType
     //! int constructor
     DualPolarizationType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = OTHER;
@@ -1230,6 +1380,9 @@ struct DualPolarizationType
         case 9:
             value = LHC_LHC;
             break;
+        case 10:
+            value = UNKNOWN;
+            break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
             break;
@@ -1239,12 +1392,12 @@ struct DualPolarizationType
     }
 
     //! destructor
-    ~DualPolarizationType(){}
+    ~DualPolarizationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("OTHER");
@@ -1264,6 +1417,8 @@ struct DualPolarizationType
             return std::string("LHC_RHC");
         case 9:
             return std::string("LHC_LHC");
+        case 10:
+            return std::string("UNKNOWN");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
@@ -1293,15 +1448,18 @@ struct DualPolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 11; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct EarthModelType 
- *
- *  Enumeration used to represent EarthModelTypes
- */
+*  \struct EarthModelType
+*
+*  Enumeration used to represent EarthModelTypes
+*/
 struct EarthModelType
 {
     //! The enumerations allowed
@@ -1312,7 +1470,7 @@ struct EarthModelType
     };
 
     //! Default constructor
-    EarthModelType(){ value = NOT_SET; }
+    EarthModelType() { value = NOT_SET; }
 
     //! string constructor
     EarthModelType(std::string s)
@@ -1328,7 +1486,7 @@ struct EarthModelType
     //! int constructor
     EarthModelType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = WGS84;
@@ -1342,12 +1500,12 @@ struct EarthModelType
     }
 
     //! destructor
-    ~EarthModelType(){}
+    ~EarthModelType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("WGS84");
@@ -1380,15 +1538,18 @@ struct EarthModelType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 2; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct FFTSign 
- *
- *  Enumeration used to represent FFTSigns
- */
+*  \struct FFTSign
+*
+*  Enumeration used to represent FFTSigns
+*/
 struct FFTSign
 {
     //! The enumerations allowed
@@ -1400,7 +1561,7 @@ struct FFTSign
     };
 
     //! Default constructor
-    FFTSign(){ value = NOT_SET; }
+    FFTSign() { value = NOT_SET; }
 
     //! string constructor
     FFTSign(std::string s)
@@ -1418,7 +1579,7 @@ struct FFTSign
     //! int constructor
     FFTSign(int i)
     {
-        switch(i)
+        switch (i)
         {
         case -1:
             value = NEG;
@@ -1435,12 +1596,12 @@ struct FFTSign
     }
 
     //! destructor
-    ~FFTSign(){}
+    ~FFTSign() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case -1:
             return std::string("NEG");
@@ -1475,15 +1636,18 @@ struct FFTSign
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ImageBeamCompensationType 
- *
- *  Enumeration used to represent ImageBeamCompensationTypes
- */
+*  \struct ImageBeamCompensationType
+*
+*  Enumeration used to represent ImageBeamCompensationTypes
+*/
 struct ImageBeamCompensationType
 {
     //! The enumerations allowed
@@ -1495,7 +1659,7 @@ struct ImageBeamCompensationType
     };
 
     //! Default constructor
-    ImageBeamCompensationType(){ value = NOT_SET; }
+    ImageBeamCompensationType() { value = NOT_SET; }
 
     //! string constructor
     ImageBeamCompensationType(std::string s)
@@ -1513,7 +1677,7 @@ struct ImageBeamCompensationType
     //! int constructor
     ImageBeamCompensationType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = NO;
@@ -1530,12 +1694,12 @@ struct ImageBeamCompensationType
     }
 
     //! destructor
-    ~ImageBeamCompensationType(){}
+    ~ImageBeamCompensationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("NO");
@@ -1570,15 +1734,18 @@ struct ImageBeamCompensationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ImageFormationType 
- *
- *  Enumeration used to represent ImageFormationTypes
- */
+*  \struct ImageFormationType
+*
+*  Enumeration used to represent ImageFormationTypes
+*/
 struct ImageFormationType
 {
     //! The enumerations allowed
@@ -1592,7 +1759,7 @@ struct ImageFormationType
     };
 
     //! Default constructor
-    ImageFormationType(){ value = NOT_SET; }
+    ImageFormationType() { value = NOT_SET; }
 
     //! string constructor
     ImageFormationType(std::string s)
@@ -1614,7 +1781,7 @@ struct ImageFormationType
     //! int constructor
     ImageFormationType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = OTHER;
@@ -1637,12 +1804,12 @@ struct ImageFormationType
     }
 
     //! destructor
-    ~ImageFormationType(){}
+    ~ImageFormationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("OTHER");
@@ -1681,15 +1848,18 @@ struct ImageFormationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct MagnificationMethod 
- *
- *  Enumeration used to represent MagnificationMethods
- */
+*  \struct MagnificationMethod
+*
+*  Enumeration used to represent MagnificationMethods
+*/
 struct MagnificationMethod
 {
     //! The enumerations allowed
@@ -1702,10 +1872,10 @@ struct MagnificationMethod
     };
 
     //! Default constructor
-    MagnificationMethod(){ value = NOT_SET; }
+    MagnificationMethod() { value = NOT_SET; }
 
     //! string constructor
-    MagnificationMethod(const std::string& s)
+    MagnificationMethod(std::string s)
     {
         if (s == "NEAREST_NEIGHBOR")
             value = NEAREST_NEIGHBOR;
@@ -1722,7 +1892,7 @@ struct MagnificationMethod
     //! int constructor
     MagnificationMethod(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = NEAREST_NEIGHBOR;
@@ -1742,12 +1912,12 @@ struct MagnificationMethod
     }
 
     //! destructor
-    ~MagnificationMethod(){}
+    ~MagnificationMethod() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("NEAREST_NEIGHBOR");
@@ -1784,15 +1954,18 @@ struct MagnificationMethod
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct OrientationType 
- *
- *  Enumeration used to represent OrientationTypes
- */
+*  \struct OrientationType
+*
+*  Enumeration used to represent OrientationTypes
+*/
 struct OrientationType
 {
     //! The enumerations allowed
@@ -1807,7 +1980,7 @@ struct OrientationType
     };
 
     //! Default constructor
-    OrientationType(){ value = NOT_SET; }
+    OrientationType() { value = NOT_SET; }
 
     //! string constructor
     OrientationType(std::string s)
@@ -1831,7 +2004,7 @@ struct OrientationType
     //! int constructor
     OrientationType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = UP;
@@ -1857,12 +2030,12 @@ struct OrientationType
     }
 
     //! destructor
-    ~OrientationType(){}
+    ~OrientationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("UP");
@@ -1903,15 +2076,18 @@ struct OrientationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 6; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct PixelType 
- *
- *  Enumeration used to represent PixelTypes
- */
+*  \struct PixelType
+*
+*  Enumeration used to represent PixelTypes
+*/
 struct PixelType
 {
     //! The enumerations allowed
@@ -1929,7 +2105,7 @@ struct PixelType
     };
 
     //! Default constructor
-    PixelType(){ value = NOT_SET; }
+    PixelType() { value = NOT_SET; }
 
     //! string constructor
     PixelType(std::string s)
@@ -1959,7 +2135,7 @@ struct PixelType
     //! int constructor
     PixelType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = RE32F_IM32F;
@@ -1994,12 +2170,12 @@ struct PixelType
     }
 
     //! destructor
-    ~PixelType(){}
+    ~PixelType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("RE32F_IM32F");
@@ -2046,15 +2222,18 @@ struct PixelType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 9; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct PolarizationSequenceType
- *
- *  Enumeration used to represent PolarizationSequenceTypes
- */
+*  \struct PolarizationSequenceType
+*
+*  Enumeration used to represent PolarizationSequenceTypes
+*/
 struct PolarizationSequenceType
 {
     //! The enumerations allowed
@@ -2071,57 +2250,35 @@ struct PolarizationSequenceType
     };
 
     //! Default constructor
-    PolarizationSequenceType() :
-        value(NOT_SET)
-    {
-    }
+    PolarizationSequenceType() { value = NOT_SET; }
 
     //! string constructor
-    PolarizationSequenceType(const std::string& str)
+    PolarizationSequenceType(std::string s)
     {
-        if (str == "OTHER")
-        {
+        if (s == "OTHER")
             value = OTHER;
-        }
-        else if (str == "V")
-        {
+        else if (s == "V")
             value = V;
-        }
-        else if (str == "H")
-        {
+        else if (s == "H")
             value = H;
-        }
-        else if (str == "RHC")
-        {
+        else if (s == "RHC")
             value = RHC;
-        }
-        else if (str == "LHC")
-        {
+        else if (s == "LHC")
             value = LHC;
-        }
-        else if (str == "UNKNOWN")
-        {
+        else if (s == "UNKNOWN")
             value = UNKNOWN;
-        }
-        else if (str == "SEQUENCE")
-        {
+        else if (s == "SEQUENCE")
             value = SEQUENCE;
-        }
-        else if (str == "NOT_SET")
-        {
+        else if (s == "NOT_SET")
             value = NOT_SET;
-        }
         else
-        {
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str));
-        }
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
-    PolarizationSequenceType(int intValue)
+    PolarizationSequenceType(int i)
     {
-        switch (intValue)
+        switch (i)
         {
         case 1:
             value = OTHER;
@@ -2148,15 +2305,17 @@ struct PolarizationSequenceType
             value = NOT_SET;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(intValue)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
+
+    //! destructor
+    ~PolarizationSequenceType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("OTHER");
@@ -2175,9 +2334,18 @@ struct PolarizationSequenceType
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(value)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
+    }
+
+    //! assignment operator
+    PolarizationSequenceType& operator=(const PolarizationSequenceType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
     }
 
     bool operator==(const PolarizationSequenceType& o) const { return value == o.value; }
@@ -2192,14 +2360,18 @@ struct PolarizationSequenceType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 8; }
+
     int value;
+
 };
 
+
 /*!
- *  \struct PolarizationType
- *
- *  Enumeration used to represent Polarization2Types
- */
+*  \struct PolarizationType
+*
+*  Enumeration used to represent PolarizationTypes
+*/
 struct PolarizationType
 {
     //! The enumerations allowed
@@ -2210,53 +2382,38 @@ struct PolarizationType
         H = 3,
         RHC = 4,
         LHC = 5,
+        UNKNOWN = 6,
         NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    PolarizationType() :
-        value(NOT_SET)
-    {
-    }
+    PolarizationType() { value = NOT_SET; }
 
     //! string constructor
-    PolarizationType(const std::string& str)
+    PolarizationType(std::string s)
     {
-        if (str == "OTHER")
-        {
+        if (s == "OTHER")
             value = OTHER;
-        }
-        else if (str == "V")
-        {
+        else if (s == "V")
             value = V;
-        }
-        else if (str == "H")
-        {
+        else if (s == "H")
             value = H;
-        }
-        else if (str == "RHC")
-        {
+        else if (s == "RHC")
             value = RHC;
-        }
-        else if (str == "LHC")
-        {
+        else if (s == "LHC")
             value = LHC;
-        }
-        else if (str == "NOT_SET")
-        {
+        else if (s == "UNKNOWN")
+            value = UNKNOWN;
+        else if (s == "NOT_SET")
             value = NOT_SET;
-        }
         else
-        {
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str));
-        }
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
-    PolarizationType(int intValue)
+    PolarizationType(int i)
     {
-        switch (intValue)
+        switch (i)
         {
         case 1:
             value = OTHER;
@@ -2273,19 +2430,24 @@ struct PolarizationType
         case 5:
             value = LHC;
             break;
+        case 6:
+            value = UNKNOWN;
+            break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(intValue)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
+
+    //! destructor
+    ~PolarizationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("OTHER");
@@ -2297,12 +2459,23 @@ struct PolarizationType
             return std::string("RHC");
         case 5:
             return std::string("LHC");
+        case 6:
+            return std::string("UNKNOWN");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(value)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
+    }
+
+    //! assignment operator
+    PolarizationType& operator=(const PolarizationType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
     }
 
     bool operator==(const PolarizationType& o) const { return value == o.value; }
@@ -2317,14 +2490,18 @@ struct PolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 7; }
+
     int value;
+
 };
 
+
 /*!
- *  \struct ProjectionType 
- *
- *  Enumeration used to represent ProjectionTypes
- */
+*  \struct ProjectionType
+*
+*  Enumeration used to represent ProjectionTypes
+*/
 struct ProjectionType
 {
     //! The enumerations allowed
@@ -2338,7 +2515,7 @@ struct ProjectionType
     };
 
     //! Default constructor
-    ProjectionType(){ value = NOT_SET; }
+    ProjectionType() { value = NOT_SET; }
 
     //! string constructor
     ProjectionType(std::string s)
@@ -2360,7 +2537,7 @@ struct ProjectionType
     //! int constructor
     ProjectionType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = PLANE;
@@ -2383,12 +2560,12 @@ struct ProjectionType
     }
 
     //! destructor
-    ~ProjectionType(){}
+    ~ProjectionType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("PLANE");
@@ -2427,15 +2604,18 @@ struct ProjectionType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RMAlgoType 
- *
- *  Enumeration used to represent RMAlgoTypes
- */
+*  \struct RMAlgoType
+*
+*  Enumeration used to represent RMAlgoTypes
+*/
 struct RMAlgoType
 {
     //! The enumerations allowed
@@ -2448,7 +2628,7 @@ struct RMAlgoType
     };
 
     //! Default constructor
-    RMAlgoType(){ value = NOT_SET; }
+    RMAlgoType() { value = NOT_SET; }
 
     //! string constructor
     RMAlgoType(std::string s)
@@ -2468,7 +2648,7 @@ struct RMAlgoType
     //! int constructor
     RMAlgoType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = OMEGA_K;
@@ -2488,12 +2668,12 @@ struct RMAlgoType
     }
 
     //! destructor
-    ~RMAlgoType(){}
+    ~RMAlgoType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("OMEGA_K");
@@ -2530,15 +2710,18 @@ struct RMAlgoType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RadarModeType 
- *
- *  Enumeration used to represent RadarModeTypes
- */
+*  \struct RadarModeType
+*
+*  Enumeration used to represent RadarModeTypes
+*/
 struct RadarModeType
 {
     //! The enumerations allowed
@@ -2552,7 +2735,7 @@ struct RadarModeType
     };
 
     //! Default constructor
-    RadarModeType(){ value = NOT_SET; }
+    RadarModeType() { value = NOT_SET; }
 
     //! string constructor
     RadarModeType(std::string s)
@@ -2574,7 +2757,7 @@ struct RadarModeType
     //! int constructor
     RadarModeType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = SPOTLIGHT;
@@ -2597,12 +2780,12 @@ struct RadarModeType
     }
 
     //! destructor
-    ~RadarModeType(){}
+    ~RadarModeType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("SPOTLIGHT");
@@ -2641,15 +2824,18 @@ struct RadarModeType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RegionType 
- *
- *  Enumeration used to represent RegionTypes
- */
+*  \struct RegionType
+*
+*  Enumeration used to represent RegionTypes
+*/
 struct RegionType
 {
     //! The enumerations allowed
@@ -2661,7 +2847,7 @@ struct RegionType
     };
 
     //! Default constructor
-    RegionType(){ value = NOT_SET; }
+    RegionType() { value = NOT_SET; }
 
     //! string constructor
     RegionType(std::string s)
@@ -2679,7 +2865,7 @@ struct RegionType
     //! int constructor
     RegionType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 1:
             value = SUB_REGION;
@@ -2696,12 +2882,12 @@ struct RegionType
     }
 
     //! destructor
-    ~RegionType(){}
+    ~RegionType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 1:
             return std::string("SUB_REGION");
@@ -2736,15 +2922,18 @@ struct RegionType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RowColEnum 
- *
- *  Enumeration used to represent RowColEnums
- */
+*  \struct RowColEnum
+*
+*  Enumeration used to represent RowColEnums
+*/
 struct RowColEnum
 {
     //! The enumerations allowed
@@ -2756,7 +2945,7 @@ struct RowColEnum
     };
 
     //! Default constructor
-    RowColEnum(){ value = NOT_SET; }
+    RowColEnum() { value = NOT_SET; }
 
     //! string constructor
     RowColEnum(std::string s)
@@ -2774,7 +2963,7 @@ struct RowColEnum
     //! int constructor
     RowColEnum(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = ROW;
@@ -2791,12 +2980,12 @@ struct RowColEnum
     }
 
     //! destructor
-    ~RowColEnum(){}
+    ~RowColEnum() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("ROW");
@@ -2831,15 +3020,18 @@ struct RowColEnum
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SCPType 
- *
- *  Enumeration used to represent SCPTypes
- */
+*  \struct SCPType
+*
+*  Enumeration used to represent SCPTypes
+*/
 struct SCPType
 {
     //! The enumerations allowed
@@ -2851,7 +3043,7 @@ struct SCPType
     };
 
     //! Default constructor
-    SCPType(){ value = NOT_SET; }
+    SCPType() { value = NOT_SET; }
 
     //! string constructor
     SCPType(std::string s)
@@ -2869,7 +3061,7 @@ struct SCPType
     //! int constructor
     SCPType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = SCP_ROW_COL;
@@ -2886,12 +3078,12 @@ struct SCPType
     }
 
     //! destructor
-    ~SCPType(){}
+    ~SCPType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("SCP_ROW_COL");
@@ -2926,15 +3118,18 @@ struct SCPType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SideOfTrackType 
- *
- *  Enumeration used to represent SideOfTrackTypes
- */
+*  \struct SideOfTrackType
+*
+*  Enumeration used to represent SideOfTrackTypes
+*/
 struct SideOfTrackType
 {
     //! The enumerations allowed
@@ -2946,7 +3141,7 @@ struct SideOfTrackType
     };
 
     //! Default constructor
-    SideOfTrackType(){ value = NOT_SET; }
+    SideOfTrackType() { value = NOT_SET; }
 
     //! string constructor
     SideOfTrackType(std::string s)
@@ -2964,7 +3159,7 @@ struct SideOfTrackType
     //! int constructor
     SideOfTrackType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case scene::TRACK_LEFT:
             value = LEFT;
@@ -2981,12 +3176,12 @@ struct SideOfTrackType
     }
 
     //! destructor
-    ~SideOfTrackType(){}
+    ~SideOfTrackType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case scene::TRACK_LEFT:
             return std::string("LEFT");
@@ -3021,15 +3216,18 @@ struct SideOfTrackType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SlowTimeBeamCompensationType 
- *
- *  Enumeration used to represent SlowTimeBeamCompensationTypes
- */
+*  \struct SlowTimeBeamCompensationType
+*
+*  Enumeration used to represent SlowTimeBeamCompensationTypes
+*/
 struct SlowTimeBeamCompensationType
 {
     //! The enumerations allowed
@@ -3042,7 +3240,7 @@ struct SlowTimeBeamCompensationType
     };
 
     //! Default constructor
-    SlowTimeBeamCompensationType(){ value = NOT_SET; }
+    SlowTimeBeamCompensationType() { value = NOT_SET; }
 
     //! string constructor
     SlowTimeBeamCompensationType(std::string s)
@@ -3062,7 +3260,7 @@ struct SlowTimeBeamCompensationType
     //! int constructor
     SlowTimeBeamCompensationType(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = NO;
@@ -3082,12 +3280,12 @@ struct SlowTimeBeamCompensationType
     }
 
     //! destructor
-    ~SlowTimeBeamCompensationType(){}
+    ~SlowTimeBeamCompensationType() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("NO");
@@ -3124,15 +3322,18 @@ struct SlowTimeBeamCompensationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct XYZEnum 
- *
- *  Enumeration used to represent XYZEnums
- */
+*  \struct XYZEnum
+*
+*  Enumeration used to represent XYZEnums
+*/
 struct XYZEnum
 {
     //! The enumerations allowed
@@ -3145,7 +3346,7 @@ struct XYZEnum
     };
 
     //! Default constructor
-    XYZEnum(){ value = NOT_SET; }
+    XYZEnum() { value = NOT_SET; }
 
     //! string constructor
     XYZEnum(std::string s)
@@ -3165,7 +3366,7 @@ struct XYZEnum
     //! int constructor
     XYZEnum(int i)
     {
-        switch(i)
+        switch (i)
         {
         case 0:
             value = X;
@@ -3185,12 +3386,12 @@ struct XYZEnum
     }
 
     //! destructor
-    ~XYZEnum(){}
+    ~XYZEnum() {}
 
     //! Returns string representation of the value
     std::string toString() const
     {
-        switch(value)
+        switch (value)
         {
         case 0:
             return std::string("X");
@@ -3227,11 +3428,15 @@ struct XYZEnum
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
-// code auto-generated 2010-08-31 15:10:30.479133
+
+// code auto-generated 2016-04-04 08:55:03.363000
+
 
 }
 

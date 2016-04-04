@@ -418,6 +418,8 @@ six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
                         : six::PolarizationType::RHC;
     case six::DualPolarizationType::LHC_LHC:
         return six::PolarizationType::LHC;
+    case six::DualPolarizationType::UNKNOWN:
+        return six::PolarizationType::UNKNOWN;
     default:
         return six::PolarizationType::NOT_SET;
     }
