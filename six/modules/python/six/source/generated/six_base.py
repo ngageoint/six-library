@@ -2744,6 +2744,16 @@ class SCP(_object):
     if _newclass:
         llh = _swig_property(_six_base.SCP_llh_get, _six_base.SCP_llh_set)
 
+    def __eq__(self, rhs):
+        """__eq__(SCP self, SCP rhs) -> bool"""
+        return _six_base.SCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(SCP self, SCP rhs) -> bool"""
+        return _six_base.SCP___ne__(self, rhs)
+
+
     def __init__(self):
         """__init__(six::SCP self) -> SCP"""
         this = _six_base.new_SCP()
@@ -3007,6 +3017,16 @@ class ParameterCollection(_object):
         return _six_base.ParameterCollection_back(self, *args)
 
 
+    def __eq__(self, rhs):
+        """__eq__(ParameterCollection self, ParameterCollection rhs) -> bool"""
+        return _six_base.ParameterCollection___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ParameterCollection self, ParameterCollection rhs) -> bool"""
+        return _six_base.ParameterCollection___ne__(self, rhs)
+
+
     def __getitem__(self, i):
         """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
         return _six_base.ParameterCollection___getitem__(self, i)
@@ -3143,6 +3163,16 @@ class CorrCoefs(_object):
     __swig_getmethods__["v2v3"] = _six_base.CorrCoefs_v2v3_get
     if _newclass:
         v2v3 = _swig_property(_six_base.CorrCoefs_v2v3_get, _six_base.CorrCoefs_v2v3_set)
+
+    def __eq__(self, rhs):
+        """__eq__(CorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.CorrCoefs___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(CorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.CorrCoefs___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_CorrCoefs
     __del__ = lambda self: None
 CorrCoefs_swigregister = _six_base.CorrCoefs_swigregister
@@ -3199,6 +3229,16 @@ class PosVelError(_object):
     __swig_getmethods__["positionDecorr"] = _six_base.PosVelError_positionDecorr_get
     if _newclass:
         positionDecorr = _swig_property(_six_base.PosVelError_positionDecorr_get, _six_base.PosVelError_positionDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(PosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.PosVelError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(PosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.PosVelError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_PosVelError
     __del__ = lambda self: None
 PosVelError_swigregister = _six_base.PosVelError_swigregister
@@ -3235,6 +3275,16 @@ class RadarSensor(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(RadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.RadarSensor___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.RadarSensor___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_RadarSensor
     __del__ = lambda self: None
 RadarSensor_swigregister = _six_base.RadarSensor_swigregister
@@ -3267,6 +3317,16 @@ class TropoError(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(TropoError self, TropoError rhs) -> bool"""
+        return _six_base.TropoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(TropoError self, TropoError rhs) -> bool"""
+        return _six_base.TropoError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_TropoError
     __del__ = lambda self: None
 TropoError_swigregister = _six_base.TropoError_swigregister
@@ -3303,6 +3363,16 @@ class IonoError(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(IonoError self, IonoError rhs) -> bool"""
+        return _six_base.IonoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(IonoError self, IonoError rhs) -> bool"""
+        return _six_base.IonoError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_IonoError
     __del__ = lambda self: None
 IonoError_swigregister = _six_base.IonoError_swigregister
@@ -3339,6 +3409,16 @@ class Components(_object):
     __swig_getmethods__["ionoError"] = _six_base.Components_ionoError_get
     if _newclass:
         ionoError = _swig_property(_six_base.Components_ionoError_get, _six_base.Components_ionoError_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Components self, Components rhs) -> bool"""
+        return _six_base.Components___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Components self, Components rhs) -> bool"""
+        return _six_base.Components___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_Components
     __del__ = lambda self: None
 Components_swigregister = _six_base.Components_swigregister
@@ -3380,6 +3460,16 @@ class CompositeSCP(_object):
     __swig_getmethods__["xyErr"] = _six_base.CompositeSCP_xyErr_get
     if _newclass:
         xyErr = _swig_property(_six_base.CompositeSCP_xyErr_get, _six_base.CompositeSCP_xyErr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(CompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.CompositeSCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(CompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.CompositeSCP___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_CompositeSCP
     __del__ = lambda self: None
 CompositeSCP_swigregister = _six_base.CompositeSCP_swigregister
@@ -3412,6 +3502,16 @@ class ErrorStatistics(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ErrorStatistics___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ErrorStatistics___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_ErrorStatistics
     __del__ = lambda self: None
 ErrorStatistics_swigregister = _six_base.ErrorStatistics_swigregister
@@ -3440,6 +3540,16 @@ class NoiseLevel(_object):
     __swig_getmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_get
     if _newclass:
         noisePoly = _swig_property(_six_base.NoiseLevel_noisePoly_get, _six_base.NoiseLevel_noisePoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_NoiseLevel
     __del__ = lambda self: None
 NoiseLevel_swigregister = _six_base.NoiseLevel_swigregister
@@ -3488,6 +3598,16 @@ class Radiometric(_object):
     __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_get
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_gammaZeroSFIncidenceMap_get, _six_base.Radiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_Radiometric
     __del__ = lambda self: None
 Radiometric_swigregister = _six_base.Radiometric_swigregister
@@ -3734,6 +3854,16 @@ class Options(_object):
         return _six_base.Options_end(self)
 
 
+    def __eq__(self, rhs):
+        """__eq__(Options self, Options rhs) -> bool"""
+        return _six_base.Options___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Options self, Options rhs) -> bool"""
+        return _six_base.Options___ne__(self, rhs)
+
+
     def __init__(self):
         """__init__(six::Options self) -> Options"""
         this = _six_base.new_Options()
@@ -3972,6 +4102,16 @@ class LatLonCorners(_object):
         """
         return _six_base.LatLonCorners_getCorner(self, *args)
 
+
+    def __eq__(self, rhs):
+        """__eq__(LatLonCorners self, LatLonCorners rhs) -> bool"""
+        return _six_base.LatLonCorners___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(LatLonCorners self, LatLonCorners rhs) -> bool"""
+        return _six_base.LatLonCorners___ne__(self, rhs)
+
     __swig_setmethods__["upperLeft"] = _six_base.LatLonCorners_upperLeft_set
     __swig_getmethods__["upperLeft"] = _six_base.LatLonCorners_upperLeft_get
     if _newclass:
@@ -4024,6 +4164,16 @@ class LatLonAltCorners(_object):
         getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
         """
         return _six_base.LatLonAltCorners_getCorner(self, *args)
+
+
+    def __eq__(self, rhs):
+        """__eq__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
+        return _six_base.LatLonAltCorners___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
+        return _six_base.LatLonAltCorners___ne__(self, rhs)
 
     __swig_setmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_set
     __swig_getmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_get
@@ -4152,6 +4302,16 @@ class ScopedCopyableRadiometric(_object):
     __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___ne__(self, rhs)
+
 ScopedCopyableRadiometric_swigregister = _six_base.ScopedCopyableRadiometric_swigregister
 ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
 
@@ -4235,6 +4395,16 @@ class ScopedCopyableErrorStatistics(_object):
     __swig_getmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_get
     if _newclass:
         additionalParameters = _swig_property(_six_base.ScopedCopyableErrorStatistics_additionalParameters_get, _six_base.ScopedCopyableErrorStatistics_additionalParameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___ne__(self, rhs)
+
 ScopedCopyableErrorStatistics_swigregister = _six_base.ScopedCopyableErrorStatistics_swigregister
 ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 
@@ -4366,6 +4536,16 @@ class ScopedCopyableCorrCoefs(_object):
     __swig_getmethods__["v2v3"] = _six_base.ScopedCopyableCorrCoefs_v2v3_get
     if _newclass:
         v2v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v2v3_get, _six_base.ScopedCopyableCorrCoefs_v2v3_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.ScopedCopyableCorrCoefs___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.ScopedCopyableCorrCoefs___ne__(self, rhs)
+
 ScopedCopyableCorrCoefs_swigregister = _six_base.ScopedCopyableCorrCoefs_swigregister
 ScopedCopyableCorrCoefs_swigregister(ScopedCopyableCorrCoefs)
 
@@ -4473,6 +4653,16 @@ class ScopedCopyablePosVelError(_object):
     __swig_getmethods__["positionDecorr"] = _six_base.ScopedCopyablePosVelError_positionDecorr_get
     if _newclass:
         positionDecorr = _swig_property(_six_base.ScopedCopyablePosVelError_positionDecorr_get, _six_base.ScopedCopyablePosVelError_positionDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.ScopedCopyablePosVelError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.ScopedCopyablePosVelError___ne__(self, rhs)
+
 ScopedCopyablePosVelError_swigregister = _six_base.ScopedCopyablePosVelError_swigregister
 ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 
@@ -4560,6 +4750,16 @@ class ScopedCopyableRadarSensor(_object):
     __swig_getmethods__["rangeBiasDecorr"] = _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get
     if _newclass:
         rangeBiasDecorr = _swig_property(_six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get, _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.ScopedCopyableRadarSensor___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.ScopedCopyableRadarSensor___ne__(self, rhs)
+
 ScopedCopyableRadarSensor_swigregister = _six_base.ScopedCopyableRadarSensor_swigregister
 ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
 
@@ -4643,6 +4843,16 @@ class ScopedCopyableTropoError(_object):
     __swig_getmethods__["tropoRangeDecorr"] = _six_base.ScopedCopyableTropoError_tropoRangeDecorr_get
     if _newclass:
         tropoRangeDecorr = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeDecorr_get, _six_base.ScopedCopyableTropoError_tropoRangeDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
+        return _six_base.ScopedCopyableTropoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
+        return _six_base.ScopedCopyableTropoError___ne__(self, rhs)
+
 ScopedCopyableTropoError_swigregister = _six_base.ScopedCopyableTropoError_swigregister
 ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
 
@@ -4730,6 +4940,16 @@ class ScopedCopyableIonoError(_object):
     __swig_getmethods__["ionoRangeVertDecorr"] = _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get
     if _newclass:
         ionoRangeVertDecorr = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get, _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
+        return _six_base.ScopedCopyableIonoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
+        return _six_base.ScopedCopyableIonoError___ne__(self, rhs)
+
 ScopedCopyableIonoError_swigregister = _six_base.ScopedCopyableIonoError_swigregister
 ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
 
@@ -4817,6 +5037,16 @@ class ScopedCopyableCompositeSCP(_object):
     __swig_getmethods__["xyErr"] = _six_base.ScopedCopyableCompositeSCP_xyErr_get
     if _newclass:
         xyErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_xyErr_get, _six_base.ScopedCopyableCompositeSCP_xyErr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.ScopedCopyableCompositeSCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.ScopedCopyableCompositeSCP___ne__(self, rhs)
+
 ScopedCopyableCompositeSCP_swigregister = _six_base.ScopedCopyableCompositeSCP_swigregister
 ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
 
@@ -4904,6 +5134,16 @@ class ScopedCopyableComponents(_object):
     __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
     if _newclass:
         ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___ne__(self, rhs)
+
 ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
 ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 
