@@ -24,22 +24,6 @@
 using namespace six;
 using namespace six::sicd;
 
-ImageData::~ImageData()
-{
-    if (amplitudeTable)
-        delete amplitudeTable;
-}
-
-ImageData* ImageData::clone() const
-{
-    ImageData* d = new ImageData(*this);
-    if (amplitudeTable)
-    {
-    d->amplitudeTable = (AmplitudeTable*)amplitudeTable->clone();
-    }
-    return d;
-}
-
 bool ImageData::operator==(const ImageData& rhs) const
 {
     return (pixelType == rhs.pixelType &&

@@ -50,12 +50,6 @@ struct ImageData
     {
     }
 
-    //!  Destructor, deletes amplitudeTable if non-NULL
-    ~ImageData();
-
-    //!  Clone this object, including amplitudeTable if non-NULL
-    ImageData* clone() const;
-
     /*!
      *  Indicates the pixel type and binary format of the data.
      *  \todo We currently do not support AMP8I_PHS8I
@@ -69,7 +63,7 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-    AmplitudeTable* amplitudeTable;
+    mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
     size_t numRows;

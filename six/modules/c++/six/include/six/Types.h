@@ -334,6 +334,24 @@ struct AmplitudeTable : public LUT
         LUT(256, sizeof(double))
     {
     }
+
+    bool operator==(const AmplitudeTable& rhs) const
+    {
+        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+    }
+    bool operator!=(const AmplitudeTable& rhs) const
+    {
+        return !(*this == rhs);
+    }
+    AmplitudeTable* clone() const
+    {
+        AmplitudeTable* ret = new AmplitudeTable();
+        for (size_t ii = 0; ii < numEntries; ++ii)
+        {
+            *(*ret)[ii] = *(*this)[ii];
+        }
+        return ret;
+    }
 };
 
 /*!
