@@ -43,14 +43,14 @@ public:
         return mType;
     }
 
-    friend bool operator==(const SFATyped& lhs, const SFATyped& rhs)
+    bool operator==(const SFATyped& rhs) const
     {
-        return lhs.equalTo(rhs);
+        return equalTo(rhs);
     }
 
-    friend bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
+    bool operator!=(const SFATyped& rhs) const
     {
-        return !(lhs == rhs);
+        return !(*this == rhs);
     }
 
 protected:
@@ -111,18 +111,26 @@ struct SFAPoint : public SFAGeometry
         return new SFAPoint(*this);
     }
 
+    bool operator==(const SFAPoint& rhs) const
+    {
+        return (x == rhs.x && y == rhs.y &&
+            z == rhs.z && m == rhs.m);
+    }
+
+    static const char TYPE_NAME[];
+
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAPoint const* point = dynamic_cast<SFAPoint const*>(&rhs);
+        const SFAPoint* point = dynamic_cast<const SFAPoint*>(&rhs);
         if (point != NULL)
         {
-            return (x == point->x && y == point->y &&
-                z == point->z && m == point->m);
+            return *this == *point;
         }
         return false;
     }
 
-    static const char TYPE_NAME[];
+
 };
 
 //! Abstract type
@@ -149,12 +157,18 @@ public:
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFALineString& rhs) const
+    {
+        return (vertices == rhs.vertices);
+    }
+
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFALineString const* lineString = dynamic_cast<SFALineString const*>(&rhs);
+        const SFALineString* lineString = dynamic_cast<const SFALineString*>(&rhs);
         if (lineString != NULL)
         {
-            return (vertices == lineString->vertices);
+            return *this == *lineString;
         }
         return false;
     }
@@ -172,13 +186,19 @@ public:
     {
         return new SFALine(*this);
     }
+    bool operator==(const SFALine& rhs) const
+    {
+        return (vertices == rhs.vertices);
+    }
     static const char TYPE_NAME[];
+
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFALine const* line = dynamic_cast<SFALine const*>(&rhs);
+        const SFALine* line = dynamic_cast<const SFALine*>(&rhs);
         if (line != NULL)
         {
-            return (vertices == line->vertices);
+            return *this == *line;
         }
         return false;
     }
@@ -196,13 +216,19 @@ public:
     {
         return new SFALinearRing(*this);
     }
+    bool operator==(const SFALinearRing& rhs) const
+    {
+        return (vertices == rhs.vertices);
+    }
     static const char TYPE_NAME[];
+
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFALinearRing const* linearRing = dynamic_cast<SFALinearRing const*>(&rhs);
+        const SFALinearRing* linearRing = dynamic_cast<const SFALinearRing*>(&rhs);
         if (linearRing != NULL)
         {
-            return (vertices == linearRing->vertices);
+            return *this == *linearRing;
         }
         return false;
     }
@@ -231,14 +257,20 @@ public:
     }
 
     std::vector<mem::ScopedCopyablePtr<SFALinearRing> > rings;
+
+    bool operator==(const SFAPolygon& rhs) const
+    {
+        return (rings == rhs.rings);
+    }
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAPolygon const* polygon = dynamic_cast<SFAPolygon const*>(&rhs);
+        const SFAPolygon* polygon = dynamic_cast<const SFAPolygon*>(&rhs);
         if (polygon != NULL)
         {
-            return (rings == polygon->rings);
+            return *this == *polygon;
         }
         return false;
     }
@@ -258,14 +290,19 @@ public:
         return new SFATriangle(*this);
     }
 
+    bool operator==(const SFATriangle& rhs) const
+    {
+        return (rings == rhs.rings);
+    }
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFATriangle const* triangle = dynamic_cast<SFATriangle const*>(&rhs);
+        const SFATriangle* triangle = dynamic_cast<const SFATriangle*>(&rhs);
         if (triangle != NULL)
         {
-            return (rings == triangle->rings);
+            return *this == *triangle;
         }
         return false;
     }
@@ -284,15 +321,20 @@ public:
         return new SFAPolyhedralSurface(*this);
     }
 
+    bool operator==(const SFAPolyhedralSurface& rhs) const
+    {
+        return (patches == rhs.patches);
+    }
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAPolyhedralSurface const* surface = dynamic_cast<SFAPolyhedralSurface const*>(&rhs);
+        const SFAPolyhedralSurface* surface = dynamic_cast<const SFAPolyhedralSurface*>(&rhs);
         if (surface != NULL)
         {
-            return (patches == surface->patches);
+            return *this == *surface;
         }
         return false;
     }
@@ -313,15 +355,20 @@ public:
         return new SFATriangulatedIrregularNetwork(*this);
     }
 
+    bool operator==(const SFATriangulatedIrregularNetwork& rhs) const
+    {
+        return (patches == rhs.patches);
+    }
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFATriangulatedIrregularNetwork const* network = dynamic_cast<SFATriangulatedIrregularNetwork const*>(&rhs);
+        const SFATriangulatedIrregularNetwork* network = dynamic_cast<const SFATriangulatedIrregularNetwork*>(&rhs);
         if (network != NULL)
         {
-            return (patches == network->patches);
+            return *this == *network;
         }
         return false;
     }
@@ -348,15 +395,20 @@ public:
     {
         return new SFAMultiPoint(*this);
     }
+    bool operator==(const SFAMultiPoint& rhs) const
+    {
+        return (vertices == rhs.vertices);
+    }
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAMultiPoint const* multiPoint = dynamic_cast<SFAMultiPoint const*>(&rhs);
+        const SFAMultiPoint* multiPoint = dynamic_cast<const SFAMultiPoint*>(&rhs);
         if (multiPoint != NULL)
         {
-            return (vertices == multiPoint->vertices);
+            return *this == *multiPoint;
         }
         return false;
     }
@@ -385,15 +437,20 @@ public:
         return new SFAMultiLineString(*this);
     }
 
+    bool operator==(const SFAMultiLineString& rhs) const
+    {
+        return (elements == rhs.elements);
+    }
+
     std::vector<mem::ScopedCloneablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
 
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAMultiLineString const* string = dynamic_cast<SFAMultiLineString const*>(&rhs);
+        const SFAMultiLineString* string = dynamic_cast<const SFAMultiLineString*>(&rhs);
         if (string != NULL)
         {
-            return (elements == string->elements);
+            return *this == *string;
         }
         return false;
     }
@@ -422,15 +479,20 @@ public:
         return new SFAMultiPolygon(*this);
     }
 
+    bool operator==(const SFAMultiPolygon& rhs) const
+    {
+        return (elements == rhs.elements);
+    }
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAMultiPolygon const* polygon = dynamic_cast<SFAMultiPolygon const*>(&rhs);
+        const SFAMultiPolygon* polygon = dynamic_cast<const SFAMultiPolygon*>(&rhs);
         if (polygon != NULL)
         {
-            return (elements == polygon->elements);
+            return *this == *polygon;
         }
         return false;
     }
@@ -545,15 +607,21 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
         return new SFAGeocentricCoordinateSystem(*this); 
     }
 
+    bool operator==(const SFAGeocentricCoordinateSystem& rhs) const
+    {
+        return (csName == rhs.csName && datum == rhs.datum &&
+            primeMeridian == rhs.primeMeridian && linearUnit == rhs.linearUnit);
+    }
+
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAGeocentricCoordinateSystem const* system = dynamic_cast<SFAGeocentricCoordinateSystem const*>(&rhs);
+        const SFAGeocentricCoordinateSystem* system = dynamic_cast<const SFAGeocentricCoordinateSystem*>(&rhs);
         if (system != NULL)
         {
-            return (csName == system->csName && datum == system->datum &&
-                primeMeridian == system->primeMeridian && linearUnit == system->linearUnit);
+            return *this == *system;
         }
         return false;
     }
@@ -577,16 +645,22 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
         return new SFAGeographicCoordinateSystem(*this);
     }
 
+    bool operator==(const SFAGeographicCoordinateSystem& rhs) const
+    {
+        return (csName == rhs.csName && datum == rhs.datum &&
+            primeMeridian == rhs.primeMeridian && linearUnit == rhs.linearUnit &&
+            angularUnit == rhs.angularUnit);
+    }
+
     static const char TYPE_NAME[];
 
+protected:
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAGeographicCoordinateSystem const* system = dynamic_cast<SFAGeographicCoordinateSystem const*>(&rhs);
+        const SFAGeographicCoordinateSystem* system = dynamic_cast<const SFAGeographicCoordinateSystem*>(&rhs);
         if (system != NULL)
         {
-            return (csName == system->csName && datum == system->datum &&
-                primeMeridian == system->primeMeridian && linearUnit == system->linearUnit &&
-                angularUnit == system->angularUnit);
+            return *this == *system;
         }
         return false;
     }
@@ -610,16 +684,20 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
         return new SFAProjectedCoordinateSystem(*this);
     }
 
+    bool operator==(const SFAProjectedCoordinateSystem& rhs) const
+    {
+        return (csName == rhs.csName && projection == rhs.projection &&
+            parameter == rhs.parameter && linearUnit == rhs.linearUnit &&
+            geographicCoordinateSystem == rhs.geographicCoordinateSystem);
+    }
     static const char TYPE_NAME[];
 
     virtual bool equalTo(const SFATyped& rhs) const
     {
-        SFAProjectedCoordinateSystem const* system = dynamic_cast<SFAProjectedCoordinateSystem const*>(&rhs);
+        const SFAProjectedCoordinateSystem* system = dynamic_cast<const SFAProjectedCoordinateSystem*>(&rhs);
         if (system != NULL)
         {
-            return (csName == system->csName && projection == system->projection &&
-                parameter == system->parameter && linearUnit == system->linearUnit &&
-                geographicCoordinateSystem == system->geographicCoordinateSystem);
+            return *this == *system;
         }
         return false;
     }
