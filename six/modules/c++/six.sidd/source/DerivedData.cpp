@@ -83,22 +83,18 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
             (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
 }
 
-bool DerivedData::equalTo(const Data& rhs) const
+bool DerivedData::operator==(const DerivedData& rhs) const
 {
-    DerivedData const* data = dynamic_cast<DerivedData const*>(&rhs);
-    if (data != NULL)
-    {
-        return (productCreation == data->productCreation &&
-            display == data->display &&
-            geographicAndTarget == data->geographicAndTarget &&
-            measurement == data->measurement &&
-            exploitationFeatures == data->exploitationFeatures &&
-            productProcessing == data->productProcessing &&
-            downstreamReprocessing == data->downstreamReprocessing &&
-            errorStatistics == data->errorStatistics &&
-            radiometric == data->radiometric &&
-            annotations == data->annotations);
-    }
+    return (productCreation == rhs.productCreation &&
+        display == rhs.display &&
+        geographicAndTarget == rhs.geographicAndTarget &&
+        measurement == rhs.measurement &&
+        exploitationFeatures == rhs.exploitationFeatures &&
+        productProcessing == rhs.productProcessing &&
+        downstreamReprocessing == rhs.downstreamReprocessing &&
+        errorStatistics == rhs.errorStatistics &&
+        radiometric == rhs.radiometric &&
+        annotations == rhs.annotations);
 }
 }
 }

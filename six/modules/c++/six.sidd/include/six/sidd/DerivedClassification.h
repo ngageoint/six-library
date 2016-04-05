@@ -177,7 +177,11 @@ public:
     mem::ScopedCopyablePtr<DateTime> exemptedSourceDate;
 
     //! Equality operator
-    virtual bool equalTo(const Classification& rhs) const;
+    bool operator==(const DerivedClassification& rhs) const;
+    bool operator!=(const DerivedClassification& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
 private:
     static

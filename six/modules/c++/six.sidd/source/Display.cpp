@@ -26,14 +26,19 @@ using namespace six::sidd;
 
 bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
 {
-    MonochromeDisplayRemap const* remap = dynamic_cast<MonochromeDisplayRemap const*>(&rhs);
+    const MonochromeDisplayRemap* remap = dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
     if (remap != NULL)
     {
-        return (remapType == remap->remapType &&
-            remapParameters == remap->remapParameters &&
-            remapLUT == remap->remapLUT);
+        return *this == *remap;
     }
     return false;
+}
+
+bool MonochromeDisplayRemap::operator==(const MonochromeDisplayRemap& rhs) const
+{
+    return (remapType == rhs.remapType &&
+        remapParameters == rhs.remapParameters &&
+        remapLUT == rhs.remapLUT);
 }
 
 bool ColorDisplayRemap::equalTo(const Remap& rhs) const
@@ -41,9 +46,14 @@ bool ColorDisplayRemap::equalTo(const Remap& rhs) const
     ColorDisplayRemap const* remap = dynamic_cast<ColorDisplayRemap const*>(&rhs);
     if (remap != NULL)
     {
-        return remapLUT == remap->remapLUT;
+        return *this == *remap;
     }
     return false;
+}
+
+bool ColorDisplayRemap::operator==(const ColorDisplayRemap& rhs) const
+{
+    return remapLUT == rhs.remapLUT;
 }
 
 Display::Display() :

@@ -46,14 +46,15 @@ public:
         return os;
     }
 
-    virtual bool equalTo(const Classification& other) const
+    bool operator==(const ComplexClassification& rhs) const
     {
-        ComplexClassification const* classification = dynamic_cast<ComplexClassification const*>(&other);
-        if (classification != NULL)
-        {
-            return (level == classification->getLevel() && fileOptions == classification->fileOptions);
-        }
-        return false;
+        return (level == rhs.getLevel() && 
+            fileOptions == rhs.fileOptions);
+    }
+
+    bool operator!=(const ComplexClassification& rhs) const
+    {
+        return !(*this == rhs);
     }
 
     //! This is spelled out (i.e. 'UNCLASSIFIED')

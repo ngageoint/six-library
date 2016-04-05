@@ -74,18 +74,6 @@ public:
 
     //! Use this to fit in anything you might need for the file container
     Options fileOptions;
-
-    friend bool operator==(const Classification& lhs, const Classification& rhs)
-    {
-        return lhs.equalTo(rhs);
-    }
-
-    friend bool operator!=(const Classification& lhs, const Classification& rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    virtual bool equalTo(const Classification& rhs) const = 0;
 };
 }
 

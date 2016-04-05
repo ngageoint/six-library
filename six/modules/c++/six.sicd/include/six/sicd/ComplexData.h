@@ -333,7 +333,11 @@ public:
         return six::getImageMode(collectionInformation->radarMode);
     }
 
-    virtual bool equalTo(const Data& rhs) const;
+    bool operator==(const ComplexData& rhs) const;
+    bool operator!=(const ComplexData& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
 private:
     static const char VENDOR_ID[];

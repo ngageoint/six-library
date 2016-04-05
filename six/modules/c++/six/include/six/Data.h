@@ -184,18 +184,6 @@ struct Data
 
     //!  Set the version of the model contained within
     virtual void setVersion(const std::string& version) = 0;
-
-    friend bool operator==(const Data& lhs, const Data& rhs)
-    {
-        return lhs.equalTo(rhs);
-    }
-
-    friend bool operator!=(const Data& lhs, const Data& rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    virtual bool equalTo(const Data& rhs) const = 0;
 };
 
 }
