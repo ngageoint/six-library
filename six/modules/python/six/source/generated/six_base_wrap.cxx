@@ -42566,6 +42566,186 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AmplitudeTable___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::AmplitudeTable *arg1 = (six::AmplitudeTable *) 0 ;
+  six::AmplitudeTable *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:AmplitudeTable___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AmplitudeTable___eq__" "', argument " "1"" of type '" "six::AmplitudeTable const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::AmplitudeTable * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__AmplitudeTable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AmplitudeTable___eq__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AmplitudeTable___eq__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::AmplitudeTable * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::AmplitudeTable const *)arg1)->operator ==((six::AmplitudeTable const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AmplitudeTable___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::AmplitudeTable *arg1 = (six::AmplitudeTable *) 0 ;
+  six::AmplitudeTable *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:AmplitudeTable___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AmplitudeTable___ne__" "', argument " "1"" of type '" "six::AmplitudeTable const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::AmplitudeTable * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__AmplitudeTable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AmplitudeTable___ne__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AmplitudeTable___ne__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::AmplitudeTable * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::AmplitudeTable const *)arg1)->operator !=((six::AmplitudeTable const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AmplitudeTable_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::AmplitudeTable *arg1 = (six::AmplitudeTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AmplitudeTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:AmplitudeTable_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AmplitudeTable_clone" "', argument " "1"" of type '" "six::AmplitudeTable const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::AmplitudeTable * >(argp1);
+  {
+    try
+    {
+      result = (six::AmplitudeTable *)((six::AmplitudeTable const *)arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_AmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::AmplitudeTable *arg1 = (six::AmplitudeTable *) 0 ;
@@ -76803,6 +76983,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_SCP", _wrap_delete_SCP, METH_VARARGS, (char *)"delete_SCP(SCP self)"},
 	 { (char *)"SCP_swigregister", SCP_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_AmplitudeTable", _wrap_new_AmplitudeTable, METH_VARARGS, (char *)"new_AmplitudeTable() -> AmplitudeTable"},
+	 { (char *)"AmplitudeTable___eq__", _wrap_AmplitudeTable___eq__, METH_VARARGS, (char *)"AmplitudeTable___eq__(AmplitudeTable self, AmplitudeTable rhs) -> bool"},
+	 { (char *)"AmplitudeTable___ne__", _wrap_AmplitudeTable___ne__, METH_VARARGS, (char *)"AmplitudeTable___ne__(AmplitudeTable self, AmplitudeTable rhs) -> bool"},
+	 { (char *)"AmplitudeTable_clone", _wrap_AmplitudeTable_clone, METH_VARARGS, (char *)"AmplitudeTable_clone(AmplitudeTable self) -> AmplitudeTable"},
 	 { (char *)"delete_AmplitudeTable", _wrap_delete_AmplitudeTable, METH_VARARGS, (char *)"delete_AmplitudeTable(AmplitudeTable self)"},
 	 { (char *)"AmplitudeTable_swigregister", AmplitudeTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"FRAME_MODE_swigconstant", FRAME_MODE_swigconstant, METH_VARARGS, NULL},

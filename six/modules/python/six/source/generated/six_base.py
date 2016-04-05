@@ -2781,6 +2781,21 @@ class AmplitudeTable(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.AmplitudeTable___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.AmplitudeTable___ne__(self, rhs)
+
+
+    def clone(self):
+        """clone(AmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.AmplitudeTable_clone(self)
+
     __swig_destroy__ = _six_base.delete_AmplitudeTable
     __del__ = lambda self: None
 AmplitudeTable_swigregister = _six_base.AmplitudeTable_swigregister
