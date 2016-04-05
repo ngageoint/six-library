@@ -3,47 +3,47 @@
 
 int main(int, char**)
 {
-    six::PolarizationType pType;
+    six::DualPolarizationType pType;
     std::string unknownValue("UNKNOWN");
 
     // Testing Enum ctor
     try
     {
-        pType = six::PolarizationType(unknownValue);
+        pType = six::DualPolarizationType(unknownValue);
     }
     catch (except::InvalidFormatException&)
     {
-        std::cerr << "Unable to construct PolarizationType with value \"" << unknownValue << "\"." << std::endl;
+        std::cerr << "Unable to construct DualPolarizationType with value \"" << unknownValue << "\"." << std::endl;
         return 1;
     }
     // Testing toType("UNKNOWN")
     try
     {
-        pType = six::toType<six::PolarizationType>(unknownValue);
+        pType = six::toType<six::DualPolarizationType>(unknownValue);
     }
     catch (except::Exception)
     {
-        std::cerr << "Unable to convert \"" << unknownValue << "\" to six::PolarizationType" << std::endl;
+        std::cerr << "Unable to convert \"" << unknownValue << "\" to six::DualPolarizationType" << std::endl;
         return 1;
     }
 
-    //Testing toString(six::PolarizationType::UNKNOWN
+    //Testing toString(six::DualPolarizationType::UNKNOWN
     try
     {
-        std::string pString = six::toString<six::PolarizationType>(pType);
+        std::string pString = six::toString<six::DualPolarizationType>(pType);
         if (pString != unknownValue)
         {
-            std::cerr << "Expecting six::toString<PolarzationType>(six::PolarizationType::UNKNOWN) "
+            std::cerr << "Expecting six::toString<DualPolarzationType>(six::DualPolarizationType::UNKNOWN) "
                 "to be " << unknownValue << ". Actually: " << pString << "." << std::endl;
             return 1;
         }
     }
     catch (except::Exception)
     {
-        std::cerr << "Unable to convert six::PolarizationType::UNKNOWN to string" << std::endl;
+        std::cerr << "Unable to convert six::DualPolarizationType::UNKNOWN to string" << std::endl;
         return 1;
     }
     
-    std::cout << "six::PolarizationType conversion tests successful" << std::endl;
+    std::cout << "six::DualPolarizationType conversion tests successful" << std::endl;
     return 0;
 }
