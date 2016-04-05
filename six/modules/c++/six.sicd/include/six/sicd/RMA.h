@@ -114,7 +114,7 @@ struct RMCR
     //! Equality operator
     bool operator==(const RMCR& rhs) const
     {
-        return (refPos == rhs.refPos & refVel == rhs.refVel && 
+        return (refPos == rhs.refPos && refVel == rhs.refVel && 
             dopConeAngleRef == rhs.dopConeAngleRef);
     }
 
