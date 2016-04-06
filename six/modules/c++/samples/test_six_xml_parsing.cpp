@@ -31,6 +31,7 @@
 #include <six/XMLControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/DerivedData.h>
 #include <six/Utilities.h>
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
@@ -49,7 +50,7 @@ private:
 
 private:
     six::XMLControlRegistry mXmlRegistry;
-    const std::vector<std::string> mSchemaPaths;
+    std::vector<std::string> mSchemaPaths;
     mutable logging::Logger mLog;
 
     mutable std::vector<char> mScratch;
@@ -62,7 +63,7 @@ XMLVerifier::XMLVerifier()
 
     try
     {
-        os.getEnv(six::SCHEMA_PATH);
+        mSchemaPaths.push_back(os.getEnv(six::SCHEMA_PATH));
     }
     catch(const except::Exception& ex)
     {
@@ -125,19 +126,45 @@ void XMLVerifier::verify(const std::string& pathname) const
     std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
-    io::StringStream outStream;
-    xmlDoc->getRootElement()->prettyPrint(outStream);
-    const std::string outStr(outStream.stream().str());
+    std::vector<std::string> separatedPath = str::split(pathname, ".");
+    std::string roundTrippedPath = separatedPath[0] + "_out";
+    if (separatedPath.size() == 2)
+    {
+        roundTrippedPath += separatedPath[1];
+    }
+    else
+    {
+        roundTrippedPath.clear();
+        for (size_t ii = 0; ii < separatedPath.size() - 1; ++ii)
+        {
+            roundTrippedPath += separatedPath[ii];
+        }
+        roundTrippedPath += "_out" + separatedPath[separatedPath.size() - 1];
+    }
 
-    // Now verify the two strings match
-    // TODO: A better check would be if we added operator== to six::Data
-    //       For now, assuming we pretty-printed the input XML and so this
-    //       will work
-    if (inStr != outStr)
+    io::FileOutputStream outStream(roundTrippedPath);
+    xmlDoc->getRootElement()->prettyPrint(outStream);
+    outStream.close();
+
+    // Now re-read the output and make sure the Data objects
+    // are equal.
+    std::string outStr;
+    readFile(roundTrippedPath, outStr);
+    inStream.reset();
+    inStream.write(reinterpret_cast<const sys::byte*>(outStr.c_str()),
+        outStr.length());
+
+    std::auto_ptr<six::Data> readData(six::parseData(mXmlRegistry,
+        roundTrippedPath,
+        mSchemaPaths,
+        mLog));
+
+    if (data.get() == NULL || readData.get() == NULL || *data != *readData)
     {
         throw except::Exception(Ctxt(
-                "Round-tripped XML does not match for '" + pathname + "'"));
+            "Round-tripped Data does not match for '" + pathname + "'"));
     }
+
     std::cout << " verified" << std::endl;
 }
 }
