@@ -60,6 +60,7 @@ protected:
     {
     }
 
+private:
     virtual bool equalTo(const SFATyped& rhs) const = 0;
 };
 
@@ -119,7 +120,7 @@ struct SFAPoint : public SFAGeometry
 
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPoint* point = dynamic_cast<const SFAPoint*>(&rhs);
@@ -162,7 +163,7 @@ public:
         return (vertices == rhs.vertices);
     }
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALineString* lineString = dynamic_cast<const SFALineString*>(&rhs);
@@ -192,7 +193,7 @@ public:
     }
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALine* line = dynamic_cast<const SFALine*>(&rhs);
@@ -222,7 +223,7 @@ public:
     }
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALinearRing* linearRing = dynamic_cast<const SFALinearRing*>(&rhs);
@@ -264,7 +265,7 @@ public:
     }
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPolygon* polygon = dynamic_cast<const SFAPolygon*>(&rhs);
@@ -296,7 +297,7 @@ public:
     }
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFATriangle* triangle = dynamic_cast<const SFATriangle*>(&rhs);
@@ -328,7 +329,7 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPolyhedralSurface* surface = dynamic_cast<const SFAPolyhedralSurface*>(&rhs);
@@ -362,7 +363,7 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFATriangulatedIrregularNetwork* network = dynamic_cast<const SFATriangulatedIrregularNetwork*>(&rhs);
@@ -402,7 +403,7 @@ public:
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiPoint* multiPoint = dynamic_cast<const SFAMultiPoint*>(&rhs);
@@ -445,6 +446,7 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
 
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiLineString* string = dynamic_cast<const SFAMultiLineString*>(&rhs);
@@ -486,7 +488,7 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiPolygon* polygon = dynamic_cast<const SFAMultiPolygon*>(&rhs);
@@ -615,7 +617,7 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAGeocentricCoordinateSystem* system = dynamic_cast<const SFAGeocentricCoordinateSystem*>(&rhs);
@@ -654,7 +656,7 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
 
     static const char TYPE_NAME[];
 
-protected:
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAGeographicCoordinateSystem* system = dynamic_cast<const SFAGeographicCoordinateSystem*>(&rhs);
@@ -692,6 +694,7 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
     }
     static const char TYPE_NAME[];
 
+private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAProjectedCoordinateSystem* system = dynamic_cast<const SFAProjectedCoordinateSystem*>(&rhs);
