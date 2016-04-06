@@ -131,5 +131,15 @@ bool ComplexData::operator==(const ComplexData& rhs) const
         rma == rhs.rma &&
         rgAzComp == rhs.rgAzComp);
 }
+
+bool ComplexData::equalTo(const Data& rhs) const
+{
+    const ComplexData* data = dynamic_cast<const ComplexData*>(&rhs);
+    if (data != NULL)
+    {
+        return *this == *data;
+    }
+    return false;
+}
 }
 }

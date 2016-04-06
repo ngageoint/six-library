@@ -334,12 +334,9 @@ public:
     }
 
     bool operator==(const ComplexData& rhs) const;
-    bool operator!=(const ComplexData& rhs) const
-    {
-        return !(*this == rhs);
-    }
 
 private:
+    bool equalTo(const Data& rhs) const;
     static const char VENDOR_ID[];
 
     std::string mVersion;

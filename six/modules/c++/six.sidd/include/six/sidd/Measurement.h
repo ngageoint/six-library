@@ -78,21 +78,22 @@ struct Projection
 
     virtual ~Projection() {}
 
-    friend bool operator==(const Projection& lhs, const Projection& rhs)
+    bool operator==(const Projection& rhs) const
     {
-        return lhs.equalTo(rhs);
+        return equalTo(rhs);
     }
 
-    friend bool operator!=(const Projection& lhs, const Projection& rhs)
+    bool operator!=(const Projection& rhs) const
     {
-        return !(lhs == rhs);
+        return !(*this == rhs);
     }
 
     //!  Pure
     virtual Projection* clone() const = 0;
-    virtual bool equalTo(const Projection& rhs) const = 0;
-
     virtual bool isMeasurable() const { return false; }
+
+private:
+    virtual bool equalTo(const Projection& rhs) const = 0;
 
 };
 
@@ -138,6 +139,9 @@ struct PolynomialProjection : public Projection
     //! Find a col in the image associated with a lat-lon
     Poly2D latLonToCol;
 
+    bool operator==(const PolynomialProjection& rhs) const;
+
+private:
     virtual bool equalTo(const Projection& rhs) const;
 };
 
@@ -156,7 +160,10 @@ struct MeasurableProjection : public Projection
 
     bool isMeasurable() const { return true; }
 
-    virtual bool equalTo(const Projection& rhs) const;
+    bool operator==(const MeasurableProjection& rhs) const;
+
+private:
+    bool equalTo(const Projection& rhs) const;
 
 };
 
@@ -184,6 +191,9 @@ struct GeographicProjection : public MeasurableProjection
     }
     virtual ~GeographicProjection() {}
 
+    bool operator==(const GeographicProjection& rhs) const;
+
+private:
     virtual bool equalTo(const Projection& rhs) const;
 
 };
@@ -227,6 +237,9 @@ struct CylindricalProjection : public MeasurableProjection
      */
     double curvatureRadius;
 
+    bool operator==(const CylindricalProjection& rhs) const;
+
+private:
     virtual bool equalTo(const Projection& rhs) const;
 
 };
@@ -257,6 +270,9 @@ struct PlaneProjection : public MeasurableProjection
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
 
+    bool operator==(const PlaneProjection& rhs) const;
+
+private:
     virtual bool equalTo(const Projection& rhs) const;
 
 

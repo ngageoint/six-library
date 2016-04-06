@@ -40,47 +40,67 @@ bool PolynomialProjection::equalTo(const Projection& rhs) const
     return false;
 }
 
+bool MeasurableProjection::operator==(const MeasurableProjection& rhs) const
+{
+    return (sampleSpacing == rhs.sampleSpacing &&
+        timeCOAPoly == rhs.timeCOAPoly &&
+        projectionType == rhs.projectionType &&
+        referencePoint == rhs.referencePoint);
+}
+
 bool MeasurableProjection::equalTo(const Projection& rhs) const
 {
-    MeasurableProjection const* projection = dynamic_cast<MeasurableProjection const*>(&rhs);
+    const MeasurableProjection* projection = dynamic_cast<const MeasurableProjection*>(&rhs);
     if (projection != NULL)
     {
-        return (sampleSpacing == projection->sampleSpacing &&
-            timeCOAPoly == projection->timeCOAPoly &&
-            projectionType == projection->projectionType &&
-            referencePoint == projection->referencePoint);
+        return *this == *projection;
     }
     return false;
+}
+
+bool GeographicProjection::operator==(const GeographicProjection& rhs) const
+{
+    return *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs));
 }
 
 bool GeographicProjection::equalTo(const Projection& rhs) const
 {
-    GeographicProjection const* projection = dynamic_cast<GeographicProjection const*>(&rhs);
+    const GeographicProjection* projection = dynamic_cast<const GeographicProjection*>(&rhs);
     if (projection != NULL)
     {
-        return *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection));
+        return *this == *projection;
     }
     return false;
+}
+
+bool CylindricalProjection::operator==(const CylindricalProjection& rhs) const
+{
+    return (stripmapDirection == rhs.stripmapDirection &&
+        curvatureRadius == rhs.curvatureRadius &&
+        *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs)));
 }
 
 bool CylindricalProjection::equalTo(const Projection& rhs) const
 {
-    CylindricalProjection const* projection = dynamic_cast<CylindricalProjection const*>(&rhs);
+    const CylindricalProjection* projection = dynamic_cast<const CylindricalProjection*>(&rhs);
     if (projection != NULL)
     {
-        return (stripmapDirection == projection->stripmapDirection && 
-            curvatureRadius == projection->curvatureRadius &&
-            *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection)));
+        return *this == *projection;
     }
     return false;
 }
 
+bool PlaneProjection::operator==(const PlaneProjection& rhs) const
+{
+    return *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs));
+}
+
 bool PlaneProjection::equalTo(const Projection& rhs) const
 {
-    PlaneProjection const* projection = dynamic_cast<PlaneProjection const*>(&rhs);
+    const PlaneProjection* projection = dynamic_cast<const PlaneProjection*>(&rhs);
     if (projection != NULL)
     {
-        return *(dynamic_cast<MeasurableProjection const*>(this)) == *(dynamic_cast<MeasurableProjection const*>(projection));
+        return *this == *projection;
     }
     return false;
 }

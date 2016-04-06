@@ -96,5 +96,15 @@ bool DerivedData::operator==(const DerivedData& rhs) const
         radiometric == rhs.radiometric &&
         annotations == rhs.annotations);
 }
+
+bool DerivedData::equalTo(const Data& rhs) const
+{
+    const DerivedData* data = dynamic_cast<const DerivedData*>(&rhs);
+    if (data != NULL)
+    {
+        return *this == *data;
+    }
+    return false;
+}
 }
 }

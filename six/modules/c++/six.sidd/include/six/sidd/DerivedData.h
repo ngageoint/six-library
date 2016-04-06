@@ -313,14 +313,10 @@ struct DerivedData: public Data
     pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
 
     bool operator==(const DerivedData& rhs) const;
-    bool operator!=(const DerivedData& rhs) const
-    {
-        return !(*this == rhs);
-    }
 
 private:
     static const char VENDOR_ID[];
-
+    bool equalTo(const Data& rhs) const;
     std::string mVersion;
 };
 }
