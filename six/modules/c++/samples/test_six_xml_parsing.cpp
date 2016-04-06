@@ -148,12 +148,6 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     // Now re-read the output and make sure the Data objects
     // are equal.
-    std::string outStr;
-    readFile(roundTrippedPath, outStr);
-    inStream.reset();
-    inStream.write(reinterpret_cast<const sys::byte*>(outStr.c_str()),
-        outStr.length());
-
     std::auto_ptr<six::Data> readData(six::parseData(mXmlRegistry,
         roundTrippedPath,
         mSchemaPaths,
