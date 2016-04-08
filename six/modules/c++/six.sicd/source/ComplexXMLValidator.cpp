@@ -39,6 +39,963 @@ ComplexXMLValidator::ComplexXMLValidator(const ComplexData& data, logging::Logge
     }
 }
 
+void ComplexXMLValidator::fillDerivedFields(ComplexData& data, bool setDefaultValues)
+{
+    if (data.grid.get() != NULL && data.grid->row.get() != NULL)
+    {
+        fillRowCol(*data.grid->row);
+    }
+    if (data.grid.get() != NULL && data.grid->col.get() != NULL)
+    {
+        fillRowCol(*data.grid->col);
+    }
+
+    fillSCPTime(data);
+    fillARPPoly(data);
+    fillRadarCollection(data, setDefaultValues);
+    fillGeoDataSCP(data);
+    fillSCPCOA(data);
+
+    double fc = Init::undefined<double>();
+    if (data.imageFormation.get() != NULL &&
+        data.radarCollection.get() != NULL &&
+        data.radarCollection->refFrequencyIndex == 0)
+    {
+        fc = (data.imageFormation->txFrequencyProcMin + data.imageFormation->txFrequencyProcMax) / 2;
+    }
+
+    fillImageFormationAlgorithm(data, fc, setDefaultValues);
+    fillGeoData(data);
+    return;
+}
+
+void ComplexXMLValidator::fillGeoData(ComplexData& data)
+{
+    if (data.geoData.get() == NULL)
+    {
+        data.geoData.reset(new GeoData());
+    }
+
+    if (Init::isUndefined<LatLon>(data.geoData->imageCorners.getCorner(0)) &&
+        data.imageData.get() != NULL &&
+        !Init::isUndefined<size_t>(data.imageData->numRows) &&
+        !Init::isUndefined<size_t>(data.imageData->numCols))
+    {
+        std::vector<RowColDouble> cornerLineSample;
+        cornerLineSample.resize(4);
+        cornerLineSample[0].row = 0;
+        cornerLineSample[0].col = 0;
+        cornerLineSample[1].row = 0;
+        cornerLineSample[1].col = data.imageData->numCols - 1;
+        cornerLineSample[2].row = data.imageData->numRows - 1;
+        cornerLineSample[2].col = data.imageData->numCols - 1;
+        cornerLineSample[3].row = data.imageData->numRows - 1;
+        cornerLineSample[4].col = 0;
+        // line 746; requires point_slant_to_ground
+    }
+
+    // Derived: Add ValidData geocoords
+    if (data.imageData.get() != NULL &&
+        !data.imageData->validData.empty() &&
+        data.geoData->validData.empty())
+    {
+        // line 757; requires point slant to ground
+    }
+}
+
+void ComplexXMLValidator::fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues)
+{
+    if (!(data.scpcoa.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpPos) &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpVel) &&
+        data.geoData.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.geoData->scp.ecf) &&
+        data.imageFormation.get() != NULL))
+    {
+        return;
+    }
+    switch (data.imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::RGAZCOMP:
+        fillRGAZCOMP(data, fc);
+        break;
+    case ImageFormationType::PFA:
+        fillPFA(data, fc, setDefaultValues);
+        break;
+    case ImageFormationType::RMA:
+        fillRMA(data, fc, setDefaultValues);
+    }
+}
+
+void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultValues)
+{
+    if (data.rma.get() == NULL)
+        return;
+
+    Vector3& scp = data.geoData->scp.ecf;
+
+    if (data.rma->rmat.get() != NULL ||
+        data.rma->rmcr.get() != NULL)
+    {
+        if (setDefaultValues)
+        {
+            if (data.grid->imagePlane == ComplexImagePlaneType::NOT_SET)
+            {
+                data.grid->imagePlane = ComplexImagePlaneType::SLANT;
+            }
+            if (data.grid->type == ComplexImageGridType::NOT_SET)
+            {
+                if (data.rma->rmat.get() != NULL)
+                {
+                    data.grid->type = ComplexImageGridType::XCTYAT;
+                }
+                else if (data.rma->rmcr.get() != NULL)
+                {
+                    data.grid->type = ComplexImageGridType::XRGYCR;
+                }
+            }
+
+            // Default: set PosRef/VelRef to  SCPCOA Pos/Vel
+            if (data.rma->rmat.get() != NULL)
+            {
+                if (Init::isUndefined<Vector3>(data.rma->rmat->refPos))
+                {
+                    // fillSCPTime() will always end with an initialized SCPCOA
+                    data.rma->rmat->refPos = data.scpcoa->arpPos;
+                }
+                if (Init::isUndefined<Vector3>(data.rma->rmat->refVel))
+                {
+                    data.rma->rmat->refVel = data.scpcoa->arpVel;
+                }
+            }
+            else if (data.rma->rmcr.get() != NULL)
+            {
+                if (Init::isUndefined<Vector3>(data.rma->rmcr->refPos))
+                {
+                    data.rma->rmcr->refPos = data.scpcoa->arpPos;
+                }
+                if (Init::isUndefined<Vector3>(data.rma->rmcr->refVel))
+                {
+                    data.rma->rmcr->refVel = data.scpcoa->arpVel;
+                }
+            }
+
+            // Default: RMAT/RMCR Row/Col.kCenter
+            if (!Init::isUndefined<double>(fc))
+            {
+                if (data.grid->row.get() == NULL)
+                {
+                    data.grid->row.reset(new DirectionParameters());
+                }
+                if (data.grid->col.get() == NULL)
+                {
+                    data.grid->col.reset(new DirectionParameters());
+                }
+                double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+                if (data.rma->rmat.get() != NULL)
+                {
+                    
+                    if (Init::isUndefined<double>(data.grid->row->kCenter))
+                    {
+                        data.grid->row->kCenter = kfc * std::sin(data.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES);
+                    }
+                    
+                    if (Init::isUndefined<double>(data.grid->col->kCenter))
+                    {
+                        data.grid->col->kCenter = kfc * std::cos(data.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES);
+                    }
+                }
+                else if (data.rma->rmcr.get() != NULL)
+                {
+                    if (Init::isUndefined<double>(data.grid->row->kCenter))
+                    {
+                        data.grid->row->kCenter = kfc;
+                    }
+                    if (Init::isUndefined<double>(data.grid->col->kCenter))
+                    {
+                        data.grid->col->kCenter = 0;
+                    }
+                }
+            }
+        }
+
+        if (data.rma->rmat.get() != NULL && 
+            !Init::isUndefined<Vector3>(data.rma->rmat->refPos) &&
+            !Init::isUndefined<Vector3>(data.rma->rmat->refVel))
+        {
+            Vector3 refPos = data.rma->rmat->refPos;
+            Vector3 refVel = data.rma->rmat->refVel;
+            Vector3 uLOS = (scp - refPos).unit();
+            Vector3 left = cross(refPos.unit(), refVel.unit());
+            int look = sign(left.dot(uLOS));
+
+            // RCA is a derived field
+            if (Init::isUndefined<double>(data.rma->rmat->dopConeAngleRef))
+            {
+                data.rma->rmat->dopConeAngleRef = std::acos(refVel.unit().dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
+            }
+
+            // Row/Col.UnitVector and Derived fields
+            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
+                Init::isUndefined<Vector3>(data.grid->col->unitVector))
+            {
+                Vector3 uYAT = refVel.unit() * -look;
+                Vector3 spn = cross(uLOS, uYAT).unit();
+                Vector3 uXCT = cross(uYAT, spn);
+                data.grid->row->unitVector = uXCT;
+                data.grid->col->unitVector = uYAT;
+            }
+        }
+        
+        else if (data.rma->rmcr.get() != NULL &&
+            !Init::isUndefined<Vector3>(data.rma->rmcr->refPos) &&
+            !Init::isUndefined<Vector3>(data.rma->rmcr->refVel))
+        {
+            Vector3 refPos = data.rma->rmcr->refPos;
+            Vector3 refVel = data.rma->rmcr->refVel;
+            Vector3 uLOS = (scp - refPos).unit();
+            Vector3 left = cross(refPos.unit(), refVel.unit());
+            int look = sign(left.dot(uLOS));
+
+            // RCA is a derived field
+            if (Init::isUndefined<double>(data.rma->rmcr->dopConeAngleRef))
+            {
+                data.rma->rmcr->dopConeAngleRef = std::acos(refVel.unit().dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
+            }
+
+            // Row/Col.UnitVector and Derived fields
+            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
+                Init::isUndefined<Vector3>(data.grid->col->unitVector))
+            {
+                Vector3 uXRG = uLOS;
+                Vector3 spn = cross(refVel.unit(), uXRG).unit() * look ;
+                Vector3 uYCR = cross(spn, uXRG);
+                data.grid->row->unitVector = uXRG;
+                data.grid->col->unitVector = uYCR;
+            }
+        }
+    }
+    else if (data.rma->inca.get() != NULL)
+    {
+        // Default: RGZERO grid is the natural result of RMA/INCA
+        if (data.grid->type == ComplexImageGridType::NOT_SET)
+        {
+            data.grid->type = ComplexImageGridType::RGZERO;
+        }
+        if (!Init::isUndefined<Poly1D>(data.rma->inca->timeCAPoly) &&
+            data.position.get() != NULL &&
+            !Init::isUndefined<PolyXYZ>(data.position->arpPoly))
+        {
+            // INCA UVects are DERIVED from closest approach position/
+            // velocity, not center of aperture
+            Vector3 caPos = data.position->arpPoly(data.rma->inca->timeCAPoly(1));
+            Vector3 caVel = data.position->arpPoly.derivative()(data.rma->inca->timeCAPoly(1));
+
+            if (Init::isUndefined<double>(data.rma->inca->rangeCA))
+            {
+                data.rma->inca->rangeCA = (caPos - scp).norm();
+            }
+
+            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
+                Init::isUndefined<Vector3>(data.grid->col->unitVector))
+            {
+                Vector3 uRG = (scp - caPos).unit();
+                Vector3 left = cross(caPos.unit(), caVel.unit());
+                int look = sign(left.dot(uRG));
+                Vector3 spn = cross(uRG, caVel).unit() * -look;
+                Vector3 uAC = cross(spn, uRG);
+                data.grid->row->unitVector = uRG;
+                data.grid->col->unitVector = uAC;
+            }
+        }
+
+        // Derived: Always the case for INCA
+        if (Init::isUndefined<double>(data.grid->col->kCenter))
+        {
+            data.grid->col->kCenter = 0;
+        }
+
+        // Default: The frequency used for computing Doppler Centroid values
+        // is often the center transmitted frequency
+        if (setDefaultValues &&
+            data.radarCollection.get() != NULL &&
+            !Init::isUndefined<double>(data.radarCollection->txFrequencyMin) &&
+            !Init::isUndefined<double>(data.radarCollection->txFrequencyMax) &&
+            Init::isUndefined<double>(data.rma->inca->freqZero))
+        {
+            data.rma->inca->freqZero = (data.radarCollection->txFrequencyMin + 
+                    data.radarCollection->txFrequencyMax ) / 2;
+        }
+
+        // Row.kCenter/FreqZero Derived relationship is exact
+        // although freqZero may be set to default above
+        if (!Init::isUndefined<double>(data.rma->inca->freqZero) &&
+            Init::isUndefined<double>(data.grid->row->kCenter))
+        {
+            data.grid->row->kCenter = data.rma->inca->freqZero * 2 /
+                    math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+        }
+    }
+    return;
+}
+
+void ComplexXMLValidator::fillPFA(ComplexData& data, double fc, bool setDefaultValues)
+{
+    Vector3& scp = data.geoData->scp.ecf;
+    Vector3& arpPos = data.scpcoa->arpPos;
+    Vector3& arpVel = data.scpcoa->arpVel;
+
+    Vector3 uLOS = (scp - arpPos).unit();
+    Vector3 left = cross(arpPos, arpVel).unit();
+    int look = sign(uLOS.dot(left));
+    Vector3 slantPlaneNormal = cross(arpVel, uLOS).unit() * look;
+    Vector3 etp = wgs84Norm(scp);
+
+    // DEFAULT: RGAZIM grid is the natural result of PFA
+    if (setDefaultValues)
+    {
+        if (data.grid.get() == NULL)
+        {
+            data.grid.reset(new Grid());
+        }
+        if (data.grid->type == ComplexImageGridType::NOT_SET)
+        {
+            data.grid->type = ComplexImageGridType::RGAZIM;
+        }
+
+        if (data.pfa.get() == NULL)
+        {
+            data.pfa.reset(new PFA());
+        }
+        if (Init::isUndefined<Vector3>(data.pfa->imagePlaneNormal))
+        {
+            switch (data.grid->imagePlane)
+            {
+            case ComplexImagePlaneType::SLANT:
+            case ComplexImagePlaneType::NOT_SET:
+                data.pfa->imagePlaneNormal = slantPlaneNormal;
+                break;
+            case ComplexImagePlaneType::GROUND:
+                data.pfa->imagePlaneNormal = etp;
+                break;
+            case ComplexImagePlaneType::OTHER:
+                // Nothing we can do
+                break;
+            }
+        }
+        if (Init::isUndefined<Vector3>(data.pfa->focusPlaneNormal))
+        {
+            data.pfa->focusPlaneNormal = etp;
+        }
+    }
+    Vector3 polRefPos;
+    if (data.position.get() != NULL &&
+        !Init::isUndefined<PolyXYZ>(data.position->arpPoly) &&
+        data.pfa.get() != NULL &&
+        !Init::isUndefined<double>(data.pfa->polarAngleRefTime))
+    {
+        std::vector<double> coefs;
+        // Compute exactly if possible
+        for (size_t ii = 0; ii < 3; ++ii)
+        {
+            Poly1D poly = polyAt(data.position->arpPoly, ii);
+            coefs.push_back(poly(data.pfa->polarAngleRefTime));
+        }
+        polRefPos = Vector3(coefs);
+    }
+    else if (setDefaultValues)
+    {
+        // Otherwise, guess PolarAngleRefTime = SCPTime
+        polRefPos = arpPos;
+        if (data.scpcoa.get() != NULL && !Init::isUndefined<double>(data.scpcoa->scpTime))
+        {
+            data.pfa->polarAngleRefTime = data.scpcoa->scpTime;
+        }
+    }
+
+    // Lines 503-522 require polyfit, pfa_polar_coords
+
+    // Lines 524 - 550 require bsxfun
+
+    // DEFAULT value. Almost always zero for PFA
+    if (setDefaultValues)
+    {
+        if (data.grid->col.get() == NULL)
+        {
+            data.grid->col.reset(new DirectionParameters());
+        }
+        if (Init::isUndefined<double>(data.grid->col->kCenter))
+        {
+            data.grid->col->kCenter = 0;
+        }
+
+        if (data.grid->row.get() == NULL)
+        {
+            data.grid->row.reset(new DirectionParameters());
+        }
+        if (Init::isUndefined<double>(data.grid->row->kCenter))
+        {
+            if (!Init::isUndefined<double>(data.pfa->krg1) &&
+                !Init::isUndefined<double>(data.pfa->krg2))
+            {
+                // Default: the most reasonable way to compute this
+                data.grid->row->kCenter = (data.pfa->krg1 + data.pfa->krg2) / 2;
+            }
+            else if (!Init::isUndefined<double>(fc))
+            {
+                // Approximation: this may not be quite right, due to
+                // rectangular inscription loss in PFA, but it should
+                // be close.
+                data.grid->row->kCenter = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) *
+                    data.pfa->spatialFrequencyScaleFactorPoly(1);
+            }
+        }
+    }
+    return;
+}
+
+double ComplexXMLValidator::nonZero(double arg)
+{
+    return arg == 0 ? arg : std::numeric_limits<double>::epsilon();
+}
+
+void ComplexXMLValidator::fillRGAZCOMP(ComplexData& data, double fc)
+{
+    Vector3& scp = data.geoData->scp.ecf;
+    Vector3& arpPos = data.scpcoa->arpPos;
+    Vector3& arpVel = data.scpcoa->arpVel;
+
+    Vector3 uLOS = (scp - arpPos).unit();
+    Vector3 left = cross(arpPos, arpVel).unit();
+    int look = sign(uLOS.dot(left));
+    Vector3 slantPlaneNormal = cross(arpVel, uLOS).unit() * look;
+
+    // Derived: RGAZCOMP image formation must result in a SLANT, RGAZIM grid
+    if (data.grid.get() == NULL)
+    {
+        data.grid.reset(new Grid());
+    }
+    if (data.grid->imagePlane == ComplexImagePlaneType::NOT_SET)
+    {
+        data.grid->imagePlane = ComplexImagePlaneType::SLANT;
+    }
+    if (data.grid->imagePlane == ComplexImageGridType::NOT_SET)
+    {
+        data.grid->type = ComplexImageGridType::RGAZIM;
+    }
+
+    // Derived: RgAzComp.AzSF
+    if (data.rgAzComp.get() == NULL)
+    {
+        data.rgAzComp.reset(new RgAzComp());
+    }
+    if (Init::isUndefined<double>(data.rgAzComp->azSF))
+    {
+        
+        data.rgAzComp->azSF = std::sin(data.scpcoa->dopplerConeAngle * math::Constants::DEGREES_TO_RADIANS) /
+            data.scpcoa->slantRange;
+    }
+
+    // Dervied: RgAzComp.KazPoly
+    if (data.timeline.get() != NULL &&
+        data.timeline->interPulsePeriod.get() != NULL &&
+        data.timeline->interPulsePeriod->sets.size() == 1 &&
+        !Init::isUndefined<Poly1D>(data.timeline->interPulsePeriod->sets[0].interPulsePeriodPoly) &&
+        data.grid->row.get() != NULL &&
+        !Init::isUndefined<double>(data.grid->row->kCenter) &&
+        Init::isUndefined<Poly1D>(data.rgAzComp->kazPoly))
+    {
+        double krgCoa = data.grid->row->kCenter;
+        if (!Init::isUndefined<Poly2D>(data.grid->row->deltaKCOAPoly))
+        {
+            krgCoa += data.grid->row->deltaKCOAPoly.atY(scp[1])(scp[0]);
+        }
+        double stRateCoa = data.timeline->interPulsePeriod->sets[0].
+            interPulsePeriodPoly.derivative()(data.scpcoa->scpTime);
+        double deltaKazPerDeltaV = look * krgCoa * arpVel.norm() * std::sin(data.scpcoa->dopplerConeAngle * math::Constants::DEGREES_TO_RADIANS)
+            / nonZero(data.scpcoa->slantRange) / nonZero(stRateCoa);
+        data.rgAzComp->kazPoly = data.timeline->interPulsePeriod->sets[0].interPulsePeriodPoly * deltaKazPerDeltaV;
+    }
+
+    // Derived UVectECF
+    if (data.grid->row.get() == NULL)
+    {
+        data.grid->row.reset(new DirectionParameters());
+    }
+    if (data.grid->col.get() == NULL)
+    {
+        data.grid->col.reset(new DirectionParameters());
+    }
+    if (Init::isUndefined<Vector3>(data.grid->row->unitVector))
+    {
+        data.grid->row->unitVector = uLOS;
+    }
+    if (Init::isUndefined<Vector3>(data.grid->col->unitVector))
+    {
+        data.grid->col->unitVector = cross(slantPlaneNormal, uLOS);
+    }
+    // Derived: Kctr/DeltaKCOAPoly
+    // In SICD, if the optional DeltaKCOAPoly field is omitted,
+    // it is assumed to be zero. If the creator of the partial 
+    // SICD metadata just forgot it, or didn't know it, rather
+    // than leaving the field off as an explicit declaration of
+    // a zero value, the KCtr computation will be wrong if the
+    // DFT was not "centered" (s_0 = s_coa and v_0 = v_coa in
+    // the terminology of the SICD spec).
+    if (!Init::isUndefined<double>(fc))
+    {
+        // We've already guaranteed grid, row, col exists, so not
+        // checking for NULL
+        if (Init::isUndefined<double>(data.grid->row->kCenter))
+        {
+            if (!Init::isUndefined<Poly2D>(data.grid->row->deltaKCOAPoly))
+            {
+                data.grid->row->kCenter = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC - 
+                    data.grid->row->deltaKCOAPoly.atY(scp[1])(scp[0]);
+            }
+            else
+            {
+                data.grid->row->kCenter = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+            }
+        }
+        else if (!Init::isUndefined<Poly2D>(data.grid->row->deltaKCOAPoly))
+        {
+            // KCtr populated, but not DeltaKCOAPoly
+            std::vector<double> coefs(1, fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC - data.grid->row->kCenter);
+            data.grid->row->deltaKCOAPoly = Poly2D(0, 0, coefs);
+        }
+    }
+    if (Init::isUndefined<double>(data.grid->col->kCenter))
+    {
+        if (!Init::isUndefined<Poly2D>(data.grid->col->deltaKCOAPoly))
+        {
+            // DeltaKCOAPoly populated, but not KCtr (would be odd)
+            data.grid->col->kCenter = -data.grid->row->deltaKCOAPoly.atY(scp[1])(scp[0]);
+        }
+    }
+    else if (Init::isUndefined<Poly2D>(data.grid->col->deltaKCOAPoly))
+    {
+        // KCtr popualted, but not DeltaKCOAPoly
+        std::vector<double> coefs(1, -data.grid->col->kCenter);
+        data.grid->col->deltaKCOAPoly = Poly2D(0, 0, coefs);
+    }
+    return;
+}
+
+void ComplexXMLValidator::fillSCPCOA(ComplexData& data)
+{
+    // We're deriving fields from ARPPos, ARPVel, and SCP
+    // So make sure to call fillARPPoly() and fillGeoDataSCP
+    // before this function
+
+    if (!(data.scpcoa.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpPos) &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpVel) &&
+        data.geoData.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.geoData->scp.ecf)))
+    {
+        return;
+    }
+
+    Vector3& scp = data.geoData->scp.ecf;
+    Vector3& arpPos = data.scpcoa->arpPos;
+    Vector3& arpVel = data.scpcoa->arpVel;
+
+    Vector3 uLOS = (scp - arpPos) / (scp - arpPos).norm();
+    Vector3 left = cross(arpPos / arpPos.norm(), arpVel / arpPos.norm());
+    int look = sign(uLOS.dot(left));
+
+    if (data.scpcoa->sideOfTrack == SideOfTrackType::NOT_SET)
+    {
+        if (look < 0)
+        {
+            data.scpcoa->sideOfTrack = SideOfTrackType::RIGHT;
+        }
+        else
+        {
+            data.scpcoa->sideOfTrack = SideOfTrackType::LEFT;
+        }
+    }
+
+    if (Init::isUndefined<double>(data.scpcoa->slantRange))
+    {
+        data.scpcoa->slantRange = (scp - arpPos).norm();
+    }
+    if (Init::isUndefined<double>(data.scpcoa->groundRange))
+    {
+        data.scpcoa->groundRange = (scp.norm() * std::acos((arpPos.dot(scp)) / (scp.norm() * arpPos.norm())));
+    }
+    if (Init::isUndefined<double>(data.scpcoa->dopplerConeAngle))
+    {
+        data.scpcoa->dopplerConeAngle = std::acos((arpVel / arpVel.norm()).dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
+    }
+
+    // Earth Tangent Plane (ETP) at the SCP is the plane tangent to the
+    // surface of constant height above the WGS 84 ellipsoid (HAE) that
+    // contains the SCP. The ETP is an approximation to the ground plane
+    // at the SCP.
+    Vector3 etp = wgs84Norm(scp);
+    if (Init::isUndefined<double>(data.scpcoa->grazeAngle))
+    {
+        // Angle between ground plane and line-of-sight vector
+        data.scpcoa->grazeAngle = std::asin(etp.dot(uLOS * -1)) * math::Constants::RADIANS_TO_DEGREES;
+    }
+    if (Init::isUndefined<double>(data.scpcoa->incidenceAngle))
+    {
+        // Angle between ground plane normal and line of sight vector
+        data.scpcoa->incidenceAngle = 90 - data.scpcoa->grazeAngle;
+    }
+
+    // Instantaneous slant plane unit normal at COA
+    // (also called uSPZ in SICD spec)
+    Vector3 slantPlaneNormal = cross(arpVel, uLOS).unit() * look;
+
+    // Project range vector (from SCP toward ARP) onto ground plane
+    Vector3 uGPX = (uLOS * -1) - etp * (etp.dot(uLOS * -1));
+    uGPX = uGPX.unit();
+
+    if (Init::isUndefined<double>(data.scpcoa->twistAngle))
+    {
+        // 1) Equations from SICD spec:
+        Vector3 uGPY = cross(etp, uGPX);
+
+        // Angle from +GPY axis to the +SPY axis in plane of incidence
+        data.scpcoa->twistAngle = -1 * std::asin(uGPY.dot(slantPlaneNormal)) * math::Constants::RADIANS_TO_DEGREES;
+    }
+
+    if (Init::isUndefined<double>(data.scpcoa->slopeAngle))
+    {
+        // Angle between slant and ground planes
+        data.scpcoa->slopeAngle = std::acos(etp.dot(slantPlaneNormal)) * math::Constants::RADIANS_TO_DEGREES;
+    }
+
+    std::vector<double> coordinates;
+    coordinates.resize(3);
+    coordinates[0] = 0;
+    coordinates[1] = 0;
+    coordinates[2] = 1;
+    Vector3 zeroZeroOne(coordinates);
+
+    // Project north onto ground plane
+    Vector3 northGround = zeroZeroOne - (etp * etp.dot(zeroZeroOne));
+    // Unit vector in ground plane in north direction
+    Vector3 uNorth = northGround.unit();
+    // Unit vector in ground plane in east direction
+    Vector3 uEast = cross(uNorth, etp);
+
+    if (Init::isUndefined<double>(data.scpcoa->azimAngle))
+    {
+        double azNorth = uGPX.dot(uNorth);
+        double azEast = uGPX.dot(uEast);
+        data.scpcoa->azimAngle = std::fmod(std::atan2(azEast, azNorth) * 
+                math::Constants::RADIANS_TO_DEGREES, 360);
+    }
+
+    if (Init::isUndefined<double>(data.scpcoa->layoverAngle))
+    {
+        Vector3 layoverGround = etp - (slantPlaneNormal / (etp.dot(slantPlaneNormal)));
+        double loNorth = layoverGround.dot(uNorth);
+        double loEast = layoverGround.dot(uEast);
+        data.scpcoa->layoverAngle = std::fmod(std::atan2(loEast, loNorth) *
+            math::Constants::RADIANS_TO_DEGREES, 360);
+    }
+}
+
+void ComplexXMLValidator::fillGeoDataSCP(ComplexData& data)
+{
+    if (data.geoData.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.geoData->scp.ecf) &&
+        Init::isUndefined<LatLonAlt>(data.geoData->scp.llh))
+    {
+        scene::ECEFToLLATransform transformer;
+        data.geoData->scp.llh = transformer.transform(data.geoData->scp.ecf);
+    }
+    if (data.geoData.get() != NULL &&
+        !Init::isUndefined<LatLonAlt>(data.geoData->scp.llh) &&
+        Init::isUndefined<Vector3>(data.geoData->scp.ecf))
+    {
+        scene::LLAToECEFTransform transformer;
+        data.geoData->scp.ecf = transformer.transform(data.geoData->scp.llh);
+    }
+}
+
+Vector3 ComplexXMLValidator::wgs84Norm(const Vector3& point)
+{
+    scene::WGS84EllipsoidModel model;
+    std::vector<double> coordinates;
+    coordinates.resize(3);
+
+    coordinates[0] = point[0] / std::pow(model.getEquatorialRadius(), 2);
+    coordinates[1] = point[1] / std::pow(model.getEquatorialRadius(), 2);
+    coordinates[2] = point[2] / std::pow(model.getPolarRadius(), 2);
+
+    Vector3 normal(coordinates);
+    return normal / normal.norm();
+}
+
+void ComplexXMLValidator::fillRadarCollection(ComplexData& data, bool setDefaultValues)
+{
+    if (data.radarCollection.get() == NULL)
+    {
+        return;
+    }
+
+    // Transmit bandwidth
+    if (!data.radarCollection->waveform.empty())
+    {
+        // DERIVED: These values should be equal
+        if (Init::isUndefined<double>(data.radarCollection->txFrequencyMin))
+        {
+            double derivedMin = std::numeric_limits<double>::infinity();
+            for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
+            {
+                if (data.radarCollection->waveform[ii].get() != NULL)
+                {
+                    derivedMin = std::min(derivedMin, data.radarCollection->waveform[ii]->txFrequencyStart);
+                }
+            }
+            data.radarCollection->txFrequencyMin = derivedMin;
+        }
+        if (Init::isUndefined<double>(data.radarCollection->txFrequencyMax))
+        {
+            double derivedMax = -std::numeric_limits<double>::infinity();
+            for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
+            {
+                if (data.radarCollection->waveform[ii].get() != NULL)
+                {
+                    derivedMax = std::max(derivedMax, 
+                        data.radarCollection->waveform[ii]->txFrequencyStart + 
+                        data.radarCollection->waveform[ii]->txRFBandwidth);
+                }
+            }
+            data.radarCollection->txFrequencyMax = derivedMax;
+        }
+        for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
+        {
+            if (data.radarCollection->waveform[ii].get() == NULL)
+            {
+                continue;
+            }
+
+            WaveformParameters wfParameters = *data.radarCollection->waveform[ii];
+            if (wfParameters.rcvDemodType == DemodType::CHIRP &&
+                Init::isUndefined<double>(wfParameters.rcvFMRate))
+            {
+                wfParameters.rcvFMRate = 0;
+            }
+            
+            if (wfParameters.rcvFMRate == 0 &&
+                wfParameters.rcvDemodType == DemodType::NOT_SET)
+            {
+                wfParameters.rcvDemodType = DemodType::CHIRP;
+            }
+
+            if (Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
+                !Init::isUndefined<double>(wfParameters.txPulseLength) &&
+                !Init::isUndefined<double>(wfParameters.txFMRate))
+            {
+                wfParameters.txRFBandwidth = wfParameters.txPulseLength * wfParameters.txFMRate;
+            }
+
+            if (!Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
+                Init::isUndefined<double>(wfParameters.txPulseLength) &&
+                !Init::isUndefined<double>(wfParameters.txFMRate))
+            {
+                if (wfParameters.txFMRate != 0)
+                {
+                    wfParameters.txPulseLength = wfParameters.txRFBandwidth / wfParameters.txFMRate;
+                }
+            }
+
+            if (!Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
+                !Init::isUndefined<double>(wfParameters.txPulseLength) &&
+                Init::isUndefined<double>(wfParameters.txFMRate))
+            {
+                if (wfParameters.txPulseLength != 0)
+                {
+                    wfParameters.txFMRate = wfParameters.txRFBandwidth / wfParameters.txPulseLength;
+                }
+            }
+        }
+    }
+
+    if (!Init::isUndefined<double>(data.radarCollection->txFrequencyMin) &&
+        !Init::isUndefined<double>(data.radarCollection->txFrequencyMax))
+    {
+        // Default: we often assume that all transmitted bandwidth was
+        // processed, if given no other information
+        //TODO: move to fillImageFormation()
+        if (setDefaultValues)
+        {
+            if (data.imageFormation.get() == NULL)
+            {
+                data.imageFormation.reset(new ImageFormation());
+            }
+            if (Init::isUndefined<double>(data.imageFormation->txFrequencyProcMin))
+            {
+                data.imageFormation->txFrequencyProcMin = data.radarCollection->txFrequencyMin;
+            }
+            if (Init::isUndefined<double>(data.imageFormation->txFrequencyProcMax))
+            {
+                data.imageFormation->txFrequencyProcMax = data.radarCollection->txFrequencyMax;
+            }
+        }
+
+        //Derived: These values should be equal.
+        if (data.radarCollection->waveform.size() == 1 &&
+            data.radarCollection->waveform[0].get() != NULL)
+        {
+            if (Init::isUndefined<double>(data.radarCollection->waveform[0]->txFrequencyStart))
+            {
+                data.radarCollection->waveform[0]->txFrequencyStart = data.radarCollection->txFrequencyMin;
+            }
+            if (Init::isUndefined<double>(data.radarCollection->waveform[0]->txRFBandwidth))
+            {
+                data.radarCollection->waveform[0]->txRFBandwidth = 
+                    data.radarCollection->txFrequencyMax - data.radarCollection->txFrequencyMin;
+            }
+        }
+    }
+
+    //ImageFormation @ 272
+    return;
+}
+
+void ComplexXMLValidator::fillARPPoly(ComplexData& data)
+{
+    // ARP Pos/Vel/Acc fields can be derived from ARPPoly and SCPTime
+    if (data.position.get() != NULL &&
+        !Init::isUndefined<PolyXYZ>(data.position->arpPoly) &&
+        data.scpcoa.get() != NULL &&
+        !Init::isUndefined<double>(data.scpcoa->scpTime))
+    {
+        std::vector<double> arpPosEcf;
+        std::vector<double> arpVelEcf;
+        std::vector<double> arpAccEcf;
+        for (size_t ii = 0; ii < 3; ++ii)
+        {
+            Poly1D posPoly = polyAt(data.position->arpPoly, ii);
+            Poly1D velPoly = posPoly.derivative();
+            Poly1D accPoly = velPoly.derivative();
+
+            arpPosEcf.push_back(posPoly(data.scpcoa->scpTime));
+            arpVelEcf.push_back(velPoly(data.scpcoa->scpTime));
+            arpAccEcf.push_back(accPoly(data.scpcoa->scpTime));
+        }
+        if (Init::isUndefined<Vector3>(data.scpcoa->arpPos))
+        {
+            data.scpcoa->arpPos = Vector3(arpPosEcf);
+        }
+        
+        if (Init::isUndefined<Vector3>(data.scpcoa->arpVel))
+        {
+            data.scpcoa->arpVel = Vector3(arpVelEcf);
+        }
+
+        if (Init::isUndefined<Vector3>(data.scpcoa->arpAcc))
+        {
+            data.scpcoa->arpAcc = Vector3(arpAccEcf);
+        }
+    }
+
+    // A simple ARPPoly can be derived from SCPCOA Pos/Vel/Acc if that was 
+    // all that was defined
+    if (data.scpcoa.get() != NULL &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpPos) &&
+        !Init::isUndefined<Vector3>(data.scpcoa->arpVel) &&
+        !Init::isUndefined<double>(data.scpcoa->scpTime) &&
+        (data.position.get() == NULL || Init::isUndefined<PolyXYZ>(data.position->arpPoly)))
+    {
+        if (Init::isUndefined<Vector3>(data.scpcoa->arpAcc))
+        {
+            data.scpcoa->arpAcc = Vector3(0.0);
+        }
+
+        std::vector<Vector3> coefs;
+        coefs.resize(3);
+
+        //constant
+        coefs[0] = data.scpcoa->arpPos - 
+            data.scpcoa->arpVel * data.scpcoa->scpTime +
+            (data.scpcoa->arpAcc / 2) * std::pow(data.scpcoa->scpTime, 2);
+
+        //linear
+        coefs[1] = data.scpcoa->arpVel - 
+            data.scpcoa->arpAcc * data.scpcoa->scpTime;
+
+        //quadratic
+        coefs[2] = data.scpcoa->arpAcc / 2;
+
+        data.position->arpPoly = PolyXYZ(coefs);
+    }
+    return;
+}
+
+void ComplexXMLValidator::fillSCPTime(ComplexData& data)
+{
+    // SCPTime can always be derived from Grid.TimeCOAPoly
+    if (data.scpcoa.get() == NULL)
+    {
+        data.scpcoa.reset(new SCPCOA());
+    }
+    if (Init::isUndefined<double>(data.scpcoa->scpTime) &&
+        data.grid.get() != NULL &&
+        !Init::isUndefined<Poly2D>(data.grid->timeCOAPoly))
+    {
+        data.scpcoa->scpTime = data.grid->timeCOAPoly.atY(1)(1);
+    }
+
+    // and sometimes Grid.TimeCOAPoly can be derived from SCPTime
+    if (!Init::isUndefined<double>(data.scpcoa->scpTime) &&
+        data.collectionInformation.get() != NULL &&
+        data.collectionInformation->radarMode.toString() == "SPOTLIGHT")
+    {
+        if (data.grid.get() == NULL)
+        {
+            data.grid.reset(new Grid());
+        }
+        if (Init::isUndefined<Poly2D>(data.grid->timeCOAPoly))
+        {
+            // I'm assuming this is what it means to assign a double to a Poly2D...
+            data.grid->timeCOAPoly = Poly2D(1, 1);
+            data.grid->timeCOAPoly[0][0] = data.scpcoa->scpTime;
+        }
+    }
+}
+
+void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
+{
+    if (rowCol.weightType.get() != NULL && 
+        rowCol.weights.empty() &&
+        (rowCol.weightType->windowName != "UNIFORM" &&
+            rowCol.weightType->windowName != "UNKNOWN"))
+    {
+        size_t defaultWgtSize = 512;
+        rowCol.weights = (*calculateWeightFunction(rowCol))(defaultWgtSize);
+    }
+
+    // Calulating resolution requires fzero and fft functions
+
+    // DeltaK1/2 are approximated from DeltaKCOAPoly
+    if (!Init::isUndefined(rowCol.deltaKCOAPoly) &&
+        !Init::isUndefined(rowCol.impulseResponseBandwidth) &&
+        !Init::isUndefined(rowCol.sampleSpacing) &&
+        (Init::isUndefined(rowCol.deltaK1) && Init::isUndefined(rowCol.deltaK2)) &&
+        sicd.imageData.get() != NULL)
+    {
+        // Here, we assume the min and max of DeltaKCOAPoly must be on the vertices
+        // of the image, since it is smooth and monotonic in most cases--although in
+        // actuality this is not always the case. To be totally generic, we would 
+        // have to search for an interior min and max as well.
+
+        std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
+        std::vector<double> deltas = calculateDeltaKs(rowCol, vertices);
+
+        rowCol.deltaK1 = deltas[0];
+        rowCol.deltaK2 = deltas[1];
+    }
+}
+
 bool ComplexXMLValidator::validate()
 {
     // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
@@ -191,17 +1148,8 @@ bool ComplexXMLValidator::checkRGAZCOMP()
     Vector3 arpVel = sicd.scpcoa->arpVel;
     Vector3 unitRG = (scp - arp) / (scp - arp).norm();
     Vector3 left = cross((arp / arp.norm()), (arpVel / arp.norm()));
-    double look = 0;
-
-    if (left.dot(unitRG) > 0)
-    {
-        look = 1;
-    }
-    else if (left.dot(unitRG) < 0)
-    {
-        look = -1;
-    }
-    Vector3 spn = -look * cross(unitRG, arpVel);
+    int look = sign(left.dot(unitRG));
+    Vector3 spn = cross(unitRG, arpVel) * -look;
     spn = spn / spn.norm();
 
     //2.12.1.3
@@ -236,9 +1184,9 @@ bool ComplexXMLValidator::checkRGAZCOMP()
             // I'm not sure that makes sense
             Poly1D interPulsePeriodPoly = sicd.timeline->interPulsePeriod->sets[0].interPulsePeriodPoly;
             double stRateCoa = interPulsePeriodPoly.derivative()(sicd.scpcoa->scpTime);
-            double deltaKazPerDeltvaV = look * krgCoa * (arpVel.norm() * std::sin(
+            double deltaKazPerDeltaV = look * krgCoa * (arpVel.norm() * std::sin(
                      sicd.scpcoa->dopplerConeAngle * math::Constants::DEGREES_TO_RADIANS) / sicd.scpcoa->slantRange) / stRateCoa;
-            Poly1D derivedKazPoly = deltaKazPerDeltvaV * interPulsePeriodPoly;
+            Poly1D derivedKazPoly = deltaKazPerDeltaV * interPulsePeriodPoly;
 
             double polyNorm = 0;
             for (size_t ii = 0; ii < std::min(sicd.rgAzComp->kazPoly.size(), derivedKazPoly.size()); ++ii)
@@ -420,15 +1368,7 @@ bool ComplexXMLValidator::checkRMAT()
     Vector3 velRef = sicd.rma->rmat->refVel;
     Vector3 uLOS = (scp - posRef) / (scp - posRef).norm();
     Vector3 left = cross(posRef / posRef.norm(), velRef / velRef.norm());
-    int look = 0;
-    if (left.dot(uLOS) > 0)
-    {
-        look = 1;
-    }
-    else if (left.dot(uLOS) < 0)
-    {
-        look = -1;
-    }
+    int look = sign(left.dot(uLOS));
     Vector3 uYAT = (velRef / velRef.norm()) * look;
     Vector3 spn = cross(uLOS, uYAT);
     spn = spn / spn.norm();
@@ -521,19 +1461,10 @@ bool ComplexXMLValidator::checkRMCR()
     Vector3 velRef = sicd.rma->rmcr->refVel;
     Vector3 uXRG = (scp - posRef) / (scp - posRef).norm();
     Vector3 left = cross(posRef / posRef.norm(), velRef / velRef.norm());
-    int look = 0;
-    if (left.dot(uXRG) > 0)
-    {
-        look = 1;
-    }
-    else if (left.dot(uXRG) < 0)
-    {
-        look = -1;
-    }
-    Vector3 spn = cross(velRef / velRef.norm(), uXRG);
-    spn = spn / spn.norm();
+    int look = sign(left.dot(uXRG));
+    Vector3 spn = cross(velRef.unit(), uXRG).unit() * look;
     Vector3 uYCR = cross(spn, uXRG);
-    double dcaRef = std::acos((velRef / velRef.norm()).dot(uXRG)) * math::Constants::RADIANS_TO_DEGREES;
+    double dcaRef = std::acos(velRef.unit().dot(uXRG)) * math::Constants::RADIANS_TO_DEGREES;
 
     //2.12.3.3.3
     if ((rowUnitVector - uXRG).norm() > UVECT_TOL)
@@ -697,15 +1628,7 @@ bool ComplexXMLValidator::checkINCA()
     Vector3 caVelVector(caVel);
     Vector3 uRG = (scp - caPosVector) / (scp - caPosVector).norm();
     Vector3 left = cross(caPosVector / caPosVector.norm(), caVelVector / caVelVector.norm());
-    int look = 0;
-    if (left.dot(uRG) < 0)
-    {
-        look = -1;
-    }
-    else if (left.dot(uRG) > 0)
-    {
-        look = 1;
-    }
+    int look = sign(left.dot(uRG));
     Vector3 spn = cross(uRG, caVelVector) * -look;
     spn = spn / spn.norm();
     Vector3 uAZ = cross(spn, uRG);
@@ -1220,19 +2143,45 @@ bool ComplexXMLValidator::checkFrequencySupportParameters(const DirectionParamet
             valid = false;
         }
     }
-    return valid;
-}
-
-bool ComplexXMLValidator::checkFrequencySupportParameters()
-{
-    bool valid = (checkFrequencySupportParameters(*sicd.grid->col, "Col") &&
-        checkFrequencySupportParameters(*sicd.grid->row, "Row"));
 
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
     // on the vertices of the image, since it is smooth and monotonic in most cases--
     // although in actuality this is not always the case.  To be totally generic, 
     // we would have to search for an interior min and max as well
+    std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
+    std::vector<double> deltas = calculateDeltaKs(direction, vertices);
+
+    double minDk = deltas[0];
+    double maxDk = deltas[1];
+
+    double DK_TOL = 1e-2;
+
+    //2.3.9.1, 2.3.9.3
+    if (std::abs(direction.deltaK1 / minDk - 1) > DK_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "SICD.Grid." << name << ".DeltaK1: " << direction.deltaK1 << std::endl
+            << "Derived Grid." << name << ".DeltaK1: " << minDk << std::endl;
+        mLog->error(messageBuilder.str());
+        valid = false;
+    }
+    //2.3.9.2, 2.3.9.4
+    if (std::abs(direction.deltaK2 / maxDk - 1) > DK_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "SICD.Grid." << name << ".DeltaK2: " << direction.deltaK2 << std::endl
+            << "Derived Grid." << name << ".DeltaK2: " << maxDk << std::endl;
+        mLog->error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
+
+std::vector<std::vector<sys::SSize_T> > ComplexXMLValidator::calculateImageVertices()
+{
     std::vector<std::vector<sys::SSize_T> > vertices;
     vertices.resize(2);
 
@@ -1260,101 +2209,52 @@ bool ComplexXMLValidator::checkFrequencySupportParameters()
         vertices[1].push_back(sicd.imageData->validData.size() - 1);
         vertices[1].push_back(sicd.imageData->validData.size() - 1);
     }
+    return vertices;
+}
 
-    double minRowDk = 0;
-    double maxRowDk = 0;
-    double minColDk = 0;
-    double maxColDk = 0;
-    double currentDeltaK = 0;
 
-    if (!Init::isUndefined<Poly2D>(sicd.grid->row->deltaKCOAPoly))
-    {
-        minRowDk = -std::numeric_limits<double>::infinity();
-        maxRowDk = std::numeric_limits<double>::infinity();
-    }
-    if (!Init::isUndefined<Poly2D>(sicd.grid->col->deltaKCOAPoly))
-    {
-        minColDk = -std::numeric_limits<double>::infinity();
-        maxColDk = std::numeric_limits<double>::infinity();
-    }
+std::vector<double> ComplexXMLValidator::calculateDeltaKs(const DirectionParameters& rowCol, 
+        std::vector<std::vector<sys::SSize_T> > vertices)
+{
+    // The calculations for deltaK1 and deltaK2 are interdependent.
+    // Since we have to calculate both to calculate either, we may as well return both.
+    double deltaK1 = 0;
+    double deltaK2 = 0;
 
-    for (size_t ii = 0; ii < vertices[0].size(); ++ii)
+    if (!Init::isUndefined<Poly2D>(rowCol.deltaKCOAPoly))
     {
-        if (!Init::isUndefined<Poly2D>(sicd.grid->row->deltaKCOAPoly))
+        deltaK1 = std::numeric_limits<double>::infinity();
+        deltaK2 = -std::numeric_limits<double>::infinity();
+
+        for (size_t ii = 0; ii < vertices[0].size(); ++ii)
         {
-            currentDeltaK = sicd.grid->row->deltaKCOAPoly.atY((double)vertices[1][ii])((double)vertices[0][ii]);
-            minRowDk = std::min(currentDeltaK, minRowDk);
-            maxRowDk = std::max(currentDeltaK, maxRowDk);
-        }
-        if (!Init::isUndefined<Poly2D>(sicd.grid->col->deltaKCOAPoly))
-        {
-            currentDeltaK = sicd.grid->col->deltaKCOAPoly.atY((double)vertices[1][ii])((double)vertices[0][ii]);
-            minColDk = std::min(currentDeltaK, minColDk);
-            maxColDk = std::max(currentDeltaK, maxColDk);
+            double currentDeltaK = rowCol.deltaKCOAPoly.atY((double)vertices[1][ii])((double)vertices[0][ii]);
+            deltaK1 = std::min(currentDeltaK, deltaK1);
+            deltaK2 = std::max(currentDeltaK, deltaK2);
         }
     }
 
-    minRowDk -= (sicd.grid->row->impulseResponseBandwidth / 2);
-    maxRowDk += (sicd.grid->row->impulseResponseBandwidth / 2);
-    minColDk -= (sicd.grid->col->impulseResponseBandwidth / 2);
-    maxColDk += (sicd.grid->col->impulseResponseBandwidth / 2);
+    deltaK1 -= (rowCol.impulseResponseBandwidth / 2);
+    deltaK2 += (sicd.grid->row->impulseResponseBandwidth / 2);
 
     // Wrapped spectrum
-    if (minRowDk < -(1 / sicd.grid->row->sampleSpacing) / 2 || maxRowDk >(1 / sicd.grid->row->sampleSpacing) / 2)
+    if (deltaK1 < -(1 / rowCol.sampleSpacing) / 2 || deltaK2 >(1 / rowCol.sampleSpacing) / 2)
     {
-        minRowDk = -(1 / sicd.grid->row->sampleSpacing) / 2;
-        maxRowDk = -minRowDk;
+        deltaK1 = -(1 / rowCol.sampleSpacing) / 2;
+        deltaK2 = -deltaK1;
     }
 
-    if (minColDk < -(1 / sicd.grid->col->sampleSpacing) / 2 || maxColDk >(1 / sicd.grid->col->sampleSpacing) / 2)
-    {
-        minColDk = -(1 / sicd.grid->col->sampleSpacing) / 2;
-        maxColDk = -minColDk;
-    }
+    std::vector<double> deltaKs;
+    deltaKs.resize(2);
+    deltaKs[0] = deltaK1;
+    deltaKs[1] = deltaK2;
+    return deltaKs;
+}
 
-    double DK_TOL = 1e-2;
-
-    //2.3.9.1
-    if (std::abs(sicd.grid->row->deltaK1 / minRowDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid.Row.DeltaK1: " << sicd.grid->row->deltaK1 << std::endl
-            << "Derived Grid.Row.DeltaK1: " << minRowDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    //2.3.9.2
-    if (std::abs(sicd.grid->row->deltaK2 / maxRowDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid.Row.DeltaK2: " << sicd.grid->row->deltaK2 << std::endl
-            << "Derived Grid.Row.DeltaK2: " << maxRowDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    //2.3.9.3
-    if (std::abs(sicd.grid->col->deltaK1 / minColDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid.Col.DeltaK1: " << sicd.grid->col->deltaK1 << std::endl
-            << "Derived Grid.Col.DeltaK1: " << minColDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    //2.3.9.4
-    if (std::abs(sicd.grid->col->deltaK2 / maxColDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid.Col.DeltaK2: " << sicd.grid->col->deltaK2 << std::endl
-            << "Derived Grid.Col.DeltaK2: " << maxColDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    return valid;
+bool ComplexXMLValidator::checkFrequencySupportParameters()
+{
+    return (checkFrequencySupportParameters(*sicd.grid->col, "Col") &&
+        checkFrequencySupportParameters(*sicd.grid->row, "Row"));
 }
 
 bool ComplexXMLValidator::checkSupportParamsAgainstPFA()

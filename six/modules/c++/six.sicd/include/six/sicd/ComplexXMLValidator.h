@@ -25,7 +25,6 @@
 
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/Functor.h>
-//#include <import/six/sicd.h>
 
 namespace six
 {
@@ -37,8 +36,24 @@ public:
     ComplexXMLValidator(const ComplexData& data, logging::Logger* log);
 
     bool validate();
+    void fillDerivedFields(ComplexData& data, bool setDefaultValues = true);
+
     static Poly1D polyAt(PolyXYZ poly, size_t idx);
     static std::vector<double> linspace(double start, double end, size_t count = 100);
+
+    template <class T>
+    static int sign(const T& val)
+    {
+        if (val < 0)
+        {
+            return -1;
+        }
+        if (val > 0)
+        {
+            return 1;
+        }
+        return 0;
+    }
 
 private:
     bool checkTimeCOAPoly();
@@ -62,6 +77,28 @@ private:
     bool checkRMCR();
     bool checkINCA();
 
+    void fillRowCol(DirectionParameters& rowCol);
+    void fillSCPTime(ComplexData& data);
+    void fillARPPoly(ComplexData& data);
+    void fillRadarCollection(ComplexData& data, bool setDefaultValues);
+    void fillGeoDataSCP(ComplexData& data);
+    void fillSCPCOA(ComplexData& data);
+    void fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues);
+    void fillRGAZCOMP(ComplexData& data, double fc);
+    void fillPFA(ComplexData& data, double fc, bool setDefaultValues);
+    void fillRMA(ComplexData& data, double fc, bool setDefaultValues);
+    void fillGeoData(ComplexData& data);
+
+    Vector3 wgs84Norm(const Vector3& point);
+    std::vector<std::vector<sys::SSize_T> > calculateImageVertices();
+
+    /* Return vector contents, in order:
+     * 0) deltaK1 (min)
+     * 1) deltaK2 (max)
+     */
+    std::vector<double> calculateDeltaKs(const DirectionParameters& rowCol, 
+            std::vector<std::vector<sys::SSize_T> > vertices);
+
     template <class T>
     void assertExists(const T& type, const std::string& name)
     {
@@ -71,6 +108,8 @@ private:
             throw except::Exception(Ctxt(""));
         }
     }
+
+    double nonZero(double arg);
 
     const std::string boundsErrorMessage = "Violation of spatial frequency extent bounds.";
     const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
