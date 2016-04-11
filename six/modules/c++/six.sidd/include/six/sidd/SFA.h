@@ -58,11 +58,6 @@ struct SFAGeometry : public SFATyped
         return new SFAGeometry(*this);
     }
 
-    virtual SFAGeometry* clone() const
-    {
-        return new SFAGeometry(*this);
-    }
-
 protected:
     SFAGeometry(const std::string& typeName) :
         SFATyped(typeName)
@@ -325,11 +320,6 @@ public:
 struct SFACoordinateSystem : public SFATyped
 {
 public:
-    virtual SFACoordinateSystem* clone() const
-    {
-        return new SFACoordinateSystem(*this);
-    }
-
     virtual SFACoordinateSystem* clone() const
     {
         return new SFACoordinateSystem(*this);
