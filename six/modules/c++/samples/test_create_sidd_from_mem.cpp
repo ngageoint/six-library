@@ -1850,31 +1850,13 @@ void initProductCreation(six::sidd::ProductCreation& productCreation)
     productCreation.classification.declassDate.reset(new six::DateTime());
     productCreation.classification.declassEvent = "N/A";
     productCreation.classification.declassException = "25X1";
-
-    //SIDD 1.0 only
     productCreation.classification.exemptedSourceType = "X8";
     productCreation.classification.exemptedSourceDate.reset(new six::DateTime());
-
-    /*
-    This is SIDD_1.1 stuff.
-    productCreation.classification.exemptFrom = "DOD_DISTRO_STATEMENT";
-    productCreation.classification.joint = six::BooleanType("IS_TRUE");
-    productCreation.classification.atomicEnergyMarkings.push_back("RD-CNWDI");
-    productCreation.classification.atomicEnergyMarkings.push_back("UCNI");
-    productCreation.classification.displayOnlyTo.push_back("AND");
-    productCreation.classification.displayOnlyTo.push_back("ALB");
-    productCreation.classification.noticeType = "LES";
-    productCreation.classification.noticeReason = "None given";
-    productCreation.classification.noticeDate.reset(new six::DateTime());
-    productCreation.classification.unregisteredNoticeType = "Other";
-    productCreation.classification.externalNotice = BooleanType("IS_FALSE");
-    */
-
     initProcessorInformation(*productCreation.processorInformation);
-
 }
 
-void initDisplay100(six::sidd::Display& display, const std::string& lutType)
+
+void initDisplay(six::sidd::Display& display, const std::string& lutType)
 {
     //pixelType set in iniData() function
     if (lutType == "Mono")
@@ -1901,21 +1883,6 @@ void initDisplay100(six::sidd::Display& display, const std::string& lutType)
     display.monitorCompensationApplied.reset(new six::sidd::MonitorCompensationApplied());
     display.monitorCompensationApplied->gamma = 5.9;
     display.monitorCompensationApplied->xMin = 0.87;
-
-}
-void initDisplay(six::sidd::Display& display, const std::string& lutType,
-        const std::string& version)
-{
-    if (version == "1.0.0")
-    {
-        initDisplay100(display, lutType);
-    }
-    /*
-    else if (version == '1.1.0')
-    {
-        initDisplay110(display, lutType);
-    }
-    */
 
     six::Parameter param;
     param.setName("name");
@@ -2173,7 +2140,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.display->magnificationMethod
             = MagnificationMethod::NEAREST_NEIGHBOR;
 
-    initDisplay(*siddData.display, lutType, version);
+    initDisplay(*siddData.display, lutType);
     initGeographicAndTarget(*siddData.geographicAndTarget);
 
     //---------------------------------------------------------------
