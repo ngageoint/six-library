@@ -2587,5 +2587,10 @@ int main(int argc, char** argv)
         std::cerr << ex.toString() << std::endl;
         return 1;
     }
+    catch (except::Error& err)
+    {
+        std::cerr << err.toString() << std::endl;
+        return 1;
+    }
 }
 
