@@ -2115,7 +2115,7 @@ void initAnnotations(six::sidd::Annotations& annotations)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, const bool smallImage, const std::string& version)
+        lutType, bool smallImage, const std::string& version)
 {
 
     // These things are essential to forming the file
@@ -2225,8 +2225,7 @@ int main(int argc, char** argv)
 
     try
     {
-        std::auto_ptr<cli::Results> options(argParser.parse(argc,
-                (const char**) argv));
+        std::auto_ptr<cli::Results> options(argParser.parse(argc, argv));
         if (options->get<bool>("smallImage") &&
                 options->get<bool>("multipleSegments"))
         {
@@ -2331,11 +2330,11 @@ int main(int argc, char** argv)
             container.addData(siddData->clone());
             if (!smallImage)
             {
-                buffers[ii] = (UByte*) IMAGE.data;
+                buffers[ii] = reinterpret_cast<const UByte*>(IMAGE.data);
             }
             else
             {
-                buffers[ii] = (UByte*) smallData;
+                buffers[ii] = reinterpret_cast<const UByte*>(smallData);
             }
         }
 
