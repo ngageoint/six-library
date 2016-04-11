@@ -21,8 +21,6 @@
  */
 #include "six/Types.h"
 
-using namespace six;
-
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
 {
     os << '(' << latLonAlt.getLat() << ',' << latLonAlt.getLon() << ','
@@ -39,6 +37,8 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 }
 */
 
+namespace six
+{
 const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;
 const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
 const unsigned short Constants::GT_XML_KEY = 50909;
@@ -53,3 +53,18 @@ const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";
 const sys::Uint64_T Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
 
+ImageMode getImageMode(RadarModeType radarMode)
+{
+    switch (radarMode)
+    {
+    case RadarModeType::STRIPMAP:
+    case RadarModeType::DYNAMIC_STRIPMAP:
+        return SCAN_MODE;
+    case RadarModeType::NOT_SET:
+        throw except::Exception(Ctxt("Radar mode not set"));
+    case RadarModeType::SPOTLIGHT:
+    default: // TODO: Not sure what to do for SCANSAR
+        return FRAME_MODE;
+    }
+}
+}

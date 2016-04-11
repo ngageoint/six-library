@@ -142,7 +142,7 @@ DerivedData* DerivedXMLParser::fromXML(
         std::vector<XMLElem> annChildren;
         annotationsXML->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0, size = annChildren.size(); i < size; ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
@@ -893,11 +893,11 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         std::vector<XMLElem> polarization;
         informationXML->getElementsByTagName("Polarization", polarization);
         info->polarization.resize(polarization.size());
-        for (size_t i = 0, nElems = polarization.size(); i < nElems; ++i)
+        for (size_t jj = 0, nElems = polarization.size(); jj < nElems; ++jj)
         {
-            XMLElem polXML = polarization[i];
-            info->polarization[i].reset(new TxRcvPolarization());
-            TxRcvPolarization* p = info->polarization[i].get();
+            XMLElem polXML = polarization[jj];
+            info->polarization[jj].reset(new TxRcvPolarization());
+            TxRcvPolarization* p = info->polarization[jj].get();
 
             p->txPolarization = six::toType<PolarizationType>(
                     getFirstAndOnly(polXML, "TxPolarization")->
@@ -1889,7 +1889,7 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
     std::vector<XMLElem> procModuleXML;
     procXML->getElementsByTagName("ProcessingModule", procModuleXML);
     procMod->processingModules.resize(procModuleXML.size());
-    for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
+    for (size_t i = 0, size = procModuleXML.size(); i < size; ++i)
     {
         procMod->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1904,7 +1904,7 @@ void DerivedXMLParser::parseProductProcessingFromXML(
     std::vector<XMLElem> procModuleXML;
     elem->getElementsByTagName("ProcessingModule", procModuleXML);
     productProcessing->processingModules.resize(procModuleXML.size());
-    for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
+    for (size_t i = 0, size = procModuleXML.size(); i < size; ++i)
     {
         productProcessing->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1942,7 +1942,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
     std::vector<XMLElem> procEventXML;
     elem->getElementsByTagName("ProcessingEvent", procEventXML);
     downstreamReproc->processingEvents.resize(procEventXML.size());
-    for (unsigned int i = 0, size = procEventXML.size(); i < size; ++i)
+    for (size_t i = 0, size = procEventXML.size(); i < size; ++i)
     {
         downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
@@ -2293,7 +2293,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         p->vertices.resize(vXML.size());
-        for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
+        for (size_t i = 0, size = vXML.size(); i < size; ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vXML[i], p->vertices[i].get());
@@ -2305,7 +2305,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> ringXML;
         elem->getElementsByTagName("Ring", ringXML);
         p->rings.resize(ringXML.size());
-        for (unsigned int i = 0, size = ringXML.size(); i < size; ++i)
+        for (size_t i = 0, size = ringXML.size(); i < size; ++i)
         {
             p->rings[i].reset(new SFALinearRing());
             parseSFAGeometryFromXML(ringXML[i], p->rings[i].get());
@@ -2317,7 +2317,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Patch", polyXML);
         p->patches.resize(polyXML.size());
-        for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
+        for (size_t i = 0, size = polyXML.size(); i < size; ++i)
         {
             p->patches[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyXML[i], p->patches[i].get());
@@ -2329,7 +2329,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Element", polyXML);
         p->elements.resize(polyXML.size());
-        for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
+        for (size_t i = 0, size = polyXML.size(); i < size; ++i)
         {
             p->elements[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyXML[i], p->elements[i].get());
@@ -2341,7 +2341,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> lineXML;
         elem->getElementsByTagName("Element", lineXML);
         p->elements.resize(lineXML.size());
-        for (unsigned int i = 0, size = lineXML.size(); i < size; ++i)
+        for (size_t i = 0, size = lineXML.size(); i < size; ++i)
         {
             p->elements[i].reset(new SFALineString());
             parseSFAGeometryFromXML(lineXML[i], p->elements[i].get());
@@ -2353,7 +2353,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         p->vertices.resize(vXML.size());
-        for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
+        for (size_t i = 0, size = vXML.size(); i < size; ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vXML[i], p->vertices[i].get());

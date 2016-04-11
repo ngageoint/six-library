@@ -325,13 +325,20 @@ public:
     types::RowCol<double>
     pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
 
+    /*
+     * Provide frame vs. scan mode
+     */
+    ImageMode getImageMode() const
+    {
+        return six::getImageMode(collectionInformation->radarMode);
+    }
+
 private:
     static const char VENDOR_ID[];
 
     std::string mVersion;
 };
+}
+}
 
-}
-}
 #endif
-

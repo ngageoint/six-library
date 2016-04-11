@@ -442,7 +442,7 @@ void Wideband::read(size_t channel,
         // Element size is half mElementSize because it's complex
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            byteSwap(data.data, mElementSize / 2, numPixels / 2, numThreads);
+            byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
         }
     }
 }

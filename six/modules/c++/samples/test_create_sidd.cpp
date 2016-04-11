@@ -340,7 +340,7 @@ int main(int argc, char** argv)
             six::sidd::Annotation *ann = (*data->annotations.rbegin()).get();
             std::cout << "Hey: " << ann->spatialReferenceSystem.get() << std::endl;
             ann->identifier = "1st Annotation";
-            ann->objects.push_back(mem::ScopedCopyablePtr<
+            ann->objects.push_back(mem::ScopedCloneablePtr<
                     six::sidd::SFAGeometry>(new six::sidd::SFAPoint));
 
             sources.push_back(sioReader);

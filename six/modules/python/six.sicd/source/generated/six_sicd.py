@@ -2352,6 +2352,11 @@ class ComplexData(pysix.six_base.Data):
         """pixelToImagePoint(ComplexData self, RowColDouble pixelLoc) -> RowColDouble"""
         return _six_sicd.ComplexData_pixelToImagePoint(self, pixelLoc)
 
+
+    def getImageMode(self):
+        """getImageMode(ComplexData self) -> six::ImageMode"""
+        return _six_sicd.ComplexData_getImageMode(self)
+
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 
