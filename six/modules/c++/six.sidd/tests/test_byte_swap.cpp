@@ -20,7 +20,6 @@
 *
 */
 
-#include <complex>
 #include <iostream>
 #include <iterator>
 #include <import/six/sidd.h>
@@ -31,20 +30,20 @@ namespace
 {
 static const std::string OUTPUT_NAME("ByteSwapTest");
 static const size_t DATA_LENGTH = 100;
-static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(std::complex<float>) / sizeof(six::UByte);
-static const size_t BYTES_PER_PIXEL = 2; //I'm not sure why
+static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
+static const size_t BYTES_PER_PIXEL = 2;
 
-void generateData(std::complex<float>* data)
+void generateData(sys::Int16_T* data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
-        data[ii] = std::complex<float>((float)ii, (float)ii);
+        data[ii] = sys::Int16_T(static_cast<sys::Int16_T>(ii));
     }
 }
 
-six::sidd::DerivedData* createData()
+std::auto_ptr<six::sidd::DerivedData> createData()
 {
-    six::sidd::DerivedData* derivedData = new six::sidd::DerivedData();
+    std::auto_ptr<six::sidd::DerivedData> derivedData(new six::sidd::DerivedData());
     derivedData->productCreation.reset(new six::sidd::ProductCreation());
     derivedData->productCreation->classification.classification = "C";
     derivedData->measurement.reset(new six::sidd::Measurement(six::ProjectionType::PLANE));
@@ -61,8 +60,6 @@ six::sidd::DerivedData* createData()
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
     derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
-    //derivedData->geographicAndTarget->imageCorners.reset(new six::LatLonCorners());
-    //derivedData->geographicAndTarget->geographicCoverage.reset(new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
 
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resolution.row = 0;
@@ -79,7 +76,6 @@ six::sidd::DerivedData* createData()
     parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
     parent->information->sensorName.clear();
     parent->geometry.reset(new six::sidd::Geometry());
-    //parent->geometry->dopplerConeAngle = 45.8;
 
     return derivedData;
 }
@@ -90,13 +86,13 @@ void write(six::UByte* data, bool useStream, bool byteSwap)
     container.addData(createData());
 
     six::NITFWriteControl writer;
-    writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, (int)byteSwap);
+    writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
     writer.initialize(&container);
 
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write((sys::byte*)data, DATA_SIZE_IN_BYTES);
+        stream.write(reinterpret_cast<sys::byte*>(data), DATA_SIZE_IN_BYTES);
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
@@ -124,26 +120,21 @@ void read(const std::string& filename, six::UByte* data)
     region.setStartCol(0);
     region.setNumRows(numRows);
     region.setNumCols(numCols);
-    six::UByte buffer[DATA_SIZE_IN_BYTES];
-    region.setBuffer(buffer);
-    six::UByte* result = reader.interleaved(region, 0);
 
-    for (size_t ii = 0; ii < DATA_SIZE_IN_BYTES; ++ii)
-    {
-        data[ii] = result[ii];
-    }
+    memcpy(data, reader.interleaved(region, 0), DATA_SIZE_IN_BYTES);
+    return;
 }
 
 bool run(bool useStream = false, bool byteswap = false)
 {
-    std::complex<float> complexData[DATA_LENGTH];
-    generateData(complexData);
+    sys::Int16_T imageData[DATA_LENGTH];
+    generateData(imageData);
 
-    six::UByte* sourceData = reinterpret_cast<six::UByte*>(&complexData[0]);
+    six::UByte* sourceData = reinterpret_cast<six::UByte*>(&imageData[0]);
     six::UByte testData[DATA_SIZE_IN_BYTES];
     memcpy(testData, sourceData, DATA_SIZE_IN_BYTES);
 
-    if (!sys::isBigEndianSystem() && !byteswap || sys::isBigEndianSystem() && byteswap)
+    if ((!sys::isBigEndianSystem() && !byteswap) || (sys::isBigEndianSystem() && byteswap))
     {
         sys::byteSwap(sourceData, BYTES_PER_PIXEL, DATA_SIZE_IN_BYTES / BYTES_PER_PIXEL);
     }
@@ -155,6 +146,7 @@ bool run(bool useStream = false, bool byteswap = false)
     {
         if (sourceData[ii] != testData[ii])
         {
+            std::cerr << "Data doesn't match. Test failed." << std::endl;
             return false;
         }
     }
@@ -174,10 +166,7 @@ int main(int argc, char** argv)
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(false, false);
 
-        if (success) 
-        {
-            return 0;
-        }
+        return (success ? 0 : 1);
     }
     catch (const except::Exception& ex)
     {
@@ -191,5 +180,4 @@ int main(int argc, char** argv)
     {
         std::cerr << "Unknown exception\n";
     }
-    return 1;
 }

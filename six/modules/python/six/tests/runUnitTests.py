@@ -23,40 +23,23 @@
 #
 
 import os
-import subprocess
-import sys
+from subprocess import call
 
-import makeRegressionFiles
-import runPythonScripts
-import runUnitTests
-import checkNITFs
 import utils
 
-utils.setPaths()
+def run():
+    install = utils.installPath()
+    unitTestDir = os.path.join(install, 'unittests')
+    childDirs = os.listdir(unitTestDir)
+    success = True
+    for childDir in childDirs:
+        for test in os.listdir(os.path.join(unitTestDir, childDir)):
+            print os.path.join(unitTestDir, childDir, test)
+            if call([utils.executableName(os.path.join(unitTestDir, childDir, test))]) != 0:
+                success = False
 
-if runPythonScripts.run() == False:
-    print "Error running a python script"
-    sys.exit(1)
+    return success
 
-if makeRegressionFiles.run() == False:
-    print "Error generating regression files"
-    sys.exit(1)
-
-if checkNITFs.run() == False:
-    print "test in checkNITFS.py failed"
-    sys.exit(1)
-
-print "Performing byte swap test"
-if subprocess.call([utils.executableName(os.path.join(
-        utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
-    print "Failed ByteSwap test in six.sidd/tests/test_byte_swap"
-    sys.exit(1)
-print "Byte swap test succeeded"
-
-if runUnitTests.run() == False:
-    print "Unit tests failed"
-    sys.exit(1)
-
-print "All passed"
-sys.exit(0)
-
+if __name__ == '__main__':
+    run()
+    

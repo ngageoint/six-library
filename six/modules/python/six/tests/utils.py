@@ -26,6 +26,7 @@ import os
 import platform
 import sys
 
+from glob import glob
 from subprocess import call
 
 def findSixHome():
@@ -60,11 +61,12 @@ def setPaths():
     sixSchemaPath = os.path.join(installPath(), 'conf', 'schema',
                                  'six')
 
-    pythonPath = os.path.join(installPath(), 'lib', 'python2.7',
-                                      'site-packages')
-    if platform.system() == 'Windows':
-        pythonPath = os.path.join(installPath(), 'lib',
-                                  'site-packages')
+    pythonPath = os.path.join(installPath(), 'lib',
+                                'site-packages')
+        
+    if platform.system() == 'Linux':
+         pythonPath = glob(os.path.join(installPath(), 'lib', 'python*',
+                                      'site-packages'))[0]
         
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
     os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
@@ -77,6 +79,8 @@ def setPaths():
 def executableName(pathname):
 
     if platform.system() == 'Windows':
+        if pathname.endswith('.exe'):
+            return pathname
         return pathname + '.exe'
     if pathname.startswith('/'):
         return '.' + pathname

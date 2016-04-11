@@ -71,4 +71,3 @@ def run():
             args = (args[0], args[1], '')
         createNITFs(args[0], args[1], args[2], home)
  
- 

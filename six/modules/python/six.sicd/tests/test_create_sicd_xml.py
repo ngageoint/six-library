@@ -563,7 +563,6 @@ def initErrorStats(cmplx):
     errorStats.compositeSCP.xErr = 12
     errorStats.compositeSCP.yErr = 34
     errorStats.compositeSCP.xyErr = 56
-    #TODO: Check SCPType for SICD 4/5
 
     errorStats.components = makeScopedCopyableComponents()
 
@@ -778,7 +777,7 @@ def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
     elif alg == 'RMA':
         cmplx = initRMA(cmplx, version, imageType)
     elif alg == 'RGAZCOMP':
-        if not version.startswith('1'): #TODO: verify version cutoff
+        if version.startswith('4'):
             raise ValueError(
                 'RgAzComp algorithm not defined'
                 ' for version {0}'.format(version))
