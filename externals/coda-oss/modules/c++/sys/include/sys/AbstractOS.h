@@ -187,11 +187,27 @@ public:
     virtual std::string getEnv(const std::string& s) const = 0;
 
     /*!
+     *  Returns true if environment variable is set, false otherwise
+     */
+    virtual bool isEnvSet(const std::string& s) const = 0;
+
+    /*!
+     *  Get an environment variable and updates value, but only if set.
+     *  Returns true if environment variable is set, false otherwise
+     */
+    bool getEnvIfSet(const std::string& envVar, std::string& value) const;
+
+    /*!
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 
                         const std::string& val,
                         bool overwrite) = 0;
+
+    /*!
+     * Unset an environment variable
+     */
+    virtual void unsetEnv(const std::string& var) = 0;
 
     virtual Pid_T getProcessId() const = 0;
 
