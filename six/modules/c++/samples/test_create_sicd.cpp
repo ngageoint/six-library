@@ -106,7 +106,7 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
+        logging::LoggerPtr logger(
                 logging::setupLogger(sys::Path::basename(argv[0])));
 
         // create an XML registry

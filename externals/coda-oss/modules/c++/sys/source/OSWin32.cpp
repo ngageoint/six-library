@@ -28,6 +28,7 @@
 #include "sys/File.h"
 
 #include <iostream>
+#include <vector>
 
 std::string sys::OSWin32::getPlatformName() const
 {
@@ -214,29 +215,60 @@ std::string sys::OSWin32::operator[](const std::string& s) const
 std::string sys::OSWin32::getEnv(const std::string& s) const
 {
     std::string result;
-    DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
+    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     if (size == 0)
-        throw sys::SystemException(Ctxt(FmtX(
-            "Unable to get windows environment variable %s", s.c_str())));
-
-    // If we can use a normal size buffer, lets not bother to malloc
-
-    char *buffer = new char[size + 1];
-    DWORD retVal = GetEnvironmentVariable(s.c_str(), buffer, size);
-    result = buffer;
-    delete [] buffer;
-
+    {
+        throw sys::SystemException(Ctxt(
+            "Unable to get windows environment variable " + s));
+    }
+    std::vector<char> buffer(size + 1);
+    const DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], size);
+    // Win32 API weirdness -- see https://msdn.microsoft.com/en-us/libary/windows/desktop/ms683188%28v=vs.85%29.aspx
+    // When less then the size of the buffer is allocated, it returns the required size, including the null character
+    // Otherwise, it returns the size of the variable, not including the null character
+    if (retVal + 1 != size) 
+    {
+        throw sys::SystemException(Ctxt(
+           "Environment variable size does not match allocated size for " + s));
+    }
+    if (retVal == 0)
+    {
+        throw sys::SystemException(Ctxt(
+               "Environment variable size changed unexpectedly to zero \
+                following buffer allocation " + s));
+    }
+    result = &buffer[0];
     return result;
+}
+
+bool sys::OSWin32::isEnvSet(const std::string& s) const
+{
+    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
+    return (size != 0);
 }
 
 void sys::OSWin32::setEnv(const std::string& var, 
                           const std::string& val,
 			  bool overwrite)
 {
-    BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
-    if(!ret)
-        throw sys::SystemException(Ctxt(FmtX(
-            "Unable to set windows environment variable %s", var.c_str())));
+    if (overwrite || !isEnvSet(var))
+    {
+        const BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
+        if (!ret)
+        {
+            throw sys::SystemException(Ctxt(
+                "Unable to set windows environment variable " + var));
+        }
+    }
+}
+
+void sys::OSWin32::unsetEnv(const std::string& var)
+{
+    const BOOL ret = SetEnvironmentVariable(var.c_str(), NULL);
+    if (!ret)
+    {
+        throw sys::SystemException(Ctxt("Unable to unset windows environment variable " + var));
+    }
 }
 
 size_t sys::OSWin32::getNumCPUs() const

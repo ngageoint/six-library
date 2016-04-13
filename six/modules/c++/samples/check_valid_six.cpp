@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 
         str::upper(level);
         str::trim(level);
-        std::auto_ptr<logging::Logger> log = 
+        logging::LoggerPtr log = 
             logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
 
         // this validates the DES of the input against the 
