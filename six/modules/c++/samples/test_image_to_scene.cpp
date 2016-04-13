@@ -73,7 +73,7 @@ int main(int argc, char** argv)
         xmlRegistry->addCreator(six::DataType::DERIVED,
                             new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-        std::auto_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        logging::LoggerPtr logger(logging::setupLogger(progname));
         six::NITFReadControl reader;
         reader.setLogger(logger.get());
         reader.setXMLControlRegistry(xmlRegistry);
