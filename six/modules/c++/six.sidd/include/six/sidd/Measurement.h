@@ -78,14 +78,14 @@ struct Projection
 
     virtual ~Projection() {}
 
-    bool operator==(const Projection& rhs) const
+    friend bool operator==(const Projection& lhs, const Projection& rhs)
     {
-        return equalTo(rhs);
+        return lhs.equalTo(rhs);
     }
 
-    bool operator!=(const Projection& rhs) const
+    friend bool operator!=(const Projection& lhs, const Projection& rhs)
     {
-        return !(*this == rhs);
+        return !(lhs == rhs);
     }
 
     //!  Pure

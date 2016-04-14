@@ -28,8 +28,8 @@
 
 TEST_CASE(SFAPoint)
 {
-    six::sidd::SFATyped* point = new six::sidd::SFAPoint(1, 2, 3, 4);
-    six::sidd::SFATyped* second = new six::sidd::SFAPoint(1, 2, 3, 4);
+    six::sidd::SFATyped* pointTyped = new six::sidd::SFAPoint(1, 2, 3, 4);
+    six::sidd::SFATyped* secondPointTyped = new six::sidd::SFAPoint(1, 2, 3, 4);
 
     six::sidd::SFAPoint rawPointOne(1, 2, 3, 4);
     six::sidd::SFAPoint rawPointTwo(1, 2, 3, 4);
@@ -37,15 +37,17 @@ TEST_CASE(SFAPoint)
     six::sidd::SFAPoint* pointPointerOne = new six::sidd::SFAPoint(1, 2, 3, 4);
     six::sidd::SFAPoint* pointPointerTwo = new six::sidd::SFAPoint(1, 2, 3, 4);
 
-    TEST_ASSERT(*point == *second);
+    TEST_ASSERT(*pointTyped == *secondPointTyped);
     TEST_ASSERT(rawPointOne == rawPointTwo);
+    TEST_ASSERT(rawPointOne == reinterpret_cast<six::sidd::SFATyped&>(rawPointTwo));
+    TEST_ASSERT(reinterpret_cast<six::sidd::SFATyped&>(rawPointOne) == rawPointTwo);
     TEST_ASSERT(*pointPointerOne == *pointPointerTwo);
-    TEST_ASSERT(*point == rawPointTwo);
-    TEST_ASSERT(*point == *pointPointerOne);
+    TEST_ASSERT(*pointTyped == rawPointTwo);
+    TEST_ASSERT(*pointTyped == *pointPointerOne);
     TEST_ASSERT(rawPointOne == *pointPointerOne);
 
     six::sidd::SFAPoint different(2, 4, 6, 8);
-    TEST_ASSERT(different != *point);
+    TEST_ASSERT(different != *pointTyped);
     TEST_ASSERT(different != rawPointOne);
     TEST_ASSERT(different != *pointPointerOne);
 }

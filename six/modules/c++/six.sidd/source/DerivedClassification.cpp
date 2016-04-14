@@ -297,6 +297,16 @@ bool DerivedClassification::operator==(const DerivedClassification& rhs) const
         exemptedSourceDate == rhs.exemptedSourceDate &&
         fileOptions == rhs.fileOptions);
 }
+
+bool DerivedClassification::equalTo(const Classification& rhs) const
+{
+    const DerivedClassification* derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
+    if (derivedClassification != NULL)
+    {
+        return *this == *derivedClassification;
+    }
+    return false;
+}
 }
 }
 

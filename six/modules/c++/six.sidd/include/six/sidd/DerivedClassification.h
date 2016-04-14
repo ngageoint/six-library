@@ -178,12 +178,9 @@ public:
 
     //! Equality operator
     bool operator==(const DerivedClassification& rhs) const;
-    bool operator!=(const DerivedClassification& rhs) const
-    {
-        return !(*this == rhs);
-    }
 
 private:
+    virtual bool equalTo(const Classification& rhs) const;
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,

@@ -55,14 +55,14 @@ struct Data
      */
     virtual Data* clone() const = 0;
 
-    bool operator==(const Data& rhs) const
+    friend bool operator==(const Data& lhs, const Data& rhs)
     {
-        return equalTo(rhs);
+        return lhs.equalTo(rhs);
     }
 
-    bool operator!=(const Data& rhs) const
+    friend bool operator!=(const Data& lhs, const Data& rhs)
     {
-        return !(*this == rhs);
+        return !(lhs == rhs);
     }
 
     /*!

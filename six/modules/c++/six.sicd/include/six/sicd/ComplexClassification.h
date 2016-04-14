@@ -52,13 +52,19 @@ public:
             fileOptions == rhs.fileOptions);
     }
 
-    bool operator!=(const ComplexClassification& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
     //! This is spelled out (i.e. 'UNCLASSIFIED')
     std::string level;
+
+private:
+    virtual bool equalTo(const Classification& rhs) const
+    {
+        const ComplexClassification* classification = dynamic_cast<const ComplexClassification*>(&rhs);
+        if (classification != NULL)
+        {
+            return *this == *classification;
+        }
+        return false;
+    }
 };
 }
 }

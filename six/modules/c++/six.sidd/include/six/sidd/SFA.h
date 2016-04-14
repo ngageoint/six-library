@@ -43,14 +43,14 @@ public:
         return mType;
     }
 
-    bool operator==(const SFATyped& rhs) const
+    friend bool operator==(const SFATyped& lhs, const SFATyped& rhs)
     {
-        return equalTo(rhs);
+        return lhs.equalTo(rhs);
     }
 
-    bool operator!=(const SFATyped& rhs) const
+    friend bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
     {
-        return !(*this == rhs);
+        return !(lhs == rhs);
     }
 
 protected:
