@@ -247,11 +247,6 @@ class ComplexClassification(pysix.six_base.Classification):
         """__eq__(ComplexClassification self, ComplexClassification rhs) -> bool"""
         return _six_sicd.ComplexClassification___eq__(self, rhs)
 
-
-    def __ne__(self, rhs):
-        """__ne__(ComplexClassification self, ComplexClassification rhs) -> bool"""
-        return _six_sicd.ComplexClassification___ne__(self, rhs)
-
     __swig_setmethods__["level"] = _six_sicd.ComplexClassification_level_set
     __swig_getmethods__["level"] = _six_sicd.ComplexClassification_level_get
     if _newclass:
@@ -2726,11 +2721,6 @@ class ComplexData(pysix.six_base.Data):
     def __eq__(self, rhs):
         """__eq__(ComplexData self, ComplexData rhs) -> bool"""
         return _six_sicd.ComplexData___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(ComplexData self, ComplexData rhs) -> bool"""
-        return _six_sicd.ComplexData___ne__(self, rhs)
 
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
