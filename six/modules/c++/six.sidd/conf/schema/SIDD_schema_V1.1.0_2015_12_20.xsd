@@ -129,7 +129,7 @@
             </xs:element>
             <xs:element name="InteractiveProcessing" type="InteractiveProcessingType">
             </xs:element>
-            <xs:element name="DisplayExtension" type="sicommon:ParameterType" maxOccurs="unbounded">
+            <xs:element name="DisplayExtension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Optional extensible parameters used to support profile-specific needs related to product display. Predefined filter types.</xs:documentation>
                 </xs:annotation>
@@ -952,7 +952,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0">
+            <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
                 </xs:annotation>
