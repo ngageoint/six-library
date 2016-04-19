@@ -2,7 +2,7 @@ import os
 
 '''dumps the libs connected to the targets'''
 
-# Recursive resolution of targets 
+# Recursive resolution of targets
 def handleTargets(targets, context):
     ret = []
 
@@ -53,7 +53,7 @@ def dumpLibImpl(context, raw):
     modArgs = globals()
     modArgs['NAME'] = 'dumplib'
     modArgs['MODULE_DEPS'] = moduleDeps
-    
+
     # We need a source file here so it doesn't think it is headers only
     topDir = context.top_dir
     buildDir = os.path.dirname(os.path.realpath(__file__))
@@ -62,23 +62,23 @@ def dumpLibImpl(context, raw):
     context.module(**modArgs)
 
     context.recurse([context.run_dir])
-    
+
     libs = []
     tsk = context.get_tgen_by_name('dumplib-c++')
     tsk.post()
     libs += resolveLibType(tsk.env)
-    
+
     # Uselibs are only need in static build.
     # In shared builds they are added to the LIB value automatically
     if tsk.env.LIB_TYPE == 'stlib':
         for uselib in tsk.uselib:
             if tsk.env['LIB_' + uselib]:
                 libs += tsk.env['LIB_' + uselib]
-    
+
     if len(libs) == 0:
         # If we found nothing print that we found nothing
         # otherwise it looks like the command failed.
-        print 'No dependencies.'
+        print('No dependencies.')
     else:
         ret = ''
         for lib in libs:
@@ -88,4 +88,4 @@ def dumpLibImpl(context, raw):
                 ret += tsk.env.STLIB_ST % lib
             else:
                 ret += lib
-        print ret
+        print(ret)

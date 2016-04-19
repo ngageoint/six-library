@@ -169,7 +169,7 @@ def check_swig_version(self, minver=None):
     swig_out = self.cmd_and_log('"%s" -version' % self.env['SWIG'])
 
     swigver = [int(s) for s in reg_swig.findall(swig_out)[0].split('.')]
-    if isinstance(minver, basestring):
+    if isinstance(minver, str):
         minver = [int(s) for s in minver.split(".")]
     if isinstance(minver, tuple):
         minver = [int(s) for s in minver]

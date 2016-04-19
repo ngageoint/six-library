@@ -22,7 +22,7 @@ def options(opt):
     opt.add_option('--nobuild-fft', action='store_false', dest="build_fft",
                    help='force not building FFT library (fftw) from scratch')
 
-def configure(conf):    
+def configure(conf):
     #-- FFT --------------------------------------------------------------------
     if Options.options.enable_fft:
         fftHome = Options.options.fft_home
@@ -72,7 +72,7 @@ def configure(conf):
         elif Options.options.build_fft:
             if not os.path.exists(os.path.join(conf.path.abspath(), 'fftw-2.1.5.tar')):
                 conf.fatal('Missing fftw tarfile')
-            
+
             # callback function to check for all #defines used by the fftw driver
             def fftw_callback(conf):
                 conf.define('FFTW_VERSION', '"2.1.5"', quote=False)
@@ -87,7 +87,7 @@ def configure(conf):
                 conf.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
                 conf.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h', mandatory=False)
                 conf.check_cc(function_name='gethrtime', header_name='sys/time.h', mandatory=False)
-                
+
                 # Check for hrtime_t data type; some systems (AIX) seem to have
                 # a function called gethrtime but no hrtime_t!
                 frag = '''
@@ -95,10 +95,10 @@ def configure(conf):
                     #include <sys/time.h>
                     int main(){hrtime_t foobar;}
                     #endif
-                    '''            
+                    '''
                 conf.check_cc(fragment=frag, define_name='HAVE_HRTIME_T',
                         msg='Checking for type hrtime_t', errmsg='not found', mandatory=False)
-                
+
                 types_str = '''
                     #include <stdio.h>
                     int isBigEndian()
@@ -122,7 +122,7 @@ def configure(conf):
                 #    erroneously be 8 here.
                 output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
                 t = Utils.str_to_dict(output or '')
-                for k, v in t.iteritems():
+                for k, v in t.items():
                     try:
                         v = int(v)
                     except:
@@ -141,16 +141,16 @@ def configure(conf):
             else:
                 double_fft = 'no'
             conf.msg('Building double precision fft library', double_fft)
-            
+
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')
-            
+
             # make configuration headers
             fname = 'fftw-2.1.5'
             driverNode = conf.path.make_node(fname)
-            writeConfig(conf, fftw_callback, 'fftw_h', infile='fftw/fftw.h.in', outfile='fftw/fftw.h', 
+            writeConfig(conf, fftw_callback, 'fftw_h', infile='fftw/fftw.h.in', outfile='fftw/fftw.h',
                         path=driverNode, feature='handleDefs')
-            
-            writeConfig(conf, fftw_callback, 'fftw', infile='fftw/config.h.in', outfile='fftw/config.h', 
+
+            writeConfig(conf, fftw_callback, 'fftw', infile='fftw/config.h.in', outfile='fftw/config.h',
                         path=driverNode, feature='handleDefs')
 
         elif conf.check(lib='fftw', uselib_store='FFT',
@@ -167,14 +167,14 @@ def build(bld):
     driversNode = bld.path
 
     sourceFiles = []
-    
+
     if 'MAKE_FFT' in env:
         fname = 'fftw-2.1.5'
-        
+
         driverNode = driversNode.make_node(fname)
 
         #bld.add_group()
-        
+
         #copied from fftw Makefile
         NOTW_CODELETS = 'fn_1.c fn_2.c fn_3.c fn_4.c fn_5.c fn_6.c fn_7.c fn_8.c fn_9.c fn_10.c fn_11.c fn_12.c fn_13.c fn_14.c fn_15.c fn_16.c fn_32.c fn_64.c'
         TWID_CODELETS = 'ftw_2.c ftw_3.c ftw_4.c ftw_5.c ftw_6.c ftw_7.c ftw_8.c ftw_9.c ftw_10.c ftw_16.c ftw_32.c ftw_64.c'
@@ -183,12 +183,12 @@ def build(bld):
         OTHERSRC = 'timer.c config.c planner.c twiddle.c executor.c ' \
                'generic.c fftwnd.c malloc.c wisdom.c wisdomio.c putils.c rader.c ' \
                    'fftwf77.c'
-        
+
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             defs = ['BUILD_FFTW_DLL']
         else:
             defs = []
-        
+
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         fftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
@@ -196,7 +196,7 @@ def build(bld):
                                 target='fftw', path=driverNode,
                                 name='FFT', defines=env['DEFINES'] + defs,
                                 env=env.derive(), targets_to_add=[])
-        
+
         if env['install_libs']:
             fftw.install_path = env['install_libdir']
 
@@ -205,7 +205,7 @@ def build(bld):
         NOTWI_CODELETS = 'fcr_1.c fcr_2.c fcr_3.c fcr_4.c fcr_5.c fcr_6.c fcr_7.c fcr_8.c fcr_9.c fcr_10.c fcr_11.c fcr_12.c fcr_13.c fcr_14.c fcr_15.c fcr_16.c fcr_32.c fcr_64.c fcr_128.c'
         TWIDI_CODELETS = 'fhb_2.c fhb_3.c fhb_4.c fhb_5.c fhb_6.c fhb_7.c fhb_8.c fhb_9.c fhb_10.c fhb_16.c fhb_32.c'
         OTHERSRC = 'rconfig.c rplanner.c rexec.c rexec2.c rfftwnd.c rgeneric.c  rfftwf77.c'
-        
+
         sources = map(lambda s: 'rfftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         rfftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
@@ -217,7 +217,7 @@ def build(bld):
                                 targets_to_add=[])
         if env['install_libs']:
             rfftw.install_path = env['install_libdir']
-        
+
         # When building RFFTW as a DLL on Windows we need to include FFTW sources as well.
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             rfftw.source += fftw.source
@@ -250,7 +250,7 @@ def build(bld):
 def distclean(context):
     #remove the untarred directories
     import shutil
-    
+
     dirs = map(lambda d: os.path.join(context.path.abspath(), d),
                ['fftw-2.1.5'])
     for d in dirs:
@@ -258,4 +258,4 @@ def distclean(context):
             if os.path.exists(d):
                 shutil.rmtree(d, ignore_errors=True)
         except:{}
-    
+

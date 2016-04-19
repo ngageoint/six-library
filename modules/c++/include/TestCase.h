@@ -47,6 +47,7 @@
 #  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
 #  define TEST_EXCEPTION(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (except::Throwable&){}
+#  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(Y&) { }  catch (except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
 #  define TEST_CASE(X) void X(std::string testName)
 
 #else /* C only */
