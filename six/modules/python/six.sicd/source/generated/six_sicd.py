@@ -8696,7 +8696,7 @@ def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows,
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
 
 import numpy as np
-from six_base import VectorString
+from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)

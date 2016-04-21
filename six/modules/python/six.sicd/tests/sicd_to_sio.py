@@ -11,9 +11,9 @@ if __name__ == '__main__':
         sioPath = nitfPath.rstrip(".nitf") + ".sio"
         schemaPath = os.path.abspath(sys.argv[2])
     else:
-        print "Usage: python " + sys.argv[0] + " <NITF path> <Schema path> [startRow numRows startCol numCols]"
+        print("Usage: python " + sys.argv[0] + " <NITF path> <Schema path> [startRow numRows startCol numCols]")
         sys.exit(0)
-    
+
     schemaPaths = six_base.VectorString()
     schemaPaths.push_back(schemaPath)
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         widebandData, complexData = six_sicd.readRegion(nitfPath, sfl, snl, sfe, sne, schemaPaths)
     else:
         widebandData, complexData = six_sicd.read(nitfPath, schemaPaths)
-    
+
     sio_lite.write(widebandData, sioPath)
 
-    print "Wrote " + sioPath
+    print("Wrote " + sioPath)
