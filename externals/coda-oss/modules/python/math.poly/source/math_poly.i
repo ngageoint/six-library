@@ -7,10 +7,16 @@
 %ignore math::poly::OneD<Vector3>::integrate;
 %ignore math::poly::OneD<Vector3>::power;
 
+
 %{
 #ifndef SWIGPY_SLICE_ARG(obj)
-# define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# if PY_VERSION_HEX >= 0x03000000
+#  define SWIGPY_SLICE_ARG(obj) ((PyObject*) (obj))
+# else
+#  define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# endif
 #endif
+
 #include <string>
 #include <sstream>
 #include "import/math/linear.h"
@@ -40,7 +46,7 @@ typedef math::linear::Vector<double> VectorDouble;
 %extend math::poly::OneD<double>
 {
     double __getitem__(long i)
-    { 
+    {
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -48,9 +54,9 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return (*self)[i];
     }
-    
+
     void __setitem__(long i, double val)
-    { 
+    {
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -58,7 +64,7 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         (*self)[i] = val;
     }
-    
+
     std::string __str__()
     {
         std::ostringstream ostr;
@@ -186,14 +192,14 @@ typedef math::linear::Vector<double> VectorDouble;
 %extend math::poly::OneD<Vector3>
 {
     public:
-        Vector3 __getitem__(long i) 
-        { 
-            return (*self)[i]; 
+        Vector3 __getitem__(long i)
+        {
+            return (*self)[i];
         }
 
-        void __setitem__(long i, Vector3 val) 
-        { 
-            (*self)[i] = val; 
+        void __setitem__(long i, Vector3 val)
+        {
+            (*self)[i] = val;
         }
 
         std::string __str__()
@@ -237,20 +243,20 @@ typedef math::linear::Vector<double> VectorDouble;
 %extend std::vector<double>
 {
     public:
-        double __getitem__(long i) 
-        { 
-            return (*self)[i]; 
+        double __getitem__(long i)
+        {
+            return (*self)[i];
         }
 
-        void __setitem__(long i, double val) 
-        { 
-            (*self)[i] = val; 
+        void __setitem__(long i, double val)
+        {
+            (*self)[i] = val;
         }
 
         std::string __str__()
         {
             std::ostringstream ostr;
-            
+
             ostr << "std::vector<double>[ ";
             for (int i = 0; i < self->size(); i++)
             {
