@@ -530,13 +530,16 @@ class CPPContext(Context.Context):
                 # This gets generated into the source/generated folder and we'll
                 # actually check it in so other developers can still use the Python
                 # bindings even if they don't have Swig
+                flags = '-python -c++'
+                if sys.version_info[0] >= 3:
+                    flags += ' -py3'
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
                     source = swigSource,
                     target = target,
                     use = use,
                     export_includes = exportIncludes,
                     env = env.derive(),
-                    swig_flags = '-python -c++',
+                    swig_flags = flags,
                     install_path = installPath,
                     name = taskName,
                     targets_to_add = targetsToAdd,

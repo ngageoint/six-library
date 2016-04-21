@@ -7524,7 +7524,11 @@ SWIGINTERN PyObject *_wrap_StreamReader_available(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -7597,7 +7601,11 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
@@ -7671,7 +7679,11 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -8089,7 +8101,11 @@ SWIGINTERN PyObject *_wrap_FileReader_seek(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< sio::lite::FileReader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -8128,7 +8144,11 @@ SWIGINTERN PyObject *_wrap_FileReader_seek(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -8182,7 +8202,11 @@ SWIGINTERN PyObject *_wrap_FileReader_tell(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
