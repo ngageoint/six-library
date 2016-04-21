@@ -4825,18 +4825,25 @@ SWIGINTERNINLINE PyObject*
   #define SWIG_From_double   PyFloat_FromDouble 
 
 
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
 SWIGINTERNINLINE PyObject* 
 SWIG_From_unsigned_SS_long  (unsigned long value)
 {
   return (value > LONG_MAX) ?
     PyLong_FromUnsignedLong(value) : PyLong_FromLong(static_cast< long >(value)); 
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
 }
 
 
@@ -4858,13 +4865,6 @@ SWIGINTERN long six_Parameter___int__(six::Parameter *self){
 SWIGINTERN double six_Parameter___float__(six::Parameter *self){
       return str::toType<double>(self->str());
     }
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
 SWIGINTERN six::Parameter &six_ParameterCollection___getitem__(six::ParameterCollection *self,size_t i){
       return (*self)[i];
     }
@@ -9606,6 +9606,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AppliedType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":AppliedType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::AppliedType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_AppliedType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::AppliedType *arg1 = (six::AppliedType *) 0 ;
@@ -10619,6 +10662,49 @@ SWIGINTERN PyObject *_wrap_AutofocusType___ge__(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AutofocusType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":AutofocusType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::AutofocusType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -11644,6 +11730,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_BooleanType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":BooleanType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::BooleanType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_BooleanType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::BooleanType *arg1 = (six::BooleanType *) 0 ;
@@ -12657,6 +12786,49 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___ge__(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ByteSwapping_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ByteSwapping_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ByteSwapping::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -13682,6 +13854,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_CollectType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":CollectType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::CollectType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_CollectType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::CollectType *arg1 = (six::CollectType *) 0 ;
@@ -14695,6 +14910,49 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___ge__(PyObject *SWIGUNUSEDPARM(
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ComplexImageGridType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ComplexImageGridType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ComplexImageGridType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -15720,6 +15978,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ComplexImagePlaneType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ComplexImagePlaneType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::ComplexImagePlaneType *arg1 = (six::ComplexImagePlaneType *) 0 ;
@@ -16733,6 +17034,49 @@ SWIGINTERN PyObject *_wrap_DataType___ge__(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DataType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":DataType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::DataType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -17758,6 +18102,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_DecimationMethod_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":DecimationMethod_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::DecimationMethod::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_DecimationMethod_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::DecimationMethod *arg1 = (six::DecimationMethod *) 0 ;
@@ -18771,6 +19158,49 @@ SWIGINTERN PyObject *_wrap_DemodType___ge__(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DemodType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":DemodType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::DemodType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -19796,6 +20226,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_DisplayType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":DisplayType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::DisplayType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_DisplayType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::DisplayType *arg1 = (six::DisplayType *) 0 ;
@@ -20809,6 +21282,49 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___ge__(PyObject *SWIGUNUSEDPARM(
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DualPolarizationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":DualPolarizationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::DualPolarizationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -21834,6 +22350,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_EarthModelType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":EarthModelType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::EarthModelType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_EarthModelType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::EarthModelType *arg1 = (six::EarthModelType *) 0 ;
@@ -22847,6 +23406,49 @@ SWIGINTERN PyObject *_wrap_FFTSign___ge__(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FFTSign_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":FFTSign_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::FFTSign::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -23872,6 +24474,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ImageBeamCompensationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ImageBeamCompensationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::ImageBeamCompensationType *arg1 = (six::ImageBeamCompensationType *) 0 ;
@@ -24891,6 +25536,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ImageFormationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ImageFormationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ImageFormationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ImageFormationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::ImageFormationType *arg1 = (six::ImageFormationType *) 0 ;
@@ -25055,27 +25743,24 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
+  std::string arg1 ;
   PyObject * obj0 = 0 ;
   six::MagnificationMethod *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_MagnificationMethod",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string const &""'"); 
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string""'"); 
     }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MagnificationMethod" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
   {
     try
     {
-      result = (six::MagnificationMethod *)new six::MagnificationMethod((std::string const &)*arg1);
+      result = (six::MagnificationMethod *)new six::MagnificationMethod(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -25104,10 +25789,8 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_1(PyObject *SWIGUNUSEDP
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MagnificationMethod, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -25202,7 +25885,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_MagnificationMethod'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    six::MagnificationMethod::MagnificationMethod()\n"
-    "    six::MagnificationMethod::MagnificationMethod(std::string const &)\n"
+    "    six::MagnificationMethod::MagnificationMethod(std::string)\n"
     "    six::MagnificationMethod::MagnificationMethod(int)\n");
   return 0;
 }
@@ -25909,6 +26592,49 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___ge__(PyObject *SWIGUNUSEDPARM(s
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MagnificationMethod_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":MagnificationMethod_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::MagnificationMethod::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -26934,6 +27660,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_OrientationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":OrientationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::OrientationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_OrientationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::OrientationType *arg1 = (six::OrientationType *) 0 ;
@@ -27953,6 +28722,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PixelType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":PixelType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::PixelType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PixelType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::PixelType *arg1 = (six::PixelType *) 0 ;
@@ -28117,27 +28929,24 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
+  std::string arg1 ;
   PyObject * obj0 = 0 ;
   six::PolarizationSequenceType *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_PolarizationSequenceType",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PolarizationSequenceType" "', argument " "1"" of type '" "std::string const &""'"); 
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_PolarizationSequenceType" "', argument " "1"" of type '" "std::string""'"); 
     }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PolarizationSequenceType" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
   {
     try
     {
-      result = (six::PolarizationSequenceType *)new six::PolarizationSequenceType((std::string const &)*arg1);
+      result = (six::PolarizationSequenceType *)new six::PolarizationSequenceType(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -28166,10 +28975,8 @@ SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType__SWIG_1(PyObject *SWIGUN
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -28264,9 +29071,60 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_PolarizationSequenceType'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    six::PolarizationSequenceType::PolarizationSequenceType()\n"
-    "    six::PolarizationSequenceType::PolarizationSequenceType(std::string const &)\n"
+    "    six::PolarizationSequenceType::PolarizationSequenceType(std::string)\n"
     "    six::PolarizationSequenceType::PolarizationSequenceType(int)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PolarizationSequenceType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::PolarizationSequenceType *arg1 = (six::PolarizationSequenceType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolarizationSequenceType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolarizationSequenceType" "', argument " "1"" of type '" "six::PolarizationSequenceType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::PolarizationSequenceType * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -28926,6 +29784,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PolarizationSequenceType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":PolarizationSequenceType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::PolarizationSequenceType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PolarizationSequenceType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::PolarizationSequenceType *arg1 = (six::PolarizationSequenceType *) 0 ;
@@ -29038,57 +29939,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_PolarizationSequenceType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::PolarizationSequenceType *arg1 = (six::PolarizationSequenceType *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolarizationSequenceType",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolarizationSequenceType" "', argument " "1"" of type '" "six::PolarizationSequenceType *""'"); 
-  }
-  arg1 = reinterpret_cast< six::PolarizationSequenceType * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *PolarizationSequenceType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -29141,27 +29991,24 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
+  std::string arg1 ;
   PyObject * obj0 = 0 ;
   six::PolarizationType *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_PolarizationType",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PolarizationType" "', argument " "1"" of type '" "std::string const &""'"); 
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_PolarizationType" "', argument " "1"" of type '" "std::string""'"); 
     }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PolarizationType" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
   {
     try
     {
-      result = (six::PolarizationType *)new six::PolarizationType((std::string const &)*arg1);
+      result = (six::PolarizationType *)new six::PolarizationType(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -29190,10 +30037,8 @@ SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_1(PyObject *SWIGUNUSEDPARM
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -29288,9 +30133,60 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_PolarizationType'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    six::PolarizationType::PolarizationType()\n"
-    "    six::PolarizationType::PolarizationType(std::string const &)\n"
+    "    six::PolarizationType::PolarizationType(std::string)\n"
     "    six::PolarizationType::PolarizationType(int)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PolarizationType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::PolarizationType *arg1 = (six::PolarizationType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolarizationType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolarizationType" "', argument " "1"" of type '" "six::PolarizationType *""'"); 
+  }
+  arg1 = reinterpret_cast< six::PolarizationType * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -29950,6 +30846,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PolarizationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":PolarizationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::PolarizationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PolarizationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::PolarizationType *arg1 = (six::PolarizationType *) 0 ;
@@ -30056,57 +30995,6 @@ SWIGINTERN PyObject *_wrap_PolarizationType_value_get(PyObject *SWIGUNUSEDPARM(s
     }
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_PolarizationType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::PolarizationType *arg1 = (six::PolarizationType *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolarizationType",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolarizationType" "', argument " "1"" of type '" "six::PolarizationType *""'"); 
-  }
-  arg1 = reinterpret_cast< six::PolarizationType * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -31014,6 +31902,49 @@ SWIGINTERN PyObject *_wrap_ProjectionType___ge__(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ProjectionType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ProjectionType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::ProjectionType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -32039,6 +32970,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_RMAlgoType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":RMAlgoType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::RMAlgoType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_RMAlgoType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::RMAlgoType *arg1 = (six::RMAlgoType *) 0 ;
@@ -33052,6 +34026,49 @@ SWIGINTERN PyObject *_wrap_RadarModeType___ge__(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RadarModeType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":RadarModeType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::RadarModeType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -34077,6 +35094,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_RegionType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":RegionType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::RegionType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_RegionType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::RegionType *arg1 = (six::RegionType *) 0 ;
@@ -35090,6 +36150,49 @@ SWIGINTERN PyObject *_wrap_RowColEnum___ge__(PyObject *SWIGUNUSEDPARM(self), PyO
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RowColEnum_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":RowColEnum_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::RowColEnum::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -36115,6 +37218,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SCPType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":SCPType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::SCPType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SCPType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::SCPType *arg1 = (six::SCPType *) 0 ;
@@ -37128,6 +38274,49 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___ge__(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SideOfTrackType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":SideOfTrackType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::SideOfTrackType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -38153,6 +39342,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":SlowTimeBeamCompensationType_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::SlowTimeBeamCompensationType::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::SlowTimeBeamCompensationType *arg1 = (six::SlowTimeBeamCompensationType *) 0 ;
@@ -39166,6 +40398,49 @@ SWIGINTERN PyObject *_wrap_XYZEnum___ge__(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XYZEnum_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":XYZEnum_size")) SWIG_fail;
+  {
+    try
+    {
+      result = six::XYZEnum::size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -73035,6 +74310,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AppliedType___gt__", _wrap_AppliedType___gt__, METH_VARARGS, (char *)"AppliedType___gt__(AppliedType self, AppliedType o) -> bool"},
 	 { (char *)"AppliedType___le__", _wrap_AppliedType___le__, METH_VARARGS, (char *)"AppliedType___le__(AppliedType self, AppliedType o) -> bool"},
 	 { (char *)"AppliedType___ge__", _wrap_AppliedType___ge__, METH_VARARGS, (char *)"AppliedType___ge__(AppliedType self, AppliedType o) -> bool"},
+	 { (char *)"AppliedType_size", _wrap_AppliedType_size, METH_VARARGS, (char *)"AppliedType_size() -> size_t"},
 	 { (char *)"AppliedType_value_set", _wrap_AppliedType_value_set, METH_VARARGS, (char *)"AppliedType_value_set(AppliedType self, int value)"},
 	 { (char *)"AppliedType_value_get", _wrap_AppliedType_value_get, METH_VARARGS, (char *)"AppliedType_value_get(AppliedType self) -> int"},
 	 { (char *)"AppliedType_swigregister", AppliedType_swigregister, METH_VARARGS, NULL},
@@ -73057,6 +74333,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AutofocusType___gt__", _wrap_AutofocusType___gt__, METH_VARARGS, (char *)"AutofocusType___gt__(AutofocusType self, AutofocusType o) -> bool"},
 	 { (char *)"AutofocusType___le__", _wrap_AutofocusType___le__, METH_VARARGS, (char *)"AutofocusType___le__(AutofocusType self, AutofocusType o) -> bool"},
 	 { (char *)"AutofocusType___ge__", _wrap_AutofocusType___ge__, METH_VARARGS, (char *)"AutofocusType___ge__(AutofocusType self, AutofocusType o) -> bool"},
+	 { (char *)"AutofocusType_size", _wrap_AutofocusType_size, METH_VARARGS, (char *)"AutofocusType_size() -> size_t"},
 	 { (char *)"AutofocusType_value_set", _wrap_AutofocusType_value_set, METH_VARARGS, (char *)"AutofocusType_value_set(AutofocusType self, int value)"},
 	 { (char *)"AutofocusType_value_get", _wrap_AutofocusType_value_get, METH_VARARGS, (char *)"AutofocusType_value_get(AutofocusType self) -> int"},
 	 { (char *)"AutofocusType_swigregister", AutofocusType_swigregister, METH_VARARGS, NULL},
@@ -73079,6 +74356,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BooleanType___gt__", _wrap_BooleanType___gt__, METH_VARARGS, (char *)"BooleanType___gt__(BooleanType self, BooleanType o) -> bool"},
 	 { (char *)"BooleanType___le__", _wrap_BooleanType___le__, METH_VARARGS, (char *)"BooleanType___le__(BooleanType self, BooleanType o) -> bool"},
 	 { (char *)"BooleanType___ge__", _wrap_BooleanType___ge__, METH_VARARGS, (char *)"BooleanType___ge__(BooleanType self, BooleanType o) -> bool"},
+	 { (char *)"BooleanType_size", _wrap_BooleanType_size, METH_VARARGS, (char *)"BooleanType_size() -> size_t"},
 	 { (char *)"BooleanType_value_set", _wrap_BooleanType_value_set, METH_VARARGS, (char *)"BooleanType_value_set(BooleanType self, int value)"},
 	 { (char *)"BooleanType_value_get", _wrap_BooleanType_value_get, METH_VARARGS, (char *)"BooleanType_value_get(BooleanType self) -> int"},
 	 { (char *)"BooleanType_swigregister", BooleanType_swigregister, METH_VARARGS, NULL},
@@ -73101,6 +74379,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ByteSwapping___gt__", _wrap_ByteSwapping___gt__, METH_VARARGS, (char *)"ByteSwapping___gt__(ByteSwapping self, ByteSwapping o) -> bool"},
 	 { (char *)"ByteSwapping___le__", _wrap_ByteSwapping___le__, METH_VARARGS, (char *)"ByteSwapping___le__(ByteSwapping self, ByteSwapping o) -> bool"},
 	 { (char *)"ByteSwapping___ge__", _wrap_ByteSwapping___ge__, METH_VARARGS, (char *)"ByteSwapping___ge__(ByteSwapping self, ByteSwapping o) -> bool"},
+	 { (char *)"ByteSwapping_size", _wrap_ByteSwapping_size, METH_VARARGS, (char *)"ByteSwapping_size() -> size_t"},
 	 { (char *)"ByteSwapping_value_set", _wrap_ByteSwapping_value_set, METH_VARARGS, (char *)"ByteSwapping_value_set(ByteSwapping self, int value)"},
 	 { (char *)"ByteSwapping_value_get", _wrap_ByteSwapping_value_get, METH_VARARGS, (char *)"ByteSwapping_value_get(ByteSwapping self) -> int"},
 	 { (char *)"ByteSwapping_swigregister", ByteSwapping_swigregister, METH_VARARGS, NULL},
@@ -73123,6 +74402,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CollectType___gt__", _wrap_CollectType___gt__, METH_VARARGS, (char *)"CollectType___gt__(CollectType self, CollectType o) -> bool"},
 	 { (char *)"CollectType___le__", _wrap_CollectType___le__, METH_VARARGS, (char *)"CollectType___le__(CollectType self, CollectType o) -> bool"},
 	 { (char *)"CollectType___ge__", _wrap_CollectType___ge__, METH_VARARGS, (char *)"CollectType___ge__(CollectType self, CollectType o) -> bool"},
+	 { (char *)"CollectType_size", _wrap_CollectType_size, METH_VARARGS, (char *)"CollectType_size() -> size_t"},
 	 { (char *)"CollectType_value_set", _wrap_CollectType_value_set, METH_VARARGS, (char *)"CollectType_value_set(CollectType self, int value)"},
 	 { (char *)"CollectType_value_get", _wrap_CollectType_value_get, METH_VARARGS, (char *)"CollectType_value_get(CollectType self) -> int"},
 	 { (char *)"CollectType_swigregister", CollectType_swigregister, METH_VARARGS, NULL},
@@ -73145,6 +74425,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexImageGridType___gt__", _wrap_ComplexImageGridType___gt__, METH_VARARGS, (char *)"ComplexImageGridType___gt__(ComplexImageGridType self, ComplexImageGridType o) -> bool"},
 	 { (char *)"ComplexImageGridType___le__", _wrap_ComplexImageGridType___le__, METH_VARARGS, (char *)"ComplexImageGridType___le__(ComplexImageGridType self, ComplexImageGridType o) -> bool"},
 	 { (char *)"ComplexImageGridType___ge__", _wrap_ComplexImageGridType___ge__, METH_VARARGS, (char *)"ComplexImageGridType___ge__(ComplexImageGridType self, ComplexImageGridType o) -> bool"},
+	 { (char *)"ComplexImageGridType_size", _wrap_ComplexImageGridType_size, METH_VARARGS, (char *)"ComplexImageGridType_size() -> size_t"},
 	 { (char *)"ComplexImageGridType_value_set", _wrap_ComplexImageGridType_value_set, METH_VARARGS, (char *)"ComplexImageGridType_value_set(ComplexImageGridType self, int value)"},
 	 { (char *)"ComplexImageGridType_value_get", _wrap_ComplexImageGridType_value_get, METH_VARARGS, (char *)"ComplexImageGridType_value_get(ComplexImageGridType self) -> int"},
 	 { (char *)"ComplexImageGridType_swigregister", ComplexImageGridType_swigregister, METH_VARARGS, NULL},
@@ -73167,6 +74448,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexImagePlaneType___gt__", _wrap_ComplexImagePlaneType___gt__, METH_VARARGS, (char *)"ComplexImagePlaneType___gt__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"},
 	 { (char *)"ComplexImagePlaneType___le__", _wrap_ComplexImagePlaneType___le__, METH_VARARGS, (char *)"ComplexImagePlaneType___le__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"},
 	 { (char *)"ComplexImagePlaneType___ge__", _wrap_ComplexImagePlaneType___ge__, METH_VARARGS, (char *)"ComplexImagePlaneType___ge__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"},
+	 { (char *)"ComplexImagePlaneType_size", _wrap_ComplexImagePlaneType_size, METH_VARARGS, (char *)"ComplexImagePlaneType_size() -> size_t"},
 	 { (char *)"ComplexImagePlaneType_value_set", _wrap_ComplexImagePlaneType_value_set, METH_VARARGS, (char *)"ComplexImagePlaneType_value_set(ComplexImagePlaneType self, int value)"},
 	 { (char *)"ComplexImagePlaneType_value_get", _wrap_ComplexImagePlaneType_value_get, METH_VARARGS, (char *)"ComplexImagePlaneType_value_get(ComplexImagePlaneType self) -> int"},
 	 { (char *)"ComplexImagePlaneType_swigregister", ComplexImagePlaneType_swigregister, METH_VARARGS, NULL},
@@ -73189,6 +74471,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DataType___gt__", _wrap_DataType___gt__, METH_VARARGS, (char *)"DataType___gt__(DataType self, DataType o) -> bool"},
 	 { (char *)"DataType___le__", _wrap_DataType___le__, METH_VARARGS, (char *)"DataType___le__(DataType self, DataType o) -> bool"},
 	 { (char *)"DataType___ge__", _wrap_DataType___ge__, METH_VARARGS, (char *)"DataType___ge__(DataType self, DataType o) -> bool"},
+	 { (char *)"DataType_size", _wrap_DataType_size, METH_VARARGS, (char *)"DataType_size() -> size_t"},
 	 { (char *)"DataType_value_set", _wrap_DataType_value_set, METH_VARARGS, (char *)"DataType_value_set(DataType self, int value)"},
 	 { (char *)"DataType_value_get", _wrap_DataType_value_get, METH_VARARGS, (char *)"DataType_value_get(DataType self) -> int"},
 	 { (char *)"DataType_swigregister", DataType_swigregister, METH_VARARGS, NULL},
@@ -73211,6 +74494,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DecimationMethod___gt__", _wrap_DecimationMethod___gt__, METH_VARARGS, (char *)"DecimationMethod___gt__(DecimationMethod self, DecimationMethod o) -> bool"},
 	 { (char *)"DecimationMethod___le__", _wrap_DecimationMethod___le__, METH_VARARGS, (char *)"DecimationMethod___le__(DecimationMethod self, DecimationMethod o) -> bool"},
 	 { (char *)"DecimationMethod___ge__", _wrap_DecimationMethod___ge__, METH_VARARGS, (char *)"DecimationMethod___ge__(DecimationMethod self, DecimationMethod o) -> bool"},
+	 { (char *)"DecimationMethod_size", _wrap_DecimationMethod_size, METH_VARARGS, (char *)"DecimationMethod_size() -> size_t"},
 	 { (char *)"DecimationMethod_value_set", _wrap_DecimationMethod_value_set, METH_VARARGS, (char *)"DecimationMethod_value_set(DecimationMethod self, int value)"},
 	 { (char *)"DecimationMethod_value_get", _wrap_DecimationMethod_value_get, METH_VARARGS, (char *)"DecimationMethod_value_get(DecimationMethod self) -> int"},
 	 { (char *)"DecimationMethod_swigregister", DecimationMethod_swigregister, METH_VARARGS, NULL},
@@ -73233,6 +74517,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DemodType___gt__", _wrap_DemodType___gt__, METH_VARARGS, (char *)"DemodType___gt__(DemodType self, DemodType o) -> bool"},
 	 { (char *)"DemodType___le__", _wrap_DemodType___le__, METH_VARARGS, (char *)"DemodType___le__(DemodType self, DemodType o) -> bool"},
 	 { (char *)"DemodType___ge__", _wrap_DemodType___ge__, METH_VARARGS, (char *)"DemodType___ge__(DemodType self, DemodType o) -> bool"},
+	 { (char *)"DemodType_size", _wrap_DemodType_size, METH_VARARGS, (char *)"DemodType_size() -> size_t"},
 	 { (char *)"DemodType_value_set", _wrap_DemodType_value_set, METH_VARARGS, (char *)"DemodType_value_set(DemodType self, int value)"},
 	 { (char *)"DemodType_value_get", _wrap_DemodType_value_get, METH_VARARGS, (char *)"DemodType_value_get(DemodType self) -> int"},
 	 { (char *)"DemodType_swigregister", DemodType_swigregister, METH_VARARGS, NULL},
@@ -73255,6 +74540,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DisplayType___gt__", _wrap_DisplayType___gt__, METH_VARARGS, (char *)"DisplayType___gt__(DisplayType self, DisplayType o) -> bool"},
 	 { (char *)"DisplayType___le__", _wrap_DisplayType___le__, METH_VARARGS, (char *)"DisplayType___le__(DisplayType self, DisplayType o) -> bool"},
 	 { (char *)"DisplayType___ge__", _wrap_DisplayType___ge__, METH_VARARGS, (char *)"DisplayType___ge__(DisplayType self, DisplayType o) -> bool"},
+	 { (char *)"DisplayType_size", _wrap_DisplayType_size, METH_VARARGS, (char *)"DisplayType_size() -> size_t"},
 	 { (char *)"DisplayType_value_set", _wrap_DisplayType_value_set, METH_VARARGS, (char *)"DisplayType_value_set(DisplayType self, int value)"},
 	 { (char *)"DisplayType_value_get", _wrap_DisplayType_value_get, METH_VARARGS, (char *)"DisplayType_value_get(DisplayType self) -> int"},
 	 { (char *)"DisplayType_swigregister", DisplayType_swigregister, METH_VARARGS, NULL},
@@ -73277,6 +74563,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DualPolarizationType___gt__", _wrap_DualPolarizationType___gt__, METH_VARARGS, (char *)"DualPolarizationType___gt__(DualPolarizationType self, DualPolarizationType o) -> bool"},
 	 { (char *)"DualPolarizationType___le__", _wrap_DualPolarizationType___le__, METH_VARARGS, (char *)"DualPolarizationType___le__(DualPolarizationType self, DualPolarizationType o) -> bool"},
 	 { (char *)"DualPolarizationType___ge__", _wrap_DualPolarizationType___ge__, METH_VARARGS, (char *)"DualPolarizationType___ge__(DualPolarizationType self, DualPolarizationType o) -> bool"},
+	 { (char *)"DualPolarizationType_size", _wrap_DualPolarizationType_size, METH_VARARGS, (char *)"DualPolarizationType_size() -> size_t"},
 	 { (char *)"DualPolarizationType_value_set", _wrap_DualPolarizationType_value_set, METH_VARARGS, (char *)"DualPolarizationType_value_set(DualPolarizationType self, int value)"},
 	 { (char *)"DualPolarizationType_value_get", _wrap_DualPolarizationType_value_get, METH_VARARGS, (char *)"DualPolarizationType_value_get(DualPolarizationType self) -> int"},
 	 { (char *)"DualPolarizationType_swigregister", DualPolarizationType_swigregister, METH_VARARGS, NULL},
@@ -73299,6 +74586,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"EarthModelType___gt__", _wrap_EarthModelType___gt__, METH_VARARGS, (char *)"EarthModelType___gt__(EarthModelType self, EarthModelType o) -> bool"},
 	 { (char *)"EarthModelType___le__", _wrap_EarthModelType___le__, METH_VARARGS, (char *)"EarthModelType___le__(EarthModelType self, EarthModelType o) -> bool"},
 	 { (char *)"EarthModelType___ge__", _wrap_EarthModelType___ge__, METH_VARARGS, (char *)"EarthModelType___ge__(EarthModelType self, EarthModelType o) -> bool"},
+	 { (char *)"EarthModelType_size", _wrap_EarthModelType_size, METH_VARARGS, (char *)"EarthModelType_size() -> size_t"},
 	 { (char *)"EarthModelType_value_set", _wrap_EarthModelType_value_set, METH_VARARGS, (char *)"EarthModelType_value_set(EarthModelType self, int value)"},
 	 { (char *)"EarthModelType_value_get", _wrap_EarthModelType_value_get, METH_VARARGS, (char *)"EarthModelType_value_get(EarthModelType self) -> int"},
 	 { (char *)"EarthModelType_swigregister", EarthModelType_swigregister, METH_VARARGS, NULL},
@@ -73321,6 +74609,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FFTSign___gt__", _wrap_FFTSign___gt__, METH_VARARGS, (char *)"FFTSign___gt__(FFTSign self, FFTSign o) -> bool"},
 	 { (char *)"FFTSign___le__", _wrap_FFTSign___le__, METH_VARARGS, (char *)"FFTSign___le__(FFTSign self, FFTSign o) -> bool"},
 	 { (char *)"FFTSign___ge__", _wrap_FFTSign___ge__, METH_VARARGS, (char *)"FFTSign___ge__(FFTSign self, FFTSign o) -> bool"},
+	 { (char *)"FFTSign_size", _wrap_FFTSign_size, METH_VARARGS, (char *)"FFTSign_size() -> size_t"},
 	 { (char *)"FFTSign_value_set", _wrap_FFTSign_value_set, METH_VARARGS, (char *)"FFTSign_value_set(FFTSign self, int value)"},
 	 { (char *)"FFTSign_value_get", _wrap_FFTSign_value_get, METH_VARARGS, (char *)"FFTSign_value_get(FFTSign self) -> int"},
 	 { (char *)"FFTSign_swigregister", FFTSign_swigregister, METH_VARARGS, NULL},
@@ -73343,6 +74632,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageBeamCompensationType___gt__", _wrap_ImageBeamCompensationType___gt__, METH_VARARGS, (char *)"ImageBeamCompensationType___gt__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"},
 	 { (char *)"ImageBeamCompensationType___le__", _wrap_ImageBeamCompensationType___le__, METH_VARARGS, (char *)"ImageBeamCompensationType___le__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"},
 	 { (char *)"ImageBeamCompensationType___ge__", _wrap_ImageBeamCompensationType___ge__, METH_VARARGS, (char *)"ImageBeamCompensationType___ge__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"},
+	 { (char *)"ImageBeamCompensationType_size", _wrap_ImageBeamCompensationType_size, METH_VARARGS, (char *)"ImageBeamCompensationType_size() -> size_t"},
 	 { (char *)"ImageBeamCompensationType_value_set", _wrap_ImageBeamCompensationType_value_set, METH_VARARGS, (char *)"ImageBeamCompensationType_value_set(ImageBeamCompensationType self, int value)"},
 	 { (char *)"ImageBeamCompensationType_value_get", _wrap_ImageBeamCompensationType_value_get, METH_VARARGS, (char *)"ImageBeamCompensationType_value_get(ImageBeamCompensationType self) -> int"},
 	 { (char *)"ImageBeamCompensationType_swigregister", ImageBeamCompensationType_swigregister, METH_VARARGS, NULL},
@@ -73365,12 +74655,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageFormationType___gt__", _wrap_ImageFormationType___gt__, METH_VARARGS, (char *)"ImageFormationType___gt__(ImageFormationType self, ImageFormationType o) -> bool"},
 	 { (char *)"ImageFormationType___le__", _wrap_ImageFormationType___le__, METH_VARARGS, (char *)"ImageFormationType___le__(ImageFormationType self, ImageFormationType o) -> bool"},
 	 { (char *)"ImageFormationType___ge__", _wrap_ImageFormationType___ge__, METH_VARARGS, (char *)"ImageFormationType___ge__(ImageFormationType self, ImageFormationType o) -> bool"},
+	 { (char *)"ImageFormationType_size", _wrap_ImageFormationType_size, METH_VARARGS, (char *)"ImageFormationType_size() -> size_t"},
 	 { (char *)"ImageFormationType_value_set", _wrap_ImageFormationType_value_set, METH_VARARGS, (char *)"ImageFormationType_value_set(ImageFormationType self, int value)"},
 	 { (char *)"ImageFormationType_value_get", _wrap_ImageFormationType_value_get, METH_VARARGS, (char *)"ImageFormationType_value_get(ImageFormationType self) -> int"},
 	 { (char *)"ImageFormationType_swigregister", ImageFormationType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_MagnificationMethod", _wrap_new_MagnificationMethod, METH_VARARGS, (char *)"\n"
 		"MagnificationMethod()\n"
-		"MagnificationMethod(std::string const & s)\n"
+		"MagnificationMethod(std::string s)\n"
 		"new_MagnificationMethod(int i) -> MagnificationMethod\n"
 		""},
 	 { (char *)"delete_MagnificationMethod", _wrap_delete_MagnificationMethod, METH_VARARGS, (char *)"delete_MagnificationMethod(MagnificationMethod self)"},
@@ -73387,6 +74678,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MagnificationMethod___gt__", _wrap_MagnificationMethod___gt__, METH_VARARGS, (char *)"MagnificationMethod___gt__(MagnificationMethod self, MagnificationMethod o) -> bool"},
 	 { (char *)"MagnificationMethod___le__", _wrap_MagnificationMethod___le__, METH_VARARGS, (char *)"MagnificationMethod___le__(MagnificationMethod self, MagnificationMethod o) -> bool"},
 	 { (char *)"MagnificationMethod___ge__", _wrap_MagnificationMethod___ge__, METH_VARARGS, (char *)"MagnificationMethod___ge__(MagnificationMethod self, MagnificationMethod o) -> bool"},
+	 { (char *)"MagnificationMethod_size", _wrap_MagnificationMethod_size, METH_VARARGS, (char *)"MagnificationMethod_size() -> size_t"},
 	 { (char *)"MagnificationMethod_value_set", _wrap_MagnificationMethod_value_set, METH_VARARGS, (char *)"MagnificationMethod_value_set(MagnificationMethod self, int value)"},
 	 { (char *)"MagnificationMethod_value_get", _wrap_MagnificationMethod_value_get, METH_VARARGS, (char *)"MagnificationMethod_value_get(MagnificationMethod self) -> int"},
 	 { (char *)"MagnificationMethod_swigregister", MagnificationMethod_swigregister, METH_VARARGS, NULL},
@@ -73409,6 +74701,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"OrientationType___gt__", _wrap_OrientationType___gt__, METH_VARARGS, (char *)"OrientationType___gt__(OrientationType self, OrientationType o) -> bool"},
 	 { (char *)"OrientationType___le__", _wrap_OrientationType___le__, METH_VARARGS, (char *)"OrientationType___le__(OrientationType self, OrientationType o) -> bool"},
 	 { (char *)"OrientationType___ge__", _wrap_OrientationType___ge__, METH_VARARGS, (char *)"OrientationType___ge__(OrientationType self, OrientationType o) -> bool"},
+	 { (char *)"OrientationType_size", _wrap_OrientationType_size, METH_VARARGS, (char *)"OrientationType_size() -> size_t"},
 	 { (char *)"OrientationType_value_set", _wrap_OrientationType_value_set, METH_VARARGS, (char *)"OrientationType_value_set(OrientationType self, int value)"},
 	 { (char *)"OrientationType_value_get", _wrap_OrientationType_value_get, METH_VARARGS, (char *)"OrientationType_value_get(OrientationType self) -> int"},
 	 { (char *)"OrientationType_swigregister", OrientationType_swigregister, METH_VARARGS, NULL},
@@ -73431,14 +74724,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PixelType___gt__", _wrap_PixelType___gt__, METH_VARARGS, (char *)"PixelType___gt__(PixelType self, PixelType o) -> bool"},
 	 { (char *)"PixelType___le__", _wrap_PixelType___le__, METH_VARARGS, (char *)"PixelType___le__(PixelType self, PixelType o) -> bool"},
 	 { (char *)"PixelType___ge__", _wrap_PixelType___ge__, METH_VARARGS, (char *)"PixelType___ge__(PixelType self, PixelType o) -> bool"},
+	 { (char *)"PixelType_size", _wrap_PixelType_size, METH_VARARGS, (char *)"PixelType_size() -> size_t"},
 	 { (char *)"PixelType_value_set", _wrap_PixelType_value_set, METH_VARARGS, (char *)"PixelType_value_set(PixelType self, int value)"},
 	 { (char *)"PixelType_value_get", _wrap_PixelType_value_get, METH_VARARGS, (char *)"PixelType_value_get(PixelType self) -> int"},
 	 { (char *)"PixelType_swigregister", PixelType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PolarizationSequenceType", _wrap_new_PolarizationSequenceType, METH_VARARGS, (char *)"\n"
 		"PolarizationSequenceType()\n"
-		"PolarizationSequenceType(std::string const & str)\n"
-		"new_PolarizationSequenceType(int intValue) -> PolarizationSequenceType\n"
+		"PolarizationSequenceType(std::string s)\n"
+		"new_PolarizationSequenceType(int i) -> PolarizationSequenceType\n"
 		""},
+	 { (char *)"delete_PolarizationSequenceType", _wrap_delete_PolarizationSequenceType, METH_VARARGS, (char *)"delete_PolarizationSequenceType(PolarizationSequenceType self)"},
 	 { (char *)"PolarizationSequenceType_toString", _wrap_PolarizationSequenceType_toString, METH_VARARGS, (char *)"PolarizationSequenceType_toString(PolarizationSequenceType self) -> std::string"},
 	 { (char *)"PolarizationSequenceType___eq__", _wrap_PolarizationSequenceType___eq__, METH_VARARGS, (char *)"\n"
 		"__eq__(PolarizationSequenceType o) -> bool\n"
@@ -73452,15 +74747,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationSequenceType___gt__", _wrap_PolarizationSequenceType___gt__, METH_VARARGS, (char *)"PolarizationSequenceType___gt__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"},
 	 { (char *)"PolarizationSequenceType___le__", _wrap_PolarizationSequenceType___le__, METH_VARARGS, (char *)"PolarizationSequenceType___le__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"},
 	 { (char *)"PolarizationSequenceType___ge__", _wrap_PolarizationSequenceType___ge__, METH_VARARGS, (char *)"PolarizationSequenceType___ge__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"},
+	 { (char *)"PolarizationSequenceType_size", _wrap_PolarizationSequenceType_size, METH_VARARGS, (char *)"PolarizationSequenceType_size() -> size_t"},
 	 { (char *)"PolarizationSequenceType_value_set", _wrap_PolarizationSequenceType_value_set, METH_VARARGS, (char *)"PolarizationSequenceType_value_set(PolarizationSequenceType self, int value)"},
 	 { (char *)"PolarizationSequenceType_value_get", _wrap_PolarizationSequenceType_value_get, METH_VARARGS, (char *)"PolarizationSequenceType_value_get(PolarizationSequenceType self) -> int"},
-	 { (char *)"delete_PolarizationSequenceType", _wrap_delete_PolarizationSequenceType, METH_VARARGS, (char *)"delete_PolarizationSequenceType(PolarizationSequenceType self)"},
 	 { (char *)"PolarizationSequenceType_swigregister", PolarizationSequenceType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PolarizationType", _wrap_new_PolarizationType, METH_VARARGS, (char *)"\n"
 		"PolarizationType()\n"
-		"PolarizationType(std::string const & str)\n"
-		"new_PolarizationType(int intValue) -> PolarizationType\n"
+		"PolarizationType(std::string s)\n"
+		"new_PolarizationType(int i) -> PolarizationType\n"
 		""},
+	 { (char *)"delete_PolarizationType", _wrap_delete_PolarizationType, METH_VARARGS, (char *)"delete_PolarizationType(PolarizationType self)"},
 	 { (char *)"PolarizationType_toString", _wrap_PolarizationType_toString, METH_VARARGS, (char *)"PolarizationType_toString(PolarizationType self) -> std::string"},
 	 { (char *)"PolarizationType___eq__", _wrap_PolarizationType___eq__, METH_VARARGS, (char *)"\n"
 		"__eq__(PolarizationType o) -> bool\n"
@@ -73474,9 +74770,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationType___gt__", _wrap_PolarizationType___gt__, METH_VARARGS, (char *)"PolarizationType___gt__(PolarizationType self, PolarizationType o) -> bool"},
 	 { (char *)"PolarizationType___le__", _wrap_PolarizationType___le__, METH_VARARGS, (char *)"PolarizationType___le__(PolarizationType self, PolarizationType o) -> bool"},
 	 { (char *)"PolarizationType___ge__", _wrap_PolarizationType___ge__, METH_VARARGS, (char *)"PolarizationType___ge__(PolarizationType self, PolarizationType o) -> bool"},
+	 { (char *)"PolarizationType_size", _wrap_PolarizationType_size, METH_VARARGS, (char *)"PolarizationType_size() -> size_t"},
 	 { (char *)"PolarizationType_value_set", _wrap_PolarizationType_value_set, METH_VARARGS, (char *)"PolarizationType_value_set(PolarizationType self, int value)"},
 	 { (char *)"PolarizationType_value_get", _wrap_PolarizationType_value_get, METH_VARARGS, (char *)"PolarizationType_value_get(PolarizationType self) -> int"},
-	 { (char *)"delete_PolarizationType", _wrap_delete_PolarizationType, METH_VARARGS, (char *)"delete_PolarizationType(PolarizationType self)"},
 	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ProjectionType", _wrap_new_ProjectionType, METH_VARARGS, (char *)"\n"
 		"ProjectionType()\n"
@@ -73497,6 +74793,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ProjectionType___gt__", _wrap_ProjectionType___gt__, METH_VARARGS, (char *)"ProjectionType___gt__(ProjectionType self, ProjectionType o) -> bool"},
 	 { (char *)"ProjectionType___le__", _wrap_ProjectionType___le__, METH_VARARGS, (char *)"ProjectionType___le__(ProjectionType self, ProjectionType o) -> bool"},
 	 { (char *)"ProjectionType___ge__", _wrap_ProjectionType___ge__, METH_VARARGS, (char *)"ProjectionType___ge__(ProjectionType self, ProjectionType o) -> bool"},
+	 { (char *)"ProjectionType_size", _wrap_ProjectionType_size, METH_VARARGS, (char *)"ProjectionType_size() -> size_t"},
 	 { (char *)"ProjectionType_value_set", _wrap_ProjectionType_value_set, METH_VARARGS, (char *)"ProjectionType_value_set(ProjectionType self, int value)"},
 	 { (char *)"ProjectionType_value_get", _wrap_ProjectionType_value_get, METH_VARARGS, (char *)"ProjectionType_value_get(ProjectionType self) -> int"},
 	 { (char *)"ProjectionType_swigregister", ProjectionType_swigregister, METH_VARARGS, NULL},
@@ -73519,6 +74816,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RMAlgoType___gt__", _wrap_RMAlgoType___gt__, METH_VARARGS, (char *)"RMAlgoType___gt__(RMAlgoType self, RMAlgoType o) -> bool"},
 	 { (char *)"RMAlgoType___le__", _wrap_RMAlgoType___le__, METH_VARARGS, (char *)"RMAlgoType___le__(RMAlgoType self, RMAlgoType o) -> bool"},
 	 { (char *)"RMAlgoType___ge__", _wrap_RMAlgoType___ge__, METH_VARARGS, (char *)"RMAlgoType___ge__(RMAlgoType self, RMAlgoType o) -> bool"},
+	 { (char *)"RMAlgoType_size", _wrap_RMAlgoType_size, METH_VARARGS, (char *)"RMAlgoType_size() -> size_t"},
 	 { (char *)"RMAlgoType_value_set", _wrap_RMAlgoType_value_set, METH_VARARGS, (char *)"RMAlgoType_value_set(RMAlgoType self, int value)"},
 	 { (char *)"RMAlgoType_value_get", _wrap_RMAlgoType_value_get, METH_VARARGS, (char *)"RMAlgoType_value_get(RMAlgoType self) -> int"},
 	 { (char *)"RMAlgoType_swigregister", RMAlgoType_swigregister, METH_VARARGS, NULL},
@@ -73541,6 +74839,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RadarModeType___gt__", _wrap_RadarModeType___gt__, METH_VARARGS, (char *)"RadarModeType___gt__(RadarModeType self, RadarModeType o) -> bool"},
 	 { (char *)"RadarModeType___le__", _wrap_RadarModeType___le__, METH_VARARGS, (char *)"RadarModeType___le__(RadarModeType self, RadarModeType o) -> bool"},
 	 { (char *)"RadarModeType___ge__", _wrap_RadarModeType___ge__, METH_VARARGS, (char *)"RadarModeType___ge__(RadarModeType self, RadarModeType o) -> bool"},
+	 { (char *)"RadarModeType_size", _wrap_RadarModeType_size, METH_VARARGS, (char *)"RadarModeType_size() -> size_t"},
 	 { (char *)"RadarModeType_value_set", _wrap_RadarModeType_value_set, METH_VARARGS, (char *)"RadarModeType_value_set(RadarModeType self, int value)"},
 	 { (char *)"RadarModeType_value_get", _wrap_RadarModeType_value_get, METH_VARARGS, (char *)"RadarModeType_value_get(RadarModeType self) -> int"},
 	 { (char *)"RadarModeType_swigregister", RadarModeType_swigregister, METH_VARARGS, NULL},
@@ -73563,6 +74862,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RegionType___gt__", _wrap_RegionType___gt__, METH_VARARGS, (char *)"RegionType___gt__(RegionType self, RegionType o) -> bool"},
 	 { (char *)"RegionType___le__", _wrap_RegionType___le__, METH_VARARGS, (char *)"RegionType___le__(RegionType self, RegionType o) -> bool"},
 	 { (char *)"RegionType___ge__", _wrap_RegionType___ge__, METH_VARARGS, (char *)"RegionType___ge__(RegionType self, RegionType o) -> bool"},
+	 { (char *)"RegionType_size", _wrap_RegionType_size, METH_VARARGS, (char *)"RegionType_size() -> size_t"},
 	 { (char *)"RegionType_value_set", _wrap_RegionType_value_set, METH_VARARGS, (char *)"RegionType_value_set(RegionType self, int value)"},
 	 { (char *)"RegionType_value_get", _wrap_RegionType_value_get, METH_VARARGS, (char *)"RegionType_value_get(RegionType self) -> int"},
 	 { (char *)"RegionType_swigregister", RegionType_swigregister, METH_VARARGS, NULL},
@@ -73585,6 +74885,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColEnum___gt__", _wrap_RowColEnum___gt__, METH_VARARGS, (char *)"RowColEnum___gt__(RowColEnum self, RowColEnum o) -> bool"},
 	 { (char *)"RowColEnum___le__", _wrap_RowColEnum___le__, METH_VARARGS, (char *)"RowColEnum___le__(RowColEnum self, RowColEnum o) -> bool"},
 	 { (char *)"RowColEnum___ge__", _wrap_RowColEnum___ge__, METH_VARARGS, (char *)"RowColEnum___ge__(RowColEnum self, RowColEnum o) -> bool"},
+	 { (char *)"RowColEnum_size", _wrap_RowColEnum_size, METH_VARARGS, (char *)"RowColEnum_size() -> size_t"},
 	 { (char *)"RowColEnum_value_set", _wrap_RowColEnum_value_set, METH_VARARGS, (char *)"RowColEnum_value_set(RowColEnum self, int value)"},
 	 { (char *)"RowColEnum_value_get", _wrap_RowColEnum_value_get, METH_VARARGS, (char *)"RowColEnum_value_get(RowColEnum self) -> int"},
 	 { (char *)"RowColEnum_swigregister", RowColEnum_swigregister, METH_VARARGS, NULL},
@@ -73607,6 +74908,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SCPType___gt__", _wrap_SCPType___gt__, METH_VARARGS, (char *)"SCPType___gt__(SCPType self, SCPType o) -> bool"},
 	 { (char *)"SCPType___le__", _wrap_SCPType___le__, METH_VARARGS, (char *)"SCPType___le__(SCPType self, SCPType o) -> bool"},
 	 { (char *)"SCPType___ge__", _wrap_SCPType___ge__, METH_VARARGS, (char *)"SCPType___ge__(SCPType self, SCPType o) -> bool"},
+	 { (char *)"SCPType_size", _wrap_SCPType_size, METH_VARARGS, (char *)"SCPType_size() -> size_t"},
 	 { (char *)"SCPType_value_set", _wrap_SCPType_value_set, METH_VARARGS, (char *)"SCPType_value_set(SCPType self, int value)"},
 	 { (char *)"SCPType_value_get", _wrap_SCPType_value_get, METH_VARARGS, (char *)"SCPType_value_get(SCPType self) -> int"},
 	 { (char *)"SCPType_swigregister", SCPType_swigregister, METH_VARARGS, NULL},
@@ -73629,6 +74931,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SideOfTrackType___gt__", _wrap_SideOfTrackType___gt__, METH_VARARGS, (char *)"SideOfTrackType___gt__(SideOfTrackType self, SideOfTrackType o) -> bool"},
 	 { (char *)"SideOfTrackType___le__", _wrap_SideOfTrackType___le__, METH_VARARGS, (char *)"SideOfTrackType___le__(SideOfTrackType self, SideOfTrackType o) -> bool"},
 	 { (char *)"SideOfTrackType___ge__", _wrap_SideOfTrackType___ge__, METH_VARARGS, (char *)"SideOfTrackType___ge__(SideOfTrackType self, SideOfTrackType o) -> bool"},
+	 { (char *)"SideOfTrackType_size", _wrap_SideOfTrackType_size, METH_VARARGS, (char *)"SideOfTrackType_size() -> size_t"},
 	 { (char *)"SideOfTrackType_value_set", _wrap_SideOfTrackType_value_set, METH_VARARGS, (char *)"SideOfTrackType_value_set(SideOfTrackType self, int value)"},
 	 { (char *)"SideOfTrackType_value_get", _wrap_SideOfTrackType_value_get, METH_VARARGS, (char *)"SideOfTrackType_value_get(SideOfTrackType self) -> int"},
 	 { (char *)"SideOfTrackType_swigregister", SideOfTrackType_swigregister, METH_VARARGS, NULL},
@@ -73651,6 +74954,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SlowTimeBeamCompensationType___gt__", _wrap_SlowTimeBeamCompensationType___gt__, METH_VARARGS, (char *)"SlowTimeBeamCompensationType___gt__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"},
 	 { (char *)"SlowTimeBeamCompensationType___le__", _wrap_SlowTimeBeamCompensationType___le__, METH_VARARGS, (char *)"SlowTimeBeamCompensationType___le__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"},
 	 { (char *)"SlowTimeBeamCompensationType___ge__", _wrap_SlowTimeBeamCompensationType___ge__, METH_VARARGS, (char *)"SlowTimeBeamCompensationType___ge__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"},
+	 { (char *)"SlowTimeBeamCompensationType_size", _wrap_SlowTimeBeamCompensationType_size, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_size() -> size_t"},
 	 { (char *)"SlowTimeBeamCompensationType_value_set", _wrap_SlowTimeBeamCompensationType_value_set, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_value_set(SlowTimeBeamCompensationType self, int value)"},
 	 { (char *)"SlowTimeBeamCompensationType_value_get", _wrap_SlowTimeBeamCompensationType_value_get, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_value_get(SlowTimeBeamCompensationType self) -> int"},
 	 { (char *)"SlowTimeBeamCompensationType_swigregister", SlowTimeBeamCompensationType_swigregister, METH_VARARGS, NULL},
@@ -73673,6 +74977,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XYZEnum___gt__", _wrap_XYZEnum___gt__, METH_VARARGS, (char *)"XYZEnum___gt__(XYZEnum self, XYZEnum o) -> bool"},
 	 { (char *)"XYZEnum___le__", _wrap_XYZEnum___le__, METH_VARARGS, (char *)"XYZEnum___le__(XYZEnum self, XYZEnum o) -> bool"},
 	 { (char *)"XYZEnum___ge__", _wrap_XYZEnum___ge__, METH_VARARGS, (char *)"XYZEnum___ge__(XYZEnum self, XYZEnum o) -> bool"},
+	 { (char *)"XYZEnum_size", _wrap_XYZEnum_size, METH_VARARGS, (char *)"XYZEnum_size() -> size_t"},
 	 { (char *)"XYZEnum_value_set", _wrap_XYZEnum_value_set, METH_VARARGS, (char *)"XYZEnum_value_set(XYZEnum self, int value)"},
 	 { (char *)"XYZEnum_value_get", _wrap_XYZEnum_value_get, METH_VARARGS, (char *)"XYZEnum_value_get(XYZEnum self) -> int"},
 	 { (char *)"XYZEnum_swigregister", XYZEnum_swigregister, METH_VARARGS, NULL},
@@ -75816,6 +77121,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_RHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_LHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_UNKNOWN",SWIG_From_int(static_cast< int >(six::DualPolarizationType::UNKNOWN)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_NOT_SET",SWIG_From_int(static_cast< int >(six::DualPolarizationType::NOT_SET)));
   SWIG_Python_SetConstant(d, "EarthModelType_WGS84",SWIG_From_int(static_cast< int >(six::EarthModelType::WGS84)));
   SWIG_Python_SetConstant(d, "EarthModelType_NOT_SET",SWIG_From_int(static_cast< int >(six::EarthModelType::NOT_SET)));
