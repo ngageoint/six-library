@@ -27,7 +27,7 @@ def configure(conf):
 
         pyver = Options.options.python_version
         if pyver:
-            pyver = map(int, pyver.split('.'))
+            pyver = list(map(int, pyver.split('.')))
         conf.check_python_version(minver=pyver)
 
         # The waf python tool uses distutils.msvccompiler, tell it that we've already setup msvc.
