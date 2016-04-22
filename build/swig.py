@@ -200,7 +200,7 @@ def configure(conf):
         if not swig: return
         swigver = Options.options.swigver
         if swigver:
-            swigver = map(int, swigver.split('.'))
+            swigver = list(map(int, swigver.split('.')))
         conf.check_swig_version(minver=swigver)
         conf.env.SWIGPATH_ST = '-I%s'
         conf.env.SWIGDEFINES_ST = '-D%s'

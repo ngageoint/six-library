@@ -7,7 +7,7 @@ def handleTargets(targets, context):
     ret = []
 
     for target in targets:
-        if isinstance(target, basestring):
+        if isinstance(target, str):
             # Find the target
             tsk = context.get_tgen_by_name(target)
 

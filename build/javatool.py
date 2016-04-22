@@ -66,13 +66,10 @@ def configure(self):
         if not isdir(incDir):
             self.fatal('could not find include directory in %r (see config.log)' % javaHome)
 
-        incDirs = list(set(map(lambda x: dirname(x),
-                      recursiveGlob(incDir, ['jni.h', 'jni_md.h']))))
-        libDirs = list(set(map(lambda x: dirname(x),
-                      recursiveGlob(javaHome, ['*jvm.a', '*jvm.lib']))))
+        incDirs = list(set([dirname(x) for x in recursiveGlob(incDir, ['jni.h', 'jni_md.h'])]))
+        libDirs = list(set([dirname(x) for x in recursiveGlob(javaHome, ['*jvm.a', '*jvm.lib'])]))
         if not libDirs:
-            libDirs = list(set(map(lambda x: dirname(x),
-                          recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll']))))
+            libDirs = list(set([dirname(x) for x in recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll'])]))
 
         #if not self.check_jni_headers():
         if not self.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
@@ -97,7 +94,7 @@ def ant(self):
         self.defines = []
     if isinstance(self.defines, str):
         self.defines = [self.defines]
-    self.env.ant_defines = map(lambda x: '-D%s' % x, self.defines)
+    self.env.ant_defines = ['-D%s' % x for x in self.defines]
     self.rule = ant_exec
 
 def ant_exec(tsk):
@@ -124,7 +121,7 @@ def java_module(bld, **modArgs):
     jni_ok = bld.is_defined('HAVE_JNI_H') or not have_native_sourcedir
 
     if env['JAVAC'] and env['JAR'] and jni_ok:
-       modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+       modArgs = dict((k.lower(), v) for k, v in modArgs.items())
 
        lang = modArgs.get('lang', 'java')
        nlang = modArgs.get('native_lang', 'c')
@@ -135,7 +132,7 @@ def java_module(bld, **modArgs):
        path = modArgs.get('path',
                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-       module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
+       module_deps = ['%s-%s' % (x, lang) for x in listify(modArgs.get('module_deps', ''))]
        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
        uselib = listify(modArgs.get('uselib', '')) + ['JAVA']
        targets_to_add = listify(modArgs.get('targets_to_add', ''))
