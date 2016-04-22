@@ -23,6 +23,7 @@
 #define __MATH_LINEAR_MATRIX_M_X_N_H__
 
 #include <cmath>
+#include <limits>
 #include <import/sys.h>
 
 namespace math
@@ -38,6 +39,14 @@ template<typename _T> bool equals(const _T& e1, const _T& e2)
 
 template<typename _T> inline bool equals(const _T& e1, const _T& e2, _T eps)
 {
+    if (std::numeric_limits<_T>::has_infinity)
+    {
+        if (e1 == std::numeric_limits<_T>::infinity() ||
+            e1 == -std::numeric_limits<_T>::infinity())
+        {
+            return e1 == e2;
+        }
+    }
     return std::abs(e1 - e2) < eps;
 }
 

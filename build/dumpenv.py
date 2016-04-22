@@ -33,4 +33,4 @@ class dumpenv(BuildContext):
             if str:
                 str += ' '
             str += self.env['DEFINES_ST'] % define
-        print str
+        print(str)

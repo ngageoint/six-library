@@ -144,17 +144,13 @@ public:
         return mRefCtr->get();
     }
 
-    void reset(T* ptr = NULL)
+    void reset(std::auto_ptr<T> scopedPtr)
     {
-        // We take ownership of the pointer no matter what, so temporarily
-        // wrap it in an auto_ptr in case creating the atomic counter throws.
         // NOTE: We need to create newRefCtr on the side before decrementing
         //       mRefCtr. This way, we can provide the strong exception
         //       guarantee (i.e. the operation either succeeds or throws - the
         //       underlying object is always in a good state).
-        std::auto_ptr<T> scopedPtr(ptr);
         sys::AtomicCounter* const newRefCtr = new sys::AtomicCounter(1);
-        scopedPtr.release();
 
         if (mRefCtr->decrementThenGet() == 0)
         {
@@ -165,7 +161,15 @@ public:
         }
 
         mRefCtr = newRefCtr;
-        mPtr = ptr;
+        mPtr = scopedPtr.release();
+    }
+
+    void reset(T* ptr = NULL)
+    {
+        // We take ownership of the pointer no matter what, so
+        // temporarily wrap it in an auto_ptr in case creating
+        // the atomic counter throws in the underlying method.
+        reset(std::auto_ptr<T>(ptr));
     }
 
     // This allows derived classes to be used for construction/assignment
