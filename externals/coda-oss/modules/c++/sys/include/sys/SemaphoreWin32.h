@@ -37,13 +37,10 @@ namespace sys
 class SemaphoreWin32 : public SemaphoreInterface
 {
 public:
-    SemaphoreWin32(unsigned int count = 0, LONG maxCount = std::numeric_limits<LONG>::max());
-    
-    virtual ~SemaphoreWin32()
-    {}
+    SemaphoreWin32(unsigned int count = 0, size_t maxCount = std::numeric_limits<size_t>::max());
 
     void wait();
-    
+
     void signal();
     
     HANDLE& getNative();

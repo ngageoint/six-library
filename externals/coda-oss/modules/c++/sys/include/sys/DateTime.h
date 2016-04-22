@@ -126,11 +126,11 @@ public:
     /*!
      *  format the DateTime string
      *  y = year (YYYY)
-     *  M = month (MM)
+     *  m = month (MM)
      *  d = day (DD)
      *  H = hour (hh)
-     *  m = minute (mm)
-     *  s = second (ss)
+     *  M = minute (mm)
+     *  S = second (ss)
      */
     std::string format(const std::string& formatStr) const;
 

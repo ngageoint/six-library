@@ -59,7 +59,7 @@ int main(int argc, char** argv)
         sys::Uint64_T numBytes;
         client->recv(&numBytes, sizeof(sys::Uint64_T));
 
-        std::vector<sys::ubyte> bufferVec(std::min(numBytes, bufferSize));
+        std::vector<sys::ubyte> bufferVec(std::min<sys::Uint64_T>(numBytes, bufferSize));
         sys::ubyte* const buffer = &bufferVec[0];
 
         // Then receive all the bytes
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         while (numBytesReceived < numBytes)
         {
             const size_t numBytesToReceive =
-                    std::min(bufferSize, numBytesReceived - numBytes);
+                    std::min<sys::Uint64_T>(bufferSize, numBytesReceived - numBytes);
 
             numBytesReceived += client->recv(buffer, numBytesToReceive);
         }
