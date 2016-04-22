@@ -79,6 +79,8 @@ public:
             const types::RgAz<double>& value, XMLElem parent = NULL) const;
     XMLElem createLatLon(const std::string& name, const LatLon& value,
             XMLElem parent = NULL) const;
+    XMLElem createLatLon(const std::string& name, const std::string& uri,
+            const LatLon& value, XMLElem parent = NULL) const;
     XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
             XMLElem parent = NULL) const;
 

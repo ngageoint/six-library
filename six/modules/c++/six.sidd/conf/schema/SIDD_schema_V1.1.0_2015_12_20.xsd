@@ -952,11 +952,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="GeoInfo" type="sicommon:GeoInfoType" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
+            <xs:element ref="sicommon:GeoInfo" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="EarthModelType">

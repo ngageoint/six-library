@@ -461,14 +461,23 @@ XMLElem SICommonXMLParser::createRangeAzimuth(const std::string& name,
 }
 
 XMLElem SICommonXMLParser::createLatLon(
-        const std::string& name, 
+        const std::string& name,
+        const std::string& uri,
         const LatLon& value,
         XMLElem parent) const
 {
-    XMLElem e = newElement(name, getDefaultURI(), parent);
+    XMLElem e = newElement(name, uri, parent);
     createDouble("Lat", getSICommonURI(), value.getLat(), e);
     createDouble("Lon", getSICommonURI(), value.getLon(), e);
     return e;
+}
+
+XMLElem SICommonXMLParser::createLatLon(
+        const std::string& name,
+        const LatLon& value,
+        XMLElem parent) const
+{
+    return createLatLon(name, getDefaultURI(), value, parent);
 }
 
 XMLElem SICommonXMLParser::createLatLonAlt(const std::string& name,

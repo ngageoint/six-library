@@ -531,4 +531,6 @@
         </xsd:sequence>
         <xsd:attribute name="name" type="xsd:string" use="required"/>
     </xsd:complexType>
+
+    <xsd:element name="GeoInfo" type="GeoInfoType"/>
 </xsd:schema>

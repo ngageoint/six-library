@@ -1897,6 +1897,22 @@ void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded)
 
     ded->nullValue = -32768;
 }
+
+void initGeographicAndTarget(six::sidd::GeographicAndTarget& geo)
+{
+    mem::ScopedCopyablePtr<six::GeoInfo> geoInfo(new six::GeoInfo());
+    geoInfo->name = "GeoInfo";
+
+    six::Parameter param;
+    param.setName("Some name");
+    param.setValue("Some value");
+    geoInfo->desc.push_back(param);
+
+    six::LatLon point(5);
+    geoInfo->geometryLatLon.push_back(point);
+
+    geo.geoInfos.push_back(geoInfo);
+}
 }
 
 int main(int argc, char** argv)
@@ -2058,6 +2074,7 @@ int main(int argc, char** argv)
         initProcessorInformation(
             siddData->productCreation->processorInformation);
         initDED(siddData->digitalElevationData);
+        initGeographicAndTarget(*siddData->geographicAndTarget);
 
         // Or directly if preferred
         // (This is SIDD 1.0 stuff)

@@ -117,6 +117,9 @@ private:
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 
+    XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo,
+                                        XMLElem parent = NULL) const;
+
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded,
                                              XMLElem parent = NULL) const;
 
