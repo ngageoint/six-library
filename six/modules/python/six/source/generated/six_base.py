@@ -5230,12 +5230,12 @@ class ScopedCloneableAmplitudeTable(_object):
 
 
     def __getitem__(self, key):
-        """__getitem__(ScopedCloneableAmplitudeTable self, int key) -> unsigned char"""
+        """__getitem__(ScopedCloneableAmplitudeTable self, size_t key) -> double"""
         return _six_base.ScopedCloneableAmplitudeTable___getitem__(self, key)
 
 
     def __setitem__(self, key, value):
-        """__setitem__(ScopedCloneableAmplitudeTable self, int key, unsigned char value)"""
+        """__setitem__(ScopedCloneableAmplitudeTable self, size_t key, double value)"""
         return _six_base.ScopedCloneableAmplitudeTable___setitem__(self, key, value)
 
     __swig_destroy__ = _six_base.delete_ScopedCloneableAmplitudeTable

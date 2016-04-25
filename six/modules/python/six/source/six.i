@@ -168,13 +168,14 @@ SCOPED_CLONEABLE(six, AmplitudeTable)
 {
     //$self is a raw pointer to a ScopedCloneable container the
     //AmplitudeTable
-    unsigned char __getitem__(int key) const
+    double __getitem__(size_t key) const
     {
-        return *((**$self)[key]);
+        return *(double*)(**$self)[key];
     }
 
-    void __setitem__(int key, unsigned char value)
+    void __setitem__(size_t key, double value)
     {
-        *((**$self)[key]) = value;
+        double* location = (double*)(**$self)[key];
+        *location = value;
     }
 }

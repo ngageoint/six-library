@@ -5175,34 +5175,12 @@ mem::ScopedCopyablePtr< six::Components > makeScopedCopyableComponents()
     return mem::ScopedCopyablePtr< six::Components >(new six::Components ());
 } 
 
-SWIGINTERN unsigned char mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____getitem__(mem::ScopedCloneablePtr< six::AmplitudeTable > const *self,int key){
-        return *((**self)[key]);
+SWIGINTERN double mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____getitem__(mem::ScopedCloneablePtr< six::AmplitudeTable > const *self,size_t key){
+        return *(double*)(**self)[key];
     }
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_unsigned_SS_char  (unsigned char value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_char (PyObject * obj, unsigned char *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UCHAR_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned char >(v);
-    }
-  }  
-  return res;
-}
-
-SWIGINTERN void mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____setitem__(mem::ScopedCloneablePtr< six::AmplitudeTable > *self,int key,unsigned char value){
-        *((**self)[key]) = value;
+SWIGINTERN void mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____setitem__(mem::ScopedCloneablePtr< six::AmplitudeTable > *self,size_t key,double value){
+        double* location = (double*)(**self)[key];
+        *location = value;
     }
 
 mem::ScopedCloneablePtr< six::AmplitudeTable > makeScopedCloneableAmplitudeTable()
@@ -76841,14 +76819,14 @@ fail:
 SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
-  int arg2 ;
+  size_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  size_t val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  unsigned char result;
+  double result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable___getitem__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
@@ -76856,15 +76834,15 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___getitem__(PyObject *S
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___getitem__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
   }
   arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable___getitem__" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable___getitem__" "', argument " "2"" of type '" "size_t""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< size_t >(val2);
   {
     try
     {
-      result = (unsigned char)mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____getitem__((mem::ScopedCloneablePtr< six::AmplitudeTable > const *)arg1,arg2);
+      result = (double)mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____getitem__((mem::ScopedCloneablePtr< six::AmplitudeTable > const *)arg1,arg2);
     } 
     catch (const std::exception& e)
     {
@@ -76892,7 +76870,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___getitem__(PyObject *S
       SWIG_fail;
     }
   }
-  resultobj = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -76902,13 +76880,13 @@ fail:
 SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
-  int arg2 ;
-  unsigned char arg3 ;
+  size_t arg2 ;
+  double arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  size_t val2 ;
   int ecode2 = 0 ;
-  unsigned char val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -76920,16 +76898,16 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___setitem__(PyObject *S
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___setitem__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
   }
   arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable___setitem__" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable___setitem__" "', argument " "2"" of type '" "size_t""'");
   } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(obj2, &val3);
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ScopedCloneableAmplitudeTable___setitem__" "', argument " "3"" of type '" "unsigned char""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ScopedCloneableAmplitudeTable___setitem__" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = static_cast< unsigned char >(val3);
+  arg3 = static_cast< double >(val3);
   {
     try
     {
@@ -79100,8 +79078,8 @@ static PyMethodDef SwigMethods[] = {
 		"reset(AmplitudeTable ptr=None)\n"
 		"ScopedCloneableAmplitudeTable_reset(ScopedCloneableAmplitudeTable self)\n"
 		""},
-	 { (char *)"ScopedCloneableAmplitudeTable___getitem__", _wrap_ScopedCloneableAmplitudeTable___getitem__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___getitem__(ScopedCloneableAmplitudeTable self, int key) -> unsigned char"},
-	 { (char *)"ScopedCloneableAmplitudeTable___setitem__", _wrap_ScopedCloneableAmplitudeTable___setitem__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___setitem__(ScopedCloneableAmplitudeTable self, int key, unsigned char value)"},
+	 { (char *)"ScopedCloneableAmplitudeTable___getitem__", _wrap_ScopedCloneableAmplitudeTable___getitem__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___getitem__(ScopedCloneableAmplitudeTable self, size_t key) -> double"},
+	 { (char *)"ScopedCloneableAmplitudeTable___setitem__", _wrap_ScopedCloneableAmplitudeTable___setitem__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___setitem__(ScopedCloneableAmplitudeTable self, size_t key, double value)"},
 	 { (char *)"delete_ScopedCloneableAmplitudeTable", _wrap_delete_ScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"delete_ScopedCloneableAmplitudeTable(ScopedCloneableAmplitudeTable self)"},
 	 { (char *)"ScopedCloneableAmplitudeTable___eq__", _wrap_ScopedCloneableAmplitudeTable___eq__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___eq__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"},
 	 { (char *)"ScopedCloneableAmplitudeTable___ne__", _wrap_ScopedCloneableAmplitudeTable___ne__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___ne__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"},

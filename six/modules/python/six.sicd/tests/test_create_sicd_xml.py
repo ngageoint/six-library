@@ -73,7 +73,7 @@ def initImageDataFull(cmplx):
     imageData.pixelType = PixelType('RE32F_IM32F')
     imageData.amplitudeTable = makeScopedCloneableAmplitudeTable()
     for ii in range(imageData.amplitudeTable.numEntries):
-        x = imageData.amplitudeTable[ii]
+        imageData.amplitudeTable[ii] = ii / 10.0
     imageData.numRows = 123
     imageData.numCols = 456
     imageData.firstRow = 9
@@ -87,11 +87,12 @@ def initImageDataFull(cmplx):
     imageData.validData.push_back(RowColInt(50, 60))
 
     cmplx.imageData = imageData
+
     return cmplx
 
 # 2x2 image to make the output NITF easier to work with
 def initImageDataNITF(cmplx):
-    imageData = makeScopedCloneableImageData()
+    imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
     imageData.numRows = 2
     imageData.numCols = 2
@@ -798,12 +799,12 @@ if __name__ == '__main__':
     if filecmp.cmp(origPathnameBase + ".xml", newPathnameBase + ".xml"):
 	print 'XML round trip succeeded!'
     else:
-	print 'NITF round trip failed'
+	print 'XML round trip failed'
 
     if includeNITF:
         if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'Round trip succeeded!'
+    	    print 'NITF Round trip succeeded!'
         else:
-            print 'Round trip failed'
+            print 'NITF Round trip failed'
 
     # If we made it to here, the read side appears to be working properly too
