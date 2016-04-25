@@ -71,7 +71,9 @@ def initImageCreation(cmplx):
 def initImageDataFull(cmplx):
     imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
-    # TODO: Fill in amplitudeTable
+    imageData.amplitudeTable = makeScopedCloneableAmplitudeTable()
+    for ii in range(imageData.amplitudeTable.numEntries):
+        x = imageData.amplitudeTable[ii]
     imageData.numRows = 123
     imageData.numCols = 456
     imageData.firstRow = 9
