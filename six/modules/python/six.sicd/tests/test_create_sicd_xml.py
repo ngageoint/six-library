@@ -69,7 +69,7 @@ def initImageCreation(cmplx):
 
 # Create data for a 'normal'-sized image
 def initImageDataFull(cmplx):
-    imageData = makeScopedCloneableImageData()
+    imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
     # TODO: Fill in amplitudeTable
     imageData.numRows = 123
