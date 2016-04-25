@@ -58,11 +58,6 @@ bool MeasurableProjection::equalTo(const Projection& rhs) const
     return false;
 }
 
-bool GeographicProjection::operator==(const GeographicProjection& rhs) const
-{
-    return *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs));
-}
-
 bool GeographicProjection::equalTo(const Projection& rhs) const
 {
     const GeographicProjection* projection = dynamic_cast<const GeographicProjection*>(&rhs);
@@ -77,7 +72,7 @@ bool CylindricalProjection::operator==(const CylindricalProjection& rhs) const
 {
     return (stripmapDirection == rhs.stripmapDirection &&
         curvatureRadius == rhs.curvatureRadius &&
-        *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs)));
+        MeasurableProjection::operator==(rhs));
 }
 
 bool CylindricalProjection::equalTo(const Projection& rhs) const

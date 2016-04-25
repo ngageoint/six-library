@@ -163,7 +163,7 @@ struct MeasurableProjection : public Projection
     bool operator==(const MeasurableProjection& rhs) const;
 
 private:
-    bool equalTo(const Projection& rhs) const;
+    virtual bool equalTo(const Projection& rhs) const;
 
 };
 
@@ -190,8 +190,6 @@ struct GeographicProjection : public MeasurableProjection
         return new GeographicProjection(*this);
     }
     virtual ~GeographicProjection() {}
-
-    bool operator==(const GeographicProjection& rhs) const;
 
 private:
     virtual bool equalTo(const Projection& rhs) const;
