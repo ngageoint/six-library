@@ -249,7 +249,7 @@ private:
      *  By default, we use the IS_SIZE_MAX to determine the max product
      *  size for an image segment, and if we have to segment, we
      *  use the ILOC_MAX to determine the segment size (if that is
-     *  smaller than the product size).  These calls give the 
+     *  smaller than the product size).  These calls give the
      *  user access to these limits and allows them to be overridden.
      *
      *  This method would typically only be used during product
@@ -358,7 +358,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
         //       we avoid the clone and byte swap and instead index into
         //       the LUT in the opposite order?
         std::auto_ptr<LUT> lut(getDisplayLUT()->clone());
-        sys::byteSwap(reinterpret_cast<sys::byte*>(lut->table.get()),
+        sys::byteSwap(reinterpret_cast<sys::byte*>(lut->getTable()),
                       static_cast<unsigned short>(lut->elementSize),
                       lut->numEntries);
 
@@ -415,7 +415,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             for (size_t j = 0; j < lut->elementSize; ++j, ++k)
             {
                 // Need to transpose the lookup table entries
-                table[j * lut->numEntries + i] = lut->table[k];
+                table[j * lut->numEntries + i] = lut->getTable()[k];
             }
         }
 

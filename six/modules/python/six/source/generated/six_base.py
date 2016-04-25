@@ -5166,6 +5166,108 @@ ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 def makeScopedCopyableComponents():
     """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
     return _six_base.makeScopedCopyableComponents()
+class StdAutoAmplitudeTable(_object):
+    """Proxy of C++ std::auto_ptr<(six::AmplitudeTable)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAmplitudeTable, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoAmplitudeTable, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::AmplitudeTable)> self) -> StdAutoAmplitudeTable"""
+        this = _six_base.new_StdAutoAmplitudeTable()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoAmplitudeTable
+    __del__ = lambda self: None
+StdAutoAmplitudeTable_swigregister = _six_base.StdAutoAmplitudeTable_swigregister
+StdAutoAmplitudeTable_swigregister(StdAutoAmplitudeTable)
+
+class ScopedCloneableAmplitudeTable(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::AmplitudeTable)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableAmplitudeTable, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableAmplitudeTable, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self, AmplitudeTable ptr=None) -> ScopedCloneableAmplitudeTable
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self) -> ScopedCloneableAmplitudeTable
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self, ScopedCloneableAmplitudeTable rhs) -> ScopedCloneableAmplitudeTable
+        """
+        this = _six_base.new_ScopedCloneableAmplitudeTable(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable___deref__(self)
+
+
+    def reset(self, *args):
+        """
+        reset(ScopedCloneableAmplitudeTable self, AmplitudeTable ptr=None)
+        reset(ScopedCloneableAmplitudeTable self)
+        """
+        return _six_base.ScopedCloneableAmplitudeTable_reset(self, *args)
+
+    __swig_destroy__ = _six_base.delete_ScopedCloneableAmplitudeTable
+    __del__ = lambda self: None
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.ScopedCloneableAmplitudeTable___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.ScopedCloneableAmplitudeTable___ne__(self, rhs)
+
+
+    def clone(self):
+        """clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable_clone(self)
+
+    __swig_setmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_set
+    __swig_getmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_get
+    if _newclass:
+        numEntries = _swig_property(_six_base.ScopedCloneableAmplitudeTable_numEntries_get, _six_base.ScopedCloneableAmplitudeTable_numEntries_set)
+    __swig_setmethods__["elementSize"] = _six_base.ScopedCloneableAmplitudeTable_elementSize_set
+    __swig_getmethods__["elementSize"] = _six_base.ScopedCloneableAmplitudeTable_elementSize_get
+    if _newclass:
+        elementSize = _swig_property(_six_base.ScopedCloneableAmplitudeTable_elementSize_get, _six_base.ScopedCloneableAmplitudeTable_elementSize_set)
+
+    def getTable(self, *args):
+        """
+        getTable(ScopedCloneableAmplitudeTable self) -> unsigned char
+        getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *
+        """
+        return _six_base.ScopedCloneableAmplitudeTable_getTable(self, *args)
+
+ScopedCloneableAmplitudeTable_swigregister = _six_base.ScopedCloneableAmplitudeTable_swigregister
+ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)
+
+
+def makeScopedCloneableAmplitudeTable():
+    """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
+    return _six_base.makeScopedCloneableAmplitudeTable()
 # This file is compatible with both classic and new-style classes.
 
 

@@ -59,6 +59,8 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %ignore mem::ScopedCopyablePtr::operator==;
 %ignore mem::ScopedCloneablePtr::operator!=;
 %ignore mem::ScopedCloneablePtr::operator==;
+%ignore mem::ScopedCloneablePtr::operator=;
+%ignore mem::ScopedCloneablePtr::mem::ScopedCloneablePtr(const mem::ScopedCloneablePtr& rhs);
 
 %import "types.i"
 %import "except.i"
@@ -162,3 +164,4 @@ SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
+SCOPED_CLONEABLE(six, AmplitudeTable)

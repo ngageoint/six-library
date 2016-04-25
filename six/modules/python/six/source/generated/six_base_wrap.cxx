@@ -3008,119 +3008,121 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[35]
 #define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[36]
 #define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[37]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[38]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[39]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[40]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[41]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[42]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[43]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[44]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[45]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[46]
-#define SWIGTYPE_p_nitf_DateTime swig_types[47]
-#define SWIGTYPE_p_nitf__DateTime swig_types[48]
-#define SWIGTYPE_p_nitf__FileSecurity swig_types[49]
-#define SWIGTYPE_p_nitf__NITFException swig_types[50]
-#define SWIGTYPE_p_off_t swig_types[51]
-#define SWIGTYPE_p_p_PyObject swig_types[52]
-#define SWIGTYPE_p_pid_t swig_types[53]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[54]
-#define SWIGTYPE_p_scene__Errors swig_types[55]
-#define SWIGTYPE_p_scene__FrameType swig_types[56]
-#define SWIGTYPE_p_scene__LatLon swig_types[57]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[58]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[59]
-#define SWIGTYPE_p_six__AmplitudeTable swig_types[60]
-#define SWIGTYPE_p_six__AppliedType swig_types[61]
-#define SWIGTYPE_p_six__AutofocusType swig_types[62]
-#define SWIGTYPE_p_six__BooleanType swig_types[63]
-#define SWIGTYPE_p_six__ByteSwapping swig_types[64]
-#define SWIGTYPE_p_six__Classification swig_types[65]
-#define SWIGTYPE_p_six__CollectType swig_types[66]
-#define SWIGTYPE_p_six__ComplexImageGridType swig_types[67]
-#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[68]
-#define SWIGTYPE_p_six__Components swig_types[69]
-#define SWIGTYPE_p_six__CompositeSCP swig_types[70]
-#define SWIGTYPE_p_six__Constants swig_types[71]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[72]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[73]
-#define SWIGTYPE_p_six__CorrCoefs swig_types[74]
-#define SWIGTYPE_p_six__DESValidationException swig_types[75]
-#define SWIGTYPE_p_six__Data swig_types[76]
-#define SWIGTYPE_p_six__DataType swig_types[77]
-#define SWIGTYPE_p_six__DecimationMethod swig_types[78]
-#define SWIGTYPE_p_six__DecorrType swig_types[79]
-#define SWIGTYPE_p_six__DemodType swig_types[80]
-#define SWIGTYPE_p_six__DisplayType swig_types[81]
-#define SWIGTYPE_p_six__DualPolarizationType swig_types[82]
-#define SWIGTYPE_p_six__EarthModelType swig_types[83]
-#define SWIGTYPE_p_six__ErrorStatistics swig_types[84]
-#define SWIGTYPE_p_six__FFTSign swig_types[85]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[86]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[87]
-#define SWIGTYPE_p_six__Init swig_types[88]
-#define SWIGTYPE_p_six__IonoError swig_types[89]
-#define SWIGTYPE_p_six__LUT swig_types[90]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[91]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[92]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[93]
-#define SWIGTYPE_p_six__Options swig_types[94]
-#define SWIGTYPE_p_six__OrientationType swig_types[95]
-#define SWIGTYPE_p_six__Parameter swig_types[96]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[97]
-#define SWIGTYPE_p_six__PixelType swig_types[98]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[99]
-#define SWIGTYPE_p_six__PolarizationType swig_types[100]
-#define SWIGTYPE_p_six__PosVelError swig_types[101]
-#define SWIGTYPE_p_six__ProjectionType swig_types[102]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[103]
-#define SWIGTYPE_p_six__RadarModeType swig_types[104]
-#define SWIGTYPE_p_six__RadarSensor swig_types[105]
-#define SWIGTYPE_p_six__Radiometric swig_types[106]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[107]
-#define SWIGTYPE_p_six__RegionType swig_types[108]
-#define SWIGTYPE_p_six__RowColEnum swig_types[109]
-#define SWIGTYPE_p_six__SCP swig_types[110]
-#define SWIGTYPE_p_six__SCPType swig_types[111]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[112]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[113]
-#define SWIGTYPE_p_six__TropoError swig_types[114]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[115]
-#define SWIGTYPE_p_six__XMLControl swig_types[116]
-#define SWIGTYPE_p_six__XYZEnum swig_types[117]
-#define SWIGTYPE_p_size_t swig_types[118]
-#define SWIGTYPE_p_size_type swig_types[119]
-#define SWIGTYPE_p_ssize_t swig_types[120]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[121]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[122]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[123]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[124]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[125]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[126]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[127]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[128]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[129]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[130]
-#define SWIGTYPE_p_std__invalid_argument swig_types[131]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[132]
-#define SWIGTYPE_p_std__ostream swig_types[133]
-#define SWIGTYPE_p_std__string swig_types[134]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[135]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[136]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[137]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[138]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[139]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[140]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[141]
-#define SWIGTYPE_p_uint16_t swig_types[142]
-#define SWIGTYPE_p_uint32_t swig_types[143]
-#define SWIGTYPE_p_uint64_t swig_types[144]
-#define SWIGTYPE_p_uint8_t swig_types[145]
-#define SWIGTYPE_p_unsigned_char swig_types[146]
-#define SWIGTYPE_p_value_type swig_types[147]
-#define SWIGTYPE_p_xml__lite__Document swig_types[148]
-static swig_type_info *swig_types[150];
-static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
+#define SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t swig_types[38]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[39]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[40]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[41]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[42]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[43]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[44]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[45]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[46]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[47]
+#define SWIGTYPE_p_nitf_DateTime swig_types[48]
+#define SWIGTYPE_p_nitf__DateTime swig_types[49]
+#define SWIGTYPE_p_nitf__FileSecurity swig_types[50]
+#define SWIGTYPE_p_nitf__NITFException swig_types[51]
+#define SWIGTYPE_p_off_t swig_types[52]
+#define SWIGTYPE_p_p_PyObject swig_types[53]
+#define SWIGTYPE_p_pid_t swig_types[54]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[55]
+#define SWIGTYPE_p_scene__Errors swig_types[56]
+#define SWIGTYPE_p_scene__FrameType swig_types[57]
+#define SWIGTYPE_p_scene__LatLon swig_types[58]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[59]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[60]
+#define SWIGTYPE_p_six__AmplitudeTable swig_types[61]
+#define SWIGTYPE_p_six__AppliedType swig_types[62]
+#define SWIGTYPE_p_six__AutofocusType swig_types[63]
+#define SWIGTYPE_p_six__BooleanType swig_types[64]
+#define SWIGTYPE_p_six__ByteSwapping swig_types[65]
+#define SWIGTYPE_p_six__Classification swig_types[66]
+#define SWIGTYPE_p_six__CollectType swig_types[67]
+#define SWIGTYPE_p_six__ComplexImageGridType swig_types[68]
+#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[69]
+#define SWIGTYPE_p_six__Components swig_types[70]
+#define SWIGTYPE_p_six__CompositeSCP swig_types[71]
+#define SWIGTYPE_p_six__Constants swig_types[72]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[73]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[74]
+#define SWIGTYPE_p_six__CorrCoefs swig_types[75]
+#define SWIGTYPE_p_six__DESValidationException swig_types[76]
+#define SWIGTYPE_p_six__Data swig_types[77]
+#define SWIGTYPE_p_six__DataType swig_types[78]
+#define SWIGTYPE_p_six__DecimationMethod swig_types[79]
+#define SWIGTYPE_p_six__DecorrType swig_types[80]
+#define SWIGTYPE_p_six__DemodType swig_types[81]
+#define SWIGTYPE_p_six__DisplayType swig_types[82]
+#define SWIGTYPE_p_six__DualPolarizationType swig_types[83]
+#define SWIGTYPE_p_six__EarthModelType swig_types[84]
+#define SWIGTYPE_p_six__ErrorStatistics swig_types[85]
+#define SWIGTYPE_p_six__FFTSign swig_types[86]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[87]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[88]
+#define SWIGTYPE_p_six__Init swig_types[89]
+#define SWIGTYPE_p_six__IonoError swig_types[90]
+#define SWIGTYPE_p_six__LUT swig_types[91]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[92]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[93]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[94]
+#define SWIGTYPE_p_six__Options swig_types[95]
+#define SWIGTYPE_p_six__OrientationType swig_types[96]
+#define SWIGTYPE_p_six__Parameter swig_types[97]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[98]
+#define SWIGTYPE_p_six__PixelType swig_types[99]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[100]
+#define SWIGTYPE_p_six__PolarizationType swig_types[101]
+#define SWIGTYPE_p_six__PosVelError swig_types[102]
+#define SWIGTYPE_p_six__ProjectionType swig_types[103]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[104]
+#define SWIGTYPE_p_six__RadarModeType swig_types[105]
+#define SWIGTYPE_p_six__RadarSensor swig_types[106]
+#define SWIGTYPE_p_six__Radiometric swig_types[107]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[108]
+#define SWIGTYPE_p_six__RegionType swig_types[109]
+#define SWIGTYPE_p_six__RowColEnum swig_types[110]
+#define SWIGTYPE_p_six__SCP swig_types[111]
+#define SWIGTYPE_p_six__SCPType swig_types[112]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[113]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[114]
+#define SWIGTYPE_p_six__TropoError swig_types[115]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[116]
+#define SWIGTYPE_p_six__XMLControl swig_types[117]
+#define SWIGTYPE_p_six__XYZEnum swig_types[118]
+#define SWIGTYPE_p_size_t swig_types[119]
+#define SWIGTYPE_p_size_type swig_types[120]
+#define SWIGTYPE_p_ssize_t swig_types[121]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[122]
+#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[123]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[124]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[125]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[126]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[127]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[128]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[129]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[130]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[131]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[132]
+#define SWIGTYPE_p_std__invalid_argument swig_types[133]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[134]
+#define SWIGTYPE_p_std__ostream swig_types[135]
+#define SWIGTYPE_p_std__string swig_types[136]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[137]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[138]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[139]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[140]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[141]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[142]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[143]
+#define SWIGTYPE_p_uint16_t swig_types[144]
+#define SWIGTYPE_p_uint32_t swig_types[145]
+#define SWIGTYPE_p_uint64_t swig_types[146]
+#define SWIGTYPE_p_uint8_t swig_types[147]
+#define SWIGTYPE_p_unsigned_char swig_types[148]
+#define SWIGTYPE_p_value_type swig_types[149]
+#define SWIGTYPE_p_xml__lite__Document swig_types[150]
+static swig_type_info *swig_types[152];
+static swig_module_info swig_module = {swig_types, 151, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5171,6 +5173,12 @@ mem::ScopedCopyablePtr< six::CompositeSCP > makeScopedCopyableCompositeSCP()
 mem::ScopedCopyablePtr< six::Components > makeScopedCopyableComponents()
 {
     return mem::ScopedCopyablePtr< six::Components >(new six::Components ());
+} 
+
+
+mem::ScopedCloneablePtr< six::AmplitudeTable > makeScopedCloneableAmplitudeTable()
+{
+    return mem::ScopedCloneablePtr< six::AmplitudeTable >(new six::AmplitudeTable ());
 } 
 
 #ifdef __cplusplus
@@ -76195,6 +76203,1261 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::AmplitudeTable > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoAmplitudeTable")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< six::AmplitudeTable > *)new std::auto_ptr< six::AmplitudeTable >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::AmplitudeTable > *arg1 = (std::auto_ptr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoAmplitudeTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoAmplitudeTable" "', argument " "1"" of type '" "std::auto_ptr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoAmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::AmplitudeTable *arg1 = (six::AmplitudeTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableAmplitudeTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableAmplitudeTable" "', argument " "1"" of type '" "six::AmplitudeTable *""'"); 
+  }
+  arg1 = reinterpret_cast< six::AmplitudeTable * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::AmplitudeTable > *)new mem::ScopedCloneablePtr< six::AmplitudeTable >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCloneableAmplitudeTable")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::AmplitudeTable > *)new mem::ScopedCloneablePtr< six::AmplitudeTable >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableAmplitudeTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableAmplitudeTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCloneableAmplitudeTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::AmplitudeTable > *)new mem::ScopedCloneablePtr< six::AmplitudeTable >((mem::ScopedCloneablePtr< six::AmplitudeTable > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCloneableAmplitudeTable__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__AmplitudeTable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableAmplitudeTable__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableAmplitudeTable__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCloneableAmplitudeTable'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::AmplitudeTable >::ScopedCloneablePtr(six::AmplitudeTable *)\n"
+    "    mem::ScopedCloneablePtr< six::AmplitudeTable >::ScopedCloneablePtr()\n"
+    "    mem::ScopedCloneablePtr< six::AmplitudeTable >::ScopedCloneablePtr(mem::ScopedCloneablePtr< six::AmplitudeTable > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AmplitudeTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (six::AmplitudeTable *)((mem::ScopedCloneablePtr< six::AmplitudeTable > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AmplitudeTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___ref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (six::AmplitudeTable *) &((mem::ScopedCloneablePtr< six::AmplitudeTable > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AmplitudeTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___deref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (six::AmplitudeTable *)((mem::ScopedCloneablePtr< six::AmplitudeTable > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  six::AmplitudeTable *arg2 = (six::AmplitudeTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableAmplitudeTable_reset" "', argument " "2"" of type '" "six::AmplitudeTable *""'"); 
+  }
+  arg2 = reinterpret_cast< six::AmplitudeTable * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCloneableAmplitudeTable_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__AmplitudeTable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCloneableAmplitudeTable_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCloneableAmplitudeTable_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::AmplitudeTable >::reset(six::AmplitudeTable *)\n"
+    "    mem::ScopedCloneablePtr< six::AmplitudeTable >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCloneableAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCloneableAmplitudeTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCloneableAmplitudeTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  six::AmplitudeTable *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___eq__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__AmplitudeTable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableAmplitudeTable___eq__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableAmplitudeTable___eq__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::AmplitudeTable * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator ==((six::AmplitudeTable const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  six::AmplitudeTable *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable___ne__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__AmplitudeTable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableAmplitudeTable___ne__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableAmplitudeTable___ne__" "', argument " "2"" of type '" "six::AmplitudeTable const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::AmplitudeTable * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator !=((six::AmplitudeTable const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AmplitudeTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_clone" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (six::AmplitudeTable *)(*arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_numEntries_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable_numEntries_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_numEntries_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable_numEntries_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->numEntries = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_numEntries_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_numEntries_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_numEntries_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result =  ((*arg1)->numEntries);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_elementSize_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableAmplitudeTable_elementSize_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_elementSize_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCloneableAmplitudeTable_elementSize_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->elementSize = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_elementSize_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_elementSize_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_elementSize_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result =  ((*arg1)->elementSize);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  unsigned char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_getTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_getTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (unsigned char *)(*arg1)->getTable();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  unsigned char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_getTable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_getTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
+  {
+    try
+    {
+      result = (unsigned char *)(*arg1)->getTable();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_getTable(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCloneableAmplitudeTable_getTable'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    six::LUT::getTable()\n"
+    "    six::LUT::getTable() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *ScopedCloneableAmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCloneableAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::AmplitudeTable > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCloneableAmplitudeTable")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCloneableAmplitudeTable();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCloneablePtr< six::AmplitudeTable >(static_cast< const mem::ScopedCloneablePtr< six::AmplitudeTable >& >(result))), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, (char *)"delete_SwigPyIterator(SwigPyIterator self)"},
@@ -77663,6 +78926,35 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableComponents___ne__", _wrap_ScopedCopyableComponents___ne__, METH_VARARGS, (char *)"ScopedCopyableComponents___ne__(ScopedCopyableComponents self, Components rhs) -> bool"},
 	 { (char *)"ScopedCopyableComponents_swigregister", ScopedCopyableComponents_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableComponents", _wrap_makeScopedCopyableComponents, METH_VARARGS, (char *)"makeScopedCopyableComponents() -> ScopedCopyableComponents"},
+	 { (char *)"new_StdAutoAmplitudeTable", _wrap_new_StdAutoAmplitudeTable, METH_VARARGS, (char *)"new_StdAutoAmplitudeTable() -> StdAutoAmplitudeTable"},
+	 { (char *)"delete_StdAutoAmplitudeTable", _wrap_delete_StdAutoAmplitudeTable, METH_VARARGS, (char *)"delete_StdAutoAmplitudeTable(StdAutoAmplitudeTable self)"},
+	 { (char *)"StdAutoAmplitudeTable_swigregister", StdAutoAmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCloneableAmplitudeTable", _wrap_new_ScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"\n"
+		"ScopedCloneableAmplitudeTable(AmplitudeTable ptr=None)\n"
+		"ScopedCloneableAmplitudeTable()\n"
+		"new_ScopedCloneableAmplitudeTable(ScopedCloneableAmplitudeTable rhs) -> ScopedCloneableAmplitudeTable\n"
+		""},
+	 { (char *)"ScopedCloneableAmplitudeTable_get", _wrap_ScopedCloneableAmplitudeTable_get, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_get(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"},
+	 { (char *)"ScopedCloneableAmplitudeTable___ref__", _wrap_ScopedCloneableAmplitudeTable___ref__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___ref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"},
+	 { (char *)"ScopedCloneableAmplitudeTable___deref__", _wrap_ScopedCloneableAmplitudeTable___deref__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___deref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"},
+	 { (char *)"ScopedCloneableAmplitudeTable_reset", _wrap_ScopedCloneableAmplitudeTable_reset, METH_VARARGS, (char *)"\n"
+		"reset(AmplitudeTable ptr=None)\n"
+		"ScopedCloneableAmplitudeTable_reset(ScopedCloneableAmplitudeTable self)\n"
+		""},
+	 { (char *)"delete_ScopedCloneableAmplitudeTable", _wrap_delete_ScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"delete_ScopedCloneableAmplitudeTable(ScopedCloneableAmplitudeTable self)"},
+	 { (char *)"ScopedCloneableAmplitudeTable___eq__", _wrap_ScopedCloneableAmplitudeTable___eq__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___eq__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"},
+	 { (char *)"ScopedCloneableAmplitudeTable___ne__", _wrap_ScopedCloneableAmplitudeTable___ne__, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable___ne__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"},
+	 { (char *)"ScopedCloneableAmplitudeTable_clone", _wrap_ScopedCloneableAmplitudeTable_clone, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"},
+	 { (char *)"ScopedCloneableAmplitudeTable_numEntries_set", _wrap_ScopedCloneableAmplitudeTable_numEntries_set, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_numEntries_set(ScopedCloneableAmplitudeTable self, size_t numEntries)"},
+	 { (char *)"ScopedCloneableAmplitudeTable_numEntries_get", _wrap_ScopedCloneableAmplitudeTable_numEntries_get, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_numEntries_get(ScopedCloneableAmplitudeTable self) -> size_t"},
+	 { (char *)"ScopedCloneableAmplitudeTable_elementSize_set", _wrap_ScopedCloneableAmplitudeTable_elementSize_set, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_elementSize_set(ScopedCloneableAmplitudeTable self, size_t elementSize)"},
+	 { (char *)"ScopedCloneableAmplitudeTable_elementSize_get", _wrap_ScopedCloneableAmplitudeTable_elementSize_get, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_elementSize_get(ScopedCloneableAmplitudeTable self) -> size_t"},
+	 { (char *)"ScopedCloneableAmplitudeTable_getTable", _wrap_ScopedCloneableAmplitudeTable_getTable, METH_VARARGS, (char *)"\n"
+		"getTable() -> unsigned char\n"
+		"ScopedCloneableAmplitudeTable_getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *\n"
+		""},
+	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCloneableAmplitudeTable", _wrap_makeScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -77818,6 +79110,7 @@ static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__line
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "six::Poly1D *|math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "six::Poly2D *|math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t = {"_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t", "mem::ScopedCloneablePtr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__Components_t = {"_p_mem__ScopedCopyablePtrT_six__Components_t", "mem::ScopedCopyablePtr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t = {"_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t", "mem::ScopedCopyablePtr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t = {"_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t", "mem::ScopedCopyablePtr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
@@ -77902,6 +79195,7 @@ static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *",
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "std::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "std::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "std::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "std::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
@@ -77969,6 +79263,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__poly__OneDT_double_t,
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
+  &_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__Components_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
@@ -78053,6 +79348,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
   &_swigt__p_std__allocatorT_std__string_t,
+  &_swigt__p_std__auto_ptrT_six__AmplitudeTable_t,
   &_swigt__p_std__auto_ptrT_six__Components_t,
   &_swigt__p_std__auto_ptrT_six__CompositeSCP_t,
   &_swigt__p_std__auto_ptrT_six__CorrCoefs_t,
@@ -78120,6 +79416,7 @@ static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__
 static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t[] = {  {&_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__Components_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -78204,6 +79501,7 @@ static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_six__AmplitudeTable_t[] = {  {&_swigt__p_std__auto_ptrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__Components_t[] = {  {&_swigt__p_std__auto_ptrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CompositeSCP_t[] = {  {&_swigt__p_std__auto_ptrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CorrCoefs_t[] = {  {&_swigt__p_std__auto_ptrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -78271,6 +79569,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__poly__OneDT_double_t,
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
+  _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__Components_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
@@ -78355,6 +79654,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_type,
   _swigc__p_ssize_t,
   _swigc__p_std__allocatorT_std__string_t,
+  _swigc__p_std__auto_ptrT_six__AmplitudeTable_t,
   _swigc__p_std__auto_ptrT_six__Components_t,
   _swigc__p_std__auto_ptrT_six__CompositeSCP_t,
   _swigc__p_std__auto_ptrT_six__CorrCoefs_t,

@@ -185,7 +185,7 @@ struct Constants
  *  \struct ReferencePoint
  *  \brief Information grouping for a reference point
  *
- *  This object contains a vector (in ECEF, IOW tail from center of spheroid), 
+ *  This object contains a vector (in ECEF, IOW tail from center of spheroid),
  *  and row-column position for a point.
  *
  */
@@ -262,7 +262,6 @@ struct SCP
  */
 struct LUT
 {
-    mem::ScopedArray<unsigned char> table;
     size_t numEntries;
     size_t elementSize;
 
@@ -315,6 +314,20 @@ struct LUT
     {
         return &(table[i * elementSize]);
     }
+
+    unsigned char* getTable()
+    {
+        return table.get();
+    }
+
+    const unsigned char* getTable() const
+    {
+        return table.get();
+    }
+
+protected:
+    mem::ScopedArray<unsigned char> table;
+
 };
 
 /*!

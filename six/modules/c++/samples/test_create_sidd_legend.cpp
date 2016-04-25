@@ -186,9 +186,9 @@ int main(int argc, char** argv)
              ii < rgbLegend->mLUT->numEntries;
              ++ii, idx += 3)
         {
-            rgbLegend->mLUT->table[idx] = ii;
-            rgbLegend->mLUT->table[idx + 1] = ii;
-            rgbLegend->mLUT->table[idx + 2] = ii;
+            rgbLegend->mLUT->getTable()[idx] = ii;
+            rgbLegend->mLUT->getTable()[idx + 1] = ii;
+            rgbLegend->mLUT->getTable()[idx + 2] = ii;
         }
 
         const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.normL1()]);
