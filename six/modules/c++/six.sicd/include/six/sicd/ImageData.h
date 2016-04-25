@@ -42,7 +42,6 @@ struct ImageData
     //!  Everything is undefined at this time
     ImageData() :
         pixelType(PixelType::NOT_SET),
-        amplitudeTable(NULL),
         numRows(Init::undefined<size_t>()),
         numCols(Init::undefined<size_t>()),
         firstRow(0),
