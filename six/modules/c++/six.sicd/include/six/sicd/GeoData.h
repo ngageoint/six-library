@@ -61,7 +61,7 @@ public:
     //!  Clone, including all sub-nodes
     GeoInfo* clone() const;
 
-    //!  (Optional) name of a geographic feature
+    //!  Name of a geographic feature
     std::string name;
 
     //! (Optional) sub-nodes
