@@ -275,7 +275,7 @@ void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>&
 
 %pythoncode %{
 import numpy as np
-from six_base import VectorString
+from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)

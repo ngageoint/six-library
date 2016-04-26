@@ -24,6 +24,8 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <climits>
+#include <cstdio>
 
 void str::trim(std::string & s)
 {
@@ -223,13 +225,34 @@ std::vector<std::string> str::split(const std::string& s,
     return vec;
 }
 
+static int transformCheck(int c, int (*transform)(int))
+{
+    // Ensure the character can be represented
+    // as an unsigned char or is 'EOF', as the
+    // behavior for all other characters is undefined
+    if ((c >= 0 && c <= UCHAR_MAX) || c == EOF)
+        return transform(c);
+    else
+        throw except::Exception("Invalid character for upper/lower transform");
+}
+
+static int tolowerCheck(int c)
+{
+    return transformCheck(c, (int(*)(int)) tolower);
+}
+
+static int toupperCheck(int c)
+{
+    return transformCheck(c, (int(*)(int)) toupper);
+}
+
 void str::lower(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolowerCheck);
 }
 
 void str::upper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) toupper);
+    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) toupperCheck);
 }
 

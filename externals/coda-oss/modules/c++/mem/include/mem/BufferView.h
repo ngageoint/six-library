@@ -45,7 +45,7 @@ namespace mem
 template <typename T>
 struct BufferView
 {
-    BufferView(T* buffer = NULL, size_t bufferSize = 0) :
+    explicit BufferView(T* buffer = NULL, size_t bufferSize = 0) :
         data(buffer), size(bufferSize)
     {
     }
