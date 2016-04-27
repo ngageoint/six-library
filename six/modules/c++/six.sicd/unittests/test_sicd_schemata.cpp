@@ -248,10 +248,14 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
     std::string xmlText("");
     char  geoText[256];
 
+    // All GeoInfo blocks start the same
+    sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
+    xmlText = std::string(geoText);
+
+
+    // In 1_0_0, Desc comes before GeoInfo children
     if (version == FRMT_1_0_0)
     {
-        sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
-        xmlText = std::string(geoText);
         for (unsigned int i=0,n=1; i<numParams; ++i,++n)
         {
             sprintf(geoText, "<Desc name=\"GeoInfoParamName%u\">GeoInfoParamVal%u</Desc>", n,n);
@@ -259,19 +263,15 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
         }
     }
 
+    // main loop
     if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
-        if (version != FRMT_1_0_0)
-        {
-            sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
-            xmlText = std::string(geoText);
-        }
-
         for (unsigned int i = 0; i < numInfos; ++i)
         {
             xmlText += initGeoInfoXML(version, numInfos - 1, numParams);
         }
 
+        // Everything has been written to version one, so we can close the block
         if (version == FRMT_1_0_0)
         {
             xmlText += "</GeoInfo>";
