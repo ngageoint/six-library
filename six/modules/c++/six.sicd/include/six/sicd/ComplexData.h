@@ -79,7 +79,7 @@ public:
     mem::ScopedCloneablePtr<ImageCreation> imageCreation;
 
     //!  Block describes the image pixel data
-    mem::ScopedCloneablePtr<ImageData> imageData;
+    mem::ScopedCopyablePtr<ImageData> imageData;
 
     //!  Describes the geographic coords of the region covered by the image
     mem::ScopedCloneablePtr<GeoData> geoData;
@@ -122,7 +122,7 @@ public:
     //          set, pfa should remain NULL.
     mem::ScopedCopyablePtr<RMA> rma;
 
-    //!  (Optional/Choice) Simple Range Doppler Compression params -- 
+    //!  (Optional/Choice) Simple Range Doppler Compression params --
     //   if this is set, pfa & rma should remain NULL.
     mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
@@ -147,8 +147,8 @@ public:
     Data* clone() const;
 
     /*!
-     *  Utility function for getting the pixel type.  
-     *  This is stored in the SICD along with the width  
+     *  Utility function for getting the pixel type.
+     *  This is stored in the SICD along with the width
      *
      *  Maps to: /SICD/ImageData/PixelType,
      *  /SIDD/Display/PixelType
@@ -272,7 +272,7 @@ public:
     /*!
      *  Classification info is needed by the NITFReadControl/NITFWriteControl
      *  to populate the nitf::FileSecurity.  This method is defined
-     *  differently for SICD than SIDD.  Any profile parameters for 
+     *  differently for SICD than SIDD.  Any profile parameters for
      *  FileSecurity that do not conform to Classification transfer must
      *  be initialized directly.
      *  Maps to SICD/CollectionInfo/Classification
@@ -333,7 +333,10 @@ public:
         return six::getImageMode(collectionInformation->radarMode);
     }
 
+    bool operator==(const ComplexData& rhs) const;
+
 private:
+    virtual bool equalTo(const Data& rhs) const;
     static const char VENDOR_ID[];
 
     std::string mVersion;

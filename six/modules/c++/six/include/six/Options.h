@@ -79,6 +79,12 @@ public:
     //!  Allows us to compare an iterator against end
     ParameterIter end() const { return mParameters.end(); }
 
+    bool operator==(const Options& rhs) const;
+    bool operator!=(const Options& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
     std::map<std::string, Parameter> mParameters;
 };

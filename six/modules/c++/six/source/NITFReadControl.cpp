@@ -52,7 +52,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
         for (size_t jj = 0; jj < lut.getTables(); ++jj, ++kk)
         {
             // Need to transpose the lookup table entries
-            legend.mLUT->table[kk] =
+            legend.mLUT->getTable()[kk] =
                     table[jj * lut.getEntries() + ii];
         }
     }
@@ -227,8 +227,8 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
             nitf::SegmentReader deReader = mReader.newDEReader(i);
             SegmentInputStreamAdapter ioAdapter(deReader);
-            std::auto_ptr<Data> data(parseData(*mXMLRegistry, 
-                                               ioAdapter, 
+            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
+                                               ioAdapter,
                                                dataType,
                                                schemaPaths,
                                                *mLog));

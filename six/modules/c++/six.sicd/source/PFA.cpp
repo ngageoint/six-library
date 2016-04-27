@@ -40,5 +40,20 @@ PFA::PFA() :
     kaz2(Init::undefined<double>())
 {
 }
+
+bool PFA::operator==(const PFA& rhs) const
+{
+    return (focusPlaneNormal == rhs.focusPlaneNormal &&
+        imagePlaneNormal == rhs.imagePlaneNormal &&
+        polarAngleRefTime == rhs.polarAngleRefTime &&
+        polarAnglePoly == rhs.polarAnglePoly &&
+        spatialFrequencyScaleFactorPoly == rhs.spatialFrequencyScaleFactorPoly &&
+        krg1 == rhs.krg1 &&
+        krg2 == rhs.krg2 &&
+        kaz1 == rhs.kaz2 &&
+        kaz2 == rhs.kaz2 &&
+        slowTimeDeskew == rhs.slowTimeDeskew);
+}
+
 }
 }

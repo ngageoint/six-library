@@ -42,3 +42,20 @@ SCPCOA::SCPCOA() :
 {
 }
 
+bool SCPCOA::operator==(const SCPCOA& rhs) const
+{
+    return (scpTime == rhs.scpTime &&
+        arpPos == rhs.arpPos &&
+        arpVel == rhs.arpVel &&
+        arpAcc == rhs.arpAcc &&
+        sideOfTrack == rhs.sideOfTrack &&
+        slantRange == rhs.slantRange &&
+        groundRange == rhs.groundRange &&
+        dopplerConeAngle == rhs.dopplerConeAngle &&
+        grazeAngle == rhs.grazeAngle &&
+        incidenceAngle == rhs.incidenceAngle &&
+        twistAngle == rhs.twistAngle &&
+        slopeAngle == rhs.slopeAngle &&
+        azimAngle == rhs.azimAngle &&
+        layoverAngle == rhs.layoverAngle);
+}

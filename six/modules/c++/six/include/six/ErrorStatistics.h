@@ -59,6 +59,13 @@ struct CorrCoefs
     double v1v2;
     double v1v3;
     double v2v3;
+
+    //! Equality operators
+    bool operator==(const CorrCoefs& rhs) const;
+    bool operator!=(const CorrCoefs& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -92,6 +99,13 @@ struct PosVelError
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr;
+
+    //! Equality operators
+    bool operator==(const PosVelError& rhs) const;
+    bool operator!=(const PosVelError& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -127,6 +141,18 @@ struct RadarSensor
 
     //!  Constructor
     RadarSensor();
+
+    //! Equality operator
+    bool operator==(const RadarSensor& rhs) const
+    {
+        return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
+            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
+    }
+
+    bool operator!=(const RadarSensor& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -159,6 +185,17 @@ struct TropoError
 
     //!  Constructor
     TropoError();
+
+    bool operator==(const TropoError& rhs) const
+    {
+        return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
+            tropoRangeDecorr == rhs.tropoRangeDecorr);
+    }
+
+    bool operator!=(const TropoError& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -197,6 +234,18 @@ struct IonoError
 
     //!  Constructor
     IonoError();
+
+    //! Equality operator
+    bool operator==(const IonoError& rhs) const
+    {
+        return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr == rhs.ionoRangeVertDecorr);
+    }
+
+    bool operator!=(const IonoError& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -217,6 +266,18 @@ struct Components
     mem::ScopedCopyablePtr<RadarSensor> radarSensor;
     mem::ScopedCopyablePtr<TropoError> tropoError;
     mem::ScopedCopyablePtr<IonoError> ionoError;
+
+    //! Equality operator
+    bool operator==(const Components& rhs) const
+    {
+        return (posVelError == rhs.posVelError && radarSensor == rhs.radarSensor &&
+            tropoError == rhs.tropoError && ionoError == rhs.ionoError);
+    }
+
+    bool operator!=(const Components& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -260,6 +321,18 @@ struct CompositeSCP
 
     //!  SICD/SIDD RowCol or RgAz depending on scpType
     double xyErr;
+
+    //! Equality operators
+    bool operator==(const CompositeSCP& rhs) const
+    {
+        return (xErr == rhs.xErr && yErr == rhs.yErr &&
+            xyErr == rhs.xyErr && scpType == rhs.scpType);
+    }
+
+    bool operator!=(const CompositeSCP& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -291,6 +364,18 @@ struct ErrorStatistics
 
     ErrorStatistics()
     {
+    }
+
+    //! Equality operators
+    bool operator==(const ErrorStatistics& rhs) const
+    {
+        return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
+            additionalParameters == rhs.additionalParameters);
+    }
+
+    bool operator!=(const ErrorStatistics& rhs) const
+    {
+        return !(*this == rhs);
     }
 };
 }

@@ -38,6 +38,20 @@ RMAT::RMAT() :
 {
 }
 
+bool RMAT::operator==(const RMAT& rhs) const
+{
+    return (refTime == rhs.refTime &&
+        refPos == rhs.refPos &&
+        refVel == rhs.refVel &&
+        distRefLinePoly == rhs.distRefLinePoly &&
+        cosDCACOAPoly == rhs.cosDCACOAPoly &&
+        kx1 == rhs.kx1 &&
+        kx2 == rhs.kx2 &&
+        ky1 == rhs.ky1 &&
+        ky2 == rhs.ky2 &&
+        dopConeAngleRef == rhs.dopConeAngleRef);
+}
+
 RMCR::RMCR() :
     refPos(Init::undefined<Vector3>()),
     refVel(Init::undefined<Vector3>()),
@@ -53,6 +67,16 @@ INCA::INCA() :
     dopplerCentroidPoly(Init::undefined<Poly2D>()),
     dopplerCentroidCOA(Init::undefined<BooleanType>())
 {
+}
+
+bool INCA::operator==(const INCA& rhs) const
+{
+    return (timeCAPoly == rhs.timeCAPoly &&
+        rangeCA == rhs.rangeCA &&
+        freqZero == rhs.freqZero &&
+        dopplerRateScaleFactorPoly == rhs.dopplerRateScaleFactorPoly &&
+        dopplerCentroidPoly == rhs.dopplerCentroidPoly &&
+        dopplerCentroidCOA == rhs.dopplerCentroidCOA);
 }
 
 RMA::RMA() : 

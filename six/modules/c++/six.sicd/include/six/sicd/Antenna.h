@@ -235,6 +235,17 @@ struct Antenna
 
     //!  Constructor
     Antenna(){}
+
+    //! Equality operator
+    bool operator==(const Antenna& rhs) const
+    {
+        return (tx == rhs.tx && rcv == rhs.rcv && twoWay == rhs.twoWay);
+    }
+
+    bool operator!=(const Antenna& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

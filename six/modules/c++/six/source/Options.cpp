@@ -57,4 +57,9 @@ bool Options::hasParameter(const std::string& option) const
     const ParameterIter p = mParameters.find(option);
     return (p != mParameters.end());
 }
+
+bool Options::operator==(const Options& rhs) const
+{
+    return mParameters == rhs.mParameters;
+}
 }

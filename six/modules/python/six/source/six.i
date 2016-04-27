@@ -162,3 +162,20 @@ SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
+SCOPED_CLONEABLE(six, AmplitudeTable)
+
+%extend mem::ScopedCloneablePtr<six::AmplitudeTable>
+{
+    //$self is a raw pointer to a ScopedCloneable container the
+    //AmplitudeTable
+    double __getitem__(size_t key) const
+    {
+        return *(double*)(**$self)[key];
+    }
+
+    void __setitem__(size_t key, double value)
+    {
+        double* location = (double*)(**$self)[key];
+        *location = value;
+    }
+}
