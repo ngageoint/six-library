@@ -59,6 +59,18 @@ struct RcvChannelProcessed
     //! \todo Would this really be out of order?
     std::vector<int> channelIndex;
 
+    //! Equality operator
+    bool operator==(const RcvChannelProcessed& rhs) const
+    {
+        return (numChannelsProcessed == rhs.numChannelsProcessed && 
+            prfScaleFactor == rhs.prfScaleFactor && channelIndex == rhs.channelIndex);
+    }
+
+    bool operator!=(const RcvChannelProcessed& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 
 /*!
@@ -84,9 +96,7 @@ struct RcvChannelProcessed
 struct Distortion
 {
     //! Constructor
-    Distortion()
-    {
-    }
+    Distortion();
 
     /*!
      *  (Optional) Date of calibration of measurement
@@ -145,6 +155,12 @@ struct Distortion
      */
     double phaseErrorF2;
 
+    //! Equality operators
+    bool operator==(const Distortion& rhs) const;
+    bool operator!=(const Distortion& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -179,6 +195,18 @@ struct PolarizationCalibration
      *  Distortion parameters
      */
     mem::ScopedCopyablePtr<Distortion> distortion;
+
+    //! Equality operators
+    bool operator==(const PolarizationCalibration& rhs) const
+    {
+        return (hvAngleCompensationApplied == rhs.hvAngleCompensationApplied &&
+            distortionCorrectionApplied == rhs.distortionCorrectionApplied && distortion == rhs.distortion);
+    }
+
+    bool operator!=(const PolarizationCalibration& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -205,6 +233,18 @@ struct Processing
 
     //! (Optional) Additional parameters
     ParameterCollection parameters;
+
+    //! Equality operators
+    bool operator==(const Processing& rhs) const
+    {
+        return (type == rhs.type && applied == rhs.applied &&
+            parameters == rhs.parameters);
+    }
+
+    bool operator!=(const Processing& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -304,6 +344,13 @@ struct ImageFormation
      *  (if any)
      */
     mem::ScopedCopyablePtr<PolarizationCalibration> polarizationCalibration;
+
+    //! Equality operators
+    bool operator==(const ImageFormation& rhs) const;
+    bool operator!=(const ImageFormation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

@@ -58,6 +58,17 @@ struct NoiseLevel
      */
     Poly2D noisePoly;
 
+    //! Equality operators
+    bool operator==(const NoiseLevel& rhs) const
+    {
+        return noiseType == rhs.noiseType && noisePoly == rhs.noisePoly;
+    }
+
+    bool operator!=(const NoiseLevel& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 
 /*!
@@ -120,6 +131,14 @@ public:
      *  Removed in 1.0.0
      */
     AppliedType gammaZeroSFIncidenceMap;
+
+    //! Equality operators
+    bool operator==(const Radiometric& rhs) const;
+
+    bool operator!=(const Radiometric& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
 };
 

@@ -11171,13 +11171,25 @@ SWIGINTERN PyObject *_wrap_FileHeader_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg3 = PyLong_AsSsize_t(obj2);
+#else
     arg3 = PyInt_AsSsize_t(obj2);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg4 = PyLong_AsSsize_t(obj3);
+#else
     arg4 = PyInt_AsSsize_t(obj3);
+#endif
   }
   {
     try
@@ -11245,15 +11257,27 @@ SWIGINTERN PyObject *_wrap_FileHeader_set(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
+#if PY_VERSION_HEX >= 0x03000000
+        _v = PyLong_Check(argv[1]) ? 1 : 0;
+#else
         _v = PyInt_Check(argv[1]) ? 1 : 0;
+#endif
       }
       if (_v) {
         {
+#if PY_VERSION_HEX >= 0x03000000
+          _v = PyLong_Check(argv[2]) ? 1 : 0;
+#else
           _v = PyInt_Check(argv[2]) ? 1 : 0;
+#endif
         }
         if (_v) {
           {
+#if PY_VERSION_HEX >= 0x03000000
+            _v = PyLong_Check(argv[3]) ? 1 : 0;
+#else
             _v = PyInt_Check(argv[3]) ? 1 : 0;
+#endif
           }
           if (_v) {
             return _wrap_FileHeader_set__SWIG_1(self, args);
@@ -11288,7 +11312,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLsize(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11344,7 +11372,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMsize(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11400,7 +11432,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDsize(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11456,7 +11492,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLoffset(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11512,7 +11552,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMoffset(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11568,7 +11612,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -11654,7 +11702,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLsize(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11708,7 +11760,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMsize(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11762,7 +11818,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDsize(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11816,7 +11876,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLoffset(PyObject *SWIGUNUSEDPARM(self
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11870,7 +11934,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMoffset(PyObject *SWIGUNUSEDPARM(self
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11924,7 +11992,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -11978,7 +12050,11 @@ SWIGINTERN PyObject *_wrap_FileHeader_getPadBytes(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20087,7 +20163,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTimeOffset(PyObject *SWIGUNUSEDPAR
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20141,7 +20221,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPosOffset(PyObject *SWIGUNUSEDPARM
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20195,7 +20279,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTimeOffset(PyObject *SWIGUNUSEDPA
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20249,7 +20337,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPosOffset(PyObject *SWIGUNUSEDPAR
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20303,7 +20395,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTimeOffset(PyObject *SWIGUNUSEDPA
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20357,7 +20453,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPosOffset(PyObject *SWIGUNUSEDPAR
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20411,7 +20511,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRPOffset(PyObject *SWIGUNUSEDP
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20465,7 +20569,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSFOffset(PyObject *SWIGUNUSEDPARM
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20519,7 +20627,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx0Offset(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20573,7 +20685,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_FxSSOffset(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20627,7 +20743,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx1Offset(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20681,7 +20801,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx2Offset(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20735,7 +20859,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_deltaTOA0Offset(PyObject *SWIGUNUSED
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20789,7 +20917,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaSSOffset(PyObject *SWIGUNUSEDPARM
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -20992,7 +21124,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21078,7 +21214,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_get(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21102,7 +21242,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21188,7 +21332,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_get(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21212,7 +21360,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21298,7 +21450,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_get(PyObject *SWIGUNUSEDPARM
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21322,7 +21478,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21408,7 +21568,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_get(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21432,7 +21596,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21518,7 +21686,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_get(PyObject *SWIGUNUSEDPARM
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21542,7 +21714,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21628,7 +21804,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_get(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21652,7 +21832,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_set(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21738,7 +21922,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_get(PyObject *SWIGUNUSEDPAR
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -21762,7 +21950,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   {
     try
@@ -21848,7 +22040,11 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_get(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -28810,10 +29006,18 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   }
   arg2 = reinterpret_cast< io::SeekableInputStream * >(argp2);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg3 = PyLong_AsSsize_t(obj2);
+#else
     arg3 = PyInt_AsSsize_t(obj2);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg4 = PyLong_AsSsize_t(obj3);
+#else
     arg4 = PyInt_AsSsize_t(obj3);
+#endif
   }
   ecode5 = SWIG_AsVal_size_t(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -28852,7 +29056,11 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -29993,10 +30201,18 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg3 = PyLong_AsSsize_t(obj2);
+#else
     arg3 = PyInt_AsSsize_t(obj2);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg4 = PyLong_AsSsize_t(obj3);
+#else
     arg4 = PyInt_AsSsize_t(obj3);
+#endif
   }
   {
     try
@@ -30077,10 +30293,18 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg3 = PyLong_AsSsize_t(obj2);
+#else
     arg3 = PyInt_AsSsize_t(obj2);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg4 = PyLong_AsSsize_t(obj3);
+#else
     arg4 = PyInt_AsSsize_t(obj3);
+#endif
   }
   {
     try
@@ -30141,11 +30365,19 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
+#if PY_VERSION_HEX >= 0x03000000
+          _v = PyLong_Check(argv[2]) ? 1 : 0;
+#else
           _v = PyInt_Check(argv[2]) ? 1 : 0;
+#endif
         }
         if (_v) {
           {
+#if PY_VERSION_HEX >= 0x03000000
+            _v = PyLong_Check(argv[3]) ? 1 : 0;
+#else
             _v = PyInt_Check(argv[3]) ? 1 : 0;
+#endif
           }
           if (_v) {
             return _wrap_new_Wideband__SWIG_1(self, args);
@@ -30163,11 +30395,19 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
+#if PY_VERSION_HEX >= 0x03000000
+          _v = PyLong_Check(argv[2]) ? 1 : 0;
+#else
           _v = PyInt_Check(argv[2]) ? 1 : 0;
+#endif
         }
         if (_v) {
           {
+#if PY_VERSION_HEX >= 0x03000000
+            _v = PyLong_Check(argv[3]) ? 1 : 0;
+#else
             _v = PyInt_Check(argv[3]) ? 1 : 0;
+#endif
           }
           if (_v) {
             return _wrap_new_Wideband__SWIG_0(self, args);
@@ -30259,7 +30499,11 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -31341,7 +31585,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
   size_t arg2 ;
-  mem::SharedPtr< logging::Logger > arg3 ;
+  SwigValueWrapper< mem::SharedPtr< logging::Logger > > arg3 ;
   void *argp1 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -31496,7 +31740,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   size_t arg2 ;
-  mem::SharedPtr< logging::Logger > arg3 ;
+  SwigValueWrapper< mem::SharedPtr< logging::Logger > > arg3 ;
   int res1 = SWIG_OLDOBJ ;
   size_t val2 ;
   int ecode2 = 0 ;
@@ -32032,7 +32276,11 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getFileOffset(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:

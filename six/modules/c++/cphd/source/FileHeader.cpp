@@ -70,7 +70,12 @@ std::string FileHeader::readVersion(io::SeekableInputStream& inStream)
     {
         throw except::Exception(Ctxt("Not a CPHD file"));
     }
-    return kvPair.second;
+    
+    // Remove any trailing whitespace from the version
+    std::string ret = kvPair.second;
+    str::trim(ret);
+
+    return ret;
 }
 
 void FileHeader::tokenize(const std::string& in,

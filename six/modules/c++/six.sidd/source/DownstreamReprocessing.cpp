@@ -76,5 +76,22 @@ GeometricChip::getChipCoordinateFromFullImage(const RowColDouble& full) const
                             v * (chipSize.col - 1.0));
     return chip;
 }
+
+bool GeometricChip::operator==(const GeometricChip& rhs) const
+{
+    return (chipSize == rhs.chipSize &&
+        originalUpperLeftCoordinate == rhs.originalUpperLeftCoordinate &&
+        originalUpperRightCoordinate == rhs.originalUpperRightCoordinate &&
+        originalLowerLeftCoordinate == rhs.originalLowerLeftCoordinate &&
+        originalLowerRightCoordinate == rhs.originalLowerRightCoordinate);
+}
+
+bool ProcessingEvent::operator==(const ProcessingEvent& rhs) const
+{
+    return (applicationName == rhs.applicationName &&
+        appliedDateTime == rhs.appliedDateTime &&
+        interpolationMethod == rhs.interpolationMethod &&
+        descriptor == rhs.descriptor);
+}
 }
 }

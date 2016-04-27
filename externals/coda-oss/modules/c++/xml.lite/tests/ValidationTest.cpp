@@ -21,7 +21,7 @@ int main(int argc, char** argv)
         // parse!
         const std::auto_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
-        std::auto_ptr<logging::Logger> log(
+        logging::LoggerPtr log(
             logging::setupLogger("ValidationTest"));
 
         std::vector<std::string> schemaPaths;

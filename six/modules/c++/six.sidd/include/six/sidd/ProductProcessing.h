@@ -61,6 +61,18 @@ struct ProcessingModule
 
     //!  Clone
     ProcessingModule* clone() const;
+
+    //! Equality operator
+    bool operator==(const ProcessingModule& rhs) const
+    {
+        return (moduleName == rhs.moduleName && moduleParameters == rhs.moduleParameters &&
+            processingModules == rhs.processingModules);
+    }
+
+    bool operator!=(const ProcessingModule& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -77,6 +89,17 @@ struct ProductProcessing
 
     //!  Contains only a set of ProcessingModule components
     std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
+
+    //! Equality operator
+    bool operator==(const ProductProcessing& rhs) const
+    {
+        return processingModules == rhs.processingModules;
+    }
+
+    bool operator!=(const ProductProcessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

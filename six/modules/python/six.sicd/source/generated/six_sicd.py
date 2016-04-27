@@ -242,6 +242,11 @@ class ComplexClassification(pysix.six_base.Classification):
         """put(ComplexClassification self, std::ostream & os) -> std::ostream &"""
         return _six_sicd.ComplexClassification_put(self, os)
 
+
+    def __eq__(self, rhs):
+        """__eq__(ComplexClassification self, ComplexClassification rhs) -> bool"""
+        return _six_sicd.ComplexClassification___eq__(self, rhs)
+
     __swig_setmethods__["level"] = _six_sicd.ComplexClassification_level_set
     __swig_getmethods__["level"] = _six_sicd.ComplexClassification_level_get
     if _newclass:
@@ -359,6 +364,16 @@ class ImageCreation(_object):
         return _six_sicd.ImageCreation_clone(self)
 
 
+    def __eq__(self, rhs):
+        """__eq__(ImageCreation self, ImageCreation rhs) -> bool"""
+        return _six_sicd.ImageCreation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ImageCreation self, ImageCreation rhs) -> bool"""
+        return _six_sicd.ImageCreation___ne__(self, rhs)
+
+
     def __init__(self):
         """__init__(six::sicd::ImageCreation self) -> ImageCreation"""
         this = _six_sicd.new_ImageCreation()
@@ -386,13 +401,6 @@ class ImageData(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_ImageData
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(ImageData self) -> ImageData"""
-        return _six_sicd.ImageData_clone(self)
-
     __swig_setmethods__["pixelType"] = _six_sicd.ImageData_pixelType_set
     __swig_getmethods__["pixelType"] = _six_sicd.ImageData_pixelType_get
     if _newclass:
@@ -429,6 +437,18 @@ class ImageData(_object):
     __swig_getmethods__["validData"] = _six_sicd.ImageData_validData_get
     if _newclass:
         validData = _swig_property(_six_sicd.ImageData_validData_get, _six_sicd.ImageData_validData_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ImageData___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ImageData___ne__(self, rhs)
+
+    __swig_destroy__ = _six_sicd.delete_ImageData
+    __del__ = lambda self: None
 ImageData_swigregister = _six_sicd.ImageData_swigregister
 ImageData_swigregister(ImageData)
 
@@ -470,6 +490,16 @@ class GeoInfo(_object):
     __swig_getmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_get
     if _newclass:
         geometryLatLon = _swig_property(_six_sicd.GeoInfo_geometryLatLon_get, _six_sicd.GeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs):
+        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.GeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.GeoInfo___ne__(self, rhs)
+
 GeoInfo_swigregister = _six_sicd.GeoInfo_swigregister
 GeoInfo_swigregister(GeoInfo)
 
@@ -513,6 +543,16 @@ class GeoData(_object):
     __swig_getmethods__["geoInfos"] = _six_sicd.GeoData_geoInfos_get
     if _newclass:
         geoInfos = _swig_property(_six_sicd.GeoData_geoInfos_get, _six_sicd.GeoData_geoInfos_set)
+
+    def __eq__(self, rhs):
+        """__eq__(GeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.GeoData___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(GeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.GeoData___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_GeoData
     __del__ = lambda self: None
 GeoData_swigregister = _six_sicd.GeoData_swigregister
@@ -541,6 +581,16 @@ class WeightType(_object):
     __swig_getmethods__["parameters"] = _six_sicd.WeightType_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.WeightType_parameters_get, _six_sicd.WeightType_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(WeightType self, WeightType rhs) -> bool"""
+        return _six_sicd.WeightType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(WeightType self, WeightType rhs) -> bool"""
+        return _six_sicd.WeightType___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_WeightType
     __del__ = lambda self: None
 WeightType_swigregister = _six_sicd.WeightType_swigregister
@@ -610,6 +660,16 @@ class DirectionParameters(_object):
     __swig_getmethods__["weights"] = _six_sicd.DirectionParameters_weights_get
     if _newclass:
         weights = _swig_property(_six_sicd.DirectionParameters_weights_get, _six_sicd.DirectionParameters_weights_set)
+
+    def __eq__(self, rhs):
+        """__eq__(DirectionParameters self, DirectionParameters rhs) -> bool"""
+        return _six_sicd.DirectionParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(DirectionParameters self, DirectionParameters rhs) -> bool"""
+        return _six_sicd.DirectionParameters___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_DirectionParameters
     __del__ = lambda self: None
 DirectionParameters_swigregister = _six_sicd.DirectionParameters_swigregister
@@ -655,6 +715,16 @@ class Grid(_object):
     __swig_getmethods__["col"] = _six_sicd.Grid_col_get
     if _newclass:
         col = _swig_property(_six_sicd.Grid_col_get, _six_sicd.Grid_col_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Grid self, Grid rhs) -> bool"""
+        return _six_sicd.Grid___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Grid self, Grid rhs) -> bool"""
+        return _six_sicd.Grid___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Grid
     __del__ = lambda self: None
 Grid_swigregister = _six_sicd.Grid_swigregister
@@ -695,6 +765,16 @@ class TimelineSet(_object):
     __swig_getmethods__["interPulsePeriodPoly"] = _six_sicd.TimelineSet_interPulsePeriodPoly_get
     if _newclass:
         interPulsePeriodPoly = _swig_property(_six_sicd.TimelineSet_interPulsePeriodPoly_get, _six_sicd.TimelineSet_interPulsePeriodPoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(TimelineSet self, TimelineSet rhs) -> bool"""
+        return _six_sicd.TimelineSet___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(TimelineSet self, TimelineSet rhs) -> bool"""
+        return _six_sicd.TimelineSet___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_TimelineSet
     __del__ = lambda self: None
 TimelineSet_swigregister = _six_sicd.TimelineSet_swigregister
@@ -719,6 +799,16 @@ class InterPulsePeriod(_object):
     __swig_getmethods__["sets"] = _six_sicd.InterPulsePeriod_sets_get
     if _newclass:
         sets = _swig_property(_six_sicd.InterPulsePeriod_sets_get, _six_sicd.InterPulsePeriod_sets_set)
+
+    def __eq__(self, rhs):
+        """__eq__(InterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
+        return _six_sicd.InterPulsePeriod___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(InterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
+        return _six_sicd.InterPulsePeriod___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_InterPulsePeriod
     __del__ = lambda self: None
 InterPulsePeriod_swigregister = _six_sicd.InterPulsePeriod_swigregister
@@ -751,6 +841,16 @@ class Timeline(_object):
     __swig_getmethods__["interPulsePeriod"] = _six_sicd.Timeline_interPulsePeriod_get
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.Timeline_interPulsePeriod_get, _six_sicd.Timeline_interPulsePeriod_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Timeline self, Timeline rhs) -> bool"""
+        return _six_sicd.Timeline___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Timeline self, Timeline rhs) -> bool"""
+        return _six_sicd.Timeline___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Timeline
     __del__ = lambda self: None
 Timeline_swigregister = _six_sicd.Timeline_swigregister
@@ -775,6 +875,16 @@ class RcvAPC(_object):
     __swig_getmethods__["rcvAPCPolys"] = _six_sicd.RcvAPC_rcvAPCPolys_get
     if _newclass:
         rcvAPCPolys = _swig_property(_six_sicd.RcvAPC_rcvAPCPolys_get, _six_sicd.RcvAPC_rcvAPCPolys_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RcvAPC self, RcvAPC rhs) -> bool"""
+        return _six_sicd.RcvAPC___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RcvAPC self, RcvAPC rhs) -> bool"""
+        return _six_sicd.RcvAPC___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RcvAPC
     __del__ = lambda self: None
 RcvAPC_swigregister = _six_sicd.RcvAPC_swigregister
@@ -811,6 +921,16 @@ class Position(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(Position self, Position rhs) -> bool"""
+        return _six_sicd.Position___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Position self, Position rhs) -> bool"""
+        return _six_sicd.Position___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Position
     __del__ = lambda self: None
 Position_swigregister = _six_sicd.Position_swigregister
@@ -846,6 +966,16 @@ class TxStep(_object):
     __swig_getmethods__["txPolarization"] = _six_sicd.TxStep_txPolarization_get
     if _newclass:
         txPolarization = _swig_property(_six_sicd.TxStep_txPolarization_get, _six_sicd.TxStep_txPolarization_set)
+
+    def __eq__(self, rhs):
+        """__eq__(TxStep self, TxStep rhs) -> bool"""
+        return _six_sicd.TxStep___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(TxStep self, TxStep rhs) -> bool"""
+        return _six_sicd.TxStep___ne__(self, rhs)
+
 TxStep_swigregister = _six_sicd.TxStep_swigregister
 TxStep_swigregister(TxStep)
 
@@ -911,6 +1041,16 @@ class WaveformParameters(_object):
     __swig_getmethods__["rcvFMRate"] = _six_sicd.WaveformParameters_rcvFMRate_get
     if _newclass:
         rcvFMRate = _swig_property(_six_sicd.WaveformParameters_rcvFMRate_get, _six_sicd.WaveformParameters_rcvFMRate_set)
+
+    def __eq__(self, rhs):
+        """__eq__(WaveformParameters self, WaveformParameters rhs) -> bool"""
+        return _six_sicd.WaveformParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(WaveformParameters self, WaveformParameters rhs) -> bool"""
+        return _six_sicd.WaveformParameters___ne__(self, rhs)
+
 WaveformParameters_swigregister = _six_sicd.WaveformParameters_swigregister
 WaveformParameters_swigregister(WaveformParameters)
 
@@ -942,6 +1082,16 @@ class ChannelParameters(_object):
     __swig_getmethods__["rcvAPCIndex"] = _six_sicd.ChannelParameters_rcvAPCIndex_get
     if _newclass:
         rcvAPCIndex = _swig_property(_six_sicd.ChannelParameters_rcvAPCIndex_get, _six_sicd.ChannelParameters_rcvAPCIndex_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ChannelParameters self, ChannelParameters rhs) -> bool"""
+        return _six_sicd.ChannelParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ChannelParameters self, ChannelParameters rhs) -> bool"""
+        return _six_sicd.ChannelParameters___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_ChannelParameters
     __del__ = lambda self: None
 ChannelParameters_swigregister = _six_sicd.ChannelParameters_swigregister
@@ -1055,6 +1205,16 @@ class Segment(_object):
     __swig_getmethods__["identifier"] = _six_sicd.Segment_identifier_get
     if _newclass:
         identifier = _swig_property(_six_sicd.Segment_identifier_get, _six_sicd.Segment_identifier_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Segment self, Segment rhs) -> bool"""
+        return _six_sicd.Segment___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Segment self, Segment rhs) -> bool"""
+        return _six_sicd.Segment___ne__(self, rhs)
+
 Segment_swigregister = _six_sicd.Segment_swigregister
 Segment_swigregister(Segment)
 
@@ -1103,6 +1263,16 @@ class AreaPlane(_object):
     __swig_getmethods__["orientation"] = _six_sicd.AreaPlane_orientation_get
     if _newclass:
         orientation = _swig_property(_six_sicd.AreaPlane_orientation_get, _six_sicd.AreaPlane_orientation_set)
+
+    def __eq__(self, rhs):
+        """__eq__(AreaPlane self, AreaPlane rhs) -> bool"""
+        return _six_sicd.AreaPlane___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(AreaPlane self, AreaPlane rhs) -> bool"""
+        return _six_sicd.AreaPlane___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_AreaPlane
     __del__ = lambda self: None
 AreaPlane_swigregister = _six_sicd.AreaPlane_swigregister
@@ -1136,6 +1306,16 @@ class Area(_object):
     __swig_getmethods__["plane"] = _six_sicd.Area_plane_get
     if _newclass:
         plane = _swig_property(_six_sicd.Area_plane_get, _six_sicd.Area_plane_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Area self, Area rhs) -> bool"""
+        return _six_sicd.Area___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Area self, Area rhs) -> bool"""
+        return _six_sicd.Area___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Area
     __del__ = lambda self: None
 Area_swigregister = _six_sicd.Area_swigregister
@@ -1201,6 +1381,16 @@ class RadarCollection(_object):
     __swig_getmethods__["parameters"] = _six_sicd.RadarCollection_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.RadarCollection_parameters_get, _six_sicd.RadarCollection_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RadarCollection self, RadarCollection rhs) -> bool"""
+        return _six_sicd.RadarCollection___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RadarCollection self, RadarCollection rhs) -> bool"""
+        return _six_sicd.RadarCollection___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RadarCollection
     __del__ = lambda self: None
 RadarCollection_swigregister = _six_sicd.RadarCollection_swigregister
@@ -1233,6 +1423,16 @@ class RcvChannelProcessed(_object):
     __swig_getmethods__["channelIndex"] = _six_sicd.RcvChannelProcessed_channelIndex_get
     if _newclass:
         channelIndex = _swig_property(_six_sicd.RcvChannelProcessed_channelIndex_get, _six_sicd.RcvChannelProcessed_channelIndex_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
+        return _six_sicd.RcvChannelProcessed___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
+        return _six_sicd.RcvChannelProcessed___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RcvChannelProcessed
     __del__ = lambda self: None
 RcvChannelProcessed_swigregister = _six_sicd.RcvChannelProcessed_swigregister
@@ -1305,6 +1505,16 @@ class Distortion(_object):
     __swig_getmethods__["phaseErrorF2"] = _six_sicd.Distortion_phaseErrorF2_get
     if _newclass:
         phaseErrorF2 = _swig_property(_six_sicd.Distortion_phaseErrorF2_get, _six_sicd.Distortion_phaseErrorF2_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Distortion self, Distortion rhs) -> bool"""
+        return _six_sicd.Distortion___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Distortion self, Distortion rhs) -> bool"""
+        return _six_sicd.Distortion___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Distortion
     __del__ = lambda self: None
 Distortion_swigregister = _six_sicd.Distortion_swigregister
@@ -1337,6 +1547,16 @@ class PolarizationCalibration(_object):
     __swig_getmethods__["distortion"] = _six_sicd.PolarizationCalibration_distortion_get
     if _newclass:
         distortion = _swig_property(_six_sicd.PolarizationCalibration_distortion_get, _six_sicd.PolarizationCalibration_distortion_set)
+
+    def __eq__(self, rhs):
+        """__eq__(PolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
+        return _six_sicd.PolarizationCalibration___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(PolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
+        return _six_sicd.PolarizationCalibration___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_PolarizationCalibration
     __del__ = lambda self: None
 PolarizationCalibration_swigregister = _six_sicd.PolarizationCalibration_swigregister
@@ -1369,6 +1589,16 @@ class Processing(_object):
     __swig_getmethods__["parameters"] = _six_sicd.Processing_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.Processing_parameters_get, _six_sicd.Processing_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Processing self, Processing rhs) -> bool"""
+        return _six_sicd.Processing___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Processing self, Processing rhs) -> bool"""
+        return _six_sicd.Processing___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Processing
     __del__ = lambda self: None
 Processing_swigregister = _six_sicd.Processing_swigregister
@@ -1445,6 +1675,16 @@ class ImageFormation(_object):
     __swig_getmethods__["polarizationCalibration"] = _six_sicd.ImageFormation_polarizationCalibration_get
     if _newclass:
         polarizationCalibration = _swig_property(_six_sicd.ImageFormation_polarizationCalibration_get, _six_sicd.ImageFormation_polarizationCalibration_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ImageFormation self, ImageFormation rhs) -> bool"""
+        return _six_sicd.ImageFormation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ImageFormation self, ImageFormation rhs) -> bool"""
+        return _six_sicd.ImageFormation___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_ImageFormation
     __del__ = lambda self: None
 ImageFormation_swigregister = _six_sicd.ImageFormation_swigregister
@@ -1521,6 +1761,16 @@ class SCPCOA(_object):
     __swig_getmethods__["layoverAngle"] = _six_sicd.SCPCOA_layoverAngle_get
     if _newclass:
         layoverAngle = _swig_property(_six_sicd.SCPCOA_layoverAngle_get, _six_sicd.SCPCOA_layoverAngle_set)
+
+    def __eq__(self, rhs):
+        """__eq__(SCPCOA self, SCPCOA rhs) -> bool"""
+        return _six_sicd.SCPCOA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(SCPCOA self, SCPCOA rhs) -> bool"""
+        return _six_sicd.SCPCOA___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_SCPCOA
     __del__ = lambda self: None
 SCPCOA_swigregister = _six_sicd.SCPCOA_swigregister
@@ -1747,6 +1997,16 @@ class Antenna(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(Antenna self, Antenna rhs) -> bool"""
+        return _six_sicd.Antenna___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Antenna self, Antenna rhs) -> bool"""
+        return _six_sicd.Antenna___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_Antenna
     __del__ = lambda self: None
 Antenna_swigregister = _six_sicd.Antenna_swigregister
@@ -1779,6 +2039,16 @@ class MatchCollect(_object):
     __swig_getmethods__["parameters"] = _six_sicd.MatchCollect_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.MatchCollect_parameters_get, _six_sicd.MatchCollect_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_sicd.MatchCollect___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_sicd.MatchCollect___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_MatchCollect
     __del__ = lambda self: None
 MatchCollect_swigregister = _six_sicd.MatchCollect_swigregister
@@ -1823,6 +2093,16 @@ class MatchType(_object):
     __swig_getmethods__["matchCollects"] = _six_sicd.MatchType_matchCollects_get
     if _newclass:
         matchCollects = _swig_property(_six_sicd.MatchType_matchCollects_get, _six_sicd.MatchType_matchCollects_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.MatchType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.MatchType___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_MatchType
     __del__ = lambda self: None
 MatchType_swigregister = _six_sicd.MatchType_swigregister
@@ -1847,6 +2127,16 @@ class MatchInformation(_object):
     __swig_getmethods__["types"] = _six_sicd.MatchInformation_types_get
     if _newclass:
         types = _swig_property(_six_sicd.MatchInformation_types_get, _six_sicd.MatchInformation_types_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.MatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.MatchInformation___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_MatchInformation
     __del__ = lambda self: None
 MatchInformation_swigregister = _six_sicd.MatchInformation_swigregister
@@ -1875,6 +2165,16 @@ class SlowTimeDeskew(_object):
     __swig_getmethods__["slowTimeDeskewPhasePoly"] = _six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_get
     if _newclass:
         slowTimeDeskewPhasePoly = _swig_property(_six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(SlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
+        return _six_sicd.SlowTimeDeskew___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(SlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
+        return _six_sicd.SlowTimeDeskew___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_SlowTimeDeskew
     __del__ = lambda self: None
 SlowTimeDeskew_swigregister = _six_sicd.SlowTimeDeskew_swigregister
@@ -1935,6 +2235,16 @@ class PFA(_object):
     __swig_getmethods__["slowTimeDeskew"] = _six_sicd.PFA_slowTimeDeskew_get
     if _newclass:
         slowTimeDeskew = _swig_property(_six_sicd.PFA_slowTimeDeskew_get, _six_sicd.PFA_slowTimeDeskew_set)
+
+    def __eq__(self, rhs):
+        """__eq__(PFA self, PFA rhs) -> bool"""
+        return _six_sicd.PFA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(PFA self, PFA rhs) -> bool"""
+        return _six_sicd.PFA___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_PFA
     __del__ = lambda self: None
 PFA_swigregister = _six_sicd.PFA_swigregister
@@ -1995,6 +2305,16 @@ class RMAT(_object):
     __swig_getmethods__["dopConeAngleRef"] = _six_sicd.RMAT_dopConeAngleRef_get
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.RMAT_dopConeAngleRef_get, _six_sicd.RMAT_dopConeAngleRef_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RMAT self, RMAT rhs) -> bool"""
+        return _six_sicd.RMAT___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RMAT self, RMAT rhs) -> bool"""
+        return _six_sicd.RMAT___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RMAT
     __del__ = lambda self: None
 RMAT_swigregister = _six_sicd.RMAT_swigregister
@@ -2027,6 +2347,16 @@ class RMCR(_object):
     __swig_getmethods__["dopConeAngleRef"] = _six_sicd.RMCR_dopConeAngleRef_get
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.RMCR_dopConeAngleRef_get, _six_sicd.RMCR_dopConeAngleRef_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RMCR self, RMCR rhs) -> bool"""
+        return _six_sicd.RMCR___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RMCR self, RMCR rhs) -> bool"""
+        return _six_sicd.RMCR___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RMCR
     __del__ = lambda self: None
 RMCR_swigregister = _six_sicd.RMCR_swigregister
@@ -2071,6 +2401,16 @@ class INCA(_object):
     __swig_getmethods__["dopplerCentroidCOA"] = _six_sicd.INCA_dopplerCentroidCOA_get
     if _newclass:
         dopplerCentroidCOA = _swig_property(_six_sicd.INCA_dopplerCentroidCOA_get, _six_sicd.INCA_dopplerCentroidCOA_set)
+
+    def __eq__(self, rhs):
+        """__eq__(INCA self, INCA rhs) -> bool"""
+        return _six_sicd.INCA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(INCA self, INCA rhs) -> bool"""
+        return _six_sicd.INCA___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_INCA
     __del__ = lambda self: None
 INCA_swigregister = _six_sicd.INCA_swigregister
@@ -2107,6 +2447,16 @@ class RMA(_object):
     __swig_getmethods__["inca"] = _six_sicd.RMA_inca_get
     if _newclass:
         inca = _swig_property(_six_sicd.RMA_inca_get, _six_sicd.RMA_inca_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RMA self, RMA rhs) -> bool"""
+        return _six_sicd.RMA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RMA self, RMA rhs) -> bool"""
+        return _six_sicd.RMA___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RMA
     __del__ = lambda self: None
 RMA_swigregister = _six_sicd.RMA_swigregister
@@ -2135,6 +2485,16 @@ class RgAzComp(_object):
     __swig_getmethods__["kazPoly"] = _six_sicd.RgAzComp_kazPoly_get
     if _newclass:
         kazPoly = _swig_property(_six_sicd.RgAzComp_kazPoly_get, _six_sicd.RgAzComp_kazPoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(RgAzComp self, RgAzComp rhs) -> bool"""
+        return _six_sicd.RgAzComp___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RgAzComp self, RgAzComp rhs) -> bool"""
+        return _six_sicd.RgAzComp___ne__(self, rhs)
+
     __swig_destroy__ = _six_sicd.delete_RgAzComp
     __del__ = lambda self: None
 RgAzComp_swigregister = _six_sicd.RgAzComp_swigregister
@@ -2356,6 +2716,11 @@ class ComplexData(pysix.six_base.Data):
     def getImageMode(self):
         """getImageMode(ComplexData self) -> six::ImageMode"""
         return _six_sicd.ComplexData_getImageMode(self)
+
+
+    def __eq__(self, rhs):
+        """__eq__(ComplexData self, ComplexData rhs) -> bool"""
+        return _six_sicd.ComplexData___eq__(self, rhs)
 
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
@@ -2689,6 +3054,16 @@ class ScopedCloneableImageCreation(_object):
         """clone(ScopedCloneableImageCreation self) -> ImageCreation"""
         return _six_sicd.ScopedCloneableImageCreation_clone(self)
 
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableImageCreation self, ImageCreation rhs) -> bool"""
+        return _six_sicd.ScopedCloneableImageCreation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableImageCreation self, ImageCreation rhs) -> bool"""
+        return _six_sicd.ScopedCloneableImageCreation___ne__(self, rhs)
+
 ScopedCloneableImageCreation_swigregister = _six_sicd.ScopedCloneableImageCreation_swigregister
 ScopedCloneableImageCreation_swigregister(ScopedCloneableImageCreation)
 
@@ -2716,98 +3091,103 @@ class StdAutoImageData(_object):
 StdAutoImageData_swigregister = _six_sicd.StdAutoImageData_swigregister
 StdAutoImageData_swigregister(StdAutoImageData)
 
-class ScopedCloneableImageData(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ImageData)> class"""
+class ScopedCopyableImageData(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::ImageData)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableImageData, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableImageData, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableImageData, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableImageData, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self, ImageData ptr=None) -> ScopedCloneableImageData
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self) -> ScopedCloneableImageData
-        __init__(mem::ScopedCloneablePtr<(six::sicd::ImageData)> self, ScopedCloneableImageData rhs) -> ScopedCloneableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self, ImageData ptr=None) -> ScopedCopyableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self) -> ScopedCopyableImageData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::ImageData)> self, ScopedCopyableImageData rhs) -> ScopedCopyableImageData
         """
-        this = _six_sicd.new_ScopedCloneableImageData(*args)
+        this = _six_sicd.new_ScopedCopyableImageData(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData_get(self)
+        """get(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData___ref__(self)
+        """__ref__(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData___deref__(self)
+        """__deref__(ScopedCopyableImageData self) -> ImageData"""
+        return _six_sicd.ScopedCopyableImageData___deref__(self)
 
 
     def reset(self, *args):
         """
-        reset(ScopedCloneableImageData self, ImageData ptr=None)
-        reset(ScopedCloneableImageData self)
+        reset(ScopedCopyableImageData self, ImageData ptr=None)
+        reset(ScopedCopyableImageData self)
         """
-        return _six_sicd.ScopedCloneableImageData_reset(self, *args)
+        return _six_sicd.ScopedCopyableImageData_reset(self, *args)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableImageData
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableImageData
     __del__ = lambda self: None
+    __swig_setmethods__["pixelType"] = _six_sicd.ScopedCopyableImageData_pixelType_set
+    __swig_getmethods__["pixelType"] = _six_sicd.ScopedCopyableImageData_pixelType_get
+    if _newclass:
+        pixelType = _swig_property(_six_sicd.ScopedCopyableImageData_pixelType_get, _six_sicd.ScopedCopyableImageData_pixelType_set)
+    __swig_setmethods__["amplitudeTable"] = _six_sicd.ScopedCopyableImageData_amplitudeTable_set
+    __swig_getmethods__["amplitudeTable"] = _six_sicd.ScopedCopyableImageData_amplitudeTable_get
+    if _newclass:
+        amplitudeTable = _swig_property(_six_sicd.ScopedCopyableImageData_amplitudeTable_get, _six_sicd.ScopedCopyableImageData_amplitudeTable_set)
+    __swig_setmethods__["numRows"] = _six_sicd.ScopedCopyableImageData_numRows_set
+    __swig_getmethods__["numRows"] = _six_sicd.ScopedCopyableImageData_numRows_get
+    if _newclass:
+        numRows = _swig_property(_six_sicd.ScopedCopyableImageData_numRows_get, _six_sicd.ScopedCopyableImageData_numRows_set)
+    __swig_setmethods__["numCols"] = _six_sicd.ScopedCopyableImageData_numCols_set
+    __swig_getmethods__["numCols"] = _six_sicd.ScopedCopyableImageData_numCols_get
+    if _newclass:
+        numCols = _swig_property(_six_sicd.ScopedCopyableImageData_numCols_get, _six_sicd.ScopedCopyableImageData_numCols_set)
+    __swig_setmethods__["firstRow"] = _six_sicd.ScopedCopyableImageData_firstRow_set
+    __swig_getmethods__["firstRow"] = _six_sicd.ScopedCopyableImageData_firstRow_get
+    if _newclass:
+        firstRow = _swig_property(_six_sicd.ScopedCopyableImageData_firstRow_get, _six_sicd.ScopedCopyableImageData_firstRow_set)
+    __swig_setmethods__["firstCol"] = _six_sicd.ScopedCopyableImageData_firstCol_set
+    __swig_getmethods__["firstCol"] = _six_sicd.ScopedCopyableImageData_firstCol_get
+    if _newclass:
+        firstCol = _swig_property(_six_sicd.ScopedCopyableImageData_firstCol_get, _six_sicd.ScopedCopyableImageData_firstCol_set)
+    __swig_setmethods__["fullImage"] = _six_sicd.ScopedCopyableImageData_fullImage_set
+    __swig_getmethods__["fullImage"] = _six_sicd.ScopedCopyableImageData_fullImage_get
+    if _newclass:
+        fullImage = _swig_property(_six_sicd.ScopedCopyableImageData_fullImage_get, _six_sicd.ScopedCopyableImageData_fullImage_set)
+    __swig_setmethods__["scpPixel"] = _six_sicd.ScopedCopyableImageData_scpPixel_set
+    __swig_getmethods__["scpPixel"] = _six_sicd.ScopedCopyableImageData_scpPixel_get
+    if _newclass:
+        scpPixel = _swig_property(_six_sicd.ScopedCopyableImageData_scpPixel_get, _six_sicd.ScopedCopyableImageData_scpPixel_set)
+    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableImageData_validData_set
+    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableImageData_validData_get
+    if _newclass:
+        validData = _swig_property(_six_sicd.ScopedCopyableImageData_validData_get, _six_sicd.ScopedCopyableImageData_validData_set)
 
-    def clone(self):
-        """clone(ScopedCloneableImageData self) -> ImageData"""
-        return _six_sicd.ScopedCloneableImageData_clone(self)
-
-    __swig_setmethods__["pixelType"] = _six_sicd.ScopedCloneableImageData_pixelType_set
-    __swig_getmethods__["pixelType"] = _six_sicd.ScopedCloneableImageData_pixelType_get
-    if _newclass:
-        pixelType = _swig_property(_six_sicd.ScopedCloneableImageData_pixelType_get, _six_sicd.ScopedCloneableImageData_pixelType_set)
-    __swig_setmethods__["amplitudeTable"] = _six_sicd.ScopedCloneableImageData_amplitudeTable_set
-    __swig_getmethods__["amplitudeTable"] = _six_sicd.ScopedCloneableImageData_amplitudeTable_get
-    if _newclass:
-        amplitudeTable = _swig_property(_six_sicd.ScopedCloneableImageData_amplitudeTable_get, _six_sicd.ScopedCloneableImageData_amplitudeTable_set)
-    __swig_setmethods__["numRows"] = _six_sicd.ScopedCloneableImageData_numRows_set
-    __swig_getmethods__["numRows"] = _six_sicd.ScopedCloneableImageData_numRows_get
-    if _newclass:
-        numRows = _swig_property(_six_sicd.ScopedCloneableImageData_numRows_get, _six_sicd.ScopedCloneableImageData_numRows_set)
-    __swig_setmethods__["numCols"] = _six_sicd.ScopedCloneableImageData_numCols_set
-    __swig_getmethods__["numCols"] = _six_sicd.ScopedCloneableImageData_numCols_get
-    if _newclass:
-        numCols = _swig_property(_six_sicd.ScopedCloneableImageData_numCols_get, _six_sicd.ScopedCloneableImageData_numCols_set)
-    __swig_setmethods__["firstRow"] = _six_sicd.ScopedCloneableImageData_firstRow_set
-    __swig_getmethods__["firstRow"] = _six_sicd.ScopedCloneableImageData_firstRow_get
-    if _newclass:
-        firstRow = _swig_property(_six_sicd.ScopedCloneableImageData_firstRow_get, _six_sicd.ScopedCloneableImageData_firstRow_set)
-    __swig_setmethods__["firstCol"] = _six_sicd.ScopedCloneableImageData_firstCol_set
-    __swig_getmethods__["firstCol"] = _six_sicd.ScopedCloneableImageData_firstCol_get
-    if _newclass:
-        firstCol = _swig_property(_six_sicd.ScopedCloneableImageData_firstCol_get, _six_sicd.ScopedCloneableImageData_firstCol_set)
-    __swig_setmethods__["fullImage"] = _six_sicd.ScopedCloneableImageData_fullImage_set
-    __swig_getmethods__["fullImage"] = _six_sicd.ScopedCloneableImageData_fullImage_get
-    if _newclass:
-        fullImage = _swig_property(_six_sicd.ScopedCloneableImageData_fullImage_get, _six_sicd.ScopedCloneableImageData_fullImage_set)
-    __swig_setmethods__["scpPixel"] = _six_sicd.ScopedCloneableImageData_scpPixel_set
-    __swig_getmethods__["scpPixel"] = _six_sicd.ScopedCloneableImageData_scpPixel_get
-    if _newclass:
-        scpPixel = _swig_property(_six_sicd.ScopedCloneableImageData_scpPixel_get, _six_sicd.ScopedCloneableImageData_scpPixel_set)
-    __swig_setmethods__["validData"] = _six_sicd.ScopedCloneableImageData_validData_set
-    __swig_getmethods__["validData"] = _six_sicd.ScopedCloneableImageData_validData_get
-    if _newclass:
-        validData = _swig_property(_six_sicd.ScopedCloneableImageData_validData_get, _six_sicd.ScopedCloneableImageData_validData_set)
-ScopedCloneableImageData_swigregister = _six_sicd.ScopedCloneableImageData_swigregister
-ScopedCloneableImageData_swigregister(ScopedCloneableImageData)
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ScopedCopyableImageData___eq__(self, rhs)
 
 
-def makeScopedCloneableImageData():
-    """makeScopedCloneableImageData() -> ScopedCloneableImageData"""
-    return _six_sicd.makeScopedCloneableImageData()
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ScopedCopyableImageData___ne__(self, rhs)
+
+ScopedCopyableImageData_swigregister = _six_sicd.ScopedCopyableImageData_swigregister
+ScopedCopyableImageData_swigregister(ScopedCopyableImageData)
+
+
+def makeScopedCopyableImageData():
+    """makeScopedCopyableImageData() -> ScopedCopyableImageData"""
+    return _six_sicd.makeScopedCopyableImageData()
 class StdAutoGeoData(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::GeoData)> class"""
     __swig_setmethods__ = {}
@@ -2897,6 +3277,16 @@ class ScopedCloneableGeoData(_object):
     __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCloneableGeoData_geoInfos_get
     if _newclass:
         geoInfos = _swig_property(_six_sicd.ScopedCloneableGeoData_geoInfos_get, _six_sicd.ScopedCloneableGeoData_geoInfos_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoData___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoData___ne__(self, rhs)
+
 ScopedCloneableGeoData_swigregister = _six_sicd.ScopedCloneableGeoData_swigregister
 ScopedCloneableGeoData_swigregister(ScopedCloneableGeoData)
 
@@ -2993,6 +3383,16 @@ class ScopedCloneableGrid(_object):
     __swig_getmethods__["col"] = _six_sicd.ScopedCloneableGrid_col_get
     if _newclass:
         col = _swig_property(_six_sicd.ScopedCloneableGrid_col_get, _six_sicd.ScopedCloneableGrid_col_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableGrid self, Grid rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGrid___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableGrid self, Grid rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGrid___ne__(self, rhs)
+
 ScopedCloneableGrid_swigregister = _six_sicd.ScopedCloneableGrid_swigregister
 ScopedCloneableGrid_swigregister(ScopedCloneableGrid)
 
@@ -3076,6 +3476,16 @@ class ScopedCopyableTimeline(_object):
     __swig_getmethods__["interPulsePeriod"] = _six_sicd.ScopedCopyableTimeline_interPulsePeriod_get
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.ScopedCopyableTimeline_interPulsePeriod_get, _six_sicd.ScopedCopyableTimeline_interPulsePeriod_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableTimeline self, Timeline rhs) -> bool"""
+        return _six_sicd.ScopedCopyableTimeline___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableTimeline self, Timeline rhs) -> bool"""
+        return _six_sicd.ScopedCopyableTimeline___ne__(self, rhs)
+
 ScopedCopyableTimeline_swigregister = _six_sicd.ScopedCopyableTimeline_swigregister
 ScopedCopyableTimeline_swigregister(ScopedCopyableTimeline)
 
@@ -3163,6 +3573,16 @@ class ScopedCopyablePosition(_object):
     __swig_getmethods__["rcvAPC"] = _six_sicd.ScopedCopyablePosition_rcvAPC_get
     if _newclass:
         rcvAPC = _swig_property(_six_sicd.ScopedCopyablePosition_rcvAPC_get, _six_sicd.ScopedCopyablePosition_rcvAPC_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyablePosition self, Position rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePosition___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyablePosition self, Position rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePosition___ne__(self, rhs)
+
 ScopedCopyablePosition_swigregister = _six_sicd.ScopedCopyablePosition_swigregister
 ScopedCopyablePosition_swigregister(ScopedCopyablePosition)
 
@@ -3238,6 +3658,16 @@ class ScopedCopyableRcvAPC(_object):
     __swig_getmethods__["rcvAPCPolys"] = _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_get
     if _newclass:
         rcvAPCPolys = _swig_property(_six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_get, _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRcvAPC self, RcvAPC rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRcvAPC___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRcvAPC self, RcvAPC rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRcvAPC___ne__(self, rhs)
+
 ScopedCopyableRcvAPC_swigregister = _six_sicd.ScopedCopyableRcvAPC_swigregister
 ScopedCopyableRcvAPC_swigregister(ScopedCopyableRcvAPC)
 
@@ -3354,6 +3784,16 @@ class ScopedCloneableRadarCollection(_object):
     __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableRadarCollection_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.ScopedCloneableRadarCollection_parameters_get, _six_sicd.ScopedCloneableRadarCollection_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableRadarCollection self, RadarCollection rhs) -> bool"""
+        return _six_sicd.ScopedCloneableRadarCollection___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableRadarCollection self, RadarCollection rhs) -> bool"""
+        return _six_sicd.ScopedCloneableRadarCollection___ne__(self, rhs)
+
 ScopedCloneableRadarCollection_swigregister = _six_sicd.ScopedCloneableRadarCollection_swigregister
 ScopedCloneableRadarCollection_swigregister(ScopedCloneableRadarCollection)
 
@@ -3481,6 +3921,16 @@ class ScopedCopyableImageFormation(_object):
     __swig_getmethods__["polarizationCalibration"] = _six_sicd.ScopedCopyableImageFormation_polarizationCalibration_get
     if _newclass:
         polarizationCalibration = _swig_property(_six_sicd.ScopedCopyableImageFormation_polarizationCalibration_get, _six_sicd.ScopedCopyableImageFormation_polarizationCalibration_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableImageFormation self, ImageFormation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableImageFormation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableImageFormation self, ImageFormation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableImageFormation___ne__(self, rhs)
+
 ScopedCopyableImageFormation_swigregister = _six_sicd.ScopedCopyableImageFormation_swigregister
 ScopedCopyableImageFormation_swigregister(ScopedCopyableImageFormation)
 
@@ -3608,6 +4058,16 @@ class ScopedCopyableSCPCOA(_object):
     __swig_getmethods__["layoverAngle"] = _six_sicd.ScopedCopyableSCPCOA_layoverAngle_get
     if _newclass:
         layoverAngle = _swig_property(_six_sicd.ScopedCopyableSCPCOA_layoverAngle_get, _six_sicd.ScopedCopyableSCPCOA_layoverAngle_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableSCPCOA self, SCPCOA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableSCPCOA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableSCPCOA self, SCPCOA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableSCPCOA___ne__(self, rhs)
+
 ScopedCopyableSCPCOA_swigregister = _six_sicd.ScopedCopyableSCPCOA_swigregister
 ScopedCopyableSCPCOA_swigregister(ScopedCopyableSCPCOA)
 
@@ -3691,6 +4151,16 @@ class ScopedCopyableAntenna(_object):
     __swig_getmethods__["twoWay"] = _six_sicd.ScopedCopyableAntenna_twoWay_get
     if _newclass:
         twoWay = _swig_property(_six_sicd.ScopedCopyableAntenna_twoWay_get, _six_sicd.ScopedCopyableAntenna_twoWay_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableAntenna self, Antenna rhs) -> bool"""
+        return _six_sicd.ScopedCopyableAntenna___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableAntenna self, Antenna rhs) -> bool"""
+        return _six_sicd.ScopedCopyableAntenna___ne__(self, rhs)
+
 ScopedCopyableAntenna_swigregister = _six_sicd.ScopedCopyableAntenna_swigregister
 ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
 
@@ -3766,6 +4236,16 @@ class ScopedCopyableMatchInformation(_object):
     __swig_getmethods__["types"] = _six_sicd.ScopedCopyableMatchInformation_types_get
     if _newclass:
         types = _swig_property(_six_sicd.ScopedCopyableMatchInformation_types_get, _six_sicd.ScopedCopyableMatchInformation_types_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchInformation___ne__(self, rhs)
+
 ScopedCopyableMatchInformation_swigregister = _six_sicd.ScopedCopyableMatchInformation_swigregister
 ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
 
@@ -3845,6 +4325,16 @@ class ScopedCopyableSlowTimeDeskew(_object):
     __swig_getmethods__["slowTimeDeskewPhasePoly"] = _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_get
     if _newclass:
         slowTimeDeskewPhasePoly = _swig_property(_six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___ne__(self, rhs)
+
 ScopedCopyableSlowTimeDeskew_swigregister = _six_sicd.ScopedCopyableSlowTimeDeskew_swigregister
 ScopedCopyableSlowTimeDeskew_swigregister(ScopedCopyableSlowTimeDeskew)
 
@@ -3956,6 +4446,16 @@ class ScopedCopyablePFA(_object):
     __swig_getmethods__["slowTimeDeskew"] = _six_sicd.ScopedCopyablePFA_slowTimeDeskew_get
     if _newclass:
         slowTimeDeskew = _swig_property(_six_sicd.ScopedCopyablePFA_slowTimeDeskew_get, _six_sicd.ScopedCopyablePFA_slowTimeDeskew_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyablePFA self, PFA rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePFA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyablePFA self, PFA rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePFA___ne__(self, rhs)
+
 ScopedCopyablePFA_swigregister = _six_sicd.ScopedCopyablePFA_swigregister
 ScopedCopyablePFA_swigregister(ScopedCopyablePFA)
 
@@ -4043,6 +4543,16 @@ class ScopedCopyableRMA(_object):
     __swig_getmethods__["inca"] = _six_sicd.ScopedCopyableRMA_inca_get
     if _newclass:
         inca = _swig_property(_six_sicd.ScopedCopyableRMA_inca_get, _six_sicd.ScopedCopyableRMA_inca_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRMA self, RMA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRMA self, RMA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMA___ne__(self, rhs)
+
 ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
 ScopedCopyableRMA_swigregister(ScopedCopyableRMA)
 
@@ -4122,6 +4632,16 @@ class ScopedCopyableRgAzComp(_object):
     __swig_getmethods__["kazPoly"] = _six_sicd.ScopedCopyableRgAzComp_kazPoly_get
     if _newclass:
         kazPoly = _swig_property(_six_sicd.ScopedCopyableRgAzComp_kazPoly_get, _six_sicd.ScopedCopyableRgAzComp_kazPoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRgAzComp self, RgAzComp rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRgAzComp___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRgAzComp self, RgAzComp rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRgAzComp___ne__(self, rhs)
+
 ScopedCopyableRgAzComp_swigregister = _six_sicd.ScopedCopyableRgAzComp_swigregister
 ScopedCopyableRgAzComp_swigregister(ScopedCopyableRgAzComp)
 
@@ -4214,6 +4734,16 @@ class ScopedCloneableGeoInfo(_object):
     __swig_getmethods__["geometryLatLon"] = _six_sicd.ScopedCloneableGeoInfo_geometryLatLon_get
     if _newclass:
         geometryLatLon = _swig_property(_six_sicd.ScopedCloneableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCloneableGeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoInfo___ne__(self, rhs)
+
 ScopedCloneableGeoInfo_swigregister = _six_sicd.ScopedCloneableGeoInfo_swigregister
 ScopedCloneableGeoInfo_swigregister(ScopedCloneableGeoInfo)
 
@@ -5105,6 +5635,16 @@ class ScopedCopyableMatchType(_object):
     __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_get
     if _newclass:
         matchCollects = _swig_property(_six_sicd.ScopedCopyableMatchType_matchCollects_get, _six_sicd.ScopedCopyableMatchType_matchCollects_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchType___ne__(self, rhs)
+
 ScopedCopyableMatchType_swigregister = _six_sicd.ScopedCopyableMatchType_swigregister
 ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
 
@@ -5184,6 +5724,16 @@ class ScopedCopyableWeightType(_object):
     __swig_getmethods__["parameters"] = _six_sicd.ScopedCopyableWeightType_parameters_get
     if _newclass:
         parameters = _swig_property(_six_sicd.ScopedCopyableWeightType_parameters_get, _six_sicd.ScopedCopyableWeightType_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableWeightType self, WeightType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableWeightType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableWeightType self, WeightType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableWeightType___ne__(self, rhs)
+
 ScopedCopyableWeightType_swigregister = _six_sicd.ScopedCopyableWeightType_swigregister
 ScopedCopyableWeightType_swigregister(ScopedCopyableWeightType)
 
@@ -5508,6 +6058,16 @@ class ScopedCloneableDirectionParameters(_object):
     __swig_getmethods__["weights"] = _six_sicd.ScopedCloneableDirectionParameters_weights_get
     if _newclass:
         weights = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_weights_get, _six_sicd.ScopedCloneableDirectionParameters_weights_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableDirectionParameters self, DirectionParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableDirectionParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableDirectionParameters self, DirectionParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableDirectionParameters___ne__(self, rhs)
+
 ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirectionParameters_swigregister
 ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
 
@@ -5609,6 +6169,16 @@ class ScopedCloneableAreaPlane(_object):
     __swig_getmethods__["orientation"] = _six_sicd.ScopedCloneableAreaPlane_orientation_get
     if _newclass:
         orientation = _swig_property(_six_sicd.ScopedCloneableAreaPlane_orientation_get, _six_sicd.ScopedCloneableAreaPlane_orientation_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableAreaPlane self, AreaPlane rhs) -> bool"""
+        return _six_sicd.ScopedCloneableAreaPlane___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableAreaPlane self, AreaPlane rhs) -> bool"""
+        return _six_sicd.ScopedCloneableAreaPlane___ne__(self, rhs)
+
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
 
@@ -5822,6 +6392,16 @@ class ScopedCloneableSegment(_object):
     __swig_getmethods__["identifier"] = _six_sicd.ScopedCloneableSegment_identifier_get
     if _newclass:
         identifier = _swig_property(_six_sicd.ScopedCloneableSegment_identifier_get, _six_sicd.ScopedCloneableSegment_identifier_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableSegment self, Segment rhs) -> bool"""
+        return _six_sicd.ScopedCloneableSegment___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableSegment self, Segment rhs) -> bool"""
+        return _six_sicd.ScopedCloneableSegment___ne__(self, rhs)
+
 ScopedCloneableSegment_swigregister = _six_sicd.ScopedCloneableSegment_swigregister
 ScopedCloneableSegment_swigregister(ScopedCloneableSegment)
 
@@ -5906,6 +6486,16 @@ class ScopedCloneableTxStep(_object):
     __swig_getmethods__["txPolarization"] = _six_sicd.ScopedCloneableTxStep_txPolarization_get
     if _newclass:
         txPolarization = _swig_property(_six_sicd.ScopedCloneableTxStep_txPolarization_get, _six_sicd.ScopedCloneableTxStep_txPolarization_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableTxStep self, TxStep rhs) -> bool"""
+        return _six_sicd.ScopedCloneableTxStep___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableTxStep self, TxStep rhs) -> bool"""
+        return _six_sicd.ScopedCloneableTxStep___ne__(self, rhs)
+
 ScopedCloneableTxStep_swigregister = _six_sicd.ScopedCloneableTxStep_swigregister
 ScopedCloneableTxStep_swigregister(ScopedCloneableTxStep)
 
@@ -6022,6 +6612,16 @@ class ScopedCloneableWaveformParameters(_object):
     __swig_getmethods__["rcvFMRate"] = _six_sicd.ScopedCloneableWaveformParameters_rcvFMRate_get
     if _newclass:
         rcvFMRate = _swig_property(_six_sicd.ScopedCloneableWaveformParameters_rcvFMRate_get, _six_sicd.ScopedCloneableWaveformParameters_rcvFMRate_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableWaveformParameters self, WaveformParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableWaveformParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableWaveformParameters self, WaveformParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableWaveformParameters___ne__(self, rhs)
+
 ScopedCloneableWaveformParameters_swigregister = _six_sicd.ScopedCloneableWaveformParameters_swigregister
 ScopedCloneableWaveformParameters_swigregister(ScopedCloneableWaveformParameters)
 
@@ -6106,6 +6706,16 @@ class ScopedCloneableArea(_object):
     __swig_getmethods__["plane"] = _six_sicd.ScopedCloneableArea_plane_get
     if _newclass:
         plane = _swig_property(_six_sicd.ScopedCloneableArea_plane_get, _six_sicd.ScopedCloneableArea_plane_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableArea self, Area rhs) -> bool"""
+        return _six_sicd.ScopedCloneableArea___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableArea self, Area rhs) -> bool"""
+        return _six_sicd.ScopedCloneableArea___ne__(self, rhs)
+
 ScopedCloneableArea_swigregister = _six_sicd.ScopedCloneableArea_swigregister
 ScopedCloneableArea_swigregister(ScopedCloneableArea)
 
@@ -6190,6 +6800,16 @@ class ScopedCloneableChannelParameters(_object):
     __swig_getmethods__["rcvAPCIndex"] = _six_sicd.ScopedCloneableChannelParameters_rcvAPCIndex_get
     if _newclass:
         rcvAPCIndex = _swig_property(_six_sicd.ScopedCloneableChannelParameters_rcvAPCIndex_get, _six_sicd.ScopedCloneableChannelParameters_rcvAPCIndex_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableChannelParameters self, ChannelParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableChannelParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableChannelParameters self, ChannelParameters rhs) -> bool"""
+        return _six_sicd.ScopedCloneableChannelParameters___ne__(self, rhs)
+
 ScopedCloneableChannelParameters_swigregister = _six_sicd.ScopedCloneableChannelParameters_swigregister
 ScopedCloneableChannelParameters_swigregister(ScopedCloneableChannelParameters)
 
@@ -7293,6 +7913,16 @@ class ScopedCopyableRcvChannelProcessed(_object):
     __swig_getmethods__["channelIndex"] = _six_sicd.ScopedCopyableRcvChannelProcessed_channelIndex_get
     if _newclass:
         channelIndex = _swig_property(_six_sicd.ScopedCopyableRcvChannelProcessed_channelIndex_get, _six_sicd.ScopedCopyableRcvChannelProcessed_channelIndex_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRcvChannelProcessed___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRcvChannelProcessed___ne__(self, rhs)
+
 ScopedCopyableRcvChannelProcessed_swigregister = _six_sicd.ScopedCopyableRcvChannelProcessed_swigregister
 ScopedCopyableRcvChannelProcessed_swigregister(ScopedCopyableRcvChannelProcessed)
 
@@ -7580,6 +8210,16 @@ class ScopedCopyablePolarizationCalibration(_object):
     __swig_getmethods__["distortion"] = _six_sicd.ScopedCopyablePolarizationCalibration_distortion_get
     if _newclass:
         distortion = _swig_property(_six_sicd.ScopedCopyablePolarizationCalibration_distortion_get, _six_sicd.ScopedCopyablePolarizationCalibration_distortion_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyablePolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePolarizationCalibration___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyablePolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
+        return _six_sicd.ScopedCopyablePolarizationCalibration___ne__(self, rhs)
+
 ScopedCopyablePolarizationCalibration_swigregister = _six_sicd.ScopedCopyablePolarizationCalibration_swigregister
 ScopedCopyablePolarizationCalibration_swigregister(ScopedCopyablePolarizationCalibration)
 
@@ -7703,6 +8343,16 @@ class ScopedCopyableDistortion(_object):
     __swig_getmethods__["phaseErrorF2"] = _six_sicd.ScopedCopyableDistortion_phaseErrorF2_get
     if _newclass:
         phaseErrorF2 = _swig_property(_six_sicd.ScopedCopyableDistortion_phaseErrorF2_get, _six_sicd.ScopedCopyableDistortion_phaseErrorF2_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableDistortion self, Distortion rhs) -> bool"""
+        return _six_sicd.ScopedCopyableDistortion___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableDistortion self, Distortion rhs) -> bool"""
+        return _six_sicd.ScopedCopyableDistortion___ne__(self, rhs)
+
 ScopedCopyableDistortion_swigregister = _six_sicd.ScopedCopyableDistortion_swigregister
 ScopedCopyableDistortion_swigregister(ScopedCopyableDistortion)
 
@@ -8222,6 +8872,16 @@ class ScopedCopyableRMAT(_object):
     __swig_getmethods__["dopConeAngleRef"] = _six_sicd.ScopedCopyableRMAT_dopConeAngleRef_get
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.ScopedCopyableRMAT_dopConeAngleRef_get, _six_sicd.ScopedCopyableRMAT_dopConeAngleRef_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRMAT self, RMAT rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMAT___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRMAT self, RMAT rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMAT___ne__(self, rhs)
+
 ScopedCopyableRMAT_swigregister = _six_sicd.ScopedCopyableRMAT_swigregister
 ScopedCopyableRMAT_swigregister(ScopedCopyableRMAT)
 
@@ -8305,6 +8965,16 @@ class ScopedCopyableRMCR(_object):
     __swig_getmethods__["dopConeAngleRef"] = _six_sicd.ScopedCopyableRMCR_dopConeAngleRef_get
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.ScopedCopyableRMCR_dopConeAngleRef_get, _six_sicd.ScopedCopyableRMCR_dopConeAngleRef_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRMCR self, RMCR rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMCR___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRMCR self, RMCR rhs) -> bool"""
+        return _six_sicd.ScopedCopyableRMCR___ne__(self, rhs)
+
 ScopedCopyableRMCR_swigregister = _six_sicd.ScopedCopyableRMCR_swigregister
 ScopedCopyableRMCR_swigregister(ScopedCopyableRMCR)
 
@@ -8400,6 +9070,16 @@ class ScopedCopyableINCA(_object):
     __swig_getmethods__["dopplerCentroidCOA"] = _six_sicd.ScopedCopyableINCA_dopplerCentroidCOA_get
     if _newclass:
         dopplerCentroidCOA = _swig_property(_six_sicd.ScopedCopyableINCA_dopplerCentroidCOA_get, _six_sicd.ScopedCopyableINCA_dopplerCentroidCOA_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableINCA self, INCA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableINCA___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableINCA self, INCA rhs) -> bool"""
+        return _six_sicd.ScopedCopyableINCA___ne__(self, rhs)
+
 ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister
 ScopedCopyableINCA_swigregister(ScopedCopyableINCA)
 
@@ -8475,6 +9155,16 @@ class ScopedCopyableInterPulsePeriod(_object):
     __swig_getmethods__["sets"] = _six_sicd.ScopedCopyableInterPulsePeriod_sets_get
     if _newclass:
         sets = _swig_property(_six_sicd.ScopedCopyableInterPulsePeriod_sets_get, _six_sicd.ScopedCopyableInterPulsePeriod_sets_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableInterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
+        return _six_sicd.ScopedCopyableInterPulsePeriod___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableInterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
+        return _six_sicd.ScopedCopyableInterPulsePeriod___ne__(self, rhs)
+
 ScopedCopyableInterPulsePeriod_swigregister = _six_sicd.ScopedCopyableInterPulsePeriod_swigregister
 ScopedCopyableInterPulsePeriod_swigregister(ScopedCopyableInterPulsePeriod)
 
@@ -8696,7 +9386,7 @@ def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows,
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
 
 import numpy as np
-from six_base import VectorString
+from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)

@@ -154,9 +154,9 @@ struct TestHelper
              ii < mRgbLegend.mLUT->numEntries;
              ++ii, idx += 3)
         {
-            mRgbLegend.mLUT->table[idx] = ii;
-            mRgbLegend.mLUT->table[idx + 1] = ii;
-            mRgbLegend.mLUT->table[idx + 2] = ii;
+            mRgbLegend.mLUT->getTable()[idx] = ii;
+            mRgbLegend.mLUT->getTable()[idx + 1] = ii;
+            mRgbLegend.mLUT->getTable()[idx + 2] = ii;
         }
 
         write();

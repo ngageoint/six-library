@@ -24,19 +24,16 @@
 using namespace six;
 using namespace six::sicd;
 
-ImageData::~ImageData()
+bool ImageData::operator==(const ImageData& rhs) const
 {
-    if (amplitudeTable)
-        delete amplitudeTable;
-}
-
-ImageData* ImageData::clone() const
-{
-    ImageData* d = new ImageData(*this);
-    if (amplitudeTable)
-    {
-	d->amplitudeTable = (AmplitudeTable*)amplitudeTable->clone();
-    }
-    return d;
+    return (pixelType == rhs.pixelType &&
+        amplitudeTable == rhs.amplitudeTable &&
+        numRows == rhs.numRows &&
+        numCols == rhs.numCols &&
+        firstRow == rhs.firstRow &&
+        firstCol == rhs.firstCol &&
+        fullImage == rhs.fullImage &&
+        scpPixel == rhs.scpPixel &&
+        validData == rhs.validData);
 }
 

@@ -53,6 +53,7 @@ struct AppliedType
     };
 
     //! Default constructor
+
     AppliedType(){ value = NOT_SET; }
 
     //! string constructor
@@ -3313,7 +3314,6 @@ struct XYZEnum
 };
 
 // code auto-generated 2016-04-04 16:12:32.876144
-
 }
 
 #endif

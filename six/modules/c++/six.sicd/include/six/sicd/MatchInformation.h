@@ -57,6 +57,18 @@ struct MatchCollect
 
     //! Relevant match parameter. Attribute name identifies the parameter.
     ParameterCollection parameters;
+
+    //! Equality operator
+    bool operator==(const MatchCollect& rhs) const
+    {
+        return (coreName == rhs.coreName && matchIndex == rhs.matchIndex &&
+            parameters == rhs.parameters);
+    }
+
+    bool operator!=(const MatchCollect& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -95,6 +107,12 @@ struct MatchType
     //! Block containing information about match collection. Block repeated
     //  for match collection = 1 to NumMatchCollections.
     std::vector<MatchCollect> matchCollects;
+
+    bool operator==(const MatchType& rhs) const;
+    bool operator!=(const MatchType& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -118,6 +136,17 @@ public:
      *  called "MatchType" in 1.x
      */
     std::vector<mem::ScopedCopyablePtr<MatchType> > types;
+
+    //! Equality operator
+    bool operator==(const MatchInformation& rhs) const
+    {
+        return types == rhs.types;
+    }
+
+    bool operator!=(const MatchInformation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }
