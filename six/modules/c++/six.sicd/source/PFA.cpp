@@ -50,7 +50,7 @@ bool PFA::operator==(const PFA& rhs) const
         spatialFrequencyScaleFactorPoly == rhs.spatialFrequencyScaleFactorPoly &&
         krg1 == rhs.krg1 &&
         krg2 == rhs.krg2 &&
-        kaz1 == rhs.kaz2 &&
+        kaz1 == rhs.kaz1 &&
         kaz2 == rhs.kaz2 &&
         slowTimeDeskew == rhs.slowTimeDeskew);
 }
