@@ -270,15 +270,15 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
         {
             xmlText += initGeoInfoXML(version, numInfos - 1, numParams);
         }
-
-        // Everything has been written to version one, so we can close the block
-        if (version == FRMT_1_0_0)
-        {
-            xmlText += "</GeoInfo>";
-        }
-
     }
 
+    // Everything has been written to version one, so we can close the block
+    if (version == FRMT_1_0_0)
+    {
+        xmlText += "</GeoInfo>";
+    }
+
+    // Still have to fill Desc for earlier version
     if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
         for (unsigned int i=0,n=1; i<numParams; ++i,++n)
