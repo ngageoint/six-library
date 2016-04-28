@@ -3911,7 +3911,9 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
 
         for (i = 0; i < window->numBands; i++)
         {
-            PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
+            //PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
+            PyObject* buffObj = PyMemoryView_FromMemory(buf[i],
+                    subimageSize * sizeof(nitf_Uint8), PyBUF_READ);
             PyList_SetItem(result, i, buffObj);
         }
 
@@ -3974,7 +3976,8 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         }
 
         source->iface->read(source->data, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyBuffer_FromMemory(buf, size);
+        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 
@@ -3991,7 +3994,8 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         }
 
         nitf_SegmentReader_read(reader, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyBuffer_FromMemory(buf, size);
+        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 
@@ -4008,7 +4012,8 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         }
 
         nitf_IOHandle_read(handle, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyBuffer_FromMemory(buf, size);
+        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 

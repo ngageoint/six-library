@@ -33,15 +33,15 @@ from nitf import *
 
 def testHandle(nitf):
     # Print out all the constants to make sure they're defined properly
-    print IOHandle.CREATE
-    print IOHandle.TRUNCATE
-    print IOHandle.OPEN_EXISTING
-    print IOHandle.ACCESS_READONLY
-    print IOHandle.ACCESS_WRITEONLY
-    print IOHandle.ACCESS_READWRITE
-    print IOHandle.SEEK_SET
-    print IOHandle.SEEK_CUR
-    print IOHandle.SEEK_END
+    print(IOHandle.CREATE)
+    print(IOHandle.TRUNCATE)
+    print(IOHandle.OPEN_EXISTING)
+    print(IOHandle.ACCESS_READONLY)
+    print(IOHandle.ACCESS_WRITEONLY)
+    print(IOHandle.ACCESS_READWRITE)
+    print(IOHandle.SEEK_SET)
+    print(IOHandle.SEEK_CUR)
+    print(IOHandle.SEEK_END)
 
     # Call all the reading functions in various configurations
     handleNew = IOHandle('test.nitf', createFlags=IOHandle.OPEN_EXISTING)

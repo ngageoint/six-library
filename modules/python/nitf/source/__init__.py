@@ -26,12 +26,12 @@
 Python wrapper for the NITRO library
 """
 ##############################################################################
-import nitropy
-from nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
-import logging, types, new
+import nitf.nitropy
+from nitf.nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
+import logging, types
 import numpy
 
-from nitropy import nrt_Error as Error
+from nitf.nitropy import nrt_Error as Error
 Error.__repr__=lambda s: s.message
 
 __all__ = ['BandInfo', 'BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
@@ -518,7 +518,7 @@ class FieldHeader:
     def __getitem__(self, key):
         """ Provide container get """
         key = key.lower()
-        if self.fieldMap.has_key(key):
+        if key in self.fieldMap:
             return Field(eval(self.fieldMap[key]))
         raise KeyError('Field not found: %s' % key)
 
@@ -526,14 +526,14 @@ class FieldHeader:
         """ Provide the container 'set' functionality """
         #truncate the value if it is too long...
         key = key.lower()
-        if self.fieldMap.has_key(key):
+        if key in self.fieldMap:
             field = Field(eval(self.fieldMap[key]))
             field.setString(str(value)[0:field.getLength()])
         else:
             raise KeyError('Field not found: %s' % key)
 
     def __contains__(self, key):
-        return self.fieldMap.has_key(key.lower())
+        return (key.lower() in self.fieldMap)
 
 
     def __iter__(self):
@@ -618,7 +618,7 @@ class FileHeader(Header):
         except:
             #try this one
             lowkey = key.lower()
-            if self.infoMap.has_key(lowkey):
+            if lowkey in self.infoMap:
                 func, type = self.infoMap[lowkey]
                 return func(type)
             else:
@@ -1083,7 +1083,7 @@ class ImageSource:
     def __call__(self):
         print("ImageSource.__call__")
         arr = []
-        print( "Size: " + str(self.ref.size))
+        print("Size: " + str(self.ref.size))
         for index in range(self.ref.size):
             print(index)
             arr.append(self.getBand(index))
@@ -1300,7 +1300,7 @@ def metadata(filename):
     def dumpHeader(header, desc, extensions={}):
         print('--- %s ---' % desc)
         print(str(header))
-        for section, tres in extensions.iteritems():
+        for section, tres in extensions.items():
             for tre in tres:
                 dumpTRE(tre, section)
 

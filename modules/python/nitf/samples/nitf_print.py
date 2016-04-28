@@ -1,10 +1,10 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 
 """
  * =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -39,7 +39,7 @@ def print_header(header, desc, extensions={}):
     ''' Dump a header, with possible extensions '''
     logging.info('--- %s ---' % desc)
     logging.info(str(header))
-    for section, tres in extensions.iteritems():
+    for section, tres in extensions.items():
         for tre in tres:
             logging.info('--- %s %s TRE [%s] - (%d) ---' % (desc, section, tre.getTag(), tre.getCurrentSize()))
             printTRE(tre)
@@ -50,10 +50,10 @@ def print_record(fileName):
     This dumps the file record to standard out
     Notice how we can easily iterate over the Extensions and TREs
     """
-    
+
     handle = IOHandle(fileName)
     record = Reader().read(handle)
-    
+
     logging.info('--- Dumping file: %s ---' % fileName)
     print_header(record.header, "FileHeader",
                  {'UDHD':record.header.getUDHD(),
@@ -71,7 +71,7 @@ def print_record(fileName):
     for i, segment in enumerate(record.getTexts()):
         subheader = segment.subheader
         print_header(subheader, 'Text [%s]' % i, {'XHD':subheader.getXHD()})
-       
+
     handle.close()
 
 
@@ -81,4 +81,4 @@ if __name__ == '__main__':
             print_record(arg)
         elif os.path.isdir(arg):
             map(print_record, glob.glob(os.path.join(arg, '*.ntf')) + glob.glob(os.path.join(arg, '*.NTF')))
-    
+
