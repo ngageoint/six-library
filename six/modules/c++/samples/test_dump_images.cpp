@@ -101,9 +101,7 @@ int main(int argc, char** argv)
             options(parser.parse(argc, argv));
 
         size_t startRow(options->get<size_t>("startRow"));
-        //long numRows(options->get<long>("numRows"));
         size_t startCol(options->get<size_t>("startCol"));
-        //long numCols(options->get<long>("numCols"));
         const bool isSIO(options->get<bool>("sio"));
         const bool oneRead(options->get<bool>("oneRead"));
         const std::string inputFile(options->get<std::string>("file"));
