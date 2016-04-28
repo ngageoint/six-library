@@ -7453,7 +7453,7 @@ static swig_type_info _swigt__p_logging__NullHandler = {"_p_logging__NullHandler
 static swig_type_info _swigt__p_logging__NullLogger = {"_p_logging__NullLogger", "logging::NullLogger *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__StandardFormatter = {"_p_logging__StandardFormatter", "logging::StandardFormatter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__StreamHandler = {"_p_logging__StreamHandler", "logging::StreamHandler *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__SharedPtrT_logging__Logger_t = {"_p_mem__SharedPtrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__SharedPtrT_logging__Logger_t = {"_p_mem__SharedPtrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *|logging::LoggerPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__SingletonT_logging__LoggerManager_true_t = {"_p_mt__SingletonT_logging__LoggerManager_true_t", "logging::LoggerFactory *|mt::Singleton< logging::LoggerManager,true > *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {

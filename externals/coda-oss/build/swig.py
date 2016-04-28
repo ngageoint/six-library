@@ -169,7 +169,7 @@ def check_swig_version(self, minver=None):
     swig_out = self.cmd_and_log('"%s" -version' % self.env['SWIG'])
 
     swigver = [int(s) for s in reg_swig.findall(swig_out)[0].split('.')]
-    if isinstance(minver, basestring):
+    if isinstance(minver, str):
         minver = [int(s) for s in minver.split(".")]
     if isinstance(minver, tuple):
         minver = [int(s) for s in minver]
@@ -200,7 +200,7 @@ def configure(conf):
         if not swig: return
         swigver = Options.options.swigver
         if swigver:
-            swigver = map(int, swigver.split('.'))
+            swigver = list(map(int, swigver.split('.')))
         conf.check_swig_version(minver=swigver)
         conf.env.SWIGPATH_ST = '-I%s'
         conf.env.SWIGDEFINES_ST = '-D%s'

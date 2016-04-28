@@ -76,7 +76,7 @@ def makeEnums(filenames):
         
         s.write("""
 /*!
- *  \struct %s 
+ *  \struct %s
  *
  *  Enumeration used to represent %ss
  */\n""" % (enum, enum))
@@ -85,7 +85,7 @@ def makeEnums(filenames):
         s.write('    enum\n    {\n')
         for (i, item) in enumerate(values.items):
             if item.value is not None:
-                s.write('        %s%s = %s' % (values.cleanPrefix, item.names[0], item.value))
+                s.write('        %s%s = %s' % (values.cleanPrefix, item.names[0].replace(' ', '_'), item.value))
             else:
                 s.write('        %s%s' % (values.cleanPrefix, item.names[0]))
             if i < len(values.items) - 1:
@@ -94,7 +94,7 @@ def makeEnums(filenames):
         s.write('    };\n\n')
         
         s.write('    //! Default constructor\n')
-        s.write('    %s(){ value = %s; }\n\n' % (enum, values.default))
+        s.write('    %s(){ value = %s; }\n\n' % (enum, values.default.replace(' ', '_')))
         
         s.write('    //! string constructor\n')
         s.write('    %s(std::string s)\n    {\n' % enum)
@@ -108,7 +108,7 @@ def makeEnums(filenames):
                     names.append('%s%s' % (values.prefix, n))
                 for n in names:
                     s.write('        %sif (s == "%s")\n            value = %s%s;\n' % (i > 0 and 'else ' or '',
-                                                                       n, values.cleanPrefix, item.names[0]))
+                                                                       n, values.cleanPrefix, item.names[0].replace(' ', '_')))
                     i += 1
         s.write('        else\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));\n')
         s.write('    }\n\n')
@@ -119,7 +119,7 @@ def makeEnums(filenames):
         for (i, item) in enumerate(values.items):
             if item.value is not None:
                 idx = item.value
-            s.write('        case %s:\n            value = %s%s;\n            break;\n' % (idx, values.cleanPrefix, item.names[0]))
+            s.write('        case %s:\n            value = %s%s;\n            break;\n' % (idx, values.cleanPrefix, item.names[0].replace(' ', '_')))
             try:
                 idx += 1
             except:{}

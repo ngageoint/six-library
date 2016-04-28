@@ -3095,8 +3095,13 @@ namespace swig {
 
 
 #ifndef SWIGPY_SLICE_ARG(obj)
-# define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# if PY_VERSION_HEX >= 0x03000000
+#  define SWIGPY_SLICE_ARG(obj) ((PyObject*) (obj))
+# else
+#  define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# endif
 #endif
+
 #include <string>
 #include <sstream>
 #include "import/math/linear.h"
@@ -4608,7 +4613,7 @@ SWIG_AsVal_long (PyObject *obj, long* val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ 
+SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -4616,7 +4621,7 @@ SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< dou
         }
         return (*self)[i];
     }
-SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ 
+SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -4764,11 +4769,11 @@ SWIGINTERN PyObject *math_poly_TwoD_Sl_double_Sg____call____SWIG_1(math::poly::T
         }
         return pyresult;
     }
-SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){ 
-            return (*self)[i]; 
+SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){
+            return (*self)[i];
         }
-SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vector3 > *self,long i,Vector3 val){ 
-            (*self)[i] = val; 
+SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vector3 > *self,long i,Vector3 val){
+            (*self)[i] = val;
         }
 SWIGINTERN std::string math_poly_OneD_Sl_Vector3_Sg____str__(math::poly::OneD< Vector3 > *self){
             std::ostringstream ostr;
@@ -4897,15 +4902,15 @@ SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__erase__SWIG_
 SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__erase__SWIG_1(std::vector< double > *self,std::vector< double >::iterator first,std::vector< double >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__insert__SWIG_0(std::vector< double > *self,std::vector< double >::iterator pos,std::vector< double >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_double_Sg__insert__SWIG_1(std::vector< double > *self,std::vector< double >::iterator pos,std::vector< double >::size_type n,std::vector< double >::value_type const &x){ self->insert(pos, n, x); }
-SWIGINTERN double std_vector_Sl_double_Sg____getitem____SWIG_2(std::vector< double > *self,long i){ 
-            return (*self)[i]; 
+SWIGINTERN double std_vector_Sl_double_Sg____getitem____SWIG_2(std::vector< double > *self,long i){
+            return (*self)[i];
         }
-SWIGINTERN void std_vector_Sl_double_Sg____setitem____SWIG_3(std::vector< double > *self,long i,double val){ 
-            (*self)[i] = val; 
+SWIGINTERN void std_vector_Sl_double_Sg____setitem____SWIG_3(std::vector< double > *self,long i,double val){
+            (*self)[i] = val;
         }
 SWIGINTERN std::string std_vector_Sl_double_Sg____str__(std::vector< double > *self){
             std::ostringstream ostr;
-            
+
             ostr << "std::vector<double>[ ";
             for (int i = 0; i < self->size(); i++)
             {
@@ -17037,14 +17042,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
 	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"fit", _wrap_fit, METH_VARARGS, (char *)"\n"
-		"fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D\n"
+		"fit(size_t numObs, double const * x, double const * y, size_t order) -> Poly1D\n"
 		"fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D\n"
 		"fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D\n"
-		"fit(VectorDouble xObs, VectorDouble yObs0, VectorDouble yObs1, VectorDouble yObs2, size_t numCoeffs) -> PolyVector3\n"
-		"fit(VectorDouble xObsVector, MatrixDouble yObsMatrix, size_t numCoeffs) -> PolyVector3\n"
-		"fit(std_vector_double xObs, std_vector_double yObs0, std_vector_double yObs1, std_vector_double yObs2, size_t numCoeffs) -> PolyVector3\n"
+		"fit(VectorDouble xObs, VectorDouble yObs0, VectorDouble yObs1, VectorDouble yObs2, size_t order) -> PolyVector3\n"
+		"fit(VectorDouble xObsVector, MatrixDouble yObsMatrix, size_t order) -> PolyVector3\n"
+		"fit(std_vector_double xObs, std_vector_double yObs0, std_vector_double yObs1, std_vector_double yObs2, size_t order) -> PolyVector3\n"
 		""},
-	 { (char *)"FitVectorDouble", _wrap_FitVectorDouble, METH_VARARGS, (char *)"FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"},
+	 { (char *)"FitVectorDouble", _wrap_FitVectorDouble, METH_VARARGS, (char *)"FitVectorDouble(VectorDouble x, VectorDouble y, size_t order) -> Poly1D"},
 	 { (char *)"new_PolyVector3", _wrap_new_PolyVector3, METH_VARARGS, (char *)"\n"
 		"PolyVector3()\n"
 		"PolyVector3(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const & coef)\n"

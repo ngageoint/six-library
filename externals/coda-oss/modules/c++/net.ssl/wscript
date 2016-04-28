@@ -6,6 +6,7 @@ USELIB          = 'SSL'
 
 from waflib import Options
 from build import writeConfig
+import sys, re
 
 distclean = lambda p: None
 
@@ -99,6 +100,9 @@ def configure(conf):
             # Update library information
             if 'LIB_SSL' in conf.env:
                 self.uselib = conf.env['LIB_SSL']
+                solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+                if re.match(solarisRegex, sys.platform):
+                    self.uselib += ['crypto']
             if 'LIBPATH_SSL' in conf.env:
                 self.libpath = conf.env['LIBPATH_SSL']
             if 'INCLUDES_SSL' in conf.env:
