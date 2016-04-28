@@ -37,8 +37,8 @@ if __name__ == '__main__':
     for x in range(poly1D.order() + 1):
         poly1D[x] = (x + 1) * 10
 
-    print '1D poly:'
-    print poly1D
+    print('1D poly:')
+    print(poly1D)
 
     # Try to index out of bounds by getting
     threw = False
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting 1D OOB threw as expected'
+        print('Getting 1D OOB threw as expected')
     else:
         sys.exit('Getting 1D OOB did not throw!')
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting 1D OOB threw as expected'
+        print('Setting 1D OOB threw as expected')
     else:
         sys.exit('Setting 1D OOB did not throw!')
 
@@ -75,8 +75,8 @@ if __name__ == '__main__':
             poly2D[(x, y)] = val
             val += 100
 
-    print '\n2D poly:'
-    print poly2D
+    print('\n2D poly:')
+    print(poly2D)
 
     # Try to index out of bounds by getting
     threw = False
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting 2D OOB threw as expected'
+        print('Getting 2D OOB threw as expected')
     else:
         sys.exit('Getting 2D OOB did not throw!')
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting 2D OOB threw as expected'
+        print('Setting 2D OOB threw as expected')
     else:
         sys.exit('Setting 2D OOB did not throw!')
 
@@ -122,8 +122,8 @@ if __name__ == '__main__':
     numCoeff = 3
 
     fit1D = fit(numObs, xObs, yObs, numCoeff);
-    print "\n1D Fit from arrays:"
-    print fit1D
+    print("\n1D Fit from arrays:")
+    print(fit1D)
 
     delete_doubleArray(xObs)
     delete_doubleArray(yObs)
@@ -147,8 +147,8 @@ if __name__ == '__main__':
     numCoeff = 3
 
     fit1D = FitVectorDouble(xObs, yObs, numCoeff)
-    print "\n1D Fit from Vectors:"
-    print fit1D
+    print("\n1D Fit from Vectors:")
+    print(fit1D)
 
     ############################################
     # PolyVector3 Fit Test (math::linear args) #
@@ -177,8 +177,8 @@ if __name__ == '__main__':
     numCoeff = 3
 
     fitPolyVector3 = fit(xObs, yObs, numCoeff)
-    print "\nPolyVector3 fit from math::linear args:"
-    print fitPolyVector3
+    print("\nPolyVector3 fit from math::linear args:")
+    print(fitPolyVector3)
 
     ###########################################
     # PolyVector3 Fit Test (std::vector args) #
@@ -191,8 +191,8 @@ if __name__ == '__main__':
     numCoeff = 3
 
     fitPolyVector3 = fit(xObs, yObs0, yObs1, yObs2, numCoeff)
-    print "\nPolyVector3 fit from std::vector args:"
-    print fitPolyVector3
+    print("\nPolyVector3 fit from std::vector args:")
+    print(fitPolyVector3)
 
     ############################
     # 2D Fit test (array args) #
@@ -235,8 +235,8 @@ if __name__ == '__main__':
     doubleArray_setitem(zObs, 8, 0.85)
 
     fit2D = fit(numRows, numCols, xObs, yObs, zObs, 1, 1)
-    print "\n2D Fit from arrays:"
-    print fit2D
+    print("\n2D Fit from arrays:")
+    print(fit2D)
 
     delete_doubleArray(xObs)
     delete_doubleArray(yObs)
@@ -280,8 +280,8 @@ if __name__ == '__main__':
     zObs[2,2] = 0.85
 
     fit2D = fit(xObs, yObs, zObs, 1, 1)
-    print "2D Fit from Matrices:"
-    print fit2D
+    print("2D Fit from Matrices:")
+    print(fit2D)
 
     ##########################################
     # Test polynomial evaluation using lists #
@@ -304,17 +304,17 @@ if __name__ == '__main__':
         threw = True
         
     if threw:
-        print "Poly1D error: polynomial evaluation using a Python list failed."
+        print("Poly1D error: polynomial evaluation using a Python list failed.")
     else:
         for x,val in zip(input_data, vals1):
             if val != p1(x):
                 raise ValueError("Poly1D error: polynomial evaluation with " +
                                  "Python list does not return the same " +
                                  "value as scalar evaluation.")
-        print "\nPoly1D evaluation using a Python list passed:"
-        print p1
-        print "input  : ", input_data
-        print "output : ", vals1
+        print("\nPoly1D evaluation using a Python list passed:")
+        print(p1)
+        print("input  : ", input_data)
+        print("output : ", vals1)
 
 
     #--------#
@@ -333,17 +333,17 @@ if __name__ == '__main__':
         threw = True
     
     if threw:
-        print "Poly2D error: polynomial evaluation using Python lists failed."
+        print("Poly2D error: polynomial evaluation using Python lists failed.")
     else:
         for x,val in zip(input_data, vals2):
             if val != p2(x,x):
                 raise ValueError("Poly2D error: polynomial evaluation with " +
                                  "Python list does not return the same " +
                                  "value as scalar evaluation.")
-        print "\nPoly2D evaluation using Python lists passed:"
-        print p2
-        print "input  : ", input_data, ",", input_data
-        print "output : ", vals2
+        print("\nPoly2D evaluation using Python lists passed:")
+        print(p2)
+        print("input  : ", input_data, ",", input_data)
+        print("output : ", vals2)
     
     #-------------#
     # PolyVector3 #
@@ -360,16 +360,16 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print "PolyVector3 error: polynomial evaluation using a Python list failed."
+        print("PolyVector3 error: polynomial evaluation using a Python list failed.")
     else:
         for x,val in zip(input_data, vals3):
             if not all([a == b for a,b in zip(val.vals(), p3(x).vals())]):
                 raise ValueError("PolyVector3 error: polynomial evaluation "+
                                  "with Python list does not return the same " +
                                  "value as scalar evaluation.")
-        print "\nPolyVector3 evaluation using a Python list passed:"
-        print p3
-        print "input  : ", input_data
-        print "output : ", [p.vals() for p in vals3]
+        print("\nPolyVector3 evaluation using a Python list passed:")
+        print(p3)
+        print("input  : ", input_data)
+        print("output : ", [p.vals() for p in vals3])
 
     

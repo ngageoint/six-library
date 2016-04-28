@@ -231,9 +231,14 @@ static int transformCheck(int c, int (*transform)(int))
     // as an unsigned char or is 'EOF', as the
     // behavior for all other characters is undefined
     if ((c >= 0 && c <= UCHAR_MAX) || c == EOF)
+    {
         return transform(c);
+    }
     else
-        throw except::Exception("Invalid character for upper/lower transform");
+    {
+        // Invalid char for transform: no-op
+        return c;
+    }
 }
 
 static int tolowerCheck(int c)
