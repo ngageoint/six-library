@@ -172,7 +172,7 @@ class IOHandle:
         self.ref = nitropy.py_IOHandle_create(
             filename, accessFlags, createFlags, self.error)
         if self.ref < 0:
-            raise Exception, 'Unable to open IOHandle at location %s' % filename
+            raise Exception('Unable to open IOHandle at location %s' % filename)
         self.open = True
 
     #close the handle
@@ -227,7 +227,7 @@ class ImageReader:
             window.numCols, window.bandList, downsampler, self.error)
         dataBuf = nitropy.py_ImageReader_read(self.ref, win, self.nbpp, self.error)
         if self.error.level:
-            raise Exception, self.error.message
+            raise Exception(self.error.message)
         return dataBuf
 
 
@@ -341,7 +341,7 @@ class Reader:
         self.io = handle #must set this so it doesn't get ref-counted away
         record = nitropy.nitf_Reader_read(self.ref, self.io.ref, self.error)
         if not record:
-            raise Exception, self.error.message
+            raise Exception(self.error.message)
         self.record = Record(record)
         return self.record
 
@@ -597,7 +597,7 @@ class FileHeader(Header):
     e.g.
     >>> infoList = header['imageinfo']
     >>> #print the first component info object
-    >>> print infoList[0]
+    >>> print(infoList[0])
     """
 
     def __init__(self, ref):
@@ -1081,11 +1081,11 @@ class ImageSource:
         return band
 
     def __call__(self):
-        print "ImageSource.__call__"
+        print("ImageSource.__call__")
         arr = []
-        print "Size: " + str(self.ref.size)
+        print( "Size: " + str(self.ref.size))
         for index in range(self.ref.size):
-            print index
+            print(index)
             arr.append(self.getBand(index))
         return arr
 
@@ -1231,7 +1231,7 @@ class Writer:
             self._imageWriters.append(writer)
             writer.attached = True
             return writer
-        raise Exception, 'Unable to get new ImageWriter: (%s)' % self.error.message
+        raise Exception('Unable to get new ImageWriter: (%s)' % self.error.message)
 
     def newGraphicWriter(self, num):
         writer = nitropy.nitf_Writer_newGraphicWriter(self.ref, num, self.error)
@@ -1240,7 +1240,7 @@ class Writer:
             self._graphicWriters.append(writer)
             writer.attached = True
             return writer
-        raise Exception, 'Unable to get new GraphicWriter: (%s)' % self.error.message
+        raise Exception('Unable to get new GraphicWriter: (%s)' % self.error.message)
 
     def prepare(self, record, handle):
         self.io = handle #must set this so it doesn't get ref-counted away
