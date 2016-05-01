@@ -378,7 +378,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const size_t imageNumber = 0;
 
     const size_t requiredBufferBytes = sizeof(std::complex<float>)
-                                            * extent.normL1();
+                                            * extent.area();
 
     if (buffer == NULL)
     {
@@ -430,7 +430,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const types::RowCol<size_t>& extent,
                                 std::vector<std::complex<float> >& buffer)
 {
-    const size_t requiredNumElements = extent.normL1();
+    const size_t requiredNumElements = extent.area();
     buffer.resize(requiredNumElements);
 
     if (requiredNumElements > 0)
