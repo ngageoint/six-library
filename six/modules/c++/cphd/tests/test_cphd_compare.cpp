@@ -93,7 +93,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 if (!compareCPHDData<std::complex<sys::Int8_T> >(
                         cphdData1.get(),
                         cphdData2.get(),
-                        dims1.normL1(),
+                        dims1.area(),
                         ii))
                 {
                     dataMatches = false;
@@ -103,7 +103,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 if (!compareCPHDData<std::complex<sys::Int16_T> >(
                         cphdData1.get(),
                         cphdData2.get(),
-                        dims1.normL1(),
+                        dims1.area(),
                         ii))
                 {
                     dataMatches = false;
@@ -113,7 +113,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 if (!compareCPHDData<std::complex<float> >(
                         cphdData1.get(),
                         cphdData2.get(),
-                        dims1.normL1(),
+                        dims1.area(),
                         ii))
                 {
                     dataMatches = false;

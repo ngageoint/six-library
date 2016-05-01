@@ -82,17 +82,17 @@ int main(int argc, char** argv)
             case cphd::SampleType::RE08I_IM08I:
                 writer.writeCPHDData<std::complex<sys::Int8_T> >(
                     reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
-                    dims.normL1());
+                    dims.area());
                 break;
             case cphd::SampleType::RE16I_IM16I:
                 writer.writeCPHDData<std::complex<sys::Int16_T> >(
                     reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
-                    dims.normL1());
+                    dims.area());
                 break;
             case cphd::SampleType::RE32F_IM32F:
                 writer.writeCPHDData<std::complex<float> >(
                     reinterpret_cast<const std::complex<float>* >(data.get()),
-                    dims.normL1());
+                    dims.area());
                 break;
             }
         }

@@ -139,7 +139,7 @@ void CPHDWriter::addImage(const T* image,
     mVBMData.push_back(vbmData);
     mCPHDData.push_back(reinterpret_cast<const sys::ubyte*>(image));
 
-    mCPHDSize += dims.normL1() * mElementSize;
+    mCPHDSize += dims.area() * mElementSize;
     mVBMSize += dims.row * mMetadata.data.getNumBytesVBP();
 
     mMetadata.data.numCPHDChannels += 1;
