@@ -799,13 +799,13 @@ if __name__ == '__main__':
     if filecmp.cmp(origPathnameBase + ".xml", newPathnameBase + ".xml"):
         print('XML round trip succeeded!')
     else:
-	print 'XML round trip failed'
+        print('XML round trip failed')
 
     if includeNITF:
         if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'NITF Round trip succeeded!'
+    	    print('NITF Round trip succeeded!')
         else:
-            print 'NITF Round trip failed'
+            print('NITF Round trip failed')
 
 
     # If we made it to here, the read side appears to be working properly too
