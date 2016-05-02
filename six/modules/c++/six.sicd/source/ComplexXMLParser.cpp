@@ -91,7 +91,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     parseTimelineFromXML(timelineXML, sicd->timeline.get());
     parsePositionFromXML(positionXML, sicd->position.get());
     parseRadarCollectionFromXML(radarCollectionXML, sicd->radarCollection.get());
-    parseImageFormationFromXML(imageFormationXML, sicd->imageFormation.get(), *sicd->radarCollection);
+    parseImageFormationFromXML(imageFormationXML, *sicd->radarCollection, sicd->imageFormation.get());
     parseSCPCOAFromXML(scpcoaXML, sicd->scpcoa.get());
 
     if (radiometricXML != NULL)
@@ -1313,8 +1313,8 @@ void ComplexXMLParser::parsePositionFromXML(
 
 void ComplexXMLParser::parseImageFormationFromXML(
     const XMLElem imageFormationXML,
-    ImageFormation *imageFormation,
-    const RadarCollection& radarCollection) const
+    const RadarCollection& radarCollection,
+    ImageFormation *imageFormation) const
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
     if (radarCollection.area.get() != NULL &&
@@ -1322,7 +1322,9 @@ void ComplexXMLParser::parseImageFormationFromXML(
         !radarCollection.area->plane->segmentList.empty() &&
         !tmpElem)
     {
-        throw except::Exception(Ctxt("ImageFormation.SegmentIdentifier must be included when a radarCollection->area->plane::segmentList is included."));
+        throw except::Exception(Ctxt(
+            "ImageFormation.SegmentIdentifier must be included when a "
+            "RadarCollection.Area.Plane.SegmentList is included."));
     }
 
     if (tmpElem)

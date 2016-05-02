@@ -202,8 +202,8 @@ private:
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
     void parseImageFormationFromXML(const XMLElem imageFormationXML, 
-                                    ImageFormation *obj,
-                                    const RadarCollection& radarCollection) const;
+                                    const RadarCollection& radarCollection,
+                                    ImageFormation *obj) const;
     void parseAntennaFromXML(const XMLElem antennaXML, Antenna *obj) const;
     void parseAntennaParametersFromXML(const XMLElem antennaParamsXML, 
                                        AntennaParameters* params) const;

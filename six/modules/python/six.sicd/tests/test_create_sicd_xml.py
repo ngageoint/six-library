@@ -96,8 +96,6 @@ def initImageDataFull(cmplx):
 def initImageDataNITF(cmplx):
     imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
-    #TODO: fill in amp table. May need to fiddle with SWIG?
-    #PixelType "AMP8I_PHS8I" for amp table not currently supported
     imageData.numRows = 2
     imageData.numCols = 2
     imageData.firstRow = 1
@@ -740,9 +738,11 @@ def initINCA(rma):
     inca.dopplerRateScaleFactorPoly = Poly2D(0, 3)
     inca.dopplerCentroidPoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    inca.dopplerRateScaleFactorPoly[(0, i)] = 9 * i
-	    inca.dopplerCentroidPoly[(i, j)] = 10 * i
+	    for j in range(4):
+	        inca.dopplerCentroidPoly[(i, j)] = 10 * i
+
+    for i in range(4):
+        inca.dopplerRateScaleFactorPoly[(0, i)] = 9 * i
 
     inca.dopplerCentroidCOA = BooleanType('IS_TRUE')
     rma.inca = inca

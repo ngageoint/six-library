@@ -167,7 +167,9 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
         !radarCollection.area->plane->segmentList.empty() &&
         imageFormation->segmentIdentifier.empty())
     {
-        throw except::Exception(Ctxt("ImageFormation.SegmentIdentifier must be included when a radarCollection->area->plane::segmentList is included."));
+        throw except::Exception(Ctxt(
+            "ImageFormation.SegmentIdentifier must be included when a "
+            "RadarCollection.Area.Plane.SegmentList is included."));
     }
 
     if (!imageFormation->segmentIdentifier.empty())
