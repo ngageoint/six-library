@@ -107,7 +107,8 @@ public:
 
     // TODO: Can make this virtual if we ever need it
     //       This is the implementation for SICD 1.x / SIDD 1.1+
-    XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo, XMLElem parent) const;
+    XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo, 
+            bool hasSIPrefix, XMLElem parent = NULL) const;
     void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const;
 
     void parseEarthModelType(XMLElem element, EarthModelType& value) const;

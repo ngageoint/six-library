@@ -183,29 +183,33 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
 }
 
 XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
+                                               bool hasSIPrefix,
                                                XMLElem parent) const
 {
-    //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
-    XMLElem geoInfoXML = newElement("GeoInfo", getSICommonURI(), parent);
+    const std::string uri = hasSIPrefix ? getSICommonURI() : "";
 
-    addParameters("Desc", geoInfo.desc, geoInfoXML);
+    //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
+    XMLElem geoInfoXML = newElement("GeoInfo", uri, parent);
+
+    addParameters("Desc", uri, geoInfo.desc, geoInfoXML);
 
     const size_t numLatLons = geoInfo.geometryLatLon.size();
     if (numLatLons == 1)
     {
-        createLatLon("Point", geoInfo.geometryLatLon[0], geoInfoXML);
+        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML);
     }
     else if (numLatLons >= 2)
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
-                                         getSICommonURI(),
-                                         geoInfoXML);
+                                         uri, geoInfoXML);
+
         setAttribute(linePolyXML, "size", str::toString(numLatLons));
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = createLatLon(
                     numLatLons == 2 ? "Endpoint" : "Vertex",
+                    uri,
                     geoInfo.geometryLatLon[ii],
                     linePolyXML);
 

@@ -1747,56 +1747,12 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
 
     for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
     {
-        convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
+        common().convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
+                                     true,
                                      geographicAndTargetElem);
     }
 
     return geographicAndTargetElem;
-}
-
-XMLElem DerivedXMLParser110::convertGeoInfoToXML(const GeoInfo& geoInfo,
-    XMLElem parent) const
-{
-    //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
-    XMLElem geoInfoXML = newElement("GeoInfo", common().getSICommonURI(), parent);
-
-    common().addParameters("Desc", common().getSICommonURI(), geoInfo.desc, geoInfoXML);
-
-    const size_t numLatLons = geoInfo.geometryLatLon.size();
-    if (numLatLons == 1)
-    {
-        common().createLatLon("Point", common().getSICommonURI(), geoInfo.geometryLatLon[0], geoInfoXML);
-    }
-    else if (numLatLons >= 2)
-    {
-        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
-            common().getSICommonURI(),
-            geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
-
-        for (size_t ii = 0; ii < numLatLons; ++ii)
-        {
-            XMLElem v = common().createLatLon(
-                numLatLons == 2 ? "Endpoint" : "Vertex",
-                common().getSICommonURI(),
-                geoInfo.geometryLatLon[ii],
-                linePolyXML);
-
-            setAttribute(v, "index", str::toString(ii + 1));
-        }
-    }
-
-    if (!geoInfo.name.empty())
-    {
-        setAttribute(geoInfoXML, "name", geoInfo.name);
-    }
-
-    for (size_t ii = 0; ii < geoInfo.geoInfos.size(); ++ii)
-    {
-        convertGeoInfoToXML(*geoInfo.geoInfos[ii], geoInfoXML);
-    }
-
-    return geoInfoXML;
 }
 
 XMLElem DerivedXMLParser110::convertDigitalElevationDataToXML(

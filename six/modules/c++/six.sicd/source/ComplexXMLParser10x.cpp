@@ -49,7 +49,7 @@ XMLElem ComplexXMLParser10x::convertGeoInfoToXML(
     XMLElem parent) const
 {
     //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
-    return common().convertGeoInfoToXML(*geoInfo, parent);
+    return common().convertGeoInfoToXML(*geoInfo, false, parent);
 }
 
 XMLElem ComplexXMLParser10x::convertWeightTypeToXML(
