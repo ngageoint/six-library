@@ -33,7 +33,7 @@ static const size_t DATA_LENGTH = 100;
 static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
 static const size_t BYTES_PER_PIXEL = sizeof(sys::Int16_T);
 
-void generateData(sys::Int16_T* data)
+void generateData(mem::ScopedArray<sys::Int16_T>& data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
@@ -80,10 +80,10 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     return derivedData;
 }
 
-void write(six::UByte* data, bool useStream, bool byteSwap)
+void write(mem::ScopedArray<sys::Int16_T>& data, bool useStream, bool byteSwap)
 {
     six::Container container(six::DataType::DERIVED);
-    container.addData(createData());
+    container.addData(createData().release());
 
     six::NITFWriteControl writer;
     writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
@@ -92,7 +92,7 @@ void write(six::UByte* data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write(reinterpret_cast<sys::byte*>(data), DATA_SIZE_IN_BYTES);
+        stream.write(reinterpret_cast<sys::byte*>(data.get()), DATA_SIZE_IN_BYTES);
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
@@ -100,11 +100,11 @@ void write(six::UByte* data, bool useStream, bool byteSwap)
     }
     else
     {
-        writer.save(data, OUTPUT_NAME);
+        writer.save(reinterpret_cast<six::UByte*>(data.get()), OUTPUT_NAME);
     }
 }
 
-void read(const std::string& filename, sys::Int16_T (&data)[DATA_LENGTH])
+void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
@@ -119,7 +119,7 @@ void read(const std::string& filename, sys::Int16_T (&data)[DATA_LENGTH])
     region.setStartCol(0);
     region.setNumRows(numRows);
     region.setNumCols(numCols);
-    region.setBuffer(reinterpret_cast<six::UByte*>(data));
+    region.setBuffer(reinterpret_cast<six::UByte*>(data.get()));
     reader.interleaved(region, 0);
 
     return;
@@ -127,25 +127,28 @@ void read(const std::string& filename, sys::Int16_T (&data)[DATA_LENGTH])
 
 bool run(bool useStream = false, bool byteswap = false)
 {
-    sys::Int16_T imageData[DATA_LENGTH];
+    std::cerr << "Called" << std::endl;
+    mem::ScopedArray<sys::Int16_T> imageData(new sys::Int16_T[DATA_LENGTH]);
     generateData(imageData);
 
-    sys::Int16_T testData[DATA_LENGTH];
-    memcpy(testData, imageData, DATA_SIZE_IN_BYTES);
+    mem::ScopedArray<sys::Int16_T> testData(new sys::Int16_T[DATA_LENGTH]);
+    memcpy(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES);
 
     if ((!sys::isBigEndianSystem() && !byteswap) ||
         (sys::isBigEndianSystem() && byteswap))
     {
-        sys::byteSwap(reinterpret_cast<six::UByte*>(imageData), BYTES_PER_PIXEL, DATA_LENGTH);
+        sys::byteSwap(reinterpret_cast<six::UByte*>(imageData.get()),
+                BYTES_PER_PIXEL, DATA_LENGTH);
     }
-
-    write(reinterpret_cast<six::UByte*>(testData), useStream, byteswap);
+    std::cerr << "Pre-write" << std::endl;
+    write(testData, useStream, byteswap);
+    std::cerr << "Pre-read" << std::endl;
     read(OUTPUT_NAME, testData);
+    std::cerr << "Pre-comp" << std::endl;
 
-
-    if (memcmp(reinterpret_cast<six::UByte*>(testData), 
-        reinterpret_cast<six::UByte*>(imageData), DATA_SIZE_IN_BYTES) == 0)
+    if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)
     {
+        std::cerr << "True" << std::endl;
         return true;
     }
     else
@@ -165,8 +168,8 @@ int main(int argc, char** argv)
 
     try
     {
-        bool success = run(false, false);// && run(true, false) &&
-            //run(false, true) && run(false, false);
+        bool success = run(false, false) && run(true, false) &&
+            run(false, true) && run(false, false);
         return (success ? 0 : 1);
     }
     catch (const except::Exception& ex)
