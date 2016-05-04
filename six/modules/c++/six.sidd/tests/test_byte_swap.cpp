@@ -77,6 +77,9 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     parent->information->sensorName.clear();
     parent->geometry.reset(new six::sidd::Geometry());
 
+    derivedData->setNumRows(DATA_LENGTH / 10);
+    derivedData->setNumCols(DATA_LENGTH / derivedData->getNumRows());
+
     return derivedData;
 }
 
@@ -92,7 +95,8 @@ void write(mem::ScopedArray<sys::Int16_T>& data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write(reinterpret_cast<sys::byte*>(data.get()), DATA_SIZE_IN_BYTES);
+        stream.write(reinterpret_cast<sys::byte*>(data.get()),
+            DATA_SIZE_IN_BYTES / sizeof(sys::byte));
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
@@ -113,7 +117,6 @@ void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 
     const size_t numRows = inData->getNumRows();
     const size_t numCols = inData->getNumCols();
-
     six::Region region;
     region.setStartRow(0);
     region.setStartCol(0);
@@ -127,7 +130,6 @@ void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 
 bool run(bool useStream = false, bool byteswap = false)
 {
-    std::cerr << "Called" << std::endl;
     mem::ScopedArray<sys::Int16_T> imageData(new sys::Int16_T[DATA_LENGTH]);
     generateData(imageData);
 
@@ -140,15 +142,11 @@ bool run(bool useStream = false, bool byteswap = false)
         sys::byteSwap(reinterpret_cast<six::UByte*>(imageData.get()),
                 BYTES_PER_PIXEL, DATA_LENGTH);
     }
-    std::cerr << "Pre-write" << std::endl;
     write(testData, useStream, byteswap);
-    std::cerr << "Pre-read" << std::endl;
     read(OUTPUT_NAME, testData);
-    std::cerr << "Pre-comp" << std::endl;
 
     if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)
     {
-        std::cerr << "True" << std::endl;
         return true;
     }
     else
@@ -169,22 +167,25 @@ int main(int argc, char** argv)
     try
     {
         bool success = run(false, false) && run(true, false) &&
-            run(false, true) && run(false, false);
-        return (success ? 0 : 1);
+            run(false, true) && run(true, true);
+        if (success)
+        {
+            std::cout << "All tests passed." << std::endl;
+            return 0;
+        }
     }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
-        return 1;
     }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
-        return 1;
     }
     catch (...)
     {
         std::cerr << "Unknown exception\n";
-        return 1;
     }
+
+    return 1;
 }
