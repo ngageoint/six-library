@@ -31,14 +31,14 @@ from subprocess import call
 import utils
 
 def moveToOutputDir(source, outdir):
-    if not isinstance(source, basestring):
+    if not isinstance(source, str):
         for filename in source:
             moveToOutputDir(filename, outdir)
         return
 
     if source in os.listdir(outdir):
         os.remove(os.path.join(outdir, source))
-         
+
     move(os.path.join(os.getcwd(), source), outdir)
 
 def run():
@@ -50,7 +50,7 @@ def run():
     # Make siddLegend
     binDir = os.path.join(utils.installPath(), 'bin')
     legendNameBase = 'siddLegend'
-    print 'Creating SIDDs with legends'
+    print('Creating SIDDs with legends')
 
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
@@ -69,7 +69,7 @@ def run():
         }
 
     for arg in argToOutput.keys():
-        print 'Creating file {}'.format(argToOutput[arg])
+        print('Creating file {}'.format(argToOutput[arg]))
         if '--lut' in arg:
             call([utils.executableName(os.path.join(binDir,
                     'test_create_sidd_from_mem')), '--lut', arg.split(' ')[1],
@@ -78,6 +78,6 @@ def run():
             call([utils.executableName(os.path.join(binDir,
                     'test_create_sidd_from_mem')), arg, argToOutput[arg]],
                      stdout = open(os.devnull, 'w'))
-            
+
     moveToOutputDir(argToOutput.values(), outdir)
-    
+

@@ -174,7 +174,7 @@ def initGrid(cmplx):
     param.setValue('334')
     grid.row.weightType.parameters.push_back(param)
 
-    for ii in xrange(5):
+    for ii in range(5):
         grid.row.weights.push_back(ii / 2.0)
 
     grid.col = makeScopedCloneableDirectionParameters()
@@ -197,7 +197,7 @@ def initGrid(cmplx):
     param.setName('WeightType Param')
     param.setValue('334')
     grid.col.weightType.parameters.push_back(param)
-    for ii in xrange(5):
+    for ii in range(5):
         grid.col.weights.push_back(ii / 2.0)
 
     cmplx.grid = grid
@@ -251,7 +251,7 @@ def initRadarCollection(cmplx):
     radarCollection.txFrequencyMax = 99
     radarCollection.txPolarization = PolarizationSequenceType('V')
     radarCollection.polarizationHVAnglePoly = Poly1D(3)
-    for index in xrange(4):
+    for index in range(4):
         radarCollection.polarizationHVAnglePoly[index] = index * 10
 
     txStep = makeScopedCloneableTxStep()
@@ -738,8 +738,8 @@ def initINCA(rma):
     inca.dopplerRateScaleFactorPoly = Poly2D(0, 3)
     inca.dopplerCentroidPoly = Poly2D(3, 3)
     for i in range(4):
-	    for j in range(4):
-	        inca.dopplerCentroidPoly[(i, j)] = 10 * i
+            for j in range(4):
+                inca.dopplerCentroidPoly[(i, j)] = 10 * i
 
     for i in range(4):
         inca.dopplerRateScaleFactorPoly[(0, i)] = 9 * i
@@ -853,19 +853,20 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
     # These should match #
 
     if filecmp.cmp(outputFilename + ".xml", newPathnameBase + ".xml"):
-	print 'XML round trip succeeded!'
+        print('XML round trip succeeded!')
     else:
         successCode = 1
-	print 'XML round trip failed'
+        print('XML round trip failed')
 
     if includeNITF:
         if filecmp.cmp(outputFilename + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'NITF round trip succeeded!'
+            print('NITF round trip succeeded!')
         else:
             successCode = 1
-            print 'NITF round trip failed'
+            print('NITF round trip failed')
+
     return successCode
-    # If we made it to here, the read side appears to be working properly too
+
 
 
 if __name__ == '__main__':

@@ -51,7 +51,7 @@ def createNITFs(version, alg, imageType, home):
         return 
 
     outputName = "sicd_{0}({1}){2}".format(version, alg, imageType)
-    print 'Creating file {}.nitf'.format(outputName)
+    print('Creating file {}.nitf'.format(outputName))
     
     cmplx = initData(includeNITF=True, version=version, alg=alg,
                      imageType=imageType)

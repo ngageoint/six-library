@@ -34,7 +34,7 @@ def run():
     success = True
     for childDir in childDirs:
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
-            print os.path.join(unitTestDir, childDir, test)
+            print(os.path.join(unitTestDir, childDir, test))
             if call([utils.executableName(os.path.join(unitTestDir, childDir, test))]) != 0:
                 success = False
 

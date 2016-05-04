@@ -35,28 +35,28 @@ import utils
 utils.setPaths()
 
 if runPythonScripts.run() == False:
-    print "Error running a python script"
+    print("Error running a python script")
     sys.exit(1)
 
 if makeRegressionFiles.run() == False:
-    print "Error generating regression files"
+    print("Error generating regression files")
     sys.exit(1)
 
 if checkNITFs.run() == False:
-    print "test in checkNITFS.py failed"
+    print("test in checkNITFS.py failed")
     sys.exit(1)
 
-print "Performing byte swap test"
+print("Performing byte swap test")
 if subprocess.call([utils.executableName(os.path.join(
         utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
-    print "Failed ByteSwap test in six.sidd/tests/test_byte_swap"
+    print("Failed ByteSwap test in six.sidd/tests/test_byte_swap")
     sys.exit(1)
-print "Byte swap test succeeded"
+print("Byte swap test succeeded")
 
 if runUnitTests.run() == False:
-    print "Unit tests failed"
+    print("Unit tests failed")
     sys.exit(1)
 
-print "All passed"
+print("All passed")
 sys.exit(0)
 
