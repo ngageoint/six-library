@@ -75,7 +75,7 @@ def initImageDataFull(cmplx):
     imageData.amplitudeTable = makeScopedCloneableAmplitudeTable()
     for ii in range(imageData.amplitudeTable.numEntries):
         imageData.amplitudeTable[ii] = ii / 10.0
-        
+
     imageData.numRows = 123
     imageData.numCols = 456
     imageData.firstRow = 9
@@ -253,12 +253,12 @@ def initRadarCollection(cmplx):
     radarCollection.polarizationHVAnglePoly = Poly1D(3)
     for index in xrange(4):
         radarCollection.polarizationHVAnglePoly[index] = index * 10
-            
+
     txStep = makeScopedCloneableTxStep()
     txStep.waveformIndex = 1
     txStep.txPolarization = PolarizationType('V')
     radarCollection.txSequence.push_back(txStep)
-    
+
     wfParams = makeScopedCloneableWaveformParameters()
     wfParams.txPulseLength = 11
     wfParams.txRFBandwidth = 22
@@ -695,7 +695,7 @@ def initRMA(cmplx, version, imageType):
                 'RMCR image type not present in version {0}'.format(version))
     elif imageType == 'RMAT':
         rma = initRMAT(rma)
-        
+
     cmplx.rma = rma
     return cmplx
 
@@ -833,7 +833,7 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
     writeXML(outputFilename, cmplx)
     if includeNITF:
         writeNITF(outputFilename, cmplx)
-        
+
     # If we made it to here, all the Python bindings must be present and
     # what we wrote out must have passed schema validation
     # We can't tell if for some reason some of the XML just didn't
@@ -865,11 +865,9 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
             successCode = 1
             print 'NITF round trip failed'
     return successCode
-
-
     # If we made it to here, the read side appears to be working properly too
 
-    
+
 if __name__ == '__main__':
     import argparse
 
@@ -887,6 +885,6 @@ if __name__ == '__main__':
     # Build up a giant ComplexData from scratch with everything populated
     cmplx = initData(includeNITF, args.version)
     successCode = doRoundTrip(cmplx, includeNITF, 'test_create_sicd')
-    sys.exit(successCode)    
+    sys.exit(successCode)
 
-   
+

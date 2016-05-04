@@ -267,9 +267,9 @@ struct LUT
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
         numEntries(entries),
-        elementSize(outputSpace)
+        elementSize(outputSpace),
+        table(new unsigned char[entries * outputSpace])
     {
     }
 
@@ -277,9 +277,9 @@ struct LUT
     LUT(const unsigned char* interleavedLUT,
         size_t entries,
         size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
         numEntries(entries),
-        elementSize(outputSpace)
+        elementSize(outputSpace),
+        table(new unsigned char[entries * outputSpace])
     {
         memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
     }

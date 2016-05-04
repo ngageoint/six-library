@@ -77,7 +77,7 @@ int main(int argc, char** argv)
         const std::string outPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));
         const std::vector<std::complex<float> > data(
-                dims.normL1(), std::complex<float>(0.0f, 0.0f));
+                dims.area(), std::complex<float>(0.0f, 0.0f));
 
         cphd::Metadata metadata;
 
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
         writer.writeMetadata(outPathname, vbm);
         for (size_t ii = 0; ii < numChannels; ++ii)
         {
-            writer.writeCPHDData(&data[0], dims.normL1());
+            writer.writeCPHDData(&data[0], dims.area());
         }
 
         std::cout << "Successfully wrote CPHD file: " << outPathname << "\n";
