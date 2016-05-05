@@ -11,5 +11,5 @@ def build(bld):
   bld.swigModule(name = 'six',
                  use = 'six-c++ scene-python math.poly-python ' \
                        'except-python xml.lite-python logging-python ' \
-                       'io-python mem-python types-python',
+                       'io-python mem-python types-python sio.lite-python',
                  package = 'pysix')
