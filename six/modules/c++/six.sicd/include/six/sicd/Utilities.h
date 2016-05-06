@@ -240,6 +240,15 @@ public:
             const types::RowCol<size_t>& offset,
             const types::RowCol<size_t>& extent,
             std::complex<float>* buffer);
+
+    /*
+    * Return the unit vector normal to the ground plane.
+    * If an output plane is defined (i.e. RadarCollection.Area.Plane
+    * exists), this is taken to be the ground plane. Otherwise,
+    * the normalized ECEF coordinates of the Scene Center Point
+    * (GeoData.scp.ec) are returned.
+    */
+    static Vector3 getGroundPlaneNormal(const ComplexData& data);
 };
 }
 }
