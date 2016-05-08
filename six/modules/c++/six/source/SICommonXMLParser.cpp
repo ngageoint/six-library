@@ -224,7 +224,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
 
     for (size_t ii = 0; ii < geoInfo.geoInfos.size(); ++ii)
     {
-        convertGeoInfoToXML(*geoInfo.geoInfos[ii], geoInfoXML);
+        convertGeoInfoToXML(*geoInfo.geoInfos[ii], hasSIPrefix, geoInfoXML);
     }
 
     return geoInfoXML;
