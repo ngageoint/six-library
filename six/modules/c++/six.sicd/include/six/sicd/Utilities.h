@@ -247,6 +247,8 @@ public:
     * exists), this is taken to be the ground plane. Otherwise,
     * the normalized ECEF coordinates of the Scene Center Point
     * (GeoData.scp.ec) are returned.
+    * \param data The ComplexData object associated with the SICD
+    * \return the unit vector normal to the ground plane
     */
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
 };

@@ -102,7 +102,6 @@ int main(int argc, char** argv)
                             container->getData(0));
             geom = six::sidd::Utilities::getSceneGeometry(data);
             projection = six::sidd::Utilities::getProjectionModel(data);
-            std::cout << geom->getReferencePosition() << std::endl;
             imagePt = data->pixelToImagePoint(pixelLoc);
             groundPlaneNormal = geom->getReferencePosition().unit();
         }
