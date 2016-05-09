@@ -489,6 +489,24 @@ void Utilities::getWidebandData(
             offset, extent, buffer);
 }
 
+Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
+{
+    Vector3 groundPlaneNormal;
+
+    if (data.radarCollection->area.get() &&
+        data.radarCollection->area->plane.get())
+    {
+        const AreaPlane& areaPlane = *data.radarCollection->area->plane;
+        groundPlaneNormal = math::linear::cross(areaPlane.xDirection->unitVector,
+                areaPlane.yDirection->unitVector);
+    }
+    else
+    {
+        groundPlaneNormal = data.geoData->scp.ecf;
+    }
+
+    return groundPlaneNormal.unit();
+}
 }
 }
 
