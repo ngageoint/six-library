@@ -8,8 +8,10 @@ def configure(conf):
   conf.env['postfix_six'] = '_base'
 
 def build(bld):
+  # NOTE: sio.lite-python isn't needed for the SIX bindings per se but is
+  #       used by some of the test programs so including here for convenience
   bld.swigModule(name = 'six',
                  use = 'six-c++ scene-python math.poly-python ' \
                        'except-python xml.lite-python logging-python ' \
-                       'io-python mem-python types-python',
+                       'io-python mem-python types-python sio.lite-python',
                  package = 'pysix')

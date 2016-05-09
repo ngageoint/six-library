@@ -82,27 +82,28 @@ int main(int argc, char** argv)
         six::Container* container = reader.getContainer();
         std::auto_ptr<scene::ProjectionModel> projection;
         std::auto_ptr<scene::SceneGeometry> geom;
+        scene::Vector3 groundPlaneNormal;
         types::RowCol<double> imagePt;
         if (container->getDataType() == six::DataType::COMPLEX)
         {
             const six::sicd::ComplexData* data =
                     reinterpret_cast<six::sicd::ComplexData*>(
                             container->getData(0));
-
             geom.reset(six::sicd::Utilities::getSceneGeometry(data));
             projection.reset(six::sicd::Utilities::getProjectionModel(
                     data, geom.get()));
             imagePt = data->pixelToImagePoint(pixelLoc);
+            groundPlaneNormal = six::sicd::Utilities::getGroundPlaneNormal(*data);
         }
         else if (container->getDataType() == six::DataType::DERIVED)
         {
             const six::sidd::DerivedData* data =
                     reinterpret_cast<six::sidd::DerivedData*>(
                             container->getData(0));
-            projection = six::sidd::Utilities::getProjectionModel(data);
             geom = six::sidd::Utilities::getSceneGeometry(data);
-            std::cout << geom->getReferencePosition() << std::endl;
+            projection = six::sidd::Utilities::getProjectionModel(data);
             imagePt = data->pixelToImagePoint(pixelLoc);
+            groundPlaneNormal = geom->getReferencePosition().unit();
         }
         else
         {
@@ -110,16 +111,14 @@ int main(int argc, char** argv)
             return 1;
         }
 
+        std::cout << "Converted imagePt : " << imagePt.row << ", "
+            << imagePt.col << std::endl;
+
         const scene::ECEFToLLATransform ecefToLLA;
+        const scene::Vector3 refPos(geom->getReferencePosition());
+        double timeCOA(0.0);
 
         // Call imageToScene() where we don't specify a height
-        const scene::Vector3 refPos(geom->getReferencePosition());
-        scene::Vector3 groundPlaneNormal(refPos);
-        groundPlaneNormal.normalize();
-
-        double timeCOA(0.0);
-        std::cout << "Converted imagePt : " <<  imagePt.row << ", "
-                  << imagePt.col << std::endl;
         const scene::Vector3 groundPt1 =
                 projection->imageToScene(imagePt, refPos, groundPlaneNormal,
                                          &timeCOA);
