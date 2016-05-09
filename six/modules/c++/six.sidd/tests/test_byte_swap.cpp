@@ -83,7 +83,7 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     return derivedData;
 }
 
-void write(mem::ScopedArray<sys::Int16_T>& data, bool useStream, bool byteSwap)
+void write(const sys::Int16_T* const data, bool useStream, bool byteSwap)
 {
     six::Container container(six::DataType::DERIVED);
     container.addData(createData().release());
@@ -95,7 +95,7 @@ void write(mem::ScopedArray<sys::Int16_T>& data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write(reinterpret_cast<sys::byte*>(data.get()),
+        stream.write(reinterpret_cast<const sys::byte* const>(data),
             DATA_SIZE_IN_BYTES / sizeof(sys::byte));
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
@@ -104,11 +104,11 @@ void write(mem::ScopedArray<sys::Int16_T>& data, bool useStream, bool byteSwap)
     }
     else
     {
-        writer.save(reinterpret_cast<six::UByte*>(data.get()), OUTPUT_NAME);
+        writer.save(reinterpret_cast<const six::UByte* const>(data), OUTPUT_NAME);
     }
 }
 
-void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
+void read(const std::string& filename, sys::Int16_T* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
@@ -122,10 +122,8 @@ void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
     region.setStartCol(0);
     region.setNumRows(numRows);
     region.setNumCols(numCols);
-    region.setBuffer(reinterpret_cast<six::UByte*>(data.get()));
+    region.setBuffer(reinterpret_cast<six::UByte*>(data));
     reader.interleaved(region, 0);
-
-    return;
 }
 
 bool run(bool useStream = false, bool byteswap = false)
@@ -142,8 +140,8 @@ bool run(bool useStream = false, bool byteswap = false)
         sys::byteSwap(reinterpret_cast<six::UByte*>(imageData.get()),
                 BYTES_PER_PIXEL, DATA_LENGTH);
     }
-    write(testData, useStream, byteswap);
-    read(OUTPUT_NAME, testData);
+    write(testData.get(), useStream, byteswap);
+    read(OUTPUT_NAME, testData.get());
 
     if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)
     {
@@ -159,13 +157,13 @@ bool run(bool useStream = false, bool byteswap = false)
 
 int main(int argc, char** argv)
 {
-    six::XMLControlFactory::getInstance().addCreator(
-        six::DataType::DERIVED,
-        new six::XMLControlCreatorT<
-        six::sidd::DerivedXMLControl>());
-
     try
     {
+        six::XMLControlFactory::getInstance().addCreator(
+            six::DataType::DERIVED,
+            new six::XMLControlCreatorT<
+            six::sidd::DerivedXMLControl>());
+
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(true, true);
         if (success)
