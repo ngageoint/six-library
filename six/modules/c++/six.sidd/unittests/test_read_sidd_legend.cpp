@@ -248,10 +248,10 @@ struct TestHelper
     six::Legend mRgbLegend;
 };
 
-TestHelper testHelper;
 
 TEST_CASE(testRead)
 {
+    TestHelper testHelper;
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&testHelper.mXmlRegistry);
 

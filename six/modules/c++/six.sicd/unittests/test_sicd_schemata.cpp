@@ -248,6 +248,12 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
     std::string xmlText("");
     char  geoText[256];
 
+    // All GeoInfo blocks start the same
+    sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
+    xmlText = std::string(geoText);
+
+
+    // In 1_0_0, Desc comes before GeoInfo children
     if (version == FRMT_1_0_0)
     {
         for (unsigned int i=0,n=1; i<numParams; ++i,++n)
@@ -255,17 +261,24 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
             sprintf(geoText, "<Desc name=\"GeoInfoParamName%u\">GeoInfoParamVal%u</Desc>", n,n);
             xmlText += std::string(geoText);
         }
+    }
+
+    // main loop
+    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
+    {
+        for (unsigned int i = 0; i < numInfos; ++i)
+        {
+            xmlText += initGeoInfoXML(version, numInfos - 1, numParams);
+        }
+    }
+
+    // Everything has been written to version one, so we can close the block
+    if (version == FRMT_1_0_0)
+    {
         xmlText += "</GeoInfo>";
     }
 
-    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0)
-    {
-        sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
-        xmlText = std::string(geoText);
-        for (unsigned int i=0; i<numInfos; ++i)
-            xmlText += initGeoInfoXML(version, numInfos-1, numParams);
-    }
-
+    // Still have to fill Desc for earlier version
     if (version == FRMT_0_4_1 || version == FRMT_0_4_0)
     {
         for (unsigned int i=0,n=1; i<numParams; ++i,++n)
@@ -275,7 +288,6 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
         }
         xmlText += "</GeoInfo>";
     }
-
     return xmlText;
 }
 
@@ -2431,6 +2443,10 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         rtDoc->getRootElement()->print(oss);
         std::string postRTxml(oss.stream().str());
 
+        // read document back into Complex Data structure to compare against
+        six::sicd::ComplexData* rtData = (
+            six::sicd::ComplexData*)xmlControl->fromXML(rtDoc.get(), std::vector<std::string>());
+
         // if output path provided, write out XML results to files
         if (!xmlPath.empty())
         {
@@ -2464,19 +2480,12 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
             rtDoc->getRootElement()->prettyPrint(rtOs);
         }
 
-        // for unit test, compare internally generated XML string to the parsed XML string
-        //   and also compare to the parsed XML string generated after "round-trip" data
-        if (xmlText != preRTxml)
+        // for unit test, compare the two ComplexData objects produced
+        if (*data != *rtData)
         {
-            if (verbose) diffXMLs("Input    ", xmlText,  "Parsed   ", preRTxml,  debugLineCnt);
+            if (verbose) diffXMLs("Input    ", xmlText,  "Parsed   ", postRTxml,  debugLineCnt);
             return false;
         }
-        if (preRTxml != postRTxml)
-        {
-            if (verbose) diffXMLs("Parsed   ", preRTxml, "RoundTrip", postRTxml, debugLineCnt);
-            return false;
-        }
-
     }
     catch (except::Exception& ex)
     {
@@ -2585,6 +2594,11 @@ int main(int argc, char** argv)
     catch (except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (except::Error& err)
+    {
+        std::cerr << err.toString() << std::endl;
         return 1;
     }
 }

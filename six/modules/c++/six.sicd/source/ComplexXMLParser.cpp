@@ -91,7 +91,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     parseTimelineFromXML(timelineXML, sicd->timeline.get());
     parsePositionFromXML(positionXML, sicd->position.get());
     parseRadarCollectionFromXML(radarCollectionXML, sicd->radarCollection.get());
-    parseImageFormationFromXML(imageFormationXML, sicd->imageFormation.get());
+    parseImageFormationFromXML(imageFormationXML, *sicd->radarCollection, sicd->imageFormation.get());
     parseSCPCOAFromXML(scpcoaXML, sicd->scpcoa.get());
 
     if (radiometricXML != NULL)
@@ -157,7 +157,7 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
     convertTimelineToXML(sicd->timeline.get(), root);
     convertPositionToXML(sicd->position.get(), root);
     convertRadarCollectionToXML(sicd->radarCollection.get(), root);
-    convertImageFormationToXML(sicd->imageFormation.get(), root);
+    convertImageFormationToXML(sicd->imageFormation.get(), *sicd->radarCollection, root);
     convertSCPCOAToXML(sicd->scpcoa.get(), root);
     if (sicd->radiometric.get())
     {
@@ -1313,9 +1313,20 @@ void ComplexXMLParser::parsePositionFromXML(
 
 void ComplexXMLParser::parseImageFormationFromXML(
     const XMLElem imageFormationXML,
+    const RadarCollection& radarCollection,
     ImageFormation *imageFormation) const
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
+    if (radarCollection.area.get() != NULL &&
+        radarCollection.area->plane.get() != NULL &&
+        !radarCollection.area->plane->segmentList.empty() &&
+        !tmpElem)
+    {
+        throw except::Exception(Ctxt(
+            "ImageFormation.SegmentIdentifier must be included when a "
+            "RadarCollection.Area.Plane.SegmentList is included."));
+    }
+
     if (tmpElem)
     {
         //optional
