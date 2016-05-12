@@ -83,7 +83,7 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     return derivedData;
 }
 
-void write(const sys::Int16_T* const data, bool useStream, bool byteSwap)
+void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
 {
     six::Container container(six::DataType::DERIVED);
     container.addData(createData().release());
@@ -95,7 +95,7 @@ void write(const sys::Int16_T* const data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write(reinterpret_cast<const sys::byte* const>(data),
+        stream.write(reinterpret_cast<const sys::byte*>(data),
             DATA_SIZE_IN_BYTES / sizeof(sys::byte));
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
@@ -104,7 +104,7 @@ void write(const sys::Int16_T* const data, bool useStream, bool byteSwap)
     }
     else
     {
-        writer.save(reinterpret_cast<const six::UByte* const>(data), OUTPUT_NAME);
+        writer.save(reinterpret_cast<const six::UByte*>(data), OUTPUT_NAME);
     }
 }
 
