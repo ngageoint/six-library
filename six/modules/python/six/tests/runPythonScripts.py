@@ -38,6 +38,7 @@ def sicdToSIO(testsDir):
     schemaPath = os.path.join(utils.findSixHome(), 'install', 'conf',
             'schema', 'six')
     print(schemaPath)
+    print(os.listdir(schemaPath))
     result = call(['python', scriptName, sampleNITF, schemaPath],
                   stdout=subprocess.PIPE)
     if result == 0:
