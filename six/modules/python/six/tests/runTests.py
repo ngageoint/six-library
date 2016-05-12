@@ -34,12 +34,12 @@ import utils
 
 utils.setPaths()
 
-if runPythonScripts.run() == False:
-    print("Error running a python script")
-    sys.exit(1)
-
 if makeRegressionFiles.run() == False:
     print("Error generating regression files")
+    sys.exit(1)
+
+if runPythonScripts.run() == False:
+    print("Error running a python script")
     sys.exit(1)
 
 if checkNITFs.run() == False:
