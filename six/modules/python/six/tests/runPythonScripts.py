@@ -35,10 +35,9 @@ def sicdToSIO(testsDir):
     scriptName = os.path.join(testsDir, 'sicd_to_sio.py')
     sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
             'six.sicd', 'sicd_1.0.0(RMA)RMAT.nitf')
-    schemaPath = os.path.join(utils.findSixHome(), 'install', 'conf',
+    schemaPath = os.path.join(utils.installPath(), 'conf',
             'schema', 'six')
-    print(os.listdir(utils.findSixHome()))
-    print(os.listdir(os.path.join(utils.findSixHome(), 'install')))
+    print(os.listdir(utils.installPath()))
     print(schemaPath)
     print(os.listdir(schemaPath))
     result = call(['python', scriptName, sampleNITF, schemaPath],
