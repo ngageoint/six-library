@@ -65,7 +65,9 @@ def setPaths():
                                 'site-packages')
         
     if platform.system() != 'Windows':
-         pythonPath = glob(os.path.join(installPath(), 'lib', 'python*',
+        print os.listdir(os.path.join(installPath()))
+        print os.listdir(os.path.join(installPath(), 'lib'))
+        pythonPath = glob(os.path.join(installPath(), 'lib', 'python*',
                                       'site-packages'))[0]
         
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
