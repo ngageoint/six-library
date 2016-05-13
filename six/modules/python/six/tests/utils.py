@@ -67,6 +67,7 @@ def setPaths():
     if platform.system() == 'Linux':
          pythonPath = glob(os.path.join(installPath(), 'lib', 'python*',
                                       'site-packages'))[0]
+         print "Pythonpath: " + pythonPath
         
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
     os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
