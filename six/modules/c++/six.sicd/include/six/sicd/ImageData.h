@@ -62,7 +62,7 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-    mem::ScopedCopyablePtr<AmplitudeTable> amplitudeTable;
+    mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
     size_t numRows;
