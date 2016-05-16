@@ -373,7 +373,7 @@ void runCPHDTest(const std::string& testName,
                 metadata.getNumVectors(ii),
                 metadata.getNumSamples(ii));
 
-        data[ii].resize(dims[ii].normL1());
+        data[ii].resize(dims[ii].area());
         for (size_t jj = 0; jj < data[ii].size(); ++jj)
         {
             data[ii][jj] = std::complex<float>(
@@ -406,7 +406,7 @@ void runCPHDTest(const std::string& testName,
         const std::complex<float>* readBuffer =
                 reinterpret_cast<std::complex<float>* >(readData.get());
 
-        for (size_t jj = 0; jj < dims[ii].normL1(); ++jj)
+        for (size_t jj = 0; jj < dims[ii].area(); ++jj)
         {
             TEST_ASSERT_EQ(readBuffer[jj], data[ii][jj]);
         }

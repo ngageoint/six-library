@@ -48,12 +48,24 @@ struct TargetInformation
     //! (Optional) SIDD Footprint: target footprint as defined by polygonal shape
     mem::ScopedCopyablePtr<LatLonCorners> footprint;
 
-    /*! 
+    /*!
      * (Optional) SIDD TargetInformationExtension
      * Generic extension.  Could be used to indicate type of target,
      * terrain, etc.
      */
     ParameterCollection targetInformationExtensions;
+
+    //! Equality operator
+    bool operator==(const TargetInformation& rhs) const
+    {
+        return (identifiers == rhs.identifiers && footprint == rhs.footprint &&
+            targetInformationExtensions == rhs.targetInformationExtensions);
+    }
+
+    bool operator!=(const TargetInformation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -77,6 +89,19 @@ struct GeographicInformation
      *  Country identifier for this geographic region.
      */
     ParameterCollection geographicInformationExtensions;
+
+    //! Equality operator
+    bool operator==(const GeographicInformation& rhs) const
+    {
+        return (countryCodes == rhs.countryCodes &&
+            securityInformation == rhs.securityInformation &&
+            geographicInformationExtensions == rhs.geographicInformationExtensions);
+    }
+
+    bool operator!=(const GeographicInformation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 //! Note that subRegion and geographicInformation are mutually exclusive!
@@ -110,6 +135,13 @@ public:
 
     //!  SIDD: GeographicInfo, mutually exclusive with SubRegion
     mem::ScopedCopyablePtr<GeographicInformation> geographicInformation;
+
+    //! Equality operators
+    bool operator==(const GeographicCoverage& rhs) const;
+    bool operator!=(const GeographicCoverage& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -147,7 +179,7 @@ public:
 
     // This section is used for SIDD 1.1
 
-    EarthModelType earthModel; 
+    EarthModelType earthModel;
     /*!
      *  Parameters apply to image corners of the
      *  product projected to the same height as the SCP.
@@ -170,6 +202,18 @@ public:
      *  Note that this may be used as a block inside of a block.
      */
     std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
+
+    //! Equality operators
+    bool operator==(const GeographicAndTarget& rhs) const
+    {
+        return (geographicCoverage == rhs.geographicCoverage &&
+            targetInformation == rhs.targetInformation);
+    }
+
+    bool operator!=(const GeographicAndTarget& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

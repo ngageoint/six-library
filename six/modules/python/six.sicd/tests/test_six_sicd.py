@@ -2,9 +2,9 @@
 
 #
 # =========================================================================
-# This file is part of six.sicd-python 
+# This file is part of six.sicd-python
 # =========================================================================
-# 
+#
 # (C) Copyright 2004 - 2015, MDA Information Systems LLC
 #
 # six.sicd-python is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU Lesser General Public 
-# License along with this program; If not, 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
 # see <http://www.gnu.org/licenses/>.
 #
 
@@ -53,7 +53,7 @@ def roundTrip(filename):
   doc = xmlparser.getDocument()
   dt = DataType(DataType.COMPLEX)
   xml_ctrl = ComplexXMLControl()
-  data = xml_ctrl.fromXML(doc, vs) 
+  data = xml_ctrl.fromXML(doc, vs)
   cmplx = asComplexData(data)
 
   out_doc = xml_ctrl.toXML(cmplx, vs)
@@ -64,9 +64,9 @@ def roundTrip(filename):
   root = out_doc.getRootElement()
   root.prettyPrint(fos)
   if filecmp.cmp(filename, out_filename):
-    print filename + " passed"
+    print(filename + " passed")
   else:
-    print "handling " + filename + " failed"
+    print("handling " + filename + " failed")
 
 
 ##############################################################
@@ -92,7 +92,7 @@ def loadSicd(filename):
   out_doc = xml_ctrl.toXML(cmplx, vs)
   root = out_doc.getRootElement()
   root.prettyPrint(fos)
-  print filename + " probably passed"
+  print(filename + " probably passed")
   return cmplx
 
 ##############################################################
@@ -106,27 +106,27 @@ def loadSicd(filename):
 # that we can actually get to the data
 
 def showInfo(cmplx):
-  print "file is " + str(cmplx.getNumRows()) + "x" + str(cmplx.getNumCols())
-  print str(cmplx.getNumBytesPerPixel()) + " bytes per pixel"
-  print "tx polarization: " + cmplx.radarCollection.txPolarization.toString()
-  print "image formation algorithm: " + cmplx.imageFormation.imageFormationAlgorithm.toString()
-  print "graze angle: " + str(cmplx.scpcoa.grazeAngle)
-  print "slant range: " + str(cmplx.scpcoa.slantRange)
-  print "radar mode: " + cmplx.collectionInformation.radarMode.toString()
+  print("file is " + str(cmplx.getNumRows()) + "x" + str(cmplx.getNumCols()))
+  print(str(cmplx.getNumBytesPerPixel()) + " bytes per pixel")
+  print( "tx polarization: " + cmplx.radarCollection.txPolarization.toString())
+  print("image formation algorithm: " + cmplx.imageFormation.imageFormationAlgorithm.toString())
+  print("graze angle: " + str(cmplx.scpcoa.grazeAngle))
+  print("slant range: " + str(cmplx.scpcoa.slantRange))
+  print("radar mode: " + cmplx.collectionInformation.radarMode.toString())
   collectionParameters = cmplx.radarCollection.parameters
-  print "radar collection parameters: "
+  print("radar collection parameters: ")
   if collectionParameters.empty():
-    print '    (none)'
+    print('    (none)')
   else:
     for idx in range(0,collectionParameters.size()):
-      print "    " + collectionParameters[idx].getName() + ": " + str(collectionParameters[idx])
-  print 'image data \'validData\''
+      print("    " + collectionParameters[idx].getName() + ": " + str(collectionParameters[idx]))
+  print('image data \'validData\'')
   validData = cmplx.imageData.validData
   if validData.empty():
-    print '    (none)'
+    print('    (none)')
   else:
     for idx in range(0,validData.size()):
-      print '    (' + str(validData[idx].row) + ',' + str(validData[idx].col) + ')'
+      print('    (' + str(validData[idx].row) + ',' + str(validData[idx].col) + ')')
 
 
 ###############################################################################
@@ -134,6 +134,9 @@ def showInfo(cmplx):
 ###############################################################################
 ###############################################################################
 ###############################################################################
+
+if 1 == len(sys.argv):
+    print("please provide a sicd or XML file")
 
 for arg in sys.argv:
   if (arg.endswith(".ntf") or arg.endswith(".nitf")):

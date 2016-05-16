@@ -60,6 +60,13 @@ struct TimelineSet
      *  Starting tStart to tEnd
      */
     Poly1D interPulsePeriodPoly;
+
+    //!  Equality operators
+    bool operator==(const TimelineSet& rhs) const;
+    bool operator!=(const TimelineSet& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -79,6 +86,17 @@ struct InterPulsePeriod
 
     //!  Vector of TimelineSet objects
     std::vector<TimelineSet> sets;
+
+    //!  Equality operators
+    bool operator==(const InterPulsePeriod& rhs) const
+    {
+        return sets == rhs.sets;
+    }
+    
+    bool operator!=(const InterPulsePeriod& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -104,6 +122,16 @@ struct Timeline
 
     //! Optional IPP parameter description
     mem::ScopedCopyablePtr<InterPulsePeriod> interPulsePeriod;
+
+    bool operator==(const Timeline& rhs) const
+    {
+        return (collectStart == rhs.collectStart && collectDuration == rhs.collectDuration &&
+            interPulsePeriod == rhs.interPulsePeriod);
+    }
+    bool operator!=(const Timeline& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

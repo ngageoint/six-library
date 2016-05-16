@@ -52,6 +52,18 @@ struct ProductPlane
 
     //! Col vector for basis
     Vector3 colUnitVector;
+
+    //! Equality operator
+    bool operator==(const ProductPlane& rhs) const
+    {
+        return (rowUnitVector == rhs.rowUnitVector &&
+            colUnitVector == rhs.colUnitVector);
+    }
+
+    bool operator!=(const ProductPlane& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -67,10 +79,22 @@ struct Projection
 
     virtual ~Projection() {}
 
+    friend bool operator==(const Projection& lhs, const Projection& rhs)
+    {
+        return lhs.equalTo(rhs);
+    }
+
+    friend bool operator!=(const Projection& lhs, const Projection& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
     //!  Pure
     virtual Projection* clone() const = 0;
-
     virtual bool isMeasurable() const { return false; }
+
+private:
+    virtual bool equalTo(const Projection& rhs) const = 0;
 
 };
 
@@ -116,6 +140,10 @@ struct PolynomialProjection : public Projection
     //! Find a col in the image associated with a lat-lon
     Poly2D latLonToCol;
 
+    bool operator==(const PolynomialProjection& rhs) const;
+
+private:
+    virtual bool equalTo(const Projection& rhs) const;
 };
 
 /*!
@@ -132,6 +160,11 @@ struct MeasurableProjection : public Projection
     Poly2D timeCOAPoly;
 
     bool isMeasurable() const { return true; }
+
+    bool operator==(const MeasurableProjection& rhs) const;
+
+private:
+    virtual bool equalTo(const Projection& rhs) const;
 
 };
 
@@ -158,6 +191,9 @@ struct GeographicProjection : public MeasurableProjection
         return new GeographicProjection(*this);
     }
     virtual ~GeographicProjection() {}
+
+private:
+    virtual bool equalTo(const Projection& rhs) const;
 
 };
 
@@ -200,6 +236,11 @@ struct CylindricalProjection : public MeasurableProjection
      */
     double curvatureRadius;
 
+    bool operator==(const CylindricalProjection& rhs) const;
+
+private:
+    virtual bool equalTo(const Projection& rhs) const;
+
 };
 
 /*!
@@ -227,6 +268,12 @@ struct PlaneProjection : public MeasurableProjection
 
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
+
+    bool operator==(const PlaneProjection& rhs) const;
+
+private:
+    virtual bool equalTo(const Projection& rhs) const;
+
 };
 
 /*!
@@ -267,6 +314,19 @@ struct Measurement
      *  and cylindrical (see ProjectionType).
      */
     Measurement(ProjectionType projectionType);
+
+    //! Equality operator
+    bool operator==(const Measurement& rhs) const
+    {
+        return (projection == rhs.projection && arpPoly == rhs.arpPoly &&
+            pixelFootprint == rhs.pixelFootprint);
+    }
+
+    bool operator!=(const Measurement& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 
 }

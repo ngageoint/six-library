@@ -61,6 +61,19 @@ struct Remap
     mem::ScopedCopyablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
 
     virtual Remap* clone() const = 0;
+
+    bool operator==(const Remap& rhs)
+    {
+        return this->equalTo(rhs);
+    }
+
+    bool operator!=(const Remap& rhs)
+    {
+        return !(*this == rhs);
+    }
+
+    virtual bool equalTo(const Remap& rhs) const = 0;
+
 };
 
 /*!
@@ -97,6 +110,9 @@ struct MonochromeDisplayRemap : public Remap
 
     //!  Remap parameters
     ParameterCollection remapParameters;
+
+    virtual bool equalTo(const Remap& rhs) const;
+    virtual bool operator==(const MonochromeDisplayRemap& rhs) const;
 };
 
 /*!
@@ -120,6 +136,9 @@ struct ColorDisplayRemap : public Remap
     {
         return new ColorDisplayRemap(*this);
     }
+
+    virtual bool equalTo(const Remap& rhs) const;
+    virtual bool operator==(const ColorDisplayRemap& rhs) const;
 };
 
 /*!
@@ -131,11 +150,22 @@ struct ColorDisplayRemap : public Remap
  */
 struct MonitorCompensationApplied
 {
+    double gamma;
+    double xMin;
+
     //! Constructor
     MonitorCompensationApplied();
 
-    double gamma;
-    double xMin;
+    //! Equality operator
+    bool operator==(const MonitorCompensationApplied& rhs) const
+    {
+        return gamma == rhs.gamma && xMin == rhs.xMin;
+    }
+
+    bool operator!=(const MonitorCompensationApplied& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -159,6 +189,17 @@ struct DRAHistogramOverrides
      *
      */
     int clipMax;
+
+    //! Equality operator
+    bool operator==(const DRAHistogramOverrides& rhs) const
+    {
+        return clipMin == rhs.clipMin && clipMax == rhs.clipMax;
+    }
+
+    bool operator!=(const DRAHistogramOverrides& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct BandInformation
@@ -356,6 +397,12 @@ struct Display
      * product display.
      */
     ParameterCollection displayExtensions;
+
+    bool operator==(const Display& rhs) const;
+    bool operator!=(const Display& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

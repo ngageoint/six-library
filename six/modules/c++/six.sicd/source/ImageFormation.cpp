@@ -24,6 +24,41 @@
 using namespace six;
 using namespace six::sicd;
 
+
+Distortion::Distortion() :
+    calibrationDate(Init::undefined<six::DateTime>()),
+    a(Init::undefined<double>()),
+    f1(Init::undefined<std::complex<double> >()),
+    q1(Init::undefined<std::complex<double> >()),
+    q2(Init::undefined<std::complex<double> >()),
+    f2(Init::undefined<std::complex<double> >()),
+    q3(Init::undefined<std::complex<double> >()),
+    q4(Init::undefined<std::complex<double> >()),
+    gainErrorA(Init::undefined<double>()),
+    gainErrorF1(Init::undefined<double>()),
+    gainErrorF2(Init::undefined<double>()),
+    phaseErrorF1(Init::undefined<double>()),
+    phaseErrorF2(Init::undefined<double>())
+{
+}
+
+bool Distortion::operator==(const Distortion& rhs) const
+{
+    return (calibrationDate == rhs.calibrationDate &&
+        a == rhs.a &&
+        f1 == rhs.f1 &&
+        q1 == rhs.q1 &&
+        q2 == rhs.q2 &&
+        f2 == rhs.f2 &&
+        q3 == rhs.q3 &&
+        q4 == rhs.q4 &&
+        gainErrorA == rhs.gainErrorA &&
+        gainErrorF1 == rhs.gainErrorF1 &&
+        gainErrorF2 == rhs.gainErrorF2 &&
+        phaseErrorF1 == rhs.phaseErrorF1 &&
+        phaseErrorF2 == rhs.phaseErrorF2);
+}
+
 ImageFormation::ImageFormation() :
     segmentIdentifier(Init::undefined<std::string>()),
     rcvChannelProcessed(new RcvChannelProcessed()),
@@ -40,3 +75,20 @@ ImageFormation::ImageFormation() :
 {
 }
 
+bool ImageFormation::operator==(const ImageFormation& rhs) const
+{
+    return (segmentIdentifier == rhs.segmentIdentifier &&
+        rcvChannelProcessed == rhs.rcvChannelProcessed &&
+        txRcvPolarizationProc == rhs.txRcvPolarizationProc &&
+        imageFormationAlgorithm == rhs.imageFormationAlgorithm &&
+        tStartProc == rhs.tStartProc &&
+        tEndProc == rhs.tEndProc &&
+        txFrequencyProcMin == rhs.txFrequencyProcMin &&
+        txFrequencyProcMax == rhs.txFrequencyProcMax &&
+        slowTimeBeamCompensation == rhs.slowTimeBeamCompensation &&
+        imageBeamCompensation == rhs.imageBeamCompensation &&
+        azimuthAutofocus == rhs.azimuthAutofocus &&
+        rangeAutofocus == rhs.rangeAutofocus &&
+        processing == rhs.processing &&
+        polarizationCalibration == rhs.polarizationCalibration);
+}

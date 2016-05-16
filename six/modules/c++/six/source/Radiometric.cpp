@@ -42,3 +42,13 @@ Radiometric::Radiometric() :
 {
 }
 
+bool Radiometric::operator==(const Radiometric& rhs) const
+{
+    return (noiseLevel == rhs.noiseLevel &&
+        rcsSFPoly == rhs.rcsSFPoly &&
+        betaZeroSFPoly == rhs.betaZeroSFPoly &&
+        sigmaZeroSFPoly == rhs.sigmaZeroSFPoly &&
+        sigmaZeroSFIncidenceMap == rhs.sigmaZeroSFIncidenceMap &&
+        gammaZeroSFPoly == rhs.gammaZeroSFPoly &&
+        gammaZeroSFIncidenceMap == rhs.gammaZeroSFIncidenceMap);
+}

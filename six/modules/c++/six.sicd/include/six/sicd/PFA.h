@@ -48,6 +48,18 @@ struct SlowTimeDeskew
     //! Slow time deskew phase function to perform the slow-time/Kaz
     //!  shift.  2D poly function of image range coord and az coord
     Poly2D slowTimeDeskewPhasePoly;
+
+    //! Equality operator
+    bool operator==(const SlowTimeDeskew& rhs) const
+    {
+        return (applied == rhs.applied &&
+            slowTimeDeskewPhasePoly == rhs.slowTimeDeskewPhasePoly);
+    }
+
+    bool operator!=(const SlowTimeDeskew& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -115,6 +127,12 @@ struct PFA
     //! SICD STDeskew parameter
     mem::ScopedCopyablePtr<SlowTimeDeskew> slowTimeDeskew;
 
+    //! Equality operator
+    bool operator==(const PFA& rhs) const;
+    bool operator!=(const PFA& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

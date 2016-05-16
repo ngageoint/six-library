@@ -110,7 +110,7 @@ DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 }
 DerivedDataBuilder& DerivedDataBuilder::addMatchInformation()
 {
-	mData->matchInformation.reset(new MatchInformation()); 
+	mData->matchInformation.reset(new MatchInformation());
 
 	return *this;
 }

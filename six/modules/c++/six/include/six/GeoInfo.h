@@ -72,6 +72,17 @@ public:
      *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
      */
     std::vector<LatLon> geometryLatLon;
+
+    bool operator==(const GeoInfo& rhs) const
+    {
+        return (name == rhs.name && geoInfos == rhs.geoInfos &&
+            desc == rhs.desc && geometryLatLon == rhs.geometryLatLon);
+    }
+    bool operator!=(const GeoInfo& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 }
 

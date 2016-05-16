@@ -50,6 +50,15 @@ struct WeightType
      *  This is present in 1.0 (but not 0.4.1) and can be 0 to unbounded
      */
     ParameterCollection parameters;
+
+    bool operator==(const WeightType& rhs) const
+    {
+        return windowName == rhs.windowName && parameters == rhs.parameters;
+    }
+    bool operator!=(const WeightType& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -112,6 +121,12 @@ struct DirectionParameters
      */
     std::vector<double> weights;
 
+    bool operator==(const DirectionParameters& rhs) const;
+    bool operator!=(const DirectionParameters& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 
 /*!
@@ -133,6 +148,12 @@ struct Grid
     Poly2D timeCOAPoly;
     mem::ScopedCloneablePtr<DirectionParameters> row;
     mem::ScopedCloneablePtr<DirectionParameters> col;
+
+    bool operator==(const Grid& rhs) const;
+    bool operator!=(const Grid& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

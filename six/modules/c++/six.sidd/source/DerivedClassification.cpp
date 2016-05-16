@@ -212,7 +212,7 @@ void DerivedClassification::putImpl(const std::string& name,
     os << name << ":\n";
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
-        os << "    [" << params[ii].getName() << " = " 
+        os << "    [" << params[ii].getName() << " = "
            << params[ii].str() << "]\n";
     }
 }
@@ -279,5 +279,45 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
 
     return os;
 }
+
+bool DerivedClassification::operator==(const DerivedClassification& rhs) const
+{
+    return (securityExtensions == rhs.securityExtensions &&
+        desVersion == rhs.desVersion &&
+        createDate == rhs.createDate &&
+        compliesWith == rhs.compliesWith &&
+        classification == rhs.classification &&
+        ownerProducer == rhs.ownerProducer &&
+        sciControls == rhs.sciControls &&
+        sarIdentifier == rhs.sarIdentifier &&
+        disseminationControls == rhs.disseminationControls &&
+        fgiSourceOpen == rhs.fgiSourceOpen &&
+        fgiSourceProtected == rhs.fgiSourceProtected &&
+        releasableTo == rhs.releasableTo &&
+        nonICMarkings == rhs.nonICMarkings &&
+        classifiedBy == rhs.classifiedBy &&
+        compilationReason == rhs.compilationReason &&
+        derivativelyClassifiedBy == rhs.derivativelyClassifiedBy &&
+        classificationReason == rhs.classificationReason &&
+        nonUSControls == rhs.nonUSControls &&
+        derivedFrom == rhs.derivedFrom &&
+        declassDate == rhs.declassDate &&
+        declassEvent == rhs.declassEvent &&
+        declassException == rhs.declassException &&
+        exemptedSourceType == rhs.exemptedSourceType &&
+        exemptedSourceDate == rhs.exemptedSourceDate &&
+        fileOptions == rhs.fileOptions);
+}
+
+bool DerivedClassification::equalTo(const Classification& rhs) const
+{
+    const DerivedClassification* derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
+    if (derivedClassification != NULL)
+    {
+        return *this == *derivedClassification;
+    }
+    return false;
+}
+
 }
 }

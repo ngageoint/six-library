@@ -94,7 +94,8 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
 }
 
 XMLElem ComplexXMLParser10x::convertImageFormationToXML(
-    const ImageFormation* imageFormation, 
+    const ImageFormation* imageFormation,
+    const RadarCollection& radarCollection,
     XMLElem parent) const
 {
     //! this segment was recreated completely because the ordering of
@@ -114,6 +115,16 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     XMLElem txFreqXML = newElement("TxFrequencyProc", imageFormationXML);
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
+
+    if (radarCollection.area.get() != NULL &&
+        radarCollection.area->plane.get() != NULL &&
+        !radarCollection.area->plane->segmentList.empty() &&
+        imageFormation->segmentIdentifier.empty())
+    {
+        throw except::Exception(Ctxt(
+            "ImageFormation.SegmentIdentifier must be included when a "
+            "RadarCollection.Area.Plane.SegmentList is included."));
+    }
 
     //! updated location in 1.0.0
     if (!imageFormation->segmentIdentifier.empty())

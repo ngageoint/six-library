@@ -93,6 +93,13 @@ struct SCPCOA
     //  ETP.
     //  Added in 1.0.0
     double layoverAngle;
+
+    //! Equality operator
+    bool operator==(const SCPCOA& rhs) const;
+    bool operator!=(const SCPCOA& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }
