@@ -41,6 +41,28 @@
 
 */
 
+/*  Results:
+        When using the non looping benchmark, aka for large continuous data 
+    sets, it was faster to use doubles.  However when repeatedly looping over
+    a set of data, it is faster use complex numbers.  
+
+        When using the non looping method, the usage of doubles was
+    approximately .5% faster than the usage of complex numbers.  
+
+        When using the looping method, the usage of complex numbers was faster
+    by approximatley 5% than the usage of doubles.
+
+    This comparison is only valid when on linux though using g++ 4.9.  Tests
+    were not runnable at sufficiently large scales on windows due to memory
+    constraints.
+
+        In summmary, it is best to use complex numbers for iteration over an
+    array.  The speed gains from using doubles is minimal at best, and the usage
+    of complex numbers both increases clarity, code readability, and does not
+    incur a performance cost.
+
+*/
+
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -81,7 +103,7 @@ void limit(T & num)
  *      return value: The mean of the vector
  */
 std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
-                                    std::vector<std::complex<float> > in,
+                                    const std::vector<std::complex<float> >& in,
                                     size_t sze,
                                     double& duration,
                                     size_t numLoops = 1)
@@ -128,7 +150,7 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
  *      return value: The mean of the vector
  */
 std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
-                                   std::vector<std::complex<float> > in,
+                                   const std::vector<std::complex<float> >& in,
                                    size_t sze,
                                    double& duration,
                                    size_t numLoops = 1)

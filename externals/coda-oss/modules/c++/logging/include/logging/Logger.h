@@ -149,5 +149,6 @@ protected:
     Handlers_T mHandlers;
 
 };
+typedef mem::SharedPtr<Logger> LoggerPtr;
 }
 #endif
