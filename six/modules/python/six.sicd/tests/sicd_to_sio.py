@@ -24,6 +24,8 @@ if __name__ == '__main__':
         sne = int(sys.argv[6])
         widebandData, complexData = six_sicd.readRegion(nitfPath, sfl, snl, sfe, sne, schemaPaths)
     else:
+        print nitfPath
+        print schemaPaths
         widebandData, complexData = six_sicd.read(nitfPath, schemaPaths)
 
     sio_lite.write(widebandData, sioPath)

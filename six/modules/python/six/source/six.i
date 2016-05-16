@@ -167,6 +167,7 @@ SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, MatchInformation)
+SCOPED_COPYABLE(six, MatchType)
 SCOPED_CLONEABLE(six, AmplitudeTable)
 
 %extend mem::ScopedCloneablePtr<six::AmplitudeTable>
@@ -184,3 +185,6 @@ SCOPED_CLONEABLE(six, AmplitudeTable)
         *location = value;
     }
 }
+
+%template(VectorMatchCollect) std::vector<six::MatchCollect>;
+%template(VectorMatchType) std::vector<six::MatchType>;

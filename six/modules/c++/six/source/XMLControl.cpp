@@ -30,11 +30,11 @@ void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log)
 {
-    // attempt to get the schema location from the 
+    // attempt to get the schema location from the
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     sys::OS os;
-    try 
+    try
     {
         if (paths.empty())
         {
@@ -65,8 +65,8 @@ void validate(const xml::lite::Document* doc,
                 "determined to use for validation"));
         }
 
-        validator.validate(doc->getRootElement(), 
-                           doc->getRootElement()->getUri(), 
+        validator.validate(doc->getRootElement(),
+                           doc->getRootElement()->getUri(),
                            errors);
 
         // log any error found and throw
@@ -80,7 +80,7 @@ void validate(const xml::lite::Document* doc,
             //! this is a unique error thrown only in this location --
             //  if the user wants a file written regardless of the consequences
             //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-            //  and attempt to rewrite the file. Continuing in this manner is 
+            //  and attempt to rewrite the file. Continuing in this manner is
             //  highly discouraged
             throw six::DESValidationException(Ctxt(
                 "INVALID XML: Check both the XML being " \

@@ -2029,6 +2029,7 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geoInfo->geographicInformationExtensions.push_back(param);
 
     geoCoverage->geographicInformation = geoInfo;
+    geographicAndTarget.geographicCoverage = geoCoverage;
     geographicAndTarget.geographicCoverage->subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
@@ -2354,11 +2355,7 @@ int main(int argc, char** argv)
             throw except::Exception(Ctxt(
                 "Small image too small to segment"));
         }
-        try
-        {
-            sys::OS().getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
+        if (!sys::OS().isEnvSet(six::SCHEMA_PATH))
         {
             throw except::Exception(Ctxt(
                     "Must specify SIDD schema path via " +
@@ -2438,7 +2435,6 @@ int main(int argc, char** argv)
         buffers.resize(numImages);
         for (size_t ii = 0; ii < numImages; ++ii)
         {
-
             std::string lutType = "None";
             if (options->hasValue("lut"))
             {

@@ -626,7 +626,7 @@ def initErrorStats(cmplx):
 def initMatchInfo(cmplx):
     matchInfo = makeScopedCopyableMatchInformation()
 
-    matchType = makeScopedCopyableMatchType()
+    matchType = MatchType()
     matchType.collectorName = 'Collector'
     matchType.illuminatorName = 'Illuminator'
     matchType.matchType.push_back('Some match type')

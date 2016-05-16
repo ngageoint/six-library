@@ -125,6 +125,9 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     parent->information.sensorName.clear();
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(
+            six::RegionType::GEOGRAPHIC_INFO));
 
     return siddDataScoped;
 }
