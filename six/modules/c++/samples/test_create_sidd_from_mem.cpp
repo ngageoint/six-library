@@ -1899,7 +1899,7 @@ void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded)
     ded->nullValue = -32768;
 }
 
-std::auto_ptr<six::sidd::DerivedData> initData(std::string lutType)
+std::auto_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 {
     //-----------------------------------------------------------
     // Make the object.  You could do this directly, but this way
