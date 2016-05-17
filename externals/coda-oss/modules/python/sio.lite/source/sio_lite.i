@@ -1,8 +1,10 @@
 %module(package="coda") sio_lite
 
 %feature("autodoc", "1");
-%include "sys.i"
-%include "io.i"
+%import "sys.i"
+%import "io.i"
+
+%import "except.i"
 
 %{
     #include "import/sio/lite.h"

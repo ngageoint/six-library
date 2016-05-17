@@ -32,10 +32,10 @@ namespace sidd
  *  \class DerivedDataBuilder
  *  \brief Incrementally builds a DerivedData object
  *
- *  This class implements the Builder design pattern by building 
+ *  This class implements the Builder design pattern by building
  *  and maintaining a DerivedData instance.  This class is the preferred
  *  method for creating a DerivedData object.  It should be used for one-offs
- *  or using get() in conjunction with the clone() method in the 
+ *  or using get() in conjunction with the clone() method in the
  *  DerivedData object as a prototype.
  *
  */
@@ -44,9 +44,9 @@ class DerivedDataBuilder
 public:
     //!  Construct. Creates and owns a new DerivedData object
     DerivedDataBuilder();
-    
+
     /*!
-     *  Construct, taking in a DerivedData object.  Warning: the builder 
+     *  Construct, taking in a DerivedData object.  Warning: the builder
      *  does not take ownership of this object in this case.
      */
     DerivedDataBuilder(DerivedData *data);
@@ -100,7 +100,7 @@ public:
      *  derived product.  The builder initializes the ExploitationFeatures
      *  constructor with this, which in turn, creates that number of
      *  collections in its vector
-     *  
+     *
      *  \param num The number of collections to create this product (defaults
      *  to one)
      *  \return Refrence to self
@@ -130,7 +130,7 @@ public:
      *  since we require that to do any work
      *
      *  \return Reference to self
-     *  
+     *
      */
     virtual DerivedDataBuilder& addErrorStatistics();
 
@@ -144,7 +144,7 @@ public:
 
     /*!
      * Add optional MatchInformation element
-     * 
+     *
      * \return Reference to self
      */
     virtual DerivedDataBuilder& addMatchInformation();
@@ -168,7 +168,7 @@ public:
      *
      */
     DerivedData* get();
-    
+
     /*!
      *  Get the pointer to the object that is being build, and do take
      *  ownership.  Note that while the builder is in scope, it will

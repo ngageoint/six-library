@@ -101,6 +101,10 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
 
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(
+            six::RegionType::GEOGRAPHIC_INFO));
+
     return siddDataScoped;
 }
 }
@@ -139,8 +143,8 @@ int main(int argc, char** argv)
         types::RowCol<size_t> dims1(40, numCols);
         std::auto_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.normL1()]);
-        std::fill_n(buffer1.get(), dims1.normL1(), 20);
+        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
+        std::fill_n(buffer1.get(), dims1.area(), 20);
 
         container.addData(data1);
         buffers.push_back(buffer1.get());
@@ -156,8 +160,8 @@ int main(int argc, char** argv)
         monoLegend->mLocation.col = 10;
         monoLegend->setDims(legendDims);
 
-        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.normL1()]);
-        std::fill_n(buffer2.get(), dims2.normL1(), 100);
+        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
+        std::fill_n(buffer2.get(), dims2.area(), 100);
 
         container.addData(data2, monoLegend);
         buffers.push_back(buffer2.get());
@@ -166,8 +170,8 @@ int main(int argc, char** argv)
         types::RowCol<size_t> dims3(150, numCols);
         std::auto_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.normL1()]);
-        std::fill_n(buffer3.get(), dims3.normL1(), 60);
+        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
+        std::fill_n(buffer3.get(), dims3.area(), 60);
 
         container.addData(data3);
         buffers.push_back(buffer3.get());
@@ -186,13 +190,13 @@ int main(int argc, char** argv)
              ii < rgbLegend->mLUT->numEntries;
              ++ii, idx += 3)
         {
-            rgbLegend->mLUT->table[idx] = ii;
-            rgbLegend->mLUT->table[idx + 1] = ii;
-            rgbLegend->mLUT->table[idx + 2] = ii;
+            rgbLegend->mLUT->getTable()[idx] = ii;
+            rgbLegend->mLUT->getTable()[idx + 1] = ii;
+            rgbLegend->mLUT->getTable()[idx + 2] = ii;
         }
 
-        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.normL1()]);
-        std::fill_n(buffer4.get(), dims4.normL1(), 200);
+        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
+        std::fill_n(buffer4.get(), dims4.area(), 200);
 
         container.addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());

@@ -3095,8 +3095,13 @@ namespace swig {
 
 
 #ifndef SWIGPY_SLICE_ARG(obj)
-# define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# if PY_VERSION_HEX >= 0x03000000
+#  define SWIGPY_SLICE_ARG(obj) ((PyObject*) (obj))
+# else
+#  define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+# endif
 #endif
+
 #include <string>
 #include <sstream>
 #include "import/math/linear.h"
@@ -4608,7 +4613,7 @@ SWIG_AsVal_long (PyObject *obj, long* val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ 
+SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -4616,7 +4621,7 @@ SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< dou
         }
         return (*self)[i];
     }
-SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ 
+SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){
         if (i > self->order())
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -4764,11 +4769,11 @@ SWIGINTERN PyObject *math_poly_TwoD_Sl_double_Sg____call____SWIG_1(math::poly::T
         }
         return pyresult;
     }
-SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){ 
-            return (*self)[i]; 
+SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){
+            return (*self)[i];
         }
-SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vector3 > *self,long i,Vector3 val){ 
-            (*self)[i] = val; 
+SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vector3 > *self,long i,Vector3 val){
+            (*self)[i] = val;
         }
 SWIGINTERN std::string math_poly_OneD_Sl_Vector3_Sg____str__(math::poly::OneD< Vector3 > *self){
             std::ostringstream ostr;
@@ -4897,15 +4902,15 @@ SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__erase__SWIG_
 SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__erase__SWIG_1(std::vector< double > *self,std::vector< double >::iterator first,std::vector< double >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< double >::iterator std_vector_Sl_double_Sg__insert__SWIG_0(std::vector< double > *self,std::vector< double >::iterator pos,std::vector< double >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_double_Sg__insert__SWIG_1(std::vector< double > *self,std::vector< double >::iterator pos,std::vector< double >::size_type n,std::vector< double >::value_type const &x){ self->insert(pos, n, x); }
-SWIGINTERN double std_vector_Sl_double_Sg____getitem____SWIG_2(std::vector< double > *self,long i){ 
-            return (*self)[i]; 
+SWIGINTERN double std_vector_Sl_double_Sg____getitem____SWIG_2(std::vector< double > *self,long i){
+            return (*self)[i];
         }
-SWIGINTERN void std_vector_Sl_double_Sg____setitem____SWIG_3(std::vector< double > *self,long i,double val){ 
-            (*self)[i] = val; 
+SWIGINTERN void std_vector_Sl_double_Sg____setitem____SWIG_3(std::vector< double > *self,long i,double val){
+            (*self)[i] = val;
         }
 SWIGINTERN std::string std_vector_Sl_double_Sg____str__(std::vector< double > *self){
             std::ostringstream ostr;
-            
+
             ostr << "std::vector<double>[ ";
             for (int i = 0; i < self->size(); i++)
             {

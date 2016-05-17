@@ -62,7 +62,7 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-    mem::ScopedCopyablePtr<AmplitudeTable> amplitudeTable;
+    mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
     size_t numRows;
@@ -84,6 +84,14 @@ struct ImageData
 
     // If this doesn't have at least 3 vertices, it's not going to get written
     std::vector<RowColInt> validData;
+
+    //! Equality operators
+    bool operator==(const ImageData& rhs) const;
+    bool operator!=(const ImageData& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 };
 }
 }

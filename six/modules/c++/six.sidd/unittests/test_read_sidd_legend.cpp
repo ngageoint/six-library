@@ -125,6 +125,9 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     parent->information.sensorName.clear();
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(
+            six::RegionType::GEOGRAPHIC_INFO));
 
     return siddDataScoped;
 }
@@ -154,9 +157,9 @@ struct TestHelper
              ii < mRgbLegend.mLUT->numEntries;
              ++ii, idx += 3)
         {
-            mRgbLegend.mLUT->table[idx] = ii;
-            mRgbLegend.mLUT->table[idx + 1] = ii;
-            mRgbLegend.mLUT->table[idx + 2] = ii;
+            mRgbLegend.mLUT->getTable()[idx] = ii;
+            mRgbLegend.mLUT->getTable()[idx + 1] = ii;
+            mRgbLegend.mLUT->getTable()[idx + 2] = ii;
         }
 
         write();
@@ -189,8 +192,8 @@ struct TestHelper
         types::RowCol<size_t> dims1(40, numCols);
         std::auto_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.normL1()]);
-        std::fill_n(buffer1.get(), dims1.normL1(), 20);
+        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
+        std::fill_n(buffer1.get(), dims1.area(), 20);
 
         container.addData(data1);
         buffers.push_back(buffer1.get());
@@ -199,8 +202,8 @@ struct TestHelper
         types::RowCol<size_t> dims2(40, numCols);
         std::auto_ptr<six::Data> data2(mockupDerivedData(dims2));
 
-        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.normL1()]);
-        std::fill_n(buffer2.get(), dims2.normL1(), 100);
+        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
+        std::fill_n(buffer2.get(), dims2.area(), 100);
 
         std::auto_ptr<six::Legend> monoLegend(new six::Legend(mMonoLegend));
         container.addData(data2, monoLegend);
@@ -210,8 +213,8 @@ struct TestHelper
         types::RowCol<size_t> dims3(150, numCols);
         std::auto_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.normL1()]);
-        std::fill_n(buffer3.get(), dims3.normL1(), 60);
+        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
+        std::fill_n(buffer3.get(), dims3.area(), 60);
 
         container.addData(data3);
         buffers.push_back(buffer3.get());
@@ -222,8 +225,8 @@ struct TestHelper
 
         std::auto_ptr<six::Legend> rgbLegend(new six::Legend(mRgbLegend));
 
-        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.normL1()]);
-        std::fill_n(buffer4.get(), dims4.normL1(), 200);
+        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
+        std::fill_n(buffer4.get(), dims4.area(), 200);
 
         container.addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());
@@ -248,10 +251,10 @@ struct TestHelper
     six::Legend mRgbLegend;
 };
 
-TestHelper testHelper;
 
 TEST_CASE(testRead)
 {
+    TestHelper testHelper;
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&testHelper.mXmlRegistry);
 

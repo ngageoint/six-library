@@ -135,7 +135,7 @@ public:
     {
         const mem::BufferView<sys::ubyte> buffer(
                 static_cast<sys::ubyte*>(data),
-                dims.normL1() * mElementSize);
+                dims.area() * mElementSize);
         read(channel, firstVector, lastVector, firstSample,
              lastSample, numThreads, buffer);
     }

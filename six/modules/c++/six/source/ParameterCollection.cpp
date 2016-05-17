@@ -33,4 +33,10 @@ ParameterCollection::containsParameter(const std::string& paramName) const
 
     return false;
 }
+
+bool
+ParameterCollection::operator==(const ParameterCollection& rhs) const
+{
+    return mParams == rhs.mParams;
+}
 }

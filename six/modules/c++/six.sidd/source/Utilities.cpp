@@ -418,6 +418,8 @@ six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
                         : six::PolarizationType::RHC;
     case six::DualPolarizationType::LHC_LHC:
         return six::PolarizationType::LHC;
+    case six::DualPolarizationType::UNKNOWN:
+        throw except::Exception(Ctxt("DualPolarizationType::UNKNOWN has no corresponding PolarizationType"));
     default:
         return six::PolarizationType::NOT_SET;
     }

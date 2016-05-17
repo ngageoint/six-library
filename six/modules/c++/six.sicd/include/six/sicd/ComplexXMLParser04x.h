@@ -51,7 +51,8 @@ protected:
                                            XMLElem parent = NULL) const;
     virtual XMLElem convertRadarCollectionToXML(const RadarCollection *radar,
                                                 XMLElem parent) const;
-    virtual XMLElem convertImageFormationToXML(const ImageFormation *obj, 
+    virtual XMLElem convertImageFormationToXML(const ImageFormation *obj,
+                                       const RadarCollection& radarCollection,
                                        XMLElem parent = NULL) const;
     virtual XMLElem convertImageFormationAlgoToXML(
         const PFA* pfa, const RMA* rma, 

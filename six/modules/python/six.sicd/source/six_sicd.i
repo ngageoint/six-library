@@ -52,8 +52,75 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
   }
 }
 
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
 
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr)
+{
+    const std::complex<float>* image = reinterpret_cast<
+            std::complex<float>* >(imageAdr);
+
+    six::XMLControlFactory::getInstance().addCreator(
+            six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    six::Container container(six::DataType::COMPLEX);
+    std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
+
+    container.addData(data.clone());
+
+    six::NITFWriteControl writer;
+    writer.initialize(&container);
+    writer.setLogger(logger.get());
+
+    six::BufferList buffers;
+    buffers.push_back(reinterpret_cast<const six::UByte*>(image));
+
+    writer.save(buffers, pathname, schemaPaths);
+}
+
+Data* readNITF(const std::string& pathname,
+        const std::vector<std::string>& schemaPaths);
+
+Data* readNITF(const std::string& pathname,
+        const std::vector<std::string>& schemaPaths)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+                           new six::XMLControlCreatorT<
+                                   six::sicd::ComplexXMLControl>());
+    logging::Logger log;
+    six::NITFReadControl reader;
+    reader.setLogger(&log);
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(pathname, schemaPaths);
+    six::Container* container = reader.getContainer();
+
+    six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+
+    six::Data* const data = container->getData(0);
+    const types::RowCol<size_t> extent(data->getNumRows(),
+                                       data->getNumCols());
+    const size_t numPixels(extent.row * extent.col);
+    size_t numBytesPerPixel = data->getNumBytesPerPixel();
+    size_t offset = 0;
+
+    mem::ScopedArray<sys::ubyte> buffer(
+            new sys::ubyte[numPixels * numBytesPerPixel]);
+
+    region.setNumRows(extent.row);
+    region.setNumCols(extent.col);
+    region.setBuffer(buffer.get() + offset);
+    return reinterpret_cast<Data*>(reader.interleaved(region, 0));
+}
 %}
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
 
 %include "std_vector.i"
 %include "std_string.i"
@@ -76,6 +143,13 @@ six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const 
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
+
+void writeNITF(const std::string& pathname, const std::vector<std::string>&
+        schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
+
+Data* readNITF(const std::string& pathname,
+        const std::vector<std::string>& schemaPaths);
+
 
 /* this version of the function returns the auto_ptr, ignore it */
 %rename ("$ignore", fullname=1) "six::sicd::Utilities::getComplexData";
@@ -179,13 +253,24 @@ SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
         std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
         Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, realBuffer);
     }
+
+    void getWidebandRegion(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData,
+                            long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)
+    {
+        std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
+
+        types::RowCol<size_t> offset(startRow, startCol);
+        types::RowCol<size_t> extent(numRows, numCols);
+        Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, offset, extent, realBuffer);
+    }
 %}
 
 void getWidebandData(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long arrayBuffer);
+void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer);
 
 %pythoncode %{
 import numpy as np
-from six_base import VectorString
+from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = getComplexData(inputPathname, schemaPaths)
@@ -197,4 +282,23 @@ def read(inputPathname, schemaPaths = VectorString()):
     getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
 
     return widebandData, complexData
+
+def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths = VectorString()):
+    complexData = getComplexData(inputPathname, schemaPaths)
+
+    widebandData = np.empty(shape = (numRows, numCols), dtype = "complex64")
+    widebandBuffer, ro = widebandData.__array_interface__["data"]
+
+    getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
+
+    return widebandData, complexData
+
+def writeAsNITF(outFile, schemaPaths, complexData, image):
+    writeNITF(outFile, schemaPaths, complexData,
+        image.__array_interface__["data"][0])
+
+def readFromNITF(pathname, schemaPaths):
+    pathname = pathname + ".nitf"
+    return readNITF(pathname, schemaPaths)
+
 %}

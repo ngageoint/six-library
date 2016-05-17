@@ -100,7 +100,7 @@ DerivedData* DerivedXMLParser110::fromXML(
     XMLElem compressionElem            = getOptional(root, "Compression");
     XMLElem dedElem                    = getOptional(root, "DigitalElevationData");
     XMLElem annotationsElem            = getOptional(root, "Annotations");
-    
+
 
     DerivedDataBuilder builder;
     DerivedData *data = builder.steal(); //steal it
@@ -483,7 +483,7 @@ void DerivedXMLParser110::parseLookupTableFromXML(
         XMLElem dbNameElem = getOptional(predefinedElem, "DatabaseName");
         XMLElem familyElem = getOptional(predefinedElem, "RemapFamily");
         XMLElem memberElem = getOptional(predefinedElem, "RemapMember");
-        
+
         if (dbNameElem)
         {
             if (!familyElem && !memberElem)
@@ -1089,14 +1089,14 @@ XMLElem DerivedXMLParser110::convertNonInteractiveProcessingToXML(
         convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
                                 prodGenElem);
     }
-    
+
     if (prodGen.asymmetricPixelCorrection.get())
     {
         convertFilterToXML("AsymmetricPixelCorrection",
                            *prodGen.asymmetricPixelCorrection, prodGenElem);
     }
 
-    // RRDS 
+    // RRDS
     XMLElem rrdsElem = newElement("RRDS", processingElem);
 
     const RRDS& rrds = processing.rrds;
@@ -1191,7 +1191,7 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     }
 
     // DynamicRangeAdjustment
-    
+
     const DynamicRangeAdjustment& adjust =
             processing.dynamicRangeAdjustment;
 

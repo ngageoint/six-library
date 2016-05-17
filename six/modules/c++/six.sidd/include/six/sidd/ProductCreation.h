@@ -41,6 +41,13 @@ struct ProcessorInformation
 
     // Optional
     std::string profile;
+
+    //! Equality operators
+    bool operator==(const ProcessorInformation& rhs) const;
+    bool operator!=(const ProcessorInformation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -75,6 +82,13 @@ public:
      *  profile-specific needs related to product creation
      */
     ParameterCollection productCreationExtensions;
+
+    //! Equality operators
+    bool operator==(const ProductCreation& rhs) const;
+    bool operator!=(const ProductCreation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

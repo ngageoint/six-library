@@ -12,11 +12,11 @@ from build import writeConfig
 from waflib import Utils
 
 def configure(conf):
-    
+
     # this check defines HAVE_CLOCK_GETTIME, undefine it to keep it out of dumpenv
     if conf.check_cc(lib='rt', uselib_store='RT', function_name='clock_gettime', header_name='time.h', mandatory=False):
         conf.undefine('HAVE_CLOCK_GETTIME')
-    
+
     # callback function to check for all #defines used by the sys module
     def sys_callback(conf):
         conf.check_cc(header_name='pthread.h', mandatory=False)
@@ -60,7 +60,7 @@ def configure(conf):
         #    erroneously be 8 here.
         output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
         t = Utils.str_to_dict(output or '')
-        for k, v in t.iteritems():
+        for k, v in t.items():
             try:
                 v = int(v)
             except:
@@ -72,7 +72,7 @@ def configure(conf):
             conf.define(k.upper(), v)
         conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_name='__CODA_CPP11', mandatory=False)
     writeConfig(conf, sys_callback, NAME)
-    
+
 def build(bld):
     bld.module(**globals())
 

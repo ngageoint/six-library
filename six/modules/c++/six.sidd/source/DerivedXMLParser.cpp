@@ -26,6 +26,7 @@
 #include <sys/Conf.h>
 #include <str/Manip.h>
 #include <except/Exception.h>
+#include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser.h>
 
 namespace
@@ -295,12 +296,16 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
     //! from ism:ResourceNodeAttributeGroup
     // NOTE: "resouceElement" is fixed to true so it isn't saved here
     classification.createDate = toType<DateTime>(
-        classificationAttributes.getValue("ism:createDate"));
+            classificationAttributes.getValue("ism:createDate"));
+    // optional
+    getAttributeListIfExists(classificationAttributes,
+                             "ism:compliesWith",
+                             classification.compliesWith);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
     classification.classification
-        = classificationAttributes.getValue("ism:classification");
+            = classificationAttributes.getValue("ism:classification");
     getAttributeList(classificationAttributes,
         "ism:ownerProducer",
         classification.ownerProducer);
@@ -399,8 +404,17 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                 std::vector<std::string> rgb = str::split(lutVals[i], ",");
                 for (size_t j = 0; j < rgb.size(); j++)
                 {
-                    sys::ubyte val = str::toType<sys::ubyte>(rgb[j]);
-                    ::memcpy(&(remapLUT->table[k++]), &val,
+                    size_t intermediateVal = str::toType<size_t>(rgb[j]);
+                    if (intermediateVal > 255)
+                    {
+                        throw except::Exception(Ctxt(
+                            "LUT vals expected to be in [0, 255]."));
+                    }
+
+                    sys::ubyte val = static_cast<sys::ubyte>(
+                            intermediateVal);
+
+                    ::memcpy(&(remapLUT->getTable()[k++]), &val,
                              sizeof(sys::ubyte));
                 }
             }
@@ -485,7 +499,7 @@ void DerivedXMLParser::parseDisplayFromXML(
     XMLElem decElem = getOptional(displayElem, "DecimationMethod");
     display->decimationMethod = decElem ?
             six::toType<DecimationMethod>(decElem->getCharacterData())
-            : DecimationMethod::NOT_SET;
+           : DecimationMethod::NOT_SET;
 
     // optional
     XMLElem histogramOverridesElem = getOptional(displayElem,
@@ -643,7 +657,9 @@ void DerivedXMLParser::parseMeasurementFromXML(
         projElem = parseCylindricalProjection(measurementElem, *measurement);
     }
     else
+    {
         throw except::Exception(Ctxt("Unknown projection type"));
+    }
 
     //  referencePointType --
     //  this is present in all projections types
@@ -680,14 +696,14 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         Collection* coll = exploitationFeatures->collections[i].get();
 
         coll->identifier
-            = collectionElem->getAttributes().getValue("identifier");
+                = collectionElem->getAttributes().getValue("identifier");
 
         // parse Information
         Information* info = &coll->information;
         XMLElem informationElem = getFirstAndOnly(collectionElem, "Information");
 
         parseString(getFirstAndOnly(informationElem, "SensorName"),
-            info->sensorName);
+                    info->sensorName);
 
         XMLElem radarModeElem = getFirstAndOnly(informationElem, "RadarMode");
         info->radarMode = six::toType<RadarModeType>(
@@ -1018,7 +1034,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
             != Init::undefined<std::string>())
     {
         setAttribute(referencePointElem, "name",
-                     measurement->projection->referencePoint.name);
+                    measurement->projection->referencePoint.name);
     }
     common().createVector3D("ECEF", common().getSICommonURI(),
                             measurement->projection->referencePoint.ecef,

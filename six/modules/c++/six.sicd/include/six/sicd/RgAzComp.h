@@ -54,6 +54,17 @@ struct RgAzComp
     //  Time (sec) -> Azimuth spatial frequency (cycles/meter). Time
     //  relative to collection start.
     Poly1D kazPoly;
+
+    //! Equality operator
+    bool operator==(const RgAzComp& rhs)
+    {
+        return azSF == rhs.azSF && kazPoly == rhs.kazPoly;
+    }
+
+    bool operator!=(const RgAzComp& rhs)
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

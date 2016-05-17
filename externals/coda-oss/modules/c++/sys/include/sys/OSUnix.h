@@ -143,11 +143,21 @@ public:
     virtual std::string getEnv(const std::string& s) const;
 
     /*!
+     * Returns true if environment variable is set, false otherwise
+     */
+    virtual bool isEnvSet(const std::string& s) const;
+
+    /*!
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 
                         const std::string& val, 
                         bool overwrite);
+
+    /*!
+     * Unset an environment variable
+     */
+    virtual void unsetEnv(const std::string& var);
 
     virtual std::string getDSOSuffix() const;
 

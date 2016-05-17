@@ -145,5 +145,29 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
             (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
             (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
 }
+
+bool DerivedData::operator==(const DerivedData& rhs) const
+{
+    return (productCreation == rhs.productCreation &&
+        display == rhs.display &&
+        geographicAndTarget == rhs.geographicAndTarget &&
+        measurement == rhs.measurement &&
+        exploitationFeatures == rhs.exploitationFeatures &&
+        productProcessing == rhs.productProcessing &&
+        downstreamReprocessing == rhs.downstreamReprocessing &&
+        errorStatistics == rhs.errorStatistics &&
+        radiometric == rhs.radiometric &&
+        annotations == rhs.annotations);
+}
+
+bool DerivedData::equalTo(const Data& rhs) const
+{
+    const DerivedData* data = dynamic_cast<const DerivedData*>(&rhs);
+    if (data != NULL)
+    {
+        return *this == *data;
+    }
+    return false;
+}
 }
 }

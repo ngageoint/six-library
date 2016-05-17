@@ -116,6 +116,24 @@ public:
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
 
+    iterator erase(iterator pos)
+    {
+        delete *pos;
+        return mValues.erase(pos);
+    }
+
+    iterator erase(iterator first, iterator last)
+    {
+        iterator iter = first;
+        while (iter != last)
+        {
+            delete *iter;
+            ++iter;
+        }
+
+        return mValues.erase(first, last);
+    }
+
 private:
     // Noncopyable
     VectorOfPointers(const VectorOfPointers& );
@@ -207,6 +225,16 @@ public:
     const_iterator begin() const { return mValues.begin(); }
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
+
+    iterator erase(iterator pos)
+    {
+        return mValues.erase(pos);
+    }
+
+    iterator erase(iterator first, iterator last)
+    {
+        return mValues.erase(first, last);
+    }
 
 private:
     std::vector<SharedPtr<T> > mValues;

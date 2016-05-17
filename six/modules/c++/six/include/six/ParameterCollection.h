@@ -158,6 +158,12 @@ public:
         return mParams.back();
     }
 
+    bool operator==(const ParameterCollection& rhs) const;
+    bool operator!=(const ParameterCollection& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
 
     std::vector<Parameter> mParams;

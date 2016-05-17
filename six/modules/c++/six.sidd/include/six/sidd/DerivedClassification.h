@@ -56,6 +56,11 @@ public:
     //  to product security.
     ParameterCollection         securityExtensions;
 
+    //! The version number of the DES. Should there be multiple specified in
+    //  an instance document the one at the root node is the one that will
+    //  apply to the entire document.
+    sys::Int32_T                     desVersion;
+
     //! Used to designate what date the document was produced on. This is the
     //  date that will be used by various constraint rules to determine if the
     //  document meets all the business rules.
@@ -224,7 +229,12 @@ public:
     //  that type of data in this document.
     BooleanType externalNotice;
 
+    //! Equality operator
+    bool operator==(const DerivedClassification& rhs) const;
+
+
 private:
+    virtual bool equalTo(const Classification& rhs) const;
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,

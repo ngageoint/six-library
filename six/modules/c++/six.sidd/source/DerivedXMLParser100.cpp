@@ -157,7 +157,7 @@ void DerivedXMLParser100::parseDerivedClassificationFromXML(
 
     const ElemAttributes& classificationAttributes
         = classificationElem->getAttributes();
- 
+
     getAttributeListIfExists(classificationAttributes,
                              "ism:compliesWith",
                              classification.compliesWith);

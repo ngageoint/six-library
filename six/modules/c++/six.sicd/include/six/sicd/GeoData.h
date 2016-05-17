@@ -30,6 +30,7 @@ namespace six
 {
 namespace sicd
 {
+
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block
@@ -49,7 +50,7 @@ public:
     }
 
     /*!
-     *  Identifies the earth model used for 
+     *  Identifies the earth model used for
      *  latitude, longitude and height parameters.  All
      *  height values are Height Above Ellipsoid (HAE)
      */
@@ -81,6 +82,12 @@ public:
      *  Note that this may be used as a block inside of a block.
      */
     std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
+
+    bool operator==(const GeoData& rhs) const;
+    bool operator!=(const GeoData& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

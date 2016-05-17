@@ -56,6 +56,11 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 
 %}
 
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
+
 %import "types.i"
 %import "except.i"
 %import "math_poly.i"
@@ -97,7 +102,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
-
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
@@ -163,3 +167,24 @@ SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, MatchInformation)
+SCOPED_COPYABLE(six, MatchType)
+SCOPED_CLONEABLE(six, AmplitudeTable)
+
+%extend mem::ScopedCloneablePtr<six::AmplitudeTable>
+{
+    //$self is a raw pointer to a ScopedCloneable container the
+    //AmplitudeTable
+    double __getitem__(size_t key) const
+    {
+        return *(double*)(**$self)[key];
+    }
+
+    void __setitem__(size_t key, double value)
+    {
+        double* location = (double*)(**$self)[key];
+        *location = value;
+    }
+}
+
+%template(VectorMatchCollect) std::vector<six::MatchCollect>;
+%template(VectorMatchType) std::vector<six::MatchType>;
