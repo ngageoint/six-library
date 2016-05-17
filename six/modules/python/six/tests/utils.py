@@ -40,7 +40,7 @@ def findSixHome():
             raise IOError(os.getcwd())
             #raise IOError('Please run this program from within six-library dir')
         currentPath = parent
-        
+
     return currentPath
 
 def installPath():
@@ -61,8 +61,8 @@ def pythonPath():
     elif platform.system() == 'Windows':
         return os.path.join(installPath(), 'lib',
                                 'site-packages')
-    return None
-    
+    return ''
+
 def setPaths():
     nitfPluginPath = os.path.join(installPath(), 'share', 'nitf',
                                   'plugins')
