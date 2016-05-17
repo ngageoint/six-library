@@ -54,29 +54,28 @@ def installPath():
             subdirs = os.listdir(child)
             if 'tests' in subdirs and 'bin' in subdirs:
                 return child
-
+def pythonPath():
+    if platform.system() == 'Linux':
+        return glob(os.path.join(installPath(), 'lib', 'python*',
+                                      'site-packages'))[0]
+    elif platform.system() == 'Windows':
+        return os.path.join(installPath(), 'lib',
+                                'site-packages')
+    return None
+    
 def setPaths():
     nitfPluginPath = os.path.join(installPath(), 'share', 'nitf',
                                   'plugins')
     sixSchemaPath = os.path.join(installPath(), 'conf', 'schema',
                                  'six')
 
-    pythonPath = os.path.join(installPath(), 'lib',
-                                'site-packages')
-        
-    if platform.system() != 'Windows':
-        print os.listdir(os.path.join(installPath()))
-        print os.listdir(os.path.join(installPath(), 'lib'))
-        pythonPath = glob(os.path.join(installPath(), 'lib', 'python*',
-                                      'site-packages'))[0]
-        
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
     os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
 
     # We set the pythonpath with sys.path so it's set for the current script
     # and with os.environ so it's set for child processes
-    sys.path.append(pythonPath)
-    os.environ['PYTHONPATH'] = pythonPath
+    sys.path.append(pythonPath())
+    os.environ['PYTHONPATH'] = pythonPath()
 
 def executableName(pathname):
 
