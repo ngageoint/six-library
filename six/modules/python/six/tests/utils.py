@@ -54,7 +54,7 @@ def installPath():
             subdirs = os.listdir(child)
             if 'tests' in subdirs and 'bin' in subdirs:
                 return child
-def pythonPath():
+def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',
                                       'site-packages'))[0]
@@ -62,6 +62,13 @@ def pythonPath():
         return os.path.join(installPath(), 'lib',
                                 'site-packages')
     return ''
+
+def ensureInitFiles(pythonPath):
+    for child in os.listdir(pythonPath):
+        childPath = os.path.join(pythonPath, child)
+        if '__init__.py' not in os.listdir(childPath):
+            open(os.path.join(childPath, '__init__.py'), 'w').close()
+
 
 def setPaths():
     nitfPluginPath = os.path.join(installPath(), 'share', 'nitf',
@@ -72,10 +79,16 @@ def setPaths():
     os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
     os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
 
+    pythonPath = findPythonPath()
+
+    # Sometimes, the __init__.py files don't get created properly
+    if pythonPath != '':
+        ensureInitFiles(pythonPath)
+
     # We set the pythonpath with sys.path so it's set for the current script
     # and with os.environ so it's set for child processes
-    sys.path.append(pythonPath())
-    os.environ['PYTHONPATH'] = pythonPath()
+    sys.path.append(pythonPath)
+    os.environ['PYTHONPATH'] = pythonPath
 
 def executableName(pathname):
 
