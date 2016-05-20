@@ -273,11 +273,9 @@ double SceneGeometry::getRotationAngle() const
     return -getImageAngle(mRg * -1);
 }
 
-Vector3 SceneGeometry::getMultiPathVector() const
+Vector3 SceneGeometry::getMultiPathVector(const Vector3& normalVec) const
 {
-    const Vector3 opZ = getOPZVector();
-
-    const double scale = mXs.dot(opZ) / mZs.dot(opZ);
+    const double scale = mXs.dot(normalVec) / mZs.dot(normalVec);
     return mXs - (mZs * scale);
 }
 
