@@ -252,6 +252,8 @@ public:
 
     double getRotationAngle() const;
 
+    Vector3 getMultiPathVector(const Vector3& normalVec) const;
+
     Vector3 getMultiPathVector() const;
 
     /*
