@@ -63,12 +63,13 @@ public:
     void imageToGround(double row, double col) const;
 
 private:
-    std::auto_ptr<const scene::SceneGeometry>   mGeometry;
+    std::auto_ptr<const scene::SceneGeometry> mGeometry;
     std::auto_ptr<const scene::ProjectionModel> mProjModel;
+    scene::Vector3 mGroundPlaneNormal;
 
-    double                                      mRowSampleSpacing;
-    double                                      mColSampleSpacing;
-    six::RowColInt                              mSCP;
+    types::RowCol<double> mSampleSpacing;
+    six::RowColInt mSCP;
+    types::RowCol<double> mAOIOffset;
 };
 
 Converter::Converter(const std::string& pathname)
@@ -103,9 +104,12 @@ Converter::Converter(const std::string& pathname)
         sicdData, mGeometry.get()));
 
     // Save off some stuff we'll need later
-    mRowSampleSpacing = sicdData->grid->row->sampleSpacing;
-    mColSampleSpacing = sicdData->grid->col->sampleSpacing;
+    mSampleSpacing.row = sicdData->grid->row->sampleSpacing;
+    mSampleSpacing.col = sicdData->grid->col->sampleSpacing;
     mSCP = sicdData->imageData->scpPixel;
+    mAOIOffset.row = sicdData->imageData->firstRow;
+    mAOIOffset.col = sicdData->imageData->firstCol;
+    mGroundPlaneNormal = six::sicd::Utilities::getGroundPlaneNormal(*sicdData);
 }
 
 void Converter::groundToImage(const scene::Vector3& groundPt) const
@@ -117,8 +121,8 @@ void Converter::groundToImage(const scene::Vector3& groundPt) const
 
     // Convert to pixel coordinates
     const types::RowCol<double> pixelPt(
-        imagePt.row / mRowSampleSpacing + mSCP.row,
-        imagePt.col / mColSampleSpacing + mSCP.col);
+        imagePt.row / mSampleSpacing.row + mSCP.row - mAOIOffset.row,
+        imagePt.col / mSampleSpacing.col + mSCP.col - mAOIOffset.col);
 
     std::cout << "Image point: row = "
               << imagePt.row << ", col = " << imagePt.col
@@ -130,20 +134,18 @@ void Converter::groundToImage(const scene::Vector3& groundPt) const
 void Converter::imageToGround(double row, double col) const
 {
     // Convert to image coordinates
+    const types::RowCol<double> offset(mSCP - mAOIOffset);
+
     const types::RowCol<double>
-        imagePt((row - mSCP.row) * mRowSampleSpacing,
-                (col - mSCP.col) * mColSampleSpacing);
+        imagePt((row - offset.row) * mSampleSpacing.row,
+                (col - offset.col) * mSampleSpacing.col);
 
     // Convert to scene coordinates
-    const scene::Vector3 groundRefPoint(mGeometry->getReferencePosition());
-    scene::Vector3 groundPlaneNormal(groundRefPoint);
-    groundPlaneNormal.normalize();
-
     double timeCOA(0.0);
     const scene::Vector3 groundPt =
         mProjModel->imageToScene(imagePt,
-                                 groundRefPoint,
-                                 groundPlaneNormal,
+                                 mGeometry->getReferencePosition(),
+                                 mGroundPlaneNormal,
                                  &timeCOA);
 
     const scene::LatLonAlt latLon(scene::Utilities::ecefToLatLon(groundPt));
