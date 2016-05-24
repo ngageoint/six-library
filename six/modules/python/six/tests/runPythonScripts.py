@@ -29,7 +29,6 @@ from subprocess import call
 
 import utils
 
-
 def sicdToSIO(testsDir):
     print('Running sicd_to_sio.py')
     scriptName = os.path.join(testsDir, 'sicd_to_sio.py')
@@ -68,6 +67,7 @@ def testSixSICD(testsDir):
         print('test_six_sicd.py succeeded')
         return True
     return False
+
 
 def run():
     testsDir = os.path.join(utils.findSixHome(), 'six',

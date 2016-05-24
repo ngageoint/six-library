@@ -23,47 +23,34 @@
 #
 
 import os
+import random
 import subprocess
-import sys
+from subprocess import call
 
-import makeRegressionFiles
-import runMiscTests
-import runPythonScripts
-import runUnitTests
-import checkNITFs
 import utils
 
-utils.setPaths()
+def getSampleSicdXML():
+    samples = os.path.join(utils.findSixHome(), 'six', 'modules', 'c++',
+                           'six.sicd', 'tests', 'sample_xml')
 
-if makeRegressionFiles.run() == False:
-    print("Error generating regression files")
-    sys.exit(1)
+    return os.path.join(samples, random.choice(os.listdir(samples)))
+
+def runTests(testDir, testName, *args):
+    argList = [utils.executableName(os.path.join(testDir, testName))]
+    argList.extend(args)
+    result = call(argList, stdout=subprocess.PIPE)
+
+    if result == 0:
+        print('Passed')
+        return True
+    print result
+    print('Failed')
+    return False
     
-if runPythonScripts.run() == False:
-    print("Error running a python script")
-    sys.exit(1)
-
-if checkNITFs.run() == False:
-    print("test in checkNITFS.py failed")
-    sys.exit(1)
-
-print("Performing byte swap test")
-if subprocess.call([utils.executableName(os.path.join(
-        utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
-    print("Failed ByteSwap test in six.sidd/tests/test_byte_swap")
-    sys.exit(1)
-print("Byte swap test succeeded")
-
-if runUnitTests.run() == False:
-    print("Unit tests failed")
-    sys.exit(1)
-
-if runMiscTests.run() == False:
-    # Tests should report their own errors
-    sys.exit(1)
-else:
-    print('RunMiscTests succeeded')
-
-print("All passed")
-sys.exit(0)
-
+def runSICDTests():
+    testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
+    return runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
+    
+    
+def run():
+    return runSICDTests()
