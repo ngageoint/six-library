@@ -43,14 +43,13 @@ def runTests(testDir, testName, *args):
     if result == 0:
         print('Passed')
         return True
-    print result
     print('Failed')
     return False
-    
+
 def runSICDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     return runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
-    
-    
+
+
 def run():
     return runSICDTests()
