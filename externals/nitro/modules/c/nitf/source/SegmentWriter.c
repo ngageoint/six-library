@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -50,7 +50,7 @@ NITFPRIV(void) SegmentWriter_destruct(NITF_DATA * data)
 
 
 NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
-                                        nitf_IOInterface* io, 
+                                        nitf_IOInterface* io,
                                         nitf_Error * error)
 {
     size_t size, bytesLeft;
@@ -58,7 +58,12 @@ NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
     size_t bytesToRead = READ_SIZE;
     char* buf = NULL;
     SegmentWriterImpl *impl = (SegmentWriterImpl *) data;
-    
+    if (impl->segmentSource == NULL)
+    {
+        nitf_Error_init(error, "SegmentSource of SegmentWriter is NULL",
+            NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
     size = (*impl->segmentSource->iface->getSize)(impl->segmentSource->data, error);
     bytesLeft = size;
 
