@@ -70,6 +70,13 @@ public:
     static std::auto_ptr<scene::ProjectionModel>
     getProjectionModel(const DerivedData* data);
 
+    /*
+    * Read a Data object from a SIDD XML file.
+    * \param xmlPath The path to the input XML file
+    * \return the Data object represented by the XML
+    */
+    static std::auto_ptr<Data> readXML(const std::string& xmlPath);
+
 };
 }
 }

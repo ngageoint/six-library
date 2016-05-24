@@ -507,6 +507,15 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
 
     return groundPlaneNormal.unit();
 }
+
+std::auto_ptr<Data> Utilities::readXML(const std::string& xmlPath)
+{
+    XMLControlFactory::getInstance().addCreator(
+        DataType::COMPLEX,
+        new XMLControlCreatorT<ComplexXMLControl>());
+
+    return six::readXML(xmlPath, DataType::COMPLEX);
+}
 }
 }
 

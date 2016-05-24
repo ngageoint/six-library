@@ -251,6 +251,13 @@ public:
     * \return the unit vector normal to the ground plane
     */
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
+
+    /*
+     * Read a Data object from a SICD XML file.
+     * \param xmlPath The path to the input XML file
+     * \return the Data object represented by the XML
+     */
+    static std::auto_ptr<Data> readXML(const std::string& xmlPath);
 };
 }
 }

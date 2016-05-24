@@ -21,6 +21,7 @@
  */
 #include "six/Utilities.h"
 #include "six/sidd/Utilities.h"
+#include "six/sidd/DerivedXMLControl.h"
 
 namespace
 {
@@ -492,6 +493,15 @@ Utilities::getProjectionModel(const DerivedData* data)
     }
 
     return projModel;
+}
+
+std::auto_ptr<Data> Utilities::readXML(const std::string& xmlPath)
+{
+    XMLControlFactory::getInstance().addCreator(
+        DataType::DERIVED,
+        new XMLControlCreatorT<DerivedXMLControl>());
+
+    return six::readXML(xmlPath, DataType::DERIVED);
 }
 }
 }

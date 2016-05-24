@@ -26,6 +26,7 @@
 #include <except/Exception.h>
 #include "six/Types.h"
 #include "six/Data.h"
+#include "six/Enums.h"
 #include "six/XMLControlFactory.h"
 #include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
@@ -179,6 +180,13 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+
+// Get Data object from XML file. Prior to calling this function,
+// XMLControlFactory::getInstance().addCreator() must be called with
+// the appropriate COMPLEX or DERIVED arguments.
+// Not for direct use. Use six::sicd::Utilities::readXML() or 
+// six::sidd:Utilities::readXML() instead to avoid worrying about preconditions
+std::auto_ptr<Data> readXML(const std::string& xmlPath, DataType dataType);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
