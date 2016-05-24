@@ -23,6 +23,7 @@
 #
 
 import os
+import platform
 import subprocess
 import sys
 
@@ -35,18 +36,26 @@ import utils
 
 utils.setPaths()
 
-if makeRegressionFiles.run() == False:
-    print("Error generating regression files")
-    sys.exit(1)
+if platform.system() != 'SunOS':
+    if makeRegressionFiles.run() == False:
+        print("Error generating regression files")
+        sys.exit(1)
     
-if runPythonScripts.run() == False:
-    print("Error running a python script")
-    sys.exit(1)
+    if runPythonScripts.run() == False:
+        print("Error running a python script")
+        sys.exit(1)
 
-if checkNITFs.run() == False:
-    print("test in checkNITFS.py failed")
-    sys.exit(1)
-
+    if checkNITFs.run() == False:
+        print("test in checkNITFS.py failed")
+        sys.exit(1)
+        
+    if runMiscTests.run() == False:
+    # Tests should report their own errors
+        sys.exit(1)
+else:
+    print('Warning: skipping the bulk of the test suite, as Python modules ' +
+          'are by default disabled on Solairs')
+    
 print("Performing byte swap test")
 if subprocess.call([utils.executableName(os.path.join(
         utils.installPath(), 'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
@@ -57,12 +66,6 @@ print("Byte swap test succeeded")
 if runUnitTests.run() == False:
     print("Unit tests failed")
     sys.exit(1)
-
-if runMiscTests.run() == False:
-    # Tests should report their own errors
-    sys.exit(1)
-else:
-    print('RunMiscTests succeeded')
 
 print("All passed")
 sys.exit(0)
