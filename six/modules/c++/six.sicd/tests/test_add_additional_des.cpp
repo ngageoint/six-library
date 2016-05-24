@@ -58,7 +58,7 @@ sys::Int16_T* generateBandData(const six::Data& data)
 
 bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
 {
-    std::cerr << "Running addingNullSegmentWriterShouldThrow\n";
+    std::cout << "Running addingNullSegmentWriterShouldThrow\n";
     std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
     six::Container container(six::DataType::COMPLEX);
     container.addData(data.release());
@@ -76,15 +76,14 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
     }
     catch (except::Exception&)
     {
-        std::cerr << "Test passed\n";
+        std::cout << "Test passed\n";
         return true;
     }
 }
 
 bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
 {
-
-    std::cerr << "Running addingUnLoadedSegmentWriterShouldThrow\n";
+    std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
     mem::ScopedArray<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -114,16 +113,16 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
         std::remove(name.c_str());
         return false;
     }
-    catch (except::Exception& e)
+    catch (except::Exception&)
     {
-        std::cerr << "Test passed" << std::endl;
+        std::cout << "Test passed" << std::endl;
         return true;
     }
 }
 
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
 {
-    std::cerr << "Running canAddProperlyLoadedSegmentWriter\n";
+    std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
     std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
     mem::ScopedArray<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -152,7 +151,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
     try
     {
         writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
-        std::cerr << "Test passed" << std::endl;
+        std::cout << "Test passed" << std::endl;
         std::remove(name.c_str());
         return true;
     }
@@ -166,7 +165,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
 
 bool canAddTwoSegmentWriters(const std::string& xmlName)
 {
-    std::cerr << "Running canAddTwoSegmentWriters\n";
+    std::cout << "Running canAddTwoSegmentWriters\n";
     std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
     mem::ScopedArray<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -208,7 +207,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
     try
     {
         writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
-        std::cerr << "Test passed" << std::endl;
+        std::cout << "Test passed" << std::endl;
         std::remove(name.c_str());
         return true;
     }
