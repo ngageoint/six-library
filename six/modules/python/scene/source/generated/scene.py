@@ -1016,9 +1016,12 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getRotationAngle(self)
 
 
-    def getMultiPathVector(self):
-        """getMultiPathVector(SceneGeometry self) -> Vector3"""
-        return _scene.SceneGeometry_getMultiPathVector(self)
+    def getMultiPathVector(self, *args):
+        """
+        getMultiPathVector(SceneGeometry self, Vector3 normalVec) -> Vector3
+        getMultiPathVector(SceneGeometry self) -> Vector3
+        """
+        return _scene.SceneGeometry_getMultiPathVector(self, *args)
 
 
     def getMultiPathAngle(self):

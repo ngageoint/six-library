@@ -2808,6 +2808,14 @@ class SixSicdUtilities(_object):
         getWidebandData = staticmethod(getWidebandData)
     __swig_getmethods__["getWidebandData"] = lambda x: getWidebandData
 
+    def getGroundPlaneNormal(data):
+        """getGroundPlaneNormal(ComplexData data) -> Vector3"""
+        return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
+
+    if _newclass:
+        getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
+    __swig_getmethods__["getGroundPlaneNormal"] = lambda x: getGroundPlaneNormal
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -2846,6 +2854,10 @@ def SixSicdUtilities_getWidebandData(*args):
     SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
     """
     return _six_sicd.SixSicdUtilities_getWidebandData(*args)
+
+def SixSicdUtilities_getGroundPlaneNormal(data):
+    """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
+    return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class"""
