@@ -1,5 +1,5 @@
 /* =========================================================================
-* This file is part of six.sidd-c++
+* This file is part of six.sicd-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
@@ -20,18 +20,20 @@
 *
 */
 
+
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/Utilities.h>
 
-
+namespace
+{
 void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + sys::Path::basename(argv[0]) +
-            " <XML pathname>";
+        std::string message = "Usage: " + sys::Path::basename(argv[0])
+                + " <XML pathname>";
         throw except::Exception(Ctxt(message));
     }
     if (!str::endsWith(argv[1], ".xml"))
@@ -42,12 +44,14 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-sys::Int16_T* generateBandData(const six::Data& data)
+sys::Int16_T* generateBandData(const six::sicd::ComplexData& data)
 {
+    std::cerr << "1" << std::endl;
     size_t length = data.getNumRows() * data.getNumCols();
+    std::cerr << "2" << std::endl;
     six::UByte* bandData =
         new six::UByte[length * data.getNumBytesPerPixel()];
-
+    std::cerr << 2 << std::endl;
     for (size_t ii = 0; ii < length; ++ii)
     {
         bandData[ii] = static_cast<six::UByte>(ii);
@@ -55,7 +59,7 @@ sys::Int16_T* generateBandData(const six::Data& data)
 
     return reinterpret_cast<sys::Int16_T*>(bandData);
 }
-
+/*
 bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
@@ -74,12 +78,13 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
         std::cerr << "Test failed\n";
         return false;
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
         std::cout << "Test passed\n";
         return true;
     }
 }
+
 
 bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
 {
@@ -97,7 +102,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
     des.getSubheader().getFilePartType().set("DE");
-    des.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    des.getSubheader().getTypeID().set("XML_DATA_CONTENT_005");
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
@@ -108,27 +113,40 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
     try
     {
         writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
-        // Actually, the "default" behavior is to segfault...
         std::cerr << "Test failed" << std::endl;
         std::remove(name.c_str());
         return false;
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
         std::cout << "Test passed" << std::endl;
         return true;
     }
 }
-
+*/
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
-    std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
+    six::sicd::ComplexData* data = six::sicd::Utilities::readXML(xmlName);
+    std::cerr << "Utilities called" << std::endl;
+    if (data->imageData.get() == NULL)
+    {
+        std::cerr << "imageData is NULL\n";
+    }
+    else
+    {
+        std::cerr << "nothign wron gyet\n";
+    }
+    std::cerr << data->imageData->numRows << std::endl;
+    std::cerr << data->getNumRows() << std::endl;
     mem::ScopedArray<sys::Int16_T> bandData(
         generateBandData(*data));
 
+    std::cerr << "Creating container" << std::endl;
     six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    container.addData(dynamic_cast<six::Data*>(data));
+    //data.reset(); //Container takes ownership
+    std::cerr << "Data added" << std::endl;
 
     six::NITFWriteControl writer;
     writer.initialize(&container);
@@ -136,13 +154,13 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
     des.getSubheader().getFilePartType().set("DE");
-    des.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    des.getSubheader().getTypeID().set("XML_DATA_CONTENT_005");
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
-            0, 0, true);
+        0, 0, true);
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
@@ -155,14 +173,14 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
         std::remove(name.c_str());
         return true;
     }
-    catch (except::Exception& e)
+    catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
         std::cerr << "Test failed" << std::endl;
         return false;
     }
 }
-
+/*
 bool canAddTwoSegmentWriters(const std::string& xmlName)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
@@ -179,7 +197,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
     nitf::Record record = writer.getRecord();
     nitf::DESegment desOne = record.newDataExtensionSegment();
     desOne.getSubheader().getFilePartType().set("DE");
-    desOne.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    desOne.getSubheader().getTypeID().set("XML_DATA_CONTENT_005");
     desOne.getSubheader().getVersion().set("01");
     desOne.getSubheader().getSecurityClass().set("U");
 
@@ -192,7 +210,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
 
     nitf::DESegment desTwo = record.newDataExtensionSegment();
     desTwo.getSubheader().getFilePartType().set("DE");
-    desTwo.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    desTwo.getSubheader().getTypeID().set("XML_DATA_CONTENT_283");
     desTwo.getSubheader().getVersion().set("01");
     desTwo.getSubheader().getSecurityClass().set("U");
 
@@ -211,12 +229,14 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
         std::remove(name.c_str());
         return true;
     }
-    catch (except::Exception& e)
+    catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
         std::cerr << "Test failed" << std::endl;
         return false;
     }
+}
+*/
 }
 
 int main(int argc, char** argv)
@@ -224,13 +244,13 @@ int main(int argc, char** argv)
     try
     {
         validateArguments(argc, argv);
-        std::string xmlName(argv[1]);
+        const std::string xmlName(argv[1]);
 
         bool allPassed = true;
-        allPassed = addingNullSegmentWriterShouldThrow(xmlName) && allPassed;
+        //allPassed = addingNullSegmentWriterShouldThrow(xmlName) && allPassed;
         allPassed = canAddProperlyLoadedSegmentWriter(xmlName) && allPassed;
-        allPassed = addingUnloadedSegmentWriterShouldThrow(xmlName) && allPassed;
-        allPassed = canAddTwoSegmentWriters(xmlName) && allPassed;
+        //allPassed = addingUnloadedSegmentWriterShouldThrow(xmlName) && allPassed;
+        //allPassed = canAddTwoSegmentWriters(xmlName) && allPassed;
 
         return allPassed ? 0 : 1;
     }

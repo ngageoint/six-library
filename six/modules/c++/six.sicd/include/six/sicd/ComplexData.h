@@ -168,6 +168,7 @@ public:
      */
     virtual size_t getNumRows() const
     {
+        std::cerr << "Calling" << std::endl;
         return imageData->numRows;
     }
     /*!

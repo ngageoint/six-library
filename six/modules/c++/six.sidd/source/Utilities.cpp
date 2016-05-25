@@ -495,13 +495,22 @@ Utilities::getProjectionModel(const DerivedData* data)
     return projModel;
 }
 
-std::auto_ptr<Data> Utilities::readXML(const std::string& xmlPath)
+std::auto_ptr<DerivedData> Utilities::readXML(const std::string& xmlPathname)
 {
     XMLControlFactory::getInstance().addCreator(
         DataType::DERIVED,
         new XMLControlCreatorT<DerivedXMLControl>());
 
-    return six::readXML(xmlPath, DataType::DERIVED);
+    std::auto_ptr<DerivedData> derivedData(dynamic_cast<DerivedData*>(
+            six::readXML(xmlPathname, DataType::DERIVED).get()));
+
+    if (derivedData.get() == NULL)
+    {
+        throw except::Exception(Ctxt("Failed to convert Data* to DerivedData*"));
+    }
+
+    return derivedData;
 }
+
 }
 }

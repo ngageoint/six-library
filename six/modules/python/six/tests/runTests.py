@@ -54,7 +54,7 @@ if platform.system() != 'SunOS':
         sys.exit(1)
 else:
     print('Warning: skipping the bulk of the test suite, as Python modules ' +
-          'are by default disabled on Solairs')
+          'are by default disabled on Solaris')
 
 print("Performing byte swap test")
 if subprocess.call([utils.executableName(os.path.join(
