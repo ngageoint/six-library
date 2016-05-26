@@ -495,15 +495,15 @@ Utilities::getProjectionModel(const DerivedData* data)
     return projModel;
 }
 
-/*
+
 std::auto_ptr<DerivedData> Utilities::readXML(const std::string& xmlPathname)
 {
     XMLControlFactory::getInstance().addCreator(
         DataType::DERIVED,
         new XMLControlCreatorT<DerivedXMLControl>());
 
-    std::auto_ptr<DerivedData> derivedData(dynamic_cast<DerivedData*>(
-            six::readXML(xmlPathname, DataType::DERIVED).get()));
+    std::auto_ptr<DerivedData> derivedData(reinterpret_cast<DerivedData*>(
+            six::readXML(xmlPathname, DataType::DERIVED).release()));
 
     if (derivedData.get() == NULL)
     {
@@ -512,6 +512,6 @@ std::auto_ptr<DerivedData> Utilities::readXML(const std::string& xmlPathname)
 
     return derivedData;
 }
-*/
+
 }
 }

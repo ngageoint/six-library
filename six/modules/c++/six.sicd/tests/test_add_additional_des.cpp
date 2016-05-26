@@ -20,7 +20,7 @@
 *
 */
 
-
+#include <cstdio>
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
@@ -44,26 +44,23 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-sys::Int16_T* generateBandData(const six::sicd::ComplexData& data)
+std::vector<sys::Int16_T> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::cerr << "1" << std::endl;
-    size_t length = data.getNumRows() * data.getNumCols();
-    std::cerr << "2" << std::endl;
-    six::UByte* bandData =
-        new six::UByte[length * data.getNumBytesPerPixel()];
-    std::cerr << 2 << std::endl;
-    for (size_t ii = 0; ii < length; ++ii)
+    std::vector<sys::Int16_T> bandData(data.getNumRows() * data.getNumCols());
+
+    for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
-        bandData[ii] = static_cast<six::UByte>(ii);
+        bandData[ii] = static_cast<sys::Int16_T>(ii);
     }
 
-    return reinterpret_cast<sys::Int16_T*>(bandData);
+    return bandData;
 }
-/*
-bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
+
+bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
-    std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
+    std::auto_ptr<six::sicd::ComplexData> data =
+            six::sicd::Utilities::readXML(xmlPathname);
     six::Container container(six::DataType::COMPLEX);
     container.addData(data.release());
 
@@ -86,11 +83,12 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlName)
 }
 
 
-bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
+bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
-    std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
-    mem::ScopedArray<sys::Int16_T> bandData(
+    std::auto_ptr<six::sicd::ComplexData> data =
+            six::sicd::Utilities::readXML(xmlPathname);
+    std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -112,7 +110,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
     std::string name(std::tmpnam(NULL));
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
         std::cerr << "Test failed" << std::endl;
         std::remove(name.c_str());
         return false;
@@ -123,21 +121,17 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
         return true;
     }
 }
-*/
-bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
+
+bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
-    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlName);
-    std::cerr << data->imageData->numRows << std::endl;
-    std::cerr << data->getNumRows() << std::endl;
-    mem::ScopedArray<sys::Int16_T> bandData(
+    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlPathname);
+
+    std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
-    std::cerr << "Creating container" << std::endl;
     six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data.get()));
-    //data.reset(); //Container takes ownership
-    std::cerr << "Data added" << std::endl;
+    container.addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
     writer.initialize(&container);
@@ -159,7 +153,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
     std::string name(std::tmpnam(NULL));
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
         std::cout << "Test passed" << std::endl;
         std::remove(name.c_str());
         return true;
@@ -171,12 +165,12 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
         return false;
     }
 }
-/*
-bool canAddTwoSegmentWriters(const std::string& xmlName)
+
+bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
-    std::auto_ptr<six::Data> data = six::sicd::Utilities::readXML(xmlName);
-    mem::ScopedArray<sys::Int16_T> bandData(
+    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlPathname);
+    std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -215,7 +209,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
     std::string name(std::tmpnam(NULL));
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(bandData.get()), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
         std::cout << "Test passed" << std::endl;
         std::remove(name.c_str());
         return true;
@@ -227,7 +221,6 @@ bool canAddTwoSegmentWriters(const std::string& xmlName)
         return false;
     }
 }
-*/
 }
 
 int main(int argc, char** argv)
@@ -235,13 +228,13 @@ int main(int argc, char** argv)
     try
     {
         validateArguments(argc, argv);
-        const std::string xmlName(argv[1]);
+        const std::string xmlPathname(argv[1]);
 
         bool allPassed = true;
-        //allPassed = addingNullSegmentWriterShouldThrow(xmlName) && allPassed;
-        allPassed = canAddProperlyLoadedSegmentWriter(xmlName) && allPassed;
-        //allPassed = addingUnloadedSegmentWriterShouldThrow(xmlName) && allPassed;
-        //allPassed = canAddTwoSegmentWriters(xmlName) && allPassed;
+        allPassed = addingNullSegmentWriterShouldThrow(xmlPathname) && allPassed;
+        allPassed = canAddProperlyLoadedSegmentWriter(xmlPathname) && allPassed;
+        allPassed = addingUnloadedSegmentWriterShouldThrow(xmlPathname) && allPassed;
+        allPassed = canAddTwoSegmentWriters(xmlPathname) && allPassed;
 
         return allPassed ? 0 : 1;
     }

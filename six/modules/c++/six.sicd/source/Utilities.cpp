@@ -516,11 +516,7 @@ std::auto_ptr<ComplexData> Utilities::readXML(
         new XMLControlCreatorT<ComplexXMLControl>());
 
     std::auto_ptr<Data> data = six::readXML(xmlPathname, DataType::COMPLEX);
-    std::cerr << data->getNumRows() << std::endl;
-    std::cerr << data->getNumBytesPerPixel() << std::endl;
-    std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(data.get()));
-    std::cerr << complexData->getNumRows() << std::endl;
-    std::cerr << complexData->getNumBytesPerPixel() << std::endl;
+    std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(data.release()));
 
     return complexData;
 }
