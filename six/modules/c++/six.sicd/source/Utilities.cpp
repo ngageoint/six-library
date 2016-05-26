@@ -545,5 +545,20 @@ std::auto_ptr<ComplexData> Utilities::parseDataFromString(
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }
+
+std::string Utilities::toXMLString(const ComplexData& data,
+                                   const std::vector<std::string>& schemaPaths,
+                                   logging::Logger* logger)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::COMPLEX,
+                           new XMLControlCreatorT<ComplexXMLControl>());
+
+    logging::NullLogger nullLogger;
+    return ::six::toValidXMLString(&data,
+    		                       schemaPaths,
+								   (logger == NULL) ? &nullLogger : logger,
+					               &xmlRegistry);
+}
 }
 }
