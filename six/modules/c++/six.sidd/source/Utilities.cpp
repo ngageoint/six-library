@@ -495,6 +495,7 @@ Utilities::getProjectionModel(const DerivedData* data)
     return projModel;
 }
 
+/*
 std::auto_ptr<DerivedData> Utilities::readXML(const std::string& xmlPathname)
 {
     XMLControlFactory::getInstance().addCreator(
@@ -511,6 +512,6 @@ std::auto_ptr<DerivedData> Utilities::readXML(const std::string& xmlPathname)
 
     return derivedData;
 }
-
+*/
 }
 }

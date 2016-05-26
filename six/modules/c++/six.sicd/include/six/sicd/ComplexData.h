@@ -128,7 +128,7 @@ public:
 
     ComplexData();
 
-    ~ComplexData(){}
+    virtual ~ComplexData(){}
 
     /*!
      *  Returns COMPLEX.  This is used by Read/Write to determine

@@ -508,23 +508,19 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
     return groundPlaneNormal.unit();
 }
 
-ComplexData* Utilities::readXML(
+std::auto_ptr<ComplexData> Utilities::readXML(
         const std::string& xmlPathname)
 {
     XMLControlFactory::getInstance().addCreator(
         DataType::COMPLEX,
         new XMLControlCreatorT<ComplexXMLControl>());
 
-    std::auto_ptr<Data> data =
-        six::readXML(xmlPathname, DataType::COMPLEX);
-
-    ComplexData* complexData(dynamic_cast<ComplexData*>(data.get()));
+    std::auto_ptr<Data> data = six::readXML(xmlPathname, DataType::COMPLEX);
+    std::cerr << data->getNumRows() << std::endl;
+    std::cerr << data->getNumBytesPerPixel() << std::endl;
+    std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(data.get()));
     std::cerr << complexData->getNumRows() << std::endl;
-
-    if (complexData == NULL)
-    {
-        throw except::Exception(Ctxt("Failed to cast Data* to ComplexData*"));
-    }
+    std::cerr << complexData->getNumBytesPerPixel() << std::endl;
 
     return complexData;
 }

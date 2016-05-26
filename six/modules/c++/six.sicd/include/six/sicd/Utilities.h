@@ -257,7 +257,7 @@ public:
      * \param xmlPath The path to the input XML file
      * \return the Data object represented by the XML
      */
-    static ComplexData* readXML(
+    static std::auto_ptr<ComplexData> readXML(
             const std::string& xmlPathname);
 };
 }

@@ -127,16 +127,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlName)
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
-    six::sicd::ComplexData* data = six::sicd::Utilities::readXML(xmlName);
-    std::cerr << "Utilities called" << std::endl;
-    if (data->imageData.get() == NULL)
-    {
-        std::cerr << "imageData is NULL\n";
-    }
-    else
-    {
-        std::cerr << "nothign wron gyet\n";
-    }
+    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlName);
     std::cerr << data->imageData->numRows << std::endl;
     std::cerr << data->getNumRows() << std::endl;
     mem::ScopedArray<sys::Int16_T> bandData(
@@ -144,7 +135,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlName)
 
     std::cerr << "Creating container" << std::endl;
     six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data));
+    container.addData(dynamic_cast<six::Data*>(data.get()));
     //data.reset(); //Container takes ownership
     std::cerr << "Data added" << std::endl;
 
