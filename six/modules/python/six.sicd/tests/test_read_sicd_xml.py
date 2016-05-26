@@ -41,11 +41,19 @@ logger = NullLogger()
 
 # Go from XML file on disk to ComplexData
 data = SixSicdUtilities.parseDataFromFile(xmlPathname, schemaPaths, logger)
-print data.getNumRows()
 
 # Go from ComplexData to string
 xmlStr = SixSicdUtilities.toXMLString(data, schemaPaths, logger)
-print xmlStr
+print(xmlStr)
+
+# Print a few things to show that we really parsed this into an object
+print("file is " + str(data.getNumRows()) + "x" + str(data.getNumCols()))
+print(str(data.getNumBytesPerPixel()) + " bytes per pixel")
+print( "tx polarization: " + data.radarCollection.txPolarization.toString())
+print("image formation algorithm: " + data.imageFormation.imageFormationAlgorithm.toString())
+print("graze angle: " + str(data.scpcoa.grazeAngle))
+print("slant range: " + str(data.scpcoa.slantRange))
+print("radar mode: " + data.collectionInformation.radarMode.toString())
 
 # Go from string back to ComplexData
 data2 = SixSicdUtilities.parseDataFromString(xmlStr, schemaPaths, logger)
