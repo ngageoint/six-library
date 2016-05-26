@@ -45,8 +45,9 @@ using std::ptrdiff_t;
 using namespace six;
 %}
 
-// This allows functions that return auto_ptrs to work properly
+// This allows functions that deal with auto_ptrs to work properly
 %auto_ptr(six::Data);
+%auto_ptr(six::XMLControlCreator);
 
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
@@ -87,6 +88,7 @@ using namespace six;
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
+%include "six/XMLControlFactory.h"
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
