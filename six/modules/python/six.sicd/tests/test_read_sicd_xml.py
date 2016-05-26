@@ -31,16 +31,32 @@ import sys, os
 
 # Parse the command line
 if len(sys.argv) != 2:
-    sys.exit('Usage ' + sys.argv[0] + ' <XML pathname>')
+    sys.exit('Usage ' + sys.argv[0] + ' <XML or NITF pathname>')
 
-xmlPathname = sys.argv[1]
+inPathname = sys.argv[1]
 
 schemaPaths = VectorString()
 schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
 logger = NullLogger()
 
+# The point of this script is to show we can hop back and forth with
+# just XML strings so if they gave us a NITF, grab the XML out of it
+# and write it to a text file
+gotNITF = inPathname.endswith('.ntf') or inPathname.endswith('.nitf')
+if gotNITF:
+    xmlPathname = inPathname + '.xml'
+    data = SixSicdUtilities.getComplexData(inPathname, schemaPaths)
+    xmlStr = SixSicdUtilities.toXMLString(data, schemaPaths, logger)
+    file = open(xmlPathname, 'w')
+    file.write(xmlStr)
+    file.close()
+else:
+    xmlPathname = inPathname
+
 # Go from XML file on disk to ComplexData
 data = SixSicdUtilities.parseDataFromFile(xmlPathname, schemaPaths, logger)
+if gotNITF:
+    os.remove(xmlPathname)
 
 # Go from ComplexData to string
 xmlStr = SixSicdUtilities.toXMLString(data, schemaPaths, logger)
