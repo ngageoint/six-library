@@ -2839,10 +2839,25 @@ class SixSicdUtilities(_object):
         parseDataFromFile = staticmethod(parseDataFromFile)
     __swig_getmethods__["parseDataFromFile"] = lambda x: parseDataFromFile
 
-    def parseDataFromString(self, xmlStr, schemaPaths, log):
-        """parseDataFromString(SixSicdUtilities self, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_parseDataFromString(self, xmlStr, schemaPaths, log)
+    def parseDataFromString(xmlStr, schemaPaths, log):
+        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
+    if _newclass:
+        parseDataFromString = staticmethod(parseDataFromString)
+    __swig_getmethods__["parseDataFromString"] = lambda x: parseDataFromString
+
+    def toXMLString(*args):
+        """
+        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+        toXMLString(ComplexData data) -> std::string
+        """
+        return _six_sicd.SixSicdUtilities_toXMLString(*args)
+
+    if _newclass:
+        toXMLString = staticmethod(toXMLString)
+    __swig_getmethods__["toXMLString"] = lambda x: toXMLString
 
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
@@ -2901,6 +2916,18 @@ def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
 def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
     """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+def SixSicdUtilities_toXMLString(*args):
+    """
+    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+    SixSicdUtilities_toXMLString(ComplexData data) -> std::string
+    """
+    return _six_sicd.SixSicdUtilities_toXMLString(*args)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class"""
