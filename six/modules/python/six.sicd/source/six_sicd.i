@@ -122,24 +122,19 @@ Data* readNITF(const std::string& pathname,
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
-%include "std_vector.i"
-%include "std_string.i"
-%include "std_complex.i"
-%include "std_pair.i"
+%include <std_vector.i>
+%include <std_string.i>
+%include <std_complex.i>
+%include <std_pair.i>
+%include <std_auto_ptr.i>
 
 %import "math_poly.i"
 %import "six.i"
 %import "io.i"
 %import "mem.i"
 
-/* wrap around auto_ptr */
-%inline
-%{
-six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const std::vector<std::string>& schemaPaths ) {
-  std::auto_ptr<six::sicd::ComplexData> retv = Utilities::getComplexData(sicdPathname, schemaPaths);
-  return retv.release();
-}
-%}
+// This allows functions that return auto_ptrs to work properly
+%auto_ptr(six::sicd::ComplexData);
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);

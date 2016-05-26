@@ -4189,6 +4189,27 @@ def loadPluginDir(pluginDir):
     """loadPluginDir(std::string const & pluginDir)"""
     return _six_base.loadPluginDir(pluginDir)
 
+def parseData(*args):
+    """
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseData(*args)
+
+def parseDataFromFile(*args):
+    """
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromFile(*args)
+
+def parseDataFromString(*args):
+    """
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromString(*args)
+
 def getErrors(errorStats, sampleSpacing, errors):
     """getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"""
     return _six_base.getErrors(errorStats, sampleSpacing, errors)

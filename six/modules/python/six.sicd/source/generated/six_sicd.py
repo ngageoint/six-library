@@ -206,10 +206,6 @@ import pysix.scene
 import coda.mem
 import coda.coda_io
 
-def getComplexData(sicdPathname, schemaPaths):
-    """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""
-    return _six_sicd.getComplexData(sicdPathname, schemaPaths)
-
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
@@ -2816,6 +2812,27 @@ class SixSicdUtilities(_object):
         getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
     __swig_getmethods__["getGroundPlaneNormal"] = lambda x: getGroundPlaneNormal
 
+    def parseData(xmlStream, schemaPaths, log):
+        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+    if _newclass:
+        parseData = staticmethod(parseData)
+    __swig_getmethods__["parseData"] = lambda x: parseData
+
+    def parseDataFromFile(pathname, schemaPaths, log):
+        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+    if _newclass:
+        parseDataFromFile = staticmethod(parseDataFromFile)
+    __swig_getmethods__["parseDataFromFile"] = lambda x: parseDataFromFile
+
+    def parseDataFromString(self, xmlStr, schemaPaths, log):
+        """parseDataFromString(SixSicdUtilities self, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromString(self, xmlStr, schemaPaths, log)
+
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -2858,6 +2875,14 @@ def SixSicdUtilities_getWidebandData(*args):
 def SixSicdUtilities_getGroundPlaneNormal(data):
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
+
+def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
+    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class"""
