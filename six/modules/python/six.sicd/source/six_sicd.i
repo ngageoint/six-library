@@ -145,10 +145,6 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-
-/* this version of the function returns the auto_ptr, ignore it */
-%rename ("$ignore", fullname=1) "six::sicd::Utilities::getComplexData";
-
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
@@ -273,7 +269,7 @@ import numpy as np
 from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
     #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")

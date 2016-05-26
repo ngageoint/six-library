@@ -2789,6 +2789,17 @@ class SixSicdUtilities(_object):
         readSicd = staticmethod(readSicd)
     __swig_getmethods__["readSicd"] = lambda x: readSicd
 
+    def getComplexData(*args):
+        """
+        getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        """
+        return _six_sicd.SixSicdUtilities_getComplexData(*args)
+
+    if _newclass:
+        getComplexData = staticmethod(getComplexData)
+    __swig_getmethods__["getComplexData"] = lambda x: getComplexData
+
     def getWidebandData(*args):
         """
         getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
@@ -2860,6 +2871,13 @@ def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
 def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):
     """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
     return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
+
+def SixSicdUtilities_getComplexData(*args):
+    """
+    getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    """
+    return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
 def SixSicdUtilities_getWidebandData(*args):
     """
@@ -9426,7 +9444,7 @@ import numpy as np
 from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
 #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
