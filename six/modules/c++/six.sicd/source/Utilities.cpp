@@ -515,8 +515,13 @@ std::auto_ptr<ComplexData> Utilities::readXML(
         DataType::COMPLEX,
         new XMLControlCreatorT<ComplexXMLControl>());
 
-    std::auto_ptr<Data> data = six::readXML(xmlPathname, DataType::COMPLEX);
-    std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(data.release()));
+    std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(
+            six::readXML(xmlPathname, DataType::COMPLEX).release()));
+
+    if (complexData.get() == NULL)
+    {
+        throw except::Exception(Ctxt("Failed to convert Data* to ComplexData*"));
+    }
 
     return complexData;
 }
