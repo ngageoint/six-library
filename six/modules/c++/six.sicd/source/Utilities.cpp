@@ -20,6 +20,7 @@
  *
  */
 
+#include <io/StringStream.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
@@ -507,6 +508,42 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
 
     return groundPlaneNormal.unit();
 }
-}
+
+std::auto_ptr<ComplexData> Utilities::parseData(
+        ::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::COMPLEX,
+                           new XMLControlCreatorT<ComplexXMLControl>());
+
+    std::auto_ptr<Data> data(six::parseData(
+            xmlRegistry, xmlStream, schemaPaths, log));
+
+     std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(
+             data.release()));
+
+     return complexData;
 }
 
+std::auto_ptr<ComplexData> Utilities::parseDataFromFile(
+        const std::string& pathname,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
+{
+    io::FileInputStream inStream(pathname);
+    return parseData(inStream, schemaPaths, log);
+}
+
+std::auto_ptr<ComplexData> Utilities::parseDataFromString(
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(inStream, schemaPaths, log);
+}
+}
+}
