@@ -115,10 +115,10 @@ void XMLVerifier::verify(const std::string& pathname) const
     inStream.write(reinterpret_cast<const sys::byte*>(inStr.c_str()),
                    inStr.length());
 
-    std::auto_ptr<six::Data> data(six::parseData(mXmlRegistry,
-                                                 pathname,
-                                                 mSchemaPaths,
-                                                 mLog));
+    std::auto_ptr<six::Data> data(six::parseDataFromFile(mXmlRegistry,
+                                                         pathname,
+                                                         mSchemaPaths,
+                                                         mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
@@ -148,7 +148,7 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     // Now re-read the output and make sure the Data objects
     // are equal.
-    std::auto_ptr<six::Data> readData(six::parseData(mXmlRegistry,
+    std::auto_ptr<six::Data> readData(six::parseDataFromFile(mXmlRegistry,
         roundTrippedPath,
         mSchemaPaths,
         mLog));
