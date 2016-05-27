@@ -160,6 +160,11 @@ struct Grid
 
     bool validate(const CollectionInformation& collectionInformation,
             logging::Logger& log) const;
+private:
+    bool validateTimeCOAPoly(
+            const CollectionInformation& collectionInformation,
+            logging::Logger& log) const;
+    bool validateFFTSigns(logging::Logger& log) const;
 };
 
 }

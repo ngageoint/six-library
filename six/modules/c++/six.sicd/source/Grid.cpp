@@ -86,14 +86,15 @@ bool Grid::operator==(const Grid& rhs) const
         row == rhs.row && col == rhs.col);
 }
 
-bool Grid::validate(const CollectionInformation& collectionInformation,
+bool Grid::validateTimeCOAPoly(
+        const CollectionInformation& collectionInformation,
         logging::Logger& log) const
 {
-    bool valid = true;
     const RadarModeType& mode = collectionInformation.radarMode;
 
     //2.1. Scalar TimeCOAPoly means SPOTLIGHT data
     bool isScalar = true;
+    bool valid = true;
 
     // I don't know that it's impossible for a one-degree polynomial to be expressed
     // as a polynomial of higher order for whatever reason, so I'm checking each term
@@ -104,6 +105,8 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
         {
             if (ii == 0 && jj == 0)
             {
+                // Don't care what the (0,0) value is, but everything else
+                // should be 0.
                 continue;
             }
             if (timeCOAPoly[ii][jj] != 0)
@@ -128,5 +131,32 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
     }
 
     return valid;
+}
+
+bool Grid::validateFFTSigns(logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //2.2. FFT signs in both dimensions almost certainly have to be equal
+    if (row->sign != col->sign)
+    {
+        messageBuilder.str("");
+        messageBuilder <<
+            "FFT signs in row and column direction should be the same." <<
+            std::endl << "Grid.Row.Sign: " << row->sign.toString() << std::endl
+            << "Grid.Col.Sign: " << col->sign.toString() << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
+
+bool Grid::validate(const CollectionInformation& collectionInformation,
+        logging::Logger& log) const
+{
+    
+    return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
+        validateFFTSigns(log));                                 //2.2
 }
 

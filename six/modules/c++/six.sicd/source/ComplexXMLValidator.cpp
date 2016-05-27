@@ -999,7 +999,6 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
 bool ComplexXMLValidator::validate()
 {
     return (
-        checkFFTSigns() &&                       // 2.2
         checkFrequencySupportParameters() &&     // 2.3.1  - 2.3.9
         checkSupportParamsAgainstPFA() &&        // 2.3.10 - 2.3.16
         checkWeightFunctions() &&                // 2.4  (omitting 2.5: requires fft, fzero)
@@ -2023,25 +2022,6 @@ bool ComplexXMLValidator::checkARPPoly()
         mLog->error(messageBuilder.str());
         return false;
     }
-    return true;
-}
-
-bool ComplexXMLValidator::checkFFTSigns()
-{
-    //2.2. FFT signs in both dimensions almost certainly have to be equal
-    FFTSign rowSign = sicd.grid->row->sign;
-    FFTSign colSign = sicd.grid->col->sign;
-
-    if (rowSign != colSign)
-    {
-        messageBuilder.str("");
-        messageBuilder << "FFT signs in row and column direction should be the same." << std::endl
-            << "Grid.Row.Sgn: " << rowSign.toString() << std::endl
-            << "Grid.Col.Sgn: " << colSign.toString() << std::endl;
-        mLog->error(messageBuilder.str());
-        return false;
-    }
-
     return true;
 }
 

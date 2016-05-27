@@ -56,7 +56,6 @@ public:
     }
 
 private:
-    bool checkFFTSigns();
     bool checkFrequencySupportParameters();
     bool checkFrequencySupportParameters(const DirectionParameters& direction, const std::string& name);
     bool checkSupportParamsAgainstPFA();
