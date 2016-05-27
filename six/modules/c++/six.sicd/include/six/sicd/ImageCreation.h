@@ -65,6 +65,18 @@ struct ImageCreation
     {
         return new ImageCreation(*this);
     }
+
+    //! Equality operator
+    bool operator==(const ImageCreation& rhs) const
+    {
+        return (application == rhs.application &&
+            dateTime == rhs.dateTime && site == rhs.site &&
+            profile == rhs.profile);
+    }
+    bool operator!=(const ImageCreation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

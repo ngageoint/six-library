@@ -14033,7 +14033,71 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  scene::Vector3 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  scene::Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SceneGeometry_getMultiPathVector",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getMultiPathVector" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SceneGeometry_getMultiPathVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SceneGeometry_getMultiPathVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
+  {
+    try
+    {
+      result = ((scene::SceneGeometry const *)arg1)->getMultiPathVector((scene::Vector3 const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
   void *argp1 = 0 ;
@@ -14082,6 +14146,50 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector(PyObject *SWIGUNUSED
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__SceneGeometry, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SceneGeometry_getMultiPathVector__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__SceneGeometry, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_SceneGeometry_getMultiPathVector__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SceneGeometry_getMultiPathVector'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    scene::SceneGeometry::getMultiPathVector(scene::Vector3 const &) const\n"
+    "    scene::SceneGeometry::getMultiPathVector() const\n");
+  return 0;
 }
 
 
@@ -15416,7 +15524,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FrameType___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_FrameType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::FrameType *arg1 = (scene::FrameType *) 0 ;
   scene::FrameType::FrameTypesEnum arg2 ;
@@ -15477,7 +15585,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FrameType___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_FrameType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::FrameType *arg1 = (scene::FrameType *) 0 ;
   scene::FrameType::FrameTypesEnum arg2 ;
@@ -15535,6 +15643,228 @@ SWIGINTERN PyObject *_wrap_FrameType___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::FrameType *arg1 = (scene::FrameType *) 0 ;
+  scene::FrameType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:FrameType___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__FrameType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameType___eq__" "', argument " "1"" of type '" "scene::FrameType const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::FrameType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_scene__FrameType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameType___eq__" "', argument " "2"" of type '" "scene::FrameType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FrameType___eq__" "', argument " "2"" of type '" "scene::FrameType const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::FrameType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((scene::FrameType const *)arg1)->operator ==((scene::FrameType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameType___eq__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__FrameType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_scene__FrameType, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_FrameType___eq____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__FrameType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_FrameType___eq____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::FrameType *arg1 = (scene::FrameType *) 0 ;
+  scene::FrameType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:FrameType___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__FrameType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameType___ne__" "', argument " "1"" of type '" "scene::FrameType const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::FrameType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_scene__FrameType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameType___ne__" "', argument " "2"" of type '" "scene::FrameType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FrameType___ne__" "', argument " "2"" of type '" "scene::FrameType const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::FrameType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((scene::FrameType const *)arg1)->operator !=((scene::FrameType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameType___ne__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__FrameType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_scene__FrameType, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_FrameType___ne____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__FrameType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_FrameType___ne____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
 }
 
 
@@ -25848,7 +26178,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getOPSlopeAngle", _wrap_SceneGeometry_getOPSlopeAngle, METH_VARARGS, (char *)"SceneGeometry_getOPSlopeAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getAzimuthAngle", _wrap_SceneGeometry_getAzimuthAngle, METH_VARARGS, (char *)"SceneGeometry_getAzimuthAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getRotationAngle", _wrap_SceneGeometry_getRotationAngle, METH_VARARGS, (char *)"SceneGeometry_getRotationAngle(SceneGeometry self) -> double"},
-	 { (char *)"SceneGeometry_getMultiPathVector", _wrap_SceneGeometry_getMultiPathVector, METH_VARARGS, (char *)"SceneGeometry_getMultiPathVector(SceneGeometry self) -> Vector3"},
+	 { (char *)"SceneGeometry_getMultiPathVector", _wrap_SceneGeometry_getMultiPathVector, METH_VARARGS, (char *)"\n"
+		"getMultiPathVector(Vector3 normalVec) -> Vector3\n"
+		"SceneGeometry_getMultiPathVector(SceneGeometry self) -> Vector3\n"
+		""},
 	 { (char *)"SceneGeometry_getMultiPathAngle", _wrap_SceneGeometry_getMultiPathAngle, METH_VARARGS, (char *)"SceneGeometry_getMultiPathAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPGroundTrackAngle", _wrap_SceneGeometry_getOPGroundTrackAngle, METH_VARARGS, (char *)"SceneGeometry_getOPGroundTrackAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getOPAngle", _wrap_SceneGeometry_getOPAngle, METH_VARARGS, (char *)"SceneGeometry_getOPAngle(SceneGeometry self, Vector3 vec) -> double"},
@@ -25877,8 +26210,14 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"FrameType_toString", _wrap_FrameType_toString, METH_VARARGS, (char *)"FrameType_toString(FrameType self) -> std::string"},
 	 { (char *)"FrameType_fromString", _wrap_FrameType_fromString, METH_VARARGS, (char *)"FrameType_fromString(std::string const & str) -> scene::FrameType::FrameTypesEnum"},
-	 { (char *)"FrameType___eq__", _wrap_FrameType___eq__, METH_VARARGS, (char *)"FrameType___eq__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool"},
-	 { (char *)"FrameType___ne__", _wrap_FrameType___ne__, METH_VARARGS, (char *)"FrameType___ne__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool"},
+	 { (char *)"FrameType___eq__", _wrap_FrameType___eq__, METH_VARARGS, (char *)"\n"
+		"__eq__(scene::FrameType::FrameTypesEnum rhs) -> bool\n"
+		"FrameType___eq__(FrameType self, FrameType rhs) -> bool\n"
+		""},
+	 { (char *)"FrameType___ne__", _wrap_FrameType___ne__, METH_VARARGS, (char *)"\n"
+		"__ne__(scene::FrameType::FrameTypesEnum rhs) -> bool\n"
+		"FrameType___ne__(FrameType self, FrameType rhs) -> bool\n"
+		""},
 	 { (char *)"FrameType_mValue_set", _wrap_FrameType_mValue_set, METH_VARARGS, (char *)"FrameType_mValue_set(FrameType self, scene::FrameType::FrameTypesEnum mValue)"},
 	 { (char *)"FrameType_mValue_get", _wrap_FrameType_mValue_get, METH_VARARGS, (char *)"FrameType_mValue_get(FrameType self) -> scene::FrameType::FrameTypesEnum"},
 	 { (char *)"delete_FrameType", _wrap_delete_FrameType, METH_VARARGS, (char *)"delete_FrameType(FrameType self)"},

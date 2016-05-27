@@ -32,9 +32,22 @@ GeoInfo* GeoInfo::clone() const
     return new GeoInfo(*this);
 }
 
+bool GeoInfo::operator==(const GeoInfo& rhs) const
+{
+    return (name == rhs.name && geoInfos == rhs.geoInfos &&
+            desc == rhs.desc && geometryLatLon == rhs.geometryLatLon);
+}
+
 GeoData* GeoData::clone()
 {
     return new GeoData(*this);
+}
+
+bool GeoData::operator==(const GeoData& rhs) const
+{
+    return (earthModel == rhs.earthModel && scp == rhs.scp &&
+            imageCorners == rhs.imageCorners && validData == rhs.validData
+            && geoInfos == rhs.geoInfos);
 }
 }
 }

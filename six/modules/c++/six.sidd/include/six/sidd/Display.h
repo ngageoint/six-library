@@ -58,6 +58,18 @@ struct Remap
 
     virtual Remap* clone() const = 0;
 
+    bool operator==(const Remap& rhs)
+    {
+        return this->equalTo(rhs);
+    }
+
+    bool operator!=(const Remap& rhs)
+    {
+        return !(*this == rhs);
+    }
+
+    virtual bool equalTo(const Remap& rhs) const = 0;
+
 };
 
 /*!
@@ -98,6 +110,8 @@ struct MonochromeDisplayRemap : public Remap
     //!  Remap parameters
     ParameterCollection remapParameters;
 
+    virtual bool equalTo(const Remap& rhs) const;
+    virtual bool operator==(const MonochromeDisplayRemap& rhs) const;
 };
 
 /*!
@@ -124,6 +138,9 @@ struct ColorDisplayRemap : public Remap
     {
         return new ColorDisplayRemap(*this);
     }
+
+    virtual bool equalTo(const Remap& rhs) const;
+    virtual bool operator==(const ColorDisplayRemap& rhs) const;
 };
 
 /*!
@@ -147,6 +164,17 @@ struct MonitorCompensationApplied
     MonitorCompensationApplied* clone() const
     {
         return new MonitorCompensationApplied(*this);
+    }
+
+    //! Equality operator
+    bool operator==(const MonitorCompensationApplied& rhs) const
+    {
+        return gamma == rhs.gamma && xMin == rhs.xMin;
+    }
+
+    bool operator!=(const MonitorCompensationApplied& rhs) const
+    {
+        return !(*this == rhs);
     }
 };
 
@@ -179,6 +207,17 @@ struct DRAHistogramOverrides
     DRAHistogramOverrides* clone() const
     {
         return new DRAHistogramOverrides(*this);
+    }
+
+    //! Equality operator
+    bool operator==(const DRAHistogramOverrides& rhs) const
+    {
+        return clipMin == rhs.clipMin && clipMax == rhs.clipMax;
+    }
+
+    bool operator!=(const DRAHistogramOverrides& rhs) const
+    {
+        return !(*this == rhs);
     }
 };
 
@@ -232,6 +271,12 @@ struct Display
             monitorCompensationApplied;
 
     ParameterCollection displayExtensions;
+
+    bool operator==(const Display& rhs) const;
+    bool operator!=(const Display& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 }

@@ -24,6 +24,82 @@
 using namespace six;
 using namespace six::sidd;
 
+bool PolynomialProjection::equalTo(const Projection& rhs) const
+{
+    PolynomialProjection const* projection = dynamic_cast<PolynomialProjection const*>(&rhs);
+    if (projection != NULL)
+    {
+        return (rowColToLat == projection->rowColToLat &&
+            rowColToLon == projection->rowColToLon &&
+            rowColToAlt == projection->rowColToAlt &&
+            latLonToRow == projection->latLonToRow &&
+            latLonToCol == projection->latLonToCol &&
+            projectionType == projection->projectionType &&
+            referencePoint == projection->referencePoint);
+    }
+    return false;
+}
+
+bool MeasurableProjection::operator==(const MeasurableProjection& rhs) const
+{
+    return (sampleSpacing == rhs.sampleSpacing &&
+        timeCOAPoly == rhs.timeCOAPoly &&
+        projectionType == rhs.projectionType &&
+        referencePoint == rhs.referencePoint);
+}
+
+bool MeasurableProjection::equalTo(const Projection& rhs) const
+{
+    const MeasurableProjection* projection = dynamic_cast<const MeasurableProjection*>(&rhs);
+    if (projection != NULL)
+    {
+        return *this == *projection;
+    }
+    return false;
+}
+
+bool GeographicProjection::equalTo(const Projection& rhs) const
+{
+    const GeographicProjection* projection = dynamic_cast<const GeographicProjection*>(&rhs);
+    if (projection != NULL)
+    {
+        return *this == *projection;
+    }
+    return false;
+}
+
+bool CylindricalProjection::operator==(const CylindricalProjection& rhs) const
+{
+    return (stripmapDirection == rhs.stripmapDirection &&
+        curvatureRadius == rhs.curvatureRadius &&
+        MeasurableProjection::operator==(rhs));
+}
+
+bool CylindricalProjection::equalTo(const Projection& rhs) const
+{
+    const CylindricalProjection* projection = dynamic_cast<const CylindricalProjection*>(&rhs);
+    if (projection != NULL)
+    {
+        return *this == *projection;
+    }
+    return false;
+}
+
+bool PlaneProjection::operator==(const PlaneProjection& rhs) const
+{
+    return *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs));
+}
+
+bool PlaneProjection::equalTo(const Projection& rhs) const
+{
+    const PlaneProjection* projection = dynamic_cast<const PlaneProjection*>(&rhs);
+    if (projection != NULL)
+    {
+        return *this == *projection;
+    }
+    return false;
+}
+
 Measurement::Measurement(ProjectionType projectionType) :
     projection(NULL)
 {

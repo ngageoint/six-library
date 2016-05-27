@@ -61,6 +61,13 @@ struct GeometricChip
     // Given full image pixel coordinates, provides chip pixel coordinates
     RowColDouble
     getChipCoordinateFromFullImage(const RowColDouble& full) const;
+
+    //! Equality operators
+    bool operator==(const GeometricChip& rhs) const;
+    bool operator!=(const GeometricChip& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -83,6 +90,12 @@ struct ProcessingEvent
 
     //!  (Optional, Unbounded) List of descriptors for the processing event
     ParameterCollection descriptor;
+
+    bool operator==(const ProcessingEvent& rhs) const;
+    bool operator!=(const ProcessingEvent& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -100,6 +113,17 @@ struct DownstreamReprocessing
 
     //!  (Optional, Unbounded) downstream processing events
     std::vector<mem::ScopedCopyablePtr<ProcessingEvent> > processingEvents;
+
+    //! Equality operator
+    bool operator==(const DownstreamReprocessing& rhs) const
+    {
+        return geometricChip == rhs.geometricChip && processingEvents == rhs.processingEvents;
+    }
+
+    bool operator!=(const DownstreamReprocessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

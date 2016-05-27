@@ -46,8 +46,25 @@ public:
         return os;
     }
 
+    bool operator==(const ComplexClassification& rhs) const
+    {
+        return (level == rhs.getLevel() && 
+            fileOptions == rhs.fileOptions);
+    }
+
     //! This is spelled out (i.e. 'UNCLASSIFIED')
     std::string level;
+
+private:
+    virtual bool equalTo(const Classification& rhs) const
+    {
+        const ComplexClassification* classification = dynamic_cast<const ComplexClassification*>(&rhs);
+        if (classification != NULL)
+        {
+            return *this == *classification;
+        }
+        return false;
+    }
 };
 }
 }

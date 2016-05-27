@@ -1016,9 +1016,12 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getRotationAngle(self)
 
 
-    def getMultiPathVector(self):
-        """getMultiPathVector(SceneGeometry self) -> Vector3"""
-        return _scene.SceneGeometry_getMultiPathVector(self)
+    def getMultiPathVector(self, *args):
+        """
+        getMultiPathVector(SceneGeometry self, Vector3 normalVec) -> Vector3
+        getMultiPathVector(SceneGeometry self) -> Vector3
+        """
+        return _scene.SceneGeometry_getMultiPathVector(self, *args)
 
 
     def getMultiPathAngle(self):
@@ -1145,14 +1148,20 @@ class FrameType(_object):
         fromString = staticmethod(fromString)
     __swig_getmethods__["fromString"] = lambda x: fromString
 
-    def __eq__(self, rhs):
-        """__eq__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool"""
-        return _scene.FrameType___eq__(self, rhs)
+    def __eq__(self, *args):
+        """
+        __eq__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool
+        __eq__(FrameType self, FrameType rhs) -> bool
+        """
+        return _scene.FrameType___eq__(self, *args)
 
 
-    def __ne__(self, rhs):
-        """__ne__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool"""
-        return _scene.FrameType___ne__(self, rhs)
+    def __ne__(self, *args):
+        """
+        __ne__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool
+        __ne__(FrameType self, FrameType rhs) -> bool
+        """
+        return _scene.FrameType___ne__(self, *args)
 
     __swig_setmethods__["mValue"] = _scene.FrameType_mValue_set
     __swig_getmethods__["mValue"] = _scene.FrameType_mValue_get

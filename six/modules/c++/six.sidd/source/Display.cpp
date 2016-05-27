@@ -24,6 +24,38 @@
 using namespace six;
 using namespace six::sidd;
 
+bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
+{
+    const MonochromeDisplayRemap* remap = dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
+    if (remap != NULL)
+    {
+        return *this == *remap;
+    }
+    return false;
+}
+
+bool MonochromeDisplayRemap::operator==(const MonochromeDisplayRemap& rhs) const
+{
+    return (remapType == rhs.remapType &&
+        remapParameters == rhs.remapParameters &&
+        remapLUT == rhs.remapLUT);
+}
+
+bool ColorDisplayRemap::equalTo(const Remap& rhs) const
+{
+    ColorDisplayRemap const* remap = dynamic_cast<ColorDisplayRemap const*>(&rhs);
+    if (remap != NULL)
+    {
+        return *this == *remap;
+    }
+    return false;
+}
+
+bool ColorDisplayRemap::operator==(const ColorDisplayRemap& rhs) const
+{
+    return remapLUT == rhs.remapLUT;
+}
+
 Display::Display() :
     pixelType(PixelType::NOT_SET),
     remapInformation(NULL), 
@@ -32,6 +64,16 @@ Display::Display() :
     histogramOverrides(NULL),
     monitorCompensationApplied(NULL)
 {
+}
+bool Display::operator==(const Display& rhs) const
+{
+    return (pixelType == rhs.pixelType &&
+        remapInformation == rhs.remapInformation &&
+        magnificationMethod == rhs.magnificationMethod &&
+        decimationMethod == rhs.decimationMethod &&
+        histogramOverrides == rhs.histogramOverrides &&
+        monitorCompensationApplied == rhs.monitorCompensationApplied &&
+        displayExtensions == rhs.displayExtensions);
 }
 
 Display* Display::clone() const

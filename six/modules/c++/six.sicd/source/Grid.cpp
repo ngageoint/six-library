@@ -47,6 +47,21 @@ DirectionParameters* DirectionParameters::clone() const
     return new DirectionParameters(*this);
 }
 
+bool DirectionParameters::operator==(const DirectionParameters& rhs) const
+{
+    return (unitVector == rhs.unitVector &&
+        sampleSpacing == rhs.sampleSpacing &&
+        impulseResponseWidth == rhs.impulseResponseWidth &&
+        sign == rhs.sign &&
+        impulseResponseBandwidth == rhs.impulseResponseBandwidth &&
+        kCenter == rhs.kCenter &&
+        deltaK1 == rhs.deltaK1 &&
+        deltaK2 == rhs.deltaK2 &&
+        deltaKCOAPoly == rhs.deltaKCOAPoly &&
+        weightType == rhs.weightType &&
+        weights == rhs.weights);
+}
+
 Grid::Grid() :
     // This is a good assumption, I think
     imagePlane(ComplexImagePlaneType::SLANT),
@@ -60,5 +75,13 @@ Grid::Grid() :
 Grid* Grid::clone() const 
 {
     return new Grid(*this);
+}
+
+bool Grid::operator==(const Grid& rhs) const
+{
+    return (imagePlane == rhs.imagePlane &&
+        type == rhs.type &&
+        timeCOAPoly == rhs.timeCOAPoly &&
+        row == rhs.row && col == rhs.col);
 }
 

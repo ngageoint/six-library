@@ -41,6 +41,16 @@ MatchType::MatchType() :
 {
 }
 
+bool MatchType::operator==(const MatchType& rhs) const
+{
+    return (collectorName == rhs.collectorName &&
+        illuminatorName == rhs.illuminatorName &&
+        matchType == rhs.matchType &&
+        typeID == rhs.typeID &&
+        currentIndex == rhs.currentIndex &&
+        matchCollects == rhs.matchCollects);
+}
+
 //! One is maditory
 MatchInformation::MatchInformation() :
     types(1)

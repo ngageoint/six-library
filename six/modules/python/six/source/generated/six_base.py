@@ -425,6 +425,14 @@ class AppliedType(_object):
         """__ge__(AppliedType self, AppliedType o) -> bool"""
         return _six_base.AppliedType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.AppliedType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.AppliedType_value_set
     __swig_getmethods__["value"] = _six_base.AppliedType_value_get
     if _newclass:
@@ -433,6 +441,10 @@ AppliedType_swigregister = _six_base.AppliedType_swigregister
 AppliedType_swigregister(AppliedType)
 cvar = _six_base.cvar
 NOT_SET_VALUE = cvar.NOT_SET_VALUE
+
+def AppliedType_size():
+    """AppliedType_size() -> size_t"""
+    return _six_base.AppliedType_size()
 
 class AutofocusType(_object):
     """Proxy of C++ six::AutofocusType class"""
@@ -500,12 +512,24 @@ class AutofocusType(_object):
         """__ge__(AutofocusType self, AutofocusType o) -> bool"""
         return _six_base.AutofocusType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.AutofocusType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.AutofocusType_value_set
     __swig_getmethods__["value"] = _six_base.AutofocusType_value_get
     if _newclass:
         value = _swig_property(_six_base.AutofocusType_value_get, _six_base.AutofocusType_value_set)
 AutofocusType_swigregister = _six_base.AutofocusType_swigregister
 AutofocusType_swigregister(AutofocusType)
+
+def AutofocusType_size():
+    """AutofocusType_size() -> size_t"""
+    return _six_base.AutofocusType_size()
 
 class BooleanType(_object):
     """Proxy of C++ six::BooleanType class"""
@@ -572,12 +596,24 @@ class BooleanType(_object):
         """__ge__(BooleanType self, BooleanType o) -> bool"""
         return _six_base.BooleanType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.BooleanType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.BooleanType_value_set
     __swig_getmethods__["value"] = _six_base.BooleanType_value_get
     if _newclass:
         value = _swig_property(_six_base.BooleanType_value_get, _six_base.BooleanType_value_set)
 BooleanType_swigregister = _six_base.BooleanType_swigregister
 BooleanType_swigregister(BooleanType)
+
+def BooleanType_size():
+    """BooleanType_size() -> size_t"""
+    return _six_base.BooleanType_size()
 
 class ByteSwapping(_object):
     """Proxy of C++ six::ByteSwapping class"""
@@ -645,12 +681,24 @@ class ByteSwapping(_object):
         """__ge__(ByteSwapping self, ByteSwapping o) -> bool"""
         return _six_base.ByteSwapping___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ByteSwapping_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ByteSwapping_value_set
     __swig_getmethods__["value"] = _six_base.ByteSwapping_value_get
     if _newclass:
         value = _swig_property(_six_base.ByteSwapping_value_get, _six_base.ByteSwapping_value_set)
 ByteSwapping_swigregister = _six_base.ByteSwapping_swigregister
 ByteSwapping_swigregister(ByteSwapping)
+
+def ByteSwapping_size():
+    """ByteSwapping_size() -> size_t"""
+    return _six_base.ByteSwapping_size()
 
 class CollectType(_object):
     """Proxy of C++ six::CollectType class"""
@@ -717,12 +765,24 @@ class CollectType(_object):
         """__ge__(CollectType self, CollectType o) -> bool"""
         return _six_base.CollectType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.CollectType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.CollectType_value_set
     __swig_getmethods__["value"] = _six_base.CollectType_value_get
     if _newclass:
         value = _swig_property(_six_base.CollectType_value_get, _six_base.CollectType_value_set)
 CollectType_swigregister = _six_base.CollectType_swigregister
 CollectType_swigregister(CollectType)
+
+def CollectType_size():
+    """CollectType_size() -> size_t"""
+    return _six_base.CollectType_size()
 
 class ComplexImageGridType(_object):
     """Proxy of C++ six::ComplexImageGridType class"""
@@ -792,12 +852,24 @@ class ComplexImageGridType(_object):
         """__ge__(ComplexImageGridType self, ComplexImageGridType o) -> bool"""
         return _six_base.ComplexImageGridType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ComplexImageGridType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ComplexImageGridType_value_set
     __swig_getmethods__["value"] = _six_base.ComplexImageGridType_value_get
     if _newclass:
         value = _swig_property(_six_base.ComplexImageGridType_value_get, _six_base.ComplexImageGridType_value_set)
 ComplexImageGridType_swigregister = _six_base.ComplexImageGridType_swigregister
 ComplexImageGridType_swigregister(ComplexImageGridType)
+
+def ComplexImageGridType_size():
+    """ComplexImageGridType_size() -> size_t"""
+    return _six_base.ComplexImageGridType_size()
 
 class ComplexImagePlaneType(_object):
     """Proxy of C++ six::ComplexImagePlaneType class"""
@@ -865,12 +937,24 @@ class ComplexImagePlaneType(_object):
         """__ge__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"""
         return _six_base.ComplexImagePlaneType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ComplexImagePlaneType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ComplexImagePlaneType_value_set
     __swig_getmethods__["value"] = _six_base.ComplexImagePlaneType_value_get
     if _newclass:
         value = _swig_property(_six_base.ComplexImagePlaneType_value_get, _six_base.ComplexImagePlaneType_value_set)
 ComplexImagePlaneType_swigregister = _six_base.ComplexImagePlaneType_swigregister
 ComplexImagePlaneType_swigregister(ComplexImagePlaneType)
+
+def ComplexImagePlaneType_size():
+    """ComplexImagePlaneType_size() -> size_t"""
+    return _six_base.ComplexImagePlaneType_size()
 
 class DataType(_object):
     """Proxy of C++ six::DataType class"""
@@ -937,12 +1021,24 @@ class DataType(_object):
         """__ge__(DataType self, DataType o) -> bool"""
         return _six_base.DataType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.DataType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.DataType_value_set
     __swig_getmethods__["value"] = _six_base.DataType_value_get
     if _newclass:
         value = _swig_property(_six_base.DataType_value_get, _six_base.DataType_value_set)
 DataType_swigregister = _six_base.DataType_swigregister
 DataType_swigregister(DataType)
+
+def DataType_size():
+    """DataType_size() -> size_t"""
+    return _six_base.DataType_size()
 
 class DecimationMethod(_object):
     """Proxy of C++ six::DecimationMethod class"""
@@ -1011,12 +1107,24 @@ class DecimationMethod(_object):
         """__ge__(DecimationMethod self, DecimationMethod o) -> bool"""
         return _six_base.DecimationMethod___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.DecimationMethod_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.DecimationMethod_value_set
     __swig_getmethods__["value"] = _six_base.DecimationMethod_value_get
     if _newclass:
         value = _swig_property(_six_base.DecimationMethod_value_get, _six_base.DecimationMethod_value_set)
 DecimationMethod_swigregister = _six_base.DecimationMethod_swigregister
 DecimationMethod_swigregister(DecimationMethod)
+
+def DecimationMethod_size():
+    """DecimationMethod_size() -> size_t"""
+    return _six_base.DecimationMethod_size()
 
 class DemodType(_object):
     """Proxy of C++ six::DemodType class"""
@@ -1083,12 +1191,24 @@ class DemodType(_object):
         """__ge__(DemodType self, DemodType o) -> bool"""
         return _six_base.DemodType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.DemodType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.DemodType_value_set
     __swig_getmethods__["value"] = _six_base.DemodType_value_get
     if _newclass:
         value = _swig_property(_six_base.DemodType_value_get, _six_base.DemodType_value_set)
 DemodType_swigregister = _six_base.DemodType_swigregister
 DemodType_swigregister(DemodType)
+
+def DemodType_size():
+    """DemodType_size() -> size_t"""
+    return _six_base.DemodType_size()
 
 class DisplayType(_object):
     """Proxy of C++ six::DisplayType class"""
@@ -1155,12 +1275,24 @@ class DisplayType(_object):
         """__ge__(DisplayType self, DisplayType o) -> bool"""
         return _six_base.DisplayType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.DisplayType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.DisplayType_value_set
     __swig_getmethods__["value"] = _six_base.DisplayType_value_get
     if _newclass:
         value = _swig_property(_six_base.DisplayType_value_get, _six_base.DisplayType_value_set)
 DisplayType_swigregister = _six_base.DisplayType_swigregister
 DisplayType_swigregister(DisplayType)
+
+def DisplayType_size():
+    """DisplayType_size() -> size_t"""
+    return _six_base.DisplayType_size()
 
 class DualPolarizationType(_object):
     """Proxy of C++ six::DualPolarizationType class"""
@@ -1178,6 +1310,7 @@ class DualPolarizationType(_object):
     RHC_LHC = _six_base.DualPolarizationType_RHC_LHC
     LHC_RHC = _six_base.DualPolarizationType_LHC_RHC
     LHC_LHC = _six_base.DualPolarizationType_LHC_LHC
+    UNKNOWN = _six_base.DualPolarizationType_UNKNOWN
     NOT_SET = _six_base.DualPolarizationType_NOT_SET
 
     def __init__(self, *args):
@@ -1234,12 +1367,24 @@ class DualPolarizationType(_object):
         """__ge__(DualPolarizationType self, DualPolarizationType o) -> bool"""
         return _six_base.DualPolarizationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.DualPolarizationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.DualPolarizationType_value_set
     __swig_getmethods__["value"] = _six_base.DualPolarizationType_value_get
     if _newclass:
         value = _swig_property(_six_base.DualPolarizationType_value_get, _six_base.DualPolarizationType_value_set)
 DualPolarizationType_swigregister = _six_base.DualPolarizationType_swigregister
 DualPolarizationType_swigregister(DualPolarizationType)
+
+def DualPolarizationType_size():
+    """DualPolarizationType_size() -> size_t"""
+    return _six_base.DualPolarizationType_size()
 
 class EarthModelType(_object):
     """Proxy of C++ six::EarthModelType class"""
@@ -1305,12 +1450,24 @@ class EarthModelType(_object):
         """__ge__(EarthModelType self, EarthModelType o) -> bool"""
         return _six_base.EarthModelType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.EarthModelType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.EarthModelType_value_set
     __swig_getmethods__["value"] = _six_base.EarthModelType_value_get
     if _newclass:
         value = _swig_property(_six_base.EarthModelType_value_get, _six_base.EarthModelType_value_set)
 EarthModelType_swigregister = _six_base.EarthModelType_swigregister
 EarthModelType_swigregister(EarthModelType)
+
+def EarthModelType_size():
+    """EarthModelType_size() -> size_t"""
+    return _six_base.EarthModelType_size()
 
 class FFTSign(_object):
     """Proxy of C++ six::FFTSign class"""
@@ -1377,12 +1534,24 @@ class FFTSign(_object):
         """__ge__(FFTSign self, FFTSign o) -> bool"""
         return _six_base.FFTSign___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.FFTSign_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.FFTSign_value_set
     __swig_getmethods__["value"] = _six_base.FFTSign_value_get
     if _newclass:
         value = _swig_property(_six_base.FFTSign_value_get, _six_base.FFTSign_value_set)
 FFTSign_swigregister = _six_base.FFTSign_swigregister
 FFTSign_swigregister(FFTSign)
+
+def FFTSign_size():
+    """FFTSign_size() -> size_t"""
+    return _six_base.FFTSign_size()
 
 class ImageBeamCompensationType(_object):
     """Proxy of C++ six::ImageBeamCompensationType class"""
@@ -1449,12 +1618,24 @@ class ImageBeamCompensationType(_object):
         """__ge__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"""
         return _six_base.ImageBeamCompensationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ImageBeamCompensationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ImageBeamCompensationType_value_set
     __swig_getmethods__["value"] = _six_base.ImageBeamCompensationType_value_get
     if _newclass:
         value = _swig_property(_six_base.ImageBeamCompensationType_value_get, _six_base.ImageBeamCompensationType_value_set)
 ImageBeamCompensationType_swigregister = _six_base.ImageBeamCompensationType_swigregister
 ImageBeamCompensationType_swigregister(ImageBeamCompensationType)
+
+def ImageBeamCompensationType_size():
+    """ImageBeamCompensationType_size() -> size_t"""
+    return _six_base.ImageBeamCompensationType_size()
 
 class ImageFormationType(_object):
     """Proxy of C++ six::ImageFormationType class"""
@@ -1523,12 +1704,24 @@ class ImageFormationType(_object):
         """__ge__(ImageFormationType self, ImageFormationType o) -> bool"""
         return _six_base.ImageFormationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ImageFormationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ImageFormationType_value_set
     __swig_getmethods__["value"] = _six_base.ImageFormationType_value_get
     if _newclass:
         value = _swig_property(_six_base.ImageFormationType_value_get, _six_base.ImageFormationType_value_set)
 ImageFormationType_swigregister = _six_base.ImageFormationType_swigregister
 ImageFormationType_swigregister(ImageFormationType)
+
+def ImageFormationType_size():
+    """ImageFormationType_size() -> size_t"""
+    return _six_base.ImageFormationType_size()
 
 class MagnificationMethod(_object):
     """Proxy of C++ six::MagnificationMethod class"""
@@ -1545,7 +1738,7 @@ class MagnificationMethod(_object):
     def __init__(self, *args):
         """
         __init__(six::MagnificationMethod self) -> MagnificationMethod
-        __init__(six::MagnificationMethod self, std::string const & s) -> MagnificationMethod
+        __init__(six::MagnificationMethod self, std::string s) -> MagnificationMethod
         __init__(six::MagnificationMethod self, int i) -> MagnificationMethod
         """
         this = _six_base.new_MagnificationMethod(*args)
@@ -1596,12 +1789,24 @@ class MagnificationMethod(_object):
         """__ge__(MagnificationMethod self, MagnificationMethod o) -> bool"""
         return _six_base.MagnificationMethod___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.MagnificationMethod_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.MagnificationMethod_value_set
     __swig_getmethods__["value"] = _six_base.MagnificationMethod_value_get
     if _newclass:
         value = _swig_property(_six_base.MagnificationMethod_value_get, _six_base.MagnificationMethod_value_set)
 MagnificationMethod_swigregister = _six_base.MagnificationMethod_swigregister
 MagnificationMethod_swigregister(MagnificationMethod)
+
+def MagnificationMethod_size():
+    """MagnificationMethod_size() -> size_t"""
+    return _six_base.MagnificationMethod_size()
 
 class OrientationType(_object):
     """Proxy of C++ six::OrientationType class"""
@@ -1671,12 +1876,24 @@ class OrientationType(_object):
         """__ge__(OrientationType self, OrientationType o) -> bool"""
         return _six_base.OrientationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.OrientationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.OrientationType_value_set
     __swig_getmethods__["value"] = _six_base.OrientationType_value_get
     if _newclass:
         value = _swig_property(_six_base.OrientationType_value_get, _six_base.OrientationType_value_set)
 OrientationType_swigregister = _six_base.OrientationType_swigregister
 OrientationType_swigregister(OrientationType)
+
+def OrientationType_size():
+    """OrientationType_size() -> size_t"""
+    return _six_base.OrientationType_size()
 
 class PixelType(_object):
     """Proxy of C++ six::PixelType class"""
@@ -1749,12 +1966,24 @@ class PixelType(_object):
         """__ge__(PixelType self, PixelType o) -> bool"""
         return _six_base.PixelType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.PixelType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.PixelType_value_set
     __swig_getmethods__["value"] = _six_base.PixelType_value_get
     if _newclass:
         value = _swig_property(_six_base.PixelType_value_get, _six_base.PixelType_value_set)
 PixelType_swigregister = _six_base.PixelType_swigregister
 PixelType_swigregister(PixelType)
+
+def PixelType_size():
+    """PixelType_size() -> size_t"""
+    return _six_base.PixelType_size()
 
 class PolarizationSequenceType(_object):
     """Proxy of C++ six::PolarizationSequenceType class"""
@@ -1775,14 +2004,16 @@ class PolarizationSequenceType(_object):
     def __init__(self, *args):
         """
         __init__(six::PolarizationSequenceType self) -> PolarizationSequenceType
-        __init__(six::PolarizationSequenceType self, std::string const & str) -> PolarizationSequenceType
-        __init__(six::PolarizationSequenceType self, int intValue) -> PolarizationSequenceType
+        __init__(six::PolarizationSequenceType self, std::string s) -> PolarizationSequenceType
+        __init__(six::PolarizationSequenceType self, int i) -> PolarizationSequenceType
         """
         this = _six_base.new_PolarizationSequenceType(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
+    __swig_destroy__ = _six_base.delete_PolarizationSequenceType
+    __del__ = lambda self: None
 
     def toString(self):
         """toString(PolarizationSequenceType self) -> std::string"""
@@ -1824,14 +2055,24 @@ class PolarizationSequenceType(_object):
         """__ge__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"""
         return _six_base.PolarizationSequenceType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.PolarizationSequenceType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.PolarizationSequenceType_value_set
     __swig_getmethods__["value"] = _six_base.PolarizationSequenceType_value_get
     if _newclass:
         value = _swig_property(_six_base.PolarizationSequenceType_value_get, _six_base.PolarizationSequenceType_value_set)
-    __swig_destroy__ = _six_base.delete_PolarizationSequenceType
-    __del__ = lambda self: None
 PolarizationSequenceType_swigregister = _six_base.PolarizationSequenceType_swigregister
 PolarizationSequenceType_swigregister(PolarizationSequenceType)
+
+def PolarizationSequenceType_size():
+    """PolarizationSequenceType_size() -> size_t"""
+    return _six_base.PolarizationSequenceType_size()
 
 class PolarizationType(_object):
     """Proxy of C++ six::PolarizationType class"""
@@ -1850,14 +2091,16 @@ class PolarizationType(_object):
     def __init__(self, *args):
         """
         __init__(six::PolarizationType self) -> PolarizationType
-        __init__(six::PolarizationType self, std::string const & str) -> PolarizationType
-        __init__(six::PolarizationType self, int intValue) -> PolarizationType
+        __init__(six::PolarizationType self, std::string s) -> PolarizationType
+        __init__(six::PolarizationType self, int i) -> PolarizationType
         """
         this = _six_base.new_PolarizationType(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
+    __swig_destroy__ = _six_base.delete_PolarizationType
+    __del__ = lambda self: None
 
     def toString(self):
         """toString(PolarizationType self) -> std::string"""
@@ -1899,14 +2142,24 @@ class PolarizationType(_object):
         """__ge__(PolarizationType self, PolarizationType o) -> bool"""
         return _six_base.PolarizationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.PolarizationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.PolarizationType_value_set
     __swig_getmethods__["value"] = _six_base.PolarizationType_value_get
     if _newclass:
         value = _swig_property(_six_base.PolarizationType_value_get, _six_base.PolarizationType_value_set)
-    __swig_destroy__ = _six_base.delete_PolarizationType
-    __del__ = lambda self: None
 PolarizationType_swigregister = _six_base.PolarizationType_swigregister
 PolarizationType_swigregister(PolarizationType)
+
+def PolarizationType_size():
+    """PolarizationType_size() -> size_t"""
+    return _six_base.PolarizationType_size()
 
 class ProjectionType(_object):
     """Proxy of C++ six::ProjectionType class"""
@@ -1975,12 +2228,24 @@ class ProjectionType(_object):
         """__ge__(ProjectionType self, ProjectionType o) -> bool"""
         return _six_base.ProjectionType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.ProjectionType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.ProjectionType_value_set
     __swig_getmethods__["value"] = _six_base.ProjectionType_value_get
     if _newclass:
         value = _swig_property(_six_base.ProjectionType_value_get, _six_base.ProjectionType_value_set)
 ProjectionType_swigregister = _six_base.ProjectionType_swigregister
 ProjectionType_swigregister(ProjectionType)
+
+def ProjectionType_size():
+    """ProjectionType_size() -> size_t"""
+    return _six_base.ProjectionType_size()
 
 class RMAlgoType(_object):
     """Proxy of C++ six::RMAlgoType class"""
@@ -2048,12 +2313,24 @@ class RMAlgoType(_object):
         """__ge__(RMAlgoType self, RMAlgoType o) -> bool"""
         return _six_base.RMAlgoType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.RMAlgoType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.RMAlgoType_value_set
     __swig_getmethods__["value"] = _six_base.RMAlgoType_value_get
     if _newclass:
         value = _swig_property(_six_base.RMAlgoType_value_get, _six_base.RMAlgoType_value_set)
 RMAlgoType_swigregister = _six_base.RMAlgoType_swigregister
 RMAlgoType_swigregister(RMAlgoType)
+
+def RMAlgoType_size():
+    """RMAlgoType_size() -> size_t"""
+    return _six_base.RMAlgoType_size()
 
 class RadarModeType(_object):
     """Proxy of C++ six::RadarModeType class"""
@@ -2122,12 +2399,24 @@ class RadarModeType(_object):
         """__ge__(RadarModeType self, RadarModeType o) -> bool"""
         return _six_base.RadarModeType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.RadarModeType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.RadarModeType_value_set
     __swig_getmethods__["value"] = _six_base.RadarModeType_value_get
     if _newclass:
         value = _swig_property(_six_base.RadarModeType_value_get, _six_base.RadarModeType_value_set)
 RadarModeType_swigregister = _six_base.RadarModeType_swigregister
 RadarModeType_swigregister(RadarModeType)
+
+def RadarModeType_size():
+    """RadarModeType_size() -> size_t"""
+    return _six_base.RadarModeType_size()
 
 class RegionType(_object):
     """Proxy of C++ six::RegionType class"""
@@ -2194,12 +2483,24 @@ class RegionType(_object):
         """__ge__(RegionType self, RegionType o) -> bool"""
         return _six_base.RegionType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.RegionType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.RegionType_value_set
     __swig_getmethods__["value"] = _six_base.RegionType_value_get
     if _newclass:
         value = _swig_property(_six_base.RegionType_value_get, _six_base.RegionType_value_set)
 RegionType_swigregister = _six_base.RegionType_swigregister
 RegionType_swigregister(RegionType)
+
+def RegionType_size():
+    """RegionType_size() -> size_t"""
+    return _six_base.RegionType_size()
 
 class RowColEnum(_object):
     """Proxy of C++ six::RowColEnum class"""
@@ -2266,12 +2567,24 @@ class RowColEnum(_object):
         """__ge__(RowColEnum self, RowColEnum o) -> bool"""
         return _six_base.RowColEnum___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.RowColEnum_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.RowColEnum_value_set
     __swig_getmethods__["value"] = _six_base.RowColEnum_value_get
     if _newclass:
         value = _swig_property(_six_base.RowColEnum_value_get, _six_base.RowColEnum_value_set)
 RowColEnum_swigregister = _six_base.RowColEnum_swigregister
 RowColEnum_swigregister(RowColEnum)
+
+def RowColEnum_size():
+    """RowColEnum_size() -> size_t"""
+    return _six_base.RowColEnum_size()
 
 class SCPType(_object):
     """Proxy of C++ six::SCPType class"""
@@ -2338,12 +2651,24 @@ class SCPType(_object):
         """__ge__(SCPType self, SCPType o) -> bool"""
         return _six_base.SCPType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.SCPType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.SCPType_value_set
     __swig_getmethods__["value"] = _six_base.SCPType_value_get
     if _newclass:
         value = _swig_property(_six_base.SCPType_value_get, _six_base.SCPType_value_set)
 SCPType_swigregister = _six_base.SCPType_swigregister
 SCPType_swigregister(SCPType)
+
+def SCPType_size():
+    """SCPType_size() -> size_t"""
+    return _six_base.SCPType_size()
 
 class SideOfTrackType(_object):
     """Proxy of C++ six::SideOfTrackType class"""
@@ -2410,12 +2735,24 @@ class SideOfTrackType(_object):
         """__ge__(SideOfTrackType self, SideOfTrackType o) -> bool"""
         return _six_base.SideOfTrackType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.SideOfTrackType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.SideOfTrackType_value_set
     __swig_getmethods__["value"] = _six_base.SideOfTrackType_value_get
     if _newclass:
         value = _swig_property(_six_base.SideOfTrackType_value_get, _six_base.SideOfTrackType_value_set)
 SideOfTrackType_swigregister = _six_base.SideOfTrackType_swigregister
 SideOfTrackType_swigregister(SideOfTrackType)
+
+def SideOfTrackType_size():
+    """SideOfTrackType_size() -> size_t"""
+    return _six_base.SideOfTrackType_size()
 
 class SlowTimeBeamCompensationType(_object):
     """Proxy of C++ six::SlowTimeBeamCompensationType class"""
@@ -2483,12 +2820,24 @@ class SlowTimeBeamCompensationType(_object):
         """__ge__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"""
         return _six_base.SlowTimeBeamCompensationType___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.SlowTimeBeamCompensationType_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.SlowTimeBeamCompensationType_value_set
     __swig_getmethods__["value"] = _six_base.SlowTimeBeamCompensationType_value_get
     if _newclass:
         value = _swig_property(_six_base.SlowTimeBeamCompensationType_value_get, _six_base.SlowTimeBeamCompensationType_value_set)
 SlowTimeBeamCompensationType_swigregister = _six_base.SlowTimeBeamCompensationType_swigregister
 SlowTimeBeamCompensationType_swigregister(SlowTimeBeamCompensationType)
+
+def SlowTimeBeamCompensationType_size():
+    """SlowTimeBeamCompensationType_size() -> size_t"""
+    return _six_base.SlowTimeBeamCompensationType_size()
 
 class XYZEnum(_object):
     """Proxy of C++ six::XYZEnum class"""
@@ -2556,12 +2905,24 @@ class XYZEnum(_object):
         """__ge__(XYZEnum self, XYZEnum o) -> bool"""
         return _six_base.XYZEnum___ge__(self, o)
 
+
+    def size():
+        """size() -> size_t"""
+        return _six_base.XYZEnum_size()
+
+    if _newclass:
+        size = staticmethod(size)
+    __swig_getmethods__["size"] = lambda x: size
     __swig_setmethods__["value"] = _six_base.XYZEnum_value_set
     __swig_getmethods__["value"] = _six_base.XYZEnum_value_get
     if _newclass:
         value = _swig_property(_six_base.XYZEnum_value_get, _six_base.XYZEnum_value_set)
 XYZEnum_swigregister = _six_base.XYZEnum_swigregister
 XYZEnum_swigregister(XYZEnum)
+
+def XYZEnum_size():
+    """XYZEnum_size() -> size_t"""
+    return _six_base.XYZEnum_size()
 
 class DESValidationException(coda.coda_except.Exception):
     """Proxy of C++ six::DESValidationException class"""
@@ -2744,6 +3105,16 @@ class SCP(_object):
     if _newclass:
         llh = _swig_property(_six_base.SCP_llh_get, _six_base.SCP_llh_set)
 
+    def __eq__(self, rhs):
+        """__eq__(SCP self, SCP rhs) -> bool"""
+        return _six_base.SCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(SCP self, SCP rhs) -> bool"""
+        return _six_base.SCP___ne__(self, rhs)
+
+
     def __init__(self):
         """__init__(six::SCP self) -> SCP"""
         this = _six_base.new_SCP()
@@ -2771,11 +3142,36 @@ class AmplitudeTable(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.AmplitudeTable___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.AmplitudeTable___ne__(self, rhs)
+
+
+    def clone(self):
+        """clone(AmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.AmplitudeTable_clone(self)
+
     __swig_destroy__ = _six_base.delete_AmplitudeTable
     __del__ = lambda self: None
 AmplitudeTable_swigregister = _six_base.AmplitudeTable_swigregister
 AmplitudeTable_swigregister(AmplitudeTable)
 
+
+_six_base.FRAME_MODE_swigconstant(_six_base)
+FRAME_MODE = _six_base.FRAME_MODE
+
+_six_base.SCAN_MODE_swigconstant(_six_base)
+SCAN_MODE = _six_base.SCAN_MODE
+
+def getImageMode(radarMode):
+    """getImageMode(RadarModeType radarMode) -> six::ImageMode"""
+    return _six_base.getImageMode(radarMode)
 class MissingRequiredException(coda.coda_except.Exception):
     """Proxy of C++ six::MissingRequiredException class"""
     __swig_setmethods__ = {}
@@ -2997,6 +3393,16 @@ class ParameterCollection(_object):
         return _six_base.ParameterCollection_back(self, *args)
 
 
+    def __eq__(self, rhs):
+        """__eq__(ParameterCollection self, ParameterCollection rhs) -> bool"""
+        return _six_base.ParameterCollection___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ParameterCollection self, ParameterCollection rhs) -> bool"""
+        return _six_base.ParameterCollection___ne__(self, rhs)
+
+
     def __getitem__(self, i):
         """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
         return _six_base.ParameterCollection___getitem__(self, i)
@@ -3133,6 +3539,16 @@ class CorrCoefs(_object):
     __swig_getmethods__["v2v3"] = _six_base.CorrCoefs_v2v3_get
     if _newclass:
         v2v3 = _swig_property(_six_base.CorrCoefs_v2v3_get, _six_base.CorrCoefs_v2v3_set)
+
+    def __eq__(self, rhs):
+        """__eq__(CorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.CorrCoefs___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(CorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.CorrCoefs___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_CorrCoefs
     __del__ = lambda self: None
 CorrCoefs_swigregister = _six_base.CorrCoefs_swigregister
@@ -3189,6 +3605,16 @@ class PosVelError(_object):
     __swig_getmethods__["positionDecorr"] = _six_base.PosVelError_positionDecorr_get
     if _newclass:
         positionDecorr = _swig_property(_six_base.PosVelError_positionDecorr_get, _six_base.PosVelError_positionDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(PosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.PosVelError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(PosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.PosVelError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_PosVelError
     __del__ = lambda self: None
 PosVelError_swigregister = _six_base.PosVelError_swigregister
@@ -3225,6 +3651,16 @@ class RadarSensor(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(RadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.RadarSensor___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(RadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.RadarSensor___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_RadarSensor
     __del__ = lambda self: None
 RadarSensor_swigregister = _six_base.RadarSensor_swigregister
@@ -3257,6 +3693,16 @@ class TropoError(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(TropoError self, TropoError rhs) -> bool"""
+        return _six_base.TropoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(TropoError self, TropoError rhs) -> bool"""
+        return _six_base.TropoError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_TropoError
     __del__ = lambda self: None
 TropoError_swigregister = _six_base.TropoError_swigregister
@@ -3293,6 +3739,16 @@ class IonoError(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(IonoError self, IonoError rhs) -> bool"""
+        return _six_base.IonoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(IonoError self, IonoError rhs) -> bool"""
+        return _six_base.IonoError___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_IonoError
     __del__ = lambda self: None
 IonoError_swigregister = _six_base.IonoError_swigregister
@@ -3329,6 +3785,16 @@ class Components(_object):
     __swig_getmethods__["ionoError"] = _six_base.Components_ionoError_get
     if _newclass:
         ionoError = _swig_property(_six_base.Components_ionoError_get, _six_base.Components_ionoError_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Components self, Components rhs) -> bool"""
+        return _six_base.Components___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Components self, Components rhs) -> bool"""
+        return _six_base.Components___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_Components
     __del__ = lambda self: None
 Components_swigregister = _six_base.Components_swigregister
@@ -3370,6 +3836,16 @@ class CompositeSCP(_object):
     __swig_getmethods__["xyErr"] = _six_base.CompositeSCP_xyErr_get
     if _newclass:
         xyErr = _swig_property(_six_base.CompositeSCP_xyErr_get, _six_base.CompositeSCP_xyErr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(CompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.CompositeSCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(CompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.CompositeSCP___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_CompositeSCP
     __del__ = lambda self: None
 CompositeSCP_swigregister = _six_base.CompositeSCP_swigregister
@@ -3402,6 +3878,16 @@ class ErrorStatistics(_object):
             self.this.append(this)
         except:
             self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ErrorStatistics___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ErrorStatistics___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_ErrorStatistics
     __del__ = lambda self: None
 ErrorStatistics_swigregister = _six_base.ErrorStatistics_swigregister
@@ -3430,6 +3916,16 @@ class NoiseLevel(_object):
     __swig_getmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_get
     if _newclass:
         noisePoly = _swig_property(_six_base.NoiseLevel_noisePoly_get, _six_base.NoiseLevel_noisePoly_set)
+
+    def __eq__(self, rhs):
+        """__eq__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_NoiseLevel
     __del__ = lambda self: None
 NoiseLevel_swigregister = _six_base.NoiseLevel_swigregister
@@ -3478,6 +3974,16 @@ class Radiometric(_object):
     __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_get
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_gammaZeroSFIncidenceMap_get, _six_base.Radiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs):
+        """__eq__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___ne__(self, rhs)
+
     __swig_destroy__ = _six_base.delete_Radiometric
     __del__ = lambda self: None
 Radiometric_swigregister = _six_base.Radiometric_swigregister
@@ -3724,6 +4230,16 @@ class Options(_object):
         return _six_base.Options_end(self)
 
 
+    def __eq__(self, rhs):
+        """__eq__(Options self, Options rhs) -> bool"""
+        return _six_base.Options___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(Options self, Options rhs) -> bool"""
+        return _six_base.Options___ne__(self, rhs)
+
+
     def __init__(self):
         """__init__(six::Options self) -> Options"""
         this = _six_base.new_Options()
@@ -3962,6 +4478,16 @@ class LatLonCorners(_object):
         """
         return _six_base.LatLonCorners_getCorner(self, *args)
 
+
+    def __eq__(self, rhs):
+        """__eq__(LatLonCorners self, LatLonCorners rhs) -> bool"""
+        return _six_base.LatLonCorners___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(LatLonCorners self, LatLonCorners rhs) -> bool"""
+        return _six_base.LatLonCorners___ne__(self, rhs)
+
     __swig_setmethods__["upperLeft"] = _six_base.LatLonCorners_upperLeft_set
     __swig_getmethods__["upperLeft"] = _six_base.LatLonCorners_upperLeft_get
     if _newclass:
@@ -4014,6 +4540,16 @@ class LatLonAltCorners(_object):
         getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
         """
         return _six_base.LatLonAltCorners_getCorner(self, *args)
+
+
+    def __eq__(self, rhs):
+        """__eq__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
+        return _six_base.LatLonAltCorners___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
+        return _six_base.LatLonAltCorners___ne__(self, rhs)
 
     __swig_setmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_set
     __swig_getmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_get
@@ -4142,6 +4678,16 @@ class ScopedCopyableRadiometric(_object):
     __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___ne__(self, rhs)
+
 ScopedCopyableRadiometric_swigregister = _six_base.ScopedCopyableRadiometric_swigregister
 ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
 
@@ -4225,6 +4771,16 @@ class ScopedCopyableErrorStatistics(_object):
     __swig_getmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_get
     if _newclass:
         additionalParameters = _swig_property(_six_base.ScopedCopyableErrorStatistics_additionalParameters_get, _six_base.ScopedCopyableErrorStatistics_additionalParameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___ne__(self, rhs)
+
 ScopedCopyableErrorStatistics_swigregister = _six_base.ScopedCopyableErrorStatistics_swigregister
 ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 
@@ -4356,6 +4912,16 @@ class ScopedCopyableCorrCoefs(_object):
     __swig_getmethods__["v2v3"] = _six_base.ScopedCopyableCorrCoefs_v2v3_get
     if _newclass:
         v2v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v2v3_get, _six_base.ScopedCopyableCorrCoefs_v2v3_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.ScopedCopyableCorrCoefs___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
+        return _six_base.ScopedCopyableCorrCoefs___ne__(self, rhs)
+
 ScopedCopyableCorrCoefs_swigregister = _six_base.ScopedCopyableCorrCoefs_swigregister
 ScopedCopyableCorrCoefs_swigregister(ScopedCopyableCorrCoefs)
 
@@ -4463,6 +5029,16 @@ class ScopedCopyablePosVelError(_object):
     __swig_getmethods__["positionDecorr"] = _six_base.ScopedCopyablePosVelError_positionDecorr_get
     if _newclass:
         positionDecorr = _swig_property(_six_base.ScopedCopyablePosVelError_positionDecorr_get, _six_base.ScopedCopyablePosVelError_positionDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.ScopedCopyablePosVelError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
+        return _six_base.ScopedCopyablePosVelError___ne__(self, rhs)
+
 ScopedCopyablePosVelError_swigregister = _six_base.ScopedCopyablePosVelError_swigregister
 ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 
@@ -4550,6 +5126,16 @@ class ScopedCopyableRadarSensor(_object):
     __swig_getmethods__["rangeBiasDecorr"] = _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get
     if _newclass:
         rangeBiasDecorr = _swig_property(_six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get, _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.ScopedCopyableRadarSensor___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
+        return _six_base.ScopedCopyableRadarSensor___ne__(self, rhs)
+
 ScopedCopyableRadarSensor_swigregister = _six_base.ScopedCopyableRadarSensor_swigregister
 ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
 
@@ -4633,6 +5219,16 @@ class ScopedCopyableTropoError(_object):
     __swig_getmethods__["tropoRangeDecorr"] = _six_base.ScopedCopyableTropoError_tropoRangeDecorr_get
     if _newclass:
         tropoRangeDecorr = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeDecorr_get, _six_base.ScopedCopyableTropoError_tropoRangeDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
+        return _six_base.ScopedCopyableTropoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
+        return _six_base.ScopedCopyableTropoError___ne__(self, rhs)
+
 ScopedCopyableTropoError_swigregister = _six_base.ScopedCopyableTropoError_swigregister
 ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
 
@@ -4720,6 +5316,16 @@ class ScopedCopyableIonoError(_object):
     __swig_getmethods__["ionoRangeVertDecorr"] = _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get
     if _newclass:
         ionoRangeVertDecorr = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get, _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
+        return _six_base.ScopedCopyableIonoError___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
+        return _six_base.ScopedCopyableIonoError___ne__(self, rhs)
+
 ScopedCopyableIonoError_swigregister = _six_base.ScopedCopyableIonoError_swigregister
 ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
 
@@ -4807,6 +5413,16 @@ class ScopedCopyableCompositeSCP(_object):
     __swig_getmethods__["xyErr"] = _six_base.ScopedCopyableCompositeSCP_xyErr_get
     if _newclass:
         xyErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_xyErr_get, _six_base.ScopedCopyableCompositeSCP_xyErr_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.ScopedCopyableCompositeSCP___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
+        return _six_base.ScopedCopyableCompositeSCP___ne__(self, rhs)
+
 ScopedCopyableCompositeSCP_swigregister = _six_base.ScopedCopyableCompositeSCP_swigregister
 ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
 
@@ -4894,6 +5510,16 @@ class ScopedCopyableComponents(_object):
     __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
     if _newclass:
         ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___ne__(self, rhs)
+
 ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
 ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 
@@ -4901,6 +5527,118 @@ ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 def makeScopedCopyableComponents():
     """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
     return _six_base.makeScopedCopyableComponents()
+class StdAutoAmplitudeTable(_object):
+    """Proxy of C++ std::auto_ptr<(six::AmplitudeTable)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAmplitudeTable, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoAmplitudeTable, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::AmplitudeTable)> self) -> StdAutoAmplitudeTable"""
+        this = _six_base.new_StdAutoAmplitudeTable()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoAmplitudeTable
+    __del__ = lambda self: None
+StdAutoAmplitudeTable_swigregister = _six_base.StdAutoAmplitudeTable_swigregister
+StdAutoAmplitudeTable_swigregister(StdAutoAmplitudeTable)
+
+class ScopedCloneableAmplitudeTable(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::AmplitudeTable)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableAmplitudeTable, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableAmplitudeTable, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self, AmplitudeTable ptr=None) -> ScopedCloneableAmplitudeTable
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self) -> ScopedCloneableAmplitudeTable
+        __init__(mem::ScopedCloneablePtr<(six::AmplitudeTable)> self, ScopedCloneableAmplitudeTable rhs) -> ScopedCloneableAmplitudeTable
+        """
+        this = _six_base.new_ScopedCloneableAmplitudeTable(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable___deref__(self)
+
+
+    def reset(self, *args):
+        """
+        reset(ScopedCloneableAmplitudeTable self, AmplitudeTable ptr=None)
+        reset(ScopedCloneableAmplitudeTable self)
+        """
+        return _six_base.ScopedCloneableAmplitudeTable_reset(self, *args)
+
+
+    def __getitem__(self, key):
+        """__getitem__(ScopedCloneableAmplitudeTable self, size_t key) -> double"""
+        return _six_base.ScopedCloneableAmplitudeTable___getitem__(self, key)
+
+
+    def __setitem__(self, key, value):
+        """__setitem__(ScopedCloneableAmplitudeTable self, size_t key, double value)"""
+        return _six_base.ScopedCloneableAmplitudeTable___setitem__(self, key, value)
+
+    __swig_destroy__ = _six_base.delete_ScopedCloneableAmplitudeTable
+    __del__ = lambda self: None
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.ScopedCloneableAmplitudeTable___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
+        return _six_base.ScopedCloneableAmplitudeTable___ne__(self, rhs)
+
+
+    def clone(self):
+        """clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
+        return _six_base.ScopedCloneableAmplitudeTable_clone(self)
+
+    __swig_setmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_set
+    __swig_getmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_get
+    if _newclass:
+        numEntries = _swig_property(_six_base.ScopedCloneableAmplitudeTable_numEntries_get, _six_base.ScopedCloneableAmplitudeTable_numEntries_set)
+    __swig_setmethods__["elementSize"] = _six_base.ScopedCloneableAmplitudeTable_elementSize_set
+    __swig_getmethods__["elementSize"] = _six_base.ScopedCloneableAmplitudeTable_elementSize_get
+    if _newclass:
+        elementSize = _swig_property(_six_base.ScopedCloneableAmplitudeTable_elementSize_get, _six_base.ScopedCloneableAmplitudeTable_elementSize_set)
+
+    def getTable(self, *args):
+        """
+        getTable(ScopedCloneableAmplitudeTable self) -> unsigned char
+        getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *
+        """
+        return _six_base.ScopedCloneableAmplitudeTable_getTable(self, *args)
+
+ScopedCloneableAmplitudeTable_swigregister = _six_base.ScopedCloneableAmplitudeTable_swigregister
+ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)
+
+
+def makeScopedCloneableAmplitudeTable():
+    """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
+    return _six_base.makeScopedCloneableAmplitudeTable()
 # This file is compatible with both classic and new-style classes.
 
 

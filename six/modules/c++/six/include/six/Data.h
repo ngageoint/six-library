@@ -55,6 +55,16 @@ struct Data
      */
     virtual Data* clone() const = 0;
 
+    friend bool operator==(const Data& lhs, const Data& rhs)
+    {
+        return lhs.equalTo(rhs);
+    }
+
+    friend bool operator!=(const Data& lhs, const Data& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
     /*!
      *  Data type/class is DERIVED for DerivedData and
      *  COMPLEX for ComplexData
@@ -184,6 +194,9 @@ struct Data
 
     //!  Set the version of the model contained within
     virtual void setVersion(const std::string& version) = 0;
+
+private:
+    virtual bool equalTo(const Data& rhs) const = 0;
 };
 
 }

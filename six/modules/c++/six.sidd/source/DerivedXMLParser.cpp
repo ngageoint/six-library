@@ -503,7 +503,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                     sys::ubyte val = static_cast<sys::ubyte>(
                             intermediateVal);
 
-                    ::memcpy(&(remapLUT->table[k++]), &val,
+                    ::memcpy(&(remapLUT->getTable()[k++]), &val,
                              sizeof(sys::ubyte));
                 }
             }
@@ -529,7 +529,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                 for (size_t ii = 0; ii < lutVals.size(); ++ii)
                 {
                     const short lutVal = str::toType<short>(lutVals[ii]);
-                    ::memcpy(&(remapLUT->table[ii * remapLUT->elementSize]),
+                    ::memcpy(&(remapLUT->getTable()[ii * remapLUT->elementSize]),
                              &lutVal, sizeof(short));
                 }
             }
