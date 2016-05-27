@@ -125,12 +125,12 @@ public:
      *         if the buffer pointer is null
      */
     static void getWidebandData(NITFReadControl& reader,
-                                const ComplexData& complexData,    
+                                const ComplexData& complexData,
                                 std::complex<float>* buffer);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
-     * function loads the wideband data of the region associated with 
+     * function loads the wideband data of the region associated with
      * the reader and ComplexData object.
      *
      * \param reader A loaded NITFReadControl associated with the SICD
@@ -151,7 +151,7 @@ public:
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
                                 std::complex<float>* buffer);
-    
+
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
      * function loads the wideband data associated with the reader
@@ -256,14 +256,25 @@ public:
      * Read a Data object from a SICD XML file.
      * \param xmlPathname The path to the input XML file
      * \param schemPaths A vector of paths to validating schemas
-     * \param log The desired logger
      * \return the Data object represented by the XML
      */
     static std::auto_ptr<ComplexData> parseData(
             const std::string& xmlPathname,
             const std::vector<std::string>& schemaPaths =
-                    std::vector<std::string>(),
-            logging::Logger& log = logging::NullLogger());
+                    std::vector<std::string>());
+
+    /*
+     * Read a Data object from a SICD XML file.
+     * \param xmlPathname The path to the input XML file
+     * \param schemPaths A vector of paths to validating schemas
+     * \param log The desired logger
+     * \return the Data object represented by the XML
+     */
+    static std::auto_ptr<ComplexData> parseData(
+            const std::string& xmlPathname,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
+
 };
 }
 }
