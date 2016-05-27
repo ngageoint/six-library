@@ -76,7 +76,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
  * put aside for now
  */
 %ignore parseData;
-%ignore readXML;
 
 /* ignore some useless (in Python) functions in ParameterCollection */
 %ignore six::ParameterCollection::begin;

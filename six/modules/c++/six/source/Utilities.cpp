@@ -1199,20 +1199,3 @@ void six::getErrors(const ErrorStatistics* errorStats,
         }
     }
 }
-
-std::auto_ptr<Data> six::readXML(const std::string& xmlPath, DataType dataType)
-{
-    io::FileInputStream xmlFileStream(xmlPath);
-    xml::lite::MinidomParser treeBuilder;
-    treeBuilder.parse(xmlFileStream);
-    xmlFileStream.close();
-
-    std::auto_ptr<logging::Logger> log(new logging::NullLogger());
-    six::XMLControl *control = six::XMLControlFactory::getInstance().
-            newXMLControl(dataType, log.get());
-
-    std::auto_ptr<Data> data(control->fromXML(treeBuilder.getDocument(),
-        std::vector<std::string>()));
-
-    return data;
-}

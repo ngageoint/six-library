@@ -254,11 +254,16 @@ public:
 
     /*
      * Read a Data object from a SICD XML file.
-     * \param xmlPath The path to the input XML file
+     * \param xmlPathname The path to the input XML file
+     * \param schemPaths A vector of paths to validating schemas
+     * \param log The desired logger
      * \return the Data object represented by the XML
      */
-    static std::auto_ptr<ComplexData> readXML(
-            const std::string& xmlPathname);
+    static std::auto_ptr<ComplexData> parseData(
+            const std::string& xmlPathname,
+            const std::vector<std::string>& schemaPaths =
+                    std::vector<std::string>(),
+            logging::Logger& log = logging::NullLogger());
 };
 }
 }

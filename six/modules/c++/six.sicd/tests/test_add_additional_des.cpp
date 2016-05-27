@@ -24,6 +24,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
+#include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
 namespace
@@ -60,7 +61,7 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
     std::auto_ptr<six::sicd::ComplexData> data =
-            six::sicd::Utilities::readXML(xmlPathname);
+            six::sicd::Utilities::parseData(xmlPathname);
     six::Container container(six::DataType::COMPLEX);
     container.addData(data.release());
 
@@ -87,7 +88,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     std::auto_ptr<six::sicd::ComplexData> data =
-            six::sicd::Utilities::readXML(xmlPathname);
+            six::sicd::Utilities::parseData(xmlPathname);
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
@@ -125,7 +126,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
-    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlPathname);
+    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::parseData(xmlPathname);
 
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -169,7 +170,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
-    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::readXML(xmlPathname);
+    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::parseData(xmlPathname);
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
@@ -229,6 +230,10 @@ int main(int argc, char** argv)
     {
         validateArguments(argc, argv);
         const std::string xmlPathname(argv[1]);
+
+        six::XMLControlFactory::getInstance().addCreator(
+            six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         bool allPassed = true;
         allPassed = addingNullSegmentWriterShouldThrow(xmlPathname) && allPassed;

@@ -508,20 +508,18 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
     return groundPlaneNormal.unit();
 }
 
-std::auto_ptr<ComplexData> Utilities::readXML(
-        const std::string& xmlPathname)
+std::auto_ptr<ComplexData> Utilities::parseData(
+        const std::string& xmlPathname,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
 {
-    XMLControlFactory::getInstance().addCreator(
-        DataType::COMPLEX,
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::COMPLEX,
         new XMLControlCreatorT<ComplexXMLControl>());
 
     std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(
-            six::readXML(xmlPathname, DataType::COMPLEX).release()));
-
-    if (complexData.get() == NULL)
-    {
-        throw except::Exception(Ctxt("Failed to convert Data* to ComplexData*"));
-    }
+            six::parseData(xmlRegistry, xmlPathname, schemaPaths, log)
+            .release()));
 
     return complexData;
 }
