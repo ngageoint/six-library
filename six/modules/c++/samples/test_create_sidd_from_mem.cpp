@@ -2338,13 +2338,13 @@ int main(int argc, char** argv)
             "multipleImages", "", 0, 1);
     argParser.addArgument("--smallImage", "Use 2x2 image with dummy data",
             cli::STORE_TRUE, "smallImage", "", 0, 1);
+    argParser.addArgument("--version", "1.0.0 or 1.1.0", cli::STORE,
+            "version", "", 0, 1)->setChoices(str::split("1.0.0 1.1.0"))->
+            setDefault("1.0.0");
     argParser.addArgument("output", "File to write to", cli::STORE, "output",
             "output-file", 1, 1, true);
     argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
             "sicdXML", "sicd-xml", 0, 1);
-
-    //We'll get this from command line args once it matters
-    const std::string version("1.0.0");
 
     try
     {
@@ -2363,6 +2363,7 @@ int main(int argc, char** argv)
         }
 
         const bool smallImage = options->get<bool>("smallImage");
+        const std::string version = options->get<std::string>("version");
 
         six::XMLControlFactory::getInstance().addCreator(
                 DataType::COMPLEX,
