@@ -497,7 +497,14 @@ Utilities::getProjectionModel(const DerivedData* data)
 
 
 std::auto_ptr<DerivedData> Utilities::parseData(const std::string& xmlPathname,
-        const std::vector <std::string>& schemaPaths,
+        const std::vector<std::string>& schemaPaths)
+{
+    logging::Logger log;
+    return parseData(xmlPathname, schemaPaths, log);
+}
+
+std::auto_ptr<DerivedData> Utilities::parseData(const std::string& xmlPathname,
+        const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
