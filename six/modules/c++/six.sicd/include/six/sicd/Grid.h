@@ -130,6 +130,10 @@ struct DirectionParameters
         return !(*this == rhs);
     }
 
+    bool validate(logging::Logger& log) const;
+private:
+    const std::string boundsErrorMessage = "Violation of spatial frequency extent bounds.";
+
 };
 
 /*!

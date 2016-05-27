@@ -999,7 +999,6 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
 bool ComplexXMLValidator::validate()
 {
     return (
-        checkFrequencySupportParameters() &&     // 2.3.1  - 2.3.9
         checkSupportParamsAgainstPFA() &&        // 2.3.10 - 2.3.16
         checkWeightFunctions() &&                // 2.4  (omitting 2.5: requires fft, fzero)
         checkARPPoly() &&                        // 2.6  (omitting 2.7: requries derived_sicd_fields.m)
@@ -2025,93 +2024,6 @@ bool ComplexXMLValidator::checkARPPoly()
     return true;
 }
 
-bool ComplexXMLValidator::checkFrequencySupportParameters(const DirectionParameters& direction, const std::string& name)
-{
-    bool valid = true;
-    //2.3.1, 2.3.5
-    if (direction.deltaK2 <= direction.deltaK1)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid." << name << ".DeltaK1: " << direction.deltaK1 << std::endl
-            << "SICD.Grid." << name << ".DetalK2: " << direction.deltaK2 << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-
-    else
-    {
-        // 2.3.2, 2.3.6
-        if (direction.deltaK2 > (1 / (2 * direction.sampleSpacing)) + std::numeric_limits<double>::epsilon())
-        {
-            messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
-                << "0.5/SICD.Grid." << name << ".SampleSpacing: " << 0.5/direction.sampleSpacing << std::endl
-                << "SICD.Grid." << name << ".DetalK2: " << direction.deltaK2 << std::endl;
-            mLog->error(messageBuilder.str());
-            valid = false;
-        }
-
-        // 2.3.3, 2.3.7
-        if (direction.deltaK1 < (-1 / (2 * direction.sampleSpacing)) - std::numeric_limits<double>::epsilon())
-        {
-            messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
-                << "0.5/SICD.Grid." << name << ".SampleSpacing: " << 0.5/direction.sampleSpacing << std::endl
-                << "SICD.Grid." << name << ".DetalK1: " << direction.deltaK1 << std::endl;
-            mLog->error(messageBuilder.str());
-            valid = false;
-        }
-
-        // 2.3.4, 2.3.8
-        if (direction.impulseResponseBandwidth > (direction.deltaK2 - direction.deltaK1) + std::numeric_limits<double>::epsilon())
-        {
-            messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
-                << "SICD.Grid." << name << ".impulseResponseBandwidth: " << direction.impulseResponseBandwidth << std::endl
-                << "SICD.Grid." << name << ".DeltaK2 - SICD.Grid." << name << ".DeltaK1: "
-                << direction.deltaK2 - direction.deltaK1 << std::endl;
-            mLog->error(messageBuilder.str());
-            valid = false;
-        }
-    }
-
-    // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
-    // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
-    // on the vertices of the image, since it is smooth and monotonic in most cases--
-    // although in actuality this is not always the case.  To be totally generic, 
-    // we would have to search for an interior min and max as well
-    std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
-    std::vector<double> deltas = calculateDeltaKs(direction, vertices);
-
-    double minDk = deltas[0];
-    double maxDk = deltas[1];
-
-    double DK_TOL = 1e-2;
-
-    //2.3.9.1, 2.3.9.3
-    if (std::abs(direction.deltaK1 / minDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid." << name << ".DeltaK1: " << direction.deltaK1 << std::endl
-            << "Derived Grid." << name << ".DeltaK1: " << minDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    //2.3.9.2, 2.3.9.4
-    if (std::abs(direction.deltaK2 / maxDk - 1) > DK_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid." << name << ".DeltaK2: " << direction.deltaK2 << std::endl
-            << "Derived Grid." << name << ".DeltaK2: " << maxDk << std::endl;
-        mLog->error(messageBuilder.str());
-        valid = false;
-    }
-    return valid;
-}
-
 std::vector<std::vector<sys::SSize_T> > ComplexXMLValidator::calculateImageVertices()
 {
     std::vector<std::vector<sys::SSize_T> > vertices;
@@ -2181,12 +2093,6 @@ std::vector<double> ComplexXMLValidator::calculateDeltaKs(const DirectionParamet
     deltaKs[0] = deltaK1;
     deltaKs[1] = deltaK2;
     return deltaKs;
-}
-
-bool ComplexXMLValidator::checkFrequencySupportParameters()
-{
-    return (checkFrequencySupportParameters(*sicd.grid->col, "Col") &&
-        checkFrequencySupportParameters(*sicd.grid->row, "Row"));
 }
 
 bool ComplexXMLValidator::checkSupportParamsAgainstPFA()

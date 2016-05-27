@@ -56,8 +56,6 @@ public:
     }
 
 private:
-    bool checkFrequencySupportParameters();
-    bool checkFrequencySupportParameters(const DirectionParameters& direction, const std::string& name);
     bool checkSupportParamsAgainstPFA();
     bool checkWeightFunctions();
     bool checkWeightFunctions(const DirectionParameters& direction, const std::string& name);
