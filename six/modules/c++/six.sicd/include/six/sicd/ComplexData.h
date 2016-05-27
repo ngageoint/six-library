@@ -334,6 +334,9 @@ public:
     }
 
     bool operator==(const ComplexData& rhs) const;
+    bool validate(logging::Logger& log) const;
+    void fillDerivedFields(bool includeDefault=true);
+    void fillDefaultFields();
 
 private:
     virtual bool equalTo(const Data& rhs) const;

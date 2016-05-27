@@ -141,5 +141,23 @@ bool ComplexData::equalTo(const Data& rhs) const
     }
     return false;
 }
+
+bool ComplexData::validate(logging::Logger& log) const
+{
+    // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
+    // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
+    return grid->validate(*collectionInformation, log);
+    return true;
+}
+
+void ComplexData::fillDerivedFields(bool includeDefault)
+{
+    return;
+}
+
+void ComplexData::fillDefaultFields()
+{
+    return;
+}
 }
 }

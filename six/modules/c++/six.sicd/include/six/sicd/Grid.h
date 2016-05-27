@@ -22,6 +22,7 @@
 #ifndef __SIX_GRID_H__
 #define __SIX_GRID_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
 #include "six/Types.h"
@@ -33,6 +34,8 @@ namespace six
 {
 namespace sicd
 {
+struct CollectionInformation;
+
 struct WeightType
 {
     WeightType();
@@ -154,6 +157,9 @@ struct Grid
     {
         return !(*this == rhs);
     }
+
+    bool validate(const CollectionInformation& collectionInformation,
+            logging::Logger& log) const;
 };
 
 }

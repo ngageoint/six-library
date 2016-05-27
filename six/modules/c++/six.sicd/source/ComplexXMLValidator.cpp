@@ -998,10 +998,7 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
 
 bool ComplexXMLValidator::validate()
 {
-    // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
-    // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
-
-    return (checkTimeCOAPoly() &&                // 2.1
+    return (
         checkFFTSigns() &&                       // 2.2
         checkFrequencySupportParameters() &&     // 2.3.1  - 2.3.9
         checkSupportParamsAgainstPFA() &&        // 2.3.10 - 2.3.16
@@ -2027,51 +2024,6 @@ bool ComplexXMLValidator::checkARPPoly()
         return false;
     }
     return true;
-}
-
-bool ComplexXMLValidator::checkTimeCOAPoly()
-{
-    bool valid = true;
-
-    const Poly2D timeCOAPoly = sicd.grid->timeCOAPoly;
-    const std::string mode = sicd.collectionInformation->radarMode.toString();
-
-    //2.1. Scalar TimeCOAPoly means SPOTLIGHT data
-    bool isScalar = true;
-
-    // I don't know that it's impossible for a one-degree polynomial to be expressed
-    // as a polynomial of higher order for whatever reason, so I'm checking each term
-    // manually
-    for (size_t ii = 0; ii <= timeCOAPoly.orderX(); ++ii)
-    {
-        for (size_t jj = 0; jj <= timeCOAPoly.orderY(); ++jj)
-        {
-            if (ii == 0 && jj == 0)
-            {
-                continue;
-            }
-            if (timeCOAPoly[ii][jj] != 0)
-            {
-                isScalar = false;
-                break;
-            }
-        }
-    }
-
-    if (mode == "SPOTLIGHT" && !isScalar)
-    {
-        mLog->error("SPOTLIGHT data should only have scalar TimeCOAPoly.");
-        valid = false;
-    }
-
-    if (mode != "SPOTLIGHT" && isScalar)
-    {
-        mLog->warn("Non-SPOTLIGHT data will generally have more than one nonzero"
-            "term in TimeCOAPoly unless \"formed as spotlight\".");
-        valid = false;
-    }
-
-    return valid;
 }
 
 bool ComplexXMLValidator::checkFFTSigns()

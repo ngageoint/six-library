@@ -56,7 +56,6 @@ public:
     }
 
 private:
-    bool checkTimeCOAPoly();
     bool checkFFTSigns();
     bool checkFrequencySupportParameters();
     bool checkFrequencySupportParameters(const DirectionParameters& direction, const std::string& name);
