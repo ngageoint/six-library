@@ -556,9 +556,9 @@ std::string Utilities::toXMLString(const ComplexData& data,
 
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,
-    		                       schemaPaths,
-								   (logger == NULL) ? &nullLogger : logger,
-					               &xmlRegistry);
+                                   schemaPaths,
+                                   (logger == NULL) ? &nullLogger : logger,
+                                   &xmlRegistry);
 }
 }
 }
