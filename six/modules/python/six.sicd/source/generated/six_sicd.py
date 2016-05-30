@@ -206,10 +206,6 @@ import pysix.scene
 import coda.mem
 import coda.coda_io
 
-def getComplexData(sicdPathname, schemaPaths):
-    """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""
-    return _six_sicd.getComplexData(sicdPathname, schemaPaths)
-
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
@@ -2793,6 +2789,17 @@ class SixSicdUtilities(_object):
         readSicd = staticmethod(readSicd)
     __swig_getmethods__["readSicd"] = lambda x: readSicd
 
+    def getComplexData(*args):
+        """
+        getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        """
+        return _six_sicd.SixSicdUtilities_getComplexData(*args)
+
+    if _newclass:
+        getComplexData = staticmethod(getComplexData)
+    __swig_getmethods__["getComplexData"] = lambda x: getComplexData
+
     def getWidebandData(*args):
         """
         getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
@@ -2815,6 +2822,42 @@ class SixSicdUtilities(_object):
     if _newclass:
         getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
     __swig_getmethods__["getGroundPlaneNormal"] = lambda x: getGroundPlaneNormal
+
+    def parseData(xmlStream, schemaPaths, log):
+        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+    if _newclass:
+        parseData = staticmethod(parseData)
+    __swig_getmethods__["parseData"] = lambda x: parseData
+
+    def parseDataFromFile(pathname, schemaPaths, log):
+        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+    if _newclass:
+        parseDataFromFile = staticmethod(parseDataFromFile)
+    __swig_getmethods__["parseDataFromFile"] = lambda x: parseDataFromFile
+
+    def parseDataFromString(xmlStr, schemaPaths, log):
+        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+    if _newclass:
+        parseDataFromString = staticmethod(parseDataFromString)
+    __swig_getmethods__["parseDataFromString"] = lambda x: parseDataFromString
+
+    def toXMLString(*args):
+        """
+        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+        toXMLString(ComplexData data) -> std::string
+        """
+        return _six_sicd.SixSicdUtilities_toXMLString(*args)
+
+    if _newclass:
+        toXMLString = staticmethod(toXMLString)
+    __swig_getmethods__["toXMLString"] = lambda x: toXMLString
 
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
@@ -2844,6 +2887,13 @@ def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandDa
     """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
     return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
 
+def SixSicdUtilities_getComplexData(*args):
+    """
+    getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    """
+    return _six_sicd.SixSicdUtilities_getComplexData(*args)
+
 def SixSicdUtilities_getWidebandData(*args):
     """
     getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
@@ -2858,6 +2908,26 @@ def SixSicdUtilities_getWidebandData(*args):
 def SixSicdUtilities_getGroundPlaneNormal(data):
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
+
+def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
+    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+def SixSicdUtilities_toXMLString(*args):
+    """
+    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+    SixSicdUtilities_toXMLString(ComplexData data) -> std::string
+    """
+    return _six_sicd.SixSicdUtilities_toXMLString(*args)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class"""
@@ -9401,7 +9471,7 @@ import numpy as np
 from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
 #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")

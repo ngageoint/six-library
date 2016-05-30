@@ -29,10 +29,11 @@ static const size_t NUM_VECTORS = 7;
 
 namespace
 {
+// [-1000, 1000]
 double getRandom()
 {
-    double r = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-    return -1000.0  + r * (1000.0 + 1000.0), 2;
+    const double r = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+    return -1000.0  + r * 2000.0;
 }
 
 cphd::Vector3 getRandomVector3()
