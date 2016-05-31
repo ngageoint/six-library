@@ -21,6 +21,8 @@
  */
 #include "six/sicd/CollectionInformation.h"
 #include "six/sicd/Grid.h"
+#include "six/sicd/ImageData.h"
+#include "six/sicd/Utilities.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -63,7 +65,81 @@ bool DirectionParameters::operator==(const DirectionParameters& rhs) const
         weights == rhs.weights);
 }
 
-bool DirectionParameters::validate(logging::Logger& log) const
+std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& imageData) const
+{
+    double derivedDeltaK1 = 0;
+    double derivedDeltaK2 = 0;
+
+    std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices(imageData);
+
+    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+    {
+        derivedDeltaK1 = std::numeric_limits<double>::infinity();
+        derivedDeltaK2 = -std::numeric_limits<double>::infinity();
+
+        for (size_t ii = 0; ii < vertices[0].size(); ++ii)
+        {
+            double currentDeltaK = deltaKCOAPoly.atY(
+                    static_cast<double>(vertices[1][ii]))(
+                    static_cast<double>(vertices[0][ii]));
+            derivedDeltaK1 = std::min(currentDeltaK, derivedDeltaK1);
+            derivedDeltaK2 = std::max(currentDeltaK, derivedDeltaK2);
+        }
+    }
+
+    derivedDeltaK1 -= (impulseResponseBandwidth / 2);
+    derivedDeltaK2 += (impulseResponseBandwidth / 2);
+
+    // Wrapped spectrum
+    if (derivedDeltaK1 < -(1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2 ||
+            derivedDeltaK2 > (1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2)
+    {
+        derivedDeltaK1 = -(1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2;
+        derivedDeltaK2 = -derivedDeltaK1;
+    }
+
+    std::vector<double> deltaKs;
+    deltaKs.resize(2);
+    deltaKs[0] = derivedDeltaK1;
+    deltaKs[1] = derivedDeltaK2;
+    return deltaKs;
+}
+
+std::vector<std::vector<sys::SSize_T> >
+DirectionParameters::calculateImageVertices(const ImageData& imageData) const
+{
+    std::vector<std::vector<sys::SSize_T> > vertices;
+    vertices.resize(2);
+
+    if (imageData.validData.size() != 0)
+    {
+        //test vertices
+        for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
+        {
+            vertices[0].push_back(imageData.validData[ii].col);
+        }
+        for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
+        {
+            vertices[1].push_back(imageData.validData[ii].row);
+        }
+    }
+    else
+    {
+        //use edges of full image
+        vertices[0].push_back(0);
+        vertices[0].push_back(imageData.validData.size() - 1);
+        vertices[0].push_back(imageData.validData.size() - 1);
+        vertices[0].push_back(0);
+        vertices[1].push_back(0);
+        vertices[1].push_back(0);
+        vertices[1].push_back(imageData.validData.size() - 1);
+        vertices[1].push_back(imageData.validData.size() - 1);
+    }
+    return vertices;
+}
+
+bool DirectionParameters::validate(const ImageData& imageData,
+        logging::Logger& log) const
 {
     bool valid = true;
     std::ostringstream messageBuilder;
@@ -126,38 +202,40 @@ bool DirectionParameters::validate(logging::Logger& log) const
     // on the vertices of the image, since it is smooth and monotonic in most cases--
     // although in actuality this is not always the case.  To be totally generic, 
     // we would have to search for an interior min and max as well
-    /*
-    std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
-    std::vector<double> deltas = calculateDeltaKs(direction, vertices);
 
-    double minDk = deltas[0];
-    double maxDk = deltas[1];
+    std::vector<double> deltas = calculateDeltaKs(imageData);
 
-    double DK_TOL = 1e-2;
+    const double minDk = deltas[0];
+    const double maxDk = deltas[1];
+
+    const double DK_TOL = 1e-2;
 
     //2.3.9.1, 2.3.9.3
-    if (std::abs(direction.deltaK1 / minDk - 1) > DK_TOL)
+    if (std::abs((deltaK1 / Utilities::nonZeroDenominator(minDk)) - 1)
+            > DK_TOL)
     {
         messageBuilder.str("");
         messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid." << name << ".DeltaK1: " << direction.deltaK1 << std::endl
-            << "Derived Grid." << name << ".DeltaK1: " << minDk << std::endl;
-        mLog->error(messageBuilder.str());
+            << "SICD.Grid.Row/Col.DeltaK1: " << deltaK1 << std::endl
+            << "Derived DeltaK1: " << minDk << std::endl;
+        log.error(messageBuilder.str());
         valid = false;
     }
     //2.3.9.2, 2.3.9.4
-    if (std::abs(direction.deltaK2 / maxDk - 1) > DK_TOL)
+    if (std::abs((deltaK2 / Utilities::nonZeroDenominator(maxDk)) - 1)
+            > DK_TOL)
     {
         messageBuilder.str("");
         messageBuilder << boundsErrorMessage << std::endl
-            << "SICD.Grid." << name << ".DeltaK2: " << direction.deltaK2 << std::endl
-            << "Derived Grid." << name << ".DeltaK2: " << maxDk << std::endl;
-        mLog->error(messageBuilder.str());
+            << "SICD.Grid.Row/Col.DeltaK2: " << deltaK2 << std::endl
+            << "Derived DeltaK2: " << maxDk << std::endl;
+        log.error(messageBuilder.str());
         valid = false;
     }
-    */
     return valid;
 }
+
+
 Grid::Grid() :
     // This is a good assumption, I think
     imagePlane(ComplexImagePlaneType::SLANT),
@@ -248,12 +326,14 @@ bool Grid::validateFFTSigns(logging::Logger& log) const
 }
 
 bool Grid::validate(const CollectionInformation& collectionInformation,
+        const ImageData& imageData,
         logging::Logger& log) const
 {
     
     return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
         validateFFTSigns(log) &&                                //2.2
-        row->validate(log) && col->validate(log)                //2.3.1 - 2.3.9
+        row->validate(imageData, log) && 
+        col->validate(imageData, log)                           //2.3.1 - 2.3.9
         );
 }
 

@@ -35,6 +35,7 @@ namespace six
 namespace sicd
 {
 struct CollectionInformation;
+struct ImageData;
 
 struct WeightType
 {
@@ -130,9 +131,17 @@ struct DirectionParameters
         return !(*this == rhs);
     }
 
-    bool validate(logging::Logger& log) const;
+    bool validate(const ImageData& imageData, logging::Logger& log) const;
 private:
-    const std::string boundsErrorMessage = "Violation of spatial frequency extent bounds.";
+    std::vector<std::vector<sys::SSize_T> >
+            calculateImageVertices(const ImageData& imageData) const;
+    /* Return vector contents, in order:
+    * 0) deltaK1 (min)
+    * 1) deltaK2 (max)
+    */
+    std::vector<double> calculateDeltaKs(const ImageData& imageData) const;
+    const std::string boundsErrorMessage =
+            "Violation of spatial frequency extent bounds.";
 
 };
 
@@ -163,6 +172,7 @@ struct Grid
     }
 
     bool validate(const CollectionInformation& collectionInformation,
+            const ImageData& imageData,
             logging::Logger& log) const;
 private:
     bool validateTimeCOAPoly(

@@ -988,9 +988,10 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
         // actuality this is not always the case. To be totally generic, we would 
         // have to search for an interior min and max as well.
 
-        std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
-        std::vector<double> deltas = calculateDeltaKs(rowCol, vertices);
-
+        //TODO: this
+        //std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
+        //std::vector<double> deltas = calculateDeltaKs(rowCol, vertices);
+        std::vector<double> deltas;
         rowCol.deltaK1 = deltas[0];
         rowCol.deltaK2 = deltas[1];
     }
@@ -2022,77 +2023,6 @@ bool ComplexXMLValidator::checkARPPoly()
         return false;
     }
     return true;
-}
-
-std::vector<std::vector<sys::SSize_T> > ComplexXMLValidator::calculateImageVertices()
-{
-    std::vector<std::vector<sys::SSize_T> > vertices;
-    vertices.resize(2);
-
-    if (sicd.imageData.get() != NULL && sicd.imageData->validData.size() != 0)
-    {
-        //test vertices
-        for (size_t ii = 0; ii < sicd.imageData->validData.size(); ++ii)
-        {
-            vertices[0].push_back(sicd.imageData->validData[ii].col);
-        }
-        for (size_t ii = 0; ii < sicd.imageData->validData.size(); ++ii)
-        {
-            vertices[1].push_back(sicd.imageData->validData[ii].row);
-        }
-    }
-    else
-    {
-        //use edges of full image
-        vertices[0].push_back(0);
-        vertices[0].push_back(sicd.imageData->validData.size() - 1);
-        vertices[0].push_back(sicd.imageData->validData.size() - 1);
-        vertices[0].push_back(0);
-        vertices[1].push_back(0);
-        vertices[1].push_back(0);
-        vertices[1].push_back(sicd.imageData->validData.size() - 1);
-        vertices[1].push_back(sicd.imageData->validData.size() - 1);
-    }
-    return vertices;
-}
-
-
-std::vector<double> ComplexXMLValidator::calculateDeltaKs(const DirectionParameters& rowCol, 
-        std::vector<std::vector<sys::SSize_T> > vertices)
-{
-    // The calculations for deltaK1 and deltaK2 are interdependent.
-    // Since we have to calculate both to calculate either, we may as well return both.
-    double deltaK1 = 0;
-    double deltaK2 = 0;
-
-    if (!Init::isUndefined<Poly2D>(rowCol.deltaKCOAPoly))
-    {
-        deltaK1 = std::numeric_limits<double>::infinity();
-        deltaK2 = -std::numeric_limits<double>::infinity();
-
-        for (size_t ii = 0; ii < vertices[0].size(); ++ii)
-        {
-            double currentDeltaK = rowCol.deltaKCOAPoly.atY((double)vertices[1][ii])((double)vertices[0][ii]);
-            deltaK1 = std::min(currentDeltaK, deltaK1);
-            deltaK2 = std::max(currentDeltaK, deltaK2);
-        }
-    }
-
-    deltaK1 -= (rowCol.impulseResponseBandwidth / 2);
-    deltaK2 += (sicd.grid->row->impulseResponseBandwidth / 2);
-
-    // Wrapped spectrum
-    if (deltaK1 < -(1 / rowCol.sampleSpacing) / 2 || deltaK2 >(1 / rowCol.sampleSpacing) / 2)
-    {
-        deltaK1 = -(1 / rowCol.sampleSpacing) / 2;
-        deltaK2 = -deltaK1;
-    }
-
-    std::vector<double> deltaKs;
-    deltaKs.resize(2);
-    deltaKs[0] = deltaK1;
-    deltaKs[1] = deltaK2;
-    return deltaKs;
 }
 
 bool ComplexXMLValidator::checkSupportParamsAgainstPFA()

@@ -251,6 +251,14 @@ public:
     * \return the unit vector normal to the ground plane
     */
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
+
+    /*
+     * Given a desired denominator, return epsilon if  it is equal to 0.
+     * Otherwise, return the number unaltered.
+     * \param denominator The desired denominator
+     * \return the nearest non-zero number
+     */
+    static double nonZeroDenominator(double denominator);
 };
 }
 }
