@@ -61,7 +61,10 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
     std::auto_ptr<six::sicd::ComplexData> data =
-            six::sicd::Utilities::parseData(xmlPathname);
+            six::sicd::Utilities::parseDataFromFile(xmlPathname,
+            std::vector<std::string>(),
+            logging::NullLogger());
+
     six::Container container(six::DataType::COMPLEX);
     container.addData(data.release());
 
@@ -88,7 +91,9 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     std::auto_ptr<six::sicd::ComplexData> data =
-            six::sicd::Utilities::parseData(xmlPathname);
+            six::sicd::Utilities::parseDataFromFile(xmlPathname,
+            std::vector < std::string>(),
+            logging::NullLogger());
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
@@ -126,7 +131,10 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
-    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::parseData(xmlPathname);
+    std::auto_ptr<six::sicd::ComplexData> data =
+            six::sicd::Utilities::parseDataFromFile(xmlPathname,
+            std::vector<std::string>(),
+            logging::NullLogger());
 
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -170,7 +178,10 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
-    std::auto_ptr<six::sicd::ComplexData> data = six::sicd::Utilities::parseData(xmlPathname);
+    std::auto_ptr<six::sicd::ComplexData> data = 
+            six::sicd::Utilities::parseDataFromFile(xmlPathname,
+            std::vector<std::string>(),
+            logging::NullLogger());
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 

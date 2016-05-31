@@ -170,16 +170,121 @@ template<> std::string toString(const six::LatLonCorners& corners);
 // Load the TRE plugins in the given directory
 void loadPluginDir(const std::string& pluginDir);
 
+/*
+ * Parses the XML in 'xmlStream' and converts it into a Data object
+ *
+ * \param xmlReg XML registry
+ * \param xmlStream Input stream containing XML
+ * \param dataType Complex vs. Derived.  If the resulting object is not the
+ * expected type, throw.  To avoid this check, set to NOT_SET.
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of 'xmlStream'
+ */
 std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
 
+/*
+ * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
+ * above but doesn't require the data type to be known in advance.
+ *
+ * \param xmlReg XML registry
+ * \param xmlStream Input stream containing XML
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of 'xmlStream'
+ */
+inline
 std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+                              ::io::InputStream& xmlStream,
+                              const std::vector<std::string>& schemaPaths,
+                              logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+}
+
+/*
+ * Parses the XML in 'pathname' and converts it into a Data object.
+ *
+ * \param xmlReg XML registry
+ * \param pathname File containing plain text XML (not a NITF)
+ * \param dataType Complex vs. Derived.  If the resulting object is not the
+ * expected type, throw.  To avoid this check, set to NOT_SET.
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of the contents of 'pathname'
+ */
+std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
+    DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+
+/*
+ * Parses the XML in 'pathname' and converts it into a Data object.  Same as
+ * above but doesn't require the data type to be known in advance.
+ *
+ * \param xmlReg XML registry
+ * \param pathname File containing plain text XML (not a NITF)
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of the contents of 'pathname'
+ */
+inline
+std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
+                             log);
+}
+
+/*
+ * Parses the XML in 'xmlStr' and converts it into a Data object.
+ *
+ * \param xmlReg XML registry
+ * \param xmlStr XML document as a string
+ * \param dataType Complex vs. Derived.  If the resulting object is not the
+ * expected type, throw.  To avoid this check, set to NOT_SET.
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of 'xmlStr'
+ */
+std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log);
+
+/*
+ * Parses the XML in 'xmlStr' and converts it into a Data object.  Same as
+ * above but doesn't require the data type to be known in advance.
+ *
+ * \param xmlReg XML registry
+ * \param xmlStr XML document as a string
+ * \param schemaPaths Schema path(s)
+ * \param log Logger
+ *
+ * \return Data representation of 'xmlStr'
+ */
+inline
+std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
+                               log);
+}
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,

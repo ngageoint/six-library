@@ -1056,7 +1056,7 @@ std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     else
         throw except::Exception(Ctxt("Unexpected XML type"));
     
-    //! Only SIDDs can have mismatch types
+    //! Only SIDDs can have mismatched types
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)
     {
         throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
@@ -1069,47 +1069,25 @@ std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return std::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
-// In this case, we don't want to have to
-// know if it's complex vs. derived before this call
-std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::auto_ptr<Data> six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
+    DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
     io::FileInputStream inStream(pathname);
-    try
-    {
-        xmlParser.parse(inStream);
-    }
-    catch (const except::Throwable& ex)
-    {
-        throw except::Exception(ex, Ctxt("Invalid XML data"));
-    }
-    const xml::lite::Document* const doc = xmlParser.getDocument();
+    return parseData(xmlReg, inStream, dataType, schemaPaths, log);
+}
 
-    //! Check the root localName for the XML type
-    const std::string xmlType = doc->getRootElement()->getLocalName();
-    DataType xmlDataType;
-    if (str::startsWith(xmlType, "SICD"))
-    {
-        xmlDataType = DataType::COMPLEX;
-    }
-    else if (str::startsWith(xmlType, "SIDD"))
-    {
-        xmlDataType = DataType::DERIVED;
-    }
-    else
-    {
-        throw except::Exception(Ctxt("Unexpected XML type"));
-    }
-
-    //! Create the correct type of XMLControl
-    const std::auto_ptr<six::XMLControl>
-        xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
-
-    return std::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+std::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
 void six::getErrors(const ErrorStatistics* errorStats,

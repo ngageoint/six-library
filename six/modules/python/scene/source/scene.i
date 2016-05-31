@@ -26,8 +26,8 @@
 
 %feature("autodoc", "1");
 
-%include "std_vector.i"
-%include "std_string.i"
+%include <std_vector.i>
+%include <std_string.i>
 
 %import "except.i"
 %import "math_linear.i"

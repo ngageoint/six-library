@@ -24,8 +24,8 @@
 
 %feature("autodoc", "1");
 
-%include "std_string.i"
-%include "std_vector.i"
+%include <std_string.i>
+%include <std_vector.i>
 
 %import "sys.i"
 %import "types.i"
@@ -39,6 +39,7 @@
 %{
 #include "import/cphd.h"
 #include "import/six.h"
+#include "import/six/sicd.h"
 using six::Vector3;
 %}
 %ignore cphd::CPHDXMLControl::toXML(const Metadata& metadata);
@@ -203,5 +204,3 @@ SCOPED_COPYABLE(cphd,AreaPlane);
 SCOPED_COPYABLE(cphd,FxParameters);
 SCOPED_COPYABLE(cphd,TOAParameters);
 SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
-
-

@@ -496,27 +496,56 @@ Utilities::getProjectionModel(const DerivedData* data)
 }
 
 
-std::auto_ptr<DerivedData> Utilities::parseData(const std::string& xmlPathname,
-        const std::vector<std::string>& schemaPaths)
-{
-    logging::Logger log;
-    return parseData(xmlPathname, schemaPaths, log);
-}
-
-std::auto_ptr<DerivedData> Utilities::parseData(const std::string& xmlPathname,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
+std::auto_ptr<DerivedData> Utilities::parseData(
+    ::io::InputStream& xmlStream,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(DataType::DERIVED,
         new XMLControlCreatorT<DerivedXMLControl>());
 
+    std::auto_ptr<Data> data(six::parseData(
+        xmlRegistry, xmlStream, schemaPaths, log));
+
     std::auto_ptr<DerivedData> derivedData(reinterpret_cast<DerivedData*>(
-            six::parseData(xmlRegistry, xmlPathname, schemaPaths, log)
-            .release()));
+        data.release()));
 
     return derivedData;
 }
 
+std::auto_ptr<DerivedData> Utilities::parseDataFromFile(
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    io::FileInputStream inStream(pathname);
+    return parseData(inStream, schemaPaths, log);
+}
+
+std::auto_ptr<DerivedData> Utilities::parseDataFromString(
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(inStream, schemaPaths, log);
+}
+
+std::string Utilities::toXMLString(const DerivedData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::DERIVED,
+        new XMLControlCreatorT<DerivedXMLControl>());
+
+    logging::NullLogger nullLogger;
+    return ::six::toValidXMLString(&data,
+        schemaPaths,
+        (logger == NULL) ? &nullLogger : logger,
+        &xmlRegistry);
+}
 }
 }
