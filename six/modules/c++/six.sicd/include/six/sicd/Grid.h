@@ -132,6 +132,7 @@ struct DirectionParameters
     }
 
     bool validate(const ImageData& imageData, logging::Logger& log) const;
+    void fillDerivedFields(const ImageData& imageData);
 private:
     std::vector<std::vector<sys::SSize_T> >
             calculateImageVertices(const ImageData& imageData) const;
@@ -174,6 +175,7 @@ struct Grid
     bool validate(const CollectionInformation& collectionInformation,
             const ImageData& imageData,
             logging::Logger& log) const;
+    void fillDerivedFields(const ImageData& imageData);
 private:
     bool validateTimeCOAPoly(
             const CollectionInformation& collectionInformation,

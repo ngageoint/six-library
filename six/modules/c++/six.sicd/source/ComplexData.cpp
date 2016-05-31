@@ -152,6 +152,7 @@ bool ComplexData::validate(logging::Logger& log) const
 
 void ComplexData::fillDerivedFields(bool includeDefault)
 {
+    grid->fillDerivedFields(*imageData);
     return;
 }
 

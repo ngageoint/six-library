@@ -973,28 +973,6 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
         size_t defaultWgtSize = 512;
         rowCol.weights = (*calculateWeightFunction(rowCol))(defaultWgtSize);
     }
-
-    // Calulating resolution requires fzero and fft functions
-
-    // DeltaK1/2 are approximated from DeltaKCOAPoly
-    if (!Init::isUndefined(rowCol.deltaKCOAPoly) &&
-        !Init::isUndefined(rowCol.impulseResponseBandwidth) &&
-        !Init::isUndefined(rowCol.sampleSpacing) &&
-        (Init::isUndefined(rowCol.deltaK1) && Init::isUndefined(rowCol.deltaK2)) &&
-        sicd.imageData.get() != NULL)
-    {
-        // Here, we assume the min and max of DeltaKCOAPoly must be on the vertices
-        // of the image, since it is smooth and monotonic in most cases--although in
-        // actuality this is not always the case. To be totally generic, we would 
-        // have to search for an interior min and max as well.
-
-        //TODO: this
-        //std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
-        //std::vector<double> deltas = calculateDeltaKs(rowCol, vertices);
-        std::vector<double> deltas;
-        rowCol.deltaK1 = deltas[0];
-        rowCol.deltaK2 = deltas[1];
-    }
 }
 
 bool ComplexXMLValidator::validate()

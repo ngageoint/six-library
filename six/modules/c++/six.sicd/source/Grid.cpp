@@ -67,6 +67,10 @@ bool DirectionParameters::operator==(const DirectionParameters& rhs) const
 
 std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& imageData) const
 {
+    //Here, we assume the min and max of DeltaKCOAPoly must be
+    // on the vertices of the image, since it is smooth and monotonic in most cases--
+    // although in actuality this is not always the case.  To be totally generic, 
+    // we would have to search for an interior min and max as well
     double derivedDeltaK1 = 0;
     double derivedDeltaK2 = 0;
 
@@ -127,15 +131,39 @@ DirectionParameters::calculateImageVertices(const ImageData& imageData) const
     {
         //use edges of full image
         vertices[0].push_back(0);
-        vertices[0].push_back(imageData.validData.size() - 1);
-        vertices[0].push_back(imageData.validData.size() - 1);
+        vertices[0].push_back(imageData.numCols - 1);
+        vertices[0].push_back(imageData.numCols - 1);
         vertices[0].push_back(0);
         vertices[1].push_back(0);
         vertices[1].push_back(0);
-        vertices[1].push_back(imageData.validData.size() - 1);
-        vertices[1].push_back(imageData.validData.size() - 1);
+        vertices[1].push_back(imageData.numRows - 1);
+        vertices[1].push_back(imageData.numRows - 1);
     }
     return vertices;
+}
+
+void DirectionParameters::fillDerivedFields(const ImageData& imageData)
+{
+    // Calulating resolution requires fzero and fft functions
+
+    // DeltaK1/2 are approximated from DeltaKCOAPoly
+    if (!Init::isUndefined(deltaKCOAPoly) &&
+        !Init::isUndefined(impulseResponseBandwidth) &&
+        !Init::isUndefined(sampleSpacing) &&
+        Init::isUndefined(deltaK1) &&
+        Init::isUndefined(deltaK2))
+    {
+        // Here, we assume the min and max of DeltaKCOAPoly must be on the vertices
+        // of the image, since it is smooth and monotonic in most cases--although in
+        // actuality this is not always the case. To be totally generic, we would 
+        // have to search for an interior min and max as well.
+
+        std::vector<double> deltas = calculateDeltaKs(imageData);
+
+        deltaK1 = deltas[0];
+        deltaK2 = deltas[1];
+    }
+    return;
 }
 
 bool DirectionParameters::validate(const ImageData& imageData,
@@ -158,25 +186,26 @@ bool DirectionParameters::validate(const ImageData& imageData,
     else
     {
         // 2.3.2, 2.3.6
-        if (deltaK2 > (1 / (2 * sampleSpacing)) + std::numeric_limits<double>::epsilon())
+        if (deltaK2 > (1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
+                + std::numeric_limits<double>::epsilon())
         {
-            //Non-0 denominator!!
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
-                << "0.5/SICD.Grid.Row/Col.SampleSpacing: "
-                << 0.5 / sampleSpacing << std::endl
+                << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
+                0.5 / Utilities::nonZeroDenominator(sampleSpacing) << std::endl
                 << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
             log.error(messageBuilder.str());
             valid = false;
         }
 
         // 2.3.3, 2.3.7
-        if (deltaK1 < (-1 / (2 * sampleSpacing)) - std::numeric_limits<double>::epsilon())
+        if (deltaK1 < (-1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
+                - std::numeric_limits<double>::epsilon())
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
-                    0.5 / sampleSpacing << std::endl
+                0.5 / Utilities::nonZeroDenominator(sampleSpacing) << std::endl
                 << "SICD.Grid.Row/Col.DetalK1: " << deltaK1 << std::endl;
             log.error(messageBuilder.str());
             valid = false;
@@ -198,11 +227,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     }
 
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
-    // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
-    // on the vertices of the image, since it is smooth and monotonic in most cases--
-    // although in actuality this is not always the case.  To be totally generic, 
-    // we would have to search for an interior min and max as well
-
+    // ImpRespBW, and SS.
     std::vector<double> deltas = calculateDeltaKs(imageData);
 
     const double minDk = deltas[0];
@@ -335,5 +360,11 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
         row->validate(imageData, log) && 
         col->validate(imageData, log)                           //2.3.1 - 2.3.9
         );
+}
+
+void Grid::fillDerivedFields(const ImageData& imageData)
+{
+    row->fillDerivedFields(imageData);
+    col->fillDerivedFields(imageData);
 }
 
