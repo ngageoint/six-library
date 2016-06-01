@@ -214,17 +214,19 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
                 try
                 {
                     field = tre.getField("DESSHSI").toString();
+                    str::trim(field);
                 }
                 catch (except::NoSuchKeyException&)
                 {
                     continue;
                 }
+
                 if (field != Constants::SICD_DESSHSI &&
                     field != Constants::SIDD_DESSHSI)
                 {
                     continue;
                 }
-                
+
                 if (tre.getTag() !=
                         Constants::DES_USER_DEFINED_SUBHEADER_TAG)
                 {
