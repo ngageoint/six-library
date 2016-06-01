@@ -57,6 +57,7 @@ std::string TempFile::pathname() const
 
 void validateArguments(int argc, char** argv)
 {
+    std::cerr << "Validating\n";
     if (argc != 2)
     {
         std::string message = "Usage: " + sys::Path::basename(argv[0])
@@ -71,13 +72,14 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-std::vector<sys::Int16_T> generateBandData(const six::sicd::ComplexData& data)
+std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<sys::Int16_T> bandData(data.getNumRows() * data.getNumCols());
+    std::vector<six::UByte> bandData(data.getNumRows() * data.getNumCols()
+            * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
-        bandData[ii] = static_cast<sys::Int16_T>(ii);
+        bandData[ii] = static_cast<six::UByte>(ii);
     }
 
     return bandData;
@@ -122,7 +124,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<sys::Int16_T> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -144,7 +146,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cerr << "Test failed" << std::endl;
         return false;
     }
@@ -164,7 +166,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    std::vector<sys::Int16_T> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -190,7 +192,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -210,7 +212,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<sys::Int16_T> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -249,7 +251,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }

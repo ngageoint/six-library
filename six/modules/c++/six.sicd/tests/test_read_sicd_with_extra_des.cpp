@@ -72,13 +72,14 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-std::vector<sys::Int16_T> generateBandData(const six::sicd::ComplexData& data)
+std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<sys::Int16_T> bandData(data.getNumRows() * data.getNumCols());
+    std::vector<six::UByte> bandData(data.getNumRows() * data.getNumCols()
+            * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
-        bandData[ii] = static_cast<sys::Int16_T>(ii);
+        bandData[ii] = static_cast<six::UByte>(ii);
     }
 
     return bandData;
@@ -92,7 +93,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    std::vector<sys::Int16_T> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
@@ -125,7 +126,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     writer.addAdditionalDES(segmentWriter);
 
     std::auto_ptr<TempFile> temp(new TempFile());
-    writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp->pathname());
+    writer.save(&bandData[0], temp->pathname());
     return temp;
 }
 }
