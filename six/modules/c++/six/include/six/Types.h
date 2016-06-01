@@ -141,6 +141,9 @@ struct Constants
     static const char DES_USER_DEFINED_SUBHEADER_ID[];
     static const sys::Uint64_T DES_USER_DEFINED_SUBHEADER_LENGTH;
 
+    static const char SICD_DESSHSI[];
+    static const char SIDD_DESSHSI[];
+
     enum
     {
         ILOC_MAX = 99999

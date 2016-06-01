@@ -53,6 +53,11 @@ const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";
 const sys::Uint64_T Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
 
+const char Constants::SICD_DESSHSI[] = 
+        "SICD Volume 1 Design & Implementation Description Document";
+const char Constants::SIDD_DESSHSI[] =
+        "SIDD Volume 1 Design & Implementation Description Document";
+
 ImageMode getImageMode(RadarModeType radarMode)
 {
     switch (radarMode)
