@@ -29,6 +29,33 @@
 
 namespace
 {
+
+class TempFile
+{
+public:
+    TempFile();
+    ~TempFile();
+
+    std::string pathname() const;
+private:
+    const std::string mName;
+};
+
+TempFile::TempFile() :
+    mName(std::tmpnam(NULL))
+{
+}
+
+TempFile::~TempFile()
+{
+    std::remove(mName.c_str());
+}
+
+std::string TempFile::pathname() const
+{
+    return mName;
+}
+
 void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
@@ -92,7 +119,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
-            std::vector < std::string>(),
+            std::vector<std::string>(),
             logging::NullLogger());
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -113,12 +140,11 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     writer.addAdditionalDES(segmentWriter);
 
-    std::string name(std::tmpnam(NULL));
+    TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
         std::cerr << "Test failed" << std::endl;
-        std::remove(name.c_str());
         return false;
     }
     catch (const except::Exception&)
@@ -159,12 +185,11 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
-    std::string name(std::tmpnam(NULL));
+    TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
         std::cout << "Test passed" << std::endl;
-        std::remove(name.c_str());
         return true;
     }
     catch (const except::Exception& e)
@@ -218,12 +243,11 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
-    std::string name(std::tmpnam(NULL));
+    TempFile temp;
     try
     {
-        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), name);
+        writer.save(reinterpret_cast<const six::UByte*>(&bandData[0]), temp.pathname());
         std::cout << "Test passed" << std::endl;
-        std::remove(name.c_str());
         return true;
     }
     catch (const except::Exception& e)
