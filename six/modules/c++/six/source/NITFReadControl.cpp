@@ -195,10 +195,8 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         {
             if (desid == "XML_DATA_CONTENT")
             {
-                bool isSicd = true;
-                // We better have a user-defined subheader.  For now we
-                // don't actually store off the values, but we do check its
-                // tag and size.  Note that we need to check the subheader
+                // Check whether DES is SICD/SIDD, or something of a different
+                // sort. Note that we need to check the subheader
                 // length first rather than calling tre.getCurrentSize() in
                 // case there is no subheader (in which case
                 // subheader.getSubheaderFields() will throw with a
@@ -227,14 +225,10 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
                     continue;
                 }
                 
-                //We definitiely have a SICD or SIDD now.
                 if (tre.getTag() !=
                         Constants::DES_USER_DEFINED_SUBHEADER_TAG)
                 {
-                    throw except::Exception(Ctxt(
-                        "Expected a user-defined subheader tag of " +
-                        std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
-                        " but got " + tre.getTag()));
+                    continue;
                 }
             }
 
