@@ -35,7 +35,6 @@ class TempFile
 public:
     TempFile();
     ~TempFile();
-
     std::string pathname() const;
 private:
     const std::string mName;
@@ -87,10 +86,11 @@ std::vector<sys::Int16_T> generateBandData(const six::sicd::ComplexData& data)
 bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
+    logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
-            logging::NullLogger());
+            log);
 
     six::Container container(six::DataType::COMPLEX);
     container.addData(data.release());
@@ -117,10 +117,11 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
+    logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
-            logging::NullLogger());
+            log);
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
@@ -157,10 +158,11 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
+    logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
-            logging::NullLogger());
+            log);
 
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -203,10 +205,11 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
-    std::auto_ptr<six::sicd::ComplexData> data = 
+    logging::Logger log;
+    std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
-            logging::NullLogger());
+            log);
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
 
