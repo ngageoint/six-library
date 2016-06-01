@@ -86,10 +86,11 @@ std::vector<sys::Int16_T> generateBandData(const six::sicd::ComplexData& data)
 
 std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
 {
+    logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
         six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
-            logging::NullLogger());
+            log);
 
     std::vector<sys::Int16_T> bandData(
         generateBandData(*data));
@@ -112,7 +113,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     record.getHeader().getUserDefinedSection().appendTRE(usrHdr);
 
     //Good tag, wrong DESSHSI
-    nitf::TRE secondHdr(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG, 
+    nitf::TRE secondHdr(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG,
         six::Constants::DES_USER_DEFINED_SUBHEADER_ID);
     record.getHeader().getUserDefinedSection().appendTRE(secondHdr);
 
