@@ -200,10 +200,25 @@ public:
      */
     void setAbstract(const std::string& abstract);
 
+    void addSegmentData(const char* data, size_t size, nitf::Off start,
+            int byteSkip, bool copyData);
+
+    /* !
+     *  Add a SegmentWriter for writing an extra DES. Writer must
+     *  already have an attached Segment source. For proper usage,
+     *  see test_adding_additional_des.cpp in six/sicd/tests.
+     *  Note that this function has deferred execution. Errors
+     *  will manifest after NITFWriteControl.write() is called.
+     *
+     * \param writer A SegmentWriter with loaded, attached SegmentSource
+     */
+    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
+
 protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
     std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > mSegmentWriters;
     std::map<std::string, void*> mCompressionOptions;
 
     void writeNITF(nitf::IOInterface& os);
@@ -373,10 +388,10 @@ private:
     std::string getDerivedIID(size_t segmentNum, size_t productNum);
 
     static
-	std::string getIID(DataType dataType,
-			           size_t segmentNum,
-			           size_t numImageSegments,
-			           size_t productNum);
+    std::string getIID(DataType dataType,
+                       size_t segmentNum,
+                       size_t numImageSegments,
+                       size_t productNum);
 
     std::string mOrganizationId;
     std::string mLocationId;

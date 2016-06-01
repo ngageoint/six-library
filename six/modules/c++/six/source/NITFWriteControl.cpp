@@ -62,7 +62,7 @@ std::string generateILOC(size_t row, size_t col)
 
 std::string generateILOC(const types::RowCol<size_t>& dims)
 {
-	return generateILOC(dims.row, dims.col);
+    return generateILOC(dims.row, dims.col);
 }
 
 class GetDisplayLutFromLegend
@@ -226,7 +226,7 @@ void NITFWriteControl::initialize(Container* container)
             }
 
             subheader.getImageLocation().set(generateILOC(segmentInfo.rowOffset,
-            										      0));
+                                                          0));
 
             subheader.getTargetId().set(targetId);
 
@@ -338,7 +338,7 @@ void NITFWriteControl::initialize(Container* container)
             // to (which is the first image segment for this product which is
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
             subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(
-            		info.getStartIndex() + 1));
+                       info.getStartIndex() + 1));
 
             setImageSecurity(info.getData()->getClassification(), subheader);
 
@@ -368,43 +368,43 @@ void NITFWriteControl::initialize(Container* container)
 }
 
 std::string NITFWriteControl::getComplexIID(size_t segmentNum,
-											size_t numImageSegments)
+                                            size_t numImageSegments)
 {
-	// SICD###
-	std::ostringstream ostr;
-	ostr << six::toString(DataType(DataType::COMPLEX))
-	     << std::setfill('0') << std::setw(3)
-	     << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
+    // SICD###
+    std::ostringstream ostr;
+    ostr << six::toString(DataType(DataType::COMPLEX))
+         << std::setfill('0') << std::setw(3)
+         << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
 
-	return ostr.str();
+    return ostr.str();
 }
 
 std::string NITFWriteControl::getDerivedIID(size_t segmentNum,
                                             size_t productNum)
 {
-	// SIDD######
-	std::ostringstream ostr;
-	ostr << six::toString(DataType(DataType::DERIVED))
-	     << std::setfill('0')
+    // SIDD######
+    std::ostringstream ostr;
+    ostr << six::toString(DataType(DataType::DERIVED))
+         << std::setfill('0')
          << std::setw(3) << (productNum + 1)
          << std::setw(3) << (segmentNum + 1);
 
-	return ostr.str();
+    return ostr.str();
 }
 
 std::string NITFWriteControl::getIID(DataType dataType,
-		           	   	   	   	   	 size_t segmentNum,
-		           	   	   	   	   	 size_t numImageSegments,
-		           	   	   	   	   	 size_t productNum)
+                                                    size_t segmentNum,
+                                                    size_t numImageSegments,
+                                                    size_t productNum)
 {
-	if (dataType == DataType::COMPLEX)
-	{
-		return getComplexIID(segmentNum, numImageSegments);
-	}
-	else
-	{
-		return getDerivedIID(segmentNum, productNum);
-	}
+    if (dataType == DataType::COMPLEX)
+    {
+        return getComplexIID(segmentNum, numImageSegments);
+    }
+    else
+    {
+        return getDerivedIID(segmentNum, productNum);
+    }
 }
 
 void NITFWriteControl::setBlocking(const std::string& imode,
@@ -937,6 +937,13 @@ void NITFWriteControl::addDataAndWrite(
                                             false);
         deWriter.attachSource(segSource);
     }
+
+    int deWriterIndex = mContainer->getNumData();
+    for (size_t ii = 0; ii < mSegmentWriters.size(); ++ii)
+    {
+        mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
+    }
+
     mWriter.write();
 }
 
@@ -1092,5 +1099,15 @@ void NITFWriteControl::addUserDefinedSubheader(
                 "six::loadPluginDir()"));
     }
     subheader.setSubheaderFields(tre);
+}
+
+void NITFWriteControl::addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+{
+    if (segmentWriter.get() == NULL)
+    {
+        throw except::Exception(Ctxt("segmentWriter is NULL"));
+    }
+
+    mSegmentWriters.push_back(segmentWriter);
 }
 }

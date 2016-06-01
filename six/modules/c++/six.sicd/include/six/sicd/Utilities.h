@@ -125,12 +125,12 @@ public:
      *         if the buffer pointer is null
      */
     static void getWidebandData(NITFReadControl& reader,
-                                const ComplexData& complexData,    
+                                const ComplexData& complexData,
                                 std::complex<float>* buffer);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
-     * function loads the wideband data of the region associated with 
+     * function loads the wideband data of the region associated with
      * the reader and ComplexData object.
      *
      * \param reader A loaded NITFReadControl associated with the SICD
@@ -151,7 +151,7 @@ public:
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
                                 std::complex<float>* buffer);
-    
+
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
      * function loads the wideband data associated with the reader

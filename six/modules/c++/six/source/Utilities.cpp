@@ -24,6 +24,7 @@
 #include <iomanip>
 
 #include <nitf/PluginRegistry.hpp>
+#include <logging/NullLogger.h>
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 

@@ -28,6 +28,7 @@ import subprocess
 import sys
 
 import makeRegressionFiles
+import runMiscTests
 import runPythonScripts
 import runUnitTests
 import checkNITFs
@@ -47,9 +48,13 @@ if platform.system() != 'SunOS':
     if checkNITFs.run() == False:
         print("test in checkNITFS.py failed")
         sys.exit(1)
+
+    if runMiscTests.run() == False:
+    # Tests should report their own errors
+        sys.exit(1)
 else:
     print('Warning: skipping the bulk of the test suite, as Python modules ' +
-          'are by default disabled on Solairs')
+          'are by default disabled on Solaris')
 
 print("Performing byte swap test")
 if subprocess.call([utils.executableName(os.path.join(

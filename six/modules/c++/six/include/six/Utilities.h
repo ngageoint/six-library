@@ -26,6 +26,7 @@
 #include <except/Exception.h>
 #include "six/Types.h"
 #include "six/Data.h"
+#include "six/Enums.h"
 #include "six/XMLControlFactory.h"
 #include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
