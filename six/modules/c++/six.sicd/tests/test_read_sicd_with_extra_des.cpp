@@ -40,14 +40,15 @@ private:
 };
 
 TempFile::TempFile() :
-    mName(std::tmpnam(NULL))
+    //mName(std::tmpnam(NULL))
+    mName("C:\\Users\\jmeans.MDAUS\\Documents\\code\\six-library\\extraStuff.nitf")
 {
 }
 
 TempFile::~TempFile()
 {
 
-    std::remove(mName.c_str());
+    //std::remove(mName.c_str());
 }
 
 std::string TempFile::pathname() const
@@ -106,16 +107,31 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     nitf::DESegment des = record.newDataExtensionSegment();
     des.getSubheader().getFilePartType().set("DE");
     des.getSubheader().getTypeID().set("XML_DATA_CONTENT");
-    des.getSubheader().getVersion().set("01");
+    des.getSubheader().getVersion().set("05");
     des.getSubheader().getSecurityClass().set("U");
+    des.getSubheader().getSubheaderFieldsLength().set(
+            six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH);
 
     //Wrong tag
-    nitf::TRE usrHdr("PIAIMB", "PIAIMB");
-    record.getHeader().getUserDefinedSection().appendTRE(usrHdr);
+    //nitf::TRE usrHdr("PIAIMB", "PIAIMB");
+    //record.getHeader().getUserDefinedSection().appendTRE(usrHdr);
 
     //Good tag, wrong DESSHSI
     nitf::TRE secondHdr(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG,
         six::Constants::DES_USER_DEFINED_SUBHEADER_ID);
+    secondHdr.setField("DESCRC", "99999");
+    secondHdr.setField("DESSHFT", "XML00000");
+    secondHdr.setField("DESSHDT", "2016-06-01T00:00:00Z");
+    secondHdr.setField("DESSHRP", "1234567890123456789012345678901234567890");
+    secondHdr.setField("DESSHSI", std::string(" ", 60));
+    secondHdr.setField("DESSHSV", "Version 10");
+    secondHdr.setField("DESSHSD", "2016-06-01T00:00:00Z");
+    secondHdr.setField("DESSHTN", std::string(" ", 120));
+    secondHdr.setField("DESSHLPG", std::string("1", 125));
+    secondHdr.setField("DESSHLPT", std::string(" ", 20));
+    secondHdr.setField("DESSHLI", std::string(" ", 20));
+    secondHdr.setField("DESSHLIN", std::string(" ", 120));
+    secondHdr.setField("DESSHABS", std::string(" ", 200));
     record.getHeader().getUserDefinedSection().appendTRE(secondHdr);
 
     static const char segmentData[] = "123456789ABCDEF0";
@@ -144,6 +160,7 @@ int main(int argc, char** argv)
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         std::auto_ptr<TempFile> nitf = createNITFFromXML(xmlPathname);
+        //std::auto_ptr<TempFile> nitf(new TempFile());
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
         return 0;
