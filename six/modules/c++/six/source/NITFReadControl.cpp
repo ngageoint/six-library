@@ -88,7 +88,8 @@ DataType NITFReadControl::getDataType(nitf::Record& record)
     {
         return DataType::NOT_SET;
     }
-    return getDataType((nitf::DESegment) des.getFirst().getData());
+    nitf::DESegment segment = (nitf::DESegment) des.getFirst().getData();
+    return getDataType(segment);
 }
 
 DataType NITFReadControl::getDataType(nitf::DESegment& segment)
@@ -145,7 +146,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
         }
         else
         {
-            // We've already checked that it's XML_DATA_CONTENT 
+            // We've already checked that it's XML_DATA_CONTENT
             // with length 773, so the DESSHSI field ought to be
             // present if the plugins are loaded.
             throw except::NoSuchKeyException(Ctxt(
