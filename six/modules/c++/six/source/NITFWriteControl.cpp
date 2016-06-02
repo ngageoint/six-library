@@ -1029,8 +1029,15 @@ void NITFWriteControl::addUserDefinedSubheader(
 
         const std::string dataType =
                 (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
-        tre["DESSHSI"] = dataType +
-                " Volume 1 Design & Implementation Description Document";
+        
+        if (dataType == "SICD")
+        {
+            tre["DESSHSI"] = Constants::SICD_DESSHSI;
+        }
+        else
+        {
+            tre["DESSHSI"] = Constants::SIDD_DESSHSI;
+        }
 
         // This is the publication date and version of the
         // Design and Implementation Description Document 
