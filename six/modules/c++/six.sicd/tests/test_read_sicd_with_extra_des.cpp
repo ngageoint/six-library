@@ -40,15 +40,14 @@ private:
 };
 
 TempFile::TempFile() :
-    //mName(std::tmpnam(NULL))
-    mName("C:\\Users\\jmeans.MDAUS\\Documents\\code\\six-library\\extraStuff.nitf")
+    mName(std::tmpnam(NULL))
+    //mName("C:\\Users\\jmeans.MDAUS\\Documents\\code\\six-library\\extraStuff.nitf")
 {
 }
 
 TempFile::~TempFile()
 {
-
-    //std::remove(mName.c_str());
+    std::remove(mName.c_str());
 }
 
 std::string TempFile::pathname() const
@@ -107,10 +106,11 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     nitf::DESegment des = record.newDataExtensionSegment();
     des.getSubheader().getFilePartType().set("DE");
     des.getSubheader().getTypeID().set("XML_DATA_CONTENT");
-    des.getSubheader().getVersion().set("05");
+    des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
-    des.getSubheader().getSubheaderFieldsLength().set(
-            six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH);
+
+    //des.getSubheader().getSubheaderFieldsLength().set(
+    //        six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH);
 
     //Wrong tag
     //nitf::TRE usrHdr("PIAIMB", "PIAIMB");
@@ -133,6 +133,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     secondHdr.setField("DESSHLIN", std::string(" ", 120));
     secondHdr.setField("DESSHABS", std::string(" ", 200));
     record.getHeader().getUserDefinedSection().appendTRE(secondHdr);
+    des.getSubheader().setSubheaderFields(secondHdr);
 
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
@@ -143,6 +144,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     std::auto_ptr<TempFile> temp(new TempFile());
     writer.save(&bandData[0], temp->pathname());
+    std::cerr << "Saved\n";
     return temp;
 }
 }
@@ -161,6 +163,7 @@ int main(int argc, char** argv)
 
         std::auto_ptr<TempFile> nitf = createNITFFromXML(xmlPathname);
         //std::auto_ptr<TempFile> nitf(new TempFile());
+        std::cerr << "After thing\n";
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
         return 0;
