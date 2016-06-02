@@ -3034,6 +3034,8 @@ Constants.DES_VERSION_STR = _six_base.cvar.Constants_DES_VERSION_STR
 Constants.DES_USER_DEFINED_SUBHEADER_TAG = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_TAG
 Constants.DES_USER_DEFINED_SUBHEADER_ID = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_ID
 Constants.DES_USER_DEFINED_SUBHEADER_LENGTH = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_LENGTH
+Constants.SICD_DESSHSI = _six_base.cvar.Constants_SICD_DESSHSI
+Constants.SIDD_DESSHSI = _six_base.cvar.Constants_SIDD_DESSHSI
 
 def Constants_getNumBytesPerPixel(type):
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
