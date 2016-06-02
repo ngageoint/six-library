@@ -41,15 +41,6 @@ ComplexXMLValidator::ComplexXMLValidator(const ComplexData& data, logging::Logge
 
 void ComplexXMLValidator::fillDerivedFields(ComplexData& data, bool setDefaultValues)
 {
-    if (data.grid.get() != NULL && data.grid->row.get() != NULL)
-    {
-        fillRowCol(*data.grid->row);
-    }
-    if (data.grid.get() != NULL && data.grid->col.get() != NULL)
-    {
-        fillRowCol(*data.grid->col);
-    }
-
     fillSCPTime(data);
     fillARPPoly(data);
     fillRadarCollection(data, setDefaultValues);
@@ -960,18 +951,6 @@ void ComplexXMLValidator::fillSCPTime(ComplexData& data)
             data.grid->timeCOAPoly = Poly2D(1, 1);
             data.grid->timeCOAPoly[0][0] = data.scpcoa->scpTime;
         }
-    }
-}
-
-void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
-{
-    if (rowCol.weightType.get() != NULL && 
-        rowCol.weights.empty() &&
-        (rowCol.weightType->windowName != "UNIFORM" &&
-            rowCol.weightType->windowName != "UNKNOWN"))
-    {
-        size_t defaultWgtSize = 512;
-        rowCol.weights = (*calculateWeightFunction(rowCol))(defaultWgtSize);
     }
 }
 

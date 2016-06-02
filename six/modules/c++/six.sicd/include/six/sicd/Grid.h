@@ -25,6 +25,7 @@
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+#include "six/sicd/Functor.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -134,6 +135,7 @@ struct DirectionParameters
     bool validate(const ImageData& imageData, logging::Logger& log) const;
     void fillDerivedFields(const ImageData& imageData);
 private:
+    std::auto_ptr<Functor> calculateWeightFunction() const;
     std::vector<std::vector<sys::SSize_T> >
             calculateImageVertices(const ImageData& imageData) const;
     /* Return vector contents, in order:

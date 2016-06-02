@@ -109,6 +109,73 @@ std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& image
     return deltaKs;
 }
 
+std::auto_ptr<Functor>
+DirectionParameters::calculateWeightFunction() const
+{
+    std::auto_ptr<Functor> weightFunction;
+    bool useWeightFunction = false;
+
+    if (weightType.get() != NULL)
+    {
+        std::string windowName(weightType->windowName);
+        str::upper(windowName);
+
+        if (windowName == "UNIFORM")
+        {
+            weightFunction.reset(new Identity());
+        }
+        else if (windowName == "HAMMING")
+        {
+            double coef;
+            if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
+            {
+                //A Hamming window is defined in many places as a raised cosine of weight .54,
+                //so this is the default. However, some data use a generalized raised cosine and
+                //call it HAMMING, so we allow for both uses.
+                coef = .54;
+            }
+            else
+            {
+                coef = str::toType<double>(weightType->parameters[0].str());
+            }
+
+            weightFunction.reset(new RaisedCos(coef));
+        }
+        else if (windowName == "HANNING")
+        {
+            weightFunction.reset(new RaisedCos(0.50));
+        }
+        else if (windowName == "KAISER")
+        {
+            weightFunction.reset(new Kaiser(str::toType<double>(
+                    weightType->parameters[0].str())));
+        }
+        else
+        {
+            //TODO: windowName == "TAYLOR"
+            useWeightFunction = true;
+        }
+    }
+    else
+    {
+        useWeightFunction = true;
+    }
+
+    if (useWeightFunction)
+    {
+        if (weights.empty())
+        {
+            weightFunction.reset();
+            return weightFunction;
+        }
+        else
+        {
+            //TODO: interpft(weightFunction)
+        }
+    }
+    return weightFunction;
+}
+
 std::vector<std::vector<sys::SSize_T> >
 DirectionParameters::calculateImageVertices(const ImageData& imageData) const
 {
@@ -162,6 +229,15 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
 
         deltaK1 = deltas[0];
         deltaK2 = deltas[1];
+    }
+
+    if (weightType.get() != NULL &&
+        weights.empty() &&
+        weightType->windowName != "UNIFORM" &&
+        weightType->windowName != "UNKNOWN")
+    {
+        size_t defaultWgtSize = 512;
+        weights = (*calculateWeightFunction())(defaultWgtSize);
     }
     return;
 }

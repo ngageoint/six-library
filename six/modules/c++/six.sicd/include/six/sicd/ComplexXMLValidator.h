@@ -73,7 +73,6 @@ private:
     bool checkRMCR();
     bool checkINCA();
 
-    void fillRowCol(DirectionParameters& rowCol);
     void fillSCPTime(ComplexData& data);
     void fillARPPoly(ComplexData& data);
     void fillRadarCollection(ComplexData& data, bool setDefaultValues);
