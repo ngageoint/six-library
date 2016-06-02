@@ -130,14 +130,13 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
         {
             return DataType::NOT_SET;
         }
-        std::cerr << "Doing a check\n";
         nitf::TRE tre = subheader.getSubheaderFields();
         if (tre.getTag() !=
             Constants::DES_USER_DEFINED_SUBHEADER_TAG)
         {
             return DataType::NOT_SET;
         }
-        std::cerr << "Doing a check\n";
+
         std::string field;
         if (tre.exists("DESSHSI"))
         {
@@ -146,7 +145,6 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
         }
         else
         {
-            std::cerr << "Doing a check\n";
             // We've already checked that it's XML_DATA_CONTENT 
             // with length 773, so the DESSHSI field ought to be
             // present if the plugins are loaded.
