@@ -23,7 +23,7 @@
 #ifndef __SIX_SICD_VALIDATOR_H__
 #define __SIX_SICD_VALIDATOR_H__
 
-#include "six/init.h"
+#include "six/Init.h"
 #include <vector>
 
 namespace six

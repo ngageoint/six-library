@@ -23,7 +23,6 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-//#include <limits>
 #include <six/sicd/Functor.h>
 
 namespace six
@@ -35,7 +34,7 @@ double bessi(size_t order, double x)
 {
     switch (order)
     {
-        case 0: 
+        case 0:
             return bessi0(x);
 
         case 1:
@@ -57,11 +56,11 @@ double bessi0(double x)
         //Polynomial fit
         y = x / 3.75;
         y *= y;
-        ans = 1.0 + y * (3.5156229 + 
-            y * (3.0899424 + 
+        ans = 1.0 + y * (3.5156229 +
+            y * (3.0899424 +
                 y*(1.2067492 +
-                    y * (0.2659732 + 
-                        y * (0.360768e-1 + 
+                    y * (0.2659732 +
+                        y * (0.360768e-1 +
                             y * (0.45813e-2))))));
     }
     else
@@ -106,7 +105,7 @@ double bessi1(double x)
             y * (-0.2895312e-1 +
                 y * (0.1787654e-1 -
                     y * 0.420059e-2));
-        ans = 0.39894228 + 
+        ans = 0.39894228 +
             y * (-0.3988024e-1 +
                 y * (-0.362018e-2 +
                     y * (0.163801e-2 +
@@ -155,7 +154,7 @@ double bessin(size_t order, double x)
         }
     }
     //Normalize with bessi0
-    ans *= bessi0(x) / bi;  
+    ans *= bessi0(x) / bi;
     return x < 0 && (order & 1) ? -ans : ans;
 }
 
@@ -174,11 +173,11 @@ std::vector<double> RaisedCos::operator()(size_t n) const
     }
     if (n % 2 == 0)
     {
-        std::copy(std::begin(ret), std::end(ret), std::back_inserter(ret));
+        std::copy(ret.begin(), ret.end(), std::back_inserter(ret));
     }
     else
     {
-        std::copy(std::begin(ret), std::end(ret) - 1, std::back_inserter(ret));
+        std::copy(ret.begin(), ret.end() - 1, std::back_inserter(ret));
     }
     return ret;
 }

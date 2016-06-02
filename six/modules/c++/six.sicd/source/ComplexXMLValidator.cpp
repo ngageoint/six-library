@@ -194,12 +194,12 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
                 double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
                 if (data.rma->rmat.get() != NULL)
                 {
-                    
+
                     if (Init::isUndefined<double>(data.grid->row->kCenter))
                     {
                         data.grid->row->kCenter = kfc * std::sin(data.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES);
                     }
-                    
+
                     if (Init::isUndefined<double>(data.grid->col->kCenter))
                     {
                         data.grid->col->kCenter = kfc * std::cos(data.rma->rmat->dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES);
@@ -219,7 +219,7 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
             }
         }
 
-        if (data.rma->rmat.get() != NULL && 
+        if (data.rma->rmat.get() != NULL &&
             !Init::isUndefined<Vector3>(data.rma->rmat->refPos) &&
             !Init::isUndefined<Vector3>(data.rma->rmat->refVel))
         {
@@ -246,7 +246,7 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
                 data.grid->col->unitVector = uYAT;
             }
         }
-        
+
         else if (data.rma->rmcr.get() != NULL &&
             !Init::isUndefined<Vector3>(data.rma->rmcr->refPos) &&
             !Init::isUndefined<Vector3>(data.rma->rmcr->refVel))
@@ -323,7 +323,7 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
             !Init::isUndefined<double>(data.radarCollection->txFrequencyMax) &&
             Init::isUndefined<double>(data.rma->inca->freqZero))
         {
-            data.rma->inca->freqZero = (data.radarCollection->txFrequencyMin + 
+            data.rma->inca->freqZero = (data.radarCollection->txFrequencyMin +
                     data.radarCollection->txFrequencyMax ) / 2;
         }
 
@@ -491,7 +491,7 @@ void ComplexXMLValidator::fillRGAZCOMP(ComplexData& data, double fc)
     }
     if (Init::isUndefined<double>(data.rgAzComp->azSF))
     {
-        
+
         data.rgAzComp->azSF = std::sin(data.scpcoa->dopplerConeAngle * math::Constants::DEGREES_TO_RADIANS) /
             data.scpcoa->slantRange;
     }
@@ -536,7 +536,7 @@ void ComplexXMLValidator::fillRGAZCOMP(ComplexData& data, double fc)
     }
     // Derived: Kctr/DeltaKCOAPoly
     // In SICD, if the optional DeltaKCOAPoly field is omitted,
-    // it is assumed to be zero. If the creator of the partial 
+    // it is assumed to be zero. If the creator of the partial
     // SICD metadata just forgot it, or didn't know it, rather
     // than leaving the field off as an explicit declaration of
     // a zero value, the KCtr computation will be wrong if the
@@ -550,7 +550,7 @@ void ComplexXMLValidator::fillRGAZCOMP(ComplexData& data, double fc)
         {
             if (!Init::isUndefined<Poly2D>(data.grid->row->deltaKCOAPoly))
             {
-                data.grid->row->kCenter = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC - 
+                data.grid->row->kCenter = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC -
                     data.grid->row->deltaKCOAPoly.atY(scp[1])(scp[0]);
             }
             else
@@ -687,7 +687,7 @@ void ComplexXMLValidator::fillSCPCOA(ComplexData& data)
     {
         double azNorth = uGPX.dot(uNorth);
         double azEast = uGPX.dot(uEast);
-        data.scpcoa->azimAngle = std::fmod(std::atan2(azEast, azNorth) * 
+        data.scpcoa->azimAngle = std::fmod(std::atan2(azEast, azNorth) *
                 math::Constants::RADIANS_TO_DEGREES, 360);
     }
 
@@ -763,8 +763,8 @@ void ComplexXMLValidator::fillRadarCollection(ComplexData& data, bool setDefault
             {
                 if (data.radarCollection->waveform[ii].get() != NULL)
                 {
-                    derivedMax = std::max(derivedMax, 
-                        data.radarCollection->waveform[ii]->txFrequencyStart + 
+                    derivedMax = std::max(derivedMax,
+                        data.radarCollection->waveform[ii]->txFrequencyStart +
                         data.radarCollection->waveform[ii]->txRFBandwidth);
                 }
             }
@@ -783,7 +783,7 @@ void ComplexXMLValidator::fillRadarCollection(ComplexData& data, bool setDefault
             {
                 wfParameters.rcvFMRate = 0;
             }
-            
+
             if (wfParameters.rcvFMRate == 0 &&
                 wfParameters.rcvDemodType == DemodType::NOT_SET)
             {
@@ -851,7 +851,7 @@ void ComplexXMLValidator::fillRadarCollection(ComplexData& data, bool setDefault
             }
             if (Init::isUndefined<double>(data.radarCollection->waveform[0]->txRFBandwidth))
             {
-                data.radarCollection->waveform[0]->txRFBandwidth = 
+                data.radarCollection->waveform[0]->txRFBandwidth =
                     data.radarCollection->txFrequencyMax - data.radarCollection->txFrequencyMin;
             }
         }
@@ -886,7 +886,7 @@ void ComplexXMLValidator::fillARPPoly(ComplexData& data)
         {
             data.scpcoa->arpPos = Vector3(arpPosEcf);
         }
-        
+
         if (Init::isUndefined<Vector3>(data.scpcoa->arpVel))
         {
             data.scpcoa->arpVel = Vector3(arpVelEcf);
@@ -898,7 +898,7 @@ void ComplexXMLValidator::fillARPPoly(ComplexData& data)
         }
     }
 
-    // A simple ARPPoly can be derived from SCPCOA Pos/Vel/Acc if that was 
+    // A simple ARPPoly can be derived from SCPCOA Pos/Vel/Acc if that was
     // all that was defined
     if (data.scpcoa.get() != NULL &&
         !Init::isUndefined<Vector3>(data.scpcoa->arpPos) &&
@@ -915,12 +915,12 @@ void ComplexXMLValidator::fillARPPoly(ComplexData& data)
         coefs.resize(3);
 
         //constant
-        coefs[0] = data.scpcoa->arpPos - 
+        coefs[0] = data.scpcoa->arpPos -
             data.scpcoa->arpVel * data.scpcoa->scpTime +
             (data.scpcoa->arpAcc / 2) * std::pow(data.scpcoa->scpTime, 2);
 
         //linear
-        coefs[1] = data.scpcoa->arpVel - 
+        coefs[1] = data.scpcoa->arpVel -
             data.scpcoa->arpAcc * data.scpcoa->scpTime;
 
         //quadratic
@@ -965,7 +965,7 @@ void ComplexXMLValidator::fillSCPTime(ComplexData& data)
 
 void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
 {
-    if (rowCol.weightType.get() != NULL && 
+    if (rowCol.weightType.get() != NULL &&
         rowCol.weights.empty() &&
         (rowCol.weightType->windowName != "UNIFORM" &&
             rowCol.weightType->windowName != "UNKNOWN"))
@@ -985,7 +985,7 @@ void ComplexXMLValidator::fillRowCol(DirectionParameters& rowCol)
     {
         // Here, we assume the min and max of DeltaKCOAPoly must be on the vertices
         // of the image, since it is smooth and monotonic in most cases--although in
-        // actuality this is not always the case. To be totally generic, we would 
+        // actuality this is not always the case. To be totally generic, we would
         // have to search for an interior min and max as well.
 
         std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
@@ -1138,7 +1138,7 @@ bool ComplexXMLValidator::checkRGAZCOMP()
         messageBuilder << "Grid.Row.DetlaKCOAPoly must be a single value for RGAZCOMP data";
         mLog->error(messageBuilder.str());
         valid = false;
-    } 
+    }
 
     Vector3 rowUnitVector = sicd.grid->row->unitVector;
     Vector3 colUnitVector = sicd.grid->col->unitVector;
@@ -1179,7 +1179,7 @@ bool ComplexXMLValidator::checkRGAZCOMP()
             sicd.timeline->interPulsePeriod->sets.size() == 1)
         {
             double krgCoa = sicd.grid->row->kCenter;
-            
+
             // TODO: In the MATLAB code, krgCoa gets added to sicd.grid->row->deltaKCOAPoly if it exists
             // I'm not sure that makes sense
             Poly1D interPulsePeriodPoly = sicd.timeline->interPulsePeriod->sets[0].interPulsePeriodPoly;
@@ -1231,7 +1231,7 @@ bool ComplexXMLValidator::checkRGAZCOMP()
     return valid;
 }
 
-std::vector<double> ComplexXMLValidator::linspace(double start, double end, size_t count) const
+std::vector<double> ComplexXMLValidator::linspace(double start, double end, size_t count)
 {
     std::vector<double> ret;
     double stepSize = (end - start) / (count-1);
@@ -1243,7 +1243,7 @@ std::vector<double> ComplexXMLValidator::linspace(double start, double end, size
     return ret;
 }
 
-Poly1D ComplexXMLValidator::polyAt(PolyXYZ poly, size_t idx) const
+Poly1D ComplexXMLValidator::polyAt(PolyXYZ poly, size_t idx)
 {
     if (idx > 2)
     {
@@ -1529,7 +1529,7 @@ bool ComplexXMLValidator::checkRMCR()
 
 bool ComplexXMLValidator::checkINCA()
 {
-    
+
     bool valid = true;
 
     // 2.12.3.4.1
@@ -1727,7 +1727,7 @@ bool ComplexXMLValidator::checkRMA()
     {
         return checkRMCR();
     }
-        
+
     else if (sicd.rma->inca.get() != NULL)
     {
         return checkINCA();
@@ -1743,7 +1743,7 @@ bool ComplexXMLValidator::checkRMA()
 bool ComplexXMLValidator::checkValidData()
 {
     // 2.11 ValidData
-    // Both ImageData.ValidData and GeoData.ValidData are optional, 
+    // Both ImageData.ValidData and GeoData.ValidData are optional,
     // but are conditionally required upon each other. If one exists,
     // the other must also
     bool imageValidData = false;
@@ -2147,7 +2147,7 @@ bool ComplexXMLValidator::checkFrequencySupportParameters(const DirectionParamet
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.  Here, we assume the min and max of DeltaKCOAPoly must be
     // on the vertices of the image, since it is smooth and monotonic in most cases--
-    // although in actuality this is not always the case.  To be totally generic, 
+    // although in actuality this is not always the case.  To be totally generic,
     // we would have to search for an interior min and max as well
     std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices();
     std::vector<double> deltas = calculateDeltaKs(direction, vertices);
@@ -2213,7 +2213,7 @@ std::vector<std::vector<sys::SSize_T> > ComplexXMLValidator::calculateImageVerti
 }
 
 
-std::vector<double> ComplexXMLValidator::calculateDeltaKs(const DirectionParameters& rowCol, 
+std::vector<double> ComplexXMLValidator::calculateDeltaKs(const DirectionParameters& rowCol,
         std::vector<std::vector<sys::SSize_T> > vertices)
 {
     // The calculations for deltaK1 and deltaK2 are interdependent.
