@@ -42,19 +42,12 @@ struct ImageData
     //!  Everything is undefined at this time
     ImageData() :
         pixelType(PixelType::NOT_SET),
-        amplitudeTable(NULL),
         numRows(Init::undefined<size_t>()),
         numCols(Init::undefined<size_t>()),
         firstRow(0),
         firstCol(0)
     {
     }
-
-    //!  Destructor, deletes amplitudeTable if non-NULL
-    ~ImageData();
-
-    //!  Clone this object, including amplitudeTable if non-NULL
-    ImageData* clone() const;
 
     /*!
      *  Indicates the pixel type and binary format of the data.
@@ -69,7 +62,7 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-    AmplitudeTable* amplitudeTable;
+    mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
     size_t numRows;
@@ -91,6 +84,13 @@ struct ImageData
 
     // If this doesnt have at least 3 vertices, its not going to get written
     std::vector<RowColInt> validData;
+
+    //! Equality operators
+    bool operator==(const ImageData& rhs) const;
+    bool operator!=(const ImageData& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
 };
 }

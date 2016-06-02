@@ -2,9 +2,9 @@
 
 """
  * =========================================================================
- * This file is part of math.linear-c++ 
+ * This file is part of math.linear-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.linear-c++ is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -37,14 +37,14 @@ if __name__ == '__main__':
     vec2 = Vector2()
     vec2[0] = 100
     vec2[1] = 200
-    print "Vector2:"
-    print vec2
+    print("Vector2:")
+    print(vec2)
 
     # Test deep copy
     vec2_copy = deepcopy(vec2)
     if vec2_copy[0] != 100 or vec2_copy[1] != 200:
         sys.exit('Vector2 did not perform a deep copy')
-    
+
     vec2_copy[0] = 300
     if vec2[0] != 100:
         sys.exit('Vector2 did not perform a deep copy')
@@ -57,13 +57,13 @@ if __name__ == '__main__':
     vec3[0] = 10
     vec3[1] = 20
     vec3[2] = 30
-    print "Vector3:"
-    print vec3
-    
+    print("Vector3:")
+    print(vec3)
+
     vec3_copy = deepcopy(vec3)
     if vec3_copy[0] != 10 or vec3_copy[1] != 20 or vec3_copy[2] != 30:
         sys.exit('Vector3 did not perform a deep copy')
-    
+
     vec3_copy[0] = 40
     if vec3[0] != 10:
         sys.exit('Vector3 did not perform a deep copy')
@@ -77,65 +77,65 @@ if __name__ == '__main__':
     vecD[0] = 10
     vecD[1] = 20
     vecD[2] = 30
-    print "\nVectorDouble:"
-    print vecD
+    print("\nVectorDouble:")
+    print(vecD)
 
     # NumPy compatibility test
     example = np.asarray([10,20,30])
     converted = np.asarray(vecD.vals())
-    print "np.array_equal(example, converted):",np.array_equal(example, converted)
+    print("np.array_equal(example, converted):",np.array_equal(example, converted))
 
     # Try to get the -1st element
     threw = False
     try:
         foo = vecD[-1]
-        print foo
+        print(foo)
     except ValueError:
         threw = True
 
     if threw:
-        print '\nGetting (OOB low) threw as expected'
+        print('\nGetting (OOB low) threw as expected')
     else:
-        sys.exit('Getting (OOB low) did not throw!') 
+        sys.exit('Getting (OOB low) did not throw!')
 
     # Try to get the N+1th element
     threw = False
     try:
         foo = vecD[size]
-        print foo
+        print(foo)
     except ValueError:
         threw = True
 
     if threw:
-        print 'Getting (OOB high) threw as expected'
+        print('Getting (OOB high) threw as expected')
     else:
-        sys.exit('Getting (OOB high) did not throw!') 
+        sys.exit('Getting (OOB high) did not throw!')
 
     # Try to set the -1st element
     threw = False
     try:
         vecD[-1] = 100
-        print foo
+        print(foo)
     except ValueError:
         threw = True
 
     if threw:
-        print 'Setting (OOB low) threw as expected'
+        print('Setting (OOB low) threw as expected')
     else:
-        sys.exit('Setting (OOB low) did not throw!') 
+        sys.exit('Setting (OOB low) did not throw!')
 
     # Try to set the N+1th element
     threw = False
     try:
         vecD[size] = 100
-        print foo
+        print(foo)
     except ValueError:
         threw = True
 
     if threw:
-        print 'Setting (OOB high) threw as expected'
+        print('Setting (OOB high) threw as expected')
     else:
-        sys.exit('Setting (OOB high) did not throw!')    
+        sys.exit('Setting (OOB high) did not throw!')
 
     ##################################
     # Matrix2D<double> Bindings Test #
@@ -152,13 +152,13 @@ if __name__ == '__main__':
     matrixD[2,0] = 6
     matrixD[2,1] = 7
     matrixD[2,2] = 8
-    print "\nMatrix2D:"
-    print matrixD
+    print("\nMatrix2D:")
+    print(matrixD)
 
     # NumPy compatibility test
     example = np.asarray([[0,1,2],[3,4,5],[6,7,8]])
     converted = np.asarray(matrixD.vals())
-    print "np.array_equal(example, converted):",np.array_equal(example, converted)
+    print(("np.array_equal(example, converted):",np.array_equal(example, converted)))
 
     # Try to get a value in the -1st row
     threw = False
@@ -168,7 +168,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print '\nGetting (OOB low row) threw as expected'
+        print('\nGetting (OOB low row) threw as expected')
     else:
         sys.exit('Getting (OOB low row) did not throw!')
 
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (OOB high row) threw as expected'
+        print('Getting (OOB high row) threw as expected')
     else:
         sys.exit('Getting (OOB high row) did not throw!')
 
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (OOB low column) threw as expected'
+        print('Getting (OOB low column) threw as expected')
     else:
         sys.exit('Getting (OOB low column) did not throw!')
 
@@ -204,7 +204,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (OOB high column) threw as expected'
+        print('Getting (OOB high column) threw as expected')
     else:
         sys.exit('Getting (OOB high column) did not throw!')
 
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (Non-integer row) threw as expected'
+        print('Getting (Non-integer row) threw as expected')
     else:
         sys.exit('Getting (Non-integer row) did not throw!')
 
@@ -228,7 +228,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (Non-integer column) threw as expected'
+        print('Getting (Non-integer column) threw as expected')
     else:
         sys.exit('Getting (Non-integer column) did not throw!')
 
@@ -240,7 +240,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (Too few arguments) threw as expected'
+        print('Getting (Too few arguments) threw as expected')
     else:
         sys.exit('Getting (Too few arguments) did not throw!')
 
@@ -252,7 +252,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Getting (Too many arguments) threw as expected'
+        print('Getting (Too many arguments) threw as expected')
     else:
         sys.exit('Getting (Too many arguments) did not throw!')
 
@@ -264,7 +264,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (OOB low row) threw as expected'
+        print('Setting (OOB low row) threw as expected')
     else:
         sys.exit('Setting (OOB low row) did not throw!')
 
@@ -276,7 +276,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (OOB high row) threw as expected'
+        print('Setting (OOB high row) threw as expected')
     else:
         sys.exit('Setting (OOB high row) did not throw!')
 
@@ -288,7 +288,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (OOB low column) threw as expected'
+        print('Setting (OOB low column) threw as expected')
     else:
         sys.exit('Setting (OOB low column) did not throw!')
 
@@ -300,7 +300,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (OOB high column) threw as expected'
+        print('Setting (OOB high column) threw as expected')
     else:
         sys.exit('Setting (OOB high column) did not throw!')
 
@@ -312,7 +312,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (Non-integer row) threw as expected'
+        print('Setting (Non-integer row) threw as expected')
     else:
         sys.exit('Setting (Non-integer row) did not throw!')
 
@@ -324,7 +324,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (Non-integer column) threw as expected'
+        print('Setting (Non-integer column) threw as expected')
     else:
         sys.exit('Setting (Non-integer column) did not throw!')
 
@@ -336,7 +336,7 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (Too few arguments) threw as expected'
+        print('Setting (Too few arguments) threw as expected')
     else:
         sys.exit('Setting (Too few arguments) did not throw!')
 
@@ -348,6 +348,6 @@ if __name__ == '__main__':
         threw = True
 
     if threw:
-        print 'Setting (Too many arguments) threw as expected'
+        print('Setting (Too many arguments) threw as expected')
     else:
         sys.exit('Setting (Too many arguments) did not throw!')

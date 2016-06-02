@@ -2841,6 +2841,16 @@ class ScopedCopyableDwellTimeParameters(_object):
         except:
             self.this = this
 
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableDwellTimeParameters self, ScopedCopyableDwellTimeParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableDwellTimeParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableDwellTimeParameters self, ScopedCopyableDwellTimeParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableDwellTimeParameters___ne__(self, rhs)
+
+
     def get(self):
         """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd.ScopedCopyableDwellTimeParameters_get(self)
@@ -2865,16 +2875,6 @@ class ScopedCopyableDwellTimeParameters(_object):
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableDwellTimeParameters
     __del__ = lambda self: None
-
-    def __eq__(self, other):
-        """__eq__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
-        return _cphd.ScopedCopyableDwellTimeParameters___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
-        return _cphd.ScopedCopyableDwellTimeParameters___ne__(self, other)
-
     __swig_setmethods__["codTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_codTimePoly_set
     __swig_getmethods__["codTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_codTimePoly_get
     if _newclass:
@@ -2910,6 +2910,16 @@ class ScopedCopyableAreaPlane(_object):
         except:
             self.this = this
 
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableAreaPlane self, ScopedCopyableAreaPlane rhs) -> bool"""
+        return _cphd.ScopedCopyableAreaPlane___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableAreaPlane self, ScopedCopyableAreaPlane rhs) -> bool"""
+        return _cphd.ScopedCopyableAreaPlane___ne__(self, rhs)
+
+
     def get(self):
         """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
         return _cphd.ScopedCopyableAreaPlane_get(self)
@@ -2934,16 +2944,6 @@ class ScopedCopyableAreaPlane(_object):
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableAreaPlane
     __del__ = lambda self: None
-
-    def __eq__(self, other):
-        """__eq__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
-        return _cphd.ScopedCopyableAreaPlane___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
-        return _cphd.ScopedCopyableAreaPlane___ne__(self, other)
-
     __swig_setmethods__["referencePoint"] = _cphd.ScopedCopyableAreaPlane_referencePoint_set
     __swig_getmethods__["referencePoint"] = _cphd.ScopedCopyableAreaPlane_referencePoint_get
     if _newclass:
@@ -3007,6 +3007,16 @@ class ScopedCopyableFxParameters(_object):
         except:
             self.this = this
 
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableFxParameters self, ScopedCopyableFxParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableFxParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableFxParameters self, ScopedCopyableFxParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableFxParameters___ne__(self, rhs)
+
+
     def get(self):
         """get(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd.ScopedCopyableFxParameters_get(self)
@@ -3031,16 +3041,6 @@ class ScopedCopyableFxParameters(_object):
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableFxParameters
     __del__ = lambda self: None
-
-    def __eq__(self, other):
-        """__eq__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
-        return _cphd.ScopedCopyableFxParameters___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
-        return _cphd.ScopedCopyableFxParameters___ne__(self, other)
-
     __swig_setmethods__["Fx0"] = _cphd.ScopedCopyableFxParameters_Fx0_set
     __swig_getmethods__["Fx0"] = _cphd.ScopedCopyableFxParameters_Fx0_get
     if _newclass:
@@ -3104,6 +3104,16 @@ class ScopedCopyableTOAParameters(_object):
         except:
             self.this = this
 
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableTOAParameters self, ScopedCopyableTOAParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableTOAParameters___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableTOAParameters self, ScopedCopyableTOAParameters rhs) -> bool"""
+        return _cphd.ScopedCopyableTOAParameters___ne__(self, rhs)
+
+
     def get(self):
         """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd.ScopedCopyableTOAParameters_get(self)
@@ -3128,16 +3138,6 @@ class ScopedCopyableTOAParameters(_object):
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableTOAParameters
     __del__ = lambda self: None
-
-    def __eq__(self, other):
-        """__eq__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
-        return _cphd.ScopedCopyableTOAParameters___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
-        return _cphd.ScopedCopyableTOAParameters___ne__(self, other)
-
     __swig_setmethods__["deltaTOA0"] = _cphd.ScopedCopyableTOAParameters_deltaTOA0_set
     __swig_getmethods__["deltaTOA0"] = _cphd.ScopedCopyableTOAParameters_deltaTOA0_get
     if _newclass:
@@ -3193,6 +3193,16 @@ class ScopedCopyableCphdAntenna(_object):
         except:
             self.this = this
 
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableCphdAntenna self, ScopedCopyableCphdAntenna rhs) -> bool"""
+        return _cphd.ScopedCopyableCphdAntenna___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableCphdAntenna self, ScopedCopyableCphdAntenna rhs) -> bool"""
+        return _cphd.ScopedCopyableCphdAntenna___ne__(self, rhs)
+
+
     def get(self):
         """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
         return _cphd.ScopedCopyableCphdAntenna_get(self)
@@ -3217,16 +3227,6 @@ class ScopedCopyableCphdAntenna(_object):
 
     __swig_destroy__ = _cphd.delete_ScopedCopyableCphdAntenna
     __del__ = lambda self: None
-
-    def __eq__(self, other):
-        """__eq__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
-        return _cphd.ScopedCopyableCphdAntenna___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
-        return _cphd.ScopedCopyableCphdAntenna___ne__(self, other)
-
     __swig_setmethods__["numTxAnt"] = _cphd.ScopedCopyableCphdAntenna_numTxAnt_set
     __swig_getmethods__["numTxAnt"] = _cphd.ScopedCopyableCphdAntenna_numTxAnt_get
     if _newclass:

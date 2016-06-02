@@ -185,7 +185,7 @@ struct Constants
  *  \struct ReferencePoint
  *  \brief Information grouping for a reference point
  *
- *  This object contains a vector (in ECEF, IOW tail from center of spheroid), 
+ *  This object contains a vector (in ECEF, IOW tail from center of spheroid),
  *  and row-column position for a point.
  *
  */
@@ -239,6 +239,16 @@ struct SCP
 {
     Vector3 ecf;
     LatLonAlt llh;
+
+    bool operator==(const SCP& rhs) const
+    {
+        return ecf == rhs.ecf && llh == rhs.llh;
+    }
+
+    bool operator!=(const SCP& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -252,15 +262,14 @@ struct SCP
  */
 struct LUT
 {
-    mem::ScopedArray<unsigned char> table;
     size_t numEntries;
     size_t elementSize;
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
         numEntries(entries),
-        elementSize(outputSpace)
+        elementSize(outputSpace),
+        table(new unsigned char[entries * outputSpace])
     {
     }
 
@@ -268,9 +277,9 @@ struct LUT
     LUT(const unsigned char* interleavedLUT,
         size_t entries,
         size_t outputSpace) :
-        table(new unsigned char[entries * outputSpace]),
         numEntries(entries),
-        elementSize(outputSpace)
+        elementSize(outputSpace),
+        table(new unsigned char[entries * outputSpace])
     {
         memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
     }
@@ -305,6 +314,20 @@ struct LUT
     {
         return &(table[i * elementSize]);
     }
+
+    unsigned char* getTable()
+    {
+        return table.get();
+    }
+
+    const unsigned char* getTable() const
+    {
+        return table.get();
+    }
+
+protected:
+    mem::ScopedArray<unsigned char> table;
+
 };
 
 /*!
@@ -323,6 +346,24 @@ struct AmplitudeTable : public LUT
     AmplitudeTable() :
         LUT(256, sizeof(double))
     {
+    }
+
+    bool operator==(const AmplitudeTable& rhs) const
+    {
+        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+    }
+    bool operator!=(const AmplitudeTable& rhs) const
+    {
+        return !(*this == rhs);
+    }
+    AmplitudeTable* clone() const
+    {
+        AmplitudeTable* ret = new AmplitudeTable();
+        for (size_t ii = 0; ii < numEntries; ++ii)
+        {
+            *(double*)(*ret)[ii] = *(double*)(*this)[ii];
+        }
+        return ret;
     }
 };
 
@@ -390,6 +431,19 @@ struct Corners
         }
     }
 
+    bool operator==(const Corners& rhs) const
+    {
+        return (upperLeft == rhs.upperLeft &&
+            upperRight == rhs.upperRight &&
+            lowerRight == rhs.lowerRight &&
+            lowerLeft == rhs.lowerLeft);
+    }
+
+    bool operator!=(const Corners& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
     LatLonT upperLeft;
     LatLonT upperRight;
     LatLonT lowerRight;
@@ -408,6 +462,25 @@ template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_FIRST_COL;
 
 typedef Corners<LatLon> LatLonCorners;
 typedef Corners<LatLonAlt> LatLonAltCorners;
+
+/*!
+ *   \enum ImageMode
+ *
+ *   Enumeration used to represent frame vs. scan mode.  Note that this is a
+ *   simpler version of RadarModeType.
+ */
+enum ImageMode
+{
+    FRAME_MODE = 0,
+    SCAN_MODE
+};
+
+/*!
+ * \param radarMode The radar mode type
+ *
+ * \return Whether this corresponds to frame or scan mode
+ */
+ImageMode getImageMode(RadarModeType radarMode);
 
 /*!
  *  \class MissingRequiredException

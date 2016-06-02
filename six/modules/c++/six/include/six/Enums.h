@@ -38,7 +38,7 @@ const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 
 /*!
- *  \struct AppliedType 
+ *  \struct AppliedType
  *
  *  Enumeration used to represent AppliedTypes
  */
@@ -53,6 +53,7 @@ struct AppliedType
     };
 
     //! Default constructor
+
     AppliedType(){ value = NOT_SET; }
 
     //! string constructor
@@ -128,12 +129,15 @@ struct AppliedType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct AutofocusType 
+ *  \struct AutofocusType
  *
  *  Enumeration used to represent AutofocusTypes
  */
@@ -231,12 +235,15 @@ struct AutofocusType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct BooleanType 
+ *  \struct BooleanType
  *
  *  Enumeration used to represent BooleanTypes
  */
@@ -326,12 +333,15 @@ struct BooleanType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ByteSwapping 
+ *  \struct ByteSwapping
  *
  *  Enumeration used to represent ByteSwappings
  */
@@ -429,12 +439,15 @@ struct ByteSwapping
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct CollectType 
+ *  \struct CollectType
  *
  *  Enumeration used to represent CollectTypes
  */
@@ -524,12 +537,15 @@ struct CollectType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ComplexImageGridType 
+ *  \struct ComplexImageGridType
  *
  *  Enumeration used to represent ComplexImageGridTypes
  */
@@ -643,12 +659,15 @@ struct ComplexImageGridType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 6; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ComplexImagePlaneType 
+ *  \struct ComplexImagePlaneType
  *
  *  Enumeration used to represent ComplexImagePlaneTypes
  */
@@ -746,12 +765,15 @@ struct ComplexImagePlaneType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DataType 
+ *  \struct DataType
  *
  *  Enumeration used to represent DataTypes
  */
@@ -841,12 +863,15 @@ struct DataType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DecimationMethod 
+ *  \struct DecimationMethod
  *
  *  Enumeration used to represent DecimationMethods
  */
@@ -952,12 +977,15 @@ struct DecimationMethod
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DemodType 
+ *  \struct DemodType
  *
  *  Enumeration used to represent DemodTypes
  */
@@ -1047,12 +1075,15 @@ struct DemodType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DisplayType 
+ *  \struct DisplayType
  *
  *  Enumeration used to represent DisplayTypes
  */
@@ -1142,12 +1173,15 @@ struct DisplayType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct DualPolarizationType 
+ *  \struct DualPolarizationType
  *
  *  Enumeration used to represent DualPolarizationTypes
  */
@@ -1165,6 +1199,7 @@ struct DualPolarizationType
         RHC_LHC = 7,
         LHC_RHC = 8,
         LHC_LHC = 9,
+        UNKNOWN = 10,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -1192,6 +1227,8 @@ struct DualPolarizationType
             value = LHC_RHC;
         else if (s == "LHC_LHC")
             value = LHC_LHC;
+        else if (s == "UNKNOWN")
+            value = UNKNOWN;
         else if (s == "NOT_SET")
             value = NOT_SET;
         else
@@ -1230,6 +1267,9 @@ struct DualPolarizationType
         case 9:
             value = LHC_LHC;
             break;
+        case 10:
+            value = UNKNOWN;
+            break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
             break;
@@ -1264,6 +1304,8 @@ struct DualPolarizationType
             return std::string("LHC_RHC");
         case 9:
             return std::string("LHC_LHC");
+        case 10:
+            return std::string("UNKNOWN");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
@@ -1293,12 +1335,15 @@ struct DualPolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 11; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct EarthModelType 
+ *  \struct EarthModelType
  *
  *  Enumeration used to represent EarthModelTypes
  */
@@ -1380,12 +1425,15 @@ struct EarthModelType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 2; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct FFTSign 
+ *  \struct FFTSign
  *
  *  Enumeration used to represent FFTSigns
  */
@@ -1475,12 +1523,15 @@ struct FFTSign
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ImageBeamCompensationType 
+ *  \struct ImageBeamCompensationType
  *
  *  Enumeration used to represent ImageBeamCompensationTypes
  */
@@ -1570,12 +1621,15 @@ struct ImageBeamCompensationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct ImageFormationType 
+ *  \struct ImageFormationType
  *
  *  Enumeration used to represent ImageFormationTypes
  */
@@ -1681,12 +1735,15 @@ struct ImageFormationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct MagnificationMethod 
+ *  \struct MagnificationMethod
  *
  *  Enumeration used to represent MagnificationMethods
  */
@@ -1705,7 +1762,7 @@ struct MagnificationMethod
     MagnificationMethod(){ value = NOT_SET; }
 
     //! string constructor
-    MagnificationMethod(const std::string& s)
+    MagnificationMethod(std::string s)
     {
         if (s == "NEAREST_NEIGHBOR")
             value = NEAREST_NEIGHBOR;
@@ -1784,12 +1841,15 @@ struct MagnificationMethod
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct OrientationType 
+ *  \struct OrientationType
  *
  *  Enumeration used to represent OrientationTypes
  */
@@ -1903,12 +1963,15 @@ struct OrientationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 6; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct PixelType 
+ *  \struct PixelType
  *
  *  Enumeration used to represent PixelTypes
  */
@@ -2046,9 +2109,12 @@ struct PixelType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 9; }
+
     int value;
 
 };
+
 
 /*!
  *  \struct PolarizationSequenceType
@@ -2071,57 +2137,35 @@ struct PolarizationSequenceType
     };
 
     //! Default constructor
-    PolarizationSequenceType() :
-        value(NOT_SET)
-    {
-    }
+    PolarizationSequenceType(){ value = NOT_SET; }
 
     //! string constructor
-    PolarizationSequenceType(const std::string& str)
+    PolarizationSequenceType(std::string s)
     {
-        if (str == "OTHER")
-        {
+        if (s == "OTHER")
             value = OTHER;
-        }
-        else if (str == "V")
-        {
+        else if (s == "V")
             value = V;
-        }
-        else if (str == "H")
-        {
+        else if (s == "H")
             value = H;
-        }
-        else if (str == "RHC")
-        {
+        else if (s == "RHC")
             value = RHC;
-        }
-        else if (str == "LHC")
-        {
+        else if (s == "LHC")
             value = LHC;
-        }
-        else if (str == "UNKNOWN")
-        {
+        else if (s == "UNKNOWN")
             value = UNKNOWN;
-        }
-        else if (str == "SEQUENCE")
-        {
+        else if (s == "SEQUENCE")
             value = SEQUENCE;
-        }
-        else if (str == "NOT_SET")
-        {
+        else if (s == "NOT_SET")
             value = NOT_SET;
-        }
         else
-        {
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str));
-        }
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
-    PolarizationSequenceType(int intValue)
+    PolarizationSequenceType(int i)
     {
-        switch (intValue)
+        switch(i)
         {
         case 1:
             value = OTHER;
@@ -2148,10 +2192,12 @@ struct PolarizationSequenceType
             value = NOT_SET;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(intValue)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
+
+    //! destructor
+    ~PolarizationSequenceType(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -2175,9 +2221,18 @@ struct PolarizationSequenceType
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(value)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
+    }
+
+    //! assignment operator
+    PolarizationSequenceType& operator=(const PolarizationSequenceType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
     }
 
     bool operator==(const PolarizationSequenceType& o) const { return value == o.value; }
@@ -2192,13 +2247,17 @@ struct PolarizationSequenceType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 8; }
+
     int value;
+
 };
+
 
 /*!
  *  \struct PolarizationType
  *
- *  Enumeration used to represent Polarization2Types
+ *  Enumeration used to represent PolarizationTypes
  */
 struct PolarizationType
 {
@@ -2214,49 +2273,31 @@ struct PolarizationType
     };
 
     //! Default constructor
-    PolarizationType() :
-        value(NOT_SET)
-    {
-    }
+    PolarizationType(){ value = NOT_SET; }
 
     //! string constructor
-    PolarizationType(const std::string& str)
+    PolarizationType(std::string s)
     {
-        if (str == "OTHER")
-        {
+        if (s == "OTHER")
             value = OTHER;
-        }
-        else if (str == "V")
-        {
+        else if (s == "V")
             value = V;
-        }
-        else if (str == "H")
-        {
+        else if (s == "H")
             value = H;
-        }
-        else if (str == "RHC")
-        {
+        else if (s == "RHC")
             value = RHC;
-        }
-        else if (str == "LHC")
-        {
+        else if (s == "LHC")
             value = LHC;
-        }
-        else if (str == "NOT_SET")
-        {
+        else if (s == "NOT_SET")
             value = NOT_SET;
-        }
         else
-        {
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str));
-        }
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
-    PolarizationType(int intValue)
+    PolarizationType(int i)
     {
-        switch (intValue)
+        switch(i)
         {
         case 1:
             value = OTHER;
@@ -2277,10 +2318,12 @@ struct PolarizationType
             value = NOT_SET;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(intValue)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
+
+    //! destructor
+    ~PolarizationType(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -2300,9 +2343,18 @@ struct PolarizationType
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
-            throw except::InvalidFormatException(Ctxt(
-                    "Invalid enum value: " + str::toString(value)));
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
+    }
+
+    //! assignment operator
+    PolarizationType& operator=(const PolarizationType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
     }
 
     bool operator==(const PolarizationType& o) const { return value == o.value; }
@@ -2317,11 +2369,15 @@ struct PolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 6; }
+
     int value;
+
 };
 
+
 /*!
- *  \struct ProjectionType 
+ *  \struct ProjectionType
  *
  *  Enumeration used to represent ProjectionTypes
  */
@@ -2427,12 +2483,15 @@ struct ProjectionType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RMAlgoType 
+ *  \struct RMAlgoType
  *
  *  Enumeration used to represent RMAlgoTypes
  */
@@ -2530,12 +2589,15 @@ struct RMAlgoType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RadarModeType 
+ *  \struct RadarModeType
  *
  *  Enumeration used to represent RadarModeTypes
  */
@@ -2641,12 +2703,15 @@ struct RadarModeType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 5; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RegionType 
+ *  \struct RegionType
  *
  *  Enumeration used to represent RegionTypes
  */
@@ -2736,12 +2801,15 @@ struct RegionType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct RowColEnum 
+ *  \struct RowColEnum
  *
  *  Enumeration used to represent RowColEnums
  */
@@ -2831,12 +2899,15 @@ struct RowColEnum
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SCPType 
+ *  \struct SCPType
  *
  *  Enumeration used to represent SCPTypes
  */
@@ -2926,12 +2997,15 @@ struct SCPType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SideOfTrackType 
+ *  \struct SideOfTrackType
  *
  *  Enumeration used to represent SideOfTrackTypes
  */
@@ -3021,12 +3095,15 @@ struct SideOfTrackType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 3; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct SlowTimeBeamCompensationType 
+ *  \struct SlowTimeBeamCompensationType
  *
  *  Enumeration used to represent SlowTimeBeamCompensationTypes
  */
@@ -3124,12 +3201,15 @@ struct SlowTimeBeamCompensationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
+
 /*!
- *  \struct XYZEnum 
+ *  \struct XYZEnum
  *
  *  Enumeration used to represent XYZEnums
  */
@@ -3227,13 +3307,13 @@ struct XYZEnum
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
+    static size_t size() { return 4; }
+
     int value;
 
 };
 
-// code auto-generated 2010-08-31 15:10:30.479133
-
+// code auto-generated 2016-04-04 16:12:32.876144
 }
 
 #endif
-

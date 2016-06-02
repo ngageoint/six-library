@@ -6227,7 +6227,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RowColDouble_normL1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RowColDouble_area(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< double > *arg1 = (types::RowCol< double > *) 0 ;
   void *argp1 = 0 ;
@@ -6235,13 +6235,13 @@ SWIGINTERN PyObject *_wrap_RowColDouble_normL1(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:RowColDouble_normL1",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:RowColDouble_area",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColDouble_normL1" "', argument " "1"" of type '" "types::RowCol< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColDouble_area" "', argument " "1"" of type '" "types::RowCol< double > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< double > * >(argp1);
-  result = (double)((types::RowCol< double > const *)arg1)->normL1();
+  result = (double)((types::RowCol< double > const *)arg1)->area();
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -6315,7 +6315,11 @@ SWIGINTERN PyObject *_wrap_RowColInt_row_set(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   if (arg1) (arg1)->row = arg2;
   resultobj = SWIG_Py_Void();
@@ -6341,7 +6345,11 @@ SWIGINTERN PyObject *_wrap_RowColInt_row_get(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result =  ((arg1)->row);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -6365,7 +6373,11 @@ SWIGINTERN PyObject *_wrap_RowColInt_col_set(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   if (arg1) (arg1)->col = arg2;
   resultobj = SWIG_Py_Void();
@@ -6391,7 +6403,11 @@ SWIGINTERN PyObject *_wrap_RowColInt_col_get(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result =  ((arg1)->col);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -6422,10 +6438,18 @@ SWIGINTERN PyObject *_wrap_new_RowColInt__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   
   if (!PyArg_ParseTuple(args,(char *)"OO:new_RowColInt",&obj0,&obj1)) SWIG_fail;
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg1 = PyLong_AsSsize_t(obj0);
+#else
     arg1 = PyInt_AsSsize_t(obj0);
+#endif
   }
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *)new types::RowCol< sys::SSize_T >(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NEW |  0 );
@@ -6486,11 +6510,19 @@ SWIGINTERN PyObject *_wrap_new_RowColInt(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
+#if PY_VERSION_HEX >= 0x03000000
+      _v = PyLong_Check(argv[0]) ? 1 : 0;
+#else
       _v = PyInt_Check(argv[0]) ? 1 : 0;
+#endif
     }
     if (_v) {
       {
+#if PY_VERSION_HEX >= 0x03000000
+        _v = PyLong_Check(argv[1]) ? 1 : 0;
+#else
         _v = PyInt_Check(argv[1]) ? 1 : 0;
+#endif
       }
       if (_v) {
         return _wrap_new_RowColInt__SWIG_1(self, args);
@@ -6525,7 +6557,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator +=(arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6552,7 +6588,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___add__(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator +(arg2);
   resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6579,7 +6619,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___isub__(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator -=(arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6606,7 +6650,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator -(arg2);
   resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6633,7 +6681,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___imul__(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator *=(arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6660,7 +6712,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator *(arg2);
   resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6687,7 +6743,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___idiv__(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator /=(arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6714,7 +6774,11 @@ SWIGINTERN PyObject *_wrap_RowColInt___div__(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(obj1);
+#else
     arg2 = PyInt_AsSsize_t(obj1);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator /(arg2);
   resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
@@ -6792,7 +6856,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RowColInt_normL1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RowColInt_area(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
   void *argp1 = 0 ;
@@ -6800,15 +6864,19 @@ SWIGINTERN PyObject *_wrap_RowColInt_normL1(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj0 = 0 ;
   ssize_t result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:RowColInt_normL1",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:RowColInt_area",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_normL1" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_area" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
-  result = ((types::RowCol< sys::SSize_T > const *)arg1)->normL1();
+  result = ((types::RowCol< sys::SSize_T > const *)arg1)->area();
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -6832,7 +6900,11 @@ SWIGINTERN PyObject *_wrap_RowColInt_normL2(PyObject *SWIGUNUSEDPARM(self), PyOb
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->normL2();
   {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
     resultobj = PyInt_FromSsize_t(result);
+#endif
   }
   return resultobj;
 fail:
@@ -7407,7 +7479,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RowColSizeT_normL1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RowColSizeT_area(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< size_t > *arg1 = (types::RowCol< size_t > *) 0 ;
   void *argp1 = 0 ;
@@ -7415,13 +7487,13 @@ SWIGINTERN PyObject *_wrap_RowColSizeT_normL1(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   size_t result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:RowColSizeT_normL1",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:RowColSizeT_area",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_types__RowColT_size_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColSizeT_normL1" "', argument " "1"" of type '" "types::RowCol< size_t > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColSizeT_area" "', argument " "1"" of type '" "types::RowCol< size_t > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< size_t > * >(argp1);
-  result = ((types::RowCol< size_t > const *)arg1)->normL1();
+  result = ((types::RowCol< size_t > const *)arg1)->area();
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -11922,7 +11994,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColDouble___div__", _wrap_RowColDouble___div__, METH_VARARGS, (char *)"RowColDouble___div__(RowColDouble self, double scalar) -> RowColDouble"},
 	 { (char *)"RowColDouble___eq__", _wrap_RowColDouble___eq__, METH_VARARGS, (char *)"RowColDouble___eq__(RowColDouble self, RowColDouble p) -> bool"},
 	 { (char *)"RowColDouble___ne__", _wrap_RowColDouble___ne__, METH_VARARGS, (char *)"RowColDouble___ne__(RowColDouble self, RowColDouble p) -> bool"},
-	 { (char *)"RowColDouble_normL1", _wrap_RowColDouble_normL1, METH_VARARGS, (char *)"RowColDouble_normL1(RowColDouble self) -> double"},
+	 { (char *)"RowColDouble_area", _wrap_RowColDouble_area, METH_VARARGS, (char *)"RowColDouble_area(RowColDouble self) -> double"},
 	 { (char *)"RowColDouble_normL2", _wrap_RowColDouble_normL2, METH_VARARGS, (char *)"RowColDouble_normL2(RowColDouble self) -> double"},
 	 { (char *)"delete_RowColDouble", _wrap_delete_RowColDouble, METH_VARARGS, (char *)"delete_RowColDouble(RowColDouble self)"},
 	 { (char *)"RowColDouble_swigregister", RowColDouble_swigregister, METH_VARARGS, NULL},
@@ -11945,7 +12017,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColInt___div__", _wrap_RowColInt___div__, METH_VARARGS, (char *)"RowColInt___div__(RowColInt self, ssize_t scalar) -> RowColInt"},
 	 { (char *)"RowColInt___eq__", _wrap_RowColInt___eq__, METH_VARARGS, (char *)"RowColInt___eq__(RowColInt self, RowColInt p) -> bool"},
 	 { (char *)"RowColInt___ne__", _wrap_RowColInt___ne__, METH_VARARGS, (char *)"RowColInt___ne__(RowColInt self, RowColInt p) -> bool"},
-	 { (char *)"RowColInt_normL1", _wrap_RowColInt_normL1, METH_VARARGS, (char *)"RowColInt_normL1(RowColInt self) -> ssize_t"},
+	 { (char *)"RowColInt_area", _wrap_RowColInt_area, METH_VARARGS, (char *)"RowColInt_area(RowColInt self) -> ssize_t"},
 	 { (char *)"RowColInt_normL2", _wrap_RowColInt_normL2, METH_VARARGS, (char *)"RowColInt_normL2(RowColInt self) -> ssize_t"},
 	 { (char *)"delete_RowColInt", _wrap_delete_RowColInt, METH_VARARGS, (char *)"delete_RowColInt(RowColInt self)"},
 	 { (char *)"RowColInt_swigregister", RowColInt_swigregister, METH_VARARGS, NULL},
@@ -11968,7 +12040,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColSizeT___div__", _wrap_RowColSizeT___div__, METH_VARARGS, (char *)"RowColSizeT___div__(RowColSizeT self, size_t scalar) -> RowColSizeT"},
 	 { (char *)"RowColSizeT___eq__", _wrap_RowColSizeT___eq__, METH_VARARGS, (char *)"RowColSizeT___eq__(RowColSizeT self, RowColSizeT p) -> bool"},
 	 { (char *)"RowColSizeT___ne__", _wrap_RowColSizeT___ne__, METH_VARARGS, (char *)"RowColSizeT___ne__(RowColSizeT self, RowColSizeT p) -> bool"},
-	 { (char *)"RowColSizeT_normL1", _wrap_RowColSizeT_normL1, METH_VARARGS, (char *)"RowColSizeT_normL1(RowColSizeT self) -> size_t"},
+	 { (char *)"RowColSizeT_area", _wrap_RowColSizeT_area, METH_VARARGS, (char *)"RowColSizeT_area(RowColSizeT self) -> size_t"},
 	 { (char *)"RowColSizeT_normL2", _wrap_RowColSizeT_normL2, METH_VARARGS, (char *)"RowColSizeT_normL2(RowColSizeT self) -> size_t"},
 	 { (char *)"delete_RowColSizeT", _wrap_delete_RowColSizeT, METH_VARARGS, (char *)"delete_RowColSizeT(RowColSizeT self)"},
 	 { (char *)"RowColSizeT_swigregister", RowColSizeT_swigregister, METH_VARARGS, NULL},

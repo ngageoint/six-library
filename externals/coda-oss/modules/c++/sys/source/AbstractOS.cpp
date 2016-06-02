@@ -76,4 +76,17 @@ void AbstractOS::remove(const std::string& path) const
         removeFile(path);
     }
 }
+
+bool AbstractOS::getEnvIfSet(const std::string& envVar, std::string& value) const
+{
+    if (isEnvSet(envVar))
+    {
+        value = getEnv(envVar);
+        return true;
+    }
+    return false;
+}
+
+
+
 }

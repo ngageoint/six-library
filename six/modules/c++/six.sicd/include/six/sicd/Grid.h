@@ -22,8 +22,10 @@
 #ifndef __SIX_GRID_H__
 #define __SIX_GRID_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+#include "six/sicd/Functor.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -33,6 +35,9 @@ namespace six
 {
 namespace sicd
 {
+struct CollectionInformation;
+struct ImageData;
+
 struct WeightType
 {
     WeightType();
@@ -50,6 +55,15 @@ struct WeightType
      *  This is present in 1.0 (but not 0.4.1) and can be 0 to unbounded
      */
     ParameterCollection parameters;
+
+    bool operator==(const WeightType& rhs) const
+    {
+        return windowName == rhs.windowName && parameters == rhs.parameters;
+    }
+    bool operator!=(const WeightType& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*!
@@ -112,6 +126,26 @@ struct DirectionParameters
      */
     std::vector<double> weights;
 
+    bool operator==(const DirectionParameters& rhs) const;
+    bool operator!=(const DirectionParameters& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+    bool validate(const ImageData& imageData, logging::Logger& log) const;
+    void fillDerivedFields(const ImageData& imageData);
+private:
+    std::auto_ptr<Functor> calculateWeightFunction() const;
+    std::vector<std::vector<sys::SSize_T> >
+            calculateImageVertices(const ImageData& imageData) const;
+    /* Return vector contents, in order:
+    * 0) deltaK1 (min)
+    * 1) deltaK2 (max)
+    */
+    std::vector<double> calculateDeltaKs(const ImageData& imageData) const;
+    const std::string boundsErrorMessage =
+            "Violation of spatial frequency extent bounds.";
+
 };
 
 /*!
@@ -133,6 +167,22 @@ struct Grid
     Poly2D timeCOAPoly;
     mem::ScopedCloneablePtr<DirectionParameters> row;
     mem::ScopedCloneablePtr<DirectionParameters> col;
+
+    bool operator==(const Grid& rhs) const;
+    bool operator!=(const Grid& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+    bool validate(const CollectionInformation& collectionInformation,
+            const ImageData& imageData,
+            logging::Logger& log) const;
+    void fillDerivedFields(const ImageData& imageData);
+private:
+    bool validateTimeCOAPoly(
+            const CollectionInformation& collectionInformation,
+            logging::Logger& log) const;
+    bool validateFFTSigns(logging::Logger& log) const;
 };
 
 }

@@ -56,10 +56,6 @@ public:
     }
 
 private:
-    bool checkTimeCOAPoly();
-    bool checkFFTSigns();
-    bool checkFrequencySupportParameters();
-    bool checkFrequencySupportParameters(const DirectionParameters& direction, const std::string& name);
     bool checkSupportParamsAgainstPFA();
     bool checkWeightFunctions();
     bool checkWeightFunctions(const DirectionParameters& direction, const std::string& name);
@@ -77,7 +73,6 @@ private:
     bool checkRMCR();
     bool checkINCA();
 
-    void fillRowCol(DirectionParameters& rowCol);
     void fillSCPTime(ComplexData& data);
     void fillARPPoly(ComplexData& data);
     void fillRadarCollection(ComplexData& data, bool setDefaultValues);
@@ -90,14 +85,6 @@ private:
     void fillGeoData(ComplexData& data);
 
     Vector3 wgs84Norm(const Vector3& point);
-    std::vector<std::vector<sys::SSize_T> > calculateImageVertices();
-
-    /* Return vector contents, in order:
-     * 0) deltaK1 (min)
-     * 1) deltaK2 (max)
-     */
-    std::vector<double> calculateDeltaKs(const DirectionParameters& rowCol, 
-            std::vector<std::vector<sys::SSize_T> > vertices);
 
     template <class T>
     void assertExists(const T& type, const std::string& name)

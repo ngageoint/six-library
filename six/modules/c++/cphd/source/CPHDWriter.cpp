@@ -139,7 +139,7 @@ void CPHDWriter::addImage(const T* image,
     mVBMData.push_back(vbmData);
     mCPHDData.push_back(reinterpret_cast<const sys::ubyte*>(image));
 
-    mCPHDSize += dims.normL1() * mElementSize;
+    mCPHDSize += dims.area() * mElementSize;
     mVBMSize += dims.row * mMetadata.data.getNumBytesVBP();
 
     mMetadata.data.numCPHDChannels += 1;
@@ -164,13 +164,23 @@ void CPHDWriter::addImage<std::complex<float> >(
         const types::RowCol<size_t>& dims,
         const sys::ubyte* vbmData);
 
-void CPHDWriter::writeMetadata(size_t vmbSize,
-                               size_t cphdSize)
+void CPHDWriter::writeMetadata(size_t vbmSize,
+                               size_t cphdSize,
+                               const std::string& classification,
+                               const std::string& releaseInfo)
 {
     const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata));
 
     FileHeader header;
-    header.set(xmlMetadata.size(), vmbSize, cphdSize);
+    header.set(xmlMetadata.size(), vbmSize, cphdSize);
+    if (!classification.empty())
+    {
+        header.setClassification(classification);
+    }
+    if (!releaseInfo.empty())
+    {
+        header.setReleaseInfo(releaseInfo);
+    }
 
     mFile.write(header.toString().c_str(), header.size());
     mFile.write("\f\n", 2);
@@ -204,7 +214,9 @@ void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
 }
 
 void CPHDWriter::writeMetadata(const std::string& pathname,
-                               const VBM& vbm)
+                               const VBM& vbm,
+                               const std::string& classification,
+                               const std::string& releaseInfo)
 {
     // Update the number of bytes per VBP
     mMetadata.data.numBytesVBP = vbm.getNumBytesVBP();
@@ -222,7 +234,7 @@ void CPHDWriter::writeMetadata(const std::string& pathname,
                 mMetadata.data.getNumSamples(ii) * mElementSize;
     }
 
-    writeMetadata(totalVBMSize, totalCPHDSize);
+    writeMetadata(totalVBMSize, totalCPHDSize, classification, releaseInfo);
 
     std::vector<sys::ubyte> vbmData;
     for (size_t ii = 0; ii < numChannels; ++ii)
@@ -262,11 +274,13 @@ void CPHDWriter::writeCPHDData<std::complex<float> >(
         const std::complex<float>* data,
         size_t numElements);
 
-void CPHDWriter::write(const std::string& pathname)
+void CPHDWriter::write(const std::string& pathname,
+                       const std::string& classification,
+                       const std::string& releaseInfo)
 {
     mFile.create(pathname);
 
-    writeMetadata(mVBMSize, mCPHDSize);
+    writeMetadata(mVBMSize, mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mVBMData.size(); ++ii)
     {

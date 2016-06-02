@@ -58,7 +58,8 @@ protected:
     virtual XMLElem convertRadarCollectionToXML(const RadarCollection *radar,
                                                 XMLElem parent) const = 0;
 
-    virtual XMLElem convertImageFormationToXML(const ImageFormation *obj, 
+    virtual XMLElem convertImageFormationToXML(const ImageFormation *obj,
+                                       const RadarCollection& radarCollection,
                                        XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertImageFormationAlgoToXML(const PFA* pfa, const RMA* rma, 
@@ -202,6 +203,7 @@ private:
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
     void parseImageFormationFromXML(const XMLElem imageFormationXML, 
+                                    const RadarCollection& radarCollection,
                                     ImageFormation *obj) const;
     void parseAntennaFromXML(const XMLElem antennaXML, Antenna *obj) const;
     void parseAntennaParametersFromXML(const XMLElem antennaParamsXML, 

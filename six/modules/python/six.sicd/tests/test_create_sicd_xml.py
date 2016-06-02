@@ -69,9 +69,13 @@ def initImageCreation(cmplx):
 
 # Create data for a 'normal'-sized image
 def initImageDataFull(cmplx):
-    imageData = makeScopedCloneableImageData()
+    imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
-    # TODO: Fill in amplitudeTable
+
+    imageData.amplitudeTable = makeScopedCloneableAmplitudeTable()
+    for ii in range(imageData.amplitudeTable.numEntries):
+        imageData.amplitudeTable[ii] = ii / 10.0
+
     imageData.numRows = 123
     imageData.numCols = 456
     imageData.firstRow = 9
@@ -85,11 +89,12 @@ def initImageDataFull(cmplx):
     imageData.validData.push_back(RowColInt(50, 60))
 
     cmplx.imageData = imageData
+
     return cmplx
 
 # 2x2 image to make the output NITF easier to work with
 def initImageDataNITF(cmplx):
-    imageData = makeScopedCloneableImageData()
+    imageData = makeScopedCopyableImageData()
     imageData.pixelType = PixelType('RE32F_IM32F')
     imageData.numRows = 2
     imageData.numCols = 2
@@ -164,6 +169,14 @@ def initGrid(cmplx):
     grid.row.weightType = makeScopedCopyableWeightType()
     grid.row.weightType.windowName = 'UNIFORM'
 
+    param = Parameter()
+    param.setName('WeightType Param')
+    param.setValue('334')
+    grid.row.weightType.parameters.push_back(param)
+
+    for ii in range(5):
+        grid.row.weights.push_back(ii / 2.0)
+
     grid.col = makeScopedCloneableDirectionParameters()
     for i in range(3):
         grid.col.unitVector[i] = i * 10
@@ -180,6 +193,12 @@ def initGrid(cmplx):
             grid.col.deltaKCOAPoly[(i, j)] = i + j
     grid.col.weightType = makeScopedCopyableWeightType()
     grid.col.weightType.windowName = 'UNIFORM'
+    param = Parameter()
+    param.setName('WeightType Param')
+    param.setValue('334')
+    grid.col.weightType.parameters.push_back(param)
+    for ii in range(5):
+        grid.col.weights.push_back(ii / 2.0)
 
     cmplx.grid = grid
     return cmplx
@@ -231,6 +250,9 @@ def initRadarCollection(cmplx):
     radarCollection.txFrequencyMin = -99
     radarCollection.txFrequencyMax = 99
     radarCollection.txPolarization = PolarizationSequenceType('V')
+    radarCollection.polarizationHVAnglePoly = Poly1D(3)
+    for index in range(4):
+        radarCollection.polarizationHVAnglePoly[index] = index * 10
 
     txStep = makeScopedCloneableTxStep()
     txStep.waveformIndex = 1
@@ -263,14 +285,14 @@ def initRadarCollection(cmplx):
 
     areaPlane = makeScopedCloneableAreaPlane()
     for i in range(3):
-	areaPlane.referencePoint.ecef[i] = i * 10
+        areaPlane.referencePoint.ecef[i] = i * 10
     areaPlane.referencePoint.rowCol.row = 12
     areaPlane.referencePoint.rowCol.col = 34
     areaPlane.referencePoint.name = 'My ref point'
 
     xDir = makeScopedCloneableAreaDirectionParameters()
     for i in range(3):
-	xDir.unitVector[i] = i * 10
+        xDir.unitVector[i] = i * 10
     xDir.spacing = 11
     xDir.elements = 500
     xDir.first = 4
@@ -278,7 +300,7 @@ def initRadarCollection(cmplx):
 
     yDir = makeScopedCloneableAreaDirectionParameters()
     for i in range(3):
-	yDir.unitVector[i] = i * 10
+        yDir.unitVector[i] = i * 10
     yDir.spacing = 11
     yDir.elements = 500
     yDir.first = 4
@@ -306,7 +328,7 @@ def initRadarCollection(cmplx):
     cmplx.radarCollection = radarCollection
     return cmplx
 
-def initImageFormation(cmplx):
+def initImageFormation(cmplx, alg):
     imageFormation = makeScopedCopyableImageFormation()
     imageFormation.segmentIdentifier = 'AA'
 
@@ -317,7 +339,7 @@ def initImageFormation(cmplx):
     imageFormation.rcvChannelProcessed = rcvChannelProcessed
 
     imageFormation.txRcvPolarizationProc = DualPolarizationType('V_V')
-    imageFormation.imageFormationAlgorithm = ImageFormationType('PFA')
+    imageFormation.imageFormationAlgorithm = ImageFormationType(alg)
     imageFormation.tStartProc = 57
     imageFormation.tEndProc = 68
     imageFormation.txFrequencyProcMin = 789
@@ -358,13 +380,14 @@ def initImageFormation(cmplx):
 
     cmplx.imageFormation = imageFormation
     return cmplx
+
 def initSCPCOA(cmplx):
     scpcoa = makeScopedCopyableSCPCOA()
     scpcoa.scpTime = 123
     for i in range(3):
-	scpcoa.arpPos[i] = i
-	scpcoa.arpVel[i] = i * 2
-	scpcoa.arpAcc[i] = i * 3
+        scpcoa.arpPos[i] = i
+        scpcoa.arpVel[i] = i * 2
+        scpcoa.arpAcc[i] = i * 3
     scpcoa.sideOfTrack = SideOfTrackType('LEFT')
     scpcoa.slantRange = 88
     scpcoa.groundRange = 77
@@ -373,6 +396,8 @@ def initSCPCOA(cmplx):
     scpcoa.incidenceAngle = 44
     scpcoa.twistAngle = 33
     scpcoa.slopeAngle = 22
+
+    #Added after 0.4.0
     scpcoa.azimAngle = 11
     scpcoa.layoverAngle = 14
 
@@ -388,12 +413,12 @@ def initRadiometric(cmplx):
     radiometric.sigmaZeroSFPoly = Poly2D(3, 3)
     radiometric.gammaZeroSFPoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    radiometric.noiseLevel.noisePoly[(i, j)] = i + j
-	    radiometric.rcsSFPoly[(i, j)] = i + j
-	    radiometric.betaZeroSFPoly[(i, j)] = i + j
-	    radiometric.sigmaZeroSFPoly[(i, j)] = i + j
-	    radiometric.gammaZeroSFPoly[(i, j)] = i + j
+        for j in range(4):
+            radiometric.noiseLevel.noisePoly[(i, j)] = i + j
+            radiometric.rcsSFPoly[(i, j)] = i + j
+            radiometric.betaZeroSFPoly[(i, j)] = i + j
+            radiometric.sigmaZeroSFPoly[(i, j)] = i + j
+            radiometric.gammaZeroSFPoly[(i, j)] = i + j
     radiometric.sigmaZeroSFIncidenceMap = AppliedType('IS_TRUE')
     radiometric.gammaZeroSFIncidenceMap = AppliedType('IS_TRUE')
 
@@ -408,17 +433,17 @@ def initAntenna(cmplx):
     antenna.tx.xAxisPoly = PolyVector3(3)
     antenna.tx.yAxisPoly = PolyVector3(3)
     for i in range(4):
-	for j in range(3):
-	    antenna.tx.xAxisPoly[i][j] = 10 * i + j
-	    antenna.tx.yAxisPoly[i][j] = 10 * i + j
+        for j in range(3):
+            antenna.tx.xAxisPoly[i][j] = 10 * i + j
+            antenna.tx.yAxisPoly[i][j] = 10 * i + j
     antenna.tx.frequencyZero = 97
 
     antenna.tx.electricalBoresight = makeScopedCopyableElectricalBoresight()
     antenna.tx.electricalBoresight.dcxPoly = Poly1D(3)
     antenna.tx.electricalBoresight.dcyPoly = Poly1D(3)
     for i in range(4):
-	antenna.tx.electricalBoresight.dcxPoly[i] = 12 * i
-	antenna.tx.electricalBoresight.dcyPoly[i] = 34 * i
+        antenna.tx.electricalBoresight.dcxPoly[i] = 12 * i
+        antenna.tx.electricalBoresight.dcyPoly[i] = 34 * i
 
     antenna.tx.halfPowerBeamwidths = makeScopedCopyableHalfPowerBeamwidths()
     antenna.tx.halfPowerBeamwidths.dcx = 1885
@@ -428,21 +453,21 @@ def initAntenna(cmplx):
     antenna.tx.array.gainPoly = Poly2D(3, 3)
     antenna.tx.array.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.tx.array.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.tx.array.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.tx.array.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.tx.array.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.tx.element = makeScopedCopyableGainAndPhasePolys()
     antenna.tx.element.gainPoly = Poly2D(3, 3)
     antenna.tx.element.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.tx.element.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.tx.element.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.tx.element.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.tx.element.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.tx.gainBSPoly = Poly1D(3)
     for i in range(4):
-	antenna.tx.gainBSPoly[i] = i * 3
+        antenna.tx.gainBSPoly[i] = i * 3
     antenna.tx.electricalBoresightFrequencyShift = BooleanType('IS_TRUE')
     antenna.tx.mainlobeFrequencyDilation = BooleanType('IS_TRUE')
 
@@ -451,17 +476,17 @@ def initAntenna(cmplx):
     antenna.rcv.xAxisPoly = PolyVector3(3)
     antenna.rcv.yAxisPoly = PolyVector3(3)
     for i in range(4):
-	for j in range(3):
-	    antenna.rcv.xAxisPoly[i][j] = 10 * i + j
-	    antenna.rcv.yAxisPoly[i][j] = 10 * i + j
+        for j in range(3):
+            antenna.rcv.xAxisPoly[i][j] = 10 * i + j
+            antenna.rcv.yAxisPoly[i][j] = 10 * i + j
     antenna.rcv.frequencyZero = 97
 
     antenna.rcv.electricalBoresight = makeScopedCopyableElectricalBoresight()
     antenna.rcv.electricalBoresight.dcxPoly = Poly1D(3)
     antenna.rcv.electricalBoresight.dcyPoly = Poly1D(3)
     for i in range(4):
-	antenna.rcv.electricalBoresight.dcxPoly[i] = 12 * i
-	antenna.rcv.electricalBoresight.dcyPoly[i] = 34 * i
+        antenna.rcv.electricalBoresight.dcxPoly[i] = 12 * i
+        antenna.rcv.electricalBoresight.dcyPoly[i] = 34 * i
 
     antenna.rcv.halfPowerBeamwidths = makeScopedCopyableHalfPowerBeamwidths()
     antenna.rcv.halfPowerBeamwidths.dcx = 1885
@@ -471,21 +496,21 @@ def initAntenna(cmplx):
     antenna.rcv.array.gainPoly = Poly2D(3, 3)
     antenna.rcv.array.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.rcv.array.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.rcv.array.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.rcv.array.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.rcv.array.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.rcv.element = makeScopedCopyableGainAndPhasePolys()
     antenna.rcv.element.gainPoly = Poly2D(3, 3)
     antenna.rcv.element.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.rcv.element.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.rcv.element.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.rcv.element.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.rcv.element.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.rcv.gainBSPoly = Poly1D(3)
     for i in range(4):
-	antenna.rcv.gainBSPoly[i] = i * 3
+        antenna.rcv.gainBSPoly[i] = i * 3
     antenna.rcv.electricalBoresightFrequencyShift = BooleanType('IS_TRUE')
     antenna.rcv.mainlobeFrequencyDilation = BooleanType('IS_TRUE')
 
@@ -494,17 +519,17 @@ def initAntenna(cmplx):
     antenna.twoWay.xAxisPoly = PolyVector3(3)
     antenna.twoWay.yAxisPoly = PolyVector3(3)
     for i in range(4):
-	for j in range(3):
-	    antenna.twoWay.xAxisPoly[i][j] = 10 * i + j
-	    antenna.twoWay.yAxisPoly[i][j] = 10 * i + j
+        for j in range(3):
+            antenna.twoWay.xAxisPoly[i][j] = 10 * i + j
+            antenna.twoWay.yAxisPoly[i][j] = 10 * i + j
     antenna.twoWay.frequencyZero = 97
 
     antenna.twoWay.electricalBoresight = makeScopedCopyableElectricalBoresight()
     antenna.twoWay.electricalBoresight.dcxPoly = Poly1D(3)
     antenna.twoWay.electricalBoresight.dcyPoly = Poly1D(3)
     for i in range(4):
-	antenna.twoWay.electricalBoresight.dcxPoly[i] = 12 * i
-	antenna.twoWay.electricalBoresight.dcyPoly[i] = 34 * i
+        antenna.twoWay.electricalBoresight.dcxPoly[i] = 12 * i
+        antenna.twoWay.electricalBoresight.dcyPoly[i] = 34 * i
 
     antenna.twoWay.halfPowerBeamwidths = makeScopedCopyableHalfPowerBeamwidths()
     antenna.twoWay.halfPowerBeamwidths.dcx = 1885
@@ -514,21 +539,21 @@ def initAntenna(cmplx):
     antenna.twoWay.array.gainPoly = Poly2D(3, 3)
     antenna.twoWay.array.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.twoWay.array.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.twoWay.array.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.twoWay.array.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.twoWay.array.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.twoWay.element = makeScopedCopyableGainAndPhasePolys()
     antenna.twoWay.element.gainPoly = Poly2D(3, 3)
     antenna.twoWay.element.phasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    antenna.twoWay.element.gainPoly[(i, j)] = i * 10 + j * 5
-	    antenna.twoWay.element.phasePoly[(i, j)] = i * 10 + j * 5
+        for j in range(4):
+            antenna.twoWay.element.gainPoly[(i, j)] = i * 10 + j * 5
+            antenna.twoWay.element.phasePoly[(i, j)] = i * 10 + j * 5
 
     antenna.twoWay.gainBSPoly = Poly1D(3)
     for i in range(4):
-	antenna.twoWay.gainBSPoly[i] = i * 3
+        antenna.twoWay.gainBSPoly[i] = i * 3
     antenna.twoWay.electricalBoresightFrequencyShift = BooleanType('IS_TRUE')
     antenna.twoWay.mainlobeFrequencyDilation = BooleanType('IS_TRUE')
 
@@ -631,15 +656,15 @@ def initMatchInfo(cmplx):
 def initPFA(cmplx):
     pfa = makeScopedCopyablePFA()
     for i in range(3):
-	pfa.focusPlaneNormal[i] = i * 2
-	pfa.imagePlaneNormal[i] = i * 3
+        pfa.focusPlaneNormal[i] = i * 2
+        pfa.imagePlaneNormal[i] = i * 3
     pfa.polarAngleRefTime = 12
 
     pfa.polarAnglePoly = Poly1D(3)
     pfa.spatialFrequencyScaleFactorPoly = Poly1D(3)
     for i in range(4):
-	pfa.polarAnglePoly[i] = i
-	pfa.spatialFrequencyScaleFactorPoly[i] = i * i
+        pfa.polarAnglePoly[i] = i
+        pfa.spatialFrequencyScaleFactorPoly[i] = i * i
 
     pfa.krg1 = 1189
     pfa.krg2 = 1131
@@ -649,27 +674,44 @@ def initPFA(cmplx):
     pfa.slowTimeDeskew.applied = BooleanType('IS_TRUE')
     pfa.slowTimeDeskew.slowTimeDeskewPhasePoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    pfa.slowTimeDeskew.slowTimeDeskewPhasePoly[(i, j)] = 44 * i + j
+        for j in range(4):
+            pfa.slowTimeDeskew.slowTimeDeskewPhasePoly[(i, j)] = 44 * i + j
 
     cmplx.pfa = pfa
     return cmplx
 
-def initRMA():
+def initRMA(cmplx, version, imageType):
     rma = makeScopedCopyableRMA()
     rma.algoType = RMAlgoType('OMEGA_K')
+
+    if imageType == 'INCA':
+        rma = initINCA(rma)
+
+    elif imageType == 'RMCR':
+        if version.startswith('1'):
+            rma = initRMCR(rma)
+        else:
+            raise ValueError(
+                'RMCR image type not present in version {0}'.format(version))
+    elif imageType == 'RMAT':
+        rma = initRMAT(rma)
+
+    cmplx.rma = rma
+    return cmplx
+
+def initRMAT(rma):
     rma.rmat = makeScopedCopyableRMAT()
     rma.rmat.refTime = 12
     for i in range(3):
-	rma.rmat.refPos[i] = i
-	rma.rmat.refVel[i] = i + 1
+        rma.rmat.refPos[i] = i
+        rma.rmat.refVel[i] = i + 1
     rma.rmat.distRefLinePoly = Poly1D(3)
     for i in range(4):
-	rma.rmat.distRefLinePoly[i] = i * 5
+        rma.rmat.distRefLinePoly[i] = i * 5
     rma.rmat.cosDCACOAPoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    rma.rmat.cosDCACOAPoly[(i, j)] = i + j
+        for j in range(4):
+            rma.rmat.cosDCACOAPoly[(i, j)] = i + j
     rma.rmat.kx1 = 1
     rma.rmat.kx2 = 2
     rma.rmat.ky1 = 3
@@ -677,36 +719,48 @@ def initRMA():
     rma.rmat.dopConeAngleRef = 5
     return rma
 
-def initRMCR():
+def initRMCR(rma):
     rmcr = makeScopedCopyableRMCR()
     for i in range(3):
-	rmcr.refPos[i] = i
-	rmcr.refVel[i] = i * 2
+        rmcr.refPos[i] = i
+        rmcr.refVel[i] = i * 2
     rmcr.dopConeAngleRef = 9
+    rma.rmcr = rmcr
+    return rma
 
-def initINCA():
+def initINCA(rma):
     inca = makeScopedCopyableINCA()
     inca.timeCAPoly = Poly1D(3)
     for i in range(3):
-	inca.timeCAPoly[i] = i
+        inca.timeCAPoly[i] = i
     inca.rangeCA = 5
     inca.freqZero = 10
-    inca.dopplerRateScaleFactorPoly = Poly2D(3, 3)
+    inca.dopplerRateScaleFactorPoly = Poly2D(0, 3)
     inca.dopplerCentroidPoly = Poly2D(3, 3)
     for i in range(4):
-	for j in range(4):
-	    inca.dopplerRateScaleFactorPoly[(i, j)] = 9 * i
-	    inca.dopplerCentroidPoly[(i, j)] = 10 * i
-    inca.dopplerCentroidCOA = BooleanType('IS_TRUE')
+            for j in range(4):
+                inca.dopplerCentroidPoly[(i, j)] = 10 * i
 
-def initRgAzComp():
+    for i in range(4):
+        inca.dopplerRateScaleFactorPoly[(0, i)] = 9 * i
+
+    inca.dopplerCentroidCOA = BooleanType('IS_TRUE')
+    rma.inca = inca
+    return rma
+
+def initRgAzComp(cmplx):
     rgAzComp = makeScopedCopyableRgAzComp()
     rgAzComp.azSF = 123
     rgAzComp.kazPoly = Poly1D(3)
     for i in range(4):
         rgAzComp.kazPoly[i] = i * 100
+    cmplx.rgAzComp = rgAzComp
+    return cmplx
 
-def initData(cmplx, includeNITF):
+
+def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
+    cmplx = ComplexData()
+    cmplx.setVersion(version)
     cmplx = initCollectionInfo(cmplx)
     cmplx = initImageCreation(cmplx)
     if includeNITF:
@@ -718,36 +772,50 @@ def initData(cmplx, includeNITF):
     cmplx = initTimeline(cmplx)
     cmplx = initPosition(cmplx)
     cmplx = initRadarCollection(cmplx)
-    cmplx = initImageFormation(cmplx)
+    cmplx = initImageFormation(cmplx, alg)
     cmplx = initSCPCOA(cmplx)
     cmplx = initRadiometric(cmplx)
     cmplx = initAntenna(cmplx)
     cmplx = initErrorStats(cmplx)
     cmplx = initMatchInfo(cmplx)
-    cmplx = initPFA(cmplx)
-    # Following four attributes not assigned due to restrictions
-    # Just building them up to make sure they work
-    initRMA()
-    initRMCR()
-    initINCA()
-    initRgAzComp()
+    if alg == 'PFA':
+        cmplx = initPFA(cmplx)
+    elif alg == 'RMA':
+        cmplx = initRMA(cmplx, version, imageType)
+    elif alg == 'RGAZCOMP':
+        if version.startswith('4'):
+            raise ValueError(
+                'RgAzComp algorithm not defined'
+                ' for version {0}'.format(version))
+        cmplx = initRgAzComp(cmplx)
+
     return cmplx
 
-def writeXML(name, schemaPaths, cmplxData):
+def writeXML(name, cmplxData):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     xml_ctrl = ComplexXMLControl()
     pathName = '{0}.xml'.format(name)
     fos = FileOutputStream(pathName)
-    out_doc = xml_ctrl.toXML(cmplxData, schemaPaths)
-    root = out_doc.getRootElement()
-    root.prettyPrint(fos)
-    fos.close()
+    try:
+        out_doc = xml_ctrl.toXML(cmplxData, schemaPaths)
+        root = out_doc.getRootElement()
+        root.prettyPrint(fos)
+    except RuntimeError:
+        pass
+    finally:
+        fos.close()
 
-def writeNITF(pathName, schemaPaths, cmplxData):
+def writeNITF(pathName, cmplxData):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     imageBuffer = np.array([[1. + 2.j, 7.j], [8., 0.]])
     writeAsNITF('{0}.nitf'.format(pathName), schemaPaths,
             cmplxData, imageBuffer)
 
-def readXML(pathNameBase, schemaPaths):
+def readXML(pathNameBase):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     fis = FileInputStream('{0}.xml'.format(pathNameBase))
     xmlparser = MinidomParser()
     xmlparser.preserveCharacterData(True)
@@ -759,23 +827,12 @@ def readXML(pathNameBase, schemaPaths):
     cmplxReadBackIn = asComplexData(data)
     return cmplxReadBackIn
 
-if __name__ == '__main__':
-    includeNITF = False
-    if len(sys.argv) == 2 and sys.argv[1] == "--includeNITF":
-        includeNITF = True
-    elif len(sys.argv) > 1:
-        sys.exit('Usage: {0} [--includeNITF]'.format(sys.argv[0]))
 
-    # Build up a giant ComplexData from scratch with everything populated
-    cmplx = initData(ComplexData(), includeNITF)
+def doRoundTrip(cmplx, includeNITF, outputFilename):
 
-    ### Now format it as XML and write it out to a file ###
-    vs = VectorString()
-    vs.push_back(os.environ['SIX_SCHEMA_PATH'])
-    origPathnameBase = 'test_create_sicd'
-    writeXML(origPathnameBase, vs, cmplx)
+    writeXML(outputFilename, cmplx)
     if includeNITF:
-        writeNITF(origPathnameBase, vs, cmplx)
+        writeNITF(outputFilename, cmplx)
 
     # If we made it to here, all the Python bindings must be present and
     # what we wrote out must have passed schema validation
@@ -783,25 +840,52 @@ if __name__ == '__main__':
     # get written out though
 
     ### Now read it back in again ###
-    cmplxReadBackIn = readXML(origPathnameBase, vs)
+    cmplxReadBackIn = readXML(outputFilename)
     if includeNITF:
-        cmplxFromNITF = readFromNITF(origPathnameBase, vs)
+        cmplxFromNITF = readFromNITF(outputFilename)
     # And then write it out one more time #
-    newPathnameBase = '{0}_rt'.format(origPathnameBase)
-    writeXML(newPathnameBase, vs, cmplxReadBackIn)
+    newPathnameBase = '{0}_rt'.format(outputFilename)
+    writeXML(newPathnameBase, cmplxReadBackIn)
     if includeNITF:
-        writeNITF(newPathnameBase, vs, cmplxReadBackIn)
+        writeNITF(newPathnameBase, cmplxReadBackIn)
 
+    successCode = 0
     # These should match #
-    if filecmp.cmp(origPathnameBase + ".xml", newPathnameBase + ".xml"):
-	print 'XML round trip succeeded!'
+
+    if filecmp.cmp(outputFilename + ".xml", newPathnameBase + ".xml"):
+        print('XML round trip succeeded!')
     else:
-	print 'NITF round trip failed'
+        successCode = 1
+        print('XML round trip failed')
 
     if includeNITF:
-        if filecmp.cmp(origPathnameBase + ".nitf", newPathnameBase + ".nitf"):
-    	    print 'Round trip succeeded!'
+        if filecmp.cmp(outputFilename + ".nitf", newPathnameBase + ".nitf"):
+            print('NITF round trip succeeded!')
         else:
-            print 'Round trip failed'
+            successCode = 1
+            print('NITF round trip failed')
 
-    # If we made it to here, the read side appears to be working properly too
+    return successCode
+
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate a SICD XML '
+        '(and optionally NITF) and round-trip it.')
+    parser.add_argument('--includeNITF', action='store_true',
+            help='Round-trip a NITF as well as an XML file')
+    parser.add_argument('-v', '--version', default='1.1.0',
+            choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0'],
+            help='Version of SICD to generate')
+
+    args = parser.parse_args()
+    includeNITF = args.includeNITF
+
+    # Build up a giant ComplexData from scratch with everything populated
+    cmplx = initData(includeNITF, args.version)
+    successCode = doRoundTrip(cmplx, includeNITF, 'test_create_sicd')
+    sys.exit(successCode)
+
+

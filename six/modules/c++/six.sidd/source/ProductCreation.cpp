@@ -30,8 +30,25 @@ six::sidd::ProcessorInformation* six::sidd::ProcessorInformation::clone() const
     return new six::sidd::ProcessorInformation(*this);
 }
 
+bool six::sidd::ProcessorInformation::operator==(const six::sidd::ProcessorInformation& rhs) const
+{
+    return (application == rhs.application &&
+        processingDateTime == rhs.processingDateTime &&
+        site == rhs.site &&
+        profile == rhs.profile);
+}
+
 six::sidd::ProductCreation* six::sidd::ProductCreation::clone() const
 {
      return new six::sidd::ProductCreation(*this);
 }
 
+bool six::sidd::ProductCreation::operator==(const six::sidd::ProductCreation& rhs) const
+{
+    return (processorInformation == rhs.processorInformation &&
+        classification == rhs.classification &&
+        productName == rhs.productName &&
+        productClass == rhs.productClass &&
+        productType == rhs.productType &&
+        productCreationExtensions == rhs.productCreationExtensions);
+}

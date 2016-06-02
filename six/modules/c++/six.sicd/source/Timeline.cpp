@@ -33,6 +33,15 @@ TimelineSet::TimelineSet() :
 {
 }
 
+bool TimelineSet::operator==(const TimelineSet& rhs) const
+{
+    return (tStart == rhs.tStart &&
+        tEnd == rhs.tEnd &&
+        interPulsePeriodStart == rhs.interPulsePeriodStart &&
+        interPulsePeriodEnd == rhs.interPulsePeriodEnd &&
+        interPulsePeriodPoly == rhs.interPulsePeriodPoly);
+}
+
 Timeline::Timeline() :
     collectStart(Init::undefined<DateTime>()),
     collectDuration(Init::undefined<double>())

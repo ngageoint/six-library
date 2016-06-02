@@ -240,6 +240,25 @@ public:
             const types::RowCol<size_t>& offset,
             const types::RowCol<size_t>& extent,
             std::complex<float>* buffer);
+
+    /*
+    * Return the unit vector normal to the ground plane.
+    * If an output plane is defined (i.e. RadarCollection.Area.Plane
+    * exists), this is taken to be the ground plane. Otherwise,
+    * the normalized ECEF coordinates of the Scene Center Point
+    * (GeoData.scp.ec) are returned.
+    * \param data The ComplexData object associated with the SICD
+    * \return the unit vector normal to the ground plane
+    */
+    static Vector3 getGroundPlaneNormal(const ComplexData& data);
+
+    /*
+     * Given a desired denominator, return epsilon if  it is equal to 0.
+     * Otherwise, return the number unaltered.
+     * \param denominator The desired denominator
+     * \return the nearest non-zero number
+     */
+    static double nonZeroDenominator(double denominator);
 };
 }
 }

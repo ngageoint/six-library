@@ -51,6 +51,20 @@ WaveformParameters::WaveformParameters() :
 {
 }
 
+bool WaveformParameters::operator==(const WaveformParameters& rhs) const
+{
+    return (txPulseLength == rhs.txPulseLength &&
+        txRFBandwidth == rhs.txRFBandwidth &&
+        txFrequencyStart == rhs.txFrequencyStart &&
+        txFMRate == rhs.txFMRate &&
+        rcvDemodType == rhs.rcvDemodType &&
+        rcvWindowLength == rhs.rcvWindowLength &&
+        adcSampleRate == rhs.adcSampleRate &&
+        rcvIFBandwidth == rhs.rcvIFBandwidth &&
+        rcvFrequencyStart == rhs.rcvFrequencyStart &&
+        rcvFMRate == rhs.rcvFMRate);
+}
+
 WaveformParameters* WaveformParameters::clone() const
 {
     return new WaveformParameters(*this);
@@ -97,6 +111,15 @@ Segment::Segment() :
     endSample(Init::undefined<int>()),
     identifier(Init::undefined<std::string>())
 {
+}
+
+bool Segment::operator==(const Segment& rhs) const
+{
+    return (startLine == rhs.startLine &&
+        startSample == rhs.startSample &&
+        endLine == rhs.endLine &&
+        endSample == rhs.endSample &&
+        identifier == rhs.identifier);
 }
 
 Segment* Segment::clone() const
@@ -151,6 +174,20 @@ Area* Area::clone() const
 RadarCollection* RadarCollection::clone() const
 {
     return new RadarCollection(*this);
+}
+
+bool RadarCollection::operator==(const RadarCollection& rhs) const
+{
+    return (refFrequencyIndex == rhs.refFrequencyIndex &&
+        txFrequencyMin == rhs.txFrequencyMin &&
+        txFrequencyMax == rhs.txFrequencyMax &&
+        txPolarization == rhs.txPolarization &&
+        polarizationHVAnglePoly == rhs.polarizationHVAnglePoly &&
+        txSequence == rhs.txSequence &&
+        waveform == rhs.waveform &&
+        rcvChannels == rhs.rcvChannels &&
+        area == rhs.area &&
+        parameters == rhs.parameters);
 }
 }
 }

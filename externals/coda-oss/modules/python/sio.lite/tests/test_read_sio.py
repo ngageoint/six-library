@@ -31,11 +31,11 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2:
         inputPathname = sys.argv[1]
     else:
-        print "Usage: " + sys.argv[0] + " <Input SIO>"
+        print("Usage: " + sys.argv[0] + " <Input SIO>")
         sys.exit(0)
         
     array = read(inputPathname)
     
-    print "Dims: " + str(array.shape)
-    print "Type: " + str(array.dtype)
+    print("Dims: " + str(array.shape))
+    print("Type: " + str(array.dtype))
     

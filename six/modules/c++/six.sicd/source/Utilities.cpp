@@ -378,7 +378,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const size_t imageNumber = 0;
 
     const size_t requiredBufferBytes = sizeof(std::complex<float>)
-                                            * extent.normL1();
+                                            * extent.area();
 
     if (buffer == NULL)
     {
@@ -430,7 +430,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const types::RowCol<size_t>& extent,
                                 std::vector<std::complex<float> >& buffer)
 {
-    const size_t requiredNumElements = extent.normL1();
+    const size_t requiredNumElements = extent.area();
     buffer.resize(requiredNumElements);
 
     if (requiredNumElements > 0)
@@ -489,6 +489,33 @@ void Utilities::getWidebandData(
             offset, extent, buffer);
 }
 
+Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
+{
+    Vector3 groundPlaneNormal;
+
+    if (data.radarCollection->area.get() &&
+        data.radarCollection->area->plane.get())
+    {
+        const AreaPlane& areaPlane = *data.radarCollection->area->plane;
+        groundPlaneNormal = math::linear::cross(areaPlane.xDirection->unitVector,
+                areaPlane.yDirection->unitVector);
+    }
+    else
+    {
+        groundPlaneNormal = data.geoData->scp.ecf;
+    }
+
+    return groundPlaneNormal.unit();
+}
+
+double Utilities::nonZeroDenominator(double denominator)
+{
+    if (denominator == 0)
+    {
+        return std::numeric_limits<double>::epsilon();
+    }
+    return denominator;
+}
 }
 }
 
