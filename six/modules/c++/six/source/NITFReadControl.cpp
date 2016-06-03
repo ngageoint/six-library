@@ -88,6 +88,8 @@ DataType NITFReadControl::getDataType(nitf::Record& record)
     {
         return DataType::NOT_SET;
     }
+
+    // SICD spec guarantees that the first DES will be the SICD/SIDD DES
     nitf::DESegment segment = (nitf::DESegment) des.getFirst().getData();
     return getDataType(segment);
 }
@@ -251,16 +253,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     reset();
 
     mRecord = mReader.readIO(ioInterface);
-    const std::string title = mRecord.getHeader().getFileTitle().toString();
-
-    DataType dataType;
-    if (str::startsWith(title, "SICD"))
-        dataType = DataType::COMPLEX;
-    else if (str::startsWith(title, "SIDD"))
-        dataType = DataType::DERIVED;
-    else
-        throw except::Exception(Ctxt("Unexpected file type"));
-
+    DataType dataType = getDataType(mRecord);
     mContainer = new Container(dataType);
 
     // First, read in the DE segments, and organize them
@@ -271,6 +264,8 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     {
         nitf::DESegment segment = (nitf::DESegment) *desIter;
         nitf::DESubheader subheader = segment.getSubheader();
+
+        //Skip over any non-SICD/SIDD DESs
         if (getDataType(segment) == DataType::NOT_SET)
         {
             continue;
