@@ -206,8 +206,7 @@ struct BandInformation
 {
     BandInformation();
 
-    std::vector<std::string> bands;
-    size_t bitsPerPixel;
+    std::vector<std::string> bandDescriptors;
 
     //! (Optional) Which band to display by default
     size_t displayFlag;
@@ -316,6 +315,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
+    size_t bandStatsSource; //! Indicates which band to use for DRA stats
 
     // Must include exactly one of draParameters or draOverrides
     mem::ScopedCopyablePtr<DRAParameters> draParameters;

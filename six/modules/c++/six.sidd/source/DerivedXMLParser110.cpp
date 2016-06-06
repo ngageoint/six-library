@@ -384,16 +384,14 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayElem,
 void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandElem,
             BandInformation& bandInformation) const
 {
-    std::vector<XMLElem> bands;
-    bandElem->getElementsByTagName("Band", bands);
-    bandInformation.bands = std::vector<std::string>();
-    bandInformation.bands.resize(bands.size());
-    for (size_t ii = 0; ii < bands.size(); ++ii)
+    std::vector<XMLElem> bandDescriptors;
+    bandElem->getElementsByTagName("BandDescriptor", bandDescriptors);
+    bandInformation.bandDescriptors = std::vector<std::string>();
+    bandInformation.bandDescriptors.resize(bandDescriptors.size());
+    for (size_t ii = 0; ii < bandDescriptors.size(); ++ii)
     {
-        parseString(bands[ii], bandInformation.bands[ii]);
+        parseString(bandDescriptors[ii], bandInformation.bandDescriptors[ii]);
     }
-    parseInt(getFirstAndOnly(bandElem, "BitsPerPixel"),
-        bandInformation.bitsPerPixel);
 
     XMLElem displayFlagElem = getOptional(bandElem, "DisplayFlag");
     if (displayFlagElem)
@@ -804,6 +802,7 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
             DynamicRangeAdjustment& rangeAdjustment) const
 {
     parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
+    parseInt(getFirstAndOnly(rangeElem, "BandStatsSource"), rangeAdjustment.bandStatsSource);
 
     bool ok = false;
     XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
@@ -1200,6 +1199,7 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
 
     createStringFromEnum("AlgorithmType", adjust.algorithmType,
         adjustElem);
+    createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
     ok = false;
     if (adjust.draParameters.get())
@@ -1670,7 +1670,6 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     // NOTE: In several spots here, there are fields which are required in
     //       SIDD 1.1 but a pointer in the Display class since it didn't exist
     //       in SIDD 1.0, so need to confirm it's allocated
-
     XMLElem displayElem = newElement("Display", parent);
 
 
@@ -1680,16 +1679,17 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     if (display.bandInformation.get() != NULL)
     {
         XMLElem bandInfoElem = newElement("BandInformation", displayElem);
-        createInt("NumBands", display.bandInformation->bands.size(), bandInfoElem);
-        for (size_t ii = 0; ii < display.bandInformation->bands.size(); ++ii)
-        {
-            XMLElem bandElem = createString("Band",
-                display.bandInformation->bands[ii],
+        createInt("NumBands", display.bandInformation->bandDescriptors.size(),
                 bandInfoElem);
-            setAttribute(bandElem, "index", str::toString(ii + 1));
+        for (size_t ii = 0; 
+                ii < display.bandInformation->bandDescriptors.size(); ++ii)
+        {
+            XMLElem bandElem = createString("BandDescriptor",
+                display.bandInformation->bandDescriptors[ii],
+                bandInfoElem);
+            setAttribute(bandElem, "band", str::toString(ii + 1));
         }
-        createInt("BitsPerPixel", display.bandInformation->bitsPerPixel,
-            bandInfoElem);
+
         if (six::Init::isDefined<size_t>(display.bandInformation->displayFlag))
         {
             createInt("DisplayFlag", display.bandInformation->displayFlag,

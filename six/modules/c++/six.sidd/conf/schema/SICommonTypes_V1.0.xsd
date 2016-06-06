@@ -436,10 +436,33 @@
     </xsd:simpleType>
     <xsd:complexType name="RadiometricType">
         <xsd:sequence>
+            <xsd:element name="NoiseLevel" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NoiseLevelType">
+                            <xsd:simpleType>
+                                <xsd:restriction base="xsd:string">
+                                    <xsd:enumeration value="ABSOLUTE"/>
+                                    <xsd:enumeration value="RELATIVE"/>
+                                </xsd:restriction>
+                            </xsd:simpleType>
+                        </xsd:element>
+                        <xsd:element name="NoisePoly" type="Poly2DType"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
             <xsd:element name="NoisePoly" type="Poly2DType" minOccurs="0"/>
             <xsd:element name="RCSSFPoly" type="Poly2DType" minOccurs="0"/>
-            <xsd:element name="BetaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
             <xsd:element name="SigmaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
+            <xsd:element name="BetaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
+            <xsd:element name="SigmaZeroSFIncidenceMap" minOccurs="0">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="APPLIED"/>
+                        <xsd:enumeration value="NOT_APPLIED"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
             <xsd:element name="GammaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>

@@ -38,7 +38,6 @@ DRAHistogramOverrides::DRAHistogramOverrides() :
 }
 
 BandInformation::BandInformation() :
-    bitsPerPixel(six::Init::undefined<size_t>()),
     displayFlag(six::Init::undefined<size_t>())
 {
 }

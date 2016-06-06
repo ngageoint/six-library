@@ -1793,10 +1793,9 @@ void initDisplay(six::sidd::Display& display)
 {
     // BandInformation
     display.bandInformation.reset(new six::sidd::BandInformation());
-    display.bandInformation->bands.push_back("Red");
-    display.bandInformation->bands.push_back("Green");
-    display.bandInformation->bands.push_back("Blue");
-    display.bandInformation->bitsPerPixel = 8;
+    display.bandInformation->bandDescriptors.push_back("Red");
+    display.bandInformation->bandDescriptors.push_back("Green");
+    display.bandInformation->bandDescriptors.push_back("Blue");
     display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
 
     // NonInteractiveProcessing
@@ -1858,6 +1857,7 @@ void initDisplay(six::sidd::Display& display)
     six::sidd::DynamicRangeAdjustment& dra =
             display.interactiveProcessing->dynamicRangeAdjustment;
     dra.algorithmType = six::sidd::DRAType::AUTO;
+    dra.bandStatsSource = 1;
     dra.draParameters.reset(new six::sidd::DynamicRangeAdjustment::DRAParameters());
     dra.draParameters->pMin = 0.2;
     dra.draParameters->pMax = 0.8;
@@ -1945,7 +1945,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation)
     productCreation.productName = "ProductName";
     productCreation.productClass = "Classy";
     productCreation.classification.classification = "U";
-    productCreation.classification.compliesWith.push_back("ICD-710");
+    productCreation.classification.compliesWith.push_back("USGov");
     productCreation.classification.ownerProducer.push_back("ABW");
     productCreation.classification.ownerProducer.push_back("AIA");
     productCreation.classification.sciControls.push_back("HCS");
@@ -1960,7 +1960,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation)
     productCreation.classification.fgiSourceProtected.push_back("AND");
     productCreation.classification.releasableTo.push_back("ABW");
     productCreation.classification.releasableTo.push_back("AFG");
-    productCreation.classification.nonICMarkings.push_back("SINFO");
+    productCreation.classification.nonICMarkings.push_back("NNPI");
     productCreation.classification.nonICMarkings.push_back("DS");
     productCreation.classification.classifiedBy = "PVT Snuffy";
     productCreation.classification.compilationReason = "Testing purposes";
@@ -2202,7 +2202,7 @@ void initErrorStatistics(six::ErrorStatistics& err)
 
 void initRadiometric(six::Radiometric& radiometric)
 {
-    radiometric.noiseLevel.noiseType = "Noise type";
+    radiometric.noiseLevel.noiseType = "ABSOLUTE";
     radiometric.noiseLevel.noisePoly = six::Poly2D(0, 0);
 
     radiometric.rcsSFPoly = six::Poly2D(0, 0);
@@ -2239,7 +2239,7 @@ void initAnnotations(six::sidd::Annotations& annotations)
 void populateData(six::sidd::DerivedData& siddData, const std::string&
         lutType, bool smallImage, const std::string& version)
 {
-
+    siddData.setVersion(version);
     // These things are essential to forming the file
     if (smallImage)
     {
@@ -2262,7 +2262,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.display->magnificationMethod
             = MagnificationMethod::NEAREST_NEIGHBOR;
 
-    initDisplay(*siddData.display, lutType);
+    initDisplay(*siddData.display);// , lutType);
     initGeographicAndTarget(*siddData.geographicAndTarget);
 
     //---------------------------------------------------------------
@@ -2340,7 +2340,7 @@ int main(int argc, char** argv)
             cli::STORE_TRUE, "smallImage", "", 0, 1);
     argParser.addArgument("--version", "1.0.0 or 1.1.0", cli::STORE,
             "version", "", 0, 1)->setChoices(str::split("1.0.0 1.1.0"))->
-            setDefault("1.0.0");
+            setDefault("1.1.0");
     argParser.addArgument("output", "File to write to", cli::STORE, "output",
             "output-file", 1, 1, true);
     argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
