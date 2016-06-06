@@ -99,9 +99,9 @@ LUT* DerivedData::getDisplayLUT()
     }
     else if (mVersion == "1.1.0")
     {
-        if (display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->custom.get())
+        if (display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom.get())
         {
-            return &(display->nonInteractiveProcessing->productGenerationOptions.dataRemapping->custom->lut);
+            return &(display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom->lut);
         }
         else
         {

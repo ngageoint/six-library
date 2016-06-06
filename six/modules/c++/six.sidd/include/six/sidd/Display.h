@@ -387,8 +387,10 @@ struct Display
     mem::ScopedCopyablePtr<BandInformation> bandInformation;
 
     //Required
-    mem::ScopedCopyablePtr<NonInteractiveProcessing> nonInteractiveProcessing;
-    mem::ScopedCopyablePtr<InteractiveProcessing> interactiveProcessing;
+    std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >
+            nonInteractiveProcessing;
+    std::vector<mem::ScopedCopyablePtr<InteractiveProcessing> >
+            interactiveProcessing;
 
     // End of SIDD 1.1-only section
 

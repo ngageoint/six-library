@@ -360,12 +360,29 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayElem,
         parseBandInformationFromXML(bandInfoElem, *display.bandInformation);
     }
 
-    display.nonInteractiveProcessing.reset(new NonInteractiveProcessing());
-    parseNonInteractiveProcessingFromXML(getFirstAndOnly(displayElem,
-           "NonInteractiveProcessing"), *display.nonInteractiveProcessing);
-    display.interactiveProcessing.reset(new InteractiveProcessing());
-    parseInteractiveProcessingFromXML(getFirstAndOnly(displayElem,
-           "InteractiveProcessing"), *display.interactiveProcessing);
+    std::vector<XMLElem> nonInteractiveProcessingElems;
+    displayElem->getElementsByTagName("NonInteractiveProcessing",
+            nonInteractiveProcessingElems);
+
+    display.nonInteractiveProcessing.resize(nonInteractiveProcessingElems.size());
+    for (size_t ii = 0; ii < nonInteractiveProcessingElems.size(); ++ii)
+    {
+        display.nonInteractiveProcessing[ii].reset(new NonInteractiveProcessing());
+        parseNonInteractiveProcessingFromXML(nonInteractiveProcessingElems[ii],
+                *display.nonInteractiveProcessing[ii]);
+    }
+
+    std::vector<XMLElem> interactiveProcessingElems;
+    displayElem->getElementsByTagName("InteractiveProcessing",
+            interactiveProcessingElems);
+
+    display.interactiveProcessing.resize(interactiveProcessingElems.size());
+    for (size_t ii = 0; ii < interactiveProcessingElems.size(); ++ii)
+    {
+        display.interactiveProcessing[ii].reset(new InteractiveProcessing());
+        parseInteractiveProcessingFromXML(interactiveProcessingElems[ii],
+                *display.interactiveProcessing[ii]);
+    }
 
     std::vector<XMLElem> extensions;
     displayElem->getElementsByTagName("DisplayExtention", extensions);
@@ -1230,7 +1247,6 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
     {
         convertLookupTableToXML("TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
     }
-
     return processingElem;
 }
 
@@ -1698,15 +1714,27 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     }
 
     // NonInteractiveProcessing
-    confirmNonNull(display.nonInteractiveProcessing,
-                   "nonInteractiveProcessing");
-    convertNonInteractiveProcessingToXML(*display.nonInteractiveProcessing,
-                                         displayElem);
+    
+    for (size_t ii = 0; ii < display.nonInteractiveProcessing.size(); ++ii)
+    {
+        confirmNonNull(display.nonInteractiveProcessing[ii],
+                "nonInteractiveProcessing");
+        XMLElem temp = convertNonInteractiveProcessingToXML(
+                *display.nonInteractiveProcessing[ii],
+                displayElem);
+        setAttribute(temp, "band", str::toString(ii + 1));
+    }
 
-    // InteractiveProcessing
-    confirmNonNull(display.interactiveProcessing, "interactiveProcessing");
-    convertInteractiveProcessingToXML(*display.interactiveProcessing,
-                                      displayElem);
+    for (size_t ii = 0; ii < display.interactiveProcessing.size(); ++ii)
+    {
+        // InteractiveProcessing
+        confirmNonNull(display.interactiveProcessing[ii],
+                "interactiveProcessing");
+        XMLElem temp = convertInteractiveProcessingToXML(
+                *display.interactiveProcessing[ii],
+                displayElem);
+        setAttribute(temp, "band", str::toString(ii + 1));
+    }
 
     // optional to unbounded
     common().addParameters("DisplayExtension", display.displayExtensions,

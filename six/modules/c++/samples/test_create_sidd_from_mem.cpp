@@ -1789,93 +1789,6 @@ std::auto_ptr<six::sidd::Filter> createCustomFilter()
     return filter;
 }
 
-void initDisplay(six::sidd::Display& display)
-{
-    // BandInformation
-    display.bandInformation.reset(new six::sidd::BandInformation());
-    display.bandInformation->bandDescriptors.push_back("Red");
-    display.bandInformation->bandDescriptors.push_back("Green");
-    display.bandInformation->bandDescriptors.push_back("Blue");
-    display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
-
-    // NonInteractiveProcessing
-    display.nonInteractiveProcessing.reset(
-            new six::sidd::NonInteractiveProcessing());
-    six::sidd::ProductGenerationOptions& prodGenOptions =
-            display.nonInteractiveProcessing->productGenerationOptions;
-    prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
-    prodGenOptions.bandEqualization->algorithm =
-            six::sidd::BandEqualizationAlgorithm::LUT_1D;
-    prodGenOptions.bandEqualization->bandLUTs.resize(1);
-    prodGenOptions.bandEqualization->bandLUTs[0].reset(new six::sidd::LookupTable());
-    prodGenOptions.bandEqualization->bandLUTs[0]->lutName = "LUT Name";
-    prodGenOptions.bandEqualization->bandLUTs[0]->predefined.reset(new six::sidd::LookupTable::Predefined());
-    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapFamily = 5;
-    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapMember = 3;
-
-    prodGenOptions.modularTransferFunctionRestoration.reset(
-            new six::sidd::Filter());
-    createPredefinedFilter(*prodGenOptions.modularTransferFunctionRestoration);
-
-    prodGenOptions.dataRemapping.reset(
-            new six::sidd::LookupTable());
-    prodGenOptions.dataRemapping->custom.reset(new six::sidd::LookupTable::Custom(256, 3));
-    std::fill_n(prodGenOptions.dataRemapping->custom->lut.table.begin(), prodGenOptions.dataRemapping->custom->lut.table.size(), 0);
-
-    prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
-
-    display.nonInteractiveProcessing->rrds.downsamplingMethod =
-            six::sidd::DownsamplingMethod::LAGRANGE;
-    display.nonInteractiveProcessing->rrds.antiAlias.reset(
-            createCustomFilter());
-    display.nonInteractiveProcessing->rrds.interpolation.reset(
-            createPredefinedFilter());
-
-    // InteractiveProcessing
-
-    display.interactiveProcessing.reset(
-            new six::sidd::InteractiveProcessing());
-    six::sidd::GeometricTransform& geoTransform =
-            display.interactiveProcessing->geometricTransform;
-    createPredefinedFilter(geoTransform.scaling.antiAlias);
-    createCustomFilter(geoTransform.scaling.interpolation);
-    geoTransform.orientation.shadowDirection =
-            six::sidd::ShadowDirection::ARBITRARY;
-
-    display.interactiveProcessing->sharpnessEnhancement.
-            modularTransferFunctionCompensation.reset(createCustomFilter());
-
-    display.interactiveProcessing->colorSpaceTransform.reset(
-            new six::sidd::ColorSpaceTransform());
-    six::sidd::ColorManagementModule& cmm = display.interactiveProcessing->
-            colorSpaceTransform->colorManagementModule;
-    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
-    cmm.sourceProfile = "Some source profile";
-    cmm.displayProfile = "Some display profile";
-    cmm.iccProfile = "Some ICC profile";
-
-    six::sidd::DynamicRangeAdjustment& dra =
-            display.interactiveProcessing->dynamicRangeAdjustment;
-    dra.algorithmType = six::sidd::DRAType::AUTO;
-    dra.bandStatsSource = 1;
-    dra.draParameters.reset(new six::sidd::DynamicRangeAdjustment::DRAParameters());
-    dra.draParameters->pMin = 0.2;
-    dra.draParameters->pMax = 0.8;
-    dra.draParameters->eMinModifier = 0.1;
-    dra.draParameters->eMaxModifier = 0.9;
-
-    display.interactiveProcessing->tonalTransferCurve.reset(
-            new six::sidd::LookupTable());
-    display.interactiveProcessing->tonalTransferCurve->lutName = "TTC Name";
-    display.interactiveProcessing->tonalTransferCurve->predefined.reset(new six::sidd::LookupTable::Predefined());
-    display.interactiveProcessing->tonalTransferCurve->predefined->databaseName = "TTC DB";
-
-    six::Parameter param;
-    param.setName("Some name");
-    param.setValue("Some value");
-    display.displayExtensions.push_back(param);
-}
-
 void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded)
 {
     ded.reset(new six::sidd::DigitalElevationData());
@@ -2005,6 +1918,86 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     display.monitorCompensationApplied.reset(new six::sidd::MonitorCompensationApplied());
     display.monitorCompensationApplied->gamma = 5.9;
     display.monitorCompensationApplied->xMin = 0.87;
+
+    // BandInformation
+    display.bandInformation.reset(new six::sidd::BandInformation());
+    display.bandInformation->bandDescriptors.push_back("Red");
+    display.bandInformation->bandDescriptors.push_back("Green");
+    display.bandInformation->bandDescriptors.push_back("Blue");
+    display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
+
+                                              // NonInteractiveProcessing
+    display.nonInteractiveProcessing.resize(1);
+    display.nonInteractiveProcessing[0].reset(
+        new six::sidd::NonInteractiveProcessing());
+    six::sidd::ProductGenerationOptions& prodGenOptions =
+        display.nonInteractiveProcessing[0]->productGenerationOptions;
+    prodGenOptions.bandEqualization.reset(new six::sidd::BandEqualization());
+    prodGenOptions.bandEqualization->algorithm =
+        six::sidd::BandEqualizationAlgorithm::LUT_1D;
+    prodGenOptions.bandEqualization->bandLUTs.resize(1);
+    prodGenOptions.bandEqualization->bandLUTs[0].reset(new six::sidd::LookupTable());
+    prodGenOptions.bandEqualization->bandLUTs[0]->lutName = "LUT Name";
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined.reset(new six::sidd::LookupTable::Predefined());
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapFamily = 5;
+    prodGenOptions.bandEqualization->bandLUTs[0]->predefined->remapMember = 3;
+
+    prodGenOptions.modularTransferFunctionRestoration.reset(
+        new six::sidd::Filter());
+    createPredefinedFilter(*prodGenOptions.modularTransferFunctionRestoration);
+
+    prodGenOptions.dataRemapping.reset(
+        new six::sidd::LookupTable());
+    prodGenOptions.dataRemapping->custom.reset(new six::sidd::LookupTable::Custom(256, 3));
+    std::fill_n(prodGenOptions.dataRemapping->custom->lut.table.begin(), prodGenOptions.dataRemapping->custom->lut.table.size(), 0);
+
+    prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
+
+    display.nonInteractiveProcessing[0]->rrds.downsamplingMethod =
+        six::sidd::DownsamplingMethod::LAGRANGE;
+    display.nonInteractiveProcessing[0]->rrds.antiAlias.reset(
+        createCustomFilter());
+    display.nonInteractiveProcessing[0]->rrds.interpolation.reset(
+        createPredefinedFilter());
+
+    // InteractiveProcessing
+    display.interactiveProcessing.resize(1);
+    display.interactiveProcessing[0].reset(
+        new six::sidd::InteractiveProcessing());
+    six::sidd::GeometricTransform& geoTransform =
+        display.interactiveProcessing[0]->geometricTransform;
+    createPredefinedFilter(geoTransform.scaling.antiAlias);
+    createCustomFilter(geoTransform.scaling.interpolation);
+    geoTransform.orientation.shadowDirection =
+        six::sidd::ShadowDirection::ARBITRARY;
+
+    display.interactiveProcessing[0]->sharpnessEnhancement.
+        modularTransferFunctionCompensation.reset(createCustomFilter());
+
+    display.interactiveProcessing[0]->colorSpaceTransform.reset(
+        new six::sidd::ColorSpaceTransform());
+    six::sidd::ColorManagementModule& cmm = display.interactiveProcessing[0]->
+        colorSpaceTransform->colorManagementModule;
+    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
+    cmm.sourceProfile = "Some source profile";
+    cmm.displayProfile = "Some display profile";
+    cmm.iccProfile = "Some ICC profile";
+
+    six::sidd::DynamicRangeAdjustment& dra =
+        display.interactiveProcessing[0]->dynamicRangeAdjustment;
+    dra.algorithmType = six::sidd::DRAType::AUTO;
+    dra.bandStatsSource = 1;
+    dra.draParameters.reset(new six::sidd::DynamicRangeAdjustment::DRAParameters());
+    dra.draParameters->pMin = 0.2;
+    dra.draParameters->pMax = 0.8;
+    dra.draParameters->eMinModifier = 0.1;
+    dra.draParameters->eMaxModifier = 0.9;
+
+    display.interactiveProcessing[0]->tonalTransferCurve.reset(
+        new six::sidd::LookupTable());
+    display.interactiveProcessing[0]->tonalTransferCurve->lutName = "TTC Name";
+    display.interactiveProcessing[0]->tonalTransferCurve->predefined.reset(new six::sidd::LookupTable::Predefined());
+    display.interactiveProcessing[0]->tonalTransferCurve->predefined->databaseName = "TTC DB";
 
     six::Parameter param;
     param.setName("name");
@@ -2262,7 +2255,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.display->magnificationMethod
             = MagnificationMethod::NEAREST_NEIGHBOR;
 
-    initDisplay(*siddData.display);// , lutType);
+    initDisplay(*siddData.display, lutType);
     initGeographicAndTarget(*siddData.geographicAndTarget);
 
     //---------------------------------------------------------------

@@ -129,9 +129,9 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="NonInteractiveProcessing" type="NonInteractiveProcessingType">
+            <xs:element name="NonInteractiveProcessing" type="NonInteractiveProcessingType" maxOccurs="unbounded">
             </xs:element>
-            <xs:element name="InteractiveProcessing" type="InteractiveProcessingType">
+            <xs:element name="InteractiveProcessing" type="InteractiveProcessingType" maxOccurs="unbounded">
             </xs:element>
             <xs:element name="DisplayExtension" type="sicommon:ParameterType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
@@ -192,6 +192,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
+        <xs:attribute name="band" type="xs:positiveInteger" use="required"/>
     </xs:complexType>
     <xs:complexType name="ProductGenerationOptionsType">
         <xs:annotation>
@@ -441,6 +442,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
+        <xs:attribute name="band" type="xs:positiveInteger" use="required"/>
     </xs:complexType>
     <xs:complexType name="GeometricTransformType">
         <xs:sequence>
