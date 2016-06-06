@@ -117,12 +117,16 @@
         <xs:sequence>
             <xs:element name="PixelType" type="PixelType">
                 <xs:annotation>
-                    <xs:documentation>Defines the pixel type, based on enumeration and definition in Design and Exploitation document.</xs:documentation>
+                    <xs:documentation>
+                        Defines the pixel type, based on enumeration and definition in Design and Exploitation document.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="BandInformation" type="BandInformationType" minOccurs="0">
+            <xs:element name="BandInformation" type="BandInformationType" minOccurs="1">
                 <xs:annotation>
-                    <xs:documentation>Information regarding the bands contained in the product.</xs:documentation>
+                    <xs:documentation>
+                        Provide information regarding the number of bands in the image as well as a description of the representation of each band.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="NonInteractiveProcessing" type="NonInteractiveProcessingType">
@@ -137,28 +141,31 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="BandInformationType">
+        <xs:annotation>
+            <xs:documentation>
+                Provide information regarding the number of bands in the image as well as a description of the representation of each band.
+            </xs:documentation>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="NumBands" type="xs:int">
                 <xs:annotation>
-                    <xs:documentation>Number of bands contained in the product.</xs:documentation>
+                    <xs:documentation>
+                        Number of bands contained in the product. Populate with the number of bands present
+                        after remapping. For example, with an 8-bit RGB image (MONO8LU) this should be populated with 3.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Band" maxOccurs="unbounded">
+            <xs:element name="BandDescriptor" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Specifies what Band[k] represents.</xs:documentation>
+                    <xs:documentation>Specifies what each band of the image represents.</xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
                     <xs:simpleContent>
                         <xs:extension base="xs:string">
-                            <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+                            <xs:attribute name="band" type="xs:positiveInteger" use="required"/>
                         </xs:extension>
                     </xs:simpleContent>
                 </xs:complexType>
-            </xs:element>
-            <xs:element name="BitsPerPixel" type="xs:int">
-                <xs:annotation>
-                    <xs:documentation>Bits per pixel per band</xs:documentation>
-                </xs:annotation>
             </xs:element>
             <xs:element name="DisplayFlag" type="xs:int" minOccurs="0">
                 <xs:annotation>
@@ -561,6 +568,13 @@
             <xs:element name="AlgorithmType" type="RangeAdjustmentAlgorithmType">
                 <xs:annotation>
                     <xs:documentation>Algorithm used for dynamic range adjustment.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="BandStatsSource" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>
+                        Indicates which band to use in computing statistics for DRA. Valid range = 1 to NumBands.
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:choice>
