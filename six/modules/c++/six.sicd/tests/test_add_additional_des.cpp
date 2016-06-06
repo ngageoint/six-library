@@ -57,7 +57,6 @@ std::string TempFile::pathname() const
 
 void validateArguments(int argc, char** argv)
 {
-    std::cerr << "Validating\n";
     if (argc != 2)
     {
         std::string message = "Usage: " + sys::Path::basename(argv[0])
