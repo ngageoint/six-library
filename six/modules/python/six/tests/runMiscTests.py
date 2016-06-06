@@ -50,7 +50,7 @@ def runSICDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     return (runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
             and runTests(testDir, 'test_read_sicd_with_extra_des',
-        getSampleSicdXML()))
+            getSampleSicdXML()))
 
 
 def run():

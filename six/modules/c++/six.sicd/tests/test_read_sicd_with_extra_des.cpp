@@ -41,7 +41,6 @@ private:
 
 TempFile::TempFile() :
     mName(std::tmpnam(NULL))
-    //mName("C:\\Users\\jmeans.MDAUS\\Documents\\code\\six-library\\extraStuff.nitf")
 {
 }
 
@@ -89,12 +88,12 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
 {
     logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
-        six::sicd::Utilities::parseDataFromFile(xmlPathname,
+            six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
 
     std::vector<six::UByte> bandData(
-        generateBandData(*data));
+            generateBandData(*data));
 
     six::Container container(six::DataType::COMPLEX);
     container.addData(dynamic_cast<six::Data*>(data.release()));
@@ -109,16 +108,20 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
-    //des.getSubheader().getSubheaderFieldsLength().set(
-    //        six::Constants::DES_USER_DEFINED_SUBHEADER_LENGTH);
+    static const char segmentData[] = "123456789ABCDEF0";
+    nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
+            0, 0, true);
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
+    segmentWriter->attachSource(sSource);
+    writer.addAdditionalDES(segmentWriter);
 
     //Wrong tag
-    //nitf::TRE usrHdr("PIAIMB", "PIAIMB");
-    //record.getHeader().getUserDefinedSection().appendTRE(usrHdr);
+    nitf::TRE usrHdr("PIAIMB", "PIAIMB");
+    record.getHeader().getUserDefinedSection().appendTRE(usrHdr);
 
     //Good tag, wrong DESSHSI
     nitf::TRE secondHdr(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG,
-        six::Constants::DES_USER_DEFINED_SUBHEADER_ID);
+            six::Constants::DES_USER_DEFINED_SUBHEADER_ID);
     secondHdr.setField("DESCRC", "99999");
     secondHdr.setField("DESSHFT", "XML00000");
     secondHdr.setField("DESSHDT", "2016-06-01T00:00:00Z");
@@ -132,19 +135,52 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     secondHdr.setField("DESSHLI", std::string(" ", 20));
     secondHdr.setField("DESSHLIN", std::string(" ", 120));
     secondHdr.setField("DESSHABS", std::string(" ", 200));
-    record.getHeader().getUserDefinedSection().appendTRE(secondHdr);
     des.getSubheader().setSubheaderFields(secondHdr);
 
-    static const char segmentData[] = "123456789ABCDEF0";
-    nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
-        0, 0, true);
-    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
-    segmentWriter->attachSource(sSource);
-    writer.addAdditionalDES(segmentWriter);
+    //Wrong length
+    nitf::TRE middleTRE(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG,
+            "XML_DATA_CONTENT_283");
+    middleTRE.setField("DESCRC", "99999");
+    middleTRE.setField("DESSHFT", "XML00000");
+    middleTRE.setField("DESSHDT", "2016-06-01T00:00:00Z");
+    middleTRE.setField("DESSHRP", "1234567890123456789012345678901234567890");
+    middleTRE.setField("DESSHSI", std::string(" ", 60));
+    middleTRE.setField("DESSHSV", "Version 10");
+    middleTRE.setField("DESSHSD", "2016-06-01T00:00:00Z");
+    middleTRE.setField("DESSHTN", std::string(" ", 120));
+
+    nitf::DESegment middleDES = record.newDataExtensionSegment();
+    middleDES.getSubheader().getFilePartType().set("DE");
+    middleDES.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    middleDES.getSubheader().getVersion().set("01");
+    middleDES.getSubheader().getSecurityClass().set("U");
+
+    nitf::SegmentMemorySource middleSource(segmentData, strlen(segmentData),
+            0, 0, true);
+    mem::SharedPtr<nitf::SegmentWriter> middleSegmentWriter(new nitf::SegmentWriter);
+    middleSegmentWriter->attachSource(middleSource);
+    writer.addAdditionalDES(middleSegmentWriter);
+
+
+    //Wrong length again
+    nitf::TRE shortTRE(six::Constants::DES_USER_DEFINED_SUBHEADER_TAG,
+            "XML_DATA_CONTENT_005");
+    shortTRE.setField("DESCRC", "99999");
+
+    nitf::DESegment shortDES = record.newDataExtensionSegment();
+    shortDES.getSubheader().getFilePartType().set("DE");
+    shortDES.getSubheader().getTypeID().set("XML_DATA_CONTENT");
+    shortDES.getSubheader().getVersion().set("01");
+    shortDES.getSubheader().getSecurityClass().set("U");
+
+    nitf::SegmentMemorySource shortSource(segmentData, strlen(segmentData),
+            0, 0, true);
+    mem::SharedPtr<nitf::SegmentWriter> shortSegmentWriter(new nitf::SegmentWriter);
+    shortSegmentWriter->attachSource(shortSource);
+    writer.addAdditionalDES(shortSegmentWriter);
 
     std::auto_ptr<TempFile> temp(new TempFile());
     writer.save(&bandData[0], temp->pathname());
-    std::cerr << "Saved\n";
     return temp;
 }
 }
@@ -162,10 +198,9 @@ int main(int argc, char** argv)
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         std::auto_ptr<TempFile> nitf = createNITFFromXML(xmlPathname);
-        //std::auto_ptr<TempFile> nitf(new TempFile());
-        std::cerr << "After thing\n";
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
+        std::cout << "Test passed\n";
         return 0;
     }
     catch (const except::Exception& e)
