@@ -73,16 +73,11 @@ private:
     bool checkRMCR();
     bool checkINCA();
 
-    void fillSCPTime(ComplexData& data);
-    void fillARPPoly(ComplexData& data);
     void fillRadarCollection(ComplexData& data, bool setDefaultValues);
-    void fillGeoDataSCP(ComplexData& data);
-    void fillSCPCOA(ComplexData& data);
     void fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues);
     void fillRGAZCOMP(ComplexData& data, double fc);
     void fillPFA(ComplexData& data, double fc, bool setDefaultValues);
     void fillRMA(ComplexData& data, double fc, bool setDefaultValues);
-    void fillGeoData(ComplexData& data);
 
     Vector3 wgs84Norm(const Vector3& point);
 

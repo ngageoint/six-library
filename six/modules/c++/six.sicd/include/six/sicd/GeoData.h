@@ -32,7 +32,7 @@ namespace six
 {
 namespace sicd
 {
-
+struct ImageData;
 /*!
  *  \struct GeoInfo
  *  \brief (Optional) SICD GeoInfo parameters
@@ -98,6 +98,8 @@ public:
     GeoData() :
         earthModel(EarthModelType::WGS84)
     {
+        scp.ecf = Init::undefined<Vector3>();
+        scp.llh = Init::undefined<LatLonAlt>();
     }
 
     //!  Clone, including non-NULL GeoInfo objects
@@ -142,6 +144,9 @@ public:
     {
         return !(*this == rhs);
     }
+
+    //Doesn't currently do anything
+    void fillDerivedFields(const ImageData& imageData);
 };
 
 }

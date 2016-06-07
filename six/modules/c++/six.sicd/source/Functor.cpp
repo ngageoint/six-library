@@ -166,14 +166,14 @@ RaisedCos::RaisedCos(double coef) :
 std::vector<double> RaisedCos::operator()(size_t n) const
 {
     std::vector<double> ret;
-
-    for (size_t ii = 0; ii < std::ceil(n/2.0); ++ii)
+    ret.resize(std::ceil(n / 2.0));
+    for (size_t ii = 0; ii < ret.size(); ++ii)
     {
-        ret.push_back((1 - mCoef) * std::cos(2 * M_PI * ii) / (n - 1));
+        ret[ii] = mCoef - (1 - mCoef) * std::cos(2 * M_PI * ii / (n - 1));
     }
     if (n % 2 == 0)
     {
-        std::copy(ret.begin(), ret.end(), std::back_inserter(ret));
+        std::reverse_copy(ret.begin(), ret.end(), std::back_inserter(ret));
     }
     else
     {
@@ -190,17 +190,18 @@ Kaiser::Kaiser(double beta) :
 std::vector<double> Kaiser::operator()(size_t L) const
 {
     std::vector<double> ret;
-
     if (L == 1)
     {
         ret.push_back(1);
         return ret;
     }
+
     size_t m = L - 1;
     double k;
     for (size_t ii = 0; ii < L; ++ii)
     {
-        k = (2 * beta / m * std::sqrt(ii * m - ii));
+        k = 2 * beta / m * std::sqrt(ii * (m - ii));
+        //k = beta * std::sqrt(1 - std::pow((2 * ii / L), 2));
         ret.push_back(bessi(0, k) / bessi(0, beta));
     }
 

@@ -516,6 +516,36 @@ double Utilities::nonZeroDenominator(double denominator)
     }
     return denominator;
 }
+
+Poly1D Utilities::nPoly(PolyXYZ poly, size_t idx)
+{
+    if (idx >= 3)
+    {
+        throw except::Exception(Ctxt("Idx should be < 3"));
+    }
+
+    std::vector<double> coefs;
+    for (size_t ii = 0; ii < poly.size(); ++ii)
+    {
+        coefs.push_back(poly[ii][idx]);
+    }
+    Poly1D ret(coefs);
+    return ret;
+}
+
+Vector3 Utilities::wgs84Norm(const Vector3& point)
+{
+    scene::WGS84EllipsoidModel model;
+    std::vector<double> coordinates;
+    coordinates.resize(3);
+
+    coordinates[0] = point[0] / std::pow(model.getEquatorialRadius(), 2);
+    coordinates[1] = point[1] / std::pow(model.getEquatorialRadius(), 2);
+    coordinates[2] = point[2] / std::pow(model.getPolarRadius(), 2);
+
+    Vector3 normal(coordinates);
+    return normal.unit();
+}
 }
 }
 

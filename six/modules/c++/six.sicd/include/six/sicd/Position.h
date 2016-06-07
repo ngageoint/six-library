@@ -31,6 +31,8 @@ namespace six
 {
 namespace sicd
 {
+struct SCPCOA;
+
 /*!
  *  \struct RcvAPC
  *  \brief SICD RcvAPC
@@ -107,6 +109,8 @@ struct Position
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const SCPCOA& scpcoa);
 };
 
 }

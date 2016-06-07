@@ -22,6 +22,7 @@
 #include <memory>
 
 #include "six/sicd/GeoData.h"
+#include "six/sicd/ImageData.h"
 
 namespace six
 {
@@ -48,6 +49,46 @@ bool GeoData::operator==(const GeoData& rhs) const
     return (earthModel == rhs.earthModel && scp == rhs.scp &&
             imageCorners == rhs.imageCorners && validData == rhs.validData
             && geoInfos == rhs.geoInfos);
+}
+
+void GeoData::fillDerivedFields(const ImageData& imageData)
+{
+    if (!Init::isUndefined<Vector3>(scp.ecf) &&
+        Init::isUndefined<LatLonAlt>(scp.llh))
+    {
+        scene::ECEFToLLATransform transformer;
+        scp.llh = transformer.transform(scp.ecf);
+    }
+    if (!Init::isUndefined<LatLonAlt>(scp.llh) &&
+        Init::isUndefined<Vector3>(scp.ecf))
+    {
+        scene::LLAToECEFTransform transformer;
+        scp.ecf = transformer.transform(scp.llh);
+    }
+
+    if (Init::isUndefined<LatLon>(imageCorners.getCorner(0)) &&
+        !Init::isUndefined<size_t>(imageData.numRows) &&
+        !Init::isUndefined<size_t>(imageData.numCols))
+    {
+        std::vector<RowColDouble> cornerLineSample;
+        cornerLineSample.resize(4);
+        cornerLineSample[0].row = 1;
+        cornerLineSample[0].col = 1;
+        cornerLineSample[1].row = 1;
+        cornerLineSample[1].col = imageData.numCols;
+        cornerLineSample[2].row = imageData.numRows;
+        cornerLineSample[2].col = imageData.numCols;
+        cornerLineSample[3].row = imageData.numRows;
+        cornerLineSample[4].col = 1;
+        // line 746; requires point_slant_to_ground
+    }
+
+    // Derived: Add ValidData geocoords
+    if (!imageData.validData.empty() &&
+        validData.empty())
+    {
+        // line 757; requires point slant to ground
+    }
 }
 }
 }

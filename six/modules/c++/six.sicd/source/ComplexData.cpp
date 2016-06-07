@@ -152,7 +152,10 @@ bool ComplexData::validate(logging::Logger& log) const
 
 void ComplexData::fillDerivedFields(bool includeDefault)
 {
-    grid->fillDerivedFields(*imageData);
+    geoData->fillDerivedFields(*imageData);
+    grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
+    position->fillDerivedFields(*scpcoa);
+    scpcoa->fillDerivedFields(*geoData, *grid, *position);
     return;
 }
 

@@ -30,6 +30,9 @@ namespace six
 {
 namespace sicd
 {
+class GeoData;
+struct Grid;
+struct Position;
 /*!
  *  \struct SCPCOA
  *  \brief SICD SCPCOA parameter
@@ -100,6 +103,10 @@ struct SCPCOA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+            const Grid& grid,
+            const Position& position);
 };
 
 }

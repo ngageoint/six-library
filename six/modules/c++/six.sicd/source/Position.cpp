@@ -20,6 +20,7 @@
  *
  */
 #include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
@@ -30,6 +31,38 @@ Position::Position() :
     grpPoly(Init::undefined<PolyXYZ>()),
     txAPCPoly(Init::undefined<PolyXYZ>())
 {
+}
+
+void Position::fillDerivedFields(const SCPCOA& scpcoa)
+{
+    if (!Init::isUndefined<Vector3>(scpcoa.arpPos) &&
+        !Init::isUndefined<Vector3>(scpcoa.arpVel) &&
+        !Init::isUndefined<double>(scpcoa.scpTime) &&
+        (Init::isUndefined<PolyXYZ>(arpPoly)))
+    {
+        Vector3 tempArpAcc = scpcoa.arpAcc;
+        if (Init::isUndefined<Vector3>(scpcoa.arpAcc))
+        {
+            tempArpAcc = Vector3(0.0);
+        }
+
+        std::vector<Vector3> coefs;
+        coefs.resize(3);
+
+        //constant
+        coefs[0] = scpcoa.arpPos -
+            scpcoa.arpVel * scpcoa.scpTime +
+            (tempArpAcc / 2) * std::pow(scpcoa.scpTime, 2);
+
+        //linear
+        coefs[1] = scpcoa.arpVel -
+            tempArpAcc * scpcoa.scpTime;
+
+        //quadratic
+        coefs[2] = tempArpAcc / 2;
+
+        arpPoly = PolyXYZ(coefs);
+    }
 }
 }
 }

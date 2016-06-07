@@ -22,6 +22,7 @@
 #include "six/sicd/CollectionInformation.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
+#include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 
 using namespace six;
@@ -233,7 +234,6 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
 
     if (weightType.get() != NULL &&
         weights.empty() &&
-        weightType->windowName != "UNIFORM" &&
         weightType->windowName != "UNKNOWN")
     {
         size_t defaultWgtSize = 512;
@@ -438,8 +438,23 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
         );
 }
 
-void Grid::fillDerivedFields(const ImageData& imageData)
+void Grid::fillDerivedFields(
+        const CollectionInformation& collectionInformation,
+        const ImageData& imageData,
+        const SCPCOA& scpcoa)
 {
+    if (!Init::isUndefined<double>(scpcoa.scpTime) &&
+        collectionInformation.radarMode == RadarModeType::SPOTLIGHT)
+    {
+        if (Init::isUndefined<Poly2D>(timeCOAPoly))
+        {
+            // I'm assuming this is what it means to assign a double to a Poly2D.
+            // It matches what's getting checked in valiidateTimeCOAPoly.
+            timeCOAPoly = Poly2D(1, 1);
+            timeCOAPoly[0][0] = scpcoa.scpTime;
+        }
+    }
+
     row->fillDerivedFields(imageData);
     col->fillDerivedFields(imageData);
 }

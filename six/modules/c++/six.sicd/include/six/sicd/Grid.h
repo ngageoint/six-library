@@ -37,6 +37,7 @@ namespace sicd
 {
 struct CollectionInformation;
 struct ImageData;
+struct SCPCOA;
 
 struct WeightType
 {
@@ -177,7 +178,10 @@ struct Grid
     bool validate(const CollectionInformation& collectionInformation,
             const ImageData& imageData,
             logging::Logger& log) const;
-    void fillDerivedFields(const ImageData& imageData);
+
+    void fillDerivedFields(const CollectionInformation& collectionInformation,
+                           const ImageData& imageData,
+                           const SCPCOA& scpcoa);
 private:
     bool validateTimeCOAPoly(
             const CollectionInformation& collectionInformation,

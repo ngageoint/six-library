@@ -259,6 +259,35 @@ public:
      * \return the nearest non-zero number
      */
     static double nonZeroDenominator(double denominator);
+    
+    /*
+     * Extracts a Poly1D in the dimention given by index
+     * \param poly The source polynomial
+     * \param index Number specifying dimension. 0-2 for X-Z
+     * \return Poly1D in specified dimension
+     */
+    static Poly1D nPoly(PolyXYZ poly, size_t index);
+
+    /*
+     * Find sign of input, expressed as -1, 0, or 1
+     * \param val A signed number
+     * \return 1 if val is positive, -1 if negative, 0 if 0
+     */
+    template <class T>
+    static int sign(const T& val)
+    {
+        if (val < 0)
+        {
+            return -1;
+        }
+        if (val > 0)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    static Vector3 wgs84Norm(const Vector3& point);
 };
 }
 }
