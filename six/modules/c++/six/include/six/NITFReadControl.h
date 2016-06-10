@@ -66,6 +66,9 @@ public:
     static
     DataType getDataType(nitf::Record& record);
 
+    static
+    DataType getDataType(nitf::DESegment& record);
+
     /*!
      *  Performs (Basic) validation when a segment is being
      *  read.  This function is able to test that the image

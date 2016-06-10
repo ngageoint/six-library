@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef __SIX_DERIVED_DATA_BUILDER_H__
 #define __SIX_DERIVED_DATA_BUILDER_H__
 
@@ -185,4 +186,3 @@ protected:
 }
 }
 #endif
-

@@ -151,7 +151,7 @@ public:
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
                                 std::complex<float>* buffer);
-    
+
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
      * function loads the wideband data associated with the reader
@@ -251,6 +251,66 @@ public:
     * \return the unit vector normal to the ground plane
     */
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
+
+    /*
+     * Parses the XML in 'xmlStream' and converts it into a ComplexData object.
+     * Throws if the underlying type is not complex.
+     *
+     * \param xmlStream Input stream containing XML
+     * \param schemaPaths Schema path(s)
+     * \param log Logger
+     *
+     * \return Data representation of 'xmlStr'
+     */
+    static std::auto_ptr<ComplexData> parseData(
+            ::io::InputStream& xmlStream,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
+
+    /*
+     * Parses the XML in 'pathname' and converts it into a ComplexData object.
+     * Throws if the underlying type is not complex.
+     *
+     * \param pathname File containing plain text XML (not a NITF)
+     * \param schemaPaths Schema path(s)
+     * \param log Logger
+     *
+     * \return Data representation of the contents of 'pathname'
+     */
+    static std::auto_ptr<ComplexData> parseDataFromFile(
+            const std::string& pathname,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
+
+    /*
+     * Parses the XML in 'xmlStr' and converts it into a ComplexData object.
+     *
+     * \param xmlStr XML document as a string
+     * \param schemaPaths Schema path(s)
+     * \param log Logger
+     *
+     * \return Data representation of 'xmlStr'
+     */
+    static std::auto_ptr<ComplexData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+
+    /*
+     * Converts 'data' back into a formatted XML string
+     *
+     * \param data Representation of SICD data
+     * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
+     * environment variable will be used.
+     * \param logger Logger.  If NULL, no logger will be used.
+     *
+     * \return XML string representation of 'data'
+     */
+    static std::string toXMLString(
+            const ComplexData& data,
+            const std::vector<std::string>& schemaPaths =
+                    std::vector<std::string>(),
+            logging::Logger* logger = NULL);
 };
 }
 }

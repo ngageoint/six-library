@@ -32,7 +32,7 @@
 namespace
 {
 typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes ElemAttributes;
+typedef xml::lite::Attributes XMLAttributes;
 }
 
 namespace six
@@ -284,7 +284,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
     common().parseParameters(classificationElem, "SecurityExtension",
         classification.securityExtensions);
 
-    const ElemAttributes& classificationAttributes
+    const XMLAttributes& classificationAttributes
         = classificationElem->getAttributes();
 
     //! from ism:ISMRootNodeAttributeGroup
@@ -617,7 +617,6 @@ XMLElem DerivedXMLParser::parseCylindricalProjection(
         cylindricalProj->sampleSpacing);
     common().parsePoly2D(getFirstAndOnly(projElem, "TimeCOAPoly"),
         cylindricalProj->timeCOAPoly);
-
     common().parseVector3D(getFirstAndOnly(projElem, "StripmapDirection"),
         cylindricalProj->stripmapDirection);
     // optional

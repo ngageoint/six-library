@@ -68,10 +68,69 @@ public:
             convertDualPolarization(six::DualPolarizationType pol);
 
     static std::auto_ptr<scene::ProjectionModel>
+
     getProjectionModel(const DerivedData* data);
 
+    /*
+    * Parses the XML in 'xmlStream' and converts it into a DerivedData object.
+    * Throws if the underlying type is not derived.
+    *
+    * \param xmlStream Input stream containing XML
+    * \param schemaPaths Schema path(s)
+    * \param log Logger
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    static std::auto_ptr<DerivedData> parseData(
+        ::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+
+    /*
+    * Parses the XML in 'pathname' and converts it into a DerivedData object.
+    * Throws if the underlying type is not derived.
+    *
+    * \param pathname File containing plain text XML (not a NITF)
+    * \param schemaPaths Schema path(s)
+    * \param log Logger
+    *
+    * \return Data representation of the contents of 'pathname'
+    */
+    static std::auto_ptr<DerivedData> parseDataFromFile(
+        const std::string& pathname,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+
+    /*
+    * Parses the XML in 'xmlStr' and converts it into a DerivedData object.
+    *
+    * \param xmlStr XML document as a string
+    * \param schemaPaths Schema path(s)
+    * \param log Logger
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    static std::auto_ptr<DerivedData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+
+    /*
+    * Converts 'data' back into a formatted XML string
+    *
+    * \param data Representation of SIDD data
+    * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
+    * environment variable will be used.
+    * \param logger Logger.  If NULL, no logger will be used.
+    *
+    * \return XML string representation of 'data'
+    */
+    static std::string toXMLString(
+        const DerivedData& data,
+        const std::vector<std::string>& schemaPaths =
+        std::vector<std::string>(),
+        logging::Logger* logger = NULL);
 };
 }
 }
 #endif
-

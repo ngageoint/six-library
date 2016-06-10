@@ -206,10 +206,6 @@ import pysix.scene
 import coda.mem
 import coda.coda_io
 
-def getComplexData(sicdPathname, schemaPaths):
-    """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""
-    return _six_sicd.getComplexData(sicdPathname, schemaPaths)
-
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
@@ -221,6 +217,7 @@ def writeNITF(pathname, schemaPaths, data, imageAdr):
 def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
+<<<<<<< HEAD
 class GeoInfo(_object):
     """Proxy of C++ six::GeoInfo class"""
     __swig_setmethods__ = {}
@@ -267,6 +264,8 @@ class GeoInfo(_object):
 GeoInfo_swigregister = _six_sicd.GeoInfo_swigregister
 GeoInfo_swigregister(GeoInfo)
 
+=======
+>>>>>>> master
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class"""
     __swig_setmethods__ = {}
@@ -483,6 +482,8 @@ class ImageData(_object):
     __swig_getmethods__["validData"] = _six_sicd.ImageData_validData_get
     if _newclass:
         validData = _swig_property(_six_sicd.ImageData_validData_get, _six_sicd.ImageData_validData_set)
+<<<<<<< HEAD
+=======
 
     def __eq__(self, rhs):
         """__eq__(ImageData self, ImageData rhs) -> bool"""
@@ -497,6 +498,52 @@ class ImageData(_object):
     __del__ = lambda self: None
 ImageData_swigregister = _six_sicd.ImageData_swigregister
 ImageData_swigregister(ImageData)
+>>>>>>> master
+
+    def __eq__(self, rhs):
+        """__eq__(ImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ImageData___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ImageData self, ImageData rhs) -> bool"""
+        return _six_sicd.ImageData___ne__(self, rhs)
+
+<<<<<<< HEAD
+    __swig_destroy__ = _six_sicd.delete_ImageData
+    __del__ = lambda self: None
+ImageData_swigregister = _six_sicd.ImageData_swigregister
+ImageData_swigregister(ImageData)
+=======
+    __swig_setmethods__["name"] = _six_sicd.GeoInfo_name_set
+    __swig_getmethods__["name"] = _six_sicd.GeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_sicd.GeoInfo_name_get, _six_sicd.GeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_sicd.GeoInfo_geoInfos_get, _six_sicd.GeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_sicd.GeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_sicd.GeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_sicd.GeoInfo_desc_get, _six_sicd.GeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_sicd.GeoInfo_geometryLatLon_get, _six_sicd.GeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs):
+        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.GeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.GeoInfo___ne__(self, rhs)
+
+GeoInfo_swigregister = _six_sicd.GeoInfo_swigregister
+GeoInfo_swigregister(GeoInfo)
+>>>>>>> master
 
 class GeoData(_object):
     """Proxy of C++ six::sicd::GeoData class"""
@@ -1987,6 +2034,8 @@ class Antenna(_object):
             self.this.append(this)
         except:
             self.this = this
+<<<<<<< HEAD
+=======
 
     def __eq__(self, rhs):
         """__eq__(Antenna self, Antenna rhs) -> bool"""
@@ -1998,6 +2047,136 @@ class Antenna(_object):
         return _six_sicd.Antenna___ne__(self, rhs)
 
     __swig_destroy__ = _six_sicd.delete_Antenna
+    __del__ = lambda self: None
+Antenna_swigregister = _six_sicd.Antenna_swigregister
+Antenna_swigregister(Antenna)
+
+class MatchCollect(_object):
+    """Proxy of C++ six::sicd::MatchCollect class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchCollect, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MatchCollect, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::MatchCollect self) -> MatchCollect"""
+        this = _six_sicd.new_MatchCollect()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_setmethods__["coreName"] = _six_sicd.MatchCollect_coreName_set
+    __swig_getmethods__["coreName"] = _six_sicd.MatchCollect_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_sicd.MatchCollect_coreName_get, _six_sicd.MatchCollect_coreName_set)
+    __swig_setmethods__["matchIndex"] = _six_sicd.MatchCollect_matchIndex_set
+    __swig_getmethods__["matchIndex"] = _six_sicd.MatchCollect_matchIndex_get
+    if _newclass:
+        matchIndex = _swig_property(_six_sicd.MatchCollect_matchIndex_get, _six_sicd.MatchCollect_matchIndex_set)
+    __swig_setmethods__["parameters"] = _six_sicd.MatchCollect_parameters_set
+    __swig_getmethods__["parameters"] = _six_sicd.MatchCollect_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_sicd.MatchCollect_parameters_get, _six_sicd.MatchCollect_parameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_sicd.MatchCollect___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_sicd.MatchCollect___ne__(self, rhs)
+
+    __swig_destroy__ = _six_sicd.delete_MatchCollect
+    __del__ = lambda self: None
+MatchCollect_swigregister = _six_sicd.MatchCollect_swigregister
+MatchCollect_swigregister(MatchCollect)
+>>>>>>> master
+
+    def __eq__(self, rhs):
+        """__eq__(Antenna self, Antenna rhs) -> bool"""
+        return _six_sicd.Antenna___eq__(self, rhs)
+
+<<<<<<< HEAD
+=======
+    def __init__(self):
+        """__init__(six::sicd::MatchType self) -> MatchType"""
+        this = _six_sicd.new_MatchType()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_setmethods__["collectorName"] = _six_sicd.MatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.MatchType_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.MatchType_collectorName_get, _six_sicd.MatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.MatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.MatchType_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.MatchType_illuminatorName_get, _six_sicd.MatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_sicd.MatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_sicd.MatchType_matchType_get
+    if _newclass:
+        matchType = _swig_property(_six_sicd.MatchType_matchType_get, _six_sicd.MatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_sicd.MatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_sicd.MatchType_typeID_get
+    if _newclass:
+        typeID = _swig_property(_six_sicd.MatchType_typeID_get, _six_sicd.MatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_sicd.MatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_sicd.MatchType_currentIndex_get
+    if _newclass:
+        currentIndex = _swig_property(_six_sicd.MatchType_currentIndex_get, _six_sicd.MatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_sicd.MatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_sicd.MatchType_matchCollects_get
+    if _newclass:
+        matchCollects = _swig_property(_six_sicd.MatchType_matchCollects_get, _six_sicd.MatchType_matchCollects_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.MatchType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.MatchType___ne__(self, rhs)
+
+    __swig_destroy__ = _six_sicd.delete_MatchType
+    __del__ = lambda self: None
+MatchType_swigregister = _six_sicd.MatchType_swigregister
+MatchType_swigregister(MatchType)
+>>>>>>> master
+
+    def __ne__(self, rhs):
+        """__ne__(Antenna self, Antenna rhs) -> bool"""
+        return _six_sicd.Antenna___ne__(self, rhs)
+
+<<<<<<< HEAD
+    __swig_destroy__ = _six_sicd.delete_Antenna
+=======
+    def __init__(self):
+        """__init__(six::sicd::MatchInformation self) -> MatchInformation"""
+        this = _six_sicd.new_MatchInformation()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_setmethods__["types"] = _six_sicd.MatchInformation_types_set
+    __swig_getmethods__["types"] = _six_sicd.MatchInformation_types_get
+    if _newclass:
+        types = _swig_property(_six_sicd.MatchInformation_types_get, _six_sicd.MatchInformation_types_set)
+
+    def __eq__(self, rhs):
+        """__eq__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.MatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.MatchInformation___ne__(self, rhs)
+
+    __swig_destroy__ = _six_sicd.delete_MatchInformation
+>>>>>>> master
     __del__ = lambda self: None
 Antenna_swigregister = _six_sicd.Antenna_swigregister
 Antenna_swigregister(Antenna)
@@ -2580,8 +2759,11 @@ class ComplexData(pysix.six_base.Data):
         """__eq__(ComplexData self, ComplexData rhs) -> bool"""
         return _six_sicd.ComplexData___eq__(self, rhs)
 
+<<<<<<< HEAD
     __swig_destroy__ = _six_sicd.delete_ComplexData
     __del__ = lambda self: None
+=======
+>>>>>>> master
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 
@@ -2653,6 +2835,17 @@ class SixSicdUtilities(_object):
         readSicd = staticmethod(readSicd)
     __swig_getmethods__["readSicd"] = lambda x: readSicd
 
+    def getComplexData(*args):
+        """
+        getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        """
+        return _six_sicd.SixSicdUtilities_getComplexData(*args)
+
+    if _newclass:
+        getComplexData = staticmethod(getComplexData)
+    __swig_getmethods__["getComplexData"] = lambda x: getComplexData
+
     def getWidebandData(*args):
         """
         getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
@@ -2676,6 +2869,45 @@ class SixSicdUtilities(_object):
         getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
     __swig_getmethods__["getGroundPlaneNormal"] = lambda x: getGroundPlaneNormal
 
+<<<<<<< HEAD
+=======
+    def parseData(xmlStream, schemaPaths, log):
+        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+    if _newclass:
+        parseData = staticmethod(parseData)
+    __swig_getmethods__["parseData"] = lambda x: parseData
+
+    def parseDataFromFile(pathname, schemaPaths, log):
+        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+    if _newclass:
+        parseDataFromFile = staticmethod(parseDataFromFile)
+    __swig_getmethods__["parseDataFromFile"] = lambda x: parseDataFromFile
+
+    def parseDataFromString(xmlStr, schemaPaths, log):
+        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+    if _newclass:
+        parseDataFromString = staticmethod(parseDataFromString)
+    __swig_getmethods__["parseDataFromString"] = lambda x: parseDataFromString
+
+    def toXMLString(*args):
+        """
+        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+        toXMLString(ComplexData data) -> std::string
+        """
+        return _six_sicd.SixSicdUtilities_toXMLString(*args)
+
+    if _newclass:
+        toXMLString = staticmethod(toXMLString)
+    __swig_getmethods__["toXMLString"] = lambda x: toXMLString
+
+>>>>>>> master
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -2704,6 +2936,13 @@ def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandDa
     """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
     return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
 
+def SixSicdUtilities_getComplexData(*args):
+    """
+    getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    """
+    return _six_sicd.SixSicdUtilities_getComplexData(*args)
+
 def SixSicdUtilities_getWidebandData(*args):
     """
     getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
@@ -2719,6 +2958,29 @@ def SixSicdUtilities_getGroundPlaneNormal(data):
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
 
+<<<<<<< HEAD
+=======
+def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
+    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
+
+def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
+    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+def SixSicdUtilities_toXMLString(*args):
+    """
+    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+    SixSicdUtilities_toXMLString(ComplexData data) -> std::string
+    """
+    return _six_sicd.SixSicdUtilities_toXMLString(*args)
+
+>>>>>>> master
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class"""
     __swig_setmethods__ = {}
@@ -3080,8 +3342,13 @@ class StdAutoGeoData(_object):
 StdAutoGeoData_swigregister = _six_sicd.StdAutoGeoData_swigregister
 StdAutoGeoData_swigregister(StdAutoGeoData)
 
+<<<<<<< HEAD
 class ScopedCopyableGeoData(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::GeoData)> class"""
+=======
+class ScopedCloneableGeoData(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::GeoData)> class"""
+>>>>>>> master
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoData, name, value)
     __swig_getmethods__ = {}
@@ -3120,7 +3387,11 @@ class ScopedCopyableGeoData(_object):
         reset(ScopedCopyableGeoData self, GeoData ptr=None)
         reset(ScopedCopyableGeoData self)
         """
+<<<<<<< HEAD
         return _six_sicd.ScopedCopyableGeoData_reset(self, *args)
+=======
+        return _six_sicd.ScopedCloneableGeoData_reset(self, *args)
+>>>>>>> master
 
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoData
     __del__ = lambda self: None
@@ -3143,6 +3414,7 @@ class ScopedCopyableGeoData(_object):
     __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_set
     __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_get
     if _newclass:
+<<<<<<< HEAD
         geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
 
     def __eq__(self, rhs):
@@ -3163,6 +3435,48 @@ def makeScopedCopyableGeoData():
     return _six_sicd.makeScopedCopyableGeoData()
 class StdAutoGrid(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::Grid)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGrid, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGrid, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::Grid)> self) -> StdAutoGrid"""
+        this = _six_sicd.new_StdAutoGrid()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_StdAutoGrid
+    __del__ = lambda self: None
+StdAutoGrid_swigregister = _six_sicd.StdAutoGrid_swigregister
+StdAutoGrid_swigregister(StdAutoGrid)
+
+class ScopedCloneableGrid(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Grid)> class"""
+=======
+        geoInfos = _swig_property(_six_sicd.ScopedCloneableGeoData_geoInfos_get, _six_sicd.ScopedCloneableGeoData_geoInfos_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoData___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoData___ne__(self, rhs)
+
+ScopedCloneableGeoData_swigregister = _six_sicd.ScopedCloneableGeoData_swigregister
+ScopedCloneableGeoData_swigregister(ScopedCloneableGeoData)
+
+
+def makeScopedCloneableGeoData():
+    """makeScopedCloneableGeoData() -> ScopedCloneableGeoData"""
+    return _six_sicd.makeScopedCloneableGeoData()
+class StdAutoGrid(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::Grid)> class"""
+>>>>>>> master
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGrid, name, value)
     __swig_getmethods__ = {}
@@ -4035,6 +4349,99 @@ ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
 def makeScopedCopyableAntenna():
     """makeScopedCopyableAntenna() -> ScopedCopyableAntenna"""
     return _six_sicd.makeScopedCopyableAntenna()
+<<<<<<< HEAD
+class StdAutoSlowTimeDeskew(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::SlowTimeDeskew)> class"""
+=======
+class StdAutoMatchInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::MatchInformation)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::MatchInformation)> self) -> StdAutoMatchInformation"""
+        this = _six_sicd.new_StdAutoMatchInformation()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_StdAutoMatchInformation
+    __del__ = lambda self: None
+StdAutoMatchInformation_swigregister = _six_sicd.StdAutoMatchInformation_swigregister
+StdAutoMatchInformation_swigregister(StdAutoMatchInformation)
+
+class ScopedCopyableMatchInformation(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> class"""
+>>>>>>> master
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoSlowTimeDeskew, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoSlowTimeDeskew, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::SlowTimeDeskew)> self) -> StdAutoSlowTimeDeskew"""
+        this = _six_sicd.new_StdAutoSlowTimeDeskew()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+<<<<<<< HEAD
+    __swig_destroy__ = _six_sicd.delete_StdAutoSlowTimeDeskew
+    __del__ = lambda self: None
+StdAutoSlowTimeDeskew_swigregister = _six_sicd.StdAutoSlowTimeDeskew_swigregister
+StdAutoSlowTimeDeskew_swigregister(StdAutoSlowTimeDeskew)
+
+=======
+
+    def get(self):
+        """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_sicd.ScopedCopyableMatchInformation_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_sicd.ScopedCopyableMatchInformation___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_sicd.ScopedCopyableMatchInformation___deref__(self)
+
+
+    def reset(self, *args):
+        """
+        reset(ScopedCopyableMatchInformation self, MatchInformation ptr=None)
+        reset(ScopedCopyableMatchInformation self)
+        """
+        return _six_sicd.ScopedCopyableMatchInformation_reset(self, *args)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableMatchInformation
+    __del__ = lambda self: None
+    __swig_setmethods__["types"] = _six_sicd.ScopedCopyableMatchInformation_types_set
+    __swig_getmethods__["types"] = _six_sicd.ScopedCopyableMatchInformation_types_get
+    if _newclass:
+        types = _swig_property(_six_sicd.ScopedCopyableMatchInformation_types_get, _six_sicd.ScopedCopyableMatchInformation_types_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchInformation___ne__(self, rhs)
+
+ScopedCopyableMatchInformation_swigregister = _six_sicd.ScopedCopyableMatchInformation_swigregister
+ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
+
+
+def makeScopedCopyableMatchInformation():
+    """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
+    return _six_sicd.makeScopedCopyableMatchInformation()
 class StdAutoSlowTimeDeskew(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::SlowTimeDeskew)> class"""
     __swig_setmethods__ = {}
@@ -4055,6 +4462,7 @@ class StdAutoSlowTimeDeskew(_object):
 StdAutoSlowTimeDeskew_swigregister = _six_sicd.StdAutoSlowTimeDeskew_swigregister
 StdAutoSlowTimeDeskew_swigregister(StdAutoSlowTimeDeskew)
 
+>>>>>>> master
 class ScopedCopyableSlowTimeDeskew(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::SlowTimeDeskew)> class"""
     __swig_setmethods__ = {}
@@ -4432,7 +4840,11 @@ def makeScopedCopyableRgAzComp():
     """makeScopedCopyableRgAzComp() -> ScopedCopyableRgAzComp"""
     return _six_sicd.makeScopedCopyableRgAzComp()
 class StdAutoGeoInfo(_object):
+<<<<<<< HEAD
     """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class"""
+=======
+    """Proxy of C++ std::auto_ptr<(six::sicd::GeoInfo)> class"""
+>>>>>>> master
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
     __swig_getmethods__ = {}
@@ -4440,7 +4852,11 @@ class StdAutoGeoInfo(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
+<<<<<<< HEAD
         """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
+=======
+        """__init__(std::auto_ptr<(six::sicd::GeoInfo)> self) -> StdAutoGeoInfo"""
+>>>>>>> master
         this = _six_sicd.new_StdAutoGeoInfo()
         try:
             self.this.append(this)
@@ -4451,8 +4867,13 @@ class StdAutoGeoInfo(_object):
 StdAutoGeoInfo_swigregister = _six_sicd.StdAutoGeoInfo_swigregister
 StdAutoGeoInfo_swigregister(StdAutoGeoInfo)
 
+<<<<<<< HEAD
 class ScopedCopyableGeoInfo(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::GeoInfo)> class"""
+=======
+class ScopedCloneableGeoInfo(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::GeoInfo)> class"""
+>>>>>>> master
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoInfo, name, value)
     __swig_getmethods__ = {}
@@ -4491,7 +4912,11 @@ class ScopedCopyableGeoInfo(_object):
         reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
         reset(ScopedCopyableGeoInfo self)
         """
+<<<<<<< HEAD
         return _six_sicd.ScopedCopyableGeoInfo_reset(self, *args)
+=======
+        return _six_sicd.ScopedCloneableGeoInfo_reset(self, *args)
+>>>>>>> master
 
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoInfo
     __del__ = lambda self: None
@@ -4510,12 +4935,28 @@ class ScopedCopyableGeoInfo(_object):
     __swig_setmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set
     __swig_getmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get
     if _newclass:
+<<<<<<< HEAD
         geometryLatLon = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set)
 
     def __eq__(self, rhs):
         """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
         return _six_sicd.ScopedCopyableGeoInfo___eq__(self, rhs)
 
+=======
+        geometryLatLon = _swig_property(_six_sicd.ScopedCloneableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCloneableGeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCloneableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCloneableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_sicd.ScopedCloneableGeoInfo___ne__(self, rhs)
+
+ScopedCloneableGeoInfo_swigregister = _six_sicd.ScopedCloneableGeoInfo_swigregister
+ScopedCloneableGeoInfo_swigregister(ScopedCloneableGeoInfo)
+>>>>>>> master
 
     def __ne__(self, rhs):
         """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
@@ -5324,6 +5765,119 @@ ScopedCopyableGainAndPhasePolys_swigregister(ScopedCopyableGainAndPhasePolys)
 def makeScopedCopyableGainAndPhasePolys():
     """makeScopedCopyableGainAndPhasePolys() -> ScopedCopyableGainAndPhasePolys"""
     return _six_sicd.makeScopedCopyableGainAndPhasePolys()
+<<<<<<< HEAD
+class StdAutoWeightType(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::WeightType)> class"""
+=======
+class StdAutoMatchType(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::MatchType)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::MatchType)> self) -> StdAutoMatchType"""
+        this = _six_sicd.new_StdAutoMatchType()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_StdAutoMatchType
+    __del__ = lambda self: None
+StdAutoMatchType_swigregister = _six_sicd.StdAutoMatchType_swigregister
+StdAutoMatchType_swigregister(StdAutoMatchType)
+
+class ScopedCopyableMatchType(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchType)> class"""
+>>>>>>> master
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoWeightType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoWeightType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::WeightType)> self) -> StdAutoWeightType"""
+        this = _six_sicd.new_StdAutoWeightType()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+<<<<<<< HEAD
+    __swig_destroy__ = _six_sicd.delete_StdAutoWeightType
+    __del__ = lambda self: None
+StdAutoWeightType_swigregister = _six_sicd.StdAutoWeightType_swigregister
+StdAutoWeightType_swigregister(StdAutoWeightType)
+
+=======
+
+    def get(self):
+        """get(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType___deref__(self)
+
+
+    def reset(self, *args):
+        """
+        reset(ScopedCopyableMatchType self, MatchType ptr=None)
+        reset(ScopedCopyableMatchType self)
+        """
+        return _six_sicd.ScopedCopyableMatchType_reset(self, *args)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableMatchType
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.ScopedCopyableMatchType_collectorName_get, _six_sicd.ScopedCopyableMatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.ScopedCopyableMatchType_illuminatorName_get, _six_sicd.ScopedCopyableMatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_get
+    if _newclass:
+        matchType = _swig_property(_six_sicd.ScopedCopyableMatchType_matchType_get, _six_sicd.ScopedCopyableMatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_get
+    if _newclass:
+        typeID = _swig_property(_six_sicd.ScopedCopyableMatchType_typeID_get, _six_sicd.ScopedCopyableMatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_get
+    if _newclass:
+        currentIndex = _swig_property(_six_sicd.ScopedCopyableMatchType_currentIndex_get, _six_sicd.ScopedCopyableMatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_get
+    if _newclass:
+        matchCollects = _swig_property(_six_sicd.ScopedCopyableMatchType_matchCollects_get, _six_sicd.ScopedCopyableMatchType_matchCollects_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_sicd.ScopedCopyableMatchType___ne__(self, rhs)
+
+ScopedCopyableMatchType_swigregister = _six_sicd.ScopedCopyableMatchType_swigregister
+ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
+
+
+def makeScopedCopyableMatchType():
+    """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
+    return _six_sicd.makeScopedCopyableMatchType()
 class StdAutoWeightType(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::WeightType)> class"""
     __swig_setmethods__ = {}
@@ -5344,6 +5898,7 @@ class StdAutoWeightType(_object):
 StdAutoWeightType_swigregister = _six_sicd.StdAutoWeightType_swigregister
 StdAutoWeightType_swigregister(StdAutoWeightType)
 
+>>>>>>> master
 class ScopedCopyableWeightType(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::WeightType)> class"""
     __swig_setmethods__ = {}
@@ -8052,6 +8607,26 @@ class StdAutoRMAT(_object):
 StdAutoRMAT_swigregister = _six_sicd.StdAutoRMAT_swigregister
 StdAutoRMAT_swigregister(StdAutoRMAT)
 
+class StdAutoRMAT(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::RMAT)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRMAT, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoRMAT, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::sicd::RMAT)> self) -> StdAutoRMAT"""
+        this = _six_sicd.new_StdAutoRMAT()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_StdAutoRMAT
+    __del__ = lambda self: None
+StdAutoRMAT_swigregister = _six_sicd.StdAutoRMAT_swigregister
+StdAutoRMAT_swigregister(StdAutoRMAT)
+
 class ScopedCopyableRMAT(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RMAT)> class"""
     __swig_setmethods__ = {}
@@ -8653,7 +9228,7 @@ import numpy as np
 from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
 #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
@@ -8672,7 +9247,10 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
     getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])

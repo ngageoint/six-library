@@ -24,8 +24,9 @@
 
 %feature("autodoc","1");
 
-%include "std_vector.i"
-%include "std_string.i"
+%include <std_vector.i>
+%include <std_string.i>
+%include <std_auto_ptr.i>
 
 %{
 
@@ -43,18 +44,16 @@ using std::ptrdiff_t;
 #include "import/nitf.hpp"
 
 using namespace six;
-
-six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
-                      ::io::InputStream& xmlStream,
-                      DataType dataType,
-                      const std::vector<std::string>& schemaPaths,
-                      logging::Logger& log)
-{
-  std::auto_ptr<Data> retv = six::parseData(xmlReg, xmlStream, dataType, schemaPaths, log);
-  return retv.release();
-}
-
 %}
+
+// This allows functions that deal with auto_ptrs to work properly
+%auto_ptr(six::Data);
+%auto_ptr(six::XMLControlCreator);
+
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
 
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
@@ -71,12 +70,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 /* parametric elt-size array */
 /* will probably want it eventually, but it looks like six.sicd doesn't use it */
 %ignore "LUT";
-
-/* auto_ptr causes problems, as well as
- * xml factory stuff that we'll just
- * put aside for now
- */
-%ignore parseData;
 
 /* ignore some useless (in Python) functions in ParameterCollection */
 %ignore six::ParameterCollection::begin;
@@ -102,6 +95,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
+%include "six/XMLControlFactory.h"
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
@@ -165,7 +159,6 @@ SCOPED_COPYABLE(six, RadarSensor)
 SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
-SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, MatchInformation)
 SCOPED_COPYABLE(six, MatchType)
 SCOPED_CLONEABLE(six, AmplitudeTable)

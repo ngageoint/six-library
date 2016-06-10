@@ -253,7 +253,12 @@ public:
 
     double getRotationAngle() const;
 
-    Vector3 getMultiPathVector() const;
+    Vector3 getMultiPathVector(const Vector3& normalVec) const;
+
+    Vector3 getMultiPathVector() const
+    {
+        return getMultiPathVector(getOPZVector());
+    }
 
     /*
      * Returns the multipath angle in [-180, 180] degrees

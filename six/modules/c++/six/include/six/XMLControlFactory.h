@@ -158,7 +158,7 @@ std::string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = NULL);
 
 /*!
- *  Additonally performs schema validation --
+ *  Additionally performs schema validation --
  *  This function must must receive a valid logger to print validation errors
  */
 std::string toValidXMLString(

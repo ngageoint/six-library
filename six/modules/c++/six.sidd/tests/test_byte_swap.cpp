@@ -60,7 +60,8 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
     derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
-    derivedData->geographicAndTarget->geographicCoverage.reset(new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+    derivedData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resolution.row = 0;
     derivedData->exploitationFeatures->product.resolution.col = 0;

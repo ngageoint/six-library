@@ -30,7 +30,6 @@ namespace six
 {
 namespace sicd
 {
-
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block

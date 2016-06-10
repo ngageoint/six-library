@@ -3033,6 +3033,8 @@ Constants.DES_VERSION = _six_base.cvar.Constants_DES_VERSION
 Constants.DES_USER_DEFINED_SUBHEADER_TAG = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_TAG
 Constants.DES_USER_DEFINED_SUBHEADER_ID = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_ID
 Constants.DES_USER_DEFINED_SUBHEADER_LENGTH = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_LENGTH
+Constants.SICD_DESSHSI = _six_base.cvar.Constants_SICD_DESSHSI
+Constants.SIDD_DESSHSI = _six_base.cvar.Constants_SIDD_DESSHSI
 
 def Constants_getNumBytesPerPixel(type):
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
@@ -4318,6 +4320,27 @@ def loadPluginDir(pluginDir):
     """loadPluginDir(std::string const & pluginDir)"""
     return _six_base.loadPluginDir(pluginDir)
 
+def parseData(*args):
+    """
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseData(*args)
+
+def parseDataFromFile(*args):
+    """
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromFile(*args)
+
+def parseDataFromString(*args):
+    """
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromString(*args)
+
 def getErrors(errorStats, sampleSpacing, errors):
     """getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"""
     return _six_base.getErrors(errorStats, sampleSpacing, errors)
@@ -4379,6 +4402,78 @@ class Options(_object):
 Options_swigregister = _six_base.Options_swigregister
 Options_swigregister(Options)
 
+class XMLControlCreator(_object):
+    """Proxy of C++ six::XMLControlCreator class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, XMLControlCreator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, XMLControlCreator, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_base.delete_XMLControlCreator
+    __del__ = lambda self: None
+
+    def newXMLControl(self, log):
+        """newXMLControl(XMLControlCreator self, logging::Logger * log) -> XMLControl"""
+        return _six_base.XMLControlCreator_newXMLControl(self, log)
+
+XMLControlCreator_swigregister = _six_base.XMLControlCreator_swigregister
+XMLControlCreator_swigregister(XMLControlCreator)
+
+class XMLControlRegistry(_object):
+    """Proxy of C++ six::XMLControlRegistry class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, XMLControlRegistry, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, XMLControlRegistry, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::XMLControlRegistry self) -> XMLControlRegistry"""
+        this = _six_base.new_XMLControlRegistry()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_XMLControlRegistry
+    __del__ = lambda self: None
+
+    def addCreator(self, *args):
+        """
+        addCreator(XMLControlRegistry self, std::string const & identifier, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, std::string const & identifier, XMLControlCreator creator)
+        addCreator(XMLControlRegistry self, DataType dataType, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, DataType dataType, XMLControlCreator creator)
+        """
+        return _six_base.XMLControlRegistry_addCreator(self, *args)
+
+
+    def newXMLControl(self, *args):
+        """
+        newXMLControl(XMLControlRegistry self, std::string const & identifier, logging::Logger * log) -> XMLControl
+        newXMLControl(XMLControlRegistry self, DataType dataType, logging::Logger * log) -> XMLControl
+        """
+        return _six_base.XMLControlRegistry_newXMLControl(self, *args)
+
+XMLControlRegistry_swigregister = _six_base.XMLControlRegistry_swigregister
+XMLControlRegistry_swigregister(XMLControlRegistry)
+
+
+def toXMLString(data, xmlRegistry=None):
+    """
+    toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string
+    toXMLString(Data data) -> std::string
+    """
+    return _six_base.toXMLString(data, xmlRegistry)
+
+def toValidXMLString(data, schemaPaths, log, xmlRegistry=None):
+    """
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
+    """
+    return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
 class VectorString(_object):
     """Proxy of C++ std::vector<(std::string)> class"""
     __swig_setmethods__ = {}
@@ -4709,8 +4804,33 @@ class LatLonAltCorners(_object):
 LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister
 LatLonAltCorners_swigregister(LatLonAltCorners)
 
+<<<<<<< HEAD
 class VectorMatchCollect(_object):
     """Proxy of C++ std::vector<(six::MatchCollect)> class"""
+=======
+class StdAutoRadiometric(_object):
+    """Proxy of C++ std::auto_ptr<(six::Radiometric)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadiometric, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoRadiometric, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::Radiometric)> self) -> StdAutoRadiometric"""
+        this = _six_base.new_StdAutoRadiometric()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoRadiometric
+    __del__ = lambda self: None
+StdAutoRadiometric_swigregister = _six_base.StdAutoRadiometric_swigregister
+StdAutoRadiometric_swigregister(StdAutoRadiometric)
+
+class ScopedCopyableRadiometric(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::Radiometric)> class"""
+>>>>>>> master
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, VectorMatchCollect, name, value)
     __swig_getmethods__ = {}
@@ -4738,6 +4858,7 @@ class VectorMatchCollect(_object):
         """__len__(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
         return _six_base.VectorMatchCollect___len__(self)
 
+<<<<<<< HEAD
 
     def pop(self):
         """pop(VectorMatchCollect self) -> MatchCollect"""
@@ -4747,6 +4868,95 @@ class VectorMatchCollect(_object):
     def __getslice__(self, i, j):
         """__getslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j) -> VectorMatchCollect"""
         return _six_base.VectorMatchCollect___getslice__(self, i, j)
+=======
+    def reset(self, *args):
+        """
+        reset(ScopedCopyableRadiometric self, Radiometric ptr=None)
+        reset(ScopedCopyableRadiometric self)
+        """
+        return _six_base.ScopedCopyableRadiometric_reset(self, *args)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableRadiometric
+    __del__ = lambda self: None
+    __swig_getmethods__["NL_ABSOLUTE"] = _six_base.ScopedCopyableRadiometric_NL_ABSOLUTE_get
+    if _newclass:
+        NL_ABSOLUTE = _swig_property(_six_base.ScopedCopyableRadiometric_NL_ABSOLUTE_get)
+    __swig_getmethods__["NL_RELATIVE"] = _six_base.ScopedCopyableRadiometric_NL_RELATIVE_get
+    if _newclass:
+        NL_RELATIVE = _swig_property(_six_base.ScopedCopyableRadiometric_NL_RELATIVE_get)
+    __swig_setmethods__["noiseLevel"] = _six_base.ScopedCopyableRadiometric_noiseLevel_set
+    __swig_getmethods__["noiseLevel"] = _six_base.ScopedCopyableRadiometric_noiseLevel_get
+    if _newclass:
+        noiseLevel = _swig_property(_six_base.ScopedCopyableRadiometric_noiseLevel_get, _six_base.ScopedCopyableRadiometric_noiseLevel_set)
+    __swig_setmethods__["rcsSFPoly"] = _six_base.ScopedCopyableRadiometric_rcsSFPoly_set
+    __swig_getmethods__["rcsSFPoly"] = _six_base.ScopedCopyableRadiometric_rcsSFPoly_get
+    if _newclass:
+        rcsSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_rcsSFPoly_get, _six_base.ScopedCopyableRadiometric_rcsSFPoly_set)
+    __swig_setmethods__["betaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_set
+    __swig_getmethods__["betaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_get
+    if _newclass:
+        betaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_betaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_set
+    __swig_getmethods__["sigmaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_get
+    if _newclass:
+        sigmaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set
+    __swig_getmethods__["sigmaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get
+    if _newclass:
+        sigmaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set)
+    __swig_setmethods__["gammaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_set
+    __swig_getmethods__["gammaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_get
+    if _newclass:
+        gammaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_set)
+    __swig_setmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set
+    __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
+    if _newclass:
+        gammaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
+        return _six_base.ScopedCopyableRadiometric___ne__(self, rhs)
+
+ScopedCopyableRadiometric_swigregister = _six_base.ScopedCopyableRadiometric_swigregister
+ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
+
+
+def makeScopedCopyableRadiometric():
+    """makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"""
+    return _six_base.makeScopedCopyableRadiometric()
+class StdAutoErrorStatistics(_object):
+    """Proxy of C++ std::auto_ptr<(six::ErrorStatistics)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoErrorStatistics, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoErrorStatistics, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::ErrorStatistics)> self) -> StdAutoErrorStatistics"""
+        this = _six_base.new_StdAutoErrorStatistics()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoErrorStatistics
+    __del__ = lambda self: None
+StdAutoErrorStatistics_swigregister = _six_base.StdAutoErrorStatistics_swigregister
+StdAutoErrorStatistics_swigregister(StdAutoErrorStatistics)
+
+class ScopedCopyableErrorStatistics(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::ErrorStatistics)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableErrorStatistics, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableErrorStatistics, name)
+    __repr__ = _swig_repr
+>>>>>>> master
 
 
     def __setslice__(self, *args):
@@ -4762,13 +4972,48 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect___delslice__(self, i, j)
 
 
+<<<<<<< HEAD
     def __delitem__(self, *args):
+=======
+    def reset(self, *args):
+>>>>>>> master
         """
         __delitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i)
         __delitem__(VectorMatchCollect self, PySliceObject * slice)
         """
+<<<<<<< HEAD
         return _six_base.VectorMatchCollect___delitem__(self, *args)
 
+=======
+        return _six_base.ScopedCopyableErrorStatistics_reset(self, *args)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableErrorStatistics
+    __del__ = lambda self: None
+    __swig_setmethods__["compositeSCP"] = _six_base.ScopedCopyableErrorStatistics_compositeSCP_set
+    __swig_getmethods__["compositeSCP"] = _six_base.ScopedCopyableErrorStatistics_compositeSCP_get
+    if _newclass:
+        compositeSCP = _swig_property(_six_base.ScopedCopyableErrorStatistics_compositeSCP_get, _six_base.ScopedCopyableErrorStatistics_compositeSCP_set)
+    __swig_setmethods__["components"] = _six_base.ScopedCopyableErrorStatistics_components_set
+    __swig_getmethods__["components"] = _six_base.ScopedCopyableErrorStatistics_components_get
+    if _newclass:
+        components = _swig_property(_six_base.ScopedCopyableErrorStatistics_components_get, _six_base.ScopedCopyableErrorStatistics_components_set)
+    __swig_setmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_set
+    __swig_getmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_get
+    if _newclass:
+        additionalParameters = _swig_property(_six_base.ScopedCopyableErrorStatistics_additionalParameters_get, _six_base.ScopedCopyableErrorStatistics_additionalParameters_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
+        return _six_base.ScopedCopyableErrorStatistics___ne__(self, rhs)
+
+ScopedCopyableErrorStatistics_swigregister = _six_base.ScopedCopyableErrorStatistics_swigregister
+ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
+>>>>>>> master
 
     def __getitem__(self, *args):
         """
@@ -4777,6 +5022,39 @@ class VectorMatchCollect(_object):
         """
         return _six_base.VectorMatchCollect___getitem__(self, *args)
 
+<<<<<<< HEAD
+=======
+def makeScopedCopyableErrorStatistics():
+    """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
+    return _six_base.makeScopedCopyableErrorStatistics()
+class StdAutoCorrCoefs(_object):
+    """Proxy of C++ std::auto_ptr<(six::CorrCoefs)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCorrCoefs, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCorrCoefs, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CorrCoefs)> self) -> StdAutoCorrCoefs"""
+        this = _six_base.new_StdAutoCorrCoefs()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCorrCoefs
+    __del__ = lambda self: None
+StdAutoCorrCoefs_swigregister = _six_base.StdAutoCorrCoefs_swigregister
+StdAutoCorrCoefs_swigregister(StdAutoCorrCoefs)
+
+class ScopedCopyableCorrCoefs(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::CorrCoefs)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableCorrCoefs, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableCorrCoefs, name)
+    __repr__ = _swig_repr
+>>>>>>> master
 
     def __setitem__(self, *args):
         """
@@ -4801,6 +5079,7 @@ class VectorMatchCollect(_object):
         """size(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
         return _six_base.VectorMatchCollect_size(self)
 
+<<<<<<< HEAD
 
     def clear(self):
         """clear(VectorMatchCollect self)"""
@@ -5380,6 +5659,8 @@ class ScopedCopyableCorrCoefs(_object):
         return _six_base.ScopedCopyableCorrCoefs___deref__(self)
 
 
+=======
+>>>>>>> master
     def reset(self, *args):
         """
         reset(ScopedCopyableCorrCoefs self, CorrCoefs ptr=None)
@@ -6064,6 +6345,7 @@ ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 def makeScopedCopyableComponents():
     """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
     return _six_base.makeScopedCopyableComponents()
+<<<<<<< HEAD
 class StdAutoMatchInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::MatchInformation)> class"""
     __swig_setmethods__ = {}
@@ -6254,6 +6536,8 @@ ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
 def makeScopedCopyableMatchType():
     """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
     return _six_base.makeScopedCopyableMatchType()
+=======
+>>>>>>> master
 class StdAutoAmplitudeTable(_object):
     """Proxy of C++ std::auto_ptr<(six::AmplitudeTable)> class"""
     __swig_setmethods__ = {}
@@ -6343,10 +6627,13 @@ class ScopedCloneableAmplitudeTable(_object):
         """clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable_clone(self)
 
+<<<<<<< HEAD
     __swig_setmethods__["table"] = _six_base.ScopedCloneableAmplitudeTable_table_set
     __swig_getmethods__["table"] = _six_base.ScopedCloneableAmplitudeTable_table_get
     if _newclass:
         table = _swig_property(_six_base.ScopedCloneableAmplitudeTable_table_get, _six_base.ScopedCloneableAmplitudeTable_table_set)
+=======
+>>>>>>> master
     __swig_setmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_set
     __swig_getmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_get
     if _newclass:

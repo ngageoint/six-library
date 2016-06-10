@@ -177,8 +177,8 @@ public:
     //!  (Optional, Unbounded) Provides target specific geo information
     std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
 
-    // This section is used for SIDD 1.1
 
+    // This section is used for SIDD 1.1
     EarthModelType earthModel;
     /*!
      *  Parameters apply to image corners of the

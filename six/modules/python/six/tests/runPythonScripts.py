@@ -35,11 +35,8 @@ def sicdToSIO(testsDir):
     scriptName = os.path.join(testsDir, 'sicd_to_sio.py')
     sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
             'six.sicd', 'sicd_1.0.0(RMA)RMAT.nitf')
-    schemaPath = os.path.join(utils.findSixHome(), 'install', 'conf',
+    schemaPath = os.path.join(utils.installPath(), 'conf',
             'schema', 'six')
-    print(sampleNITF)
-    print(schemaPath)
-
     result = call(['python', scriptName, sampleNITF, schemaPath],
                   stdout=subprocess.PIPE)
     if result == 0:
@@ -72,11 +69,23 @@ def testSixSICD(testsDir):
         return True
     return False
 
+
+def testReadSICDXML(testsDir):
+    print('Running test_read_sicd_xml.py')
+    scriptName = os.path.join(testsDir, 'test_read_sicd_xml.py')
+    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
+            'six.sicd', 'sicd_1.0.0(RMA)RMAT.nitf')
+    result = call(['python', scriptName, sampleNITF])
+    if result == 0:
+        print('test_read_sicd_xml.py succeeded')
+        return True
+    return False
+
+
 def run():
     testsDir = os.path.join(utils.findSixHome(), 'six',
             'modules', 'python', 'six.sicd', 'tests')
 
     result = (sicdToSIO(testsDir) and testCreateSICDXML(testsDir) and
-            testSixSICD(testsDir))
+           testSixSICD(testsDir) and testReadSICDXML(testsDir))
     return result
-

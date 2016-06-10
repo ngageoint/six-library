@@ -504,7 +504,7 @@ private:
 struct SFACoordinateSystem : public SFATyped
 {
 public:
-   virtual SFACoordinateSystem* clone() const = 0;
+    virtual SFACoordinateSystem* clone() const = 0;
 
 protected:
     SFACoordinateSystem(const std::string& typeName) :

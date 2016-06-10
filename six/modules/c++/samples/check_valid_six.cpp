@@ -152,10 +152,10 @@ int main(int argc, char** argv)
                         NITF_VER_UNKNOWN)
                 {
                     // Assume it's just a text file containing XML
-                    six::parseData(xmlRegistry,
-                                   inputPathname,
-                                   schemaPaths,
-                                   *log);
+                    six::parseDataFromFile(xmlRegistry,
+                                           inputPathname,
+                                           schemaPaths,
+                                           *log);
                 }
                 else
                 {

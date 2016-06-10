@@ -937,6 +937,13 @@ void NITFWriteControl::addDataAndWrite(
                                             false);
         deWriter.attachSource(segSource);
     }
+
+    int deWriterIndex = mContainer->getNumData();
+    for (size_t ii = 0; ii < mSegmentWriters.size(); ++ii)
+    {
+        mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
+    }
+
     mWriter.write();
 }
 
@@ -1022,8 +1029,15 @@ void NITFWriteControl::addUserDefinedSubheader(
 
         const std::string dataType =
                 (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
-        tre["DESSHSI"] = dataType +
-                " Volume 1 Design & Implementation Description Document";
+        
+        if (dataType == "SICD")
+        {
+            tre["DESSHSI"] = Constants::SICD_DESSHSI;
+        }
+        else
+        {
+            tre["DESSHSI"] = Constants::SIDD_DESSHSI;
+        }
 
         // This is the publication date and version of the
         // Design and Implementation Description Document 
@@ -1097,5 +1111,15 @@ void NITFWriteControl::addUserDefinedSubheader(
                 "six::loadPluginDir()"));
     }
     subheader.setSubheaderFields(tre);
+}
+
+void NITFWriteControl::addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+{
+    if (segmentWriter.get() == NULL)
+    {
+        throw except::Exception(Ctxt("segmentWriter is NULL"));
+    }
+
+    mSegmentWriters.push_back(segmentWriter);
 }
 }

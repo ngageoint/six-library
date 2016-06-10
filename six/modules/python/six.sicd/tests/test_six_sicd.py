@@ -84,7 +84,7 @@ def roundTrip(filename):
 def loadSicd(filename):
   vs = VectorString()
   vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
-  cmplx = getComplexData(filename, vs)
+  cmplx = SixSicdUtilities.getComplexData(filename, vs)
   showInfo(cmplx)
   out_filename = 'from_sicd_' + os.path.basename(filename) + '.xml'
   xml_ctrl = ComplexXMLControl()

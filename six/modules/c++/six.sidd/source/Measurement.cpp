@@ -101,7 +101,6 @@ bool PlaneProjection::equalTo(const Projection& rhs) const
     return false;
 }
 
-
 Measurement::Measurement(ProjectionType projectionType) :
     pixelFootprint(Init::undefined<RowColInt>())
 {

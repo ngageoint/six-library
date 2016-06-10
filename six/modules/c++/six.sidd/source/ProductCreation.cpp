@@ -42,4 +42,3 @@ bool six::sidd::ProductCreation::operator==(const six::sidd::ProductCreation& rh
         productType == rhs.productType &&
         productCreationExtensions == rhs.productCreationExtensions);
 }
-

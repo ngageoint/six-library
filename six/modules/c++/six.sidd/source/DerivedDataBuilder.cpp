@@ -110,9 +110,9 @@ DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 }
 DerivedDataBuilder& DerivedDataBuilder::addMatchInformation()
 {
-	mData->matchInformation.reset(new MatchInformation());
+    mData->matchInformation.reset(new MatchInformation());
 
-	return *this;
+    return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addCompression()
@@ -139,4 +139,3 @@ DerivedData* DerivedDataBuilder::steal()
     mAdopt = false;
     return get();
 }
-

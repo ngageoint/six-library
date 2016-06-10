@@ -3,7 +3,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, MDA Information Systems LLC
  * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

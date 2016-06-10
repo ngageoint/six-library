@@ -326,7 +326,6 @@ struct Measurement
     {
         return !(*this == rhs);
     }
-
 };
 
 }
