@@ -153,6 +153,7 @@ def setValue(self, *args):
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
+SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, CorrCoefs)
 SCOPED_COPYABLE(six, PosVelError)
 SCOPED_COPYABLE(six, RadarSensor)

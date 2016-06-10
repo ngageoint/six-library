@@ -73,11 +73,10 @@ def run():
         if '--lut' in arg:
             call([utils.executableName(os.path.join(binDir,
                     'test_create_sidd_from_mem')), '--lut', arg.split(' ')[1],
-                    argToOutput[arg]], stdout = open(os.devnull, 'w'))
+                    argToOutput[arg]])
         else:
             call([utils.executableName(os.path.join(binDir,
-                    'test_create_sidd_from_mem')), arg, argToOutput[arg]],
-                     stdout = open(os.devnull, 'w'))
+                    'test_create_sidd_from_mem')), arg, argToOutput[arg]])
 
     moveToOutputDir(argToOutput.values(), outdir)
 

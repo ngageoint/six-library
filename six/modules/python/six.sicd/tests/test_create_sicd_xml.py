@@ -567,7 +567,7 @@ def initErrorStats(cmplx):
     errorStats.compositeSCP.yErr = 34
     errorStats.compositeSCP.xyErr = 56
 
-    errorStats.components = makeScopedCopyableComponents()
+    errorStats.components = makeScopedCopybleComponents()
 
     errorStats.components.posVelError = makeScopedCopyablePosVelError()
     errorStats.components.posVelError.frame = FrameType('ECF')
