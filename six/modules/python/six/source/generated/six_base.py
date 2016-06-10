@@ -5420,6 +5420,103 @@ ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 def makeScopedCopyableErrorStatistics():
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
+class StdAutoComponents(_object):
+    """Proxy of C++ std::auto_ptr<(six::Components)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComponents, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComponents, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
+        this = _six_base.new_StdAutoComponents()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoComponents
+    __del__ = lambda self: None
+StdAutoComponents_swigregister = _six_base.StdAutoComponents_swigregister
+StdAutoComponents_swigregister(StdAutoComponents)
+
+class ScopedCopyableComponents(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableComponents, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableComponents, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, Components ptr=None) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, ScopedCopyableComponents rhs) -> ScopedCopyableComponents
+        """
+        this = _six_base.new_ScopedCopyableComponents(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___deref__(self)
+
+
+    def reset(self, *args):
+        """
+        reset(ScopedCopyableComponents self, Components ptr=None)
+        reset(ScopedCopyableComponents self)
+        """
+        return _six_base.ScopedCopyableComponents_reset(self, *args)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableComponents
+    __del__ = lambda self: None
+    __swig_setmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_set
+    __swig_getmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_get
+    if _newclass:
+        posVelError = _swig_property(_six_base.ScopedCopyableComponents_posVelError_get, _six_base.ScopedCopyableComponents_posVelError_set)
+    __swig_setmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_set
+    __swig_getmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_get
+    if _newclass:
+        radarSensor = _swig_property(_six_base.ScopedCopyableComponents_radarSensor_get, _six_base.ScopedCopyableComponents_radarSensor_set)
+    __swig_setmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_set
+    __swig_getmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_get
+    if _newclass:
+        tropoError = _swig_property(_six_base.ScopedCopyableComponents_tropoError_get, _six_base.ScopedCopyableComponents_tropoError_set)
+    __swig_setmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_set
+    __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
+    if _newclass:
+        ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
+
+    def __eq__(self, rhs):
+        """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___eq__(self, rhs)
+
+
+    def __ne__(self, rhs):
+        """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___ne__(self, rhs)
+
+ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
+ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
+
+
+def makeScopedCopyableComponents():
+    """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
+    return _six_base.makeScopedCopyableComponents()
 class StdAutoCorrCoefs(_object):
     """Proxy of C++ std::auto_ptr<(six::CorrCoefs)> class"""
     __swig_setmethods__ = {}
