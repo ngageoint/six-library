@@ -200,8 +200,29 @@ int main(int argc, char** argv)
         std::auto_ptr<TempFile> nitf = createNITFFromXML(xmlPathname);
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
-        std::cout << "Test passed\n";
-        return 0;
+
+        // Make sure ComplexData got read in
+        logging::Logger log;
+        std::auto_ptr<six::sicd::ComplexData> originalData =
+                six::sicd::Utilities::parseDataFromFile(xmlPathname,
+                std::vector<std::string>(),
+                log);
+
+        // reader retains ownership of these pointers
+        six::Container* const container = reader.getContainer();
+        six::Data* const readData = container->getData(0);
+
+        if (*readData == *originalData)
+        {
+            std::cout << "Test passed\n";
+            return 0;
+        }
+        else
+        {
+            std::cerr << "Round-tripped data not the same as original."
+                    << "Test failed.\n";
+            return 1;
+        }
     }
     catch (const except::Exception& e)
     {
