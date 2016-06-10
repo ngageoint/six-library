@@ -146,7 +146,9 @@ bool ComplexData::validate(logging::Logger& log) const
 {
     // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
     // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
-    return grid->validate(*collectionInformation, *imageData, log);
+    return (grid->validate(*collectionInformation, *imageData, log) &&
+            position->validate(log) &&
+            scpcoa->validate(*geoData, *grid, *position, log));
     return true;
 }
 
@@ -155,12 +157,20 @@ void ComplexData::fillDerivedFields(bool includeDefault)
     geoData->fillDerivedFields(*imageData);
     grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
     position->fillDerivedFields(*scpcoa);
+    radarCollection->fillDerivedFields();
     scpcoa->fillDerivedFields(*geoData, *grid, *position);
+
+    if (includeDefault)
+    {
+        fillDefaultFields();
+    }
+
     return;
 }
 
 void ComplexData::fillDefaultFields()
 {
+    imageFormation->fillDefaultFields(*radarCollection);
     return;
 }
 }

@@ -22,6 +22,7 @@
 #ifndef __SIX_SCPCOA_H__
 #define __SIX_SCPCOA_H__
 
+#include <logging/Logger.h>
 #include "six/Init.h"
 #include "six/Types.h"
 #include "six/Parameter.h"
@@ -107,6 +108,42 @@ struct SCPCOA
     void fillDerivedFields(const GeoData& geoData,
             const Grid& grid,
             const Position& position);
+
+    bool validate(const GeoData& geoData,
+            const Grid& grid,
+            const Position& position,
+            logging::Logger& log);
+
+private:
+    double derivedSCPTime(const Grid& grid) const;
+    std::vector<Vector3> derivedArpVectors(const Position& position) const;
+    SideOfTrackType derivedSideOfTrack(const GeoData& geoData) const;
+    void setScp(const GeoData& geoData);
+    Vector3 scp() const;
+    Vector3 uLOS() const;
+    Vector3 left() const;
+    Vector3 etp() const;
+    Vector3 uGPX() const;
+    Vector3 uNorth() const;
+    Vector3 uEast() const;
+    Vector3 slantPlaneNormal() const;
+    double derivedSlantRange() const;
+    double derivedGroundRange() const;
+    double derivedDopplerConeAngle() const;
+    double derivedGrazeAngle() const;
+    double derivedIncidenceAngle() const;
+    double derivedTwistAngle() const;
+    double derivedSlopeAngle() const;
+    double derivedAzimAngle() const;
+    double derivedLayoverAngle() const;
+    bool compareFields(double given, double expected,
+            const std::string& name, logging::Logger& log) const;
+    bool compareFields(Vector3 given, Vector3 expected,
+            const std::string& name, logging::Logger& log) const;
+    int look() const;
+    Vector3 ecf;
+    static const std::string mScpcoaInconsistentString;
+    static const double mScpcoaTol;
 };
 
 }

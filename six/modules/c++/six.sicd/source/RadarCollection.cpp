@@ -70,6 +70,48 @@ WaveformParameters* WaveformParameters::clone() const
     return new WaveformParameters(*this);
 }
 
+void WaveformParameters::fillDerivedFields()
+{
+    if (rcvDemodType == DemodType::CHIRP &&
+        Init::isUndefined<double>(rcvFMRate))
+    {
+        rcvFMRate = 0;
+    }
+
+    if (rcvFMRate == 0 &&
+        rcvDemodType == DemodType::NOT_SET)
+    {
+        rcvDemodType = DemodType::CHIRP;
+    }
+
+    if (Init::isUndefined<double>(txRFBandwidth) &&
+        !Init::isUndefined<double>(txPulseLength) &&
+        !Init::isUndefined<double>(txFMRate))
+    {
+        txRFBandwidth = txPulseLength * txFMRate;
+    }
+
+    if (!Init::isUndefined<double>(txRFBandwidth) &&
+        Init::isUndefined<double>(txPulseLength) &&
+        !Init::isUndefined<double>(txFMRate))
+    {
+        if (txFMRate != 0)
+        {
+            txPulseLength = txRFBandwidth / txFMRate;
+        }
+    }
+
+    if (!Init::isUndefined<double>(txRFBandwidth) &&
+        !Init::isUndefined<double>(txPulseLength) &&
+        Init::isUndefined<double>(txFMRate))
+    {
+        if (txPulseLength != 0)
+        {
+            txFMRate = txRFBandwidth / txPulseLength;
+        }
+    }
+}
+
 ChannelParameters::ChannelParameters() :
     txRcvPolarization(DualPolarizationType::NOT_SET),
     rcvAPCIndex(Init::undefined<int>())
@@ -188,6 +230,62 @@ bool RadarCollection::operator==(const RadarCollection& rhs) const
         rcvChannels == rhs.rcvChannels &&
         area == rhs.area &&
         parameters == rhs.parameters);
+}
+
+void RadarCollection::fillDerivedFields()
+{
+    // Transmit bandwidth
+    if (!waveform.empty())
+    {
+        if (Init::isUndefined<double>(txFrequencyMin))
+        {
+            double derivedMin = std::numeric_limits<double>::infinity();
+            for (size_t ii = 0; ii < waveform.size(); ++ii)
+            {
+                if (waveform[ii].get() != NULL)
+                {
+                    derivedMin = std::min(derivedMin,
+                            waveform[ii]->txFrequencyStart);
+                }
+            }
+            txFrequencyMin = derivedMin;
+        }
+        if (Init::isUndefined<double>(txFrequencyMax))
+        {
+            double derivedMax = -std::numeric_limits<double>::infinity();
+            for (size_t ii = 0; ii < waveform.size(); ++ii)
+            {
+                if (waveform[ii].get() != NULL)
+                {
+                    derivedMax = std::max(derivedMax,
+                        waveform[ii]->txFrequencyStart +
+                        waveform[ii]->txRFBandwidth);
+                }
+            }
+            txFrequencyMax = derivedMax;
+        }
+
+        for (size_t ii = 0; ii < waveform.size(); ++ii)
+        {
+            if (waveform[ii].get() != NULL)
+            {
+                waveform[ii]->fillDerivedFields();
+            }
+        }
+    }
+
+    if (waveform.size() == 1 &&
+        waveform[0].get() != NULL)
+    {
+        if (Init::isUndefined<double>(waveform[0]->txFrequencyStart))
+        {
+            waveform[0]->txFrequencyStart = txFrequencyMin;
+        }
+        if (Init::isUndefined<double>(waveform[0]->txRFBandwidth))
+        {
+            waveform[0]->txRFBandwidth = txFrequencyMax - txFrequencyMin;
+        }
+    }
 }
 }
 }

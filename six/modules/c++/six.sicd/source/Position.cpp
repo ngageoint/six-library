@@ -64,5 +64,17 @@ void Position::fillDerivedFields(const SCPCOA& scpcoa)
         arpPoly = PolyXYZ(coefs);
     }
 }
+
+bool Position::validate(logging::Logger& log) const
+{
+    // 2.6
+    if (arpPoly.order() < 2)
+    {
+        log.error("Position.arpPoly should have at least position"
+                " and velocity terms.");
+        return false;
+    }
+    return true;
+}
 }
 }

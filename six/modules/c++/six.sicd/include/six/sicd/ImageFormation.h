@@ -33,6 +33,8 @@ namespace six
 {
 namespace sicd
 {
+struct RadarCollection;
+
 /*!
  *  \struct RcvChannelProcessed
  *  \brief SICD RcvChanProc
@@ -351,6 +353,8 @@ struct ImageFormation
     {
         return !(*this == rhs);
     }
+
+    void fillDefaultFields(const RadarCollection& radarCollection);
 };
 
 }

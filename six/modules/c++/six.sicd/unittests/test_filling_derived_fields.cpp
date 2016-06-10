@@ -23,6 +23,13 @@
 #include <import/six/sicd.h>
 #include "TestCase.h"
 
+namespace
+{
+double calculateError(double actual, double expected)
+{
+    return std::abs((actual - expected) / actual);
+}
+}
 TEST_CASE(DerivedDeltaKsNoImageData)
 {
     six::sicd::ImageData imageData;
@@ -127,7 +134,7 @@ TEST_CASE(DerivedScp)
     }
 }
 
-TEST_CASE(DerivedSCPCOAPolys)
+TEST_CASE(DerivedSCPCOA)
 {
     six::sicd::SCPCOA scpcoa;
     scpcoa.scpTime = 123;
@@ -149,6 +156,11 @@ TEST_CASE(DerivedSCPCOAPolys)
 
     six::sicd::Grid grid;
     six::sicd::GeoData geoData;
+    for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
+    {
+        geoData.scp.ecf[ii] = ii + 1;
+    }
+
     scpcoa.fillDerivedFields(geoData, grid, position);
 
     TEST_ASSERT_EQ(scpcoa.arpPos[0], 5612982);
@@ -162,6 +174,17 @@ TEST_CASE(DerivedSCPCOAPolys)
     TEST_ASSERT_EQ(scpcoa.arpAcc[0], 2218);
     TEST_ASSERT_EQ(scpcoa.arpAcc[1], 2958);
     TEST_ASSERT_EQ(scpcoa.arpAcc[2], 3698);
+
+    TEST_ASSERT_EQ(scpcoa.sideOfTrack.toString(), "LEFT");
+    TEST_ASSERT_LESSER(calculateError(scpcoa.slantRange, 13240000), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.groundRange, 0.6953), 1e-4);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.dopplerConeAngle, 179.9922), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.grazeAngle, 79.2171), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.incidenceAngle, 10.7829), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(std::abs(scpcoa.twistAngle), 89.3273), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.slopeAngle, 89.8742), 1e-2);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.azimAngle, 222.4278), 1e-5);
+    TEST_ASSERT_LESSER(calculateError(scpcoa.layoverAngle, 133.0886), 1e-5);
 }
 
 TEST_CASE(DerivedArpPoly)
@@ -205,7 +228,7 @@ int main(int, char**)
     TEST_CHECK(HammingWindow);
     TEST_CHECK(KaiserWindow);
     TEST_CHECK(DerivedScp);
-    TEST_CHECK(DerivedSCPCOAPolys);
     TEST_CHECK(DerivedArpPoly);
+    TEST_CHECK(DerivedSCPCOA)
     return 0;
 }

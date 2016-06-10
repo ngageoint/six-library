@@ -123,6 +123,8 @@ struct WaveformParameters
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
 };
 
 /*!
@@ -476,6 +478,8 @@ struct RadarCollection
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
 };
 
 }

@@ -60,7 +60,6 @@ private:
     bool checkWeightFunctions();
     bool checkWeightFunctions(const DirectionParameters& direction, const std::string& name);
     Functor* calculateWeightFunction(const DirectionParameters& direction);
-    bool checkARPPoly();
     bool checkWaveformDescription();
     double nonZeroDenominator(double denominator);
     bool checkGeoData();
@@ -73,7 +72,6 @@ private:
     bool checkRMCR();
     bool checkINCA();
 
-    void fillRadarCollection(ComplexData& data, bool setDefaultValues);
     void fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues);
     void fillRGAZCOMP(ComplexData& data, double fc);
     void fillPFA(ComplexData& data, double fc, bool setDefaultValues);

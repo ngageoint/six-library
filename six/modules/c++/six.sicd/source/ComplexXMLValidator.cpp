@@ -41,8 +41,6 @@ ComplexXMLValidator::ComplexXMLValidator(const ComplexData& data, logging::Logge
 
 void ComplexXMLValidator::fillDerivedFields(ComplexData& data, bool setDefaultValues)
 {
-    fillRadarCollection(data, setDefaultValues);
-
     double fc = Init::undefined<double>();
     if (data.imageFormation.get() != NULL &&
         data.radarCollection.get() != NULL &&
@@ -548,140 +546,11 @@ Vector3 ComplexXMLValidator::wgs84Norm(const Vector3& point)
     return normal / normal.norm();
 }
 
-void ComplexXMLValidator::fillRadarCollection(ComplexData& data, bool setDefaultValues)
-{
-    if (data.radarCollection.get() == NULL)
-    {
-        return;
-    }
-
-    // Transmit bandwidth
-    if (!data.radarCollection->waveform.empty())
-    {
-        // DERIVED: These values should be equal
-        if (Init::isUndefined<double>(data.radarCollection->txFrequencyMin))
-        {
-            double derivedMin = std::numeric_limits<double>::infinity();
-            for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
-            {
-                if (data.radarCollection->waveform[ii].get() != NULL)
-                {
-                    derivedMin = std::min(derivedMin, data.radarCollection->waveform[ii]->txFrequencyStart);
-                }
-            }
-            data.radarCollection->txFrequencyMin = derivedMin;
-        }
-        if (Init::isUndefined<double>(data.radarCollection->txFrequencyMax))
-        {
-            double derivedMax = -std::numeric_limits<double>::infinity();
-            for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
-            {
-                if (data.radarCollection->waveform[ii].get() != NULL)
-                {
-                    derivedMax = std::max(derivedMax,
-                        data.radarCollection->waveform[ii]->txFrequencyStart +
-                        data.radarCollection->waveform[ii]->txRFBandwidth);
-                }
-            }
-            data.radarCollection->txFrequencyMax = derivedMax;
-        }
-        for (size_t ii = 0; ii < data.radarCollection->waveform.size(); ++ii)
-        {
-            if (data.radarCollection->waveform[ii].get() == NULL)
-            {
-                continue;
-            }
-
-            WaveformParameters wfParameters = *data.radarCollection->waveform[ii];
-            if (wfParameters.rcvDemodType == DemodType::CHIRP &&
-                Init::isUndefined<double>(wfParameters.rcvFMRate))
-            {
-                wfParameters.rcvFMRate = 0;
-            }
-
-            if (wfParameters.rcvFMRate == 0 &&
-                wfParameters.rcvDemodType == DemodType::NOT_SET)
-            {
-                wfParameters.rcvDemodType = DemodType::CHIRP;
-            }
-
-            if (Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
-                !Init::isUndefined<double>(wfParameters.txPulseLength) &&
-                !Init::isUndefined<double>(wfParameters.txFMRate))
-            {
-                wfParameters.txRFBandwidth = wfParameters.txPulseLength * wfParameters.txFMRate;
-            }
-
-            if (!Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
-                Init::isUndefined<double>(wfParameters.txPulseLength) &&
-                !Init::isUndefined<double>(wfParameters.txFMRate))
-            {
-                if (wfParameters.txFMRate != 0)
-                {
-                    wfParameters.txPulseLength = wfParameters.txRFBandwidth / wfParameters.txFMRate;
-                }
-            }
-
-            if (!Init::isUndefined<double>(wfParameters.txRFBandwidth) &&
-                !Init::isUndefined<double>(wfParameters.txPulseLength) &&
-                Init::isUndefined<double>(wfParameters.txFMRate))
-            {
-                if (wfParameters.txPulseLength != 0)
-                {
-                    wfParameters.txFMRate = wfParameters.txRFBandwidth / wfParameters.txPulseLength;
-                }
-            }
-        }
-    }
-
-    if (!Init::isUndefined<double>(data.radarCollection->txFrequencyMin) &&
-        !Init::isUndefined<double>(data.radarCollection->txFrequencyMax))
-    {
-        // Default: we often assume that all transmitted bandwidth was
-        // processed, if given no other information
-        //TODO: move to fillImageFormation()
-        if (setDefaultValues)
-        {
-            if (data.imageFormation.get() == NULL)
-            {
-                data.imageFormation.reset(new ImageFormation());
-            }
-            if (Init::isUndefined<double>(data.imageFormation->txFrequencyProcMin))
-            {
-                data.imageFormation->txFrequencyProcMin = data.radarCollection->txFrequencyMin;
-            }
-            if (Init::isUndefined<double>(data.imageFormation->txFrequencyProcMax))
-            {
-                data.imageFormation->txFrequencyProcMax = data.radarCollection->txFrequencyMax;
-            }
-        }
-
-        //Derived: These values should be equal.
-        if (data.radarCollection->waveform.size() == 1 &&
-            data.radarCollection->waveform[0].get() != NULL)
-        {
-            if (Init::isUndefined<double>(data.radarCollection->waveform[0]->txFrequencyStart))
-            {
-                data.radarCollection->waveform[0]->txFrequencyStart = data.radarCollection->txFrequencyMin;
-            }
-            if (Init::isUndefined<double>(data.radarCollection->waveform[0]->txRFBandwidth))
-            {
-                data.radarCollection->waveform[0]->txRFBandwidth =
-                    data.radarCollection->txFrequencyMax - data.radarCollection->txFrequencyMin;
-            }
-        }
-    }
-
-    //ImageFormation @ 272
-    return;
-}
-
 bool ComplexXMLValidator::validate()
 {
     return (
         checkSupportParamsAgainstPFA() &&        // 2.3.10 - 2.3.16
         checkWeightFunctions() &&                // 2.4  (omitting 2.5: requires fft, fzero)
-        checkARPPoly() &&                        // 2.6  (omitting 2.7: requries derived_sicd_fields.m)
         checkWaveformDescription() &&            // 2.8  (omitting 2.9: required add_sicd_corners.m)
         checkGeoData() &&                        // 2.10
         checkValidData() &&                      // 2.11
@@ -1690,18 +1559,6 @@ bool ComplexXMLValidator::checkWaveformDescription()
         }
     }
     return valid;
-}
-
-bool ComplexXMLValidator::checkARPPoly()
-{
-    if (sicd.position->arpPoly.order() < 2)
-    {
-        messageBuilder.str("");
-        messageBuilder << "SICD.Position.ARPPoly should have at least position and velocity terms." << std::endl;
-        mLog->error(messageBuilder.str());
-        return false;
-    }
-    return true;
 }
 
 bool ComplexXMLValidator::checkSupportParamsAgainstPFA()
