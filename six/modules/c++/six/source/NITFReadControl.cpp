@@ -81,21 +81,114 @@ six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 
 namespace six
 {
+DataType NITFReadControl::getDataType(nitf::Record& record)
+{
+    nitf::List des = record.getDataExtensions();
+    if (des.isEmpty())
+    {
+        return DataType::NOT_SET;
+    }
+
+    // SICD spec guarantees that the first DES will be the SICD/SIDD DES
+    nitf::DESegment segment = (nitf::DESegment) des.getFirst().getData();
+    return getDataType(segment);
+}
+
+DataType NITFReadControl::getDataType(nitf::DESegment& segment)
+{
+    // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
+    //       SICD or SIDD, so for old files we could key off of that.  Since
+    //       that's not guaranteed for newer versions though, we now use the
+    //       DESID for really old versions and the DESSHSI from
+    //       XML_DATA_CONTENT for newer versions.
+    nitf::DESubheader subheader = segment.getSubheader();
+    std::string desid = subheader.getTypeID().toString();
+    str::trim(desid);
+
+    // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
+    // Older versions of the spec specified it as SICD_XML/SIDD_XML
+    // Here we'll accept any of these under the assumption that it's not
+    // such an old version of the spec that the XML layout itself has
+    // changed (if it did, XMLControl will end up throwing anyway)
+    if (desid == "SICD_XML")
+    {
+        return DataType::COMPLEX;
+    }
+    else if (desid == "SIDD_XML")
+    {
+        return DataType::DERIVED;
+    }
+    else if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+    {
+        // Check whether DES is SICD/SIDD, or something of a different
+        // sort. Note that we need to check the subheader
+        // length first rather than calling tre.getCurrentSize() in
+        // case there is no subheader (in which case
+        // subheader.getSubheaderFields() will throw with a
+        // NITRO-specific message).
+        const sys::Uint64_T
+            subheaderLength(subheader.getSubheaderFieldsLength());
+        if (subheaderLength !=
+            Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
+        {
+            return DataType::NOT_SET;
+        }
+        nitf::TRE tre = subheader.getSubheaderFields();
+        if (tre.getTag() !=
+            Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+        {
+            return DataType::NOT_SET;
+        }
+
+        std::string field;
+        if (tre.exists("DESSHSI"))
+        {
+            field = tre.getField("DESSHSI").toString();
+            str::trim(field);
+        }
+        else
+        {
+            // We've already checked that it's XML_DATA_CONTENT
+            // with length 773, so the DESSHSI field ought to be
+            // present if the plugins are loaded.
+            throw except::NoSuchKeyException(Ctxt(
+                "Must have '" +
+                std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
+                "' plugin on the plugin path.  Either set the "
+                "NITF_PLUGIN_PATH environment variable or use "
+                "six::loadPluginDir()"));
+        }
+
+        if (field == Constants::SICD_DESSHSI)
+        {
+            return DataType::COMPLEX;
+        }
+        else if (field == Constants::SIDD_DESSHSI)
+        {
+            return DataType::DERIVED;
+        }
+        else
+        {
+            return DataType::NOT_SET;
+        }
+    }
+}
+
 DataType NITFReadControl::getDataType(const std::string& fromFile) const
 {
     // Could cache this
     if (mReader.getNITFVersion(fromFile) != NITF_VER_UNKNOWN)
     {
         nitf::IOHandle inFile(fromFile);
-        nitf::Record rec = mReader.read(inFile);
-        inFile.close();
-        std::string title = rec.getHeader().getFileTitle().toString();
-        if (str::startsWith(title, "SICD"))
-            return DataType::COMPLEX;
-        else if (str::startsWith(title, "SIDD"))
-            return DataType::DERIVED;
+        nitf::Record record = mReader.read(inFile);
+
+        return getDataType(record);
     }
-    return DataType::NOT_SET;
+    else
+    {
+        return DataType::NOT_SET;
+    }
+
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
@@ -160,16 +253,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
     reset();
 
     mRecord = mReader.readIO(ioInterface);
-    const std::string title = mRecord.getHeader().getFileTitle().toString();
-
-    DataType dataType;
-    if (str::startsWith(title, "SICD"))
-        dataType = DataType::COMPLEX;
-    else if (str::startsWith(title, "SIDD"))
-        dataType = DataType::DERIVED;
-    else
-        throw except::Exception(Ctxt("Unexpected file type"));
-
+    DataType dataType = getDataType(mRecord);
     mContainer = new Container(dataType);
 
     // First, read in the DE segments, and organize them
@@ -178,80 +262,41 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
     for (size_t i = 0, productNum = 0; desIter != des.end(); ++desIter, ++i)
     {
-        // Get a segment ref
-        nitf::DESegment segment = (nitf::DESegment) * desIter;
+        nitf::DESegment segment = (nitf::DESegment) *desIter;
         nitf::DESubheader subheader = segment.getSubheader();
-        std::string desid = subheader.getTypeID().toString();
-        str::trim(desid);
 
-        // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
-        // Older versions of the spec specified it as SICD_XML/SIDD_XML
-        // Here we'll accept any of these under the assumption that it's not
-        // such an old version of the spec that the XML layout itself has
-        // changed (if it did, XMLControl will end up throwing anyway)
-        if (desid == "XML_DATA_CONTENT" ||
-            desid == "SICD_XML" ||
-            desid == "SIDD_XML")
+        //Skip over any non-SICD/SIDD DESs
+        if (getDataType(segment) == DataType::NOT_SET)
         {
-            if (desid == "XML_DATA_CONTENT")
-            {
-                // We better have a user-defined subheader.  For now we
-                // don't actually store off the values, but we do check its
-                // tag and size.  Note that we need to check the subheader
-                // length first rather than calling tre.getCurrentSize() in
-                // case there is no subheader (in which case
-                // subheader.getSubheaderFields() will throw with a
-                // NITRO-specific message).
-                const sys::Uint64_T
-                        subheaderLength(subheader.getSubheaderFieldsLength());
-                if (subheaderLength !=
-                            Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
-                {
-                    std::ostringstream ostr;
-                    ostr << "Expected a user-defined subheader size of "
-                         << Constants::DES_USER_DEFINED_SUBHEADER_LENGTH
-                         << " but got " << subheaderLength;
-                    throw except::Exception(Ctxt(ostr.str()));
-                }
-
-                nitf::TRE tre = subheader.getSubheaderFields();
-                if (tre.getTag() !=
-                        Constants::DES_USER_DEFINED_SUBHEADER_TAG)
-                {
-                    throw except::Exception(Ctxt(
-                        "Expected a user-defined subheader tag of " +
-                        std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
-                        " but got " + tre.getTag()));
-                }
-            }
-
-            nitf::SegmentReader deReader = mReader.newDEReader(i);
-            SegmentInputStreamAdapter ioAdapter(deReader);
-            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
-                                               ioAdapter,
-                                               dataType,
-                                               schemaPaths,
-                                               *mLog));
-            if (data.get() == NULL)
-            {
-                throw except::Exception(Ctxt("Unable to transform XML DES"));
-            }
-
-            // Note that DE override data never should clash, there
-            // is one DES per data, so it's safe to do this
-            addDEClassOptions(subheader, data->getClassification());
-
-            if (data->getDataType() == six::DataType::DERIVED)
-            {
-                mContainer->addData(data, findLegend(productNum));
-            }
-            else
-            {
-                mContainer->addData(data);
-            }
-
-            ++productNum;
+            continue;
         }
+
+        nitf::SegmentReader deReader = mReader.newDEReader(i);
+        SegmentInputStreamAdapter ioAdapter(deReader);
+        std::auto_ptr<Data> data(parseData(*mXMLRegistry,
+                                           ioAdapter,
+                                           dataType,
+                                           schemaPaths,
+                                           *mLog));
+        if (data.get() == NULL)
+        {
+            throw except::Exception(Ctxt("Unable to transform XML DES"));
+        }
+
+        // Note that DE override data never should clash, there
+        // is one DES per data, so it's safe to do this
+        addDEClassOptions(subheader, data->getClassification());
+
+        if (data->getDataType() == six::DataType::DERIVED)
+        {
+            mContainer->addData(data, findLegend(productNum));
+        }
+        else
+        {
+            mContainer->addData(data);
+        }
+
+        ++productNum;
     }
 
     // Get the total number of images in the NITF

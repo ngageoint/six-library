@@ -74,8 +74,7 @@ def testReadSICDXML(testsDir):
     scriptName = os.path.join(testsDir, 'test_read_sicd_xml.py')
     sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
             'six.sicd', 'sicd_1.0.0(RMA)RMAT.nitf')
-    result = call(['python', scriptName, sampleNITF],
-                  stdout = subprocess.PIPE)
+    result = call(['python', scriptName, sampleNITF])
     if result == 0:
         print('test_read_sicd_xml.py succeeded')
         return True

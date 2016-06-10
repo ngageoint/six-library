@@ -42043,6 +42043,98 @@ fail:
 }
 
 
+SWIGINTERN int Swig_var_Constants_SICD_DESSHSI_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_SICD_DESSHSI is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_SICD_DESSHSI_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_FromCharPtr(six::Constants::SICD_DESSHSI);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN int Swig_var_Constants_SIDD_DESSHSI_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_SIDD_DESSHSI is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_SIDD_DESSHSI_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_FromCharPtr(six::Constants::SIDD_DESSHSI);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Constants_getNumBytesPerPixel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::PixelType arg1 ;
@@ -84066,6 +84158,8 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_TAG",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_TAG_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_TAG_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_ID",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_ID_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_ID_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_LENGTH",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"Constants_SICD_DESSHSI",Swig_var_Constants_SICD_DESSHSI_get, Swig_var_Constants_SICD_DESSHSI_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"Constants_SIDD_DESSHSI",Swig_var_Constants_SIDD_DESSHSI_get, Swig_var_Constants_SIDD_DESSHSI_set);
   SWIG_Python_SetConstant(d, "Constants_ILOC_MAX",SWIG_From_int(static_cast< int >(six::Constants::ILOC_MAX)));
   SWIG_Python_SetConstant(d, "CompositeSCP_ROW_COL",SWIG_From_int(static_cast< int >(six::CompositeSCP::ROW_COL)));
   SWIG_Python_SetConstant(d, "CompositeSCP_RG_AZ",SWIG_From_int(static_cast< int >(six::CompositeSCP::RG_AZ)));
