@@ -11,9 +11,12 @@ LookupTable::Predefined::Predefined() :
 {
 }
 
-LookupTable::Custom::Custom(size_t numEntries, size_t numBands) :
-    lut(numEntries, numBands)
+LookupTable::Custom::Custom(size_t numEntries, size_t numBands)
 {
+    for (size_t ii = 0; ii < numBands; ++ii)
+    {
+        lutValues.push_back(LUT(numEntries, 2));
+    }
 }
 }
 }

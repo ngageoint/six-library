@@ -1147,7 +1147,11 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
 {
     XMLElem lutElement = newElement(name, parent);
     setAttribute(lutElement, "size", str::toString(lut->numEntries));
+    return createLUTImpl(lut, lutElement);
+}
 
+XMLElem DerivedXMLParser::createLUTImpl(const LUT *lut, XMLElem lutElem) const
+{
     std::ostringstream oss;
     for (unsigned int i = 0; i < lut->numEntries; ++i)
     {
@@ -1158,9 +1162,9 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         }
         else if (lut->elementSize == 3)
         {
-            oss << (unsigned int) (*lut)[i][0] << ','
-                    << (unsigned int) (*lut)[i][1] << ','
-                    << (unsigned int) (*lut)[i][2];
+            oss << (unsigned int)(*lut)[i][0] << ','
+                    << (unsigned int)(*lut)[i][1] << ','
+                    << (unsigned int)(*lut)[i][2];
         }
         else
         {
@@ -1171,8 +1175,8 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         if ((lut->numEntries - 1) != i)
             oss << ' ';
     }
-    lutElement->setCharacterData(oss.str());
-    return lutElement;
+    lutElem->setCharacterData(oss.str());
+    return lutElem;
 }
 
 XMLElem DerivedXMLParser::createFootprint(const std::string& name,

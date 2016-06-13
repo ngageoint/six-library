@@ -32,7 +32,7 @@
     <xs:complexType name="LookupTableType">
         <xs:simpleContent>
             <xs:extension base="LUTListType">
-                <xs:attribute name="size" type="xs:int" use="required">
+                <xs:attribute name="Band" type="xs:int" use="required">
                     <xs:annotation>
                         <xs:documentation>Size of LUT.</xs:documentation>
                     </xs:annotation>
@@ -406,9 +406,16 @@
             </xs:sequence>
         </xs:choice>
     </xs:complexType>
+    <xs:complexType name="LUTInfoType">
+        <xs:sequence>
+            <xs:element name="LUTValues" type="LookupTableType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="numBands" type="xs:int" use="required"/>
+        <xs:attribute name="size" type="xs:int" use="required"/>
+    </xs:complexType>
     <xs:complexType name="CustomLookupType">
         <xs:sequence>
-            <xs:element name="LUT" type="Lookup3TableType"/>
+            <xs:element name="LUTInfo" type="LUTInfoType"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="EqualizationAlgorithmType">

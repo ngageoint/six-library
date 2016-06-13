@@ -101,7 +101,8 @@ LUT* DerivedData::getDisplayLUT()
     {
         if (display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom.get())
         {
-            return &(display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom->lut);
+            return NULL; //this is broken, but I want it to compile until I figure out what should happen
+            //return &(display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom->lut);
         }
         else
         {

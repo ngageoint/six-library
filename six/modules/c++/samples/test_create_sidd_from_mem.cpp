@@ -1948,7 +1948,13 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     prodGenOptions.dataRemapping.reset(
         new six::sidd::LookupTable());
     prodGenOptions.dataRemapping->custom.reset(new six::sidd::LookupTable::Custom(256, 3));
-    std::fill_n(prodGenOptions.dataRemapping->custom->lut.table.begin(), prodGenOptions.dataRemapping->custom->lut.table.size(), 0);
+    for (size_t ii = 0; ii < 3; ++ii)
+    {
+        std::fill_n(
+            prodGenOptions.dataRemapping->custom->lutValues[ii].table.begin(),
+            prodGenOptions.dataRemapping->custom->lutValues[ii].table.size(),
+            0);
+    }
 
     prodGenOptions.asymmetricPixelCorrection.reset(createCustomFilter());
 

@@ -52,7 +52,7 @@ public:
     {
         Custom(size_t numEntries, size_t numBands);
 
-        LUT lut;
+        std::vector<LUT> lutValues;
     };
 
     std::string lutName;

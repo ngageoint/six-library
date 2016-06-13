@@ -48,7 +48,7 @@ def sicdToSIO(testsDir):
 def testCreateSICDXML(testsDir):
     print('Running test_create_sicd_xml.py')
     scriptName = os.path.join(testsDir, 'test_create_sicd_xml.py')
-    result = call(['python', scriptName, '-v', '1.1.0'], stdout=subprocess.PIPE)
+    result = call(['python', scriptName, '-v', '1.1.0'])
     if result == 0:
         os.remove('test_create_sicd.xml')
         os.remove('test_create_sicd_rt.xml')

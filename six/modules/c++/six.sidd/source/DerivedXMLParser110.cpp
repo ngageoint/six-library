@@ -29,7 +29,7 @@
 namespace
 {
 typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes ElemAttributes;
+typedef xml::lite::Attributes XMLAttributes;
 
 template <typename T>
 bool isDefined(const T& enumVal)
@@ -268,7 +268,7 @@ void DerivedXMLParser110::parseDerivedClassificationFromXML(
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
-    const ElemAttributes& classificationAttributes
+    const XMLAttributes& classificationAttributes
         = classificationElem->getAttributes();
 
     getAttributeList(classificationAttributes,
@@ -485,9 +485,21 @@ void DerivedXMLParser110::parseLookupTableFromXML(
         if (!predefinedElem)
         {
             ok = true;
-            std::auto_ptr<LUT> lut = parseSingleLUT(getFirstAndOnly(customElem, "LUT"));
-            lookupTable.custom.reset(new LookupTable::Custom(lut->numEntries, lut->elementSize));
-            lookupTable.custom->lut = *lut;
+            XMLElem lutInfoElem = getFirstAndOnly(customElem, "LUTInfo");
+            const XMLAttributes& attributes = lutInfoElem->getAttributes();
+            size_t numBands;
+            size_t size;
+            getAttributeIfExists(attributes, "numBands", numBands);
+            getAttributeIfExists(attributes, "size", size);
+            lookupTable.custom.reset(new LookupTable::Custom(numBands, numBands));
+            std::vector<XMLElem> lutElems;
+            lutInfoElem->getElementsByTagName("LUTValues", lutElems);
+
+            for (size_t ii = 0; ii < lutElems.size(); ++ii)
+            {
+                std::auto_ptr<LUT> lut = parseSingleLUT(lutElems[ii], size);
+                lookupTable.custom->lutValues[ii] = *lut;
+            }
         }
     }
     else if (predefinedElem)
@@ -655,7 +667,7 @@ void DerivedXMLParser110::parseKernelFromXML(const XMLElem kernelElem,
         ok = true;
         kernel.custom.reset(new Filter::Kernel::Custom());
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const ElemAttributes& attributes = filterCoef->getAttributes();
+        const XMLAttributes& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numRows", kernel.custom->size.row);
         getAttributeIfExists(attributes, "numCols", kernel.custom->size.col);
 
@@ -700,7 +712,7 @@ void DerivedXMLParser110::parseBankFromXML(const XMLElem bankElem,
         ok = true;
 
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const ElemAttributes& attributes = filterCoef->getAttributes();
+        const XMLAttributes& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numPhasings", bank.custom->numPhasings);
         getAttributeIfExists(attributes, "numPoints", bank.custom->numPoints);
 
@@ -1050,9 +1062,19 @@ XMLElem DerivedXMLParser110::convertLookupTableToXML(
     else if (table.custom.get())
     {
         ok = true;
+        std::vector<LUT>& lutValues = table.custom->lutValues;
 
         XMLElem customElem = newElement("Custom", lookupElem);
-        createLUT("LUT", &table.custom->lut, customElem);
+        XMLElem lutInfoElem = newElement("LUTInfo", customElem);
+        setAttribute(lutInfoElem, "numBands", str::toString(lutValues.size()));
+        setAttribute(lutInfoElem, "size",
+                str::toString(lutValues[0].table.size()));
+
+        for (size_t ii = 0; ii < lutValues.size(); ++ii)
+        {
+            XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
+            setAttribute(lutElem, "Band", str::toString(ii + 1));
+        }
     }
     if (!ok)
     {
@@ -1952,6 +1974,30 @@ void DerivedXMLParser110::parseDigitalElevationDataFromXML(
     XMLElem pointElem = getFirstAndOnly(posAccuracyElem, "PointToPointAccuracy");
     parseDouble(getFirstAndOnly(pointElem, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
+}
+
+std::auto_ptr<LUT> DerivedXMLParser110::parseSingleLUT(const XMLElem elem,
+        size_t size) const
+{
+    std::string lutStr = "";
+    parseString(elem, lutStr);
+    std::vector<std::string> lutVals = str::split(lutStr, " ");
+    std::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+
+    for (size_t ii = 0; ii < lutVals.size(); ++ii)
+    {
+        const short lutVal = str::toType<short>(lutVals[ii]);
+        ::memcpy(&(lut->table[ii * lut->elementSize]),
+            &lutVal, sizeof(short));
+    }
+    return lut;
+}
+
+XMLElem DerivedXMLParser110::createLUT(const std::string& name, const LUT *lut,
+        XMLElem parent) const
+{
+    XMLElem lutElement = newElement(name, parent);
+    return createLUTImpl(lut, lutElement);
 }
 }
 }

@@ -76,6 +76,9 @@ protected:
         const ExploitationFeatures* exploitationFeatures,
         XMLElem parent = NULL) const;
 
+    virtual XMLElem createLUT(const std::string& name, const LUT *l,
+        XMLElem parent = NULL) const;
+
 
 private:
     static const char VERSION[];
@@ -171,6 +174,9 @@ private:
 
     void parseLookupTableFromXML(const XMLElem lookupElem,
           LookupTable& lookupTable) const;
+
+    std::auto_ptr<LUT> parseSingleLUT(const XMLElem elem,
+            size_t size) const;
 };
 }
 }

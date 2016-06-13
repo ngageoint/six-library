@@ -121,8 +121,9 @@ protected:
                                const DateTime* value,
                                const std::string& uri = "");
 
-    XMLElem createLUT(const std::string& name, const LUT *l,
+    virtual XMLElem createLUT(const std::string& name, const LUT *l,
             XMLElem parent = NULL) const;
+    XMLElem createLUTImpl(const LUT *l, XMLElem lutElem) const;
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
                             const LatLonCorners& corners,
