@@ -1719,7 +1719,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
         XMLElem bandInfoElem = newElement("BandInformation", displayElem);
         createInt("NumBands", display.bandInformation->bandDescriptors.size(),
                 bandInfoElem);
-        for (size_t ii = 0; 
+        for (size_t ii = 0;
                 ii < display.bandInformation->bandDescriptors.size(); ++ii)
         {
             XMLElem bandElem = createString("BandDescriptor",
@@ -1736,7 +1736,7 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     }
 
     // NonInteractiveProcessing
-    
+
     for (size_t ii = 0; ii < display.nonInteractiveProcessing.size(); ++ii)
     {
         confirmNonNull(display.nonInteractiveProcessing[ii],
@@ -1939,13 +1939,14 @@ void DerivedXMLParser110::parseExploitationFeaturesFromXML(
     {
         XMLElem collectionElem = collectionsElem[i];
         XMLElem geometryElem = getOptional(collectionElem, "Geometry");
-        Collection coll = *exploitationFeatures->collections[i];
+        Collection& coll = *exploitationFeatures->collections[i];
 
         // optional
         if (geometryElem) {
             XMLElem dopplerElem = getOptional(geometryElem, "DopplerConeAngle");
-            if (dopplerElem)
+            if (dopplerElem) {
                 parseDouble(dopplerElem, coll.geometry->dopplerConeAngle);
+            }
         }
     }
 }
