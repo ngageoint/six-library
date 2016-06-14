@@ -11,12 +11,26 @@ LookupTable::Predefined::Predefined() :
 {
 }
 
+bool LookupTable::Predefined::operator==(
+        const LookupTable::Predefined& rhs) const
+{
+    return (databaseName == rhs.databaseName &&
+        remapFamily == rhs.remapFamily &&
+        remapMember == rhs.remapMember);
+}
+
 LookupTable::Custom::Custom(size_t numEntries, size_t numBands)
 {
     for (size_t ii = 0; ii < numBands; ++ii)
     {
         lutValues.push_back(LUT(numEntries, 2));
     }
+}
+
+bool LookupTable::operator==(const LookupTable& rhs) const
+{
+    return (predefined == rhs.predefined &&
+        custom == rhs.custom);
 }
 }
 }

@@ -44,6 +44,12 @@ struct Filter
 
         //! Index specifying the member for the filter family
         size_t filterMember;
+
+        bool operator==(const Predefined& rhs) const;
+        bool operator!=(const Predefined& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     // Used for spatially invariant filtering
@@ -58,11 +64,23 @@ struct Filter
 
             //! Coefficients for the kernelSize kernel.
             std::vector<double> filterCoef;
+
+            bool operator==(const Custom& rhs) const;
+            bool operator!=(const Custom& rhs) const
+            {
+                return !(*this == rhs);
+            }
         };
 
         // Exactly one of Predefined or Custom
         mem::ScopedCopyablePtr<Predefined> predefined;
         mem::ScopedCopyablePtr<Custom> custom;
+
+        bool operator==(const Kernel& rhs) const;
+        bool operator!=(const Kernel& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     // Used for spatially variant filtering
@@ -78,11 +96,23 @@ struct Filter
 
             //! Coefficients for the numPhasings * numPoints filter bank.
             std::vector<double> filterCoef;
+
+            bool operator==(const Custom& rhs) const;
+            bool operator!=(const Custom& rhs) const
+            {
+                return !(*this == rhs);
+            }
         };
 
         // Exactly one of Predefined or Custom
         mem::ScopedCopyablePtr<Predefined> predefined;
         mem::ScopedCopyablePtr<Custom> custom;
+
+        bool operator==(const Bank& rhs) const;
+        bool operator!=(const Bank& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     //! Name of the filter
@@ -96,6 +126,12 @@ struct Filter
         correlation
      */
     FilterOperation operation;
+
+    bool operator==(const Filter& rhs) const;
+    bool operator!=(const Filter& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

@@ -46,6 +46,12 @@ public:
 
         //! Index specifying the member for the remap family
         size_t remapMember;
+
+        bool operator==(const Predefined& rhs) const;
+        bool operator!=(const Predefined& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     struct Custom
@@ -53,6 +59,16 @@ public:
         Custom(size_t numEntries, size_t numBands);
 
         std::vector<LUT> lutValues;
+
+        bool operator==(const Custom& rhs) const
+        {
+            return lutValues == rhs.lutValues;
+        }
+
+        bool operator!=(const Custom& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     std::string lutName;
@@ -60,6 +76,12 @@ public:
     // Exactly one of Predefined or Custom
     mem::ScopedCopyablePtr<Predefined> predefined;
     mem::ScopedCopyablePtr<Custom> custom;
+    
+    bool operator==(const LookupTable& rhs) const;
+    bool operator!=(const LookupTable& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 }

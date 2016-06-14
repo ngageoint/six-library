@@ -88,6 +88,98 @@ bool ColorDisplayRemap::operator==(const ColorDisplayRemap& rhs) const
     return remapLUT == rhs.remapLUT;
 }
 
+bool RRDS::operator==(const RRDS& rhs) const
+{
+    return (downsamplingMethod == rhs.downsamplingMethod &&
+            antiAlias == rhs.antiAlias &&
+            interpolation == rhs.interpolation);
+}
+
+bool ProductGenerationOptions::operator==(const ProductGenerationOptions& rhs) const
+{
+    return (bandEqualization == rhs.bandEqualization &&
+            modularTransferFunctionRestoration == 
+                    rhs.modularTransferFunctionRestoration &&
+            dataRemapping == rhs.dataRemapping &&
+            asymmetricPixelCorrection == rhs.asymmetricPixelCorrection);
+}
+
+bool BandEqualization::operator==(const BandEqualization& rhs) const
+{
+    return (algorithm == rhs.algorithm &&
+            bandLUTs == rhs.bandLUTs);
+}
+bool BandInformation::operator==(const BandInformation& rhs) const
+{
+    return (bandDescriptors == rhs.bandDescriptors &&
+            displayFlag == rhs.displayFlag);
+}
+
+bool NonInteractiveProcessing::operator==(
+        const NonInteractiveProcessing& rhs) const
+{
+    return (productGenerationOptions == rhs.productGenerationOptions &&
+            rrds == rhs.rrds);
+}
+
+bool Scaling::operator==(const Scaling& rhs) const
+{
+    return antiAlias == rhs.antiAlias && interpolation == rhs.interpolation;
+}
+
+bool ColorManagementModule::operator==(const ColorManagementModule& rhs) const
+{
+    return (renderingIntent == rhs.renderingIntent &&
+        sourceProfile == rhs.sourceProfile &&
+        displayProfile == rhs.displayProfile &&
+        iccProfile == rhs.iccProfile);
+}
+
+bool GeometricTransform::operator==(const GeometricTransform& rhs) const
+{
+    return scaling == rhs.scaling && orientation == rhs.orientation;
+}
+
+bool SharpnessEnhancement::operator==(const SharpnessEnhancement& rhs) const
+{
+    return (modularTransferFunctionCompensation ==
+                rhs.modularTransferFunctionCompensation &&
+            modularTransferFunctionRestoration ==
+                rhs.modularTransferFunctionRestoration);
+}
+
+bool DynamicRangeAdjustment::DRAParameters::operator==(
+    const DynamicRangeAdjustment::DRAParameters& rhs) const
+{
+    return (pMin == rhs.pMin &&
+        pMax == rhs.pMax &&
+        eMinModifier == rhs.eMinModifier &&
+        eMaxModifier == rhs.eMaxModifier);
+}
+
+bool DynamicRangeAdjustment::DRAOverrides::operator==(
+    const DynamicRangeAdjustment::DRAOverrides& rhs) const
+{
+    return (subtractor == rhs.subtractor &&
+        multiplier == rhs.multiplier);
+}
+
+bool DynamicRangeAdjustment::operator==(
+        const DynamicRangeAdjustment& rhs) const
+{
+    return (draParameters == rhs.draParameters &&
+        draOverrides == rhs.draOverrides);
+}
+
+bool InteractiveProcessing::operator==(const InteractiveProcessing& rhs) const
+{
+    return (geometricTransform == rhs.geometricTransform &&
+        sharpnessEnhancement == rhs.sharpnessEnhancement &&
+        colorSpaceTransform == rhs.colorSpaceTransform &&
+        dynamicRangeAdjustment == rhs.dynamicRangeAdjustment &&
+        tonalTransferCurve == rhs.tonalTransferCurve);
+}
+
 Display::Display() :
     pixelType(PixelType::NOT_SET),
     magnificationMethod(MagnificationMethod::NOT_SET),
@@ -96,6 +188,7 @@ Display::Display() :
     monitorCompensationApplied(NULL)
 {
 }
+
 bool Display::operator==(const Display& rhs) const
 {
     return (pixelType == rhs.pixelType &&
@@ -104,6 +197,9 @@ bool Display::operator==(const Display& rhs) const
         decimationMethod == rhs.decimationMethod &&
         histogramOverrides == rhs.histogramOverrides &&
         monitorCompensationApplied == rhs.monitorCompensationApplied &&
+        bandInformation == rhs.bandInformation &&
+        nonInteractiveProcessing == rhs.nonInteractiveProcessing &&
+        interactiveProcessing == rhs.interactiveProcessing &&
         displayExtensions == rhs.displayExtensions);
 }
 

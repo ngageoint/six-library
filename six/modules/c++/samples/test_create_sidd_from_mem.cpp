@@ -1746,6 +1746,7 @@ void initProcessorInformation(
     processorInformation.application = "ProcessorName";
     processorInformation.profile = "Profile";
     processorInformation.site = "Ypsilanti, MI";
+    processorInformation.processingDateTime = six::DateTime();
 }
 
 void createPredefinedFilter(six::sidd::Filter& filter)
@@ -1852,12 +1853,28 @@ std::auto_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
     return  std::auto_ptr<six::sidd::DerivedData>(siddBuilder.steal());
 }
 
-void initProductCreation(six::sidd::ProductCreation& productCreation)
+void initProductCreation(six::sidd::ProductCreation& productCreation,
+        const std::string& version)
 {
     productCreation.productName = "ProductName";
-    productCreation.productClass = "Classy";
+    productCreation.productClass = "Unclassified";
+    productCreation.productType = "The product's type";
+    six::Parameter parameter("sample");
+    productCreation.productCreationExtensions.push_back(parameter);
+
+    productCreation.classification.securityExtensions.push_back(parameter);
+    productCreation.classification.desVersion = 234;
+    productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
-    productCreation.classification.compliesWith.push_back("USGov");
+    
+    if (version == "1.0.0")
+    {
+        productCreation.classification.compliesWith.push_back("ICD-710");
+    }
+    else
+    {
+        productCreation.classification.compliesWith.push_back("USGov");
+    }
     productCreation.classification.ownerProducer.push_back("ABW");
     productCreation.classification.ownerProducer.push_back("AIA");
     productCreation.classification.sciControls.push_back("HCS");
@@ -1872,7 +1889,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation)
     productCreation.classification.fgiSourceProtected.push_back("AND");
     productCreation.classification.releasableTo.push_back("ABW");
     productCreation.classification.releasableTo.push_back("AFG");
-    productCreation.classification.nonICMarkings.push_back("NNPI");
+    productCreation.classification.nonICMarkings.push_back("SBU");
     productCreation.classification.nonICMarkings.push_back("DS");
     productCreation.classification.classifiedBy = "PVT Snuffy";
     productCreation.classification.compilationReason = "Testing purposes";
@@ -1886,6 +1903,15 @@ void initProductCreation(six::sidd::ProductCreation& productCreation)
     productCreation.classification.declassException = "25X1";
     productCreation.classification.exemptedSourceType = "X8";
     productCreation.classification.exemptedSourceDate.reset(new six::DateTime());
+    productCreation.classification.exemptFrom = "IC_710_MANDATORY_FDR";
+    productCreation.classification.joint = six::BooleanType::IS_TRUE;
+    productCreation.classification.atomicEnergyMarkings.push_back("DCNI");
+    productCreation.classification.displayOnlyTo.push_back("AIA");
+    productCreation.classification.noticeType = "LES";
+    productCreation.classification.noticeReason = "Notice reason here";
+    productCreation.classification.noticeDate.reset(new six::DateTime());
+    productCreation.classification.unregisteredNoticeType = "Foo";
+    productCreation.classification.externalNotice = six::BooleanType::IS_FALSE;
     initProcessorInformation(productCreation.processorInformation);
 }
 
@@ -1925,7 +1951,7 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     display.bandInformation->bandDescriptors.push_back("Blue");
     display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
 
-                                              // NonInteractiveProcessing
+    // NonInteractiveProcessing
     display.nonInteractiveProcessing.resize(1);
     display.nonInteractiveProcessing[0].reset(
         new six::sidd::NonInteractiveProcessing());
@@ -2252,7 +2278,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation);
+    initProductCreation(*siddData.productCreation, version);
 
     // Or directly if preferred
     siddData.display->decimationMethod

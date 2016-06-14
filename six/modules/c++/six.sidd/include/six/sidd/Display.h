@@ -210,12 +210,24 @@ struct BandInformation
 
     //! (Optional) Which band to display by default
     size_t displayFlag;
+
+    bool operator==(const BandInformation& rhs) const;
+    bool operator!=(const BandInformation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct BandEqualization
 {
     BandEqualizationAlgorithm algorithm;
     std::vector<mem::ScopedCopyablePtr<LookupTable> > bandLUTs;
+    
+    bool operator==(const BandEqualization& rhs) const;
+    bool operator!=(const BandEqualization& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct RRDS
@@ -234,6 +246,12 @@ struct RRDS
      * downsamplingMethod = DECIMATE or MAX_PIXEL.
      */
     mem::ScopedCopyablePtr<Filter> interpolation;
+
+    bool operator==(const RRDS& rhs) const;
+    bool operator!=(const RRDS& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct ProductGenerationOptions
@@ -245,24 +263,50 @@ struct ProductGenerationOptions
     mem::ScopedCopyablePtr<LookupTable> dataRemapping;
 
     mem::ScopedCopyablePtr<Filter> asymmetricPixelCorrection;
+
+    bool operator==(const ProductGenerationOptions& rhs) const;
+    bool operator!=(const ProductGenerationOptions& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct NonInteractiveProcessing
 {
     ProductGenerationOptions productGenerationOptions;
     RRDS rrds;
+
+    bool operator==(const NonInteractiveProcessing& rhs) const;
+    bool operator!=(const NonInteractiveProcessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct Scaling
 {
     Filter antiAlias;
     Filter interpolation;
+
+    bool operator==(const Scaling& rhs) const;
+    bool operator!=(const Scaling& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct Orientation
 {
     //! Describes the shadow direction relative to the pixels in the file.
     ShadowDirection shadowDirection;
+    bool operator==(const Orientation& rhs) const
+    {
+        return shadowDirection == rhs.shadowDirection;
+    }
+    bool operator!=(const Orientation& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct SharpnessEnhancement
@@ -271,6 +315,12 @@ struct SharpnessEnhancement
     // modularTransferFunctionRestoration
     mem::ScopedCopyablePtr<Filter> modularTransferFunctionCompensation;
     mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
+
+    bool operator==(const SharpnessEnhancement& rhs) const;
+    bool operator!=(const SharpnessEnhancement& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct ColorManagementModule
@@ -280,17 +330,34 @@ struct ColorManagementModule
     std::string sourceProfile;
     std::string displayProfile;
     std::string iccProfile;
+
+    bool operator==(const ColorManagementModule& rhs) const;
+    bool operator!=(const ColorManagementModule& rhs) const;
 };
 
 struct ColorSpaceTransform
 {
     ColorManagementModule colorManagementModule;
+    bool operator==(const ColorSpaceTransform& rhs) const
+    {
+        return (colorManagementModule == rhs.colorManagementModule);
+    }
+    bool operator!=(const ColorSpaceTransform& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct GeometricTransform
 {
     Scaling scaling;
     Orientation orientation;
+
+    bool operator==(const GeometricTransform& rhs) const;
+    bool operator!=(const GeometricTransform& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct DynamicRangeAdjustment
@@ -304,6 +371,12 @@ struct DynamicRangeAdjustment
 
         double eMinModifier; //! eMin modifier
         double eMaxModifier; //! eMax modifier
+
+        bool operator==(const DRAParameters& rhs) const;
+        bool operator!=(const DRAParameters& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     struct DRAOverrides
@@ -312,6 +385,12 @@ struct DynamicRangeAdjustment
 
         double subtractor; //! Subtractor value used to reduce haze in the image
         double multiplier; //! Multiplier value used to brighten the image data
+
+        bool operator==(const DRAOverrides& rhs) const;
+        bool operator!=(const DRAOverrides& rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
@@ -320,6 +399,11 @@ struct DynamicRangeAdjustment
     // Must include exactly one of draParameters or draOverrides
     mem::ScopedCopyablePtr<DRAParameters> draParameters;
     mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
+    bool operator==(const DynamicRangeAdjustment& rhs) const;
+    bool operator!=(const DynamicRangeAdjustment& rhs)
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct InteractiveProcessing
@@ -329,6 +413,12 @@ struct InteractiveProcessing
     mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
     DynamicRangeAdjustment dynamicRangeAdjustment;
     mem::ScopedCopyablePtr<LookupTable> tonalTransferCurve;
+
+    bool operator==(const InteractiveProcessing& rhs) const;
+    bool operator!=(const InteractiveProcessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 /*
