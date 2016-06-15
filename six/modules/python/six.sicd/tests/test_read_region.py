@@ -23,6 +23,7 @@
 
 import os
 import subprocess
+import sys
 
 from pysix.six_sicd import readRegion, read
 
@@ -46,6 +47,14 @@ if __name__ == '__main__':
     expectedArray, expectedData = read(pathname)
     numRows, numCols = expectedArray.shape
     actualArray, actualData = readRegion(pathname, 0, numRows, 0, numCols)
-    assert (actualArray == expectedArray).all()
-    assert actualData == expectedData
+    try:
+        assert (actualArray == expectedArray).all()
+        assert actualData == expectedData
+    except AssertionError:
+        print('Behavior of readRegion() and read() differ. Test failed')
+        sys.exit(1)
+    except Exception as e:
+        sys.exit(repr(e))
+    print('Test passed')
+    sys.exit(0)
 

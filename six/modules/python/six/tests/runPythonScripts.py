@@ -83,7 +83,7 @@ def testReadSICDXML(testsDir):
 def testReadRegion(testsDir):
     print('Running test_read_region.py')
     scriptName = os.path.join(testsDir, 'test_read_region.py')
-    result = call(['python', scriptName])
+    result = call(['python', scriptName], stdout=subprocess.PIPE)
     if result == 0:
         print('test_read_region succeeded')
         return True
@@ -94,5 +94,6 @@ def run():
             'modules', 'python', 'six.sicd', 'tests')
 
     result = (sicdToSIO(testsDir) and testCreateSICDXML(testsDir) and
-            testSixSICD(testsDir) and testReadSICDXML(testsDir))
+            testSixSICD(testsDir) and testReadSICDXML(testsDir) and
+            testReadRegion(testsDir))
     return result
