@@ -319,6 +319,7 @@ private:
     static const char VENDOR_ID[];
     virtual bool equalTo(const Data& rhs) const;
     std::string mVersion;
+    LUT* mNITFDisplayLUT;
 };
 }
 }

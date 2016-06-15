@@ -99,15 +99,7 @@ LUT* DerivedData::getDisplayLUT()
     }
     else if (mVersion == "1.1.0")
     {
-        if (display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom.get())
-        {
-            return NULL; //this is broken, but I want it to compile until I figure out what should happen
-            //return &(display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom->lut);
-        }
-        else
-        {
-            return NULL;
-        }
+        return mNITFDisplayLUT;
     }
     else
     {
