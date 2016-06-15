@@ -80,6 +80,15 @@ def testReadSICDXML(testsDir):
         return True
     return False
 
+def testReadRegion(testsDir):
+    print('Running test_read_region.py')
+    scriptName = os.path.join(testsDir, 'test_read_region.py')
+    result = call(['python', scriptName])
+    if result == 0:
+        print('test_read_region succeeded')
+        return True
+    return False
+
 def run():
     testsDir = os.path.join(utils.findSixHome(), 'six',
             'modules', 'python', 'six.sicd', 'tests')
