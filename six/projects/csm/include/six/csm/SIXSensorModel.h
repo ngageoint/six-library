@@ -27,10 +27,12 @@
 
 #include "RasterGM.h"
 #include "CorrelationModel.h"
+#include "NitfIsd.h"
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
 #include <scene/ECEFToLLATransform.h>
+#include <six/Enums.h>
 #include <six/Types.h>
 
 namespace six
@@ -677,6 +679,9 @@ protected:
     {
         return csm::ImageCoord(pt.row, pt.col);
     }
+
+    static
+    DataType getDataType(const csm::Des& des);
 
 protected:
     const scene::ECEFToLLATransform mECEFToLLA;

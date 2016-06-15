@@ -63,6 +63,7 @@ def build(bld):
     else:
         modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']] 
     bld.plugin(**modArgs)
+    bld.module(**modArgs)
 
     # TODO: It seems like instead of this, I should be able to set 
     #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the name

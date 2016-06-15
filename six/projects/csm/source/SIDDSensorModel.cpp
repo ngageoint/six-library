@@ -120,6 +120,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
+            std::cerr << "1\n";
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
@@ -128,6 +129,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         six::Data* const data = container->getData(imageIndex);
         if (data->getDataType() != six::DataType::DERIVED)
         {
+            std::cerr << "@\n";
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
@@ -165,10 +167,8 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
-            str::trim(desId);
-            
-            if (!(desId == "XML_DATA_CONTENT" || desId == "SIDD_XML"))
+            DataType dataType = getDataType(desList[ii]);
+            if (dataType != DataType::DERIVED)
             {
                 continue;
             }
