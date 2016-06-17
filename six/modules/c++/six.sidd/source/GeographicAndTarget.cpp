@@ -42,5 +42,15 @@ bool GeographicCoverage::operator==(const GeographicCoverage& rhs) const
         geographicInformation == rhs.geographicInformation);
 }
 
+bool GeographicAndTarget::operator==(const GeographicAndTarget& rhs) const
+{
+    return (geographicCoverage == rhs.geographicCoverage &&
+        targetInformation == rhs.targetInformation && 
+        earthModel == rhs.earthModel &&
+        imageCorners == rhs.imageCorners &&
+        validData == rhs.validData &&
+        geoInfos == rhs.geoInfos);
+}
+
 }
 }

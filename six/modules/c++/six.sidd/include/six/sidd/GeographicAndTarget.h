@@ -204,12 +204,7 @@ public:
     std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
 
     //! Equality operators
-    bool operator==(const GeographicAndTarget& rhs) const
-    {
-        return (geographicCoverage == rhs.geographicCoverage &&
-            targetInformation == rhs.targetInformation);
-    }
-
+    bool operator==(const GeographicAndTarget& rhs) const;
     bool operator!=(const GeographicAndTarget& rhs) const
     {
         return !(*this == rhs);

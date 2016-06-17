@@ -2061,6 +2061,21 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     targetInfo->footprint.reset(new six::LatLonCorners());
     targetInfo->targetInformationExtensions.push_back(param);
     geographicAndTarget.targetInformation.push_back(targetInfo);
+
+    geographicAndTarget.imageCorners.reset(new six::LatLonCorners());
+    for (size_t ii = 0; ii < six::LatLonCorners::NUM_CORNERS; ++ii)
+    {
+        geographicAndTarget.imageCorners->getCorner(ii).setLat(ii + 1);
+        geographicAndTarget.imageCorners->getCorner(ii).setLon(ii * 3);
+    }
+
+    geographicAndTarget.validData.push_back(six::LatLon(23, 34));
+
+    mem::ScopedCopyablePtr<six::GeoInfo> newGeoInfo(new six::GeoInfo());
+    newGeoInfo->name = "GeoInfo";
+    newGeoInfo->desc.push_back(param);
+    newGeoInfo->geometryLatLon.push_back(six::LatLon(36.5, 99.87));
+    geographicAndTarget.geoInfos.push_back(newGeoInfo);
 }
 
 void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
