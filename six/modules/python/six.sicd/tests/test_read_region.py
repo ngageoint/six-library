@@ -31,7 +31,7 @@ from pysix.six_sicd import readRegion, read
 def createNITF():
     location = os.path.split(os.path.realpath(__file__))[0]
     testPath = os.path.join(location, 'test_create_sicd_xml.py')
-    subprocess.call([testPath, '--includeNITF'])
+    subprocess.call(['python', testPath, '--includeNITF'])
     return os.path.join(os.getcwd(), 'test_create_sicd.nitf')
 
 
@@ -44,6 +44,7 @@ def clean(pathname):
 
 if __name__ == '__main__':
     pathname = createNITF()
+    assert os.path.exists(pathname)
     expectedArray, expectedData = read(pathname)
     numRows, numCols = expectedArray.shape
     actualArray, actualData = readRegion(pathname, 0, numRows, 0, numCols)
