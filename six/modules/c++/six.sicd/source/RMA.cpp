@@ -223,6 +223,15 @@ const PolyXYZ& INCA::arpPoly() const
     return *mArpPoly;
 }
 
+void INCA::fillDefaultFields(double fc)
+{
+    if (!Init::isUndefined<double>(fc) &&
+        Init::isUndefined<double>(freqZero))
+    {
+        freqZero = fc;
+    }
+}
+
 RMA::RMA() : 
     algoType(RMAlgoType::NOT_SET)
 {
@@ -245,6 +254,21 @@ void RMA::fillDerivedFields(const GeoData& geoData,
     else if (inca.get())
     {
         inca->fillDerivedFields(scp, fc, position);
+    }
+}
+
+
+void RMA::fillDefaultFields(double fc)
+{
+    if (rmat.get())
+    {
+    }
+    else if (rmcr.get())
+    {
+    }
+    else if (inca.get())
+    {
+        inca->fillDefaultFields(fc);
     }
 }
 

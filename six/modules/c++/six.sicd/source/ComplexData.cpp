@@ -199,6 +199,31 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
+
+    double fc(Init::undefined<double>());
+    if (radarCollection->refFrequencyIndex == 0)
+    {
+        fc = (imageFormation->txFrequencyProcMin +
+            imageFormation->txFrequencyProcMax) / 2;
+    }
+    switch (imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::RGAZCOMP:
+        if (rgAzComp.get())
+        {
+        }
+        break;
+    case ImageFormationType::PFA:
+        if (pfa.get())
+        {
+            //pass
+        }
+    case ImageFormationType::RMA:
+        if (rma.get())
+        {
+            rma->fillDefaultFields(fc);
+        }
+    }
     return;
 }
 }

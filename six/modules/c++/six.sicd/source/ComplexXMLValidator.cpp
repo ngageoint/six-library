@@ -79,9 +79,6 @@ void ComplexXMLValidator::fillImageFormationAlgorithm(ComplexData& data, double 
 
 void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultValues)
 {
-    if (data.rma.get() == NULL)
-        return;
-
     Vector3& scp = data.geoData->scp.ecf;
 
     if (data.rma->rmat.get() != NULL ||
@@ -169,21 +166,7 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
             }
         }
     }
-    else if (data.rma->inca.get() != NULL)
-    {
-        // Default: The frequency used for computing Doppler Centroid values
-        // is often the center transmitted frequency
-        if (setDefaultValues &&
-            data.radarCollection.get() != NULL &&
-            !Init::isUndefined<double>(data.radarCollection->txFrequencyMin) &&
-            !Init::isUndefined<double>(data.radarCollection->txFrequencyMax) &&
-            Init::isUndefined<double>(data.rma->inca->freqZero))
-        {
-            data.rma->inca->freqZero = (data.radarCollection->txFrequencyMin +
-                    data.radarCollection->txFrequencyMax ) / 2;
-        }
 
-    }
     return;
 }
 

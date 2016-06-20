@@ -192,6 +192,8 @@ struct INCA
 
     Vector3 caPos() const;
     Vector3 caVel() const;
+
+    void fillDefaultFields(double fc);
 private:
     mem::ScopedCopyablePtr<Vector3> mScp;
     mem::ScopedCopyablePtr<PolyXYZ> mArpPoly;
@@ -237,6 +239,7 @@ struct RMA
     void fillDerivedFields(const GeoData& geoData,
             const Position& position,
             double fc);
+    void fillDefaultFields(double fc);
 };
 
 }
