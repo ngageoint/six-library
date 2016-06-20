@@ -23,6 +23,7 @@
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/SCPCOA.h"
+#include "six/sicd/RMA.h"
 #include "six/sicd/Utilities.h"
 
 using namespace six;
@@ -459,3 +460,81 @@ void Grid::fillDerivedFields(
     col->fillDerivedFields(imageData);
 }
 
+void Grid::fillDerivedFields(const RMA& rma)
+{
+    if (rma.rmat.get())
+    {
+        fillDerivedFields(*rma.rmat);
+    }
+    else if (rma.rmcr.get())
+    {
+        fillDerivedFields(*rma.rmcr);
+    }
+    else if (rma.inca.get())
+    {
+        fillDerivedFields(*rma.inca);
+    }
+}
+
+void Grid::fillDerivedFields(const RMAT& rmat)
+{
+    // Row/Col.UnitVector and Derived fields
+    if (Init::isUndefined<Vector3>(row->unitVector) &&
+        Init::isUndefined<Vector3>(col->unitVector))
+    {
+        Vector3 uYAT = rmat.refVel.unit() * -rmat.look();
+        Vector3 spn = cross(rmat.uLOS(), uYAT).unit();
+        Vector3 uXCT = cross(uYAT, spn);
+        row->unitVector = uXCT;
+        col->unitVector = uYAT;
+    }
+}
+
+void Grid::fillDerivedFields(const RMCR& rmcr)
+{
+    // Row/Col.UnitVector and Derived fields
+    if (Init::isUndefined<Vector3>(row->unitVector) &&
+        Init::isUndefined<Vector3>(col->unitVector))
+    {
+        Vector3 uXRG = rmcr.uLOS();
+        Vector3 spn = cross(rmcr.refVel.unit(), uXRG).unit() * rmcr.look();
+        Vector3 uYCR = cross(spn, uXRG);
+        row->unitVector = uXRG;
+        col->unitVector = uYCR;
+    }
+}
+
+void Grid::fillDerivedFields(const INCA& inca)
+{
+    if (type == ComplexImageGridType::NOT_SET)
+    {
+        type = ComplexImageGridType::RGZERO;
+    }
+
+    if (!Init::isUndefined<Poly1D>(inca.timeCAPoly) &&
+        !Init::isUndefined<PolyXYZ>(inca.arpPoly()) &&
+        Init::isUndefined<Vector3>(row->unitVector) &&
+        Init::isUndefined<Vector3>(col->unitVector))
+    {
+
+        Vector3 uRG = (inca.scp() - inca.caPos()).unit();
+        Vector3 left = cross(inca.caPos().unit(), inca.caVel().unit());
+        int look = Utilities::sign(left.dot(uRG));
+        Vector3 spn = cross(uRG, inca.caVel()).unit() * -look;
+        Vector3 uAC = cross(spn, uRG);
+        row->unitVector = uRG;
+        col->unitVector = uAC;
+    }
+
+    if (Init::isUndefined<double>(col->kCenter))
+    {
+        col->kCenter = 0;
+    }
+
+    if (!Init::isUndefined<double>(inca.freqZero) &&
+        Init::isUndefined<double>(row->kCenter))
+    {
+        row->kCenter = inca.freqZero * 2 /
+            math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+    }
+}

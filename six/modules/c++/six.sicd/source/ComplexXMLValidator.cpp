@@ -168,103 +168,9 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
                 }
             }
         }
-
-        if (data.rma->rmat.get() != NULL &&
-            !Init::isUndefined<Vector3>(data.rma->rmat->refPos) &&
-            !Init::isUndefined<Vector3>(data.rma->rmat->refVel))
-        {
-            Vector3 refPos = data.rma->rmat->refPos;
-            Vector3 refVel = data.rma->rmat->refVel;
-            Vector3 uLOS = (scp - refPos).unit();
-            Vector3 left = cross(refPos.unit(), refVel.unit());
-            int look = sign(left.dot(uLOS));
-
-            // RCA is a derived field
-            if (Init::isUndefined<double>(data.rma->rmat->dopConeAngleRef))
-            {
-                data.rma->rmat->dopConeAngleRef = std::acos(refVel.unit().dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
-            }
-
-            // Row/Col.UnitVector and Derived fields
-            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
-                Init::isUndefined<Vector3>(data.grid->col->unitVector))
-            {
-                Vector3 uYAT = refVel.unit() * -look;
-                Vector3 spn = cross(uLOS, uYAT).unit();
-                Vector3 uXCT = cross(uYAT, spn);
-                data.grid->row->unitVector = uXCT;
-                data.grid->col->unitVector = uYAT;
-            }
-        }
-
-        else if (data.rma->rmcr.get() != NULL &&
-            !Init::isUndefined<Vector3>(data.rma->rmcr->refPos) &&
-            !Init::isUndefined<Vector3>(data.rma->rmcr->refVel))
-        {
-            Vector3 refPos = data.rma->rmcr->refPos;
-            Vector3 refVel = data.rma->rmcr->refVel;
-            Vector3 uLOS = (scp - refPos).unit();
-            Vector3 left = cross(refPos.unit(), refVel.unit());
-            int look = sign(left.dot(uLOS));
-
-            // RCA is a derived field
-            if (Init::isUndefined<double>(data.rma->rmcr->dopConeAngleRef))
-            {
-                data.rma->rmcr->dopConeAngleRef = std::acos(refVel.unit().dot(uLOS)) * math::Constants::RADIANS_TO_DEGREES;
-            }
-
-            // Row/Col.UnitVector and Derived fields
-            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
-                Init::isUndefined<Vector3>(data.grid->col->unitVector))
-            {
-                Vector3 uXRG = uLOS;
-                Vector3 spn = cross(refVel.unit(), uXRG).unit() * look ;
-                Vector3 uYCR = cross(spn, uXRG);
-                data.grid->row->unitVector = uXRG;
-                data.grid->col->unitVector = uYCR;
-            }
-        }
     }
     else if (data.rma->inca.get() != NULL)
     {
-        // Default: RGZERO grid is the natural result of RMA/INCA
-        if (data.grid->type == ComplexImageGridType::NOT_SET)
-        {
-            data.grid->type = ComplexImageGridType::RGZERO;
-        }
-        if (!Init::isUndefined<Poly1D>(data.rma->inca->timeCAPoly) &&
-            data.position.get() != NULL &&
-            !Init::isUndefined<PolyXYZ>(data.position->arpPoly))
-        {
-            // INCA UVects are DERIVED from closest approach position/
-            // velocity, not center of aperture
-            Vector3 caPos = data.position->arpPoly(data.rma->inca->timeCAPoly(1));
-            Vector3 caVel = data.position->arpPoly.derivative()(data.rma->inca->timeCAPoly(1));
-
-            if (Init::isUndefined<double>(data.rma->inca->rangeCA))
-            {
-                data.rma->inca->rangeCA = (caPos - scp).norm();
-            }
-
-            if (Init::isUndefined<Vector3>(data.grid->row->unitVector) &&
-                Init::isUndefined<Vector3>(data.grid->col->unitVector))
-            {
-                Vector3 uRG = (scp - caPos).unit();
-                Vector3 left = cross(caPos.unit(), caVel.unit());
-                int look = sign(left.dot(uRG));
-                Vector3 spn = cross(uRG, caVel).unit() * -look;
-                Vector3 uAC = cross(spn, uRG);
-                data.grid->row->unitVector = uRG;
-                data.grid->col->unitVector = uAC;
-            }
-        }
-
-        // Derived: Always the case for INCA
-        if (Init::isUndefined<double>(data.grid->col->kCenter))
-        {
-            data.grid->col->kCenter = 0;
-        }
-
         // Default: The frequency used for computing Doppler Centroid values
         // is often the center transmitted frequency
         if (setDefaultValues &&
@@ -277,14 +183,6 @@ void ComplexXMLValidator::fillRMA(ComplexData& data, double fc, bool setDefaultV
                     data.radarCollection->txFrequencyMax ) / 2;
         }
 
-        // Row.kCenter/FreqZero Derived relationship is exact
-        // although freqZero may be set to default above
-        if (!Init::isUndefined<double>(data.rma->inca->freqZero) &&
-            Init::isUndefined<double>(data.grid->row->kCenter))
-        {
-            data.grid->row->kCenter = data.rma->inca->freqZero * 2 /
-                    math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
-        }
     }
     return;
 }

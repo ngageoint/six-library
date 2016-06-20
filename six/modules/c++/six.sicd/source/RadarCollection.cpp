@@ -166,7 +166,6 @@ bool Segment::operator==(const Segment& rhs) const
 
 Segment* Segment::clone() const
 {
-
     return new Segment(*this);
 }
 

@@ -37,7 +37,11 @@ namespace sicd
 {
 struct CollectionInformation;
 struct ImageData;
+struct INCA;
 struct SCPCOA;
+struct RMA;
+struct RMAT;
+struct RMCR;
 
 struct WeightType
 {
@@ -182,11 +186,15 @@ struct Grid
     void fillDerivedFields(const CollectionInformation& collectionInformation,
                            const ImageData& imageData,
                            const SCPCOA& scpcoa);
+    void fillDerivedFields(const RMA& rma);
 private:
     bool validateTimeCOAPoly(
             const CollectionInformation& collectionInformation,
             logging::Logger& log) const;
     bool validateFFTSigns(logging::Logger& log) const;
+    void fillDerivedFields(const RMAT& rmat);
+    void fillDerivedFields(const RMCR& rmcr);
+    void fillDerivedFields(const INCA& inca);
 };
 
 }

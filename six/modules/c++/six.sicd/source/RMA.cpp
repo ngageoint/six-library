@@ -19,7 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Position.h"
 #include "six/sicd/RMA.h"
+#include "six/sicd/Utilities.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -52,11 +55,93 @@ bool RMAT::operator==(const RMAT& rhs) const
         dopConeAngleRef == rhs.dopConeAngleRef);
 }
 
+void RMAT::fillDerivedFields(const Vector3& scp)
+{
+    setSCP(scp);
+
+    if (!Init::isUndefined<Vector3>(refPos) &&
+        !Init::isUndefined<Vector3>(refVel))
+    {
+        // RCA is a derived field
+        if (Init::isUndefined<double>(dopConeAngleRef))
+        {
+            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS())) *
+                    math::Constants::RADIANS_TO_DEGREES;
+        }
+    }
+}
+
+void RMAT::setSCP(const Vector3& scp)
+{
+    mScp.reset(new Vector3(scp));
+}
+
+const Vector3& RMAT::scp() const
+{
+    if (!mScp.get())
+    {
+        throw except::Exception(Ctxt("mScp is NULL. Initialize with RMAT.setSCP()"));
+    }
+    return *mScp;
+}
+
+Vector3 RMAT::uLOS() const
+{
+    return (scp() - refPos).unit();
+}
+
+int RMAT::look() const
+{
+    Vector3 left = cross(refPos.unit(), refVel.unit());
+    return Utilities::sign(left.dot(uLOS()));
+}
+
 RMCR::RMCR() :
     refPos(Init::undefined<Vector3>()),
     refVel(Init::undefined<Vector3>()),
     dopConeAngleRef(Init::undefined<double>())
 {
+}
+
+void RMCR::fillDerivedFields(const Vector3& scp)
+{
+    setSCP(scp);
+
+    if (!Init::isUndefined<Vector3>(refPos) &&
+        !Init::isUndefined<Vector3>(refVel))
+    {
+        // RCA is a derived field
+        if (Init::isUndefined<double>(dopConeAngleRef))
+        {
+            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS())) *
+                math::Constants::RADIANS_TO_DEGREES;
+        }
+    }
+}
+
+Vector3 RMCR::uLOS() const
+{
+    return (scp() - refPos).unit();
+}
+
+int RMCR::look() const
+{
+    Vector3 left = cross(refPos.unit(), refVel.unit());
+    return Utilities::sign(left.dot(uLOS()));
+}
+
+void RMCR::setSCP(const Vector3& scp)
+{
+    mScp.reset(new Vector3(scp));
+}
+
+const Vector3& RMCR::scp() const
+{
+    if (!mScp.get())
+    {
+        throw except::Exception(Ctxt("mScp is NULL. Initialize with RMAT.setSCP()"));
+    }
+    return *mScp;
 }
 
 INCA::INCA() :
@@ -79,8 +164,87 @@ bool INCA::operator==(const INCA& rhs) const
         dopplerCentroidCOA == rhs.dopplerCentroidCOA);
 }
 
+void INCA::fillDerivedFields(const Vector3& scp,
+        double fc,
+        const Position& position)
+{
+    setSCP(scp);
+    setArpPoly(position.arpPoly);
+
+    if (!Init::isUndefined<Poly1D>(timeCAPoly) &&
+        !Init::isUndefined<PolyXYZ>(position.arpPoly) &&
+        Init::isUndefined<double>(rangeCA))
+    {
+        if (Init::isUndefined<double>(rangeCA))
+        {
+            rangeCA = (caPos() - scp).norm();
+        }
+    }
+}
+
+Vector3 INCA::caPos() const
+{
+    //TODO: verify!!!
+    return (*mArpPoly)(timeCAPoly(1));
+}
+
+Vector3 INCA::caVel() const
+{
+    return mArpPoly->derivative()(timeCAPoly(1));
+}
+
+void INCA::setSCP(const Vector3& scp)
+{
+    mScp.reset(new Vector3(scp));
+}
+
+const Vector3& INCA::scp() const
+{
+    if (!mScp.get())
+    {
+        throw except::Exception(Ctxt(
+            "mScp is NULL. Initialize with RMAT.setSCP()"));
+    }
+    return *mScp;
+}
+
+void INCA::setArpPoly(const PolyXYZ& arpPoly)
+{
+    mArpPoly.reset(new PolyXYZ(arpPoly));
+}
+
+const PolyXYZ& INCA::arpPoly() const
+{
+    if (!mArpPoly.get())
+    {
+        throw except::Exception(Ctxt(
+            "mArpPoly is NULL. Initialize with RMAT.setArpPoly()"));
+    }
+    return *mArpPoly;
+}
+
 RMA::RMA() : 
     algoType(RMAlgoType::NOT_SET)
 {
+}
+
+void RMA::fillDerivedFields(const GeoData& geoData, 
+        const Position& position,
+        double fc)
+{
+    const Vector3& scp = geoData.scp.ecf;
+
+    if (rmat.get())
+    {
+        rmat->fillDerivedFields(scp);
+    }
+    else if (rmcr.get())
+    {
+        rmcr->fillDerivedFields(scp);
+    }
+    else if (inca.get())
+    {
+        inca->fillDerivedFields(scp, fc, position);
+    }
 }
 

@@ -31,7 +31,8 @@ namespace six
 {
 namespace sicd
 {
-
+class GeoData;
+struct Position;
 /*!
  *  \struct  RMAT
  *  \brief   Parameters for Range Migration with Along Track phase
@@ -82,6 +83,14 @@ struct RMAT
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp);
+    int look() const;
+    void setSCP(const Vector3& scp);
+    const Vector3& scp() const;
+    Vector3 uLOS() const;
+private:
+    mem::ScopedCopyablePtr<Vector3> mScp;
 };
 
 /*!
@@ -122,6 +131,14 @@ struct RMCR
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp);
+    void setSCP(const Vector3& scp);
+    const Vector3& scp() const;
+    Vector3 uLOS() const;
+    int look() const;
+private:
+    mem::ScopedCopyablePtr<Vector3> mScp;
 };
 
 /*!
@@ -163,6 +180,21 @@ struct INCA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp, double fc,
+            const Position& position);
+
+    void setSCP(const Vector3& scp);
+    const Vector3& scp() const;
+
+    void setArpPoly(const PolyXYZ& arpPoly);
+    const PolyXYZ& arpPoly() const;
+
+    Vector3 caPos() const;
+    Vector3 caVel() const;
+private:
+    mem::ScopedCopyablePtr<Vector3> mScp;
+    mem::ScopedCopyablePtr<PolyXYZ> mArpPoly;
 };
 
 /*!
@@ -201,6 +233,10 @@ struct RMA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+            const Position& position,
+            double fc);
 };
 
 }
