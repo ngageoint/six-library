@@ -184,13 +184,12 @@ void INCA::fillDerivedFields(const Vector3& scp,
 
 Vector3 INCA::caPos() const
 {
-    //TODO: verify!!!
-    return (*mArpPoly)(timeCAPoly(1));
+    return (*mArpPoly)(timeCAPoly[0]);
 }
 
 Vector3 INCA::caVel() const
 {
-    return mArpPoly->derivative()(timeCAPoly(1));
+    return mArpPoly->derivative()(timeCAPoly[0]);
 }
 
 void INCA::setSCP(const Vector3& scp)
