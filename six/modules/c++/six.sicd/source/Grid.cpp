@@ -337,28 +337,6 @@ bool DirectionParameters::validate(const ImageData& imageData,
     return valid;
 }
 
-bool DirectionParameters::validate(const RMAT& rmat, double kfc,
-    logging::Logger& log) const
-{
-    const double WF_TOL = 1e-3;
-    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
-    std::ostringstream messageBuilder;
-    bool valid = false;
-    if (std::abs((kfc * std::sin(
-            rmat.dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES) / 
-            kCenter)) - 1 > WF_TOL)
-    {
-        messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
-            << "KCtr: " << kCenter << std::endl
-            << "Derived KCtr: " << kfc * std::sin(rmat.dopConeAngleRef *
-                math::Constants::RADIANS_TO_DEGREES);
-        log.warn(messageBuilder.str());
-        valid = false;
-    }
-    return valid;
-}
-
 Grid::Grid() :
     // This is a good assumption, I think
     imagePlane(ComplexImagePlaneType::SLANT),
@@ -455,7 +433,7 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
     
     return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
         validateFFTSigns(log) &&                                //2.2
-        row->validate(imageData, log) && 
+        row->validate(imageData, log) &&
         col->validate(imageData, log)                           //2.3.1 - 2.3.9
         );
 }
@@ -541,9 +519,14 @@ void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
     if (!Init::isUndefined<double>(inca.freqZero) &&
         Init::isUndefined<double>(row->kCenter))
     {
-        row->kCenter = inca.freqZero * 2 /
-            math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+        row->kCenter = derivedRowKCenter(inca);
     }
+}
+
+double Grid::derivedRowKCenter(const INCA& inca) const
+{
+    return inca.freqZero * 2 /
+        math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
 }
 
 void Grid::fillDefaultFields(const RMA& rma, double fc)
@@ -570,19 +553,30 @@ void Grid::fillDefaultFields(const RMAT& rmat, double fc)
     }
     if (!Init::isUndefined<double>(fc))
     {
-        double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
         if (Init::isUndefined<double>(row->kCenter))
         {
-            row->kCenter = kfc * std::sin(rmat.dopConeAngleRef * 
-                    math::Constants::RADIANS_TO_DEGREES);
+            row->kCenter = derivedRowKCenter(rmat, fc);
         }
 
         if (Init::isUndefined<double>(col->kCenter))
         {
-            col->kCenter = kfc * std::cos(rmat.dopConeAngleRef *
-                    math::Constants::RADIANS_TO_DEGREES);
+            col->kCenter = derivedColKCenter(rmat, fc);
         }
     }
+}
+
+double Grid::derivedRowKCenter(const RMAT& rmat, double fc) const
+{
+    const double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+    return kfc * std::sin(rmat.dopConeAngleRef *
+            math::Constants::RADIANS_TO_DEGREES);
+}
+
+double Grid::derivedColKCenter(const RMAT& rmat, double fc) const
+{
+    const double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+    return kfc * std::cos(rmat.dopConeAngleRef *
+        math::Constants::RADIANS_TO_DEGREES);
 }
 
 void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
@@ -593,10 +587,9 @@ void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
     }
     if (!Init::isUndefined<double>(fc))
     {
-        double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
         if (Init::isUndefined<double>(row->kCenter))
         {
-            row->kCenter = kfc;
+            row->kCenter = derivedRowKCenter(rmcr, fc);
         }
         if (Init::isUndefined<double>(col->kCenter))
         {
@@ -669,11 +662,27 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
         valid = false;
     }
 
-    double kfc = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+    // 2.12.3.2.6
+    if (std::abs(derivedRowKCenter(rmat, fc) / row->kCenter - 1) > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "Grid.Row.KCtr: " << row->kCenter << std::endl
+            << "Derived KCtr: " << derivedRowKCenter(rmat, fc);
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
 
-    // 2.12.3.2.6, 2.12.3.2.7
-    valid = valid && row->validate(rmat, kfc, log);
-    valid = valid && col->validate(rmat, kfc, log);
+    //2.12.3.2.7
+    if (std::abs(derivedColKCenter(rmat, fc) / col->kCenter - 1) > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "Grid.Col.KCtr: " << col->kCenter << std::endl
+            << "Derived KCtr: " << derivedColKCenter(rmat, fc);
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
 
     return valid;
 }
@@ -720,21 +729,23 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
     // 2.12.3.3.7
     if (!Init::isUndefined<double>(fc))
     {
-        const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
-        const double WF_TOL = 1e-3;
-        double kfc = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
-        if (std::abs((row->kCenter / kfc) - 1) > WF_TOL)
+        if (std::abs(row->kCenter / derivedRowKCenter(rmcr, fc) - 1) > WF_TOL)
         {
             messageBuilder.str("");
             messageBuilder << WF_INCONSISTENT_STR << std::endl
                 << "Grid.Row.KCtr: " << row->kCenter << std::endl
-                << "Center frequency * 2/c: " << kfc;
+                << "Center frequency * 2/c: " << derivedRowKCenter(rmcr, fc);
             log.warn(messageBuilder.str());
             valid = false;
         }
     }
 
     return valid;
+}
+
+double Grid::derivedRowKCenter(const RMCR& rmcr, double fc) const
+{
+    return fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
 }
 
 bool Grid::validate(const INCA& inca, const Vector3& scp,
@@ -822,16 +833,14 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
 
     // 2.12.3.4.11
     if (Init::isUndefined<double>(fc) &&
-        std::abs(row->kCenter - inca.freqZero * 2 /
-            math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) >
+        std::abs(row->kCenter - derivedRowKCenter(inca)) >
         std::numeric_limits<double>::epsilon())
     {
         const std::string WF_INCONSISTENT_STR =
                 "Waveform fields not consistent";
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
-            << "RMA.INCA.FreqZero * 2 / c: " << inca.freqZero * 
-                2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC
+            << "RMA.INCA.FreqZero * 2 / c: " << derivedRowKCenter(inca)
             << "Grid.Row.KCenter: " << row->kCenter;
         log.error(messageBuilder.str());
         valid = false;

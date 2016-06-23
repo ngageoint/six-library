@@ -62,11 +62,9 @@ void RMAT::fillDerivedFields(const Vector3& scp)
     if (!Init::isUndefined<Vector3>(refPos) &&
         !Init::isUndefined<Vector3>(refVel))
     {
-        // RCA is a derived field
         if (Init::isUndefined<double>(dopConeAngleRef))
         {
-            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS(scp))) *
-                    math::Constants::RADIANS_TO_DEGREES;
+            dopConeAngleRef = derivedDcaRef(scp);
         }
     }
 }
@@ -91,8 +89,7 @@ bool RMAT::validate(const Vector3& scp, logging::Logger& log)
     bool valid = true;
 
     // 2.12.3.2.5
-    double dcaRef = std::acos((refVel.unit()).dot(uLOS(scp))) * 
-            math::Constants::RADIANS_TO_DEGREES;
+    const double dcaRef = derivedDcaRef(scp);
     if (std::abs(dcaRef - dopConeAngleRef) > 1e-6)
     {
         messageBuilder.str("");
@@ -103,6 +100,12 @@ bool RMAT::validate(const Vector3& scp, logging::Logger& log)
         valid = false;
     }
     return valid;
+}
+
+double RMAT::derivedDcaRef(const Vector3& scp) const
+{
+    return std::acos((refVel.unit()).dot(uLOS(scp))) *
+        math::Constants::RADIANS_TO_DEGREES;
 }
 
 Vector3 RMAT::uYAT(const Vector3& scp) const
@@ -146,8 +149,7 @@ void RMCR::fillDerivedFields(const Vector3& scp)
         // RCA is a derived field
         if (Init::isUndefined<double>(dopConeAngleRef))
         {
-            dopConeAngleRef = std::acos(refVel.unit().dot(uXRG(scp))) *
-                math::Constants::RADIANS_TO_DEGREES;
+            dopConeAngleRef = derivedDcaRef(scp);
         }
     }
 }
@@ -172,8 +174,7 @@ bool RMCR::validate(const Vector3& scp, logging::Logger& log)
     std::ostringstream messageBuilder;
 
     // 2.12.3.3.5
-    double dcaRef = std::acos(refVel.unit().dot(uXRG(scp))) *
-            math::Constants::RADIANS_TO_DEGREES;
+    const double dcaRef = derivedDcaRef(scp);
     if (std::abs(dcaRef - dopConeAngleRef) > 1e-6)
     {
         messageBuilder.str("");
@@ -184,6 +185,12 @@ bool RMCR::validate(const Vector3& scp, logging::Logger& log)
         valid = false;
     }
     return valid;
+}
+
+double RMCR::derivedDcaRef(const Vector3& scp) const
+{
+    return std::acos(refVel.unit().dot(uXRG(scp))) *
+        math::Constants::RADIANS_TO_DEGREES;
 }
 
 Vector3 RMCR::uXRG(const Vector3& scp) const
@@ -237,7 +244,7 @@ void INCA::fillDerivedFields(const Vector3& scp,
     {
         if (Init::isUndefined<double>(rangeCA))
         {
-            rangeCA = (caPos(position.arpPoly) - scp).norm();
+            rangeCA = derivedRangeCa(scp, position.arpPoly);
         }
     }
 }
@@ -287,17 +294,22 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
     }
 
     // 2.12.3.4.10
-    if ((caPos(arpPoly) - scp).norm() - rangeCA > 1e-2)
+    if (derivedRangeCa(scp, arpPoly) - rangeCA > 1e-2)
     {
         messageBuilder.str("");
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
             << "RMA.INCA.rangeCA: " << rangeCA
-            << "Derived RMA.INCA.rangeCA: " << (caPos(arpPoly) - scp).norm();
+            << "Derived RMA.INCA.rangeCA: " << derivedRangeCa(scp, arpPoly);
         log.error(messageBuilder.str());
         valid = false;
     }
 
     return valid;
+}
+
+double INCA::derivedRangeCa(const Vector3& scp, const PolyXYZ& arpPoly) const
+{
+    return (caPos(arpPoly) - scp).norm();
 }
 
 Vector3 INCA::caPos(const PolyXYZ& arpPoly) const

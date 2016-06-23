@@ -138,7 +138,6 @@ struct DirectionParameters
     }
 
     bool validate(const ImageData& imageData, logging::Logger& log) const;
-    bool validate(const RMAT& rmat, double kfc, logging::Logger& log) const;
     void fillDerivedFields(const ImageData& imageData);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
@@ -211,8 +210,14 @@ private:
             const PolyXYZ& arpPoly);
     void fillDefaultFields(const RMAT& rmat, double fc);
     void fillDefaultFields(const RMCR& rmcr, double fc);
+    double derivedColKCenter(const RMAT& rmat, double fc) const;
+    double derivedRowKCenter(const RMAT& rmat, double fc) const;
+    double derivedRowKCenter(const RMCR& rmcr, double fc) const;
+    double derivedRowKCenter(const INCA& inca) const;
     ComplexImageGridType expectedGridType(const RMA& rma) const;
     const double UVECT_TOL = 1e-3;
+    const double WF_TOL = 1e-3;
+    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
 };
 
 }

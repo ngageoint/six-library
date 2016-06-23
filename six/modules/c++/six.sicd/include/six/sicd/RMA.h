@@ -96,7 +96,7 @@ struct RMAT
     Vector3 uXCT(const Vector3& scp) const;
     Vector3 uLOS(const Vector3& scp) const;
 private:
-    mem::ScopedCopyablePtr<Vector3> mScp;
+    double derivedDcaRef(const Vector3& scp) const;
 };
 
 /*!
@@ -146,7 +146,7 @@ struct RMCR
     Vector3 spn(const Vector3& scp) const;
     int look(const Vector3& scp) const;
 private:
-    mem::ScopedCopyablePtr<Vector3> mScp;
+    double derivedDcaRef(const Vector3& scp) const;
 };
 
 /*!
@@ -204,6 +204,8 @@ struct INCA
     bool validate(const CollectionInformation& collectionInformation,
             const Vector3& scp, const PolyXYZ& arpPoly,
             double fc, logging::Logger& log) const;
+private:
+    double derivedRangeCa(const Vector3& scp, const PolyXYZ& arpPoly) const;
 };
 
 /*!
