@@ -126,8 +126,9 @@ void XMLVerifier::verify(const std::string& pathname) const
     std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
-    sys::Path::StringPair splitPath = sys::Path::splitExt(pathname);
-    std::string roundTrippedPath = splitPath.first + "_out" + splitPath.second;
+    const sys::Path::StringPair splitPath = sys::Path::splitExt(pathname);
+    const std::string roundTrippedPath = splitPath.first + "_out"
+            + splitPath.second;
 
     io::FileOutputStream outStream(roundTrippedPath);
     xmlDoc->getRootElement()->prettyPrint(outStream);
