@@ -481,7 +481,8 @@ void Grid::fillDerivedFields(
     col->fillDerivedFields(imageData);
 }
 
-void Grid::fillDerivedFields(const RMA& rma, const Vector3& scp)
+void Grid::fillDerivedFields(const RMA& rma, const Vector3& scp,
+        const PolyXYZ& arpPoly)
 {
     if (rma.rmat.get())
     {
@@ -493,7 +494,7 @@ void Grid::fillDerivedFields(const RMA& rma, const Vector3& scp)
     }
     else if (rma.inca.get())
     {
-        fillDerivedFields(*rma.inca);
+        fillDerivedFields(*rma.inca, scp, arpPoly);
     }
 }
 
@@ -519,16 +520,17 @@ void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
     }
 }
 
-void Grid::fillDerivedFields(const INCA& inca)
+void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
+        const PolyXYZ& arpPoly)
 {
 
     if (!Init::isUndefined<Poly1D>(inca.timeCAPoly) &&
-        !Init::isUndefined<PolyXYZ>(inca.arpPoly()) &&
+        !Init::isUndefined<PolyXYZ>(arpPoly) &&
         Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        row->unitVector = inca.uRG();
-        col->unitVector = inca.uAZ();
+        row->unitVector = inca.uRG(scp, arpPoly);
+        col->unitVector = inca.uAZ(scp, arpPoly);
     }
 
     if (Init::isUndefined<double>(col->kCenter))
@@ -604,7 +606,8 @@ void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
 }
 
 bool Grid::validate(const RMA& rma, const Vector3& scp,
-        double fc, logging::Logger& log) const
+        const PolyXYZ& arpPoly, double fc,
+        logging::Logger& log) const
 {
     bool valid = true;
     // 2.12.3.2.1, 2.12.3.4.1
@@ -629,7 +632,7 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
 
     else if (rma.inca.get())
     {
-        return validate(*rma.inca, fc, log);
+        return validate(*rma.inca, scp, arpPoly, fc, log);
     }
 
     // If no image formation algorithm is present, the problem isn't
@@ -734,7 +737,9 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
     return valid;
 }
 
-bool Grid::validate(const INCA& inca, double fc, logging::Logger& log) const
+bool Grid::validate(const INCA& inca, const Vector3& scp,
+        const PolyXYZ& arpPoly, double fc,
+        logging::Logger& log) const
 {
     (void)inca; // Only for overloading
     bool valid = true;
@@ -783,23 +788,23 @@ bool Grid::validate(const INCA& inca, double fc, logging::Logger& log) const
     }
 
     // 2.12.3.4.6
-    if ((inca.uRG() - row->unitVector).norm() > UVECT_TOL)
+    if ((inca.uRG(scp, arpPoly) - row->unitVector).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
             << "Grid.Row.UVectECF: " << row->unitVector
-            << "Derived Grid.Row.UVectECF: " << inca.uRG();
+            << "Derived Grid.Row.UVectECF: " << inca.uRG(scp, arpPoly);
         log.error(messageBuilder.str());
         valid =  false;
     }
 
     // 2.12.3.4.7
-    if ((inca.uAZ() - col->unitVector).norm() > UVECT_TOL)
+    if ((inca.uAZ(scp, arpPoly) - col->unitVector).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector
-            << "Derived Grid.Col.UVectECF: " << inca.uAZ();
+            << "Derived Grid.Col.UVectECF: " << inca.uAZ(scp, arpPoly);
         log.error(messageBuilder.str());
         valid = false;
     }

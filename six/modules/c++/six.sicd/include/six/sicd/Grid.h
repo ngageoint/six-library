@@ -185,12 +185,13 @@ struct Grid
             logging::Logger& log) const;
 
     bool validate(const RMA& rma, const Vector3& scp,
-            double fc, logging::Logger& log) const;
+            const PolyXYZ& arpPoly, double fc,
+            logging::Logger& log) const;
 
     void fillDerivedFields(const CollectionInformation& collectionInformation,
                            const ImageData& imageData,
                            const SCPCOA& scpcoa);
-    void fillDerivedFields(const RMA& rma, const Vector3& scp);
+    void fillDerivedFields(const RMA& rma, const Vector3& scp, const PolyXYZ& arpPoly);
     void fillDefaultFields(const RMA& rma, double fc);
 private:
     bool validateTimeCOAPoly(
@@ -201,10 +202,13 @@ private:
             double fc, logging::Logger& log) const;
     bool validate(const RMCR& rmcr, const Vector3& scp,
             double fc, logging::Logger& log) const;
-    bool validate(const INCA& inca, double fc, logging::Logger& log) const;
+    bool validate(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly, double fc,
+            logging::Logger& log) const;
     void fillDerivedFields(const RMAT& rmat, const Vector3& scp);
     void fillDerivedFields(const RMCR& rmcr, const Vector3& scp);
-    void fillDerivedFields(const INCA& inca);
+    void fillDerivedFields(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly);
     void fillDefaultFields(const RMAT& rmat, double fc);
     void fillDefaultFields(const RMCR& rmcr, double fc);
     ComplexImageGridType expectedGridType(const RMA& rma) const;

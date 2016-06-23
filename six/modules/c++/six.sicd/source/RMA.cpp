@@ -237,12 +237,13 @@ void INCA::fillDerivedFields(const Vector3& scp,
     {
         if (Init::isUndefined<double>(rangeCA))
         {
-            rangeCA = (caPos() - scp).norm();
+            rangeCA = (caPos(position.arpPoly) - scp).norm();
         }
     }
 }
 
 bool INCA::validate(const CollectionInformation& collectionInformation,
+        const Vector3& scp, const PolyXYZ& arpPoly,
         double fc, logging::Logger& log) const
 {
     bool valid = true;
@@ -286,12 +287,12 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
     }
 
     // 2.12.3.4.10
-    if ((caPos() - scp()).norm() - rangeCA >  1e-2)
+    if ((caPos(arpPoly) - scp).norm() - rangeCA > 1e-2)
     {
         messageBuilder.str("");
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
             << "RMA.INCA.rangeCA: " << rangeCA
-            << "Derived RMA.INCA.rangeCA: " << (caPos() - scp()).norm();
+            << "Derived RMA.INCA.rangeCA: " << (caPos(arpPoly) - scp).norm();
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -299,69 +300,40 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
     return valid;
 }
 
-Vector3 INCA::caPos() const
+Vector3 INCA::caPos(const PolyXYZ& arpPoly) const
 {
-    return (*mArpPoly)(timeCAPoly[0]);
+    return arpPoly(timeCAPoly[0]);
 }
 
-Vector3 INCA::caVel() const
+Vector3 INCA::caVel(const PolyXYZ& arpPoly) const
 {
-    return mArpPoly->derivative()(timeCAPoly[0]);
+    return (arpPoly.derivative())(timeCAPoly[0]);
 }
 
-Vector3 INCA::uRG() const
+Vector3 INCA::uRG(const Vector3& scp, const PolyXYZ& arpPoly) const
 {
-    return (scp() - caPos()).unit();
+    return (scp - caPos(arpPoly)).unit();
 }
 
-Vector3 INCA::uAZ() const
+Vector3 INCA::uAZ(const Vector3& scp, const PolyXYZ& arpPoly) const
 {
-    return cross(spn(), uRG());
+    return cross(spn(scp, arpPoly), uRG(scp, arpPoly));
 }
 
-Vector3 INCA::spn() const
+Vector3 INCA::spn(const Vector3& scp, const PolyXYZ& arpPoly) const
 {
-    return (cross(uRG(), caVel()) * -look()).unit();
+    return (cross(uRG(scp, arpPoly), caVel(arpPoly)) *
+            -look(scp, arpPoly)).unit();
 }
 
-int INCA::look() const
+int INCA::look(const Vector3& scp, const PolyXYZ& arpPoly) const
 {
-    return Utilities::sign(left().dot(uRG()));
+    return Utilities::sign(left(arpPoly).dot(uRG(scp, arpPoly)));
 }
 
-Vector3 INCA::left() const
+Vector3 INCA::left(const PolyXYZ& arpPoly) const
 {
-    return cross(caPos().unit(), caVel().unit());
-}
-
-void INCA::setSCP(const Vector3& scp)
-{
-    mScp.reset(new Vector3(scp));
-}
-
-const Vector3& INCA::scp() const
-{
-    if (!mScp.get())
-    {
-        throw except::Exception(Ctxt(
-            "mScp is NULL. Initialize with RMAT.setSCP()"));
-    }
-    return *mScp;
-}
-
-void INCA::setArpPoly(const PolyXYZ& arpPoly)
-{
-    mArpPoly.reset(new PolyXYZ(arpPoly));
-}
-
-const PolyXYZ& INCA::arpPoly() const
-{
-    if (!mArpPoly.get())
-    {
-        throw except::Exception(Ctxt(
-            "mArpPoly is NULL. Initialize with RMAT.setArpPoly()"));
-    }
-    return *mArpPoly;
+    return cross(caPos(arpPoly).unit(), caVel(arpPoly).unit());
 }
 
 void INCA::fillDefaultFields(double fc)
@@ -416,11 +388,12 @@ void RMA::fillDefaultFields(const SCPCOA& scpcoa, double fc)
 }
 
 bool RMA::validate(const CollectionInformation& collectionInformation,
-        const Vector3& scp, double fc, logging::Logger& log) const
+        const Vector3& scp, const PolyXYZ& arpPoly, double fc, 
+        logging::Logger& log) const
 {
     if (rmat.get())
     {
-        return rmat->validate(log);
+        return rmat->validate(scp, log);
     }
 
     else if (rmcr.get())
@@ -430,7 +403,7 @@ bool RMA::validate(const CollectionInformation& collectionInformation,
 
     else if (inca.get())
     {
-        return inca->validate(collectionInformation, fc, log);
+        return inca->validate(collectionInformation, scp, arpPoly, fc, log);
     }
 
     std::ostringstream messageBuilder;

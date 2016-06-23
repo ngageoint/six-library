@@ -192,19 +192,17 @@ struct INCA
     void fillDerivedFields(const Vector3& scp, double fc,
             const Position& position);
 
-    void setArpPoly(const PolyXYZ& arpPoly);
-    const PolyXYZ& arpPoly() const;
-
-    Vector3 caPos() const;
-    Vector3 caVel() const;
-    Vector3 uRG() const;
-    Vector3 uAZ() const;
-    Vector3 spn() const;
-    int look() const;
-    Vector3 left() const;
+    Vector3 caPos(const PolyXYZ& arpPoly) const;
+    Vector3 caVel(const PolyXYZ& arpPoly) const;
+    Vector3 uRG(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 uAZ(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 spn(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    int look(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 left(const PolyXYZ& arpPoly) const;
 
     void fillDefaultFields(double fc);
     bool validate(const CollectionInformation& collectionInformation,
+            const Vector3& scp, const PolyXYZ& arpPoly,
             double fc, logging::Logger& log) const;
 };
 
@@ -250,7 +248,8 @@ struct RMA
             double fc);
     void fillDefaultFields(const SCPCOA& scpcoa, double fc);
     bool validate(const CollectionInformation& collectionInformation,
-            const Vector3& scp, double fc, logging::Logger& log) const;
+            const Vector3& scp, const PolyXYZ& arpPoly,
+            double fc, logging::Logger& log) const;
 };
 
 }

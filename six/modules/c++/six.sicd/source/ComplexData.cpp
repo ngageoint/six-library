@@ -169,8 +169,9 @@ bool ComplexData::validate(logging::Logger& log) const
         if (rma.get())
         {
             valid = valid && rma->validate(*collectionInformation,
-                    geoData->scp.ecf, fc, log);
-            valid = valid && grid->validate(*rma, geoData->scp.ecf, fc, log);
+                    geoData->scp.ecf, position->arpPoly, fc, log);
+            valid = valid && grid->validate(*rma, geoData->scp.ecf,
+                    position->arpPoly, fc, log);
         }
         else
         {
@@ -227,7 +228,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
         if (rma.get())
         {
             rma->fillDerivedFields(*geoData, *position, fc);
-            grid->fillDerivedFields(*rma, geoData->scp.ecf);
+            grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
     }
 
