@@ -146,10 +146,53 @@ bool ComplexData::validate(logging::Logger& log) const
 {
     // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
     // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
-    return (grid->validate(*collectionInformation, *imageData, log) &&
+    bool valid = (grid->validate(*collectionInformation, *imageData, log) &&
             position->validate(log) &&
             scpcoa->validate(*geoData, *grid, *position, log));
-    return true;
+
+    double fc(Init::undefined<double>());
+    if (radarCollection->refFrequencyIndex == 0)
+    {
+        fc = (imageFormation->txFrequencyProcMin +
+            imageFormation->txFrequencyProcMax) / 2;
+    }
+    std::ostringstream messageBuilder;
+    switch (imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::RGAZCOMP: // 2.12.1
+        //return checkRGAZCOMP();
+        //break;
+    case ImageFormationType::PFA:      // 2.12.2
+        //return checkPFA();
+        //break;
+    case ImageFormationType::RMA:      // 2.12.3.*
+        if (rma.get())
+        {
+            valid = valid && rma->validate(*collectionInformation,
+                    geoData->scp.ecf, fc, log);
+            valid = valid && grid->validate(*rma, geoData->scp.ecf, fc, log);
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "RMA specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        break;
+    default:
+        //2.12.3 (This is not a typo)
+
+        messageBuilder << "Image formation not fully defined." << std::endl
+            << "SICD.ImageFormation.ImageFormAlgo = OTHER or is not set.";
+        log.warn(messageBuilder.str());
+        valid = false;
+        break;
+    }
+
+    return valid;
 }
 
 void ComplexData::fillDerivedFields(bool includeDefault)
@@ -184,7 +227,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
         if (rma.get())
         {
             rma->fillDerivedFields(*geoData, *position, fc);
-            grid->fillDerivedFields(*rma);
+            grid->fillDerivedFields(*rma, geoData->scp.ecf);
         }
     }
 
@@ -221,7 +264,8 @@ void ComplexData::fillDefaultFields()
     case ImageFormationType::RMA:
         if (rma.get())
         {
-            rma->fillDefaultFields(fc);
+            rma->fillDefaultFields(*scpcoa, fc);
+            grid->fillDefaultFields(*rma, fc);
         }
     }
     return;

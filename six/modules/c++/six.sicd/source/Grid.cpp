@@ -337,6 +337,27 @@ bool DirectionParameters::validate(const ImageData& imageData,
     return valid;
 }
 
+bool DirectionParameters::validate(const RMAT& rmat, double kfc,
+    logging::Logger& log) const
+{
+    const double WF_TOL = 1e-3;
+    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+    std::ostringstream messageBuilder;
+    bool valid = false;
+    if (std::abs((kfc * std::sin(
+            rmat.dopConeAngleRef * math::Constants::RADIANS_TO_DEGREES) / 
+            kCenter)) - 1 > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "KCtr: " << kCenter << std::endl
+            << "Derived KCtr: " << kfc * std::sin(rmat.dopConeAngleRef *
+                math::Constants::RADIANS_TO_DEGREES);
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
 
 Grid::Grid() :
     // This is a good assumption, I think
@@ -460,15 +481,15 @@ void Grid::fillDerivedFields(
     col->fillDerivedFields(imageData);
 }
 
-void Grid::fillDerivedFields(const RMA& rma)
+void Grid::fillDerivedFields(const RMA& rma, const Vector3& scp)
 {
     if (rma.rmat.get())
     {
-        fillDerivedFields(*rma.rmat);
+        fillDerivedFields(*rma.rmat, scp);
     }
     else if (rma.rmcr.get())
     {
-        fillDerivedFields(*rma.rmcr);
+        fillDerivedFields(*rma.rmcr, scp);
     }
     else if (rma.inca.get())
     {
@@ -476,54 +497,38 @@ void Grid::fillDerivedFields(const RMA& rma)
     }
 }
 
-void Grid::fillDerivedFields(const RMAT& rmat)
+void Grid::fillDerivedFields(const RMAT& rmat, const Vector3& scp)
 {
     // Row/Col.UnitVector and Derived fields
     if (Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        Vector3 uYAT = rmat.refVel.unit() * -rmat.look();
-        Vector3 spn = cross(rmat.uLOS(), uYAT).unit();
-        Vector3 uXCT = cross(uYAT, spn);
-        row->unitVector = uXCT;
-        col->unitVector = uYAT;
+        row->unitVector = rmat.uXCT(scp);
+        col->unitVector = rmat.uYAT(scp);
     }
 }
 
-void Grid::fillDerivedFields(const RMCR& rmcr)
+void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
 {
     // Row/Col.UnitVector and Derived fields
     if (Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        Vector3 uXRG = rmcr.uLOS();
-        Vector3 spn = cross(rmcr.refVel.unit(), uXRG).unit() * rmcr.look();
-        Vector3 uYCR = cross(spn, uXRG);
-        row->unitVector = uXRG;
-        col->unitVector = uYCR;
+        row->unitVector = rmcr.uXRG(scp);
+        col->unitVector = rmcr.uYCR(scp);
     }
 }
 
 void Grid::fillDerivedFields(const INCA& inca)
 {
-    if (type == ComplexImageGridType::NOT_SET)
-    {
-        type = ComplexImageGridType::RGZERO;
-    }
 
     if (!Init::isUndefined<Poly1D>(inca.timeCAPoly) &&
         !Init::isUndefined<PolyXYZ>(inca.arpPoly()) &&
         Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-
-        Vector3 uRG = (inca.scp() - inca.caPos()).unit();
-        Vector3 left = cross(inca.caPos().unit(), inca.caVel().unit());
-        int look = Utilities::sign(left.dot(uRG));
-        Vector3 spn = cross(uRG, inca.caVel()).unit() * -look;
-        Vector3 uAC = cross(spn, uRG);
-        row->unitVector = uRG;
-        col->unitVector = uAC;
+        row->unitVector = inca.uRG();
+        col->unitVector = inca.uAZ();
     }
 
     if (Init::isUndefined<double>(col->kCenter))
@@ -536,5 +541,311 @@ void Grid::fillDerivedFields(const INCA& inca)
     {
         row->kCenter = inca.freqZero * 2 /
             math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+    }
+}
+
+void Grid::fillDefaultFields(const RMA& rma, double fc)
+{
+    if (type == ComplexImageGridType::NOT_SET)
+    {
+        type = expectedGridType(rma);
+    }
+    if (rma.rmat.get())
+    {
+        fillDefaultFields(*rma.rmat, fc);
+    }
+    else if (rma.rmcr.get())
+    {
+        fillDefaultFields(*rma.rmcr, fc);
+    }
+}
+
+void Grid::fillDefaultFields(const RMAT& rmat, double fc)
+{
+    if (imagePlane == ComplexImagePlaneType::NOT_SET)
+    {
+        imagePlane = ComplexImagePlaneType::SLANT;
+    }
+    if (!Init::isUndefined<double>(fc))
+    {
+        double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+        if (Init::isUndefined<double>(row->kCenter))
+        {
+            row->kCenter = kfc * std::sin(rmat.dopConeAngleRef * 
+                    math::Constants::RADIANS_TO_DEGREES);
+        }
+
+        if (Init::isUndefined<double>(col->kCenter))
+        {
+            col->kCenter = kfc * std::cos(rmat.dopConeAngleRef *
+                    math::Constants::RADIANS_TO_DEGREES);
+        }
+    }
+}
+
+void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
+{
+    if (imagePlane == ComplexImagePlaneType::NOT_SET)
+    {
+        imagePlane = ComplexImagePlaneType::SLANT;
+    }
+    if (!Init::isUndefined<double>(fc))
+    {
+        double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+        if (Init::isUndefined<double>(row->kCenter))
+        {
+            row->kCenter = kfc;
+        }
+        if (Init::isUndefined<double>(col->kCenter))
+        {
+            col->kCenter = 0;
+        }
+    }
+}
+
+bool Grid::validate(const RMA& rma, const Vector3& scp,
+        double fc, logging::Logger& log) const
+{
+    bool valid = true;
+    // 2.12.3.2.1, 2.12.3.4.1
+    if (type != expectedGridType(rma))
+    {
+        std::ostringstream messageBuilder;
+        messageBuilder << "Given image formation algorithm expects "
+            << expectedGridType(rma).toString() << ".\nFound " << type;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    if (rma.rmat.get())
+    {
+        return validate(*rma.rmat, scp, fc, log);
+    }
+
+    else if (rma.rmcr.get())
+    {
+        return validate(*rma.rmcr, scp, fc, log);
+    }
+
+    else if (rma.inca.get())
+    {
+        return validate(*rma.inca, fc, log);
+    }
+
+    // If no image formation algorithm is present, the problem isn't
+    // with the Grid, so we'll let RMA deal with it that error
+    return valid;
+}
+
+bool Grid::validate(const RMAT& rmat, const Vector3& scp,
+    double fc, logging::Logger& log) const
+{
+    (void)rmat; // only for overloading
+    std::ostringstream messageBuilder;
+    bool valid = true;
+
+    // 2.12.3.2.3
+    if ((row->unitVector - rmat.uXCT(scp)).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVect fields inconsistent." << std::endl
+            << "Grid.Row.UVectECF: " << row->unitVector
+            << "Derived grid.Row.UVectECT: " << rmat.uXCT(scp);
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.2.4
+    if ((col->unitVector - rmat.uYAT(scp)).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVect fields inconsistent." << std::endl
+            << "Grid.Col.UVectECF: " << col->unitVector
+            << "Derived Grid.Col.UVectECF: " << rmat.uYAT(scp);
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    double kfc = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+
+    // 2.12.3.2.6, 2.12.3.2.7
+    valid = valid && row->validate(rmat, kfc, log);
+    valid = valid && col->validate(rmat, kfc, log);
+
+    return valid;
+}
+
+bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
+        double fc, logging::Logger& log) const
+{
+    (void)rmcr; // Only for overloading
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //2.12.3.3.3
+    if ((row->unitVector - rmcr.uXRG(scp)).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVect fields inconsistent." << std::endl
+            << "Grid.Row.UVectECF: " << row->unitVector << std::endl
+            << "Derived Grid.Row.UVectECF: " << rmcr.uXRG(scp);
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.3.4
+    if ((col->unitVector - rmcr.uYCR(scp)).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVect fields inconsistent." << std::endl
+            << "Grid.Col.UVectECF: " << col->unitVector << std::endl
+            << "Derived Grid.Col.UVectECF: " << rmcr.uYCR(scp);
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.3.6
+    if (col->kCenter != 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << "Grid.Col.KCtr must be zero for RMA/RMCR data." 
+            << std::endl << "Grid.Col.KCtr = " << col->kCenter;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.3.7
+    if (!Init::isUndefined<double>(fc))
+    {
+        const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+        const double WF_TOL = 1e-3;
+        double kfc = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+        if (std::abs((row->kCenter / kfc) - 1) > WF_TOL)
+        {
+            messageBuilder.str("");
+            messageBuilder << WF_INCONSISTENT_STR << std::endl
+                << "Grid.Row.KCtr: " << row->kCenter << std::endl
+                << "Center frequency * 2/c: " << kfc;
+            log.warn(messageBuilder.str());
+            valid = false;
+        }
+    }
+
+    return valid;
+}
+
+bool Grid::validate(const INCA& inca, double fc, logging::Logger& log) const
+{
+    (void)inca; // Only for overloading
+    bool valid = true;
+    std::ostringstream messageBuilder;
+    const double IFP_POLY_TOL = 1e-5;
+
+    if (!Init::isUndefined<Poly2D>(inca.dopplerCentroidPoly) &&
+        inca.dopplerCentroidCOA == BooleanType::IS_TRUE)
+    {
+        const Poly2D& kcoaPoly = col->deltaKCOAPoly;
+        const Poly2D& centroidPoly = inca.dopplerCentroidPoly;
+
+        if (kcoaPoly.orderX() != centroidPoly.orderX() &&
+            kcoaPoly.orderY() != centroidPoly.orderY())
+        {
+            valid = false;
+            messageBuilder.str("");
+            messageBuilder << "Grid.Col.delaKCOAPoly and "
+                << "RMA.INCA.dopplerCentroidPoly have diferent sizes.";
+            log.error(messageBuilder.str());
+        }
+        else
+        {
+            Poly2D differencePoly = kcoaPoly - (centroidPoly * inca.timeCAPoly[1]);
+            double norm = 0;
+
+            for (size_t ii = 0; ii < differencePoly.orderX(); ++ii)
+            {
+                for (size_t jj = 0; jj < differencePoly.orderY(); ++jj)
+                {
+                    norm += std::pow(differencePoly[ii][jj], 2);
+                }
+            }
+            norm = std::sqrt(norm);
+
+            if(norm > IFP_POLY_TOL)
+            {
+                messageBuilder.str("");
+                messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+                    << "Compare Grid.Col.KCOAPoly to RMA.INCA.DopCentroidPoly "
+                    << "* RMA.INCA.TimeCAPoly[1].";
+                log.error(messageBuilder.str());
+                valid = false;
+            }
+        }
+    }
+
+    // 2.12.3.4.6
+    if ((inca.uRG() - row->unitVector).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVectFields inconsistent" << std::endl
+            << "Grid.Row.UVectECF: " << row->unitVector
+            << "Derived Grid.Row.UVectECF: " << inca.uRG();
+        log.error(messageBuilder.str());
+        valid =  false;
+    }
+
+    // 2.12.3.4.7
+    if ((inca.uAZ() - col->unitVector).norm() > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVectFields inconsistent" << std::endl
+            << "Grid.Col.UVectECF: " << col->unitVector
+            << "Derived Grid.Col.UVectECF: " << inca.uAZ();
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.4.8
+    if (col->kCenter != 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << "Grid.Col.KCtr  must be zero "
+            << "for RMA/INCA data." << std::endl
+            << "Grid.Col.KCtr: " << col->kCenter;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.4.11
+    if (Init::isUndefined<double>(fc) &&
+        std::abs(row->kCenter - inca.freqZero * 2 /
+            math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) >
+        std::numeric_limits<double>::epsilon())
+    {
+        const std::string WF_INCONSISTENT_STR =
+                "Waveform fields not consistent";
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
+            << "RMA.INCA.FreqZero * 2 / c: " << inca.freqZero * 
+                2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC
+            << "Grid.Row.KCenter: " << row->kCenter;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
+
+ComplexImageGridType Grid::expectedGridType(const RMA& rma) const
+{
+    if (rma.rmat.get())
+    {
+        return ComplexImageGridType::XCTYAT;
+    }
+    else if (rma.rmcr.get())
+    {
+        return ComplexImageGridType::XRGYCR;
+    }
+    else if (rma.inca.get())
+    {
+        return ComplexImageGridType::RGZERO;
     }
 }

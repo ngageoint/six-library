@@ -67,15 +67,10 @@ private:
     bool checkIFP();
     bool checkRGAZCOMP();
     bool checkPFA();
-    bool checkRMA();
-    bool checkRMAT();
-    bool checkRMCR();
-    bool checkINCA();
 
     void fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues);
     void fillRGAZCOMP(ComplexData& data, double fc);
     void fillPFA(ComplexData& data, double fc, bool setDefaultValues);
-    void fillRMA(ComplexData& data, double fc, bool setDefaultValues);
 
     Vector3 wgs84Norm(const Vector3& point);
 

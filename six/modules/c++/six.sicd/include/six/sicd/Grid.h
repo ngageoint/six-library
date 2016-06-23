@@ -138,6 +138,7 @@ struct DirectionParameters
     }
 
     bool validate(const ImageData& imageData, logging::Logger& log) const;
+    bool validate(const RMAT& rmat, double kfc, logging::Logger& log) const;
     void fillDerivedFields(const ImageData& imageData);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
@@ -183,18 +184,31 @@ struct Grid
             const ImageData& imageData,
             logging::Logger& log) const;
 
+    bool validate(const RMA& rma, const Vector3& scp,
+            double fc, logging::Logger& log) const;
+
     void fillDerivedFields(const CollectionInformation& collectionInformation,
                            const ImageData& imageData,
                            const SCPCOA& scpcoa);
-    void fillDerivedFields(const RMA& rma);
+    void fillDerivedFields(const RMA& rma, const Vector3& scp);
+    void fillDefaultFields(const RMA& rma, double fc);
 private:
     bool validateTimeCOAPoly(
             const CollectionInformation& collectionInformation,
             logging::Logger& log) const;
     bool validateFFTSigns(logging::Logger& log) const;
-    void fillDerivedFields(const RMAT& rmat);
-    void fillDerivedFields(const RMCR& rmcr);
+    bool validate(const RMAT& rmat, const Vector3& scp,
+            double fc, logging::Logger& log) const;
+    bool validate(const RMCR& rmcr, const Vector3& scp,
+            double fc, logging::Logger& log) const;
+    bool validate(const INCA& inca, double fc, logging::Logger& log) const;
+    void fillDerivedFields(const RMAT& rmat, const Vector3& scp);
+    void fillDerivedFields(const RMCR& rmcr, const Vector3& scp);
     void fillDerivedFields(const INCA& inca);
+    void fillDefaultFields(const RMAT& rmat, double fc);
+    void fillDefaultFields(const RMCR& rmcr, double fc);
+    ComplexImageGridType expectedGridType(const RMA& rma) const;
+    const double UVECT_TOL = 1e-3;
 };
 
 }

@@ -19,9 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RMA.h"
+#include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 
 using namespace six;
@@ -57,43 +59,76 @@ bool RMAT::operator==(const RMAT& rhs) const
 
 void RMAT::fillDerivedFields(const Vector3& scp)
 {
-    setSCP(scp);
-
     if (!Init::isUndefined<Vector3>(refPos) &&
         !Init::isUndefined<Vector3>(refVel))
     {
         // RCA is a derived field
         if (Init::isUndefined<double>(dopConeAngleRef))
         {
-            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS())) *
+            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS(scp))) *
                     math::Constants::RADIANS_TO_DEGREES;
         }
     }
 }
 
-void RMAT::setSCP(const Vector3& scp)
+void RMAT::fillDefaultFields(const SCPCOA& scpcoa)
 {
-    mScp.reset(new Vector3(scp));
-}
-
-const Vector3& RMAT::scp() const
-{
-    if (!mScp.get())
+    if (Init::isUndefined<Vector3>(refPos) &&
+        !Init::isUndefined<Vector3>(scpcoa.arpPos))
     {
-        throw except::Exception(Ctxt("mScp is NULL. Initialize with RMAT.setSCP()"));
+        refPos = scpcoa.arpPos;
     }
-    return *mScp;
+    if (Init::isUndefined<Vector3>(refVel) &&
+        !Init::isUndefined<Vector3>(scpcoa.arpVel))
+    {
+        refVel = scpcoa.arpVel;
+    }
 }
 
-Vector3 RMAT::uLOS() const
+bool RMAT::validate(const Vector3& scp, logging::Logger& log)
 {
-    return (scp() - refPos).unit();
+    std::ostringstream messageBuilder;
+    bool valid = true;
+
+    // 2.12.3.2.5
+    double dcaRef = std::acos((refVel.unit()).dot(uLOS(scp))) * 
+            math::Constants::RADIANS_TO_DEGREES;
+    if (std::abs(dcaRef - dopConeAngleRef) > 1e-6)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA fields inconsistent." << std::endl
+            << "RMA.RMAT.DopConeAngleRef: " << dopConeAngleRef
+            << std::endl << "Derived RMA.RMAT.DopConeAngleRef: " << dcaRef;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
 }
 
-int RMAT::look() const
+Vector3 RMAT::uYAT(const Vector3& scp) const
+{
+    return (refVel.unit() * look(scp));
+}
+
+Vector3 RMAT::spn(const Vector3& scp) const
+{
+    return cross(uLOS(scp), uYAT(scp)).unit();
+}
+
+Vector3 RMAT::uXCT(const Vector3& scp) const
+{
+    return cross(uYAT(scp), spn(scp));
+}
+
+Vector3 RMAT::uLOS(const Vector3& scp) const
+{
+    return (scp - refPos).unit();
+}
+
+int RMAT::look(const Vector3& scp) const
 {
     Vector3 left = cross(refPos.unit(), refVel.unit());
-    return Utilities::sign(left.dot(uLOS()));
+    return Utilities::sign(left.dot(uLOS(scp)));
 }
 
 RMCR::RMCR() :
@@ -105,43 +140,71 @@ RMCR::RMCR() :
 
 void RMCR::fillDerivedFields(const Vector3& scp)
 {
-    setSCP(scp);
-
     if (!Init::isUndefined<Vector3>(refPos) &&
         !Init::isUndefined<Vector3>(refVel))
     {
         // RCA is a derived field
         if (Init::isUndefined<double>(dopConeAngleRef))
         {
-            dopConeAngleRef = std::acos(refVel.unit().dot(uLOS())) *
+            dopConeAngleRef = std::acos(refVel.unit().dot(uXRG(scp))) *
                 math::Constants::RADIANS_TO_DEGREES;
         }
     }
 }
 
-Vector3 RMCR::uLOS() const
+void RMCR::fillDefaultFields(const SCPCOA& scpcoa)
 {
-    return (scp() - refPos).unit();
+    if (Init::isUndefined<Vector3>(refPos) &&
+        !Init::isUndefined<Vector3>(scpcoa.arpPos))
+    {
+        refPos = scpcoa.arpPos;
+    }
+    if (Init::isUndefined<Vector3>(refVel) &&
+        !Init::isUndefined<Vector3>(scpcoa.arpVel))
+    {
+        refVel = scpcoa.arpVel;
+    }
 }
 
-int RMCR::look() const
+bool RMCR::validate(const Vector3& scp, logging::Logger& log)
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    // 2.12.3.3.5
+    double dcaRef = std::acos(refVel.unit().dot(uXRG(scp))) *
+            math::Constants::RADIANS_TO_DEGREES;
+    if (std::abs(dcaRef - dopConeAngleRef) > 1e-6)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA fields inconsistent." << std::endl
+            << "RMA.RMCR.DopConeAngleRef: " << dopConeAngleRef << std::endl
+            << "Derived RMA.RMCR.DopConeAngleRef: " << dcaRef;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
+
+Vector3 RMCR::uXRG(const Vector3& scp) const
+{
+    return (scp - refPos).unit();
+}
+
+Vector3 RMCR::uYCR(const Vector3& scp) const
+{
+    return cross(spn(scp), uXRG(scp));
+}
+
+Vector3 RMCR::spn(const Vector3& scp) const
+{
+    return cross(refVel.unit(), uXRG(scp)) * look(scp);
+}
+
+int RMCR::look(const Vector3& scp) const
 {
     Vector3 left = cross(refPos.unit(), refVel.unit());
-    return Utilities::sign(left.dot(uLOS()));
-}
-
-void RMCR::setSCP(const Vector3& scp)
-{
-    mScp.reset(new Vector3(scp));
-}
-
-const Vector3& RMCR::scp() const
-{
-    if (!mScp.get())
-    {
-        throw except::Exception(Ctxt("mScp is NULL. Initialize with RMAT.setSCP()"));
-    }
-    return *mScp;
+    return Utilities::sign(left.dot(uXRG(scp)));
 }
 
 INCA::INCA() :
@@ -168,9 +231,6 @@ void INCA::fillDerivedFields(const Vector3& scp,
         double fc,
         const Position& position)
 {
-    setSCP(scp);
-    setArpPoly(position.arpPoly);
-
     if (!Init::isUndefined<Poly1D>(timeCAPoly) &&
         !Init::isUndefined<PolyXYZ>(position.arpPoly) &&
         Init::isUndefined<double>(rangeCA))
@@ -182,6 +242,63 @@ void INCA::fillDerivedFields(const Vector3& scp,
     }
 }
 
+bool INCA::validate(const CollectionInformation& collectionInformation,
+        double fc, logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //2.12.3.4.3
+    if (collectionInformation.radarMode == RadarModeType::SPOTLIGHT &&
+        (!Init::isUndefined<Poly2D>(dopplerCentroidPoly) ||
+            !Init::isUndefined<BooleanType>(dopplerCentroidCOA)))
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+            << "RMA.INCA.DopplerCentroidPoly/DopplerCentroidCOA "
+            << "should not be included for SPOTLIGHT collection.";
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.12.3.4.4
+    if (collectionInformation.radarMode != RadarModeType::SPOTLIGHT &&
+        (Init::isUndefined<Poly2D>(dopplerCentroidPoly) || 
+            Init::isUndefined<BooleanType>(dopplerCentroidCOA)))
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+            << "RMA.INCA.DopplerCentroidPoly/COA required "
+            << "for non-SPOTLIGHT collection.";
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.4.9
+    if (std::abs((freqZero / fc) - 1) > 1e-3)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA.INCA.FreqZero is typically the center transmit frequency" << std::endl
+            << "RMA.INCA.FreqZero: " << freqZero
+            << "Center transmit frequency: " << fc;
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.3.4.10
+    if ((caPos() - scp()).norm() - rangeCA >  1e-2)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RMA.INCA fields inconsistent." << std::endl
+            << "RMA.INCA.rangeCA: " << rangeCA
+            << "Derived RMA.INCA.rangeCA: " << (caPos() - scp()).norm();
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    return valid;
+}
+
 Vector3 INCA::caPos() const
 {
     return (*mArpPoly)(timeCAPoly[0]);
@@ -190,6 +307,31 @@ Vector3 INCA::caPos() const
 Vector3 INCA::caVel() const
 {
     return mArpPoly->derivative()(timeCAPoly[0]);
+}
+
+Vector3 INCA::uRG() const
+{
+    return (scp() - caPos()).unit();
+}
+
+Vector3 INCA::uAZ() const
+{
+    return cross(spn(), uRG());
+}
+
+Vector3 INCA::spn() const
+{
+    return (cross(uRG(), caVel()) * -look()).unit();
+}
+
+int INCA::look() const
+{
+    return Utilities::sign(left().dot(uRG()));
+}
+
+Vector3 INCA::left() const
+{
+    return cross(caPos().unit(), caVel().unit());
 }
 
 void INCA::setSCP(const Vector3& scp)
@@ -257,13 +399,15 @@ void RMA::fillDerivedFields(const GeoData& geoData,
 }
 
 
-void RMA::fillDefaultFields(double fc)
+void RMA::fillDefaultFields(const SCPCOA& scpcoa, double fc)
 {
     if (rmat.get())
     {
+        rmat->fillDefaultFields(scpcoa);
     }
     else if (rmcr.get())
     {
+        rmcr->fillDefaultFields(scpcoa);
     }
     else if (inca.get())
     {
@@ -271,3 +415,27 @@ void RMA::fillDefaultFields(double fc)
     }
 }
 
+bool RMA::validate(const CollectionInformation& collectionInformation,
+        const Vector3& scp, double fc, logging::Logger& log) const
+{
+    if (rmat.get())
+    {
+        return rmat->validate(log);
+    }
+
+    else if (rmcr.get())
+    {
+        return rmcr->validate(scp, log);
+    }
+
+    else if (inca.get())
+    {
+        return inca->validate(collectionInformation, fc, log);
+    }
+
+    std::ostringstream messageBuilder;
+    messageBuilder << "Exactly one of RMA->RMAT, RMA->RMCR, RMA->INCA "
+        << "must exist.";
+    log.error(messageBuilder.str());
+    return false;
+}

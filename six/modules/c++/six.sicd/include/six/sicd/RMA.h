@@ -22,6 +22,7 @@
 #ifndef __SIX_RMA_H__
 #define __SIX_RMA_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
@@ -31,8 +32,10 @@ namespace six
 {
 namespace sicd
 {
+struct CollectionInformation;
 class GeoData;
 struct Position;
+struct SCPCOA;
 /*!
  *  \struct  RMAT
  *  \brief   Parameters for Range Migration with Along Track phase
@@ -85,10 +88,13 @@ struct RMAT
     }
 
     void fillDerivedFields(const Vector3& scp);
-    int look() const;
-    void setSCP(const Vector3& scp);
-    const Vector3& scp() const;
-    Vector3 uLOS() const;
+    void fillDefaultFields(const SCPCOA& scpcoa);
+    bool validate(const Vector3& scp, logging::Logger& log);
+    int look(const Vector3& scp) const;
+    Vector3 uYAT(const Vector3& scp) const;
+    Vector3 spn(const Vector3& scp) const;
+    Vector3 uXCT(const Vector3& scp) const;
+    Vector3 uLOS(const Vector3& scp) const;
 private:
     mem::ScopedCopyablePtr<Vector3> mScp;
 };
@@ -133,10 +139,12 @@ struct RMCR
     }
 
     void fillDerivedFields(const Vector3& scp);
-    void setSCP(const Vector3& scp);
-    const Vector3& scp() const;
-    Vector3 uLOS() const;
-    int look() const;
+    void fillDefaultFields(const SCPCOA& scpcoa);
+    bool validate(const Vector3& scp, logging::Logger& log);
+    Vector3 uXRG(const Vector3& scp) const;
+    Vector3 uYCR(const Vector3& scp) const;
+    Vector3 spn(const Vector3& scp) const;
+    int look(const Vector3& scp) const;
 private:
     mem::ScopedCopyablePtr<Vector3> mScp;
 };
@@ -184,19 +192,20 @@ struct INCA
     void fillDerivedFields(const Vector3& scp, double fc,
             const Position& position);
 
-    void setSCP(const Vector3& scp);
-    const Vector3& scp() const;
-
     void setArpPoly(const PolyXYZ& arpPoly);
     const PolyXYZ& arpPoly() const;
 
     Vector3 caPos() const;
     Vector3 caVel() const;
+    Vector3 uRG() const;
+    Vector3 uAZ() const;
+    Vector3 spn() const;
+    int look() const;
+    Vector3 left() const;
 
     void fillDefaultFields(double fc);
-private:
-    mem::ScopedCopyablePtr<Vector3> mScp;
-    mem::ScopedCopyablePtr<PolyXYZ> mArpPoly;
+    bool validate(const CollectionInformation& collectionInformation,
+            double fc, logging::Logger& log) const;
 };
 
 /*!
@@ -239,7 +248,9 @@ struct RMA
     void fillDerivedFields(const GeoData& geoData,
             const Position& position,
             double fc);
-    void fillDefaultFields(double fc);
+    void fillDefaultFields(const SCPCOA& scpcoa, double fc);
+    bool validate(const CollectionInformation& collectionInformation,
+            const Vector3& scp, double fc, logging::Logger& log) const;
 };
 
 }
