@@ -2,7 +2,7 @@ def options(opt):
     opt.recurse()
 
 def configure(conf):
-    conf.env['VERSION'] = '2.2.0'
+    conf.env['VERSION'] = '2.2.1-alpha'
     conf.recurse()
 
 def build(bld):
