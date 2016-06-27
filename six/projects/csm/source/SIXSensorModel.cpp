@@ -1121,7 +1121,8 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     const csm::Tre tre(des.subHeader());
     std::string desid = des.subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
-
+    std::cerr << desid << std::endl;
+    std::cerr << NITF_DESTAG_SZ << std::endl;
     // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
     // Older versions of the spec specified it as SICD_XML/SIDD_XML
     // Here we'll accept any of these under the assumption that it's not
@@ -1143,16 +1144,18 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
         // case there is no subheader (in which case
         // subheader.getSubheaderFields() will throw with a
         // NITRO-specific message).
+        std::cerr << "Length: " << tre.length() << std::endl;
         if (tre.length() !=
             Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
         {
+            std::cerr << "Ret!\n";
             return DataType::NOT_SET;
         }
 
         const size_t desshsiOffset = 73;
         const size_t desshsiLength = 60;
+        std::cerr << tre.data() << std::endl;
         std::string field = tre.data().substr(desshsiOffset, desshsiLength);
-        std::cerr << field << std::endl;
         if (field == Constants::SICD_DESSHSI)
         {
             return DataType::COMPLEX;
