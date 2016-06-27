@@ -50,7 +50,6 @@ if platform.system() != 'SunOS':
         sys.exit(1)
 
     if runMiscTests.run() == False:
-    # Tests should report their own errors
         sys.exit(1)
 else:
     print('Warning: skipping the bulk of the test suite, as Python modules ' +

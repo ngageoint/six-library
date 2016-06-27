@@ -36,25 +36,28 @@ def moveToOutputDir(source, outdir):
             moveToOutputDir(filename, outdir)
         return
 
+    if not os.path.isdir(outdir):
+        os.makedirs(outdir)
+
     if source in os.listdir(outdir):
         os.remove(os.path.join(outdir, source))
 
     move(os.path.join(os.getcwd(), source), outdir)
 
 def run():
-    outdir = os.path.join(utils.findSixHome(),
+    outBase = os.path.join(utils.findSixHome(),
                           'regression_files', 'six.sidd')
-    if not os.path.isdir(outdir):
-        os.makedirs(outdir)
 
     # Make siddLegend
     binDir = os.path.join(utils.installPath(), 'bin')
     legendNameBase = 'siddLegend'
     print('Creating SIDDs with legends')
 
+    # This only does version 1.0 currently
     call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
+    outdir = os.path.join(outBase, '1.0.0')
     moveToOutputDir(['{}_blocked.nitf'.format(legendNameBase),
                      '{}_unblocked.nitf'.format(legendNameBase)],
                     outdir)
@@ -68,15 +71,18 @@ def run():
         '--multipleSegments' : 'siddMultipleSegments.nitf'
         }
 
-    for arg in argToOutput.keys():
-        print('Creating file {}'.format(argToOutput[arg]))
-        if '--lut' in arg:
-            call([utils.executableName(os.path.join(binDir,
-                    'test_create_sidd_from_mem')), '--lut', arg.split(' ')[1],
-                    argToOutput[arg]])
-        else:
-            call([utils.executableName(os.path.join(binDir,
-                    'test_create_sidd_from_mem')), arg, argToOutput[arg]])
+    for version in ['1.0.0', '1.1.0']:
+        outdir = os.path.join(outBase, version)
+        for arg in argToOutput.keys():
+            print('Creating file {}'.format(argToOutput[arg]))
+            if '--lut' in arg:
+                call([utils.executableName(os.path.join(binDir,
+                        'test_create_sidd_from_mem')), '--lut', arg.split(' ')[1],
+                        '--version', version, argToOutput[arg]])
+            else:
+                call([utils.executableName(os.path.join(binDir,
+                        'test_create_sidd_from_mem')), arg, '--version',
+                        version, argToOutput[arg]])
 
-    moveToOutputDir(argToOutput.values(), outdir)
+        moveToOutputDir(argToOutput.values(), outdir)
 
