@@ -128,22 +128,15 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
             DataType dataType = getDataType(desList[ii]);
-            std::cerr << dataType << std::endl;
             if (dataType != DataType::COMPLEX)
             {
-                std::cerr << "Not equal\n";
                 continue;
             }
 
             const std::string& desData(desList[ii].data());
 
-            if (desData.empty())
-            {
-                std::cerr << "Empty DES\n";
-            }
             if (!desData.empty())
             {
-                std::cerr << "DES has stuff\n";
                 try
                 {
                     io::StringStream stream;
@@ -183,7 +176,6 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 
         if (sicdXML == NULL)
         {
-            std::cerr << "Null!\n";
             throw csm::Error(csm::Error::UNKNOWN_ERROR,
                                "Not a SICD",
                                "SICDSensorModel::SICDSensorModel");
