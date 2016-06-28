@@ -36,7 +36,6 @@ public:
     ComplexXMLValidator(const ComplexData& data, logging::Logger* log);
 
     bool validate();
-    void fillDerivedFields(ComplexData& data, bool setDefaultValues = true);
 
     static Poly1D polyAt(PolyXYZ poly, size_t idx);
     static std::vector<double> linspace(double start, double end, size_t count = 100);
@@ -66,13 +65,6 @@ private:
     bool checkValidData();
     bool checkIFP();
     bool checkRGAZCOMP();
-    bool checkPFA();
-
-    void fillImageFormationAlgorithm(ComplexData& data, double fc, bool setDefaultValues);
-    void fillRGAZCOMP(ComplexData& data, double fc);
-    void fillPFA(ComplexData& data, double fc, bool setDefaultValues);
-
-    Vector3 wgs84Norm(const Vector3& point);
 
     template <class T>
     void assertExists(const T& type, const std::string& name)

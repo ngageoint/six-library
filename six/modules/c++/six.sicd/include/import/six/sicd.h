@@ -39,6 +39,7 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RadarCollection.h"
+#include "six/sicd/RgAzComp.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 

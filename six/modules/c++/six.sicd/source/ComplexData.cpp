@@ -163,8 +163,9 @@ bool ComplexData::validate(logging::Logger& log) const
         //return checkRGAZCOMP();
         //break;
     case ImageFormationType::PFA:      // 2.12.2
-        //return checkPFA();
-        //break;
+        valid = valid && pfa->validate(*scpcoa, log) &&
+            grid->validate(*pfa, *radarCollection, fc, log);
+        break;
     case ImageFormationType::RMA:      // 2.12.3.*
         if (rma.get())
         {
@@ -217,12 +218,14 @@ void ComplexData::fillDerivedFields(bool includeDefault)
     case ImageFormationType::RGAZCOMP:
         if (rgAzComp.get())
         {
+            rgAzComp->fillDerivedFields(*geoData, *grid, *scpcoa, *timeline);
+            grid->fillDerivedFields(*rgAzComp, *geoData, *scpcoa, fc);
         }
         break;
     case ImageFormationType::PFA:
         if (pfa.get())
         {
-            //pass
+            pfa->fillDerivedFields(*position);
         }
     case ImageFormationType::RMA:
         if (rma.get())
@@ -260,7 +263,8 @@ void ComplexData::fillDefaultFields()
     case ImageFormationType::PFA:
         if (pfa.get())
         {
-            //pass
+            pfa->fillDefaultFields(*geoData, *grid, *scpcoa);
+            grid->fillDefaultFields(*pfa, fc);
         }
     case ImageFormationType::RMA:
         if (rma.get())

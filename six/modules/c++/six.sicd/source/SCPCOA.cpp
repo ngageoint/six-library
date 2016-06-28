@@ -73,72 +73,72 @@ double SCPCOA::derivedSCPTime(const Grid& grid) const
     return grid.timeCOAPoly[0][0];
 }
 
-double SCPCOA::derivedSlantRange() const
+double SCPCOA::derivedSlantRange(const Vector3& scp) const
 {
-    return (scp() - arpPos).norm();
+    return (scp - arpPos).norm();
 }
 
-double SCPCOA::derivedGroundRange() const
+double SCPCOA::derivedGroundRange(const Vector3& scp) const
 {
-    return scp().norm() * std::acos(
-        arpPos.dot(scp()) / (scp().norm() * arpPos.norm()));
+    return scp.norm() * arpPos.angle(scp);
 }
 
-double SCPCOA::derivedDopplerConeAngle() const
+double SCPCOA::derivedDopplerConeAngle(const Vector3& scp) const
 {
-    return std::acos(arpVel.unit().dot(uLOS())) *
+    return std::acos(arpVel.unit().dot(uLOS(scp))) *
             math::Constants::RADIANS_TO_DEGREES;
 }
 
-Vector3 SCPCOA::etp() const
+Vector3 SCPCOA::etp(const Vector3& scp) const
 {
     // Earth Tangent Plane (ETP) at the SCP is the plane tangent to the
     // surface of constant height above the WGS 84 ellipsoid (HAE) that
     // contains the SCP. The ETP is an approximation to the ground plane
     // at the SCP.
-    return Utilities::wgs84Norm(scp());
+    return Utilities::wgs84Norm(scp);
 }
 
-double SCPCOA::derivedGrazeAngle() const
+double SCPCOA::derivedGrazeAngle(const Vector3& scp) const
 {
     // Angle between ground plane and line-of-sight vector
-    return std::asin(etp().dot(uLOS() * -1)) *
+    return std::asin(etp(scp).dot(uLOS(scp) * -1)) *
             math::Constants::RADIANS_TO_DEGREES;
 }
 
-double SCPCOA::derivedIncidenceAngle() const
+double SCPCOA::derivedIncidenceAngle(const Vector3& scp) const
 {
     // Angle between ground plane normal and line of sight vector
-    return 90 - derivedGrazeAngle();
+    return 90 - derivedGrazeAngle(scp);
 }
 
-double SCPCOA::derivedSlopeAngle() const
+double SCPCOA::derivedSlopeAngle(const Vector3& scp) const
 {
     // Angle between slant and ground planes
-    return std::acos(etp().dot(slantPlaneNormal())) *
+    return std::acos(etp(scp).dot(slantPlaneNormal(scp))) *
             math::Constants::RADIANS_TO_DEGREES;
 }
 
-Vector3 SCPCOA::slantPlaneNormal() const
+Vector3 SCPCOA::slantPlaneNormal(const Vector3& scp) const
 {
     // Instantaneous slant plane unit normal at COA
     // (also called uSPZ in SICD spec)
-    return cross(arpVel, uLOS()).unit() * look();
+    return cross(arpVel, uLOS(scp)).unit() * look(scp);
 }
 
-Vector3 SCPCOA::uGPX() const
+Vector3 SCPCOA::uGPX(const Vector3& scp) const
 {
     // Project range vector (from SCP toward ARP) onto ground plane
-    return ((uLOS() * -1) - etp() * (etp().dot(uLOS() * -1))).unit();
+    return ((uLOS(scp) * -1) -
+            etp(scp) * (etp(scp).dot(uLOS(scp) * -1))).unit();
 }
 
-Vector3 SCPCOA::uEast() const
+Vector3 SCPCOA::uEast(const Vector3& scp) const
 {
     // Unit vector in ground plane in east direction
-    return cross(uNorth(), etp());
+    return cross(uNorth(scp), etp(scp));
 }
 
-Vector3 SCPCOA::uNorth() const
+Vector3 SCPCOA::uNorth(const Vector3& scp) const
 {
     // Unit vector in ground plane in north direction
     std::vector<double> coordinates;
@@ -149,22 +149,22 @@ Vector3 SCPCOA::uNorth() const
     Vector3 base(coordinates);
 
     // Project north onto ground plane
-    Vector3 northGround = base - (etp() * etp().dot(base));
+    Vector3 northGround = base - (etp(scp) * etp(scp).dot(base));
     return northGround.unit();
 }
 
-double SCPCOA::derivedTwistAngle() const
+double SCPCOA::derivedTwistAngle(const Vector3& scp) const
 {
     // Angle from +GPY axis to the +SPY axis in plane of incidence
-    Vector3 uGPY = cross(etp(), uGPX());
-    return -1 * std::asin(uGPY.dot(slantPlaneNormal())) *
+    Vector3 uGPY = cross(etp(scp), uGPX(scp));
+    return -1 * std::asin(uGPY.dot(slantPlaneNormal(scp))) *
         math::Constants::RADIANS_TO_DEGREES;
 }
 
-double SCPCOA::derivedAzimAngle() const
+double SCPCOA::derivedAzimAngle(const Vector3& scp) const
 {
-    double azNorth = uGPX().dot(uNorth());
-    double azEast = uGPX().dot(uEast());
+    double azNorth = uGPX(scp).dot(uNorth(scp));
+    double azEast = uGPX(scp).dot(uEast(scp));
     double tempAngle = std::fmod(std::atan2(azEast, azNorth) *
             math::Constants::RADIANS_TO_DEGREES, 360);
 
@@ -172,12 +172,12 @@ double SCPCOA::derivedAzimAngle() const
     return tempAngle >= 0 ? tempAngle : tempAngle + 360;
 }
 
-double SCPCOA::derivedLayoverAngle() const
+double SCPCOA::derivedLayoverAngle(const Vector3& scp) const
 {
-    Vector3 layoverGround = etp() -
-        (slantPlaneNormal() / (etp().dot(slantPlaneNormal())));
-    double loNorth = layoverGround.dot(uNorth());
-    double loEast = layoverGround.dot(uEast());
+    Vector3 layoverGround = etp(scp) -
+        (slantPlaneNormal(scp) / (etp(scp).dot(slantPlaneNormal(scp))));
+    double loNorth = layoverGround.dot(uNorth(scp));
+    double loEast = layoverGround.dot(uEast(scp));
     return std::fmod(std::atan2(loEast, loNorth) *
             math::Constants::RADIANS_TO_DEGREES, 360);
 }
@@ -186,7 +186,6 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
         const Grid& grid,
         const Position& position)
 {
-    setScp(geoData);
     if (Init::isUndefined<double>(scpTime) &&
         !Init::isUndefined<Poly2D>(grid.timeCOAPoly))
     {
@@ -211,61 +210,53 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
             arpAcc = vectors[2];
         }
     }
+
+    const Vector3& scp = geoData.scp.ecf;
     if (sideOfTrack == SideOfTrackType::NOT_SET)
     {
         sideOfTrack = derivedSideOfTrack(geoData);
     }
     if (Init::isUndefined<double>(slantRange))
     {
-        slantRange = derivedSlantRange();
+        slantRange = derivedSlantRange(scp);
     }
     if (Init::isUndefined<double>(groundRange))
     {
-        groundRange = derivedGroundRange();
+        groundRange = derivedGroundRange(scp);
     }
     if (Init::isUndefined<double>(dopplerConeAngle))
     {
-        dopplerConeAngle = derivedDopplerConeAngle();
+        dopplerConeAngle = derivedDopplerConeAngle(scp);
     }
     if (Init::isUndefined<double>(grazeAngle))
     {
-        grazeAngle = derivedGrazeAngle();
+        grazeAngle = derivedGrazeAngle(scp);
     }
     if (Init::isUndefined<double>(incidenceAngle))
     {
-        incidenceAngle = derivedIncidenceAngle();
+        incidenceAngle = derivedIncidenceAngle(scp);
     }
     if (Init::isUndefined<double>(twistAngle))
     {
-        twistAngle = derivedTwistAngle();
+        twistAngle = derivedTwistAngle(scp);
     }
     if (Init::isUndefined<double>(slopeAngle))
     {
-        slopeAngle = derivedSlopeAngle();
+        slopeAngle = derivedSlopeAngle(scp);
     }
     if (Init::isUndefined<double>(azimAngle))
     {
-        azimAngle = derivedAzimAngle();
+        azimAngle = derivedAzimAngle(scp);
     }
     if (Init::isUndefined<double>(layoverAngle))
     {
-        layoverAngle = derivedLayoverAngle();
+        layoverAngle = derivedLayoverAngle(scp);
     }
 }
 
-void SCPCOA::setScp(const GeoData& geoData)
+Vector3 SCPCOA::uLOS(const Vector3& scp) const
 {
-    ecf = geoData.scp.ecf;
-}
-
-Vector3 SCPCOA::scp() const
-{
-    return ecf;
-}
-
-Vector3 SCPCOA::uLOS() const
-{
-    return (scp() - arpPos).unit();
+    return (scp - arpPos).unit();
 }
 
 Vector3 SCPCOA::left() const
@@ -273,9 +264,9 @@ Vector3 SCPCOA::left() const
     return cross(arpPos.unit(), arpVel.unit());
 }
 
-int SCPCOA::look() const
+int SCPCOA::look(const Vector3& scp) const
 {
-    return six::sicd::Utilities::sign(uLOS().dot(left()));
+    return six::sicd::Utilities::sign(uLOS(scp).dot(left()));
 }
 
 std::vector<Vector3> SCPCOA::derivedArpVectors(const Position& position) const
@@ -292,14 +283,12 @@ std::vector<Vector3> SCPCOA::derivedArpVectors(const Position& position) const
         vectors[1][ii] = velPoly(scpTime);
         vectors[2][ii] = accPoly(scpTime);
     }
-
     return vectors;
-
 }
 
 SideOfTrackType SCPCOA::derivedSideOfTrack(const GeoData& geoData) const
 {
-    return look() < 0 ? SideOfTrackType::RIGHT :
+    return look(geoData.scp.ecf) < 0 ? SideOfTrackType::RIGHT :
         SideOfTrackType::LEFT;
 }
 
@@ -310,7 +299,7 @@ bool SCPCOA::validate(const GeoData& geoData,
 {
     std::ostringstream messageBuilder;
     bool valid = true;
-    setScp(geoData);
+    const Vector3& scp = geoData.scp.ecf;
     // 2.7.1
     // SCPTime has stricter tolerance because everything else depends on it
     if (std::abs(derivedSCPTime(grid) - scpTime) >
@@ -348,23 +337,23 @@ bool SCPCOA::validate(const GeoData& geoData,
     }
 
     // 2.7.6 - 2.7.14
-    valid = valid && compareFields(slantRange, derivedSlantRange(),
+    valid = valid && compareFields(slantRange, derivedSlantRange(scp),
             "slantRange", log);
-    valid = valid && compareFields(groundRange, derivedGroundRange(),
+    valid = valid && compareFields(groundRange, derivedGroundRange(scp),
             "groundRange", log);
-    valid = valid && compareFields(dopplerConeAngle, derivedDopplerConeAngle(),
-            "dopplerConeAngle", log);
-    valid = valid && compareFields(grazeAngle, derivedGrazeAngle(),
+    valid = valid && compareFields(dopplerConeAngle,
+            derivedDopplerConeAngle(scp), "dopplerConeAngle", log);
+    valid = valid && compareFields(grazeAngle, derivedGrazeAngle(scp),
             "grazeAngle", log);
-    valid = valid && compareFields(incidenceAngle, derivedIncidenceAngle(),
+    valid = valid && compareFields(incidenceAngle, derivedIncidenceAngle(scp),
             "incidenceAngle", log);
-    valid = valid && compareFields(twistAngle, derivedTwistAngle(),
+    valid = valid && compareFields(twistAngle, derivedTwistAngle(scp),
             "twistAngle", log);
-    valid = valid && compareFields(slopeAngle, derivedSlopeAngle(),
+    valid = valid && compareFields(slopeAngle, derivedSlopeAngle(scp),
             "slopeAngle", log);
-    valid = valid && compareFields(azimAngle, derivedAzimAngle(),
+    valid = valid && compareFields(azimAngle, derivedAzimAngle(scp),
             "azimAngle", log);
-    valid = valid && compareFields(layoverAngle, derivedLayoverAngle(),
+    valid = valid && compareFields(layoverAngle, derivedLayoverAngle(scp),
             "layoverAngle", log);
     return valid;
 }

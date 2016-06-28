@@ -20,9 +20,13 @@
  *
  */
 #include "six/sicd/CollectionInformation.h"
+#include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
+#include "six/sicd/PFA.h"
 #include "six/sicd/SCPCOA.h"
+#include "six/sicd/RadarCollection.h"
+#include "six/sicd/RgAzComp.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/Utilities.h"
 
@@ -241,6 +245,30 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         weights = (*calculateWeightFunction())(defaultWgtSize);
     }
     return;
+}
+
+void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
+        const GeoData& geoData, double offset)
+{
+    const Vector3& scp = geoData.scp.ecf;
+    if (Init::isUndefined<double>(kCenter))
+    {
+        kCenter = offset;
+        if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+        {
+            // DeltaKCOAPoly populated, but not KCtr (would be odd)
+            kCenter -= deltaKCOAPoly.atY(scp[1])(scp[0]);
+        }
+    }
+
+    if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
+        !Init::isUndefined<double>(kCenter))
+    {
+        // KCtr popualted, but not DeltaKCOAPoly
+        // Create a Poly2D with one term
+        std::vector<double> coefs(1, offset - kCenter);
+        deltaKCOAPoly = Poly2D(0, 0, coefs);
+    }
 }
 
 bool DirectionParameters::validate(const ImageData& imageData,
@@ -523,6 +551,37 @@ void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
     }
 }
 
+void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
+        const GeoData& geoData,
+        const SCPCOA& scpcoa,
+        double fc)
+{
+    const Vector3& scp = geoData.scp.ecf;
+
+    if (imagePlane == ComplexImagePlaneType::NOT_SET)
+    {
+        imagePlane = ComplexImagePlaneType::SLANT;
+    }
+    if (imagePlane == ComplexImageGridType::NOT_SET)
+    {
+        type = ComplexImageGridType::RGAZIM;
+    }
+
+    if (Init::isUndefined<Vector3>(row->unitVector))
+    {
+        row->unitVector = scpcoa.uLOS(scp);
+    }
+    if (Init::isUndefined<Vector3>(col->unitVector))
+    {
+        col->unitVector = cross(scpcoa.slantPlaneNormal(scp), 
+            scpcoa.uLOS(scp));
+    }
+
+    row->fillDerivedFields(rgAzComp, geoData,
+            fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+    col->fillDerivedFields(rgAzComp, geoData, 0);
+}
+
 double Grid::derivedRowKCenter(const INCA& inca) const
 {
     return inca.freqZero * 2 /
@@ -594,6 +653,36 @@ void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
         if (Init::isUndefined<double>(col->kCenter))
         {
             col->kCenter = 0;
+        }
+    }
+}
+
+void Grid::fillDefaultFields(const PFA& pfa, double fc)
+{
+    if (type == ComplexImageGridType::NOT_SET)
+    {
+        type = ComplexImageGridType::RGAZIM;
+    }
+
+    if (Init::isUndefined<double>(col->kCenter))
+    {
+        col->kCenter = 0;
+    }
+    if (Init::isUndefined<double>(row->kCenter))
+    {
+        if (!Init::isUndefined<double>(pfa.krg1) &&
+            !Init::isUndefined<double>(pfa.krg2))
+        {
+            // Default: the most reasonable way to compute this
+            row->kCenter = (pfa.krg1 + pfa.krg2) / 2;
+        }
+        else if (!Init::isUndefined<double>(fc))
+        {
+            // Approximation: this may not be quite right, due to
+            // rectangular inscription loss in PFA, but it should
+            // be close.
+            row->kCenter = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) *
+                pfa.spatialFrequencyScaleFactorPoly[0];
         }
     }
 }
@@ -845,6 +934,51 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         log.error(messageBuilder.str());
         valid = false;
     }
+    return valid;
+}
+
+bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
+            double fc, logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //2.12.2.1
+    if (type != ComplexImageGridType::RGAZIM)
+    {
+        messageBuilder.str("");
+        messageBuilder << "PFA image formation should result in a RGAZIM grid."
+            << std::endl << "Grid.Type: " << type.toString();
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // Make sure Row.kCtr is consistent with processed RF frequency bandwidth
+    if (Init::isUndefined<double>(radarCollection.refFrequencyIndex) &&
+        !Init::isUndefined<double>(fc))
+    {
+        // PFA.SpatialFreqSFPoly affects Row.KCtr
+        double kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *
+                2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
+
+        // PFA inscription could cause kapCtr and Row.KCtr 
+        // to be somewhat different
+        double theta = std::atan((col->impulseResponseBandwidth / 2) /
+                row->kCenter);
+        double kCtrTol = 1 - std::cos(theta);
+        kCtrTol = std::max(0.01, kCtrTol);
+
+        if (std::abs(row->kCenter / kapCtr - 1) > kCtrTol)
+        {
+            messageBuilder.str("");
+            messageBuilder << WF_INCONSISTENT_STR
+                << "Grid.Row.KCtr: " << row->kCenter << std::endl
+                << "Derived KapCtr: " << kapCtr;
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+    }
+
     return valid;
 }
 

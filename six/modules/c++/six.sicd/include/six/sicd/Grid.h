@@ -36,12 +36,16 @@ namespace six
 namespace sicd
 {
 struct CollectionInformation;
+struct GeoData;
 struct ImageData;
 struct INCA;
-struct SCPCOA;
+struct PFA;
+struct RadarCollection;
+struct RgAzComp;
 struct RMA;
 struct RMAT;
 struct RMCR;
+struct SCPCOA;
 
 struct WeightType
 {
@@ -139,6 +143,8 @@ struct DirectionParameters
 
     bool validate(const ImageData& imageData, logging::Logger& log) const;
     void fillDerivedFields(const ImageData& imageData);
+    void fillDerivedFields(const RgAzComp& rgAzComp, const GeoData& geoData,
+            double offset = 0);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
     std::vector<std::vector<sys::SSize_T> >
@@ -187,11 +193,19 @@ struct Grid
             const PolyXYZ& arpPoly, double fc,
             logging::Logger& log) const;
 
+    bool validate(const PFA& pfa, const RadarCollection& radarCollection,
+        double fc, logging::Logger& log) const;
+
     void fillDerivedFields(const CollectionInformation& collectionInformation,
                            const ImageData& imageData,
                            const SCPCOA& scpcoa);
     void fillDerivedFields(const RMA& rma, const Vector3& scp, const PolyXYZ& arpPoly);
+    void fillDerivedFields(const RgAzComp& rgAzComp,
+            const GeoData& geoData,
+            const SCPCOA& scpcoa,
+            double fc);
     void fillDefaultFields(const RMA& rma, double fc);
+    void fillDefaultFields(const PFA& pfa, double fc);
 private:
     bool validateTimeCOAPoly(
             const CollectionInformation& collectionInformation,

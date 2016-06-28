@@ -114,34 +114,34 @@ struct SCPCOA
             const Position& position,
             logging::Logger& log);
 
+    Vector3 uLOS(const Vector3& scp) const;
+    int look(const Vector3& scp) const;
+    Vector3 left() const;
+    Vector3 slantPlaneNormal(const Vector3& scp) const;
+    Vector3 etp(const Vector3& scp) const;
+
 private:
     double derivedSCPTime(const Grid& grid) const;
     std::vector<Vector3> derivedArpVectors(const Position& position) const;
     SideOfTrackType derivedSideOfTrack(const GeoData& geoData) const;
-    void setScp(const GeoData& geoData);
-    Vector3 scp() const;
-    Vector3 uLOS() const;
-    Vector3 left() const;
-    Vector3 etp() const;
-    Vector3 uGPX() const;
-    Vector3 uNorth() const;
-    Vector3 uEast() const;
-    Vector3 slantPlaneNormal() const;
-    double derivedSlantRange() const;
-    double derivedGroundRange() const;
-    double derivedDopplerConeAngle() const;
-    double derivedGrazeAngle() const;
-    double derivedIncidenceAngle() const;
-    double derivedTwistAngle() const;
-    double derivedSlopeAngle() const;
-    double derivedAzimAngle() const;
-    double derivedLayoverAngle() const;
+    Vector3 uGPX(const Vector3& scp) const;
+    Vector3 uNorth(const Vector3& scp) const;
+    Vector3 uEast(const Vector3& scp) const;
+    double derivedSlantRange(const Vector3& scp) const;
+    double derivedGroundRange(const Vector3& scp) const;
+    double derivedDopplerConeAngle(const Vector3& scp) const;
+    double derivedGrazeAngle(const Vector3& scp) const;
+    double derivedIncidenceAngle(const Vector3& scp) const;
+    double derivedTwistAngle(const Vector3& scp) const;
+    double derivedSlopeAngle(const Vector3& scp) const;
+    double derivedAzimAngle(const Vector3& scp) const;
+    double derivedLayoverAngle(const Vector3& scp) const;
     bool compareFields(double given, double expected,
             const std::string& name, logging::Logger& log) const;
     bool compareFields(Vector3 given, Vector3 expected,
             const std::string& name, logging::Logger& log) const;
-    int look() const;
-    Vector3 ecf;
+
+
     static const std::string mScpcoaInconsistentString;
     static const double mScpcoaTol;
 };

@@ -19,7 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Grid.h"
 #include "six/sicd/PFA.h"
+#include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
@@ -55,5 +59,72 @@ bool PFA::operator==(const PFA& rhs) const
         slowTimeDeskew == rhs.slowTimeDeskew);
 }
 
+void PFA::fillDerivedFields(const Position& position)
+{
+    if (!Init::isUndefined<PolyXYZ>(position.arpPoly) &&
+        !Init::isUndefined<double>(polarAngleRefTime))
+    {
+        // This doesn't actually do anything currently.
+        // Requires re-implemenation of polyfit, pfa_polar_coords, and bsxfun
+        Vector3 polRefPos = position.arpPoly(polarAngleRefTime);
+    }
+}
+
+void PFA::fillDefaultFields(const GeoData& geoData,
+        const Grid& grid, const SCPCOA& scpcoa)
+{
+    const Vector3& scp = geoData.scp.ecf;
+    if (Init::isUndefined<Vector3>(imagePlaneNormal))
+    {
+        switch (grid.imagePlane)
+        {
+        case ComplexImagePlaneType::SLANT:
+        case ComplexImagePlaneType::NOT_SET:
+            imagePlaneNormal = scpcoa.slantPlaneNormal(scp);
+            break;
+        case ComplexImagePlaneType::GROUND:
+            imagePlaneNormal = scpcoa.etp(scp);
+            break;
+        case ComplexImagePlaneType::OTHER:
+            // Nothing we can do
+            break;
+        }
+    }
+
+    if (Init::isUndefined<Vector3>(focusPlaneNormal))
+    {
+        focusPlaneNormal = scpcoa.etp(scp);
+    }
+
+    if (!Init::isUndefined<double>(scpcoa.scpTime) &&
+        Init::isUndefined<double>(polarAngleRefTime))
+    {
+        polarAngleRefTime = scpcoa.scpTime;
+    }
+
+    //Vector3 polRefPos = arpPos;
+    //for when the other functions get implemented
+}
+
+bool PFA::validate(const SCPCOA& scpcoa, logging::Logger& log)
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //2.12.2.3
+    if (polarAngleRefTime - scpcoa.scpTime >
+            std::numeric_limits<double>::epsilon())
+    {
+        messageBuilder.str("");
+        messageBuilder << "Polar angle reference time and center of aperture "
+            << "time for center are usuallly the same." << std::endl
+            << "PFA.PolarAngRefTime: " << polarAngleRefTime << std::endl
+            << "SCPCOA.SCPTime: " << scpcoa.scpTime;
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
+
+    return valid;
+}
 }
 }

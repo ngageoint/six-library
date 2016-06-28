@@ -22,6 +22,7 @@
 #ifndef __SIX_PFA_H__
 #define __SIX_PFA_H__
 
+#include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -30,6 +31,10 @@ namespace six
 {
 namespace sicd
 {
+class GeoData;
+struct Grid;
+struct Position;
+struct SCPCOA;
 /*!
  *  \struct SlowTimeDeskew
  *  \brief SICD STDeskew
@@ -133,6 +138,12 @@ struct PFA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Position& position);
+    void fillDefaultFields(const GeoData& geoData, const Grid&,
+            const SCPCOA& scpcoa);
+
+    bool validate(const SCPCOA& scpcoa, logging::Logger& log);
 };
 
 }

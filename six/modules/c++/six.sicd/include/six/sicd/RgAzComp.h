@@ -29,7 +29,10 @@ namespace six
 {
 namespace sicd
 {
-
+struct GeoData;
+struct Grid;
+struct SCPCOA;
+struct Timeline;
 /*!
  *  \struct  RgAzComp
  *  \brief   Parameters included for a Range, Doppler image. 
@@ -65,6 +68,12 @@ struct RgAzComp
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+        const Grid& grid,
+        const SCPCOA& scpcoa,
+        const Timeline& timeline);
+
 };
 
 }
