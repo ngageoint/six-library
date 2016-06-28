@@ -253,22 +253,39 @@ void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
     const Vector3& scp = geoData.scp.ecf;
     if (Init::isUndefined<double>(kCenter))
     {
-        kCenter = offset;
-        if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
-        {
-            // DeltaKCOAPoly populated, but not KCtr (would be odd)
-            kCenter -= deltaKCOAPoly.atY(scp[1])(scp[0]);
-        }
+        kCenter = derivedKCenter(rgAzComp, scp, offset);
     }
 
     if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
         !Init::isUndefined<double>(kCenter))
     {
-        // KCtr popualted, but not DeltaKCOAPoly
-        // Create a Poly2D with one term
-        std::vector<double> coefs(1, offset - kCenter);
-        deltaKCOAPoly = Poly2D(0, 0, coefs);
+        deltaKCOAPoly = derivedKcoaPoly(rgAzComp, offset);
     }
+}
+
+double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
+        const Vector3& scp, double offset) const
+{
+    (void)rgAzComp;
+    double derivedCenter = offset;
+    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+    {
+        // DeltaKCOAPoly populated, but not KCtr (would be odd)
+        derivedCenter -= deltaKCOAPoly.atY(scp[1])(scp[0]);
+    }
+    return derivedCenter;
+
+}
+
+Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& rgAzComp,
+        double offset) const
+{
+    (void)rgAzComp;
+    // KCtr popualted, but not DeltaKCOAPoly
+    // Create a Poly2D with one term
+    std::vector<double> coefs(1, offset - kCenter);
+    return Poly2D(0, 0, coefs);
+
 }
 
 bool DirectionParameters::validate(const ImageData& imageData,
@@ -359,6 +376,37 @@ bool DirectionParameters::validate(const ImageData& imageData,
         messageBuilder << boundsErrorMessage << std::endl
             << "SICD.Grid.Row/Col.DeltaK2: " << deltaK2 << std::endl
             << "Derived DeltaK2: " << maxDk << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
+
+
+bool DirectionParameters::validate(const RgAzComp& rgAzComp,
+        const Vector3& scp,
+        logging::Logger& log,
+        double offset) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    // 2.12.1.8, 2.12.1.9
+    if (std::abs(kCenter - derivedKCenter(rgAzComp, scp, offset))
+            > std::numeric_limits<double>::epsilon())
+    {
+        messageBuilder.str("");
+        messageBuilder << "KCenter: " << kCenter << std::endl
+            << "DeltaKCOAPoly: " << deltaKCOAPoly[0][0];
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.12.1.10, 2.12.1.11
+    if (!Init::isUndefined(deltaKCOAPoly) && deltaKCOAPoly.orderX() > 1)
+    {
+        messageBuilder.str("");
+        messageBuilder << "DetlaKCOAPoly must be a single value for RGAZCOMP data";
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -569,17 +617,28 @@ void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
 
     if (Init::isUndefined<Vector3>(row->unitVector))
     {
-        row->unitVector = scpcoa.uLOS(scp);
+        row->unitVector = derivedRowUnitVector(scpcoa, scp);
     }
     if (Init::isUndefined<Vector3>(col->unitVector))
     {
-        col->unitVector = cross(scpcoa.slantPlaneNormal(scp), 
-            scpcoa.uLOS(scp));
+        col->unitVector = derivedColUnitVector(scpcoa, scp);
     }
 
     row->fillDerivedFields(rgAzComp, geoData,
             fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
     col->fillDerivedFields(rgAzComp, geoData, 0);
+}
+
+Vector3 Grid::derivedRowUnitVector(
+        const SCPCOA& scpcoa, const Vector3& scp) const
+{
+    return scpcoa.uLOS(scp);
+}
+
+Vector3 Grid::derivedColUnitVector(
+    const SCPCOA& scpcoa, const Vector3& scp) const
+{
+    return cross(scpcoa.slantPlaneNormal(scp), scpcoa.uLOS(scp));
 }
 
 double Grid::derivedRowKCenter(const INCA& inca) const
@@ -977,6 +1036,70 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             log.error(messageBuilder.str());
             valid = false;
         }
+    }
+
+    return valid;
+}
+
+bool Grid::validate(const RgAzComp& rgAzComp,
+        const GeoData& geoData,
+        const SCPCOA& scpcoa,
+        double fc,
+        logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+    
+    // 2.12.1.1
+    if (imagePlane != ComplexImagePlaneType::SLANT)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RGAZCOMP image formation should result in a SLANT plane image." << std::endl
+            << "Grid.ImagePlane: " << imagePlane.toString();
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.12.1.2
+    if (type != ComplexImageGridType::RGAZIM)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RGAZCOMP image formation should result in a RGAZIM grid." << std::endl
+            << "Grid.Type: " << type.toString();
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.12.1.8
+    const Vector3& scp = geoData.scp.ecf;
+    valid = valid && col->validate(rgAzComp, scp, log);
+    valid = valid && row->validate(rgAzComp, scp, log,
+            fc *(2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC));
+
+    //2.12.1.6
+    if ((derivedRowUnitVector(scpcoa, scp) - row->unitVector).norm()
+            > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVect fields inconsistent." << std::endl
+            << "Grid.Row.UVectECEF: " << row->unitVector << std::endl
+            << "Derived Grid.Row.UVectECEF: " <<
+            derivedRowUnitVector(scpcoa, scp);
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.12.1.7
+    if ((derivedColUnitVector(scpcoa, scp) - col->unitVector).norm()
+            > UVECT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << "UVectr fields inconsistent." << std::endl
+            << "Grid.Col.UVectECF: " << col->unitVector << std::endl
+            << "Derived Grid.Col.UVectECF: " <<
+            derivedColUnitVector(scpcoa, scp);
+        log.error(messageBuilder.str());
+        valid = false;
     }
 
     return valid;

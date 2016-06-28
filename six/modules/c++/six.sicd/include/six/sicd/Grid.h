@@ -36,7 +36,7 @@ namespace six
 namespace sicd
 {
 struct CollectionInformation;
-struct GeoData;
+class GeoData;
 struct ImageData;
 struct INCA;
 struct PFA;
@@ -141,12 +141,22 @@ struct DirectionParameters
         return !(*this == rhs);
     }
 
-    bool validate(const ImageData& imageData, logging::Logger& log) const;
+    bool validate(const ImageData& imageData,
+            logging::Logger& log) const;
+    bool validate(const RgAzComp& rgAzComp,
+            const Vector3& scp,
+            logging::Logger& log,
+            double offset = 0) const;
     void fillDerivedFields(const ImageData& imageData);
     void fillDerivedFields(const RgAzComp& rgAzComp, const GeoData& geoData,
             double offset = 0);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
+    double derivedKCenter(const RgAzComp& rgAzComp,
+            const Vector3& scp,
+            double offset = 0) const;
+    Poly2D derivedKcoaPoly(const RgAzComp& rgAzComp,
+            double offset = 0) const;
     std::vector<std::vector<sys::SSize_T> >
             calculateImageVertices(const ImageData& imageData) const;
     /* Return vector contents, in order:
@@ -196,6 +206,12 @@ struct Grid
     bool validate(const PFA& pfa, const RadarCollection& radarCollection,
         double fc, logging::Logger& log) const;
 
+    bool validate(const RgAzComp& rgAzComp,
+            const GeoData& geoData,
+            const SCPCOA& scpcoa,
+            double fc,
+            logging::Logger& log) const;
+
     void fillDerivedFields(const CollectionInformation& collectionInformation,
                            const ImageData& imageData,
                            const SCPCOA& scpcoa);
@@ -229,6 +245,10 @@ private:
     double derivedRowKCenter(const RMCR& rmcr, double fc) const;
     double derivedRowKCenter(const INCA& inca) const;
     ComplexImageGridType expectedGridType(const RMA& rma) const;
+    Vector3 derivedRowUnitVector(const SCPCOA& scpcoa,
+            const Vector3& scp) const;
+    Vector3 derivedColUnitVector(const SCPCOA& scpcoa,
+        const Vector3& scp) const;
     const double UVECT_TOL = 1e-3;
     const double WF_TOL = 1e-3;
     const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";

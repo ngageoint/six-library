@@ -22,6 +22,7 @@
 #ifndef __SIX_RG_AZ_COMP_H__
 #define __SIX_RG_AZ_COMP_H__
 
+#include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
 
@@ -29,7 +30,7 @@ namespace six
 {
 namespace sicd
 {
-struct GeoData;
+class GeoData;
 struct Grid;
 struct SCPCOA;
 struct Timeline;
@@ -73,6 +74,19 @@ struct RgAzComp
         const Grid& grid,
         const SCPCOA& scpcoa,
         const Timeline& timeline);
+
+    bool validate(const GeoData& geoData,
+            const Grid& grid,
+            const SCPCOA& scpcoa,
+            const Timeline& timeline,
+            logging::Logger& log) const;
+
+private:
+    double derivedAzSf(const SCPCOA& scpcoa, const Vector3& scp) const;
+    Poly1D derivedKazPoly(const Grid& grid,
+            const SCPCOA& scpcoa,
+            const Timeline& timeline,
+            const Vector3& scp) const;
 
 };
 

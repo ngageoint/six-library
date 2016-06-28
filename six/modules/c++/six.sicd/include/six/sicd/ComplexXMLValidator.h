@@ -63,8 +63,6 @@ private:
     double nonZeroDenominator(double denominator);
     bool checkGeoData();
     bool checkValidData();
-    bool checkIFP();
-    bool checkRGAZCOMP();
 
     template <class T>
     void assertExists(const T& type, const std::string& name)

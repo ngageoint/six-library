@@ -160,11 +160,38 @@ bool ComplexData::validate(logging::Logger& log) const
     switch (imageFormation->imageFormationAlgorithm)
     {
     case ImageFormationType::RGAZCOMP: // 2.12.1
-        //return checkRGAZCOMP();
-        //break;
+        if (rgAzComp.get())
+        {
+            valid = valid && rgAzComp->validate(*geoData, *grid,
+                *scpcoa, *timeline, log) &&
+                grid->validate(*rgAzComp, *geoData, *scpcoa, fc, log);
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "RgAzComp specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        break;
     case ImageFormationType::PFA:      // 2.12.2
-        valid = valid && pfa->validate(*scpcoa, log) &&
-            grid->validate(*pfa, *radarCollection, fc, log);
+
+        if (pfa.get())
+        {
+            valid = valid && pfa->validate(*scpcoa, log) &&
+                grid->validate(*pfa, *radarCollection, fc, log);
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "PFA specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
         break;
     case ImageFormationType::RMA:      // 2.12.3.*
         if (rma.get())

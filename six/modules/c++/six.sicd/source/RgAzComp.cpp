@@ -38,34 +38,96 @@ void RgAzComp::fillDerivedFields(const GeoData& geoData,
         const SCPCOA& scpcoa,
         const Timeline& timeline)
 {
+    const Vector3& scp = geoData.scp.ecf;
     if (Init::isUndefined<double>(azSF))
     {
-        azSF = std::sin(scpcoa.dopplerConeAngle *
-            math::Constants::DEGREES_TO_RADIANS) / scpcoa.slantRange;
+        azSF = derivedAzSf(scpcoa, scp);
     }
 
-    // Dervied: RgAzComp.KazPoly
     if (timeline.interPulsePeriod->sets.size() == 1 &&
         !Init::isUndefined<Poly1D>(
                 timeline.interPulsePeriod->sets[0].interPulsePeriodPoly) &&
         !Init::isUndefined<double>(grid.row->kCenter) &&
         Init::isUndefined<Poly1D>(kazPoly))
     {
-        double krgCoa = grid.row->kCenter;
-        const Vector3& scp = geoData.scp.ecf;
-        if (!Init::isUndefined<Poly2D>(grid.row->deltaKCOAPoly))
-        {
-            krgCoa += grid.row->deltaKCOAPoly.atY(scp[1])(scp[0]);
-        }
-        double stRateCoa = timeline.interPulsePeriod->sets[0].
-                interPulsePeriodPoly.derivative()(scpcoa.scpTime);
-        double deltaKazPerDeltaV = scpcoa.look(scp) * krgCoa *
-                scpcoa.arpVel.norm() * std::sin(scpcoa.dopplerConeAngle *
-                    math::Constants::DEGREES_TO_RADIANS)
-                 / scpcoa.slantRange / stRateCoa;
-        kazPoly = timeline.interPulsePeriod->sets[0].interPulsePeriodPoly
-                * deltaKazPerDeltaV;
+        kazPoly = derivedKazPoly(grid, scpcoa, timeline, scp);
     }
+}
+
+bool RgAzComp::validate(const GeoData& geoData,
+        const Grid& grid,
+        const SCPCOA& scpcoa,
+        const Timeline& timeline,
+        logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+    const Vector3& scp = geoData.scp.ecf;
+
+    //2.12.1.4
+    double expectedAzSf = derivedAzSf(scpcoa, scp);
+    if (std::abs(azSF - expectedAzSf) > 1e-6)
+    {
+        messageBuilder.str("");
+        messageBuilder << "RGAZCOMP fields inconsistent." << std::endl
+            << "RgAzComp.AzSF: " << azSF << std::endl
+            << "Derived RgAzComp.AzSF: " << expectedAzSf;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.12.1.5 omitted, polyval, polyder
+
+    if (timeline.interPulsePeriod->sets.size() == 1)
+    {
+        Poly1D derivedPoly = derivedKazPoly(grid, scpcoa, timeline, scp);
+        Poly1D difference = kazPoly - derivedPoly;
+
+        double norm = 0;
+        for (size_t ii = 0; ii < difference.order(); ++ii)
+        {
+            norm += std::pow(difference[ii], 2);
+        }
+        norm = std::sqrt(norm);
+
+        if (std::sqrt(norm) > 1e-3)
+        {
+            messageBuilder.str("");
+            messageBuilder << "RGAZCOMP fields inconsistent." << std::endl
+                << "RgAzComp.KazPoly: " << kazPoly << std::endl
+                << "Derived RgAzComp.KazPoly: " << derivedPoly;
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+    }
+
+    return valid;
+}
+
+double RgAzComp::derivedAzSf(const SCPCOA& scpcoa, const Vector3& scp) const
+{
+    return -scpcoa.look(scp) * std::sin(scpcoa.dopplerConeAngle *
+        math::Constants::DEGREES_TO_RADIANS) / scpcoa.slantRange;
+}
+
+Poly1D RgAzComp::derivedKazPoly(const Grid& grid,
+        const SCPCOA& scpcoa,
+        const Timeline& timeline,
+        const Vector3& scp) const
+{
+    double krgCoa = grid.row->kCenter;
+    if (!Init::isUndefined<Poly2D>(grid.row->deltaKCOAPoly))
+    {
+        krgCoa += grid.row->deltaKCOAPoly.atY(scp[1])(scp[0]);
+    }
+    double stRateCoa = timeline.interPulsePeriod->sets[0].
+        interPulsePeriodPoly.derivative()(scpcoa.scpTime);
+    double deltaKazPerDeltaV = scpcoa.look(scp) * krgCoa *
+        scpcoa.arpVel.norm() * std::sin(scpcoa.dopplerConeAngle *
+            math::Constants::DEGREES_TO_RADIANS)
+        / scpcoa.slantRange / stRateCoa;
+    return timeline.interPulsePeriod->sets[0].interPulsePeriodPoly
+        * deltaKazPerDeltaV;
 }
 }
 }
