@@ -117,23 +117,6 @@ TEST_CASE(KaiserWindow)
     TEST_ASSERT_LESSER(std::abs(row.weights[460] - .0238), .0001);
 }
 
-TEST_CASE(DerivedScp)
-{
-    six::sicd::GeoData geoData;
-    geoData.scp.llh = six::LatLonAlt(10, 20, 30);
-    six::sicd::ImageData imageData;
-    geoData.fillDerivedFields(imageData);
-    std::vector<double> expectedData(3);
-    expectedData[0] = 5.9031e6;
-    expectedData[1] = 2.1485e6;
-    expectedData[2] = 1.1003e6;
-    six::Vector3 expected(expectedData);
-    for (size_t ii = 0; ii < 3; ++ii)
-    {
-        TEST_ASSERT_LESSER(std::abs(expected[ii] - geoData.scp.ecf[ii]), 100);
-    }
-}
-
 TEST_CASE(DerivedSCPCOA)
 {
     six::sicd::SCPCOA scpcoa;
@@ -220,14 +203,6 @@ TEST_CASE(DerivedArpPoly)
     TEST_ASSERT_EQ(position.arpPoly[2][2], 3);
 }
 
-TEST_CASE(CheckWaveformParameters)
-{
-    six::sicd::WaveformParameters params;
-    params.rcvDemodType = six::DemodType::CHIRP;
-    params.fillDerivedFields();
-    TEST_ASSERT_EQ(params.rcvFMRate, 0);
-}
-
 int main(int, char**)
 {
     TEST_CHECK(DerivedDeltaKsNoImageData);
@@ -235,9 +210,7 @@ int main(int, char**)
     TEST_CHECK(IdentityWeightFunction);
     TEST_CHECK(HammingWindow);
     TEST_CHECK(KaiserWindow);
-    TEST_CHECK(DerivedScp);
     TEST_CHECK(DerivedArpPoly);
     TEST_CHECK(DerivedSCPCOA);
-    TEST_CHECK(CheckWaveformParameters);
     return 0;
 }
