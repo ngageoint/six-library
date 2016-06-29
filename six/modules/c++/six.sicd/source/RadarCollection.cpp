@@ -112,6 +112,138 @@ void WaveformParameters::fillDerivedFields()
     }
 }
 
+bool WaveformParameters::validate(int refFrequencyIndex,
+        logging::Logger& log) const
+{
+    bool valid = false;
+    std::ostringstream messageBuilder;
+
+    //2.8.3
+    if (std::abs(txRFBandwidth / (txPulseLength * txFMRate) - 1) > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.TxFRBandwidth: "
+            << txRFBandwidth << std::endl
+            << "SICD.RadarCollection.TxFrequency.txFMRate * txPulseLength: "
+            << txFMRate * txPulseLength << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.4
+    if (rcvDemodType == DemodType::CHIRP &&
+        rcvFMRate != 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+            << rcvDemodType.toString() << std::endl
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
+            << rcvFMRate << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.5
+    if (rcvDemodType == DemodType::STRETCH &&
+        std::abs(rcvFMRate / txFMRate - 1) > WGT_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+            << rcvDemodType << std::endl
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
+            << rcvFMRate << std::endl
+            << "SICD>RadarCollection.Waveform.WFParameters.TxFMRate: "
+            << txFMRate << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.7
+    //Absolute frequencies must be positive
+    if (six::Init::isUndefined<int>(refFrequencyIndex) &&
+        txFrequencyStart <= 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.txFreqStart: "
+            << txFrequencyStart << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.8
+    //Absolute frequencies must be positive
+    if (six::Init::isUndefined<int>(refFrequencyIndex) &&
+            rcvFrequencyStart <= 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.rcvFreqStart: "
+            << rcvFrequencyStart << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.9
+    if (txPulseLength > rcvWindowLength)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.TxPulseLength: "
+            << txPulseLength << std::endl
+            << "SICD.RadarCollection.Waveform.WFPArameters.RcvWindowLength: "
+            << rcvWindowLength << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.10
+    if (rcvIFBandwidth > adcSampleRate)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvIFBandwidth: "
+            << rcvIFBandwidth << std::endl
+            << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
+            << adcSampleRate << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.11
+    if (rcvDemodType == DemodType::CHIRP && txRFBandwidth > adcSampleRate)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
+            << rcvDemodType << std::endl
+            << "SICD.RadarCollection.Waveform.WFParameters.TxRFBandwidth: "
+            << txRFBandwidth << std::endl
+            << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
+            << adcSampleRate << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.12
+    double freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
+    if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
+        rcvFrequencyStart <= txFrequencyStart - freq_tol)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
+            << rcvFrequencyStart << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    return valid;
+}
+
 ChannelParameters::ChannelParameters() :
     txRcvPolarization(DualPolarizationType::NOT_SET),
     rcvAPCIndex(Init::undefined<int>())
@@ -231,6 +363,35 @@ bool RadarCollection::operator==(const RadarCollection& rhs) const
         parameters == rhs.parameters);
 }
 
+double RadarCollection::waveformMax() const
+{
+    double derivedMax = -std::numeric_limits<double>::infinity();
+    for (size_t ii = 0; ii < waveform.size(); ++ii)
+    {
+        if (waveform[ii].get() != NULL)
+        {
+            derivedMax = std::max(derivedMax,
+                waveform[ii]->txFrequencyStart +
+                waveform[ii]->txRFBandwidth);
+        }
+    }
+    return derivedMax;
+}
+
+double RadarCollection::waveformMin() const
+{
+    double derivedMin = std::numeric_limits<double>::infinity();
+    for (size_t ii = 0; ii < waveform.size(); ++ii)
+    {
+        if (waveform[ii].get() != NULL)
+        {
+            derivedMin = std::min(derivedMin,
+                waveform[ii]->txFrequencyStart);
+        }
+    }
+    return derivedMin;
+}
+
 void RadarCollection::fillDerivedFields()
 {
     // Transmit bandwidth
@@ -238,30 +399,11 @@ void RadarCollection::fillDerivedFields()
     {
         if (Init::isUndefined<double>(txFrequencyMin))
         {
-            double derivedMin = std::numeric_limits<double>::infinity();
-            for (size_t ii = 0; ii < waveform.size(); ++ii)
-            {
-                if (waveform[ii].get() != NULL)
-                {
-                    derivedMin = std::min(derivedMin,
-                            waveform[ii]->txFrequencyStart);
-                }
-            }
-            txFrequencyMin = derivedMin;
+            txFrequencyMin = waveformMin();
         }
         if (Init::isUndefined<double>(txFrequencyMax))
         {
-            double derivedMax = -std::numeric_limits<double>::infinity();
-            for (size_t ii = 0; ii < waveform.size(); ++ii)
-            {
-                if (waveform[ii].get() != NULL)
-                {
-                    derivedMax = std::max(derivedMax,
-                        waveform[ii]->txFrequencyStart +
-                        waveform[ii]->txRFBandwidth);
-                }
-            }
-            txFrequencyMax = derivedMax;
+            txFrequencyMax = waveformMax();
         }
 
         for (size_t ii = 0; ii < waveform.size(); ++ii)
@@ -285,6 +427,65 @@ void RadarCollection::fillDerivedFields()
             waveform[0]->txRFBandwidth = txFrequencyMax - txFrequencyMin;
         }
     }
+}
+
+bool RadarCollection::validate(logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    // 2.8 Waveform description consistency
+    double wfMin = waveformMax();
+    double wfMax = waveformMin();
+
+    // 2.8.1
+    if (wfMin != std::numeric_limits<double>::infinity() &&
+        std::abs((wfMin / txFrequencyMin) - 1) > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart: "
+            << wfMin << std::endl
+            << "SICD.RadarCollection.TxFrequency.Min: " << txFrequencyMin
+            << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.2
+    if (wfMax != -std::numeric_limits<double>::infinity() &&
+        std::abs((wfMax / txFrequencyMax) - 1) > WF_TOL)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart"
+            << " + TxFRBandwidth: " << wfMax << std::endl
+            << "SICD.RadarCollection.TxFrequency.Max: "
+            << txFrequencyMax << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.8.6
+    //Absolute frequencies must be positive
+    if (six::Init::isUndefined<int>(refFrequencyIndex) && txFrequencyMin <= 0)
+    {
+        messageBuilder.str("");
+        messageBuilder << WF_INCONSISTENT_STR
+            << "SICD.RadarCollection.txFrequencyMin: "
+            << txFrequencyMin << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    for (size_t ii = 0; ii < waveform.size(); ++ii)
+    {
+        if (waveform[ii].get())
+        {
+            valid = valid && waveform[ii]->validate(refFrequencyIndex, log);
+        }
+    }
+    return valid;
 }
 }
 }

@@ -27,6 +27,7 @@
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -147,6 +148,7 @@ public:
 
     //Doesn't currently do anything
     void fillDerivedFields(const ImageData& imageData);
+    bool validate(logging::Logger& log) const;
 };
 
 }

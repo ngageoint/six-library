@@ -27,6 +27,7 @@
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -125,6 +126,11 @@ struct WaveformParameters
     }
 
     void fillDerivedFields();
+    bool validate(int refFrequencyIndex, logging::Logger& log) const;
+private:
+    const double WF_TOL = 1e-3;
+    const double WGT_TOL = 1e-3;
+    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
 };
 
 /*!
@@ -480,6 +486,12 @@ struct RadarCollection
     }
 
     void fillDerivedFields();
+    bool validate(logging::Logger& log) const;
+private:
+    double waveformMin() const;
+    double waveformMax() const;
+    const double WF_TOL = 1e-3;
+    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
 };
 
 }

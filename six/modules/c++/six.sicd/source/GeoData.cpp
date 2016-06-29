@@ -90,6 +90,28 @@ void GeoData::fillDerivedFields(const ImageData& imageData)
         // line 757; requires point slant to ground
     }
 }
+
+bool GeoData::validate(logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    // 2.10
+    scene::LLAToECEFTransform transformer;
+    Vector3 derivedEcf = transformer.transform(scp.llh);
+    double ecf_diff = (scp.ecf - derivedEcf).norm();
+
+    if (ecf_diff > 1e-2)
+    {
+        messageBuilder.str("");
+        messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent."
+            << std::endl << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
+            << ecf_diff << " (m)" << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    return valid;
+}
 }
 }
 

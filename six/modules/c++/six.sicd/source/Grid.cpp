@@ -293,7 +293,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
-
+    const double& epsilon = std::numeric_limits<double>::epsilon();
     //2.3.1, 2.3.5
     if (deltaK2 <= deltaK1)
     {
@@ -309,7 +309,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     {
         // 2.3.2, 2.3.6
         if (deltaK2 > (1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
-                + std::numeric_limits<double>::epsilon())
+                + epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
@@ -322,7 +322,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
 
         // 2.3.3, 2.3.7
         if (deltaK1 < (-1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
-                - std::numeric_limits<double>::epsilon())
+                - epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
@@ -334,8 +334,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         }
 
         // 2.3.4, 2.3.8
-        if (impulseResponseBandwidth > (deltaK2 - deltaK1) +
-                std::numeric_limits<double>::epsilon())
+        if (impulseResponseBandwidth > (deltaK2 - deltaK1) + epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
@@ -379,9 +378,101 @@ bool DirectionParameters::validate(const ImageData& imageData,
         log.error(messageBuilder.str());
         valid = false;
     }
+
+    // Check weight functions
+    //std::vector<double> expectedWeights; <- Used in unimplemented section
+    std::auto_ptr<Functor> weightFunction;
+    const size_t DEFAULT_WGT_SIZE = 512;
+
+    if (weightType.get())
+    {
+        weightFunction.reset(calculateWeightFunction().release());
+
+        if (weightFunction.get())
+        {
+            if (!weights.empty())
+            {
+                valid = valid && validateWeights(*weightFunction, log);
+            }
+            else
+            {
+                //expectedWeights = (*weightFunction)(DEFAULT_WGT_SIZE);
+            }
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder << "Unrecognized weighting description" << std::endl
+                << "WeightType.WindowName: "
+                << weightType->windowName << std::endl;
+            log.warn(messageBuilder.str());
+            valid = false;
+        }
+    }
+
+    // 2.4.3, 2.4.4
+    if (weightType.get() &&
+        weightType->windowName != "UNIFORM" &&
+        weightType->windowName != "UNKNOWN" &&
+        weights.empty())
+    {
+        messageBuilder.str("");
+        messageBuilder << "Non-uniform weighting, but no WgtFunct provided"
+            << std::endl << "WgtType.WindowName: " << weightType->windowName
+            << std::endl;
+        log.warn(messageBuilder.str());
+    }
+
+    // TODO: 2.5 (requires fzero)
+
     return valid;
 }
 
+bool DirectionParameters::validateWeights(const Functor& weightFunction,
+        logging::Logger& log) const
+{
+    bool consistentValues = true;
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    //Arg doesn't matter. Just checking for Uniform-type Functor
+    if (weightFunction(5).empty())
+    {
+        double key = weights[0];
+        for (size_t ii = 0; ii < weights.size(); ++ii)
+        {
+            if (key != weights[ii])
+            {
+                consistentValues = false;
+            }
+        }
+    }
+    else
+    {
+        std::vector<double> expectedWeights = weightFunction(weights.size());
+        for (size_t ii = 0; ii < weights.size(); ++ii)
+        {
+            if (std::abs(expectedWeights[ii] - weights[ii]) > WGT_TOL)
+            {
+                consistentValues = false;
+                break;
+            }
+        }
+    }
+
+    if (!consistentValues)
+    {
+        messageBuilder.str("");
+        messageBuilder << "DirectionParameters weights values "
+            << "inconsistent with weightType" << std::endl
+            << "WeightType.WindowName: "
+            << weightType->windowName << std::endl;
+        log.warn(messageBuilder.str());
+        valid = false;
+    }
+
+    return valid;
+}
 
 bool DirectionParameters::validate(const RgAzComp& rgAzComp,
         const Vector3& scp,
@@ -1001,6 +1092,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
+    const double& epsilon = std::numeric_limits<double>::epsilon();
 
     //2.12.2.1
     if (type != ComplexImageGridType::RGAZIM)
@@ -1036,6 +1128,103 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             log.error(messageBuilder.str());
             valid = false;
         }
+    }
+
+    //Slow-time deskew would allow for PFA.Kaz2-PFA.Kaz1>(1/Grid.Col.SS),
+    //since Kaz bandwidth is compressed from original polar annulus.
+    if (pfa.slowTimeDeskew->applied != BooleanType::IS_TRUE)
+    {
+        //2.3.10
+        if ((pfa.kaz2 - col->kCenter) >
+            (1 / (2 * col->sampleSpacing)) + epsilon)
+        {
+            messageBuilder.str("");
+            messageBuilder << boundsErrorMessage << std::endl
+                << "0.5/SICD.Grid.Col.SampleSpacing: "
+                << 0.5 / col->sampleSpacing << std::endl
+                << "PFA.Kaz2 - Grid.Col.KCenter: "
+                << pfa.kaz2 - col->kCenter << std::endl;
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        //2.3.11
+        if ((pfa.kaz1 - col->kCenter) <
+            (-1 / (2 * col->sampleSpacing)) - epsilon)
+        {
+            messageBuilder.str("");
+            messageBuilder << boundsErrorMessage << std::endl
+                << "0.5/SICD.Grid.Col.SampleSpacing: "
+                << 0.5 / col->sampleSpacing << std::endl
+                << "PFA.Kaz1 - Grid.Col.KCenter: "
+                << pfa.kaz1 - col->kCenter << std::endl;
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+    }
+
+    //2.3.12
+    if ((pfa.krg2 - row->kCenter) >
+        (1 / (2 * row->sampleSpacing)) + epsilon)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "0.5/SICD.Grid.Row.SampleSpacing: "
+            << 0.5 / row->sampleSpacing << std::endl
+            << "PFA.Krg2 - Grid.Row.KCenter: "
+            << pfa.krg2 - row->kCenter << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.3.13
+    if (pfa.krg1 - row->kCenter <
+        (-1 / (2 * row->sampleSpacing)) - epsilon)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "0.5/SICD.Grid.Row.SampleSpacing: "
+            << 0.5 / row->sampleSpacing << std::endl
+            << "PFA.Krg1 - Grid.Row.KCenter: "
+            << pfa.krg1 - row->kCenter << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    //2.3.14
+    if (col->impulseResponseBandwidth > pfa.kaz2 - pfa.kaz1 + epsilon)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "Grid.Col.ImpulseResponseBandwidth: "
+            << col->impulseResponseBandwidth << std::endl
+            << "SICD.PFA.Kaz2 - SICD.PFA.Kaz1: "
+            << pfa.kaz2 - pfa.kaz1 << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    //2.3.15
+    if (row->impulseResponseBandwidth > pfa.krg2 - pfa.krg1 + epsilon)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "Grid.Row.ImpulseResponseBandwidth: "
+            << row->impulseResponseBandwidth << std::endl
+            << "SICD.PFA.Krg2 - SICD.PFA.Krg1: "
+            << pfa.krg2 - pfa.krg1 << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+    //2.3.16
+    if (col->kCenter != 0 &&
+        std::abs(col->kCenter - (pfa.kaz1 + pfa.kaz2) / 2) > 1e-5)
+    {
+        messageBuilder.str("");
+        messageBuilder << boundsErrorMessage << std::endl
+            << "Grid.Col.KCenter: " << col->kCenter << std::endl
+            << "mean(SICD.PFA.Kaz1, SICD.PFA.Kaz2): "
+            << (pfa.kaz1 + pfa.kaz2) / 2 << std::endl;
+        log.error(messageBuilder.str());
+        valid = false;
     }
 
     return valid;

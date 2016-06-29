@@ -147,11 +147,14 @@ struct DirectionParameters
             const Vector3& scp,
             logging::Logger& log,
             double offset = 0) const;
+
     void fillDerivedFields(const ImageData& imageData);
     void fillDerivedFields(const RgAzComp& rgAzComp, const GeoData& geoData,
             double offset = 0);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
+    bool validateWeights(const Functor& weightFunction,
+            logging::Logger& log) const;
     double derivedKCenter(const RgAzComp& rgAzComp,
             const Vector3& scp,
             double offset = 0) const;
@@ -164,6 +167,7 @@ private:
     * 1) deltaK2 (max)
     */
     std::vector<double> calculateDeltaKs(const ImageData& imageData) const;
+    const double WGT_TOL = 1e-3;
     const std::string boundsErrorMessage =
             "Violation of spatial frequency extent bounds.";
 
@@ -252,6 +256,8 @@ private:
     const double UVECT_TOL = 1e-3;
     const double WF_TOL = 1e-3;
     const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+    const std::string boundsErrorMessage =
+            "Violation of spatial frequency extent bounds.";
 };
 
 }

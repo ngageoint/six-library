@@ -136,16 +136,11 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
         sicd->rgAzComp.reset(new RgAzComp());
         parseRgAzCompFromXML(rgAzCompXML, sicd->rgAzComp.get());
     }
-    ComplexXMLValidator validator(*sicd, log());
-    validator.validate();
     return sicd;
 }
 
 xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
 {
-    ComplexXMLValidator validator(*sicd, log());
-    validator.validate();
-
     xml::lite::Document* doc = new xml::lite::Document();
 
     XMLElem root = newElement("SICD");

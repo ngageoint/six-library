@@ -148,7 +148,10 @@ bool ComplexData::validate(logging::Logger& log) const
     // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
     bool valid = (grid->validate(*collectionInformation, *imageData, log) &&
             position->validate(log) &&
-            scpcoa->validate(*geoData, *grid, *position, log));
+            scpcoa->validate(*geoData, *grid, *position, log) &&
+            imageData->validate(*geoData, log) &&
+            geoData->validate(log) &&
+            radarCollection->validate(log));
 
     double fc(Init::undefined<double>());
     if (radarCollection->refFrequencyIndex == 0)

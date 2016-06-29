@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 
 using namespace six;
@@ -35,5 +36,82 @@ bool ImageData::operator==(const ImageData& rhs) const
         fullImage == rhs.fullImage &&
         scpPixel == rhs.scpPixel &&
         validData == rhs.validData);
+}
+
+bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
+{
+    bool valid = true;
+    std::ostringstream messageBuilder;
+
+    // 2.11.1
+    if (!validData.empty() && geoData.validData.empty())
+    {
+        messageBuilder.str("");
+        messageBuilder << "ImageData.ValidData/GeoData.ValidData "
+            << "required together." << std::endl
+            << "ImageData.ValidData exists, but GeoData.ValidData does not.";
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.11.2
+    if (validData.empty() && !geoData.validData.empty())
+    {
+        messageBuilder.str("");
+        messageBuilder << "ImageData.ValidData/GeoData.ValidData "
+            << "required together." << std::endl
+            << "GeoData.ValidData exists, but ImageData.ValidData does not.";
+        log.error(messageBuilder.str());
+        valid = false;
+    }
+
+    // 2.11.3 In ValidData, first vertex should have (1) minimum row index
+    // and (2) minimum column index if 2 vertices exist with equal minimum
+    // row index.
+    if (!validData.empty())
+    {
+        bool minimumRowComesFirst = true;
+
+        for (size_t ii = 1; ii < validData.size(); ++ii)
+        {
+            if (validData[ii].row < validData[0].row)
+            {
+                minimumRowComesFirst = false;
+                break;
+            }
+        }
+        if (!minimumRowComesFirst)
+        {
+            messageBuilder.str("");
+            messageBuilder << "ImageData.ValidData first row should have"
+                << "minimum row index";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        else
+        {
+            bool minimumColComesFirst = true;
+            std::vector<size_t> minimumIndices;
+            for (size_t ii = 0; ii < validData.size(); ++ii)
+            {
+                if (validData[0].row == validData[ii].row &&
+                    validData[ii].col < validData[0].col)
+                {
+                    minimumColComesFirst = false;
+                    break;
+                }
+            }
+            if (!minimumColComesFirst)
+            {
+                messageBuilder << "ImageData.ValidData first col of matching"
+                    << "minimum row index should have minimum col index";
+                log.error(messageBuilder.str());
+                valid = false;
+            }
+        }
+    }
+
+    //TODO: figure out how to tell if corners are clockwise
+    return valid;
 }
 
