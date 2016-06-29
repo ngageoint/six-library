@@ -95,20 +95,14 @@ void WaveformParameters::fillDerivedFields()
         Init::isUndefined<double>(txPulseLength) &&
         !Init::isUndefined<double>(txFMRate))
     {
-        if (txFMRate != 0)
-        {
-            txPulseLength = txRFBandwidth / txFMRate;
-        }
+        txPulseLength = txRFBandwidth / txFMRate;
     }
 
     if (!Init::isUndefined<double>(txRFBandwidth) &&
         !Init::isUndefined<double>(txPulseLength) &&
         Init::isUndefined<double>(txFMRate))
     {
-        if (txPulseLength != 0)
-        {
-            txFMRate = txRFBandwidth / txPulseLength;
-        }
+        txFMRate = txRFBandwidth / txPulseLength;
     }
 }
 

@@ -2,7 +2,7 @@
 * This file is part of six.sicd-c++
 * =========================================================================
 *
-* (C) Copyright 2004 - 2014, MDA Information Systems LLC
+* (C) Copyright 2004 - 2016, MDA Information Systems LLC
 *
 * six.sicd-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
@@ -220,6 +220,14 @@ TEST_CASE(DerivedArpPoly)
     TEST_ASSERT_EQ(position.arpPoly[2][2], 3);
 }
 
+TEST_CASE(CheckWaveformParameters)
+{
+    six::sicd::WaveformParameters params;
+    params.rcvDemodType = six::DemodType::CHIRP;
+    params.fillDerivedFields();
+    TEST_ASSERT_EQ(params.rcvFMRate, 0);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(DerivedDeltaKsNoImageData);
@@ -229,6 +237,7 @@ int main(int, char**)
     TEST_CHECK(KaiserWindow);
     TEST_CHECK(DerivedScp);
     TEST_CHECK(DerivedArpPoly);
-    TEST_CHECK(DerivedSCPCOA)
+    TEST_CHECK(DerivedSCPCOA);
+    TEST_CHECK(CheckWaveformParameters);
     return 0;
 }
