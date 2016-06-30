@@ -248,7 +248,8 @@ private:
     double derivedRowKCenter(const RMAT& rmat, double fc) const;
     double derivedRowKCenter(const RMCR& rmcr, double fc) const;
     double derivedRowKCenter(const INCA& inca) const;
-    ComplexImageGridType expectedGridType(const RMA& rma) const;
+    ComplexImageGridType defaultGridType(const RMA& rma) const;
+    ComplexImagePlaneType defaultPlaneType(const RMA& rma) const;
     Vector3 derivedRowUnitVector(const SCPCOA& scpcoa,
             const Vector3& scp) const;
     Vector3 derivedColUnitVector(const SCPCOA& scpcoa,

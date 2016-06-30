@@ -110,7 +110,7 @@ double RMAT::derivedDcaRef(const Vector3& scp) const
 
 Vector3 RMAT::uYAT(const Vector3& scp) const
 {
-    return (refVel.unit() * look(scp));
+    return (refVel.unit() * -look(scp));
 }
 
 Vector3 RMAT::spn(const Vector3& scp) const
@@ -205,7 +205,7 @@ Vector3 RMCR::uYCR(const Vector3& scp) const
 
 Vector3 RMCR::spn(const Vector3& scp) const
 {
-    return cross(refVel.unit(), uXRG(scp)) * look(scp);
+    return (cross(refVel.unit(), uXRG(scp)) * look(scp)).unit();
 }
 
 int RMCR::look(const Vector3& scp) const

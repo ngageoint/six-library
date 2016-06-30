@@ -100,11 +100,10 @@ std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& image
     derivedDeltaK1 -= (impulseResponseBandwidth / 2);
     derivedDeltaK2 += (impulseResponseBandwidth / 2);
 
-    // Wrapped spectrum
-    if (derivedDeltaK1 < -(1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2 ||
-            derivedDeltaK2 > (1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2)
+    if (derivedDeltaK1 < -(1 / sampleSpacing) / 2 ||
+            derivedDeltaK2 > (1 / sampleSpacing) / 2)
     {
-        derivedDeltaK1 = -(1 / Utilities::nonZeroDenominator(sampleSpacing)) / 2;
+        derivedDeltaK1 = -(1 / sampleSpacing) / 2;
         derivedDeltaK2 = -derivedDeltaK1;
     }
 
@@ -271,7 +270,7 @@ double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
     if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
     {
         // DeltaKCOAPoly populated, but not KCtr (would be odd)
-        derivedCenter -= deltaKCOAPoly.atY(scp[1])(scp[0]);
+        derivedCenter -= deltaKCOAPoly[0][0];
     }
     return derivedCenter;
 
@@ -308,26 +307,26 @@ bool DirectionParameters::validate(const ImageData& imageData,
     else
     {
         // 2.3.2, 2.3.6
-        if (deltaK2 > (1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
+        if (deltaK2 > (1 / (2 * sampleSpacing))
                 + epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
-                0.5 / Utilities::nonZeroDenominator(sampleSpacing) << std::endl
+                0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
             log.error(messageBuilder.str());
             valid = false;
         }
 
         // 2.3.3, 2.3.7
-        if (deltaK1 < (-1 / (Utilities::nonZeroDenominator(2 * sampleSpacing)))
+        if (deltaK1 < (-1 / (2 * sampleSpacing))
                 - epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
-                0.5 / Utilities::nonZeroDenominator(sampleSpacing) << std::endl
+                0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK1: " << deltaK1 << std::endl;
             log.error(messageBuilder.str());
             valid = false;
@@ -357,7 +356,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     const double DK_TOL = 1e-2;
 
     //2.3.9.1, 2.3.9.3
-    if (std::abs((deltaK1 / Utilities::nonZeroDenominator(minDk)) - 1)
+    if (std::abs((deltaK1 / minDk) - 1)
             > DK_TOL)
     {
         messageBuilder.str("");
@@ -368,7 +367,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         valid = false;
     }
     //2.3.9.2, 2.3.9.4
-    if (std::abs((deltaK2 / Utilities::nonZeroDenominator(maxDk)) - 1)
+    if (std::abs((deltaK2 / maxDk) - 1)
             > DK_TOL)
     {
         messageBuilder.str("");
@@ -597,7 +596,6 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
         const ImageData& imageData,
         logging::Logger& log) const
 {
-    
     return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
         validateFFTSigns(log) &&                                //2.2
         row->validate(imageData, log) &&
@@ -738,9 +736,13 @@ double Grid::derivedRowKCenter(const INCA& inca) const
 
 void Grid::fillDefaultFields(const RMA& rma, double fc)
 {
+    if (imagePlane == ComplexImagePlaneType::NOT_SET)
+    {
+        imagePlane = defaultPlaneType(rma);
+    }
     if (type == ComplexImageGridType::NOT_SET)
     {
-        type = expectedGridType(rma);
+        type = defaultGridType(rma);
     }
     if (rma.rmat.get())
     {
@@ -754,10 +756,6 @@ void Grid::fillDefaultFields(const RMA& rma, double fc)
 
 void Grid::fillDefaultFields(const RMAT& rmat, double fc)
 {
-    if (imagePlane == ComplexImagePlaneType::NOT_SET)
-    {
-        imagePlane = ComplexImagePlaneType::SLANT;
-    }
     if (!Init::isUndefined<double>(fc))
     {
         if (Init::isUndefined<double>(row->kCenter))
@@ -776,22 +774,18 @@ double Grid::derivedRowKCenter(const RMAT& rmat, double fc) const
 {
     const double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
     return kfc * std::sin(rmat.dopConeAngleRef *
-            math::Constants::RADIANS_TO_DEGREES);
+            math::Constants::DEGREES_TO_RADIANS);
 }
 
 double Grid::derivedColKCenter(const RMAT& rmat, double fc) const
 {
     const double kfc = fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
     return kfc * std::cos(rmat.dopConeAngleRef *
-        math::Constants::RADIANS_TO_DEGREES);
+        math::Constants::DEGREES_TO_RADIANS);
 }
 
 void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
 {
-    if (imagePlane == ComplexImagePlaneType::NOT_SET)
-    {
-        imagePlane = ComplexImagePlaneType::SLANT;
-    }
     if (!Init::isUndefined<double>(fc))
     {
         if (Init::isUndefined<double>(row->kCenter))
@@ -841,11 +835,11 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
 {
     bool valid = true;
     // 2.12.3.2.1, 2.12.3.4.1
-    if (type != expectedGridType(rma))
+    if (type != defaultGridType(rma))
     {
         std::ostringstream messageBuilder;
         messageBuilder << "Given image formation algorithm expects "
-            << expectedGridType(rma).toString() << ".\nFound " << type;
+            << defaultGridType(rma).toString() << ".\nFound " << type;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1292,7 +1286,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
     return valid;
 }
 
-ComplexImageGridType Grid::expectedGridType(const RMA& rma) const
+ComplexImageGridType Grid::defaultGridType(const RMA& rma) const
 {
     if (rma.rmat.get())
     {
@@ -1306,4 +1300,18 @@ ComplexImageGridType Grid::expectedGridType(const RMA& rma) const
     {
         return ComplexImageGridType::RGZERO;
     }
+    return ComplexImageGridType::NOT_SET;
+}
+
+ComplexImagePlaneType Grid::defaultPlaneType(const RMA& rma) const
+{
+    if (rma.rmat.get() || rma.rmcr.get())
+    {
+        return ComplexImagePlaneType::SLANT;
+    }
+    else if (rma.inca.get())
+    {
+        return this->imagePlane;
+    }
+    return ComplexImagePlaneType::NOT_SET;
 }

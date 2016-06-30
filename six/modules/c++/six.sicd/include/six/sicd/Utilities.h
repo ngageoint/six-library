@@ -253,14 +253,6 @@ public:
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
 
     /*
-     * Given a desired denominator, return epsilon if  it is equal to 0.
-     * Otherwise, return the number unaltered.
-     * \param denominator The desired denominator
-     * \return the nearest non-zero number
-     */
-    static double nonZeroDenominator(double denominator);
-    
-    /*
      * Extracts a Poly1D in the dimention given by index
      * \param poly The source polynomial
      * \param index Number specifying dimension. 0-2 for X-Z

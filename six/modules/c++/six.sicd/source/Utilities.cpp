@@ -508,15 +508,6 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
     return groundPlaneNormal.unit();
 }
 
-double Utilities::nonZeroDenominator(double denominator)
-{
-    if (denominator == 0)
-    {
-        return std::numeric_limits<double>::epsilon();
-    }
-    return denominator;
-}
-
 Poly1D Utilities::nPoly(PolyXYZ poly, size_t idx)
 {
     if (idx >= 3)
