@@ -30,92 +30,7 @@ double calculateError(double actual, double expected)
     return std::abs((actual - expected) / actual);
 }
 }
-TEST_CASE(DerivedDeltaKsNoImageData)
-{
-    six::sicd::ImageData imageData;
-    six::sicd::DirectionParameters row;
-    row.impulseResponseBandwidth = 13;
-    row.sampleSpacing = 5;
-    row.deltaKCOAPoly = six::Poly2D(3, 3);
-    for (size_t ii = 0; ii <= row.deltaKCOAPoly.orderX(); ++ii)
-    {
-        for (size_t jj = 0; jj <= row.deltaKCOAPoly.orderY(); ++jj)
-        {
-            row.deltaKCOAPoly[ii][jj] = ii + jj;
-        }
-    }
-    row.fillDerivedFields(imageData);
-    TEST_ASSERT_ALMOST_EQ(row.deltaK1, -0.1);
-    TEST_ASSERT_ALMOST_EQ(row.deltaK2, 0.1);
-}
 
-TEST_CASE(DerivedDeltaKsWithImageData)
-{
-    six::sicd::ImageData imageData;
-    imageData.validData.push_back(six::RowColInt(10, 20));
-    imageData.validData.push_back(six::RowColInt(30, 40));
-    imageData.validData.push_back(six::RowColInt(50, 60));
-    six::sicd::DirectionParameters row;
-    row.impulseResponseBandwidth = 13;
-    row.sampleSpacing = 5;
-    row.deltaKCOAPoly = six::Poly2D(3, 3);
-    for (size_t ii = 0; ii <= row.deltaKCOAPoly.orderX(); ++ii)
-    {
-        for (size_t jj = 0; jj <= row.deltaKCOAPoly.orderY(); ++jj)
-        {
-            row.deltaKCOAPoly[ii][jj] = ii + jj;
-        }
-    }
-    row.fillDerivedFields(imageData);
-    //TODO: find test data where these numbers aren't identical to above test
-    TEST_ASSERT_ALMOST_EQ(row.deltaK1, -0.1);
-    TEST_ASSERT_ALMOST_EQ(row.deltaK2, 0.1);
-}
-
-TEST_CASE(IdentityWeightFunction)
-{
-    six::sicd::DirectionParameters row;
-    row.weightType.reset(new six::sicd::WeightType());
-    row.weightType->windowName = "UNIFORM";
-
-    // This shouldn't affect anything, but it's a required argument
-    six::sicd::ImageData imageData;
-    row.fillDerivedFields(imageData);
-    TEST_ASSERT(row.weights.empty());
-}
-
-TEST_CASE(HammingWindow)
-{
-    six::sicd::DirectionParameters row;
-    row.weightType.reset(new six::sicd::WeightType());
-    row.weightType->windowName = "HAMMING";
-
-    six::sicd::ImageData imageData;
-    row.fillDerivedFields(imageData);
-    TEST_ASSERT_EQ(row.weights.size(), 512);
-    //Just grabbing some random values to make sure they line up with MATLAB
-    //TEST_ASSERT_ALMOST_EQ is too picky for what we have, so doing something
-    //more manual.
-    TEST_ASSERT_LESSER(std::abs(row.weights[163] - .7332), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[300] - .9328), .0001)
-}
-
-TEST_CASE(KaiserWindow)
-{
-    six::sicd::DirectionParameters row;
-    row.weightType.reset(new six::sicd::WeightType());
-    row.weightType->windowName = "KAISER";
-    six::Parameter param;
-    param.setName("Name");
-    param.setValue("10");
-    row.weightType->parameters.push_back(param);
-
-    six::sicd::ImageData imageData;
-    row.fillDerivedFields(imageData);
-    TEST_ASSERT_LESSER(std::abs(row.weights[10] - .0014), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[300] - .8651), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[460] - .0238), .0001);
-}
 
 TEST_CASE(DerivedSCPCOA)
 {
@@ -205,11 +120,7 @@ TEST_CASE(DerivedArpPoly)
 
 int main(int, char**)
 {
-    TEST_CHECK(DerivedDeltaKsNoImageData);
-    TEST_CHECK(DerivedDeltaKsWithImageData);
-    TEST_CHECK(IdentityWeightFunction);
-    TEST_CHECK(HammingWindow);
-    TEST_CHECK(KaiserWindow);
+
     TEST_CHECK(DerivedArpPoly);
     TEST_CHECK(DerivedSCPCOA);
     return 0;

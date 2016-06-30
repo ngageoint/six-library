@@ -615,8 +615,6 @@ void Grid::fillDerivedFields(
     {
         if (Init::isUndefined<Poly2D>(timeCOAPoly))
         {
-            // I'm assuming this is what it means to assign a double to a Poly2D.
-            // It matches what's getting checked in valiidateTimeCOAPoly.
             timeCOAPoly = Poly2D(1, 1);
             timeCOAPoly[0][0] = scpcoa.scpTime;
         }
