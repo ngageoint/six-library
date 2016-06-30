@@ -3129,14 +3129,6 @@ class SixSicdUtilities(_object):
         getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
     __swig_getmethods__["getGroundPlaneNormal"] = lambda x: getGroundPlaneNormal
 
-    def nonZeroDenominator(denominator):
-        """nonZeroDenominator(double denominator) -> double"""
-        return _six_sicd.SixSicdUtilities_nonZeroDenominator(denominator)
-
-    if _newclass:
-        nonZeroDenominator = staticmethod(nonZeroDenominator)
-    __swig_getmethods__["nonZeroDenominator"] = lambda x: nonZeroDenominator
-
     def nPoly(poly, index):
         """nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
         return _six_sicd.SixSicdUtilities_nPoly(poly, index)
@@ -3195,10 +3187,6 @@ def SixSicdUtilities_getWidebandData(*args):
 def SixSicdUtilities_getGroundPlaneNormal(data):
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
-
-def SixSicdUtilities_nonZeroDenominator(denominator):
-    """SixSicdUtilities_nonZeroDenominator(double denominator) -> double"""
-    return _six_sicd.SixSicdUtilities_nonZeroDenominator(denominator)
 
 def SixSicdUtilities_nPoly(poly, index):
     """SixSicdUtilities_nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
