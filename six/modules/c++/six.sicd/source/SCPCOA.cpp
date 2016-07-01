@@ -190,7 +190,6 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
         {
             arpPos = vectors[0];
         }
-
         if (Init::isUndefined<Vector3>(arpVel))
         {
             arpVel = vectors[1];
@@ -251,7 +250,7 @@ Vector3 SCPCOA::uLOS(const Vector3& scp) const
 
 Vector3 SCPCOA::left() const
 {
-    return cross(arpPos.unit(), arpVel.unit());
+    return cross(arpPos.unit(), arpVel / arpPos.norm());// .unit());
 }
 
 int SCPCOA::look(const Vector3& scp) const

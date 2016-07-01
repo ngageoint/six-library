@@ -44,7 +44,8 @@ void RgAzComp::fillDerivedFields(const GeoData& geoData,
         azSF = derivedAzSf(scpcoa, scp);
     }
 
-    if (timeline.interPulsePeriod->sets.size() == 1 &&
+    if (timeline.interPulsePeriod.get() &&
+        timeline.interPulsePeriod->sets.size() == 1 &&
         !Init::isUndefined<Poly1D>(
                 timeline.interPulsePeriod->sets[0].interPulsePeriodPoly) &&
         !Init::isUndefined<double>(grid.row->kCenter) &&
@@ -52,6 +53,7 @@ void RgAzComp::fillDerivedFields(const GeoData& geoData,
     {
         kazPoly = derivedKazPoly(grid, scpcoa, timeline, scp);
     }
+
 }
 
 bool RgAzComp::validate(const GeoData& geoData,
@@ -75,8 +77,6 @@ bool RgAzComp::validate(const GeoData& geoData,
         log.error(messageBuilder.str());
         valid = false;
     }
-
-    // 2.12.1.5 omitted, polyval, polyder
 
     if (timeline.interPulsePeriod->sets.size() == 1)
     {
@@ -115,19 +115,36 @@ Poly1D RgAzComp::derivedKazPoly(const Grid& grid,
         const Timeline& timeline,
         const Vector3& scp) const
 {
-    double krgCoa = grid.row->kCenter;
-    if (!Init::isUndefined<Poly2D>(grid.row->deltaKCOAPoly))
-    {
-        krgCoa += grid.row->deltaKCOAPoly.atY(scp[1])(scp[0]);
-    }
-    double stRateCoa = timeline.interPulsePeriod->sets[0].
-        interPulsePeriodPoly.derivative()(scpcoa.scpTime);
-    double deltaKazPerDeltaV = scpcoa.look(scp) * krgCoa *
+    const Poly1D& interPulsePeriodPoly = timeline.interPulsePeriod->sets[0].
+        interPulsePeriodPoly;
+
+    std::vector<double> krgValues((grid.row->deltaKCOAPoly.orderX() + 1) *
+            (grid.row->deltaKCOAPoly.orderY() + 1), grid.row->kCenter);
+
+    Poly2D krgCoa = grid.row->deltaKCOAPoly + Poly2D(
+        (grid.row->deltaKCOAPoly.orderX()),
+            (grid.row->deltaKCOAPoly.orderY()), krgValues);
+
+    double stRateCoa = interPulsePeriodPoly.derivative()(scpcoa.scpTime);
+
+    Poly2D deltaKazPerDeltaV = scpcoa.look(scp) * krgCoa *
         scpcoa.arpVel.norm() * std::sin(scpcoa.dopplerConeAngle *
             math::Constants::DEGREES_TO_RADIANS)
         / scpcoa.slantRange / stRateCoa;
-    return timeline.interPulsePeriod->sets[0].interPulsePeriodPoly
-        * deltaKazPerDeltaV;
+
+    Poly1D derivedPoly(interPulsePeriodPoly.order());
+    for (size_t row = 0; row < deltaKazPerDeltaV.orderX() + 1; ++row)
+    {
+        double currentValue = 0;
+        for (size_t column = 0;
+            column < deltaKazPerDeltaV.orderY() + 1; ++column)
+        {
+            currentValue += deltaKazPerDeltaV[row][column] *
+                interPulsePeriodPoly[column];
+        }
+        derivedPoly[row] = currentValue;
+    }
+    return derivedPoly;
 }
 }
 }
