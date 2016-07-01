@@ -83,7 +83,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
             imagePlaneNormal = scpcoa.slantPlaneNormal(scp);
             break;
         case ComplexImagePlaneType::GROUND:
-            imagePlaneNormal = scpcoa.etp(scp);
+            imagePlaneNormal = scpcoa.earthTangentPlane(scp);
             break;
         case ComplexImagePlaneType::OTHER:
             // Nothing we can do
@@ -93,7 +93,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
 
     if (Init::isUndefined<Vector3>(focusPlaneNormal))
     {
-        focusPlaneNormal = scpcoa.etp(scp);
+        focusPlaneNormal = scpcoa.earthTangentPlane(scp);
     }
 
     if (!Init::isUndefined<double>(scpcoa.scpTime) &&

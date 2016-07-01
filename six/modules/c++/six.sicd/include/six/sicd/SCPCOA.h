@@ -118,7 +118,7 @@ struct SCPCOA
     int look(const Vector3& scp) const;
     Vector3 left() const;
     Vector3 slantPlaneNormal(const Vector3& scp) const;
-    Vector3 etp(const Vector3& scp) const;
+    Vector3 earthTangentPlane(const Vector3& scp) const;
 
 private:
     double derivedSCPTime(const Grid& grid) const;

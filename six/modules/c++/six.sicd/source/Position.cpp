@@ -40,11 +40,8 @@ void Position::fillDerivedFields(const SCPCOA& scpcoa)
         !Init::isUndefined<double>(scpcoa.scpTime) &&
         (Init::isUndefined<PolyXYZ>(arpPoly)))
     {
-        Vector3 tempArpAcc = scpcoa.arpAcc;
-        if (Init::isUndefined<Vector3>(scpcoa.arpAcc))
-        {
-            tempArpAcc = Vector3(0.0);
-        }
+        const Vector3 tempArpAcc = Init::isUndefined<Vector3>(scpcoa.arpAcc) ?
+            Vector3(0.0) : scpcoa.arpAcc;
 
         std::vector<Vector3> coefs;
         coefs.resize(3);

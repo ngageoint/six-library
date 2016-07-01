@@ -89,58 +89,47 @@ double SCPCOA::derivedDopplerConeAngle(const Vector3& scp) const
             math::Constants::RADIANS_TO_DEGREES;
 }
 
-Vector3 SCPCOA::etp(const Vector3& scp) const
+Vector3 SCPCOA::earthTangentPlane(const Vector3& scp) const
 {
-    // Earth Tangent Plane (ETP) at the SCP is the plane tangent to the
-    // surface of constant height above the WGS 84 ellipsoid (HAE) that
-    // contains the SCP. The ETP is an approximation to the ground plane
-    // at the SCP.
     return Utilities::wgs84Norm(scp);
 }
 
 double SCPCOA::derivedGrazeAngle(const Vector3& scp) const
 {
-    // Angle between ground plane and line-of-sight vector
-    return std::asin(etp(scp).dot(uLOS(scp) * -1)) *
+    return std::asin(earthTangentPlane(scp).dot(uLOS(scp) * -1)) *
             math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SCPCOA::derivedIncidenceAngle(const Vector3& scp) const
 {
-    // Angle between ground plane normal and line of sight vector
     return 90 - derivedGrazeAngle(scp);
 }
 
 double SCPCOA::derivedSlopeAngle(const Vector3& scp) const
 {
-    // Angle between slant and ground planes
-    return std::acos(etp(scp).dot(slantPlaneNormal(scp))) *
+    return std::acos(earthTangentPlane(scp).dot(slantPlaneNormal(scp))) *
             math::Constants::RADIANS_TO_DEGREES;
 }
 
 Vector3 SCPCOA::slantPlaneNormal(const Vector3& scp) const
 {
-    // Instantaneous slant plane unit normal at COA
-    // (also called uSPZ in SICD spec)
     return cross(arpVel, uLOS(scp)).unit() * look(scp);
 }
 
 Vector3 SCPCOA::uGPX(const Vector3& scp) const
 {
-    // Project range vector (from SCP toward ARP) onto ground plane
     return ((uLOS(scp) * -1) -
-            etp(scp) * (etp(scp).dot(uLOS(scp) * -1))).unit();
+        earthTangentPlane(scp) *
+        (earthTangentPlane(scp).dot(uLOS(scp) * -1))).unit();
 }
 
 Vector3 SCPCOA::uEast(const Vector3& scp) const
 {
-    // Unit vector in ground plane in east direction
-    return cross(uNorth(scp), etp(scp));
+    return cross(uNorth(scp), earthTangentPlane(scp));
 }
 
 Vector3 SCPCOA::uNorth(const Vector3& scp) const
 {
-    // Unit vector in ground plane in north direction
     std::vector<double> coordinates;
     coordinates.resize(3);
     coordinates[0] = 0;
@@ -149,14 +138,15 @@ Vector3 SCPCOA::uNorth(const Vector3& scp) const
     Vector3 base(coordinates);
 
     // Project north onto ground plane
-    Vector3 northGround = base - (etp(scp) * etp(scp).dot(base));
+    Vector3 northGround = base -
+            (earthTangentPlane(scp) * earthTangentPlane(scp).dot(base));
     return northGround.unit();
 }
 
 double SCPCOA::derivedTwistAngle(const Vector3& scp) const
 {
     // Angle from +GPY axis to the +SPY axis in plane of incidence
-    Vector3 uGPY = cross(etp(scp), uGPX(scp));
+    Vector3 uGPY = cross(earthTangentPlane(scp), uGPX(scp));
     return -1 * std::asin(uGPY.dot(slantPlaneNormal(scp))) *
         math::Constants::RADIANS_TO_DEGREES;
 }
@@ -174,8 +164,9 @@ double SCPCOA::derivedAzimAngle(const Vector3& scp) const
 
 double SCPCOA::derivedLayoverAngle(const Vector3& scp) const
 {
-    Vector3 layoverGround = etp(scp) -
-        (slantPlaneNormal(scp) / (etp(scp).dot(slantPlaneNormal(scp))));
+    Vector3 layoverGround = earthTangentPlane(scp) -
+        (slantPlaneNormal(scp) / (earthTangentPlane(scp).dot(
+                slantPlaneNormal(scp))));
     double loNorth = layoverGround.dot(uNorth(scp));
     double loEast = layoverGround.dot(uEast(scp));
     return std::fmod(std::atan2(loEast, loNorth) *
@@ -189,7 +180,6 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
     if (Init::isUndefined<double>(scpTime) &&
         !Init::isUndefined<Poly2D>(grid.timeCOAPoly))
     {
-        //Tested manually
         scpTime = derivedSCPTime(grid);
     }
     if (!Init::isUndefined<PolyXYZ>(position.arpPoly) &&
