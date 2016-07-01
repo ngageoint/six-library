@@ -544,8 +544,8 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
 {
     return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
         validateFFTSigns(log) &&                                //2.2
-        row->validate(imageData, log) &&
-        col->validate(imageData, log));                         //2.3.1 - 2.3.9
+        row->validate(imageData, log) &&                        //2.3.1 - 2.3.9
+        col->validate(imageData, log));
 }
 
 void Grid::fillDerivedFields(
@@ -554,13 +554,11 @@ void Grid::fillDerivedFields(
         const SCPCOA& scpcoa)
 {
     if (!Init::isUndefined<double>(scpcoa.scpTime) &&
-        collectionInformation.radarMode == RadarModeType::SPOTLIGHT)
+        collectionInformation.radarMode == RadarModeType::SPOTLIGHT &&
+        Init::isUndefined<Poly2D>(timeCOAPoly))
     {
-        if (Init::isUndefined<Poly2D>(timeCOAPoly))
-        {
-            timeCOAPoly = Poly2D(0, 0);
-            timeCOAPoly[0][0] = scpcoa.scpTime;
-        }
+        timeCOAPoly = Poly2D(0, 0);
+        timeCOAPoly[0][0] = scpcoa.scpTime;
     }
 
     row->fillDerivedFields(imageData);
@@ -590,8 +588,8 @@ void Grid::fillDerivedFields(const RMAT& rmat, const Vector3& scp)
     if (Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        row->unitVector = rmat.uXCT(scp);
-        col->unitVector = rmat.uYAT(scp);
+        row->unitVector = derivedRowUnitVector(rmat, scp);
+        col->unitVector = derivedColUnitVector(rmat, scp);
     }
 }
 
@@ -601,8 +599,8 @@ void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
     if (Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        row->unitVector = rmcr.uXRG(scp);
-        col->unitVector = rmcr.uYCR(scp);
+        row->unitVector = derivedRowUnitVector(rmcr, scp);
+        col->unitVector = derivedColUnitVector(rmcr, scp);
     }
 }
 
@@ -615,8 +613,8 @@ void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
         Init::isUndefined<Vector3>(row->unitVector) &&
         Init::isUndefined<Vector3>(col->unitVector))
     {
-        row->unitVector = inca.uRG(scp, arpPoly);
-        col->unitVector = inca.uAZ(scp, arpPoly);
+        row->unitVector = derivedRowUnitVector(inca, scp, arpPoly);
+        col->unitVector = derivedColUnitVector(inca, scp, arpPoly);
     }
 
     if (Init::isUndefined<double>(col->kCenter))
@@ -729,6 +727,38 @@ double Grid::derivedColKCenter(const RMAT& rmat, double fc) const
         math::Constants::DEGREES_TO_RADIANS);
 }
 
+Vector3 Grid::derivedRowUnitVector(const RMAT& rmat, const Vector3& scp) const
+{
+    return rmat.uXCT(scp);
+}
+
+Vector3 Grid::derivedColUnitVector(const RMAT& rmat, const Vector3& scp) const
+{
+    return rmat.uYAT(scp);
+}
+
+Vector3 Grid::derivedRowUnitVector(const RMCR& rmcr, const Vector3& scp) const
+{
+    return rmcr.uXRG(scp);
+}
+
+Vector3 Grid::derivedColUnitVector(const RMCR& rmcr, const Vector3& scp) const
+{
+    return rmcr.uYCR(scp);
+}
+
+Vector3 Grid::derivedRowUnitVector(const INCA& inca, const Vector3& scp,
+        const PolyXYZ& arpPoly) const
+{
+    return inca.uRG(scp, arpPoly);
+}
+
+Vector3 Grid::derivedColUnitVector(const INCA& inca, const Vector3& scp,
+    const PolyXYZ& arpPoly) const
+{
+    return inca.uAZ(scp, arpPoly);
+}
+
 void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
 {
     if (!Init::isUndefined<double>(fc))
@@ -768,7 +798,8 @@ void Grid::fillDefaultFields(const PFA& pfa, double fc)
             // Approximation: this may not be quite right, due to
             // rectangular inscription loss in PFA, but it should
             // be close.
-            row->kCenter = fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) *
+            row->kCenter = fc * 
+                (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC) *
                 pfa.spatialFrequencyScaleFactorPoly[0];
         }
     }
@@ -812,34 +843,35 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
 bool Grid::validate(const RMAT& rmat, const Vector3& scp,
     double fc, logging::Logger& log) const
 {
-    (void)rmat; // only for overloading
     std::ostringstream messageBuilder;
     bool valid = true;
 
     // 2.12.3.2.3
-    if ((row->unitVector - rmat.uXCT(scp)).norm() > UVECT_TOL)
+    if ((row->unitVector - derivedRowUnitVector(rmat, scp)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Row.UVectECF: " << row->unitVector
-            << "Derived grid.Row.UVectECT: " << rmat.uXCT(scp);
+            << "Derived grid.Row.UVectECT: "
+            << derivedRowUnitVector(rmat, scp);
         log.error(messageBuilder.str());
         valid = false;
     }
 
     // 2.12.3.2.4
-    if ((col->unitVector - rmat.uYAT(scp)).norm() > UVECT_TOL)
+    if ((col->unitVector - derivedColUnitVector(rmat, scp)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector
-            << "Derived Grid.Col.UVectECF: " << rmat.uYAT(scp);
+            << "Derived Grid.Col.UVectECF: "
+            << derivedColUnitVector(rmat, scp);
         log.error(messageBuilder.str());
         valid = false;
     }
 
     // 2.12.3.2.6
-    if (std::abs(derivedRowKCenter(rmat, fc) / row->kCenter - 1) > WF_TOL)
+    if (std::abs((derivedRowKCenter(rmat, fc) / row->kCenter) - 1) > WF_TOL)
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR
@@ -850,7 +882,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
     }
 
     //2.12.3.2.7
-    if (std::abs(derivedColKCenter(rmat, fc) / col->kCenter - 1) > WF_TOL)
+    if (std::abs((derivedColKCenter(rmat, fc) / col->kCenter) - 1) > WF_TOL)
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR
@@ -866,28 +898,29 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
 bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
         double fc, logging::Logger& log) const
 {
-    (void)rmcr; // Only for overloading
     bool valid = true;
     std::ostringstream messageBuilder;
 
     //2.12.3.3.3
-    if ((row->unitVector - rmcr.uXRG(scp)).norm() > UVECT_TOL)
+    if ((row->unitVector - derivedRowUnitVector(rmcr, scp)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Row.UVectECF: " << row->unitVector << std::endl
-            << "Derived Grid.Row.UVectECF: " << rmcr.uXRG(scp);
+            << "Derived Grid.Row.UVectECF: "
+            << derivedRowUnitVector(rmcr, scp);
         log.error(messageBuilder.str());
         valid = false;
     }
 
     // 2.12.3.3.4
-    if ((col->unitVector - rmcr.uYCR(scp)).norm() > UVECT_TOL)
+    if ((col->unitVector - derivedColUnitVector(rmcr, scp)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
-            << "Derived Grid.Col.UVectECF: " << rmcr.uYCR(scp);
+            << "Derived Grid.Col.UVectECF: "
+            << derivedRowUnitVector(rmcr, scp);
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -975,23 +1008,27 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     }
 
     // 2.12.3.4.6
-    if ((inca.uRG(scp, arpPoly) - row->unitVector).norm() > UVECT_TOL)
+    if ((row->unitVector -
+            derivedRowUnitVector(inca, scp, arpPoly)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
             << "Grid.Row.UVectECF: " << row->unitVector
-            << "Derived Grid.Row.UVectECF: " << inca.uRG(scp, arpPoly);
+            << "Derived Grid.Row.UVectECF: "
+            << derivedRowUnitVector(inca, scp, arpPoly);
         log.error(messageBuilder.str());
         valid =  false;
     }
 
     // 2.12.3.4.7
-    if ((inca.uAZ(scp, arpPoly) - col->unitVector).norm() > UVECT_TOL)
+    if ((col->unitVector -
+            derivedRowUnitVector(inca, scp, arpPoly)).norm() > UVECT_TOL)
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector
-            << "Derived Grid.Col.UVectECF: " << inca.uAZ(scp, arpPoly);
+            << "Derived Grid.Col.UVectECF: "
+            << derivedRowUnitVector(inca, scp, arpPoly);
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1000,7 +1037,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     if (col->kCenter != 0)
     {
         messageBuilder.str("");
-        messageBuilder << "Grid.Col.KCtr  must be zero "
+        messageBuilder << "Grid.Col.KCtr must be zero "
             << "for RMA/INCA data." << std::endl
             << "Grid.Col.KCtr: " << col->kCenter;
         log.error(messageBuilder.str());
@@ -1180,8 +1217,9 @@ bool Grid::validate(const RgAzComp& rgAzComp,
     if (imagePlane != ComplexImagePlaneType::SLANT)
     {
         messageBuilder.str("");
-        messageBuilder << "RGAZCOMP image formation should result in a SLANT plane image." << std::endl
-            << "Grid.ImagePlane: " << imagePlane.toString();
+        messageBuilder << 
+            "RGAZCOMP image formation should result in a SLANT plane image." 
+            << std::endl << "Grid.ImagePlane: " << imagePlane.toString();
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1190,8 +1228,9 @@ bool Grid::validate(const RgAzComp& rgAzComp,
     if (type != ComplexImageGridType::RGAZIM)
     {
         messageBuilder.str("");
-        messageBuilder << "RGAZCOMP image formation should result in a RGAZIM grid." << std::endl
-            << "Grid.Type: " << type.toString();
+        messageBuilder <<
+            "RGAZCOMP image formation should result in a RGAZIM grid."
+            << std::endl << "Grid.Type: " << type.toString();
         log.error(messageBuilder.str());
         valid = false;
     }

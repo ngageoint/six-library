@@ -256,10 +256,24 @@ private:
     double derivedRowKCenter(const INCA& inca) const;
     ComplexImageGridType defaultGridType(const RMA& rma) const;
     ComplexImagePlaneType defaultPlaneType(const RMA& rma) const;
+
+    Vector3 derivedRowUnitVector(const RMAT& rmat, const Vector3& scp) const;
+    Vector3 derivedColUnitVector(const RMAT& rmat, const Vector3& scp) const;
+
+    Vector3 derivedRowUnitVector(const RMCR& rmcr, const Vector3& scp) const;
+    Vector3 derivedColUnitVector(const RMCR& rmcr, const Vector3& scp) const;
+
+    Vector3 derivedRowUnitVector(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly) const;
+    Vector3 derivedColUnitVector(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly) const;
+
     Vector3 derivedRowUnitVector(const SCPCOA& scpcoa,
             const Vector3& scp) const;
+
     Vector3 derivedColUnitVector(const SCPCOA& scpcoa,
         const Vector3& scp) const;
+
     const double UVECT_TOL = 1e-3;
     const double WF_TOL = 1e-3;
     const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
