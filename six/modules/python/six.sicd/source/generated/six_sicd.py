@@ -689,8 +689,8 @@ class DirectionParameters(_object):
     def validate(self, *args):
         """
         validate(DirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
-        validate(DirectionParameters self, RgAzComp rgAzComp, Vector3 scp, logging::Logger & log, double offset=0) -> bool
-        validate(DirectionParameters self, RgAzComp rgAzComp, Vector3 scp, logging::Logger & log) -> bool
+        validate(DirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
+        validate(DirectionParameters self, RgAzComp rgAzComp, logging::Logger & log) -> bool
         """
         return _six_sicd.DirectionParameters_validate(self, *args)
 
@@ -6563,8 +6563,8 @@ class ScopedCloneableDirectionParameters(_object):
     def validate(self, *args):
         """
         validate(ScopedCloneableDirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
-        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, Vector3 scp, logging::Logger & log, double offset=0) -> bool
-        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, Vector3 scp, logging::Logger & log) -> bool
+        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
+        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, logging::Logger & log) -> bool
         """
         return _six_sicd.ScopedCloneableDirectionParameters_validate(self, *args)
 
