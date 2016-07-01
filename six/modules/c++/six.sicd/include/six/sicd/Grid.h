@@ -144,7 +144,6 @@ struct DirectionParameters
     bool validate(const ImageData& imageData,
             logging::Logger& log) const;
     bool validate(const RgAzComp& rgAzComp,
-            const Vector3& scp,
             logging::Logger& log,
             double offset = 0) const;
 
@@ -153,14 +152,17 @@ struct DirectionParameters
             double offset = 0);
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
+
     bool validateWeights(const Functor& weightFunction,
             logging::Logger& log) const;
+
     double derivedKCenter(const RgAzComp& rgAzComp,
-            const Vector3& scp,
             double offset = 0) const;
+
     Poly2D derivedKcoaPoly(const RgAzComp& rgAzComp,
             double offset = 0) const;
-    std::vector<std::vector<sys::SSize_T> >
+
+    std::vector<RowColInt>
             calculateImageVertices(const ImageData& imageData) const;
 
     /* Return vector contents, in order:
@@ -171,6 +173,7 @@ private:
             const ImageData& imageData) const;
 
     const double WGT_TOL = 1e-3;
+    const size_t DEFAULT_WEIGHT_SIZE = 512;
     const std::string boundsErrorMessage =
             "Violation of spatial frequency extent bounds.";
 

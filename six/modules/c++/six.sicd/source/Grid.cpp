@@ -81,18 +81,18 @@ std::pair<double, double> DirectionParameters::calculateDeltaKs(
     double derivedDeltaK1 = 0;
     double derivedDeltaK2 = 0;
 
-    std::vector<std::vector<sys::SSize_T> > vertices = calculateImageVertices(imageData);
+    std::vector<RowColInt> vertices = calculateImageVertices(imageData);
 
     if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
     {
         derivedDeltaK1 = std::numeric_limits<double>::infinity();
         derivedDeltaK2 = -std::numeric_limits<double>::infinity();
 
-        for (size_t ii = 0; ii < vertices[0].size(); ++ii)
+        for (size_t ii = 0; ii < vertices.size(); ++ii)
         {
             double currentDeltaK = deltaKCOAPoly.atY(
-                    static_cast<double>(vertices[1][ii]))(
-                    static_cast<double>(vertices[0][ii]));
+                    static_cast<double>(vertices[ii].col))(
+                    static_cast<double>(vertices[ii].row));
             derivedDeltaK1 = std::min(currentDeltaK, derivedDeltaK1);
             derivedDeltaK2 = std::max(currentDeltaK, derivedDeltaK2);
         }
@@ -156,31 +156,23 @@ DirectionParameters::calculateWeightFunction() const
     return weightFunction;
 }
 
-std::vector<std::vector<sys::SSize_T> >
+std::vector<RowColInt>
 DirectionParameters::calculateImageVertices(const ImageData& imageData) const
 {
-    std::vector<std::vector<sys::SSize_T> > vertices;
-    vertices.resize(2);
+    std::vector<RowColInt> vertices;
 
     if (imageData.validData.size() != 0)
     {
-        for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
-        {
-            vertices[0].push_back(imageData.validData[ii].col);
-            vertices[1].push_back(imageData.validData[ii].row);
-        }
+        vertices = imageData.validData;
     }
     else
     {
+        vertices.resize(4);
         //use edges of full image
-        vertices[0].push_back(0);
-        vertices[0].push_back(imageData.numCols - 1);
-        vertices[0].push_back(imageData.numCols - 1);
-        vertices[0].push_back(0);
-        vertices[1].push_back(0);
-        vertices[1].push_back(0);
-        vertices[1].push_back(imageData.numRows - 1);
-        vertices[1].push_back(imageData.numRows - 1);
+        vertices[0] = RowColInt(0, 0);
+        vertices[1] = RowColInt(imageData.numCols - 1, 0);
+        vertices[2] = RowColInt(imageData.numCols - 1, imageData.numCols - 1);
+        vertices[3] = RowColInt(0, imageData.numCols - 1);
     }
     return vertices;
 }
@@ -209,11 +201,10 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         weights.empty() &&
         weightType->windowName != "UNKNOWN")
     {
-        const size_t defaultWgtSize = 512;
         std::auto_ptr<Functor> weightFunction = calculateWeightFunction();
         if (weightFunction.get())
         {
-            weights = (*weightFunction)(defaultWgtSize);
+            weights = (*weightFunction)(DEFAULT_WEIGHT_SIZE);
         }
     }
     return;
@@ -307,7 +298,6 @@ bool DirectionParameters::validate(const ImageData& imageData,
 
     // Check weight functions
     std::auto_ptr<Functor> weightFunction;
-    const size_t DEFAULT_WGT_SIZE = 512;
 
     if (weightType.get())
     {
@@ -399,7 +389,7 @@ void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
     const Vector3& scp = geoData.scp.ecf;
     if (Init::isUndefined<double>(kCenter))
     {
-        kCenter = derivedKCenter(rgAzComp, scp, offset);
+        kCenter = derivedKCenter(rgAzComp, offset);
     }
 
     if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
@@ -410,7 +400,7 @@ void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
 }
 
 double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
-        const Vector3& scp, double offset) const
+        double offset) const
 {
     (void)rgAzComp;
     double derivedCenter = offset;
@@ -431,7 +421,6 @@ Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& rgAzComp,
 }
 
 bool DirectionParameters::validate(const RgAzComp& rgAzComp,
-        const Vector3& scp,
         logging::Logger& log,
         double offset) const
 {
@@ -439,7 +428,7 @@ bool DirectionParameters::validate(const RgAzComp& rgAzComp,
     std::ostringstream messageBuilder;
 
     // 2.12.1.8, 2.12.1.9
-    if (std::abs(kCenter - derivedKCenter(rgAzComp, scp, offset))
+    if (std::abs(kCenter - derivedKCenter(rgAzComp, offset))
             > std::numeric_limits<double>::epsilon())
     {
         messageBuilder.str("");
@@ -1209,8 +1198,8 @@ bool Grid::validate(const RgAzComp& rgAzComp,
 
     //2.12.1.8
     const Vector3& scp = geoData.scp.ecf;
-    valid = valid && col->validate(rgAzComp, scp, log);
-    valid = valid && row->validate(rgAzComp, scp, log,
+    valid = valid && col->validate(rgAzComp, log);
+    valid = valid && row->validate(rgAzComp, log,
             fc *(2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC));
 
     //2.12.1.6
