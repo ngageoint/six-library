@@ -162,11 +162,14 @@ private:
             double offset = 0) const;
     std::vector<std::vector<sys::SSize_T> >
             calculateImageVertices(const ImageData& imageData) const;
+
     /* Return vector contents, in order:
     * 0) deltaK1 (min)
     * 1) deltaK2 (max)
     */
-    std::vector<double> calculateDeltaKs(const ImageData& imageData) const;
+    std::pair<double, double> calculateDeltaKs(
+            const ImageData& imageData) const;
+
     const double WGT_TOL = 1e-3;
     const std::string boundsErrorMessage =
             "Violation of spatial frequency extent bounds.";

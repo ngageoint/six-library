@@ -71,7 +71,8 @@ bool DirectionParameters::operator==(const DirectionParameters& rhs) const
         weights == rhs.weights);
 }
 
-std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& imageData) const
+std::pair<double, double> DirectionParameters::calculateDeltaKs(
+        const ImageData& imageData) const
 {
     //Here, we assume the min and max of DeltaKCOAPoly must be
     // on the vertices of the image, since it is smooth and monotonic in most cases--
@@ -107,18 +108,13 @@ std::vector<double> DirectionParameters::calculateDeltaKs(const ImageData& image
         derivedDeltaK2 = -derivedDeltaK1;
     }
 
-    std::vector<double> deltaKs;
-    deltaKs.resize(2);
-    deltaKs[0] = derivedDeltaK1;
-    deltaKs[1] = derivedDeltaK2;
-    return deltaKs;
+    return std::pair<double, double>(derivedDeltaK1, derivedDeltaK2);
 }
 
 std::auto_ptr<Functor>
 DirectionParameters::calculateWeightFunction() const
 {
     std::auto_ptr<Functor> weightFunction;
-    bool useWeightFunction = false;
 
     if (weightType.get() != NULL)
     {
@@ -155,29 +151,8 @@ DirectionParameters::calculateWeightFunction() const
             weightFunction.reset(new Kaiser(str::toType<double>(
                     weightType->parameters[0].str())));
         }
-        else
-        {
-            //TODO: windowName == "TAYLOR"
-            useWeightFunction = true;
-        }
-    }
-    else
-    {
-        useWeightFunction = true;
     }
 
-    if (useWeightFunction)
-    {
-        if (weights.empty())
-        {
-            weightFunction.reset();
-            return weightFunction;
-        }
-        else
-        {
-            //TODO: interpft(weightFunction)
-        }
-    }
     return weightFunction;
 }
 
@@ -189,13 +164,9 @@ DirectionParameters::calculateImageVertices(const ImageData& imageData) const
 
     if (imageData.validData.size() != 0)
     {
-        //test vertices
         for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
         {
             vertices[0].push_back(imageData.validData[ii].col);
-        }
-        for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
-        {
             vertices[1].push_back(imageData.validData[ii].row);
         }
     }
@@ -229,66 +200,27 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         // of the image, since it is smooth and monotonic in most cases--although in
         // actuality this is not always the case. To be totally generic, we would 
         // have to search for an interior min and max as well.
-
-        std::vector<double> deltas = calculateDeltaKs(imageData);
-
-        deltaK1 = deltas[0];
-        deltaK2 = deltas[1];
+        std::pair<double, double> deltas = calculateDeltaKs(imageData);
+        deltaK1 = deltas.first;
+        deltaK2 = deltas.second;
     }
 
     if (weightType.get() != NULL &&
         weights.empty() &&
         weightType->windowName != "UNKNOWN")
     {
-        size_t defaultWgtSize = 512;
-        weights = (*calculateWeightFunction())(defaultWgtSize);
+        const size_t defaultWgtSize = 512;
+        std::auto_ptr<Functor> weightFunction = calculateWeightFunction();
+        if (weightFunction.get())
+        {
+            weights = (*weightFunction)(defaultWgtSize);
+        }
     }
     return;
 }
 
-void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
-        const GeoData& geoData, double offset)
-{
-    const Vector3& scp = geoData.scp.ecf;
-    if (Init::isUndefined<double>(kCenter))
-    {
-        kCenter = derivedKCenter(rgAzComp, scp, offset);
-    }
-
-    if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
-        !Init::isUndefined<double>(kCenter))
-    {
-        deltaKCOAPoly = derivedKcoaPoly(rgAzComp, offset);
-    }
-}
-
-double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
-        const Vector3& scp, double offset) const
-{
-    (void)rgAzComp;
-    double derivedCenter = offset;
-    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
-    {
-        // DeltaKCOAPoly populated, but not KCtr (would be odd)
-        derivedCenter -= deltaKCOAPoly[0][0];
-    }
-    return derivedCenter;
-
-}
-
-Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& rgAzComp,
-        double offset) const
-{
-    (void)rgAzComp;
-    // KCtr popualted, but not DeltaKCOAPoly
-    // Create a Poly2D with one term
-    std::vector<double> coefs(1, offset - kCenter);
-    return Poly2D(0, 0, coefs);
-
-}
-
 bool DirectionParameters::validate(const ImageData& imageData,
-        logging::Logger& log) const
+    logging::Logger& log) const
 {
     bool valid = true;
     std::ostringstream messageBuilder;
@@ -307,8 +239,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     else
     {
         // 2.3.2, 2.3.6
-        if (deltaK2 > (1 / (2 * sampleSpacing))
-                + epsilon)
+        if (deltaK2 > (1 / (2 * sampleSpacing)) + epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
@@ -320,8 +251,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         }
 
         // 2.3.3, 2.3.7
-        if (deltaK1 < (-1 / (2 * sampleSpacing))
-                - epsilon)
+        if (deltaK1 < (-1 / (2 * sampleSpacing)) - epsilon)
         {
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
@@ -338,7 +268,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
             messageBuilder.str("");
             messageBuilder << boundsErrorMessage << std::endl
                 << "SICD.Grid.Row/Col.impulseResponseBandwidth: " <<
-                    impulseResponseBandwidth << std::endl
+                impulseResponseBandwidth << std::endl
                 << "SICD.Grid.Row/Col.DeltaK2 - SICD.Grid.Row/COl.DeltaK1: "
                 << deltaK2 - deltaK1 << std::endl;
             log.error(messageBuilder.str());
@@ -348,16 +278,14 @@ bool DirectionParameters::validate(const ImageData& imageData,
 
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.
-    std::vector<double> deltas = calculateDeltaKs(imageData);
-
-    const double minDk = deltas[0];
-    const double maxDk = deltas[1];
+    std::pair<double, double> deltas = calculateDeltaKs(imageData);
+    const double minDk = deltas.first;
+    const double maxDk = deltas.second;
 
     const double DK_TOL = 1e-2;
 
     //2.3.9.1, 2.3.9.3
-    if (std::abs((deltaK1 / minDk) - 1)
-            > DK_TOL)
+    if (std::abs((deltaK1 / minDk) - 1) > DK_TOL)
     {
         messageBuilder.str("");
         messageBuilder << boundsErrorMessage << std::endl
@@ -367,8 +295,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         valid = false;
     }
     //2.3.9.2, 2.3.9.4
-    if (std::abs((deltaK2 / maxDk) - 1)
-            > DK_TOL)
+    if (std::abs((deltaK2 / maxDk) - 1) > DK_TOL)
     {
         messageBuilder.str("");
         messageBuilder << boundsErrorMessage << std::endl
@@ -379,7 +306,6 @@ bool DirectionParameters::validate(const ImageData& imageData,
     }
 
     // Check weight functions
-    //std::vector<double> expectedWeights; <- Used in unimplemented section
     std::auto_ptr<Functor> weightFunction;
     const size_t DEFAULT_WGT_SIZE = 512;
 
@@ -392,10 +318,6 @@ bool DirectionParameters::validate(const ImageData& imageData,
             if (!weights.empty())
             {
                 valid = valid && validateWeights(*weightFunction, log);
-            }
-            else
-            {
-                //expectedWeights = (*weightFunction)(DEFAULT_WGT_SIZE);
             }
         }
         else
@@ -422,13 +344,11 @@ bool DirectionParameters::validate(const ImageData& imageData,
         log.warn(messageBuilder.str());
     }
 
-    // TODO: 2.5 (requires fzero)
-
     return valid;
 }
 
 bool DirectionParameters::validateWeights(const Functor& weightFunction,
-        logging::Logger& log) const
+    logging::Logger& log) const
 {
     bool consistentValues = true;
     bool valid = true;
@@ -471,6 +391,43 @@ bool DirectionParameters::validateWeights(const Functor& weightFunction,
     }
 
     return valid;
+}
+
+void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
+        const GeoData& geoData, double offset)
+{
+    const Vector3& scp = geoData.scp.ecf;
+    if (Init::isUndefined<double>(kCenter))
+    {
+        kCenter = derivedKCenter(rgAzComp, scp, offset);
+    }
+
+    if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
+        !Init::isUndefined<double>(kCenter))
+    {
+        deltaKCOAPoly = derivedKcoaPoly(rgAzComp, offset);
+    }
+}
+
+double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
+        const Vector3& scp, double offset) const
+{
+    (void)rgAzComp;
+    double derivedCenter = offset;
+    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+    {
+        derivedCenter -= deltaKCOAPoly[0][0];
+    }
+    return derivedCenter;
+}
+
+Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& rgAzComp,
+        double offset) const
+{
+    (void)rgAzComp;
+    // Create a Poly2D with one term
+    std::vector<double> coefs(1, offset - kCenter);
+    return Poly2D(0, 0, coefs);
 }
 
 bool DirectionParameters::validate(const RgAzComp& rgAzComp,
@@ -599,8 +556,7 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
     return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
         validateFFTSigns(log) &&                                //2.2
         row->validate(imageData, log) &&
-        col->validate(imageData, log)                           //2.3.1 - 2.3.9
-        );
+        col->validate(imageData, log));                         //2.3.1 - 2.3.9
 }
 
 void Grid::fillDerivedFields(
@@ -613,7 +569,7 @@ void Grid::fillDerivedFields(
     {
         if (Init::isUndefined<Poly2D>(timeCOAPoly))
         {
-            timeCOAPoly = Poly2D(1, 1);
+            timeCOAPoly = Poly2D(0, 0);
             timeCOAPoly[0][0] = scpcoa.scpTime;
         }
     }
