@@ -1897,9 +1897,9 @@ class SCPCOA(_object):
         return _six_sicd.SCPCOA_slantPlaneNormal(self, scp)
 
 
-    def etp(self, scp):
-        """etp(SCPCOA self, Vector3 scp) -> Vector3"""
-        return _six_sicd.SCPCOA_etp(self, scp)
+    def earthTangentPlane(self, scp):
+        """earthTangentPlane(SCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.SCPCOA_earthTangentPlane(self, scp)
 
     __swig_destroy__ = _six_sicd.delete_SCPCOA
     __del__ = lambda self: None
@@ -4515,9 +4515,9 @@ class ScopedCopyableSCPCOA(_object):
         return _six_sicd.ScopedCopyableSCPCOA_slantPlaneNormal(self, scp)
 
 
-    def etp(self, scp):
-        """etp(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
-        return _six_sicd.ScopedCopyableSCPCOA_etp(self, scp)
+    def earthTangentPlane(self, scp):
+        """earthTangentPlane(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableSCPCOA_earthTangentPlane(self, scp)
 
 ScopedCopyableSCPCOA_swigregister = _six_sicd.ScopedCopyableSCPCOA_swigregister
 ScopedCopyableSCPCOA_swigregister(ScopedCopyableSCPCOA)
