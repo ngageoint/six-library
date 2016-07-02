@@ -1,6 +1,7 @@
 NAME            = 'six'
 MAINTAINER      = 'adam.sylvester@mdaus.com'
 MODULE_DEPS     = 'scene nitf xml.lite logging math.poly mem'
+USELIB_LOCAL    = 'PIAPEA-static-c'
 TARGETS_TO_ADD  = 'XML_DATA_CONTENT'
 
 options = configure = distclean = lambda p: None

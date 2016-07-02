@@ -72,11 +72,11 @@
 
 #ifdef __cplusplus
 #define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
-        extern "C" char** _Tre##_init(nitf_Error*); \
+        extern "C" const char** _Tre##_init(nitf_Error*); \
         extern "C" nitf_TREHandler* _Tre##_handler(nitf_Error*);
 #else
 #define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
-        extern char** _Tre##_init(nitf_Error*); \
+        extern const char** _Tre##_init(nitf_Error*); \
         extern nitf_TREHandler* _Tre##_handler(nitf_Error*);
 #endif
 

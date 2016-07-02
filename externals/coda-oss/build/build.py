@@ -173,13 +173,20 @@ class CPPContext(Context.Context):
             targetName = libName
 
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
-        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        glob_patterns = []
-        for dir in sourcedirs:
-            for ext in allSourceExt:
-                glob_patterns.append(join(dir, '*%s' % ext))
+        
+        glob_patterns = listify(modArgs.get('source', '')) or None
+        if not glob_patterns:
+            sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
+            glob_patterns = []
+            for dir in sourcedirs:
+                for ext in allSourceExt:
+                    glob_patterns.append(join(dir, '*%s' % ext))
 
         #build the lib
+        if libName == 'PIAPEA-static-c':
+            #print sourcedirs
+            print path.ant_glob(glob_patterns)
+        
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
@@ -420,6 +427,10 @@ class CPPContext(Context.Context):
 
         if not source:
             source = bld.path.make_node(modArgs.get('source_dir', modArgs.get('sourcedir', 'source'))).ant_glob('*.c*', excl=modArgs.get('source_filter', ''))
+
+        if progName == 'test_static':
+            print uselib_local
+            print uselib
 
         exe = bld.program(features = 'add_targets',
                                source=source, name=progName,

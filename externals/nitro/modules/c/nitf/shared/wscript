@@ -17,19 +17,29 @@ def build(bld):
     env = bld.all_envs[variant]
     
     pluginList = []
-    plugins = bld.path.ant_glob('*.c')
+    tres = bld.path.ant_glob('*.c')
 
-    for p in plugins:
-        filename = str(p)
+    for tre in tres:
+        filename = str(tre)
 
+        # Build the TRE as a plugin
         kw = globals()
-        pluginName = splitext(filename)[0]
-        kw['NAME'] = pluginName
-        kw['LIBNAME'] = pluginName
+        treName = splitext(filename)[0]
+        kw['NAME'] = treName
+        kw['LIBNAME'] = treName
         kw['SOURCE'] = filename
 
         bld.plugin(**kw)
-        pluginList.append(pluginName)
+        pluginList.append(treName)
+
+        # Build the TRE as a static library
+        staticName = treName + '-static'
+        kw = globals()
+        kw['NAME'] = staticName
+        kw['LIBNAME'] = staticName
+        kw['SOURCE'] = filename
+
+        bld.module(**kw)
 
     bld(features='add_targets', target='nitro-plugins',
         targets_to_add=pluginList)

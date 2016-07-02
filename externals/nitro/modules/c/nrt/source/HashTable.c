@@ -365,6 +365,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
     nrt_Pair_init(p, key, data);
 
     /* Push the pair back into the list */
+    printf("I am pushing back a pair with key %s\n", key);
     return nrt_List_pushBack(ht->buckets[bucket], p, error);
 }
 
