@@ -1,0 +1,44 @@
+import os, sys
+from os.path import join, exists
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+
+build = distclean = lambda x: None
+
+def options(opt):
+    opt.add_option('--disable-numpy', action='store_false', dest='enable_numpy', default=True,
+                   help='Turn off Numpy C headers/libs')
+
+def configure(conf):    
+    if Options.options.enable_numpy and \
+        hasattr(Options.options, 'python') and Options.options.python:
+        # a little magic borrowed from python-config and extended for numpy and -L flags
+        try:
+            from distutils import sysconfig
+            import numpy.distutils
+            import os
+            
+            np_info = numpy.distutils.misc_util.get_info('npymath')
+
+            warningmessage = ""
+            if(len(np_info['include_dirs']) > 1):
+                warningmessage += " More than one include directory reported by Numpy.  Using first."
+            if(len(np_info['library_dirs']) > 1):
+                warningmessage += " More than one lib directory reported by Numpy.  Using first."
+
+            inc_dir = np_info['include_dirs'][0]
+            lib_dir = np_info['library_dirs'][0]
+
+            conf.check(uselib_store='NUMPY',
+                       use='PYEXT',
+                       lib='npymath',  
+                       header_name=['Python.h','numpy/arrayobject.h'],
+                       includes=inc_dir,
+                       libpath=lib_dir,
+                       msg='Checking for library numpy' + warningmessage, 
+                       mandatory=True)
+
+            conf.undefine("HAVE_NUMPY_ARRAYOBJECT_H")
+            conf.env['PY_HAVE_NUMPY'] = True
+        except:
+            conf.env['PY_HAVE_NUMPY'] = False
