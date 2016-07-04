@@ -116,6 +116,16 @@ NITFAPI(NITF_BOOL)
     nitf_PluginRegistry_loadPlugin(const char* fullPathName, nitf_Error* error);
 
 /*!
+ * Checks if a TRE handler exists for 'ident'
+ *
+ * \param ident ID of the TRE
+ *
+ * \return true if a TRE handler exists, false otherwise
+ */
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_TREHandlerExists(const char* ident);
+
+/*!
  *  Unload the plugin registry.  This will unload the DLLs and free
  *  the nodes in the data structure containing them.  Since this is
  *  normally called implicitly (by the destructor at exit), if you
