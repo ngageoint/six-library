@@ -2,7 +2,7 @@ import os, subprocess
 from waflib import Options
 from os.path import splitext, dirname, join
 
-MAINTAINER         = 'adam.sylvester@gd-ais.com'
+MAINTAINER         = 'adam.sylvester@mdaus.com'
 VERSION            = '1.0'
 LANG               = 'c'
 USE                = 'nitf-c'
@@ -10,26 +10,44 @@ PLUGIN             = 'nitf'
 REMOVEPLUGINPREFIX = True
 DEFINES            = ['NITF_MODULE_EXPORTS']
 
-configure = options = distclean = lambda p: None
+distclean = lambda p: None
+
+def options(opt):
+    opt.add_option('--enable-static-tres', action='store_true', default=False, dest='enable_static_tres',
+                   help='Enable static TRE support')
+
+def configure(conf):
+    # If it's already defined in a wscript, don't touch
+    if not conf.env['enable_static_tres']:
+        conf.env['enable_static_tres'] = Options.options.enable_static_tres
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant]
     
     pluginList = []
-    plugins = bld.path.ant_glob('*.c')
+    tres = bld.path.ant_glob('*.c')
 
-    for p in plugins:
-        filename = str(p)
+    for tre in tres:
+        filename = str(tre)
 
+        # Build the TRE as a plugin
         kw = globals()
-        pluginName = splitext(filename)[0]
-        kw['NAME'] = pluginName
-        kw['LIBNAME'] = pluginName
+        treName = splitext(filename)[0]
+        kw['NAME'] = treName
+        kw['LIBNAME'] = treName
         kw['SOURCE'] = filename
 
         bld.plugin(**kw)
-        pluginList.append(pluginName)
+        pluginList.append(treName)
+
+        # Build the TRE as a static library
+        if env['enable_static_tres']:
+            staticName = treName + '-static'
+            kw['NAME'] = staticName
+            kw['LIBNAME'] = staticName
+
+            bld.module(**kw)
 
     bld(features='add_targets', target='nitro-plugins',
         targets_to_add=pluginList)
