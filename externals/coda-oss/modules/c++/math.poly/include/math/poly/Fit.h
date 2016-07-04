@@ -5,6 +5,7 @@
 #include <math/poly/TwoD.h>
 #include <math/linear/Matrix2D.h>
 #include <math/linear/VectorN.h>
+#include <numeric>
 
 namespace math
 {
@@ -48,18 +49,29 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
                                              const Vector_T& y,
                                              size_t order)
 {
-        
+    math::linear::Vector<double> vx(x);
     math::linear::Vector<double> vy(y);
     // n is polynomial order
-    size_t sizeX = x.size();
+    size_t sizeX = vx.size();
 
-    math::linear::Matrix2D<double> A(x.size(), order + 1);
+    // Compute mean value
+    double mean = std::accumulate(vx.get(), vx.get() + sizeX, 0.0) / sizeX;
+
+    // Shift the vector values by mean to center around zero
+    math::linear::Vector<double> offv(sizeX, mean);
+    math::linear::Vector<double> xp = vx - offv;
+
+    // Normalize the values in the vector using standard deviation
+    double rxrms = 1 / std::sqrt(xp.normSq() / sizeX);
+    xp.scale(rxrms);
+
+    math::linear::Matrix2D<double> A(sizeX, order + 1);
 
     for (size_t i = 0; i < sizeX; i++)
     {
         // The c0 coefficient is a freebie
         A(i, 0) = 1;
-        double v = x[i];
+        double v = xp[i];
         A(i, 1) = v;
         for (size_t j = 2; j <= order; j++)
         {
@@ -71,10 +83,24 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
     math::linear::Matrix2D<double> inv = inverse(At * A);
     math::linear::Matrix2D<double> B = inv * At;
     math::linear::Vector<double> c(B * vy.matrix());
-    // use the vector constructor
-    std::vector<double> cv(c.size());
-    std::copy(c.get(), c.get()+c.size(), cv.begin());
-    return math::poly::OneD<double>(cv);
+
+    // Now we need the order+1 components out for our poly
+    math::poly::OneD<double> poly(c.size());
+
+    // Remove the normalization scaling
+    double xacc = 1;
+    for (size_t i = 0; i < c.size(); i++)
+    {
+        poly[i] = c[i] * xacc;
+        xacc *= rxrms;
+    }
+
+    // Shift the polynomial back from its centered offset
+    math::poly::OneD<double> shift(1);
+    shift[0] = -mean;
+    shift[1] = 1;
+
+    return poly.transformInput(shift);
 }
 
 
@@ -114,40 +140,32 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
                     size_t nx,
                     size_t ny)
 {
-    // Normalize the values in the matrix
     size_t m = x.rows();
     size_t n = x.cols();
-    
+    size_t mxn = x.size();
+
     if (m != y.rows())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
 
     if (n != y.cols())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
-    
-    double xacc = 0.0;
-    double yacc = 0.0;
-    for (size_t i = 0; i < m; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            xacc += x(i, j) * x(i, j);
-            yacc += y(i, j) * y(i, j);
-        }
-    }
-    
-    // by num elements
-    size_t mxn = m*n;
-    
-    xacc /= (double)mxn;
-    yacc /= (double)mxn;
-    
-    double rxrms = 1/std::sqrt(xacc);
-    double ryrms = 1/std::sqrt(yacc);
-    
-    // Scalar division
-    
-    math::linear::Matrix2D<double> xp = x * rxrms;
-    math::linear::Matrix2D<double> yp = y * ryrms;
+
+    // Compute mean values
+    double xoff = std::accumulate(x.get(), x.get() + mxn, 0.0) / mxn;
+    double yoff = std::accumulate(y.get(), y.get() + mxn, 0.0) / mxn;
+
+    // Shift the matrix values by mean to center around zero
+    math::linear::Matrix2D<double> xoffm(m, n, xoff);
+    math::linear::Matrix2D<double> yoffm(m, n, yoff);
+
+    math::linear::Matrix2D<double> xp = x - xoffm;
+    math::linear::Matrix2D<double> yp = y - yoffm;
+
+    // Normalize the values in the matrix using standard deviation
+    double rxrms = 1 / std::sqrt(xp.normSq() / mxn);
+    double ryrms = 1 / std::sqrt(yp.normSq() / mxn);
+    xp.scale(rxrms);
+    yp.scale(ryrms);
 
     size_t acols = (nx+1) * (ny+1);
 
@@ -160,21 +178,20 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     for (size_t i = 0; i < m; i++)
     {
         size_t xidx = i*n;
-        for (size_t j = 0; j < n; j++)
+        for (size_t j = 0; j < n; j++, xidx++)
         {
-
             // We are doing an accumulation of pow()s to get this
 
             // Pre-calculate these
             double xij = xp(i, j);
             double yij = yp(i, j);
 
-            xacc = 1;
+            double xacc = 1;
 
             for (size_t k = 0; k <= nx; k++)
             {
                 size_t yidx = k * (ny + 1);
-                yacc = 1;
+                double yacc = 1;
                 
                 for (size_t l = 0; l <= ny; l++)
                 {
@@ -182,12 +199,9 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
                     A(xidx, yidx) = xacc * yacc;
                     yacc *= yij;
                     ++yidx;
-
                 }
                 xacc *= xij;
             }
-            // xidx: i*n + j;
-            xidx++;
         }
     }
     
@@ -196,9 +210,10 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 
     for (size_t i = 0; i < m; i++)
     {
-        for (size_t j = 0; j < n; j++)
+        size_t xidx = i*n;
+        for (size_t j = 0; j < n; j++, xidx++)
         {
-            tmp(i*n + j, 0) = z(i, j);
+            tmp(xidx, 0) = z(i, j);
         }
     }
     
@@ -220,11 +235,12 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     // and NY+1 components out for our y coeffs
     math::poly::TwoD<double> coeffs(nx, ny);
 
-    xacc = 1;
+    // Remove the normalization scaling
+    double xacc = 1;
     size_t p = 0;
     for (size_t i = 0; i <= nx; i++)
     {
-        yacc = 1;
+        double yacc = 1;
         for (size_t j = 0; j <= ny; j++)
         {
             coeffs[i][j] = C(p, 0)*(xacc * yacc);
@@ -233,9 +249,16 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         }
         xacc *= rxrms;
     }
-    return coeffs;
 
+    // Shift the polynomial back from its centered offset
+    math::poly::TwoD<double> xShift(1, 1);
+    math::poly::TwoD<double> yShift(1, 1);
+    xShift[0][0] = -xoff;
+    xShift[1][0] = 1;
+    yShift[0][0] = -yoff;
+    yShift[0][1] = 1;
 
+    return coeffs.transformInput(xShift, yShift);
 }
 
 inline math::poly::TwoD<double> fit(size_t numRows,

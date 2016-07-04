@@ -27,28 +27,36 @@
 using namespace math::linear;
 using namespace math::poly;
 
+namespace
+{
+inline
+double diffSq(double lhs, double rhs)
+{
+    const double diff = lhs - rhs;
+    return (diff * diff);
+}
+
 TEST_CASE(test1DPolyfit)
 {
-    double x_obs[] = { 1, -1, 2, -2 };
-    double y_obs[] = { 3, 13, 1, 33 };
-    double z_poly[] = { 5, -4, 3, -1 };
+    const double xObs[] = { 1, -1, 2, -2 };
+    const double yObs[] = { 3, 13, 1, 33 };
+    const double zPoly[] = { 5, -4, 3, -1 };
 
-    std::vector<double> truthSTLVec(4);
-    memcpy(&truthSTLVec[0], z_poly, sizeof(double)*4);
+    const std::vector<double> truthSTLVec(zPoly, zPoly + 4);
 
-    OneD<double> truth(3, z_poly);
+    const OneD<double> truth(3, zPoly);
     // First test the raw pointer signature
-    OneD<double> polyFromRaw = fit(4, x_obs, y_obs, 3);
+    const OneD<double> polyFromRaw = fit(4, xObs, yObs, 3);
     
     // Now call the other one
-    Vector<double> xv(4, x_obs);
-    Vector<double> yv(4, y_obs);
+    const Vector<double> xv(4, xObs);
+    const Vector<double> yv(4, yObs);
 
-    OneD<double> polyFromVec = fit(xv, yv, 3);
+    const OneD<double> polyFromVec = fit(xv, yv, 3);
 
-    Fixed1D<3> fixed = fit(xv, yv, 3);
+    const Fixed1D<3> fixed = fit(xv, yv, 3);
 
-    OneD<double> polyFromSTL(truthSTLVec);
+    const OneD<double> polyFromSTL(truthSTLVec);
 
     // Polys better match
     TEST_ASSERT_EQ(polyFromRaw, polyFromVec);
@@ -56,13 +64,68 @@ TEST_CASE(test1DPolyfit)
     TEST_ASSERT_EQ(polyFromRaw, fixed);
     assert(polyFromRaw == truthSTLVec);
     TEST_ASSERT_EQ(polyFromSTL, truth);
-    
+}
 
+TEST_CASE(test1DPolyfitLarge)
+{
+    // Fit a polynomial
+    static const size_t NUM_OBS = 9;
+    double xObs[] = { 1, -1, 2, -2, 3, 15, 29, -4, -14 };
+    const double yObs[] = { 3, 13, 1, 33, -7, -2755, -21977, 133, 3393 };
+
+    static const size_t POLY_ORDER = 3;
+    const OneD<double> polyUnshifted = fit(NUM_OBS, xObs, yObs, POLY_ORDER);
+
+    // Now shift all the x values and fit another polynomial
+    static const size_t OFFSET = 10000;
+    double xObsShifted[NUM_OBS];
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        xObsShifted[ii] = xObs[ii] + OFFSET;
+    }
+
+    const OneD<double> polyShifted =
+            fit(NUM_OBS, xObsShifted, yObs, POLY_ORDER);
+
+    // If we evaluate the polynomials at equivalent x positions, we better
+    // have almost the same values
+    // TODO: Seems like I need a bigger epsilon here than I'd expect
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        TEST_ASSERT_ALMOST_EQ_EPS(polyUnshifted(xObs[ii]),
+                                  polyShifted(xObsShifted[ii]),
+                                  0.0005);
+    }
+
+    // Calculate the mean residual error to determine goodness of fit.
+    double errorSumUnshifted = 0.0;
+    double errorSumShifted = 0.0;
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        errorSumUnshifted += diffSq(polyUnshifted(xObs[ii]), yObs[ii]);
+        errorSumShifted += diffSq(polyShifted(xObsShifted[ii]), yObs[ii]);
+    }
+    const double meanResidualErrorUnshifted = errorSumUnshifted / NUM_OBS;
+    const double meanResidualErrorShifted = errorSumShifted / NUM_OBS;
+
+    /*
+    std::cout << "meanResidualErrorUnshifted: "
+              << meanResidualErrorUnshifted
+              << "\nmeanResidualErrorShifted: "
+              << meanResidualErrorShifted
+              << std::endl;
+    */
+
+    TEST_ASSERT_ALMOST_EQ(meanResidualErrorUnshifted, 0.0);
+
+    // TODO: This one is around 1.3e-7 which isn't as good as the 1.0e-22
+    //       for the unshifted case
+    TEST_ASSERT_ALMOST_EQ_EPS(meanResidualErrorShifted, 0.0, 2e-7);
 }
 
 TEST_CASE(test2DPolyfit)
 {
-    double coeffs[] = 
+    const double coeffs[] =
     {
         -1.02141e-16, 0.15,
          0.08,        0.4825,
@@ -90,9 +153,82 @@ TEST_CASE(test2DPolyfit)
     TEST_ASSERT_EQ(poly, truth);
 }
 
+TEST_CASE(test2DPolyfitLarge)
+{
+    // Use a defined polynomial to generate mapped values.  This ensures
+    // it is possible to fit the points using at least as many coefficients.
+    const double coeffs[] =
+    {
+        -1.021e-12, 7.5,    2.2,   5.5,
+         0.88,      4.825,  .52,   .69,
+         5.5,       1.0,    .62,   1.01,
+         .012,      6.32,   1.56,  .376
+    };
+
+    TwoD<double> truth(3, 3, coeffs);
+
+    // Specifically sampling points far from (0,0) to verify an issue
+    // identified when fitting non-centered input.
+
+    size_t gridSize = 9; // 9x9
+    size_t xOffset = 25000;
+    size_t xSpacing = 2134;
+    size_t yOffset = 42000;
+    size_t ySpacing = 3214;
+
+    Matrix2D<double> x(gridSize, gridSize);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        double xidx = xOffset + i * xSpacing;
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            x(i, j) = xidx;
+        }
+    }
+
+    Matrix2D<double> y(gridSize, gridSize);
+    for (size_t j = 0; j < gridSize; j++)
+    {
+        double yidx = yOffset + j * ySpacing;
+        for (size_t i = 0; i < gridSize; i++)
+        {
+            y(i, j) = yidx;
+        }
+    }
+
+    Matrix2D<double> z(gridSize, gridSize);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            z(i, j) = truth(i, j);
+        }
+    }
+
+    // Fit polynomial
+    TwoD<double> poly = fit(x, y, z, 5, 5);
+
+    // Calculate the mean residual error to determine goodness of fit.
+    double errorSum(0.0);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            errorSum += diffSq(z(i, j), poly(x(i, j), y(i, j)));
+        }
+    }
+    double meanResidualError = errorSum / (gridSize * gridSize);
+
+    // std::cout << "meanResidualError: " << meanResidualError << std::endl;
+
+    TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
+}
+}
+
 int main(int, char**)
 {
-
     TEST_CHECK(test1DPolyfit);
+    TEST_CHECK(test1DPolyfitLarge);
     TEST_CHECK(test2DPolyfit);
+    TEST_CHECK(test2DPolyfitLarge);
 }

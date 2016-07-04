@@ -73,12 +73,12 @@ OneD<math::linear::VectorN<3, double> >::integrate(double start, double end) con
 {
    math::linear::VectorN<3, double> ret(0.0);
 
-   int polyOrder = order();
+   const size_t polyOrder = order();
    OneD<double> poly0(polyOrder);
    OneD<double> poly1(polyOrder);
    OneD<double> poly2(polyOrder);
 
-   for(size_t term = 0, sz = mCoef.size(); term < sz; term++)
+   for (size_t term = 0, sz = mCoef.size(); term < sz; term++)
    {
        poly0[term] = mCoef[term][0];
        poly1[term] = mCoef[term][1];
@@ -115,14 +115,14 @@ OneD< math::linear::VectorN<3, double> >::derivative() const
 {
    OneD< math::linear::VectorN<3, double> > ret(0);
 
-   int polyOrder = order();
-   if(polyOrder > 0)
+   const size_t polyOrder = order();
+   if (polyOrder > 0)
    {
        OneD<double> poly0(polyOrder);
        OneD<double> poly1(polyOrder);
        OneD<double> poly2(polyOrder);
 
-       for(size_t term = 0, sz = mCoef.size(); term < sz; term++)
+       for (size_t term = 0, sz = mCoef.size(); term < sz; term++)
        {
            poly0[term] = mCoef[term][0];
            poly1[term] = mCoef[term][1];
@@ -133,8 +133,8 @@ OneD< math::linear::VectorN<3, double> >::derivative() const
        poly1 = poly1.derivative();
        poly2 = poly2.derivative();
 
-       ret = OneD< math::linear::VectorN<3, double> >(polyOrder - 1);
-       for(size_t term = 0, sz = mCoef.size() -1; term < sz; term++)
+       ret = OneD<math::linear::VectorN<3, double> >(polyOrder - 1);
+       for (size_t term = 0, sz = mCoef.size() -1; term < sz; term++)
        {
            ret[term][0] = poly0[term];
            ret[term][1] = poly1[term];
@@ -241,9 +241,9 @@ OneD<_T>&
 OneD<_T>::operator *= (const OneD<_T>& p) 
 {
    OneD<_T> tmp(order()+p.order());
-   for (size_t i = 0, xsz = mCoef.size() ; i < xsz; i++)
+   for (size_t i = 0, xsz = mCoef.size(); i < xsz; i++)
    {
-       for (unsigned int j = 0, ysz = p.mCoef.size() ; j < ysz; j++)
+       for (size_t j = 0, ysz = p.mCoef.size(); j < ysz; j++)
        {
            tmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
        }
@@ -292,11 +292,11 @@ OneD<_T>&
 OneD<_T>::operator -= (const OneD<_T>& p) 
 {
    OneD<_T> tmp(std::max<size_t>(order(), p.order()));
-   for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
+   for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
    {
        tmp.mCoef[i] = mCoef[i];
    }
-   for (unsigned int i = 0, sz = p.mCoef.size(); i < sz; i++)
+   for (size_t i = 0, sz = p.mCoef.size(); i < sz; i++)
    {
        tmp.mCoef[i] -= p.mCoef[i];
    }
