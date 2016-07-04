@@ -22,19 +22,24 @@ TEST_FILTER     = 'test_1band_rw_line.c ' \
                   'test_des.c ' \
                   'test_ext_iter.c ' \
                   'test_ImageIO_read_data.c ' \
-                  'test_ImageIO_writePattern.c ' \
-                  'test_static_plugin.c' 
+                  'test_ImageIO_writePattern.c'
 
 SUBDIRS = 'shared apps'
 
-configure = options = distclean = lambda p: None
+distclean = lambda p: None
+
+def options(opt):
+    opt.recurse(SUBDIRS)
+
+def configure(conf):
+    conf.recurse(SUBDIRS)
 
 def build(bld):
-    env = bld.module(**globals())
+    bld.module(**globals())
     bld.recurse(SUBDIRS)
 
     #run doxygen
-    if 'DOXYGEN' in env and Options.is_install:
+    if 'DOXYGEN' in bld.env and Options.is_install:
         bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
             htmlDocs = bld.path.find_dir('doc/html')
@@ -42,23 +47,3 @@ def build(bld):
                 relpath = f.path_from(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
-
-    # Convenience target
-    # We do this mainly so that from the top-level wscript we can choose what to build
-    tests = bld.path.ant_glob(os.path.join('tests', '*.c'))
-    test_targets = []
-    for test in tests:
-        test_filename = str(test)
-        if test_filename not in TEST_FILTER:
-            test_targets.append(os.path.splitext(test_filename)[0])
-
-    bld(features='add_targets', target='nitf-c-tests',
-        targets_to_add=test_targets)
-
-    tests = bld.path.ant_glob(os.path.join('unittests', '*.c'))
-    test_targets = []
-    for test in tests:
-        test_targets.append(os.path.splitext(str(test))[0])
-    
-    bld(features='add_targets', target='nitf-c-unittests',
-        targets_to_add=test_targets)
