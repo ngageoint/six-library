@@ -9,7 +9,7 @@ USELIB_LOCAL    = 'nitf-c'
 LANG            = 'c++'
 TEST_FILTER     = 'test_functional.cpp test_handles.cpp ' \
                   'test_mem_source.cpp test_static_plugin.cpp'
-APPS            = 'apps/show_nitf++.cpp'
+APPS            = join('apps', 'show_nitf++.cpp')
 
 options = configure = distclean = lambda p: None
 
@@ -17,23 +17,19 @@ def build(bld):
     bld.module(**globals())
     
     env = bld.get_env()
-    app_targets = []
     for app in APPS.split():
         app_name = splitext(basename(app))[0]
-        app_targets.append(app_name)
         bld.program_helper(module_deps=NAME,
                            source=app, path=bld.path,
                            name=app_name)
 
-    bld(features='add_targets', target='nitf-c++-apps',
-        targets_to_add=app_targets)
-
-    tests = bld.path.ant_glob(join('tests', '*.cpp'))
-    test_targets = []
-    for test in tests:
-        test_filename = str(test)
-        if test_filename not in TEST_FILTER:
-            test_targets.append(splitext(test_filename)[0])
-
-    bld(features='add_targets', target='nitf-c++-tests',
-        targets_to_add=test_targets)
+    # We can only test static "plugins" if we've got them enabled
+    # If we do, we have to build this test directly ourselves because we need
+    # to link in the TRE that it uses (so it's in TEST_FILTER regardless of if
+    # we're going to build it or not)
+    if bld.env['enable_static_tres']:
+        bld.program_helper(module_deps=NAME,
+                           use='PIAPEA-static-c',
+                           source=join('tests', 'test_static_plugin.cpp'),
+                           name='test_static_plugin',
+                           install_path='${PREFIX}/tests/%s' % NAME)
