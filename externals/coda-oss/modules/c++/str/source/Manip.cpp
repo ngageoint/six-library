@@ -49,9 +49,9 @@ void str::trim(std::string & s)
 
 bool str::endsWith(const std::string & s, const std::string & match)
 {
-    int mLen = match.length();
-    int sLen = s.length();
-    for (int i = 0; i < sLen && i < mLen; ++i)
+    const size_t mLen = match.length();
+    const size_t sLen = s.length();
+    for (size_t i = 0; i < sLen && i < mLen; ++i)
         if (!(s[sLen - i - 1] == match[mLen - i - 1]))
             return false;
     return sLen >= mLen;
@@ -59,9 +59,9 @@ bool str::endsWith(const std::string & s, const std::string & match)
 
 bool str::startsWith(const std::string & s, const std::string & match)
 {
-    int mLen = match.length();
-    int sLen = s.length();
-    for (int i = 0; i < sLen && i < mLen; ++i)
+    const size_t mLen = match.length();
+    const size_t sLen = s.length();
+    for (size_t i = 0; i < sLen && i < mLen; ++i)
         if (!(s[i] == match[i]))
             return false;
     return sLen >= mLen;

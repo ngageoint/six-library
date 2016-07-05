@@ -275,9 +275,9 @@ class RowColDouble(_object):
         return _coda_types.RowColDouble___ne__(self, p)
 
 
-    def normL1(self):
-        """normL1(RowColDouble self) -> double"""
-        return _coda_types.RowColDouble_normL1(self)
+    def area(self):
+        """area(RowColDouble self) -> double"""
+        return _coda_types.RowColDouble_area(self)
 
 
     def normL2(self):
@@ -367,9 +367,9 @@ class RowColInt(_object):
         return _coda_types.RowColInt___ne__(self, p)
 
 
-    def normL1(self):
-        """normL1(RowColInt self) -> ssize_t"""
-        return _coda_types.RowColInt_normL1(self)
+    def area(self):
+        """area(RowColInt self) -> ssize_t"""
+        return _coda_types.RowColInt_area(self)
 
 
     def normL2(self):
@@ -459,9 +459,9 @@ class RowColSizeT(_object):
         return _coda_types.RowColSizeT___ne__(self, p)
 
 
-    def normL1(self):
-        """normL1(RowColSizeT self) -> size_t"""
-        return _coda_types.RowColSizeT_normL1(self)
+    def area(self):
+        """area(RowColSizeT self) -> size_t"""
+        return _coda_types.RowColSizeT_area(self)
 
 
     def normL2(self):

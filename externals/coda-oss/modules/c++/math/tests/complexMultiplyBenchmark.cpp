@@ -43,24 +43,7 @@
 
 /*  Results:
         When using the non looping benchmark, aka for large continuous data 
-    sets, it was faster to use doubles.  However when repeatedly looping over
-    a set of data, it is faster use complex numbers.  
-
-        When using the non looping method, the usage of doubles was
-    approximately .5% faster than the usage of complex numbers.  
-
-        When using the looping method, the usage of complex numbers was faster
-    by approximatley 5% than the usage of doubles.
-
-    This comparison is only valid when on linux though using g++ 4.9.  Tests
-    were not runnable at sufficiently large scales on windows due to memory
-    constraints.
-
-        In summmary, it is best to use complex numbers for iteration over an
-    array.  The speed gains from using doubles is minimal at best, and the usage
-    of complex numbers both increases clarity, code readability, and does not
-    incur a performance cost.
-
+    sets, it was approximately the same for both methods 
 */
 
 #include <algorithm>
@@ -75,6 +58,7 @@
 #include <str/Convert.h>
 
 const size_t NUM_TRIALS = 4;
+const size_t MAX_SIZE = 10E9;
 
 //Limits num so that it is less than 100
 template<typename T>
@@ -102,15 +86,17 @@ void limit(T & num)
  *      duration: The amount of time the operation took according to wtch
  *      return value: The mean of the vector
  */
-std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
-                                    const std::vector<std::complex<float> >& in,
-                                    size_t sze,
-                                    double& duration,
-                                    size_t numLoops = 1)
+void getMultWComplex(sys::RealTimeStopWatch& wtch,
+                     const std::vector<std::complex<float> >& in,
+                     size_t sze,
+                     double& duration,
+                     size_t numLoops = 1)
 {
     //declare starting point
-    std::complex<double> tmp(0.0,0.0);
-
+    std::vector<std::complex<float> > out (sze, 0);
+    double dblFactor = 1.23486;
+    float factor = dblFactor;
+    double incFact = .0000001;
     //start the watch
     wtch.start();
 
@@ -119,18 +105,14 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
     {
         for (size_t i = 0; i < sze; ++i)
         {
-            tmp += in[i];
+            out[i] = in[i] *  factor;
+            dblFactor += incFact;
+            factor = dblFactor;
         }
     }
 
-    tmp /= (sze * numLoops);
-
     //stop the watch and record the duration
     duration = wtch.stop();
-
-    //return the mean
-    return std::complex<float>(static_cast<float>(tmp.real()),
-                               static_cast<float>(tmp.imag()));
 }
 
 /*
@@ -149,15 +131,19 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
  *      duration: The amount of time the operation took according to wtch
  *      return value: The mean of the vector
  */
-std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
-                                   const std::vector<std::complex<float> >& in,
-                                   size_t sze,
-                                   double& duration,
-                                   size_t numLoops = 1)
+void getMultWDouble(sys::RealTimeStopWatch& wtch,
+                    const std::vector<std::complex<float> >& in,
+                    size_t sze,
+                    double& duration,
+                    size_t numLoops = 1)
 {
     //declare starting values
-    double meanI = 0.0;
-    double meanQ = 0.0;
+    float I = 0.0;
+    float Q = 0.0;
+    std::vector<std::complex<float> > out (sze, 0);
+    double dblFactor = 1.23486;
+    float factor = dblFactor;
+    double incFact = .0000001;
 
     //start the watch
     wtch.start();
@@ -167,31 +153,27 @@ std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
     {
         for (size_t i = 0; i < sze; ++i)
         {
-            meanI += in[i].real();
-            meanQ += in[i].imag();
+            I = in[i].real() * factor;
+            Q = in[i].imag() * factor;
+
+            out[i] = std::complex<float>(I, Q);
+            dblFactor += incFact;
+            factor = dblFactor;
         }
     }
-
-    meanI /= (sze * numLoops);
-    meanQ /= (sze * numLoops);
 
     //stop the watch and record the duration;
     duration = wtch.stop();
 
-    //return the mean
-    return std::complex<float>(meanI, meanQ);
 
 }
 
 //Prints out the results in a table format
-void print(std::ostream& out, size_t sze, std::complex<float> meanOne,
-           std::complex<float> meanTwo, double durOne, double durTwo)
+void print(std::ostream& out, size_t sze, double durOne, double durTwo)
 {
-    out << std::setw(15) << sze
-        << std::setw(25) << meanOne
-        << std::setw(25) << meanTwo
+    std::cout << std::setw(15) << sze
         << std::setw(15) << durOne/1000
-        << std::setw(25) << durTwo/1000 << '\n';
+        << std::setw(25) << durTwo/1000 << std::endl;
 }
 
 
@@ -247,25 +229,19 @@ void loopingBenchmark(size_t size,
         for(size_t k = 0; k < NUM_TRIALS; ++k)
         {
             //find the complex mean
-            std::complex<float> cmplxMean = getMeanWComplex(cmplxWatch,
-                                                            arr,
-                                                            size,
-                                                            cmplxTime,
-                                                            numLoops);
+            getMultWComplex(cmplxWatch, arr, size, cmplxTime, numLoops);
+
             //find the mean using doubles
-            std::complex<float> dblMean = getMeanWDouble(dblWatch,
-                                                         arr,
-                                                         size,
-                                                         dblTime,
-                                                         numLoops);
+            getMultWDouble(dblWatch, arr, size, dblTime, numLoops);
+
             //output the results
-            print(out, size * numLoops, cmplxMean, dblMean, cmplxTime, dblTime);
+            print(out, size * numLoops, cmplxTime, dblTime);
         }
         //simulate vector size growth
         numLoops *= growthFactor;
 
         //return if growth simulated would be too large to handle
-        if (sizeof(std::complex<float>) * size * numLoops > 10E10)
+        if (sizeof(std::complex<float>) * size * numLoops > MAX_SIZE)
         {
             std::cout << "ending early to prevent growth spiraling" << std::endl;
             return;
@@ -278,17 +254,17 @@ void loopingBenchmark(size_t size,
 size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 {
     //setup size calculation variables
-    const size_t MAX_SIZE = 10E10 / (sizeof( std::complex<float>));
+    const size_t MAX_SZE = MAX_SIZE / (sizeof( std::complex<float>));
     size_t largestPosGrowth =
         initSize * std::pow(static_cast<double>(growthFactor),
                             static_cast<double>(numGrowths));
-    size_t largestPosSize = std::min(largestPosGrowth, MAX_SIZE);
+    size_t largestPosSize = std::min(largestPosGrowth, MAX_SZE);
 
     //if growth is too high, find last growth less than MaxSize
-    if (largestPosSize == MAX_SIZE)
+    if (largestPosSize == MAX_SZE)
     {
         //simulate scaling until scaling would exceed MAX_SIZE
-        while (largestPosSize * growthFactor < MAX_SIZE)
+        while (largestPosSize * growthFactor < MAX_SZE)
         {
             largestPosSize *= growthFactor;
         }
@@ -352,17 +328,13 @@ void singlePassBenchmark(size_t size,
         for (size_t k = 0; k < NUM_TRIALS; ++k)
         {
             //find the mena using complex values
-            std::complex<float> cmplxMean = getMeanWComplex(cmplxWatch,
-                                                            arr,
-                                                            size,
-                                                            cmplxTime);
+            getMultWComplex(cmplxWatch, arr, size, cmplxTime);
+            
             //find the mean using doubles
-            std::complex<float> dblMean = getMeanWDouble(dblWatch,
-                                                         arr,
-                                                         size,
-                                                         dblTime);
+            getMultWDouble(dblWatch, arr, size, dblTime);
+
             //output the results
-            print(out, size, cmplxMean, dblMean, cmplxTime, dblTime);
+            print(out, size, cmplxTime, dblTime);
         }
 
         //increase size of vector

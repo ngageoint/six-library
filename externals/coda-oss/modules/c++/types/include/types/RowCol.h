@@ -213,10 +213,11 @@ template<typename T> struct RowCol
         return ! (RowCol::operator==(p));
     }
     
-    T normL1() const
+    T area() const
     {
         return std::abs(row) * std::abs(col);
     }
+
     T normL2() const
     {
         //! Should be able to just use sqrt() here but VC++ 2010 compiler
@@ -231,7 +232,7 @@ template<typename T> struct RowCol
 };
 
 template <>
-inline size_t RowCol<size_t>::normL1() const
+inline size_t RowCol<size_t>::area() const
 {
     return row * col;
 }
@@ -250,10 +251,6 @@ inline bool RowCol<double>::operator==(const RowCol<double>& p) const
     return std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;
 }
-
-
-
 }
-
 
 #endif
