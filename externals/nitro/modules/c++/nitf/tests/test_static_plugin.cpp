@@ -22,7 +22,10 @@
 
 #include <import/nitf.hpp>
 
+namespace
+{
 NITF_TRE_STATIC_HANDLER_REF(PIAPEA);
+}
 
 int main(int argc, char** argv)
 {
@@ -39,9 +42,13 @@ int main(int argc, char** argv)
         }
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
-        std::cout << t.getTrace() << std::endl;
+        std::cerr << t.getTrace() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
     }
     return 1;
 }

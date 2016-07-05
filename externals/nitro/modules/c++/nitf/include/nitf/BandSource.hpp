@@ -164,7 +164,7 @@ public:
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           nitf::Uint32 blockNumber,
+                           nitf::Uint32 /*blockNumber*/,
                            nitf::Uint64 blockSize) throw (::nitf::NITFException)
     {
         memcpy(buf, block, blockSize);
