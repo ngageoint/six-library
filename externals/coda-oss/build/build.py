@@ -173,13 +173,18 @@ class CPPContext(Context.Context):
             targetName = libName
 
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
+
+        # Source files can be individually listed via 'source'
+        glob_patterns = listify(modArgs.get('source', '')) or []
+
+        # Entire source directories can also be provided via
+        # 'source_dir' or 'sourcedir'
         sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        glob_patterns = []
         for dir in sourcedirs:
             for ext in allSourceExt:
                 glob_patterns.append(join(dir, '*%s' % ext))
 
-        #build the lib
+        # Build the lib
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
