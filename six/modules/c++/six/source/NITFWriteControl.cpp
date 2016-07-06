@@ -207,6 +207,25 @@ void NITFWriteControl::initialize(Container* container)
             nitf::ImageSegment imageSegment = mRecord.newImageSegment();
             nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
+            // SIDD 1.1 needs to write LUT to the NITF
+            if (info.getData()->getDataType() == DataType::DERIVED &&
+                info.getData()->getVersion() == "1.1.0")
+            {
+                LUT* nitfLUT = info.getData()->getDisplayLUT();
+                if (nitfLUT)
+                {
+                    if (subheader.getBandCount() == 0)
+                    {
+                        subheader.createBands(1);
+                    }
+
+                    subheader.getBandInfo(0).getLookupTable().setTable(
+                        nitfLUT->getTable(),
+                        nitfLUT->elementSize,
+                        nitfLUT->numEntries);
+                }
+            }
+
             subheader.getImageTitle().set(fileTitle);
             const DateTime collectionDT =
                     info.getData()->getCollectionStartDateTime();

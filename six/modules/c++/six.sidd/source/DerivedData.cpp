@@ -99,7 +99,7 @@ LUT* DerivedData::getDisplayLUT()
     }
     else if (mVersion == "1.1.0")
     {
-        return mNITFDisplayLUT;
+        return nitfLUT.get();
     }
     else
     {

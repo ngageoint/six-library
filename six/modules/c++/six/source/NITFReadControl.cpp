@@ -422,7 +422,8 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
         if (currentInfo->getData()->getDataType() == DataType::DERIVED &&
             currentInfo->getData()->getVersion() == "1.1.0")
         {
-            nitf::LookupTable nitfLut = subheader.getBandInfo(0).getLookupTable();
+            nitf::LookupTable nitfLut =
+                    subheader.getBandInfo(0).getLookupTable();
             LUT sixLut(nitfLut.getEntries(), nitfLut.getTables());
             *currentInfo->getData()->getDisplayLUT() = sixLut;
         }

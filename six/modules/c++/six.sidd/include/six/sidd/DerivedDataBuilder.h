@@ -163,6 +163,14 @@ public:
     * \return Reference to self
     */
     virtual DerivedDataBuilder& addDigitalElevationData();
+
+    /*!
+     * Add the optional NITF LUT element.
+     *
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addNitfLUT();
+
     /*!
      *  Get the pointer to the object that is being built, but do not
      *  take ownership

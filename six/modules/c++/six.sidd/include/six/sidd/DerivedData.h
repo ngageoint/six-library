@@ -117,6 +117,11 @@ struct DerivedData: public Data
      */
     Annotations annotations;
 
+    /*
+     * (Optional) In SIDD 1.1, the LUT stored in the NITF
+     */
+    mem::ScopedCopyablePtr<LUT> nitfLUT;
+
     /*!
      *  Constructor.  Creates only the product creation.  All other
      *  elements are set to NULL.  A builder should be used where possible
@@ -319,7 +324,6 @@ private:
     static const char VENDOR_ID[];
     virtual bool equalTo(const Data& rhs) const;
     std::string mVersion;
-    LUT* mNITFDisplayLUT;
 };
 }
 }
