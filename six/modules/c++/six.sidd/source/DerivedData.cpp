@@ -99,6 +99,12 @@ LUT* DerivedData::getDisplayLUT()
     }
     else if (mVersion == "1.1.0")
     {
+        // This is used to set the LUT, so we need to make sure
+        // it's not returning NULL
+        if (nitfLUT.get() == NULL)
+        {
+            nitfLUT.reset(new LUT(256, 2));
+        }
         return nitfLUT.get();
     }
     else
