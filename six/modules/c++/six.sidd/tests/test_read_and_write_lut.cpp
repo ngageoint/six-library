@@ -104,7 +104,6 @@ std::string doRoundTrip(const std::string& siddPathname)
             const size_t numPixels(extent.row * extent.col);
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
-            size_t offset = 0;
 
             sys::ubyte* buffer =
                 buffers.add(numPixels * numBytesPerPixel);
@@ -142,25 +141,35 @@ nitf::LookupTable readLookupTable(const std::string& pathname)
 
     nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
     nitf::ImageSubheader subheader = segment.getSubheader();
-    return subheader.getBandInfo(0).getLookupTable();
+
+    const nitf::LookupTable& localTable = subheader.getBandInfo(0).getLookupTable();
+    return nitf::LookupTable(localTable.getTable(), localTable.getTables(),
+            localTable.getEntries());
 }
 
 bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
 {
-    std::cerr << "Called\n";
-    if (lhs.getTable() == NULL)
+    if ((lhs.getTable() == NULL && rhs.getTable() != NULL) ||
+            (lhs.getTable() != NULL && rhs.getTable() == NULL))
     {
-        std::cerr << "Null Table\n";
+        return false;
+    }
+
+    bool isEqual = (lhs.getTables() == rhs.getTables() &&
+        lhs.getEntries() == rhs.getEntries());
+
+    if (lhs.getTable() == NULL && rhs.getTable() == NULL)
+    {
+        isEqual = isEqual && true;
     }
     else
     {
-        std::cerr << "Table okay\n";
-    }
-    return (lhs.getTables() == rhs.getTables() &&
-        lhs.getEntries() == rhs.getEntries() &&
-        std::equal(lhs.getTable(),
+        isEqual = isEqual &&  std::equal(lhs.getTable(),
             lhs.getTable() + sizeof lhs.getTable() / sizeof *lhs.getTable(),
-            rhs.getTable()));
+            rhs.getTable());
+    }
+    return isEqual;
+
 }
 
 bool operator!=(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
@@ -170,11 +179,25 @@ bool operator!=(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
 
 bool operator==(const six::LUT& lhs, const nitf::LookupTable& rhs)
 {
-    return (lhs.numEntries == rhs.getEntries() &&
-        lhs.elementSize == rhs.getTables() &&
-        std::equal(rhs.getTable(),
+    if ((lhs.getTable() == NULL && rhs.getTable() != NULL) ||
+            (lhs.getTable() != NULL && rhs.getTable() == NULL))
+    {
+        return false;
+    }
+
+    bool isEqual = (lhs.numEntries == rhs.getEntries() &&
+        lhs.elementSize == rhs.getTables());
+
+    if (rhs.getTable() == NULL)
+    {
+        return isEqual && true;
+    }
+    else
+    {
+        return isEqual && std::equal(rhs.getTable(),
             rhs.getTable() + sizeof rhs.getTable() / sizeof *rhs.getTable(),
-            lhs.getTable()));
+            lhs.getTable());
+    }
 }
 
 bool operator!=(const six::LUT& lhs, const nitf::LookupTable& rhs)
@@ -192,7 +215,7 @@ bool operator!=(const nitf::LookupTable& lhs, const six::LUT& rhs)
     return !(lhs == rhs);
 }
 
-six::LUT* readLUT(const std::string& pathname)
+six::LUT readLUT(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
@@ -206,7 +229,8 @@ six::LUT* readLUT(const std::string& pathname)
     reader.load(pathname);
     six::Container* container = reader.getContainer();
     six::Data* const data = container->getData(0);
-    return data->getDisplayLUT();
+    six::LUT* lut = data->getDisplayLUT();
+    return six::LUT(lut->table.data(), lut->numEntries, lut->elementSize);
 }
 }
 
@@ -222,6 +246,9 @@ int main(int argc, char** argv)
         nitf::LookupTable roundTrippedTable =
                 readLookupTable(roundTrippedPathname);
 
+
+        std::cerr << originalTable.getTables() << std::endl;
+        std::cerr << originalTable.getEntries() << std::endl;
         if (originalTable != roundTrippedTable)
         {
             std::cerr <<
@@ -229,16 +256,24 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        six::LUT* originalLUT = readLUT(siddPathname);
-        six::LUT* roundTrippedLUT = readLUT(roundTrippedPathname);
+        six::LUT originalLUT = readLUT(siddPathname);
+        six::LUT roundTrippedLUT = readLUT(roundTrippedPathname);
 
-        if (!(*originalLUT == *roundTrippedLUT))
+        if (!(originalLUT == roundTrippedLUT))
         {
             std::cerr <<
                 "Round-tripped six::LUT differs from original\n";
             return 1;
         }
 
+        if (originalTable != originalLUT)
+        {
+            std::cerr <<
+                "Read-in six::LUT differens from original nitf::LookupTable\n";
+            return 1;
+        }
+
+        std::cout << "Round-trip succeeded\n";
         return 0;
     }
     catch (const except::Exception& e)
