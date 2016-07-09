@@ -58,7 +58,7 @@ public:
             compute();
     }
 
-    unsigned int getNumBitsPerPixel() const
+    size_t getNumBitsPerPixel() const
     {
         return data->getNumBytesPerPixel() / data->getNumChannels() * 8;
     }
