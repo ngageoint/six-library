@@ -101,5 +101,5 @@ def executableName(pathname):
             return pathname
         return pathname + '.exe'
     if pathname.startswith('/'):
-        return '.' + pathname
+        return pathname
     return './' + pathname
