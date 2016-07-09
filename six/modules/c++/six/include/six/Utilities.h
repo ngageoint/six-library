@@ -168,7 +168,15 @@ template<> std::string toString(const six::FrameType& value);
 template<> std::string toString(const six::LatLonCorners& corners);
 
 // Load the TRE plugins in the given directory
+// In most cases this is not needed as XML_DATA_CONTENT is linked statically
 void loadPluginDir(const std::string& pluginDir);
+
+/*
+ * Used to ensure the PluginRegistry singleton has loaded the XML_DATA_CONTENT
+ * handler.  This is used internally by NITFReadControl and NITFWriteControl
+ * and should not need to be called directly.
+ */
+void loadXmlDataContentHandler();
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object
