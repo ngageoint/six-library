@@ -81,6 +81,13 @@ six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 
 namespace six
 {
+NITFReadControl::NITFReadControl()
+{
+    // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
+    // singleton PluginRegistry
+    loadXmlDataContentHandler();
+}
+
 DataType NITFReadControl::getDataType(nitf::Record& record)
 {
     nitf::List des = record.getDataExtensions();
@@ -140,24 +147,8 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
             return DataType::NOT_SET;
         }
 
-        std::string field;
-        if (tre.exists("DESSHSI"))
-        {
-            field = tre.getField("DESSHSI").toString();
-            str::trim(field);
-        }
-        else
-        {
-            // We've already checked that it's XML_DATA_CONTENT
-            // with length 773, so the DESSHSI field ought to be
-            // present if the plugins are loaded.
-            throw except::NoSuchKeyException(Ctxt(
-                "Must have '" +
-                std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
-                "' plugin on the plugin path.  Either set the "
-                "NITF_PLUGIN_PATH environment variable or use "
-                "six::loadPluginDir()"));
-        }
+        std::string field = tre.getField("DESSHSI").toString();
+        str::trim(field);
 
         if (field == Constants::SICD_DESSHSI)
         {

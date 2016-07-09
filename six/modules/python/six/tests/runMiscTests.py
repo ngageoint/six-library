@@ -49,19 +49,24 @@ def runTests(testDir, testName, *args):
 
 def runSICDTests():
     # Make sure plugins installed properly
-    nitfPluginPath = os.environ['NITF_PLUGIN_PATH']
-    # I'm not sure how this happens, but during a prior test, one .dll does
-    # get copied over, so we can't just check that the directory's empty.
-    if len(os.listdir(nitfPluginPath)) <= 1:
+    nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
+
+    if not any(plugin.startswith('PIAIMB') for plugin in os.listdir(nitfPluginPath)): 
         print('Could not find NITF plugins. Please re-install with '
                 'the following command.')
-        print('python waf install --target=nitro-plugins')
+        print('python waf install --target=PIAIMB')
         sys.exit(1)
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
-    return (runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
-            and runTests(testDir, 'test_read_sicd_with_extra_des',
-            getSampleSicdXML()))
 
+    success = runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
+
+    # Need it for just this test
+    os.environ['NITF_PLUGIN_PATH'] = os.environ['NITF_PLUGIN_PATH_REAL']
+    success = success and runTests(testDir, 'test_read_sicd_with_extra_des',
+            getSampleSicdXML())
+    del os.environ['NITF_PLUGIN_PATH']
+
+    return success
 
 def run():
     return runSICDTests()
