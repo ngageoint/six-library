@@ -155,7 +155,7 @@ void xml::lite::XercesContentHandler::startElement(
 }
 
 void xml::lite::XercesErrorHandler::
-warning(const SAXParseException &exception)
+warning(const SAXParseException& /*exception*/)
 {
 }
 
