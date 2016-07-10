@@ -31,13 +31,19 @@ def build(bld):
     for tre in tres:
         filename = str(tre)
 
-        # Build the TRE as a plugin
+        # We're building a single source file so don't have any includes
+        # If we don't blank out INCLUDES and EXPORT_INCLUDES, 'waf msvs' has
+        # problems complaining include directories don't exist (which is fair
+        # since they don't)
         kw = globals()
         treName = splitext(filename)[0]
-        kw['NAME'] = treName
         kw['LIBNAME'] = treName
-        kw['SOURCE'] = filename
+        kw['INCLUDES'] = []
+        kw['EXPORT_INCLUDES'] = []
 
+        # Build the TRE as a plugin
+        kw['NAME'] = treName
+        kw['SOURCE'] = filename
         bld.plugin(**kw)
         pluginList.append(treName)
 
