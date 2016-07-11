@@ -53,6 +53,7 @@ def runSICDTests():
             and runTests(testDir, 'test_read_sicd_with_extra_des',
             getSampleSicdXML()))
 
+
 def runSIDDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
     inputFiles = os.listdir(os.path.join(
@@ -63,7 +64,6 @@ def runSIDDTests():
                 os.path.join(utils.findSixHome(), 'regression_files',
                 'six.sidd', '1.1.0', pathname))
     return passed
-
 
 
 def run():
