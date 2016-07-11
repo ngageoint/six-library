@@ -177,45 +177,7 @@ bool operator!=(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
     return !(lhs == rhs);
 }
 
-bool operator==(const six::LUT& lhs, const nitf::LookupTable& rhs)
-{
-    if ((lhs.getTable() == NULL && rhs.getTable() != NULL) ||
-            (lhs.getTable() != NULL && rhs.getTable() == NULL))
-    {
-        return false;
-    }
-
-    bool isEqual = (lhs.numEntries == rhs.getEntries() &&
-        lhs.elementSize == rhs.getTables());
-
-    if (rhs.getTable() == NULL)
-    {
-        return isEqual && true;
-    }
-    else
-    {
-        return isEqual && std::equal(rhs.getTable(),
-            rhs.getTable() + sizeof rhs.getTable() / sizeof *rhs.getTable(),
-            lhs.getTable());
-    }
-}
-
-bool operator!=(const six::LUT& lhs, const nitf::LookupTable& rhs)
-{
-    return !(lhs == rhs);
-}
-
-bool operator==(const nitf::LookupTable& lhs, const six::LUT& rhs)
-{
-    return rhs == lhs;
-}
-
-bool operator!=(const nitf::LookupTable& lhs, const six::LUT& rhs)
-{
-    return !(lhs == rhs);
-}
-
-six::LUT readLUT(const std::string& pathname)
+mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
@@ -229,8 +191,15 @@ six::LUT readLUT(const std::string& pathname)
     reader.load(pathname);
     six::Container* container = reader.getContainer();
     six::Data* const data = container->getData(0);
-    six::LUT* lut = data->getDisplayLUT();
-    return six::LUT(lut->table.data(), lut->numEntries, lut->elementSize);
+    mem::ScopedCopyablePtr<six::LUT> lut = data->getDisplayLUT();
+    if (lut.get() == NULL)
+    {
+        return mem::ScopedCopyablePtr<six::LUT>();
+    }
+    else
+    {
+        return mem::ScopedCopyablePtr<six::LUT>(lut->clone());
+    }
 }
 }
 
@@ -246,9 +215,6 @@ int main(int argc, char** argv)
         nitf::LookupTable roundTrippedTable =
                 readLookupTable(roundTrippedPathname);
 
-
-        std::cerr << originalTable.getTables() << std::endl;
-        std::cerr << originalTable.getEntries() << std::endl;
         if (originalTable != roundTrippedTable)
         {
             std::cerr <<
@@ -256,20 +222,13 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        six::LUT originalLUT = readLUT(siddPathname);
-        six::LUT roundTrippedLUT = readLUT(roundTrippedPathname);
-
+        mem::ScopedCopyablePtr<six::LUT> originalLUT = readLUT(siddPathname);
+        mem::ScopedCopyablePtr<six::LUT> roundTrippedLUT =
+                readLUT(roundTrippedPathname);
         if (!(originalLUT == roundTrippedLUT))
         {
             std::cerr <<
                 "Round-tripped six::LUT differs from original\n";
-            return 1;
-        }
-
-        if (originalTable != originalLUT)
-        {
-            std::cerr <<
-                "Read-in six::LUT differens from original nitf::LookupTable\n";
             return 1;
         }
 

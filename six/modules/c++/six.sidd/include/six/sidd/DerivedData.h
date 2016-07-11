@@ -294,7 +294,7 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual LUT* getDisplayLUT();
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
 
     virtual std::string getVendorID() const
     {

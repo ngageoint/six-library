@@ -91,21 +91,15 @@ DateTime DerivedData::getCollectionStartDateTime() const
     return exploitationFeatures->collections[0]->information.collectionDateTime;
 }
 
-LUT* DerivedData::getDisplayLUT()
+mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
 {
     if (mVersion == "1.0.0")
     {
-        return display->remapInformation->remapLUT.get();
+        return display->remapInformation->remapLUT;
     }
     else if (mVersion == "1.1.0")
     {
-        // This is used to set the LUT, so we need to make sure
-        // it's not returning NULL
-        if (nitfLUT.get() == NULL)
-        {
-            nitfLUT.reset(new LUT(256, 2));
-        }
-        return nitfLUT.get();
+        return nitfLUT;
     }
     else
     {

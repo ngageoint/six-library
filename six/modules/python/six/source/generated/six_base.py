@@ -4239,7 +4239,7 @@ class Data(_object):
 
 
     def getDisplayLUT(self):
-        """getDisplayLUT(Data self) -> six::LUT *"""
+        """getDisplayLUT(Data self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_base.Data_getDisplayLUT(self)
 
 
@@ -6457,6 +6457,11 @@ class ScopedCloneableAmplitudeTable(_object):
         getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *
         """
         return _six_base.ScopedCloneableAmplitudeTable_getTable(self, *args)
+
+
+    def interleaveTable(self):
+        """interleaveTable(ScopedCloneableAmplitudeTable self) -> std::vector< unsigned char,std::allocator< unsigned char > >"""
+        return _six_base.ScopedCloneableAmplitudeTable_interleaveTable(self)
 
 ScopedCloneableAmplitudeTable_swigregister = _six_base.ScopedCloneableAmplitudeTable_swigregister
 ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)

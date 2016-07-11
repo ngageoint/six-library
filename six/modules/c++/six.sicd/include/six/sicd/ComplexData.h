@@ -286,7 +286,7 @@ public:
     }
 
     // Okay, little bit of a hack for now
-    virtual LUT* getDisplayLUT()
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT()
     {
         throw except::Exception(Ctxt("Display LUT operation not supported"));
     }

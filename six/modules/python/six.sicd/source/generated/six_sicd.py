@@ -2538,7 +2538,7 @@ class ComplexData(pysix.six_base.Data):
 
 
     def getDisplayLUT(self):
-        """getDisplayLUT(ComplexData self) -> six::LUT *"""
+        """getDisplayLUT(ComplexData self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_sicd.ComplexData_getDisplayLUT(self)
 
 

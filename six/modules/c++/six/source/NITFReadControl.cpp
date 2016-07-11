@@ -426,8 +426,12 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
                     subheader.getBandInfo(0).getLookupTable();
 
             //getDisplayLUT will not return NULL for 1.1
-            *currentInfo->getData()->getDisplayLUT() =
-                    LUT(nitfLut.getEntries(), nitfLut.getTables());
+            currentInfo->getData()->getDisplayLUT().reset(
+                    new LUT(nitfLut.getTable(),
+                            nitfLut.getEntries(),
+                            nitfLut.getTables()));
+            currentInfo->getData()->getDisplayLUT()->table =
+                    currentInfo->getData()->getDisplayLUT()->interleaveTable();
         }
         currentInfo->addSegment(si);
     }

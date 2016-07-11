@@ -48,6 +48,25 @@ def runTests(testDir, testName, *args):
     return False
 
 def runSICDTests():
+    testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
+    return (runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
+            and runTests(testDir, 'test_read_sicd_with_extra_des',
+            getSampleSicdXML()))
+
+def runSIDDTests():
+    testDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
+    inputFiles = os.listdir(os.path.join(
+        utils.findSixHome(), 'regression_files', 'six.sidd', '1.1.0'))
+    passed = True
+    for pathname in inputFiles:
+        passed = passed and runTests(testDir, 'test_read_and_write_lut',
+                os.path.join(utils.findSixHome(), 'regression_files',
+                'six.sidd', '1.1.0', pathname))
+    return passed
+
+
+
+def run():
     # Make sure plugins installed properly
     nitfPluginPath = os.environ['NITF_PLUGIN_PATH']
     # I'm not sure how this happens, but during a prior test, one .dll does
@@ -57,11 +76,8 @@ def runSICDTests():
                 'the following command.')
         print('python waf install --target=nitro-plugins')
         sys.exit(1)
-    testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
-    return (runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
-            and runTests(testDir, 'test_read_sicd_with_extra_des',
-            getSampleSicdXML()))
 
+    return runSICDTests() and runSIDDTests()
 
-def run():
-    return runSICDTests()
+if __name__ == '__main__':
+    run()
