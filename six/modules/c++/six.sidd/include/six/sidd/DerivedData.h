@@ -119,6 +119,8 @@ struct DerivedData: public Data
 
     /*
      * (Optional) In SIDD 1.1, the LUT stored in the NITF
+     * In 1.0, each Display element has a single LUT which corresponds
+     * to the LUT in the NITF, making this redundant.
      */
     mem::ScopedCopyablePtr<LUT> nitfLUT;
 
