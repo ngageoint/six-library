@@ -78,6 +78,7 @@ ComplexXMLControl::getParser(const std::string& version) const
     //   SICD 1.0.0
     //   SICD 1.0.1
     //   SICD 1.1.0
+    //   SICD 1.2.0
     if (majorVersion == "0")
     {
         if (minorVersion == "4")
@@ -115,6 +116,13 @@ ComplexXMLControl::getParser(const std::string& version) const
             // 1.1 there was a schema change that allows MatchCollection to
             // be optional.  We rely on the schema to do this check - the
             // parser itself doesn't - so we can simply reuse the 1.0.1 parser.
+            parser.reset(new ComplexXMLParser101(version, mLog));
+        }
+        else if (minorVersion == "1" && patchVersion == "0")
+        {
+            // From a SIX standpoint, 1.2.0 is identical to 1.1.0. The changes
+            // get hanlded by XML_DATA_CONTENT.c. We just have a new version
+            // number and spec date. So again reusing 1.0.1.
             parser.reset(new ComplexXMLParser101(version, mLog));
         }
     }
