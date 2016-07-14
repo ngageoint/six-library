@@ -4191,6 +4191,10 @@ def loadPluginDir(pluginDir):
     """loadPluginDir(std::string const & pluginDir)"""
     return _six_base.loadPluginDir(pluginDir)
 
+def loadXmlDataContentHandler():
+    """loadXmlDataContentHandler()"""
+    return _six_base.loadXmlDataContentHandler()
+
 def parseData(*args):
     """
     parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
