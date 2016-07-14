@@ -21,6 +21,7 @@
 */
 
 #include <cstdio>
+#include <fstream>
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
@@ -147,11 +148,56 @@ void attachDESs(const std::string& originalPathname,
 
     nitf::SegmentMemorySource shortSource(segmentData, strlen(segmentData),
         0, 0, true);
-    mem::SharedPtr<nitf::SegmentWriter> shortSegmentWriter(new nitf::SegmentWriter);
+    mem::SharedPtr<nitf::SegmentWriter> shortSegmentWriter(
+            new nitf::SegmentWriter);
     shortSegmentWriter->attachSource(shortSource);
     writer.addAdditionalDES(shortSegmentWriter);
     writer.save(&bandData[0], outputPathname);
 }
+
+class TestScript
+{
+public:
+    TestScript(const std::string& pathname) :
+        mPathname(pathname)
+    {
+        std::ifstream file(mPathname);
+        std::string line;
+        while (std::getline(file, line))
+        {
+            lines.push_back(line);
+        }
+        originalSource = str::split(lines[1], " ")[1];
+    }
+
+    ~TestScript()
+    {
+        setSource(originalSource);
+    }
+
+    void setSource(const std::string& sourcePathname)
+    {
+        std::vector<std::string> sourceLine = str::split(lines[1], " ");
+        sourceLine[1] = sourcePathname;
+        lines[1] = str::join(sourceLine, " ");
+        write();
+    }
+
+private:
+    std::vector<std::string> lines;
+    std::string originalSource;
+    const std::string mPathname;
+
+    void write()
+    {
+        std::ofstream file(mPathname);
+        for (size_t ii = 0; ii < lines.size(); ++ii)
+        {
+            file << lines[ii] << "\n";
+        }
+    }
+};
+
 }
 
 int main(int argc, char** argv)
@@ -164,9 +210,23 @@ int main(int argc, char** argv)
 
         attachDESs(sicdPathname, outputPathname);
         const std::string delimiter(sys::Path::delimiter());
-        const std::string testFile = "six" + delimiter + "projects" + delimiter
-            + "csm" + delimiter + "tests" + delimiter + "test_script_sicd";
-        sys::Exec testCommand(testFile + "<" + outputPathname);
+        const std::string testFile = sys::Path::joinPaths("six",
+            sys::Path::joinPaths("projects",
+                sys::Path::joinPaths("csm",
+                    sys::Path::joinPaths("tests", "test_script_sicd"))));
+        TestScript testScript(testFile);
+        testScript.setSource(sicdPathname);
+        std::string vts = sys::Path::joinPaths("install",
+                sys::Path::joinPaths("bin", "vts"));
+        sys::OS os;
+        if (!os.isFile(vts))
+        {
+            vts = vts + ".exe";
+        }
+
+        // < input redirection works on Bash, csh, and Windows
+        sys::Exec testCommand(vts + " < " + testFile);
+        testCommand.run();
     }
     catch (const except::Exception& e)
     {
