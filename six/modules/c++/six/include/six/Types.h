@@ -289,6 +289,36 @@ struct LUT
     {
     }
 
+    //! Initialize from nitf::LookupTable read from a NITF
+    LUT(const nitf::LookupTable& lookupTable) :
+        table(lookupTable.getEntries() * lookupTable.getTables()),
+        numEntries(lookupTable.getEntries()),
+        elementSize(lookupTable.getTables())
+    {
+        // NITF stores the tables consecutively. 
+        // Need to interleave them for SIX
+        if (elementSize == 3)
+        {
+            // Imagine the vector is a matrix and then transpose it
+            for (size_t ii = 0; ii < table.size(); ++ii)
+            {
+                table[(ii % numEntries) * elementSize +
+                    (ii / numEntries)] = lookupTable.getTable()[ii];
+            }
+        }
+
+        // I'm not sure why this is a special case, but elements get
+        // swapped if we try to use the above formula
+        else if (elementSize == 2)
+        {
+            for (size_t ii = 0; ii < numEntries; ++ii)
+            {
+                table[2 * ii] = lookupTable.getTable()[numEntries + ii];
+                table[2 * ii + 1] = lookupTable.getTable()[ii];
+            }
+        }
+    }
+
     virtual ~LUT()
     {
     }
@@ -326,38 +356,6 @@ struct LUT
     virtual LUT* clone() const
     {
         return new LUT(getTable(), numEntries, elementSize);
-    }
-
-    /*
-     * NITF stores lookup tables as consecutive, single-valued tables.
-     * SICD stores them with values interleaved.
-     * This function converts from NITF to SICD.
-     */
-    std::vector<unsigned char> interleaveTable() const
-    {
-        std::vector<unsigned char> interleaved(table.size());
-
-        if (elementSize == 3)
-        {
-            // Imagine the vector is a matrix and then transpose it
-            for (size_t ii = 0; ii < table.size(); ++ii)
-            {
-                interleaved[(ii % numEntries) * elementSize +
-                        (ii / numEntries)] = table[ii];
-            }
-        }
-
-        // I'm not sure why this is a special case, but elements get
-        // swapped if we try to use the above formula
-        else if (elementSize == 2)
-        {
-            for (size_t ii = 0; ii < numEntries; ++ii)
-            {
-                interleaved[2 * ii] = table[numEntries + ii];
-                interleaved[2 * ii + 1] = table[ii];
-            }
-        }
-        return interleaved;
     }
 };
 
