@@ -60312,6 +60312,48 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_loadXmlDataContentHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)":loadXmlDataContentHandler")) SWIG_fail;
+  {
+    try
+    {
+      six::loadXmlDataContentHandler();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   XMLControlRegistry *arg1 = 0 ;
@@ -93229,6 +93271,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XMLControl_swigregister", XMLControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"remapZeroTo360", _wrap_remapZeroTo360, METH_VARARGS, (char *)"remapZeroTo360(double degree) -> double"},
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
+	 { (char *)"loadXmlDataContentHandler", _wrap_loadXmlDataContentHandler, METH_VARARGS, (char *)"loadXmlDataContentHandler()"},
 	 { (char *)"parseData", _wrap_parseData, METH_VARARGS, (char *)"\n"
 		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
 		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
