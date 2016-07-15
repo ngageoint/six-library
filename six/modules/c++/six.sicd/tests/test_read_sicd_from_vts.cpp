@@ -198,6 +198,63 @@ private:
     }
 };
 
+class ResultFile
+{
+public:
+    ResultFile();
+    ~ResultFile();
+    std::string pathname() const;
+    bool operator==(const ResultFile& rhs) const;
+private:
+    std::string mName;
+};
+
+ResultFile::ResultFile() :
+    mName(std::tmpnam(NULL))
+{
+}
+
+ResultFile::~ResultFile()
+{
+    std::remove(mName.c_str());
+}
+
+std::string ResultFile::pathname() const
+{
+    return mName;
+}
+
+bool ResultFile::operator==(const ResultFile& rhs) const
+{
+    std::string leftLine;
+    std::string rightLine;
+    std::ifstream leftFile(pathname());
+    std::ifstream rightFile(rhs.pathname());
+
+    while (std::getline(leftFile, leftLine) &&
+        std::getline(rightFile, rightLine))
+    {
+        str::trim(leftLine);
+        str::trim(rightLine);
+        if (str::startsWith(leftLine, "Program End Time"))
+        {
+            break;
+        }
+
+        if (str::startsWith(leftLine, "Program Start Time") ||
+            str::endsWith(leftLine, ".nitf"))
+        {
+            continue;
+        }
+
+        if (leftLine != rightLine)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 }
 
 int main(int argc, char** argv)
@@ -224,9 +281,27 @@ int main(int argc, char** argv)
             vts = vts + ".exe";
         }
 
-        // < input redirection works on Bash, csh, and Windows
-        sys::Exec testCommand(vts + " < " + testFile);
-        testCommand.run();
+        ResultFile originalResult;
+        sys::Exec originalCommand(vts + " < " + testFile + " > "
+                + originalResult.pathname());
+        originalCommand.run();
+
+        testScript.setSource(outputPathname);
+        ResultFile roundTrippedResult;
+        sys::Exec roundTrippedCommand(vts + " < " + testFile + " > "
+                + roundTrippedResult.pathname());
+        roundTrippedCommand.run();
+
+        if (originalResult == roundTrippedResult)
+        {
+            std::cout << "Test passed" << std::endl;
+            return 0;
+        }
+        else
+        {
+            std::cerr << "VTS output does not match. Test failed" << std::endl;
+            return 1;
+        }
     }
     catch (const except::Exception& e)
     {
