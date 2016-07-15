@@ -32,10 +32,10 @@ namespace
 {
 void validateArguments(int argc, char** argv)
 {
-    if (argc < 3 || argc > 4)
+    if (argc != 3)
     {
         std::string message = "Usage: " + sys::Path::basename(argv[0])
-            + " <SICD pathname> <output SICD pathname> [VTS logfile]";
+            + " <SICD pathname> <output SICD pathname>";
         throw except::Exception(Ctxt(message));
     }
     if (!str::endsWith(argv[1], ".nitf") && !str::endsWith(argv[1], ".ntf"))
@@ -161,7 +161,7 @@ public:
     TestScript(const std::string& pathname) :
         mPathname(pathname)
     {
-        std::ifstream file(mPathname);
+        std::ifstream file(mPathname.c_str());
         std::string line;
         while (std::getline(file, line))
         {
@@ -190,7 +190,7 @@ private:
 
     void write()
     {
-        std::ofstream file(mPathname);
+        std::ofstream file(mPathname.c_str());
         for (size_t ii = 0; ii < lines.size(); ++ii)
         {
             file << lines[ii] << "\n";
@@ -228,8 +228,8 @@ bool ResultFile::operator==(const ResultFile& rhs) const
 {
     std::string leftLine;
     std::string rightLine;
-    std::ifstream leftFile(pathname());
-    std::ifstream rightFile(rhs.pathname());
+    std::ifstream leftFile(pathname().c_str());
+    std::ifstream rightFile(rhs.pathname().c_str());
 
     while (std::getline(leftFile, leftLine) &&
         std::getline(rightFile, rightLine))
