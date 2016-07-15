@@ -260,7 +260,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
     case ImageFormationType::RMA:
         if (rma.get())
         {
-            rma->fillDerivedFields(*geoData, *position, fc);
+            rma->fillDerivedFields(*geoData, *position);
             grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
     }

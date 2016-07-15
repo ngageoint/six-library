@@ -235,7 +235,6 @@ bool INCA::operator==(const INCA& rhs) const
 }
 
 void INCA::fillDerivedFields(const Vector3& scp,
-        double fc,
         const Position& position)
 {
     if (!Init::isUndefined<Poly1D>(timeCAPoly) &&
@@ -363,8 +362,7 @@ RMA::RMA() :
 }
 
 void RMA::fillDerivedFields(const GeoData& geoData, 
-        const Position& position,
-        double fc)
+        const Position& position)
 {
     const Vector3& scp = geoData.scp.ecf;
 
@@ -378,7 +376,7 @@ void RMA::fillDerivedFields(const GeoData& geoData,
     }
     else if (inca.get())
     {
-        inca->fillDerivedFields(scp, fc, position);
+        inca->fillDerivedFields(scp, position);
     }
 }
 

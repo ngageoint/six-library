@@ -189,7 +189,7 @@ struct INCA
         return !(*this == rhs);
     }
 
-    void fillDerivedFields(const Vector3& scp, double fc,
+    void fillDerivedFields(const Vector3& scp,
             const Position& position);
 
     Vector3 caPos(const PolyXYZ& arpPoly) const;
@@ -246,8 +246,7 @@ struct RMA
     }
 
     void fillDerivedFields(const GeoData& geoData,
-            const Position& position,
-            double fc);
+            const Position& position);
     void fillDefaultFields(const SCPCOA& scpcoa, double fc);
     bool validate(const CollectionInformation& collectionInformation,
             const Vector3& scp, const PolyXYZ& arpPoly,
