@@ -119,11 +119,6 @@ int main(int argc, char** argv)
                            "latDegrees,lonDegrees[,altMeters] tuples",
                            cli::STORE,
                            "latlon", "#,#,#", 4, 4);
-        parser.addArgument("--nitro",
-                           "Specify a path to the NITRO plugins.  To use "
-                           "NITF_PLUGIN_PATH environment variable instead, "
-                           "use \"\".",
-                           cli::STORE)->setDefault(nitroDir);
         parser.addArgument("--schema",
                            "Specify a schema or directory of schemas "
                            "(or set SIX_SCHEMA_PATH). Use \"\" as value to "
@@ -148,12 +143,6 @@ int main(int argc, char** argv)
         const std::string outPathname(options->get<std::string> ("output"));
         const bool trimCornersIfNeeded =
                 !options->get<bool>("requireAoiInBounds");
-
-        const std::string nitroStr(options->get<std::string>("nitro"));
-        if (!nitroStr.empty())
-        {
-            six::loadPluginDir(nitroStr);
-        }
 
         std::vector<std::string> schemaPaths;
         const std::string schemaPath(options->get<std::string>("schema"));

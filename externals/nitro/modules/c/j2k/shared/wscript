@@ -2,7 +2,7 @@ import os, subprocess
 from waflib import Options
 from os.path import splitext, dirname, join
 
-MAINTAINER         = 'adam.sylvester@gd-ais.com'
+MAINTAINER         = 'adam.sylvester@mdaus.com'
 VERSION            = '1.0'
 LANG               = 'c'
 USE                = 'nitf-c j2k-c'

@@ -275,7 +275,7 @@ def read(inputPathname, schemaPaths = VectorString()):
     return widebandData, complexData
 
 def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
     widebandData = np.empty(shape = (numRows, numCols), dtype = "complex64")
     widebandBuffer, ro = widebandData.__array_interface__["data"]
@@ -289,7 +289,7 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
-def readFromNITF(pathname, schemaPaths):
+def readFromNITF(pathname, schemaPaths=VectorString()):
     pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
 

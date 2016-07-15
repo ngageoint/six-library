@@ -68,13 +68,12 @@ def runSIDDTests():
 
 def run():
     # Make sure plugins installed properly
-    nitfPluginPath = os.environ['NITF_PLUGIN_PATH']
-    # I'm not sure how this happens, but during a prior test, one .dll does
-    # get copied over, so we can't just check that the directory's empty.
-    if len(os.listdir(nitfPluginPath)) <= 1:
+    nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
+
+    if not any(plugin.startswith('PIAIMB') for plugin in os.listdir(nitfPluginPath)): 
         print('Could not find NITF plugins. Please re-install with '
                 'the following command.')
-        print('python waf install --target=nitro-plugins')
+        print('python waf install --target=PIAIMB')
         sys.exit(1)
 
     return runSICDTests() and runSIDDTests()

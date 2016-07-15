@@ -29,6 +29,7 @@ import utils
 
 from subprocess import call
 
+print utils.installPath()
 binDir = os.path.join(utils.installPath(), 'bin')
 
 def extractVersionNumber(pathname):

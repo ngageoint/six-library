@@ -60,4 +60,9 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
 
     return compIface;
 }
+
+bool PluginRegistry::treHandlerExists(const std::string& ident)
+{
+    return nitf_PluginRegistry_TREHandlerExists(ident.c_str());
+}
 }

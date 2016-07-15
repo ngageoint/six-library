@@ -49,7 +49,6 @@ def initCollectionInfo(cmplx):
     param = Parameter()
     param.setName('Collection Param')
     param.setValue('334')
-    #pdb.set_trace()
     collectionInfo.parameters.push_back(param)
     param.setValue('335')
     collectionInfo.parameters.push_back(param)
@@ -758,7 +757,7 @@ def initRgAzComp(cmplx):
     return cmplx
 
 
-def initData(includeNITF=False, version='1.1.0', alg='PFA', imageType=''):
+def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
     cmplx = ComplexData()
     cmplx.setVersion(version)
     cmplx = initCollectionInfo(cmplx)
@@ -877,7 +876,8 @@ if __name__ == '__main__':
     parser.add_argument('--includeNITF', action='store_true',
             help='Round-trip a NITF as well as an XML file')
     parser.add_argument('-v', '--version', default='1.1.0',
-            choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0'],
+            choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0',
+                     '1.2.0'],
             help='Version of SICD to generate')
 
     args = parser.parse_args()
