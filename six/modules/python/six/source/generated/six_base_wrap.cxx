@@ -92043,58 +92043,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_interleaveTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  mem::ScopedCloneablePtr< six::AmplitudeTable > *arg1 = (mem::ScopedCloneablePtr< six::AmplitudeTable > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::vector< unsigned char,std::allocator< unsigned char > > > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableAmplitudeTable_interleaveTable",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableAmplitudeTable_interleaveTable" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::AmplitudeTable > const *""'"); 
-  }
-  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::AmplitudeTable > * >(argp1);
-  {
-    try
-    {
-      result = (*arg1)->interleaveTable();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj((new std::vector< unsigned char,std::allocator< unsigned char > >(static_cast< const std::vector< unsigned char,std::allocator< unsigned char > >& >(result))), SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *ScopedCloneableAmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -93921,7 +93869,6 @@ static PyMethodDef SwigMethods[] = {
 		"getTable() -> unsigned char\n"
 		"ScopedCloneableAmplitudeTable_getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *\n"
 		""},
-	 { (char *)"ScopedCloneableAmplitudeTable_interleaveTable", _wrap_ScopedCloneableAmplitudeTable_interleaveTable, METH_VARARGS, (char *)"ScopedCloneableAmplitudeTable_interleaveTable(ScopedCloneableAmplitudeTable self) -> std::vector< unsigned char,std::allocator< unsigned char > >"},
 	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCloneableAmplitudeTable", _wrap_makeScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"},
 	 { NULL, NULL, 0, NULL }
