@@ -129,6 +129,13 @@ DerivedDataBuilder& DerivedDataBuilder::addDigitalElevationData()
     return *this;
 }
 
+DerivedDataBuilder& DerivedDataBuilder::addNitfLUT()
+{
+    mData->nitfLUT.reset(new LUT(256, 2));
+
+    return *this;
+}
+
 DerivedData* DerivedDataBuilder::get()
 {
     return mData;

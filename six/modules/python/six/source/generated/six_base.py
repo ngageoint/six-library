@@ -4239,7 +4239,7 @@ class Data(_object):
 
 
     def getDisplayLUT(self):
-        """getDisplayLUT(Data self) -> six::LUT *"""
+        """getDisplayLUT(Data self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_base.Data_getDisplayLUT(self)
 
 

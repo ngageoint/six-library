@@ -389,8 +389,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
                 const unsigned char* const entry = (*lut)[i];
                 table[i] = entry[0];
                 table[lut->numEntries + i] = entry[1];
-            }
 
+            }
             //I would like to set it this way but it does not seem to work.
             //Using the init function instead.
             //band1.getRepresentation().set("LU");
@@ -430,7 +430,6 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
             unsigned char* const table(lookupTable.getTable());
-
             for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
             {
                 for (size_t j = 0; j < lut->elementSize; ++j, ++k)

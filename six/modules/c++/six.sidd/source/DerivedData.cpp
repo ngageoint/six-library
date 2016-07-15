@@ -91,23 +91,15 @@ DateTime DerivedData::getCollectionStartDateTime() const
     return exploitationFeatures->collections[0]->information.collectionDateTime;
 }
 
-LUT* DerivedData::getDisplayLUT()
+mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
 {
     if (mVersion == "1.0.0")
     {
-        return display->remapInformation->remapLUT.get();
+        return display->remapInformation->remapLUT;
     }
     else if (mVersion == "1.1.0")
     {
-        if (display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom.get())
-        {
-            return NULL; //this is broken, but I want it to compile until I figure out what should happen
-            //return &(display->nonInteractiveProcessing[0]->productGenerationOptions.dataRemapping->custom->lut);
-        }
-        else
-        {
-            return NULL;
-        }
+        return nitfLUT;
     }
     else
     {

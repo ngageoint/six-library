@@ -117,6 +117,13 @@ struct DerivedData: public Data
      */
     Annotations annotations;
 
+    /*
+     * (Optional) In SIDD 1.1, the LUT stored in the NITF
+     * In 1.0, each Display element has a single LUT which corresponds
+     * to the LUT in the NITF, making this redundant.
+     */
+    mem::ScopedCopyablePtr<LUT> nitfLUT;
+
     /*!
      *  Constructor.  Creates only the product creation.  All other
      *  elements are set to NULL.  A builder should be used where possible
@@ -289,7 +296,7 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual LUT* getDisplayLUT();
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
 
     virtual std::string getVendorID() const
     {

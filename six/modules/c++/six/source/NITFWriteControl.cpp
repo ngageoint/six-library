@@ -763,7 +763,7 @@ void NITFWriteControl::save(
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr< ::nitf::WriteHandler> writeHandler( 
+            mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
                 new StreamWriteHandler (segmentInfo, imageData[i], numCols,
                                         numChannels, pixelSize, doByteSwap));
 
@@ -826,16 +826,16 @@ void NITFWriteControl::save(
         nitf::ImageSegment imageSegment = mRecord.getImages()[i];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        const bool isBlocking = 
+        const bool isBlocking =
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
 
-        // The SIDD spec requires that a J2K compressed SIDDs be only a 
+        // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
-        if (isBlocking || (enableJ2K && numIS == 1) || 
+        if (isBlocking || (enableJ2K && numIS == 1) ||
             !mCompressionOptions.empty())
         {
-            if ((isBlocking || (enableJ2K && numIS == 1)) && 
+            if ((isBlocking || (enableJ2K && numIS == 1)) &&
                 info.getData()->getDataType() == six::DataType::COMPLEX)
             {
                 throw except::Exception(Ctxt(
@@ -1029,7 +1029,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 
         const std::string dataType =
                 (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
-        
+
         if (dataType == "SICD")
         {
             tre["DESSHSI"] = Constants::SICD_DESSHSI;
@@ -1040,14 +1040,14 @@ void NITFWriteControl::addUserDefinedSubheader(
         }
 
         // This is the publication date and version of the
-        // Design and Implementation Description Document 
+        // Design and Implementation Description Document
         // for the specification -- Add to this list as more
         // versions are published
         const std::string version(data.getVersion());
         std::string specVers;
         std::string specDT;
         if (dataType == "SICD")
-        {    
+        {
             if (version == "1.0.0" || version == "1.0.1")
             {
                 specVers = "1.0";

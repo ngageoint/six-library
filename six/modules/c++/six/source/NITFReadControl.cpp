@@ -418,6 +418,15 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
             }
         }
 
+        // SIDD 1.1 needs to read LUT directly from NITF
+        if (currentInfo->getData()->getDataType() == DataType::DERIVED &&
+            currentInfo->getData()->getVersion() == "1.1.0")
+        {
+            nitf::LookupTable nitfLut =
+                    subheader.getBandInfo(0).getLookupTable();
+
+            currentInfo->getData()->getDisplayLUT().reset(new LUT(nitfLut));
+        }
         currentInfo->addSegment(si);
     }
 }

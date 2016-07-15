@@ -72,8 +72,8 @@ struct Data
     virtual DataType getDataType() const = 0;
 
     /*!
-     *  Utility function for getting the pixel type.  
-     *  This is stored in the SICD along with the width  
+     *  Utility function for getting the pixel type.
+     *  This is stored in the SICD along with the width
      *
      *  Maps to: /SICD/ImageData/PixelType,
      *  /SIDD/Display/PixelTypeking with. In other words, a
@@ -143,14 +143,14 @@ struct Data
     virtual void setSource(std::string name) = 0;
 
     /*!
-     *  Maps to: /SICD/ImageCreation/DateTime,  
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  Maps to: /SICD/ImageCreation/DateTime,
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual DateTime getCreationTime() const = 0;
 
     /*!
-     *  Maps to: /SICD/ImageCreation/DateTime,  
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  Maps to: /SICD/ImageCreation/DateTime,
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual void setCreationTime(DateTime creationTime) = 0;
 
@@ -163,12 +163,12 @@ struct Data
     //!  Get back the number of bytes per pixel for the product
     virtual size_t getNumBytesPerPixel() const;
 
-    /*!  
+    /*!
      *  This reader is only used for informational purposes, but it
      *  contains the number of channels of pixel data.  For SIDD truecolor,
      *  this would be 3, for SIDD pseudo, it would be 1.  For SICD complex
      *  there would be 2, one for real and one for imaginary.
-     */  
+     */
     virtual size_t getNumChannels() const;
 
     /*!
@@ -180,7 +180,7 @@ struct Data
 
     virtual Classification& getClassification() = 0;
 
-    virtual LUT* getDisplayLUT() = 0;
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
 
     /*!
      * Returns an identifier of the Vendor supplying the implementation code.

@@ -289,6 +289,36 @@ struct LUT
     {
     }
 
+    //! Initialize from nitf::LookupTable read from a NITF
+    LUT(const nitf::LookupTable& lookupTable) :
+        table(lookupTable.getEntries() * lookupTable.getTables()),
+        numEntries(lookupTable.getEntries()),
+        elementSize(lookupTable.getTables())
+    {
+        // NITF stores the tables consecutively. 
+        // Need to interleave them for SIX
+        if (elementSize == 3)
+        {
+            // Imagine the vector is a matrix and then transpose it
+            for (size_t ii = 0; ii < table.size(); ++ii)
+            {
+                table[(ii % numEntries) * elementSize +
+                    (ii / numEntries)] = lookupTable.getTable()[ii];
+            }
+        }
+
+        // I'm not sure why this is a special case, but elements get
+        // swapped if we try to use the above formula
+        else if (elementSize == 2)
+        {
+            for (size_t ii = 0; ii < numEntries; ++ii)
+            {
+                table[2 * ii] = lookupTable.getTable()[numEntries + ii];
+                table[2 * ii + 1] = lookupTable.getTable()[ii];
+            }
+        }
+    }
+
     virtual ~LUT()
     {
     }

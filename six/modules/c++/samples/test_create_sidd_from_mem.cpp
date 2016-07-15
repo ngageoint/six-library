@@ -1825,7 +1825,11 @@ std::auto_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 
     if (lutType == "Mono")
     {
-        pixelType = PixelType::MONO8I;
+        pixelType = PixelType::MONO8LU;
+    }
+    else if (lutType == "Color")
+    {
+        pixelType = PixelType::RGB8LU;
     }
 
     //-----------------------------------------------------------
@@ -1866,7 +1870,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation,
     productCreation.classification.desVersion = 234;
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
-    
+
     if (version == "1.0.0")
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
@@ -2279,6 +2283,12 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
         lutType, bool smallImage, const std::string& version)
 {
     siddData.setVersion(version);
+    size_t elementSize = lutType == "Mono" ? 2 : 3;
+    siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
+    for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
+    {
+        siddData.getDisplayLUT()->table[ii] = ii % 128;
+    }
     // These things are essential to forming the file
     if (smallImage)
     {
