@@ -13,11 +13,11 @@
       <xsd:annotation>
          <xsd:documentation>(U) NonUS Control markings supported by ISM
                     PERMISSIBLE VALUES
-                    
+
                     The permissible values for this simple type are defined in the Controlled Value Enumeration:
-                    
+
                     CVEnumISMNonUSControls.xml
-                    
+
                 </xsd:documentation>
       </xsd:annotation>
       <xsd:restriction base="xsd:token">
