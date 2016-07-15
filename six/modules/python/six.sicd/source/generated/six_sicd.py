@@ -2632,9 +2632,9 @@ class INCA(_object):
         return _six_sicd.INCA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp, fc, position):
-        """fillDerivedFields(INCA self, Vector3 scp, double fc, Position position)"""
-        return _six_sicd.INCA_fillDerivedFields(self, scp, fc, position)
+    def fillDerivedFields(self, scp, position):
+        """fillDerivedFields(INCA self, Vector3 scp, Position position)"""
+        return _six_sicd.INCA_fillDerivedFields(self, scp, position)
 
 
     def caPos(self, arpPoly):
@@ -2728,9 +2728,9 @@ class RMA(_object):
         return _six_sicd.RMA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, position, fc):
-        """fillDerivedFields(RMA self, GeoData geoData, Position position, double fc)"""
-        return _six_sicd.RMA_fillDerivedFields(self, geoData, position, fc)
+    def fillDerivedFields(self, geoData, position):
+        """fillDerivedFields(RMA self, GeoData geoData, Position position)"""
+        return _six_sicd.RMA_fillDerivedFields(self, geoData, position)
 
 
     def fillDefaultFields(self, scpcoa, fc):
@@ -5020,9 +5020,9 @@ class ScopedCopyableRMA(_object):
         return _six_sicd.ScopedCopyableRMA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, position, fc):
-        """fillDerivedFields(ScopedCopyableRMA self, GeoData geoData, Position position, double fc)"""
-        return _six_sicd.ScopedCopyableRMA_fillDerivedFields(self, geoData, position, fc)
+    def fillDerivedFields(self, geoData, position):
+        """fillDerivedFields(ScopedCopyableRMA self, GeoData geoData, Position position)"""
+        return _six_sicd.ScopedCopyableRMA_fillDerivedFields(self, geoData, position)
 
 
     def fillDefaultFields(self, scpcoa, fc):
@@ -9675,9 +9675,9 @@ class ScopedCopyableINCA(_object):
         return _six_sicd.ScopedCopyableINCA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp, fc, position):
-        """fillDerivedFields(ScopedCopyableINCA self, Vector3 scp, double fc, Position position)"""
-        return _six_sicd.ScopedCopyableINCA_fillDerivedFields(self, scp, fc, position)
+    def fillDerivedFields(self, scp, position):
+        """fillDerivedFields(ScopedCopyableINCA self, Vector3 scp, Position position)"""
+        return _six_sicd.ScopedCopyableINCA_fillDerivedFields(self, scp, position)
 
 
     def caPos(self, arpPoly):
