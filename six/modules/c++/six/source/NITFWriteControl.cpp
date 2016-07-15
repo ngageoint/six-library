@@ -1058,6 +1058,12 @@ void NITFWriteControl::addUserDefinedSubheader(
             specVers = "1.1";
             specDT = "2014-07-08T00:00:00Z";
         }
+        else if (version == "1.2.0")
+        {
+            specVers = "1.2";
+            // TODO: Update specDT once final document is posted
+            specDT = "2016-04-12T00:00:00Z";
+        }
     }
     else if (dataType == "SIDD")
     {
