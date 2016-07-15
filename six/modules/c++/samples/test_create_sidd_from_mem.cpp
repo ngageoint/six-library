@@ -2284,10 +2284,17 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
 {
     siddData.setVersion(version);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
-    siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
-    for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
+
+    if (version == "1.1.0")
     {
-        siddData.getDisplayLUT()->table[ii] = ii % 128;
+        // This will natural get constructed in the course of 1.0.0
+        // Separate field in 1.1.0
+        siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
+
+        for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
+        {
+            siddData.getDisplayLUT()->table[ii] = ii % 128;
+        }
     }
     // These things are essential to forming the file
     if (smallImage)

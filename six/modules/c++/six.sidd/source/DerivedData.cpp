@@ -95,6 +95,10 @@ mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
 {
     if (mVersion == "1.0.0")
     {
+        if (display->remapInformation.get() == NULL)
+        {
+            throw except::Exception(Ctxt("Display.RemapInformation is NULL"));
+        }
         return display->remapInformation->remapLUT;
     }
     else if (mVersion == "1.1.0")
