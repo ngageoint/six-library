@@ -6,11 +6,11 @@
 	Type Level 1 types (Feature Table 7.2.5)
 	Available types: Geometry, Point, Curve, LineString, Surface, Polygon, GeomCollection
 	Instantiable types: Point, LineString, Polygon, GeomCollection
-	
+
 	Type Level 2 types (Feature Table 7.2.5)
 	Available types: Geometry, Point, Curve, LineString, Surface, Polygon, GeomCollection, MultiPoint, MultiCurve, MultiLineString, MultiSurface, MultiPolygon
 	Instantiable types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon
-	
+
 	Type Level 3 types (Feature Table 7.2.5)
 	Available types: Geometry, Point, Curve, LineString, Surface, Polygon, GeomCollection, MultiPoint , MultiCurve, MultiLineString, MultiSurface, MultiPolygon
 	Instantiable types: Point, LineString, Polygon, GeomCollection, MultiPoint, MultiLineString, MultiPolygon

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ****************************************************************
-  INTELLIGENCE COMMUNITY TECHNICAL SPECIFICATION  
+  INTELLIGENCE COMMUNITY TECHNICAL SPECIFICATION
   XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA (ISM.XML)
   ****************************************************************
   Module:   Information Security Markup
@@ -11,26 +11,26 @@
 <!-- **************************************************************** -->
 <!--                            INTRODUCTION                          -->
 <!-- **************************************************************** -->
-<!-- This XML Schema file is one component of the XML Data Encoding 
-  Specification (DES). Please see the document titled 
-  "XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA" 
+<!-- This XML Schema file is one component of the XML Data Encoding
+  Specification (DES). Please see the document titled
+  "XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA"
   for a complete description of the encoding as well as list
-  of all components.  
-  
+  of all components.
+
   It is envisioned that this schema or its components, as well as other
-  parts of the DES may be overridden for localized implementations. 
-  Therefore, permission to use, copy, modify and distribute this XML 
-  Schema and the other parts of the DES for any purpose is hereby 
+  parts of the DES may be overridden for localized implementations.
+  Therefore, permission to use, copy, modify and distribute this XML
+  Schema and the other parts of the DES for any purpose is hereby
   granted in perpetuity.
-  
+
   Please reference the preceding two paragraphs in all copies or
   variations. The developers make no representation about the
-  suitability of the schema or DES for any purpose. It is provided 
+  suitability of the schema or DES for any purpose. It is provided
   "as is" without expressed or implied warranty.
-  
+
   If you modify this XML Schema in any way label your schema
-  as a variant of ISM.XML. 
-  
+  as a variant of ISM.XML.
+
   Please direct all questions, bug reports,or suggestions for changes
   to the points of contact identified in the document referenced above.
 -->
@@ -59,7 +59,7 @@
 
      IMPLEMENTATION NOTES:
 
-     1. Refer to the XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA 
+     1. Refer to the XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA
         Data Encoding Specification (ISM.XML DES)
         for an explanation of the relationships
         of the IC ISM attributes and the associated controlled vocabularies.
@@ -94,23 +94,23 @@
 <!-- **************************************************************** -->
 <!-- The formal change list is at the end of this file.               -->
 <!-- **************************************************************** -->
-<xsd:schema 
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns="urn:us:gov:ic:ism" 
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="urn:us:gov:ic:ism"
 	xmlns:iccve="urn:us:gov:ic:ism-cvenum"
-	targetNamespace="urn:us:gov:ic:ism" 
-	elementFormDefault="qualified" 
+	targetNamespace="urn:us:gov:ic:ism"
+	elementFormDefault="qualified"
 	xml:lang="en">
 	<xsd:annotation>
 		<xsd:documentation>
       W3C XML Schema for the Intelligence Community Metadata Standard for Information Security Marking (IC-ISM), which is part of the XML DATA ENCODING SPECIFICATION FOR INFORMATION SECURITY MARKING METADATA.
           </xsd:documentation>
 	</xsd:annotation>
-	
+
 	<!-- **************************************************************** -->
 	<!--        IMPORT CVE-Generated schema types                         -->
 	<!-- **************************************************************** -->
-	<xsd:import namespace="urn:us:gov:ic:ism-cvenum" 
+	<xsd:import namespace="urn:us:gov:ic:ism-cvenum"
 	schemaLocation="./CVEGeneratedTypes.xsd"/>
 
 	<!-- ************************************************************* -->
@@ -180,7 +180,7 @@
 		<xsd:attribute ref="typeOfExemptedSource" use="optional"/>
 		<xsd:attribute ref="dateOfExemptedSource" use="optional"/>
 	</xsd:attributeGroup>
-	
+
 	<!-- ************************************************************* -->
 	<!-- NoticeAttributesGroup ..................................... -->
 	<!-- ************************************************************* -->
@@ -196,7 +196,7 @@
 		<xsd:attribute ref="noticeDate" use="optional"/>
 		<xsd:attributeGroup ref="SecurityAttributesGroup"/>
 	</xsd:attributeGroup>
-	
+
 	<!-- ************************************************************* -->
 	<!-- NoticeAttributesOptionGroup ..................................... -->
 	<!-- ************************************************************* -->
@@ -212,7 +212,7 @@
 		<xsd:attribute ref="noticeDate" use="optional"/>
 		<xsd:attributeGroup ref="SecurityAttributesOptionGroup"/>
 	</xsd:attributeGroup>
-	
+
 	<!-- ************************************************************* -->
 	<!-- GLOBAL ATTRIBUTE DECLARATIONS ............................... -->
 	<!-- ************************************************************* -->
@@ -234,7 +234,7 @@
       </xsd:documentation>
 		</xsd:annotation>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- GLOBAL ATTRIBUTE DECLARATIONS ............................... -->
 	<!-- ************************************************************* -->
@@ -242,17 +242,17 @@
 		<xsd:annotation>
 			<xsd:documentation>
 				This attribute is used at the resource level.
-				
+
 				An indicator of what optional ISM rule sets the documents complies with. This allows sytems to know that the document claims compliance with these rule sets and they should be enforced.
 				PERMISSIBLE VALUES
-				
+
 				The permissible values for this simple type are defined in the Controlled Value Enumeration:
-				
+
 				CVEnumISMcompliesWith.xml
 			</xsd:documentation>
 		</xsd:annotation>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- ownerProducer ............................................... -->
 	<!-- ************************************************************* -->
@@ -433,7 +433,7 @@
       </xsd:documentation>
 		</xsd:annotation>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- nonUSControls ............................................... -->
 	<!-- ************************************************************* -->
@@ -441,19 +441,19 @@
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
 				This attribute is used at both the resource and the portion levels.
-				
+
 				One or more indicators of the expansion or limitation on the distribution of an information resource or portion within the domain of information originating from non-US components.
-				
+
 				It is manifested in portion marks and security banners.
-								
+
 				PERMISSIBLE VALUES
 				The permissible values for this attribute are defined in the Controlled Value Enumeration:
-				
+
 				CVEnumISMNonUSControls.xml
 			</xsd:documentation>
 		</xsd:annotation>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- classifiedBy ................................................ -->
 	<!-- ************************************************************* -->
@@ -630,7 +630,7 @@
 			<xsd:restriction base="xsd:date"/>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- resourceElement ............................................. -->
 	<!-- ************************************************************* -->
@@ -638,8 +638,8 @@
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
         This attribute is used to designate which element has the ISM attributes representing the classification for the entire resource.
-		Every document must have at least one element with this indicator as true. It should be rare that a document has more than one. Mainly 
-		this would occur in some sort of aggregator schema. In that unusual case the first one encountered in XML document order is the one used for 
+		Every document must have at least one element with this indicator as true. It should be rare that a document has more than one. Mainly
+		this would occur in some sort of aggregator schema. In that unusual case the first one encountered in XML document order is the one used for
 		all constraint rules.
       </xsd:documentation>
 		</xsd:annotation>
@@ -664,14 +664,14 @@
 			<xsd:restriction base="xsd:boolean"/>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- createDate .................................................. -->
 	<!-- ************************************************************* -->
 	<xsd:attribute name="createDate">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
-				This attribute is used to designate what date the document was produced on. This is the date that will be used by 
+				This attribute is used to designate what date the document was produced on. This is the date that will be used by
 				various constraint rules to determine if the document meets all the business rules. It must be on the element where
 				resourceElement is true.
 			</xsd:documentation>
@@ -680,7 +680,7 @@
 			<xsd:restriction base="xsd:date"/>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- compilationReason ........................................... -->
 	<!-- ************************************************************* -->
@@ -691,7 +691,7 @@
         sub elements would result in. This acts as an indicator to rule engines that there is not accidental over classification
         going on and to users that special care beyond what the portion marks reveal must be taken when using this data. Use of this
         mark does not replace the need for the compilation reason being defined in the prose in accordance with ISOO Directive 1.
-        For example this would document why 3 Unclassified bullet items form a Secret List. 
+        For example this would document why 3 Unclassified bullet items form a Secret List.
         Without this reason being noted the above described document would be considered to be miss-marked and overclassified.
       </xsd:documentation>
 		</xsd:annotation>
@@ -701,7 +701,7 @@
 			</xsd:restriction>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- Notice ..................................................... -->
 	<!-- ************************************************************* -->
@@ -710,15 +710,15 @@
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
 				A categorization defining which of the required Notices, described in the CAPCO Register, is included in the element.
-				This attribute is an indicator that the element contains a Notice. The element could contain any structure the implementing 
-				schema defined and details of the rendering would be up to the schema in question. 
+				This attribute is an indicator that the element contains a Notice. The element could contain any structure the implementing
+				schema defined and details of the rendering would be up to the schema in question.
 				The permissible value for this attribute are defined in the Controlled Value Enumeration:
-				
+
 				CVEnumISMNotice.xml
 			</xsd:documentation>
 		</xsd:annotation>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- NoticeDate .................................................. -->
 	<!-- ************************************************************* -->
@@ -733,7 +733,7 @@
 			<xsd:restriction base="xsd:date"/>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- NoticeReason................................................. -->
 	<!-- ************************************************************* -->
@@ -750,7 +750,7 @@
 			</xsd:restriction>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- noticePOC.................................................... -->
 	<!-- ************************************************************* -->
@@ -767,7 +767,7 @@
 			</xsd:restriction>
 		</xsd:simpleType>
 	</xsd:attribute>
-	
+
 	<!-- ************************************************************* -->
 	<!-- DESVersion          ......................................... -->
 	<!-- ************************************************************* -->
@@ -779,19 +779,19 @@
 		<xsd:attribute name="DESVersion" use="required" type="xsd:int" fixed="4" form="qualified">
 			<xsd:annotation>
 				<xsd:documentation xml:lang="en">
-					The version number of the DES. Should there be multiple specified in an instance document 
+					The version number of the DES. Should there be multiple specified in an instance document
 					the one at the root node is the one that will apply to the entire document.
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 	</xsd:attributeGroup>
-	
+
 	<xsd:attributeGroup name="ResourceNodeAttributeGroup">
 		<xsd:annotation>
 			<xsd:documentation>
-				An attribute group to be used on the element that represents the resource 
-				node of an instance document. This node's ISM attributes would be used to 
-				generate banner marks and the E.O. 12958 classification authority block. 
+				An attribute group to be used on the element that represents the resource
+				node of an instance document. This node's ISM attributes would be used to
+				generate banner marks and the E.O. 12958 classification authority block.
 				Implementing Schemas might use this on the Root node or any other node.
 			</xsd:documentation>
 		</xsd:annotation>
@@ -800,8 +800,8 @@
 		<xsd:attribute ref="compliesWith" use="optional" />
 		<xsd:attributeGroup ref="SecurityAttributesGroup"/>
 	</xsd:attributeGroup>
-	
-	
+
+
 	<!-- **************************************************************
                             CHANGE HISTORY
      **************************************************************
@@ -876,7 +876,7 @@
 *     - (CR 2010-02) Add notice attribute, NoticeAttributesGroup and NoticeAttributesOptionGroup
 * Final review before signature 2010-06-06
 *     - Remove comment about LES not being in the Register since it is now in the register.
-*     - Correct NoticeAttributesOptionGroup to have SecurityAttributesOptionGroup so that NoteInline in PUBS works correctly. 
+*     - Correct NoticeAttributesOptionGroup to have SecurityAttributesOptionGroup so that NoteInline in PUBS works correctly.
 *
 * Date     2010-06-01
 * By:      ODNI OCIO ICIS
