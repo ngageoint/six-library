@@ -64,14 +64,14 @@ TEST_CASE(DerivedSCPCOA)
     TEST_ASSERT_EQ(scpcoa.arpAcc[1], 2958);
     TEST_ASSERT_EQ(scpcoa.arpAcc[2], 3698);
 
-    TEST_ASSERT_EQ(scpcoa.sideOfTrack.toString(), "RIGHT");
+    TEST_ASSERT_EQ(scpcoa.sideOfTrack.toString(), "LEFT");
     TEST_ASSERT_ALMOST_EQ(scpcoa.slantRange, 13240071.80623738);
     TEST_ASSERT_ALMOST_EQ(scpcoa.groundRange, 0.69533621);
     TEST_ASSERT_ALMOST_EQ(scpcoa.dopplerConeAngle, 179.9922244);
     TEST_ASSERT_ALMOST_EQ(scpcoa.grazeAngle, 79.21708938);
     TEST_ASSERT_ALMOST_EQ(scpcoa.incidenceAngle, 10.78291061);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.slopeAngle, 89.87415027);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.twistAngle, 89.32730959);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.slopeAngle, 90.12584972);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.twistAngle, -89.32730959);
     TEST_ASSERT_ALMOST_EQ(scpcoa.azimAngle, 222.4277615);
     TEST_ASSERT_ALMOST_EQ(scpcoa.layoverAngle, 133.0885753);
 }

@@ -250,7 +250,7 @@ Vector3 SCPCOA::uLOS(const Vector3& scp) const
 
 Vector3 SCPCOA::left() const
 {
-    return cross(arpPos.unit(), arpVel / arpPos.norm());// .unit());
+    return cross(arpPos.unit(), arpVel.unit());
 }
 
 int SCPCOA::look(const Vector3& scp) const
