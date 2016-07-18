@@ -3034,6 +3034,8 @@ Constants.DES_VERSION_STR = _six_base.cvar.Constants_DES_VERSION_STR
 Constants.DES_USER_DEFINED_SUBHEADER_TAG = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_TAG
 Constants.DES_USER_DEFINED_SUBHEADER_ID = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_ID
 Constants.DES_USER_DEFINED_SUBHEADER_LENGTH = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_LENGTH
+Constants.SICD_DESSHSI = _six_base.cvar.Constants_SICD_DESSHSI
+Constants.SIDD_DESSHSI = _six_base.cvar.Constants_SIDD_DESSHSI
 
 def Constants_getNumBytesPerPixel(type):
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
@@ -4189,6 +4191,31 @@ def loadPluginDir(pluginDir):
     """loadPluginDir(std::string const & pluginDir)"""
     return _six_base.loadPluginDir(pluginDir)
 
+def loadXmlDataContentHandler():
+    """loadXmlDataContentHandler()"""
+    return _six_base.loadXmlDataContentHandler()
+
+def parseData(*args):
+    """
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseData(*args)
+
+def parseDataFromFile(*args):
+    """
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromFile(*args)
+
+def parseDataFromString(*args):
+    """
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    """
+    return _six_base.parseDataFromString(*args)
+
 def getErrors(errorStats, sampleSpacing, errors):
     """getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"""
     return _six_base.getErrors(errorStats, sampleSpacing, errors)
@@ -4250,6 +4277,78 @@ class Options(_object):
 Options_swigregister = _six_base.Options_swigregister
 Options_swigregister(Options)
 
+class XMLControlCreator(_object):
+    """Proxy of C++ six::XMLControlCreator class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, XMLControlCreator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, XMLControlCreator, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_base.delete_XMLControlCreator
+    __del__ = lambda self: None
+
+    def newXMLControl(self, log):
+        """newXMLControl(XMLControlCreator self, logging::Logger * log) -> XMLControl"""
+        return _six_base.XMLControlCreator_newXMLControl(self, log)
+
+XMLControlCreator_swigregister = _six_base.XMLControlCreator_swigregister
+XMLControlCreator_swigregister(XMLControlCreator)
+
+class XMLControlRegistry(_object):
+    """Proxy of C++ six::XMLControlRegistry class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, XMLControlRegistry, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, XMLControlRegistry, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::XMLControlRegistry self) -> XMLControlRegistry"""
+        this = _six_base.new_XMLControlRegistry()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_XMLControlRegistry
+    __del__ = lambda self: None
+
+    def addCreator(self, *args):
+        """
+        addCreator(XMLControlRegistry self, std::string const & identifier, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, std::string const & identifier, XMLControlCreator creator)
+        addCreator(XMLControlRegistry self, DataType dataType, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, DataType dataType, XMLControlCreator creator)
+        """
+        return _six_base.XMLControlRegistry_addCreator(self, *args)
+
+
+    def newXMLControl(self, *args):
+        """
+        newXMLControl(XMLControlRegistry self, std::string const & identifier, logging::Logger * log) -> XMLControl
+        newXMLControl(XMLControlRegistry self, DataType dataType, logging::Logger * log) -> XMLControl
+        """
+        return _six_base.XMLControlRegistry_newXMLControl(self, *args)
+
+XMLControlRegistry_swigregister = _six_base.XMLControlRegistry_swigregister
+XMLControlRegistry_swigregister(XMLControlRegistry)
+
+
+def toXMLString(data, xmlRegistry=None):
+    """
+    toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string
+    toXMLString(Data data) -> std::string
+    """
+    return _six_base.toXMLString(data, xmlRegistry)
+
+def toValidXMLString(data, schemaPaths, log, xmlRegistry=None):
+    """
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
+    """
+    return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
 class VectorString(_object):
     """Proxy of C++ std::vector<(std::string)> class"""
     __swig_setmethods__ = {}

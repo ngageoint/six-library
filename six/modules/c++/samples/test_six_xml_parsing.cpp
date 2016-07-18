@@ -115,10 +115,10 @@ void XMLVerifier::verify(const std::string& pathname) const
     inStream.write(reinterpret_cast<const sys::byte*>(inStr.c_str()),
                    inStr.length());
 
-    std::auto_ptr<six::Data> data(six::parseData(mXmlRegistry,
-                                                 pathname,
-                                                 mSchemaPaths,
-                                                 mLog));
+    std::auto_ptr<six::Data> data(six::parseDataFromFile(mXmlRegistry,
+                                                         pathname,
+                                                         mSchemaPaths,
+                                                         mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
@@ -126,21 +126,9 @@ void XMLVerifier::verify(const std::string& pathname) const
     std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
-    std::vector<std::string> separatedPath = str::split(pathname, ".");
-    std::string roundTrippedPath = separatedPath[0] + "_out";
-    if (separatedPath.size() == 2)
-    {
-        roundTrippedPath += "." + separatedPath[1];
-    }
-    else
-    {
-        roundTrippedPath.clear();
-        for (size_t ii = 0; ii < separatedPath.size() - 1; ++ii)
-        {
-            roundTrippedPath += "." + separatedPath[ii];
-        }
-        roundTrippedPath += "_out." + separatedPath[separatedPath.size() - 1];
-    }
+    const sys::Path::StringPair splitPath = sys::Path::splitExt(pathname);
+    const std::string roundTrippedPath = splitPath.first + "_out"
+            + splitPath.second;
 
     io::FileOutputStream outStream(roundTrippedPath);
     xmlDoc->getRootElement()->prettyPrint(outStream);
@@ -148,7 +136,7 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     // Now re-read the output and make sure the Data objects
     // are equal.
-    std::auto_ptr<six::Data> readData(six::parseData(mXmlRegistry,
+    std::auto_ptr<six::Data> readData(six::parseDataFromFile(mXmlRegistry,
         roundTrippedPath,
         mSchemaPaths,
         mLog));

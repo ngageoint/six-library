@@ -51,9 +51,7 @@ class NITFReadControl : public ReadControl
 public:
 
     //!  Constructor
-    NITFReadControl()
-    {
-    }
+    NITFReadControl();
 
     //!  Destructor
     virtual ~NITFReadControl()
@@ -62,6 +60,12 @@ public:
     }
 
     virtual DataType getDataType(const std::string& fromFile) const;
+
+    static
+    DataType getDataType(nitf::Record& record);
+
+    static
+    DataType getDataType(nitf::DESegment& record);
 
     /*!
      *  Performs (Basic) validation when a segment is being

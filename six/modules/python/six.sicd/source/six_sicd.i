@@ -122,24 +122,19 @@ Data* readNITF(const std::string& pathname,
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
-%include "std_vector.i"
-%include "std_string.i"
-%include "std_complex.i"
-%include "std_pair.i"
+%include <std_vector.i>
+%include <std_string.i>
+%include <std_complex.i>
+%include <std_pair.i>
+%include <std_auto_ptr.i>
 
 %import "math_poly.i"
 %import "six.i"
 %import "io.i"
 %import "mem.i"
 
-/* wrap around auto_ptr */
-%inline
-%{
-six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const std::vector<std::string>& schemaPaths ) {
-  std::auto_ptr<six::sicd::ComplexData> retv = Utilities::getComplexData(sicdPathname, schemaPaths);
-  return retv.release();
-}
-%}
+// This allows functions that return auto_ptrs to work properly
+%auto_ptr(six::sicd::ComplexData);
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
@@ -149,10 +144,6 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
-
-
-/* this version of the function returns the auto_ptr, ignore it */
-%rename ("$ignore", fullname=1) "six::sicd::Utilities::getComplexData";
 
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
@@ -278,7 +269,7 @@ import numpy as np
 from pysix.six_base import VectorString
 
 def read(inputPathname, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
     #Numpy has no concept of complex integers, so dtype will always be complex64
     widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
@@ -289,7 +280,7 @@ def read(inputPathname, schemaPaths = VectorString()):
     return widebandData, complexData
 
 def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths = VectorString()):
-    complexData = getComplexData(inputPathname, schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
 
     widebandData = np.empty(shape = (numRows, numCols), dtype = "complex64")
     widebandBuffer, ro = widebandData.__array_interface__["data"]
@@ -301,7 +292,7 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
-def readFromNITF(pathname, schemaPaths):
+def readFromNITF(pathname, schemaPaths=VectorString()):
     pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
 

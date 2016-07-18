@@ -20,6 +20,7 @@
  *
  */
 
+#include <io/StringStream.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
@@ -85,7 +86,7 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         {
             rowsToRead = endRow - row;
         }
-        
+
         // Read into the temp buffer
         types::RowCol<size_t> swathOffset(row, offset.col);
         types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
@@ -537,6 +538,57 @@ Vector3 Utilities::wgs84Norm(const Vector3& point)
     Vector3 normal(coordinates);
     return normal.unit();
 }
-}
+
+std::auto_ptr<ComplexData> Utilities::parseData(
+        ::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::COMPLEX,
+                           new XMLControlCreatorT<ComplexXMLControl>());
+
+    std::auto_ptr<Data> data(six::parseData(
+            xmlRegistry, xmlStream, schemaPaths, log));
+
+     std::auto_ptr<ComplexData> complexData(reinterpret_cast<ComplexData*>(
+             data.release()));
+
+     return complexData;
 }
 
+std::auto_ptr<ComplexData> Utilities::parseDataFromFile(
+        const std::string& pathname,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
+{
+    io::FileInputStream inStream(pathname);
+    return parseData(inStream, schemaPaths, log);
+}
+
+std::auto_ptr<ComplexData> Utilities::parseDataFromString(
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(inStream, schemaPaths, log);
+}
+
+std::string Utilities::toXMLString(const ComplexData& data,
+                                   const std::vector<std::string>& schemaPaths,
+                                   logging::Logger* logger)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(DataType::COMPLEX,
+                           new XMLControlCreatorT<ComplexXMLControl>());
+
+    logging::NullLogger nullLogger;
+    return ::six::toValidXMLString(&data,
+                                   schemaPaths,
+                                   (logger == NULL) ? &nullLogger : logger,
+                                   &xmlRegistry);
+}
+}
+}

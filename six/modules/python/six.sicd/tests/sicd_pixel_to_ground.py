@@ -57,7 +57,7 @@ if __name__ == '__main__':
     schemaPaths.push_back(schemaPath)
 
     # Read in the XML portion of the SICD
-    complexData = six_sicd.getComplexData(args.sicd, schemaPaths)
+    complexData = six_sicd.SixSicdUtilities.getComplexData(args.sicd, schemaPaths)
 
     # Derive geometry info from this
     geom = six_sicd.SixSicdUtilities.getSceneGeometry(complexData)

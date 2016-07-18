@@ -62,6 +62,15 @@ public:
     static nitf_CompressionInterface* retrieveCompressionInterface(
             const std::string& comp) throw(nitf::NITFException);
 
+    /*!
+     * Checks if a TRE handler exists for 'ident'
+     *
+     * \param ident ID of the TRE
+     *
+     * \return true if a TRE handler exists, false otherwise
+     */
+    static bool treHandlerExists(const std::string& ident);
+
 private:
     PluginRegistry()
     {

@@ -26,6 +26,7 @@ from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
 from coda.coda_io import *
+from coda.coda_logging import *
 
 import os
 import sys
@@ -63,7 +64,10 @@ def roundTrip(filename):
   fos = FileOutputStream(out_filename)
   root = out_doc.getRootElement()
   root.prettyPrint(fos)
-  if filecmp.cmp(filename, out_filename):
+  round_tripped_cmplx = SixSicdUtilities_parseDataFromFile(out_filename,
+      vs, Logger())
+
+  if cmplx == round_tripped_cmplx:
     print(filename + " passed")
   else:
     print("handling " + filename + " failed")
@@ -84,7 +88,7 @@ def roundTrip(filename):
 def loadSicd(filename):
   vs = VectorString()
   vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
-  cmplx = getComplexData(filename, vs)
+  cmplx = SixSicdUtilities.getComplexData(filename, vs)
   showInfo(cmplx)
   out_filename = 'from_sicd_' + os.path.basename(filename) + '.xml'
   xml_ctrl = ComplexXMLControl()

@@ -62,7 +62,7 @@ std::string generateILOC(size_t row, size_t col)
 
 std::string generateILOC(const types::RowCol<size_t>& dims)
 {
-	return generateILOC(dims.row, dims.col);
+    return generateILOC(dims.row, dims.col);
 }
 
 class GetDisplayLutFromLegend
@@ -90,6 +90,13 @@ const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
 const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
 const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
+
+NITFWriteControl::NITFWriteControl()
+{
+    // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
+    // singleton PluginRegistry
+    loadXmlDataContentHandler();
+}
 
 void NITFWriteControl::initialize(Container* container)
 {
@@ -226,7 +233,7 @@ void NITFWriteControl::initialize(Container* container)
             }
 
             subheader.getImageLocation().set(generateILOC(segmentInfo.rowOffset,
-            										      0));
+                                                          0));
 
             subheader.getTargetId().set(targetId);
 
@@ -338,7 +345,7 @@ void NITFWriteControl::initialize(Container* container)
             // to (which is the first image segment for this product which is
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
             subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(
-            		info.getStartIndex() + 1));
+                       info.getStartIndex() + 1));
 
             setImageSecurity(info.getData()->getClassification(), subheader);
 
@@ -368,43 +375,43 @@ void NITFWriteControl::initialize(Container* container)
 }
 
 std::string NITFWriteControl::getComplexIID(size_t segmentNum,
-											size_t numImageSegments)
+                                            size_t numImageSegments)
 {
-	// SICD###
-	std::ostringstream ostr;
-	ostr << six::toString(DataType(DataType::COMPLEX))
-	     << std::setfill('0') << std::setw(3)
-	     << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
+    // SICD###
+    std::ostringstream ostr;
+    ostr << six::toString(DataType(DataType::COMPLEX))
+         << std::setfill('0') << std::setw(3)
+         << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
 
-	return ostr.str();
+    return ostr.str();
 }
 
 std::string NITFWriteControl::getDerivedIID(size_t segmentNum,
                                             size_t productNum)
 {
-	// SIDD######
-	std::ostringstream ostr;
-	ostr << six::toString(DataType(DataType::DERIVED))
-	     << std::setfill('0')
+    // SIDD######
+    std::ostringstream ostr;
+    ostr << six::toString(DataType(DataType::DERIVED))
+         << std::setfill('0')
          << std::setw(3) << (productNum + 1)
          << std::setw(3) << (segmentNum + 1);
 
-	return ostr.str();
+    return ostr.str();
 }
 
 std::string NITFWriteControl::getIID(DataType dataType,
-		           	   	   	   	   	 size_t segmentNum,
-		           	   	   	   	   	 size_t numImageSegments,
-		           	   	   	   	   	 size_t productNum)
+                                                    size_t segmentNum,
+                                                    size_t numImageSegments,
+                                                    size_t productNum)
 {
-	if (dataType == DataType::COMPLEX)
-	{
-		return getComplexIID(segmentNum, numImageSegments);
-	}
-	else
-	{
-		return getDerivedIID(segmentNum, productNum);
-	}
+    if (dataType == DataType::COMPLEX)
+    {
+        return getComplexIID(segmentNum, numImageSegments);
+    }
+    else
+    {
+        return getDerivedIID(segmentNum, productNum);
+    }
 }
 
 void NITFWriteControl::setBlocking(const std::string& imode,
@@ -937,6 +944,13 @@ void NITFWriteControl::addDataAndWrite(
                                             false);
         deWriter.attachSource(segSource);
     }
+
+    int deWriterIndex = mContainer->getNumData();
+    for (size_t ii = 0; ii < mSegmentWriters.size(); ++ii)
+    {
+        mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
+    }
+
     mWriter.write();
 }
 
@@ -1005,92 +1019,99 @@ void NITFWriteControl::addUserDefinedSubheader(
         const six::Data& data,
         nitf::DESubheader& subheader) const
 {
-    // If NITRO doesn't know this TRE (because our plugin path isn't set),
-    // we won't actually get an exception in the TRE constructor because it'll
-    // use a default handler for the TRE.  Instead, we'll get a no such key
-    // exception when it doesn't know what the fields below are.  try/catch
-    // this so we can supply a more obvious error message.
     nitf::TRE tre(Constants::DES_USER_DEFINED_SUBHEADER_TAG,
                   Constants::DES_USER_DEFINED_SUBHEADER_ID);
 
-    try
+    tre["DESCRC"] = "99999";
+    tre["DESSHFT"] = "XML";
+    tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
+    setField("DESSHRP", mOrganizationId, tre);
+
+    const std::string dataType =
+            (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
+
+    if (dataType == "SICD")
     {
-        tre["DESCRC"] = "99999";
-        tre["DESSHFT"] = "XML";
-        tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
-        setField("DESSHRP", mOrganizationId, tre);
-
-        const std::string dataType =
-                (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
-        tre["DESSHSI"] = dataType +
-                " Volume 1 Design & Implementation Description Document";
-
-        // This is the publication date and version of the
-        // Design and Implementation Description Document 
-        // for the specification -- Add to this list as more
-        // versions are published
-        const std::string version(data.getVersion());
-        std::string specVers;
-        std::string specDT;
-        if (dataType == "SICD")
-        {    
-            if (version == "1.0.0" || version == "1.0.1")
-            {
-                specVers = "1.0";
-                specDT = "2011-09-28T00:00:00Z";
-            }
-            else if (version == "1.1.0")
-            {
-                specVers = "1.1";
-                specDT = "2014-07-08T00:00:00Z";
-            }
-        }
-        else if (dataType == "SIDD")
-        {
-            if (version == "1.0.0")
-            {
-                specVers = "1.0";
-                specDT = "2011-08-01T00:00:00Z";
-            }
-        }
-
-        // spec version
-        if (specVers.empty())
-        {
-            throw except::Exception(Ctxt(
-                "DESSHSV Failure - Unsupported in " + dataType +
-                " version: " + version));
-        }
-        tre["DESSHSV"] = specVers;
-
-        // spec publication Date/Time
-        if (specDT.empty())
-        {
-            throw except::Exception(Ctxt(
-                "DESSHSD Failure - Unsupported in " + dataType +
-                " version: " + version));
-        }
-        tre["DESSHSD"] = specDT;
-
-        tre["DESSHTN"] = "urn:" + dataType + ":" + version;
-        tre["DESSHLPG"] = toString(data.getImageCorners());
-
-        // Spec specifies leaving this blank
-        tre["DESSHLPT"] = "";
-
-        setField("DESSHLI", mLocationId, tre);
-        setField("DESSHLIN", mLocationIdNamespace, tre);
-        setField("DESSHABS", mAbstract, tre);
+        tre["DESSHSI"] = Constants::SICD_DESSHSI;
     }
-    catch (const except::NoSuchKeyException& )
+    else
     {
-        throw except::NoSuchKeyException(Ctxt(
-                "Must have '" +
-                std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
-                "' plugin on the plugin path.  Either set the "
-                "NITF_PLUGIN_PATH environment variable or use "
-                "six::loadPluginDir()"));
+        tre["DESSHSI"] = Constants::SIDD_DESSHSI;
     }
+
+    // This is the publication date and version of the
+    // Design and Implementation Description Document
+    // for the specification -- Add to this list as more
+    // versions are published
+    const std::string version(data.getVersion());
+    std::string specVers;
+    std::string specDT;
+    if (dataType == "SICD")
+    {
+        if (version == "1.0.0" || version == "1.0.1")
+        {
+            specVers = "1.0";
+            specDT = "2011-09-28T00:00:00Z";
+        }
+        else if (version == "1.1.0")
+        {
+            specVers = "1.1";
+            specDT = "2014-07-08T00:00:00Z";
+        }
+        else if (version == "1.2.0")
+        {
+            specVers = "1.2";
+            // TODO: Update specDT once final document is posted
+            specDT = "2016-04-12T00:00:00Z";
+        }
+    }
+    else if (dataType == "SIDD")
+    {
+        if (version == "1.0.0")
+        {
+            specVers = "1.0";
+            specDT = "2011-08-01T00:00:00Z";
+        }
+    }
+
+    // spec version
+    if (specVers.empty())
+    {
+        throw except::Exception(Ctxt(
+            "DESSHSV Failure - Unsupported in " + dataType +
+            " version: " + version));
+    }
+    tre["DESSHSV"] = specVers;
+
+    // spec publication Date/Time
+    if (specDT.empty())
+    {
+        throw except::Exception(Ctxt(
+            "DESSHSD Failure - Unsupported in " + dataType +
+            " version: " + version));
+    }
+    tre["DESSHSD"] = specDT;
+
+    tre["DESSHTN"] = "urn:" + dataType + ":" + version;
+    tre["DESSHLPG"] = toString(data.getImageCorners());
+
+    // Spec specifies leaving this blank
+    tre["DESSHLPT"] = "";
+
+    setField("DESSHLI", mLocationId, tre);
+    setField("DESSHLIN", mLocationIdNamespace, tre);
+    setField("DESSHABS", mAbstract, tre);
+
     subheader.setSubheaderFields(tre);
+}
+
+void NITFWriteControl::addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+{
+    if (segmentWriter.get() == NULL)
+    {
+        throw except::Exception(Ctxt("segmentWriter is NULL"));
+    }
+
+    mSegmentWriters.push_back(segmentWriter);
 }
 }

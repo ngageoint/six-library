@@ -420,7 +420,7 @@ NITFPRIV(NITF_BOOL) unloadDSO(nitf_DLL* dll, nitf_Error * error)
 	if ( dll->libname )
 	{
 
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
             printf("Unloaded dll with name [%s]\n", dll->libname);
 #endif
 
@@ -497,7 +497,7 @@ NITFAPI(NITF_BOOL)
         {
             return NITF_FAILURE;
         }
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
         printf("Successfully loaded plugin: [%s] at [%p]\n",
                keyName, dll);
 #endif
@@ -540,10 +540,10 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
 
     for (; ident[i] != NULL; ++i)
     {
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
         if (nitf_HashTable_exists(reg->treHandlers, ident[i]))
         {
-            printf("Warning, static handler overriding [%s] hook", ident);
+            printf("Warning, static handler overriding [%s] hook\n", ident[i]);
         }
 #endif
         ok &= nitf_HashTable_insert(reg->treHandlers, ident[i], (NITF_DATA*)handle, error);
@@ -601,7 +601,7 @@ NITFPROT(NITF_BOOL)
                 {
                     if (!nitf_PluginRegistry_loadPlugin(fullName, error))
                     {
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
                         printf("Warning: plugin [%s] failed to load!\n", name);
 #endif                        
                     }
@@ -609,7 +609,7 @@ NITFPROT(NITF_BOOL)
                 
                 else
                 {
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
                     printf("Skipping directory [%s]\n", name);
 #endif
                 }
@@ -625,7 +625,7 @@ NITFPROT(NITF_BOOL)
     }
     else
     {
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
         fprintf(stdout,
                 "Could not open plug-in directory '%s'. "
                 "You may have forgotten to set your NITF_PLUGIN_PATH environment "
@@ -636,6 +636,12 @@ NITFPROT(NITF_BOOL)
     return NITF_SUCCESS;
 }
 
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_internalTREHandlerExists(nitf_PluginRegistry* reg,
+                                             const char* ident)
+{
+    return nitf_HashTable_exists(reg->treHandlers, ident);
+}
 
 NITFPROT(NITF_BOOL) nitf_PluginRegistry_load(nitf_PluginRegistry * reg,
                                              nitf_Error * error)
@@ -662,7 +668,29 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
     return status;
 }
 
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_TREHandlerExists(const char* ident)
+{
+    NITF_BOOL exists;
+    nitf_Error error;
 
+    /* first, get the registry */
+    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstance(&error);
+    if (reg == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    /* must be thread safe */
+    nitf_Mutex_lock(GET_MUTEX());
+
+    exists = nitf_PluginRegistry_internalTREHandlerExists(reg, ident);
+
+    /* unlock */
+    nitf_Mutex_unlock(GET_MUTEX());
+
+    return exists;
+}
 
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
 nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
@@ -761,7 +789,7 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
     nitf_Utils_replace(name, ' ', '_');
 
     /*  No error has occurred (yet)  */
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
     printf("Loading function [%s] in dso at [%p]\n", name, dso);
 #endif
 
@@ -774,7 +802,7 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
         return NITF_FAILURE;
     }
 
-#if NITF_DEBUG_PLUGIN_REG
+#ifdef NITF_DEBUG_PLUGIN_REG
     if (nitf_HashTable_exists(hash, ident))
     {
         printf("Warning, overriding [%s] hook", ident);
@@ -783,7 +811,6 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
 #endif
     
     return nitf_HashTable_insert(hash, ident, dsoMain, error);
-
 }
 
 /*

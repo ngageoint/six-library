@@ -1,7 +1,7 @@
 NAME            = 'six'
 MAINTAINER      = 'adam.sylvester@mdaus.com'
 MODULE_DEPS     = 'scene nitf xml.lite logging math.poly mem'
-TARGETS_TO_ADD  = 'XML_DATA_CONTENT'
+USE             = 'XML_DATA_CONTENT-static-c'
 
 options = configure = distclean = lambda p: None
 

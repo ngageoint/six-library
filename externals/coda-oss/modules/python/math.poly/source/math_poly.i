@@ -9,7 +9,7 @@
 
 
 %{
-#ifndef SWIGPY_SLICE_ARG(obj)
+#ifndef SWIGPY_SLICE_ARG
 # if PY_VERSION_HEX >= 0x03000000
 #  define SWIGPY_SLICE_ARG(obj) ((PyObject*) (obj))
 # else
