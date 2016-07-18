@@ -69,6 +69,12 @@ public:
     static
     DataType getDataType(nitf::DESegment& record);
 
+    static
+        DataType getDataType(const std::string& desid,
+            sys::Uint64_T subheaderLength,
+            const std::string& desshsiField,
+            const std::string& treTag="");
+
     /*!
      *  Performs (Basic) validation when a segment is being
      *  read.  This function is able to test that the image

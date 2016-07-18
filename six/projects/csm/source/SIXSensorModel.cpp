@@ -24,6 +24,7 @@
 #include <limits>
 
 #include "Error.h"
+#include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
 
 namespace
@@ -1113,59 +1114,18 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
 
 DataType SIXSensorModel::getDataType(const csm::Des& des)
 {
-    // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
-    //       SICD or SIDD, so for old files we could key off of that.  Since
-    //       that's not guaranteed for newer versions though, we now use the
-    //       DESID for really old versions and the DESSHSI from
-    //       XML_DATA_CONTENT for newer versions.
     std::string desid = des.subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
-    // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
-    // Older versions of the spec specified it as SICD_XML/SIDD_XML
-    // Here we'll accept any of these under the assumption that it's not
-    // such an old version of the spec that the XML layout itself has
-    // changed (if it did, XMLControl will end up throwing anyway)
-    if (desid == "SICD_XML")
-    {
-        return DataType::COMPLEX;
-    }
-    else if (desid == "SIDD_XML")
-    {
-        return DataType::DERIVED;
-    }
-    else if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
-    {
-        // Check whether DES is SICD/SIDD, or something of a different
-        // sort. Note that we need to check the subheader
-        // length first rather than calling tre.getCurrentSize() in
-        // case there is no subheader (in which case
-        // subheader.getSubheaderFields() will throw with a
-        // NITRO-specific message).
-        const std::string& subheader = des.subHeader();
-        if (subheader.size() - 200 !=
-            Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
-        {
-            return DataType::NOT_SET;
-        }
+    const std::string& subheader = des.subHeader();
 
-        const size_t desshsiOffset = 73 + 200;
-        const size_t desshsiLength = 60;
-        std::string field = des.subHeader().substr(
-                desshsiOffset, desshsiLength);
-        str::trim(field);
-        if (field == Constants::SICD_DESSHSI)
-        {
-            return DataType::COMPLEX;
-        }
-        else if (field == Constants::SIDD_DESSHSI)
-        {
-            return DataType::DERIVED;
-        }
-        else
-        {
-            return DataType::NOT_SET;
-        }
-    }
+    const size_t desshsiOffset = 73 + 200;
+    const size_t desshsiLength = 60;
+    std::string desshsiField = des.subHeader().substr(
+            desshsiOffset, desshsiLength);
+    str::trim(desshsiField);
+
+    return NITFReadControl::getDataType(desid, subheader.size() - 200,
+            desshsiField);
 }
 }
 }
