@@ -2287,7 +2287,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
 
     if (version == "1.1.0")
     {
-        // This will natural get constructed in the course of 1.0.0
+        // This will naturally get constructed in the course of 1.0.0
         // Separate field in 1.1.0
         siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
 
