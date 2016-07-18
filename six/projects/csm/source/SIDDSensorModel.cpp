@@ -120,7 +120,6 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
-            std::cerr << "1\n";
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
@@ -129,7 +128,6 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         six::Data* const data = container->getData(imageIndex);
         if (data->getDataType() != six::DataType::DERIVED)
         {
-            std::cerr << "@\n";
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
