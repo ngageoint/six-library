@@ -49,9 +49,7 @@ class NITFWriteControl : public WriteControl
 public:
 
     //!  Constructor
-    NITFWriteControl()
-    {
-    }
+    NITFWriteControl();
 
     //!  We are a 'NITF'
     std::string getFileType() const

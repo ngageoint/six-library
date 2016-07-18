@@ -81,6 +81,13 @@ six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 
 namespace six
 {
+NITFReadControl::NITFReadControl()
+{
+    // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
+    // singleton PluginRegistry
+    loadXmlDataContentHandler();
+}
+
 DataType NITFReadControl::getDataType(nitf::Record& record)
 {
     nitf::List des = record.getDataExtensions();

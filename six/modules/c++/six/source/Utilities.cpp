@@ -30,6 +30,8 @@
 
 namespace
 {
+NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
+
 inline
 double square(double val)
 {
@@ -1026,6 +1028,15 @@ template<> std::string six::toString(const six::LatLonCorners& corners)
 void six::loadPluginDir(const std::string& pluginDir)
 {
     nitf::PluginRegistry::loadDir(pluginDir);
+}
+
+void six::loadXmlDataContentHandler()
+{
+    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT"))
+    {
+        nitf::PluginRegistry::registerTREHandler(XML_DATA_CONTENT_init,
+                                                 XML_DATA_CONTENT_handler);
+    }
 }
 
 std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg, 

@@ -51,9 +51,7 @@ class NITFReadControl : public ReadControl
 public:
 
     //!  Constructor
-    NITFReadControl()
-    {
-    }
+    NITFReadControl();
 
     //!  Destructor
     virtual ~NITFReadControl()

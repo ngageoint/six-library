@@ -11,14 +11,14 @@
 <!--*************************************************************-->
 <xsd:simpleType name="CVEnumISMFGIProtectedValues">
       <xsd:annotation>
-         <xsd:documentation>(U) FGI followed by all currently valid ISO Trigraphs except USA in alphabetical order by Trigraph, 
+         <xsd:documentation>(U) FGI followed by all currently valid ISO Trigraphs except USA in alphabetical order by Trigraph,
             followed by all currently valid CAPCO Coalition tetragraphs in alphabetical order by tetragraph.
                     PERMISSIBLE VALUES
-                    
+
                     The permissible values for this simple type are defined in the Controlled Value Enumeration:
-                    
+
                     CVEnumISMFGIProtected.xml
-                    
+
                 </xsd:documentation>
       </xsd:annotation>
       <xsd:restriction base="xsd:token">

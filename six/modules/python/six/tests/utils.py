@@ -50,10 +50,11 @@ def installPath():
                 'docs', 'waf', '.gitignore', 'LICENSE']
 
     for child in os.listdir(home):
-        if child not in children and os.path.isdir(child):
-            subdirs = os.listdir(child)
+        fullChildPath = os.path.join(home, child)
+        if child not in children and os.path.isdir(fullChildPath):
+            subdirs = os.listdir(fullChildPath)
             if 'tests' in subdirs and 'bin' in subdirs:
-                return child
+                return fullChildPath
 def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',
@@ -76,7 +77,10 @@ def setPaths():
     sixSchemaPath = os.path.join(installPath(), 'conf', 'schema',
                                  'six')
 
-    os.environ['NITF_PLUGIN_PATH'] = nitfPluginPath
+    # Want to save this value off but only actually want it set for one test
+    # For the rest of them, want to make sure we don't need NITF_PLUGIN_PATH
+    # set since we're linking XML_DATA_CONTENT in statically
+    os.environ['NITF_PLUGIN_PATH_REAL'] = nitfPluginPath
     os.environ['SIX_SCHEMA_PATH'] = sixSchemaPath
 
     pythonPath = findPythonPath()
@@ -97,5 +101,5 @@ def executableName(pathname):
             return pathname
         return pathname + '.exe'
     if pathname.startswith('/'):
-        return '.' + pathname
+        return pathname
     return './' + pathname

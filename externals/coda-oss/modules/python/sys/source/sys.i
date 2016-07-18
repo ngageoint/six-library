@@ -80,7 +80,7 @@
 %#endif
 }
 
-%typemap(in) Int64_T {
+%typemap(in) sys::Int64_T {
 %#if PY_VERSION_HEX >= 0x03000000
   $1 = PyLong_AsSsize_t($input);
 %#else
@@ -88,7 +88,7 @@
 %#endif
 }
 
-%typemap(out) Int64_T {
+%typemap(out) sys::Int64_T {
 %#if PY_VERSION_HEX >= 0x03000000
   $result = PyLong_FromSsize_t($1);
 %#else
@@ -96,7 +96,7 @@
 %#endif
 }
 
-%typemap(typecheck) Int64_T {
+%typemap(typecheck) sys::Int64_T {
 %#if PY_VERSION_HEX >= 0x03000000
   $1 = PyLong_Check($input) ? 1 : 0;
 %#else

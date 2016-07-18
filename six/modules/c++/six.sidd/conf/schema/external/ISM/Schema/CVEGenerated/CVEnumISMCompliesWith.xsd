@@ -13,11 +13,11 @@
       <xsd:annotation>
          <xsd:documentation>(U) Current rule set names that documents may comply with
                     PERMISSIBLE VALUES
-                    
+
                     The permissible values for this simple type are defined in the Controlled Value Enumeration:
-                    
+
                     CVEnumISMCompliesWith.xml
-                    
+
                 </xsd:documentation>
       </xsd:annotation>
       <xsd:restriction base="xsd:token">
