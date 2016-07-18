@@ -119,25 +119,10 @@ DataType NITFReadControl::getDataType(const std::string& desid,
         {
             return DataType::NOT_SET;
         }
-
         if (treTag != Constants::DES_USER_DEFINED_SUBHEADER_TAG)
         {
             return DataType::NOT_SET;
         }
-
-        if (desshsiField.empty())
-        {
-            // We've already checked that it's XML_DATA_CONTENT
-            // with length 773, so the DESSHSI field ought to be
-            // present if the plugins are loaded.
-            throw except::NoSuchKeyException(Ctxt(
-                "Must have '" +
-                std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
-                "' plugin on the plugin path.  Either set the "
-                "NITF_PLUGIN_PATH environment variable or use "
-                "six::loadPluginDir()"));
-        }
-
         if (desshsiField == Constants::SICD_DESSHSI)
         {
             return DataType::COMPLEX;
