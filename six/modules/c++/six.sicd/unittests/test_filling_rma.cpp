@@ -59,9 +59,45 @@ TEST_CASE(DerivedRMATandRMCR)
     TEST_ASSERT_ALMOST_EQ(rma.rmcr->dopConeAngleRef, 0.10082275);
 }
 
+TEST_CASE(DerivedINCA)
+{
+    six::sicd::RMA rma;
+    rma.inca.reset(new six::sicd::INCA());
+
+    std::vector<double> timePolyData(4);
+    timePolyData[0] = 0;
+    timePolyData[1] = 1;
+    timePolyData[2] = 2;
+    timePolyData[3] = 0;
+    rma.inca->timeCAPoly = six::Poly1D(timePolyData);
+
+    six::sicd::Position position;
+    std::vector<six::Vector3> arpPolyData(4);
+    for (size_t ii = 0; ii < arpPolyData.size(); ++ii)
+    {
+        std::vector<double> nextTerm(3);
+        for (size_t jj = 0; jj < nextTerm.size(); ++jj)
+        {
+            nextTerm[jj] = ii + jj;
+        }
+        arpPolyData[ii] = six::Vector3(nextTerm);
+    }
+
+    position.arpPoly = six::PolyXYZ(arpPolyData);
+
+    six::sicd::GeoData geoData;
+    for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
+    {
+        geoData.scp.ecf[ii] = 100 * (ii + 1);
+    }
+
+    rma.fillDerivedFields(geoData, position);
+    TEST_ASSERT_ALMOST_EQ(rma.inca->rangeCA, 372.0282247);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(DerivedRMATandRMCR);
-    //TEST_CHECK(DerivedINCA);
+    TEST_CHECK(DerivedINCA);
     return 0;
 }

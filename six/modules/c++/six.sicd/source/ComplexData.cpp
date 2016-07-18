@@ -285,23 +285,20 @@ void ComplexData::fillDefaultFields()
     }
     switch (imageFormation->imageFormationAlgorithm)
     {
-    case ImageFormationType::RGAZCOMP:
-        if (rgAzComp.get())
-        {
-        }
-        break;
     case ImageFormationType::PFA:
         if (pfa.get())
         {
             pfa->fillDefaultFields(*geoData, *grid, *scpcoa);
             grid->fillDefaultFields(*pfa, fc);
         }
+        break;
     case ImageFormationType::RMA:
         if (rma.get())
         {
             rma->fillDefaultFields(*scpcoa, fc);
             grid->fillDefaultFields(*rma, fc);
         }
+        break;
     }
     return;
 }
