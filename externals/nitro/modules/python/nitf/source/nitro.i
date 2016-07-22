@@ -340,6 +340,16 @@
         return 0;
     }
 
+    void py_Field_setRawData(nitf_Field *field, char* buf, int length,  nitf_Error *error)
+    {
+        nitf_Field_setRawData(field, (NITF_DATA*)buf, length, error);
+    }
+
+    void py_TRE_setField(nitf_TRE *tre, const char* tag, char* buf, int length, nitf_Error *error)
+    {
+        nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, length, error);
+    }
+
 %}
 
 
