@@ -479,6 +479,10 @@ class Field:
         error = Error()
         retval = nitropy.nitf_Field_setString(self.ref, str(data), error)
 
+    def setRawData(self, data):
+        error = Error()
+        retval = nitropy.py_Field_setRawData(self.ref, data, len(data), error)
+
     def intValue(self):
         error = Error()
         return nitropy.py_Field_getInt(self.ref, error)
@@ -1020,6 +1024,9 @@ class TRE:
         field = nitropy.nitf_TRE_getField(self.ref, name)
         return field and Field(field) or None
 
+    def setField(self, name, value):
+        field = nitropy.py_TRE_setField(self.ref, name, value, len(value), self.error)
+
     def __getitem__(self, field):
         return self.getField(field)
 
@@ -1050,7 +1057,7 @@ class Extensions:
 
     def append(self, tre):
         """ appends the given TRE to this Extensions object """
-        return nitropy.nitf_Extensions_append(self.ref, tre.ref, self.error) == 1
+        return nitropy.nitf_Extensions_appendTRE(self.ref, tre.ref, self.error) == 1
 
     def removeTREsByName(self, tag):
         """ removes all TREs with the given name """
