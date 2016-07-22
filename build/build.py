@@ -246,6 +246,12 @@ class CPPContext(Context.Context):
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
+        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
+        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
+            for test in pythonTestNode.ant_glob('*.py'):
+                if str(test) not in listify(modArgs.get('test_filter', '')):
+                    self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
+
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('unittest_deps', modArgs.get('module_deps', '')))

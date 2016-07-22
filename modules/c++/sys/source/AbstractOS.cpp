@@ -87,6 +87,43 @@ bool AbstractOS::getEnvIfSet(const std::string& envVar, std::string& value) cons
     return false;
 }
 
+std::string AbstractOS::getCurrentExecutable(
+        const std::string& argvPathname) const
+{
+    if (argvPathname.empty())
+    {
+        // If the OS-specific overrides can't find the name,
+        // and we don't have an argv[0] to look at,
+        // there's nothing we can do.
+        return "";
+    }
 
+    if (sys::Path::isAbsolutePath(argvPathname))
+    {
+        return argvPathname;
+    }
+
+    const std::string candidatePathname = sys::Path::joinPaths(
+            getCurrentWorkingDirectory(), argvPathname);
+    if (exists(candidatePathname))
+    {
+        return candidatePathname;
+    }
+
+    // Look for it in PATH
+    const std::vector<std::string> pathDirs =
+            str::split(getEnv("PATH"), sys::Path::separator());
+    for (size_t ii = 0; ii < pathDirs.size(); ++ii)
+    {
+        const std::string candidatePathname = sys::Path::joinPaths(
+                sys::Path::absolutePath(pathDirs[ii]), argvPathname);
+        if (exists(candidatePathname))
+        {
+            return candidatePathname;
+        }
+    }
+
+    return "";
+}
 
 }

@@ -47,6 +47,8 @@ int main(int argc, char **argv)
         std::cout << "The delimiter on this platform: " << os.getDelimiter()
                 << std::endl;
         std::cout << "The process id: " << os.getProcessId() << std::endl;
+        std::cout << "The current executable is: "
+                << os.getCurrentExecutable() << std::endl;
 
         size_t freeMemory = 0;
         size_t physMemory = 0;

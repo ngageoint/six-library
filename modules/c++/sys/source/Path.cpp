@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -156,8 +156,8 @@ std::string sys::Path::absolutePath(const std::string& path)
     std::string osDelimStr(sys::Path::delimiter());
 
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
-    if (!str::startsWith(path, osDelimStr) && 
-        !str::startsWith(path, "/") && 
+    if (!str::startsWith(path, osDelimStr) &&
+        !str::startsWith(path, "/") &&
         driveParts.first.empty())
     {
         return sys::Path::normalizePath(sys::Path::joinPaths(
@@ -167,6 +167,15 @@ std::string sys::Path::absolutePath(const std::string& path)
     {
         return sys::Path::normalizePath(path);
     }
+}
+
+bool sys::Path::isAbsolutePath(const std::string& path)
+{
+#ifdef WIN32
+    return !sys::Path::splitDrive(path).first.empty();
+#else
+    return (!path.empty() && path[0] == sys::Path::delimiter()[0]);
+#endif
 }
 
 sys::Path::StringPair sys::Path::splitPath(const std::string& path)
