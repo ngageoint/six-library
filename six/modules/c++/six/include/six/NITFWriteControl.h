@@ -396,6 +396,8 @@ private:
                        size_t numImageSegments,
                        size_t productNum);
 
+    void setComplexityLevelIfRequired();
+
     std::string mOrganizationId;
     std::string mLocationId;
     std::string mLocationIdNamespace;
