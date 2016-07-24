@@ -77,6 +77,10 @@ int main(int argc, char** argv)
         // TODO: Allow this size to be overridden
         const types::RowCol<size_t> dims(123, 456);
         std::vector<std::complex<float> > image(dims.row * dims.col);
+        for (size_t ii = 0; ii < image.size(); ++ii)
+        {
+            image[ii] = std::complex<float>(ii, ii);
+        }
 
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
@@ -199,6 +203,7 @@ int main(int argc, char** argv)
 
         //six::BufferList buffers;
         //buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));
+        //writer.save(buffers, outputName, schemaPaths);
         writer.crazySave(&image[0], outputName, schemaPaths);
 
         return 0;
