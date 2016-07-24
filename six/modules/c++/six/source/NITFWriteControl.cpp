@@ -797,6 +797,174 @@ void NITFWriteControl::save(const BufferList& imageData,
     bufferedIO.close();
 }
 
+void NITFWriteControl::crazySave(void* imageData,
+               const std::string& outputFile,
+               const std::vector<std::string>& schemaPaths,
+               bool restoreData)
+{
+    // TODO: At least for now should probably be SICDWriteControl method since
+    //       only handles one logical image?  Not handling blocking, etc. that
+    //       SIDD would have
+
+    ////////////////////////////////////////////////////////////////////////////
+    // TODO: This whole section gets called the first time only
+    ////////////////////////////////////////////////////////////////////////////
+    int bufferSize = DEFAULT_BUFFER_SIZE;
+    nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
+
+    mWriter.prepareIO(bufferedIO, mRecord);
+    const bool doByteSwap = shouldByteSwap();
+
+    std::cout << "Do byte swap: " << doByteSwap << std::endl;
+
+    // Write the file header
+    nitf_Off fileLenOff;
+    nitf_Uint32 hdrLen;
+    mWriter.writeHeader(fileLenOff, hdrLen);
+
+    // Write image subheaders
+    const size_t numImages = mRecord.getNumImages();
+    std::vector<nitf::Off> imageSubLens(numImages);
+    std::vector<nitf::Off> imageDataLens(numImages);
+    std::vector<nitf::Off> imageDataStart(numImages);
+
+    size_t numBands = 0;
+    size_t numBytesPerPixel = 0;
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment imageSegment = mRecord.getImages()[ii];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+        const nitf::Off start = bufferedIO.tell();
+        nitf::Off comratOff(0);
+        mWriter.writeImageSubheader(subheader,
+                                    mRecord.getVersion(),
+                                    comratOff);
+        imageDataStart[ii] = bufferedIO.tell();
+        imageSubLens[ii] = imageDataStart[ii] - start;
+
+        // Seek past the pixel data
+        // TODO: This will be more complicated when handling blocking for
+        //       SIDD as you will have some pad
+        // TODO: Would be nice if ImageSubheader had a method to compute this
+        //       for you
+        const size_t numRows(subheader.getNumRows());
+        const size_t numCols(subheader.getNumCols());
+        numBands = subheader.getNumImageBands();
+        std::cout << "Num bands: " << numBands << std::endl;
+        const size_t numBitsPerPixel(subheader.getNumBitsPerPixel());
+        numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
+        const size_t numBytes = numRows * numCols * numBands * numBytesPerPixel;
+        imageDataLens[ii] = numBytes;
+        std::cout << "Orig size is " << bufferedIO.getSize() << std::endl;
+        std::cout << "Orig tell is " << bufferedIO.tell() << std::endl;
+        bufferedIO.seek(numBytes, NITF_SEEK_CUR);
+        std::cout << "I just did a seek for " << numBytes << std::endl;
+        std::cout << "New size is " << bufferedIO.getSize() << std::endl;
+        std::cout << "New tell is " << bufferedIO.tell() << std::endl;
+    }
+
+    std::cout << "bytes/pixel: " << numBytesPerPixel << std::endl;
+
+    // Write DE subheader and data
+    const size_t numDEs = mRecord.getNumDataExtensions();
+    std::vector<nitf::Off> deSubLens(numDEs);
+    std::vector<nitf::Off> deDataLens(numDEs);
+
+    for (size_t ii = 0; ii < numDEs; ++ii)
+    {
+        nitf::DESegment deSegment = mRecord.getDataExtensions()[ii];
+        nitf::DESubheader subheader = deSegment.getSubheader();
+
+        // Write subheader
+        const nitf::Off start = bufferedIO.tell();
+        nitf::Uint32 userSublen = 999;
+        mWriter.writeDESubheader(subheader, userSublen, mRecord.getVersion());
+        deSubLens[ii] = bufferedIO.tell() - start;
+
+        // Write XML
+        const Data* data = mContainer->getData(ii);
+
+        std::cout << "Bytes per pixel from SIX: " << data->getNumBytesPerPixel() << std::endl;
+
+        const std::string desStr =
+                six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
+        deDataLens[ii] = desStr.length();
+        std::cout << "String length: " << desStr.length() << std::endl;
+
+        bufferedIO.write(desStr.c_str(), desStr.length());
+    }
+
+    //--------------------------------------------------------------------------
+    // Update file header with real lengths
+    //--------------------------------------------------------------------------
+
+    // Overall file length and header length
+    const nitf::Off fileLen = bufferedIO.tell();
+    bufferedIO.seek(fileLenOff, NITF_SEEK_SET);
+    mWriter.writeInt64Field(fileLen, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
+    mWriter.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
+
+    // Image segments
+    bufferedIO.seek(NITF_NUMI_SZ, NITF_SEEK_CUR);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        mWriter.writeInt64Field(imageSubLens[ii], NITF_LISH_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+
+        mWriter.writeInt64Field(imageDataLens[ii], NITF_LI_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+    }
+
+    // Seek past all the 3 byte lengths for the various other types that we
+    // don't have in our file (graphics, NUMX, text, plus the number of DESs
+    // that we've already written to the file anyhow)
+    std::cout << "My offset was " << bufferedIO.tell() << std::endl;
+    bufferedIO.seek(NITF_NUMS_SZ + NITF_NUMX_SZ + NITF_NUMT_SZ + NITF_NUMDES_SZ, NITF_SEEK_CUR);
+
+    std::cout << "And now my offset is " << bufferedIO.tell() << std::endl;
+
+    // Data extension segments
+    for (size_t ii = 0; ii < numDEs; ++ii)
+    {
+        mWriter.writeInt64Field(deSubLens[ii], NITF_LDSH_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+
+        mWriter.writeInt64Field(deDataLens[ii], NITF_LD_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+    }
+
+    // Write image
+
+    // This will come from them
+    const size_t rowOffset = 0;
+    const size_t numRows = mContainer->getData(0)->getNumRows();
+
+    const size_t numCols = mContainer->getData(0)->getNumCols();
+
+    const size_t numPixelsToWrite = numRows * numCols * numBands;
+
+    // This is the part that'll happen with just the offset they provide
+    bufferedIO.seek(imageDataStart[0], NITF_SEEK_SET);
+
+    if (doByteSwap)
+    {
+        sys::byteSwap(imageData,
+                      static_cast<unsigned short>(numBytesPerPixel),
+                      numPixelsToWrite);
+    }
+
+    // TODO: This will be more complicated with blocking for SIDD
+    bufferedIO.write(imageData, numPixelsToWrite * numBytesPerPixel);
+
+    if (doByteSwap && restoreData)
+    {
+        sys::byteSwap(imageData,
+                      static_cast<unsigned short>(numBytesPerPixel),
+                      numPixelsToWrite);
+    }
+}
+
 void NITFWriteControl::save(
         const BufferList& imageData,
         nitf::IOInterface& outputFile,

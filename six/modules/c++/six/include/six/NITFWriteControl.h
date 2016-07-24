@@ -130,6 +130,11 @@ public:
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
+    void crazySave(void* imageData,
+                   const std::string& outputFile,
+                   const std::vector<std::string>& schemaPaths,
+                   bool restoreData = true);
+
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
               const std::vector<std::string>& schemaPaths)

@@ -32,6 +32,10 @@
 
 NITF_CXX_GUARD
 
+// TODO: Add comments
+#define NITF_WRITER_FILL_LEFT 1
+#define NITF_WRITER_FILL_RIGHT 2
+
 /*!
  *  \struct nitf_Writer
  *  \brief  This object represents the 2.1 (2.0?) file writer
@@ -172,6 +176,34 @@ NITFAPI(nitf_SegmentWriter*) nitf_Writer_newDEWriter(nitf_Writer *writer,
  */
 NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);
 
+///////////
+
+// Only use these if you know what you're doing
+
+NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
+                                            nitf_Off* fileLenOff,
+                                            nitf_Uint32* hdrLen,
+                                            nitf_Error* error);
+
+NITFPROT(NITF_BOOL)
+nitf_Writer_writeImageSubheader(nitf_Writer* writer,
+                                nitf_ImageSubheader* subhdr,
+                                nitf_Version fver,
+                                nitf_Off* comratOff,
+                                nitf_Error* error);
+
+NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
+                                                 nitf_DESubheader* subhdr,
+                                                 nitf_Uint32* userSublen,
+                                                 nitf_Version fver,
+                                                 nitf_Error* error);
+
+NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
+                                                nitf_Uint64 field,
+                                                nitf_Uint32 length,
+                                                char fill,
+                                                nitf_Uint32 fillDir,
+                                                nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 

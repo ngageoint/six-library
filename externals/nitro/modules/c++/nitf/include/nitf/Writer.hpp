@@ -162,6 +162,22 @@ public:
     //! Get the warningList
     nitf::List getWarningList();
 
+    // Only use these if you know what you're doing
+    void writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen);
+
+    void writeImageSubheader(nitf::ImageSubheader subheader,
+                             nitf::Version version,
+                             nitf::Off& comratOff);
+
+    void writeDESubheader(nitf::DESubheader subheader,
+                          nitf::Uint32& userSublen,
+                          nitf::Version version);
+
+    void writeInt64Field(nitf::Uint64 field,
+                         nitf::Uint32 length,
+                         char fill,
+                         nitf::Uint32 fillDir);
+
 private:
     nitf_Error error;
 

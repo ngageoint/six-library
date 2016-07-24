@@ -181,7 +181,7 @@ int main(int argc, char** argv)
          *  the algorithm to segment early.
          *
          */
-        if (maxRows > 0)
+        /*if (maxRows > 0)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
             writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
@@ -194,12 +194,12 @@ int main(int argc, char** argv)
             writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                                              maxSize);
         }
-
+*/
         writer.initialize(&container);
 
-        six::BufferList buffers;
-        buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));
-        writer.save(buffers, outputName, schemaPaths);
+        //six::BufferList buffers;
+        //buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));
+        writer.crazySave(&image[0], outputName, schemaPaths);
 
         return 0;
     }

@@ -35,8 +35,8 @@
 /*  These define chars for filling fields  */
 #define SPACE ' '
 #define ZERO '0'
-#define FILL_LEFT 1
-#define FILL_RIGHT 2
+#define FILL_LEFT NITF_WRITER_FILL_LEFT
+#define FILL_RIGHT NITF_WRITER_FILL_RIGHT
 
 /* define some maximum data lengths */
 #define NITF_MAX_IMAGE_LENGTH NITF_INT64(9999999999)
@@ -60,7 +60,7 @@
         goto CATCH_ERROR;
 
 #define NITF_WRITE_INT64_FIELD(value_, fld_, fil_, dir_) \
-    if (!writeInt64Field(writer, value_, fld_##_SZ, fil_, dir_, error)) \
+    if (!nitf_Writer_writeInt64Field(writer, value_, fld_##_SZ, fil_, dir_, error)) \
         goto CATCH_ERROR;
 
 
@@ -148,12 +148,11 @@ NITFPRIV(NITF_BOOL) writeField(nitf_Writer * writer,
                                nitf_Uint32 length, nitf_Error * error);
 
 /*  Pads a string with a fill character                              */
-/*  fld The input string                                             */
-/*  fill The fill character                                          */
+/*  field The input string                                             */
 /*  length The total length of the string                            */
+/*  fill The fill character                                          */
 /*  fillDir The fill direction (either FILL_LEFT or FILL_RIGHT)      */
-NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
-                              char *field,
+NITFPRIV(NITF_BOOL) padString(char *field,
                               nitf_Uint32 length,
                               char fill,
                               const nitf_Uint32 fillDir,
@@ -193,7 +192,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
     memset(buf, '\0', length + 1);
     memcpy(buf, field, length);
 
-    if (!padString(writer, buf, length, fill, fillDir, error))
+    if (!padString(buf, length, fill, fillDir, error))
         goto CATCH_ERROR;
 
     if (!writeField(writer, buf, length, error))
@@ -252,7 +251,7 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
     {
         memcpy(buf, field->raw, length);
 
-        if (!padString(writer, buf, length, fill, fillDir, error))
+        if (!padString(buf, length, fill, fillDir, error))
             goto CATCH_ERROR;
     }
 
@@ -280,7 +279,7 @@ NITFPRIV(NITF_BOOL) writeIntField(nitf_Writer * writer,
     memset(buf, '\0', 20);
     NITF_SNPRINTF(buf, 20, "%d", field);
 
-    if (padString(writer, buf, length, fill, fillDir, error))
+    if (padString(buf, length, fill, fillDir, error))
     {
         return writeField(writer, buf, length, error);
     }
@@ -293,19 +292,19 @@ NITFPRIV(NITF_BOOL) writeIntField(nitf_Writer * writer,
 
 
 /* This function pads the given nitf_Uint64, and writes it to the IOHandle */
-NITFPRIV(NITF_BOOL) writeInt64Field(nitf_Writer * writer,
-                                    nitf_Uint64 field,
-                                    nitf_Uint32 length,
-                                    char fill,
-                                    const nitf_Uint32 fillDir,
-                                    nitf_Error * error)
+NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
+                                                nitf_Uint64 field,
+                                                nitf_Uint32 length,
+                                                char fill,
+                                                nitf_Uint32 fillDir,
+                                                nitf_Error* error)
 {
     char buf[20];
 
     memset(buf, '\0', 20);
     NITF_SNPRINTF(buf, 20, "%lld", (long long int)field);
 
-    if (padString(writer, buf, length, fill, fillDir, error))
+    if (padString(buf, length, fill, fillDir, error))
     {
         return writeField(writer, buf, length, error);
     }
@@ -397,8 +396,7 @@ CATCH_ERROR:
 
 
 /* This function pads the given string with the fill character */
-NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
-                              char *field,
+NITFPRIV(NITF_BOOL) padString(char *field,
                               nitf_Uint32 length,
                               char fill,
                               const nitf_Uint32 fillDir,
@@ -972,10 +970,10 @@ NITFAPI(void) nitf_Writer_destruct(nitf_Writer ** writer)
 }
 
 
-NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
-                                nitf_Off * fileLenOff,
-                                nitf_Uint32 * hdrLen,
-                                nitf_Error * error)
+NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
+                                            nitf_Off* fileLenOff,
+                                            nitf_Uint32* hdrLen,
+                                            nitf_Error* error)
 {
     nitf_Uint32 numImages, numGraphics, numLabels;
     nitf_Uint32 numTexts, numDES, numRES;
@@ -1119,7 +1117,7 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL)
+NITFPROT(NITF_BOOL)
 nitf_Writer_writeImageSubheader(nitf_Writer * writer,
                                 nitf_ImageSubheader *subhdr,
                                 nitf_Version fver,
@@ -1346,11 +1344,11 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
-                                     nitf_DESubheader * subhdr,
-                                     nitf_Uint32 *userSublen,
-                                     nitf_Version fver,
-                                     nitf_Error * error)
+NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
+                                                 nitf_DESubheader* subhdr,
+                                                 nitf_Uint32* userSublen,
+                                                 nitf_Version fver,
+                                                 nitf_Error* error)
 {
     nitf_Uint32 subLen;
 
@@ -1652,7 +1650,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
     nitf_FileHeader* header = writer->record->header;
 
-    if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
+    if (!nitf_Writer_writeHeader(writer, &fileLenOff, &hdrLen, error))
         return NITF_FAILURE;
 
     fver = nitf_Record_getVersion(writer->record);
@@ -1999,9 +1997,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         {
             nitf_DESegment *segment =
                 (nitf_DESegment *) nitf_ListIterator_get(&iter);
-            if (!writeDESubheader(writer,
-                                  segment->subheader,
-                                  &userSublen, fver, error))
+            if (!nitf_Writer_writeDESubheader(writer,
+                                              segment->subheader,
+                                              &userSublen, fver, error))
             {
                 NITF_FREE(deSubLens);
                 NITF_FREE(deDataLens);
