@@ -1491,7 +1491,7 @@ XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurem
 {
     XMLElem measurementElem = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
 
-    if (six::Init::isDefined(measurement->arpFlag))
+    if (measurement->arpFlag != AppliedType::NOT_SET)
     {
         createStringFromEnum("ARPFlag", measurement->arpFlag, measurementElem);
     }
