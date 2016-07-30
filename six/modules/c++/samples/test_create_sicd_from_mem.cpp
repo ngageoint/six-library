@@ -30,6 +30,56 @@
 
 // For SICD implementation
 #include <import/six/sicd.h>
+#include <six/sicd/SICDWriteControl.h>
+
+namespace
+{
+class Compare
+{
+public:
+    Compare(const six::Data& lhsData,
+            const std::vector<std::complex<float> >& lhsImage,
+            const std::vector<std::string>& schemaPaths) :
+        mLhsData(*reinterpret_cast<const six::sicd::ComplexData*>(lhsData.clone())),
+        mLhsImage(lhsImage),
+        mSchemaPaths(schemaPaths)
+    {
+    }
+
+    bool operator()(const std::string& pathname) const
+    {
+        std::auto_ptr<six::sicd::ComplexData> rhsData;
+        std::vector<std::complex<float> > rhsImage;
+        six::sicd::Utilities::readSicd(pathname,
+                                       mSchemaPaths,
+                                       rhsData,
+                                       rhsImage);
+
+        if (mLhsData == *rhsData)
+        {
+            std::cout << "Data matches\n";
+        }
+        if (mLhsImage != rhsImage)
+        {
+            for (size_t ii = 0; ii < mLhsImage.size(); ++ii)
+            {
+                if (mLhsImage[ii] != rhsImage[ii])
+                {
+                    std::cout << "Stops matching at " << ii << std::endl;
+                    break;
+                }
+            }
+        }
+
+        return (mLhsData == *rhsData && mLhsImage == rhsImage);
+    }
+
+private:
+    const six::sicd::ComplexData mLhsData;
+    const std::vector<std::complex<float> > mLhsImage;
+    const std::vector<std::string> mSchemaPaths;
+};
+}
 
 int main(int argc, char** argv)
 {
@@ -79,8 +129,10 @@ int main(int argc, char** argv)
         std::vector<std::complex<float> > image(dims.row * dims.col);
         for (size_t ii = 0; ii < image.size(); ++ii)
         {
-            image[ii] = std::complex<float>(ii, ii);
+            const float value = static_cast<float>(ii);
+            image[ii] = std::complex<float>(value, value);
         }
+        std::complex<float>* const imagePtr = &image[0];
 
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
@@ -185,7 +237,9 @@ int main(int argc, char** argv)
          *  the algorithm to segment early.
          *
          */
-        /*if (maxRows > 0)
+        std::cout << "TODO: Fix overrides\n";
+        /*
+        if (maxRows > 0)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
             writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
@@ -198,15 +252,150 @@ int main(int argc, char** argv)
             writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                                              maxSize);
         }
-*/
+        */
+
+        // Write the file out the regular way
         writer.initialize(&container);
 
-        //six::BufferList buffers;
-        //buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));
-        //writer.save(buffers, outputName, schemaPaths);
-        writer.crazySave(&image[0], outputName, schemaPaths);
+        six::BufferList buffers;
 
-        return 0;
+        buffers.push_back(reinterpret_cast<six::UByte*>(imagePtr));
+        writer.save(buffers, outputName, schemaPaths);
+
+        // Write the file out with a SICDWriteControl in one shot
+        std::string otherPathname = "foo_1.nitf";
+        {
+            six::sicd::SICDWriteControl sicdWriter(otherPathname,
+                                                   schemaPaths);
+            sicdWriter.initialize(&container);
+            sicdWriter.save(imagePtr,
+                            types::RowCol<size_t>(0, 0),
+                            dims);
+        }
+
+        // Let's see if things match
+        const Compare compare(*container.getData(0), image, schemaPaths);
+        int retCode = 0;
+        if (compare(otherPathname))
+        {
+            std::cout << "Match!\n";
+        }
+        else
+        {
+            retCode = 1;
+            std::cerr << "NO MATCH!\n";
+        }
+
+        // Now let's try some writes with num cols == global num cols
+        otherPathname = "foo_2.nitf";
+        {
+            six::sicd::SICDWriteControl sicdWriter(otherPathname,
+                                                   schemaPaths);
+            sicdWriter.initialize(&container);
+
+            // Rows [40, 60)
+            types::RowCol<size_t> offset(40, 0);
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(20, dims.col));
+
+            // Rows [5, 25)
+            offset.row = 5;
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(20, dims.col));
+
+            // Rows [0, 5)
+            offset.row = 0;
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(5, dims.col));
+
+            // Rows [100, 123)
+            offset.row = 100;
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(23, dims.col));
+
+            // Rows [25, 40)
+            offset.row = 25;
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(15, dims.col));
+
+            // Rows [60, 100)
+            offset.row = 60;
+            sicdWriter.save(imagePtr + offset.row * dims.col,
+                            offset,
+                            types::RowCol<size_t>(40, dims.col));
+        }
+
+        if (compare(otherPathname))
+        {
+            std::cout << "Match!\n";
+        }
+        else
+        {
+            retCode = 1;
+            std::cerr << "NO MATCH!\n";
+        }
+
+        // Now let's try with a partial number of columns
+        // TODO: This one doesn't work right yet
+        std::cout << "The problem is we need to copy the data below to make it contiguous\n";
+        otherPathname = "foo_3.nitf";
+        {
+            six::sicd::SICDWriteControl sicdWriter(otherPathname,
+                                                   schemaPaths);
+            sicdWriter.initialize(&container);
+
+            /*
+            // Rows [40, 60)
+            // Cols [400, 456)
+            types::RowCol<size_t> offset(40, 400);
+            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
+                            offset,
+                            types::RowCol<size_t>(20, 56));
+
+            // Rows [60, 123)
+            offset.row = 60;
+            offset.col = 0;
+            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
+                            offset,
+                            types::RowCol<size_t>(63, dims.col));
+
+            // Rows [0, 40)
+            offset.row = 0;
+            offset.col = 0;
+            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
+                            offset,
+                            types::RowCol<size_t>(40, dims.col));
+
+            // Rows [40, 60)
+            // Cols [0, 400)
+            offset.row = 40;
+            offset.col = 0;
+            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
+                            offset,
+                            types::RowCol<size_t>(20, 400));
+                            */
+        }
+
+        if (compare(otherPathname))
+        {
+            std::cout << "Match!\n";
+        }
+        else
+        {
+            retCode = 1;
+            std::cerr << "NO MATCH!\n";
+        }
+
+        // TODO: Test that NITF headers look right
+        //       Test 16-bit writes
+
+
+        return retCode;
     }
     catch (const std::exception& ex)
     {

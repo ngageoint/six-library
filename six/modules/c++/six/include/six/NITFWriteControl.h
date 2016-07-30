@@ -130,11 +130,6 @@ public:
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
-    void crazySave(void* imageData,
-                   const std::string& outputFile,
-                   const std::vector<std::string>& schemaPaths,
-                   bool restoreData = true);
-
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
               const std::vector<std::string>& schemaPaths)
@@ -372,9 +367,9 @@ protected:
     {
     }
 
-private:
     bool shouldByteSwap() const;
 
+private:
     static
     std::string getDesTypeID(const six::Data& data);
 
@@ -395,8 +390,6 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
-
-    void setComplexityLevelIfRequired();
 
     std::string mOrganizationId;
     std::string mLocationId;
