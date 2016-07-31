@@ -34,6 +34,98 @@
 
 namespace
 {
+std::auto_ptr<six::Data>
+createData(const types::RowCol<size_t>& dims)
+{
+    six::sicd::ComplexData* data(new six::sicd::ComplexData());
+    std::auto_ptr<six::Data> scopedData(data);
+    data->setPixelType(six::PixelType::RE32F_IM32F);
+    data->setNumRows(dims.row);
+    data->setNumCols(dims.col);
+    data->setName("corename");
+    data->setSource("sensorname");
+    data->collectionInformation->classification.level = "UNCLASSIFIED";
+    data->setCreationTime(six::DateTime());
+    data->setImageCorners(makeUpCornersFromDMS());
+    data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+    data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
+    data->geoData->scp.llh = six::LatLonAlt(42.2708, -83.7264);
+    data->geoData->scp.ecf =
+            scene::Utilities::latLonToECEF(data->geoData->scp.llh);
+    data->grid->timeCOAPoly = six::Poly2D(0, 0);
+    data->grid->timeCOAPoly[0][0] = 15605743.142846;
+    data->position->arpPoly = six::PolyXYZ(0);
+    data->position->arpPoly[0] = 0.0;
+
+    data->radarCollection->txFrequencyMin = 0.0;
+    data->radarCollection->txFrequencyMax = 0.0;
+    data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+    mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
+            rcvChannel(new six::sicd::ChannelParameters());
+    rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
+    data->radarCollection->rcvChannels.push_back(rcvChannel);
+
+    data->grid->row->sign = six::FFTSign::POS;
+    data->grid->row->unitVector = 0.0;
+    data->grid->row->sampleSpacing = 0;
+    data->grid->row->impulseResponseWidth = 0;
+    data->grid->row->impulseResponseBandwidth = 0;
+    data->grid->row->kCenter = 0;
+    data->grid->row->deltaK1 = 0;
+    data->grid->row->deltaK2 = 0;
+    data->grid->col->sign = six::FFTSign::POS;
+    data->grid->col->unitVector = 0.0;
+    data->grid->col->sampleSpacing = 0;
+    data->grid->col->impulseResponseWidth = 0;
+    data->grid->col->impulseResponseBandwidth = 0;
+    data->grid->col->kCenter = 0;
+    data->grid->col->deltaK1 = 0;
+    data->grid->col->deltaK2 = 0;
+
+    data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
+    data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
+
+    data->pfa.reset(new six::sicd::PFA());
+    data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
+    data->pfa->spatialFrequencyScaleFactorPoly[0] = 42;
+    data->pfa->polarAnglePoly = six::Poly1D(0);
+    data->pfa->polarAnglePoly[0] = 42;
+
+    data->timeline->collectStart = six::DateTime();
+    data->timeline->collectDuration = 1.0;
+    data->imageFormation->txRcvPolarizationProc =
+            six::DualPolarizationType::OTHER;
+    data->imageFormation->tStartProc = 0;
+    data->imageFormation->tEndProc = 0;
+
+    data->scpcoa->scpTime = 15605743.142846;
+    data->scpcoa->slantRange = 0.0;
+    data->scpcoa->groundRange = 0.0;
+    data->scpcoa->dopplerConeAngle = 0.0;
+    data->scpcoa->grazeAngle = 0.0;
+    data->scpcoa->incidenceAngle = 0.0;
+    data->scpcoa->twistAngle = 0.0;
+    data->scpcoa->slopeAngle = 0.0;
+    data->scpcoa->azimAngle = 0.0;
+    data->scpcoa->layoverAngle = 0.0;
+    data->scpcoa->arpPos = 0.0;
+    data->scpcoa->arpVel = 0.0;
+    data->scpcoa->arpAcc = 0.0;
+
+    data->pfa->focusPlaneNormal = 0.0;
+    data->pfa->imagePlaneNormal = 0.0;
+    data->pfa->polarAngleRefTime = 0.0;
+    data->pfa->krg1 = 0;
+    data->pfa->krg2 = 0;
+    data->pfa->kaz1 = 0;
+    data->pfa->kaz2 = 0;
+
+    data->imageFormation->txFrequencyProcMin = 0;
+    data->imageFormation->txFrequencyProcMax = 0;
+
+    return scopedData;
+}
+
 class Compare
 {
 public:
@@ -93,6 +185,69 @@ void subsetData(const std::vector<T>& orig,
         ::memcpy(outputPtr, origPtr, dims.col * sizeof(T));
     }
 }
+
+void readFile(const std::string& pathname,
+              std::vector<sys::byte>& contents)
+{
+    io::FileInputStream inStream(pathname);
+
+    contents.resize(inStream.available());
+
+    const size_t numRead = inStream.read(&contents[0], contents.size());
+    if (numRead != contents.size())
+    {
+        throw except::Exception(Ctxt("Short read"));
+    }
+}
+
+// Note that this will work because SIX is forcing the NITF date/time to match
+// what's in the SICD XML and we're writing the same SICD XML in all our files
+class CompareFiles
+{
+public:
+    CompareFiles(const std::string& lhsPathname)
+    {
+        readFile(lhsPathname, mLHS);
+    }
+
+    bool operator()(const std::string& prefix,
+                    const std::string& rhsPathname) const
+    {
+        readFile(rhsPathname, mRHS);
+
+        if (mLHS == mRHS)
+        {
+            std::cout << prefix << " matches" << std::endl;
+            return true;
+        }
+        else if (mLHS.size() != mRHS.size())
+        {
+            std::cerr << prefix << " DOES NOT MATCH: file sizes are "
+                      << mLHS.size() << " vs. " << mRHS.size() << " bytes"
+                      << std::endl;
+        }
+        else
+        {
+            size_t ii;
+            for (ii = 0; ii < mLHS.size(); ++ii)
+            {
+                if (mLHS[ii] != mRHS[ii])
+                {
+                    break;
+                }
+            }
+
+            std::cerr << prefix << " DOES NOT MATCH at byte " << ii
+                      << std::endl;
+        }
+
+        return false;
+    }
+
+private:
+    std::vector<sys::byte> mLHS;
+    mutable std::vector<sys::byte> mRHS;
+};
 }
 
 int main(int argc, char** argv)
@@ -107,8 +262,6 @@ int main(int argc, char** argv)
                            "ROWS")->setDefault(-1);
         parser.addArgument("-s --size", "Max product size", cli::STORE,
                            "maxSize", "BYTES")->setDefault(-1);
-        parser.addArgument("--class", "Classification Level", cli::STORE,
-                           "classLevel", "LEVEL")->setDefault("UNCLASSIFIED");
         parser.addArgument("--schema", 
                            "Specify a schema or directory of schemas",
                            cli::STORE);
@@ -120,7 +273,6 @@ int main(int argc, char** argv)
         std::string outputName(options->get<std::string> ("output"));
         size_t maxRows(options->get<size_t>("maxRows"));
         size_t maxSize(options->get<size_t>("maxSize"));
-        std::string classLevel(options->get<std::string> ("classLevel"));
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
@@ -128,12 +280,6 @@ int main(int argc, char** argv)
                 logging::setupLogger(sys::Path::basename(argv[0])));
 
         // create an XML registry
-        // The reason to do this is to avoid adding XMLControlCreators to the
-        // XMLControlFactory singleton - this way has more fine-grained control
-        //        XMLControlRegistry xmlRegistry;
-        //        xmlRegistry.addCreator(DataType::COMPLEX, new XMLControlCreatorT<
-        //                six::sicd::ComplexXMLControl> ());
-
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
@@ -143,100 +289,14 @@ int main(int argc, char** argv)
         std::vector<std::complex<float> > image(dims.row * dims.col);
         for (size_t ii = 0; ii < image.size(); ++ii)
         {
-            const float value = static_cast<float>(ii);
-            image[ii] = std::complex<float>(value, value);
+            image[ii] = std::complex<float>(static_cast<float>(ii),
+                                            static_cast<float>(ii * 10));
         }
         std::complex<float>* const imagePtr = &image[0];
 
         // Create the Data
-        // TODO: Use a ComplexDataBuilder?
-        six::sicd::ComplexData* data(new six::sicd::ComplexData());
-        std::auto_ptr<six::Data> scopedData(data);
-        data->setPixelType(six::PixelType::RE32F_IM32F);
-        data->setNumRows(dims.row);
-        data->setNumCols(dims.col);
-        data->setName("corename");
-        data->setSource("sensorname");
-        data->collectionInformation->classification.level = classLevel;
-        data->setCreationTime(six::DateTime());
-        data->setImageCorners(makeUpCornersFromDMS());
-        data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
-        data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
-        data->geoData->scp.llh = six::LatLonAlt(42.2708, -83.7264);
-        data->geoData->scp.ecf =
-                scene::Utilities::latLonToECEF(data->geoData->scp.llh);
-        data->grid->timeCOAPoly = six::Poly2D(0, 0);
-        data->grid->timeCOAPoly[0][0] = 15605743.142846;
-        data->position->arpPoly = six::PolyXYZ(0);
-        data->position->arpPoly[0] = 0.0;
-
-        data->radarCollection->txFrequencyMin = 0.0;
-        data->radarCollection->txFrequencyMax = 0.0;
-        data->radarCollection->txPolarization = six::PolarizationType::OTHER;
-        mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
-                rcvChannel(new six::sicd::ChannelParameters());
-        rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
-        data->radarCollection->rcvChannels.push_back(rcvChannel);
-
-        data->grid->row->sign = six::FFTSign::POS;
-        data->grid->row->unitVector = 0.0;
-        data->grid->row->sampleSpacing = 0;
-        data->grid->row->impulseResponseWidth = 0;
-        data->grid->row->impulseResponseBandwidth = 0;
-        data->grid->row->kCenter = 0;
-        data->grid->row->deltaK1 = 0;
-        data->grid->row->deltaK2 = 0;
-        data->grid->col->sign = six::FFTSign::POS;
-        data->grid->col->unitVector = 0.0;
-        data->grid->col->sampleSpacing = 0;
-        data->grid->col->impulseResponseWidth = 0;
-        data->grid->col->impulseResponseBandwidth = 0;
-        data->grid->col->kCenter = 0;
-        data->grid->col->deltaK1 = 0;
-        data->grid->col->deltaK2 = 0;
-
-        data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
-        data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
-
-        data->pfa.reset(new six::sicd::PFA());
-        data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
-        data->pfa->spatialFrequencyScaleFactorPoly[0] = 42;
-        data->pfa->polarAnglePoly = six::Poly1D(0);
-        data->pfa->polarAnglePoly[0] = 42;
-
-        data->timeline->collectDuration = 0;
-        data->imageFormation->txRcvPolarizationProc =
-                six::DualPolarizationType::OTHER;
-        data->imageFormation->tStartProc = 0;
-        data->imageFormation->tEndProc = 0;
-
-        data->scpcoa->scpTime = 15605743.142846;
-        data->scpcoa->slantRange = 0.0;
-        data->scpcoa->groundRange = 0.0;
-        data->scpcoa->dopplerConeAngle = 0.0;
-        data->scpcoa->grazeAngle = 0.0;
-        data->scpcoa->incidenceAngle = 0.0;
-        data->scpcoa->twistAngle = 0.0;
-        data->scpcoa->slopeAngle = 0.0;
-        data->scpcoa->azimAngle = 0.0;
-        data->scpcoa->layoverAngle = 0.0;
-        data->scpcoa->arpPos = 0.0;
-        data->scpcoa->arpVel = 0.0;
-        data->scpcoa->arpAcc = 0.0;
-
-        data->pfa->focusPlaneNormal = 0.0;
-        data->pfa->imagePlaneNormal = 0.0;
-        data->pfa->polarAngleRefTime = 0.0;
-        data->pfa->krg1 = 0;
-        data->pfa->krg2 = 0;
-        data->pfa->kaz1 = 0;
-        data->pfa->kaz2 = 0;
-
-        data->imageFormation->txFrequencyProcMin = 0;
-        data->imageFormation->txFrequencyProcMax = 0;
-
         six::Container container(six::DataType::COMPLEX);
-        container.addData(scopedData);
+        container.addData(createData(dims));
         six::NITFWriteControl writer;
         writer.setLogger(logger.get());
 
@@ -288,16 +348,12 @@ int main(int argc, char** argv)
         }
 
         // Let's see if things match
-        const Compare compare(*container.getData(0), image, schemaPaths);
         int retCode = 0;
-        if (compare(otherPathname))
-        {
-            std::cout << "Match!\n";
-        }
-        else
+
+        const CompareFiles compareFiles(outputName);
+        if (!compareFiles("Single write", otherPathname))
         {
             retCode = 1;
-            std::cerr << "NO MATCH!\n";
         }
 
         // Now let's try some writes with num cols == global num cols
@@ -344,15 +400,7 @@ int main(int argc, char** argv)
                             types::RowCol<size_t>(40, dims.col));
         }
 
-        if (compare(otherPathname))
-        {
-            std::cout << "Match!\n";
-        }
-        else
-        {
-            retCode = 1;
-            std::cerr << "NO MATCH!\n";
-        }
+        compareFiles("Multiple writes of full rows", otherPathname);
 
         // Now let's try with a partial number of columns
         otherPathname = "foo_3.nitf";
@@ -404,15 +452,7 @@ int main(int argc, char** argv)
             sicdWriter.save(&subset[0], offset, subsetDims);
         }
 
-        if (compare(otherPathname))
-        {
-            std::cout << "Match!\n";
-        }
-        else
-        {
-            retCode = 1;
-            std::cerr << "NO MATCH!\n";
-        }
+        compareFiles("Multiple writes of partial rows", otherPathname);
 
         // TODO: Test that NITF headers look right
         //       If force NITRO to set the file date/time, everything else will
