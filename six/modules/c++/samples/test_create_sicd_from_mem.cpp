@@ -286,19 +286,24 @@ private:
 class Tester
 {
 public:
-    Tester(const std::string& origPathname,
-           const types::RowCol<size_t>& dims,
-           const std::vector<std::string>& schemaPaths,
-           six::Container* container,
-           std::complex<float>* imagePtr) :
-        mCompareFiles(origPathname),
-        mDims(dims),
+    Tester(const std::vector<std::string>& schemaPaths) :
+        mNormalPathname("normal_write.nitf"),
+        mNormalFileCleanup(mNormalPathname),
+        mContainer(six::DataType::COMPLEX),
+        mDims(123, 456),
+        mImage(mDims.area()),
+        mImagePtr(&mImage[0]),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
-        mContainer(container),
-        mImagePtr(imagePtr),
         mRetCode(0)
     {
+        for (size_t ii = 0; ii < mImage.size(); ++ii)
+        {
+            mImage[ii] = std::complex<float>(static_cast<float>(ii),
+                                             static_cast<float>(ii * 10));
+        }
+
+        normalWrite();
     }
 
     int getRetCode() const
@@ -316,23 +321,47 @@ public:
     void testMultipleWritesOfPartialRows();
 
 private:
+    void normalWrite();
+
+private:
     void compare(const std::string& prefix)
     {
-        if (!mCompareFiles(prefix, mTestPathname))
+        if (!(*mCompareFiles)(prefix, mTestPathname))
         {
             mRetCode = 1;
         }
     }
 
 private:
-    const CompareFiles mCompareFiles;
+    const std::string mNormalPathname;
+    const EnsureFileCleanup mNormalFileCleanup;
+
+    six::Container mContainer;
+    const types::RowCol<size_t> mDims;
+    std::vector<std::complex<float> > mImage;
+    std::complex<float>* const mImagePtr;
+
+    std::auto_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
-    const types::RowCol<size_t> mDims;
-    six::Container* const mContainer;
-    std::complex<float>* const mImagePtr;
+
     int mRetCode;
 };
+
+void Tester::normalWrite()
+{
+    mContainer.addData(createData(mDims));
+
+    six::NITFWriteControl writer;
+
+    writer.initialize(&mContainer);
+
+    six::BufferList buffers;
+    buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
+    writer.save(buffers, mNormalPathname, mSchemaPaths);
+
+    mCompareFiles.reset(new CompareFiles(mNormalPathname));
+}
 
 void Tester::testSingleWrite()
 {
@@ -340,7 +369,7 @@ void Tester::testSingleWrite()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
 
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(&mContainer);
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
 
@@ -353,7 +382,7 @@ void Tester::testMultipleWritesOfFullRows()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname,
                                            mSchemaPaths);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(&mContainer);
 
     // Rows [40, 60)
     types::RowCol<size_t> offset(40, 0);
@@ -402,7 +431,7 @@ void Tester::testMultipleWritesOfPartialRows()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname,
                                            mSchemaPaths);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(&mContainer);
 
     // Rows [40, 60)
     // Cols [400, 456)
@@ -467,40 +496,18 @@ int main(int argc, char** argv)
         parser.addArgument("--schema", 
                            "Specify a schema or directory of schemas",
                            cli::STORE);
-        parser.addArgument("output", "Output filename", cli::STORE, "output",
-                           "OUTPUT", 1, 1);
 
         std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
-        std::string outputName(options->get<std::string> ("output"));
         size_t maxRows(options->get<size_t>("maxRows"));
         size_t maxSize(options->get<size_t>("maxSize"));
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
-                logging::setupLogger(sys::Path::basename(argv[0])));
-
         // create an XML registry
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-
-        // TODO: Allow this size to be overridden
-        const types::RowCol<size_t> dims(123, 456);
-        std::vector<std::complex<float> > image(dims.row * dims.col);
-        for (size_t ii = 0; ii < image.size(); ++ii)
-        {
-            image[ii] = std::complex<float>(static_cast<float>(ii),
-                                            static_cast<float>(ii * 10));
-        }
-        std::complex<float>* const imagePtr = &image[0];
-
-        // Create the Data
-        six::Container container(six::DataType::COMPLEX);
-        container.addData(createData(dims));
-        six::NITFWriteControl writer;
-        writer.setLogger(logger.get());
 
         /*
          *  Under normal circumstances, the library uses the
@@ -530,21 +537,7 @@ int main(int argc, char** argv)
         }
         */
 
-        // Write the file out the regular way
-        writer.initialize(&container);
-
-        six::BufferList buffers;
-
-        buffers.push_back(reinterpret_cast<six::UByte*>(imagePtr));
-        writer.save(buffers, outputName, schemaPaths);
-
-        // Now test the SICDWriteControl
-        Tester tester(outputName,
-                      dims,
-                      schemaPaths,
-                      &container,
-                      imagePtr);
-
+        Tester tester(schemaPaths);
         tester.testSingleWrite();
         tester.testMultipleWritesOfFullRows();
         tester.testMultipleWritesOfPartialRows();
