@@ -27,6 +27,7 @@
 
 #include <types/RowCol.h>
 #include <six/NITFWriteControl.h>
+#include <six/sicd/ComplexData.h>
 
 namespace six
 {
@@ -37,6 +38,12 @@ class SICDWriteControl : public six::NITFWriteControl
 public:
     SICDWriteControl(const std::string& outputFile,
                      const std::vector<std::string>& schemaPaths);
+
+    // So the implementation for this is kind of hokey
+    // TODO: If WriteControl holds onto the Container by SharedPtr,
+    //       this goes away
+    // You only have to call one of these two methods
+    void initialize(const ComplexData& data);
 
     virtual void initialize(Container* container);
 
@@ -62,6 +69,8 @@ private:
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;
+
+    std::auto_ptr<six::Container> mOurContainer;
 };
 }
 }

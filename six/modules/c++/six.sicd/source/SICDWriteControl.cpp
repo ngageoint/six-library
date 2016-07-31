@@ -55,6 +55,17 @@ void SICDWriteControl::setComplexityLevelIfRequired()
     }
 }
 
+void SICDWriteControl::initialize(const ComplexData& data)
+{
+	mOurContainer.reset(new Container(DataType::COMPLEX));
+
+    // The container wants to take ownership of the data
+    // To avoid memory problems, we'll just clone it
+    mOurContainer->addData(data.clone());
+
+	initialize(mOurContainer.get());
+}
+
 void SICDWriteControl::initialize(Container* container)
 {
     NITFWriteControl::initialize(container);
@@ -171,6 +182,11 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
+	if (mContainer == NULL)
+	{
+		throw except::Exception(Ctxt("initialize() must be called prior to calling save()"));
+	}
+
     const six::Data* const data = mContainer->getData(0);
     static const size_t NUM_BANDS = 2;
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
