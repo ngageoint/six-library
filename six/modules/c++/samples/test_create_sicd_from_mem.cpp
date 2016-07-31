@@ -55,10 +55,6 @@ public:
                                        rhsData,
                                        rhsImage);
 
-        if (mLhsData == *rhsData)
-        {
-            std::cout << "Data matches\n";
-        }
         if (mLhsImage != rhsImage)
         {
             for (size_t ii = 0; ii < mLhsImage.size(); ++ii)
@@ -79,6 +75,24 @@ private:
     const std::vector<std::complex<float> > mLhsImage;
     const std::vector<std::string> mSchemaPaths;
 };
+
+template <typename T>
+void subsetData(const std::vector<T>& orig,
+                size_t origNumCols,
+                const types::RowCol<size_t>& offset,
+                const types::RowCol<size_t>& dims,
+                std::vector<T>& output)
+{
+    output.resize(dims.area());
+    const T* origPtr = &orig[0] + offset.row * origNumCols + offset.col;
+    T* outputPtr = &output[0];
+    for (size_t row = 0;
+         row < dims.row;
+         ++row, origPtr += origNumCols, outputPtr += dims.col)
+    {
+        ::memcpy(outputPtr, origPtr, dims.col * sizeof(T));
+    }
+}
 }
 
 int main(int argc, char** argv)
@@ -341,44 +355,53 @@ int main(int argc, char** argv)
         }
 
         // Now let's try with a partial number of columns
-        // TODO: This one doesn't work right yet
-        std::cout << "The problem is we need to copy the data below to make it contiguous\n";
         otherPathname = "foo_3.nitf";
         {
             six::sicd::SICDWriteControl sicdWriter(otherPathname,
                                                    schemaPaths);
             sicdWriter.initialize(&container);
 
-            /*
             // Rows [40, 60)
             // Cols [400, 456)
             types::RowCol<size_t> offset(40, 400);
-            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
-                            offset,
-                            types::RowCol<size_t>(20, 56));
+            std::vector<std::complex<float> > subset;
+            types::RowCol<size_t> subsetDims(20, 56);
+            subsetData(image, dims.col, offset, subsetDims, subset);
+            sicdWriter.save(&subset[0], offset, subsetDims);
 
             // Rows [60, 123)
             offset.row = 60;
             offset.col = 0;
-            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
-                            offset,
-                            types::RowCol<size_t>(63, dims.col));
+            subsetDims.row = 63;
+            subsetDims.col = dims.col;
+            subsetData(image, dims.col, offset, subsetDims, subset);
+            sicdWriter.save(&subset[0], offset, subsetDims);
+
+            // Rows [40, 60)
+            // Cols [150, 400)
+            offset.row = 40;
+            offset.col = 150;
+            subsetDims.row = 20;
+            subsetDims.col = 250;
+            subsetData(image, dims.col, offset, subsetDims, subset);
+            sicdWriter.save(&subset[0], offset, subsetDims);
 
             // Rows [0, 40)
             offset.row = 0;
             offset.col = 0;
-            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
-                            offset,
-                            types::RowCol<size_t>(40, dims.col));
+            subsetDims.row = 40;
+            subsetDims.col = dims.col;
+            subsetData(image, dims.col, offset, subsetDims, subset);
+            sicdWriter.save(&subset[0], offset, subsetDims);
 
             // Rows [40, 60)
-            // Cols [0, 400)
+            // Cols [0, 150)
             offset.row = 40;
             offset.col = 0;
-            sicdWriter.save(imagePtr + offset.row * dims.col + offset.col,
-                            offset,
-                            types::RowCol<size_t>(20, 400));
-                            */
+            subsetDims.row = 20;
+            subsetDims.col = 150;
+            subsetData(image, dims.col, offset, subsetDims, subset);
+            sicdWriter.save(&subset[0], offset, subsetDims);
         }
 
         if (compare(otherPathname))
@@ -392,7 +415,10 @@ int main(int argc, char** argv)
         }
 
         // TODO: Test that NITF headers look right
+        //       If force NITRO to set the file date/time, everything else will
+        //       be identical and then can compare the file itself
         //       Test 16-bit writes
+        //       Test multi-seg
 
 
         return retCode;
