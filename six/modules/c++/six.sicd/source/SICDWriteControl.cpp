@@ -222,5 +222,10 @@ void SICDWriteControl::save(void* imageData,
                       numPixelsToWrite);
     }
 }
+
+void SICDWriteControl::close()
+{
+    mIO->close();
+}
 }
 }

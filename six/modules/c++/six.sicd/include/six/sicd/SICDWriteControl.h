@@ -47,10 +47,17 @@ public:
               const types::RowCol<size_t>& dims,
               bool restoreData = true);
 
+    void close();
+
 private:
     void setComplexityLevelIfRequired();
 
 private:
+    // TODO: You probably want to use a buffered IO for the initial small
+    //       writes of the file header but then a non-buffered IO for the image
+    //       writes (otherwise you're going to do a needless memcpy() for the
+    //       cases where you have partial rows).  Not sure how you could cleanly
+    //       handle this since you need to keep the same file descriptor open.
     std::auto_ptr<nitf::IOInterface> mIO;
     const std::vector<std::string> mSchemaPaths;
 

@@ -169,14 +169,14 @@ private:
 };
 
 template <typename T>
-void subsetData(const std::vector<T>& orig,
+void subsetData(const T* orig,
                 size_t origNumCols,
                 const types::RowCol<size_t>& offset,
                 const types::RowCol<size_t>& dims,
                 std::vector<T>& output)
 {
     output.resize(dims.area());
-    const T* origPtr = &orig[0] + offset.row * origNumCols + offset.col;
+    const T* origPtr = orig + offset.row * origNumCols + offset.col;
     T* outputPtr = &output[0];
     for (size_t row = 0;
          row < dims.row;
@@ -248,6 +248,208 @@ private:
     std::vector<sys::byte> mLHS;
     mutable std::vector<sys::byte> mRHS;
 };
+
+class EnsureFileCleanup
+{
+public:
+    EnsureFileCleanup(const std::string& pathname) :
+        mPathname(pathname)
+    {
+        removeIfExists();
+    }
+
+    ~EnsureFileCleanup()
+    {
+        try
+        {
+            removeIfExists();
+        }
+        catch (...)
+        {
+        }
+    }
+
+private:
+    void removeIfExists()
+    {
+        sys::OS os;
+        if (os.exists(mPathname))
+        {
+            os.remove(mPathname);
+        }
+    }
+
+private:
+    const std::string mPathname;
+};
+
+class Tester
+{
+public:
+    Tester(const std::string& origPathname,
+           const types::RowCol<size_t>& dims,
+           const std::vector<std::string>& schemaPaths,
+           six::Container* container,
+           std::complex<float>* imagePtr) :
+        mCompareFiles(origPathname),
+        mDims(dims),
+        mTestPathname("streaming_write.nitf"),
+        mSchemaPaths(schemaPaths),
+        mContainer(container),
+        mImagePtr(imagePtr),
+        mRetCode(0)
+    {
+    }
+
+    int getRetCode() const
+    {
+        return mRetCode;
+    }
+
+    // Write the file out with a SICDWriteControl in one shot
+    void testSingleWrite();
+
+    // Writes with num cols == global num cols
+    void testMultipleWritesOfFullRows();
+
+    // Writes where some rows are written out with only some of the cols
+    void testMultipleWritesOfPartialRows();
+
+private:
+    void compare(const std::string& prefix)
+    {
+        if (!mCompareFiles(prefix, mTestPathname))
+        {
+            mRetCode = 1;
+        }
+    }
+
+private:
+    const CompareFiles mCompareFiles;
+    const std::string mTestPathname;
+    const std::vector<std::string> mSchemaPaths;
+    const types::RowCol<size_t> mDims;
+    six::Container* const mContainer;
+    std::complex<float>* const mImagePtr;
+    int mRetCode;
+};
+
+void Tester::testSingleWrite()
+{
+    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+    six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
+
+    sicdWriter.initialize(mContainer);
+    sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
+    sicdWriter.close();
+
+    compare("Single write");
+}
+
+void Tester::testMultipleWritesOfFullRows()
+{
+    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+    six::sicd::SICDWriteControl sicdWriter(mTestPathname,
+                                           mSchemaPaths);
+    sicdWriter.initialize(mContainer);
+
+    // Rows [40, 60)
+    types::RowCol<size_t> offset(40, 0);
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(20, mDims.col));
+
+    // Rows [5, 25)
+    offset.row = 5;
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(20, mDims.col));
+
+    // Rows [0, 5)
+    offset.row = 0;
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(5, mDims.col));
+
+    // Rows [100, 123)
+    offset.row = 100;
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(23, mDims.col));
+
+    // Rows [25, 40)
+    offset.row = 25;
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(15, mDims.col));
+
+    // Rows [60, 100)
+    offset.row = 60;
+    sicdWriter.save(mImagePtr + offset.row * mDims.col,
+                    offset,
+                    types::RowCol<size_t>(40, mDims.col));
+
+    sicdWriter.close();
+
+    compare("Multiple writes of full rows");
+}
+
+void Tester::testMultipleWritesOfPartialRows()
+{
+    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+    six::sicd::SICDWriteControl sicdWriter(mTestPathname,
+                                           mSchemaPaths);
+    sicdWriter.initialize(mContainer);
+
+    // Rows [40, 60)
+    // Cols [400, 456)
+    types::RowCol<size_t> offset(40, 400);
+    std::vector<std::complex<float> > subset;
+    types::RowCol<size_t> subsetDims(20, 56);
+    subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
+    sicdWriter.save(&subset[0], offset, subsetDims);
+
+    // Rows [60, 123)
+    offset.row = 60;
+    offset.col = 0;
+    subsetDims.row = 63;
+    subsetDims.col = mDims.col;
+    subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
+    sicdWriter.save(&subset[0], offset, subsetDims);
+
+    // Rows [40, 60)
+    // Cols [150, 400)
+    offset.row = 40;
+    offset.col = 150;
+    subsetDims.row = 20;
+    subsetDims.col = 250;
+    subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
+    sicdWriter.save(&subset[0], offset, subsetDims);
+
+    // Rows [0, 40)
+    offset.row = 0;
+    offset.col = 0;
+    subsetDims.row = 40;
+    subsetDims.col = mDims.col;
+    subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
+    sicdWriter.save(&subset[0], offset, subsetDims);
+
+    // Rows [40, 60)
+    // Cols [0, 150)
+    offset.row = 40;
+    offset.col = 0;
+    subsetDims.row = 20;
+    subsetDims.col = 150;
+    subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
+    sicdWriter.save(&subset[0], offset, subsetDims);
+
+    sicdWriter.close();
+
+    compare("Multiple writes of partial rows");
+}
 }
 
 int main(int argc, char** argv)
@@ -336,132 +538,23 @@ int main(int argc, char** argv)
         buffers.push_back(reinterpret_cast<six::UByte*>(imagePtr));
         writer.save(buffers, outputName, schemaPaths);
 
-        // Write the file out with a SICDWriteControl in one shot
-        std::string otherPathname = "foo_1.nitf";
-        {
-            six::sicd::SICDWriteControl sicdWriter(otherPathname,
-                                                   schemaPaths);
-            sicdWriter.initialize(&container);
-            sicdWriter.save(imagePtr,
-                            types::RowCol<size_t>(0, 0),
-                            dims);
-        }
+        // Now test the SICDWriteControl
+        Tester tester(outputName,
+                      dims,
+                      schemaPaths,
+                      &container,
+                      imagePtr);
 
-        // Let's see if things match
-        int retCode = 0;
+        tester.testSingleWrite();
+        tester.testMultipleWritesOfFullRows();
+        tester.testMultipleWritesOfPartialRows();
 
-        const CompareFiles compareFiles(outputName);
-        if (!compareFiles("Single write", otherPathname))
-        {
-            retCode = 1;
-        }
 
-        // Now let's try some writes with num cols == global num cols
-        otherPathname = "foo_2.nitf";
-        {
-            six::sicd::SICDWriteControl sicdWriter(otherPathname,
-                                                   schemaPaths);
-            sicdWriter.initialize(&container);
-
-            // Rows [40, 60)
-            types::RowCol<size_t> offset(40, 0);
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(20, dims.col));
-
-            // Rows [5, 25)
-            offset.row = 5;
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(20, dims.col));
-
-            // Rows [0, 5)
-            offset.row = 0;
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(5, dims.col));
-
-            // Rows [100, 123)
-            offset.row = 100;
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(23, dims.col));
-
-            // Rows [25, 40)
-            offset.row = 25;
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(15, dims.col));
-
-            // Rows [60, 100)
-            offset.row = 60;
-            sicdWriter.save(imagePtr + offset.row * dims.col,
-                            offset,
-                            types::RowCol<size_t>(40, dims.col));
-        }
-
-        compareFiles("Multiple writes of full rows", otherPathname);
-
-        // Now let's try with a partial number of columns
-        otherPathname = "foo_3.nitf";
-        {
-            six::sicd::SICDWriteControl sicdWriter(otherPathname,
-                                                   schemaPaths);
-            sicdWriter.initialize(&container);
-
-            // Rows [40, 60)
-            // Cols [400, 456)
-            types::RowCol<size_t> offset(40, 400);
-            std::vector<std::complex<float> > subset;
-            types::RowCol<size_t> subsetDims(20, 56);
-            subsetData(image, dims.col, offset, subsetDims, subset);
-            sicdWriter.save(&subset[0], offset, subsetDims);
-
-            // Rows [60, 123)
-            offset.row = 60;
-            offset.col = 0;
-            subsetDims.row = 63;
-            subsetDims.col = dims.col;
-            subsetData(image, dims.col, offset, subsetDims, subset);
-            sicdWriter.save(&subset[0], offset, subsetDims);
-
-            // Rows [40, 60)
-            // Cols [150, 400)
-            offset.row = 40;
-            offset.col = 150;
-            subsetDims.row = 20;
-            subsetDims.col = 250;
-            subsetData(image, dims.col, offset, subsetDims, subset);
-            sicdWriter.save(&subset[0], offset, subsetDims);
-
-            // Rows [0, 40)
-            offset.row = 0;
-            offset.col = 0;
-            subsetDims.row = 40;
-            subsetDims.col = dims.col;
-            subsetData(image, dims.col, offset, subsetDims, subset);
-            sicdWriter.save(&subset[0], offset, subsetDims);
-
-            // Rows [40, 60)
-            // Cols [0, 150)
-            offset.row = 40;
-            offset.col = 0;
-            subsetDims.row = 20;
-            subsetDims.col = 150;
-            subsetData(image, dims.col, offset, subsetDims, subset);
-            sicdWriter.save(&subset[0], offset, subsetDims);
-        }
-
-        compareFiles("Multiple writes of partial rows", otherPathname);
-
-        // TODO: Test that NITF headers look right
-        //       If force NITRO to set the file date/time, everything else will
-        //       be identical and then can compare the file itself
-        //       Test 16-bit writes
+        // TODO: Test 16-bit writes
         //       Test multi-seg
 
 
-        return retCode;
+        return tester.getRetCode();
     }
     catch (const std::exception& ex)
     {
