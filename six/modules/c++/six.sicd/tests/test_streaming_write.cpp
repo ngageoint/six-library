@@ -360,6 +360,9 @@ public:
         mSchemaPaths(schemaPaths),
         mSuccess(true)
     {
+        mSetMaxProductSize = true;
+        mMaxProductSize = mDims.area() * sizeof(std::complex<DataTypeT>) / 2 + 1024;
+
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
             mImage[ii] = std::complex<DataTypeT>(
@@ -396,6 +399,15 @@ private:
         }
     }
 
+    void setMaxProductSize(six::NITFWriteControl& writer)
+    {
+        if (mSetMaxProductSize)
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+        }
+    }
+
 private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
@@ -409,6 +421,9 @@ private:
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
+    bool mSetMaxProductSize;
+    size_t mMaxProductSize;
+
     bool mSuccess;
 };
 
@@ -418,8 +433,9 @@ void Tester<DataTypeT>::normalWrite()
     mContainer.addData(createData<DataTypeT>(mDims));
 
     six::NITFWriteControl writer;
-
+    setMaxProductSize(writer);
     writer.initialize(&mContainer);
+
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
@@ -434,8 +450,9 @@ void Tester<DataTypeT>::testSingleWrite()
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-
+    setMaxProductSize(sicdWriter);
     sicdWriter.initialize(&mContainer);
+
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
 
@@ -447,8 +464,8 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    six::sicd::SICDWriteControl sicdWriter(mTestPathname,
-                                           mSchemaPaths);
+    six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
+    setMaxProductSize(sicdWriter);
     sicdWriter.initialize(&mContainer);
 
     // Rows [40, 60)
@@ -497,8 +514,8 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    six::sicd::SICDWriteControl sicdWriter(mTestPathname,
-                                           mSchemaPaths);
+    six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
+    setMaxProductSize(sicdWriter);
     sicdWriter.initialize(&mContainer);
 
     // Rows [40, 60)
@@ -583,22 +600,6 @@ int main(int /*argc*/, char** /*argv*/)
          *  the algorithm to segment early.
          *
          */
-        std::cout << "TODO: Fix overrides\n";
-        /*
-        if (maxRows > 0)
-        {
-            std::cout << "Overriding NITF max ILOC" << std::endl;
-            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
-                                             maxRows);
-
-        }
-        if (maxSize > 0)
-        {
-            std::cout << "Overriding NITF product size" << std::endl;
-            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
-                                             maxSize);
-        }
-        */
 
         bool success = true;
         if (!doTests<float>(schemaPaths))

@@ -201,32 +201,80 @@ void SICDWriteControl::save(void* imageData,
                       numPixelsToWrite);
     }
 
-    // TODO: Need to compute the correct segment and offset here
-    //       Use NITFSegmentInfo for this
+    /*std::cout << "I have " << mImageDataStart.size() << " offsets\n";
+    for (size_t ii = 0; ii < mImageDataStart.size(); ++ii)
+    {
+        std::cout << "  " << mImageDataStart[ii] << std::endl;
+    }*/
+
+    const std::vector <NITFSegmentInfo> imageSegments
+                    = mInfos[0]->getImageSegments();
+    /*std::cout << "And " << imageSegments.size() << " image segments\n";
+    for (size_t ii = 0; ii < imageSegments.size(); ++ii)
+    {
+        std::cout << "  first = " << imageSegments[ii].firstRow << " / num = " << imageSegments[ii].numRows << std::endl;
+    }*/
+
     const size_t globalNumCols = data->getNumCols();
-    const size_t pixelOffset = offset.row * globalNumCols + offset.col;
-    size_t byteOffset = pixelOffset * numBytesPerPixel * NUM_BANDS;
+    const size_t imageDataEndRow = offset.row + dims.row;
 
-    // TODO: For SIDD we'll have to handle blocking too
-
-    if (dims.col == globalNumCols)
+    for (size_t seg = 0; seg < imageSegments.size(); ++seg)
     {
-        // Life is easy - one write
-        mIO->seek(mImageDataStart[0] + byteOffset, NITF_SEEK_SET);
-        mIO->write(imageData, numPixelsToWrite * numBytesPerPixel);
-    }
-    else
-    {
-        const sys::ubyte* imageDataPtr = static_cast<sys::ubyte*>(imageData);
-        const size_t numBytesPerRow = dims.col * numBytesPerPixel * NUM_BANDS;
-        const size_t rowSeekStride = globalNumCols * numBytesPerPixel * NUM_BANDS;
+        const size_t segStartRow = imageSegments[seg].firstRow;
+        const size_t segEndRow = segStartRow + imageSegments[seg].numRows;
 
-        for (size_t row = 0;
-             row < dims.row;
-             ++row, byteOffset += rowSeekStride, imageDataPtr += numBytesPerRow)
+        // See if we're in this segment
+        const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
+        const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
+
+        /*std::cout << "Seg " << seg << " segStartRow = " << segStartRow
+                  << ", segEndRow = " << segEndRow
+                  << ", startGlobal = " << startGlobalRowToWrite
+                  << ", endGlobal = " << endGlobalRowToWrite
+                  << std::endl;*/
+
+        if (endGlobalRowToWrite > startGlobalRowToWrite)
         {
-            mIO->seek(mImageDataStart[0] + byteOffset, NITF_SEEK_SET);
-            mIO->write(imageDataPtr, numBytesPerRow);
+            const size_t numRowsToWrite =
+                    endGlobalRowToWrite - startGlobalRowToWrite;
+
+            // Figure out what offset of 'imageData' we're writing from
+            const size_t startLocalRowToWrite =
+                    startGlobalRowToWrite - offset.row;
+            const size_t numBytesPerRow = dims.col * numBytesPerPixel * NUM_BANDS;
+            const sys::ubyte* imageDataPtr =
+                    static_cast<sys::ubyte*>(imageData) +
+                    startLocalRowToWrite * numBytesPerRow;
+
+            // Now figure out our offset into the segment
+            const size_t startRowInSegToWrite =
+                    startGlobalRowToWrite - segStartRow;
+            const size_t pixelOffset =
+                    startRowInSegToWrite * globalNumCols + offset.col;
+            size_t byteOffset = mImageDataStart[seg] +
+                    pixelOffset * numBytesPerPixel * NUM_BANDS;
+
+            // TODO: For SIDD we'll have to handle blocking too
+
+            if (dims.col == globalNumCols)
+            {
+                // Life is easy - one write
+                mIO->seek(byteOffset, NITF_SEEK_SET);
+                mIO->write(imageDataPtr,
+                           numRowsToWrite * dims.col * NUM_BANDS * numBytesPerPixel);
+            }
+            else
+            {
+                const size_t rowSeekStride = globalNumCols * numBytesPerPixel * NUM_BANDS;
+
+                for (size_t row = 0;
+                     row < numRowsToWrite;
+                     ++row, byteOffset += rowSeekStride, imageDataPtr += numBytesPerRow)
+                {
+                    mIO->seek(byteOffset, NITF_SEEK_SET);
+                    mIO->write(imageDataPtr, numBytesPerRow);
+                }
+            }
         }
     }
 
