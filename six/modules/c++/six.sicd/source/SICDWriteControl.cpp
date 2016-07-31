@@ -184,13 +184,14 @@ void SICDWriteControl::save(void* imageData,
 {
 	if (mContainer == NULL)
 	{
-		throw except::Exception(Ctxt("initialize() must be called prior to calling save()"));
+		throw except::Exception(Ctxt(
+		        "initialize() must be called prior to calling save()"));
 	}
 
     const six::Data* const data = mContainer->getData(0);
     static const size_t NUM_BANDS = 2;
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
-    const size_t numPixelsToWrite = dims.area() * NUM_BANDS;
+    const size_t numPixelsTotal = dims.area() * NUM_BANDS;
     const bool doByteSwap = shouldByteSwap();
 
     // Byte swap if needed
@@ -198,7 +199,7 @@ void SICDWriteControl::save(void* imageData,
     {
         sys::byteSwap(imageData,
                       static_cast<unsigned short>(numBytesPerPixel),
-                      numPixelsToWrite);
+                      numPixelsTotal);
     }
 
     const std::vector <NITFSegmentInfo> imageSegments
@@ -209,10 +210,10 @@ void SICDWriteControl::save(void* imageData,
 
     for (size_t seg = 0; seg < imageSegments.size(); ++seg)
     {
+        // See if we're in this segment
         const size_t segStartRow = imageSegments[seg].firstRow;
         const size_t segEndRow = segStartRow + imageSegments[seg].numRows;
 
-        // See if we're in this segment
         const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
         const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
 
@@ -249,6 +250,7 @@ void SICDWriteControl::save(void* imageData,
             }
             else
             {
+                // Need to write out partial rows
                 const size_t rowSeekStride =
                         globalNumCols * numBytesPerPixel * NUM_BANDS;
 
@@ -269,7 +271,7 @@ void SICDWriteControl::save(void* imageData,
     {
         sys::byteSwap(imageData,
                       static_cast<unsigned short>(numBytesPerPixel),
-                      numPixelsToWrite);
+                      numPixelsTotal);
     }
 }
 
