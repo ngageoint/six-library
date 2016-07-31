@@ -34,12 +34,36 @@
 
 namespace
 {
+template <typename DataTypeT>
+struct GetPixelType
+{
+};
+
+template <>
+struct GetPixelType<float>
+{
+    static six::PixelType getPixelType()
+    {
+        return six::PixelType::RE32F_IM32F;
+    }
+};
+
+template <>
+struct GetPixelType<sys::Int16_T>
+{
+    static six::PixelType getPixelType()
+    {
+        return six::PixelType::RE16I_IM16I;
+    }
+};
+
+template <typename DataTypeT>
 std::auto_ptr<six::Data>
 createData(const types::RowCol<size_t>& dims)
 {
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
     std::auto_ptr<six::Data> scopedData(data);
-    data->setPixelType(six::PixelType::RE32F_IM32F);
+    data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
     data->setName("corename");
@@ -283,6 +307,7 @@ private:
     const std::string mPathname;
 };
 
+template <typename DataTypeT>
 class Tester
 {
 public:
@@ -295,20 +320,21 @@ public:
         mImagePtr(&mImage[0]),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
-        mRetCode(0)
+        mSuccess(true)
     {
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
-            mImage[ii] = std::complex<float>(static_cast<float>(ii),
-                                             static_cast<float>(ii * 10));
+            mImage[ii] = std::complex<DataTypeT>(
+                    static_cast<DataTypeT>(ii),
+                    static_cast<DataTypeT>(ii * 10));
         }
 
         normalWrite();
     }
 
-    int getRetCode() const
+    bool success() const
     {
-        return mRetCode;
+        return mSuccess;
     }
 
     // Write the file out with a SICDWriteControl in one shot
@@ -328,7 +354,7 @@ private:
     {
         if (!(*mCompareFiles)(prefix, mTestPathname))
         {
-            mRetCode = 1;
+            mSuccess = false;
         }
     }
 
@@ -338,19 +364,20 @@ private:
 
     six::Container mContainer;
     const types::RowCol<size_t> mDims;
-    std::vector<std::complex<float> > mImage;
-    std::complex<float>* const mImagePtr;
+    std::vector<std::complex<DataTypeT> > mImage;
+    std::complex<DataTypeT>* const mImagePtr;
 
     std::auto_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
-    int mRetCode;
+    bool mSuccess;
 };
 
-void Tester::normalWrite()
+template <typename DataTypeT>
+void Tester<DataTypeT>::normalWrite()
 {
-    mContainer.addData(createData(mDims));
+    mContainer.addData(createData<DataTypeT>(mDims));
 
     six::NITFWriteControl writer;
 
@@ -363,7 +390,8 @@ void Tester::normalWrite()
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
 
-void Tester::testSingleWrite()
+template <typename DataTypeT>
+void Tester<DataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -376,7 +404,8 @@ void Tester::testSingleWrite()
     compare("Single write");
 }
 
-void Tester::testMultipleWritesOfFullRows()
+template <typename DataTypeT>
+void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -425,7 +454,8 @@ void Tester::testMultipleWritesOfFullRows()
     compare("Multiple writes of full rows");
 }
 
-void Tester::testMultipleWritesOfPartialRows()
+template <typename DataTypeT>
+void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -436,7 +466,7 @@ void Tester::testMultipleWritesOfPartialRows()
     // Rows [40, 60)
     // Cols [400, 456)
     types::RowCol<size_t> offset(40, 400);
-    std::vector<std::complex<float> > subset;
+    std::vector<std::complex<DataTypeT> > subset;
     types::RowCol<size_t> subsetDims(20, 56);
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
     sicdWriter.save(&subset[0], offset, subsetDims);
@@ -478,6 +508,17 @@ void Tester::testMultipleWritesOfPartialRows()
     sicdWriter.close();
 
     compare("Multiple writes of partial rows");
+}
+
+template <typename DataTypeT>
+int doTests(const std::vector<std::string>& schemaPaths)
+{
+    Tester<DataTypeT> tester(schemaPaths);
+    tester.testSingleWrite();
+    tester.testMultipleWritesOfFullRows();
+    tester.testMultipleWritesOfPartialRows();
+
+    return tester.success();
 }
 }
 
@@ -537,17 +578,21 @@ int main(int argc, char** argv)
         }
         */
 
-        Tester tester(schemaPaths);
-        tester.testSingleWrite();
-        tester.testMultipleWritesOfFullRows();
-        tester.testMultipleWritesOfPartialRows();
+        bool success = true;
+        if (!doTests<float>(schemaPaths))
+        {
+            success = false;
+        }
+
+        if (!doTests<sys::Int16_T>(schemaPaths))
+        {
+            success = false;
+        }
 
 
-        // TODO: Test 16-bit writes
-        //       Test multi-seg
+        // TODO: Test multi-seg
 
-
-        return tester.getRetCode();
+        return (success ? 0 : 1);
     }
     catch (const std::exception& ex)
     {
