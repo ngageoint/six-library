@@ -19,6 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+// Test program for SICDWriteControl
+// Demonstrates that streaming writes result in equivalent SICDs to the normal
+// writes via NITFWriteControl
+
 #include <iostream>
 
 #include <import/six.h>
@@ -26,7 +31,6 @@
 #include <logging/Setup.h>
 #include <scene/Utilities.h>
 
-// For SICD implementation
 #include <import/six/sicd.h>
 #include <six/sicd/SICDWriteControl.h>
 
@@ -95,6 +99,7 @@ struct GetPixelType<sys::Int16_T>
     }
 };
 
+// Create dummy SICD data
 template <typename DataTypeT>
 std::auto_ptr<six::Data>
 createData(const types::RowCol<size_t>& dims)
@@ -188,6 +193,7 @@ createData(const types::RowCol<size_t>& dims)
     return scopedData;
 }
 
+// Grab an AOI out of 'orig' specified by 'offset' and 'dims'
 template <typename T>
 void subsetData(const T* orig,
                 size_t origNumCols,
@@ -206,6 +212,7 @@ void subsetData(const T* orig,
     }
 }
 
+// Read in the entire contents of a file into 'contents'
 void readFile(const std::string& pathname,
               std::vector<sys::byte>& contents)
 {
@@ -269,6 +276,9 @@ private:
     mutable std::vector<sys::byte> mRHS;
 };
 
+// Makes sure a file gets removed
+// Both makes sure we start with a clean slate each time and that there are no
+// leftover files if an exception occurs
 class EnsureFileCleanup
 {
 public:
@@ -303,6 +313,7 @@ private:
     const std::string mPathname;
 };
 
+// Main test class
 template <typename DataTypeT>
 class Tester
 {
@@ -539,6 +550,8 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     // TODO: This math isn't quite right
     //       We also end up with a different number of segments for the
     //       complex float than the complex short case sometimes
+    //       It would be better to get the logic fixed that forces
+    //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     static const size_t APPROX_HEADER_SIZE = 2 * 1024;
     const size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
@@ -583,24 +596,14 @@ int main(int /*argc*/, char** /*argv*/)
                 six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-        /*
-         *  Under normal circumstances, the library uses the
-         *  segmentation algorithm in the SICD spec, and numRowsLimit
-         *  is set to Contants::ILOC_SZ.  If the user sets this, they
-         *  want us to create an alternate numRowsLimit to force the
-         *  library to segment on smaller boundaries.
-         *
-         *  This is handy especially for debugging, since it will force
-         *  the algorithm to segment early.
-         *
-         */
-
+        // Run tests with no funky segmentation
         bool success = true;
         if (!doTestsBothDataTypes(schemaPaths, false))
         {
             success = false;
         }
 
+        // Run tests forcing various numbers of segments
         std::vector<size_t> numRows;
         numRows.push_back(80);
         numRows.push_back(30);
@@ -618,6 +621,7 @@ int main(int /*argc*/, char** /*argv*/)
             }
         }
 
+        // With any luck we passed
         if (success)
         {
             std::cout << "All tests pass!\n";
