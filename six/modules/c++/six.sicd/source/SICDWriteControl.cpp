@@ -201,19 +201,8 @@ void SICDWriteControl::save(void* imageData,
                       numPixelsToWrite);
     }
 
-    /*std::cout << "I have " << mImageDataStart.size() << " offsets\n";
-    for (size_t ii = 0; ii < mImageDataStart.size(); ++ii)
-    {
-        std::cout << "  " << mImageDataStart[ii] << std::endl;
-    }*/
-
     const std::vector <NITFSegmentInfo> imageSegments
                     = mInfos[0]->getImageSegments();
-    /*std::cout << "And " << imageSegments.size() << " image segments\n";
-    for (size_t ii = 0; ii < imageSegments.size(); ++ii)
-    {
-        std::cout << "  first = " << imageSegments[ii].firstRow << " / num = " << imageSegments[ii].numRows << std::endl;
-    }*/
 
     const size_t globalNumCols = data->getNumCols();
     const size_t imageDataEndRow = offset.row + dims.row;
@@ -226,12 +215,6 @@ void SICDWriteControl::save(void* imageData,
         // See if we're in this segment
         const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
         const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
-
-        /*std::cout << "Seg " << seg << " segStartRow = " << segStartRow
-                  << ", segEndRow = " << segEndRow
-                  << ", startGlobal = " << startGlobalRowToWrite
-                  << ", endGlobal = " << endGlobalRowToWrite
-                  << std::endl;*/
 
         if (endGlobalRowToWrite > startGlobalRowToWrite)
         {
@@ -261,15 +244,18 @@ void SICDWriteControl::save(void* imageData,
                 // Life is easy - one write
                 mIO->seek(byteOffset, NITF_SEEK_SET);
                 mIO->write(imageDataPtr,
-                           numRowsToWrite * dims.col * NUM_BANDS * numBytesPerPixel);
+                           numRowsToWrite * dims.col * NUM_BANDS *
+                               numBytesPerPixel);
             }
             else
             {
-                const size_t rowSeekStride = globalNumCols * numBytesPerPixel * NUM_BANDS;
+                const size_t rowSeekStride =
+                        globalNumCols * numBytesPerPixel * NUM_BANDS;
 
                 for (size_t row = 0;
                      row < numRowsToWrite;
-                     ++row, byteOffset += rowSeekStride, imageDataPtr += numBytesPerRow)
+                     ++row, byteOffset += rowSeekStride,
+                         imageDataPtr += numBytesPerRow)
                 {
                     mIO->seek(byteOffset, NITF_SEEK_SET);
                     mIO->write(imageDataPtr, numBytesPerRow);

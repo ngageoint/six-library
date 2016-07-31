@@ -188,48 +188,6 @@ createData(const types::RowCol<size_t>& dims)
     return scopedData;
 }
 
-class Compare
-{
-public:
-    Compare(const six::Data& lhsData,
-            const std::vector<std::complex<float> >& lhsImage,
-            const std::vector<std::string>& schemaPaths) :
-        mLhsData(*reinterpret_cast<const six::sicd::ComplexData*>(lhsData.clone())),
-        mLhsImage(lhsImage),
-        mSchemaPaths(schemaPaths)
-    {
-    }
-
-    bool operator()(const std::string& pathname) const
-    {
-        std::auto_ptr<six::sicd::ComplexData> rhsData;
-        std::vector<std::complex<float> > rhsImage;
-        six::sicd::Utilities::readSicd(pathname,
-                                       mSchemaPaths,
-                                       rhsData,
-                                       rhsImage);
-
-        if (mLhsImage != rhsImage)
-        {
-            for (size_t ii = 0; ii < mLhsImage.size(); ++ii)
-            {
-                if (mLhsImage[ii] != rhsImage[ii])
-                {
-                    std::cout << "Stops matching at " << ii << std::endl;
-                    break;
-                }
-            }
-        }
-
-        return (mLhsData == *rhsData && mLhsImage == rhsImage);
-    }
-
-private:
-    const six::sicd::ComplexData mLhsData;
-    const std::vector<std::complex<float> > mLhsImage;
-    const std::vector<std::string> mSchemaPaths;
-};
-
 template <typename T>
 void subsetData(const T* orig,
                 size_t origNumCols,
@@ -349,7 +307,9 @@ template <typename DataTypeT>
 class Tester
 {
 public:
-    Tester(const std::vector<std::string>& schemaPaths) :
+    Tester(const std::vector<std::string>& schemaPaths,
+           bool setMaxProductSize,
+           size_t maxProductSize = 0) :
         mNormalPathname("normal_write.nitf"),
         mNormalFileCleanup(mNormalPathname),
         mContainer(six::DataType::COMPLEX),
@@ -358,11 +318,10 @@ public:
         mImagePtr(&mImage[0]),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
-        mSuccess(true)
+        mSuccess(true),
+        mSetMaxProductSize(setMaxProductSize),
+        mMaxProductSize(maxProductSize)
     {
-        mSetMaxProductSize = true;
-        mMaxProductSize = mDims.area() * sizeof(std::complex<DataTypeT>) / 2 + 1024;
-
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
             mImage[ii] = std::complex<DataTypeT>(
@@ -393,7 +352,14 @@ private:
 private:
     void compare(const std::string& prefix)
     {
-        if (!(*mCompareFiles)(prefix, mTestPathname))
+        std::string fullPrefix = prefix;
+        if (mSetMaxProductSize)
+        {
+            fullPrefix += " (max product size " +
+                    str::toString(mMaxProductSize) + ")";
+        }
+
+        if (!(*mCompareFiles)(fullPrefix, mTestPathname))
         {
             mSuccess = false;
         }
@@ -566,14 +532,42 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 }
 
 template <typename DataTypeT>
-int doTests(const std::vector<std::string>& schemaPaths)
+bool doTests(const std::vector<std::string>& schemaPaths,
+             bool setMaxProductSize,
+             size_t numRowsPerSeg)
 {
-    Tester<DataTypeT> tester(schemaPaths);
+    // TODO: This math isn't quite right
+    //       We also end up with a different number of segments for the
+    //       complex float than the complex short case sometimes
+    static const size_t APPROX_HEADER_SIZE = 2 * 1024;
+    const size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
+    const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
+            APPROX_HEADER_SIZE;
+
+    Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
     tester.testSingleWrite();
     tester.testMultipleWritesOfFullRows();
     tester.testMultipleWritesOfPartialRows();
 
     return tester.success();
+}
+
+bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
+                          bool setMaxProductSize,
+                          size_t numRowsPerSeg = 0)
+{
+    bool success = true;
+    if (!doTests<float>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    {
+        success = false;
+    }
+
+    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    {
+        success = false;
+    }
+
+    return success;
 }
 }
 
@@ -602,18 +596,36 @@ int main(int /*argc*/, char** /*argv*/)
          */
 
         bool success = true;
-        if (!doTests<float>(schemaPaths))
+        if (!doTestsBothDataTypes(schemaPaths, false))
         {
             success = false;
         }
 
-        if (!doTests<sys::Int16_T>(schemaPaths))
+        std::vector<size_t> numRows;
+        numRows.push_back(80);
+        numRows.push_back(30);
+        numRows.push_back(15);
+        numRows.push_back(7);
+        numRows.push_back(3);
+        numRows.push_back(2);
+        numRows.push_back(1);
+
+        for (size_t ii = 0; ii < numRows.size(); ++ii)
         {
-            success = false;
+            if (!doTestsBothDataTypes(schemaPaths, true, numRows[ii]))
+            {
+                success = false;
+            }
         }
 
-
-        // TODO: Test multi-seg
+        if (success)
+        {
+            std::cout << "All tests pass!\n";
+        }
+        else
+        {
+            std::cerr << "Some tests FAIL!\n";
+        }
 
         return (success ? 0 : 1);
     }
