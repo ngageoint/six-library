@@ -21,12 +21,10 @@
  */
 #include <iostream>
 
-#include <import/cli.h>
 #include <import/six.h>
 #include <import/io.h>
 #include <logging/Setup.h>
 #include <scene/Utilities.h>
-#include "utils.h"
 
 // For SICD implementation
 #include <import/six/sicd.h>
@@ -34,6 +32,46 @@
 
 namespace
 {
+/*!
+ *  This function converts DMS corners into decimal degrees using NITRO,
+ *  and then puts them into a lat-lon
+ */
+inline
+six::LatLonCorners makeUpCornersFromDMS()
+{
+    int latTopDMS[3] = { 42, 17, 50 };
+    int latBottomDMS[3] = { 42, 15, 14 };
+    int lonEastDMS[3] = { -83, 42, 12 };
+    int lonWestDMS[3] = { -83, 45, 44 };
+
+    const double latTopDecimal =
+        nitf::Utils::geographicToDecimal(latTopDMS[0],
+                                         latTopDMS[1],
+                                         latTopDMS[2]);
+
+    const double latBottomDecimal =
+        nitf::Utils::geographicToDecimal(latBottomDMS[0],
+                                         latBottomDMS[1],
+                                         latBottomDMS[2]);
+
+    const double lonEastDecimal =
+        nitf::Utils::geographicToDecimal(lonEastDMS[0],
+                                         lonEastDMS[1],
+                                         lonEastDMS[2]);
+
+    const double lonWestDecimal =
+        nitf::Utils::geographicToDecimal(lonWestDMS[0],
+                                         lonWestDMS[1],
+                                         lonWestDMS[2]);
+
+    six::LatLonCorners corners;
+    corners.upperLeft = six::LatLon(latTopDecimal, lonWestDecimal);
+    corners.upperRight = six::LatLon(latTopDecimal, lonEastDecimal);
+    corners.lowerRight = six::LatLon(latBottomDecimal, lonEastDecimal);
+    corners.lowerLeft = six::LatLon(latBottomDecimal, lonWestDecimal);
+    return corners;
+}
+
 template <typename DataTypeT>
 struct GetPixelType
 {
@@ -522,28 +560,12 @@ int doTests(const std::vector<std::string>& schemaPaths)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        // create a parser and add our options to it
-        cli::ArgumentParser parser;
-        parser.setDescription(
-                              "This program creates a sample SICD NITF file of all zeros.");
-        parser.addArgument("-r --rows", "Rows limit", cli::STORE, "maxRows",
-                           "ROWS")->setDefault(-1);
-        parser.addArgument("-s --size", "Max product size", cli::STORE,
-                           "maxSize", "BYTES")->setDefault(-1);
-        parser.addArgument("--schema", 
-                           "Specify a schema or directory of schemas",
-                           cli::STORE);
-
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
-
-        size_t maxRows(options->get<size_t>("maxRows"));
-        size_t maxSize(options->get<size_t>("maxSize"));
-        std::vector<std::string> schemaPaths;
-        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
+        // TODO: Take these in optionally
+        const std::vector<std::string> schemaPaths;
 
         // create an XML registry
         six::XMLControlFactory::getInstance().addCreator(
