@@ -43,6 +43,13 @@ def findSixHome():
 
     return currentPath
 
+def sicdDir():
+    if platform.system() == 'Linux':
+        return os.path.join(os.sep, 'data1', 'u', 'jmeans', 'sicds')
+
+    if platform.system() == 'Windows':
+        return os.path.join('V:', 'ComSAR', 'Input', '100914')
+
 def installPath():
     home = findSixHome()
     children = ['remove_foss.csh', 'README.md', 'six', 'wscript',
@@ -55,6 +62,7 @@ def installPath():
             subdirs = os.listdir(fullChildPath)
             if 'tests' in subdirs and 'bin' in subdirs:
                 return fullChildPath
+            
 def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',

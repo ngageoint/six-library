@@ -34,6 +34,23 @@ import runUnitTests
 import checkNITFs
 import utils
 
+# If we don't run this before setting the paths, we won't be testing the right
+# things
+cropSicds = utils.executableName(
+        os.path.join(utils.installPath(), 'bin', 'crop_sicd'))
+success = subprocess.call([cropSicds, '--start-row', '0', '--start-col', '0',
+                           '--num-rows', '10', '--num-cols', '10',
+                           os.path.join(utils.sicdDir(),
+                                        os.listdir(utils.sicdDir())[0]),
+                           'cropped.nitf'], stdout=subprocess.PIPE)
+
+if os.path.exists('cropped.nitf'):
+    os.remove('cropped.nitf')                   
+if success != 0:
+    print("Error running crop_sicd")
+    sys.exit(1)
+    
+
 utils.setPaths()
 
 if platform.system() != 'SunOS':
