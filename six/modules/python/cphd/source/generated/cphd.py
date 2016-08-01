@@ -2184,6 +2184,17 @@ class VectorArraySize(_object):
         """capacity(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
         return _cphd.VectorArraySize_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _cphd.delete_VectorArraySize
     __del__ = lambda self: None
 VectorArraySize_swigregister = _cphd.VectorArraySize_swigregister
@@ -2387,6 +2398,17 @@ class VectorVector3(_object):
     def capacity(self):
         """capacity(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _cphd.VectorVector3_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _cphd.delete_VectorVector3
     __del__ = lambda self: None
@@ -2592,6 +2614,17 @@ class VectorChannelParameters(_object):
         """capacity(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
         return _cphd.VectorChannelParameters_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _cphd.delete_VectorChannelParameters
     __del__ = lambda self: None
 VectorChannelParameters_swigregister = _cphd.VectorChannelParameters_swigregister
@@ -2795,6 +2828,17 @@ class VectorAntennaParameters(_object):
     def capacity(self):
         """capacity(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
         return _cphd.VectorAntennaParameters_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _cphd.delete_VectorAntennaParameters
     __del__ = lambda self: None

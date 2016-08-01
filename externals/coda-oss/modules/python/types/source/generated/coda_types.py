@@ -197,6 +197,9 @@ SwigPyIterator_swigregister = _coda_types.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 import coda.coda_sys
+
+import cPickle as pickle
+
 class RowColDouble(_object):
     """Proxy of C++ types::RowCol<(double)> class"""
     __swig_setmethods__ = {}
@@ -283,6 +286,13 @@ class RowColDouble(_object):
     def normL2(self):
         """normL2(RowColDouble self) -> double"""
         return _coda_types.RowColDouble_normL2(self)
+
+
+    def __getstate__(self):
+        return (self.row, self.col)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
 
     __swig_destroy__ = _coda_types.delete_RowColDouble
     __del__ = lambda self: None
@@ -376,6 +386,13 @@ class RowColInt(_object):
         """normL2(RowColInt self) -> ssize_t"""
         return _coda_types.RowColInt_normL2(self)
 
+
+    def __getstate__(self):
+        return (self.row, self.col)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
+
     __swig_destroy__ = _coda_types.delete_RowColInt
     __del__ = lambda self: None
 RowColInt_swigregister = _coda_types.RowColInt_swigregister
@@ -468,6 +485,13 @@ class RowColSizeT(_object):
         """normL2(RowColSizeT self) -> size_t"""
         return _coda_types.RowColSizeT_normL2(self)
 
+
+    def __getstate__(self):
+        return (self.row, self.col)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
+
     __swig_destroy__ = _coda_types.delete_RowColSizeT
     __del__ = lambda self: None
 RowColSizeT_swigregister = _coda_types.RowColSizeT_swigregister
@@ -549,6 +573,13 @@ class RgAzDouble(_object):
     def __ne__(self, p):
         """__ne__(RgAzDouble self, RgAzDouble p) -> bool"""
         return _coda_types.RgAzDouble___ne__(self, p)
+
+
+    def __getstate__(self):
+        return (self.rg, self.az)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
 
     __swig_destroy__ = _coda_types.delete_RgAzDouble
     __del__ = lambda self: None
@@ -754,6 +785,17 @@ class VectorRowColInt(_object):
         """capacity(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"""
         return _coda_types.VectorRowColInt_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _coda_types.delete_VectorRowColInt
     __del__ = lambda self: None
 VectorRowColInt_swigregister = _coda_types.VectorRowColInt_swigregister
@@ -957,6 +999,17 @@ class VectorSizeT(_object):
     def capacity(self):
         """capacity(VectorSizeT self) -> std::vector< size_t >::size_type"""
         return _coda_types.VectorSizeT_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _coda_types.delete_VectorSizeT
     __del__ = lambda self: None
