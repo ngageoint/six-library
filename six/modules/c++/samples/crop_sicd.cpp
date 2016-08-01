@@ -88,7 +88,9 @@ int main(int argc, char** argv)
 {
     try
     {
-        const sys::Path::StringPair splitName(sys::Path::splitPath(argv[0]));
+        sys::OS os;
+        const sys::Path::StringPair splitName(sys::Path::splitPath(
+                os.getCurrentExecutable(argv[0])));
         const sys::Path progDirname(splitName.first);
         const sys::Path installPath(progDirname.join("..").getAbsolutePath());
 
