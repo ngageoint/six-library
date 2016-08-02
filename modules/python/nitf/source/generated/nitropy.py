@@ -555,6 +555,10 @@ def nitf_PluginRegistry_loadPlugin(fullPathName, error):
     return _nitropy.nitf_PluginRegistry_loadPlugin(fullPathName, error)
 nitf_PluginRegistry_loadPlugin = _nitropy.nitf_PluginRegistry_loadPlugin
 
+def nitf_PluginRegistry_TREHandlerExists(ident):
+    return _nitropy.nitf_PluginRegistry_TREHandlerExists(ident)
+nitf_PluginRegistry_TREHandlerExists = _nitropy.nitf_PluginRegistry_TREHandlerExists
+
 def nitf_PluginRegistry_unload(reg, error):
     return _nitropy.nitf_PluginRegistry_unload(reg, error)
 nitf_PluginRegistry_unload = _nitropy.nitf_PluginRegistry_unload
@@ -3665,6 +3669,14 @@ py_Field_getString = _nitropy.py_Field_getString
 def py_Field_getInt(field, error):
     return _nitropy.py_Field_getInt(field, error)
 py_Field_getInt = _nitropy.py_Field_getInt
+
+def py_Field_setRawData(field, buf, length, error):
+    return _nitropy.py_Field_setRawData(field, buf, length, error)
+py_Field_setRawData = _nitropy.py_Field_setRawData
+
+def py_TRE_setField(tre, tag, buf, length, error):
+    return _nitropy.py_TRE_setField(tre, tag, buf, length, error)
+py_TRE_setField = _nitropy.py_TRE_setField
 
 def py_Record_getFileHeader(record):
     return _nitropy.py_Record_getFileHeader(record)
