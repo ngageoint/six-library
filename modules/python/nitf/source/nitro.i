@@ -24,6 +24,7 @@
 %module nitropy
 %{
 #include <import/nitf.h>
+#include <numpyutils/numpyutils.h>
 %}
 
 #define NITF_LIST_TO_PYTHON_LIST(_type) \
