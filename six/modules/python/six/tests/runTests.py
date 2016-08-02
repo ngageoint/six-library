@@ -47,11 +47,11 @@ success = subprocess.call([cropSicds, '--start-row', '0', '--start-col', '0',
 
 print("Running crop_sicd")
 if os.path.exists('cropped.nitf'):
-    os.remove('cropped.nitf')                   
+    os.remove('cropped.nitf')
 if success != 0:
     print("Error running crop_sicd")
     sys.exit(1)
-    
+
 
 utils.setPaths()
 
