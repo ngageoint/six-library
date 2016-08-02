@@ -138,11 +138,8 @@ DataType NITFReadControl::getDataType(const std::string& desid,
         {
             return DataType::DERIVED;
         }
-        else
-        {
-            return DataType::NOT_SET;
-        }
     }
+    return DataType::NOT_SET;
 }
 
 DataType NITFReadControl::getDataType(nitf::DESegment& segment)
