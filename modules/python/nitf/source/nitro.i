@@ -66,7 +66,7 @@
     if ($input)
     {
         nitf_DataSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp, $descriptor(nitf_DataSource *), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp, $descriptor(nitf_DataSource *), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DataSource**)&temp;
     }
 }
@@ -75,7 +75,7 @@
     if ($input)
     {
         nitf_Writer* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Writer*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Writer*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Writer**)&temp;
     }
 }
@@ -83,7 +83,7 @@
     if ($input)
     {
         nitf_ImageWriter* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageWriter*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageWriter*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageWriter**)&temp;
     }
 }
@@ -91,7 +91,7 @@
     if ($input)
     {
         nitf_ImageSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageSource*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageSource**)&temp;
     }
 }
@@ -99,7 +99,7 @@
     if ($input)
     {
         nitf_ImageReader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageReader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageReader**)&temp;
     }
 }
@@ -107,7 +107,7 @@
     if ($input)
     {
         nitf_Reader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Reader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Reader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Reader**)&temp;
     }
 }
@@ -115,7 +115,7 @@
     if ($input)
     {
         nitf_DownSampler* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_DownSampler*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_DownSampler*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DownSampler**)&temp;
     }
 }
@@ -123,7 +123,7 @@
     if ($input)
     {
         nitf_Record* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Record*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Record*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Record**)&temp;
     }
 }
@@ -132,7 +132,7 @@
     if ($input)
     {
         nitf_TREEnumerator* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_TREEnumerator**)&temp;
     }
 }
@@ -141,7 +141,7 @@
     if ($input)
     {
         nitf_SegmentReader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_SegmentReader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentReader**)&temp;
     }
 }
@@ -150,7 +150,7 @@
     if ($input)
     {
         nitf_SegmentSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_SegmentSource*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentSource**)&temp;
     }
 }
@@ -434,8 +434,8 @@
 
     nitf_Version py_Record_getVersion(nitf_Record * record)
     {
-	    return nitf_Record_getVersion(record);
-	}
+        return nitf_Record_getVersion(record);
+    }
 %}
 
 
@@ -610,9 +610,9 @@
 
         for (i = 0; i < window->numBands; i++)
         {
-            //PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
-            PyObject* buffObj = PyMemoryView_FromMemory(buf[i],
-                    subimageSize * sizeof(nitf_Uint8), PyBUF_READ);
+            PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
+            //PyObject* buffObj = PyMemoryView_FromMemory(buf[i],
+                    //subimageSize * sizeof(nitf_Uint8), PyBUF_READ);
             PyList_SetItem(result, i, buffObj);
         }
 
@@ -675,8 +675,8 @@
         }
 
         source->iface->read(source->data, buf, size, error);
-        //bufObj = PyBuffer_FromMemory(buf, size);
-        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
+        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 
@@ -693,8 +693,8 @@
         }
 
         nitf_SegmentReader_read(reader, buf, size, error);
-        //bufObj = PyBuffer_FromMemory(buf, size);
-        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
+        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 
@@ -711,8 +711,8 @@
         }
 
         nitf_IOHandle_read(handle, buf, size, error);
-        //bufObj = PyBuffer_FromMemory(buf, size);
-        bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
+        bufObj = PyBuffer_FromMemory(buf, size);
+        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
         return bufObj;
     }
 

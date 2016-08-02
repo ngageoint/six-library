@@ -25,7 +25,7 @@ def build(bld):
             features = 'c cshlib pyext add_targets',
             source = 'source/nitro.i',
             target = '_nitropy',
-            use='nitf-c numpyutils-c++',
+            use='nitf-c++ numpyutils-c++',
             env=env.derive(),
             swig_flags='-python -c++',
             install_path='${PYTHONDIR}/nitf',
@@ -38,7 +38,7 @@ def build(bld):
             features = 'c cshlib pyext add_targets',
             source = 'source/generated/nitropy_wrap.cxx',
             target = '_nitropy',
-            use='nitf-c',
+            use='nitf-c++',
             env=env.derive(),
             targets_to_add='_nitropy_py',
             install_path='${PYTHONDIR}/nitf')
