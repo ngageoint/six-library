@@ -51,7 +51,9 @@ def runSICDTests():
     # Make sure plugins installed properly
     nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
 
-    if not any(plugin.startswith('PIAIMB') for plugin in os.listdir(nitfPluginPath)): 
+    if (not os.path.exists(nitfPluginPath) or
+            not any(plugin.startswith('PIAIMB') for plugin in
+                    os.listdir(nitfPluginPath))):
         print('Could not find NITF plugins. Please re-install with '
                 'the following command.')
         print('python waf install --target=PIAIMB')
@@ -70,3 +72,6 @@ def runSICDTests():
 
 def run():
     return runSICDTests()
+
+if __name__ == '__main__':
+    run()
