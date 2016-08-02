@@ -36,14 +36,16 @@ import utils
 
 # If we don't run this before setting the paths, we won't be testing the right
 # things
-cropSicds = utils.executableName(
-        os.path.join(utils.installPath(), 'bin', 'crop_sicd'))
+os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
+        os.path.join(utils.installPath(), 'bin'))
+cropSicds = utils.executableName('crop_sicd')
 success = subprocess.call([cropSicds, '--start-row', '0', '--start-col', '0',
                            '--num-rows', '10', '--num-cols', '10',
                            os.path.join(utils.sicdDir(),
                                         os.listdir(utils.sicdDir())[0]),
                            'cropped.nitf'], stdout=subprocess.PIPE)
 
+print("Running crop_sicd")
 if os.path.exists('cropped.nitf'):
     os.remove('cropped.nitf')                   
 if success != 0:
