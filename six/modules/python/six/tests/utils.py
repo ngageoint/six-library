@@ -43,13 +43,6 @@ def findSixHome():
 
     return currentPath
 
-def sicdDir():
-    if platform.system() == 'Linux':
-        return os.path.join(os.sep, 'miinfnas02-data1', 'jmeans',
-                'six-reference', 'SICD')
-
-    if platform.system() == 'Windows':
-        return os.path.join('V:', 'ComSAR', 'Input', '100914')
 
 def installPath():
     home = findSixHome()
