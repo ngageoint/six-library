@@ -3275,7 +3275,7 @@ SWIGINTERN void mt_ThreadGroup_createThread(mt::ThreadGroup *self,PyObject *runn
     sys::Runnable *n;
     if (SWIG_ConvertPtr(runnable, (void **) &n, SWIGTYPE_p_sys__Runnable, SWIG_POINTER_DISOWN) == -1)
     {
-        throw except::Exception(except::Context("../externals/coda-oss/modules/python/mt/source/mt.i", 74, "", sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
+        throw except::Exception(except::Context("../modules/python/mt/source/mt.i", 74, "", sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
 );
     }
     self->createThread(n);
