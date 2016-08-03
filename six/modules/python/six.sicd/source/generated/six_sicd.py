@@ -5032,6 +5032,17 @@ class VectorScopedCloneableGeoInfo(_object):
         """capacity(VectorScopedCloneableGeoInfo self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::GeoInfo > >::size_type"""
         return _six_sicd.VectorScopedCloneableGeoInfo_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_sicd.delete_VectorScopedCloneableGeoInfo
     __del__ = lambda self: None
 VectorScopedCloneableGeoInfo_swigregister = _six_sicd.VectorScopedCloneableGeoInfo_swigregister
@@ -5235,6 +5246,17 @@ class VectorLatLon(_object):
     def capacity(self):
         """capacity(VectorLatLon self) -> std::vector< scene::LatLon >::size_type"""
         return _six_sicd.VectorLatLon_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorLatLon
     __del__ = lambda self: None
@@ -6021,6 +6043,17 @@ class VectorPolyXYZ(_object):
     def capacity(self):
         """capacity(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorPolyXYZ
     __del__ = lambda self: None
@@ -7098,6 +7131,17 @@ class VectorScopedCloneableWaveformParameters(_object):
         """capacity(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_sicd.delete_VectorScopedCloneableWaveformParameters
     __del__ = lambda self: None
 VectorScopedCloneableWaveformParameters_swigregister = _six_sicd.VectorScopedCloneableWaveformParameters_swigregister
@@ -7301,6 +7345,17 @@ class VectorScopedCloneableTxStep(_object):
     def capacity(self):
         """capacity(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type"""
         return _six_sicd.VectorScopedCloneableTxStep_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorScopedCloneableTxStep
     __del__ = lambda self: None
@@ -7506,6 +7561,17 @@ class vectorScopedClonableSegment(_object):
         """capacity(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type"""
         return _six_sicd.vectorScopedClonableSegment_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_sicd.delete_vectorScopedClonableSegment
     __del__ = lambda self: None
 vectorScopedClonableSegment_swigregister = _six_sicd.vectorScopedClonableSegment_swigregister
@@ -7710,6 +7776,17 @@ class VectorScopedCloneableChannelParameters(_object):
         """capacity(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableChannelParameters_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_sicd.delete_VectorScopedCloneableChannelParameters
     __del__ = lambda self: None
 VectorScopedCloneableChannelParameters_swigregister = _six_sicd.VectorScopedCloneableChannelParameters_swigregister
@@ -7913,6 +7990,17 @@ class VectorInt(_object):
     def capacity(self):
         """capacity(VectorInt self) -> std::vector< int >::size_type"""
         return _six_sicd.VectorInt_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorInt
     __del__ = lambda self: None
@@ -8210,6 +8298,17 @@ class VectorProcessing(_object):
     def capacity(self):
         """capacity(VectorProcessing self) -> std::vector< six::sicd::Processing >::size_type"""
         return _six_sicd.VectorProcessing_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorProcessing
     __del__ = lambda self: None
@@ -8641,6 +8740,17 @@ class VectorMatchCollect(_object):
         """capacity(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::size_type"""
         return _six_sicd.VectorMatchCollect_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_sicd.delete_VectorMatchCollect
     __del__ = lambda self: None
 VectorMatchCollect_swigregister = _six_sicd.VectorMatchCollect_swigregister
@@ -8844,6 +8954,17 @@ class VectorScopedCopyableMatchType(_object):
     def capacity(self):
         """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type"""
         return _six_sicd.VectorScopedCopyableMatchType_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorScopedCopyableMatchType
     __del__ = lambda self: None
@@ -9452,6 +9573,17 @@ class VectorTimelineSet(_object):
     def capacity(self):
         """capacity(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
         return _six_sicd.VectorTimelineSet_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _six_sicd.delete_VectorTimelineSet
     __del__ = lambda self: None
