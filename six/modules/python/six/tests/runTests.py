@@ -79,8 +79,8 @@ def run(sicdDir):
             # These tests should report their own errors
             return False
     else:
-        print('Warning: skipping the bulk of the test suite,
-                since Python modules are by default disabled on Solaris')
+        print('Warning: skipping the bulk of the test suite, '
+                'since Python modules are by default disabled on Solaris')
 
     print("Performing byte swap test")
     if subprocess.call([
