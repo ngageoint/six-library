@@ -44,8 +44,7 @@ def run(sicdDir):
                 os.path.join(utils.installPath(), 'bin'))
         cropSicds = utils.executableName('crop_sicd')
 
-        sicdPathname = os.path.join(utils.sicdDir(),
-                os.listdir(utils.sicdDir())[0])
+        sicdPathname = os.path.join(sicdDir, os.listdir(sicdDir)[0])
 
         success = subprocess.call([cropSicds,
                 '--start-row', '0', '--start-col', '0',
@@ -58,7 +57,7 @@ def run(sicdDir):
             os.remove('cropped.nitf')
         if success != 0:
             print("Error running crop_sicd")
-        return False
+            return False
 
     utils.setPaths()
 
