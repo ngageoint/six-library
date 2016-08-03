@@ -4548,6 +4548,17 @@ class VectorString(_object):
         """capacity(VectorString self) -> std::vector< std::string >::size_type"""
         return _six_base.VectorString_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _six_base.delete_VectorString
     __del__ = lambda self: None
 VectorString_swigregister = _six_base.VectorString_swigregister
