@@ -39,11 +39,13 @@ import utils
 os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
         os.path.join(utils.installPath(), 'bin'))
 cropSicds = utils.executableName('crop_sicd')
+
+sicdPathname = os.path.join(utils.sicdDir(), os.listdir(utils.sicdDir())[0])
+
 success = subprocess.call([cropSicds, '--start-row', '0', '--start-col', '0',
                            '--num-rows', '10', '--num-cols', '10',
-                           os.path.join(utils.sicdDir(),
-                                        os.listdir(utils.sicdDir())[0]),
-                           'cropped.nitf'], stdout=subprocess.PIPE)
+                           sicdPathname, 'cropped.nitf'],
+                           stdout=subprocess.PIPE)
 
 print("Running crop_sicd")
 if os.path.exists('cropped.nitf'):
