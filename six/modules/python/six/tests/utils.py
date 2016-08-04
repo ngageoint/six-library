@@ -43,6 +43,7 @@ def findSixHome():
 
     return currentPath
 
+
 def installPath():
     home = findSixHome()
     children = ['remove_foss.csh', 'README.md', 'six', 'wscript',
@@ -55,6 +56,7 @@ def installPath():
             subdirs = os.listdir(fullChildPath)
             if 'tests' in subdirs and 'bin' in subdirs:
                 return fullChildPath
+
 def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',
@@ -100,6 +102,5 @@ def executableName(pathname):
         if pathname.endswith('.exe'):
             return pathname
         return pathname + '.exe'
-    if pathname.startswith('/'):
-        return pathname
-    return './' + pathname
+    return pathname
+
