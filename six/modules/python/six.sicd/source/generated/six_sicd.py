@@ -9630,6 +9630,52 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
     pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
 
+class SICDWriteControl(_object):
+    """Proxy of C++ six::sicd::SICDWriteControl class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SICDWriteControl, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SICDWriteControl, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, outputFile, schemaPaths):
+        """__init__(six::sicd::SICDWriteControl self, std::string const & outputFile, VectorString schemaPaths) -> SICDWriteControl"""
+        this = _six_sicd.new_SICDWriteControl(outputFile, schemaPaths)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def initialize(self, *args):
+        """
+        initialize(SICDWriteControl self, ComplexData data)
+        initialize(SICDWriteControl self, Container * container)
+        """
+        return _six_sicd.SICDWriteControl_initialize(self, *args)
+
+
+    def save(self, *args):
+        """
+        save(SICDWriteControl self)
+        save(SICDWriteControl self, void * imageData, RowColSizeT offset, RowColSizeT dims, bool restoreData=True)
+        save(SICDWriteControl self, void * imageData, RowColSizeT offset, RowColSizeT dims)
+        """
+        return _six_sicd.SICDWriteControl_save(self, *args)
+
+
+    def close(self):
+        """close(SICDWriteControl self)"""
+        return _six_sicd.SICDWriteControl_close(self)
+
+
+    def write(self, data, offset):
+        """write(SICDWriteControl self, PyObject * data, RowColSizeT offset)"""
+        return _six_sicd.SICDWriteControl_write(self, data, offset)
+
+    __swig_destroy__ = _six_sicd.delete_SICDWriteControl
+    __del__ = lambda self: None
+SICDWriteControl_swigregister = _six_sicd.SICDWriteControl_swigregister
+SICDWriteControl_swigregister(SICDWriteControl)
 
 # This file is compatible with both classic and new-style classes.
 

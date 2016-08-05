@@ -367,9 +367,9 @@ protected:
     {
     }
 
-private:
     bool shouldByteSwap() const;
 
+private:
     static
     std::string getDesTypeID(const six::Data& data);
 
