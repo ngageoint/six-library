@@ -32,6 +32,11 @@
 
 NITF_CXX_GUARD
 
+// These represent the fill direction when writing NITF fields (i.e. do you
+// fill with, say, spaces on the left or right of the field)
+#define NITF_WRITER_FILL_LEFT 1
+#define NITF_WRITER_FILL_RIGHT 2
+
 /*!
  *  \struct nitf_Writer
  *  \brief  This object represents the 2.1 (2.0?) file writer
@@ -172,6 +177,90 @@ NITFAPI(nitf_SegmentWriter*) nitf_Writer_newDEWriter(nitf_Writer *writer,
  */
 NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);
 
+// NOTE: In general the following functions are not needed.  Only use these
+//       if you know what you're doing and are trying to write out a NITF
+//       piecemeal rather than through the normal Writer object interface.
+
+/*!
+ * Writes out the file header (skips over the FL field as the total file length
+ * is not known yet).  No seeking is performed so the underlying IO object
+ * should be at the beginning of the file.
+ *
+ * \param writer Initialized writer object
+ * \param fileLenOff Output parameter providing the offset in bytes in the file
+ *     to the file length (FL) field in the header so that you can write it out
+ *     later once the file length is known
+ * \param hdrLen Output parameter providing the total number of bytes the file
+ *     header is on disk
+ * \param error Output parameter providing the error if one occurs
+ *
+ * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
+ *
+ */
+NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
+                                            nitf_Off* fileLenOff,
+                                            nitf_Uint32* hdrLen,
+                                            nitf_Error* error);
+
+/*!
+ * Writes out an image subheader.  No seeking is performed so the underlying
+ * IO object should be at the appropriate spot in the file prior to this call.
+ *
+ * \param writer Initialized writer object
+ * \param subhdr Image subheader to write out
+ * \param fver NITF file version to write (you probably want NITF_VER_21)
+ * \param comratOff Output parameter containing the offset in bytes in the
+ *     file where the COMRAT field would be populated for compressed files
+ * \param error Output parameter providing the error if one occurs
+ *
+ * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
+ */
+NITFPROT(NITF_BOOL)
+nitf_Writer_writeImageSubheader(nitf_Writer* writer,
+                                const nitf_ImageSubheader* subhdr,
+                                nitf_Version fver,
+                                nitf_Off* comratOff,
+                                nitf_Error* error);
+
+/*!
+ * Writes out a data extension subheader.  No seeking is performed so the
+ * underlying IO object should be at the appropriate spot in the file prior to
+ * this call.
+ *
+ * \param writer Initialized writer object
+ * \param subhdr Data extension subheader to write out
+ * \param userSublen Output parameter containing the length in bytes of the
+ *     user subheader
+ * \param fver NITF file version to write (you probably want NITF_VER_21)
+ * \param error Output parameter providing the error if one occurs
+ *
+ * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
+ */
+NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
+                                                 const nitf_DESubheader* subhdr,
+                                                 nitf_Uint32* userSublen,
+                                                 nitf_Version fver,
+                                                 nitf_Error* error);
+
+/*!
+ * Writes an int64 field to the writer in its current position
+ *
+ * \param writer Initialized writer object
+ * \param field Value of the field to write out
+ * \param length Length of the field to write out
+ * \param fill Fill character to use for any remaining bytes
+ * \param fillDir Fill direction (NITF_WRITER_FILL_LEFT or
+ *     NITF_WRITER_FILL_RIGHT)
+ * \param error Output parameter providing the error if one occurs
+ *
+ * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
+ */
+NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
+                                                nitf_Uint64 field,
+                                                nitf_Uint32 length,
+                                                char fill,
+                                                nitf_Uint32 fillDir,
+                                                nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 
