@@ -9646,6 +9646,14 @@ class SICDWriteControl(_object):
         except:
             self.this = this
 
+    def initialize(self, *args):
+        """
+        initialize(SICDWriteControl self)
+        initialize(SICDWriteControl self, ComplexData data)
+        """
+        return _six_sicd.SICDWriteControl_initialize(self, *args)
+
+
     def save(self, *args):
         """
         save(SICDWriteControl self)
