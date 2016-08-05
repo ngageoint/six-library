@@ -1118,11 +1118,11 @@ CATCH_ERROR:
 
 
 NITFPROT(NITF_BOOL)
-nitf_Writer_writeImageSubheader(nitf_Writer * writer,
-                                nitf_ImageSubheader *subhdr,
+nitf_Writer_writeImageSubheader(nitf_Writer* writer,
+                                const nitf_ImageSubheader* subhdr,
                                 nitf_Version fver,
-                                nitf_Off *comratOff,
-                                nitf_Error * error)
+                                nitf_Off* comratOff,
+                                nitf_Error* error)
 {
     nitf_Uint32 bands;
     nitf_Uint32 i;
@@ -1345,7 +1345,7 @@ CATCH_ERROR:
 
 
 NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
-                                                 nitf_DESubheader* subhdr,
+                                                 const nitf_DESubheader* subhdr,
                                                  nitf_Uint32* userSublen,
                                                  nitf_Version fver,
                                                  nitf_Error* error)
