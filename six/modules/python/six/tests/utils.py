@@ -29,6 +29,7 @@ import sys
 from glob import glob
 from subprocess import call
 
+
 def findSixHome():
     if 'WORKSPACE' in os.environ:
         return os.environ['WORKSPACE']

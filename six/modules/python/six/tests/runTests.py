@@ -34,6 +34,8 @@ import runUnitTests
 import checkNITFs
 import utils
 
+from runner import CppTestRunner
+
 
 def run(sicdDir):
     # If we don't run this before setting the paths, we won't be testing
@@ -81,13 +83,15 @@ def run(sicdDir):
         print('Warning: skipping the bulk of the test suite, '
                 'since Python modules are by default disabled on Solaris')
 
-    print("Performing byte swap test")
-    if subprocess.call([
-            utils.executableName(os.path.join(utils.installPath(),
-            'tests', 'six.sidd', 'test_byte_swap'))]) != 0:
-        print("Failed ByteSwap test in six.sidd/tests/test_byte_swap")
+    sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
+    siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
+
+    sicdTestRunner = CppTestRunner(sicdTestDir)
+    siddTestRunner = CppTestRunner(siddTestDir)
+
+    if not (sicdTestRunner.run('test_streaming_write') and
+        siddTestRunner.run('test_byte_swap')):
         return False
-    print("Byte swap test succeeded")
 
     if runUnitTests.run() == False:
         print("Unit tests failed")
