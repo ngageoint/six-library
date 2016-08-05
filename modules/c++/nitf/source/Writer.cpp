@@ -255,3 +255,58 @@ nitf::List Writer::getWarningList()
 {
     return nitf::List(getNativeOrThrow()->warningList);
 }
+
+void Writer::writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen)
+{
+    if (!nitf_Writer_writeHeader(getNativeOrThrow(),
+                                 &fileLenOff,
+                                 &hdrLen,
+                                 &error))
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+
+void Writer::writeImageSubheader(nitf::ImageSubheader subheader,
+                                 nitf::Version version,
+                                 nitf::Off& comratOff)
+{
+    if (!nitf_Writer_writeImageSubheader(getNativeOrThrow(),
+                                         subheader.getNativeOrThrow(),
+                                         version,
+                                         &comratOff,
+                                         &error))
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+
+void Writer::writeDESubheader(nitf::DESubheader subheader,
+                              nitf::Uint32& userSublen,
+                              nitf::Version version)
+{
+    if (!nitf_Writer_writeDESubheader(getNativeOrThrow(),
+                                      subheader.getNativeOrThrow(),
+                                      &userSublen,
+                                      version,
+                                      &error))
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+
+void Writer::writeInt64Field(nitf::Uint64 field,
+                             nitf::Uint32 length,
+                             char fill,
+                             nitf::Uint32 fillDir)
+{
+    if (!nitf_Writer_writeInt64Field(getNativeOrThrow(),
+                                     field,
+                                     length,
+                                     fill,
+                                     fillDir,
+                                     &error))
+    {
+        throw nitf::NITFException(&error);
+    }
+}
