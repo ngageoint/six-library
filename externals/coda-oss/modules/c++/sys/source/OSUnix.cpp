@@ -56,7 +56,7 @@ std::string readLink(const std::string& pathname)
 
     if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
     {
-        throw except::Exception(Ctxt(strerror(errno)));
+        return "";
     }
 
     return std::string(buffer);
