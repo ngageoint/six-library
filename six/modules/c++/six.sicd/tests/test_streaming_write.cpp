@@ -329,9 +329,9 @@ public:
         mImagePtr(&mImage[0]),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
-        mSuccess(true),
         mSetMaxProductSize(setMaxProductSize),
-        mMaxProductSize(maxProductSize)
+        mMaxProductSize(maxProductSize),
+        mSuccess(true)
     {
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {

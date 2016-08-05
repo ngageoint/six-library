@@ -57,6 +57,8 @@ public:
     SICDWriteControl(const std::string& outputPathname,
                      const std::vector<std::string>& schemaPaths);
 
+    using NITFWriteControl::initialize;
+
     /*!
      * Initializes the control.  Either this or the base class's initialize()
      * function must be called prior to any of the save() methods or doing
@@ -68,7 +70,6 @@ public:
      */
     void initialize(const ComplexData& data);
 
-    using NITFWriteControl::initialize;
     using NITFWriteControl::save;
 
     /*!
