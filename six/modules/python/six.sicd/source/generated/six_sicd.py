@@ -9638,21 +9638,13 @@ class SICDWriteControl(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, SICDWriteControl, name)
     __repr__ = _swig_repr
 
-    def __init__(self, outputFile, schemaPaths):
-        """__init__(six::sicd::SICDWriteControl self, std::string const & outputFile, VectorString schemaPaths) -> SICDWriteControl"""
-        this = _six_sicd.new_SICDWriteControl(outputFile, schemaPaths)
+    def __init__(self, outputPathname, schemaPaths):
+        """__init__(six::sicd::SICDWriteControl self, std::string const & outputPathname, VectorString schemaPaths) -> SICDWriteControl"""
+        this = _six_sicd.new_SICDWriteControl(outputPathname, schemaPaths)
         try:
             self.this.append(this)
         except:
             self.this = this
-
-    def initialize(self, *args):
-        """
-        initialize(SICDWriteControl self, ComplexData data)
-        initialize(SICDWriteControl self, Container * container)
-        """
-        return _six_sicd.SICDWriteControl_initialize(self, *args)
-
 
     def save(self, *args):
         """
