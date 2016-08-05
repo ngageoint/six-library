@@ -26,10 +26,11 @@ namespace six
 {
 namespace sicd
 {
-SICDWriteControl::SICDWriteControl(const std::string& outputFile,
+SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
                                    const std::vector<std::string>& schemaPaths) :
-    mIO(new nitf::BufferedWriter(outputFile, DEFAULT_BUFFER_SIZE)),
-    mSchemaPaths(schemaPaths)
+    mIO(new nitf::BufferedWriter(outputPathname, DEFAULT_BUFFER_SIZE)),
+    mSchemaPaths(schemaPaths),
+    mHaveWrittenHeaders(false)
 {
 }
 
@@ -57,6 +58,12 @@ void SICDWriteControl::setComplexityLevelIfRequired()
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
+    // TODO: The implementation for this is hokey... the problem is that the
+    //       underlying WriteControl doesn't own the Container, but here we
+    //       need to create a Container for 'data' and need it to live longer
+    //       than this method.  If WriteControl holds onto the Container by
+    //       SharedPtr, this goes away.
+
 	mOurContainer.reset(new Container(DataType::COMPLEX));
 
     // The container wants to take ownership of the data
@@ -66,10 +73,8 @@ void SICDWriteControl::initialize(const ComplexData& data)
 	initialize(mOurContainer.get());
 }
 
-void SICDWriteControl::initialize(Container* container)
+void SICDWriteControl::writeHeaders()
 {
-    NITFWriteControl::initialize(container);
-
     mWriter.prepareIO(*mIO, mRecord);
 
     // Write the file header
@@ -186,6 +191,13 @@ void SICDWriteControl::save(void* imageData,
 	{
 		throw except::Exception(Ctxt(
 		        "initialize() must be called prior to calling save()"));
+	}
+
+	// The first time through we'll write out all the headers
+	if (!mHaveWrittenHeaders)
+	{
+	    writeHeaders();
+	    mHaveWrittenHeaders = true;
 	}
 
     const six::Data* const data = mContainer->getData(0);
