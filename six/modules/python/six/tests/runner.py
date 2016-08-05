@@ -45,3 +45,4 @@ class CppTestRunner(TestRunner):
 
     def createInvocation(self, pathname):
         return [utils.executableName(pathname)]
+
