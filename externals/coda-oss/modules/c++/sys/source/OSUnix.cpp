@@ -56,7 +56,7 @@ std::string readLink(const std::string& pathname)
 
     if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
     {
-        return "";
+        throw except::Exception(Ctxt(strerror(errno)));
     }
 
     return std::string(buffer);
@@ -384,6 +384,10 @@ std::string sys::OSUnix::getCurrentExecutable(
     for (size_t ii = 0; ii < possibleSymlinks.size(); ++ii)
     {
         const std::string pathname = possibleSymlinks[ii];
+        if (!isFile(pathname))
+        {
+            continue;
+        }
         const std::string executableName = readLink(pathname);
 
         if (isFile(executableName))
