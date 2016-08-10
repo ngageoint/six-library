@@ -32,6 +32,8 @@
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "six/sicd/SICDWriteControl.h"
+#include <numpyutils/numpyutils.h>
 
 using namespace six::sicd;
 using namespace six;
@@ -295,5 +297,22 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
 def readFromNITF(pathname, schemaPaths=VectorString()):
     pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
-
 %}
+
+%include "six/sicd/SICDWriteControl.h"
+%extend six::sicd::SICDWriteControl
+{
+    void write(PyObject* data, const types::RowCol<size_t>& offset)
+    {
+        numpyutils::verifyArrayType(data, NPY_COMPLEX64);
+   
+        // TODO: Force array to be contigious memory
+        //       Right now we're requiring the caller to do that
+        // TODO: If we get noncontiguous memory, maybe we want to
+        //       instead do multiple calls to save() ourselves to
+        //       avoid the memory allocation
+        $self->save(numpyutils::getBuffer<std::complex<float> >(data),
+                    offset,
+                    numpyutils::getDimensionsRC(data));
+    }
+}

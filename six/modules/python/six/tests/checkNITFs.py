@@ -28,7 +28,6 @@ import utils
 
 from subprocess import call
 
-print utils.installPath()
 binDir = os.path.join(utils.installPath(), 'bin')
 
 def roundTrippedName(pathname):
@@ -41,7 +40,7 @@ def roundTripSix(pathname):
 def validate(pathname):
     check_valid_six = utils.executableName(os.path.join(binDir,
             'check_valid_six'))
-    
+
     return (call([check_valid_six, pathname], stdout=open(os.devnull, 'w')) and
             call([check_valid_six, roundTrippedName(pathname)],
             stdout=open(os.devnull, 'w'))) == 0
