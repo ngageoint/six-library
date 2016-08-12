@@ -28,6 +28,7 @@
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
+#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -175,12 +176,11 @@ public:
     }
 
     /*!
-     *  const pointer to Container.  This object is not owned by the
-     *  WriteControl
+     *  const pointer to Container.
      */
     const Container* getContainer()
     {
-        return mContainer;
+        return mContainer.get();
     }
 
     /*!
@@ -240,7 +240,7 @@ public:
     }
 
 protected:
-    Container* mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

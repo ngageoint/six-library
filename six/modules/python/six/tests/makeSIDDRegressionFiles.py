@@ -52,7 +52,7 @@ def run():
     legendNameBase = 'siddLegend'
     print('Creating SIDDs with legends')
 
-    call([utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
+    call(['gdb', '--args', utils.executableName(os.path.join(binDir, 'test_create_sidd_legend')),
           legendNameBase])
 
     moveToOutputDir(['{}_blocked.nitf'.format(legendNameBase),

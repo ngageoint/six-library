@@ -187,18 +187,18 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-	if (mContainer == NULL)
-	{
-		throw except::Exception(Ctxt(
-		        "initialize() must be called prior to calling save()"));
-	}
+    if (mContainer.get() == NULL)
+    {
+        throw except::Exception(Ctxt(
+                "initialize() must be called prior to calling save()"));
+    }
 
-	// The first time through we'll write out all the headers
-	if (!mHaveWrittenHeaders)
-	{
-	    writeHeaders();
-	    mHaveWrittenHeaders = true;
-	}
+    // The first time through we'll write out all the headers
+    if (!mHaveWrittenHeaders)
+    {
+        writeHeaders();
+        mHaveWrittenHeaders = true;
+    }
 
     const six::Data* const data = mContainer->getData(0);
     static const size_t NUM_BANDS = 2;

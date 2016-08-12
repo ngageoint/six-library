@@ -78,7 +78,7 @@ public:
     // Get the container that we were initialized from (const)
     const Container* getContainer() const
     {
-        return mContainer;
+        return mContainer.get();
     }
 
     // Get the record that was generated during initialization

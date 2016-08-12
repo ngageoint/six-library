@@ -101,10 +101,8 @@ NITFWriteControl::NITFWriteControl()
 void NITFWriteControl::initialize(Container* container)
 {
     // Clean up
-    // NOTE  We do not own the container, so we don't delete 'mContainer' here
     mInfos.clear();
-
-    mContainer = container;
+    mContainer.reset(container);
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;
     sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
