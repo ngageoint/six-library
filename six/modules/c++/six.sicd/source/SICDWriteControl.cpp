@@ -58,19 +58,13 @@ void SICDWriteControl::setComplexityLevelIfRequired()
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    // TODO: The implementation for this is hokey... the problem is that the
-    //       underlying WriteControl doesn't own the Container, but here we
-    //       need to create a Container for 'data' and need it to live longer
-    //       than this method.  If WriteControl holds onto the Container by
-    //       SharedPtr, this goes away.
-
-	mOurContainer.reset(new Container(DataType::COMPLEX));
+    mem::SharedPtr<Container> container(new Container(
+            DataType::COMPLEX));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    mOurContainer->addData(data.clone());
-
-	initialize(mOurContainer.get());
+    container->addData(data.clone());
+    initialize(container);
 }
 
 void SICDWriteControl::writeHeaders()

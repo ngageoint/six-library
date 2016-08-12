@@ -89,7 +89,7 @@ Converter::Converter(const std::string& pathname)
     reader.load(pathname);
 
     // Verify it's a SICD
-    const six::Container* container(reader.getContainer());
+    mem::SharedPtr<const six::Container> container(reader.getContainer());
     if (container->getDataType() != six::DataType::COMPLEX)
     {
         throw except::InvalidFormatException(Ctxt("Expected a SICD NITF"));

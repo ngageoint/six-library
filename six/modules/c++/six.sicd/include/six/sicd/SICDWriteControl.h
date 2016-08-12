@@ -121,9 +121,6 @@ private:
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;
-
-    std::auto_ptr<six::Container> mOurContainer;
-
     bool mHaveWrittenHeaders;
 };
 }

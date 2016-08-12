@@ -67,13 +67,14 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    six::Container container(six::DataType::COMPLEX);
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-    container.addData(data.clone());
+    container->addData(data.clone());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
     writer.setLogger(logger.get());
 
     six::BufferList buffers;
@@ -97,7 +98,7 @@ Data* readNITF(const std::string& pathname,
     reader.setLogger(&log);
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(pathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    mem::SharedPtr<six::Container> container = reader.getContainer();
 
     six::Region region;
     region.setStartRow(0);
@@ -305,7 +306,7 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
     void write(PyObject* data, const types::RowCol<size_t>& offset)
     {
         numpyutils::verifyArrayType(data, NPY_COMPLEX64);
-   
+
         // TODO: Force array to be contigious memory
         //       Right now we're requiring the caller to do that
         // TODO: If we get noncontiguous memory, maybe we want to

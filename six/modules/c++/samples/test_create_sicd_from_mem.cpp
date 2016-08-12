@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
                            "maxSize", "BYTES")->setDefault(-1);
         parser.addArgument("--class", "Classification Level", cli::STORE,
                            "classLevel", "LEVEL")->setDefault("UNCLASSIFIED");
-        parser.addArgument("--schema", 
+        parser.addArgument("--schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -165,8 +165,9 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        six::Container container(six::DataType::COMPLEX);
-        container.addData(scopedData);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                six::DataType::COMPLEX));
+        container->addData(scopedData);
         six::NITFWriteControl writer;
         writer.setLogger(logger.get());
 
@@ -195,7 +196,7 @@ int main(int argc, char** argv)
                                              maxSize);
         }
 
-        writer.initialize(&container);
+        writer.initialize(container);
 
         six::BufferList buffers;
         buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));

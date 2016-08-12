@@ -245,7 +245,7 @@ void NITFReadControl::load(nitf::IOInterface& ioInterface,
 
     mRecord = mReader.readIO(ioInterface);
     DataType dataType = getDataType(mRecord);
-    mContainer = new Container(dataType);
+    mContainer.reset(new Container(dataType));
 
     // First, read in the DE segments, and organize them
     nitf::List des = mRecord.getDataExtensions();
@@ -758,9 +758,6 @@ void NITFReadControl::reset()
         delete mInfos[ii];
     }
     mInfos.clear();
-
-    delete mContainer;
-    mContainer = NULL;
 }
 
 

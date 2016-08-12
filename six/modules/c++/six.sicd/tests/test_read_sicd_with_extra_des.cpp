@@ -95,11 +95,12 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
             generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data.release()));
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -209,8 +210,8 @@ int main(int argc, char** argv)
                 log);
 
         // reader retains ownership of these pointers
-        six::Container* const container = reader.getContainer();
-        six::Data* const readData = container->getData(0);
+        mem::SharedPtr<const six::Container> container = reader.getContainer();
+        const six::Data* readData = container->getData(0);
 
         if (*readData == *originalData)
         {

@@ -89,19 +89,17 @@ public:
                       const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
-     *  Get a const pointer to the current container.  This
-     *  container is not allocated, nor deleted by this class
+     *  Get a const pointer to the current container.
      */
-    const Container* getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
 
     /*!
-     *  Get a non-const pointer to the current container.  This
-     *  container is not allocated, nor deleted by this class
+     *  Get a non-const pointer to the current container.
      */
-    Container* getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mContainer;
     }
@@ -159,7 +157,7 @@ public:
     }
 
 protected:
-    Container* mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
