@@ -159,7 +159,7 @@ class TestCreator(unittest.TestCase):
             handle = IOHandle(outfile)
             reader = Reader()
             record = reader.read(handle)
-            #logging.info(str(record.header))
+            logging.info(str(record.header))
 
             # Read back in the band data to make sure the read/write
             # went okay
@@ -174,8 +174,6 @@ class TestCreator(unittest.TestCase):
             bandData = imageReader.read(window)
             readData = []
             for item in bandData[0]:
-                #if sys.version_info[0] == 2:
-                #    item = ord(item)
                 readData.append(item)
             assert (readData == alldata).all()
 
