@@ -206,6 +206,9 @@ struct BandInformation
 {
     BandInformation();
 
+    size_t numBands;
+
+    //! (Optional)
     std::vector<std::string> bandDescriptors;
 
     //! (Optional) Which band to display by default

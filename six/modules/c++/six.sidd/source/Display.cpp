@@ -111,7 +111,8 @@ bool BandEqualization::operator==(const BandEqualization& rhs) const
 }
 bool BandInformation::operator==(const BandInformation& rhs) const
 {
-    return (bandDescriptors == rhs.bandDescriptors &&
+    return (numBands == rhs.numBands &&
+            bandDescriptors == rhs.bandDescriptors &&
             displayFlag == rhs.displayFlag);
 }
 
