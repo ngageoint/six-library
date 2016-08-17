@@ -189,8 +189,11 @@ class IOHandle:
         return nitropy.py_IOHandle_write(self.ref, address, size,
             self.error) == 1
 
-    def read(self, size):
-        return nitropy.py_IOHandle_read(self.ref, size, self.error)
+    def read(self, numElements, dtype=numpy.dtype('b')):
+        size = numElements * dtype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_IOHandle_read(
+                self.ref, size, self.error), dtype=numpy.dtype('b'))
+        return numpy.fromstring(byteArray.tostring(), dtype)
 
     def tell(self):
         return nitropy.nrt_IOHandle_tell(self.ref, self.error)
@@ -244,8 +247,11 @@ class SegmentReader:
         logging.debug('destruct SegmentReader')
         if self.ref: nitropy.nitf_SegmentReader_destruct(self.ref)
 
-    def read(self, size):
-        return nitropy.py_SegmentReader_read(self.ref, size, self.error)
+    def read(self, size, datatype=numpy.dtype('b')):
+        size = size * datatype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_SegmentReader_read(
+                self.ref, size, self.error))
+        return numpy.fromstring(byteArray.tostring(), datatype)
 
     def getSize(self):
         return nitropy.nitf_SegmentReader_getSize(self.ref, self.error)
@@ -1113,8 +1119,11 @@ class DataSource:
         logging.debug('destruct DataSource')
         if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
 
-    def read(self, size):
-        return nitropy.py_DataSource_read(self.ref, size, self.error)
+    def read(self, numElements, dtype=numpy.dtype('b')):
+        size = numElements * dtype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_DataSource_read(
+                self.ref, size, self.error), dtype=numpy.dtype('b'))
+        return numpy.fromstring(byteArray.tostring(), dtype)
 
 
 class BandSource(DataSource):
@@ -1157,12 +1166,14 @@ class SegmentSource:
     """ Base SegmentSource class """
     def __init__(self, ref):
         self.ref = ref
+        self.attached = False
         if not hasattr(self, 'error'):
             self.error = Error()
 
     def __del__(self):
         logging.debug('destruct SegmentSource')
-        if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
+        if not self.attached:
+            if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
 
 
 class MemorySegmentSource(SegmentSource):
@@ -1214,7 +1225,11 @@ class SegmentWriter:
             if self.ref: nitropy.nitf_SegmentWriter_destruct(self.ref)
 
     def attachSource(self, source):
-        return nitropy.nitf_SegmentWriter_attachSource(self.ref, source.ref, self.error) == 1
+        val = nitropy.nitf_SegmentWriter_attachSource(self.ref, source.ref, self.error) == 1
+        if val:
+            # source.attached = True does not work for some reason
+            setattr(source, 'attached', True)
+        return val
 
 
 class Writer:

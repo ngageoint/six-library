@@ -22,12 +22,12 @@ def build(bld):
         # TODO: Update build.py's swigModule() to handle compiling C modules
         #       'features' and 'swig_flags' will be different
         tsk = bld(
-            features = 'c cshlib pyext add_targets',
+            features = 'cxx cshlib pyext add_targets',
             source = 'source/nitro.i',
             target = '_nitropy',
-            use='nitf-c++ numpyutils-c++',
+            use='numpyutils-c++ nitf-c++',
             env=env.derive(),
-            swig_flags='-python -c++',
+            swig_flags='-c++ -python',
             install_path='${PYTHONDIR}/nitf',
             name='nitf-python',
             targets_to_add='_nitropy_py',
@@ -35,7 +35,7 @@ def build(bld):
 
     else:
         bld(
-            features = 'c cshlib pyext add_targets',
+            features = 'cxx cshlib pyext add_targets',
             source = 'source/generated/nitropy_wrap.cxx',
             target = '_nitropy',
             use='nitf-c++',

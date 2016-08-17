@@ -25,6 +25,7 @@
 %{
 #include <import/nitf.h>
 #include <numpyutils/numpyutils.h>
+#include <iostream>
 %}
 
 #define NITF_LIST_TO_PYTHON_LIST(_type) \
@@ -572,13 +573,20 @@
     {
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
         nitf_Uint8 **buf = NULL;
-        PyObject* result = NULL;
+        nitf_Uint8 *pyArrayBuffer = NULL;
+        PyObject* result = Py_None;
         int padded, rowSkip, colSkip, subimageSize;
         nitf_Uint32 i;
+        types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
         subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+
+        dims.row = window->numBands;
+        dims.col = subimageSize;
+
+        numpyutils::createOrVerify(result, NPY_UINT8, dims);
 
         buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
         if (!buf)
@@ -599,25 +607,26 @@
             }
         }
 
-        result = PyList_New(window->numBands);
-
-        if (!nitf_ImageReader_read(reader, window, buf, &padded, error))
+        if (!nitf_ImageReader_read(reader, window,
+               buf, &padded, error))
         {
             nitf_Error_print(error, stderr, "Read failed");
             PyErr_SetString(PyExc_RuntimeError, "");
             goto CATCH_ERROR;
         }
 
-        for (i = 0; i < window->numBands; i++)
+        // Copy to output numpy array
+        pyArrayBuffer = numpyutils::getBuffer<nitf_Uint8>(result);
+        for (i = 0; i < window->numBands; ++i)
         {
-            PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
-            //PyObject* buffObj = PyMemoryView_FromMemory(buf[i],
-                    //subimageSize * sizeof(nitf_Uint8), PyBUF_READ);
-            PyList_SetItem(result, i, buffObj);
+            memcpy(pyArrayBuffer + i * subimageSize,
+                   buf[i], sizeof(nitf_Uint8) * subimageSize);
         }
 
-        //The PyList now owns the memory of the elements of buf,
-        //so only freeing buf itself.
+        for (i = 0; i < window->numBands; ++i)
+        {
+            NITF_FREE(buf[i]);
+        }
         NITF_FREE(buf);
         return result;
 
@@ -659,8 +668,13 @@
     PyObject* py_DataSource_read(nitf_DataSource* source, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!source)
         {
@@ -675,16 +689,19 @@
         }
 
         source->iface->read(source->data, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
-        return bufObj;
+        return pyArray;
     }
 
     PyObject* py_SegmentReader_read(nitf_SegmentReader* reader, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!buf)
         {
@@ -693,16 +710,19 @@
         }
 
         nitf_SegmentReader_read(reader, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
-        return bufObj;
+        return pyArray;
     }
 
     PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!buf)
         {
@@ -711,9 +731,7 @@
         }
 
         nitf_IOHandle_read(handle, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        //bufObj = PyMemoryView_FromMemory(buf, size, PyBUF_READ);
-        return bufObj;
+        return pyArray;
     }
 
 %}
