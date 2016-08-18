@@ -38,6 +38,7 @@ DRAHistogramOverrides::DRAHistogramOverrides() :
 }
 
 BandInformation::BandInformation() :
+    numBands(six::Init::undefined<size_t>()),
     displayFlag(six::Init::undefined<size_t>())
 {
 }
