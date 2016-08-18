@@ -38,6 +38,7 @@ DRAHistogramOverrides::DRAHistogramOverrides() :
 }
 
 BandInformation::BandInformation() :
+    numBands(six::Init::undefined<size_t>()),
     displayFlag(six::Init::undefined<size_t>())
 {
 }
@@ -111,7 +112,8 @@ bool BandEqualization::operator==(const BandEqualization& rhs) const
 }
 bool BandInformation::operator==(const BandInformation& rhs) const
 {
-    return (bandDescriptors == rhs.bandDescriptors &&
+    return (numBands == rhs.numBands &&
+            bandDescriptors == rhs.bandDescriptors &&
             displayFlag == rhs.displayFlag);
 }
 

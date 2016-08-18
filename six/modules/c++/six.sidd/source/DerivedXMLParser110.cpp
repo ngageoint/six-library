@@ -401,6 +401,8 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayElem,
 void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandElem,
             BandInformation& bandInformation) const
 {
+    parseInt(getFirstAndOnly(bandElem, "NumBands"), bandInformation.numBands);
+
     std::vector<XMLElem> bandDescriptors;
     bandElem->getElementsByTagName("BandDescriptor", bandDescriptors);
     bandInformation.bandDescriptors = std::vector<std::string>();
@@ -1717,8 +1719,10 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     if (display.bandInformation.get() != NULL)
     {
         XMLElem bandInfoElem = newElement("BandInformation", displayElem);
-        createInt("NumBands", display.bandInformation->bandDescriptors.size(),
-                bandInfoElem);
+        createInt("NumBands", display.bandInformation->numBands, bandInfoElem);
+
+        // BandDescriptors.size() is not necessarily equal to numBands
+        // For example, there may be 0 band descriptors
         for (size_t ii = 0;
                 ii < display.bandInformation->bandDescriptors.size(); ++ii)
         {
