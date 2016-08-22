@@ -178,6 +178,25 @@ namespace
     class TestScript
     {
     public:
+        size_t findSourceLine() const
+        {
+            size_t index = 0;
+            for (index = 1; index < mLines.size(); ++index)
+            {
+                if (!mLines[index].empty())
+                {
+                    break;
+                }
+            }
+
+            if (index == 0)
+            {
+                throw except::Exception(Ctxt("Test script appears empty"));
+            }
+
+            return index;
+        }
+
         TestScript(const std::string& pathname) :
             mPathname(pathname)
         {
@@ -185,35 +204,38 @@ namespace
             std::string line;
             while (std::getline(file, line))
             {
-                lines.push_back(line);
+                mLines.push_back(line);
             }
-            originalSource = str::split(lines[1], " ")[1];
+
+            std::string sourceLine = mLines[findSourceLine()];
+            mOriginalSource = str::split(sourceLine, " ")[1];
         }
 
         ~TestScript()
         {
-            setSource(originalSource);
+            setSource(mOriginalSource);
         }
 
         void setSource(const std::string& sourcePathname)
         {
-            std::vector<std::string> sourceLine = str::split(lines[1], " ");
+            std::vector<std::string> sourceLine = str::split(
+                    mLines[findSourceLine()], " ");
             sourceLine[1] = sourcePathname;
-            lines[1] = str::join(sourceLine, " ");
+            mLines[findSourceLine()] = str::join(sourceLine, " ");
             write();
         }
 
     private:
-        std::vector<std::string> lines;
-        std::string originalSource;
+        std::vector<std::string> mLines;
+        std::string mOriginalSource;
         const std::string mPathname;
 
         void write()
         {
             std::ofstream file(mPathname.c_str());
-            for (size_t ii = 0; ii < lines.size(); ++ii)
+            for (size_t ii = 0; ii < mLines.size(); ++ii)
             {
-                file << lines[ii] << "\n";
+                file << mLines[ii] << "\n";
             }
         }
     };
@@ -288,7 +310,7 @@ int main(int argc, char** argv)
         attachDESs(inputPathname, outputPathname);
 
         const std::string delimiter(sys::Path::delimiter());
-        const std::string testName = 
+        const std::string testName =
                 (getDataType(inputPathname) == six::DataType::COMPLEX) ?
                 "test_script_sicd" : "test_script_sidd";
         const std::string testFile = sys::Path::joinPaths("six",
@@ -308,6 +330,7 @@ int main(int argc, char** argv)
         ResultFile originalResult;
         sys::Exec originalCommand(vts + " < " + testFile + " > "
             + originalResult.pathname());
+
         originalCommand.run();
 
         testScript.setSource(outputPathname);

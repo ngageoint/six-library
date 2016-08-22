@@ -37,13 +37,19 @@ import utils
 from runner import CppTestRunner
 
 
+def clean(files):
+    for pathname in files:
+        if os.path.exists(pathname):
+            os.remove(pathname)
+
+
 def run(sourceDir):
     # If we don't run this before setting the paths, we won't be testing
     # the right things
 
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
-    
+
     '''
     if sourceDir != '':
         os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
@@ -98,16 +104,29 @@ def run(sourceDir):
     sampleTestRunner = CppTestRunner(sampleTestDir)
 
 
-
-    utils.installVts()
-
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
-        if not (sicdTestRunner.run('test_streaming_write') and
-                sampleTestRunner.run('test_read_nitf_from_vts', os.path.abspath(os.path.join(
-                   sicdDir, os.listdir(sicdDir)[0])), 'out_sicd.nitf') and
-                sampleTestRunner.run('test_read_nitf_from_vts', os.path.join(
-                    siddDir, os.listdir(siddDir)[0]), 'out_sicd.nitf') and
-                siddTestRunner.run('test_byte_swap')):
+        if not sicdTestRunner.run('test_streaming_write'):
+            return False
+
+        newFiles = utils.installVts()
+
+        for nitf in os.listdir(sicdDir):
+            nitf = os.path.join(sicdDir, nitf)
+            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
+                    'out.nitf'):
+                clean(newFiles)
+                return False
+
+        for nitf in os.listdir(siddDir):
+            nitf = os.path.join(siddDir, nitf)
+            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
+                    'out.nitf'):
+                clean(newFiles)
+                return False
+
+        clean(newFiles)
+
+        if not siddTestRunner.run('test_byte_swap'):
             return False
 
     if runUnitTests.run() == False:
