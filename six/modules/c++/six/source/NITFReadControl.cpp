@@ -159,8 +159,8 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
     // subheader.getSubheaderFields() will throw with a
     // NITRO-specific message).
     const sys::Uint64_T subheaderLength(subheader.getSubheaderFieldsLength());
-    std::string treTag("");
-    std::string desshsiField = "";
+    std::string treTag;
+    std::string desshsiField;
     if (subheaderLength != 0)
     {
         nitf::TRE tre = subheader.getSubheaderFields();

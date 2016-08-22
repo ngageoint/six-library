@@ -24,6 +24,7 @@
 
 import os
 import platform
+import shutil
 import sys
 
 from glob import glob
@@ -104,3 +105,15 @@ def executableName(pathname):
         return pathname + '.exe'
     return pathname
 
+def installVts():
+    os.environ['PATH'] = (os.environ['PATH'] + ";" +
+        os.path.join(installPath(), 'lib'))
+        
+    pluginDir = os.path.join(installPath(), 'share', 'CSM', 'plugins')
+    if platform.system() == 'Windows':
+        for plugin in os.listdir(pluginDir):
+            plugin = os.path.join(pluginDir, plugin)
+            shutil.copy(plugin, os.getcwd())
+        
+        
+    

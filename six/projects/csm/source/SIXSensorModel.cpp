@@ -1134,11 +1134,10 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
 
     nitf::TRE tre("XML_DATA_CONTENT");
     const size_t desshsiLength = tre.getField("DESSHSI").getLength();
-    std::string desshsiField = des.subHeader().substr(
+    std::string desshsiField = subheader.substr(
             desshsiOffset, desshsiLength);
     str::trim(desshsiField);
 
-    std::cerr << des.subHeader() << std::endl;
     return NITFReadControl::getDataType(desid,
             subheader.size() - DES_SUBHEADER_LENGTH,
             desshsiField,
