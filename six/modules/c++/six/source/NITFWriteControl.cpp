@@ -102,7 +102,6 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
     // Clean up
     mInfos.clear();
-    mContainer.reset();
     mContainer = container;
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;

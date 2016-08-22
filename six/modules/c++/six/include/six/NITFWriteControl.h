@@ -75,12 +75,6 @@ public:
         DEFAULT_BUFFER_SIZE = 8192
     };
 
-    // Get the container that we were initialized from (const)
-    const Container* getContainer() const
-    {
-        return mContainer.get();
-    }
-
     // Get the record that was generated during initialization
     nitf::Record getRecord() const
     {

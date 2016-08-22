@@ -89,7 +89,7 @@ public:
                       const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
-     *  Get a const pointer to the current container.
+     *  Get a const shared pointer to the current container.
      */
     mem::SharedPtr<const Container> getContainer() const
     {

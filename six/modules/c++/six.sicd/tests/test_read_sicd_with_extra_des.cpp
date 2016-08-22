@@ -97,7 +97,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
-    container->addData(dynamic_cast<six::Data*>(data.release()));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.initialize(container);

@@ -58,7 +58,6 @@ class GeoTIFFWriteControl : public WriteControl
     std::vector<Data*> mDerivedData;
 public:
     GeoTIFFWriteControl();
-    virtual ~GeoTIFFWriteControl() {}
 
 
     /*!
