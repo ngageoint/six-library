@@ -81,7 +81,6 @@ public:
         return mRecord;
     }
 
-    // Ownership is not transferred - 'container' must outlive this object
     virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;

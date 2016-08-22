@@ -209,8 +209,8 @@ int main(int argc, char** argv)
                 std::vector<std::string>(),
                 log);
 
-        // reader retains ownership of these pointers
         mem::SharedPtr<const six::Container> container = reader.getContainer();
+        // container retains ownership of this pointer
         const six::Data* readData = container->getData(0);
 
         if (*readData == *originalData)
