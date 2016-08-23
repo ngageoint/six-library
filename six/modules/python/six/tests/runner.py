@@ -26,6 +26,7 @@ class TestRunner(object):
         commandArgs.extend(args)
         result = False
         print(commandArgs)
+        print(os.listdir(os.getcwd()))
         if call(commandArgs) == 0:
             print("{0} succeeded!".format(testName))
             result = True

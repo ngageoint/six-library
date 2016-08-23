@@ -303,11 +303,13 @@ int main(int argc, char** argv)
 {
     try
     {
+        std::cerr << "VTS.exe\n";
         validateArguments(argc, argv);
         const std::string inputPathname(argv[1]);
         const std::string outputPathname(argv[2]);
 
         attachDESs(inputPathname, outputPathname);
+        std::cerr << "DESs attached\n";
 
         const std::string delimiter(sys::Path::delimiter());
         const std::string testName =
@@ -322,7 +324,8 @@ int main(int argc, char** argv)
         std::string vts = sys::Path::joinPaths("install",
             sys::Path::joinPaths("bin", "vts"));
         sys::OS os;
-        if (!os.isFile(vts))
+        std::cerr << "OS name: " << os.getPlatformName() << std::endl;
+        if (os.isFile(vts + ".exe"))
         {
             vts = vts + ".exe";
         }
