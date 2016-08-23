@@ -50,7 +50,6 @@ def run(sourceDir):
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
 
-    '''
     if sourceDir != '':
         os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
                 os.path.join(utils.installPath(), 'bin'))
@@ -70,9 +69,9 @@ def run(sourceDir):
         if success != 0:
             print("Error running crop_sicd")
             return False
-    '''
+
     utils.setPaths()
-    '''
+
     if platform.system() != 'SunOS':
         if makeRegressionFiles.run() == False:
             print("Error generating regression files")
@@ -92,7 +91,7 @@ def run(sourceDir):
     else:
         print('Warning: skipping the bulk of the test suite, '
                 'since Python modules are by default disabled on Solaris')
-    '''
+
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
     sampleTestDir = os.path.join(utils.installPath(), 'bin')
@@ -104,26 +103,22 @@ def run(sourceDir):
     sampleTestRunner = CppTestRunner(sampleTestDir)
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
-        #if not sicdTestRunner.run('test_streaming_write'):
-        #    return False
+        if not sicdTestRunner.run('test_streaming_write'):
+            return False
 
         for nitf in os.listdir(sicdDir):
-            print('Running SICD')
             nitf = os.path.join(sicdDir, nitf)
             if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
                     'out.nitf'):
                 clean(newFiles)
                 return False
-            print(os.listdir(os.getcwd()))
 
         for nitf in os.listdir(siddDir):
-            print('Running SIDD')
             nitf = os.path.join(siddDir, nitf)
             if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
                     'out.nitf'):
                 clean(newFiles)
                 return False
-            print(os.listdir(os.getcwd()))
 
         clean(newFiles)
 
