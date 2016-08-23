@@ -25,6 +25,7 @@ class TestRunner(object):
         commandArgs = self.createInvocation(pathname)
         commandArgs.extend(args)
         result = False
+        print(commandArgs)
         if call(commandArgs) == 0:
             print("{0} succeeded!".format(testName))
             result = True
