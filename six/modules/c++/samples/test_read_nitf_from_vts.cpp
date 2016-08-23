@@ -319,9 +319,11 @@ int main(int argc, char** argv)
                     sys::Path::joinPaths("tests", testName))));
         TestScript testScript(testFile);
         testScript.setSource(inputPathname);
-        std::string vts = sys::Path::joinPaths("install",
-            sys::Path::joinPaths("bin", "vts"));
+
         sys::OS os;
+        const std::string currentFile = os.getCurrentExecutable();
+        const std::string currentDirectory = sys::Path::splitPath(currentFile).first;
+        std::string vts = sys::Path::joinPaths(currentDirectory, "vts");
         if (!os.isFile(vts))
         {
             vts = vts + ".exe";
