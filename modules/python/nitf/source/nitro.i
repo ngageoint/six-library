@@ -159,12 +159,12 @@
 %typemap(in) nrt_IOHandle{
     if ($input)
     {
-        $1 = *(nrt_IOHandle*)($input);
+        $1 = (nrt_IOHandle) PyInt_AsLong($input);
     }
 }
 
 %typemap(out) nrt_IOHandle {
-    $result = SWIG_From_int((int)(result));
+    $result = SWIG_From_int((int)($1));
 }
 
 /* meant for nitf_PluginRegistry_retrieveTREHandler */

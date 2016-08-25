@@ -5509,7 +5509,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
@@ -5555,7 +5555,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), Py
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
@@ -5602,7 +5602,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   {
@@ -5650,7 +5650,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_tell(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
@@ -5680,7 +5680,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_getSize(PyObject *SWIGUNUSEDPARM(self), 
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
@@ -5705,7 +5705,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_close(PyObject *SWIGUNUSEDPARM(self), Py
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   nrt_IOHandle_close(arg1);
@@ -6704,7 +6704,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPAR
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   ecode2 = SWIG_AsVal_int(obj1, &val2);
@@ -8043,7 +8043,7 @@ SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     if (obj1)
     {
-      arg2 = *(nrt_IOHandle*)(obj1);
+      arg2 = (nrt_IOHandle) PyInt_AsLong(obj1);
     }
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
@@ -9049,7 +9049,7 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), P
   {
     if (obj2)
     {
-      arg3 = *(nrt_IOHandle*)(obj2);
+      arg3 = (nrt_IOHandle) PyInt_AsLong(obj2);
     }
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
@@ -17663,7 +17663,7 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   {
@@ -32578,7 +32578,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   {
@@ -33483,7 +33483,7 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
@@ -33529,7 +33529,7 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   {
@@ -34719,7 +34719,7 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     if (obj0)
     {
-      arg1 = *(nrt_IOHandle*)(obj0);
+      arg1 = (nrt_IOHandle) PyInt_AsLong(obj0);
     }
   }
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
