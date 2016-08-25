@@ -166,6 +166,10 @@
     }
 }
 
+%typemap(out) nrt_IOHandle {
+    $result = SWIG_From_int((int)(result));
+}
+
 /* meant for nitf_PluginRegistry_retrieveTREHandler */
 %typemap(in) int *had_error {
     $1 = &$input;

@@ -5477,7 +5477,9 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_create(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg4 = reinterpret_cast< nrt_Error * >(argp4);
   result = (nrt_IOHandle)nrt_IOHandle_create((char const *)arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_int(static_cast< int >(result));
+  {
+    resultobj = SWIG_From_int((int)(result));
+  }
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
   return resultobj;
 fail:
@@ -33459,7 +33461,9 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_create(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg4 = reinterpret_cast< nitf_Error * >(argp4);
   result = (nitf_IOHandle)py_IOHandle_create((char const *)arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_int(static_cast< int >(result));
+  {
+    resultobj = SWIG_From_int((int)(result));
+  }
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
   return resultobj;
 fail:
