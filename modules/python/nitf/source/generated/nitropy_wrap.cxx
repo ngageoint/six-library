@@ -5494,8 +5494,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyO
   void *arg2 = (void *) 0 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int res2 ;
   size_t val3 ;
   int ecode3 = 0 ;
@@ -5508,11 +5506,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyO
   bool result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nrt_IOHandle_read",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_read" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandle_read" "', argument " "2"" of type '" "void *""'"); 
@@ -5541,8 +5540,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), Py
   void *arg2 = (void *) 0 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int res2 ;
   size_t val3 ;
   int ecode3 = 0 ;
@@ -5555,11 +5552,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), Py
   bool result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nrt_IOHandle_write",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_write" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandle_write" "', argument " "2"" of type '" "void const *""'"); 
@@ -5588,8 +5586,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyO
   nrt_Off arg2 ;
   int arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
   int val3 ;
@@ -5603,11 +5599,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyO
   nrt_Off result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nrt_IOHandle_seek",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_seek" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
@@ -5643,8 +5640,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_tell(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject *resultobj = 0;
   nrt_IOHandle arg1 ;
   nrt_Error *arg2 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
@@ -5652,11 +5647,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_tell(PyObject *SWIGUNUSEDPARM(self), PyO
   nrt_Off result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOHandle_tell",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_tell" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandle_tell" "', argument " "2"" of type '" "nrt_Error *""'"); 
@@ -5674,8 +5670,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_getSize(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   nrt_IOHandle arg1 ;
   nrt_Error *arg2 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
@@ -5683,11 +5677,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_getSize(PyObject *SWIGUNUSEDPARM(self), 
   nrt_Off result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOHandle_getSize",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_getSize" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandle_getSize" "', argument " "2"" of type '" "nrt_Error *""'"); 
@@ -5704,16 +5699,15 @@ fail:
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_close(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IOHandle arg1 ;
-  int val1 ;
-  int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_IOHandle_close",&obj0)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandle_close" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   nrt_IOHandle_close(arg1);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -6697,8 +6691,6 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPAR
   nrt_IOHandle arg1 ;
   int arg2 ;
   nrt_Error *arg3 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
   void *argp3 = 0 ;
@@ -6709,11 +6701,12 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPAR
   nrt_IOInterface *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nrt_IOHandleAdapter_construct",&obj0,&obj1,&obj2)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "1"" of type '" "nrt_IOHandle""'");
-  } 
-  arg1 = static_cast< nrt_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "2"" of type '" "int""'");
@@ -8034,8 +8027,6 @@ SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -8049,11 +8040,12 @@ SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_read" "', argument " "1"" of type '" "nitf_Reader *""'"); 
   }
   arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_read" "', argument " "2"" of type '" "nitf_IOHandle""'");
-  } 
-  arg2 = static_cast< nitf_IOHandle >(val2);
+  {
+    if (obj1)
+    {
+      arg2 = *(nrt_IOHandle*)(obj1);
+    }
+  }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_read" "', argument " "3"" of type '" "nitf_Error *""'"); 
@@ -9035,8 +9027,6 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), P
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
   void *argp4 = 0 ;
   int res4 = 0 ;
   PyObject * obj0 = 0 ;
@@ -9056,11 +9046,12 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_prepare" "', argument " "2"" of type '" "nitf_Record *""'"); 
   }
   arg2 = reinterpret_cast< nitf_Record * >(argp2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_Writer_prepare" "', argument " "3"" of type '" "nitf_IOHandle""'");
-  } 
-  arg3 = static_cast< nitf_IOHandle >(val3);
+  {
+    if (obj2)
+    {
+      arg3 = *(nrt_IOHandle*)(obj2);
+    }
+  }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_prepare" "', argument " "4"" of type '" "nitf_Error *""'"); 
@@ -17655,8 +17646,6 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   int arg3 ;
   int arg4 ;
   nitf_Error *arg5 = (nitf_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   int val4 ;
@@ -17671,11 +17660,12 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   nitf_BandSource *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_FileSource_construct",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nitf_FileSource_construct" "', argument " "1"" of type '" "nitf_IOHandle""'");
-  } 
-  arg1 = static_cast< nitf_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   {
     arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
@@ -32574,8 +32564,6 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
   nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   void *argp4 = 0 ;
@@ -32587,11 +32575,12 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
   nitf_SegmentSource *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_SegmentFileSource_construct",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nitf_SegmentFileSource_construct" "', argument " "1"" of type '" "nitf_IOHandle""'");
-  } 
-  arg1 = static_cast< nitf_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   {
     arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
@@ -33478,8 +33467,6 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyO
   long long arg2 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   long long val2 ;
   int ecode2 = 0 ;
   size_t val3 ;
@@ -33493,11 +33480,12 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyO
   bool result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:py_IOHandle_write",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_write" "', argument " "1"" of type '" "nitf_IOHandle""'");
-  } 
-  arg1 = static_cast< nitf_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "py_IOHandle_write" "', argument " "2"" of type '" "long long""'");
@@ -33527,8 +33515,6 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyOb
   nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   void *argp4 = 0 ;
@@ -33540,11 +33526,12 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyOb
   nitf_Off result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:py_IOHandle_seek",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_seek" "', argument " "1"" of type '" "nitf_IOHandle""'");
-  } 
-  arg1 = static_cast< nitf_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   {
     arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
@@ -34719,8 +34706,6 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   nitf_IOHandle arg1 ;
   size_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
-  int val1 ;
-  int ecode1 = 0 ;
   size_t val2 ;
   int ecode2 = 0 ;
   void *argp3 = 0 ;
@@ -34731,11 +34716,12 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:py_IOHandle_read",&obj0,&obj1,&obj2)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_read" "', argument " "1"" of type '" "nitf_IOHandle""'");
-  } 
-  arg1 = static_cast< nitf_IOHandle >(val1);
+  {
+    if (obj0)
+    {
+      arg1 = *(nrt_IOHandle*)(obj0);
+    }
+  }
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "py_IOHandle_read" "', argument " "2"" of type '" "size_t""'");
