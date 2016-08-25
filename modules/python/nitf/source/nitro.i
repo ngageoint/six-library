@@ -163,7 +163,7 @@
     }
 }
 
-%typemap(out) nrt_IOHandle {
+%typemap(out) nrt_IOHandle{
     $result = SWIG_From_int((int)($1));
 }
 
