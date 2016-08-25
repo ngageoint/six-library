@@ -156,6 +156,16 @@
     }
 }
 
+%typemap(in) nrt_IOHandle**{
+    if ($input)
+    {
+        nrt_IOHandle* temp = 0;
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nrt_IOHandle*), 0 |  0 ) != -1 && temp)
+            $1 = (nitf_SegmentSource**)&temp;
+
+    }
+}
+
 /* meant for nitf_PluginRegistry_retrieveTREHandler */
 %typemap(in) int *had_error {
     $1 = &$input;
