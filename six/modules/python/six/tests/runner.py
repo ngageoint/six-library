@@ -13,7 +13,7 @@ class TestRunner(object):
     def clean(self):
         currentFiles = os.listdir(os.getcwd())
         for f in currentFiles:
-            if f not in self.previousFiles:
+            if f not in self.previousFiles and not os.path.islink(f):
                 os.remove(f)
 
     def createInvocation(self, pathname):
