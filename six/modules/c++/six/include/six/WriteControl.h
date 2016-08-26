@@ -176,9 +176,17 @@ public:
     }
 
     /*!
+     * shared pointer to Container
+     */
+    mem::SharedPtr<Container> getContainer()
+    {
+        return mContainer;
+    }
+
+    /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer()
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
