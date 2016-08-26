@@ -156,16 +156,18 @@
     }
 }
 
+#ifdef SWIGWIN
 %typemap(in) nrt_IOHandle{
     if ($input)
     {
-        $1 = (nrt_IOHandle) PyInt_AsLong($input);
+        $1 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask($input);
     }
 }
 
 %typemap(out) nrt_IOHandle{
-    $result = SWIG_From_int((int)($1));
+    $result = PyInt_FromSize_t($1);
 }
+#endif
 
 /* meant for nitf_PluginRegistry_retrieveTREHandler */
 %typemap(in) int *had_error {
