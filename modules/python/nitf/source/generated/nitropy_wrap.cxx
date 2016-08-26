@@ -5481,7 +5481,7 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandle_create(PyObject *SWIGUNUSEDPARM(self), P
 #ifdef SWIGWIN
     resultobj = PyInt_FromSize_t(result);
 #else
-    resultobj = PyInt_FromLong(result);
+    resultobj = PyInt_FromLong((long long)(result));
 #endif
   }
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
@@ -33502,7 +33502,7 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_create(PyObject *SWIGUNUSEDPARM(self), Py
 #ifdef SWIGWIN
     resultobj = PyInt_FromSize_t(result);
 #else
-    resultobj = PyInt_FromLong(result);
+    resultobj = PyInt_FromLong((long long)(result));
 #endif
   }
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;

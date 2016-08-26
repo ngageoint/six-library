@@ -171,7 +171,7 @@
     %#ifdef SWIGWIN
         $result = PyInt_FromSize_t($1);
     %#else
-        $result = PyInt_FromLong($1);
+        $result = PyInt_FromLong((long long)($1));
     %#endif
 }
 
