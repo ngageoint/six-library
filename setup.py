@@ -21,11 +21,10 @@ codaPyds = [os.path.basename(pyd) for pyd in codaPyds]
 sixPyds = glob.glob(os.path.join(packages, 'pysix', '_*pyd'))
 sixPyds = [os.path.basename(pyd) for pyd in sixPyds]
 
-
+#package_dir = {'': packages},
 
 setup(name='pysix',
       version='2.2.1',
-      package_dir = {'': packages},
       description = str(codaPyds),
       packages=['pysix', 'coda'],
       package_data= {
