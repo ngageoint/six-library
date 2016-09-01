@@ -198,7 +198,11 @@ SwigPyIterator_swigregister(SwigPyIterator)
 
 import coda.coda_sys
 
-import cPickle as pickle
+import sys
+if sys.version_info[0] == 2:
+    import cPickle as pickle
+else:
+    import pickle
 
 class RowColDouble(_object):
     """Proxy of C++ types::RowCol<(double)> class"""
@@ -800,6 +804,221 @@ class VectorRowColInt(_object):
     __del__ = lambda self: None
 VectorRowColInt_swigregister = _coda_types.VectorRowColInt_swigregister
 VectorRowColInt_swigregister(VectorRowColInt)
+
+class VectorRowColDouble(_object):
+    """Proxy of C++ std::vector<(types::RowCol<(double)>)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorRowColDouble, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorRowColDouble, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorRowColDouble self) -> SwigPyIterator"""
+        return _coda_types.VectorRowColDouble_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorRowColDouble self) -> bool"""
+        return _coda_types.VectorRowColDouble___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorRowColDouble self) -> bool"""
+        return _coda_types.VectorRowColDouble___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"""
+        return _coda_types.VectorRowColDouble___len__(self)
+
+
+    def pop(self):
+        """pop(VectorRowColDouble self) -> RowColDouble"""
+        return _coda_types.VectorRowColDouble_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j) -> VectorRowColDouble"""
+        return _coda_types.VectorRowColDouble___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j, VectorRowColDouble v)
+        __setslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j)
+        """
+        return _coda_types.VectorRowColDouble___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j)"""
+        return _coda_types.VectorRowColDouble___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i)
+        __delitem__(VectorRowColDouble self, PySliceObject * slice)
+        """
+        return _coda_types.VectorRowColDouble___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorRowColDouble self, PySliceObject * slice) -> VectorRowColDouble
+        __getitem__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i) -> RowColDouble
+        """
+        return _coda_types.VectorRowColDouble___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorRowColDouble self, PySliceObject * slice, VectorRowColDouble v)
+        __setitem__(VectorRowColDouble self, PySliceObject * slice)
+        __setitem__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, RowColDouble x)
+        """
+        return _coda_types.VectorRowColDouble___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorRowColDouble self, RowColDouble x)"""
+        return _coda_types.VectorRowColDouble_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorRowColDouble self) -> bool"""
+        return _coda_types.VectorRowColDouble_empty(self)
+
+
+    def size(self):
+        """size(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"""
+        return _coda_types.VectorRowColDouble_size(self)
+
+
+    def clear(self):
+        """clear(VectorRowColDouble self)"""
+        return _coda_types.VectorRowColDouble_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorRowColDouble self, VectorRowColDouble v)"""
+        return _coda_types.VectorRowColDouble_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::allocator_type"""
+        return _coda_types.VectorRowColDouble_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::iterator"""
+        return _coda_types.VectorRowColDouble_begin(self)
+
+
+    def end(self):
+        """end(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::iterator"""
+        return _coda_types.VectorRowColDouble_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::reverse_iterator"""
+        return _coda_types.VectorRowColDouble_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::reverse_iterator"""
+        return _coda_types.VectorRowColDouble_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorRowColDouble self)"""
+        return _coda_types.VectorRowColDouble_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator pos) -> std::vector< types::RowCol< double > >::iterator
+        erase(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator first, std::vector< types::RowCol< double > >::iterator last) -> std::vector< types::RowCol< double > >::iterator
+        """
+        return _coda_types.VectorRowColDouble_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(types::RowCol<(double)>)> self) -> VectorRowColDouble
+        __init__(std::vector<(types::RowCol<(double)>)> self, VectorRowColDouble arg2) -> VectorRowColDouble
+        __init__(std::vector<(types::RowCol<(double)>)> self, std::vector< types::RowCol< double > >::size_type size) -> VectorRowColDouble
+        __init__(std::vector<(types::RowCol<(double)>)> self, std::vector< types::RowCol< double > >::size_type size, RowColDouble value) -> VectorRowColDouble
+        """
+        this = _coda_types.new_VectorRowColDouble(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorRowColDouble self, RowColDouble x)"""
+        return _coda_types.VectorRowColDouble_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorRowColDouble self) -> RowColDouble"""
+        return _coda_types.VectorRowColDouble_front(self)
+
+
+    def back(self):
+        """back(VectorRowColDouble self) -> RowColDouble"""
+        return _coda_types.VectorRowColDouble_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type n, RowColDouble x)"""
+        return _coda_types.VectorRowColDouble_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type new_size)
+        resize(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type new_size, RowColDouble x)
+        """
+        return _coda_types.VectorRowColDouble_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator pos, RowColDouble x) -> std::vector< types::RowCol< double > >::iterator
+        insert(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator pos, std::vector< types::RowCol< double > >::size_type n, RowColDouble x)
+        """
+        return _coda_types.VectorRowColDouble_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type n)"""
+        return _coda_types.VectorRowColDouble_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"""
+        return _coda_types.VectorRowColDouble_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _coda_types.delete_VectorRowColDouble
+    __del__ = lambda self: None
+VectorRowColDouble_swigregister = _coda_types.VectorRowColDouble_swigregister
+VectorRowColDouble_swigregister(VectorRowColDouble)
 
 class VectorSizeT(_object):
     """Proxy of C++ std::vector<(size_t)> class"""

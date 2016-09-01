@@ -38,10 +38,35 @@ typedef math::linear::Vector<double> VectorDouble;
 %include "carrays.i"
 %array_functions(double, doubleArray);
 
+// Pickle utilities
+%import <types.i> // for std::vector pickling
+%pythoncode
+%{
+    import cPickle as pickle
+%}
+
 %include "math/poly/OneD.h"
+%extend math::poly::OneD
+{
+%pythoncode
+%{
+    def __setstate__(self, state):
+        """Recursive unpickling method for SWIG-wrapped Poly1D."""
+        self.__init__(pickle.loads(state.pop('coeffs')))
+
+    def __getstate__(self):
+        """Recursive pickling method for SWIG-wrapped Poly1D."""
+        # Create a dictionary of parameters and values
+        state = {}
+    
+        # Use swig_setmethods to get only data we can set later
+        state['coeffs'] = pickle.dumps(self.coeffs())
+        return state
+%}
+}
 
 %template(Poly1D) math::poly::OneD<double>;
-
+%template(Vector3Coefficients) std::vector<math::linear::VectorN<3, double> >;
 
 %extend math::poly::OneD<double>
 {
@@ -97,8 +122,27 @@ typedef math::linear::Vector<double> VectorDouble;
 }
 
 %include "math/poly/TwoD.h"
+%extend math::poly::TwoD
+{
+%pythoncode
+%{
+    def __setstate__(self, state):
+        """Recursive unpickling method for SWIG-wrapped Poly2D."""
+        self.__init__(pickle.loads(state.pop('coeffs')))
+
+    def __getstate__(self):
+        """Recursive pickling method for SWIG-wrapped Poly2D."""
+        # Create a dictionary of parameters and values
+        state = {}
+    
+        # Use swig_setmethods to get only data we can set later
+        state['coeffs'] = pickle.dumps(self.coeffs())
+        return state
+%}
+}
 
 %template(Poly2D) math::poly::TwoD<double>;
+%template(Poly1DVector) std::vector<math::poly::OneD<double>>;
 
 %extend math::poly::TwoD<double>
 {
@@ -182,6 +226,7 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return pyresult;
     }
+
 }
 
 %include "math/poly/Fit.h"

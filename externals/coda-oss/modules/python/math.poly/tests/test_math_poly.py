@@ -25,6 +25,7 @@
 """
 
 import sys
+import cPickle as pickle
 from coda.math_linear import VectorDouble, MatrixDouble, Vector3
 from coda.math_poly import *
 
@@ -64,6 +65,13 @@ if __name__ == '__main__':
     else:
         sys.exit('Setting 1D OOB did not throw!')
 
+    # Pickle and unpickle
+    pPoly1D = pickle.loads(pickle.dumps(poly1D))
+    if pPoly1D.coeffs() == poly1D.coeffs():
+        print('Pickling and unpickling 1D matched as expected')
+    else:
+        sys.exit('Pickling 1D did not match!')
+
     #################
     # Basic 2D test #
     #################
@@ -101,6 +109,13 @@ if __name__ == '__main__':
         print('Setting 2D OOB threw as expected')
     else:
         sys.exit('Setting 2D OOB did not throw!')
+
+    # Pickle and unpickle
+    pPoly2D = pickle.loads(pickle.dumps(poly2D))
+    if pPoly2D == poly2D:
+        print('Pickling and unpickling 2D matched as expected')
+    else:
+        sys.exit('Pickling 2D did not match!')
 
     ############################
     # 1D Fit test (array args) #
