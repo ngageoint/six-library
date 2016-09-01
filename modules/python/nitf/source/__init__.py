@@ -129,7 +129,7 @@ IMAGE_SUBHEADER_FIELDS = [
     {'id' : 'IXSOFL', 'name' : 'extendedHeaderOverflow', },
 ]
 
-def _bufferFromData(data):
+def _bufferFromData(data, dtype=numpy.uint8):
     """Return a 2-tuple consistning of
     1). The memory address of the beginning of an array-like data object.
     2). The size of the buffer, in bytes
@@ -138,7 +138,7 @@ def _bufferFromData(data):
     """
     buf = None
     try:
-        buf = numpy.ascontiguousarray(data)
+        buf = numpy.ascontiguousarray(data, dtype=dtype)
     except:
         raise ValueError("Cannot convert data to Numpy array")
 
@@ -179,8 +179,8 @@ class IOHandle:
     def __del__(self):
         self.close()
 
-    def write(self, data, size=-1):
-        address, bufferSize = _bufferFromData(data)
+    def write(self, data, size=-1, dtype=numpy.uint8):
+        address, bufferSize = _bufferFromData(data, dtype)
         if size == -1:
             size = bufferSize
         elif size > bufferSize:
@@ -1150,7 +1150,9 @@ class MemoryBandSource(BandSource):
             raise ValueError("Attempting to read {0} bytes from buffer "
             "of size {1} bytes.", size * nbpp, data.size * data.itemsize)
 
-        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(data.__array_interface__['data'][0], size, start, nbpp, pixelskip, self.error))
+        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(
+            data.__array_interface__['data'][0], size, start, nbpp, pixelskip,
+            self.error))
 
 
 class FileBandSource(BandSource):
@@ -1180,11 +1182,14 @@ class MemorySegmentSource(SegmentSource):
     """ SegmentSource derived from memory """
     def __init__(self, data, size=-1, start=0, byteSkip=0):
         self.error = Error()
-        address, buffersize = _bufferFromData(data)
+        address, buffersize = _bufferFromData(data, data.dtype)
 
         if size == -1:
             size = buffersize
-        SegmentSource.__init__(self, nitropy.py_nitf_SegmentMemorySource_construct(data.__array_interface__['data'][0], size, start, byteSkip, True, self.error))
+        SegmentSource.__init__(self,
+                nitropy.py_nitf_SegmentMemorySource_construct(
+                data.__array_interface__['data'][0], size, start, byteSkip,
+                True, self.error))
 
 
 class FileSegmentSource(SegmentSource):

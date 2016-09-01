@@ -66,15 +66,16 @@ def testHandle(nitf):
             createFlags = IOHandle.CREATE)
     data = [1, 2, 3, 4, 5]
     sizeInBytes = len(data) * 8
-    handleWrite.write(data, sizeInBytes)
+    handleWrite.write(data, sizeInBytes, np.dtype('int64'))
     handleWrite.close()
 
     # Read it back in to verify
     handleRead = IOHandle('new.nitf')
     try:
-        readData = handleRead.read(len(data), np.dtype('int'))
+        readData = handleRead.read(len(data), np.dtype('int64'))
         assert (data == readData).all()
     finally:
+        handleRead.close()
         os.remove('new.nitf')
 
 
@@ -104,6 +105,7 @@ def testSegmentReader():
     try:
         assert(data == readData).all()
     finally:
+        del reader #This has to delete before we are free to remove the file
         os.remove(outfile)
 
 
