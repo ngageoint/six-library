@@ -197,6 +197,11 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _math_linear.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+
+import cPickle as pickle
+
+import coda.coda_types
+import coda.coda_sys
 class std_vector_double(_object):
     """Proxy of C++ std::vector<(double)> class"""
     __swig_setmethods__ = {}
@@ -395,6 +400,17 @@ class std_vector_double(_object):
     def capacity(self):
         """capacity(std_vector_double self) -> std::vector< double >::size_type"""
         return _math_linear.std_vector_double_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
 
     __swig_destroy__ = _math_linear.delete_std_vector_double
     __del__ = lambda self: None
@@ -600,6 +616,17 @@ class std_vector_vector_double(_object):
         """capacity(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
         return _math_linear.std_vector_vector_double_capacity(self)
 
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
     __swig_destroy__ = _math_linear.delete_std_vector_vector_double
     __del__ = lambda self: None
 std_vector_vector_double_swigregister = _math_linear.std_vector_vector_double_swigregister
@@ -722,14 +749,14 @@ class Matrix3x1(_object):
 
 
     def decomposeLU(self, pivotsM):
-        """decomposeLU(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > & pivotsM) -> Matrix3x1"""
+        """decomposeLU(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1"""
         return _math_linear.Matrix3x1_decomposeLU(self, pivotsM)
 
 
     def permute(self, *args):
         """
-        permute(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=1) -> Matrix3x1
-        permute(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> Matrix3x1
+        permute(Matrix3x1 self, VectorSizeT pivotsM, size_t n=1) -> Matrix3x1
+        permute(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1
         """
         return _math_linear.Matrix3x1_permute(self, *args)
 
@@ -772,6 +799,11 @@ class Matrix3x1(_object):
     def __div__(self, scalar):
         """__div__(Matrix3x1 self, double scalar) -> Matrix3x1"""
         return _math_linear.Matrix3x1___div__(self, scalar)
+
+
+    def __neg__(self):
+        """__neg__(Matrix3x1 self) -> Matrix3x1"""
+        return _math_linear.Matrix3x1___neg__(self)
 
 Matrix3x1_swigregister = _math_linear.Matrix3x1_swigregister
 Matrix3x1_swigregister(Matrix3x1)
@@ -884,6 +916,11 @@ class Vector2(_object):
         return _math_linear.Vector2___sub__(self, v)
 
 
+    def __neg__(self):
+        """__neg__(Vector2 self) -> Vector2"""
+        return _math_linear.Vector2___neg__(self)
+
+
     def __imul__(self, *args):
         """
         __imul__(Vector2 self, Vector2 v) -> Vector2
@@ -908,6 +945,12 @@ class Vector2(_object):
     def __div__(self, v):
         """__div__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___div__(self, v)
+
+
+    def __getstate__(self):
+        return pickle.dumps(self.vals())
+    def __setstate__(self, state):
+        self.__init__(pickle.loads(state))
 
 
     def __getitem__(self, i):
@@ -1045,6 +1088,11 @@ class Vector3(_object):
         return _math_linear.Vector3___sub__(self, v)
 
 
+    def __neg__(self):
+        """__neg__(Vector3 self) -> Vector3"""
+        return _math_linear.Vector3___neg__(self)
+
+
     def __imul__(self, *args):
         """
         __imul__(Vector3 self, Vector3 v) -> Vector3
@@ -1069,6 +1117,12 @@ class Vector3(_object):
     def __div__(self, v):
         """__div__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___div__(self, v)
+
+
+    def __getstate__(self):
+        return pickle.dumps(self.vals())
+    def __setstate__(self, state):
+        self.__init__(pickle.loads(state))
 
 
     def __getitem__(self, i):
@@ -1212,6 +1266,11 @@ class VectorDouble(_object):
     def __sub__(self, v):
         """__sub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___sub__(self, v)
+
+
+    def __neg__(self):
+        """__neg__(VectorDouble self) -> VectorDouble"""
+        return _math_linear.VectorDouble___neg__(self)
 
 
     def __imul__(self, *args):
@@ -1395,14 +1454,14 @@ class MatrixDouble(_object):
 
 
     def decomposeLU(self, pivotsM):
-        """decomposeLU(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > & pivotsM) -> MatrixDouble"""
+        """decomposeLU(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble"""
         return _math_linear.MatrixDouble_decomposeLU(self, pivotsM)
 
 
     def permute(self, pivotsM, n=0):
         """
-        permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=0) -> MatrixDouble
-        permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> MatrixDouble
+        permute(MatrixDouble self, VectorSizeT pivotsM, size_t n=0) -> MatrixDouble
+        permute(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble
         """
         return _math_linear.MatrixDouble_permute(self, pivotsM, n)
 
@@ -1448,6 +1507,11 @@ class MatrixDouble(_object):
         __mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
         """
         return _math_linear.MatrixDouble___mul__(self, *args)
+
+
+    def __neg__(self):
+        """__neg__(MatrixDouble self) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___neg__(self)
 
 
     def __getitem__(self, inObj):
