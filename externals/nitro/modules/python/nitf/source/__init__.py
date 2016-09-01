@@ -26,12 +26,12 @@
 Python wrapper for the NITRO library
 """
 ##############################################################################
-import nitropy
-from nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
-import logging, types, new
+import nitf.nitropy
+from nitf.nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
+import logging, types
 import numpy
 
-from nitropy import nrt_Error as Error
+from nitf.nitropy import nrt_Error as Error
 Error.__repr__=lambda s: s.message
 
 __all__ = ['BandInfo', 'BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
@@ -129,7 +129,7 @@ IMAGE_SUBHEADER_FIELDS = [
     {'id' : 'IXSOFL', 'name' : 'extendedHeaderOverflow', },
 ]
 
-def _bufferFromData(data):
+def _bufferFromData(data, dtype=numpy.uint8):
     """Return a 2-tuple consistning of
     1). The memory address of the beginning of an array-like data object.
     2). The size of the buffer, in bytes
@@ -138,7 +138,7 @@ def _bufferFromData(data):
     """
     buf = None
     try:
-        buf = numpy.ascontiguousarray(data)
+        buf = numpy.ascontiguousarray(data, dtype=dtype)
     except:
         raise ValueError("Cannot convert data to Numpy array")
 
@@ -172,15 +172,15 @@ class IOHandle:
         self.ref = nitropy.py_IOHandle_create(
             filename, accessFlags, createFlags, self.error)
         if self.ref < 0:
-            raise Exception, 'Unable to open IOHandle at location %s' % filename
+            raise Exception('Unable to open IOHandle at location %s' % filename)
         self.open = True
 
     #close the handle
     def __del__(self):
         self.close()
 
-    def write(self, data, size=-1):
-        address, bufferSize = _bufferFromData(data)
+    def write(self, data, size=-1, dtype=numpy.uint8):
+        address, bufferSize = _bufferFromData(data, dtype)
         if size == -1:
             size = bufferSize
         elif size > bufferSize:
@@ -189,8 +189,11 @@ class IOHandle:
         return nitropy.py_IOHandle_write(self.ref, address, size,
             self.error) == 1
 
-    def read(self, size):
-        return nitropy.py_IOHandle_read(self.ref, size, self.error)
+    def read(self, numElements, dtype=numpy.dtype('b')):
+        size = numElements * dtype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_IOHandle_read(
+                self.ref, size, self.error), dtype=numpy.dtype('b'))
+        return numpy.fromstring(byteArray.tostring(), dtype)
 
     def tell(self):
         return nitropy.nrt_IOHandle_tell(self.ref, self.error)
@@ -227,7 +230,7 @@ class ImageReader:
             window.numCols, window.bandList, downsampler, self.error)
         dataBuf = nitropy.py_ImageReader_read(self.ref, win, self.nbpp, self.error)
         if self.error.level:
-            raise Exception, self.error.message
+            raise Exception(self.error.message)
         return dataBuf
 
 
@@ -244,8 +247,11 @@ class SegmentReader:
         logging.debug('destruct SegmentReader')
         if self.ref: nitropy.nitf_SegmentReader_destruct(self.ref)
 
-    def read(self, size):
-        return nitropy.py_SegmentReader_read(self.ref, size, self.error)
+    def read(self, size, datatype=numpy.dtype('b')):
+        size = size * datatype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_SegmentReader_read(
+                self.ref, size, self.error))
+        return numpy.fromstring(byteArray.tostring(), datatype)
 
     def getSize(self):
         return nitropy.nitf_SegmentReader_getSize(self.ref, self.error)
@@ -341,7 +347,7 @@ class Reader:
         self.io = handle #must set this so it doesn't get ref-counted away
         record = nitropy.nitf_Reader_read(self.ref, self.io.ref, self.error)
         if not record:
-            raise Exception, self.error.message
+            raise Exception(self.error.message)
         self.record = Record(record)
         return self.record
 
@@ -522,7 +528,7 @@ class FieldHeader:
     def __getitem__(self, key):
         """ Provide container get """
         key = key.lower()
-        if self.fieldMap.has_key(key):
+        if key in self.fieldMap:
             return Field(eval(self.fieldMap[key]))
         raise KeyError('Field not found: %s' % key)
 
@@ -530,14 +536,14 @@ class FieldHeader:
         """ Provide the container 'set' functionality """
         #truncate the value if it is too long...
         key = key.lower()
-        if self.fieldMap.has_key(key):
+        if key in self.fieldMap:
             field = Field(eval(self.fieldMap[key]))
             field.setString(str(value)[0:field.getLength()])
         else:
             raise KeyError('Field not found: %s' % key)
 
     def __contains__(self, key):
-        return self.fieldMap.has_key(key.lower())
+        return (key.lower() in self.fieldMap)
 
 
     def __iter__(self):
@@ -601,7 +607,7 @@ class FileHeader(Header):
     e.g.
     >>> infoList = header['imageinfo']
     >>> #print the first component info object
-    >>> print infoList[0]
+    >>> print(infoList[0])
     """
 
     def __init__(self, ref):
@@ -622,7 +628,7 @@ class FileHeader(Header):
         except:
             #try this one
             lowkey = key.lower()
-            if self.infoMap.has_key(lowkey):
+            if lowkey in self.infoMap:
                 func, type = self.infoMap[lowkey]
                 return func(type)
             else:
@@ -1088,11 +1094,11 @@ class ImageSource:
         return band
 
     def __call__(self):
-        print "ImageSource.__call__"
+        print("ImageSource.__call__")
         arr = []
-        print "Size: " + str(self.ref.size)
+        print("Size: " + str(self.ref.size))
         for index in range(self.ref.size):
-            print index
+            print(index)
             arr.append(self.getBand(index))
         return arr
 
@@ -1113,8 +1119,11 @@ class DataSource:
         logging.debug('destruct DataSource')
         if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
 
-    def read(self, size):
-        return nitropy.py_DataSource_read(self.ref, size, self.error)
+    def read(self, numElements, dtype=numpy.dtype('b')):
+        size = numElements * dtype.itemsize
+        byteArray = numpy.frombuffer(nitropy.py_DataSource_read(
+                self.ref, size, self.error), dtype=numpy.dtype('b'))
+        return numpy.fromstring(byteArray.tostring(), dtype)
 
 
 class BandSource(DataSource):
@@ -1141,7 +1150,9 @@ class MemoryBandSource(BandSource):
             raise ValueError("Attempting to read {0} bytes from buffer "
             "of size {1} bytes.", size * nbpp, data.size * data.itemsize)
 
-        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(data.__array_interface__['data'][0], size, start, nbpp, pixelskip, self.error))
+        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(
+            data.__array_interface__['data'][0], size, start, nbpp, pixelskip,
+            self.error))
 
 
 class FileBandSource(BandSource):
@@ -1157,23 +1168,28 @@ class SegmentSource:
     """ Base SegmentSource class """
     def __init__(self, ref):
         self.ref = ref
+        self.attached = False
         if not hasattr(self, 'error'):
             self.error = Error()
 
     def __del__(self):
         logging.debug('destruct SegmentSource')
-        if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
+        if not self.attached:
+            if self.ref: nitropy.nitf_DataSource_destruct(self.ref)
 
 
 class MemorySegmentSource(SegmentSource):
     """ SegmentSource derived from memory """
     def __init__(self, data, size=-1, start=0, byteSkip=0):
         self.error = Error()
-        address, buffersize = _bufferFromData(data)
+        address, buffersize = _bufferFromData(data, data.dtype)
 
         if size == -1:
             size = buffersize
-        SegmentSource.__init__(self, nitropy.py_nitf_SegmentMemorySource_construct(data.__array_interface__['data'][0], size, start, byteSkip, True, self.error))
+        SegmentSource.__init__(self,
+                nitropy.py_nitf_SegmentMemorySource_construct(
+                data.__array_interface__['data'][0], size, start, byteSkip,
+                True, self.error))
 
 
 class FileSegmentSource(SegmentSource):
@@ -1214,7 +1230,11 @@ class SegmentWriter:
             if self.ref: nitropy.nitf_SegmentWriter_destruct(self.ref)
 
     def attachSource(self, source):
-        return nitropy.nitf_SegmentWriter_attachSource(self.ref, source.ref, self.error) == 1
+        val = nitropy.nitf_SegmentWriter_attachSource(self.ref, source.ref, self.error) == 1
+        if val:
+            # source.attached = True does not work for some reason
+            setattr(source, 'attached', True)
+        return val
 
 
 class Writer:
@@ -1238,7 +1258,7 @@ class Writer:
             self._imageWriters.append(writer)
             writer.attached = True
             return writer
-        raise Exception, 'Unable to get new ImageWriter: (%s)' % self.error.message
+        raise Exception('Unable to get new ImageWriter: (%s)' % self.error.message)
 
     def newGraphicWriter(self, num):
         writer = nitropy.nitf_Writer_newGraphicWriter(self.ref, num, self.error)
@@ -1247,7 +1267,7 @@ class Writer:
             self._graphicWriters.append(writer)
             writer.attached = True
             return writer
-        raise Exception, 'Unable to get new GraphicWriter: (%s)' % self.error.message
+        raise Exception('Unable to get new GraphicWriter: (%s)' % self.error.message)
 
     def prepare(self, record, handle):
         self.io = handle #must set this so it doesn't get ref-counted away
@@ -1307,7 +1327,7 @@ def metadata(filename):
     def dumpHeader(header, desc, extensions={}):
         print('--- %s ---' % desc)
         print(str(header))
-        for section, tres in extensions.iteritems():
+        for section, tres in extensions.items():
             for tre in tres:
                 dumpTRE(tre, section)
 
