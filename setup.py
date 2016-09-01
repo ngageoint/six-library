@@ -15,7 +15,7 @@ if platform.system() == 'Windows':
     packages = os.path.join(installDir, 'lib', 'site-packages')
 else:
     packages = glob.glob(os.path.join(
-        installDir, 'lib', 'python*', 'site-pacakges'))[0]
+        installDir, 'lib', 'python*', 'site-packages'))[0]
 
 
 class BinaryDistribution(Distribution):
