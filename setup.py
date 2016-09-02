@@ -32,14 +32,17 @@ sixPyds = glob.glob(os.path.join(packages, 'pysix', '_*pyd'))
 sixPyds = [os.path.basename(pyd) for pyd in sixPyds]
 
 
-setup(name='pysix',
-      version='2.2.1',
-      description = str(codaPyds),
+setup(name = 'pysix',
+      version = '2.2.1',
+      description = ('The Sensor Independent XML library (six), is a cross-'
+          'platform C++ API for reading and writing NGA\'s complex and '
+          'derived sensor independent radar formats. Pysix is a Python '
+          'wrapper to allow easy reading and writing of the complex format.'),
       package_dir = {'': packages},
-      packages=['pysix', 'coda'],
-      package_data= {
+      packages = ['pysix', 'coda'],
+      package_data = {
           'pysix': sixPyds,
           'coda': codaPyds
       },
-      distclass=BinaryDistribution)
+      distclass = BinaryDistribution)
 
