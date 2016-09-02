@@ -42,3 +42,4 @@ setup(name='pysix',
           'coda': codaPyds
       },
       distclass=BinaryDistribution)
+
