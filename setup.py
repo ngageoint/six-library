@@ -2,6 +2,7 @@ from setuptools import setup, Distribution
 import glob
 import os
 import platform
+import sys
 
 installDir = ''
 for child in os.listdir(os.getcwd()):
@@ -14,8 +15,10 @@ packages = ''
 if platform.system() == 'Windows':
     packages = os.path.join(installDir, 'lib', 'site-packages')
 else:
-    packages = glob.glob(os.path.join(
-        installDir, 'lib', 'python*', 'site-packages'))[0]
+    versionedPython = 'python{0}{1}'.format(
+        sys.version_info(0), sys.version_info(1))
+    packages = os.path.join(
+        installDir, 'lib', versionedPython, 'site-packages')
 
 
 class BinaryDistribution(Distribution):
