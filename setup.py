@@ -15,8 +15,8 @@ packages = ''
 if platform.system() == 'Windows':
     packages = os.path.join(installDir, 'lib', 'site-packages')
 else:
-    versionedPython = 'python{0}{1}'.format(
-        sys.version_info(0), sys.version_info(1))
+    versionedPython = 'python{0}.{1}'.format(
+        sys.version_info[0], sys.version_info[1])
     packages = os.path.join(
         installDir, 'lib', versionedPython, 'site-packages')
 
