@@ -354,25 +354,25 @@ except:
 def stealth_write(self, data, flags='wb'):
         import sys
         print(sys.version_info)
-	try:
-		data = str(data)
-	except:
-		data = data.encode('utf-8') # python 3
-	else:
-		data = data.decode(sys.getfilesystemencoding(), 'replace')
-		data = data.encode('utf-8')
+        try:
+            data = str(data)
+        except:
+            data = data.encode('utf-8') # python 3
+        else:
+            data = data.decode(sys.getfilesystemencoding(), 'replace')
+            data = data.encode('utf-8')
 
-	if self.name.endswith('.vcproj') or self.name.endswith('.vcxproj'):
-		data = BOM + data
+        if self.name.endswith('.vcproj') or self.name.endswith('.vcxproj'):
+            data = BOM + data
 
-	try:
-		txt = self.read(flags='rb')
-		if txt != data:
-			raise ValueError('must write')
-	except (IOError, ValueError):
-		self.write(data, flags=flags)
-	else:
-		Logs.debug('msvs: skipping %s' % self.abspath())
+        try:
+            txt = self.read(flags='rb')
+            if txt != data:
+                raise ValueError('must write')
+        except (IOError, ValueError):
+            self.write(data, flags=flags)
+        else:
+            Logs.debug('msvs: skipping %s' % self.abspath())
 Node.Node.stealth_write = stealth_write
 
 re_quote = re.compile("[^a-zA-Z0-9-]")
