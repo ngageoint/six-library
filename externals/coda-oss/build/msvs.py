@@ -352,8 +352,10 @@ except:
 	pass
 
 def stealth_write(self, data, flags='wb'):
+        import sys
+        print(sys.version_info)
 	try:
-		x = str(data)
+		data = str(data)
 	except:
 		data = data.encode('utf-8') # python 3
 	else:
