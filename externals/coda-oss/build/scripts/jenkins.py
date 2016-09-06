@@ -17,12 +17,6 @@ parser.add_option("--no-distclean", dest="do_distclean", help="No distclean at t
 
 (options, args) = parser.parse_args()
 
-if not options.package_name:
-    print('No package name')
-    sys.exit(1)
-if not options.build_dir:
-    print('No build dir')
-    sys.exit(1)
 if not options.package_name or not options.build_dir:
     print('You must specify package name and build directory')
     sys.exit(1)
@@ -72,10 +66,10 @@ elif '-vc10' in os.environ.get('JOB_NAME'):
     config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
 print('Job: %s' % os.environ.get('JOB_NAME', ''))
-if os.environ.has_key('GIT_COMMIT'):
+if 'GIT_COMMIT' in os.environ:
     commit_id = os.environ.get('GIT_COMMIT', '')
     commit_id = commit_id[-8:]
-elif os.environ.has_key('SVN_REVISION'):
+elif 'SVN_REVISION' in os.environ:
     commit_id = os.environ.get('SVN_REVISION', '')
 print("Revision: %s" % commit_id)
 print("LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH',''))
