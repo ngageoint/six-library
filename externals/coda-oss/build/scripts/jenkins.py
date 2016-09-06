@@ -5,6 +5,8 @@ from optparse import OptionParser
 import platform
 from makeInstallPath import installPath
 
+print('Jenkins called')
+print(sys.argv)
 parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
 parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory", default=".")
