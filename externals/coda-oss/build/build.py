@@ -26,7 +26,6 @@ COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.spl
 for ext in COMMON_EXCLUDES_EXT:
     TaskGen.extension(ext)(Utils.nada)
 
-sys.exit(sys.version_info)
 if sys.version_info < (2,6,0):
     raise Errors.WafError('Build system requires at least Python 2.6')
 
