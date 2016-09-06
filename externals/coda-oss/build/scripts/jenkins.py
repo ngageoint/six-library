@@ -17,6 +17,12 @@ parser.add_option("--no-distclean", dest="do_distclean", help="No distclean at t
 
 (options, args) = parser.parse_args()
 
+if not options.package_name:
+    print('No package name')
+    sys.exit(1)
+if not options.build_dir:
+    print('No build dir')
+    sys.exit(1)
 if not options.package_name or not options.build_dir:
     print('You must specify package name and build directory')
     sys.exit(1)
