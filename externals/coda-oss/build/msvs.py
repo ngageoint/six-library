@@ -138,7 +138,7 @@ PROJECT_TEMPLATE = r'''<?xml version="1.0" encoding="UTF-8"?>
         ${endfor}
 
         ${for b in project.build_properties}
-                ${if getattr(b, 'deploy_dir', None)}
+            ${if getattr(b, 'deploy_dir', None)}
         <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='${b.configuration}|${b.platform}'">
                 <Deploy>
                         <DeploymentType>CopyToHardDrive</DeploymentType>
@@ -185,7 +185,7 @@ PROJECT_2008_TEMPLATE = r'''<?xml version="1.0" encoding="UTF-8"?>
         <Platforms>
                 ${if project.build_properties}
                 ${for b in project.build_properties}
-                   <Platform Name="${xml: b.platform}" />
+                <Platform Name="${xml: b.platform}" />
                 ${endfor}
                 ${else}
                    <Platform Name="Win32" />
