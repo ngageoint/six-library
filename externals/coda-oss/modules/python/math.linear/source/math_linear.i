@@ -24,11 +24,7 @@
 // Pickle utilities
 %pythoncode
 %{
-    import sys
-    if sys.version_info[0] == 2:
-        import cPickle as pickle
-    else:
-        import pickle
+    import cPickle as pickle
 %}
 %import <types.i>
 
@@ -66,7 +62,7 @@
         strStream << *self;
         return strStream.str();
     }
-
+    
     math::linear::VectorN<2, double> __deepcopy__(PyObject* memo)
     {
         return math::linear::VectorN<2, double>(*$self);
@@ -76,7 +72,7 @@
     // v = ml.Vector2([1.0, 1.0])
     // arr = np.asarray(v.vals())
     //
-    // ideally we should implement __array__() instead, which will allow it
+    // ideally we should implement __array__() instead, which will allow it 
     // to be used by most numpy functions
     std::vector<double> vals() {
         return self->matrix().col(0);
@@ -104,7 +100,7 @@
     // v = ml.Vector3([1.0, 1.0, 1.0])
     // arr = np.asarray(v.vals())
     //
-    // ideally we should implement __array__() instead, which will allow it
+    // ideally we should implement __array__() instead, which will allow it 
     // to be used by most numpy functions
     std::vector<double> vals() {
         return self->matrix().col(0);
@@ -125,7 +121,7 @@
     }
     void __setitem__(long i, double val)
     {
-
+    
         if(i < 0 || i > self->size() - 1)
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -133,7 +129,7 @@
         }
         (*self)[i] = val;
     }
-
+    
     // string representation in python
     std::string __str__()
     {
@@ -141,7 +137,7 @@
         strStream << *self;
         return strStream.str();
     }
-
+    
     // helper method to facilitate creating a numpy array from VectorDouble
     // v= ml.VectorDouble([1.0, 1.0, 1.0])
     // arr = np.asarray(v.vals())
@@ -199,7 +195,7 @@
         }
         (*self)(m,n) = val;
     }
-
+    
     // string representation in python
     std::string __str__()
     {
@@ -207,7 +203,7 @@
         strStream << *self;
         return strStream.str();
     }
-
+    
     // helper method to facilitate creating a numpy array from Matrix2D
     // v= ml.VectorDouble([1.0, 1.0, 1.0])
     // arr = np.asarray(v.vals())
@@ -225,6 +221,6 @@
                 returnVals[m][n] = (*self)(m,n);
             }
         }
-        return returnVals;
+        return returnVals; 
     }
 }
