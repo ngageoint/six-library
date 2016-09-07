@@ -86,7 +86,7 @@ PROJECT_TEMPLATE = r'''<?xml version="1.0" encoding="UTF-8"?>
         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
         <ItemGroup Label="ProjectConfigurations">
-                ${for b in project.build_properties}
+            ${for b in project.build_properties}
                 <ProjectConfiguration Include="${b.configuration}|${b.platform}">
                         <Configuration>${b.configuration}</Configuration>
                         <Platform>${b.platform}</Platform>
