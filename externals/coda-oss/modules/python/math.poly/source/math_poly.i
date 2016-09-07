@@ -42,7 +42,11 @@ typedef math::linear::Vector<double> VectorDouble;
 %import <types.i> // for std::vector pickling
 %pythoncode
 %{
-    import cPickle as pickle
+    import sys
+    if sys.version_info[0] == 2:
+        import cPickle as pickle
+    else:
+        import pickle
 %}
 
 %include "math/poly/OneD.h"
@@ -58,7 +62,7 @@ typedef math::linear::Vector<double> VectorDouble;
         """Recursive pickling method for SWIG-wrapped Poly1D."""
         # Create a dictionary of parameters and values
         state = {}
-    
+
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
@@ -134,7 +138,7 @@ typedef math::linear::Vector<double> VectorDouble;
         """Recursive pickling method for SWIG-wrapped Poly2D."""
         # Create a dictionary of parameters and values
         state = {}
-    
+
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
