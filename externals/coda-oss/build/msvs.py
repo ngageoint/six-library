@@ -307,7 +307,7 @@ def compile_template(line):
         app = buf.append
 
         def app(txt):
-                buf.append(indent * '\t' + txt)
+                buf.append(indent * 4 * ' ' + txt)
 
         for x in range(len(extr)):
                 if params[x]:
