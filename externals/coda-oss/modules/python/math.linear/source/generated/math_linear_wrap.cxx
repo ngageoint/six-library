@@ -2977,26 +2977,40 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_difference_type swig_types[4]
 #define SWIGTYPE_p_double swig_types[5]
 #define SWIGTYPE_p_except__NullPointerReferenceException swig_types[6]
-#define SWIGTYPE_p_math__linear__Matrix2DT_double_t swig_types[7]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t swig_types[8]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_1_3_double_t swig_types[9]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t swig_types[10]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[11]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[12]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[13]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[14]
-#define SWIGTYPE_p_p_PyObject swig_types[15]
-#define SWIGTYPE_p_size_type swig_types[16]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[17]
-#define SWIGTYPE_p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t swig_types[18]
-#define SWIGTYPE_p_std__invalid_argument swig_types[19]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[20]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[21]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t swig_types[22]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[23]
-#define SWIGTYPE_p_value_type swig_types[24]
-static swig_type_info *swig_types[26];
-static swig_module_info swig_module = {swig_types, 25, 0, 0, 0, 0};
+#define SWIGTYPE_p_int swig_types[7]
+#define SWIGTYPE_p_int16_t swig_types[8]
+#define SWIGTYPE_p_int32_t swig_types[9]
+#define SWIGTYPE_p_int64_t swig_types[10]
+#define SWIGTYPE_p_int8_t swig_types[11]
+#define SWIGTYPE_p_math__linear__Matrix2DT_double_t swig_types[12]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t swig_types[13]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_1_3_double_t swig_types[14]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t swig_types[15]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[16]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[17]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[18]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[19]
+#define SWIGTYPE_p_off_t swig_types[20]
+#define SWIGTYPE_p_p_PyObject swig_types[21]
+#define SWIGTYPE_p_pid_t swig_types[22]
+#define SWIGTYPE_p_size_t swig_types[23]
+#define SWIGTYPE_p_size_type swig_types[24]
+#define SWIGTYPE_p_ssize_t swig_types[25]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[26]
+#define SWIGTYPE_p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t swig_types[27]
+#define SWIGTYPE_p_std__invalid_argument swig_types[28]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[29]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[30]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t swig_types[31]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[32]
+#define SWIGTYPE_p_uint16_t swig_types[33]
+#define SWIGTYPE_p_uint32_t swig_types[34]
+#define SWIGTYPE_p_uint64_t swig_types[35]
+#define SWIGTYPE_p_uint8_t swig_types[36]
+#define SWIGTYPE_p_unsigned_char swig_types[37]
+#define SWIGTYPE_p_value_type swig_types[38]
+static swig_type_info *swig_types[40];
+static swig_module_info swig_module = {swig_types, 39, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4820,6 +4834,36 @@ SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vect
 SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vector_Sl_double_Sg__Sg__erase__SWIG_1(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator first,std::vector< std::vector< double > >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_0(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator pos,std::vector< std::vector< double > >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_1(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator pos,std::vector< std::vector< double > >::size_type n,std::vector< std::vector< double > >::value_type const &x){ self->insert(pos, n, x); }
+
+namespace swig {
+  template <> struct traits<size_t > {
+    typedef value_category category;
+    static const char* type_name() { return"size_t"; }
+  };  
+  template <>  struct traits_asval<size_t > {   
+    typedef size_t value_type;
+    static int asval(PyObject *obj, value_type *val) { 
+      return SWIG_AsVal_size_t (obj, val);
+    }
+  };
+  template <>  struct traits_from<size_t > {
+    typedef size_t value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_size_t  (val);
+    }
+  };
+}
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<size_t, std::allocator< size_t > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "size_t" "," "std::allocator< size_t >" " >";
+	  }
+	};
+      }
+    
 SWIGINTERN double math_linear_VectorN_Sl_2_Sc_double_Sg____getitem__(math::linear::VectorN< 2,double > *self,long i){ return (*self)[i]; }
 SWIGINTERN void math_linear_VectorN_Sl_2_Sc_double_Sg____setitem__(math::linear::VectorN< 2,double > *self,long i,double val){ (*self)[i] = val; }
 SWIGINTERN std::string math_linear_VectorN_Sl_2_Sc_double_Sg____str__(math::linear::VectorN< 2,double > *self){
@@ -15165,8 +15209,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   size_t arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   size_t val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -15180,14 +15223,17 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1_permute" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Matrix3x1_permute" "', argument " "3"" of type '" "size_t""'");
@@ -15225,8 +15271,10 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     }
   }
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >::Like_T(static_cast< const math::linear::MatrixMxN< 3,1,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -15237,8 +15285,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   std::vector< size_t,std::allocator< size_t > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   math::linear::MatrixMxN< 3,1,double >::Like_T result;
@@ -15249,14 +15296,17 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1_permute" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Matrix3x1_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   {
     try
     {
@@ -15289,8 +15339,10 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
   }
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >::Like_T(static_cast< const math::linear::MatrixMxN< 3,1,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -15313,7 +15365,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Matrix3x1_permute__SWIG_1(self, args);
@@ -15326,7 +15378,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -15773,6 +15825,58 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___div__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator /(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >::Like_T(static_cast< const math::linear::MatrixMxN< 3,1,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Matrix3x1___neg__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::MatrixMxN< 3,1,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Matrix3x1___neg__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1___neg__" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator -();
     } 
     catch (const std::exception& e)
     {
@@ -17258,6 +17362,58 @@ SWIGINTERN PyObject *_wrap_Vector2___sub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator -((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___neg__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2___neg__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___neg__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator -();
     } 
     catch (const std::exception& e)
     {
@@ -19507,6 +19663,58 @@ SWIGINTERN PyObject *_wrap_Vector3___sub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator -((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 3,double >::Like_T(static_cast< const math::linear::VectorN< 3,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector3___neg__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 3,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector3___neg__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___neg__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 3,double > const *)arg1)->operator -();
     } 
     catch (const std::exception& e)
     {
@@ -22017,6 +22225,58 @@ SWIGINTERN PyObject *_wrap_VectorDouble___sub__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator -((math::linear::Vector< double > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::Vector< double >(static_cast< const math::linear::Vector< double >& >(result))), SWIGTYPE_p_math__linear__VectorT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorDouble___neg__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Vector< double > *arg1 = (math::linear::Vector< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::Vector< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorDouble___neg__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble___neg__" "', argument " "1"" of type '" "math::linear::Vector< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::Vector< double > const *)arg1)->operator -();
     } 
     catch (const std::exception& e)
     {
@@ -25437,8 +25697,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_0(PyObject *SWIGUNUSEDPARM
   size_t arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   size_t val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -25452,14 +25711,17 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_0(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble_permute" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "MatrixDouble_permute" "', argument " "3"" of type '" "size_t""'");
@@ -25497,8 +25759,10 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_0(PyObject *SWIGUNUSEDPARM
     }
   }
   resultobj = SWIG_NewPointerObj((new math::linear::Matrix2D< double >(static_cast< const math::linear::Matrix2D< double >& >(result))), SWIGTYPE_p_math__linear__Matrix2DT_double_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -25509,8 +25773,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_1(PyObject *SWIGUNUSEDPARM
   std::vector< size_t,std::allocator< size_t > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   math::linear::Matrix2D< double > result;
@@ -25521,14 +25784,17 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_1(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble_permute" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MatrixDouble_permute" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   {
     try
     {
@@ -25561,8 +25827,10 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_1(PyObject *SWIGUNUSEDPARM
     }
   }
   resultobj = SWIG_NewPointerObj((new math::linear::Matrix2D< double >(static_cast< const math::linear::Matrix2D< double >& >(result))), SWIGTYPE_p_math__linear__Matrix2DT_double_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -25585,7 +25853,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute(PyObject *self, PyObject *args) 
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_MatrixDouble_permute__SWIG_1(self, args);
@@ -25598,7 +25866,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute(PyObject *self, PyObject *args) 
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -26190,6 +26458,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_MatrixDouble___neg__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Matrix2D< double > *arg1 = (math::linear::Matrix2D< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::Matrix2D< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatrixDouble___neg__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble___neg__" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::Matrix2D< double > const *)arg1)->operator -();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::Matrix2D< double >(static_cast< const math::linear::Matrix2D< double >& >(result))), SWIGTYPE_p_math__linear__Matrix2DT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_MatrixDouble___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::Matrix2D< double > *arg1 = (math::linear::Matrix2D< double > *) 0 ;
@@ -26608,10 +26928,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Matrix3x1_add", _wrap_Matrix3x1_add, METH_VARARGS, (char *)"Matrix3x1_add(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_subtract", _wrap_Matrix3x1_subtract, METH_VARARGS, (char *)"Matrix3x1_subtract(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_transpose", _wrap_Matrix3x1_transpose, METH_VARARGS, (char *)"Matrix3x1_transpose(Matrix3x1 self) -> math::linear::MatrixMxN< 1,3,double >"},
-	 { (char *)"Matrix3x1_decomposeLU", _wrap_Matrix3x1_decomposeLU, METH_VARARGS, (char *)"Matrix3x1_decomposeLU(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > & pivotsM) -> Matrix3x1"},
+	 { (char *)"Matrix3x1_decomposeLU", _wrap_Matrix3x1_decomposeLU, METH_VARARGS, (char *)"Matrix3x1_decomposeLU(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_permute", _wrap_Matrix3x1_permute, METH_VARARGS, (char *)"\n"
-		"permute(std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=1) -> Matrix3x1\n"
-		"Matrix3x1_permute(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> Matrix3x1\n"
+		"permute(VectorSizeT pivotsM, size_t n=1) -> Matrix3x1\n"
+		"Matrix3x1_permute(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1\n"
 		""},
 	 { (char *)"Matrix3x1_normSq", _wrap_Matrix3x1_normSq, METH_VARARGS, (char *)"Matrix3x1_normSq(Matrix3x1 self) -> double"},
 	 { (char *)"Matrix3x1_norm", _wrap_Matrix3x1_norm, METH_VARARGS, (char *)"Matrix3x1_norm(Matrix3x1 self) -> double"},
@@ -26621,6 +26941,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Matrix3x1___sub__", _wrap_Matrix3x1___sub__, METH_VARARGS, (char *)"Matrix3x1___sub__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___mul__", _wrap_Matrix3x1___mul__, METH_VARARGS, (char *)"Matrix3x1___mul__(Matrix3x1 self, double scalar) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___div__", _wrap_Matrix3x1___div__, METH_VARARGS, (char *)"Matrix3x1___div__(Matrix3x1 self, double scalar) -> Matrix3x1"},
+	 { (char *)"Matrix3x1___neg__", _wrap_Matrix3x1___neg__, METH_VARARGS, (char *)"Matrix3x1___neg__(Matrix3x1 self) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_swigregister", Matrix3x1_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Vector2", _wrap_new_Vector2, METH_VARARGS, (char *)"\n"
 		"Vector2()\n"
@@ -26650,6 +26971,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector2_subtract", _wrap_Vector2_subtract, METH_VARARGS, (char *)"Vector2_subtract(Vector2 self, Vector2 v) -> Vector2"},
 	 { (char *)"Vector2___add__", _wrap_Vector2___add__, METH_VARARGS, (char *)"Vector2___add__(Vector2 self, Vector2 v) -> Vector2"},
 	 { (char *)"Vector2___sub__", _wrap_Vector2___sub__, METH_VARARGS, (char *)"Vector2___sub__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___neg__", _wrap_Vector2___neg__, METH_VARARGS, (char *)"Vector2___neg__(Vector2 self) -> Vector2"},
 	 { (char *)"Vector2___imul__", _wrap_Vector2___imul__, METH_VARARGS, (char *)"\n"
 		"__imul__(Vector2 v) -> Vector2\n"
 		"Vector2___imul__(Vector2 self, double sv) -> Vector2\n"
@@ -26694,6 +27016,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector3_subtract", _wrap_Vector3_subtract, METH_VARARGS, (char *)"Vector3_subtract(Vector3 self, Vector3 v) -> Vector3"},
 	 { (char *)"Vector3___add__", _wrap_Vector3___add__, METH_VARARGS, (char *)"Vector3___add__(Vector3 self, Vector3 v) -> Vector3"},
 	 { (char *)"Vector3___sub__", _wrap_Vector3___sub__, METH_VARARGS, (char *)"Vector3___sub__(Vector3 self, Vector3 v) -> Vector3"},
+	 { (char *)"Vector3___neg__", _wrap_Vector3___neg__, METH_VARARGS, (char *)"Vector3___neg__(Vector3 self) -> Vector3"},
 	 { (char *)"Vector3___imul__", _wrap_Vector3___imul__, METH_VARARGS, (char *)"\n"
 		"__imul__(Vector3 v) -> Vector3\n"
 		"Vector3___imul__(Vector3 self, double sv) -> Vector3\n"
@@ -26743,6 +27066,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorDouble_subtract", _wrap_VectorDouble_subtract, METH_VARARGS, (char *)"VectorDouble_subtract(VectorDouble self, VectorDouble v) -> VectorDouble"},
 	 { (char *)"VectorDouble___add__", _wrap_VectorDouble___add__, METH_VARARGS, (char *)"VectorDouble___add__(VectorDouble self, VectorDouble v) -> VectorDouble"},
 	 { (char *)"VectorDouble___sub__", _wrap_VectorDouble___sub__, METH_VARARGS, (char *)"VectorDouble___sub__(VectorDouble self, VectorDouble v) -> VectorDouble"},
+	 { (char *)"VectorDouble___neg__", _wrap_VectorDouble___neg__, METH_VARARGS, (char *)"VectorDouble___neg__(VectorDouble self) -> VectorDouble"},
 	 { (char *)"VectorDouble___imul__", _wrap_VectorDouble___imul__, METH_VARARGS, (char *)"\n"
 		"__imul__(VectorDouble v) -> VectorDouble\n"
 		"VectorDouble___imul__(VectorDouble self, double sv) -> VectorDouble\n"
@@ -26802,10 +27126,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MatrixDouble_add", _wrap_MatrixDouble_add, METH_VARARGS, (char *)"MatrixDouble_add(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"},
 	 { (char *)"MatrixDouble_subtract", _wrap_MatrixDouble_subtract, METH_VARARGS, (char *)"MatrixDouble_subtract(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"},
 	 { (char *)"MatrixDouble_transpose", _wrap_MatrixDouble_transpose, METH_VARARGS, (char *)"MatrixDouble_transpose(MatrixDouble self) -> MatrixDouble"},
-	 { (char *)"MatrixDouble_decomposeLU", _wrap_MatrixDouble_decomposeLU, METH_VARARGS, (char *)"MatrixDouble_decomposeLU(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > & pivotsM) -> MatrixDouble"},
+	 { (char *)"MatrixDouble_decomposeLU", _wrap_MatrixDouble_decomposeLU, METH_VARARGS, (char *)"MatrixDouble_decomposeLU(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble"},
 	 { (char *)"MatrixDouble_permute", _wrap_MatrixDouble_permute, METH_VARARGS, (char *)"\n"
-		"permute(std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=0) -> MatrixDouble\n"
-		"MatrixDouble_permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> MatrixDouble\n"
+		"permute(VectorSizeT pivotsM, size_t n=0) -> MatrixDouble\n"
+		"MatrixDouble_permute(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble\n"
 		""},
 	 { (char *)"MatrixDouble_normSq", _wrap_MatrixDouble_normSq, METH_VARARGS, (char *)"MatrixDouble_normSq(MatrixDouble self) -> double"},
 	 { (char *)"MatrixDouble_norm", _wrap_MatrixDouble_norm, METH_VARARGS, (char *)"MatrixDouble_norm(MatrixDouble self) -> double"},
@@ -26818,6 +27142,7 @@ static PyMethodDef SwigMethods[] = {
 		"__mul__(double scalar) -> MatrixDouble\n"
 		"MatrixDouble___mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble\n"
 		""},
+	 { (char *)"MatrixDouble___neg__", _wrap_MatrixDouble___neg__, METH_VARARGS, (char *)"MatrixDouble___neg__(MatrixDouble self) -> MatrixDouble"},
 	 { (char *)"MatrixDouble___getitem__", _wrap_MatrixDouble___getitem__, METH_VARARGS, (char *)"MatrixDouble___getitem__(MatrixDouble self, PyObject * inObj) -> double"},
 	 { (char *)"MatrixDouble___setitem__", _wrap_MatrixDouble___setitem__, METH_VARARGS, (char *)"MatrixDouble___setitem__(MatrixDouble self, PyObject * inObj, double val)"},
 	 { (char *)"MatrixDouble___str__", _wrap_MatrixDouble___str__, METH_VARARGS, (char *)"MatrixDouble___str__(MatrixDouble self) -> std::string"},
@@ -26832,10 +27157,15 @@ static PyMethodDef SwigMethods[] = {
 static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_a_1__double = {"_p_a_1__double", "double (*)[1]", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__Matrix2DT_double_t = {"_p_math__linear__Matrix2DT_double_t", "math::linear::Matrix2D< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_1_double_t = {"_p_math__linear__MatrixMxNT_1_1_double_t", "math::linear::MatrixMxN< 1,1,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_3_double_t = {"_p_math__linear__MatrixMxNT_1_3_double_t", "math::linear::MatrixMxN< 1,3,double > *", 0, 0, (void*)0, 0};
@@ -26844,15 +27174,24 @@ static swig_type_info _swigt__p_math__linear__MatrixMxNT_3_1_double_t = {"_p_mat
 static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "math::linear::VectorN< 2 > *|math::linear::VectorN< 2,double >::Like_T *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "math::linear::VectorN< 3,double >::Like_T *|math::linear::VectorN< 3,double > *|math::linear::VectorN< 3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "math::linear::Vector< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_double_t = {"_p_std__allocatorT_double_t", "std::vector< double >::allocator_type *|std::allocator< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t = {"_p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t", "std::vector< std::vector< double > >::allocator_type *|std::allocator< std::vector< double,std::allocator< double > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t = {"_p_std__vectorT_double_std__allocatorT_double_t_t", "std::vector< double,std::allocator< double > > *|std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *|std::vector< size_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t = {"_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t", "std::vector< std::vector< double > > *|std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > *|std::vector< std::vector< double,std::allocator< double > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -26863,6 +27202,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_difference_type,
   &_swigt__p_double,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_int,
+  &_swigt__p_int16_t,
+  &_swigt__p_int32_t,
+  &_swigt__p_int64_t,
+  &_swigt__p_int8_t,
   &_swigt__p_math__linear__Matrix2DT_double_t,
   &_swigt__p_math__linear__MatrixMxNT_1_1_double_t,
   &_swigt__p_math__linear__MatrixMxNT_1_3_double_t,
@@ -26871,8 +27215,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__linear__VectorNT_2_double_t,
   &_swigt__p_math__linear__VectorNT_3_double_t,
   &_swigt__p_math__linear__VectorT_double_t,
+  &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
+  &_swigt__p_pid_t,
+  &_swigt__p_size_t,
   &_swigt__p_size_type,
+  &_swigt__p_ssize_t,
   &_swigt__p_std__allocatorT_double_t,
   &_swigt__p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t,
   &_swigt__p_std__invalid_argument,
@@ -26880,6 +27228,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   &_swigt__p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t,
   &_swigt__p_swig__SwigPyIterator,
+  &_swigt__p_uint16_t,
+  &_swigt__p_uint32_t,
+  &_swigt__p_uint64_t,
+  &_swigt__p_uint8_t,
+  &_swigt__p_unsigned_char,
   &_swigt__p_value_type,
 };
 
@@ -26890,6 +27243,11 @@ static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__Matrix2DT_double_t[] = {  {&_swigt__p_math__linear__Matrix2DT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_1_1_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_1_1_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_1_3_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_1_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -26898,8 +27256,12 @@ static swig_cast_info _swigc__p_math__linear__MatrixMxNT_3_1_double_t[] = {  {&_
 static swig_cast_info _swigc__p_math__linear__VectorNT_2_double_t[] = {  {&_swigt__p_math__linear__VectorNT_2_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__p_math__linear__VectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_double_t[] = {  {&_swigt__p_std__allocatorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t[] = {  {&_swigt__p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
@@ -26907,6 +27269,11 @@ static swig_cast_info _swigc__p_std__vectorT_double_std__allocatorT_double_t_t[]
 static swig_cast_info _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t[] = {  {&_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t[] = {  {&_swigt__p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint16_t[] = {  {&_swigt__p_uint16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_uint8_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -26917,6 +27284,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_difference_type,
   _swigc__p_double,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_int,
+  _swigc__p_int16_t,
+  _swigc__p_int32_t,
+  _swigc__p_int64_t,
+  _swigc__p_int8_t,
   _swigc__p_math__linear__Matrix2DT_double_t,
   _swigc__p_math__linear__MatrixMxNT_1_1_double_t,
   _swigc__p_math__linear__MatrixMxNT_1_3_double_t,
@@ -26925,8 +27297,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__linear__VectorNT_2_double_t,
   _swigc__p_math__linear__VectorNT_3_double_t,
   _swigc__p_math__linear__VectorT_double_t,
+  _swigc__p_off_t,
   _swigc__p_p_PyObject,
+  _swigc__p_pid_t,
+  _swigc__p_size_t,
   _swigc__p_size_type,
+  _swigc__p_ssize_t,
   _swigc__p_std__allocatorT_double_t,
   _swigc__p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t,
   _swigc__p_std__invalid_argument,
@@ -26934,6 +27310,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   _swigc__p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t,
   _swigc__p_swig__SwigPyIterator,
+  _swigc__p_uint16_t,
+  _swigc__p_uint32_t,
+  _swigc__p_uint64_t,
+  _swigc__p_uint8_t,
+  _swigc__p_unsigned_char,
   _swigc__p_value_type,
 };
 

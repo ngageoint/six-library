@@ -24,6 +24,7 @@
  *
 """
 import sys
+import cPickle as pickle
 import numpy as np
 from copy import deepcopy
 from coda.math_linear import *
@@ -49,6 +50,12 @@ if __name__ == '__main__':
     if vec2[0] != 100:
         sys.exit('Vector2 did not perform a deep copy')
 
+    # Test pickling and unpickling
+    pvec2 = pickle.loads(pickle.dumps(vec2))
+    for i in range(2):
+        if pvec2[i] != vec2[i]:
+            sys.exit('Vector2 was not pickled correctly')
+
     ####################################
     # VectorN<3, double> Bindings Test #
     ####################################
@@ -67,6 +74,12 @@ if __name__ == '__main__':
     vec3_copy[0] = 40
     if vec3[0] != 10:
         sys.exit('Vector3 did not perform a deep copy')
+
+    # Test pickling and unpickling
+    pvec3 = pickle.loads(pickle.dumps(vec3))
+    for i in range(3):
+        if pvec3[i] != vec3[i]:
+            sys.exit('Vector3 was not pickled correctly')
 
     ################################
     # Vector<double> Bindings Test #

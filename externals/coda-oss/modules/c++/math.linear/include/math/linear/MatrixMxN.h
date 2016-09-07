@@ -1189,8 +1189,26 @@ public:
         return multiply(mx);
     }
     
-
-
+    /*!
+     *  Negation operator;
+     *
+     *  \code
+           B = -A;
+     *  \endcode
+     *
+     */
+    Like_T operator-() const
+    {
+        Like_T neg;
+        for (size_t ii = 0; ii < _MD; ++ii)
+        {
+            for (size_t jj = 0; jj < _ND; ++jj)
+            {
+                neg.mRaw[ii][jj] = -mRaw[ii][jj];
+            }
+        }
+        return neg;
+    }
 
 };
 

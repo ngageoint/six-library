@@ -4803,9 +4803,9 @@ SWIGINTERN std::string cphd_FileHeader___str__(cphd::FileHeader *self){
 
 
   namespace swig {
-    template <>  struct traits<math::poly::OneD< Vector3 > > {
+    template <>  struct traits<math::linear::VectorN< 3,double > > {
       typedef pointer_category category;
-      static const char* type_name() { return"math::poly::OneD< Vector3 >"; }
+      static const char* type_name() { return"math::linear::VectorN< 3,double >"; }
     };
   }
 
@@ -4904,6 +4904,24 @@ namespace swig {
       static PyObject *from(const std::vector<T>& vec) {
 	return traits_from_stdseq<std::vector<T> >::from(vec);
       }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<math::linear::VectorN< 3,double >, std::allocator< math::linear::VectorN< 3,double > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "math::linear::VectorN< 3,double >" "," "std::allocator< math::linear::VectorN< 3,double > >" " >";
+	  }
+	};
+      }
+    
+
+  namespace swig {
+    template <>  struct traits<math::poly::OneD< Vector3 > > {
+      typedef pointer_category category;
+      static const char* type_name() { return"math::poly::OneD< Vector3 >"; }
     };
   }
 
@@ -5164,24 +5182,6 @@ SWIGINTERN std::vector< cphd::ArraySize >::iterator std_vector_Sl_cphd_ArraySize
 SWIGINTERN std::vector< cphd::ArraySize >::iterator std_vector_Sl_cphd_ArraySize_Sg__erase__SWIG_1(std::vector< cphd::ArraySize > *self,std::vector< cphd::ArraySize >::iterator first,std::vector< cphd::ArraySize >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< cphd::ArraySize >::iterator std_vector_Sl_cphd_ArraySize_Sg__insert__SWIG_0(std::vector< cphd::ArraySize > *self,std::vector< cphd::ArraySize >::iterator pos,std::vector< cphd::ArraySize >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_cphd_ArraySize_Sg__insert__SWIG_1(std::vector< cphd::ArraySize > *self,std::vector< cphd::ArraySize >::iterator pos,std::vector< cphd::ArraySize >::size_type n,std::vector< cphd::ArraySize >::value_type const &x){ self->insert(pos, n, x); }
-
-  namespace swig {
-    template <>  struct traits<math::linear::VectorN< 3,double > > {
-      typedef pointer_category category;
-      static const char* type_name() { return"math::linear::VectorN< 3,double >"; }
-    };
-  }
-
-
-      namespace swig {
-	template <>  struct traits<std::vector<math::linear::VectorN< 3,double >, std::allocator< math::linear::VectorN< 3,double > > > > {
-	  typedef pointer_category category;
-	  static const char* type_name() {
-	    return "std::vector<" "math::linear::VectorN< 3,double >" "," "std::allocator< math::linear::VectorN< 3,double > >" " >";
-	  }
-	};
-      }
-    
 SWIGINTERN swig::SwigPyIterator *std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__iterator(std::vector< math::linear::VectorN< 3,double > > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
     }
@@ -52023,8 +52023,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SRP_srpType_get", _wrap_SRP_srpType_get, METH_VARARGS, (char *)"SRP_srpType_get(SRP self) -> SRPType"},
 	 { (char *)"SRP_numSRPs_set", _wrap_SRP_numSRPs_set, METH_VARARGS, (char *)"SRP_numSRPs_set(SRP self, size_t numSRPs)"},
 	 { (char *)"SRP_numSRPs_get", _wrap_SRP_numSRPs_get, METH_VARARGS, (char *)"SRP_numSRPs_get(SRP self) -> size_t"},
-	 { (char *)"SRP_srpPT_set", _wrap_SRP_srpPT_set, METH_VARARGS, (char *)"SRP_srpPT_set(SRP self, VectorVector3 srpPT)"},
-	 { (char *)"SRP_srpPT_get", _wrap_SRP_srpPT_get, METH_VARARGS, (char *)"SRP_srpPT_get(SRP self) -> VectorVector3"},
+	 { (char *)"SRP_srpPT_set", _wrap_SRP_srpPT_set, METH_VARARGS, (char *)"SRP_srpPT_set(SRP self, Vector3Coefficients srpPT)"},
+	 { (char *)"SRP_srpPT_get", _wrap_SRP_srpPT_get, METH_VARARGS, (char *)"SRP_srpPT_get(SRP self) -> Vector3Coefficients"},
 	 { (char *)"SRP_srpPVTPoly_set", _wrap_SRP_srpPVTPoly_set, METH_VARARGS, (char *)"SRP_srpPVTPoly_set(SRP self, VectorPolyXYZ srpPVTPoly)"},
 	 { (char *)"SRP_srpPVTPoly_get", _wrap_SRP_srpPVTPoly_get, METH_VARARGS, (char *)"SRP_srpPVTPoly_get(SRP self) -> VectorPolyXYZ"},
 	 { (char *)"SRP_srpPVVPoly_set", _wrap_SRP_srpPVVPoly_set, METH_VARARGS, (char *)"SRP_srpPVVPoly_set(SRP self, VectorPolyXYZ srpPVVPoly)"},
@@ -52349,66 +52349,66 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorArraySize_capacity", _wrap_VectorArraySize_capacity, METH_VARARGS, (char *)"VectorArraySize_capacity(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"},
 	 { (char *)"delete_VectorArraySize", _wrap_delete_VectorArraySize, METH_VARARGS, (char *)"delete_VectorArraySize(VectorArraySize self)"},
 	 { (char *)"VectorArraySize_swigregister", VectorArraySize_swigregister, METH_VARARGS, NULL},
-	 { (char *)"VectorVector3_iterator", _wrap_VectorVector3_iterator, METH_VARARGS, (char *)"VectorVector3_iterator(VectorVector3 self) -> SwigPyIterator"},
-	 { (char *)"VectorVector3___nonzero__", _wrap_VectorVector3___nonzero__, METH_VARARGS, (char *)"VectorVector3___nonzero__(VectorVector3 self) -> bool"},
-	 { (char *)"VectorVector3___bool__", _wrap_VectorVector3___bool__, METH_VARARGS, (char *)"VectorVector3___bool__(VectorVector3 self) -> bool"},
-	 { (char *)"VectorVector3___len__", _wrap_VectorVector3___len__, METH_VARARGS, (char *)"VectorVector3___len__(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
-	 { (char *)"VectorVector3_pop", _wrap_VectorVector3_pop, METH_VARARGS, (char *)"VectorVector3_pop(VectorVector3 self) -> Vector3"},
-	 { (char *)"VectorVector3___getslice__", _wrap_VectorVector3___getslice__, METH_VARARGS, (char *)"VectorVector3___getslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> VectorVector3"},
+	 { (char *)"VectorVector3_iterator", _wrap_VectorVector3_iterator, METH_VARARGS, (char *)"VectorVector3_iterator(Vector3Coefficients self) -> SwigPyIterator"},
+	 { (char *)"VectorVector3___nonzero__", _wrap_VectorVector3___nonzero__, METH_VARARGS, (char *)"VectorVector3___nonzero__(Vector3Coefficients self) -> bool"},
+	 { (char *)"VectorVector3___bool__", _wrap_VectorVector3___bool__, METH_VARARGS, (char *)"VectorVector3___bool__(Vector3Coefficients self) -> bool"},
+	 { (char *)"VectorVector3___len__", _wrap_VectorVector3___len__, METH_VARARGS, (char *)"VectorVector3___len__(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
+	 { (char *)"VectorVector3_pop", _wrap_VectorVector3_pop, METH_VARARGS, (char *)"VectorVector3_pop(Vector3Coefficients self) -> Vector3"},
+	 { (char *)"VectorVector3___getslice__", _wrap_VectorVector3___getslice__, METH_VARARGS, (char *)"VectorVector3___getslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> Vector3Coefficients"},
 	 { (char *)"VectorVector3___setslice__", _wrap_VectorVector3___setslice__, METH_VARARGS, (char *)"\n"
-		"__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, VectorVector3 v)\n"
-		"VectorVector3___setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)\n"
+		"__setslice__(std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, Vector3Coefficients v)\n"
+		"VectorVector3___setslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)\n"
 		""},
-	 { (char *)"VectorVector3___delslice__", _wrap_VectorVector3___delslice__, METH_VARARGS, (char *)"VectorVector3___delslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)"},
+	 { (char *)"VectorVector3___delslice__", _wrap_VectorVector3___delslice__, METH_VARARGS, (char *)"VectorVector3___delslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)"},
 	 { (char *)"VectorVector3___delitem__", _wrap_VectorVector3___delitem__, METH_VARARGS, (char *)"\n"
 		"__delitem__(std::vector< math::linear::VectorN< 3,double > >::difference_type i)\n"
-		"VectorVector3___delitem__(VectorVector3 self, PySliceObject * slice)\n"
+		"VectorVector3___delitem__(Vector3Coefficients self, PySliceObject * slice)\n"
 		""},
 	 { (char *)"VectorVector3___getitem__", _wrap_VectorVector3___getitem__, METH_VARARGS, (char *)"\n"
-		"__getitem__(PySliceObject * slice) -> VectorVector3\n"
-		"VectorVector3___getitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3\n"
+		"__getitem__(PySliceObject * slice) -> Vector3Coefficients\n"
+		"VectorVector3___getitem__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3\n"
 		""},
 	 { (char *)"VectorVector3___setitem__", _wrap_VectorVector3___setitem__, METH_VARARGS, (char *)"\n"
-		"__setitem__(PySliceObject * slice, VectorVector3 v)\n"
+		"__setitem__(PySliceObject * slice, Vector3Coefficients v)\n"
 		"__setitem__(PySliceObject * slice)\n"
-		"VectorVector3___setitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, Vector3 x)\n"
+		"VectorVector3___setitem__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, Vector3 x)\n"
 		""},
-	 { (char *)"VectorVector3_append", _wrap_VectorVector3_append, METH_VARARGS, (char *)"VectorVector3_append(VectorVector3 self, Vector3 x)"},
-	 { (char *)"VectorVector3_empty", _wrap_VectorVector3_empty, METH_VARARGS, (char *)"VectorVector3_empty(VectorVector3 self) -> bool"},
-	 { (char *)"VectorVector3_size", _wrap_VectorVector3_size, METH_VARARGS, (char *)"VectorVector3_size(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
-	 { (char *)"VectorVector3_clear", _wrap_VectorVector3_clear, METH_VARARGS, (char *)"VectorVector3_clear(VectorVector3 self)"},
-	 { (char *)"VectorVector3_swap", _wrap_VectorVector3_swap, METH_VARARGS, (char *)"VectorVector3_swap(VectorVector3 self, VectorVector3 v)"},
-	 { (char *)"VectorVector3_get_allocator", _wrap_VectorVector3_get_allocator, METH_VARARGS, (char *)"VectorVector3_get_allocator(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::allocator_type"},
-	 { (char *)"VectorVector3_begin", _wrap_VectorVector3_begin, METH_VARARGS, (char *)"VectorVector3_begin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"},
-	 { (char *)"VectorVector3_end", _wrap_VectorVector3_end, METH_VARARGS, (char *)"VectorVector3_end(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"},
-	 { (char *)"VectorVector3_rbegin", _wrap_VectorVector3_rbegin, METH_VARARGS, (char *)"VectorVector3_rbegin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"},
-	 { (char *)"VectorVector3_rend", _wrap_VectorVector3_rend, METH_VARARGS, (char *)"VectorVector3_rend(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"},
-	 { (char *)"VectorVector3_pop_back", _wrap_VectorVector3_pop_back, METH_VARARGS, (char *)"VectorVector3_pop_back(VectorVector3 self)"},
+	 { (char *)"VectorVector3_append", _wrap_VectorVector3_append, METH_VARARGS, (char *)"VectorVector3_append(Vector3Coefficients self, Vector3 x)"},
+	 { (char *)"VectorVector3_empty", _wrap_VectorVector3_empty, METH_VARARGS, (char *)"VectorVector3_empty(Vector3Coefficients self) -> bool"},
+	 { (char *)"VectorVector3_size", _wrap_VectorVector3_size, METH_VARARGS, (char *)"VectorVector3_size(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
+	 { (char *)"VectorVector3_clear", _wrap_VectorVector3_clear, METH_VARARGS, (char *)"VectorVector3_clear(Vector3Coefficients self)"},
+	 { (char *)"VectorVector3_swap", _wrap_VectorVector3_swap, METH_VARARGS, (char *)"VectorVector3_swap(Vector3Coefficients self, Vector3Coefficients v)"},
+	 { (char *)"VectorVector3_get_allocator", _wrap_VectorVector3_get_allocator, METH_VARARGS, (char *)"VectorVector3_get_allocator(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::allocator_type"},
+	 { (char *)"VectorVector3_begin", _wrap_VectorVector3_begin, METH_VARARGS, (char *)"VectorVector3_begin(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"},
+	 { (char *)"VectorVector3_end", _wrap_VectorVector3_end, METH_VARARGS, (char *)"VectorVector3_end(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"},
+	 { (char *)"VectorVector3_rbegin", _wrap_VectorVector3_rbegin, METH_VARARGS, (char *)"VectorVector3_rbegin(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"},
+	 { (char *)"VectorVector3_rend", _wrap_VectorVector3_rend, METH_VARARGS, (char *)"VectorVector3_rend(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"},
+	 { (char *)"VectorVector3_pop_back", _wrap_VectorVector3_pop_back, METH_VARARGS, (char *)"VectorVector3_pop_back(Vector3Coefficients self)"},
 	 { (char *)"VectorVector3_erase", _wrap_VectorVector3_erase, METH_VARARGS, (char *)"\n"
 		"erase(std::vector< math::linear::VectorN< 3,double > >::iterator pos) -> std::vector< math::linear::VectorN< 3,double > >::iterator\n"
-		"VectorVector3_erase(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator first, std::vector< math::linear::VectorN< 3,double > >::iterator last) -> std::vector< math::linear::VectorN< 3,double > >::iterator\n"
+		"VectorVector3_erase(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator first, std::vector< math::linear::VectorN< 3,double > >::iterator last) -> std::vector< math::linear::VectorN< 3,double > >::iterator\n"
 		""},
 	 { (char *)"new_VectorVector3", _wrap_new_VectorVector3, METH_VARARGS, (char *)"\n"
 		"VectorVector3()\n"
-		"VectorVector3(VectorVector3 arg2)\n"
+		"VectorVector3(Vector3Coefficients arg2)\n"
 		"VectorVector3(std::vector< math::linear::VectorN< 3,double > >::size_type size)\n"
-		"new_VectorVector3(std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> VectorVector3\n"
+		"new_VectorVector3(std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> Vector3Coefficients\n"
 		""},
-	 { (char *)"VectorVector3_push_back", _wrap_VectorVector3_push_back, METH_VARARGS, (char *)"VectorVector3_push_back(VectorVector3 self, Vector3 x)"},
-	 { (char *)"VectorVector3_front", _wrap_VectorVector3_front, METH_VARARGS, (char *)"VectorVector3_front(VectorVector3 self) -> Vector3"},
-	 { (char *)"VectorVector3_back", _wrap_VectorVector3_back, METH_VARARGS, (char *)"VectorVector3_back(VectorVector3 self) -> Vector3"},
-	 { (char *)"VectorVector3_assign", _wrap_VectorVector3_assign, METH_VARARGS, (char *)"VectorVector3_assign(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)"},
+	 { (char *)"VectorVector3_push_back", _wrap_VectorVector3_push_back, METH_VARARGS, (char *)"VectorVector3_push_back(Vector3Coefficients self, Vector3 x)"},
+	 { (char *)"VectorVector3_front", _wrap_VectorVector3_front, METH_VARARGS, (char *)"VectorVector3_front(Vector3Coefficients self) -> Vector3"},
+	 { (char *)"VectorVector3_back", _wrap_VectorVector3_back, METH_VARARGS, (char *)"VectorVector3_back(Vector3Coefficients self) -> Vector3"},
+	 { (char *)"VectorVector3_assign", _wrap_VectorVector3_assign, METH_VARARGS, (char *)"VectorVector3_assign(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)"},
 	 { (char *)"VectorVector3_resize", _wrap_VectorVector3_resize, METH_VARARGS, (char *)"\n"
 		"resize(std::vector< math::linear::VectorN< 3,double > >::size_type new_size)\n"
-		"VectorVector3_resize(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size, Vector3 x)\n"
+		"VectorVector3_resize(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size, Vector3 x)\n"
 		""},
 	 { (char *)"VectorVector3_insert", _wrap_VectorVector3_insert, METH_VARARGS, (char *)"\n"
 		"insert(std::vector< math::linear::VectorN< 3,double > >::iterator pos, Vector3 x) -> std::vector< math::linear::VectorN< 3,double > >::iterator\n"
-		"VectorVector3_insert(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)\n"
+		"VectorVector3_insert(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)\n"
 		""},
-	 { (char *)"VectorVector3_reserve", _wrap_VectorVector3_reserve, METH_VARARGS, (char *)"VectorVector3_reserve(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n)"},
-	 { (char *)"VectorVector3_capacity", _wrap_VectorVector3_capacity, METH_VARARGS, (char *)"VectorVector3_capacity(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
-	 { (char *)"delete_VectorVector3", _wrap_delete_VectorVector3, METH_VARARGS, (char *)"delete_VectorVector3(VectorVector3 self)"},
+	 { (char *)"VectorVector3_reserve", _wrap_VectorVector3_reserve, METH_VARARGS, (char *)"VectorVector3_reserve(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type n)"},
+	 { (char *)"VectorVector3_capacity", _wrap_VectorVector3_capacity, METH_VARARGS, (char *)"VectorVector3_capacity(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"},
+	 { (char *)"delete_VectorVector3", _wrap_delete_VectorVector3, METH_VARARGS, (char *)"delete_VectorVector3(Vector3Coefficients self)"},
 	 { (char *)"VectorVector3_swigregister", VectorVector3_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VectorChannelParameters_iterator", _wrap_VectorChannelParameters_iterator, METH_VARARGS, (char *)"VectorChannelParameters_iterator(VectorChannelParameters self) -> SwigPyIterator"},
 	 { (char *)"VectorChannelParameters___nonzero__", _wrap_VectorChannelParameters___nonzero__, METH_VARARGS, (char *)"VectorChannelParameters___nonzero__(VectorChannelParameters self) -> bool"},

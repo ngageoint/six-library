@@ -21,6 +21,25 @@
 %include "math/linear/VectorN.h"
 %include "math/linear/Vector.h"
 
+// Pickle utilities
+%pythoncode
+%{
+    import cPickle as pickle
+%}
+%import <types.i>
+
+%extend math::linear::VectorN
+{
+%pythoncode
+%{
+    def __getstate__(self):
+        return pickle.dumps(self.vals())
+    def __setstate__(self, state):
+        self.__init__(pickle.loads(state))
+%}
+}
+
+
 %template(std_vector_double) std::vector<double>;
 %template(std_vector_vector_double) std::vector<std::vector<double> >;
 

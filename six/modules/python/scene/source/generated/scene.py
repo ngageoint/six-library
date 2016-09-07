@@ -198,9 +198,9 @@ SwigPyIterator_swigregister(SwigPyIterator)
 
 import coda.coda_except
 import coda.math_linear
-import coda.math_poly
 import coda.coda_types
 import coda.coda_sys
+import coda.math_poly
 
 _scene.TRACK_LEFT_swigconstant(_scene)
 TRACK_LEFT = _scene.TRACK_LEFT

@@ -133,6 +133,11 @@ public:
         return mCoef.empty();
     }
 
+    inline const std::vector<_T>& coeffs() const
+    {
+        return mCoef;
+    }
+
     /*!
      * Returns a scaled polynomial such that
      * P'(x) = P(x * scale)

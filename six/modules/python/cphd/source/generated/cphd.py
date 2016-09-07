@@ -2236,13 +2236,13 @@ class VectorVector3(_object):
 
 
     def __getslice__(self, i, j):
-        """__getslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> VectorVector3"""
+        """__getslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> Vector3Coefficients"""
         return _cphd.VectorVector3___getslice__(self, i, j)
 
 
     def __setslice__(self, *args):
         """
-        __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, VectorVector3 v)
+        __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, Vector3Coefficients v)
         __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)
         """
         return _cphd.VectorVector3___setslice__(self, *args)
@@ -2263,7 +2263,7 @@ class VectorVector3(_object):
 
     def __getitem__(self, *args):
         """
-        __getitem__(VectorVector3 self, PySliceObject * slice) -> VectorVector3
+        __getitem__(VectorVector3 self, PySliceObject * slice) -> Vector3Coefficients
         __getitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3
         """
         return _cphd.VectorVector3___getitem__(self, *args)
@@ -2271,7 +2271,7 @@ class VectorVector3(_object):
 
     def __setitem__(self, *args):
         """
-        __setitem__(VectorVector3 self, PySliceObject * slice, VectorVector3 v)
+        __setitem__(VectorVector3 self, PySliceObject * slice, Vector3Coefficients v)
         __setitem__(VectorVector3 self, PySliceObject * slice)
         __setitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, Vector3 x)
         """
@@ -2299,7 +2299,7 @@ class VectorVector3(_object):
 
 
     def swap(self, v):
-        """swap(VectorVector3 self, VectorVector3 v)"""
+        """swap(VectorVector3 self, Vector3Coefficients v)"""
         return _cphd.VectorVector3_swap(self, v)
 
 
@@ -2344,7 +2344,7 @@ class VectorVector3(_object):
     def __init__(self, *args):
         """
         __init__(std::vector<(math::linear::VectorN<(3,double)>)> self) -> VectorVector3
-        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, VectorVector3 arg2) -> VectorVector3
+        __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, Vector3Coefficients arg2) -> VectorVector3
         __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size) -> VectorVector3
         __init__(std::vector<(math::linear::VectorN<(3,double)>)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> VectorVector3
         """

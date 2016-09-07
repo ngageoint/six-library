@@ -199,9 +199,9 @@ SwigPyIterator_swigregister(SwigPyIterator)
 import coda.math_poly
 import coda.math_linear
 import coda.coda_except
-import pysix.six_base
 import coda.coda_types
 import coda.coda_sys
+import pysix.six_base
 import pysix.scene
 import coda.mem
 import coda.coda_io
@@ -2774,7 +2774,7 @@ class SixSicdUtilities(_object):
     __swig_getmethods__["getProjectionModel"] = lambda x: getProjectionModel
 
     def getValidDataPolygon(sicdData, projection, validData):
-        """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > & validData)"""
+        """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
         return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
     if _newclass:
@@ -2880,7 +2880,7 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
 def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
-    """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > & validData)"""
+    """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
     return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
 def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):

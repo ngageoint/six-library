@@ -47,6 +47,9 @@ TEST_CASE(test1DPolyfit)
     const OneD<double> truth(3, zPoly);
     // First test the raw pointer signature
     const OneD<double> polyFromRaw = fit(4, xObs, yObs, 3);
+
+    // should fail with not enough points (order>=npoints)
+    TEST_EXCEPTION(fit(4, xObs, yObs, 4));
     
     // Now call the other one
     const Vector<double> xv(4, xObs);
@@ -148,6 +151,9 @@ TEST_CASE(test2DPolyfit)
     z(0, 0) = 1;   z(1, 0) = .3; z(2, 0) = 0;
     z(0, 1) = .16; z(1, 1) = 1;  z(2, 1) = 0;
     z(0, 2) = 0;   z(1, 2) = 0;  z(2, 2) = .85;
+
+    // should fail with not enough points: (orderX+1)*(orderY+1) > npoints
+    TEST_EXCEPTION(fit(x, y, z, 3, 3));
 
     TwoD<double> poly = fit(x, y, z, 1, 1);
     TEST_ASSERT_EQ(poly, truth);

@@ -2985,26 +2985,28 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_size_type swig_types[12]
 #define SWIGTYPE_p_ssize_t swig_types[13]
 #define SWIGTYPE_p_std__allocatorT_size_t_t swig_types[14]
-#define SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t swig_types[15]
-#define SWIGTYPE_p_std__invalid_argument swig_types[16]
-#define SWIGTYPE_p_std__pairT_double_double_t swig_types[17]
-#define SWIGTYPE_p_std__pairT_size_t_size_t_t swig_types[18]
-#define SWIGTYPE_p_std__pairT_ssize_t_ssize_t_t swig_types[19]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[20]
-#define SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t swig_types[21]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[22]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[23]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[24]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[25]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[26]
-#define SWIGTYPE_p_uint16_t swig_types[27]
-#define SWIGTYPE_p_uint32_t swig_types[28]
-#define SWIGTYPE_p_uint64_t swig_types[29]
-#define SWIGTYPE_p_uint8_t swig_types[30]
-#define SWIGTYPE_p_unsigned_char swig_types[31]
-#define SWIGTYPE_p_value_type swig_types[32]
-static swig_type_info *swig_types[34];
-static swig_module_info swig_module = {swig_types, 33, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__allocatorT_types__RowColT_double_t_t swig_types[15]
+#define SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t swig_types[16]
+#define SWIGTYPE_p_std__invalid_argument swig_types[17]
+#define SWIGTYPE_p_std__pairT_double_double_t swig_types[18]
+#define SWIGTYPE_p_std__pairT_size_t_size_t_t swig_types[19]
+#define SWIGTYPE_p_std__pairT_ssize_t_ssize_t_t swig_types[20]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[21]
+#define SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t swig_types[22]
+#define SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t swig_types[23]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[24]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[25]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[26]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[27]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[28]
+#define SWIGTYPE_p_uint16_t swig_types[29]
+#define SWIGTYPE_p_uint32_t swig_types[30]
+#define SWIGTYPE_p_uint64_t swig_types[31]
+#define SWIGTYPE_p_uint8_t swig_types[32]
+#define SWIGTYPE_p_unsigned_char swig_types[33]
+#define SWIGTYPE_p_value_type swig_types[34]
+static swig_type_info *swig_types[36];
+static swig_module_info swig_module = {swig_types, 35, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4717,6 +4719,112 @@ SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types
 SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator first,std::vector< types::RowCol< ssize_t > >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator pos,std::vector< types::RowCol< ssize_t > >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator pos,std::vector< types::RowCol< ssize_t > >::size_type n,std::vector< types::RowCol< ssize_t > >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits<types::RowCol< double > > {
+      typedef pointer_category category;
+      static const char* type_name() { return"types::RowCol< double >"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<types::RowCol< double >, std::allocator< types::RowCol< double > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "types::RowCol< double >" "," "std::allocator< types::RowCol< double > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__iterator(std::vector< types::RowCol< double > > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____nonzero__(std::vector< types::RowCol< double > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____bool__(std::vector< types::RowCol< double > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< types::RowCol< double > >::size_type std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____len__(std::vector< types::RowCol< double > > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< types::RowCol< double > >::value_type std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__pop(std::vector< types::RowCol< double > > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getslice__(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::difference_type i,std::vector< types::RowCol< double > >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setslice____SWIG_0(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::difference_type i,std::vector< types::RowCol< double > >::difference_type j,std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &v=std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > >()){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delslice__(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::difference_type i,std::vector< types::RowCol< double > >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delitem____SWIG_0(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::difference_type i){
+      self->erase(swig::getpos(self,i));
+    }
+SWIGINTERN std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getitem____SWIG_0(std::vector< types::RowCol< double > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type id = i;
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_0(std::vector< types::RowCol< double > > *self,PySliceObject *slice,std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type id = i;
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_1(std::vector< types::RowCol< double > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type id = i;
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delitem____SWIG_1(std::vector< types::RowCol< double > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type id = i;
+      std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< types::RowCol< double > >::value_type const &std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getitem____SWIG_1(std::vector< types::RowCol< double > > const *self,std::vector< types::RowCol< double > >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_2(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::difference_type i,std::vector< types::RowCol< double > >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__append(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< types::RowCol< double > >::iterator std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__erase__SWIG_0(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< types::RowCol< double > >::iterator std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__erase__SWIG_1(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::iterator first,std::vector< types::RowCol< double > >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< types::RowCol< double > >::iterator std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__insert__SWIG_0(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::iterator pos,std::vector< types::RowCol< double > >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__insert__SWIG_1(std::vector< types::RowCol< double > > *self,std::vector< types::RowCol< double > >::iterator pos,std::vector< types::RowCol< double > >::size_type n,std::vector< types::RowCol< double > >::value_type const &x){ self->insert(pos, n, x); }
 
 namespace swig {
   template <> struct traits<size_t > {
@@ -10031,6 +10139,1919 @@ SWIGINTERN PyObject *VectorRowColInt_swigregister(PyObject *SWIGUNUSEDPARM(self)
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_iterator" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (swig::SwigPyIterator *)std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__iterator(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___nonzero__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (bool)std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____nonzero__((std::vector< types::RowCol< double > > const *)arg1);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___bool__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (bool)std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____bool__((std::vector< types::RowCol< double > > const *)arg1);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___len__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____len__((std::vector< types::RowCol< double > > const *)arg1);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_pop" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  try {
+    result = std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__pop(arg1);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< double > >::value_type(static_cast< const std::vector< types::RowCol< double > >::value_type& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  std::vector< types::RowCol< double > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___getslice__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___getslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColDouble___getslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val3);
+  try {
+    result = (std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *)std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getslice__(arg1,arg2,arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  std::vector< types::RowCol< double > >::difference_type arg3 ;
+  std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorRowColDouble___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___setslice__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColDouble___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val3);
+  {
+    std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *ptr = (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorRowColDouble___setslice__" "', argument " "4"" of type '" "std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble___setslice__" "', argument " "4"" of type '" "std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &)*arg4);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  std::vector< types::RowCol< double > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___setslice__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColDouble___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val3);
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setslice__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorRowColDouble___setslice____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorRowColDouble___setslice____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::__setslice__(std::vector< types::RowCol< double > >::difference_type,std::vector< types::RowCol< double > >::difference_type,std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &)\n"
+    "    std::vector< types::RowCol< double > >::__setslice__(std::vector< types::RowCol< double > >::difference_type,std::vector< types::RowCol< double > >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  std::vector< types::RowCol< double > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___delslice__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___delslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColDouble___delslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val3);
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delslice__(arg1,arg2,arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___delitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___delitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delitem____SWIG_0(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___getitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  try {
+    result = (std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *)std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getitem____SWIG_0(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___setitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *ptr = (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColDouble___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &)*arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___setitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_1(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___delitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____delitem____SWIG_1(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  catch(std::invalid_argument &_e) {
+    SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___delitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::__delitem__(std::vector< types::RowCol< double > >::difference_type)\n"
+    "    std::vector< types::RowCol< double > >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< types::RowCol< double > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___getitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___getitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  try {
+    result = (std::vector< types::RowCol< double > >::value_type *) &std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____getitem____SWIG_1((std::vector< types::RowCol< double > > const *)arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___getitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::__getitem__(PySliceObject *)\n"
+    "    std::vector< types::RowCol< double > >::__getitem__(std::vector< types::RowCol< double > >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::difference_type arg2 ;
+  std::vector< types::RowCol< double > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble___setitem__" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble___setitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColDouble___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp3);
+  try {
+    std_vector_Sl_types_RowCol_Sl_double_Sg__Sg____setitem____SWIG_2(arg1,arg2,(types::RowCol< double > const &)*arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+  }
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorRowColDouble___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_double_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorRowColDouble___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::__setitem__(PySliceObject *,std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > const &)\n"
+    "    std::vector< types::RowCol< double > >::__setitem__(PySliceObject *)\n"
+    "    std::vector< types::RowCol< double > >::__setitem__(std::vector< types::RowCol< double > >::difference_type,std::vector< types::RowCol< double > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_append" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColDouble_append" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_append" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp2);
+  std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__append(arg1,(types::RowCol< double > const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorRowColDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorRowColDouble")) SWIG_fail;
+  result = (std::vector< types::RowCol< double > > *)new std::vector< types::RowCol< double > >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorRowColDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorRowColDouble",&obj0)) SWIG_fail;
+  {
+    std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *ptr = (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorRowColDouble" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorRowColDouble" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  result = (std::vector< types::RowCol< double > > *)new std::vector< types::RowCol< double > >((std::vector< types::RowCol< double > > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_empty" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (bool)((std::vector< types::RowCol< double > > const *)arg1)->empty();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_size" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = ((std::vector< types::RowCol< double > > const *)arg1)->size();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_clear" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  (arg1)->clear();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_swap" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColDouble_swap" "', argument " "2"" of type '" "std::vector< types::RowCol< double > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_swap" "', argument " "2"" of type '" "std::vector< types::RowCol< double > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp2);
+  (arg1)->swap(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< types::RowCol< double > > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_get_allocator" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = ((std::vector< types::RowCol< double > > const *)arg1)->get_allocator();
+  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< double > >::allocator_type(static_cast< const std::vector< types::RowCol< double > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_types__RowColT_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_begin" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (arg1)->begin();
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_end" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (arg1)->end();
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_rbegin" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (arg1)->rbegin();
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_rend" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (arg1)->rend();
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorRowColDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorRowColDouble",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColDouble" "', argument " "1"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< types::RowCol< double > >::size_type >(val1);
+  result = (std::vector< types::RowCol< double > > *)new std::vector< types::RowCol< double > >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_pop_back" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  (arg1)->pop_back();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_resize" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::size_type >(val2);
+  (arg1)->resize(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< types::RowCol< double > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_erase" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+    }
+  }
+  result = std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__erase__SWIG_0(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::iterator arg2 ;
+  std::vector< types::RowCol< double > >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< types::RowCol< double > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_erase" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+    }
+  }
+  result = std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorRowColDouble_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorRowColDouble_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::erase(std::vector< types::RowCol< double > >::iterator)\n"
+    "    std::vector< types::RowCol< double > >::erase(std::vector< types::RowCol< double > >::iterator,std::vector< types::RowCol< double > >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorRowColDouble__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > >::size_type arg1 ;
+  std::vector< types::RowCol< double > >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< types::RowCol< double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorRowColDouble",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColDouble" "', argument " "1"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< types::RowCol< double > >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorRowColDouble" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorRowColDouble" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp2);
+  result = (std::vector< types::RowCol< double > > *)new std::vector< types::RowCol< double > >(arg1,(std::vector< types::RowCol< double > >::value_type const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorRowColDouble(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorRowColDouble__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorRowColDouble__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorRowColDouble__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_types__RowColT_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorRowColDouble__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorRowColDouble'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::vector()\n"
+    "    std::vector< types::RowCol< double > >::vector(std::vector< types::RowCol< double > > const &)\n"
+    "    std::vector< types::RowCol< double > >::vector(std::vector< types::RowCol< double > >::size_type)\n"
+    "    std::vector< types::RowCol< double > >::vector(std::vector< types::RowCol< double > >::size_type,std::vector< types::RowCol< double > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_push_back" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColDouble_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp2);
+  (arg1)->push_back((std::vector< types::RowCol< double > >::value_type const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_front" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (std::vector< types::RowCol< double > >::value_type *) &((std::vector< types::RowCol< double > > const *)arg1)->front();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_back" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = (std::vector< types::RowCol< double > >::value_type *) &((std::vector< types::RowCol< double > > const *)arg1)->back();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::size_type arg2 ;
+  std::vector< types::RowCol< double > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_assign" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble_assign" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColDouble_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp3);
+  (arg1)->assign(arg2,(std::vector< types::RowCol< double > >::value_type const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::size_type arg2 ;
+  std::vector< types::RowCol< double > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_resize" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColDouble_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp3);
+  (arg1)->resize(arg2,(std::vector< types::RowCol< double > >::value_type const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorRowColDouble_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_double_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorRowColDouble_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::resize(std::vector< types::RowCol< double > >::size_type)\n"
+    "    std::vector< types::RowCol< double > >::resize(std::vector< types::RowCol< double > >::size_type,std::vector< types::RowCol< double > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::iterator arg2 ;
+  std::vector< types::RowCol< double > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< types::RowCol< double > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorRowColDouble_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_insert" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColDouble_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp3);
+  result = std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__insert__SWIG_0(arg1,arg2,(types::RowCol< double > const &)*arg3);
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< double > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::iterator arg2 ;
+  std::vector< types::RowCol< double > >::size_type arg3 ;
+  std::vector< types::RowCol< double > >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorRowColDouble_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_insert" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColDouble_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColDouble_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< types::RowCol< double > >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_types__RowColT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorRowColDouble_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColDouble_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< double > >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< types::RowCol< double > >::value_type * >(argp4);
+  std_vector_Sl_types_RowCol_Sl_double_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(types::RowCol< double > const &)*arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_insert(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5] = {
+    0
+  };
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_double_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorRowColDouble_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<types::RowCol< double >,std::allocator< types::RowCol< double > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< double > >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_types__RowColT_double_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorRowColDouble_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorRowColDouble_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< types::RowCol< double > >::insert(std::vector< types::RowCol< double > >::iterator,std::vector< types::RowCol< double > >::value_type const &)\n"
+    "    std::vector< types::RowCol< double > >::insert(std::vector< types::RowCol< double > >::iterator,std::vector< types::RowCol< double > >::size_type,std::vector< types::RowCol< double > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  std::vector< types::RowCol< double > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorRowColDouble_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_reserve" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColDouble_reserve" "', argument " "2"" of type '" "std::vector< types::RowCol< double > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< types::RowCol< double > >::size_type >(val2);
+  (arg1)->reserve(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorRowColDouble_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< types::RowCol< double > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorRowColDouble_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColDouble_capacity" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  result = ((std::vector< types::RowCol< double > > const *)arg1)->capacity();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorRowColDouble(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< types::RowCol< double > > *arg1 = (std::vector< types::RowCol< double > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorRowColDouble",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorRowColDouble" "', argument " "1"" of type '" "std::vector< types::RowCol< double > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< types::RowCol< double > > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorRowColDouble_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_VectorSizeT_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< size_t > *arg1 = (std::vector< size_t > *) 0 ;
@@ -12126,6 +14147,67 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorRowColInt_capacity", _wrap_VectorRowColInt_capacity, METH_VARARGS, (char *)"VectorRowColInt_capacity(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"},
 	 { (char *)"delete_VectorRowColInt", _wrap_delete_VectorRowColInt, METH_VARARGS, (char *)"delete_VectorRowColInt(VectorRowColInt self)"},
 	 { (char *)"VectorRowColInt_swigregister", VectorRowColInt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorRowColDouble_iterator", _wrap_VectorRowColDouble_iterator, METH_VARARGS, (char *)"VectorRowColDouble_iterator(VectorRowColDouble self) -> SwigPyIterator"},
+	 { (char *)"VectorRowColDouble___nonzero__", _wrap_VectorRowColDouble___nonzero__, METH_VARARGS, (char *)"VectorRowColDouble___nonzero__(VectorRowColDouble self) -> bool"},
+	 { (char *)"VectorRowColDouble___bool__", _wrap_VectorRowColDouble___bool__, METH_VARARGS, (char *)"VectorRowColDouble___bool__(VectorRowColDouble self) -> bool"},
+	 { (char *)"VectorRowColDouble___len__", _wrap_VectorRowColDouble___len__, METH_VARARGS, (char *)"VectorRowColDouble___len__(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"},
+	 { (char *)"VectorRowColDouble_pop", _wrap_VectorRowColDouble_pop, METH_VARARGS, (char *)"VectorRowColDouble_pop(VectorRowColDouble self) -> RowColDouble"},
+	 { (char *)"VectorRowColDouble___getslice__", _wrap_VectorRowColDouble___getslice__, METH_VARARGS, (char *)"VectorRowColDouble___getslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j) -> VectorRowColDouble"},
+	 { (char *)"VectorRowColDouble___setslice__", _wrap_VectorRowColDouble___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j, VectorRowColDouble v)\n"
+		"VectorRowColDouble___setslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j)\n"
+		""},
+	 { (char *)"VectorRowColDouble___delslice__", _wrap_VectorRowColDouble___delslice__, METH_VARARGS, (char *)"VectorRowColDouble___delslice__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, std::vector< types::RowCol< double > >::difference_type j)"},
+	 { (char *)"VectorRowColDouble___delitem__", _wrap_VectorRowColDouble___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< types::RowCol< double > >::difference_type i)\n"
+		"VectorRowColDouble___delitem__(VectorRowColDouble self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorRowColDouble___getitem__", _wrap_VectorRowColDouble___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorRowColDouble\n"
+		"VectorRowColDouble___getitem__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i) -> RowColDouble\n"
+		""},
+	 { (char *)"VectorRowColDouble___setitem__", _wrap_VectorRowColDouble___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorRowColDouble v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorRowColDouble___setitem__(VectorRowColDouble self, std::vector< types::RowCol< double > >::difference_type i, RowColDouble x)\n"
+		""},
+	 { (char *)"VectorRowColDouble_append", _wrap_VectorRowColDouble_append, METH_VARARGS, (char *)"VectorRowColDouble_append(VectorRowColDouble self, RowColDouble x)"},
+	 { (char *)"VectorRowColDouble_empty", _wrap_VectorRowColDouble_empty, METH_VARARGS, (char *)"VectorRowColDouble_empty(VectorRowColDouble self) -> bool"},
+	 { (char *)"VectorRowColDouble_size", _wrap_VectorRowColDouble_size, METH_VARARGS, (char *)"VectorRowColDouble_size(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"},
+	 { (char *)"VectorRowColDouble_clear", _wrap_VectorRowColDouble_clear, METH_VARARGS, (char *)"VectorRowColDouble_clear(VectorRowColDouble self)"},
+	 { (char *)"VectorRowColDouble_swap", _wrap_VectorRowColDouble_swap, METH_VARARGS, (char *)"VectorRowColDouble_swap(VectorRowColDouble self, VectorRowColDouble v)"},
+	 { (char *)"VectorRowColDouble_get_allocator", _wrap_VectorRowColDouble_get_allocator, METH_VARARGS, (char *)"VectorRowColDouble_get_allocator(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::allocator_type"},
+	 { (char *)"VectorRowColDouble_begin", _wrap_VectorRowColDouble_begin, METH_VARARGS, (char *)"VectorRowColDouble_begin(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::iterator"},
+	 { (char *)"VectorRowColDouble_end", _wrap_VectorRowColDouble_end, METH_VARARGS, (char *)"VectorRowColDouble_end(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::iterator"},
+	 { (char *)"VectorRowColDouble_rbegin", _wrap_VectorRowColDouble_rbegin, METH_VARARGS, (char *)"VectorRowColDouble_rbegin(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::reverse_iterator"},
+	 { (char *)"VectorRowColDouble_rend", _wrap_VectorRowColDouble_rend, METH_VARARGS, (char *)"VectorRowColDouble_rend(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::reverse_iterator"},
+	 { (char *)"VectorRowColDouble_pop_back", _wrap_VectorRowColDouble_pop_back, METH_VARARGS, (char *)"VectorRowColDouble_pop_back(VectorRowColDouble self)"},
+	 { (char *)"VectorRowColDouble_erase", _wrap_VectorRowColDouble_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< types::RowCol< double > >::iterator pos) -> std::vector< types::RowCol< double > >::iterator\n"
+		"VectorRowColDouble_erase(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator first, std::vector< types::RowCol< double > >::iterator last) -> std::vector< types::RowCol< double > >::iterator\n"
+		""},
+	 { (char *)"new_VectorRowColDouble", _wrap_new_VectorRowColDouble, METH_VARARGS, (char *)"\n"
+		"VectorRowColDouble()\n"
+		"VectorRowColDouble(VectorRowColDouble arg2)\n"
+		"VectorRowColDouble(std::vector< types::RowCol< double > >::size_type size)\n"
+		"new_VectorRowColDouble(std::vector< types::RowCol< double > >::size_type size, RowColDouble value) -> VectorRowColDouble\n"
+		""},
+	 { (char *)"VectorRowColDouble_push_back", _wrap_VectorRowColDouble_push_back, METH_VARARGS, (char *)"VectorRowColDouble_push_back(VectorRowColDouble self, RowColDouble x)"},
+	 { (char *)"VectorRowColDouble_front", _wrap_VectorRowColDouble_front, METH_VARARGS, (char *)"VectorRowColDouble_front(VectorRowColDouble self) -> RowColDouble"},
+	 { (char *)"VectorRowColDouble_back", _wrap_VectorRowColDouble_back, METH_VARARGS, (char *)"VectorRowColDouble_back(VectorRowColDouble self) -> RowColDouble"},
+	 { (char *)"VectorRowColDouble_assign", _wrap_VectorRowColDouble_assign, METH_VARARGS, (char *)"VectorRowColDouble_assign(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type n, RowColDouble x)"},
+	 { (char *)"VectorRowColDouble_resize", _wrap_VectorRowColDouble_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< types::RowCol< double > >::size_type new_size)\n"
+		"VectorRowColDouble_resize(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type new_size, RowColDouble x)\n"
+		""},
+	 { (char *)"VectorRowColDouble_insert", _wrap_VectorRowColDouble_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< types::RowCol< double > >::iterator pos, RowColDouble x) -> std::vector< types::RowCol< double > >::iterator\n"
+		"VectorRowColDouble_insert(VectorRowColDouble self, std::vector< types::RowCol< double > >::iterator pos, std::vector< types::RowCol< double > >::size_type n, RowColDouble x)\n"
+		""},
+	 { (char *)"VectorRowColDouble_reserve", _wrap_VectorRowColDouble_reserve, METH_VARARGS, (char *)"VectorRowColDouble_reserve(VectorRowColDouble self, std::vector< types::RowCol< double > >::size_type n)"},
+	 { (char *)"VectorRowColDouble_capacity", _wrap_VectorRowColDouble_capacity, METH_VARARGS, (char *)"VectorRowColDouble_capacity(VectorRowColDouble self) -> std::vector< types::RowCol< double > >::size_type"},
+	 { (char *)"delete_VectorRowColDouble", _wrap_delete_VectorRowColDouble, METH_VARARGS, (char *)"delete_VectorRowColDouble(VectorRowColDouble self)"},
+	 { (char *)"VectorRowColDouble_swigregister", VectorRowColDouble_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VectorSizeT_iterator", _wrap_VectorSizeT_iterator, METH_VARARGS, (char *)"VectorSizeT_iterator(VectorSizeT self) -> SwigPyIterator"},
 	 { (char *)"VectorSizeT___nonzero__", _wrap_VectorSizeT___nonzero__, METH_VARARGS, (char *)"VectorSizeT___nonzero__(VectorSizeT self) -> bool"},
 	 { (char *)"VectorSizeT___bool__", _wrap_VectorSizeT___bool__, METH_VARARGS, (char *)"VectorSizeT___bool__(VectorSizeT self) -> bool"},
@@ -12208,16 +14290,18 @@ static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *",
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_size_t_t = {"_p_std__allocatorT_size_t_t", "std::vector< size_t >::allocator_type *|std::allocator< size_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_types__RowColT_double_t_t = {"_p_std__allocatorT_types__RowColT_double_t_t", "std::allocator< types::RowCol< double > > *|std::vector< types::RowCol< double > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t = {"_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t", "std::allocator< types::RowCol< ssize_t > > *|std::allocator< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< ssize_t > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__pairT_double_double_t = {"_p_std__pairT_double_double_t", "std::pair< double,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__pairT_size_t_size_t_t = {"_p_std__pairT_size_t_size_t_t", "std::pair< size_t,size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__pairT_ssize_t_ssize_t_t = {"_p_std__pairT_ssize_t_ssize_t_t", "std::pair< ssize_t,ssize_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *|std::vector< size_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t = {"_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t", "std::vector< types::RowCol< double > > *|std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t = {"_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t", "std::vector< types::RowCol< ssize_t > > *|std::vector< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< ssize_t >,std::allocator< types::RowCol< ssize_t > > > *|std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "types::RowCol< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "std::vector< types::RowCol< double > >::value_type *|types::RowCol< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_size_t_t = {"_p_types__RowColT_size_t_t", "types::RowCol< size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_ssize_t_t = {"_p_types__RowColT_ssize_t_t", "types::RowCol< sys::SSize_T > *|types::RowCol< ssize_t > *|std::vector< types::RowCol< ssize_t > >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
@@ -12243,12 +14327,14 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
   &_swigt__p_std__allocatorT_size_t_t,
+  &_swigt__p_std__allocatorT_types__RowColT_double_t_t,
   &_swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__pairT_double_double_t,
   &_swigt__p_std__pairT_size_t_size_t_t,
   &_swigt__p_std__pairT_ssize_t_ssize_t_t,
   &_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
+  &_swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t,
   &_swigt__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_types__RgAzT_double_t,
@@ -12278,12 +14364,14 @@ static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_size_t_t[] = {  {&_swigt__p_std__allocatorT_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_types__RowColT_double_t_t[] = {  {&_swigt__p_std__allocatorT_types__RowColT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t[] = {  {&_swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__pairT_double_double_t[] = {  {&_swigt__p_std__pairT_double_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__pairT_size_t_size_t_t[] = {  {&_swigt__p_std__pairT_size_t_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__pairT_ssize_t_ssize_t_t[] = {  {&_swigt__p_std__pairT_ssize_t_ssize_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t[] = {  {&_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t[] = {  {&_swigt__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RgAzT_double_t[] = {  {&_swigt__p_types__RgAzT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -12313,12 +14401,14 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_type,
   _swigc__p_ssize_t,
   _swigc__p_std__allocatorT_size_t_t,
+  _swigc__p_std__allocatorT_types__RowColT_double_t_t,
   _swigc__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__pairT_double_double_t,
   _swigc__p_std__pairT_size_t_size_t_t,
   _swigc__p_std__pairT_ssize_t_ssize_t_t,
   _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
+  _swigc__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t,
   _swigc__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_types__RgAzT_double_t,
