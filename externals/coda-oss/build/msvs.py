@@ -354,7 +354,7 @@ except:
 def stealth_write(self, data, flags='wb'):
 	import sys
 	if sys.version_info[0] == 2:
-                data = data.decode(sys.getfilesystemencoding(), 'replace')
+		data = data.decode(sys.getfilesystemencoding(), 'replace')
 		data = data.encode('utf-8')
 	else:
 		data = data.encode('utf-8')
