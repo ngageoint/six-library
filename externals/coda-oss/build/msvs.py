@@ -335,7 +335,7 @@ def compile_template(line):
                 if params[-1]:
                         app("lst.append(%r)" % params[-1])
 
-        fun = COMPILE_TEMPLATE % "\n\t".join(buf)
+        fun = COMPILE_TEMPLATE % "\n    ".join(buf)
         #print(fun)
         return Task.funex(fun)
 
