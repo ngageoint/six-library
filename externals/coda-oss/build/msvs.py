@@ -307,7 +307,7 @@ def compile_template(line):
         app = buf.append
 
         def app(txt):
-                buf.append(indent * 4 * ' ' + txt)
+                buf.append(indent * '\t ' + txt)
 
         for x in range(len(extr)):
                 if params[x]:
@@ -335,7 +335,7 @@ def compile_template(line):
                 if params[-1]:
                         app("lst.append(%r)" % params[-1])
 
-        fun = COMPILE_TEMPLATE % "\n    ".join(buf)
+        fun = COMPILE_TEMPLATE % "\n\t".join(buf)
         #print(fun)
         return Task.funex(fun)
 
