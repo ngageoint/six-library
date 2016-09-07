@@ -8,7 +8,7 @@ installDir = ''
 for child in os.listdir(os.getcwd()):
     if os.path.isdir(child):
         subdirs = os.listdir(child)
-        if 'tests' in subdirs and 'bin' in subdirs:
+        if 'tests' in subdirs:
             installDir = child
 
 packages = ''
