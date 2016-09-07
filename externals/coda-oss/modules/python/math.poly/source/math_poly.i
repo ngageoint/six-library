@@ -259,7 +259,7 @@ typedef math::linear::Vector<double> VectorDouble;
             return math::poly::OneD<Vector3>(*$self);
         }
 
-        PyObject* __call__(PyObject* input)
+	PyObject* __call__(PyObject* input)
         {
             if (!PySequence_Check(input))
             {
@@ -279,7 +279,7 @@ typedef math::linear::Vector<double> VectorDouble;
                                            0 | 0);
                 PyList_SetItem(pyresult, i, pytmp);
             }
-            return pyresult;
+	    return pyresult;
         }
 };
 
