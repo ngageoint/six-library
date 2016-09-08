@@ -25,10 +25,10 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 
-codaPyds = glob.glob(os.path.join(packages, 'coda', '_*pyd'))
+codaPyds = glob.glob(os.path.join(packages, 'coda', '_*'))
 codaPyds = [os.path.basename(pyd) for pyd in codaPyds]
 
-sixPyds = glob.glob(os.path.join(packages, 'pysix', '_*pyd'))
+sixPyds = glob.glob(os.path.join(packages, 'pysix', '_*'))
 sixPyds = [os.path.basename(pyd) for pyd in sixPyds]
 
 
