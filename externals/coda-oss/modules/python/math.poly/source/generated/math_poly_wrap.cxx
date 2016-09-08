@@ -5040,7 +5040,7 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_Vector3_Sg____call____SWIG_1(math::poly::
                                            0 | 0);
                 PyList_SetItem(pyresult, i, pytmp);
             }
-            return pyresult;
+	    return pyresult;
         }
 SWIGINTERN swig::SwigPyIterator *std_vector_Sl_double_Sg__iterator(std::vector< double > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);

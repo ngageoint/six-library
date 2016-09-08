@@ -4944,7 +4944,7 @@ SWIGINTERN double math_linear_Vector_Sl_double_Sg____getitem__(math::linear::Vec
         return (*self)[i];
     }
 SWIGINTERN void math_linear_Vector_Sl_double_Sg____setitem__(math::linear::Vector< double > *self,long i,double val){
-    
+
         if(i < 0 || i > self->size() - 1)
         {
             PyErr_SetString(PyExc_ValueError, "Index out of range");
@@ -5029,7 +5029,7 @@ SWIGINTERN std::vector< std::vector< double,std::allocator< double > >,std::allo
                 returnVals[m][n] = (*self)(m,n);
             }
         }
-        return returnVals; 
+        return returnVals;
     }
 #ifdef __cplusplus
 extern "C" {
