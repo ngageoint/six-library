@@ -38,6 +38,7 @@ setup(name = 'pysix',
           'platform C++ API for reading and writing NGA\'s complex and '
           'derived sensor independent radar formats. Pysix is a Python '
           'wrapper to allow easy reading and writing of the complex format.'),
+      install_requires = [ 'numpy' ]
       package_dir = {'': packages},
       packages = ['pysix', 'coda'],
       package_data = {
