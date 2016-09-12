@@ -24,10 +24,14 @@
  *
 """
 import sys
-import cPickle as pickle
 import numpy as np
 from copy import deepcopy
 from coda.math_linear import *
+
+if sys.version_info[0] == 2:
+    import cPickle as pickle
+else:
+    import pickle
 
 if __name__ == '__main__':
 
