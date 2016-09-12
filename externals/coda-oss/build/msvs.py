@@ -352,12 +352,11 @@ except:
 	pass
 
 def stealth_write(self, data, flags='wb'):
-	try:
-		x = str
-	except:
-		data = data.encode('utf-8') # python 3
-	else:
+	import sys
+	if sys.version_info[0] == 2:
 		data = data.decode(sys.getfilesystemencoding(), 'replace')
+		data = data.encode('utf-8')
+	else:
 		data = data.encode('utf-8')
 
 	if self.name.endswith('.vcproj') or self.name.endswith('.vcxproj'):

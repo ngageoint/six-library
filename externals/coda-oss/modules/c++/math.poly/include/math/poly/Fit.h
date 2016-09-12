@@ -5,7 +5,11 @@
 #include <math/poly/TwoD.h>
 #include <math/linear/Matrix2D.h>
 #include <math/linear/VectorN.h>
+#include <sys/Conf.h>
+#include <except/Exception.h>
+
 #include <numeric>
+#include <sstream>
 
 namespace math
 {
@@ -54,6 +58,16 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
     // n is polynomial order
     size_t sizeX = vx.size();
 
+    if (sizeX <= order)
+    {
+        std::ostringstream excSS;
+        excSS << "Not enough points for a unique fit solution ("
+              << sizeX << " points for an order-" << order
+              << "fit)!  You should really have at least (order+1) = "
+              << (order+1) << " points for this to do what you expect.";
+        throw except::Exception(Ctxt(excSS.str()));
+    }
+    
     // Compute mean value
     double mean = std::accumulate(vx.get(), vx.get() + sizeX, 0.0) / sizeX;
 
@@ -168,6 +182,17 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     yp.scale(ryrms);
 
     size_t acols = (nx+1) * (ny+1);
+
+    if (mxn < acols)
+    {
+        std::ostringstream excSS;
+        excSS << "Not enough points for a unique fit solution ("
+              << mxn << " points for a " << acols << "-coefficient fit)!"
+              << " You should really have at least (orderX+1)*(orderY+1) = "
+              << acols << " points for this to do what you expect.";
+        throw except::Exception(Ctxt(excSS.str()));
+    }
+    
 
     // R = M x N
     // C = NX+1 x NY+1

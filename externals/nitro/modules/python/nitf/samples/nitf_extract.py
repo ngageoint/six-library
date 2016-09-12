@@ -1,10 +1,10 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 
 """
  * =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -35,13 +35,13 @@ def extract_image(subheader, index, imageReader, outDir=None, baseName=None):
     window = SubWindow()
     window.numRows = subheader['numRows'].intValue()
     window.numCols = subheader['numCols'].intValue()
-    window.bandList = range(subheader.getBandCount())
+    window.bandList = list(range(subheader.getBandCount()))
     nbpp = subheader['numBitsPerPixel'].intValue()
     bandData = imageReader.read(window)
-    
+
     if not outDir: outDir = os.getcwd()
     if not baseName: baseName = os.path.basename(os.tempnam())
-    
+
     outNames = []
     for band, data in enumerate(bandData):
         outName = '%s_%d__%d_x_%d_%d_band_%d.out' % (
@@ -59,12 +59,12 @@ def extract_image(subheader, index, imageReader, outDir=None, baseName=None):
 def extract_images(fileName, outDir=None):
     if not outDir: outDir = os.getcwd()
     if not os.path.exists(outDir): os.makedirs(outDir)
-    
+
     handle = IOHandle(fileName)
     reader = Reader()
     record = reader.read(handle)
     logging.info('Dumping file: %s' % fileName)
-    
+
     for i, segment in enumerate(record.getImages()):
         logging.info('--- Image [%d] ---' % i)
         imReader = reader.newImageReader(i)
