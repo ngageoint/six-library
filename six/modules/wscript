@@ -1,11 +1,9 @@
-from waflib.TaskGen import task_gen, feature, Task
 import sys
 if sys.version_info[0] == 3:
     from configparser import SafeConfigParser
 else:
     from ConfigParser import SafeConfigParser
 import os
-import subprocess
 
 def options(opt):
     opt.recurse()
