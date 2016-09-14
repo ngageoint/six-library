@@ -44,7 +44,6 @@ def package(context):
 
     if installDir == None:
         raise Exception('Please run waf install before packaging')
-    print(installDir)
 
     shutil.copyfile(os.path.join('target', 'settings.config'),
         'settings.config')
@@ -57,7 +56,6 @@ def package(context):
         os.remove(numpyWheel[0])
 
     context.to_log('Zipping installation\n')
-    context.to_log(str(installDir))
     shutil.copy(wheel, os.path.join(installDir, wheel))
     shutil.make_archive('sixInstall', 'zip', None, installDir)
     os.remove(os.path.join(installDir, wheel))
