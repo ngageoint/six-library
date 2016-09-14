@@ -1,4 +1,5 @@
 from setuptools import setup, Distribution
+from ConfigParser import SafeConfigParser
 import glob
 import os
 import platform
@@ -10,6 +11,13 @@ for child in os.listdir(os.getcwd()):
         subdirs = os.listdir(child)
         if 'tests' in subdirs:
             installDir = child
+
+if not os.path.exists('settings.config'):
+    raise IOError('File settings.config does not exist')
+
+config = SafeConfigParser()
+config.read('settings.config')
+version = config.get('DEFAULT', 'version')
 
 packages = ''
 if platform.system() == 'Windows':
@@ -33,7 +41,7 @@ sixPyds = [os.path.basename(pyd) for pyd in sixPyds]
 
 
 setup(name = 'pysix',
-      version = '2.2.1',
+      version = version,
       description = ('The Sensor Independent XML library (six), is a cross-'
           'platform C++ API for reading and writing NGA\'s complex and '
           'derived sensor independent radar formats. Pysix is a Python '
