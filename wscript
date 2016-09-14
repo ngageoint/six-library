@@ -56,7 +56,7 @@ def package(context):
         os.remove(numpyWheel[0])
 
     context.to_log('Zipping installation\n')
-    shutil.move(wheel, os.path.join(installDir, wheel))
+    shutil.copy(wheel, os.path.join(installDir, wheel))
     shutil.make_archive('sixInstall', 'zip', None, installDir)
     os.remove(os.path.join(installDir, wheel))
 
