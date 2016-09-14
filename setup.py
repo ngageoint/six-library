@@ -1,5 +1,9 @@
 from setuptools import setup, Distribution
-from ConfigParser import SafeConfigParser
+import sys
+if sys.version_info[0] == 3:
+    from configparser import SafeConfigParser
+else:
+    from ConfigParser import SafeConfigParser
 import glob
 import os
 import platform

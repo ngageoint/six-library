@@ -50,6 +50,9 @@ def package(context):
     subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.'])
     os.remove('settings.config')
     wheel = glob.glob('pysix*whl')[0]
+    numpyWheel = glob.glob('numpy*whl')
+    if len(numpyWheel) > 0:
+        os.remove(numpyWheel[0])
 
     context.to_log('Zipping installation\n')
     shutil.move(wheel, os.path.join(installDir, wheel))
