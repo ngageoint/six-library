@@ -28,9 +28,17 @@ def build(bld):
     bld.launch_dir = join(bld.launch_dir, 'six')
     bld.recurse(DIRS)
 
+    bld(features='subst',
+        name='setup',
+        source='conf/setup.py.in',
+        target='setup.py',
+        SIX_VERSION=bld.env['SIX_VERSION'])
+
+
 def distclean(context):
     context.recurse('modules projects')
     Scripting.distclean(context)
+
 
 def package(context):
     import glob
@@ -45,11 +53,11 @@ def package(context):
     if installDir == None:
         raise Exception('Please run waf install before packaging')
 
-    shutil.copyfile(os.path.join('target', 'settings.config'),
-        'settings.config')
+    shutil.copyfile(os.path.join('target', 'setup.py'),
+        'setup.py')
     context.to_log('Creating wheel\n')
     subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.'])
-    os.remove('settings.config')
+    os.remove('setup.py')
     wheel = glob.glob('pysix*whl')[0]
     numpyWheel = glob.glob('numpy*whl')
     if len(numpyWheel) > 0:
@@ -64,3 +72,4 @@ def package(context):
 class Package(Context.Context):
     cmd = 'package'
     fun = 'package'
+

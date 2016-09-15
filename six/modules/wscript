@@ -1,23 +1,11 @@
 import sys
-if sys.version_info[0] == 3:
-    from configparser import SafeConfigParser
-else:
-    from ConfigParser import SafeConfigParser
 import os
 
 def options(opt):
     opt.recurse()
 
 def configure(conf):
-    conf.env['VERSION'] = '2.2.2-alpha'
-
-    # Save off version for later use
-    targetDir = os.path.dirname(os.path.dirname(conf.getBuildDir()))
-    versionConfig = SafeConfigParser()
-    versionConfig.set('DEFAULT', 'version', conf.env['VERSION'])
-
-    with open(os.path.join(targetDir, 'settings.config'), 'w') as config:
-        versionConfig.write(config)
+    conf.env['SIX_VERSION'] = '2.2.2-alpha'
 
     # This allows us to build XML_DATA_CONTENT statically so that users don't
     # have to set NITF_PLUGIN_PATH
