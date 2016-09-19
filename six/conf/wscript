@@ -1,0 +1,10 @@
+import os
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld(features='subst',
+        name='six_setup',
+        source='setup.py.in',
+        target='setup.py',
+        SIX_VERSION=bld.env['SIX_VERSION'])
