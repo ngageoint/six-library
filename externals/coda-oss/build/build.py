@@ -18,6 +18,8 @@ from dumpenv import dumpenv
 from dumplib import dumplib
 from dumplibraw import dumplibraw
 from dumpconfig import dumpconfig
+from makewheel import makewheel
+from package import package
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -1464,10 +1466,10 @@ def python_package(tg):
 def untar(tsk):
     untarDriver(tsk.path, tsk.fname)
 
-def untarFile(path, fname):
+def untarFile(path, fname, mode='r'):
     import tarfile
     f = path.find_or_declare(fname)
-    tf = tarfile.open(f.abspath(), 'r')
+    tf = tarfile.open(f.abspath(), mode)
     p = path.abspath()
     for x in tf:
         tf.extract(x, p)
@@ -1831,3 +1833,14 @@ class CPPDumpConfigContext(dumpconfig, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpConfigContext, self).__init__(**kw)
+
+class CPPMakeWheelContext(makewheel, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMakeWheelContext, self).__init__(**kw)
+
+class CPPPackageContext(package, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPPackageContext, self).__init__(**kw)
+

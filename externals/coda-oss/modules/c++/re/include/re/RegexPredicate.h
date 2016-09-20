@@ -2,7 +2,7 @@
 #define __RE_REGEX_FILE_PREDICATE_H__
 
 #include "sys/FileFinder.h"
-#include "re/PCRE.h"
+#include "re/Regex.h"
 
 namespace re
 {
@@ -21,7 +21,7 @@ public:
     }
 
 private:
-    re::PCRE mRegex;
+    re::Regex mRegex;
 
 };
 
