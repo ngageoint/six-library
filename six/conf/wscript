@@ -1,6 +1,9 @@
 import os
 
-options = configure = distclean = lambda p: None
+options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env['SETUP_PY_DIR'] = conf.getBuildDir()
 
 def build(bld):
     bld(features='subst',
@@ -9,4 +12,3 @@ def build(bld):
         target='setup.py',
         SIX_VERSION=bld.env['SIX_VERSION'],
         LIBDIR=bld.env['install_libdir'])
-    bld.install_files(os.getcwd(), ['setup.py'])
