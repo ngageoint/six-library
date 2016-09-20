@@ -9,4 +9,4 @@ def build(bld):
         target='setup.py',
         SIX_VERSION=bld.env['SIX_VERSION'],
         LIBDIR=bld.env['install_libdir'])
-    bld.env['SETUP_PY_DIR'] = os.path.join(bld.getBuildDir(), 'six', 'conf')
+    bld.install_files(os.getcwd(), ['setup.py'])
