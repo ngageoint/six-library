@@ -915,7 +915,6 @@ void NITFWriteControl::save(
             iWriter.attachSource(iSource);
         }
     }
-
     addDataAndWrite(schemaPaths);
 }
 
@@ -948,7 +947,6 @@ void NITFWriteControl::addDataAndWrite(
     {
         mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
     }
-
     mWriter.write();
 }
 
