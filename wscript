@@ -1,4 +1,5 @@
 import os
+import subprocess
 from os.path import join
 from waflib import Scripting, Options, Context
 from build import CPPOptionsContext
@@ -22,11 +23,12 @@ def options(opt):
 def configure(conf):
     conf.load(TOOLS, tooldir=TOOLS_DIR)
     conf.recurse(DIRS)
-    
+
 def build(bld):
     bld.launch_dir = join(bld.launch_dir, 'six')
     bld.recurse(DIRS)
 
 def distclean(context):
-    context.recurse('modules projects')
+    context.recurse(DIRS)
     Scripting.distclean(context)
+
