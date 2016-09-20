@@ -28,7 +28,6 @@ def build(bld):
     bld.launch_dir = join(bld.launch_dir, 'six')
     bld.recurse(DIRS)
 
-
 def distclean(context):
     context.recurse(DIRS)
     Scripting.distclean(context)

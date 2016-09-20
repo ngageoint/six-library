@@ -5,4 +5,5 @@ def build(bld):
         name='six_setup',
         source='setup.py.in',
         target='setup.py',
-        SIX_VERSION=bld.env['SIX_VERSION'])
+        SIX_VERSION=bld.env['SIX_VERSION'],
+        LIBDIR=bld.env['install_libdir'])

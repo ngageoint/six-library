@@ -13,13 +13,14 @@ for child in os.listdir(os.getcwd()):
             installDir = child
 
 packages = ''
+libdir = '@LIBDIR@'
 if platform.system() == 'Windows':
-    packages = os.path.join(installDir, 'lib', 'site-packages')
+    packages = os.path.join(libdir, 'site-packages')
 else:
     versionedPython = 'python{0}.{1}'.format(
         sys.version_info[0], sys.version_info[1])
     packages = os.path.join(
-        installDir, 'lib', versionedPython, 'site-packages')
+        libdir, versionedPython, 'site-packages')
 
 
 class BinaryDistribution(Distribution):
