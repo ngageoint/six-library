@@ -463,13 +463,29 @@ $ ./waf install
 
       <para>After installation, there are two waf commands that allow for
       packaging the library for distribution. <emphasis>waf makewheel</emphasis>
-      creates a Python wheel in the bin directory of your installation.
-      Calling <emphasis>pip install install/bin/*.whl</emphasis> will then
-      set the PYTHONPATH appropriately, install any missing dependencies, and
-      link to the proper <emphasis>.so</emphasis> files.</para>
+      To create a Python wheel in the bin directory of your installation:
 
-      <para>You may also call <emphasis>waf package</emphasis> to write the
-      installation to a .zip file.</para>
+      <programlisting>
+      &gt; python waf makewheel
+      </programlisting>
+
+      A wheel is the standard format for distributing a Python module. It
+      contains all information needed to simply install and run. Any missing
+      depencies such as Numpy will automatically be installed as well.
+      To install a wheel:
+
+      <programlisting>
+      &gt; pip install install/bin/*.whl
+      </programlisting>
+
+      For more information on wheels, see PEP 427.</para>
+
+      <para>To convert the installation to a zip file:
+
+      <programlisting>
+      &gt; python waf package
+      </programlisting>
+      </para>
     </section>
 
     <section>
