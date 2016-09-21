@@ -27,6 +27,9 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 
+    def has_ext_modules(val):
+        return True
+
 codaPyds = glob.glob(os.path.join(packages, 'coda', '_*'))
 codaPyds = [os.path.basename(pyd) for pyd in codaPyds]
 
