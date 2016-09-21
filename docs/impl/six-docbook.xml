@@ -951,7 +951,7 @@ six::NITFReadControl reader;
 reader.load("/path/to/sicd.nitf");
 
 // Get the container
-mem::SharedPtr<six::Container> c = reader.getContainer();
+mem::SharedPtr&lt;six::Container&gt; c = reader.getContainer();
 
 // Get the SICD data model
 six::ComplexData* sicd = (six::ComplexData*)c-&gt;getData(0);
@@ -990,7 +990,7 @@ six::NITFReadControl reader;
 reader.load("/path/to/sidd.nitf");
 
 // Get the container
-mem::SharedPtr<six::Container> c = reader.getContainer();
+mem::SharedPtr&lt;six::Container&gt; c = reader.getContainer();
 
 // Get the SIDD data model (first data block)
 six::DerivedData* sidd = (six::DerivedData*)c-&gt;getData(0);
