@@ -315,4 +315,12 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                     offset,
                     numpyutils::getDimensionsRC(data));
     }
+
+    void initXMLControlRegistry(six::XMLControlRegistry& xmlRegistry)
+    {
+        xmlRegistry.addCreator(six::DataType::COMPLEX,
+                               new six::XMLControlCreatorT<
+                                       six::sicd::ComplexXMLControl>());
+        $self->setXMLControlRegistry(&xmlRegistry);
+    }
 }

@@ -9672,6 +9672,11 @@ class SICDWriteControl(_object):
         """write(SICDWriteControl self, PyObject * data, RowColSizeT offset)"""
         return _six_sicd.SICDWriteControl_write(self, data, offset)
 
+
+    def initXMLControlRegistry(self, xmlRegistry):
+        """initXMLControlRegistry(SICDWriteControl self, XMLControlRegistry xmlRegistry)"""
+        return _six_sicd.SICDWriteControl_initXMLControlRegistry(self, xmlRegistry)
+
     __swig_destroy__ = _six_sicd.delete_SICDWriteControl
     __del__ = lambda self: None
 SICDWriteControl_swigregister = _six_sicd.SICDWriteControl_swigregister
