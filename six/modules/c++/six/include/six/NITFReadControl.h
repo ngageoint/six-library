@@ -59,13 +59,44 @@ public:
         reset();
     }
 
+    /*! 
+     *  Read whether a file has COMPLEX or DERIVED data
+     *  \param fromFile path to file
+     *  \return datatype of file contents
+     */
     virtual DataType getDataType(const std::string& fromFile) const;
 
+    /*!
+    *  Read whether a Record has COMPLEX or DERIVED data
+    *  \param record the Record in question
+    *  \return datatype of Record contents
+    */
     static
     DataType getDataType(nitf::Record& record);
-
+    
+    /*!
+    *  Read whether a DESegment has COMPLEX or DERIVED data
+    *  \param segment the DESegment in question
+    *  \return datatype of DESegment contents
+    */
     static
-    DataType getDataType(nitf::DESegment& record);
+    DataType getDataType(nitf::DESegment& segment);
+
+    /*!
+    *  Determine whether specific attribute outline COMPLEX or DERIVED contents
+    *  Interface to allow communication with programs that use different ways 
+    *  of storing NITF data
+    *  \param desid SICD_XML, SIDD_XML, XML_DATA_CONTENT, etc.
+    *  \param subheaderLength length of subheader
+    *  \param desshsiField Specification identifier
+    *  \param treTag tag of TRE (e.g. XML_DATA_CONTENT)
+    *  \return datatype
+    */
+    static
+    DataType getDataType(const std::string& desid,
+            sys::Uint64_T subheaderLength,
+            const std::string& desshsiField,
+            const std::string& treTag="");
 
     /*!
      *  Performs (Basic) validation when a segment is being

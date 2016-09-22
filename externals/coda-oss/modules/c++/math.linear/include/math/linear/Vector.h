@@ -317,6 +317,15 @@ public:
         return subtract(v);
     }
 
+    //!  Overloaded negation operator
+    Vector
+    operator-() const
+    {
+        Vector v(*this);
+        v.mRaw = -v.mRaw;
+        return v;
+    }
+
     //!  Element-wise multiply assign from another vector
     Vector& operator *=(const Vector& v)
     {

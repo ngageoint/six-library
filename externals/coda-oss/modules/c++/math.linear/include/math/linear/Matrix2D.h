@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <functional>
 #include <import/sys.h>
 #include <mem/ScopedArray.h>
 #include <math/linear/MatrixMxN.h>
@@ -1079,6 +1080,24 @@ public:
     operator*(const Matrix2D& mx) const
     {
         return multiply(mx);
+    }
+
+    /*!
+     *  Negation operator;
+     *
+     *  \code
+           B = -A;
+     *  \endcode
+     *
+     */
+    Matrix2D operator-() const
+    {
+        Matrix2D neg(*this);
+        std::transform(neg.mRaw,
+                       neg.mRaw + neg.mMN,
+                       neg.mRaw,
+                       std::negate<_T>());
+        return neg;
     }
 
     /*!

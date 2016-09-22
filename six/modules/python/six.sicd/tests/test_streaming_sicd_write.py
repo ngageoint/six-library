@@ -727,8 +727,8 @@ if __name__ == '__main__':
 
     # Verify the results match
     if filecmp.cmp(normalPathname, streamingPathname):
-        print 'Results match!'
+        print('Results match!')
         sys.exit(0)
     else:
-        print 'Results DO NOT MATCH!'
+        print('Results DO NOT MATCH!')
         sys.exit(1)

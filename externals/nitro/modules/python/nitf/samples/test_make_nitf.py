@@ -92,8 +92,8 @@ class TestCreator(unittest.TestCase):
     def make_image_nitf(self, numBands=2, width=256, height=256):
         """ makes a nitf, with artificial image data """
         record = Record()
-        if self.fieldmap.has_key('header'):
-            for field, value in self.fieldmap['header'].iteritems():
+        if 'header' in self.fieldmap:
+            for field, value in list(self.fieldmap['header'].items()):
                 if field in record.header:
                     record.header[field] = str(value)
 
@@ -108,8 +108,8 @@ class TestCreator(unittest.TestCase):
 
         #add an image segment
         segment = record.newImageSegment()
-        if self.fieldmap.has_key('image'):
-            for field, value in self.fieldmap['image'].iteritems():
+        if 'image' in self.fieldmap:
+            for field, value in list(self.fieldmap['image'].items()):
                 if field in segment.subheader:
                     segment.subheader[field] = str(value)
 
@@ -153,8 +153,8 @@ class TestCreator(unittest.TestCase):
                     writer.write()
                     logging.info('Successfully Wrote NEW NITF: %s\n' % outfile)
             outhandle.close()
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
         else:
             handle = IOHandle(outfile)
             reader = Reader()
@@ -169,12 +169,12 @@ class TestCreator(unittest.TestCase):
             window = SubWindow()
             window.numRows = subheader['numRows'].intValue()
             window.numCols = subheader['numCols'].intValue()
-            window.bandList = range(subheader.getBandCount())
+            window.bandList = list(range(subheader.getBandCount()))
             nbpp = subheader['numBitsPerPixel'].intValue()
             bandData = imageReader.read(window)
             readData = []
             for item in bandData[0]:
-                readData.append(ord(item))
+                readData.append(item)
             assert (readData == alldata).all()
 
             handle.close()

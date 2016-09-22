@@ -384,6 +384,10 @@ std::string sys::OSUnix::getCurrentExecutable(
     for (size_t ii = 0; ii < possibleSymlinks.size(); ++ii)
     {
         const std::string pathname = possibleSymlinks[ii];
+        if (!isFile(pathname))
+        {
+            continue;
+        }
         const std::string executableName = readLink(pathname);
 
         if (isFile(executableName))

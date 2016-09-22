@@ -644,6 +644,12 @@ nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
 def nitf_Reader_getNITFVersion(fileName):
     return _nitropy.nitf_Reader_getNITFVersion(fileName)
 nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
+
+_nitropy.NITF_WRITER_FILL_LEFT_swigconstant(_nitropy)
+NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
+
+_nitropy.NITF_WRITER_FILL_RIGHT_swigconstant(_nitropy)
+NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
 class nitf_Writer(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Writer, name, value)
@@ -758,6 +764,22 @@ nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
 def nitf_Writer_write(writer, error):
     return _nitropy.nitf_Writer_write(writer, error)
 nitf_Writer_write = _nitropy.nitf_Writer_write
+
+def nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error):
+    return _nitropy.nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error)
+nitf_Writer_writeHeader = _nitropy.nitf_Writer_writeHeader
+
+def nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error):
+    return _nitropy.nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error)
+nitf_Writer_writeImageSubheader = _nitropy.nitf_Writer_writeImageSubheader
+
+def nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error):
+    return _nitropy.nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error)
+nitf_Writer_writeDESubheader = _nitropy.nitf_Writer_writeDESubheader
+
+def nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error):
+    return _nitropy.nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error)
+nitf_Writer_writeInt64Field = _nitropy.nitf_Writer_writeInt64Field
 class nitf_Record(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Record, name, value)

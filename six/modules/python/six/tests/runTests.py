@@ -37,11 +37,20 @@ import utils
 from runner import CppTestRunner
 
 
-def run(sicdDir):
+def clean(files):
+    for pathname in files:
+        if os.path.exists(pathname):
+            os.remove(pathname)
+
+
+def run(sourceDir):
     # If we don't run this before setting the paths, we won't be testing
     # the right things
 
-    if sicdDir != '':
+    sicdDir = os.path.join(sourceDir, 'SICD')
+    siddDir = os.path.join(sourceDir, 'SIDD')
+
+    if sourceDir != '':
         os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
                 os.path.join(utils.installPath(), 'bin'))
         cropSicds = utils.executableName('crop_sicd')
@@ -85,13 +94,36 @@ def run(sicdDir):
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
+    sampleTestDir = os.path.join(utils.installPath(), 'bin')
+
+    newFiles = utils.installVts()
 
     sicdTestRunner = CppTestRunner(sicdTestDir)
     siddTestRunner = CppTestRunner(siddTestDir)
+    sampleTestRunner = CppTestRunner(sampleTestDir)
 
-    if not (sicdTestRunner.run('test_streaming_write') and
-        siddTestRunner.run('test_byte_swap')):
-        return False
+    if os.path.exists(sicdDir) and os.path.exists(siddDir):
+        if not sicdTestRunner.run('test_streaming_write'):
+            return False
+
+        for nitf in os.listdir(sicdDir):
+            nitf = os.path.join(sicdDir, nitf)
+            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
+                    'out.nitf'):
+                clean(newFiles)
+                return False
+
+        for nitf in os.listdir(siddDir):
+            nitf = os.path.join(siddDir, nitf)
+            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
+                    'out.nitf'):
+                clean(newFiles)
+                return False
+
+        clean(newFiles)
+
+        if not siddTestRunner.run('test_byte_swap'):
+            return False
 
     if runUnitTests.run() == False:
         print("Unit tests failed")
