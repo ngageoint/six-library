@@ -71,38 +71,55 @@ bool siddsMatch(const std::string& sidd1Path,
         if (ignoreDate)
         {
             // Creation time is easy
-            sidd2Metadata->setCreationTime( sidd1Metadata->getCreationTime() );
+            sidd2Metadata->setCreationTime(sidd1Metadata->getCreationTime());
 
             // Various SICD/SIDD specific fields
-            six::sidd::DerivedData* ddata1 = dynamic_cast<six::sidd::DerivedData*>(sidd1Metadata.get());
-            six::sidd::DerivedData* ddata2 = dynamic_cast<six::sidd::DerivedData*>(sidd2Metadata.get());
+            six::sidd::DerivedData* ddata1 = 
+                dynamic_cast<six::sidd::DerivedData*>(sidd1Metadata.get());
+            six::sidd::DerivedData* ddata2 = 
+                dynamic_cast<six::sidd::DerivedData*>(sidd2Metadata.get());
             if (ddata1 && ddata2)
             {
                 // Processing events
-                size_t nEvents1 = ddata1->downstreamReprocessing->processingEvents.size();
-                size_t nEvents2 = ddata2->downstreamReprocessing->processingEvents.size();
+                
+                // aliases for long names...
+                six::sidd::DownstreamReprocessing* dr1 = 
+                    ddata1->downstreamReprocessing.get();
+                six::sidd::DownstreamReprocessing* dr2 = 
+                    ddata2->downstreamReprocessing.get();
+                size_t nEvents1 = dr1->processingEvents.size();
+                size_t nEvents2 = dr2->processingEvents.size();
                 if (nEvents1 != nEvents2) return false;
                 for (size_t ii = 0; ii < nEvents1; ++ii)
                 {
-                    ddata2->downstreamReprocessing->processingEvents[ii]->appliedDateTime =
-                        ddata1->downstreamReprocessing->processingEvents[ii]->appliedDateTime;
+                    dr2->processingEvents[ii]->appliedDateTime =
+                        dr1->processingEvents[ii]->appliedDateTime;
                 }
 
                 // Collection information
-                size_t nCollect1 = ddata1->exploitationFeatures->collections.size();
-                size_t nCollect2 = ddata2->exploitationFeatures->collections.size();
+                
+                // aliases for long names...
+                six::sidd::ExploitationFeatures* ef1 =
+                    ddata1->exploitationFeatures.get();
+                six::sidd::ExploitationFeatures* ef2 =
+                    ddata2->exploitationFeatures.get();
+                size_t nCollect1 = ef1->collections.size();
+                size_t nCollect2 = ef2->collections.size();
                 if (nCollect1 != nCollect2) return false;
                 for (size_t ii = 0; ii < nCollect1; ++ii)
                 {
-                    ddata2->exploitationFeatures->collections[ii]->information->collectionDateTime =
-                        ddata1->exploitationFeatures->collections[ii]->information->collectionDateTime;
-                    ddata2->exploitationFeatures->collections[ii]->information->localDateTime =
-                        ddata1->exploitationFeatures->collections[ii]->information->localDateTime;
+
+                    ef2->collections[ii]->information->collectionDateTime =
+                        ef1->collections[ii]->information->collectionDateTime;
+                    ef2->collections[ii]->information->localDateTime =
+                        ef1->collections[ii]->information->localDateTime;
                 }
 
                 // Derived specific classification times
-                six::sidd::DerivedClassification& class1 = ddata1->productCreation->classification;
-                six::sidd::DerivedClassification& class2 = ddata2->productCreation->classification;
+                six::sidd::DerivedClassification& class1 = 
+                    ddata1->productCreation->classification;
+                six::sidd::DerivedClassification& class2 = 
+                    ddata2->productCreation->classification;
                 class2.createDate = class1.createDate;
                 class2.exemptedSourceDate = class1.exemptedSourceDate;
                 class2.declassDate = class1.declassDate;
