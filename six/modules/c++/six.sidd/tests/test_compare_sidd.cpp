@@ -70,7 +70,47 @@ bool siddsMatch(const std::string& sidd1Path,
     {
         if (ignoreDate)
         {
+            // Creation time is easy
             sidd2Metadata->setCreationTime( sidd1Metadata->getCreationTime() );
+
+            // Various SICD/SIDD specific fields
+            six::sidd::DerivedData* ddata1 = dynamic_cast<six::sidd::DerivedData*>(sidd1Metadata.get());
+            six::sidd::DerivedData* ddata2 = dynamic_cast<six::sidd::DerivedData*>(sidd2Metadata.get());
+            if (ddata1 && ddata2)
+            {
+                // Processing events
+                size_t nEvents1 = ddata1->downstreamReprocessing->processingEvents.size();
+                size_t nEvents2 = ddata2->downstreamReprocessing->processingEvents.size();
+                if (nEvents1 != nEvents2) return false;
+                for (size_t ii = 0; ii < nEvents1; ++ii)
+                {
+                    ddata2->downstreamReprocessing->processingEvents[ii]->appliedDateTime =
+                        ddata1->downstreamReprocessing->processingEvents[ii]->appliedDateTime;
+                }
+
+                // Collection information
+                size_t nCollect1 = ddata1->exploitationFeatures->collections.size();
+                size_t nCollect2 = ddata2->exploitationFeatures->collections.size();
+                if (nCollect1 != nCollect2) return false;
+                for (size_t ii = 0; ii < nCollect1; ++ii)
+                {
+                    ddata2->exploitationFeatures->collections[ii]->information->collectionDateTime =
+                        ddata1->exploitationFeatures->collections[ii]->information->collectionDateTime;
+                    ddata2->exploitationFeatures->collections[ii]->information->localDateTime =
+                        ddata1->exploitationFeatures->collections[ii]->information->localDateTime;
+                }
+
+                // Derived specific classification times
+                six::sidd::DerivedClassification& class1 = ddata1->productCreation->classification;
+                six::sidd::DerivedClassification& class2 = ddata2->productCreation->classification;
+                class2.createDate = class1.createDate;
+                class2.exemptedSourceDate = class1.exemptedSourceDate;
+                class2.declassDate = class1.declassDate;
+            }
+            else
+            {
+                // TODO: SICD specific time fields
+            }
         }
         
         bool metadataMatches = (*sidd1Metadata) == (*sidd2Metadata);
