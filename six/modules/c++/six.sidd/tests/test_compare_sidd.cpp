@@ -109,7 +109,8 @@ int main(int argc, char* argv[])
         cli::ArgumentParser parser;
         parser.setDescription("This program compares two SIDDs to determine "
                 "if they are identical or not. If the SIDDs match, the "
-                "program's exit code will be 0, and 1 if they don't match.");
+                "program's exit code will be 0. If the SIDDs don't match,"
+                "or if there is an error, the code will be nonzero.");
         parser.addArgument("--ignore-metadata",
                 "Does not check SIDD metadata for differences",
                 cli::STORE_TRUE, "ignoreMetadata")->setDefault("false");
