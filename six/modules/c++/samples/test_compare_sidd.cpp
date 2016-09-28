@@ -20,7 +20,6 @@
 
 namespace
 {
-
 mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
@@ -165,7 +164,6 @@ bool siddsMatch(const std::string& sidd1Path,
                 sidd1Metadata->getNumBytesPerPixel());
 
     return !result;
-
 }
 }
 
@@ -222,5 +220,4 @@ int main(int argc, char* argv[])
     }
 
     return 0;
-
 }
