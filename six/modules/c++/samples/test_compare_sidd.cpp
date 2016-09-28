@@ -20,6 +20,7 @@
 
 namespace
 {
+
 mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
