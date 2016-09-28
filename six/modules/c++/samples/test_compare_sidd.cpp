@@ -28,17 +28,17 @@ mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
 }
 
 void readWideband(six::NITFReadControl& reader, 
-        const mem::SharedPtr<six::Data>& data,
+        const six::Data& data,
         mem::ScopedAlignedArray<six::UByte>& buffer)
 {
-    buffer.reset( data->getNumRows() *
-                  data->getNumCols() *
-                  data->getNumBytesPerPixel() );
+    buffer.reset(data.getNumRows() *
+                 data.getNumCols() *
+                 data.getNumBytesPerPixel());
     six::Region region;
     region.setStartRow(0);
     region.setStartCol(0);
-    region.setNumRows(data->getNumRows());
-    region.setNumCols(data->getNumCols());
+    region.setNumRows(data.getNumRows());
+    region.setNumCols(data.getNumCols());
     region.setBuffer(buffer.get());
     reader.interleaved(region, 0);
 }
@@ -63,14 +63,14 @@ bool siddsMatch(const std::string& sidd1Path,
     mem::SharedPtr<six::Data> sidd1Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<six::UByte> sidd1Buffer;
     readWideband(reader,
-            sidd1Metadata,
+            *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
     mem::SharedPtr<six::Data> sidd2Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<six::UByte> sidd2Buffer;
     readWideband(reader,
-            sidd2Metadata,
+            *sidd2Metadata,
             sidd2Buffer);
 
     if (!ignoreMetadata)
@@ -139,7 +139,7 @@ bool siddsMatch(const std::string& sidd1Path,
         
         bool metadataMatches = (*sidd1Metadata) == (*sidd2Metadata);
 
-        if(!metadataMatches)
+        if (!metadataMatches)
         {
             return false;
         }
