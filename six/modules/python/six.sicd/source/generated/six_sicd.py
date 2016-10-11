@@ -226,6 +226,19 @@ def writeNITF(pathname, schemaPaths, data, imageAdr):
 def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
+
+import os
+import sys
+
+def schema_path():
+    """Provide an absolute path to the schemas."""
+    try:
+        pysix_path = os.path.dirname(__file__)
+    except NameError:
+# Must be running as __main__, so use sys.argv
+        pysix_path = os.path.dirname(sys.argv[0])
+    return os.path.abspath(os.path.join(pysix_path, 'schemas'))
+
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class."""
 
