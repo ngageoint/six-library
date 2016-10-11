@@ -36,6 +36,8 @@ codaPyds = [os.path.basename(pyd) for pyd in codaPyds]
 sixPyds = glob.glob(os.path.join(packages, 'pysix', '_*'))
 sixPyds = [os.path.basename(pyd) for pyd in sixPyds]
 
+sixSchemas = glob.glob(os.path.join(packages, 'pysix', 'schemas', '*.xsd'))
+sixSchemas = ['schemas/' + os.path.basename(pyd) for pyd in sixSchemas]
 
 setup(name = 'pysix',
       version = '@SIX_VERSION@',
@@ -47,7 +49,7 @@ setup(name = 'pysix',
       package_dir = {'': packages},
       packages = ['pysix', 'coda'],
       package_data = {
-          'pysix': sixPyds,
+          'pysix': sixPyds + sixSchemas,
           'coda': codaPyds
       },
       distclass = BinaryDistribution)

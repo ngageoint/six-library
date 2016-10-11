@@ -147,6 +147,21 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
+%pythoncode
+%{
+import os
+import sys
+
+def schema_path():
+    """Provide an absolute path to the schemas."""
+    try:
+        pysix_path = os.path.dirname(__file__)
+    except NameError:
+        # Must be running as __main__, so use sys.argv
+        pysix_path = os.path.dirname(sys.argv[0])
+    return os.path.abspath(os.path.join(pysix_path, 'schemas'))
+%}
+
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
