@@ -42,11 +42,7 @@ typedef math::linear::Vector<double> VectorDouble;
 %import <types.i> // for std::vector pickling
 %pythoncode
 %{
-    import sys
-    if sys.version_info[0] == 2:
-        import cPickle as pickle
-    else:
-        import pickle
+    from coda.coda_types import pickle
 %}
 
 %include "math/poly/OneD.h"

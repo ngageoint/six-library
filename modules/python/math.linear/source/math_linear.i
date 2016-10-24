@@ -24,11 +24,7 @@
 // Pickle utilities
 %pythoncode
 %{
-    import sys
-    if sys.version_info[0] == 2:
-        import cPickle as pickle
-    else:
-        import pickle
+from coda.coda_types import pickle
 %}
 %import <types.i>
 
@@ -48,7 +44,20 @@
 %template(std_vector_vector_double) std::vector<std::vector<double> >;
 
 // define template variants we want in python
+%template(Matrix1x1) math::linear::MatrixMxN<1,1,double>;
+%template(Matrix1x2) math::linear::MatrixMxN<1,2,double>;
+%template(Matrix1x3) math::linear::MatrixMxN<1,3,double>;
+%template(Matrix2x1) math::linear::MatrixMxN<2,1,double>;
+%template(Matrix2x2) math::linear::MatrixMxN<2,2,double>;
+%template(Matrix2x3) math::linear::MatrixMxN<2,3,double>;
+%template(Matrix2x7) math::linear::MatrixMxN<2,7,double>;
 %template(Matrix3x1) math::linear::MatrixMxN<3,1,double>;
+%template(Matrix3x2) math::linear::MatrixMxN<3,2,double>;
+%template(Matrix3x3) math::linear::MatrixMxN<3,3,double>;
+%template(Matrix3x7) math::linear::MatrixMxN<3,7,double>;
+%template(Matrix7x2) math::linear::MatrixMxN<7,2,double>;
+%template(Matrix7x3) math::linear::MatrixMxN<7,3,double>;
+%template(Matrix7x7) math::linear::MatrixMxN<7,7,double>;
 %template(Vector2) math::linear::VectorN<2, double>;
 %template(Vector3) math::linear::VectorN<3, double>;
 %template(cross) math::linear::cross<double>;
@@ -228,3 +237,97 @@
         return returnVals;
     }
 }
+
+%define ExtendMatrix(M, N)
+%extend math::linear::MatrixMxN<M, N, double>
+{
+    // SWIG doesn't automatically generate [] operator
+    double __getitem__(PyObject* inObj)
+    {
+        if (!PyTuple_Check(inObj))
+        {
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple");
+            return 0.0;
+        }
+        Py_ssize_t m, n;
+        if (!PyArg_ParseTuple(inObj, "nn", &m, &n))
+        {
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple of the form (size_t, size_t)");
+            return 0.0;
+        }
+        if (m < 0 || m > self->rows() - 1 ||
+            n < 0 || n > self->cols() - 1)
+        {
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
+        }
+        return (*self)(m,n);
+    }
+    void __setitem__(PyObject* inObj, double val)
+    {
+        if (!PyTuple_Check(inObj))
+        {
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple");
+            return;
+        }
+        Py_ssize_t m, n;
+        if (!PyArg_ParseTuple(inObj, "nn", &m, &n))
+        {
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple of the form (size_t, size_t)");
+            return;
+        }
+        if (m < 0 || m > self->rows() - 1 ||
+            n < 0 || n > self->cols() - 1)
+        {
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
+        }
+        (*self)(m,n) = val;
+    }
+
+    // string representation in python
+    std::string __str__()
+    {
+        std::ostringstream strStream;
+        strStream << *self;
+        return strStream.str();
+    }
+
+    // helper method to facilitate creating a numpy array from Matrix2D
+    // v= ml.VectorDouble([1.0, 1.0, 1.0])
+    // arr = np.asarray(v.vals())
+    //
+    // ideally we should implement __array__() instead, which will allow it
+    // to be used by most numpy functions
+    std::vector<std::vector<double> > vals()
+    {
+        std::vector<std::vector<double> > returnVals(self->rows());
+        for (size_t m=0; m< self->rows(); m++)
+        {
+            returnVals[m] = std::vector<double>(self->cols());
+            for (size_t n = 0; n < self->cols(); n++)
+            {
+                returnVals[m][n] = (*self)(m,n);
+            }
+        }
+        return returnVals;
+    }
+}
+%enddef
+
+
+ExtendMatrix(1, 1);
+ExtendMatrix(1, 2);
+ExtendMatrix(1, 3);
+ExtendMatrix(2, 1);
+ExtendMatrix(2, 2);
+ExtendMatrix(2, 3);
+ExtendMatrix(2, 7);
+ExtendMatrix(3, 1);
+ExtendMatrix(3, 2);
+ExtendMatrix(3, 3);
+ExtendMatrix(3, 7);
+ExtendMatrix(7, 2);
+ExtendMatrix(7, 3);
+ExtendMatrix(7, 7);
+

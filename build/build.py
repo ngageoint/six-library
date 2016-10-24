@@ -60,9 +60,16 @@ class CPPContext(Context.Context):
             dirs = string
 
         if not dirs:
-            super(CPPContext, self).recurse([x for x in next(os.walk(self.path.abspath()))[1] if exists(join(self.path.abspath(), x, 'wscript'))])
-        else:
-            super(CPPContext, self).recurse([x for x in dirs if exists(join(self.path.abspath(), x, 'wscript'))])
+            dirs = next(os.walk(self.path.abspath()))[1]
+
+        # Move 'drivers' to the front of the list. We want to ensure that
+        # drivers are configured before modules so dependencies are resolved
+        # correctly
+        if 'drivers' in dirs:
+            dirs.remove('drivers')
+            dirs.insert(0, 'drivers')
+
+        super(CPPContext, self).recurse([x for x in dirs if exists(join(self.path.abspath(), x, 'wscript'))])
 
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', str(version))

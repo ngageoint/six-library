@@ -119,11 +119,7 @@ def doubleArray_setitem(ary, index, value):
     """doubleArray_setitem(double * ary, size_t index, double value)"""
     return _math_poly.doubleArray_setitem(ary, index, value)
 
-import sys
-if sys.version_info[0] == 2:
-    import cPickle as pickle
-else:
-    import pickle
+from coda.coda_types import pickle
 
 class Poly1D(_object):
     """Proxy of C++ math::poly::OneD<(double)> class."""

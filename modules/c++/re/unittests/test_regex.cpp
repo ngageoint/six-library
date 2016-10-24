@@ -59,6 +59,35 @@ TEST_CASE(testMatches)
     TEST_ASSERT_EQ(matches[3], "");
 }
 
+TEST_CASE(testMatchOptional)
+{
+    re::RegexMatch matches;
+    re::Regex rx("([A-Za-z]+)://([^/?#:]+)(?::(\\d+))?(/[^?#:]+)?(?:[?]([^&#/]+(?:[&;][^&;#/]+)*)?)?(?:[#](.*))?");
+    std::string url = "http://localhost:80/something/page.com?param1=foo&param2=bar#fragment";
+
+    rx.match(url, matches);
+    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches[1], "http");
+    TEST_ASSERT_EQ(matches[2], "localhost");
+    TEST_ASSERT_EQ(matches[3], "80");
+    TEST_ASSERT_EQ(matches[4], "/something/page.com");
+    TEST_ASSERT_EQ(matches[5], "param1=foo&param2=bar");
+    TEST_ASSERT_EQ(matches[6], "fragment");
+
+    url = "http://localhost/page.com";
+    matches.clear();
+    rx.match(url, matches);
+    TEST_ASSERT_GREATER_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches[1], "http");
+    TEST_ASSERT_EQ(matches[2], "localhost");
+    TEST_ASSERT_EQ(matches[3], "");
+    TEST_ASSERT_EQ(matches[4], "/page.com");
+    TEST_ASSERT_EQ(matches[5], "");
+    TEST_ASSERT_EQ(matches[6], "");
+}
+
 TEST_CASE(testSearch)
 {
     re::Regex rx("ju.");
@@ -470,6 +499,7 @@ int main(int, char**)
 {
     TEST_CHECK(testCompile);
     TEST_CHECK(testMatches);
+    TEST_CHECK(testMatchOptional);
     TEST_CHECK(testSearch);
     TEST_CHECK(testSearchAll);
     TEST_CHECK(testSearchAllWithOverlap);

@@ -7,10 +7,11 @@ options = configure = distclean = lambda p: None
 
 def build(bld):
     globs = globals()
-    if bld.env['HAVE_BOOST'] is False :
-        globs['UNITTEST_FILTER'] = 'test_Matrix2D_serialize.cpp ' + \
-                                   'test_Vector_serialize.cpp'
-    else :
+    if 'HAVE_BOOST' in bld.env and bld.env['HAVE_BOOST']:
         globs['UNITTEST_DEPS'] = 'serialize'
         globs['UNITTEST_USELIB'] = 'BOOST_SERIALIZATION'
+    else:
+        globs['UNITTEST_FILTER'] = 'test_Matrix2D_serialize.cpp ' + \
+                                   'test_Vector_serialize.cpp'
+
     bld.module(**globs)
