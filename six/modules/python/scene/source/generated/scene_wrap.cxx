@@ -11405,7 +11405,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_getTransformMatrix(PyObject 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,3,double > > result;
+  math::linear::MatrixMxN< 3,3,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:LocalCoordinateTransform_getTransformMatrix",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__LocalCoordinateTransform, 0 |  0 );
@@ -19654,7 +19654,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_slantToImagePartials__SWIG_0(PyObject
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,2,double > > result;
+  math::linear::MatrixMxN< 2,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_slantToImagePartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -19723,7 +19723,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_slantToImagePartials__SWIG_1(PyObject
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,2,double > > result;
+  math::linear::MatrixMxN< 2,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ProjectionModel_slantToImagePartials",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -19853,7 +19853,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_0(Py
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,7,double > > result;
+  math::linear::MatrixMxN< 3,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:ProjectionModel_imageToSceneSensorPartials",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -19943,7 +19943,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_1(Py
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,7,double > > result;
+  math::linear::MatrixMxN< 3,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_imageToSceneSensorPartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20028,7 +20028,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_2(Py
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,7,double > > result;
+  math::linear::MatrixMxN< 3,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_imageToSceneSensorPartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20106,7 +20106,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_3(Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,7,double > > result;
+  math::linear::MatrixMxN< 3,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_imageToSceneSensorPartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20307,7 +20307,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_0(PyObject
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,2,double > > result;
+  math::linear::MatrixMxN< 3,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:ProjectionModel_imageToScenePartials",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20397,7 +20397,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_1(PyObject
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,2,double > > result;
+  math::linear::MatrixMxN< 3,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_imageToScenePartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20482,7 +20482,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_2(PyObject
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,2,double > > result;
+  math::linear::MatrixMxN< 3,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_imageToScenePartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -20560,7 +20560,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_3(PyObject
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 3,2,double > > result;
+  math::linear::MatrixMxN< 3,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_imageToScenePartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21211,7 +21211,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_0(Py
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,7,double > > result;
+  math::linear::MatrixMxN< 2,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_sceneToImageSensorPartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21292,7 +21292,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_1(Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,7,double > > result;
+  math::linear::MatrixMxN< 2,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_sceneToImageSensorPartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21368,7 +21368,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_2(Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,7,double > > result;
+  math::linear::MatrixMxN< 2,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_sceneToImageSensorPartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21437,7 +21437,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_3(Py
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,7,double > > result;
+  math::linear::MatrixMxN< 2,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ProjectionModel_sceneToImageSensorPartials",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21605,7 +21605,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_0(PyObject
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,3,double > > result;
+  math::linear::MatrixMxN< 2,3,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:ProjectionModel_sceneToImagePartials",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21686,7 +21686,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_1(PyObject
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,3,double > > result;
+  math::linear::MatrixMxN< 2,3,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_sceneToImagePartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21762,7 +21762,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_2(PyObject
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,3,double > > result;
+  math::linear::MatrixMxN< 2,3,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_sceneToImagePartials",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21831,7 +21831,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_3(PyObject
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,3,double > > result;
+  math::linear::MatrixMxN< 2,3,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ProjectionModel_sceneToImagePartials",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -21995,7 +21995,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_0(PyObject *
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 7,7,double > > result;
+  math::linear::MatrixMxN< 7,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_getErrorCovariance",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -22068,7 +22068,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_1(PyObject *
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 7,7,double > > result;
+  math::linear::MatrixMxN< 7,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:ProjectionModel_getErrorCovariance",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -22140,7 +22140,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_2(PyObject *
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 7,7,double > > result;
+  math::linear::MatrixMxN< 7,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ProjectionModel_getErrorCovariance",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -22200,7 +22200,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_3(PyObject *
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 7,7,double > > result;
+  math::linear::MatrixMxN< 7,7,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:ProjectionModel_getErrorCovariance",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -22338,7 +22338,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getUnmodeledErrorCovariance(PyObject 
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  SwigValueWrapper< math::linear::MatrixMxN< 2,2,double > > result;
+  math::linear::MatrixMxN< 2,2,double > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:ProjectionModel_getUnmodeledErrorCovariance",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__ProjectionModel, 0 |  0 );
@@ -26201,7 +26201,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_LocalCoordinateTransform", _wrap_delete_LocalCoordinateTransform, METH_VARARGS, (char *)"delete_LocalCoordinateTransform(LocalCoordinateTransform self)"},
 	 { (char *)"LocalCoordinateTransform_toECEFPoint", _wrap_LocalCoordinateTransform_toECEFPoint, METH_VARARGS, (char *)"LocalCoordinateTransform_toECEFPoint(LocalCoordinateTransform self, Vector3 localPoint) -> Vector3"},
 	 { (char *)"LocalCoordinateTransform_toLocalPoint", _wrap_LocalCoordinateTransform_toLocalPoint, METH_VARARGS, (char *)"LocalCoordinateTransform_toLocalPoint(LocalCoordinateTransform self, Vector3 ecefPoint) -> Vector3"},
-	 { (char *)"LocalCoordinateTransform_getTransformMatrix", _wrap_LocalCoordinateTransform_getTransformMatrix, METH_VARARGS, (char *)"LocalCoordinateTransform_getTransformMatrix(LocalCoordinateTransform self) -> math::linear::MatrixMxN< 3,3,double >"},
+	 { (char *)"LocalCoordinateTransform_getTransformMatrix", _wrap_LocalCoordinateTransform_getTransformMatrix, METH_VARARGS, (char *)"LocalCoordinateTransform_getTransformMatrix(LocalCoordinateTransform self) -> Matrix3x3"},
 	 { (char *)"LocalCoordinateTransform_getUnitVectorX", _wrap_LocalCoordinateTransform_getUnitVectorX, METH_VARARGS, (char *)"LocalCoordinateTransform_getUnitVectorX(LocalCoordinateTransform self) -> Vector3"},
 	 { (char *)"LocalCoordinateTransform_getUnitVectorY", _wrap_LocalCoordinateTransform_getUnitVectorY, METH_VARARGS, (char *)"LocalCoordinateTransform_getUnitVectorY(LocalCoordinateTransform self) -> Vector3"},
 	 { (char *)"LocalCoordinateTransform_getUnitVectorZ", _wrap_LocalCoordinateTransform_getUnitVectorZ, METH_VARARGS, (char *)"LocalCoordinateTransform_getUnitVectorZ(LocalCoordinateTransform self) -> Vector3"},
@@ -26299,14 +26299,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Errors_clear", _wrap_Errors_clear, METH_VARARGS, (char *)"Errors_clear(Errors self)"},
 	 { (char *)"Errors_mFrameType_set", _wrap_Errors_mFrameType_set, METH_VARARGS, (char *)"Errors_mFrameType_set(Errors self, FrameType mFrameType)"},
 	 { (char *)"Errors_mFrameType_get", _wrap_Errors_mFrameType_get, METH_VARARGS, (char *)"Errors_mFrameType_get(Errors self) -> FrameType"},
-	 { (char *)"Errors_mSensorErrorCovar_set", _wrap_Errors_mSensorErrorCovar_set, METH_VARARGS, (char *)"Errors_mSensorErrorCovar_set(Errors self, math::linear::MatrixMxN< 7,7,double > * mSensorErrorCovar)"},
-	 { (char *)"Errors_mSensorErrorCovar_get", _wrap_Errors_mSensorErrorCovar_get, METH_VARARGS, (char *)"Errors_mSensorErrorCovar_get(Errors self) -> math::linear::MatrixMxN< 7,7,double > *"},
-	 { (char *)"Errors_mUnmodeledErrorCovar_set", _wrap_Errors_mUnmodeledErrorCovar_set, METH_VARARGS, (char *)"Errors_mUnmodeledErrorCovar_set(Errors self, math::linear::MatrixMxN< 2,2,double > * mUnmodeledErrorCovar)"},
-	 { (char *)"Errors_mUnmodeledErrorCovar_get", _wrap_Errors_mUnmodeledErrorCovar_get, METH_VARARGS, (char *)"Errors_mUnmodeledErrorCovar_get(Errors self) -> math::linear::MatrixMxN< 2,2,double > *"},
-	 { (char *)"Errors_mIonoErrorCovar_set", _wrap_Errors_mIonoErrorCovar_set, METH_VARARGS, (char *)"Errors_mIonoErrorCovar_set(Errors self, math::linear::MatrixMxN< 2,2,double > * mIonoErrorCovar)"},
-	 { (char *)"Errors_mIonoErrorCovar_get", _wrap_Errors_mIonoErrorCovar_get, METH_VARARGS, (char *)"Errors_mIonoErrorCovar_get(Errors self) -> math::linear::MatrixMxN< 2,2,double > *"},
-	 { (char *)"Errors_mTropoErrorCovar_set", _wrap_Errors_mTropoErrorCovar_set, METH_VARARGS, (char *)"Errors_mTropoErrorCovar_set(Errors self, math::linear::MatrixMxN< 1,1,double > * mTropoErrorCovar)"},
-	 { (char *)"Errors_mTropoErrorCovar_get", _wrap_Errors_mTropoErrorCovar_get, METH_VARARGS, (char *)"Errors_mTropoErrorCovar_get(Errors self) -> math::linear::MatrixMxN< 1,1,double > *"},
+	 { (char *)"Errors_mSensorErrorCovar_set", _wrap_Errors_mSensorErrorCovar_set, METH_VARARGS, (char *)"Errors_mSensorErrorCovar_set(Errors self, Matrix7x7 mSensorErrorCovar)"},
+	 { (char *)"Errors_mSensorErrorCovar_get", _wrap_Errors_mSensorErrorCovar_get, METH_VARARGS, (char *)"Errors_mSensorErrorCovar_get(Errors self) -> Matrix7x7"},
+	 { (char *)"Errors_mUnmodeledErrorCovar_set", _wrap_Errors_mUnmodeledErrorCovar_set, METH_VARARGS, (char *)"Errors_mUnmodeledErrorCovar_set(Errors self, Matrix2x2 mUnmodeledErrorCovar)"},
+	 { (char *)"Errors_mUnmodeledErrorCovar_get", _wrap_Errors_mUnmodeledErrorCovar_get, METH_VARARGS, (char *)"Errors_mUnmodeledErrorCovar_get(Errors self) -> Matrix2x2"},
+	 { (char *)"Errors_mIonoErrorCovar_set", _wrap_Errors_mIonoErrorCovar_set, METH_VARARGS, (char *)"Errors_mIonoErrorCovar_set(Errors self, Matrix2x2 mIonoErrorCovar)"},
+	 { (char *)"Errors_mIonoErrorCovar_get", _wrap_Errors_mIonoErrorCovar_get, METH_VARARGS, (char *)"Errors_mIonoErrorCovar_get(Errors self) -> Matrix2x2"},
+	 { (char *)"Errors_mTropoErrorCovar_set", _wrap_Errors_mTropoErrorCovar_set, METH_VARARGS, (char *)"Errors_mTropoErrorCovar_set(Errors self, Matrix1x1 mTropoErrorCovar)"},
+	 { (char *)"Errors_mTropoErrorCovar_get", _wrap_Errors_mTropoErrorCovar_get, METH_VARARGS, (char *)"Errors_mTropoErrorCovar_get(Errors self) -> Matrix1x1"},
 	 { (char *)"Errors_mPositionCorrCoefZero_set", _wrap_Errors_mPositionCorrCoefZero_set, METH_VARARGS, (char *)"Errors_mPositionCorrCoefZero_set(Errors self, double mPositionCorrCoefZero)"},
 	 { (char *)"Errors_mPositionCorrCoefZero_get", _wrap_Errors_mPositionCorrCoefZero_get, METH_VARARGS, (char *)"Errors_mPositionCorrCoefZero_get(Errors self) -> double"},
 	 { (char *)"Errors_mPositionDecorrRate_set", _wrap_Errors_mPositionDecorrRate_set, METH_VARARGS, (char *)"Errors_mPositionDecorrRate_set(Errors self, double mPositionDecorrRate)"},
@@ -26344,20 +26344,20 @@ static PyMethodDef SwigMethods[] = {
 		"ProjectionModel_sceneToImage(ProjectionModel self, Vector3 scenePoint) -> RowColDouble\n"
 		""},
 	 { (char *)"ProjectionModel_slantToImagePartials", _wrap_ProjectionModel_slantToImagePartials, METH_VARARGS, (char *)"\n"
-		"slantToImagePartials(RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,2,double >\n"
-		"ProjectionModel_slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,2,double >\n"
+		"slantToImagePartials(RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x2\n"
+		"ProjectionModel_slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2\n"
 		""},
 	 { (char *)"ProjectionModel_imageToSceneSensorPartials", _wrap_ProjectionModel_imageToSceneSensorPartials, METH_VARARGS, (char *)"\n"
-		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 3,7,double >\n"
-		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> math::linear::MatrixMxN< 3,7,double >\n"
-		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, double delta=0.0001) -> math::linear::MatrixMxN< 3,7,double >\n"
-		"ProjectionModel_imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> math::linear::MatrixMxN< 3,7,double >\n"
+		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x7\n"
+		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x7\n"
+		"imageToSceneSensorPartials(RowColDouble imageGridPoint, double height, double delta=0.0001) -> Matrix3x7\n"
+		"ProjectionModel_imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> Matrix3x7\n"
 		""},
 	 { (char *)"ProjectionModel_imageToScenePartials", _wrap_ProjectionModel_imageToScenePartials, METH_VARARGS, (char *)"\n"
-		"imageToScenePartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 3,2,double >\n"
-		"imageToScenePartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> math::linear::MatrixMxN< 3,2,double >\n"
-		"imageToScenePartials(RowColDouble imageGridPoint, double height, double delta=0.0001) -> math::linear::MatrixMxN< 3,2,double >\n"
-		"ProjectionModel_imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> math::linear::MatrixMxN< 3,2,double >\n"
+		"imageToScenePartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x2\n"
+		"imageToScenePartials(RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x2\n"
+		"imageToScenePartials(RowColDouble imageGridPoint, double height, double delta=0.0001) -> Matrix3x2\n"
+		"ProjectionModel_imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> Matrix3x2\n"
 		""},
 	 { (char *)"ProjectionModel_imageToSceneHeightPartial", _wrap_ProjectionModel_imageToSceneHeightPartial, METH_VARARGS, (char *)"\n"
 		"imageToSceneHeightPartial(RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x1\n"
@@ -26366,24 +26366,24 @@ static PyMethodDef SwigMethods[] = {
 		"ProjectionModel_imageToSceneHeightPartial(ProjectionModel self, RowColDouble imageGridPoint, double height) -> Matrix3x1\n"
 		""},
 	 { (char *)"ProjectionModel_sceneToImageSensorPartials", _wrap_ProjectionModel_sceneToImageSensorPartials, METH_VARARGS, (char *)"\n"
-		"sceneToImageSensorPartials(Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,7,double >\n"
-		"sceneToImageSensorPartials(Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,7,double >\n"
-		"sceneToImageSensorPartials(Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,7,double >\n"
-		"ProjectionModel_sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint) -> math::linear::MatrixMxN< 2,7,double >\n"
+		"sceneToImageSensorPartials(Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x7\n"
+		"sceneToImageSensorPartials(Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x7\n"
+		"sceneToImageSensorPartials(Vector3 scenePoint, double delta=0.0001) -> Matrix2x7\n"
+		"ProjectionModel_sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint) -> Matrix2x7\n"
 		""},
 	 { (char *)"ProjectionModel_sceneToImagePartials", _wrap_ProjectionModel_sceneToImagePartials, METH_VARARGS, (char *)"\n"
-		"sceneToImagePartials(Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,3,double >\n"
-		"sceneToImagePartials(Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,3,double >\n"
-		"sceneToImagePartials(Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,3,double >\n"
-		"ProjectionModel_sceneToImagePartials(ProjectionModel self, Vector3 scenePoint) -> math::linear::MatrixMxN< 2,3,double >\n"
+		"sceneToImagePartials(Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x3\n"
+		"sceneToImagePartials(Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x3\n"
+		"sceneToImagePartials(Vector3 scenePoint, double delta=0.0001) -> Matrix2x3\n"
+		"ProjectionModel_sceneToImagePartials(ProjectionModel self, Vector3 scenePoint) -> Matrix2x3\n"
 		""},
 	 { (char *)"ProjectionModel_getErrorCovariance", _wrap_ProjectionModel_getErrorCovariance, METH_VARARGS, (char *)"\n"
-		"getErrorCovariance(Vector3 scenePoint, double timeCOA) -> math::linear::MatrixMxN< 7,7,double >\n"
-		"getErrorCovariance(Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 7,7,double >\n"
-		"getErrorCovariance(Vector3 scenePoint) -> math::linear::MatrixMxN< 7,7,double >\n"
-		"ProjectionModel_getErrorCovariance(ProjectionModel self) -> math::linear::MatrixMxN< 7,7,double >\n"
+		"getErrorCovariance(Vector3 scenePoint, double timeCOA) -> Matrix7x7\n"
+		"getErrorCovariance(Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix7x7\n"
+		"getErrorCovariance(Vector3 scenePoint) -> Matrix7x7\n"
+		"ProjectionModel_getErrorCovariance(ProjectionModel self) -> Matrix7x7\n"
 		""},
-	 { (char *)"ProjectionModel_getUnmodeledErrorCovariance", _wrap_ProjectionModel_getUnmodeledErrorCovariance, METH_VARARGS, (char *)"ProjectionModel_getUnmodeledErrorCovariance(ProjectionModel self, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,2,double >"},
+	 { (char *)"ProjectionModel_getUnmodeledErrorCovariance", _wrap_ProjectionModel_getUnmodeledErrorCovariance, METH_VARARGS, (char *)"ProjectionModel_getUnmodeledErrorCovariance(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2"},
 	 { (char *)"ProjectionModel_getAdjustableParams", _wrap_ProjectionModel_getAdjustableParams, METH_VARARGS, (char *)"\n"
 		"getAdjustableParams() -> AdjustableParams\n"
 		"ProjectionModel_getAdjustableParams(ProjectionModel self) -> AdjustableParams\n"

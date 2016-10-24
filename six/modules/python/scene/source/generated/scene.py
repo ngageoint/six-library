@@ -748,7 +748,7 @@ class LocalCoordinateTransform(_object):
 
 
     def getTransformMatrix(self):
-        """getTransformMatrix(LocalCoordinateTransform self) -> math::linear::MatrixMxN< 3,3,double >"""
+        """getTransformMatrix(LocalCoordinateTransform self) -> Matrix3x3"""
         return _scene.LocalCoordinateTransform_getTransformMatrix(self)
 
 
@@ -1377,28 +1377,28 @@ class ProjectionModel(_object):
 
     def slantToImagePartials(self, imageGridPoint, delta=0.0001):
         """
-        slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,2,double >
-        slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,2,double >
+        slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x2
+        slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2
         """
         return _scene.ProjectionModel_slantToImagePartials(self, imageGridPoint, delta)
 
 
     def imageToSceneSensorPartials(self, *args):
         """
-        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 3,7,double >
-        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> math::linear::MatrixMxN< 3,7,double >
-        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, double delta=0.0001) -> math::linear::MatrixMxN< 3,7,double >
-        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> math::linear::MatrixMxN< 3,7,double >
+        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x7
+        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x7
+        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, double delta=0.0001) -> Matrix3x7
+        imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> Matrix3x7
         """
         return _scene.ProjectionModel_imageToSceneSensorPartials(self, *args)
 
 
     def imageToScenePartials(self, *args):
         """
-        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 3,2,double >
-        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> math::linear::MatrixMxN< 3,2,double >
-        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, double delta=0.0001) -> math::linear::MatrixMxN< 3,2,double >
-        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> math::linear::MatrixMxN< 3,2,double >
+        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x2
+        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x2
+        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, double delta=0.0001) -> Matrix3x2
+        imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height) -> Matrix3x2
         """
         return _scene.ProjectionModel_imageToScenePartials(self, *args)
 
@@ -1415,36 +1415,36 @@ class ProjectionModel(_object):
 
     def sceneToImageSensorPartials(self, *args):
         """
-        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,7,double >
-        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,7,double >
-        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,7,double >
-        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint) -> math::linear::MatrixMxN< 2,7,double >
+        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x7
+        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x7
+        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, double delta=0.0001) -> Matrix2x7
+        sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint) -> Matrix2x7
         """
         return _scene.ProjectionModel_sceneToImageSensorPartials(self, *args)
 
 
     def sceneToImagePartials(self, *args):
         """
-        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,3,double >
-        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,3,double >
-        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, double delta=0.0001) -> math::linear::MatrixMxN< 2,3,double >
-        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint) -> math::linear::MatrixMxN< 2,3,double >
+        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x3
+        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x3
+        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, double delta=0.0001) -> Matrix2x3
+        sceneToImagePartials(ProjectionModel self, Vector3 scenePoint) -> Matrix2x3
         """
         return _scene.ProjectionModel_sceneToImagePartials(self, *args)
 
 
     def getErrorCovariance(self, *args):
         """
-        getErrorCovariance(ProjectionModel self, Vector3 scenePoint, double timeCOA) -> math::linear::MatrixMxN< 7,7,double >
-        getErrorCovariance(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 7,7,double >
-        getErrorCovariance(ProjectionModel self, Vector3 scenePoint) -> math::linear::MatrixMxN< 7,7,double >
-        getErrorCovariance(ProjectionModel self) -> math::linear::MatrixMxN< 7,7,double >
+        getErrorCovariance(ProjectionModel self, Vector3 scenePoint, double timeCOA) -> Matrix7x7
+        getErrorCovariance(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix7x7
+        getErrorCovariance(ProjectionModel self, Vector3 scenePoint) -> Matrix7x7
+        getErrorCovariance(ProjectionModel self) -> Matrix7x7
         """
         return _scene.ProjectionModel_getErrorCovariance(self, *args)
 
 
     def getUnmodeledErrorCovariance(self, imageGridPoint):
-        """getUnmodeledErrorCovariance(ProjectionModel self, RowColDouble imageGridPoint) -> math::linear::MatrixMxN< 2,2,double >"""
+        """getUnmodeledErrorCovariance(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2"""
         return _scene.ProjectionModel_getUnmodeledErrorCovariance(self, imageGridPoint)
 
 
