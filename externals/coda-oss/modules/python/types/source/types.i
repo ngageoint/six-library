@@ -43,11 +43,7 @@
 // Pickle utilities
 %pythoncode
 %{
-    import sys
-    if sys.version_info[0] == 2:
-        import cPickle as pickle
-    else:
-        import pickle
+    from . import pickle
 %}
 
 %extend types::RowCol

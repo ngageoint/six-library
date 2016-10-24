@@ -103,7 +103,10 @@ public:
         }
         else
         {
-            return returnCode;
+            // The returnCode value won't include trailing empty
+            // matches. By returning the actual size including empty matches
+            // we now match the STL and Python versions of regex.
+            return pcre2_get_ovector_count(mMatchData);
         }
     }
 
@@ -113,6 +116,14 @@ public:
 
         const size_t index = outVector[idx * 2];
         const size_t end = outVector[idx * 2 + 1];
+
+        // If both index and end are set to PCRE2_UNSET then we did not find
+        // a match the index and end values are invalid for the substr call.
+        // In this case we need to return an empty string.
+        if (index == PCRE2_UNSET && end == PCRE2_UNSET)
+        {
+            return "";
+        }
 
         if (end > str.length())
         {
