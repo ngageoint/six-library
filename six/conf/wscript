@@ -3,7 +3,9 @@ import os
 options = distclean = lambda p: None
 
 def configure(conf):
-    conf.env['SETUP_PY_DIR'] = conf.getBuildDir()
+    if 'WHEEL_MAP' not in conf.env:
+        conf.env['WHEEL_MAP'] = {}
+    conf.env['WHEEL_MAP']['pysix'] = conf.getBuildDir()
 
 def build(bld):
     bld(features='subst',
