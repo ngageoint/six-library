@@ -69,7 +69,10 @@ class CPPContext(Context.Context):
             dirs.remove('drivers')
             dirs.insert(0, 'drivers')
 
-        super(CPPContext, self).recurse([x for x in dirs if exists(join(self.path.abspath(), x, 'wscript'))])
+        dirsWithWscripts = [x for x in dirs if exists(
+                join(self.path.abspath(), x, 'wscript'))]
+
+        super(CPPContext, self).recurse(dirsWithWscripts)
 
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', str(version))
@@ -78,13 +81,13 @@ class CPPContext(Context.Context):
         defines = []
         for line in env.DEFINES:
             split = line.split('=')
-            k = split[0]
-            v = len(split) == 2 and split[1] or '1'
-            if v is not None and v != ():
-                if k.startswith('HAVE_') or k.startswith('USE_'):
-                    defines.append(k)
+            key = split[0]
+            value = len(split) == 2 and split[1] or '1'
+            if value is not None and value != ():
+                if key.startswith('HAVE_') or key.startswith('USE_'):
+                    defines.append(key)
                 else:
-                    defines.append('%s=%s' % (k, v))
+                    defines.append('%s=%s' % (key, value))
         return defines
 
     def pprint(self, *strs, **kw):
