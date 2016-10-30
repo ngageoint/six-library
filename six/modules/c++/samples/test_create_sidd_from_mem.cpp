@@ -2082,7 +2082,7 @@ void initRadiometric(six::Radiometric& radiometric)
 {
     radiometric.noiseLevel.noiseType = "Noise type";
     radiometric.noiseLevel.noisePoly = six::Poly2D(0, 0);
-    
+
     radiometric.rcsSFPoly = six::Poly2D(0, 0);
     radiometric.betaZeroSFPoly = six::Poly2D(1, 3);
     radiometric.sigmaZeroSFPoly = six::Poly2D(0, 0);
@@ -2309,7 +2309,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a','b', 'c', 'd'};
 
         // Create a file container
-        six::Container container(DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2327,7 +2328,7 @@ int main(int argc, char** argv)
                     initData(lutType);
 
             populateData(*siddData, lutType, smallImage, version);
-            container.addData(siddData->clone());
+            container->addData(siddData->clone());
             if (!smallImage)
             {
                 buffers[ii] = reinterpret_cast<const UByte*>(IMAGE.data);
@@ -2345,10 +2346,12 @@ int main(int argc, char** argv)
         // of the data.
         //--------------------------------------------------------
         if (sicdData.get())
-            container.addData(sicdData.release());
+        {
+            container->addData(sicdData.release());
+        }
 
         // Init the container
-        writer->initialize(&container);
+        writer->initialize(container);
 
         // Save the file
         writer->save(buffers, outputName);

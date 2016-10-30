@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -323,7 +323,7 @@ public:
            size_t maxProductSize = 0) :
         mNormalPathname("normal_write.nitf"),
         mNormalFileCleanup(mNormalPathname),
-        mContainer(six::DataType::COMPLEX),
+        mContainer(new six::Container(six::DataType::COMPLEX)),
         mDims(123, 456),
         mImage(mDims.area()),
         mImagePtr(&mImage[0]),
@@ -389,7 +389,7 @@ private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
 
-    six::Container mContainer;
+    mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
     std::vector<std::complex<DataTypeT> > mImage;
     std::complex<DataTypeT>* const mImagePtr;
@@ -407,11 +407,11 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    mContainer.addData(createData<DataTypeT>(mDims));
+    mContainer->addData(createData<DataTypeT>(mDims));
 
     six::NITFWriteControl writer;
     setMaxProductSize(writer);
-    writer.initialize(&mContainer);
+    writer.initialize(mContainer);
 
 
     six::BufferList buffers;
@@ -428,7 +428,7 @@ void Tester<DataTypeT>::testSingleWrite()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
     setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(&mContainer);
+    sicdWriter.initialize(mContainer);
 
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
@@ -443,7 +443,7 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
     setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(&mContainer);
+    sicdWriter.initialize(mContainer);
 
     // Rows [40, 60)
     types::RowCol<size_t> offset(40, 0);
@@ -493,7 +493,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
     setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(&mContainer);
+    sicdWriter.initialize(mContainer);
 
     // Rows [40, 60)
     // Cols [400, 456)

@@ -126,10 +126,6 @@ void six::sidd::GeoTIFFReadControl::load(
         const std::string& fromFile,
         const std::vector<std::string>& schemaPaths)
 {
-    // Clean up
-    delete mContainer;
-    mContainer = NULL;
-
     mReader.openFile(fromFile);
 
     if (mReader.getImageCount() <= 0 ||
@@ -142,7 +138,7 @@ void six::sidd::GeoTIFFReadControl::load(
     parseXMLEntry((*(mReader[0]->getIFD()))[six::Constants::GT_XML_KEY],
                   xmlStrs);
 
-    mContainer = new six::Container(six::DataType::DERIVED);
+    mContainer.reset(new six::Container(six::DataType::DERIVED));
 
     std::auto_ptr<six::XMLControl> siddXMLControl;
     std::auto_ptr<six::XMLControl> sicdXMLControl;
@@ -187,7 +183,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc, 
+            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc,
                                                               schemaPaths));
 
             if (!data.get())

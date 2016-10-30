@@ -28,6 +28,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
+#include <mem/SharedPtr.h>
 
 namespace
 {
@@ -70,8 +71,8 @@ namespace
 
         six::NITFReadControl reader;
         reader.load(pathname);
-        six::Container* const container = reader.getContainer();
-        six::Data* const data = container->getData(0);
+        mem::SharedPtr<const six::Container> container = reader.getContainer();
+        const six::Data* data = container->getData(0);
         return data->getDataType();
     }
 
@@ -87,7 +88,7 @@ namespace
 
         six::NITFReadControl reader;
         reader.load(originalPathname);
-        six::Container* const container = reader.getContainer();
+        mem::SharedPtr<six::Container> container = reader.getContainer();
 
         six::NITFWriteControl writer;
         writer.initialize(container);

@@ -41,7 +41,7 @@ namespace six
  *  This class uses NITRO to write out a NITF that is properly
  *  segmented using the algorithm in the SICD/SIDD spec.  In order
  *  to do this efficiently for the pixel-interleaved unblocked case
- *  we take advantage of the WriteHandler API and bypass the normal 
+ *  we take advantage of the WriteHandler API and bypass the normal
  *  blocker.
  */
 class NITFWriteControl : public WriteControl
@@ -75,20 +75,13 @@ public:
         DEFAULT_BUFFER_SIZE = 8192
     };
 
-    // Get the container that we were initialized from (const)
-    const Container* getContainer() const
-    {
-        return mContainer;
-    }
-
     // Get the record that was generated during initialization
     nitf::Record getRecord() const
     {
         return mRecord;
     }
 
-    // Ownership is not transferred - 'container' must outlive this object
-    virtual void initialize(Container* container);
+    virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;
 
@@ -325,7 +318,7 @@ protected:
 
     /*!
      *  This function sets the image security fields in the
-     *  given image subheader using the parameters in the 
+     *  given image subheader using the parameters in the
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */
@@ -334,7 +327,7 @@ protected:
 
     /*!
      *  This function sets the image security fields in the
-     *  given DE subheader using the parameters in the 
+     *  given DE subheader using the parameters in the
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */

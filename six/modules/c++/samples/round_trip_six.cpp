@@ -186,7 +186,7 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
-        parser.addArgument("-s --schema", 
+        parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE);
         parser.addArgument("--retainDateTime",
@@ -253,7 +253,7 @@ int main(int argc, char** argv)
         reader.setXMLControlRegistry(&xmlRegistry);
 
         reader.load(inputFile, schemaPaths);
-        six::Container* container = reader.getContainer();
+        mem::SharedPtr<six::Container> container(reader.getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)

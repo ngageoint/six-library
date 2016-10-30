@@ -41,12 +41,11 @@ int main(int argc, char** argv)
         NITFReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
 
-        Container* container = reader->getContainer();
+        mem::SharedPtr<Container> container = reader->getContainer();
 
         // test the clone...
         Container dolly = *container;
 
-        delete container;
         delete reader;
         return 0;
     }

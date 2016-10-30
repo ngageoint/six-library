@@ -58,19 +58,13 @@ void SICDWriteControl::setComplexityLevelIfRequired()
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    // TODO: The implementation for this is hokey... the problem is that the
-    //       underlying WriteControl doesn't own the Container, but here we
-    //       need to create a Container for 'data' and need it to live longer
-    //       than this method.  If WriteControl holds onto the Container by
-    //       SharedPtr, this goes away.
-
-	mOurContainer.reset(new Container(DataType::COMPLEX));
+    mem::SharedPtr<Container> container(new Container(
+            DataType::COMPLEX));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    mOurContainer->addData(data.clone());
-
-	initialize(mOurContainer.get());
+    container->addData(data.clone());
+    initialize(container);
 }
 
 void SICDWriteControl::writeHeaders()
@@ -187,18 +181,18 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-	if (mContainer == NULL)
-	{
-		throw except::Exception(Ctxt(
-		        "initialize() must be called prior to calling save()"));
-	}
+    if (mContainer.get() == NULL)
+    {
+        throw except::Exception(Ctxt(
+                "initialize() must be called prior to calling save()"));
+    }
 
-	// The first time through we'll write out all the headers
-	if (!mHaveWrittenHeaders)
-	{
-	    writeHeaders();
-	    mHaveWrittenHeaders = true;
-	}
+    // The first time through we'll write out all the headers
+    if (!mHaveWrittenHeaders)
+    {
+        writeHeaders();
+        mHaveWrittenHeaders = true;
+    }
 
     const six::Data* const data = mContainer->getData(0);
     static const size_t NUM_BANDS = 2;

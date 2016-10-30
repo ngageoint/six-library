@@ -41,8 +41,8 @@ def validate(pathname):
     check_valid_six = utils.executableName(os.path.join(binDir,
             'check_valid_six'))
 
-    return (call([check_valid_six, pathname], stdout=open(os.devnull, 'w')) and
-            call([check_valid_six, roundTrippedName(pathname)],
+    return (call([check_valid_six, pathname], stdout=open(os.devnull, 'w')) == 0
+            and call([check_valid_six, roundTrippedName(pathname)],
             stdout=open(os.devnull, 'w'))) == 0
 
 
@@ -52,9 +52,15 @@ def run():
     for pathname in glob.iglob(os.path.join(regressionDir, '*', '*.nitf')):
         print('Checking {0}'.format(os.path.basename(pathname)))
         result = result and roundTripSix(pathname) and validate(pathname)
+        if result == False:
+            print('Failed {0}'.format(os.path.basename(pathname)))
+            break
 
     # Clean up
     for pathname in glob.iglob(os.path.join(os.getcwd(), '*.nitf')):
         os.remove(pathname)
 
     return result
+
+if __name__ == '__main__':
+    run()

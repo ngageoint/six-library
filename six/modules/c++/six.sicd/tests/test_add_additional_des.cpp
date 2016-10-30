@@ -93,11 +93,12 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
@@ -126,11 +127,12 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -168,11 +170,12 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data.release()));
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -214,11 +217,12 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment desOne = record.newDataExtensionSegment();

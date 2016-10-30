@@ -39,7 +39,7 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
                                                     tiff::Const::Type::ASCII,
                                                     Constants::GT_XML_TAG);
 }
-void GeoTIFFWriteControl::initialize(Container* container)
+void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
 
     if (container->getDataType() != DataType::DERIVED)
@@ -232,7 +232,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
-        xmlEntry->addValues(six::toValidXMLString(mComplexData[jj], 
+        xmlEntry->addValues(six::toValidXMLString(mComplexData[jj],
                                                   schemaPaths, mLog));
     }
 }
