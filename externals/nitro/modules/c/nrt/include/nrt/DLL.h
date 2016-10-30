@@ -31,6 +31,9 @@
 #ifdef WIN32
 /*  Under windows, a dynamic shared object is a DLL  */
 #    define  NRT_DLL_EXTENSION ".dll"
+#elif defined(__APPLE__)
+/*  Under OSX, a dynamic shared object has a .dylib extension  */
+#    define  NRT_DLL_EXTENSION ".dylib"
 #else
 /*
  *  BE WARY: Under Unix, we expect a DSO to have a .so extension,
