@@ -1,4 +1,4 @@
-import os, sys
+import os
 from waflib import Options
 
 configure = distclean = lambda x: None
