@@ -25,6 +25,7 @@
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
+#include <nitf/IOStreamReader.hpp>
 
 namespace
 {
@@ -241,6 +242,13 @@ void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
     nitf::IOHandle handle(fromFile);
+    load(handle, schemaPaths);
+}
+
+void NITFReadControl::load(io::SeekableInputStream& stream,
+                           const std::vector<std::string>& schemaPaths)
+{
+    nitf::IOStreamReader handle(stream);
     load(handle, schemaPaths);
 }
 

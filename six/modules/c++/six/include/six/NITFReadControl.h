@@ -27,6 +27,7 @@
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
 #include "six/Adapters.h"
+#include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
 
 namespace six
@@ -59,7 +60,7 @@ public:
         reset();
     }
 
-    /*! 
+    /*!
      *  Read whether a file has COMPLEX or DERIVED data
      *  \param fromFile path to file
      *  \return datatype of file contents
@@ -73,7 +74,7 @@ public:
     */
     static
     DataType getDataType(nitf::Record& record);
-    
+
     /*!
     *  Read whether a DESegment has COMPLEX or DERIVED data
     *  \param segment the DESegment in question
@@ -84,7 +85,7 @@ public:
 
     /*!
     *  Determine whether specific attribute outline COMPLEX or DERIVED contents
-    *  Interface to allow communication with programs that use different ways 
+    *  Interface to allow communication with programs that use different ways
     *  of storing NITF data
     *  \param desid SICD_XML, SIDD_XML, XML_DATA_CONTENT, etc.
     *  \param subheaderLength length of subheader
@@ -116,6 +117,16 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     void load(const std::string& fromFile,
+              const std::vector<std::string>& schemaPaths);
+
+    /*
+     *  \func load
+     *  \brief Loads a SICD from an io::SeekableInputStream.
+     *
+     *  \param ioStream The stream to read from.
+     *  \param schemaPaths Directories or files of schema locations.
+     */
+    void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
     void load(nitf::IOInterface& ioInterface);
