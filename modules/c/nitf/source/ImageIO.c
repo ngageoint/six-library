@@ -537,7 +537,7 @@ _nitf_ImageIO;
   The userBase field is an array of pointers, one for each requested
 band. The user is likely to want to put the bands in non-continuous buffers.
 
-The padded field is a flags that indicates that pad pixels are
+The padded field is a flag that indicates that pad pixels are
 included. It is used by read operations.
 
 The blockIO field is a two dimensional array of _nitf_ImageIOBlock
@@ -659,7 +659,7 @@ formatted (i.e., byte swapped).
 
 The unpacked buffer provides an additional level of buffering when the
 user requets down-sampling. Data is read full-resolution into the read
-read buffer and than unpacked into the unpacked buffer. After a complete
+buffer and than unpacked into the unpacked buffer. After a complete
 sample window of rows have been read and unpacked, the data is down-sampled
 into the user buffer. Unformatting is done in-place in the unpacked buffer.
 The unpacked buffer will contain one sample window more columns than the
@@ -677,7 +677,7 @@ The offset is updated, not the pointer.
 
 At the end of the read the input buffer offset points to the begining of
 the read data. This offset may be adjusted by the read function on a read
-by read basis. In the simplier cases, is is initialize to point to the
+by read basis. In the simpler cases, it is initialized to point to the
 user buffer and incremented by nitf_ImageIO_nextRow.
 
 A blockMask pointer is maintained in the IO structure to handle block
@@ -714,7 +714,7 @@ occurs when the image size in the row or column dimension is not an
 interger multiple of the corresponding block dimension. The pad column
 count is the number of pad bytes that must be added to the end of the row.
 the count is bytes not pixels. This field is only non-zero in blocks that
-are in the last block column. The writeer uses this value as a flag
+are in the last block column. The writer uses this value as a flag
 indicating the need to write pad pixels. The pad row count gives the number
 of pad rows that need to be added to the end of the image. sice each block
 I/O object represents a column of blocks for one band, all blocks have the
@@ -3591,7 +3591,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
                                              nitf_Uint32 length,
                                              nitf_Error* error)
 {
-    
     _nitf_ImageIO* nio = (_nitf_ImageIO*)object;
 
     if (length > NITF_IMAGE_IO_PAD_MAX_LENGTH)
@@ -6494,16 +6493,8 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     else
         padCodeLength = 0;
 
-    if (nitf_ImageIO_bigEndian())
-    {
-        ((nitf_Uint8 *) buffer)[8] = padCodeLength >> 8;
-        ((nitf_Uint8 *) buffer)[9] = padCodeLength & 0xff;
-    }
-    else
-    {
-        ((nitf_Uint8 *) buffer)[9] = padCodeLength >> 8;
-        ((nitf_Uint8 *) buffer)[8] = padCodeLength & 0xff;
-    }
+    ((nitf_Uint8 *) buffer)[9] = padCodeLength >> 8;
+    ((nitf_Uint8 *) buffer)[8] = padCodeLength & 0xff;
 
     if (!nitf_ImageIO_writeToFile(io, nitf->imageBase,
                                   buffer, NITF_IMAGE_IO_MASK_HEADER_LEN,
