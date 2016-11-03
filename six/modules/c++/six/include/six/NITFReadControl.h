@@ -29,6 +29,7 @@
 #include "six/Adapters.h"
 #include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
+#include <nitf/IOStreamReader.hpp>
 
 namespace six
 {
@@ -222,6 +223,10 @@ private:
 
         return (iCat == "LEG");
     }
+
+    // We need this for one of the load overloadings
+    // to prevent data from being deleted prematurely
+    mem::ScopedCopyablePtr<nitf::IOStreamReader> mStreamReader;
 };
 
 

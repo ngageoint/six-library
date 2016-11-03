@@ -25,7 +25,6 @@
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
-#include <nitf/IOStreamReader.hpp>
 
 namespace
 {
@@ -248,8 +247,8 @@ void NITFReadControl::load(const std::string& fromFile,
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
 {
-    nitf::IOStreamReader handle(stream);
-    load(handle, schemaPaths);
+    mStreamReader.reset(new nitf::IOStreamReader(stream));
+    load(*mStreamReader, schemaPaths);
 }
 
 void NITFReadControl::load(nitf::IOInterface& ioInterface)
@@ -592,7 +591,6 @@ NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
-
     NITFImageInfo* thisImage = mInfos[imageNumber];
 
     size_t numRowsTotal = thisImage->getData()->getNumRows();
@@ -676,6 +674,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " sw.startRow: " << sw.getStartRow()
     << " i: " << i << std::endl;
 #endif
+
     int nbpp = thisImage->getData()->getNumBytesPerPixel();
     int startIndex = thisImage->getStartIndex();
     createCompressionOptions(mCompressionOptions);
