@@ -71,7 +71,7 @@ int main(int argc, char** argv)
         std::auto_ptr<six::sicd::ComplexData> streamComplexData;
         std::vector<std::complex<float> > streamWidebandData;
         io::FileInputStream stream(sicdPathname);
-        //nitf::IOStreamReader handle(stream);
+
         six::XMLControlRegistry xmlRegistry;
         xmlRegistry.addCreator(six::DataType::COMPLEX,
             new six::XMLControlCreatorT<
