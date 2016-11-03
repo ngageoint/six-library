@@ -28,6 +28,7 @@
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <io/StandardStreams.h>
+#include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
@@ -55,12 +56,7 @@ int main(int argc, char** argv)
         }
         else
         {
-            // In a normal installation, we can infer the path
-            const sys::Path progDirname =
-                sys::Path::splitPath(progname).first;
-            const sys::Path schemaPath = progDirname.join("..").join("..").
-                join("conf").join("schema").join("six");
-            schemaPaths.push_back(sys::Path::absolutePath(schemaPath));
+            schemaPaths.push_back(six::findSchemaPath(progname));
         }
 
         std::auto_ptr<six::sicd::ComplexData> fileComplexData;
@@ -82,11 +78,8 @@ int main(int argc, char** argv)
         reader.load(stream, schemaPaths);
 
         streamComplexData = six::sicd::Utilities::getComplexData(reader);
-        six::sicd::Utilities::getWidebandData(reader, *(streamComplexData.get()), streamWidebandData);
-
-        // This tells the reader that it doesn't
-        // own an XMLControlRegistry
-        reader.setXMLControlRegistry(NULL);
+        six::sicd::Utilities::getWidebandData(reader, *streamComplexData,
+                streamWidebandData);
 
          if (*streamComplexData != *fileComplexData)
         {

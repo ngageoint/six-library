@@ -240,28 +240,29 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
-    nitf::IOHandle handle(fromFile);
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOHandle(fromFile));
     load(handle, schemaPaths);
 }
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
 {
-    mStreamReader.reset(new nitf::IOStreamReader(stream));
-    load(*mStreamReader, schemaPaths);
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOStreamReader(stream));
+    load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface)
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface,
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
+    mInterface = ioInterface;
 
-    mRecord = mReader.readIO(ioInterface);
+    mRecord = mReader.readIO(*ioInterface);
     DataType dataType = getDataType(mRecord);
     mContainer.reset(new Container(dataType));
 
@@ -776,6 +777,7 @@ void NITFReadControl::reset()
         delete mInfos[ii];
     }
     mInfos.clear();
+    mInterface.reset();
 }
 
 

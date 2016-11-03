@@ -130,8 +130,8 @@ public:
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(nitf::IOInterface& ioInterface);
-    void load(nitf::IOInterface& ioInterface,
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);
@@ -226,7 +226,9 @@ private:
 
     // We need this for one of the load overloadings
     // to prevent data from being deleted prematurely
-    mem::ScopedCopyablePtr<nitf::IOStreamReader> mStreamReader;
+    // The issue occurs from the explicit destructor of
+    // IOControl
+    mem::SharedPtr<nitf::IOInterface> mInterface;
 };
 
 
