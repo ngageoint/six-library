@@ -59437,6 +59437,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_findSchemaPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:findSchemaPath",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "findSchemaPath" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "findSchemaPath" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = six::findSchemaPath((std::string const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_Options(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
@@ -82375,6 +82434,7 @@ static PyMethodDef SwigMethods[] = {
 		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"getErrors", _wrap_getErrors, METH_VARARGS, (char *)"getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"},
+	 { (char *)"findSchemaPath", _wrap_findSchemaPath, METH_VARARGS, (char *)"findSchemaPath(std::string const & progname) -> std::string"},
 	 { (char *)"delete_Options", _wrap_delete_Options, METH_VARARGS, (char *)"delete_Options(Options self)"},
 	 { (char *)"Options_getParameter", _wrap_Options_getParameter, METH_VARARGS, (char *)"\n"
 		"getParameter(std::string const & option) -> Parameter\n"
