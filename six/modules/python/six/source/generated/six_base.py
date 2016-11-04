@@ -4215,6 +4215,10 @@ def parseDataFromString(*args):
 def getErrors(errorStats, sampleSpacing, errors):
     """getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"""
     return _six_base.getErrors(errorStats, sampleSpacing, errors)
+
+def findSchemaPath(progname):
+    """findSchemaPath(std::string const & progname) -> std::string"""
+    return _six_base.findSchemaPath(progname)
 class Options(_object):
     """Proxy of C++ six::Options class."""
 

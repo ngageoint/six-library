@@ -29,6 +29,7 @@
 #include "six/Adapters.h"
 #include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
+#include <nitf/IOStreamReader.hpp>
 
 namespace six
 {
@@ -129,8 +130,8 @@ public:
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(nitf::IOInterface& ioInterface);
-    void load(nitf::IOInterface& ioInterface,
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);
@@ -222,6 +223,12 @@ private:
 
         return (iCat == "LEG");
     }
+
+    // We need this for one of the load overloadings
+    // to prevent data from being deleted prematurely
+    // The issue occurs from the explicit destructor of
+    // IOControl
+    mem::SharedPtr<nitf::IOInterface> mInterface;
 };
 
 

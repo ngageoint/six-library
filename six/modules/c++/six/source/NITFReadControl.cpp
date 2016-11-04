@@ -25,7 +25,6 @@
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
-#include <nitf/IOStreamReader.hpp>
 
 namespace
 {
@@ -241,28 +240,29 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
-    nitf::IOHandle handle(fromFile);
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOHandle(fromFile));
     load(handle, schemaPaths);
 }
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
 {
-    nitf::IOStreamReader handle(stream);
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOStreamReader(stream));
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface)
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface,
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
+    mInterface = ioInterface;
 
-    mRecord = mReader.readIO(ioInterface);
+    mRecord = mReader.readIO(*ioInterface);
     DataType dataType = getDataType(mRecord);
     mContainer.reset(new Container(dataType));
 
@@ -592,7 +592,6 @@ NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
-
     NITFImageInfo* thisImage = mInfos[imageNumber];
 
     size_t numRowsTotal = thisImage->getData()->getNumRows();
@@ -676,6 +675,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " sw.startRow: " << sw.getStartRow()
     << " i: " << i << std::endl;
 #endif
+
     int nbpp = thisImage->getData()->getNumBytesPerPixel();
     int startIndex = thisImage->getStartIndex();
     createCompressionOptions(mCompressionOptions);
@@ -777,6 +777,7 @@ void NITFReadControl::reset()
         delete mInfos[ii];
     }
     mInfos.clear();
+    mInterface.reset();
 }
 
 

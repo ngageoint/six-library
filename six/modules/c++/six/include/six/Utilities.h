@@ -297,6 +297,15 @@ std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
                scene::Errors& errors);
+
+/*
+ * Try to find schema directory from given location.
+ * Return empty string on failure
+ *
+ * \param progname name of executable
+ * \return path to schema directory, or empty string
+ */
+std::string findSchemaPath(const std::string& progname);
 }
 
 #endif
