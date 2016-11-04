@@ -1108,7 +1108,7 @@ std::string six::findSchemaPath(const std::string& progname)
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
-    const size_t MAX_DEPTH = 5;
+    const static size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
     std::string schemaPath;
