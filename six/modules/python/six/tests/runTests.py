@@ -102,10 +102,11 @@ def run(sourceDir):
     siddTestRunner = CppTestRunner(siddTestDir)
     sampleTestRunner = CppTestRunner(sampleTestDir)
 
-
-    sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
-    sicdTestRunner.run('test_load_from_input_stream', sampleSicd)
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
+        sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
+        if not sicdTestRunner.run('test_load_from_input_stream', sampleSicd):
+            return False
+
         if not sicdTestRunner.run('test_streaming_write'):
             return False
 
