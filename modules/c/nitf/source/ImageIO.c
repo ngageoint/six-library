@@ -696,7 +696,7 @@ the number of blocks to be processed in the block is 1 the rowsUntil counter
 is set to 0. After the first row of blocks, the counter is set to one less
 than the number of rows in a block. This works because this is always right
 for all rows of blocks except the first and last and in the last it is OK to
-put in a to big value since there is a separate counter keeping track of the
+put in a too big value since there is a separate counter keeping track of the
 rows processed.
 
 The userEqBuffer flag indicates that the user buffer is the read/write
@@ -1113,7 +1113,7 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
   field in the nitf argument. The functions are selected baseded on the
   options set in the nitf_ImageIO structure. The relevant options are
   compression, blocking mode and pixel. This function must be called after
-  the functions that initialize the correspondin fields.
+  the functions that initialize the corresponding fields.
 
   \b Note:
 
@@ -1298,7 +1298,7 @@ and subwindow cannot be changed (a new object must be created).
 
 The subwindow should be validated by the caller
 
-The user pointers argument should have a pointer to an sub-window sized
+The user pointers argument should have a pointer to a sub-window sized
 buffer for each requested band. For writing, there is a creation call
 (i.e., nitf_ImageIO_writeSequential) followed by a write call. In this
 case the user data pointers are not required for the creation call and
@@ -1316,7 +1316,7 @@ directly by the user.
 
 \return The new _nitf_ImageIOControl or NULL on error
 
-On, error the error object is set.
+On error, the error object is set.
 
 Possible errors include:
 
@@ -2006,7 +2006,7 @@ void nitf_ImageIO_setDefaultParameters(_nitf_ImageIO * object);
   nitf_ImageIO_unpack_P_1   - Unpack 2 byte data\\n
 nitf_ImageIO_unpack_P_2   - Unpack 4 byte data\\n
 nitf_ImageIO_unpack_P_4   - Unpack 8 byte data\\n
-nitf_ImageIO_unpack_P_8   - Unpack 8 byte, complex data data\\n
+nitf_ImageIO_unpack_P_8   - Unpack 8 byte, complex data\\n
 nitf_ImageIO_unpack_P_16  - Unpack 16 byte data\\n
 
 There is no difference between anytypes when it comes to unpacking.
@@ -2057,7 +2057,7 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
   nitf_ImageIO_pack_P_1   - Pack 2 byte data\\n
 nitf_ImageIO_pack_P_2   - Pack 4 byte data\\n
 nitf_ImageIO_pack_P_4   - Pack 8 byte data\\n
-nitf_ImageIO_pack_P_8   - Pack 8 byte, complex data data\\n
+nitf_ImageIO_pack_P_8   - Pack 8 byte, complex data\\n
 nitf_ImageIO_pack_P_16  - Pack 16 byte data\\n
 
 There is no difference between anytypes when it comes to packing.
@@ -2243,11 +2243,11 @@ nitf_ImageIO_swapOnly_2   - Byte swap 2 byte data\\n
 nitf_ImageIO_swapOnly_4   - Byte swap 4 byte data\\n
 nitf_ImageIO_swapOnly_4c  - Byte swap 4 byte, complex data\\n
 nitf_ImageIO_swapOnly_8   - Byte swap 8 byte data\\n
-nitf_ImageIO_swapOnly_8c  - Byte swap 8 byte, complex data data
-nitf_ImageIO_swapOnly_16c - Byte swap 16 byte, complex data data
+nitf_ImageIO_swapOnly_8c  - Byte swap 8 byte, complex data
+nitf_ImageIO_swapOnly_16c - Byte swap 16 byte, complex data
 
 There is no difference between integer and real types when it comes to
-byte orderin, except for complex which is actually two consecutive reals.
+byte ordering, except for complex which is actually two consecutive reals.
 
 The shiftCount argument is not used but is required for the calling
 convention.
@@ -3037,7 +3037,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
      * 2. Among other things, setPixelDef() sets vtbl.unformat and vtbl.format
      *    which handle endian swapping.  However, we don't want to do endian
      *    swapping if we have a compressor/decompressor (because it will do
-     *    this for us), so we need to do #1 first to we know what compression
+     *    this for us), so we need to do #1 first so we know what compression
      *    we've got.
      * 3. For certain input types, decodeBlockingMode() will fake out the
      *    number of bands and then override vtbl.unformat (in order to
@@ -3055,7 +3055,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
 
     /*
      *      Check for pixel type B (binary), if there is no decompressor, set
-     *  The psuedo decompressor for B typ3 pixels
+     *  The psuedo decompressor for B type pixels
      */
 
     if ((nitf->pixel.type == NITF_IMAGE_IO_PIXEL_TYPE_B)
@@ -3092,7 +3092,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
     nitf_ImageIO_setUnpack(nitf);
     nitf_ImageIO_setIO(nitf);
 
-    /* Call if compressor open function if the compressor is not NULL */
+    /* Call the compressor open function if the compressor is not NULL */
     if(nitf->compressor != NULL)
     {
         nitf->compressionControl = 
@@ -3104,7 +3104,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
         }
     }
 
-    /* Call if decompressor open function if the decompressor is not NULL */
+    /* Call the decompressor open function if the decompressor is not NULL */
     if(nitf->decompressor != NULL)
     {
         nitf->decompressionControl = 
@@ -3177,8 +3177,7 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf)
         if (nitfp->decompressor == NULL)
             NITF_FREE(nitfp->blockControl.block);
         else
-            (*(nitfp->decompressor->freeBlock)) (nitfp->
-                                                 decompressionControl,
+            (*(nitfp->decompressor->freeBlock)) (nitfp->decompressionControl,
                                                  nitfp->blockControl.block,
                                                  &error);
     }
@@ -3208,8 +3207,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
     NITF_BOOL oneRead;          /* Complete request in one read flag */
     int oneBand;                /* One band flag */
     _nitf_ImageIOControl *cntl; /* IO control structure */
-    /* Read control structure */
-    _nitf_ImageIOReadControl *readCntl;
+    _nitf_ImageIOReadControl *readCntl; /* Read control structure */
     nitf_SubWindow tmpSub;      /* Temp sub-window structure for one band loop */
     nitf_Uint32 band;           /* Current band */
     int ret;                    /* Return value */
@@ -3227,8 +3225,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
     /* *possibly* revert the optimized modes */
     nitf_ImageIO_revertOptimizedModes(nitfI, subWindow->numBands);
 
-    /*  Create I/O control */
-
     /*
      *      Check the request, set-up blocking first since the sub-window
      *  check requires the block size
@@ -3245,7 +3241,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
         return 0;
 
     /*
-     *   Look for single read cases (down-sampling never does a single read ori
+     *   Look for single read cases (down-sampling never does a single read or
      * one band reads if the method is multi-band)
      */
 
@@ -4579,7 +4575,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* Parent _nitf_ImageIO object */
     nitf_Uint32 startBlockRow;  /* Starting blockRow */
-    nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
@@ -4637,10 +4632,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
      */
 
     startBlockRow = cntl->row / nitf->numRowsPerBlock;
-    endBlockRow = (cntl->numRows * (cntl->rowSkip) + cntl->row - 1) /
-                nitf->numRowsPerBlock;
-    if (endBlockRow >= nitf->nBlocksPerRow)
-        endBlockRow -= 1;
 
     startBlockCol = cntl->column / nitf->numColumnsPerBlock;
     endBlockCol = (cntl->numColumns * (cntl->columnSkip) + cntl->column - 1) /
@@ -5101,7 +5092,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
     _nitf_ImageIO *nitf = NULL; /* Parent _nitf_ImageIO object */
     nitf_Uint32 startBlockRow;  /* Starting blockRow */
-    nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
@@ -5129,8 +5119,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint8 blockColIdx;     /* Current block column index */
     nitf_Uint8 *cacheBuffer = NULL; /* Current cach buffer */
     NITF_BOOL freeCacheBuffer;  /* Sets block control free flag */
-    /* Resets freeCacheBuffer flag */
-    NITF_BOOL freeCacheBufferReset;
+    NITF_BOOL freeCacheBufferReset; /* Resets freeCacheBuffer flag */
 
     nitf = cntl->nitf;
 
@@ -5147,10 +5136,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
      * for more information
      */
     startBlockRow = cntl->row / nitf->numRowsPerBlock;
-    endBlockRow = (cntl->numRows * (cntl->rowSkip) + cntl->row - 1) /
-        nitf->numRowsPerBlock;
-    if (endBlockRow >= nitf->nBlocksPerRow)
-        endBlockRow -= 1;
     
     startBlockCol = cntl->column / nitf->numColumnsPerBlock;
     endBlockCol = (cntl->numColumns * (cntl->columnSkip) + cntl->column - 1) /
@@ -5429,7 +5414,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                  */
                 blockIO->rwBuffer.buffer = blockIO->user.buffer;
                 cntl->bufferInc =
-                        cntl->numColumns * nitf->numBands * nitf->pixel.bytes;
+                        cntl->numColumns * nitf->numBands * bytes;
                 blockIO->userEqBuffer = 1;
             }
 

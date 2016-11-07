@@ -3,7 +3,7 @@ from os.path import join, split, basename, splitext
 NAME            = 'nitf'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '2.7'
-MODULE_DEPS     = 'mt sys mem io'
+MODULE_DEPS     = 'cli mt sys mem io'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'
 LANG            = 'c++'
@@ -15,7 +15,7 @@ options = configure = distclean = lambda p: None
 
 def build(bld):
     bld.module(**globals())
-    
+
     env = bld.get_env()
     for app in APPS.split():
         app_name = splitext(basename(app))[0]
