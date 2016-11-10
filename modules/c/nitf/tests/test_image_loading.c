@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -109,7 +109,7 @@ void writeImage(nitf_ImageSegment * segment,
            segment->subheader->imageCompression->raw,
            (int)segment->subheader->compressionRate->length,
            segment->subheader->compressionRate->raw);
-    
+
 
     if (optz)
     {
@@ -152,8 +152,8 @@ void writeImage(nitf_ImageSegment * segment,
     subimage = nitf_SubWindow_construct(error);
     assert(subimage);
 
-    /* 
-     *  You need a buffer for each band (unless this is an 
+    /*
+     *  You need a buffer for each band (unless this is an
      *  accelerated IQ complex or RGB read, in which case, you
      *  can set the number of bands to 1, and size your buffer
      *  accordingly to receive band-interleaved by pixel data)
@@ -163,7 +163,7 @@ void writeImage(nitf_ImageSegment * segment,
     /* An iterator for bands */
     band = 0;
 
-    /* 
+    /*
      *  This tells us what order to give you bands in.  Normally
      *  you just want it in the order of the banding.  For example,
      *  in a non-accelerated band-interleaved by pixel cases, you might
@@ -183,8 +183,8 @@ void writeImage(nitf_ImageSegment * segment,
     subimage->numCols = nColumns / columnSkipFactor;
 
     /* Construct our pixel skip downsampler (does nothing if skips are 1) */
-    pixelSkip = nitf_PixelSkip_construct(rowSkipFactor, 
-                                         columnSkipFactor, 
+    pixelSkip = nitf_PixelSkip_construct(rowSkipFactor,
+                                         columnSkipFactor,
                                          error);
     if (!pixelSkip)
     {
@@ -249,7 +249,7 @@ void writeImage(nitf_ImageSegment * segment,
                                  (const char *) buffer[i],
                                  subimageSize, error))
         {
-            nitf_Error_print(error, stderr, 
+            nitf_Error_print(error, stderr,
                              "IO handle write failed for raw band");
             goto CATCH_ERROR;
         }
@@ -349,8 +349,8 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    /*  
-     *  As of 2.5, you do not have to use an IOHandle if you use 
+    /*
+     *  As of 2.5, you do not have to use an IOHandle if you use
      *  readIO instead of read()
      */
     io = nitf_IOHandle_create(inputFile,
@@ -403,7 +403,7 @@ int main(int argc, char **argv)
             nitf_Error_print(&e, stderr, "Couldnt spawn deserializer");
             exit(EXIT_FAILURE);
         }
-        
+
         printf("Writing image %d... ", count);
 
         /*  Write the thing out  */
@@ -411,7 +411,7 @@ int main(int argc, char **argv)
                    rowSkipFactor, columnSkipFactor, optz, &e);
 
         nitf_ImageReader_destruct(&deserializer);
-        
+
         printf("done.\n");
 
         /*  Increment the iterator so we can continue  */
