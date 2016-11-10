@@ -6493,8 +6493,8 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     else
         padCodeLength = 0;
 
-    ((nitf_Uint8 *) buffer)[9] = padCodeLength >> 8;
-    ((nitf_Uint8 *) buffer)[8] = padCodeLength & 0xff;
+    ((nitf_Uint8 *) buffer)[8] = padCodeLength >> 8;
+    ((nitf_Uint8 *) buffer)[9] = padCodeLength & 0xff;
 
     if (!nitf_ImageIO_writeToFile(io, nitf->imageBase,
                                   buffer, NITF_IMAGE_IO_MASK_HEADER_LEN,
