@@ -173,5 +173,10 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
  */
 NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
 
+/*!
+ *  Byte-swap a given value of length `size` bytes in-place.
+ */
+NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, nrt_Uint8 size);
+
 NRT_CXX_ENDGUARD
 #endif
