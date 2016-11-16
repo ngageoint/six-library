@@ -46,14 +46,6 @@ class IOHandle : public IOInterface
 
 public:
 
-    /*!
-     * Default constructor. Only here for compatibility purposes.
-     * Use the other constructor
-     */
-    /*explicit IOHandle()
-    {
-    }*/
-
     IOHandle(const std::string& fname,
              nitf::AccessFlags access = NITF_ACCESS_READONLY,
              nitf::CreationFlags creation = NITF_OPEN_EXISTING)
