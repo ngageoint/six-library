@@ -35,13 +35,10 @@
 #include <cstddef>
 using std::ptrdiff_t;
 
+#include "import/nitf.hpp"
 #include "import/six.h"
 #include "Python.h"
 #include "datetime.h"
-/* this isn't imported by the above include */
-#include "six/Radiometric.h"
-
-#include "import/nitf.hpp"
 
 using namespace six;
 %}
