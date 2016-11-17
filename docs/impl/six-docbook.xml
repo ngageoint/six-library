@@ -467,6 +467,13 @@ $ ./waf install
 
       <programlisting>
       &gt; python waf makewheel
+
+Creating wheel
+Processing /home/user/six-user/six-library
+Building wheels for collected packages: pysix
+  Running setup.py bdist_wheel for pysix
+  Stored in directory /home/user/six-user/six-library/install/bin
+Successfully built pysix
       </programlisting>
 
       <para>A wheel is the standard format for distributing a Python module. It
