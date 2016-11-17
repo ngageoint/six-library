@@ -46,7 +46,13 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     std::auto_ptr<six::sidd::DerivedData> derivedData(new six::sidd::DerivedData());
     derivedData->productCreation.reset(new six::sidd::ProductCreation());
     derivedData->productCreation->classification.classification = "U";
-    derivedData->measurement.reset(new six::sidd::Measurement(six::ProjectionType::GEOGRAPHIC));
+    derivedData->measurement.reset(
+            new six::sidd::Measurement(six::ProjectionType::GEOGRAPHIC));
+    six::sidd::GeographicProjection* geographicProjection = 
+            (six::sidd::GeographicProjection*)
+            derivedData->measurement->projection.get();
+    geographicProjection->timeCOAPoly = six::Poly2D(0, 0);
+    geographicProjection->timeCOAPoly[0][0] = 1;
     derivedData->measurement->arpPoly = six::PolyXYZ(0);
     derivedData->measurement->arpPoly[0] = six::Vector3(0.0);
     derivedData->display.reset(new six::sidd::Display());
