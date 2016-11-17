@@ -123,20 +123,6 @@ def setValue(self, *args):
         return nitfDateTime;
     }
 
-    /*
-    nitf::DateTime fromPythonDateTime(PyObject* datetime)
-    {
-        double second = PyDateTime_DATE_GET_SECOND(datetime) +
-                (PyDateTime_DATE_GET_MICROSECOND(datetime) / 1e6);
-        nitf::DateTime sixDateTime;
-        sixDateTime.setYear(PyDateTime_GET_YEAR(datetime));
-        sixDateTime.setMonth(PyDateTime_GET_MONTH(datetime));
-        sixDateTime.setDayOfMonth(PyDateTime_GET_DAY(datetime));
-        sixDateTime.setHour(PyDateTime_DATE_GET_HOUR(datetime));
-        sixDateTime.setMinute(PyDateTime_DATE_GET_MINUTE(datetime));
-        sixDateTime.setSecond(second);
-        return sixDateTime;
-    }*/
     %pythoncode
     %{
         @staticmethod
