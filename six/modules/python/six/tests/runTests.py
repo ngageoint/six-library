@@ -126,7 +126,8 @@ def run(sourceDir):
 
         clean(newFiles)
 
-        if not siddTestRunner.run('test_byte_swap'):
+        if not (siddTestRunner.run('test_byte_swap') and
+                siddTestRunner.run('test_geotiff')):
             return False
 
     if runUnitTests.run() == False:
