@@ -30,6 +30,7 @@ from runner import PythonTestRunner
 
 
 def run():
+    # SICD tests
     testsDir = os.path.join(utils.findSixHome(), 'six',
             'modules', 'python', 'six.sicd', 'tests')
     sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
@@ -43,6 +44,12 @@ def run():
         sicdRunner.run('test_six_sicd.py', sampleNITF) and
         sicdRunner.run('test_create_sicd_xml.py', '-v', '1.2.0') and
         sicdRunner.run('sicd_to_sio.py', sampleNITF, schemaPath))
+
+    # SIX tests
+    testsDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'python', 'six', 'tests')
+    sixRunner = PythonTestRunner(testsDir)
+    result = result and sixRunner.run('testDateTime.py');
 
     return result
 

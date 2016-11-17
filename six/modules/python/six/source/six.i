@@ -36,13 +36,18 @@
 using std::ptrdiff_t;
 
 #include "import/six.h"
-
+#include "Python.h"
+#include "datetime.h"
 /* this isn't imported by the above include */
 #include "six/Radiometric.h"
 
 #include "import/nitf.hpp"
 
 using namespace six;
+%}
+
+%init %{
+    PyDateTime_IMPORT;
 %}
 
 // This allows functions that deal with auto_ptrs to work properly
@@ -99,6 +104,54 @@ def setValue(self, *args):
     return $action(self, str(args[0]))
 %}
 
+
+%extend nitf::DateTime
+{
+  public:
+    PyObject* toPythonDateTime()
+    {
+        PyObject* nitfDateTime = NULL;
+        int year = self->getYear();
+        int month = self->getMonth();
+        int day = self->getDayOfMonth();
+        int hour = self->getHour();
+        int minute = self->getMinute();
+        int second = static_cast<int>(self->getSecond());
+        int microsecond = static_cast<int>((self->getSecond() - second) * 1e6);
+        nitfDateTime = PyDateTime_FromDateAndTime(year, month, day,
+                hour, minute, second, microsecond);
+        return nitfDateTime;
+    }
+
+    /*
+    nitf::DateTime fromPythonDateTime(PyObject* datetime)
+    {
+        double second = PyDateTime_DATE_GET_SECOND(datetime) +
+                (PyDateTime_DATE_GET_MICROSECOND(datetime) / 1e6);
+        nitf::DateTime sixDateTime;
+        sixDateTime.setYear(PyDateTime_GET_YEAR(datetime));
+        sixDateTime.setMonth(PyDateTime_GET_MONTH(datetime));
+        sixDateTime.setDayOfMonth(PyDateTime_GET_DAY(datetime));
+        sixDateTime.setHour(PyDateTime_DATE_GET_HOUR(datetime));
+        sixDateTime.setMinute(PyDateTime_DATE_GET_MINUTE(datetime));
+        sixDateTime.setSecond(second);
+        return sixDateTime;
+    }*/
+    %pythoncode
+    %{
+        @staticmethod
+        def fromPythonDateTime(pyDatetime):
+            second = pyDatetime.second + (pyDatetime.microsecond / 1e6);
+            sixDatetime = DateTime()
+            sixDatetime.setYear(pyDatetime.year)
+            sixDatetime.setMonth(pyDatetime.month)
+            sixDatetime.setDayOfMonth(pyDatetime.day)
+            sixDatetime.setHour(pyDatetime.hour)
+            sixDatetime.setMinute(pyDatetime.minute)
+            sixDatetime.setSecond(second)
+            return sixDatetime
+    %}
+}
 
 %extend six::Parameter
 {

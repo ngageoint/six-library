@@ -47,6 +47,7 @@ def runTests(testDir, testName, *args):
     print('Failed')
     return False
 
+
 def runSICDTests():
     # Make sure plugins installed properly
     nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
