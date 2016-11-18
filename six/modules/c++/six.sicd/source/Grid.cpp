@@ -399,10 +399,9 @@ void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
     }
 }
 
-double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
+double DirectionParameters::derivedKCenter(const RgAzComp& /*rgAzComp*/,
         double offset) const
 {
-    (void)rgAzComp;
     double derivedCenter = offset;
     if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
     {
@@ -411,10 +410,9 @@ double DirectionParameters::derivedKCenter(const RgAzComp& rgAzComp,
     return derivedCenter;
 }
 
-Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& rgAzComp,
+Poly2D DirectionParameters::derivedKcoaPoly(const RgAzComp& /*rgAzComp*/,
         double offset) const
 {
-    (void)rgAzComp;
     // Create a Poly2D with one term
     std::vector<double> coefs(1, offset - kCenter);
     return Poly2D(0, 0, coefs);
@@ -960,7 +958,6 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         const PolyXYZ& arpPoly, double fc,
         logging::Logger& log) const
 {
-    (void)inca; // Only for overloading
     bool valid = true;
     std::ostringstream messageBuilder;
     const double IFP_POLY_TOL = 1e-5;
