@@ -183,7 +183,7 @@ std::vector<double> RaisedCos::operator()(size_t n) const
 }
 
 Kaiser::Kaiser(double beta) :
-    beta(beta)
+    mBeta(beta)
 {
 }
 
@@ -200,9 +200,8 @@ std::vector<double> Kaiser::operator()(size_t L) const
     double k;
     for (size_t ii = 0; ii < L; ++ii)
     {
-        k = 2 * beta / m * std::sqrt(ii * (m - ii));
-        //k = beta * std::sqrt(1 - std::pow((2 * ii / L), 2));
-        ret.push_back(bessi(0, k) / bessi(0, beta));
+        k = 2 * mBeta / m * std::sqrt(ii * (m - ii));
+        ret.push_back(bessi(0, k) / bessi(0, mBeta));
     }
 
     return ret;

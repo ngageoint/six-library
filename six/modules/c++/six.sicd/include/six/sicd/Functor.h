@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SICD_VALIDATOR_H__
-#define __SIX_SICD_VALIDATOR_H__
+#ifndef __SIX_SICD_FUNCTOR_H__
+#define __SIX_SICD_FUNCTOR_H__
 
 #include "six/Init.h"
 #include <vector>
@@ -30,6 +30,14 @@ namespace six
 {
 namespace sicd
 {
+/*!
+ *   \class Functor
+ *   \brief Represents a windowing function, with set parameters
+ *
+ *   This class is meant as an interface for classes to represent windowing
+ *   functions. The parameters are set in the constructor, and the functor
+ *   is called with the window size
+ */
 class Functor
 {
 public:
@@ -39,9 +47,8 @@ public:
 class Identity : public Functor
 {
 public:
-    virtual std::vector<double> operator()(size_t n) const
+    virtual std::vector<double> operator()(size_t /*n*/) const
     {
-        (void)n;
         return std::vector<double>();
     }
 };
@@ -66,7 +73,7 @@ public:
     Kaiser(double beta);
     virtual std::vector<double> operator()(size_t n) const;
 private:
-    double beta;
+    double mBeta;
 
 };
 }
