@@ -161,7 +161,7 @@ DirectionParameters::calculateImageVertices(const ImageData& imageData) const
 {
     std::vector<RowColInt> vertices;
 
-    if (imageData.validData.size() != 0)
+    if (!imageData.validData.empty())
     {
         vertices = imageData.validData;
     }
@@ -607,7 +607,6 @@ void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
 void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
         const PolyXYZ& arpPoly)
 {
-
     if (!Init::isUndefined<Poly1D>(inca.timeCAPoly) &&
         !Init::isUndefined<PolyXYZ>(arpPoly) &&
         Init::isUndefined<Vector3>(row->unitVector) &&
@@ -1295,7 +1294,7 @@ ComplexImagePlaneType Grid::defaultPlaneType(const RMA& rma) const
     }
     else if (rma.inca.get())
     {
-        return this->imagePlane;
+        return imagePlane;
     }
     return ComplexImagePlaneType::NOT_SET;
 }
