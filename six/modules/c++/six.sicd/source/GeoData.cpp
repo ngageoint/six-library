@@ -99,14 +99,14 @@ bool GeoData::validate(logging::Logger& log) const
     // 2.10
     scene::LLAToECEFTransform transformer;
     Vector3 derivedEcf = transformer.transform(scp.llh);
-    double ecf_diff = (scp.ecf - derivedEcf).norm();
+    double ecfDiff = (scp.ecf - derivedEcf).norm();
 
-    if (ecf_diff > 1e-2)
+    if (ecfDiff > 1e-2)
     {
         messageBuilder.str("");
         messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent."
             << std::endl << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
-            << ecf_diff << " (m)" << std::endl;
+            << ecfDiff << " (m)" << std::endl;
         log.error(messageBuilder.str());
         valid = false;
     }

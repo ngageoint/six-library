@@ -269,8 +269,6 @@ void ComplexData::fillDerivedFields(bool includeDefault)
     {
         fillDefaultFields();
     }
-
-    return;
 }
 
 void ComplexData::fillDefaultFields()
@@ -300,7 +298,6 @@ void ComplexData::fillDefaultFields()
         }
         break;
     }
-    return;
 }
 }
 }
