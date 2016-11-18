@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -51,7 +51,7 @@
  *  This is a sample demonstration of using this file to segment
  *
  *  test_create_sidd sidd.xml martinirgb.sio 3 martinirgb.nitf
- * 
+ *
  *  You can re-read the file into an SIO as follows:
  *
  *  test_dump_sidd_lines martinirgb.nitf -sio
@@ -97,7 +97,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
     if (!fileHeader->getNumUserDataFields())
         return NULL;
 
-    // Otherwise 
+    // Otherwise
     six::LUT* lut = NULL;
 
     sio::lite::UserDataDictionary dict = fileHeader->getUserDataSection();
@@ -236,14 +236,15 @@ int main(int argc, char** argv)
         parser.parse(fis);
 
         std::auto_ptr<logging::Logger> log (new logging::NullLogger());
-        six::Data* complexData = 
+        six::Data* complexData =
             six::XMLControlFactory::getInstance().newXMLControl(
-                six::DataType::COMPLEX, 
-                log.get())->fromXML(parser.getDocument(), 
+                six::DataType::COMPLEX,
+                log.get())->fromXML(parser.getDocument(),
                                     std::vector<std::string>());
 
         // Create a file container
-        six::Container* container = new six::Container(six::DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                six::DataType::DERIVED));
 
         // We have a source for each image
         std::vector<io::InputStream*> sources;
@@ -293,7 +294,7 @@ int main(int argc, char** argv)
             processorInformation.profile = "Profile";
             processorInformation.site = "Ypsilanti, MI";
 
-            data->display->pixelType = pixelType; 
+            data->display->pixelType = pixelType;
             data->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;
             data->display->magnificationMethod = six::MagnificationMethod::NEAREST_NEIGHBOR;
 
@@ -385,11 +386,9 @@ int main(int argc, char** argv)
 
         // Delete the sources (sio read streams)
         for (unsigned int i = 0; i < sources.size(); ++i)
+        {
             delete sources[i];
-
-        // Delete the container (and Data)
-        delete container;
-
+        }
     }
     catch (except::Exception& ex)
     {

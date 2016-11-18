@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -78,7 +78,7 @@ bool sys::OSWin32::exists(const std::string& path) const
         if (errCode != ERROR_FILE_NOT_FOUND && errCode != ERROR_PATH_NOT_FOUND)
         {
             char* err = NULL;
-            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL, errCode,
                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -104,7 +104,7 @@ void sys::OSWin32::removeFile(const std::string& pathname) const
     {
         sys::Err err;
         std::ostringstream oss;
-        oss << "Failure removing file [" <<  pathname << 
+        oss << "Failure removing file [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
         throw except::Exception(Ctxt(oss.str()));
@@ -117,21 +117,21 @@ void sys::OSWin32::removeDirectory(const std::string& pathname) const
     {
         sys::Err err;
         std::ostringstream oss;
-        oss << "Failure removing directory [" <<  pathname << 
+        oss << "Failure removing directory [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
         throw except::Exception(Ctxt(oss.str()));
     }
 }
 
-bool sys::OSWin32::move(const std::string& path, 
+bool sys::OSWin32::move(const std::string& path,
                         const std::string& newPath) const
 {
     // MOVEFILE_REPLACE_EXISTING - forcefully move the file
     // MOVEFILE_WRITE_THROUGH    - report status after performing a flush
-    return (MoveFileEx(path.c_str(), 
-                       newPath.c_str(), 
-                       MOVEFILE_REPLACE_EXISTING | 
+    return (MoveFileEx(path.c_str(),
+                       newPath.c_str(),
+                       MOVEFILE_REPLACE_EXISTING |
                        MOVEFILE_WRITE_THROUGH)) ? (true) : (false);
 }
 
@@ -226,7 +226,7 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
     // Win32 API weirdness -- see https://msdn.microsoft.com/en-us/libary/windows/desktop/ms683188%28v=vs.85%29.aspx
     // When less then the size of the buffer is allocated, it returns the required size, including the null character
     // Otherwise, it returns the size of the variable, not including the null character
-    if (retVal + 1 != size) 
+    if (retVal + 1 != size)
     {
         throw sys::SystemException(Ctxt(
            "Environment variable size does not match allocated size for " + s));
@@ -247,7 +247,7 @@ bool sys::OSWin32::isEnvSet(const std::string& s) const
     return (size != 0);
 }
 
-void sys::OSWin32::setEnv(const std::string& var, 
+void sys::OSWin32::setEnv(const std::string& var,
                           const std::string& val,
 			  bool overwrite)
 {
@@ -278,7 +278,7 @@ size_t sys::OSWin32::getNumCPUs() const
     return info.dwNumberOfProcessors;
 }
 
-void sys::OSWin32::createSymlink(const std::string& origPathname, 
+void sys::OSWin32::createSymlink(const std::string& origPathname,
                                  const std::string& symlinkPathname) const
 {
     // NTDDI_WINXPSP3 = 0x05010300
@@ -312,7 +312,7 @@ void sys::OSWin32::createSymlink(const std::string& origPathname,
 
 void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
 {
-	if (RemoveDirectory(symlinkPathname.c_str()) != true)
+    if (RemoveDirectory(symlinkPathname.c_str()) != true)
     {
         sys::Err err;
         std::ostringstream oss;
@@ -343,6 +343,24 @@ void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
     }
 }
 
+std::string sys::OSWin32::getCurrentExecutable(
+        const std::string& argvPathname) const
+{
+    //XP doesn't always null-terminate the buffer, so taking some precautions
+    char buffer[MAX_PATH + 2];
+    memset(buffer, 0, MAX_PATH + 2);
+
+    size_t bytesRead = GetModuleFileName(NULL, buffer, MAX_PATH + 1);
+
+    if (bytesRead == MAX_PATH + 1 || bytesRead == 0)
+    {
+        // Path may be up to 32,767 characters, so take a more manual
+        // approach instead of guess-and-checking our way up
+        return AbstractOS::getCurrentExecutable(argvPathname);
+    }
+    return std::string(buffer);
+}
+
 void sys::DirectoryWin32::close()
 {
     if (mHandle != INVALID_HANDLE_VALUE)
@@ -355,7 +373,7 @@ std::string sys::DirectoryWin32::findFirstFile(const std::string& dir)
     std::string plusWC = dir;
     plusWC += std::string("\\*");
     mHandle = ::FindFirstFile(plusWC.c_str(), &mFileData);
-    if (mHandle == INVALID_HANDLE_VALUE) 
+    if (mHandle == INVALID_HANDLE_VALUE)
         return "";
     return mFileData.cFileName;
 }
@@ -366,6 +384,5 @@ std::string sys::DirectoryWin32::findNextFile()
         return "";
     return mFileData.cFileName;
 }
-
 
 #endif

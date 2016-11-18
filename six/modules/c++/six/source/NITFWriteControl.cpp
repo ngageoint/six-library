@@ -98,12 +98,10 @@ NITFWriteControl::NITFWriteControl()
     loadXmlDataContentHandler();
 }
 
-void NITFWriteControl::initialize(Container* container)
+void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
     // Clean up
-    // NOTE  We do not own the container, so we don't delete 'mContainer' here
     mInfos.clear();
-
     mContainer = container;
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;
@@ -770,7 +768,7 @@ void NITFWriteControl::save(
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr< ::nitf::WriteHandler> writeHandler( 
+            mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
                 new StreamWriteHandler (segmentInfo, imageData[i], numCols,
                                         numChannels, pixelSize, doByteSwap));
 
@@ -833,16 +831,16 @@ void NITFWriteControl::save(
         nitf::ImageSegment imageSegment = mRecord.getImages()[i];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        const bool isBlocking = 
+        const bool isBlocking =
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
             static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
 
-        // The SIDD spec requires that a J2K compressed SIDDs be only a 
+        // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
-        if (isBlocking || (enableJ2K && numIS == 1) || 
+        if (isBlocking || (enableJ2K && numIS == 1) ||
             !mCompressionOptions.empty())
         {
-            if ((isBlocking || (enableJ2K && numIS == 1)) && 
+            if ((isBlocking || (enableJ2K && numIS == 1)) &&
                 info.getData()->getDataType() == six::DataType::COMPLEX)
             {
                 throw except::Exception(Ctxt(
@@ -917,7 +915,6 @@ void NITFWriteControl::save(
             iWriter.attachSource(iSource);
         }
     }
-
     addDataAndWrite(schemaPaths);
 }
 
@@ -950,7 +947,6 @@ void NITFWriteControl::addDataAndWrite(
     {
         mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
     }
-
     mWriter.write();
 }
 

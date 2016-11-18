@@ -20,6 +20,7 @@ def configure(conf):
     # callback function to check for all #defines used by the sys module
     def sys_callback(conf):
         conf.check_cc(header_name='pthread.h', mandatory=False)
+        conf.check_cc(header_name='execinfo.h', mandatory=False)
         conf.check_cc(function_name='clock_gettime', header_name='time.h', mandatory=False)
         conf.check_cc(header_name="atomic.h", mandatory=False)
         conf.check_cc(header_name="sys/time.h", mandatory=False)

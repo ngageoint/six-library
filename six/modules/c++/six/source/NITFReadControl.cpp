@@ -101,17 +101,10 @@ DataType NITFReadControl::getDataType(nitf::Record& record)
     return getDataType(segment);
 }
 
-DataType NITFReadControl::getDataType(nitf::DESegment& segment)
+DataType NITFReadControl::getDataType(const std::string& desid,
+        sys::Uint64_T subheaderLength, const std::string& desshsiField,
+        const std::string& treTag)
 {
-    // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
-    //       SICD or SIDD, so for old files we could key off of that.  Since
-    //       that's not guaranteed for newer versions though, we now use the
-    //       DESID for really old versions and the DESSHSI from
-    //       XML_DATA_CONTENT for newer versions.
-    nitf::DESubheader subheader = segment.getSubheader();
-    std::string desid = subheader.getTypeID().toString();
-    str::trim(desid);
-
     // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
     // Older versions of the spec specified it as SICD_XML/SIDD_XML
     // Here we'll accept any of these under the assumption that it's not
@@ -127,42 +120,60 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
     }
     else if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
     {
-        // Check whether DES is SICD/SIDD, or something of a different
-        // sort. Note that we need to check the subheader
-        // length first rather than calling tre.getCurrentSize() in
-        // case there is no subheader (in which case
-        // subheader.getSubheaderFields() will throw with a
-        // NITRO-specific message).
-        const sys::Uint64_T
-            subheaderLength(subheader.getSubheaderFieldsLength());
+        // Check whether DES is SICD/SIDD, or something of a different sort.
         if (subheaderLength !=
             Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
         {
             return DataType::NOT_SET;
         }
-        nitf::TRE tre = subheader.getSubheaderFields();
-        if (tre.getTag() !=
-            Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+        if (treTag != Constants::DES_USER_DEFINED_SUBHEADER_TAG)
         {
             return DataType::NOT_SET;
         }
-
-        std::string field = tre.getField("DESSHSI").toString();
-        str::trim(field);
-
-        if (field == Constants::SICD_DESSHSI)
+        if (desshsiField == Constants::SICD_DESSHSI)
         {
             return DataType::COMPLEX;
         }
-        else if (field == Constants::SIDD_DESSHSI)
+        else if (desshsiField == Constants::SIDD_DESSHSI)
         {
             return DataType::DERIVED;
         }
-        else
+    }
+    return DataType::NOT_SET;
+}
+
+DataType NITFReadControl::getDataType(nitf::DESegment& segment)
+{
+    // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
+    //       SICD or SIDD, so for old files we could key off of that. Since
+    //       that's not guaranteed for newer versions though, we now use the
+    //       DESID for really old versions and the DESSHSI from
+    //       XML_DATA_CONTENT for newer versions.
+    nitf::DESubheader subheader = segment.getSubheader();
+    std::string desid = subheader.getTypeID().toString();
+    str::trim(desid);
+
+    // Note that we need to check the subheader
+    // length first rather than calling tre.getCurrentSize() in
+    // case there is no subheader (in which case
+    // subheader.getSubheaderFields() will throw with a
+    // NITRO-specific message).
+    const sys::Uint64_T subheaderLength(subheader.getSubheaderFieldsLength());
+    std::string treTag;
+    std::string desshsiField;
+    if (subheaderLength != 0)
+    {
+        nitf::TRE tre = subheader.getSubheaderFields();
+        treTag = tre.getTag();
+
+        if (tre.exists("DESSHSI"))
         {
-            return DataType::NOT_SET;
+            desshsiField = tre.getField("DESSHSI").toString();
+            str::trim(desshsiField);
         }
     }
+
+    return getDataType(desid, subheaderLength, desshsiField, treTag);
 }
 
 DataType NITFReadControl::getDataType(const std::string& fromFile) const
@@ -229,23 +240,31 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
-    nitf::IOHandle handle(fromFile);
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOHandle(fromFile));
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface)
+void NITFReadControl::load(io::SeekableInputStream& stream,
+                           const std::vector<std::string>& schemaPaths)
+{
+    mem::SharedPtr<nitf::IOInterface> handle(new nitf::IOStreamReader(stream));
+    load(handle, schemaPaths);
+}
+
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(nitf::IOInterface& ioInterface,
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
+    mInterface = ioInterface;
 
-    mRecord = mReader.readIO(ioInterface);
+    mRecord = mReader.readIO(*ioInterface);
     DataType dataType = getDataType(mRecord);
-    mContainer = new Container(dataType);
+    mContainer.reset(new Container(dataType));
 
     // First, read in the DE segments, and organize them
     nitf::List des = mRecord.getDataExtensions();
@@ -573,7 +592,6 @@ NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
-
     NITFImageInfo* thisImage = mInfos[imageNumber];
 
     size_t numRowsTotal = thisImage->getData()->getNumRows();
@@ -657,6 +675,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " sw.startRow: " << sw.getStartRow()
     << " i: " << i << std::endl;
 #endif
+
     int nbpp = thisImage->getData()->getNumBytesPerPixel();
     int startIndex = thisImage->getStartIndex();
     createCompressionOptions(mCompressionOptions);
@@ -758,9 +777,7 @@ void NITFReadControl::reset()
         delete mInfos[ii];
     }
     mInfos.clear();
-
-    delete mContainer;
-    mContainer = NULL;
+    mInterface.reset();
 }
 
 

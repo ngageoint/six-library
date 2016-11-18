@@ -2,9 +2,9 @@
 
 """
  * =========================================================================
- * This file is part of math.poly-c++ 
+ * This file is part of math.poly-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.linear-c++ is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -27,6 +27,11 @@
 import sys
 from coda.math_linear import VectorDouble, MatrixDouble, Vector3
 from coda.math_poly import *
+
+if sys.version_info[0] == 2:
+    import cPickle as pickle
+else:
+    import pickle
 
 if __name__ == '__main__':
     #################
@@ -63,6 +68,13 @@ if __name__ == '__main__':
         print('Setting 1D OOB threw as expected')
     else:
         sys.exit('Setting 1D OOB did not throw!')
+
+    # Pickle and unpickle
+    pPoly1D = pickle.loads(pickle.dumps(poly1D))
+    if pPoly1D.coeffs() == poly1D.coeffs():
+        print('Pickling and unpickling 1D matched as expected')
+    else:
+        sys.exit('Pickling 1D did not match!')
 
     #################
     # Basic 2D test #
@@ -101,6 +113,13 @@ if __name__ == '__main__':
         print('Setting 2D OOB threw as expected')
     else:
         sys.exit('Setting 2D OOB did not throw!')
+
+    # Pickle and unpickle
+    pPoly2D = pickle.loads(pickle.dumps(poly2D))
+    if pPoly2D == poly2D:
+        print('Pickling and unpickling 2D matched as expected')
+    else:
+        sys.exit('Pickling 2D did not match!')
 
     ############################
     # 1D Fit test (array args) #
@@ -153,7 +172,7 @@ if __name__ == '__main__':
     ############################################
     # PolyVector3 Fit Test (math::linear args) #
     ############################################
-    
+
     xObs = VectorDouble(4)
     xObs[0] = 1
     xObs[1] = -1
@@ -286,7 +305,7 @@ if __name__ == '__main__':
     ##########################################
     # Test polynomial evaluation using lists #
     ##########################################
-    
+
     input_data = [1.0, 2.0, -3.0, 5.0]
 
     #--------#
@@ -302,7 +321,7 @@ if __name__ == '__main__':
         vals1 = p1(input_data)
     except TypeError:
         threw = True
-        
+
     if threw:
         print("Poly1D error: polynomial evaluation using a Python list failed.")
     else:
@@ -331,7 +350,7 @@ if __name__ == '__main__':
         vals2 = p2(input_data, input_data)
     except TypeError:
         threw = True
-    
+
     if threw:
         print("Poly2D error: polynomial evaluation using Python lists failed.")
     else:
@@ -344,7 +363,7 @@ if __name__ == '__main__':
         print(p2)
         print("input  : ", input_data, ",", input_data)
         print("output : ", vals2)
-    
+
     #-------------#
     # PolyVector3 #
     #-------------#
@@ -372,4 +391,4 @@ if __name__ == '__main__':
         print("input  : ", input_data)
         print("output : ", [p.vals() for p in vals3])
 
-    
+

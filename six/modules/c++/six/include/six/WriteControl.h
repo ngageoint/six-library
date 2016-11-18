@@ -28,6 +28,7 @@
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
+#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -94,7 +95,7 @@ public:
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(Container* container) = 0;
+    virtual void initialize(mem::SharedPtr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -175,10 +176,17 @@ public:
     }
 
     /*!
-     *  const pointer to Container.  This object is not owned by the
-     *  WriteControl
+     * shared pointer to Container
      */
-    const Container* getContainer()
+    mem::SharedPtr<Container> getContainer()
+    {
+        return mContainer;
+    }
+
+    /*!
+     *  shared const pointer to Container.
+     */
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -240,7 +248,7 @@ public:
     }
 
 protected:
-    Container* mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

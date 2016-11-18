@@ -89,7 +89,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, mSchemaDirs);
 
-        six::Container* const container = reader.getContainer();
+        const mem::SharedPtr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
             container->getNumData() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)
@@ -127,10 +127,8 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
-            str::trim(desId);
-
-            if (!(desId == "XML_DATA_CONTENT" || desId == "SICD_XML"))
+            DataType dataType = getDataType(desList[ii]);
+            if (dataType != DataType::COMPLEX)
             {
                 continue;
             }

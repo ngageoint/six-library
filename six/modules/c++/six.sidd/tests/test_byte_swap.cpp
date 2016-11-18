@@ -85,12 +85,13 @@ std::auto_ptr<six::sidd::DerivedData> createData()
 
 void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
 {
-    six::Container container(six::DataType::DERIVED);
-    container.addData(createData().release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
+    container->addData(createData().release());
 
     six::NITFWriteControl writer;
     writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
-    writer.initialize(&container);
+    writer.initialize(container);
 
     if (useStream)
     {
@@ -112,8 +113,8 @@ void read(const std::string& filename, sys::Int16_T* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
-    six::Container* const container = reader.getContainer();
-    six::Data* const inData = container->getData(0);
+    mem::SharedPtr<const six::Container> container = reader.getContainer();
+    const six::Data* const inData = container->getData(0);
 
     const size_t numRows = inData->getNumRows();
     const size_t numCols = inData->getNumCols();

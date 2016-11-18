@@ -37,7 +37,7 @@ def configure(conf):
         #       one but you end up with the one from the command prompt since
         #       it's first on your path).
         #       For example, if you're building with VS 2008 Express, use:
-        #       --enable-32bit "--msvc_version=msvc 9.0Exp" 
+        #       --enable-32bit "--msvc_version=msvc 9.0Exp"
         platformName = 'winVC' + str(conf.env['MSVC_VERSION']).replace('.', '')
     elif re.match(osxRegex,sys.platform):
         platformName='darwin'
@@ -61,10 +61,10 @@ def build(bld):
     if re.match(r'win32', sys.platform):
         modArgs['USE'] = 'CSMAPI'
     else:
-        modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']] 
+        modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']]
     bld.plugin(**modArgs)
 
-    # TODO: It seems like instead of this, I should be able to set 
+    # TODO: It seems like instead of this, I should be able to set
     #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the name
     #       of the target.  This works fine when building, but something about
     #       how 'waf list' and 'waf msvs' operate makes this not work right.

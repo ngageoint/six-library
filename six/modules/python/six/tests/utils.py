@@ -24,6 +24,7 @@
 
 import os
 import platform
+import shutil
 import sys
 
 from glob import glob
@@ -43,6 +44,7 @@ def findSixHome():
 
     return currentPath
 
+
 def installPath():
     home = findSixHome()
     children = ['remove_foss.csh', 'README.md', 'six', 'wscript',
@@ -55,6 +57,7 @@ def installPath():
             subdirs = os.listdir(fullChildPath)
             if 'tests' in subdirs and 'bin' in subdirs:
                 return fullChildPath
+
 def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',
@@ -100,6 +103,26 @@ def executableName(pathname):
         if pathname.endswith('.exe'):
             return pathname
         return pathname + '.exe'
-    if pathname.startswith('/'):
-        return pathname
-    return './' + pathname
+    return pathname
+
+def installVts():
+    os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
+        os.path.join(installPath(), 'lib'))
+
+    newFiles = []
+    pluginDir = os.path.join(installPath(), 'share', 'CSM', 'plugins')
+    if platform.system() == 'Windows':
+        for plugin in os.listdir(pluginDir):
+            shutil.copy(os.path.join(pluginDir, plugin), os.getcwd())
+            newFiles.append(os.path.join(os.getcwd(), plugin))
+    else:
+        for plugin in os.listdir(pluginDir):
+            call(['ln', '-s', os.path.join(pluginDir, plugin), os.getcwd()])
+            newFiles.append(os.path.join(os.getcwd(), plugin))
+
+        os.environ['LD_LIBRARY_PATH'] = (os.environ['LD_LIBRARY_PATH'] +
+            os.pathsep + os.path.join(installPath(), 'lib'))
+
+    return newFiles
+
+

@@ -10,6 +10,7 @@ def build(bld):
                'image_to_scene'            : 'six.sicd six.sidd',
                'round_trip_six'            : 'cli six.sicd six.sidd',
                'test_create_sicd'          : 'cli six.sicd sio.lite',
+               'test_create_sicd_from_mem' : 'cli six.sicd',
                'test_create_sidd_from_mem' : 'cli six.sicd six.sidd',
                'test_create_sidd_legend'   : 'cli six.sidd',
                'test_create_sidd'          : 'cli six.sicd six.sidd sio.lite',
@@ -17,7 +18,9 @@ def build(bld):
                'test_extract_xml'          : 'cli nitf xml.lite',
                'test_image_to_scene'       : 'six.sicd six.sidd',
                'test_parse_xml'            : 'six.sicd six.sidd',
-               'test_six_xml_parsing'          : 'six.sicd six.sidd'}
+               'test_read_nitf_from_vts'   : 'sys six six.sicd six.sidd',
+               'test_six_xml_parsing'      : 'six.sicd six.sidd',
+               'test_compare_sidd'         : 'cli six.sicd six.sidd' }
 
     for sample, module_deps in samples.items():
         bld.program_helper(module_deps=module_deps,

@@ -32,6 +32,8 @@
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "six/sicd/SICDWriteControl.h"
+#include <numpyutils/numpyutils.h>
 
 using namespace six::sicd;
 using namespace six;
@@ -65,13 +67,14 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    six::Container container(six::DataType::COMPLEX);
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-    container.addData(data.clone());
+    container->addData(data.clone());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
     writer.setLogger(logger.get());
 
     six::BufferList buffers;
@@ -95,7 +98,7 @@ Data* readNITF(const std::string& pathname,
     reader.setLogger(&log);
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(pathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    mem::SharedPtr<six::Container> container = reader.getContainer();
 
     six::Region region;
     region.setStartRow(0);
@@ -144,6 +147,21 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
+
+%pythoncode
+%{
+import os
+import sys
+
+def schema_path():
+    """Provide an absolute path to the schemas."""
+    try:
+        pysix_path = os.path.dirname(__file__)
+    except NameError:
+        # Must be running as __main__, so use sys.argv
+        pysix_path = os.path.dirname(sys.argv[0])
+    return os.path.abspath(os.path.join(pysix_path, 'schemas'))
+%}
 
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
@@ -295,5 +313,30 @@ def writeAsNITF(outFile, schemaPaths, complexData, image):
 def readFromNITF(pathname, schemaPaths=VectorString()):
     pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
-
 %}
+
+%include "six/sicd/SICDWriteControl.h"
+%extend six::sicd::SICDWriteControl
+{
+    void write(PyObject* data, const types::RowCol<size_t>& offset)
+    {
+        numpyutils::verifyArrayType(data, NPY_COMPLEX64);
+
+        // TODO: Force array to be contigious memory
+        //       Right now we're requiring the caller to do that
+        // TODO: If we get noncontiguous memory, maybe we want to
+        //       instead do multiple calls to save() ourselves to
+        //       avoid the memory allocation
+        $self->save(numpyutils::getBuffer<std::complex<float> >(data),
+                    offset,
+                    numpyutils::getDimensionsRC(data));
+    }
+
+    void initXMLControlRegistry(six::XMLControlRegistry& xmlRegistry)
+    {
+        xmlRegistry.addCreator(six::DataType::COMPLEX,
+                               new six::XMLControlCreatorT<
+                                       six::sicd::ComplexXMLControl>());
+        $self->setXMLControlRegistry(&xmlRegistry);
+    }
+}

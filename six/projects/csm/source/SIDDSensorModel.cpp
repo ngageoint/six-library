@@ -116,7 +116,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // For multi-image SIDDs, all the SIDD DESs will appear first (in the
         // case where SICD DESs are also present), so we just have to grab out
         // the Nth Data object
-        six::Container* const container = reader.getContainer();
+        const mem::SharedPtr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
@@ -165,10 +165,8 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
-            str::trim(desId);
-            
-            if (!(desId == "XML_DATA_CONTENT" || desId == "SIDD_XML"))
+            DataType dataType = getDataType(desList[ii]);
+            if (dataType != DataType::DERIVED)
             {
                 continue;
             }

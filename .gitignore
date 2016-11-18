@@ -1,5 +1,7 @@
+*.whl
 *.pyc
 *~
+*.swp
 
 # Eclipse
 .cproject

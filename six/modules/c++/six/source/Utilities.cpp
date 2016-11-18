@@ -1101,6 +1101,34 @@ std::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
+std::string six::findSchemaPath(const std::string& progname)
+{
+    sys::OS os;
+    std::string currentDir = os.getCurrentExecutable(progname);
+
+    // Arbitrary depth to prevent infinite loop in case
+    // of weird project structure
+    const static size_t MAX_DEPTH = 5;
+    size_t levelsTraversed = 0;
+
+    std::string schemaPath;
+    while (levelsTraversed < MAX_DEPTH)
+    {
+        currentDir = sys::Path::absolutePath(
+                sys::Path::joinPaths(currentDir, ".."));
+        const std::string confDir = sys::Path::joinPaths(currentDir, "conf");
+        if (os.exists(confDir))
+        {
+            schemaPath = sys::Path(confDir).join("schema").join("six");
+            break;
+        }
+        ++levelsTraversed;
+    }
+
+    // If we got lost, this will be empty
+    return schemaPath;
+}
+
 void six::getErrors(const ErrorStatistics* errorStats,
                     const types::RgAz<double>& sampleSpacing,
                     scene::Errors& errors)

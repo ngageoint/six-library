@@ -199,6 +199,12 @@ public:
      */
     virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const;
 
+    /*!
+    *  Get the absolute path to the current executable
+    */
+    virtual std::string getCurrentExecutable(
+        const std::string& argvPathname = "") const;
+
 protected:
     /*!
      *  Remove file with this pathname

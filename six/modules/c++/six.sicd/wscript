@@ -3,11 +3,13 @@ MAINTAINER      = 'adam.sylvester@mdaus.com'
 MODULE_DEPS     = 'scene nitf xml.lite six mem'
 UNITTEST_DEPS   = 'cli sio.lite'
 
+import os
+
 options = configure = distclean = lambda p: None
 
 def build(bld):
     modArgs = globals()
-    modArgs['VERSION'] = bld.env['VERSION']
+    modArgs['SIX_VERSION'] = bld.env['SIX_VERSION']
     bld.module(**modArgs)
 
     # install the schemas
@@ -15,3 +17,9 @@ def build(bld):
     lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                                   dir=bld.path.make_node('conf/schema'),
                                   install_path='${PREFIX}/conf/schema/six/'))
+
+    if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
+        lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                                      dir=bld.path.make_node('conf/schema'),
+                                      install_path=os.path.join(bld.env['install_pydir'],
+                                                                'pysix', 'schemas')))

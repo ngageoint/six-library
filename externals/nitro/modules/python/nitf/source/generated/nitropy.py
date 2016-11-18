@@ -555,6 +555,10 @@ def nitf_PluginRegistry_loadPlugin(fullPathName, error):
     return _nitropy.nitf_PluginRegistry_loadPlugin(fullPathName, error)
 nitf_PluginRegistry_loadPlugin = _nitropy.nitf_PluginRegistry_loadPlugin
 
+def nitf_PluginRegistry_TREHandlerExists(ident):
+    return _nitropy.nitf_PluginRegistry_TREHandlerExists(ident)
+nitf_PluginRegistry_TREHandlerExists = _nitropy.nitf_PluginRegistry_TREHandlerExists
+
 def nitf_PluginRegistry_unload(reg, error):
     return _nitropy.nitf_PluginRegistry_unload(reg, error)
 nitf_PluginRegistry_unload = _nitropy.nitf_PluginRegistry_unload
@@ -640,6 +644,12 @@ nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
 def nitf_Reader_getNITFVersion(fileName):
     return _nitropy.nitf_Reader_getNITFVersion(fileName)
 nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
+
+_nitropy.NITF_WRITER_FILL_LEFT_swigconstant(_nitropy)
+NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
+
+_nitropy.NITF_WRITER_FILL_RIGHT_swigconstant(_nitropy)
+NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
 class nitf_Writer(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Writer, name, value)
@@ -754,6 +764,22 @@ nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
 def nitf_Writer_write(writer, error):
     return _nitropy.nitf_Writer_write(writer, error)
 nitf_Writer_write = _nitropy.nitf_Writer_write
+
+def nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error):
+    return _nitropy.nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error)
+nitf_Writer_writeHeader = _nitropy.nitf_Writer_writeHeader
+
+def nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error):
+    return _nitropy.nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error)
+nitf_Writer_writeImageSubheader = _nitropy.nitf_Writer_writeImageSubheader
+
+def nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error):
+    return _nitropy.nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error)
+nitf_Writer_writeDESubheader = _nitropy.nitf_Writer_writeDESubheader
+
+def nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error):
+    return _nitropy.nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error)
+nitf_Writer_writeInt64Field = _nitropy.nitf_Writer_writeInt64Field
 class nitf_Record(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Record, name, value)
@@ -3665,6 +3691,14 @@ py_Field_getString = _nitropy.py_Field_getString
 def py_Field_getInt(field, error):
     return _nitropy.py_Field_getInt(field, error)
 py_Field_getInt = _nitropy.py_Field_getInt
+
+def py_Field_setRawData(field, buf, length, error):
+    return _nitropy.py_Field_setRawData(field, buf, length, error)
+py_Field_setRawData = _nitropy.py_Field_setRawData
+
+def py_TRE_setField(tre, tag, buf, length, error):
+    return _nitropy.py_TRE_setField(tre, tag, buf, length, error)
+py_TRE_setField = _nitropy.py_TRE_setField
 
 def py_Record_getFileHeader(record):
     return _nitropy.py_Record_getFileHeader(record)
