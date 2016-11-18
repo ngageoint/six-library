@@ -27,15 +27,16 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
+#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
 namespace sicd
 {
-struct CollectionInformation;
-class GeoData;
-struct Position;
-struct SCPCOA;
+
 /*!
  *  \struct  RMAT
  *  \brief   Parameters for Range Migration with Along Track phase
@@ -52,7 +53,7 @@ struct RMAT
     double refTime;
 
     //! Platform reference position used to establish the reference
-    //  trajectory line.  
+    //  trajectory line.
     Vector3 refPos;
 
     //! Reference unit velocity vector used to establish the
@@ -101,11 +102,11 @@ private:
 
 /*!
  *  \struct  RMCR
- *  \brief   Parameters for Range Migration with 
+ *  \brief   Parameters for Range Migration with
  *           Cross Range Motion Compensation
  *           Added in 1.0.0
  *
- *  Note: this is a repeat of parameters in RMAT but 
+ *  Note: this is a repeat of parameters in RMAT but
  *        we recreate them to avoid confusion
  */
 struct RMCR
@@ -129,7 +130,7 @@ struct RMCR
     //! Equality operator
     bool operator==(const RMCR& rhs) const
     {
-        return (refPos == rhs.refPos && refVel == rhs.refVel && 
+        return (refPos == rhs.refPos && refVel == rhs.refVel &&
             dopConeAngleRef == rhs.dopConeAngleRef);
     }
 

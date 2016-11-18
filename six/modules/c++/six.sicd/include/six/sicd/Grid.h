@@ -30,21 +30,18 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/ImageData.h"
+#include "six/sicd/RadarCollection.h"
+#include "six/sicd/RMA.h"
 
 namespace six
 {
 namespace sicd
 {
-struct CollectionInformation;
-class GeoData;
-struct ImageData;
-struct INCA;
 struct PFA;
-struct RadarCollection;
 struct RgAzComp;
-struct RMA;
-struct RMAT;
-struct RMCR;
 struct SCPCOA;
 
 struct WeightType

@@ -26,15 +26,15 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
 namespace sicd
 {
-class GeoData;
 struct Grid;
-struct Position;
-struct SCPCOA;
 /*!
  *  \struct SlowTimeDeskew
  *  \brief SICD STDeskew

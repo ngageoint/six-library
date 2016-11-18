@@ -789,8 +789,8 @@ class Grid(_object):
     def validate(self, *args):
         """
         validate(Grid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
-        validate(Grid self, RMA rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
-        validate(Grid self, PFA pfa, RadarCollection radarCollection, double fc, logging::Logger & log) -> bool
+        validate(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
+        validate(Grid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
         """
         return _six_sicd.Grid_validate(self, *args)
@@ -799,7 +799,7 @@ class Grid(_object):
     def fillDerivedFields(self, *args):
         """
         fillDerivedFields(Grid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
-        fillDerivedFields(Grid self, RMA rma, Vector3 scp, PolyVector3 arpPoly)
+        fillDerivedFields(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
         return _six_sicd.Grid_fillDerivedFields(self, *args)
@@ -807,7 +807,7 @@ class Grid(_object):
 
     def fillDefaultFields(self, *args):
         """
-        fillDefaultFields(Grid self, RMA rma, double fc)
+        fillDefaultFields(Grid self, RMA const & rma, double fc)
         fillDefaultFields(Grid self, PFA pfa, double fc)
         """
         return _six_sicd.Grid_fillDefaultFields(self, *args)
@@ -3883,8 +3883,8 @@ class ScopedCloneableGrid(_object):
     def validate(self, *args):
         """
         validate(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
-        validate(ScopedCloneableGrid self, RMA rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
-        validate(ScopedCloneableGrid self, PFA pfa, RadarCollection radarCollection, double fc, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
         """
         return _six_sicd.ScopedCloneableGrid_validate(self, *args)
@@ -3893,7 +3893,7 @@ class ScopedCloneableGrid(_object):
     def fillDerivedFields(self, *args):
         """
         fillDerivedFields(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
-        fillDerivedFields(ScopedCloneableGrid self, RMA rma, Vector3 scp, PolyVector3 arpPoly)
+        fillDerivedFields(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
         return _six_sicd.ScopedCloneableGrid_fillDerivedFields(self, *args)
@@ -3901,7 +3901,7 @@ class ScopedCloneableGrid(_object):
 
     def fillDefaultFields(self, *args):
         """
-        fillDefaultFields(ScopedCloneableGrid self, RMA rma, double fc)
+        fillDefaultFields(ScopedCloneableGrid self, RMA const & rma, double fc)
         fillDefaultFields(ScopedCloneableGrid self, PFA pfa, double fc)
         """
         return _six_sicd.ScopedCloneableGrid_fillDefaultFields(self, *args)
