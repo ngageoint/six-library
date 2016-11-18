@@ -260,6 +260,11 @@ public:
      */
     static Poly1D nPoly(PolyXYZ poly, size_t index);
 
+    /*
+     * Computes the normal vector to the WGS 84 ellipsoid
+     * \param point A point in ECEF space
+     * \return Normal vector to WGS 84 ellipsoid at given point
+     */
     static Vector3 wgs84Norm(const Vector3& point);
 
      /* Parses the XML in 'xmlStream' and converts it into a ComplexData object.
