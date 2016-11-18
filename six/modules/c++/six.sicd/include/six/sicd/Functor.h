@@ -62,11 +62,6 @@ private:
     double mCoef;
 };
 
-double bessi(size_t order, double x);
-double bessi0(double x);
-double bessi1(double x);
-double bessin(size_t order, double x);
-
 class Kaiser : public Functor
 {
 public:
