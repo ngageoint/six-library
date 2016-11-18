@@ -43,10 +43,10 @@ struct TxStep
 {
     //!  Constructor
     TxStep();
-    
+
     //!  Destructor
     ~TxStep() {}
-  
+
     //!  Clone this object
     TxStep* clone() const;
 
@@ -128,9 +128,9 @@ struct WaveformParameters
     void fillDerivedFields();
     bool validate(int refFrequencyIndex, logging::Logger& log) const;
 private:
-    const double WF_TOL = 1e-3;
-    const double WGT_TOL = 1e-3;
-    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+    static const double WF_TOL;
+    static const double WGT_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 /*!
@@ -186,7 +186,7 @@ struct AreaDirectionParameters
 {
     //!  Constructor
     AreaDirectionParameters();
-    
+
     //!  Clone (copy) params
     AreaDirectionParameters* clone() const;
 
@@ -281,12 +281,12 @@ struct Segment
      *  be 0-based or 1-based but does not necessarily have to be.
      */
     int endLine;
-    
+
     /*!
      *  SICD EndSample parameter.  Defines end sample in collection plane
      *  corresponding to the full image.  This is inclusive.  It will normally
      *  be 0-based or 1-based but does not necessarily have to be.
-     */    
+     */
     int endSample;
 
     /*!
@@ -317,7 +317,7 @@ struct AreaPlane
      *
      */
     AreaPlane();
-    
+
     /*!
      *  Make a deep copy of xDirection, yDirection, and any existing
      *  segments
@@ -402,7 +402,7 @@ struct Area
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.
-     *  
+     *
      */
     mem::ScopedCloneablePtr<AreaPlane> plane;
 
@@ -423,7 +423,7 @@ struct Area
  *
  *  Describes the radar collection information.  The SICD RefFreqIndex,
  *  called here refFrequencyIndex for API consistency is not initialized,
- *  since it is optional.  If required for profile, it must be manually 
+ *  since it is optional.  If required for profile, it must be manually
  *  populated by the application developer.
  *
  */
@@ -490,8 +490,8 @@ struct RadarCollection
 private:
     double waveformMin() const;
     double waveformMax() const;
-    const double WF_TOL = 1e-3;
-    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
+    static const double WF_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 }

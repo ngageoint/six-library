@@ -169,10 +169,9 @@ private:
     std::pair<double, double> calculateDeltaKs(
             const ImageData& imageData) const;
 
-    const double WGT_TOL = 1e-3;
-    const size_t DEFAULT_WEIGHT_SIZE = 512;
-    const std::string boundsErrorMessage =
-            "Violation of spatial frequency extent bounds.";
+    static const double WGT_TOL;
+    static const size_t DEFAULT_WEIGHT_SIZE;
+    static const char BOUNDS_ERROR_MESSAGE[];
 
 };
 
@@ -271,11 +270,10 @@ private:
     Vector3 derivedColUnitVector(const SCPCOA& scpcoa,
         const Vector3& scp) const;
 
-    const double UVECT_TOL = 1e-3;
-    const double WF_TOL = 1e-3;
-    const std::string WF_INCONSISTENT_STR = "Waveform fields not consistent";
-    const std::string boundsErrorMessage =
-            "Violation of spatial frequency extent bounds.";
+    static const double UVECT_TOL;
+    static const double WF_TOL;
+    static const char WF_INCONSISTENT_STR[];
+    static const char BOUNDS_ERROR_MESSAGE[];
 };
 
 }

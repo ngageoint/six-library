@@ -51,6 +51,12 @@ WaveformParameters::WaveformParameters() :
 {
 }
 
+const double WaveformParameters::WF_TOL = 1e-3;
+const double WaveformParameters::WGT_TOL = 1e-3;
+const char WaveformParameters::WF_INCONSISTENT_STR[] =
+        "Waveform fields not consistent";
+
+
 bool WaveformParameters::operator==(const WaveformParameters& rhs) const
 {
     return (txPulseLength == rhs.txPulseLength &&
@@ -338,6 +344,10 @@ Area* Area::clone() const
     return new Area(*this);
 }
 
+const double RadarCollection::WF_TOL = 1e-3;
+const char RadarCollection::WF_INCONSISTENT_STR[] =
+        "Waveform fields not consistent";
+
 RadarCollection* RadarCollection::clone() const
 {
     return new RadarCollection(*this);
@@ -476,7 +486,7 @@ bool RadarCollection::validate(logging::Logger& log) const
     {
         if (waveform[ii].get())
         {
-            valid = valid && waveform[ii]->validate(refFrequencyIndex, log);
+            valid = waveform[ii]->validate(refFrequencyIndex, log) && valid;
         }
     }
     return valid;

@@ -51,6 +51,11 @@ DirectionParameters::DirectionParameters() :
 {
 }
 
+const double DirectionParameters::WGT_TOL = 1e-3;
+const size_t DirectionParameters::DEFAULT_WEIGHT_SIZE = 512;
+const char DirectionParameters::BOUNDS_ERROR_MESSAGE[] =
+        "Violation of spatial frequency extent bounds";
+
 DirectionParameters* DirectionParameters::clone() const 
 {
     return new DirectionParameters(*this);
@@ -220,7 +225,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     if (deltaK2 <= deltaK1)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK1: " << deltaK1 << std::endl
             << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
         log.error(messageBuilder.str());
@@ -233,7 +238,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         if (deltaK2 > (1 / (2 * sampleSpacing)) + epsilon)
         {
             messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
+            messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
                 0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
@@ -245,7 +250,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         if (deltaK1 < (-1 / (2 * sampleSpacing)) - epsilon)
         {
             messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
+            messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
                 0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK1: " << deltaK1 << std::endl;
@@ -257,7 +262,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         if (impulseResponseBandwidth > (deltaK2 - deltaK1) + epsilon)
         {
             messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
+            messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
                 << "SICD.Grid.Row/Col.impulseResponseBandwidth: " <<
                 impulseResponseBandwidth << std::endl
                 << "SICD.Grid.Row/Col.DeltaK2 - SICD.Grid.Row/COl.DeltaK1: "
@@ -279,7 +284,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     if (std::abs((deltaK1 / minDk) - 1) > DK_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK1: " << deltaK1 << std::endl
             << "Derived DeltaK1: " << minDk << std::endl;
         log.error(messageBuilder.str());
@@ -289,7 +294,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     if (std::abs((deltaK2 / maxDk) - 1) > DK_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK2: " << deltaK2 << std::endl
             << "Derived DeltaK2: " << maxDk << std::endl;
         log.error(messageBuilder.str());
@@ -307,7 +312,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         {
             if (!weights.empty())
             {
-                valid = valid && validateWeights(*weightFunction, log);
+                valid = validateWeights(*weightFunction, log) && valid;
             }
         }
         else
@@ -457,6 +462,12 @@ Grid::Grid() :
 {
 }
 
+const double Grid::UVECT_TOL = 1e-3;
+const double Grid::WF_TOL = 1e-3;
+const char Grid::WF_INCONSISTENT_STR[] = "Waveform fields not consistent";
+const char Grid::BOUNDS_ERROR_MESSAGE[] =
+        "Violation of spatial frequency extent bounds";
+
 Grid* Grid::clone() const 
 {
     return new Grid(*this);
@@ -540,10 +551,10 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
         const ImageData& imageData,
         logging::Logger& log) const
 {
-    return (validateTimeCOAPoly(collectionInformation, log) &&  //2.1
-        validateFFTSigns(log) &&                                //2.2
-        row->validate(imageData, log) &&                        //2.3.1 - 2.3.9
-        col->validate(imageData, log));
+    bool valid = validateTimeCOAPoly(collectionInformation, log);//2.1
+    valid = validateFFTSigns(log) && valid;                      //2.2
+    valid = row->validate(imageData, log) && valid;              //2.3.1 - 2.3.9
+    valid = col->validate(imageData, log) && valid;
 }
 
 void Grid::fillDerivedFields(
@@ -833,7 +844,7 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
     }
 
     // If no image formation algorithm is present, the problem isn't
-    // with the Grid, so we'll let RMA deal with it that error
+    // with the Grid, so we'll let RMA deal with that error
     return valid;
 }
 
@@ -1109,7 +1120,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             (1 / (2 * col->sampleSpacing)) + epsilon)
         {
             messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
+            messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
                 << "0.5/SICD.Grid.Col.SampleSpacing: "
                 << 0.5 / col->sampleSpacing << std::endl
                 << "PFA.Kaz2 - Grid.Col.KCenter: "
@@ -1122,7 +1133,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             (-1 / (2 * col->sampleSpacing)) - epsilon)
         {
             messageBuilder.str("");
-            messageBuilder << boundsErrorMessage << std::endl
+            messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
                 << "0.5/SICD.Grid.Col.SampleSpacing: "
                 << 0.5 / col->sampleSpacing << std::endl
                 << "PFA.Kaz1 - Grid.Col.KCenter: "
@@ -1137,7 +1148,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         (1 / (2 * row->sampleSpacing)) + epsilon)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "0.5/SICD.Grid.Row.SampleSpacing: "
             << 0.5 / row->sampleSpacing << std::endl
             << "PFA.Krg2 - Grid.Row.KCenter: "
@@ -1151,7 +1162,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         (-1 / (2 * row->sampleSpacing)) - epsilon)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "0.5/SICD.Grid.Row.SampleSpacing: "
             << 0.5 / row->sampleSpacing << std::endl
             << "PFA.Krg1 - Grid.Row.KCenter: "
@@ -1164,7 +1175,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
     if (col->impulseResponseBandwidth > pfa.kaz2 - pfa.kaz1 + epsilon)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "Grid.Col.ImpulseResponseBandwidth: "
             << col->impulseResponseBandwidth << std::endl
             << "SICD.PFA.Kaz2 - SICD.PFA.Kaz1: "
@@ -1176,7 +1187,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
     if (row->impulseResponseBandwidth > pfa.krg2 - pfa.krg1 + epsilon)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "Grid.Row.ImpulseResponseBandwidth: "
             << row->impulseResponseBandwidth << std::endl
             << "SICD.PFA.Krg2 - SICD.PFA.Krg1: "
@@ -1189,7 +1200,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         std::abs(col->kCenter - (pfa.kaz1 + pfa.kaz2) / 2) > 1e-5)
     {
         messageBuilder.str("");
-        messageBuilder << boundsErrorMessage << std::endl
+        messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "Grid.Col.KCenter: " << col->kCenter << std::endl
             << "mean(SICD.PFA.Kaz1, SICD.PFA.Kaz2): "
             << (pfa.kaz1 + pfa.kaz2) / 2 << std::endl;
@@ -1233,9 +1244,9 @@ bool Grid::validate(const RgAzComp& rgAzComp,
 
     //2.12.1.8
     const Vector3& scp = geoData.scp.ecf;
-    valid = valid && col->validate(rgAzComp, log);
-    valid = valid && row->validate(rgAzComp, log,
-            fc *(2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC));
+    valid = col->validate(rgAzComp, log) && valid;
+    valid = row->validate(rgAzComp, log,
+            fc *(2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC)) && valid;
 
     //2.12.1.6
     if ((derivedRowUnitVector(scpcoa, scp) - row->unitVector).norm()

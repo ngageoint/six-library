@@ -39,6 +39,8 @@ bool GeoInfo::operator==(const GeoInfo& rhs) const
             desc == rhs.desc && geometryLatLon == rhs.geometryLatLon);
 }
 
+const double GeoData::ECF_THRESHOLD = 1e-2;
+
 GeoData* GeoData::clone()
 {
     return new GeoData(*this);
@@ -101,7 +103,7 @@ bool GeoData::validate(logging::Logger& log) const
     Vector3 derivedEcf = transformer.transform(scp.llh);
     double ecfDiff = (scp.ecf - derivedEcf).norm();
 
-    if (ecfDiff > 1e-2)
+    if (ecfDiff > ECF_THRESHOLD)
     {
         messageBuilder.str("");
         messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent."

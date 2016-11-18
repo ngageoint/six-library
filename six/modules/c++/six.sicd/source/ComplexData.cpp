@@ -146,12 +146,12 @@ bool ComplexData::validate(logging::Logger& log) const
 {
     // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
     // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
-    bool valid = (grid->validate(*collectionInformation, *imageData, log) &&
-            position->validate(log) &&
-            scpcoa->validate(*geoData, *grid, *position, log) &&
-            imageData->validate(*geoData, log) &&
-            geoData->validate(log) &&
-            radarCollection->validate(log));
+    bool valid = grid->validate(*collectionInformation, *imageData, log);
+    valid = position->validate(log) && valid;
+    valid = scpcoa->validate(*geoData, *grid, *position, log) && valid;
+    valid = imageData->validate(*geoData, log) && valid;
+    valid = geoData->validate(log) && valid;
+    valid = radarCollection->validate(log) && valid;
 
     double fc(Init::undefined<double>());
     if (radarCollection->refFrequencyIndex == 0)
@@ -165,9 +165,10 @@ bool ComplexData::validate(logging::Logger& log) const
     case ImageFormationType::RGAZCOMP: // 2.12.1
         if (rgAzComp.get())
         {
-            valid = valid && rgAzComp->validate(*geoData, *grid,
-                *scpcoa, *timeline, log) &&
-                grid->validate(*rgAzComp, *geoData, *scpcoa, fc, log);
+            valid = rgAzComp->validate(
+                    *geoData, *grid, *scpcoa, *timeline, log) && valid;
+            valid = grid->validate(
+                    *rgAzComp, *geoData, *scpcoa, fc, log) && valid;
         }
         else
         {
@@ -183,8 +184,8 @@ bool ComplexData::validate(logging::Logger& log) const
 
         if (pfa.get())
         {
-            valid = valid && pfa->validate(*scpcoa, log) &&
-                grid->validate(*pfa, *radarCollection, fc, log);
+            valid = pfa->validate(*scpcoa, log) && valid;
+            valid = grid->validate(*pfa, *radarCollection, fc, log) && valid;
         }
         else
         {
@@ -199,10 +200,10 @@ bool ComplexData::validate(logging::Logger& log) const
     case ImageFormationType::RMA:      // 2.12.3.*
         if (rma.get())
         {
-            valid = valid && rma->validate(*collectionInformation,
-                    geoData->scp.ecf, position->arpPoly, fc, log);
-            valid = valid && grid->validate(*rma, geoData->scp.ecf,
-                    position->arpPoly, fc, log);
+            valid = rma->validate(*collectionInformation, geoData->scp.ecf,
+                    position->arpPoly, fc, log) && valid;
+            valid = grid->validate(*rma, geoData->scp.ecf, position->arpPoly,
+                    fc, log) && valid;
         }
         else
         {

@@ -42,7 +42,7 @@ struct Position;
  */
 struct SCPCOA
 {
-    
+
     /*!
      *  Constructor.  All fields are set as undefined, and all fields
      *  are required, and so, must be filled in.
@@ -142,8 +142,8 @@ private:
             const std::string& name, logging::Logger& log) const;
 
 
-    static const std::string mScpcoaInconsistentString;
-    static const double mScpcoaTol;
+    static const char SCPCOA_INCONSISTENT_STR[];
+    static const double SCPCOA_TOL;
 };
 
 }

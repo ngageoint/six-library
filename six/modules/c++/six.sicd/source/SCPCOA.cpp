@@ -29,9 +29,9 @@
 using namespace six;
 using namespace six::sicd;
 
-const std::string SCPCOA::mScpcoaInconsistentString =
+const char SCPCOA::SCPCOA_INCONSISTENT_STR[] =
         "SCPCOA fields not consistent with other SICD metadata.";
-const double SCPCOA::mScpcoaTol = 1e-2;
+const double SCPCOA::SCPCOA_TOL = 1e-2;
 
 SCPCOA::SCPCOA() :
     scpTime(Init::undefined<double>()),
@@ -296,7 +296,7 @@ bool SCPCOA::validate(const GeoData& geoData,
             std::numeric_limits<double>::epsilon())
     {
         messageBuilder.str("");
-        messageBuilder << mScpcoaInconsistentString << "\n" <<
+        messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
             "SCPCOA.scpTime: " << scpTime << std::endl <<
             "Derived scpTime: " << derivedSCPTime(grid) << std::endl;
         log.error(messageBuilder.str());
@@ -305,20 +305,20 @@ bool SCPCOA::validate(const GeoData& geoData,
 
     std::vector<Vector3> arpVectors = derivedArpVectors(position);
     // 2.7.2
-    valid = valid && compareFields(arpPos, arpVectors[0], "arpPos", log);
+    valid = compareFields(arpPos, arpVectors[0], "arpPos", log) && valid;
 
     // 2.7.3
-    valid = valid &&  compareFields(arpVel, arpVectors[1], "arpVel", log);
+    valid = compareFields(arpVel, arpVectors[1], "arpVel", log) && valid;
 
     // 2.7.4 ARPAcc doesn't really matter and the instantaneous
     // ARPAcc can often vary from the ARPPoly polynomial derived one
-    valid = valid && compareFields(arpAcc, arpVectors[2], "arpAcc", log);
+    valid = compareFields(arpAcc, arpVectors[2], "arpAcc", log) && valid;
 
     // 2.7.5 SideOfTrack
     if (sideOfTrack != derivedSideOfTrack(geoData))
     {
         messageBuilder.str("");
-        messageBuilder << mScpcoaInconsistentString << "\n" <<
+        messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
             "SCPCOA.SideOfTrack: " << sideOfTrack << std::endl <<
             "Derived SideOfTrack: " << derivedSideOfTrack(geoData)
             << std::endl;
@@ -327,37 +327,37 @@ bool SCPCOA::validate(const GeoData& geoData,
     }
 
     // 2.7.6 - 2.7.14
-    valid = valid && compareFields(slantRange, derivedSlantRange(scp),
-            "slantRange", log);
-    valid = valid && compareFields(groundRange, derivedGroundRange(scp),
-            "groundRange", log);
-    valid = valid && compareFields(dopplerConeAngle,
-            derivedDopplerConeAngle(scp), "dopplerConeAngle", log);
-    valid = valid && compareFields(grazeAngle, derivedGrazeAngle(scp),
-            "grazeAngle", log);
-    valid = valid && compareFields(incidenceAngle, derivedIncidenceAngle(scp),
-            "incidenceAngle", log);
-    valid = valid && compareFields(twistAngle, derivedTwistAngle(scp),
-            "twistAngle", log);
-    valid = valid && compareFields(slopeAngle, derivedSlopeAngle(scp),
-            "slopeAngle", log);
-    valid = valid && compareFields(azimAngle, derivedAzimAngle(scp),
-            "azimAngle", log);
-    valid = valid && compareFields(layoverAngle, derivedLayoverAngle(scp),
-            "layoverAngle", log);
+    valid = compareFields(slantRange, derivedSlantRange(scp),
+            "slantRange", log) && valid;
+    valid = compareFields(groundRange, derivedGroundRange(scp),
+            "groundRange", log) && valid;
+    valid = compareFields(dopplerConeAngle,
+            derivedDopplerConeAngle(scp), "dopplerConeAngle", log) && valid;
+    valid = compareFields(grazeAngle, derivedGrazeAngle(scp),
+            "grazeAngle", log) && valid;;
+    valid = compareFields(incidenceAngle, derivedIncidenceAngle(scp),
+            "incidenceAngle", log) && valid;
+    valid = compareFields(twistAngle, derivedTwistAngle(scp),
+            "twistAngle", log) && valid;
+    valid = compareFields(slopeAngle, derivedSlopeAngle(scp),
+            "slopeAngle", log) && valid;
+    valid = compareFields(azimAngle, derivedAzimAngle(scp),
+            "azimAngle", log) && valid;
+    valid = compareFields(layoverAngle, derivedLayoverAngle(scp),
+            "layoverAngle", log) && valid;
     return valid;
 }
 
 bool SCPCOA::compareFields(double given, double expected,
         const std::string& name, logging::Logger& log) const
 {
-    if (std::abs(given - expected) < mScpcoaTol)
+    if (std::abs(given - expected) < SCPCOA_TOL)
     {
         return true;
     }
 
     std::ostringstream messageBuilder;
-    messageBuilder << mScpcoaInconsistentString << "\n" <<
+    messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
         "SCPCOA." << name << ": " << given << std::endl <<
         "Derived " << name << ": " << expected << std::endl;
     log.error(messageBuilder.str());
@@ -367,13 +367,13 @@ bool SCPCOA::compareFields(double given, double expected,
 bool SCPCOA::compareFields(Vector3 given, Vector3 expected,
         const std::string& name, logging::Logger& log) const
 {
-    if ((given - expected).norm() < mScpcoaTol)
+    if ((given - expected).norm() < SCPCOA_TOL)
     {
         return true;
     }
 
     std::ostringstream messageBuilder;
-    messageBuilder << mScpcoaInconsistentString << "\n" <<
+    messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
         "SCPCOA." << name << ": " << given << std::endl <<
         "Derived " << name << ": " << expected << std::endl;
     log.error(messageBuilder.str());

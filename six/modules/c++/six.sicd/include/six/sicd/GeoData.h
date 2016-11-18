@@ -73,7 +73,7 @@ public:
 
     /*!
      *  This could be a point if one, a line if 2, or a polygon if > 2
-     *  In other words, this simultaneously represents SICD's 
+     *  In other words, this simultaneously represents SICD's
      *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
      */
     std::vector<LatLon> geometryLatLon;
@@ -107,7 +107,7 @@ public:
     GeoData* clone();
 
     /*!
-     *  Identifies the earth model used for 
+     *  Identifies the earth model used for
      *  latitude, longitude and height parameters.  All
      *  height values are Height Above Ellipsoid (HAE)
      */
@@ -149,6 +149,9 @@ public:
     //Doesn't currently do anything
     void fillDerivedFields(const ImageData& imageData);
     bool validate(logging::Logger& log) const;
+
+private:
+    static const double ECF_THRESHOLD;
 };
 
 }
