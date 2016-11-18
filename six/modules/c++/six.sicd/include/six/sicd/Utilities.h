@@ -260,25 +260,6 @@ public:
      */
     static Poly1D nPoly(PolyXYZ poly, size_t index);
 
-    /*
-     * Find sign of input, expressed as -1, 0, or 1
-     * \param val A signed number
-     * \return 1 if val is positive, -1 if negative, 0 if 0
-     */
-    template <class T>
-    static int sign(const T& val)
-    {
-        if (val < 0)
-        {
-            return -1;
-        }
-        if (val > 0)
-        {
-            return 1;
-        }
-        return 0;
-    }
-
     static Vector3 wgs84Norm(const Vector3& point);
 
      /* Parses the XML in 'xmlStream' and converts it into a ComplexData object.

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "math/Sign.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/Position.h"
@@ -255,7 +256,7 @@ Vector3 SCPCOA::left() const
 
 int SCPCOA::look(const Vector3& scp) const
 {
-    return six::sicd::Utilities::sign(uLOS(scp).dot(left()));
+    return math::sign(uLOS(scp).dot(left()));
 }
 
 std::vector<Vector3> SCPCOA::derivedArpVectors(const Position& position) const

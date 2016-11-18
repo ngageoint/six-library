@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "math/Sign.h"
 #include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
@@ -131,7 +132,7 @@ Vector3 RMAT::uLOS(const Vector3& scp) const
 int RMAT::look(const Vector3& scp) const
 {
     Vector3 left = cross(refPos.unit(), refVel.unit());
-    return Utilities::sign(left.dot(uLOS(scp)));
+    return math::sign(left.dot(uLOS(scp)));
 }
 
 RMCR::RMCR() :
@@ -211,7 +212,7 @@ Vector3 RMCR::spn(const Vector3& scp) const
 int RMCR::look(const Vector3& scp) const
 {
     Vector3 left = cross(refPos.unit(), refVel.unit());
-    return Utilities::sign(left.dot(uXRG(scp)));
+    return math::sign(left.dot(uXRG(scp)));
 }
 
 INCA::INCA() :
@@ -270,7 +271,7 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
 
     //2.12.3.4.4
     if (collectionInformation.radarMode != RadarModeType::SPOTLIGHT &&
-        (Init::isUndefined<Poly2D>(dopplerCentroidPoly) || 
+        (Init::isUndefined<Poly2D>(dopplerCentroidPoly) ||
             Init::isUndefined<BooleanType>(dopplerCentroidCOA)))
     {
         messageBuilder.str("");
@@ -339,7 +340,7 @@ Vector3 INCA::spn(const Vector3& scp, const PolyXYZ& arpPoly) const
 
 int INCA::look(const Vector3& scp, const PolyXYZ& arpPoly) const
 {
-    return Utilities::sign(left(arpPoly).dot(uRG(scp, arpPoly)));
+    return math::sign(left(arpPoly).dot(uRG(scp, arpPoly)));
 }
 
 Vector3 INCA::left(const PolyXYZ& arpPoly) const
@@ -356,12 +357,12 @@ void INCA::fillDefaultFields(double fc)
     }
 }
 
-RMA::RMA() : 
+RMA::RMA() :
     algoType(RMAlgoType::NOT_SET)
 {
 }
 
-void RMA::fillDerivedFields(const GeoData& geoData, 
+void RMA::fillDerivedFields(const GeoData& geoData,
         const Position& position)
 {
     const Vector3& scp = geoData.scp.ecf;
@@ -398,7 +399,7 @@ void RMA::fillDefaultFields(const SCPCOA& scpcoa, double fc)
 }
 
 bool RMA::validate(const CollectionInformation& collectionInformation,
-        const Vector3& scp, const PolyXYZ& arpPoly, double fc, 
+        const Vector3& scp, const PolyXYZ& arpPoly, double fc,
         logging::Logger& log) const
 {
     if (rmat.get())
