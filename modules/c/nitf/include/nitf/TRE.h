@@ -144,7 +144,7 @@ typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre,
 typedef const char* (*NITF_TRE_ID_GET) (nitf_TRE* tre);
 
 /*!
- * Read data from the given IO interface, parsing it 
+ * Read data from the given IO interface, parsing it
  *  however the plug-in desires.
  * \param io        The IO interface we are reading from
  * \param length    The length of the TRE (i.e. # of bytes to read)

@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this program;
  * If not, see <http://www.gnu.org/licenses/>.
  *
@@ -35,7 +35,7 @@ NRT_CXX_GUARD
  *  data structure (not to be confused with a TRE,
  *  or Tagged Record Extension).  Trees may be useful
  *  for certain kinds of parsing, and it may also at
- *  some point become the default storage for TREs 
+ *  some point become the default storage for TREs
  *  themselves.  Since a tree isnt really a flat data
  *  structure, traversal functions may be more appropriate
  *  than our typical
@@ -62,7 +62,7 @@ typedef struct _NRT_Tree
 
 /*!
  *  Construct a new (detached) TreeNode.  This function will assign
- *  its user data to the tree node, and will only return error if 
+ *  its user data to the tree node, and will only return error if
  *  memory cannot be allocated for the TreeNode (or its child list).
  *  The user is assumed to be responsible for the data associated with
  *  the node
@@ -78,14 +78,14 @@ NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA * data,
 /*!
  *  Destroy the current node and NULL set it.  We are not responsible
  *  for deleting the data in the node, it is up to the user to delete.
- *  
+ *
  *  \param node The node
  */
 NRTAPI(void) nrt_TreeNode_destruct(nrt_TreeNode ** node);
 
 /*!
  *  Add a node to our children.  The child will be appended to the NITF
- *  list.  
+ *  list.
  *
  *  \param node Our node
  *  \param child The node to add
@@ -97,7 +97,7 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_addChild(nrt_TreeNode * node,
                                        nrt_TreeNode * child, nrt_Error * error);
 
 /*!
- *  Return if this tree node has children.  This is slightly easier than 
+ *  Return if this tree node has children.  This is slightly easier than
  *  going directly to the underlying list.
  *
  *  \param node The node
@@ -130,7 +130,7 @@ NRTAPI(nrt_TreeNode *) nrt_TreeNode_clone(nrt_TreeNode * source,
  *  an integral tree.  It is okay to leave our root element as NULL.
  *  We will simply not initialize the root
  *
- *  \param An error.  
+ *  \param An error.
  *
  */
 NRTAPI(nrt_Tree *) nrt_Tree_construct(nrt_TreeNode * root, nrt_Error * error);
@@ -151,7 +151,7 @@ typedef enum _NRT_Traversal
 /*!
  *  This is a traversal function.  When you call nrt_Tree_walk()
  *  you will give it the user data that is necessary to run this
- *  
+ *
  *  The node will be handed to this function by the traversal
  *  The function returns true or false if it succeeded or failed.
  *  If it failed, you should set the nrt_Error*.  On failure,

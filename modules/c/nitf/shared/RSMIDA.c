@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -115,7 +115,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Illum Azimuth Angle Const", "IE0" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row", "IAR" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Col", "IAC" },
-    
+
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row^2", "IARR" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row-Col", "IARC" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Col^2", "IACC" },
@@ -131,7 +131,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Sensor z-position", "SPZ" },
     {NITF_BCS_A, 21, "Sensor z-velocity", "SVZ" },
     {NITF_BCS_A, 21, "Sensor z-acceleration", "SAZ" },
-    {NITF_END, 0, NULL, NULL}    
+    {NITF_END, 0, NULL, NULL}
 };
 
 NITF_DECLARE_SINGLE_PLUGIN(RSMIDA, description)
