@@ -70,10 +70,7 @@ public:
     static const char OPT_NUM_COLS_PER_BLOCK[];
 
     //!  Buffered IO
-    enum
-    {
-        DEFAULT_BUFFER_SIZE = 8192
-    };
+    static const size_t DEFAULT_BUFFER_SIZE;
 
     // Get the record that was generated during initialization
     nitf::Record getRecord() const
