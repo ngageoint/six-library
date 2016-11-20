@@ -70,7 +70,7 @@
     with caution. Refer to the table below for a listing of compilers and
     architectures that the <emphasis>six</emphasis> library is known to build
     on.</para>
-    
+
      <table frame='all'><title>Architecture / Compiler Matrix</title>
     <tgroup cols='2' align='left' colsep='1' rowsep='1'>
         <colspec colname='name'/> <colspec colname='help'/><thead>
@@ -85,7 +85,7 @@
     </tbody>
     </tgroup>
     </table>
-    
+
       <section>
       <title>Building with
       <emphasis>Waf</emphasis></title>
@@ -98,7 +98,7 @@
       1.7.9 and requires Python 2.7 or higher, but will not work with
       Python 3.x. The most recent release of Python 2.x is recommended
       (currently Python 2.7.10).</para>
-      
+
       <para>In order to build on Windows, you will need a <emphasis>Visual
       Studio Compiler</emphasis> installed. <emphasis>Microsoft Visual Studio C++
       Express Edition</emphasis> is freely available, and is what the
@@ -120,7 +120,7 @@
       a command prompt / shell window and type the following:
       </para>
       <programlisting>python --version</programlisting>
-      
+
       <para>The following listing shows an example scenario of configuring,
       building, and installing the code. In this example we will be telling
       <emphasis>Waf</emphasis> to install locally to a directory named
@@ -130,7 +130,7 @@
 
       <programlisting>
       &gt;cd C:\dev\six\modules
-      
+
       &gt;python waf configure --prefix=install
 Setting top to                           : C:\dev\six\modules
 Setting out to                           : C:\dev\six\modules\target
@@ -350,7 +350,7 @@ Building local lib
       should be run multiple times only if you need to modify the configuration variant. Most
       of the time you will end up running the configure phase just
       once, followed by one or more build/install phases</para></note>
-      
+
       <table frame='all'><title>Notable <emphasis>configure</emphasis> options</title>
         <tgroup cols='2' align='left' colsep='1' rowsep='1'>
             <colspec colname='name'/> <colspec colname='help'/><thead>
@@ -364,9 +364,9 @@ Building local lib
         <row><entry>--with-defs</entry><entry>Specify custom macro definitions</entry></row>
         <row><entry>--with-xml-home</entry><entry>Specify pre-built Xerces 3.1.1 location [default: Built automatically]</entry></row>
         </tbody></tgroup></table>
-      
+
       <para>To see all available configure flags, use <emphasis>python waf --help</emphasis>.</para>
-      
+
       <para>Once you have configured your build variant, the next step is to
       build the code. You do this by running <emphasis>waf build</emphasis> or
       just <emphasis>waf</emphasis> (they do the same thing).</para>
@@ -415,7 +415,7 @@ $ ./waf install
       <emphasis>--enable-64bit</emphasis> explicitly or you may get a
       link-error between some of the compiled components. It is generally a
       good idea to always force certain options you want control over.</para>
-      
+
       <para>When running <emphasis>waf build</emphasis> or
       <emphasis>waf install</emphasis> without a target list, it will build
       all targets it can find which include a number of test programs that
@@ -426,10 +426,10 @@ $ ./waf install
       that are needed.  After configuring, you can use
       <emphasis>python waf list</emphasis> to list all available targets.
       Here's an example of building just the SICD and SIDD libraries:</para>
-      
+
       <programlisting>&gt; python waf install --target=six.sicd-c++,six.sidd-c++</programlisting>
-      
-      <para>After installing the library and its headers you will likely incorporate the
+
+      <para>After installing the library and its headers you will likely incorporate
       its use into your own applications.  We don't enforce the use of
       <emphasis>Waf</emphasis> for your own applications so you can use whatever ways you
       are already accustomed to.  However, it's critical that you use the same
@@ -439,11 +439,11 @@ $ ./waf install
       given target or set of targets by running <emphasis>waf dumpenv</emphasis>
       and listing the targets you're interested in.  To do this for the SICD
       and SIDD libraries:</para>
-      
+
       <programlisting>
       &gt; python waf dumpenv --target=six.sicd-c++,six.sidd-c++
       </programlisting>
-      
+
       <note><para>Keep in mind that many compilers/linkers require libs
       to be listed in descending order, based on dependencies on one
       another, so link order <emphasis>does</emphasis> matter.  When building
@@ -460,21 +460,51 @@ $ ./waf install
       on Windows, you will need to set XERCES_STATIC_LIBRARY if you're using
       Xerces or XML_STATIC if you're using Expat and OPJ_STATIC for OpenJPEG
       (pertains to J2K compression in SIDD NITFs).</para></note>
+
+      <para>After installation, there are two waf commands that allow for
+      packaging the library for distribution. To create a Python wheel in
+      the bin directory of your installation:</para>
+
+      <programlisting>
+      &gt; python waf makewheel
+
+Creating wheel
+Processing /home/user/six-user/six-library
+Building wheels for collected packages: pysix
+  Running setup.py bdist_wheel for pysix
+  Stored in directory /home/user/six-user/six-library/install/bin
+Successfully built pysix
+      </programlisting>
+
+      <para>A wheel is the standard format for distributing a Python module. It
+      contains all information needed to simply install and run. Any missing
+      depencies such as Numpy will automatically be installed as well. For
+      more information, see PEP 427. To install a wheel:</para>
+
+      <programlisting>
+      &gt; pip install install/bin/*.whl
+      </programlisting>
+
+      <para>To convert the installation to a zip file:</para>
+
+      <programlisting>
+      &gt; python waf package
+      </programlisting>
     </section>
-    
+
     <section>
        <title>Sample Programs</title>
-       
+
        <para>There are several sample programs that have been developed to
        demonstrate the <emphasis>six</emphasis> library in action. These samples
        should serve as a good starting point for a developer looking to incorporate
        the library into their own application.</para>
-       
+
        <note><para>If you are not familiar with the SIO file format,
       you can still use your own raw image files as sources for several of these samples.
       Just modify the code to read the images using your own libraries and
       then pass the buffers to the writer <emphasis>save()</emphasis> method.</para></note>
-       
+
       <section>
       <title>test_create_sidd_from_memory.cpp</title>
       <para>This sample generates a SIDD NITF file by using imagery from memory
@@ -519,10 +549,10 @@ $ ./waf install
       NITF product. The SIDD model data is fabricated.</para>
       </section>
     </section>
-    
+
     <section>
       <title>Library Dependencies</title>
-      
+
       <para>The XML handler library used by the library (called
       <emphasis>xml.lite</emphasis>) is a lightweight implementation of a
       simple Document Object Model (DOM) using one of several freely available
@@ -539,14 +569,14 @@ $ ./waf install
       on the target system and the <emphasis>--nobuild-xml</emphasis> configure
       flag is used, it will attempt to use the installed version. If it does
       not, it will attempt to build it from scratch from an internally bundled
-      driver the first time the library is built. If <emphasis>Xerces</emphasis> 
-      already is installed on your system, you can use the 
+      driver the first time the library is built. If <emphasis>Xerces</emphasis>
+      already is installed on your system, you can use the
       <emphasis>--with-xml-home</emphasis> option to set the proper include and
       lib paths for the build system. To switch the xml library to the
       <emphasis>Expat</emphasis> parser, use the
       <emphasis>--enable-xml-layer=expat</emphasis> flag, optionally in
       conjunction with the <emphasis>--with-xml-home</emphasis> path,
-      identifying the location of <emphasis>Expat</emphasis>, if it is not in 
+      identifying the location of <emphasis>Expat</emphasis>, if it is not in
       the sytem path.</para>
 
       <para>The <emphasis>NITRO</emphasis> library is MDA-IS software that
@@ -776,7 +806,7 @@ void createWriter(std::string siddFile)
       <programlisting>// ComplexData* data
 
 // Generically, from a Data*
-six::XMLControl *genericControl = 
+six::XMLControl *genericControl =
     six::XMLControlFactory::newXMLControl(data-&gt;getDataClass());
 
 // Concretely if we know what Data type we have
@@ -841,7 +871,7 @@ container-&gt;addData( sicdData );
     you built <emphasis>six</emphasis> in, on Windows:</para>
     <programlisting>
     &gt;set NITF_PLUGIN_PATH=%cd%\install\share\nitf\plugins
-    </programlisting> 
+    </programlisting>
     <para>On Unix (exact syntax may depend on your shell):</para>
     <programlisting>
     $ setenv NITF_PLUGIN_PATH `pwd`/install/share/nitf/plugins
@@ -852,7 +882,7 @@ container-&gt;addData( sicdData );
     for reading but this may change in the future.
     </para>
   </section>
-  
+
   <section>
     <title>XML schema path</title>
     <para>
@@ -865,7 +895,7 @@ container-&gt;addData( sicdData );
     directory you built <emphasis>six</emphasis> in, on Windows:</para>
     <programlisting>
     &gt;set SIX_SCHEMA_PATH=%cd%\install\conf\schema\six
-    </programlisting> 
+    </programlisting>
     <para>On Unix (exact syntax may depend on your shell):</para>
     <programlisting>
     $ setenv SIX_SCHEMA_PATH `pwd`/install/conf/schema/six
@@ -925,7 +955,7 @@ six::NITFReadControl reader;
 reader.load("/path/to/sicd.nitf");
 
 // Get the container
-six::Container* c = reader.getContainer();
+mem::SharedPtr&lt;six::Container&gt; c = reader.getContainer();
 
 // Get the SICD data model
 six::ComplexData* sicd = (six::ComplexData*)c-&gt;getData(0);
@@ -964,7 +994,7 @@ six::NITFReadControl reader;
 reader.load("/path/to/sidd.nitf");
 
 // Get the container
-six::Container* c = reader.getContainer();
+mem::SharedPtr&lt;six::Container&gt; c = reader.getContainer();
 
 // Get the SIDD data model (first data block)
 six::DerivedData* sidd = (six::DerivedData*)c-&gt;getData(0);
@@ -1086,7 +1116,7 @@ region.setEndRow(endRow);
 region.setStartCol(startCol);
 region.setEndCol(endCol);
 
-std::complex&lt;float&gt;* chip = 
+std::complex&lt;float&gt;* chip =
     (std::complex&lt;float&gt;*)reader-&gt;interleaved(region, 0);
 
 ...
@@ -1145,11 +1175,11 @@ std::vector&lt;io::InputStream*&gt; sources;
 // Lets say this source function needs to know pixel array
 // information contained in the DerivedData section
 //--------------------------------------------------------------
-io::InputStream* is1 = 
+io::InputStream* is1 =
     createInputSourceForProduct1(params, container-&gt;getData(0));
 
 // Same type of function, but needs MD for SIDD data 1, not 0
-io::InputStream* is2 = 
+io::InputStream* is2 =
     createInputSourceForProduct1(params, container-&gt;getData(1));
 
 sources.push_back( is1 );
@@ -1186,10 +1216,10 @@ for (unsigned int i = 0; i &lt; sources.size(); ++i)
     make a short, concise example that would replicate the problem you are
     seeing. We do not currently have an email group for help or discussion.</para>
   </section>
-  
+
   <?hard-pagebreak?>
   <appendix><title>Build Alternatives</title>
-    
+
     <section>
       <title>Building on Windows within Visual Studio</title>
 
@@ -1204,6 +1234,6 @@ for (unsigned int i = 0; i &lt; sources.size(); ++i)
       plugins that are not used by SIX.  However, the six.sicd and six.sidd
       projects inside this solution may still be useful.</para>
     </section>
-  
+
   </appendix>
 </article>
