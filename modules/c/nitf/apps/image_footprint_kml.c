@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -49,8 +49,8 @@
  * path.
  *
  */
-void writeKML(nitf_ImageSubheader* header, 
-              int i, 
+void writeKML(nitf_ImageSubheader* header,
+              int i,
               const char* file)
 {
 
@@ -77,9 +77,9 @@ void writeKML(nitf_ImageSubheader* header,
 
     NITF_SNPRINTF(outfile, NITF_MAX_PATH, "%s-%d.kml", file, i+1);
 
-    out = nitf_IOHandle_create(outfile, 
+    out = nitf_IOHandle_create(outfile,
                                NITF_ACCESS_WRITEONLY,
-                               NITF_CREATE, 
+                               NITF_CREATE,
                                &error);
 
     /* KML is lon first! */
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
         printf("No images found in file.  Ignoring.\n");
         goto CLEANUP;
     }
-    
+
     nitf_Utils_baseName(file, argv[1], ".");
 
     for (i = 0; i < num; i++)
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
             goto CLEANUP;
         }
         writeKML(segment->subheader, i, file);
-    } 
+    }
 
 CLEANUP:
     nitf_IOHandle_close(io);

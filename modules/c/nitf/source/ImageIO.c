@@ -9833,3 +9833,4 @@ NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
 
     return NITF_SUCCESS;
 }
+

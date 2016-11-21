@@ -83,19 +83,19 @@ void printTRE(nitf_TRE* tre)
     nitf_Uint32 treLength;
     nitf_TREEnumerator* it = NULL;
     const char* treID = NULL;
-    
+
     /* This is just so you know how long the TRE is */
     treLength = tre->handler->getCurrentSize(tre, &error);
 
-    /* 
+    /*
      *  This is the name for the description that was selected to field
      *  this TRE by the handler.
      */
     treID = nitf_TRE_getID(tre);
-    
+
     printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
            tre->tag, treLength, treID ? treID : "null id");
-    
+
     /* Now walk the TRE */
     it = nitf_TRE_begin(tre, &error);
 
@@ -115,7 +115,7 @@ void printTRE(nitf_TRE* tre)
         }
         else
             nitf_Error_print(&error, stdout, "Field retrieval error");
-        
+
     }
     printf("---------------------------------------------\n");
 }
@@ -190,7 +190,7 @@ void showFileHeader(nitf_Record * record)
     nitf_Uint32 dataLen32;
     nitf_Version fver;
     nitf_FileHeader *header;
-    
+
     fver = nitf_Record_getVersion(record);
 
     /* Sanity check */
@@ -296,7 +296,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of text sections contained in this file [%ld]\n", 
+    printf("The number of text sections contained in this file [%ld]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -310,7 +310,7 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of text subheader [%u]: %lu bytes\n", 
+        printf("\tThe length of text subheader [%u]: %lu bytes\n",
                i, len);
 
         printf("\tThe length of the text data: %lu bytes\n\n",
@@ -438,7 +438,7 @@ void showImageSubheader(nitf_ImageSubheader * sub)
     SHOW_VAL(sub->pixelJustification);
     SHOW_VAL(sub->imageCoordinateSystem);
     SHOW_VAL(sub->cornerCoordinates);
-    
+
     cornersType = nitf_ImageSubheader_getCornersType(sub);
 
     if (cornersType == NITF_CORNERS_GEO ||
@@ -458,7 +458,7 @@ void showImageSubheader(nitf_ImageSubheader * sub)
             printf("(R,0): (%f, %f)\n", corners[3][0], corners[3][1]);
 
         }
-        
+
     }
 
 
@@ -634,14 +634,14 @@ void showTextSubheader(nitf_TextSubheader * sub)
 /*
  *  This section is for dumping the Data Extension Segment (DES)
  *  subheader.  It can hold up to 1GB worth of data, so its big
- *  enough for most things.  People stuff all kinds of things in 
+ *  enough for most things.  People stuff all kinds of things in
  *  the DESDATA block including
- * 
+ *
  *  - TRE overflow:
  *      When a TRE is too big for the section its in.  In other words,
  *      if populating it properly would overflow the segment, it is
- *      dumped into the TRE overflow segment.  
- *  
+ *      dumped into the TRE overflow segment.
+ *
  *      This is kind of a pain, and so NITRO 2.0 has functions to
  *      split this up for you, or merge it back into the header where it
  *      would go if it wasnt too big (see nitf_Record_mergeTREs() and
@@ -652,17 +652,17 @@ void showTextSubheader(nitf_TextSubheader * sub)
  *      might see overflow data
  *
  *  - Text data (especially XML)
- *     
+ *
  *      XML data is getting more popular, and to make sure that they
  *      dont have to worry about the length of the XML surpassing the
  *      limits of a segment, most people decide to spec. it to go here
  *
  *  - Binary data
- *      
+ *
  *      Since the DES is the wild west of the NITF, you can put anything
  *      you want here.
  *
- *  Confusingly, the DES subheader has its own little TRE-like 
+ *  Confusingly, the DES subheader has its own little TRE-like
  *  arbitrary key-value params.  In NITRO we treat this as a TRE within
  *  the subheader.
  *
@@ -714,7 +714,7 @@ void showDESubheader(nitf_DESubheader * sub)
 void showRESubheader(nitf_RESubheader * sub)
 {
     assert( sub );
- 
+
     printf("RES subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->typeID);
@@ -732,7 +732,7 @@ int main(int argc, char **argv)
 {
     /*  Get the error object  */
     nitf_Error error;
-    
+
     /*  This is the reader object  */
     nitf_Reader *reader;
     nitf_Record *record;
@@ -754,12 +754,12 @@ int main(int argc, char **argv)
         printf("This file does not appear to be a valid NITF\n");
         exit(EXIT_FAILURE);
     }
-        
+
 
 
     /*
      *  Using an IO handle is one valid way to read a NITF in
-     *  
+     *
      *  NITRO 2.5 offers other ways, using the readIO() function
      *  in the Reader
      */
@@ -797,7 +797,7 @@ int main(int argc, char **argv)
         /*  Walk each image and show  */
         nitf_ListIterator iter = nitf_List_begin(record->images);
         nitf_ListIterator end = nitf_List_end(record->images);
-        
+
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
             nitf_ImageSegment *segment =
@@ -814,7 +814,7 @@ int main(int argc, char **argv)
     num = nitf_Record_getNumGraphics(record, &error);
     if (NITF_INVALID_NUM_SEGMENTS( num ) )
         goto CATCH_ERROR;
-    
+
     if (num)
     {
         /*  Walk each graphic and show  */
@@ -895,26 +895,26 @@ int main(int argc, char **argv)
     num = nitf_Record_getNumReservedExtensions(record, &error);
     if (NITF_INVALID_NUM_SEGMENTS( num ) )
         goto CATCH_ERROR;
-    
+
     if (num)
     {
         /*  Walk each reservedextension and show  */
         nitf_ListIterator iter =
             nitf_List_begin(record->reservedExtensions);
         nitf_ListIterator end = nitf_List_end(record->reservedExtensions);
-        
+
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
             nitf_RESegment *segment =
                 (nitf_RESegment *) nitf_ListIterator_get(&iter);
-            
+
             showRESubheader(segment->subheader);
             nitf_ListIterator_increment(&iter);
         }
     }
 
     /*measureComplexity(record);*/
-    
+
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);

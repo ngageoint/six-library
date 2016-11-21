@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2013 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -23,13 +23,13 @@
 /*
   \file DirectBlockSource - Band source implementation for data read directly
 
-  The DirectBlockSource object is derived from the DataSource object and is used 
+  The DirectBlockSource object is derived from the DataSource object and is used
   in cases when the user wants to directly read blocks from file without
-  requiring any re-formatting or re-organization.  One such case would be a file 
-  copy.  Another would be some sort of block-level data merge where data from 
+  requiring any re-formatting or re-organization.  One such case would be a file
+  copy.  Another would be some sort of block-level data merge where data from
   all sources is formatted the same.
 
-  This allows higher performance reading and writing in such cases where the 
+  This allows higher performance reading and writing in such cases where the
   user knows the data is formatted a certain way.
 */
 
@@ -60,7 +60,7 @@ typedef NITF_BOOL(*NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK) (void* algorithm,
                                                          nitf_Error * error);
 
 /*
-  \brief nitf_DirectBlockSource_construct - Constructor for the DirectBlockSource 
+  \brief nitf_DirectBlockSource_construct - Constructor for the DirectBlockSource
   object
 
   \return The new object or NULL on error. On error, the error object is

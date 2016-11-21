@@ -117,7 +117,7 @@ NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
                                        NITF_PLUGIN_TRE_HANDLER_FUNCTION handler,
                                        nitf_Error* error);
-   
+
 /*!
  *  Public function to load the registry with plugins in the given directory.
  *  This will walk the DLL path and search
@@ -180,7 +180,7 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry * reg, nitf_Error * error);
 NITFPROT(nitf_TREHandler*)
 nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
                                        const char *ident,
-                                       int *hadError, 
+                                       int *hadError,
                                        nitf_Error * error);
 
 

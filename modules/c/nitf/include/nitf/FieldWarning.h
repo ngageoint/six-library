@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -56,11 +56,11 @@ typedef struct _nitf_FieldWarning
        ted(i)  - ith text data section
        esh(i)  - ith extended data sub-header
        edd(i)  - ith extended data section
-       
+
        <TRE>(i)- ith occurance of a particular TRE in a particular
-       section (i.e. hdr.ish(2).ACFTB(1).SCNUM 
+       section (i.e. hdr.ish(2).ACFTB(1).SCNUM
     */
-    
+
     char *fieldName;
 
     /* Original field found in the file */
@@ -83,7 +83,7 @@ nitf_FieldWarning;
  *  \param error An error object to fill if a problem occurs
  *  \return A FieldWarning object or NULL upon failure
  */
-NITFAPI(nitf_FieldWarning *) 
+NITFAPI(nitf_FieldWarning *)
 nitf_FieldWarning_construct(nitf_Off fileOffset,
                             const char *fieldName,
                             nitf_Field *field,
