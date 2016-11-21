@@ -32,9 +32,9 @@
 
 
 static const struct {
-  unsigned int   width;
-  unsigned int   height;
-  unsigned int   bytesPerPixel;
+  size_t   width;
+  size_t   height;
+  size_t   bytesPerPixel;
   unsigned char  data[188 * 36 * 3 + 1];
 } NITRO_IMAGE = {
   188, 36, 3,
@@ -986,7 +986,7 @@ void populateFileHeader(nitf::Record& record, const std::string& title)
     /* the file header is already created, so just grab it */
     nitf::FileHeader header = record.getHeader();
 
-    header.getOriginStationID().set("SF.net");
+    header.getOriginStationID().set("github.com");
     header.getFileTitle().set(title);
 }
 
@@ -1160,7 +1160,7 @@ bool testRead(const std::string& pathname, bool isMono = false,
             {
                 imageIndex = jj;
             }
-            if (block[jj] != ((nitf_Uint8*)(NITRO_IMAGE.data))[imageIndex])
+            if (block[jj] != NITRO_IMAGE.data[imageIndex])
             {
                 std::cerr << "Image data doesn't match" << std::endl;
                 return false;
@@ -1182,10 +1182,12 @@ int main(int argc, char **argv)
         parser.addArgument("-c --compress", "Compress file", cli::STORE_TRUE,
                 "shouldCompress");
         parser.addArgument("output", "Output filename", cli::STORE, "output",
-            "OUTPUT", 1, 1, true)->setDefault("test_creat.ntf");
+            "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
         std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const bool isMono(options->get<bool>("isMono"));
+        // If we're compressing, we're using the J2K plugin, so please ensure
+        // that it is on your NITF_PLUGIN_PATH
         const bool shouldCompress(options->get<bool>("shouldCompress"));
         const std::string outname(options->get<std::string>("output"));
 
@@ -1213,4 +1215,3 @@ int main(int argc, char **argv)
         return 1;
     }
 }
-
