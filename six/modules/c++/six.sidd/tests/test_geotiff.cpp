@@ -33,11 +33,11 @@ static const size_t DATA_LENGTH = 100;
 static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
 static const size_t BYTES_PER_PIXEL = sizeof(sys::Int16_T);
 
-void generateData(mem::ScopedArray<sys::Int16_T>& data)
+void generateData(sys::Int16_T* data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
-        data[ii] = sys::Int16_T(static_cast<sys::Int16_T>(ii));
+        data[ii] = static_cast<sys::Int16_T>(ii);
     }
 }
 
@@ -112,10 +112,10 @@ void read(const std::string& filename, sys::Int16_T* data)
     reader.interleaved(region, 0);
 }
 
-bool run(bool useStream = false, bool byteswap = false)
+bool run()
 {
     mem::ScopedArray<sys::Int16_T> imageData(new sys::Int16_T[DATA_LENGTH]);
-    generateData(imageData);
+    generateData(imageData.get());
 
     mem::ScopedArray<sys::Int16_T> testData(new sys::Int16_T[DATA_LENGTH]);
 
@@ -143,9 +143,7 @@ int main(int argc, char** argv)
             new six::XMLControlCreatorT<
             six::sidd::DerivedXMLControl>());
 
-        bool success = run(false, false) && run(true, false) &&
-            run(false, true) && run(true, true);
-        if (success)
+        if (run())
         {
             std::cout << "All tests passed." << std::endl;
             return 0;
