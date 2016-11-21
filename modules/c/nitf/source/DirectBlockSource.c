@@ -70,17 +70,17 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off
     if (!directBlockSource)
         return NITF_FAILURE;
 
-    block = nitf_ImageIO_readBlockDirect(directBlockSource->imageReader->imageDeblocker, 
-                                         directBlockSource->imageReader->input, 
-                                         directBlockSource->blockNumber++, 
+    block = nitf_ImageIO_readBlockDirect(directBlockSource->imageReader->imageDeblocker,
+                                         directBlockSource->imageReader->input,
+                                         directBlockSource->blockNumber++,
                                          &blockSize, error);
     if(!block)
         return NITF_FAILURE;
 
-    if(!directBlockSource->nextBlock(directBlockSource->algorithm, 
-                                     buf, 
-                                     block, 
-                                     directBlockSource->blockNumber-1, 
+    if(!directBlockSource->nextBlock(directBlockSource->algorithm,
+                                     buf,
+                                     block,
+                                     directBlockSource->blockNumber-1,
                                      blockSize,
                                      error))
     {
@@ -159,9 +159,9 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
     blockInfo = nitf_ImageReader_getBlockingInfo(imageReader, error);
     if (blockInfo == NULL)
         return NITF_FAILURE;
-    
+
     numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
-    
+
     nitf_BlockingInfo_destruct(&blockInfo);
 
     impl->algorithm = algorithm;

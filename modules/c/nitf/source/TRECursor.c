@@ -152,16 +152,16 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
                                                 int looping, nitf_Error * error)
 {
     /* temp buf used for storing the qualified tag */
-    char tag_str[TAG_BUF_LEN];         
+    char tag_str[TAG_BUF_LEN];
 
     /* pointer for brace position */
-    char *bracePtr;             
+    char *bracePtr;
 
     /* used as in iterator */
     int index = 0;
 
     /* temp used for looping */
-    int i;                      
+    int i;
 
     /* the pair to return */
     nitf_Pair *pair = NULL;
@@ -186,7 +186,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
     {
         /* it is dependent on something in another loop,
          * so, we need to figure out what level.
-         * since tags are unique, we are ok checking like this 
+         * since tags are unique, we are ok checking like this
          */
         pair = nitf_HashTable_find(
                 ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
@@ -320,12 +320,12 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     if (tre_cursor->desc_ptr->special)
                     {
                         /* evaluate the special string as a postfix expression */
-                        tre_cursor->length = 
+                        tre_cursor->length =
                             nitf_TRECursor_evaluatePostfix(
-                                tre_cursor->tre, 
-                                idx_str, 
+                                tre_cursor->tre,
+                                idx_str,
                                 tre_cursor->looping,
-                                tre_cursor->desc_ptr->special, 
+                                tre_cursor->desc_ptr->special,
                                 error);
 
                         if (tre_cursor->length < 0)
@@ -434,8 +434,8 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                 else if (tre_cursor->desc_ptr->data_type == NITF_IF)
                 {
                     if (!nitf_TRECursor_evalIf
-                            (tre_cursor->tre, 
-                             tre_cursor->desc_ptr, 
+                            (tre_cursor->tre,
+                             tre_cursor->desc_ptr,
                              idx_str,
                              tre_cursor->looping, error))
                     {
@@ -485,14 +485,14 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
     int loops;
 
     /* temp buf used for manipulating the loop label */
-    char str[TAG_BUF_LEN];   
+    char str[TAG_BUF_LEN];
 
     nitf_Pair *pair;
     nitf_Field *field;
 
     char *op;
     char *valPtr;
-    
+
     /* used for the possible data in the loop label */
     int loopVal;
 
@@ -599,14 +599,14 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
 NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
                                    nitf_TREDescription* desc_ptr,
                                    char idx_str[10][10],
-                                   int looping, 
+                                   int looping,
                                    nitf_Error* error)
 {
     nitf_Field *field;
     nitf_Pair *pair;
 
     /* temp buf for the label */
-    char str[TAG_BUF_LEN];      
+    char str[TAG_BUF_LEN];
     char *emptyPtr;
     char *op;
     char *valPtr;
@@ -616,7 +616,7 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
 
     /* used as the value for comparing */
     int fieldData;
-    
+
     /* the value defined int the TRE descrip */
     int treData;
 
@@ -627,7 +627,7 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
     unsigned int treBitField;
 
     /* get the data out of the hashtable */
-    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str, 
+    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str,
                                      looping, error);
     if (!pair)
     {
@@ -750,12 +750,12 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
 NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
                                            nitf_TREDescription* desc_ptr,
                                            char idx_str[10][10],
-                                           int looping, 
+                                           int looping,
                                            nitf_Error* error)
 {
     int computedLength;
     /* temp buf used for manipulating the loop label */
-    char str[TAG_BUF_LEN];      
+    char str[TAG_BUF_LEN];
     nitf_Pair *pair;
     nitf_Field *field;
 
@@ -765,7 +765,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
     /* used for the possible data in the description label */
     int funcVal;
 
-    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, 
+    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag,
                                      idx_str, looping, error);
     if (!pair)
     {

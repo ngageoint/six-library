@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -168,7 +168,7 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(const nitf_Record* record,
  * \param error The error to populate on failure
  * \return nitf_GraphicSegment* that is bound to the Record
  */
-NITFAPI(nitf_GraphicSegment*) 
+NITFAPI(nitf_GraphicSegment*)
 nitf_Record_newGraphicSegment(nitf_Record * record,
                               nitf_Error * error);
 
@@ -200,7 +200,7 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
                                                       nitf_Error * error);
 
 
-                     
+
 /*!
  *  Utility function gets the number of DES out of the record.
  *  Just goes into the FHDR and gets out NUMDES and converts the
@@ -213,7 +213,7 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
  */
 NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(const nitf_Record* record,
                                                       nitf_Error* error);
-                                          
+
 /*!
  * Creates and returns a new DESegment* that is bound to the Record
  *
@@ -224,7 +224,7 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(const nitf_Record* record,
  * \param error The error to populate on failure
  * \return nitf_DESegment* that is bound to the Record
  */
-NITFAPI(nitf_DESegment*) 
+NITFAPI(nitf_DESegment*)
 nitf_Record_newDataExtensionSegment(nitf_Record * record,
                                     nitf_Error * error);
 
@@ -471,7 +471,7 @@ NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
  *  \param The record or operate on
  *  \param error An error to populate if a problem occurs
  *  \return TRUE on success, false on failure
- * 
+ *
 */
 NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
 (
@@ -482,7 +482,7 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
 /*!
  * nitf_Record_unmergeTREs scans all segments and creates TRE_OVERFLOW (DE)
  * segments for each segment that requires one. When an overflow segment is
- * created,TREs are transfered from the original segment to the overflow. 
+ * created,TREs are transfered from the original segment to the overflow.
  * The TRE order in the combined lists, original and overflows replicates the
  * order of the orginal TRE list. As many TREs as will fit are placed in the
  * original segment, but the orginal list is not reordered.
@@ -497,7 +497,7 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
  *  \param The record or operate on
  *  \param error An error to populate if a problem occurs
  *  \return TRUE on success, false on failure
- * 
+ *
 */
 NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
 (

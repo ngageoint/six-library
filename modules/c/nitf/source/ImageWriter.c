@@ -58,7 +58,7 @@ NITFPRIV(void) ImageWriter_destruct(NITF_DATA * data)
 
 
 NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
-                                      nitf_IOInterface* output, 
+                                      nitf_IOInterface* output,
                                       nitf_Error * error)
 {
     nitf_Uint8 **user = NULL;
@@ -112,7 +112,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         band = 0;
 
         /* For each block, read the data and write out as-is without any re-arranging the data
-           Data should be copied into userContig as the underlying block will be discarded 
+           Data should be copied into userContig as the underlying block will be discarded
            with each read */
         for(block = 0; block < numBlocks; ++block)
         {
@@ -120,7 +120,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                                band, error);
             if (bandSrc == NULL)
                 return NITF_FAILURE;
-            
+
             /* Assumes this will be reading block number 'block' */
             if (!(*(bandSrc->iface->read)) (bandSrc->data, (char *) userContig,
                                             (size_t) blockSize, error))
@@ -165,14 +165,14 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                                    band, error);
                 if (bandSrc == NULL)
                     return NITF_FAILURE;
-                
+
                 if (!(*(bandSrc->iface->read)) (bandSrc->data, (char *) user[band],
                                                 (size_t) rowSize, error))
                 {
                     goto CATCH_ERROR;
                 }
             }
-            
+
             if (!nitf_ImageIO_writeRows(impl->imageBlocker, output, 1, user, error))
                 goto CATCH_ERROR;
         }
@@ -199,8 +199,8 @@ CLEANUP:
 }
 
 NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
-    nitf_ImageSubheader *subheader, 
-    nrt_HashTable* options, 
+    nitf_ImageSubheader *subheader,
+    nrt_HashTable* options,
     nitf_Error * error)
 {
     static nitf_IWriteHandler iWriteHandler =
@@ -231,7 +231,7 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
 
     impl->imageSource = NULL;
     impl->directBlockWrite = 0;
-    
+
 
     /* Check for compression and get compression interface */
     /* get the compression string */
@@ -249,10 +249,10 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
         }
     }
 
-    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0, 
-                                                compIface, 
-                                                NULL, 
-                                                options, 
+    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0,
+                                                compIface,
+                                                NULL,
+                                                options,
                                                 error);
     if (!impl->imageBlocker)
         goto CATCH_ERROR;
@@ -283,14 +283,14 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * imageWriter,
         nitf_ImageSource *imageSource, nitf_Error * error)
 {
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
-    
+
     if (impl->imageSource != NULL)
     {
         nitf_Error_init(error, "Image source already attached",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
     }
-    
+
     impl->imageSource = imageSource;
     return NITF_SUCCESS;
 }
@@ -316,5 +316,5 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
                                                 nitf_Error* error)
 {
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
-    return nitf_ImageIO_setPadPixel(impl->imageBlocker, value, length, error); 
+    return nitf_ImageIO_setPadPixel(impl->imageBlocker, value, length, error);
 }

@@ -25,7 +25,7 @@
 
 
 NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
-                                 char *bufptr, 
+                                 char *bufptr,
                                  nitf_Error * error)
 {
     int status = 1;
@@ -55,7 +55,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
     {
-        if ((iterStatus = 
+        if ((iterStatus =
              nitf_TRECursor_iterate(&cursor, error)) == NITF_SUCCESS)
         {
             length = cursor.length;
@@ -157,7 +157,7 @@ NITFAPI(char *) nitf_TREUtils_getRawData(nitf_TRE * tre, nitf_Uint32* treLength,
 
     /* temp nitf_Pair */
     nitf_Pair *pair;
-    
+
     /* temp nitf_Field */
     nitf_Field *field;
 
@@ -284,7 +284,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOInterface* io,
 NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                                           const char *tag,
                                           NITF_DATA * data,
-                                          size_t dataLength, 
+                                          size_t dataLength,
                                           nitf_Error * error)
 {
     nitf_Pair *pair;
@@ -425,9 +425,9 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
 
 }
 
-NITFAPI(NITF_BOOL) 
+NITFAPI(NITF_BOOL)
 nitf_TREUtils_setDescription(nitf_TRE* tre,
-                             nitf_Uint32 length, 
+                             nitf_Uint32 length,
                              nitf_Error* error)
 {
 
@@ -1040,8 +1040,8 @@ NITFAPI(nitf_TREEnumerator*) nitf_TREUtils_basicBegin(nitf_TRE* tre,
     return it;
 }
 
-NITFAPI(nitf_TREHandler*) 
-nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, 
+NITFAPI(nitf_TREHandler*)
+nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set,
                                  nitf_TREHandler *handler,
                                  nitf_Error* error)
 {

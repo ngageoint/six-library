@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -102,7 +102,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 2, "Ground Z Adj Proportional to Y index", "GZY" },
     {NITF_BCS_A, 2, "Ground Z Adj Proportional to Z index", "GZZ" },
 
-    
+
     {NITF_LOOP, 0, NULL, "NPAR" },
 
     {NITF_BCS_A, 21, "Component Value", "PARVAL" },
@@ -112,7 +112,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_END, 0, NULL, NULL}
 
-    
+
 };
 
 

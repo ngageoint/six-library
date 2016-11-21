@@ -29,8 +29,8 @@ TEST_CASE(testFourBytes)
     nrt_Uint32 value;
     nrt_Uint32 swappedValue;
 
-    value = 0x03040506;
-    swappedValue = 0x06050403;
+    value = 0x12345678;
+    swappedValue = 0x78563412;
     nrt_Utils_byteSwap(&value, 4);
     TEST_ASSERT(value == swappedValue);
 }
@@ -52,13 +52,11 @@ TEST_CASE(testEightBytes)
     nrt_Uint64 swappedValue;
     nrt_Uint64 originalValue;
 
-    value = 0x0102030405060708;
-    originalValue = 0x0102030405060708;
-    swappedValue = 0x0807060504030201;
+    value = 0x0123456789ABCDEF;
+    swappedValue = 0xEFCDAB8967452301;
     /* This shouldn't do anything, because we don't handle this case */
     nrt_Utils_byteSwap(&value, 8);
-    TEST_ASSERT(value == originalValue);
-    TEST_ASSERT(value != swappedValue);
+    TEST_ASSERT(value == swappedValue);
 }
 
 int main(int argc, char **argv)

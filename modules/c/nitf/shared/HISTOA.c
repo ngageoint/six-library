@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -36,7 +36,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 14, "Processing Date And Time", "PDATE" },
     {NITF_BCS_A, 10, "Processing Site", "PSITE" },
     {NITF_BCS_A, 10, "Softcopy Processing Application", "PAS" },
-    {NITF_BCS_N, 1, "Number of Image Processing Comments", "NIPCOM" }, 
+    {NITF_BCS_N, 1, "Number of Image Processing Comments", "NIPCOM" },
 
     {NITF_LOOP, 0, NULL, "NIPCOM"},
 
@@ -61,7 +61,7 @@ static nitf_TREDescription description[] = {
     {NITF_IF, 0, "eq 1", "ASYM_FLAG" },
 
     {NITF_BCS_A, 7, "Mag in Line (row) Direction", "ZOOMROW" },
-    {NITF_BCS_A, 7, "Mag in Element (column) Direction", "ZOOMCOL" }, 
+    {NITF_BCS_A, 7, "Mag in Element (column) Direction", "ZOOMCOL" },
 
     {NITF_ENDIF, 0, NULL, NULL},
 
@@ -80,7 +80,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_IF, 0, "== 1", "MAG_FLAG" },
 
-    {NITF_BCS_A, 7, "Level of Relative Magnification", "MAG_LEVEL" }, 
+    {NITF_BCS_A, 7, "Level of Relative Magnification", "MAG_LEVEL" },
 
     {NITF_ENDIF, 0, NULL, NULL},
 
@@ -101,7 +101,7 @@ static nitf_TREDescription description[] = {
     {NITF_IF, 0, "== 1", "TTC_FLAG" },
 
     {NITF_BCS_N, 2, "TTC Family Number", "TTCFAM" },
-        
+
     {NITF_BCS_N, 2, "TTC Member Number", "TTCMEM" },
 
     {NITF_ENDIF, 0, NULL, NULL},
@@ -113,7 +113,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 2, "Output Bit Depth (actual)", "OBPP" },
     {NITF_BCS_A, 3, "Output Pixel Value Type", "OPVTYPE" },
     {NITF_BCS_A, 10, "Output Bandwidth Compression", "OUTBWC" },
-    
+
     {NITF_ENDLOOP, 0, NULL, NULL},
     {NITF_END, 0, NULL, NULL}
 };
