@@ -24,6 +24,7 @@
 
 
 import sys
+import traceback
 from datetime import datetime
 from pysix.six_base import DateTime
 
@@ -31,14 +32,16 @@ def convertToPython():
     original = DateTime()
     converted = original.toPythonDateTime()
     try:
-        assert original.getYear() == converted.year
-        assert original.getMonth() == converted.month
-        assert original.getDayOfMonth() == converted.day
-        assert original.getHour() == converted.hour
-        assert original.getMinute() == converted.minute
-        assert int(original.getSecond()) == converted.second
+        assert(original.getYear() == converted.year)
+        assert(original.getMonth() == converted.month)
+        assert(original.getDayOfMonth() == converted.day)
+        assert(original.getHour() == converted.hour)
+        assert(original.getMinute() == converted.minute)
+        assert(int(original.getSecond()) == converted.second)
+        microseconds = (original.getSecond() - int(original.getSecond())) * 1e6
+        assert(int(microseconds) == converted.microsecond)
     except AssertionError as error:
-        print(error)
+        traceback.print_exc()
         return False
     return True
 
@@ -46,14 +49,16 @@ def convertFromPython():
     original = datetime.now()
     converted = DateTime.fromPythonDateTime(original)
     try:
-        assert converted.getYear() == original.year
-        assert converted.getMonth() == original.month
-        assert converted.getDayOfMonth() == original.day
-        assert converted.getHour() == original.hour
-        assert converted.getMinute() == original.minute
-        assert int(converted.getSecond()) == original.second
+        assert(converted.getYear() == original.year)
+        assert(converted.getMonth() == original.month)
+        assert(converted.getDayOfMonth() == original.day)
+        assert(converted.getHour() == original.hour)
+        assert(converted.getMinute() == original.minute)
+        assert(int(converted.getSecond()) == original.second)
+        microsecond = (converted.getSecond() - int(converted.getSecond())) * 1e6
+        assert(int(microsecond) != original.microsecond)
     except AssertionError as error:
-        print(error)
+        traceback.print_exc()
         return False
     return True
 

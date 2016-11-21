@@ -376,13 +376,12 @@ class DateTime(_object):
     @staticmethod
     def fromPythonDateTime(pyDatetime):
         second = pyDatetime.second + (pyDatetime.microsecond / 1e6);
-        sixDatetime = DateTime()
-        sixDatetime.setYear(pyDatetime.year)
-        sixDatetime.setMonth(pyDatetime.month)
-        sixDatetime.setDayOfMonth(pyDatetime.day)
-        sixDatetime.setHour(pyDatetime.hour)
-        sixDatetime.setMinute(pyDatetime.minute)
-        sixDatetime.setSecond(second)
+        sixDatetime = DateTime(pyDatetime.year,
+                pyDatetime.month,
+                pyDatetime.day,
+                pyDatetime.hour,
+                pyDatetime.minute,
+                second)
         return sixDatetime
 
 DateTime_swigregister = _six_base.DateTime_swigregister
