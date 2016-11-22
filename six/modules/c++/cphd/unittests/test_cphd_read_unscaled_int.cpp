@@ -65,7 +65,7 @@ std::string TempFile::pathname() const
 
 
 template<typename T>
-std::vector<std::complex<T> > generateData(size_t length, T /*value*/)
+std::vector<std::complex<T> > generateData(size_t length)
 {
     std::vector<std::complex<T> > data(length);
     srand(0);
@@ -222,20 +222,37 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
     return compareVectors(readData, writeData, scaleFactors, scale);
 }
 
-TEST_CASE(testUnscaledInt)
+TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData(dims.area(), static_cast<sys::Int16_T>(1));
+    const std::vector<std::complex<sys::Int8_T> > writeData =
+            generateData<sys::Int8_T>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData))
 }
 
-TEST_CASE(testScaledInt)
+TEST_CASE(testScaledInt8)
+{
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<sys::Int8_T> > writeData =
+            generateData<sys::Int8_T>(dims.area());
+    const bool scale = true;
+    TEST_ASSERT(runTest(scale, writeData));
+}
+TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData(dims.area(), static_cast<sys::Int16_T>(1));
+            generateData<sys::Int16_T>(dims.area());
+    const bool scale = false;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testScaledInt16)
+{
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateData<sys::Int16_T>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -244,7 +261,7 @@ TEST_CASE(testUnscaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<float> > writeData =
-            generateData(dims.area(), static_cast<float>(1));
+            generateData<float>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData))
 }
@@ -253,7 +270,7 @@ TEST_CASE(testScaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<float> > writeData =
-            generateData(dims.area(), static_cast<float>(1));
+            generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -263,8 +280,10 @@ int main(int argc, char** argv)
 {
     try
     {
-        TEST_CHECK(testUnscaledInt);
-        TEST_CHECK(testScaledInt);
+        TEST_CHECK(testUnscaledInt8);
+        TEST_CHECK(testScaledInt8);
+        TEST_CHECK(testUnscaledInt16);
+        TEST_CHECK(testScaledInt16);
         TEST_CHECK(testUnscaledFloat);
         TEST_CHECK(testScaledFloat);
         TempFile tempfile;
