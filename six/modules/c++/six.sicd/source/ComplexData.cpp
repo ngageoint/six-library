@@ -142,6 +142,17 @@ bool ComplexData::equalTo(const Data& rhs) const
     return false;
 }
 
+double ComplexData::computeFc() const
+{
+    double fc(Init::undefined<double>());
+    if (radarCollection->refFrequencyIndex == 0)
+    {
+        fc = (imageFormation->txFrequencyProcMin +
+            imageFormation->txFrequencyProcMax) / 2;
+    }
+    return fc;
+}
+
 bool ComplexData::validate(logging::Logger& log) const
 {
     // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
@@ -153,12 +164,8 @@ bool ComplexData::validate(logging::Logger& log) const
     valid = geoData->validate(log) && valid;
     valid = radarCollection->validate(log) && valid;
 
-    double fc(Init::undefined<double>());
-    if (radarCollection->refFrequencyIndex == 0)
-    {
-        fc = (imageFormation->txFrequencyProcMin +
-            imageFormation->txFrequencyProcMax) / 2;
-    }
+    double fc = computeFc();
+
     std::ostringstream messageBuilder;
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -236,13 +243,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
     radarCollection->fillDerivedFields();
     scpcoa->fillDerivedFields(*geoData, *grid, *position);
 
-    // possibly center processed frequency?
-    double fc(Init::undefined<double>());
-    if (radarCollection->refFrequencyIndex == 0)
-    {
-        fc = (imageFormation->txFrequencyProcMin +
-            imageFormation->txFrequencyProcMax) / 2;
-    }
+    double fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -275,13 +276,8 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
+    double fc = computeFc();
 
-    double fc(Init::undefined<double>());
-    if (radarCollection->refFrequencyIndex == 0)
-    {
-        fc = (imageFormation->txFrequencyProcMin +
-            imageFormation->txFrequencyProcMax) / 2;
-    }
     switch (imageFormation->imageFormationAlgorithm)
     {
     case ImageFormationType::PFA:

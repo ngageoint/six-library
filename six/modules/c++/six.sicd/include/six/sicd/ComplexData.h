@@ -358,6 +358,9 @@ public:
 
 private:
     virtual bool equalTo(const Data& rhs) const;
+
+    // This is possibly the center processed frequency
+    double computeFc() const;
     static const char VENDOR_ID[];
 
     std::string mVersion;
