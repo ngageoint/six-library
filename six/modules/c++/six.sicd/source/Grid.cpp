@@ -487,29 +487,8 @@ bool Grid::validateTimeCOAPoly(
     const RadarModeType& mode = collectionInformation.radarMode;
 
     //2.1. Scalar TimeCOAPoly means SPOTLIGHT data
-    bool isScalar = true;
+    bool isScalar = timeCOAPoly.isScalar();
     bool valid = true;
-
-    // I don't know that it's impossible for a one-degree polynomial to be expressed
-    // as a polynomial of higher order for whatever reason, so I'm checking each term
-    // manually
-    for (size_t ii = 0; ii <= timeCOAPoly.orderX(); ++ii)
-    {
-        for (size_t jj = 0; jj <= timeCOAPoly.orderY(); ++jj)
-        {
-            if (ii == 0 && jj == 0)
-            {
-                // Don't care what the (0,0) value is, but everything else
-                // should be 0.
-                continue;
-            }
-            if (timeCOAPoly[ii][jj] != 0)
-            {
-                isScalar = false;
-                break;
-            }
-        }
-    }
 
     if (mode == RadarModeType::SPOTLIGHT && !isScalar)
     {
