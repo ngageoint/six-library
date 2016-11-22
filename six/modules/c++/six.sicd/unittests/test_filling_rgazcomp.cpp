@@ -81,3 +81,4 @@ int main(int, char**)
     TEST_CHECK(DerivedRgAzComp);
     return 0;
 }
+

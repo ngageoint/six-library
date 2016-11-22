@@ -47,3 +47,4 @@ int main(int, char**)
     TEST_CHECK(ecfFromLlh);
     return 0;
 }
+

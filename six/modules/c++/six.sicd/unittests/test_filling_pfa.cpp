@@ -59,3 +59,4 @@ int main(int, char**)
     TEST_CHECK(DefaultPFA);
     return 0;
 }
+

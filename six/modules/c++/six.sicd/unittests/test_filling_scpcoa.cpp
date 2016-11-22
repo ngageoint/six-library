@@ -81,3 +81,4 @@ int main(int, char**)
     TEST_CHECK(DerivedSCPCOA);
     return 0;
 }
+
