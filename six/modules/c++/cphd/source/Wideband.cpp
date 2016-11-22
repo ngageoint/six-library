@@ -35,6 +35,40 @@
 namespace
 {
 template <typename InT>
+class PromoteRunnable : public sys::Runnable
+{
+public:
+    PromoteRunnable(const std::complex<InT>* input,
+                  size_t startRow,
+                  size_t numRows,
+                  size_t numCols,
+                  std::complex<float>* output) :
+        mInput(input + startRow * numCols),
+        mDims(numRows, numCols),
+        mOutput(output + startRow * numCols)
+    {
+    }
+
+    virtual void run()
+    {
+        for (size_t row = 0, idx = 0; row < mDims.row; ++row)
+        {
+            for (size_t col = 0; col < mDims.col; ++col, ++idx)
+            {
+                const std::complex<InT>& input(mInput[idx]);
+                mOutput[idx] = std::complex<float>(input.real(),
+                                                   input.imag());
+            }
+        }
+    }
+
+private:
+    const std::complex<InT>* const mInput;
+    const types::RowCol<size_t> mDims;
+    std::complex<float>* const mOutput;
+};
+
+template<typename InT>
 class ScaleRunnable : public sys::Runnable
 {
 public:
@@ -72,6 +106,65 @@ private:
     std::complex<float>* const mOutput;
 };
 
+template <typename InT>
+void promote(const void* input,
+             const types::RowCol<size_t>& dims,
+             size_t numThreads,
+             std::complex<float>* output)
+{
+    if (numThreads <= 1)
+    {
+        PromoteRunnable<InT>(static_cast<const std::complex<InT>*>(input),
+                            0, dims.row, dims.col, output).run();
+    }
+    else
+    {
+        mt::ThreadGroup threads;
+        const mt::ThreadPlanner planner(dims.row, numThreads);
+
+        size_t threadNum(0);
+        size_t startRow(0);
+        size_t numRowsThisThread(0);
+        while (planner.getThreadInfo(threadNum++,
+                                     startRow,
+                                     numRowsThisThread))
+        {
+            std::auto_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
+                    static_cast<const std::complex<InT>*>(input),
+                    startRow,
+                    numRowsThisThread,
+                    dims.col,
+                    output));
+            threads.createThread(scaler);
+        }
+
+        threads.joinAll();
+
+    }
+}
+
+void promote(const void* input,
+             size_t elementSize,
+             const types::RowCol<size_t>& dims,
+             size_t numThreads,
+             std::complex<float>* output)
+{
+    switch (elementSize)
+    {
+    case 2:
+        promote<sys::Int8_T>(input, dims, numThreads, output);
+        break;
+    case 4:
+        promote<sys::Int16_T>(input, dims, numThreads, output);
+        break;
+    case 8:
+        promote<float>(input, dims, numThreads, output);
+        break;
+    default:
+        throw except::Exception(Ctxt(
+                "Unexpected element size " + str::toString(elementSize)));
+    }
+}
 template <typename InT>
 void scale(const void* input,
            const types::RowCol<size_t>& dims,
@@ -430,6 +523,23 @@ void Wideband::read(size_t channel,
             // Just need to scale
             scale(scratch.data, mElementSize, dims, &vectorScaleFactors[0],
                   numThreads, data.data);
+        }
+    }
+    // We need to convert the output to floating-point data
+    else if (mElementSize != 8)
+    {
+        // Perform the read into the scratch buffer
+        readImpl(channel, firstVector, lastVector, firstSample, lastSample,
+                 scratch.data);
+
+        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        {
+            byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
+                    data.data);
+        }
+        else
+        {
+            promote(scratch.data, mElementSize, dims, numThreads, data.data);
         }
     }
     else
