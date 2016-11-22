@@ -64,15 +64,16 @@ std::string TempFile::pathname() const
 }
 
 
-std::vector<std::complex<sys::Int16_T> > generateData(size_t length)
+template<typename T>
+std::vector<std::complex<T> > generateData(size_t length, T /*value*/)
 {
-    std::vector<std::complex<sys::Int16_T> > data(length);
+    std::vector<std::complex<T> > data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        float real = static_cast<sys::Int16_T>(rand() / 100);
-        float imag = static_cast<sys::Int16_T>(rand() / 100);
-        data[ii] = std::complex<sys::Int16_T>(real, imag);
+        float real = static_cast<T>(rand() / 100);
+        float imag = static_cast<T>(rand() / 100);
+        data[ii] = std::complex<T>(real, imag);
     }
     return data;
 }
@@ -92,9 +93,10 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
     return scaleFactors;
 }
 
+template<typename T>
 void writeCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
-        const std::vector<std::complex<sys::Int16_T> >& writeData)
+        const std::vector<std::complex<T> >& writeData)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -108,8 +110,19 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
                 cphd::ArraySize(dims.row, dims.col));
     }
 
-    //! Must set the sample type (complex<int>)
-    metadata.data.sampleType = cphd::SampleType::RE16I_IM16I;
+    //! Must set the sample type
+    if (sizeof(writeData[0]) == 2)
+    {
+        metadata.data.sampleType = cphd::SampleType::RE08I_IM08I;
+    }
+    else if (sizeof(writeData[0]) == 4)
+    {
+        metadata.data.sampleType = cphd::SampleType::RE16I_IM16I;
+    }
+    else if (sizeof(writeData[0]) == 8)
+    {
+        metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
+    }
 
     //! We must have a radar mode set
     metadata.collectionInformation.radarMode = cphd::RadarModeType::SPOTLIGHT;
@@ -149,16 +162,15 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     }
 }
 
-std::vector<std::complex<float> >checkData(const std::string& pathname,
+std::vector<std::complex<float> > checkData(const std::string& pathname,
         size_t numThreads,
         const std::vector<double>& scaleFactors,
         bool scale,
-        const types::RowCol<size_t>& dims,
-        const std::vector<std::complex<sys::Int16_T> >& writtenData)
+        const types::RowCol<size_t>& dims)
 {
     cphd::CPHDReader reader(pathname, numThreads);
     cphd::Wideband& wideband = reader.getWideband();
-    std::vector<std::complex<float> > readData(writtenData.size());
+    std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
     sys::ubyte scratchData[sizeInBytes];
@@ -171,8 +183,9 @@ std::vector<std::complex<float> >checkData(const std::string& pathname,
     return readData;
 }
 
+template<typename T>
 bool compareVectors(const std::vector<std::complex<float> >& readData,
-                    const std::vector<std::complex<sys::Int16_T> >& writeData,
+                    const std::vector<std::complex<T> >& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -194,34 +207,55 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
     return true;
 }
 
-bool runTest(bool scale)
+template<typename T>
+bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 {
     TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData(dims.area());
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData);
     const std::vector<std::complex<float> > readData =
             checkData(tempfile.pathname(), numThreads, scaleFactors,
-            scale, dims, writeData);
+            scale, dims);
     return compareVectors(readData, writeData, scaleFactors, scale);
 }
 
 TEST_CASE(testUnscaledInt)
 {
-    TempFile tempfile;
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateData(dims.area(), static_cast<sys::Int16_T>(1));
     const bool scale = false;
-    TEST_ASSERT(runTest(scale))
+    TEST_ASSERT(runTest(scale, writeData))
 }
 
 TEST_CASE(testScaledInt)
 {
-    TempFile tempfile;
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateData(dims.area(), static_cast<sys::Int16_T>(1));
+    const bool scale = true;
+    TEST_ASSERT(runTest(scale, writeData));
+}
+
+TEST_CASE(testUnscaledFloat)
+{
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<float> > writeData =
+            generateData(dims.area(), static_cast<float>(1));
     const bool scale = false;
-    TEST_ASSERT(runTest(scale));
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testScaledFloat)
+{
+    const types::RowCol<size_t> dims(128, 128);
+    const std::vector<std::complex<float> > writeData =
+            generateData(dims.area(), static_cast<float>(1));
+    const bool scale = true;
+    TEST_ASSERT(runTest(scale, writeData));
 }
 }
 
@@ -231,6 +265,8 @@ int main(int argc, char** argv)
     {
         TEST_CHECK(testUnscaledInt);
         TEST_CHECK(testScaledInt);
+        TEST_CHECK(testUnscaledFloat);
+        TEST_CHECK(testScaledFloat);
         TempFile tempfile;
     }
     catch (const std::exception& ex)
