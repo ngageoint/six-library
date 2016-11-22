@@ -281,6 +281,7 @@ void CPHDWriter::write(const std::string& pathname,
     mFile.create(pathname);
 
     writeMetadata(mVBMSize, mCPHDSize, classification, releaseInfo);
+
     for (size_t ii = 0; ii < mVBMData.size(); ++ii)
     {
         writeVBMData(mVBMData[ii], ii);
