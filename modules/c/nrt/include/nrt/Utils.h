@@ -181,8 +181,15 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * \param indexOne Index of first byte to be swapped
  * \param indexTwo Index of second byte to be swapped
  */
+NRTPRIV(void) inline nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+        size_t indexTwo)
+{
+    nrt_Uint8 temp;
+    temp = value[indexOne];
+    value[indexOne] = value[indexTwo];
+    value[indexTwo] = temp;
+}
 
-NRTPROT(void) nrt_Utils_swap(nrt_Uint8 *value, size_t indexOne, size_t indexTwo);
 /*!
  *  Byte-swap a given value of length `size` bytes in-place.
  *  Sizes of length 2, 4, and 8 are supported.
@@ -190,7 +197,7 @@ NRTPROT(void) nrt_Utils_swap(nrt_Uint8 *value, size_t indexOne, size_t indexTwo)
  *  \param value Pointer to value to be swapped
  *  \param size The size, in bytes, of each buffer element
  */
-NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size);
+NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8* value, size_t size);
 
 NRT_CXX_ENDGUARD
 #endif

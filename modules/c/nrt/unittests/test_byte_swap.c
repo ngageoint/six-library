@@ -54,7 +54,6 @@ TEST_CASE(testEightBytes)
 
     value = 0x0123456789ABCDEF;
     swappedValue = 0xEFCDAB8967452301;
-    /* This shouldn't do anything, because we don't handle this case */
     nrt_Utils_byteSwap(&value, 8);
     TEST_ASSERT(value == swappedValue);
 }
