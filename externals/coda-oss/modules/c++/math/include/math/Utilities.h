@@ -43,6 +43,11 @@ int sign(T val)
     }
     return 0;
 }
+
+inline double square(double val)
+{
+    return val * val;
+}
 }
 
 #endif
