@@ -104,7 +104,7 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
-        parser.addArgument("-s --schema", 
+        parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE, "schema", "FILE");
         parser.addArgument("input", "Input SICD/SIDD file or directory of files", cli::STORE, "input",
@@ -133,10 +133,10 @@ int main(int argc, char** argv)
 
         str::upper(level);
         str::trim(level);
-        std::auto_ptr<logging::Logger> log = 
+        std::auto_ptr<logging::Logger> log =
             logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
 
-        // this validates the DES of the input against the 
+        // this validates the DES of the input against the
         // best available schema
         int retCode = 0;
         six::NITFReadControl reader;
@@ -148,16 +148,26 @@ int main(int argc, char** argv)
             log->info(Ctxt("Reading " + inputPathname));
             try
             {
-                if (nitf::Reader::getNITFVersion(inputPathname) ==
-                        NITF_VER_UNKNOWN)
+                std::auto_ptr<six::Data> data =
+                        six::parseDataFromFile(xmlRegistry,
+                                               inputPathname,
+                                               schemaPaths,
+                                               *log);
+
+                six::sicd::ComplexData* complexData =
+                        dynamic_cast<six::sicd::ComplexData*>(data.get());
+
+                if (complexData != NULL)
                 {
-                    // Assume it's just a text file containing XML
-                    six::parseDataFromFile(xmlRegistry,
-                                           inputPathname,
-                                           schemaPaths,
-                                           *log);
+                    if (!complexData->validate(*log))
+                    {
+                        retCode = 1;
+                    }
                 }
-                else
+
+                if (nitf::Reader::getNITFVersion(inputPathname) !=
+                        NITF_VER_UNKNOWN)
+
                 {
                     reader.load(inputPathname, schemaPaths);
                 }
