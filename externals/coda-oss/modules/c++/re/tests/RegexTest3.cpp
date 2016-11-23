@@ -35,7 +35,7 @@ using namespace std;
 
 const char
         *request =
-                "GET http://pluto.beseen.com:1113 HTTP/1.0\r\nProxy-Connection: Keep-Alive\r\nUser-Agent: Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Encoding: gzip\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\nContent-type: application/x-www-form-urlencoded\r\nContent-Length: 96\r\n\r\n";
+                "GET http://pluto.beseen.com:1113 HTTP/1.0\r\nProxy-Connection: Keep-Alive\r\nUser-Agent: Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Encoding: gzip\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 96\r\n\r\n";
 //const char *request = "HTTP/1.1 200\r\nContent-Length: 200\r\n\r\n";
 
 class HttpParser
@@ -59,11 +59,11 @@ public:
     {
         std::string rest = restOfChunk;
 
-        PCREMatch matches;
+        RegexMatch matches;
         while (!mMatchEndOfHeader.match(rest, matches))
         {
             cout << rest << endl;
-            PCREMatch keyVals;
+            RegexMatch keyVals;
             if (mMatchPair.match(rest, keyVals))
             {
                 mKeyValuePair[keyVals[1]] = keyVals[2];
@@ -78,7 +78,7 @@ public:
     }
     virtual bool parseResponse()
     {
-        PCREMatch responseVals;
+        RegexMatch responseVals;
         if (mMatchResponse.match(mHeader, responseVals))
         {
             cout << "'response' matches." << endl;
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    virtual void parse(const char* header, int length)
+    virtual void parse(const char* header, size_t length)
     {
         mHeader = std::string(header, length);
         if (!parseRequest())
@@ -105,7 +105,7 @@ public:
 
     virtual bool parseRequest()
     {
-        PCREMatch requestVals;
+        RegexMatch requestVals;
         if (mMatchRequest.match(mHeader, requestVals))
         {
             cout << "'request' matches." << endl;
@@ -162,10 +162,10 @@ public:
     }
 
 protected:
-    PCRE mMatchRequest;
-    PCRE mMatchPair;
-    PCRE mMatchEndOfHeader;
-    PCRE mMatchResponse;
+    Regex mMatchRequest;
+    Regex mMatchPair;
+    Regex mMatchEndOfHeader;
+    Regex mMatchResponse;
     map<string, string>mKeyValuePair;
 
     string mReturnVal;

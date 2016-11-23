@@ -18,6 +18,8 @@ from dumpenv import dumpenv
 from dumplib import dumplib
 from dumplibraw import dumplibraw
 from dumpconfig import dumpconfig
+from makewheel import makewheel
+from package import package
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -58,9 +60,19 @@ class CPPContext(Context.Context):
             dirs = string
 
         if not dirs:
-            super(CPPContext, self).recurse([x for x in next(os.walk(self.path.abspath()))[1] if exists(join(self.path.abspath(), x, 'wscript'))])
-        else:
-            super(CPPContext, self).recurse([x for x in dirs if exists(join(self.path.abspath(), x, 'wscript'))])
+            dirs = next(os.walk(self.path.abspath()))[1]
+
+        # Move 'drivers' to the front of the list. We want to ensure that
+        # drivers are configured before modules so dependencies are resolved
+        # correctly
+        if 'drivers' in dirs:
+            dirs.remove('drivers')
+            dirs.insert(0, 'drivers')
+
+        dirsWithWscripts = [x for x in dirs if exists(
+                join(self.path.abspath(), x, 'wscript'))]
+
+        super(CPPContext, self).recurse(dirsWithWscripts)
 
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', str(version))
@@ -69,13 +81,13 @@ class CPPContext(Context.Context):
         defines = []
         for line in env.DEFINES:
             split = line.split('=')
-            k = split[0]
-            v = len(split) == 2 and split[1] or '1'
-            if v is not None and v != ():
-                if k.startswith('HAVE_') or k.startswith('USE_'):
-                    defines.append(k)
+            key = split[0]
+            value = len(split) == 2 and split[1] or '1'
+            if value is not None and value != ():
+                if key.startswith('HAVE_') or key.startswith('USE_'):
+                    defines.append(key)
                 else:
-                    defines.append('%s=%s' % (k, v))
+                    defines.append('%s=%s' % (key, value))
         return defines
 
     def pprint(self, *strs, **kw):
@@ -245,6 +257,12 @@ class CPPContext(Context.Context):
                                  uselib=modArgs.get('test_uselib', uselib),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
+        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
+        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
+            for test in pythonTestNode.ant_glob('*.py'):
+                if str(test) not in listify(modArgs.get('test_filter', '')):
+                    self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -1458,10 +1476,10 @@ def python_package(tg):
 def untar(tsk):
     untarDriver(tsk.path, tsk.fname)
 
-def untarFile(path, fname):
+def untarFile(path, fname, mode='r'):
     import tarfile
     f = path.find_or_declare(fname)
-    tf = tarfile.open(f.abspath(), 'r')
+    tf = tarfile.open(f.abspath(), mode)
     p = path.abspath()
     for x in tf:
         tf.extract(x, p)
@@ -1825,3 +1843,14 @@ class CPPDumpConfigContext(dumpconfig, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpConfigContext, self).__init__(**kw)
+
+class CPPMakeWheelContext(makewheel, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMakeWheelContext, self).__init__(**kw)
+
+class CPPPackageContext(package, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPPackageContext, self).__init__(**kw)
+
