@@ -73,7 +73,7 @@ NITF_CXX_GUARD
 /*!
   \brief NITF Image segment image data I/O object handle
 
-  The \b nitf_ImageIO is the object used to manage one the image data I/O for
+  The \b nitf_ImageIO is the object used to manage the image data I/O for
   one image segment of one image. There are no user accessible fields
 
 */

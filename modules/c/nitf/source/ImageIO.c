@@ -529,7 +529,7 @@ _nitf_ImageIO;
 
   The I/O control structure manages the information needed to process one
   read or write request. It is a container object for the _nitf_ImageIOBlock
-  structures. Each block IO strcuture controls access to one band of one
+  structures. Each block IO structure controls access to one band of one
   block column. The array is indexed by block columns and band as follows:
 
      cntl->bklIO[column][band]
@@ -696,13 +696,13 @@ the number of blocks to be processed in the block is 1 the rowsUntil counter
 is set to 0. After the first row of blocks, the counter is set to one less
 than the number of rows in a block. This works because this is always right
 for all rows of blocks except the first and last and in the last it is OK to
-put in a to big value since there is a separate counter keeping track of the
+put in a too big value since there is a separate counter keeping track of the
 rows processed.
 
 The userEqBuffer flag indicates that the user buffer is the read/write
-buffer.  This is useful for some read/write modes where the address of the
+buffer. This is useful for some read/write modes where the address of the
 user buffer is not known at construct time. For example, sequential write
-were the construction of the control object is done in a separate call from
+where the construction of the control object is done in a separate call from
 the write row operations. In this case the user and buffer fields are
 initialized zero and updated at each call. The flag tells the writer whether
 the buffer field has to be modified. The flag would be set in the band
@@ -1113,7 +1113,7 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
   field in the nitf argument. The functions are selected baseded on the
   options set in the nitf_ImageIO structure. The relevant options are
   compression, blocking mode and pixel. This function must be called after
-  the functions that initialize the correspondin fields.
+  the functions that initialize the corresponding fields.
 
   \b Note:
 
@@ -1168,6 +1168,159 @@ NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(
 
 /*!< The array to free */
 NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs);
+
+/*!
+  \brief nitf_ImageIO_getPadBufferSizeCommon - Find baseline pad buffer size
+
+  nitf_ImageIO_getPadBufferSizeCommon finds the size of the pad buffer, without
+  taking into account blocking mode. This means the caller is responsible for
+  multiplying by the number of bands, if appropriate.
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return padBufferSize
+*/
+
+/*!< nitf_ImageIO I/O control object */
+NITFPRIV(nitf_Uint32)
+nitf_ImageIO_getPadBufferSizeCommon(_nitf_ImageIOControl *cntl);
+
+/*!
+  \brief nitf_ImageIO_setBlockOffsets - Initialize block
+
+  nitf_ImageIO_setBlockOffsets sets the values of the block's blockOffset,
+  taking into account IMODE.
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return None
+*/
+
+/*!< nitf_ImageIO I/O control object */
+/*!< BlockIO to initialize */
+/*!< Current band */
+/*!< Current block number */
+/*!< Remaining column transfer count, in bytes */
+/*!< Partial sample columns previous block */
+/*!< Partial sample columns this block */
+/*!< Current block column index */
+/*!< Current band index */
+/*!< Number of blockCols */
+/*!< First column of this block */
+/*!< Offset for user buffer */
+NITFPRIV(void) nitf_ImageIO_commonBlockInit(
+    _nitf_ImageIOControl * cntl,
+    _nitf_ImageIOBlock *blockIO,
+    nitf_Uint32 band,
+    nitf_Uint32 blockNumber,
+    nitf_Uint32 columnCountFR,
+    nitf_Uint32 residual,
+    nitf_Uint32 myResidual,
+    nitf_Uint32 blockColIdx,
+    nitf_Uint32 bandIdx,
+    nitf_Uint32 nBlockCols,
+    nitf_Uint32 startColumn,
+    nitf_Uint32 userOff);
+
+/*!
+  \brief nitf_ImageIO_updateMyResidual - update how much is left for next read
+
+  Once per block column, update the myResidual value to account for down-
+  sampling
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return new myResidual
+*/
+
+/*!< nitf_ImageIO I/O control object */
+/*!< BlockIO being updated */
+/*!< Current band index */
+/*!< Current blockCol index */
+/*!< Number of blockCols */
+/*!< Partial sample columns this block */
+NITFPRIV(nitf_Uint32) nitf_ImageIO_updateMyResidual(
+    _nitf_ImageIOControl *cntl,
+    _nitf_ImageIOBlock *blockIO,
+    nitf_Uint32 bandIdx,
+    nitf_Uint32 blockColIdx,
+    nitf_Uint32 nBlockCols,
+    nitf_Uint32 myResidual);
+
+/*!
+  \brief nitf_ImageIO_setPadColumnCount - Set padColumnCount for blockIOs
+
+  nitf_ImageIO_setPadColumnCount sets the padColumnCount for the last
+  _nitf_ImageIOBlock in each column when reading.
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return None
+*/
+
+/*!< nitf_ImageIO I/O control object */
+/*!< Number of columns per block */
+/*!< Flag indicating whether padColumnCount needs to account for bands */
+NITFPRIV(void) nitf_ImageIO_setPadColumnCount(_nitf_ImageIOControl* cntl,
+    nitf_Uint32 nBlockCols,
+    int scaleByBandCount);
+
+/*!
+  \brief nitf_ImageIO_setPadRowCount - Set padRowCount for blockIOs
+
+  nitf_ImageIO_setPadRowCount sets the padRowCount for every _nitf_ImageIOBlock
+  if appropriate.
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return None
+*/
+
+/*!< nitf_ImageIO I/O control object */
+NITFPRIV(void) nitf_ImageIO_setPadRowCount(_nitf_ImageIOControl* cntl);
+
+/*!
+  \brief nitf_ImageIO_setup_common - Set common values of ImageIOControl
+
+  nitf_ImageIO_setup_common begins initialization of _nitf_ImageIOControl with
+  values common to each blocking mode. It also allocates each _nitf_ImageIOBlock
+
+\b Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return Returns FALSE on error
+
+On error, FALSE is returned and the error object is set.
+
+Possible errors include:
+
+Memory allocation error
+*/
+
+/*!< nitf_ImageIO I/O control object */
+/*!< Number of columns for each block */
+/*!< Error object */
+NITFPRIV(int) nitf_ImageIO_setup_common(_nitf_ImageIOControl *cntl,
+        nitf_Uint32 nBlockCols,
+        nitf_Error *error);
+
 
 /*!
   \brief nitf_ImageIO_setup_SBR - Do read/write setup for the "S", "B", and "R"
@@ -1298,7 +1451,7 @@ and subwindow cannot be changed (a new object must be created).
 
 The subwindow should be validated by the caller
 
-The user pointers argument should have a pointer to an sub-window sized
+The user pointers argument should have a pointer to a sub-window sized
 buffer for each requested band. For writing, there is a creation call
 (i.e., nitf_ImageIO_writeSequential) followed by a write call. In this
 case the user data pointers are not required for the creation call and
@@ -1316,7 +1469,7 @@ directly by the user.
 
 \return The new _nitf_ImageIOControl or NULL on error
 
-On, error the error object is set.
+On error, the error object is set.
 
 Possible errors include:
 
@@ -1823,8 +1976,8 @@ NITFPRIV(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
   This function checks for missing and pad present blocks if the compression
   mode is a masked type (i.e. NM) but masks are not generated for S mode.
 
-  The reason for this is that unlike all other blocksing modes, in s mode,
-  the complete pixel (all bands) for a give image location is not in the
+  The reason for this is that unlike all other blocksing modes, in S mode,
+  the complete pixel (all bands) for a given image location is not in the
   same block.
 
   All bands are written at once, rows top to bottom. For all modes except S
@@ -2006,7 +2159,7 @@ void nitf_ImageIO_setDefaultParameters(_nitf_ImageIO * object);
   nitf_ImageIO_unpack_P_1   - Unpack 2 byte data\\n
 nitf_ImageIO_unpack_P_2   - Unpack 4 byte data\\n
 nitf_ImageIO_unpack_P_4   - Unpack 8 byte data\\n
-nitf_ImageIO_unpack_P_8   - Unpack 8 byte, complex data data\\n
+nitf_ImageIO_unpack_P_8   - Unpack 8 byte, complex data\\n
 nitf_ImageIO_unpack_P_16  - Unpack 16 byte data\\n
 
 There is no difference between anytypes when it comes to unpacking.
@@ -2057,7 +2210,7 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
   nitf_ImageIO_pack_P_1   - Pack 2 byte data\\n
 nitf_ImageIO_pack_P_2   - Pack 4 byte data\\n
 nitf_ImageIO_pack_P_4   - Pack 8 byte data\\n
-nitf_ImageIO_pack_P_8   - Pack 8 byte, complex data data\\n
+nitf_ImageIO_pack_P_8   - Pack 8 byte, complex data\\n
 nitf_ImageIO_pack_P_16  - Pack 16 byte data\\n
 
 There is no difference between anytypes when it comes to packing.
@@ -2243,11 +2396,11 @@ nitf_ImageIO_swapOnly_2   - Byte swap 2 byte data\\n
 nitf_ImageIO_swapOnly_4   - Byte swap 4 byte data\\n
 nitf_ImageIO_swapOnly_4c  - Byte swap 4 byte, complex data\\n
 nitf_ImageIO_swapOnly_8   - Byte swap 8 byte data\\n
-nitf_ImageIO_swapOnly_8c  - Byte swap 8 byte, complex data data
-nitf_ImageIO_swapOnly_16c - Byte swap 16 byte, complex data data
+nitf_ImageIO_swapOnly_8c  - Byte swap 8 byte, complex data
+nitf_ImageIO_swapOnly_16c - Byte swap 16 byte, complex data
 
 There is no difference between integer and real types when it comes to
-byte orderin, except for complex which is actually two consecutive reals.
+byte ordering, except for complex which is actually two consecutive reals.
 
 The shiftCount argument is not used but is required for the calling
 convention.
@@ -3037,7 +3190,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
      * 2. Among other things, setPixelDef() sets vtbl.unformat and vtbl.format
      *    which handle endian swapping.  However, we don't want to do endian
      *    swapping if we have a compressor/decompressor (because it will do
-     *    this for us), so we need to do #1 first to we know what compression
+     *    this for us), so we need to do #1 first so we know what compression
      *    we've got.
      * 3. For certain input types, decodeBlockingMode() will fake out the
      *    number of bands and then override vtbl.unformat (in order to
@@ -3055,7 +3208,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
 
     /*
      *      Check for pixel type B (binary), if there is no decompressor, set
-     *  The psuedo decompressor for B typ3 pixels
+     *  The psuedo decompressor for B type pixels
      */
 
     if ((nitf->pixel.type == NITF_IMAGE_IO_PIXEL_TYPE_B)
@@ -3092,7 +3245,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
     nitf_ImageIO_setUnpack(nitf);
     nitf_ImageIO_setIO(nitf);
 
-    /* Call if compressor open function if the compressor is not NULL */
+    /* Call the compressor open function if the compressor is not NULL */
     if(nitf->compressor != NULL)
     {
         nitf->compressionControl =
@@ -3104,7 +3257,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
         }
     }
 
-    /* Call if decompressor open function if the decompressor is not NULL */
+    /* Call the decompressor open function if the decompressor is not NULL */
     if(nitf->decompressor != NULL)
     {
         nitf->decompressionControl =
@@ -3177,8 +3330,7 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf)
         if (nitfp->decompressor == NULL)
             NITF_FREE(nitfp->blockControl.block);
         else
-            (*(nitfp->decompressor->freeBlock)) (nitfp->
-                                                 decompressionControl,
+            (*(nitfp->decompressor->freeBlock)) (nitfp->decompressionControl,
                                                  nitfp->blockControl.block,
                                                  &error);
     }
@@ -3208,8 +3360,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
     NITF_BOOL oneRead;          /* Complete request in one read flag */
     int oneBand;                /* One band flag */
     _nitf_ImageIOControl *cntl; /* IO control structure */
-    /* Read control structure */
-    _nitf_ImageIOReadControl *readCntl;
+    _nitf_ImageIOReadControl *readCntl; /* Read control structure */
     nitf_SubWindow tmpSub;      /* Temp sub-window structure for one band loop */
     nitf_Uint32 band;           /* Current band */
     int ret;                    /* Return value */
@@ -3227,8 +3378,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
     /* *possibly* revert the optimized modes */
     nitf_ImageIO_revertOptimizedModes(nitfI, subWindow->numBands);
 
-    /*  Create I/O control */
-
     /*
      *      Check the request, set-up blocking first since the sub-window
      *  check requires the block size
@@ -3245,7 +3394,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
         return 0;
 
     /*
-     *   Look for single read cases (down-sampling never does a single read ori
+     *   Look for single read cases (down-sampling never does a single read or
      * one band reads if the method is multi-band)
      */
 
@@ -3475,10 +3624,8 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                                            nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* Parent _nitf_ImageIO object */
-    /* Internal representation */
-    _nitf_ImageIOWriteControl *cntl;
-    /* Associated IO control object */
-    _nitf_ImageIOControl *ioCntl;
+    _nitf_ImageIOWriteControl *cntl; /* Internal representation */
+    _nitf_ImageIOControl *ioCntl; /* Associated IO control object */
     nitf_Uint32 idxIO;          /* Current block IO index (linear array) */
     nitf_Uint32 nBlockCols;       /* Number of block columns */
     nitf_Uint32 numBands;         /* Number of bands */
@@ -3543,10 +3690,15 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                 blockIO = &(ioCntl->blockIO[col][band]);
 
                 if (nitf->vtbl.pack != NULL)
+                {
                     (*(nitf->vtbl.pack)) (blockIO, error);
+                }
                 else
-                    memcpy(blockIO->rwBuffer.buffer,blockIO->user.buffer
-                          + blockIO->user.offset.mark,blockIO->readCount);
+                {
+                    memcpy(blockIO->rwBuffer.buffer,
+                           blockIO->user.buffer + blockIO->user.offset.mark,
+                           blockIO->readCount);
+                }
 
                 if (blockIO->doIO)
                 {
@@ -4044,11 +4196,21 @@ NITFPRIV(int) nitf_ImageIO_decodeBlockingMode(_nitf_ImageIO* nitf,
                 }
             }
         }
+        else if (!(nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION))
+        {
+            nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_B;
+            nitf->oneBand = 0;
+            nitf->vtbl.setup = nitf_ImageIO_setup_SBR;
+            nitf->vtbl.reader = NULL;
+            nitf->vtbl.writer = NULL;
+            nitf->vtbl.done = nitf_ImageIO_done_SBR;
+        }
+
         else
         {
             nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
             nitf->vtbl.setup = nitf_ImageIO_setup_P;
-            nitf->vtbl.done = nitf_ImageIO_setup_P;
+            nitf->vtbl.done = nitf_ImageIO_done_P;
         }
 
         nitf->oneBand = 0;
@@ -4554,7 +4716,6 @@ NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
     return blockIOs;
 }
 
-
 NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
 {
     /* Dereferenced argument */
@@ -4574,26 +4735,369 @@ NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
     return;
 }
 
+NITFPRIV(nitf_Uint32)
+nitf_ImageIO_getPadBufferSizeCommon(_nitf_ImageIOControl *cntl)
+{
+    _nitf_ImageIO* nitf;
+    nitf_Uint32 padBufferSize;
+
+    nitf = cntl->nitf;
+
+    padBufferSize = nitf->numColumnsPerBlock * nitf->pixel.bytes;
+    if (cntl->reading && cntl->numColumns < nitf->numColumnsPerBlock)
+    {
+        padBufferSize = (cntl->numColumns * cntl->columnSkip) *
+                nitf->pixel.bytes;
+    }
+    return padBufferSize;
+}
+
+NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
+    _nitf_ImageIOBlock *blockIO,  /* BlockIO to initialize */
+    nitf_Uint32 band,             /* Current band */
+    nitf_Uint32 blockNumber,      /* Current block number */
+    nitf_Uint32 columnCountFR,    /* Remaining column transfer count (bytes) */
+    nitf_Uint32 residual,         /* Partial sample columns previous block */
+    nitf_Uint32 myResidual,       /* Partial sample columns this block */
+    nitf_Uint32 blockColIdx,      /* Current block column index */
+    nitf_Uint32 bandIdx,          /* Current band index */
+    nitf_Uint32 nBlockCols,       /* Number of blockCols */
+    nitf_Uint32 startColumn,      /* First column of this block */
+    nitf_Uint32 userOff)          /* Offset for user buffer */
+{
+    _nitf_ImageIO *nitf;             /* Parent _nitf_ImageIO object */
+    nitf_Uint32 bytes;               /* Bytes per pixel */
+    nitf_Uint32 modeBlockBaseOffset; /* Block pixel offset based on mode*/
+    nitf_Uint32 maskOffset;          /* Mask offset based on mode */
+    nitf_Uint32 markOffset;          /* Mark offset based on mode */
+    nitf_Uint32 numColsFR;           /* Number of columns at full resolution */
+    nitf_Uint32 startRowThisBlock;   /* Row of this block to start at */
+
+    nitf = cntl->nitf;
+    bytes = nitf->pixel.bytes;
+    numColsFR = cntl->numColumns * (cntl->columnSkip);
+    startRowThisBlock = cntl->row % nitf->numRowsPerBlock;
+
+    blockIO->cntl = cntl;
+    blockIO->band = band;
+    blockIO->number = blockNumber;
+    blockIO->currentRow = cntl->row;
+    blockIO->padColumnCount = 0;
+    blockIO->padRowCount = 0;
+    blockIO->residual = residual;
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    {
+        if (cntl->downSampling)
+        {
+            blockIO->myResidual = nitf_ImageIO_updateMyResidual(cntl, blockIO,
+                    bandIdx, blockColIdx, nBlockCols, myResidual);
+        }
+    }
+    else
+    {
+        blockIO->myResidual = nitf_ImageIO_updateMyResidual(cntl, blockIO,
+                bandIdx, blockColIdx, nBlockCols, myResidual);
+    }
+
+    /*
+    * See description of _nitf_ImageIOBlock for an
+    * explaination of the -1
+    */
+    blockIO->rowsUntil = nitf->numRowsPerBlock - startRowThisBlock - 1;
+
+    modeBlockBaseOffset = 0;  /* Only worry about these in special cases */
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_B)
+    {
+        /* Each block is stored one band at a time.
+         *  Skip to (band)th band in the block
+         *  | 00000 00000 | 11111 11111 | 22222 22222 |
+         *  | 00000 00000 | 11111 11111 | 22222 22222 |
+         *  In diagram, all rows between vertical lines are stored contiguously
+         *  So the goal is to jump between entire sections
+         */
+        modeBlockBaseOffset =
+            band * nitf->numColumnsPerBlock * nitf->numRowsPerBlock;
+    }
+    else if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R)
+    {
+        /* Ex: 5 cols per block, interleaved
+         * 00000 11111 22222
+         * -----------------
+         * 00000 11111 22222
+         * For band 1, jump to pixel 1 * 5 = 5
+         */
+        modeBlockBaseOffset = band * nitf->numColumnsPerBlock;
+    }
+
+    blockIO->blockOffset.orig = (modeBlockBaseOffset + startColumn) * bytes;
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    {
+        /* Due to interleaving, all the units are (band) pixels wide,
+        so we need to scale up */
+        blockIO->blockOffset.orig *= nitf->numBands;
+    }
+
+    /* Advance to starting row*/
+    markOffset = startRowThisBlock * nitf->numColumnsPerBlock * bytes;
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R ||
+        nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    {
+        /* Each row is `numBands` pixels wide */
+        markOffset *= nitf->numBands;
+    }
+    blockIO->blockOffset.mark = blockIO->blockOffset.orig + markOffset;
+
+    maskOffset = 0;
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_S)
+    {
+        maskOffset = band * nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
+    }
+
+    blockIO->blockMask = nitf->blockMask + maskOffset;
+    blockIO->padMask = nitf->padMask + maskOffset;
+    blockIO->imageDataOffset = blockIO->blockMask[blockNumber];
+    /* FR == Full Resolution */
+    blockIO->pixelCountFR = nitf->numColumnsPerBlock - startColumn;
+
+    /* Last block may not span full block */
+    if (blockIO->pixelCountFR > columnCountFR)
+    {
+        blockIO->pixelCountFR = columnCountFR;
+    }
+
+    if (residual == 0)
+    {
+        blockIO->sampleStartColumn = 0;
+    }
+    else
+    {
+        blockIO->sampleStartColumn = cntl->columnSkip - residual;
+    }
+
+    /* DR == Downsampled Resolution */
+    blockIO->pixelCountDR =
+        (blockIO->pixelCountFR - blockIO->sampleStartColumn) /
+        (cntl->columnSkip);
+
+    /*
+    * If there is a pixel split between this and the
+    * previous block, add one to the pixel count size
+    * the split pixel is processed this block. A start
+    * column not zero indicates this
+    */
+    if (blockIO->sampleStartColumn > 0)
+    {
+        blockIO->pixelCountDR += 1;
+    }
+
+    if (cntl->downSampling)
+    {
+        /*
+        * If there is a partial sample window at the end
+        * of the line that extends beyond the physical block size, the DR count
+        * must be incremented to account for this last partial neighborhood.
+        */
+        if ((blockColIdx == (nBlockCols - 1)) &&
+            (cntl->column + numColsFR > nitf->numColumnsActual))
+        {
+            blockIO->pixelCountDR += 1;
+        }
+    }
+
+    // Set user buffer
+    if (cntl->userBase != NULL)
+    {
+        blockIO->user.buffer = cntl->userBase[bandIdx];
+    }
+    else
+    {
+        blockIO->user.buffer = NULL;
+    }
+    blockIO->user.offset.mark = userOff;
+    blockIO->user.offset.orig = userOff;
+}
+
+nitf_Uint32 nitf_ImageIO_updateMyResidual(
+        _nitf_ImageIOControl * cntl, /* nitf_ImageIO control object */
+        _nitf_ImageIOBlock *blockIO, /* Current BlockIO */
+        nitf_Uint32 bandIdx,         /* Current band index */
+        nitf_Uint32 blockColIdx,     /* Current blockCol index */
+        nitf_Uint32 nBlockCols,      /* Number of blockCols */
+        nitf_Uint32 myResidual) /* We return this if it doesn't need updating */
+{
+    _nitf_ImageIO *nitf;   /* Parent _nitf_ImageIO object */
+    nitf_Uint32 numColsFR; /* Number of columns at full resolution */
+
+    nitf = cntl->nitf;
+    numColsFR = cntl->numColumns * (cntl->columnSkip);
+
+   /*
+    * Only update residual once per block column.
+    * The last column block is a special
+    * case because the normal myResidual calculation is based
+    * on read count which is not the right value in this
+    * case. myResidual only needs to be updated for the first
+    * band in a block column since the value will be the same
+    * for each band but this ad
+    */
+    if (bandIdx == 0)
+    {
+        nitf = cntl->nitf;
+        if (blockColIdx != (nBlockCols - 1))
+        {
+            myResidual = (blockIO->pixelCountFR - blockIO->sampleStartColumn) %
+                    cntl->columnSkip;
+        }
+        else
+        {
+            myResidual = cntl->column + numColsFR - nitf->numColumns;
+
+            if (myResidual < 0)
+            {
+                myResidual = 0;
+            }
+        }
+    }
+    return myResidual;
+}
+
+NITFPRIV(void) nitf_ImageIO_setPadColumnCount(_nitf_ImageIOControl* cntl,
+    nitf_Uint32 nBlockCols,
+    int scaleByBandCount)
+{
+    _nitf_ImageIO* nitf;           /* nitf_ImageIO object */
+    _nitf_ImageIOBlock *blockIO;   /* Current block to set */
+    nitf_Uint32 bandIdx;           /* Current band index */
+    nitf_Uint32 bandCount;         /* Total number of bands */
+
+    nitf = cntl->nitf;
+    bandCount = cntl->numBandSubset;
+
+    /*
+    * Set-up last block column for column pad if writing
+    *
+    * Writing of pad pixels is required if the actual number of columns is
+    * greater than the NITF header number of columns field and the sub-image
+    * being written includes the last pixel in the line.
+    *
+    * If all of this is TRUE, then set the padColumnCount
+    * field in the blocks at the end of the rows. There will be one per band.
+    *
+    * The actual row length will be bigger if the block size is not an integral
+    * multiple of the row length.
+    *
+    */
+    if (!(cntl->reading)
+        && (nitf->numColumnsActual > nitf->numColumns)
+        && (cntl->column + cntl->numColumns >= nitf->numColumns))
+    {
+        /*
+        * The relevent blockIO's are at the end of the row
+        * (the last block column)
+        */
+        for (bandIdx = 0; bandIdx < bandCount; bandIdx++)
+        {
+            blockIO = &(cntl->blockIO[nBlockCols - 1][bandIdx]);
+            blockIO->padColumnCount =
+                    (nitf->numColumnsActual - nitf->numColumns) *
+                    nitf->pixel.bytes;
+            if (scaleByBandCount)
+            {
+                blockIO->padColumnCount *= nitf->numBands;
+            }
+        }
+    }
+}
+
+NITFPRIV(void) nitf_ImageIO_setPadRowCount(_nitf_ImageIOControl* cntl)
+{
+    _nitf_ImageIO *nitf;          /* nitf_ImageIO object */
+    _nitf_ImageIOBlock *blockIO;  /* blockIO being set */
+    nitf_Uint32 blockIdx;         /* Current block index */
+
+    nitf = cntl->nitf;
+
+    /*
+    * Set-up block columns for row pad if writing
+    *
+    * Writing of pad pixels is also required if the actual number of rows is
+    * greater than the NITF header number of rows field and the sub-image
+    * being written includes the last row in the image.
+    *
+    * If all of this is TRUE, then set the padRowCount field in
+    * all of the blocks.
+    * Since the block structures represent columns of blocks,
+    * all of the columns will include the end of the image if any do.
+    */
+    if (!(cntl->reading)
+        && (nitf->numRowsActual > nitf->numRows)
+        && (cntl->row + cntl->numRows >= nitf->numRows))
+    {
+        blockIO = &(cntl->blockIO[0][0]);
+        for (blockIdx = 0; blockIdx < cntl->nBlockIO; blockIdx++)
+        {
+            blockIO->padRowCount = nitf->numRowsActual - nitf->numRows;
+            if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R)
+            {
+                blockIO->padRowCount *= nitf->numBands;
+            }
+            blockIO += 1;
+        }
+    }
+}
+
+NITFPRIV(int)
+nitf_ImageIO_setup_common(_nitf_ImageIOControl *cntl, nitf_Uint32 nBlockCols,
+        nitf_Error *error)
+{
+    _nitf_ImageIO *nitf;
+    _nitf_ImageIOBlock **blockIOs;  /* The block I/O control structures */
+    nitf_Uint32 bytes;              /* Number of bytes per pixel */
+    nitf_Uint32 bandCount;          /* Number of bands */
+
+    nitf = cntl->nitf;
+    bytes = nitf->pixel.bytes;
+
+    cntl->numberInc = nitf->nBlocksPerRow;
+    cntl->userInc = cntl->numColumns * bytes;
+
+    cntl->blockOffsetInc = nitf->numColumnsPerBlock * bytes;
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R ||
+        nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    {
+        /* Account for row interleaving */
+        cntl->blockOffsetInc *= nitf->numBands;
+    }
+
+    /* Create the block I/O structures */
+    bandCount = cntl->numBandSubset;
+    blockIOs = nitf_ImageIO_allocBlockArray(nBlockCols, bandCount, error);
+    if (blockIOs == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    /* Set-up BlockIO's for each band */
+    cntl->nBlockIO = nBlockCols * bandCount;
+    cntl->blockIO = blockIOs;
+
+    return NITF_SUCCESS;
+}
 
 int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* Parent _nitf_ImageIO object */
     nitf_Uint32 startBlockRow;  /* Starting blockRow */
-    nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
     nitf_Uint32 startBlock;     /* Block number of start block */
-    nitf_Uint32 startRowInBlock0; /* Start row in the first block (pixels) */
     nitf_Uint32 startColumnInBlock0;/* Start column in the first block (pixels) */
     nitf_Uint32 residual;       /* Partial sample columns previous block */
-    nitf_Uint32 myResidual;     /* Partial sample columns current block */
+    nitf_Uint32 myResidual;     /* Partial sample columsn current block */
     nitf_Uint32 bytes;          /* Bytes per pixel */
-    _nitf_ImageIOBlock **blockIOs;/* The block I/O control structures */
     _nitf_ImageIOBlock *blockIO;  /* The current block I/O control structure */
     nitf_Uint32 columnCountFR;  /* Remaining column transfer count (bytes) */
-    nitf_Uint32 numColsFR;      /* Total number of columns requested FR */
-    nitf_Uint32 startRowThisBlock;      /* Start row for current block (pixels) */
     /* Start column for current block (pixels) */
     nitf_Uint32 startColumnThisBlock;
     nitf_Uint32 blockNumber;    /* Current block number */
@@ -4602,15 +5106,12 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint32 bandIdx;        /* Current band index */
     nitf_Uint32 blockIdx;       /* Current block index */
     nitf_Uint32 band;           /* Current band */
-    nitf_Uint32 modeBlockBaseOffset; /* Block pixel offset based on mode */
-    nitf_Uint32 modeMaskOffset; /* Mask offset based on mode */
     nitf_Uint8 *writeBuffer;    /* Write buffer */
     nitf_Uint8 *readBuffer;     /* Read buffer */
     nitf_Uint8 blockColIdx;     /* Current block column index */
     nitf_Uint8 *cacheBuffer;    /* Current cach buffer */
     NITF_BOOL freeCacheBuffer;  /* Sets block control free flag */
-    /* Resets freeCacheBuffer flag */
-    NITF_BOOL freeCacheBufferReset;
+    NITF_BOOL freeCacheBufferReset; /* Resets freeCacheBuffer flag */
 
     nitf = cntl->nitf;
 
@@ -4637,12 +5138,9 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
      */
 
     startBlockRow = cntl->row / nitf->numRowsPerBlock;
-    endBlockRow = (cntl->numRows * (cntl->rowSkip) + cntl->row - 1) /
-                nitf->numRowsPerBlock;
-    if (endBlockRow >= nitf->nBlocksPerRow)
-        endBlockRow -= 1;
-
     startBlockCol = cntl->column / nitf->numColumnsPerBlock;
+    startColumnInBlock0 = cntl->column % nitf->numColumnsPerBlock;
+
     endBlockCol = (cntl->numColumns * (cntl->columnSkip) + cntl->column - 1) /
                 nitf->numColumnsPerBlock;
     if (endBlockCol >= nitf->nBlocksPerRow)
@@ -4651,17 +5149,23 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nBlockCols = endBlockCol - startBlockCol + 1;
     startBlock = startBlockRow * nitf->nBlocksPerRow + startBlockCol;
 
-    startRowInBlock0 = cntl->row - startBlockRow * nitf->numRowsPerBlock;
-    startColumnInBlock0 = cntl->column - startBlockCol * nitf->numColumnsPerBlock;
+    bytes = nitf->pixel.bytes;
+    bandCnt = cntl->numBandSubset;
+    columnCountFR = cntl->numColumns * (cntl->columnSkip);
+    startColumnThisBlock = startColumnInBlock0;
+    residual = 0;  /* Residual from block -1 is 0 */
+    myResidual = 0;
+    blockNumber = startBlock;
+
+    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NULL)
+    {
+        return NITF_FAILURE;
+    }
 
     /*
-       Initialize increment values. For writing, the user buffer is not
-       used as the write buffer, so the buffer is not incremented
-     */
-
-    bytes = nitf->pixel.bytes;
-    cntl->numberInc = nitf->nBlocksPerRow;
-    cntl->userInc = cntl->numColumns * bytes;
+    Initialize increment values. For writing, the user buffer is not
+    used as the write buffer, so the buffer is not incremented
+    */
     if (cntl->reading)
     {
         if (cntl->downSampling)
@@ -4674,31 +5178,10 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
         cntl->bufferInc = 0;
 
-    /* Create the block I/O structures */
-
-    bandCnt = cntl->numBandSubset;
-
-    blockIOs = nitf_ImageIO_allocBlockArray(nBlockCols, bandCnt, error);
-    if (blockIOs == NULL)
-        return NITF_FAILURE;
-
-    /* Set-up BlockIO's for each band */
-
-    cntl->nBlockIO = nBlockCols * bandCnt;
-    cntl->blockIO = blockIOs;
-    numColsFR = cntl->numColumns * (cntl->columnSkip);
-    columnCountFR = numColsFR;
-    startRowThisBlock = startRowInBlock0;
-    startColumnThisBlock = startColumnInBlock0;
-    residual = 0;               /* Residual from block -1 is 0 */
-    myResidual = 0;             /* Avoids an uninitialized variable warning */
-    blockNumber = startBlock;
-
     /*
      * Allocate write buffer if writing or allocate read buffer if reading
      * with down-sample
      */
-
     writeBuffer = NULL;         /* Avoids uninitialized variable warning */
     readBuffer = NULL;          /* Avoids uninitialized variable warning */
     if (cntl->reading)
@@ -4743,7 +5226,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
         }
     }
 
-    blockIO = &(blockIOs[0][0]);    /* Eliminates spurious warning */
+    blockIO = &(cntl->blockIO[0][0]);    /* Eliminates spurious warning */
     userOff = 0;
     blockColIdx = 0;
     for (blockIdx = 0; blockIdx < nBlockCols; blockIdx++)
@@ -4756,14 +5239,12 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
          * not to double free a buffer. This is the reason for the flag
          * variables
          */
-
         freeCacheBuffer = 1;       /* Always allocate first band */
         freeCacheBufferReset = 1;  /* Do allocate after first band */
         if ((nitf->blockingMode != NITF_IMAGE_IO_BLOCKING_MODE_S)
             && nitf->cachedWriteFlag)
         {
-            cacheBuffer =
-                (nitf_Uint8 *) NITF_MALLOC(nitf->blockSize);
+            cacheBuffer = (nitf_Uint8 *) NITF_MALLOC(nitf->blockSize);
             if (cacheBuffer == NULL)
             {
                 nitf_Error_initf(error, NITF_CTXT,
@@ -4793,144 +5274,21 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                     return NITF_FAILURE;
                 }
             }
+            blockIO = &(cntl->blockIO[blockIdx][bandIdx]);
+            nitf_ImageIO_commonBlockInit(cntl, blockIO, band, blockNumber,
+                columnCountFR, residual, myResidual, blockColIdx, bandIdx,
+                nBlockCols, startColumnThisBlock, userOff);
 
-            blockIO = &(blockIOs[blockIdx][bandIdx]);
-            if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_S)
-            {
-                cntl->blockOffsetInc = nitf->numColumnsPerBlock * bytes;
-                modeBlockBaseOffset = 0;
-                modeMaskOffset =
-                    band * nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
-                blockIO->blockOffset.orig =
-                    modeBlockBaseOffset + startColumnThisBlock * bytes;
-
-                blockIO->blockOffset.mark =
-                    blockIO->blockOffset.orig +
-                    ((nitf_Uint64) startRowThisBlock) *
-                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
-                    ((nitf_Uint64)  bytes);
-            }
-            else if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_B)
-            {
-                cntl->blockOffsetInc = nitf->numColumnsPerBlock * bytes;
-                modeBlockBaseOffset =
-                    band * nitf->numColumnsPerBlock * nitf->numRowsPerBlock *
-                    bytes;
-                modeMaskOffset = 0;
-                blockIO->blockOffset.orig =
-                    modeBlockBaseOffset + startColumnThisBlock * bytes;
-
-                blockIO->blockOffset.mark =
-                    blockIO->blockOffset.orig +
-                    ((nitf_Uint64) startRowThisBlock) *
-                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
-                    ((nitf_Uint64)  bytes);
-            }
-            else /* IMODE == "R" */
-            {
-                cntl->blockOffsetInc =
-                    nitf->numColumnsPerBlock * (nitf->numBands) * bytes;
-                modeBlockBaseOffset = band * nitf->numColumnsPerBlock * bytes;
-                modeMaskOffset = 0;
-                blockIO->blockOffset.orig =
-                    modeBlockBaseOffset + startColumnThisBlock * bytes;
-
-                blockIO->blockOffset.mark =
-                    blockIO->blockOffset.orig +
-                    ((nitf_Uint64) startRowThisBlock) *
-                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
-                    ((nitf_Uint64) nitf->numBands) *
-                    ((nitf_Uint64)  bytes);
-            }
-
-            blockIO->cntl = cntl;
-            blockIO->band = band;
             blockIO->doIO = 1;
-            blockIO->number = blockNumber;
-            /*
-             * See description of _nitf_ImageIOControl for an
-             * explaination of the - 1
-             */
-            blockIO->rowsUntil = nitf->numRowsPerBlock - startRowInBlock0 - 1;
-            blockIO->blockMask = nitf->blockMask + modeMaskOffset;
-            blockIO->padMask = nitf->padMask + modeMaskOffset;
-            blockIO->imageDataOffset = blockIO->blockMask[blockNumber];
-            blockIO->pixelCountFR =
-                (nitf->numColumnsPerBlock - startColumnThisBlock);
-            /* Last block may not span full block */
-            if (blockIO->pixelCountFR > columnCountFR)
-                blockIO->pixelCountFR = columnCountFR;
             blockIO->readCount = blockIO->pixelCountFR * bytes;
-            blockIO->padColumnCount = 0;
-            blockIO->padRowCount = 0;
-            blockIO->currentRow = cntl->row;
+            blockIO->formatCount = blockIO->pixelCountDR * (cntl->columnSkip);
 
-            /* Calculate the block column's residual and myResidual */
-
-            if (residual == 0)
-                blockIO->sampleStartColumn = 0;
-            else
-                blockIO->sampleStartColumn = cntl->columnSkip - residual;
-
-            blockIO->pixelCountDR =
-                (blockIO->pixelCountFR -
-                 blockIO->sampleStartColumn) / (cntl->columnSkip);
-            /*
-             * If there is a pixel split between this and the
-             * previous block, add one to the pixel count size
-             * the split pixel is precessed this block. A start
-             * column not zero indicates this
-             */
-            if (blockIO->sampleStartColumn > 0)
-                blockIO->pixelCountDR += 1;
-
-            /*
-             * Only update residual once per block column and only
-             * if down-sampling.  The last column block is a special
-             * case because the normal myResidual calculation is based
-             * on read count which is not the right value in this
-             * case. myResidual only needs to be updated for the first
-             * band in a block column since the value will be the same
-             * for each band but this ad
-             */
-
-            blockIO->residual = residual;
-            if (bandIdx == 0)
-            {
-                if (blockColIdx != (nBlockCols - 1))
-                {
-                    myResidual =
-                        (blockIO->pixelCountFR -
-                         blockIO->sampleStartColumn) % cntl->columnSkip;
-                }
-                else
-                {
-                    if (cntl->column + numColsFR > nitf->numColumns)
-                        myResidual =
-                            cntl->column + numColsFR - nitf->numColumns;
-                    else
-                        myResidual = 0;
-                }
-            }
-
-            /*
-             * If there is a partial sample window at the end of the
-             * line that extends
-             * beyond the physical block size, the DR count must be
-             * incremented to account for this last partial neighborhood.
-             */
-            if (cntl->downSampling && (blockColIdx == (nBlockCols - 1)) &&
-                (cntl->column + numColsFR > nitf->numColumnsActual))
-                blockIO->pixelCountDR += 1;
-
-            if ((bandIdx >= (bandCnt - 1)) && cntl->downSampling)
+            if (cntl->downSampling && bandIdx >= (bandCnt - 1))
             {
                 blockColIdx += 1;
-                residual = myResidual;
+                residual = blockIO->myResidual;
             }
-            blockIO->myResidual = myResidual;
-
-            blockIO->formatCount = blockIO->pixelCountDR * (cntl->columnSkip);
+            myResidual = blockIO->myResidual;
 
             /*
              * The user and buffer fields will be the same for reading
@@ -4939,14 +5297,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * modifiy the user supplied data. This is not required for
              * reading. The write buffer only needs enough save for one write.
              */
-
-            if (cntl->userBase != NULL)
-                blockIO->user.buffer = cntl->userBase[bandIdx];
-            else
-                blockIO->user.buffer = NULL;
-            blockIO->user.offset.mark = userOff;
-            blockIO->user.offset.orig = userOff;
-
             if (cntl->reading)
             {
                 if (cntl->downSampling)
@@ -4998,7 +5348,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
         }
 
         userOff += blockIO->pixelCountDR * bytes;
-
         startColumnThisBlock = 0;
 
         /*
@@ -5010,79 +5359,11 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     }
 
     /* Set pad buffer size */
-
     cntl->padBuffer = NULL; /* Created the first time it is used */
-    if (cntl->reading)
-    {
-        if (cntl->numColumns < nitf->numColumnsPerBlock)
-            cntl->padBufferSize =
-                cntl->numColumns * nitf->pixel.bytes * cntl->columnSkip;
-        else
-            cntl->padBufferSize = nitf->numColumnsPerBlock * nitf->pixel.bytes;
-    }
-    else
-        cntl->padBufferSize = nitf->numColumnsPerBlock * nitf->pixel.bytes;
+    cntl->padBufferSize = nitf_ImageIO_getPadBufferSizeCommon(cntl);
 
-    /*
-     * Set-up last block column for column pad if writing
-     *
-     * Writing of pad pixels is required if the actual number of columns is
-     * greater than the NITF header number of columns field and the sub-image
-     * being written includes the last pixel in the line.
-     *
-     * If all of this is TRUE, then set the padColumnCount field in the
-     * blocks that are at the end of the rows. There will be one per band.
-     *
-     * The actual row length will be bigger if the block size is not an integral
-     * multiple of the row length.
-     *
-     */
-
-    if (!(cntl->reading)
-        && (nitf->numColumnsActual > nitf->numColumns)
-        && (cntl->column + cntl->numColumns >= nitf->numColumns))
-    {
-        /* The relevent blockIO's are at the end of the row
-         * (the last block column)
-         */
-        for (bandIdx = 0; bandIdx < bandCnt; bandIdx++)
-        {
-            blockIO = &(cntl->blockIO[nBlockCols - 1][bandIdx]);
-            blockIO->padColumnCount =
-                (nitf->numColumnsActual - nitf->numColumns) * bytes;
-            blockIO += nBlockCols;
-        }
-    }
-
-    /*
-     * Set-up block columns for row pad if writing
-     *
-     * Writing of pad pixels is also required if the actual number of rows is
-     * greater than the NITF header number of rows field and the sub-image
-     * being written includes the last row in the image.
-     *
-     * If all of this is TRUE, then set the padRowCount field
-     * in all of the blocks.
-     * Since the block structures represent columns of blocks,
-     * all of the columns
-     * will include the end of the image if any do.
-     */
-    if (!(cntl->reading)
-        && (nitf->numRowsActual > nitf->numRows)
-        && (cntl->row + cntl->numRows >= nitf->numRows))
-    {
-        blockIO = &(cntl->blockIO[0][0]);
-        for (blockIdx = 0; blockIdx < cntl->nBlockIO; blockIdx++)
-        {
-            if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R)
-                blockIO->padRowCount =
-                    (nitf->numRowsActual - nitf->numRows) * (nitf->numBands);
-            else
-                blockIO->padRowCount = nitf->numRowsActual - nitf->numRows;
-
-            blockIO += 1;
-        }
-    }
+    nitf_ImageIO_setPadColumnCount(cntl, nBlockCols, 0);
+    nitf_ImageIO_setPadRowCount(cntl);
 
     cntl->ioCount = (size_t)nBlockCols * nitf->numBands * cntl->numRows;
     return NITF_SUCCESS;
@@ -5101,21 +5382,16 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
     _nitf_ImageIO *nitf = NULL; /* Parent _nitf_ImageIO object */
     nitf_Uint32 startBlockRow;  /* Starting blockRow */
-    nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
     nitf_Uint32 startBlock;     /* Block number of start block */
-    nitf_Uint32 startRowInBlock0; /* Start row in the first block (pixels) */
     nitf_Uint32 startColumnInBlock0; /* Start column in the first block (pixels) */
     nitf_Uint32 residual;       /* Partial sample columns previous block */
-    nitf_Uint32 myResidual;     /* Partial sample columns current block */
+    nitf_Uint32 myResidual;
     nitf_Uint32 bytes;          /* Bytes per pixel */
-    _nitf_ImageIOBlock **blockIOs = NULL;/* The block I/O control structures */
     _nitf_ImageIOBlock *blockIO = NULL; /* The current block I/O control structure */
     nitf_Uint32 columnCountFR;  /* Remaining column transfer count (bytes) */
-    nitf_Uint32 numColsFR;      /* Total number of columns requested FR */
-    nitf_Uint32 startRowThisBlock;      /* Start row for current block (pixels) */
     /* Start column for current block (pixels) */
     nitf_Uint32 startColumnThisBlock;
     nitf_Uint32 blockNumber;    /* Current block number */
@@ -5129,8 +5405,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint8 blockColIdx;     /* Current block column index */
     nitf_Uint8 *cacheBuffer = NULL; /* Current cach buffer */
     NITF_BOOL freeCacheBuffer;  /* Sets block control free flag */
-    /* Resets freeCacheBuffer flag */
-    NITF_BOOL freeCacheBufferReset;
+    NITF_BOOL freeCacheBufferReset; /* Resets freeCacheBuffer flag */
 
     nitf = cntl->nitf;
 
@@ -5138,8 +5413,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
      * BlockRows and BlockCols variables manipulate block row
      * and column indexes.
      * They have units of blocks and are used to calculate the
-     * start block number
-     * and other block mask indexes and increments.
+     * start block number and other block mask indexes and increments.
      */
 
     /*
@@ -5147,12 +5421,9 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
      * for more information
      */
     startBlockRow = cntl->row / nitf->numRowsPerBlock;
-    endBlockRow = (cntl->numRows * (cntl->rowSkip) + cntl->row - 1) /
-        nitf->numRowsPerBlock;
-    if (endBlockRow >= nitf->nBlocksPerRow)
-        endBlockRow -= 1;
-
     startBlockCol = cntl->column / nitf->numColumnsPerBlock;
+    startColumnInBlock0 = cntl->column % nitf->numColumnsPerBlock;
+
     endBlockCol = (cntl->numColumns * (cntl->columnSkip) + cntl->column - 1) /
         nitf->numColumnsPerBlock;
     if (endBlockCol >= nitf->nBlocksPerRow)
@@ -5161,18 +5432,23 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nBlockCols = endBlockCol - startBlockCol + 1;
     startBlock = startBlockRow * nitf->nBlocksPerRow + startBlockCol;
 
-    startRowInBlock0 = cntl->row - startBlockRow * nitf->numRowsPerBlock;
-    startColumnInBlock0 = cntl->column - startBlockCol * nitf->numColumnsPerBlock;
+    bytes = nitf->pixel.bytes;
+    bandCnt = cntl->numBandSubset;
+    columnCountFR = cntl->numColumns * (cntl->columnSkip);
+    startColumnThisBlock = startColumnInBlock0;
+    residual = 0;               /* Residual from block -1 is 0 */
+    myResidual = 0;
+    blockNumber = startBlock;
+
+    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NULL)
+    {
+        return NITF_FAILURE;
+    }
 
     /*
      * Initialize increment values. For writing, the user buffer is not
      * used as the write buffer, so the buffer is not incremented
      */
-    bytes = nitf->pixel.bytes;
-    cntl->numberInc = nitf->nBlocksPerRow;
-    cntl->blockOffsetInc = (nitf->numColumnsPerBlock) * (nitf->numBands) * bytes;
-    cntl->userInc = cntl->numColumns * bytes;
-    cntl->bufferInc = 0;
     if (cntl->reading)
     {
         if (cntl->downSampling)
@@ -5185,33 +5461,13 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
         cntl->unpackedInc = 0;
 
-    /* Create the block I/O structures */
-
-    bandCnt = cntl->numBandSubset;
-
-    blockIOs = nitf_ImageIO_allocBlockArray(nBlockCols, bandCnt, error);
-    if (blockIOs == NULL)
-        return NITF_FAILURE;
-
-    /* Set-up BlockIO's for each band */
-    cntl->nBlockIO = nBlockCols * bandCnt;
-    cntl->blockIO = blockIOs;
-    columnCountFR = cntl->numColumns * (cntl->columnSkip);
-    numColsFR = cntl->numColumns * (cntl->columnSkip);
-    startRowThisBlock = startRowInBlock0;
-    startColumnThisBlock = startColumnInBlock0;
-    residual = 0;               /* Residual from block -1 is 0 */
-    myResidual = 0;             /* Avoids an uninitialized variable warning */
-    blockNumber = startBlock;
-
     /* Allocate I/O and unpacked buffer */
     if (cntl->downSampling)
     {
-        unpackedBuffer = (nitf_Uint8 *) NITF_MALLOC((nitf->numColumnsPerBlock +
-                                                     cntl->columnSkip) *
-                                                    (nitf->numBands) *
-                                                    (cntl->rowSkip) *
-                                                    bytes);
+        unpackedBuffer = (nitf_Uint8 *) NITF_MALLOC((cntl->rowSkip) *
+                                                    (nitf->numColumnsPerBlock +
+                                                    cntl->columnSkip) *
+                                                    bytes * (nitf->numBands));
         if (unpackedBuffer == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5224,23 +5480,20 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
         unpackedBuffer = NULL;
 
 
-    if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION)
+    ioBuffer = (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock *
+                                          nitf->numBands * bytes);
+    if (ioBuffer == NULL)
     {
-        ioBuffer = (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock *
-                                              nitf->numBands * bytes);
-        if (ioBuffer == NULL)
-        {
-            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                             "Error allocating I/O buffer: %s",
-                             NITF_STRERROR(NITF_ERRNO));
-            if (unpackedBuffer != NULL)
-                NITF_FREE(unpackedBuffer);
-            return NITF_FAILURE;
-        }
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
+                         "Error allocating I/O buffer: %s",
+                         NITF_STRERROR(NITF_ERRNO));
+        if (unpackedBuffer != NULL)
+            NITF_FREE(unpackedBuffer);
+        return NITF_FAILURE;
     }
 
     /*    Initialize blocks */
-    blockIO = &(blockIOs[0][0]);    /* Eliminates spurious warning */
+    blockIO = &(cntl->blockIO[0][0]);    /* Eliminates spurious warning */
     userOff = 0;
     blockColIdx = 0;
     for (blockIdx = 0; blockIdx < nBlockCols; blockIdx++)
@@ -5263,10 +5516,10 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
         for (bandIdx = 0; bandIdx < bandCnt; bandIdx++)
         {
             band = cntl->bandSubset[bandIdx];
-
-            blockIO = &(blockIOs[blockIdx][bandIdx]);
-            blockIO->cntl = cntl;
-            blockIO->band = band;
+            blockIO = &(cntl->blockIO[blockIdx][bandIdx]);
+            nitf_ImageIO_commonBlockInit(cntl, blockIO, band, blockNumber,
+                columnCountFR, residual, myResidual, blockColIdx, bandIdx,
+                nBlockCols, startColumnThisBlock, userOff);
 
             /*
              * When reading, only the first blockIO in
@@ -5276,118 +5529,28 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * When writing, only the last blockIO in each
              * column does the actual write,
              * the rest just pack
+             *
+             * When compressing, we don't handle interleaving,
+             * so read/write every time.
              */
-            if (cntl->reading)
-                blockIO->doIO = (bandIdx == 0) ? 1 : 0;
-            else
-                blockIO->doIO = (bandIdx == (nitf->numBands - 1)) ? 1 : 0;
-            blockIO->number = blockNumber;
-            /*
-             * See description of _nitf_ImageIOControl for an
-             * explaination of the - 1
-             */
-            blockIO->rowsUntil = nitf->numRowsPerBlock - startRowInBlock0 - 1;
-            blockIO->blockMask = nitf->blockMask;
-            blockIO->padMask = nitf->padMask;
-            blockIO->imageDataOffset = blockIO->blockMask[blockNumber];
-            blockIO->blockOffset.orig =
-                startColumnThisBlock * (nitf->numBands) * bytes;
-
-            blockIO->blockOffset.mark =
-                blockIO->blockOffset.orig +
-                ((nitf_Uint64) startRowThisBlock) *
-                ((nitf_Uint64) nitf->numColumnsPerBlock) *
-                ((nitf_Uint64) nitf->numBands) *
-                ((nitf_Uint64)  bytes);
-
-            blockIO->pixelCountFR =
-                (nitf->numColumnsPerBlock - startColumnThisBlock);
-
-            /* Last block may not span full block */
-            if (blockIO->pixelCountFR > columnCountFR)
-                blockIO->pixelCountFR = columnCountFR;
+            blockIO->doIO = (cntl->reading) ? (bandIdx == 0) :
+                            (bandIdx == nitf->numBands - 1);
 
             blockIO->readCount =
                 blockIO->pixelCountFR * (nitf->numBands) * bytes;
-            blockIO->padColumnCount = 0;
-            blockIO->padRowCount = 0;
-            blockIO->currentRow = cntl->row;
-
-            /* Calculate the block column's residual and myResidual */
-            if (residual == 0)
-                blockIO->sampleStartColumn = 0;
-            else
-                blockIO->sampleStartColumn = cntl->columnSkip - residual;
-
-            blockIO->pixelCountDR =
-                (blockIO->pixelCountFR -
-                 blockIO->sampleStartColumn) / (cntl->columnSkip);
-            /*
-             * If there is a pixel split between this and the
-             * previous block, add one
-             * to the pixel count size the split pixel is
-             * precessed this block. A start
-             * column not zero indicates this
-             */
-
-            if (blockIO->sampleStartColumn > 0)
-                blockIO->pixelCountDR += 1;
-
-            /*
-             * Only update residual once per block column and
-             * only if down-sampling. The last column block is a
-             * special case because the normal myResidual
-             * calculation is based on read count which is not the
-             * right value in this case. myResidual only needs to be
-             * updated for the first band in a block
-             * column since the value will be the same for
-             * each band but this ad
-             */
-
-            blockIO->residual = residual;
-            if (cntl->downSampling)
-            {
-                if (bandIdx == 0)
-                {
-                    if (blockColIdx != (nBlockCols - 1))
-                    {
-                        myResidual =
-                            (blockIO->pixelCountFR -
-                             blockIO->sampleStartColumn) % cntl->columnSkip;
-                    }
-                    else
-                    {
-                        if (cntl->column + numColsFR > nitf->numColumns)
-                            myResidual =
-                                cntl->column + numColsFR - nitf->numColumns;
-                        else
-                            myResidual = 0;
-                    }
-                }
-                /*
-                 * If there is a partial sample window at the end
-                 * of the line that extends
-                 * beyond the physical block size, the DR count
-                 * must be incremented to
-                 * account for this last partial neighborhood.
-                 */
-                if ((blockColIdx == (nBlockCols - 1)) &&
-                    (cntl->column + numColsFR > nitf->numColumnsActual))
-                    blockIO->pixelCountDR += 1;
-
-                if (bandIdx >= (bandCnt - 1))
-                {
-                    blockColIdx += 1;
-                    residual = myResidual;
-                }
-            }
-            blockIO->myResidual = myResidual;
 
             if (cntl->downSampling)
                 blockIO->formatCount =
                     blockIO->pixelCountDR * (cntl->columnSkip);
             else
                 blockIO->formatCount = blockIO->pixelCountFR * nitf->numBands;
+
+            if (cntl->downSampling && bandIdx >= (bandCnt - 1))
+            {
+                blockColIdx += 1;
+                residual = blockIO->myResidual;
+            }
+            myResidual = blockIO->myResidual;
 
             /*
              * The user and buffer fields will be separate buffers since
@@ -5399,42 +5562,17 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
              *
              * For reading, the first read for a given row segment reads
              * all of the bands for that segment. The initial offset of 0
-             * for the first band is the correct
-             * buffer offset for the read. The pixel size times band offset
-             * then correctly line-up the start buffer for the unpack
-             * operations.
+             * for the first band is the correct buffer offset for the read.
+             * The pixel size times band offset then correctly line-up the
+             * start buffer for the unpack operations.
              *
              * For writing, the buffer offset should be zero since the
-             * last block IO does the write. The offsets need for the bands
+             * last block IO does the write. The offsets needed for the bands
              * are calculated directly by the pack function.
              */
-            if (cntl->userBase != NULL)
-                blockIO->user.buffer = cntl->userBase[bandIdx];
-            else
-                blockIO->user.buffer = NULL;
+            blockIO->rwBuffer.buffer = ioBuffer;
+            blockIO->userEqBuffer = 0;
 
-
-            if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION)
-            {
-                blockIO->rwBuffer.buffer = ioBuffer;
-                blockIO->userEqBuffer = 0;
-            }
-            else
-            {
-                /* Read directly into user buffer */
-                /* NOTE: Here I'm assuming that you can't/won't actually
-                 * request to read a single band in via the subwindow.  I
-                 * can't just use cntl->numBandSubset here due to the C7
-                 * case where nitf->numBands == 2 but cntl->numBandSubset == 1
-                 */
-                blockIO->rwBuffer.buffer = blockIO->user.buffer;
-                cntl->bufferInc =
-                        cntl->numColumns * nitf->numBands * nitf->pixel.bytes;
-                blockIO->userEqBuffer = 1;
-            }
-
-            blockIO->user.offset.mark = userOff;
-            blockIO->user.offset.orig = userOff;
             if (cntl->reading)
             {
                 blockIO->rwBuffer.offset.mark = bytes * band;
@@ -5449,11 +5587,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             /*
              * Initialize the unpacked buffer, for P modes this is the
              * user buffer buffer unless there is down-sampling
-             */
-
-            /*
-             * Initialize the unpacked buffer, for P modes this
-             * is a separate buffer
              */
             if (cntl->downSampling)
             {
@@ -5470,8 +5603,8 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 /* Read directly into user buffer */
                 blockIO->unpacked.buffer = blockIO->user.buffer;
                 /* FR == DR */
-                blockIO->unpacked.offset.mark = blockIO->user.offset.mark;
-                blockIO->unpacked.offset.orig = blockIO->user.offset.mark;
+                blockIO->unpacked.offset.mark = userOff;
+                blockIO->unpacked.offset.orig = userOff;
                 blockIO->unpackedNoFree = 1;
             }
 
@@ -5494,81 +5627,12 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
         blockNumber += 1;
     }
 
-    /* Set pad buffer size */
-
     cntl->padBuffer = NULL; /* Created the first time it is used */
-    if (cntl->reading)
-    {
-        if (cntl->numColumns < nitf->numColumnsPerBlock)
-            cntl->padBufferSize = cntl->numColumns * (nitf->numBands) *
-                (nitf->pixel.bytes * cntl->columnSkip);
-        else
-            cntl->padBufferSize = nitf->numColumnsPerBlock *
-                (nitf->numBands) * (nitf->pixel.bytes);
-    }
-    else
-        cntl->padBufferSize =
-            nitf->numColumnsPerBlock * (nitf->numBands) * nitf->pixel.bytes;
+    cntl->padBufferSize = nitf_ImageIO_getPadBufferSizeCommon(cntl);
+    cntl->padBufferSize *= nitf->numBands;
 
-    /*
-     * Set-up last block column for column pad if writing
-     *
-     * Writing of pad pixels is required if the actual number of columns is
-     * greater than the NITF header number of columns field and the sub-image
-     * being written includes the last pixel in the line.
-     *
-     * If all of this is TRUE, then set the padColumnCount
-     * field in the blocks that
-     * are at the end of the rows. There will be one per band.
-     *
-     * The actual row length will be bigger if the block size is not an integral
-     * multiple of the row length.
-     *
-     */
-
-    if (!(cntl->reading)
-            && (nitf->numColumnsActual > nitf->numColumns)
-            && (cntl->column + cntl->numColumns >= nitf->numColumns))
-    {
-        /*
-         * The relevent blockIO's are at the end of the row
-         * (the last block column)
-         */
-
-        for (bandIdx = 0; bandIdx < bandCnt; bandIdx++)
-        {
-            blockIO = &(cntl->blockIO[nBlockCols - 1][bandIdx]);
-            blockIO->padColumnCount =
-                (nitf->numColumnsActual -
-                 nitf->numColumns) * (nitf->numBands) * bytes;
-        }
-    }
-
-    /*
-     * Set-up block columns for row pad if writing
-     *
-     * Writing of pad pixels is also required if the actual number of rows is
-     * greater than the NITF header number of rows field and the sub-image
-     * being written includes the last row in the image.
-     *
-     * If all of this is TRUE, then set the padRowCount field in
-     * all of the blocks.
-     * Since the block structures represent columns of blocks,
-     * all of the columns
-     * will include the end of the image if any do.
-     */
-
-    if (!(cntl->reading)
-            && (nitf->numRowsActual > nitf->numRows)
-            && (cntl->row + cntl->numRows >= nitf->numRows))
-    {
-        blockIO = &(cntl->blockIO[0][0]);
-        for (blockIdx = 0; blockIdx < cntl->nBlockIO; blockIdx++)
-        {
-            blockIO->padRowCount = nitf->numRowsActual - nitf->numRows;
-            blockIO += 1;
-        }
-    }
+    nitf_ImageIO_setPadColumnCount(cntl, nBlockCols, 1);
+    nitf_ImageIO_setPadRowCount(cntl);
 
     cntl->ioCount = (size_t)nBlockCols * nitf->numBands * cntl->numRows;
     return NITF_SUCCESS;
@@ -7100,17 +7164,14 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         size_t count,
                                         nitf_Error * error)
 {
-    _nitf_ImageIO *nitf;        /* Associated image I/O object */
-    /* Associated block control */
-    _nitf_ImageIOBlockCacheControl *blockCntl;
-    nitf_Uint64 fileOffset;     /* Offset in filw for write */
-    /* Pad scanning function */
-    _NITF_IMAGE_IO_PAD_SCAN_FUNC scanner;
+    _nitf_ImageIO *nitf;                    /* Associated image I/O object */
+    _nitf_ImageIOBlockCacheControl *blockCntl; /* Associated block control */
+    nitf_Uint64 fileOffset;                 /* Offset in filw for write */
+    _NITF_IMAGE_IO_PAD_SCAN_FUNC scanner;   /* Pad scanning function */
 
     nitf = ((_nitf_ImageIOControl *) (blockIO->cntl))->nitf;
     blockCntl = &(blockIO->blockControl);
     scanner = nitf->padScanner;
-
 
     if (blockCntl->block == NULL)
     {
@@ -7230,9 +7291,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
          * due to skipped blocks
          */
         blockIO->imageDataOffset = blockIO->blockMask[blockIO->number];
-
         fileOffset = nitf->pixelBase + blockIO->imageDataOffset;
-
 
         /*  Check for compression */
 
@@ -7251,14 +7310,12 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             return NITF_FAILURE;
 
             /* Write the data */
-
             if (!nitf_IOInterface_write(io,
                             (char *) (blockCntl->block),
                             nitf->blockSize, error) )
             return NITF_FAILURE;
         }
     }
-
     return NITF_SUCCESS;
 }
 
@@ -7291,7 +7348,6 @@ int nitf_ImageIO_uncachedReader(_nitf_ImageIOBlock * blockIO,
                                 nitf_IOInterface* io,
                                 nitf_Error * error)
 {
-
     /* Check for pad pixel read */
     if (blockIO->imageDataOffset == NITF_IMAGE_IO_NO_OFFSET)
     {
@@ -8729,6 +8785,7 @@ void nitf_ImageIO_pack_P_16(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     return;
 }
 
+
 void nitf_ImageIO_formatShift_1(nitf_Uint8 * buffer,
         size_t count, nitf_Uint32 shiftCount)
 {
@@ -9776,3 +9833,4 @@ NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
 
     return NITF_SUCCESS;
 }
+
