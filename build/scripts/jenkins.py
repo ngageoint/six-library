@@ -18,7 +18,7 @@ parser.add_option("--no-distclean", dest="do_distclean", help="No distclean at t
 (options, args) = parser.parse_args()
 
 if not options.package_name or not options.build_dir:
-    print 'You must specify package name and build directory'
+    print('You must specify package name and build directory')
     sys.exit(1)
 
 install_suffix = ''
@@ -34,18 +34,18 @@ if options.build_options is not None:
 else:
     build_options = []
 
-print 'Package Name: %s' % package_name
-print 'Build Dir: %s' % build_dir
-print 'Config Options: %s' % config_options
-print 'Build Options: %s' % build_options
+print('Package Name: %s' % package_name)
+print('Build Dir: %s' % build_dir)
+print('Config Options: %s' % config_options)
+print('Build Options: %s' % build_options)
 
 if 'studio11' in os.environ.get('JOB_NAME'):
-    print 'Studio 11 Path: %s' % options.studio11_path
+    print('Studio 11 Path: %s' % options.studio11_path)
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio11_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio11_path)
-    print 'Path: %s' % os.environ['PATH']
+    print('Path: %s' % os.environ['PATH'])
 elif 'studio12' in os.environ.get('JOB_NAME') or 'solaris' in os.environ.get('JOB_NAME'):
-    print 'Studio 12 Path: %s' % options.studio12_path
+    print('Studio 12 Path: %s' % options.studio12_path)
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio12_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio12_path)
 elif 'linux' in os.environ.get('JOB_NAME'):
@@ -65,14 +65,14 @@ if '-vc9' in os.environ.get('JOB_NAME'):
 elif '-vc10' in os.environ.get('JOB_NAME'):
     config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
-print 'Job: %s' % os.environ.get('JOB_NAME', '')
-if os.environ.has_key('GIT_COMMIT'):
+print('Job: %s' % os.environ.get('JOB_NAME', ''))
+if 'GIT_COMMIT' in os.environ:
     commit_id = os.environ.get('GIT_COMMIT', '')
     commit_id = commit_id[-8:]
-elif os.environ.has_key('SVN_REVISION'):
+elif 'SVN_REVISION' in os.environ:
     commit_id = os.environ.get('SVN_REVISION', '')
-print "Revision: %s" % commit_id
-print "LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH','')
+print("Revision: %s" % commit_id)
+print("LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH',''))
 
 install_path = installPath(package_name)
 

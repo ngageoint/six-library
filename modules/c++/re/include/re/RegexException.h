@@ -20,20 +20,20 @@
  *
  */
 
-#ifndef __RE_PCRE_EXCEPTION_H__
-#define __RE_PCRE_EXCEPTION_H__
+#ifndef __RE_REGEX_EXCEPTION_H__
+#define __RE_REGEX_EXCEPTION_H__
 
 #include "except/Exception.h"
 
 namespace re
 {
 /*!
- *  \class PCREException
+ *  \class RegexException
  *  \brief Error class for pcre
  *  
  *  Specialized for regular expression errors
  */
-class PCREException : public except::Exception
+class RegexException : public except::Exception
 {
 public:
 
@@ -42,7 +42,7 @@ public:
      *  \param message A message to take
             *  \param errorId  The error id
      */
-    PCREException(const char *message, int /*errorId*/ = 0) : except::Exception(message)
+    RegexException(const char *message, int /*errorId*/ = 0) : except::Exception(message)
     {}
 
     /*!
@@ -50,7 +50,7 @@ public:
      *  \param message A message to take
             *  \param errorId  The error id
      */
-    PCREException(const std::string& message, int /*errorId*/ = 0) : except::Exception(message)
+    RegexException(const std::string& message, int /*errorId*/ = 0) : except::Exception(message)
     {}
 
     /*!
@@ -58,7 +58,7 @@ public:
      *  \param c A Context to take
             *  \param errorId  The error id
      */
-    PCREException(const except::Context& c, int /*errorId*/ = 0) : except::Exception(c)
+    RegexException(const except::Context& c, int /*errorId*/ = 0) : except::Exception(c)
     {}
 };
 
