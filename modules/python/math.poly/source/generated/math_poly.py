@@ -265,6 +265,16 @@ class Poly1D(_object):
         return _math_poly.Poly1D_power(self, toThe)
 
 
+    def __eq__(self, p):
+        """__eq__(Poly1D self, Poly1D p) -> bool"""
+        return _math_poly.Poly1D___eq__(self, p)
+
+
+    def __ne__(self, p):
+        """__ne__(Poly1D self, Poly1D p) -> bool"""
+        return _math_poly.Poly1D___ne__(self, p)
+
+
     def __setstate__(self, state):
         """Recursive unpickling method for SWIG-wrapped Poly1D."""
         self.__init__(pickle.loads(state.pop('coeffs')))
@@ -277,6 +287,7 @@ class Poly1D(_object):
     # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
+
 
 
     def __getitem__(self, i):
@@ -305,6 +316,16 @@ class Poly1D(_object):
         __call__(Poly1D self, PyObject * input) -> PyObject *
         """
         return _math_poly.Poly1D___call__(self, *args)
+
+
+    def asArray(self):
+        """asArray(Poly1D self) -> PyObject *"""
+        return _math_poly.Poly1D_asArray(self)
+
+
+    @staticmethod
+    def fromArray(array):
+        return Poly1D(array.tolist())
 
     __swig_destroy__ = _math_poly.delete_Poly1D
     __del__ = lambda self: None
@@ -695,6 +716,11 @@ class Poly2D(_object):
         return _math_poly.Poly2D_power(self, toThe)
 
 
+    def isScalar(self):
+        """isScalar(Poly2D self) -> bool"""
+        return _math_poly.Poly2D_isScalar(self)
+
+
     def __setstate__(self, state):
         """Recursive unpickling method for SWIG-wrapped Poly2D."""
         self.__init__(pickle.loads(state.pop('coeffs')))
@@ -735,6 +761,20 @@ class Poly2D(_object):
         __call__(Poly2D self, PyObject * x_input, PyObject * y_input) -> PyObject *
         """
         return _math_poly.Poly2D___call__(self, *args)
+
+
+    def asArray(self):
+        """asArray(Poly2D self) -> PyObject *"""
+        return _math_poly.Poly2D_asArray(self)
+
+
+    @staticmethod
+    def fromArray(array):
+        twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
+        for i in range(len(array)):
+            for j in range(len(array[0])):
+                twoD[(i,j)] = array[i][j]
+        return twoD
 
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
@@ -1090,6 +1130,16 @@ class PolyVector3(_object):
         return _math_poly.PolyVector3___div__(self, cv)
 
 
+    def __eq__(self, p):
+        """__eq__(PolyVector3 self, PolyVector3 p) -> bool"""
+        return _math_poly.PolyVector3___eq__(self, p)
+
+
+    def __ne__(self, p):
+        """__ne__(PolyVector3 self, PolyVector3 p) -> bool"""
+        return _math_poly.PolyVector3___ne__(self, p)
+
+
     def __setstate__(self, state):
         """Recursive unpickling method for SWIG-wrapped Poly1D."""
         self.__init__(pickle.loads(state.pop('coeffs')))
@@ -1102,6 +1152,7 @@ class PolyVector3(_object):
     # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
+
 
 
     def __getitem__(self, i):
