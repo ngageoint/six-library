@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math.poly-c++ 
+ * This file is part of math.poly-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.poly-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -34,7 +34,7 @@ namespace poly
 {
 
 template<typename _T>
-_T 
+_T
 TwoD<_T>::operator () (double atX, double atY) const
 {
     _T ret(0.0);
@@ -46,9 +46,9 @@ TwoD<_T>::operator () (double atX, double atY) const
     }
     return ret;
 }
-    
+
 template<typename _T>
-_T 
+_T
 TwoD<_T>::integrate(double xStart, double xEnd,
                     double yStart, double yEnd) const
 {
@@ -68,9 +68,9 @@ TwoD<_T>::integrate(double xStart, double xEnd,
     }
     return ret;
 }
-    
+
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::derivativeY() const
 {
     TwoD<_T> ret(0, 0);
@@ -86,7 +86,7 @@ TwoD<_T>::derivativeY() const
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::derivativeX() const
 {
     TwoD<_T> ret(0, 0);
@@ -138,8 +138,8 @@ TwoD<_T>::power(size_t toThe) const
     if (toThe == 1)
         return rv;
 
- 
-    // Otherwise, we have to raise it   
+
+    // Otherwise, we have to raise it
     for (size_t i = 2; i <= toThe; i++)
     {
         rv *= *this;
@@ -149,13 +149,13 @@ TwoD<_T>::power(size_t toThe) const
 
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::flipXY() const
 {
     size_t oY = orderX();
     size_t oX = orderY();
     TwoD<_T> prime(oX, oY);
-    
+
     for (size_t i = 0; i <= oX; i++)
         for (size_t j = 0; j <= oY; j++)
             prime[i][j] = mCoef[j][i];
@@ -163,15 +163,15 @@ TwoD<_T>::flipXY() const
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::derivativeXY() const
 {
     TwoD<_T> ret = derivativeY().derivativeX();
     return ret;
 }
-    
+
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 TwoD<_T>::operator [] (size_t i) const
 {
     OneD<_T> ret(0);
@@ -182,7 +182,7 @@ TwoD<_T>::operator [] (size_t i) const
     else
     {
         std::stringstream str;
-        str << "index:" << i << " not within range [0..." 
+        str << "index:" << i << " not within range [0..."
             << mCoef.size() << ")";
 
         std::string msg(str.str());
@@ -192,8 +192,8 @@ TwoD<_T>::operator [] (size_t i) const
 }
 
 template<typename _T>
-_T* 
-TwoD<_T>::operator [] (size_t i) 
+_T*
+TwoD<_T>::operator [] (size_t i)
 {
     if (i < mCoef.size())
     {
@@ -208,10 +208,10 @@ TwoD<_T>::operator [] (size_t i)
         throw(except::IndexOutOfRangeException(Ctxt(msg)));
     }
 }
-    
+
 template<typename _T>
-TwoD<_T>& 
-TwoD<_T>::operator *= (double cv) 
+TwoD<_T>&
+TwoD<_T>::operator *= (double cv)
 {
     for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
     {
@@ -219,9 +219,9 @@ TwoD<_T>::operator *= (double cv)
     }
     return *this;
 }
-    
+
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::operator * (double cv) const
 {
     TwoD<_T> ret(*this);
@@ -230,15 +230,15 @@ TwoD<_T>::operator * (double cv) const
 }
 
 template<typename _T>
-TwoD<_T> 
-operator * (double cv, const TwoD<_T>& p) 
+TwoD<_T>
+operator * (double cv, const TwoD<_T>& p)
 {
     return p * cv;
 }
-    
+
 template<typename _T>
-TwoD<_T>& 
-TwoD<_T>::operator *= (const TwoD<_T>& p) 
+TwoD<_T>&
+TwoD<_T>::operator *= (const TwoD<_T>& p)
 {
     TwoD<_T> tmp(orderX() + p.orderX(), orderY() + p.orderY());
     for (size_t i = 0, xsz = mCoef.size(); i < xsz; i++)
@@ -253,7 +253,7 @@ TwoD<_T>::operator *= (const TwoD<_T>& p)
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::operator * (const TwoD<_T>& p) const
 {
     TwoD<_T> ret(*this);
@@ -262,8 +262,8 @@ TwoD<_T>::operator * (const TwoD<_T>& p) const
 }
 
 template<typename _T>
-TwoD<_T>& 
-TwoD<_T>::operator += (const TwoD<_T>& p) 
+TwoD<_T>&
+TwoD<_T>::operator += (const TwoD<_T>& p)
 {
     TwoD<_T> tmp(std::max<size_t>(orderX(), p.orderX()),
                  std::max<size_t>(orderY(), p.orderY()));
@@ -285,7 +285,7 @@ TwoD<_T>::operator += (const TwoD<_T>& p)
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::operator + (const TwoD<_T>& p) const
 {
     TwoD<_T> ret(*this);
@@ -294,8 +294,8 @@ TwoD<_T>::operator + (const TwoD<_T>& p) const
 }
 
 template<typename _T>
-TwoD<_T>& 
-TwoD<_T>::operator -= (const TwoD<_T>& p) 
+TwoD<_T>&
+TwoD<_T>::operator -= (const TwoD<_T>& p)
 {
     TwoD<_T> tmp(std::max<size_t>(orderX() ,p.orderX()),
                  std::max<size_t>(orderY(), p.orderY()));
@@ -318,17 +318,17 @@ TwoD<_T>::operator -= (const TwoD<_T>& p)
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::operator-(const TwoD<_T>& p) const
 {
     TwoD<_T> ret(*this);
     ret -= p;
     return ret;
 }
-    
+
 template<typename _T>
-TwoD<_T>& 
-TwoD<_T>::operator/=(double cv) 
+TwoD<_T>&
+TwoD<_T>::operator/=(double cv)
 {
     double recipCV = 1.0/cv;
     for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
@@ -339,7 +339,7 @@ TwoD<_T>::operator/=(double cv)
 }
 
 template<typename _T>
-TwoD<_T> 
+TwoD<_T>
 TwoD<_T>::operator/(double cv) const
 {
     TwoD<_T> ret(*this);
@@ -348,7 +348,7 @@ TwoD<_T>::operator/(double cv) const
 }
 
 template<typename _T>
-std::ostream& 
+std::ostream&
 operator << (std::ostream& out, const TwoD<_T> p)
 {
     for (size_t i = 0 ; i < p.mCoef.size() ; i++)
@@ -514,5 +514,23 @@ TwoD<_T> TwoD<_T>::transformInput(const math::poly::TwoD<_T>& gx,
 
     return transformInput(gx, gy, zeroEpsilon);
 }
+
+template<typename _T>
+bool TwoD<_T>::isScalar() const
+{
+    for (size_t ii = 0; ii <= orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= orderY(); ++jj)
+        {
+            // Initial term may be anything
+            if ((ii != 0 || jj != 0) && (*this)[ii][jj] != 0)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 } // poly
 } // math

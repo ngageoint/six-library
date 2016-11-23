@@ -90,6 +90,7 @@ const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
 const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
 const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
+const size_t NITFWriteControl::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
 NITFWriteControl::NITFWriteControl()
 {
@@ -699,10 +700,10 @@ void NITFWriteControl::save(const SourceList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
-    //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
+    const size_t bufferSize =
+            mOptions.getParameter(OPT_BUFFER_SIZE,
+                                  Parameter(DEFAULT_BUFFER_SIZE));
 
-    int bufferSize = DEFAULT_BUFFER_SIZE;
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     save(imageData, bufferedIO, schemaPaths);
@@ -785,10 +786,9 @@ void NITFWriteControl::save(const BufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-
-    //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
-    //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
-    int bufferSize = DEFAULT_BUFFER_SIZE;
+    const size_t bufferSize =
+            mOptions.getParameter(OPT_BUFFER_SIZE,
+                                  Parameter(DEFAULT_BUFFER_SIZE));
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     save(imageData, bufferedIO, schemaPaths);

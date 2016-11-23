@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -40,7 +40,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_BCS_N, 7, "Cross-track depression angle", "Dep_Angle" },
     {NITF_BCS_N, 10, "Cross-track range", "CT_Track_Range" },
-    
+
     {NITF_BCS_A, 16, "Dummy param, leading edge of patch", "eta_0" },
     {NITF_BCS_A, 16, "Dummy param, trailing edge of patch", "eta_1" },
 
@@ -70,7 +70,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 10, "Small circle origin offset (along v)", "s_off" },
     {NITF_BCS_A, 12, "Offset btwn small and great circle plane", "Rn_offset" },
 
-    {NITF_BCS_N, 11, "Range to CRP", "CRP_Range" },    
+    {NITF_BCS_N, 11, "Range to CRP", "CRP_Range" },
     {NITF_BCS_N, 7, "Scene ref. depression angle", "Ref_Dep_Ang" },
     {NITF_BCS_N, 9, "Scene ref. aspect angle", "Ref_Asp_Ang" },
     {NITF_BCS_N, 1, "N-skip azimuth", "n_Skip_Az" },

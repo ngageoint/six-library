@@ -25,6 +25,9 @@ typedef math::linear::Vector<double> VectorDouble;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
 #include "math/poly/Fit.h"
+#include "numpyutils/numpyutils.h"
+#include "Python.h"
+#include "numpy/arrayobject.h"
 %}
 
 typedef math::linear::VectorN<3,double> Vector3;
@@ -62,6 +65,7 @@ typedef math::linear::Vector<double> VectorDouble;
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
+
 %}
 }
 
@@ -119,11 +123,26 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return pyresult;
     }
+
+    PyObject* asArray()
+    {
+        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                &((*self)[0]));
+    }
+
+    %pythoncode
+    %{
+        @staticmethod
+        def fromArray(array):
+            return Poly1D(array.tolist())
+    %}
+
 }
 
 %include "math/poly/TwoD.h"
 %extend math::poly::TwoD
 {
+
 %pythoncode
 %{
     def __setstate__(self, state):
@@ -140,6 +159,7 @@ typedef math::linear::Vector<double> VectorDouble;
         return state
 %}
 }
+
 
 %template(Poly2D) math::poly::TwoD<double>;
 %template(Poly1DVector) std::vector<math::poly::OneD<double>>;
@@ -227,6 +247,28 @@ typedef math::linear::Vector<double> VectorDouble;
         return pyresult;
     }
 
+    PyObject* asArray()
+    {
+        size_t numRows = self->orderX() + 1;
+        size_t numColumns = self->orderY() + 1;
+        std::vector<void*> rows(numRows);
+        for (size_t ii = 0; ii < rows.size(); ++ii)
+        {
+            rows[ii] = &((*self)[ii][0]);
+        }
+        return numpyutils::toNumpyArray(numColumns, NPY_DOUBLE, rows);
+    }
+    %pythoncode
+    %{
+        @staticmethod
+        def fromArray(array):
+            twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
+            for i in range(len(array)):
+                for j in range(len(array[0])):
+                    twoD[(i,j)] = array[i][j]
+            return twoD
+    %}
+
 }
 
 %include "math/poly/Fit.h"
@@ -279,7 +321,7 @@ typedef math::linear::Vector<double> VectorDouble;
                                            0 | 0);
                 PyList_SetItem(pyresult, i, pytmp);
             }
-	    return pyresult;
+            return pyresult;
         }
 };
 

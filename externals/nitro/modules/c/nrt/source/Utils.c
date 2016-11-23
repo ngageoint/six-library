@@ -489,3 +489,29 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
     nrt_Utils_decimalToGeographic(decimal, &d, &m, &s);
     nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
 }
+
+NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size)
+{
+    switch(size)
+    {
+    case 2:
+        nrt_Utils_swap(value, 0, 1);
+        break;
+
+    case 4:
+        nrt_Utils_swap(value, 0, 3);
+        nrt_Utils_swap(value, 1, 2);
+        break;
+
+    case 8:
+        nrt_Utils_swap(value, 0, 7);
+        nrt_Utils_swap(value, 1, 6);
+        nrt_Utils_swap(value, 2, 5);
+        nrt_Utils_swap(value, 3, 4);
+        break;
+
+    default:
+        /* Not handled */
+        break;
+    }
+}

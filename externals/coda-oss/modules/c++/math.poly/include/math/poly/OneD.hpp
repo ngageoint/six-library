@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math.poly-c++ 
+ * This file is part of math.poly-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.poly-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,7 +32,7 @@ namespace poly
 {
 
 template<typename _T>
-_T 
+_T
 OneD<_T>::operator () (double at) const
 {
    _T ret(0.0);
@@ -46,7 +46,7 @@ OneD<_T>::operator () (double at) const
 }
 
 template<typename _T>
-_T 
+_T
 OneD<_T>::integrate(double start, double end) const
 {
    _T ret(0.0);
@@ -157,11 +157,11 @@ _T
 OneD<_T>::acceleration(double x) const
 {
     return derivative().derivative()(x);
-    
+
 }
 
 template<typename _T>
-_T& 
+_T&
 OneD<_T>::operator [] (size_t i)
 {
     if (i < mCoef.size())
@@ -180,7 +180,7 @@ OneD<_T>::operator [] (size_t i)
 
 
 template<typename _T>
-_T 
+_T
 OneD<_T>::operator [] (size_t i) const
 {
    _T ret(0.0);
@@ -199,7 +199,7 @@ OneD<_T>::operator [] (size_t i) const
 }
 
 template<typename _T>
-std::ostream& 
+std::ostream&
 operator << (std::ostream& out, const OneD<_T>& p)
 {
    for (size_t i = 0 ; i < p.mCoef.size() ; i++)
@@ -210,8 +210,8 @@ operator << (std::ostream& out, const OneD<_T>& p)
 }
 
 template<typename _T>
-OneD<_T>& 
-OneD<_T>::operator *= (double cv) 
+OneD<_T>&
+OneD<_T>::operator *= (double cv)
 {
     for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
@@ -219,9 +219,9 @@ OneD<_T>::operator *= (double cv)
     }
     return *this;
 }
-    
+
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 OneD<_T>::operator * (double cv) const
 {
     OneD<_T> ret(*this);
@@ -230,15 +230,15 @@ OneD<_T>::operator * (double cv) const
 }
 
 template<typename _T>
-OneD<_T> 
-operator * (double cv, const OneD<_T>& p) 
+OneD<_T>
+operator * (double cv, const OneD<_T>& p)
 {
     return p*cv;
 }
 
 template<typename _T>
-OneD<_T>& 
-OneD<_T>::operator *= (const OneD<_T>& p) 
+OneD<_T>&
+OneD<_T>::operator *= (const OneD<_T>& p)
 {
    OneD<_T> tmp(order()+p.order());
    for (size_t i = 0, xsz = mCoef.size(); i < xsz; i++)
@@ -251,9 +251,9 @@ OneD<_T>::operator *= (const OneD<_T>& p)
    *this = tmp;
    return *this;
 }
-    
+
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 OneD<_T>::operator * (const OneD<_T>& p) const
 {
     OneD<_T> ret(*this);
@@ -262,8 +262,8 @@ OneD<_T>::operator * (const OneD<_T>& p) const
 }
 
 template<typename _T>
-OneD<_T>& 
-OneD<_T>::operator += (const OneD<_T>& p) 
+OneD<_T>&
+OneD<_T>::operator += (const OneD<_T>& p)
 {
     OneD<_T> tmp(std::max<size_t>(order(), p.order()));
     for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
@@ -279,17 +279,17 @@ OneD<_T>::operator += (const OneD<_T>& p)
 }
 
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 OneD<_T>::operator + (const OneD<_T>& p) const
 {
     OneD<_T> ret(*this);
     ret += p;
     return ret;
 }
-    
+
 template<typename _T>
-OneD<_T>& 
-OneD<_T>::operator -= (const OneD<_T>& p) 
+OneD<_T>&
+OneD<_T>::operator -= (const OneD<_T>& p)
 {
    OneD<_T> tmp(std::max<size_t>(order(), p.order()));
    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
@@ -305,7 +305,7 @@ OneD<_T>::operator -= (const OneD<_T>& p)
 }
 
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 OneD<_T>::operator - (const OneD<_T>& p) const
 {
    OneD<_T> ret(*this);
@@ -314,8 +314,8 @@ OneD<_T>::operator - (const OneD<_T>& p) const
 }
 
 template<typename _T>
-OneD<_T>& 
-OneD<_T>::operator /= (double cv) 
+OneD<_T>&
+OneD<_T>::operator /= (double cv)
 {
     double recipCV = 1.0/cv;
     for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
@@ -326,7 +326,7 @@ OneD<_T>::operator /= (double cv)
 }
 
 template<typename _T>
-OneD<_T> 
+OneD<_T>
 OneD<_T>::operator / (double cv) const
 {
     OneD<_T> ret(*this);
@@ -352,8 +352,8 @@ OneD<_T> OneD<_T>::power(size_t toThe) const
     if (toThe == 1)
         return rv;
 
- 
-    // Otherwise, we have to raise it   
+
+    // Otherwise, we have to raise it
     for (size_t i = 2; i <= toThe; i++)
     {
         rv *= *this;
@@ -441,6 +441,56 @@ void OneD<_T>::copyFrom(const OneD<_T>& p)
 {
     const size_t numCopy(std::min(size(), p.size()));
     std::copy(p.mCoef.begin(), p.mCoef.begin() + numCopy, mCoef.begin());
+}
+
+template<typename _T>
+template<typename Vector_T>
+bool OneD<_T>::equalImpl(const Vector_T& p) const
+{
+    size_t sz = size();
+    size_t psz = p.size();
+    size_t minSize = std::min<size_t>(sz, psz);
+
+    // guard against uninitialized
+    if (minSize == 0 && (sz != psz))
+    {
+        return false;
+    }
+
+    for (size_t ii = 0; ii < minSize; ++ii)
+    {
+        if (!math::linear::equals(mCoef[ii], p[ii]))
+        {
+            return false;
+        }
+    }
+
+    _T defaultValue(0.0);
+
+    // Cover case where one polynomial has more
+    // coefficients than the other
+    if (sz > psz)
+    {
+        for (size_t ii = minSize; ii < sz; ++ii)
+        {
+            if (!math::linear::equals(mCoef[ii], defaultValue))
+            {
+                return false;
+            }
+        }
+    }
+    if (sz < psz)
+    {
+        for (size_t ii = minSize; ii < psz; ++ii)
+        {
+            if (!math::linear::equals(p[ii], defaultValue))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 } // poly

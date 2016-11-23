@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SIDDSensorModel::VERSION(1, 1, 1);
+const csm::Version SIDDSensorModel::VERSION(1, 1, 2);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
