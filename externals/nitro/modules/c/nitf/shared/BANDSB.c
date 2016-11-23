@@ -32,7 +32,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A,  1,  "Data Representation Unit",                           "RADIOMETRIC_QUANTITY_UNIT" },
     {NITF_BINARY, 4,  "Cube Scale Factor",                                  "SCALE_FACTOR" },
     {NITF_BINARY, 4,  "Cube Additive Factor",                               "ADDITIVE_FACTOR" },
-    {NITF_BCS_N,  7,  "Row Ground Sample Distance",                         "ROW_GSD" },    
+    {NITF_BCS_N,  7,  "Row Ground Sample Distance",                         "ROW_GSD" },
     {NITF_BCS_A,  1,  "Units of Row Ground Sample Distance",                "ROW_GSD_UNIT" },
     {NITF_BCS_N,  7,  "Column Ground Sample Distance",                      "COL_GSD" },
     {NITF_BCS_A,  1,  "Units of Column Ground Sample Distance",             "COL_GSD_UNIT" },
@@ -49,7 +49,7 @@ static nitf_TREDescription description[] = {
     {NITF_IF, 0, "& 0x40000000", "EXISTENCE_MASK" },
     {NITF_BCS_N,  7,  "Diameter of the lens",                               "DIAMETER" },
     {NITF_ENDIF, 0, NULL, NULL},
-    {NITF_IF, 0, "& 0x20000000", "EXISTENCE_MASK" },        
+    {NITF_IF, 0, "& 0x20000000", "EXISTENCE_MASK" },
     {NITF_BINARY,32,  "Field reserved for future use",                      "DATA_FLD_2" },
     {NITF_ENDIF, 0, NULL, NULL},
     {NITF_IF, 0, "& 0x01F80000", "EXISTENCE_MASK" },
@@ -195,5 +195,5 @@ NITF_DECLARE_SINGLE_PLUGIN(BANDSB, description)
 
 NITF_CXX_ENDGUARD
 
- 	  	 
+
 

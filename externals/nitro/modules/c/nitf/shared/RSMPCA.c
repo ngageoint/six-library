@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -66,7 +66,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 1, "Row Denominator Poly Max Power of Z", "RDPWRZ" },
 
     {NITF_BCS_N, 3, "Row Denominator Poly Number of Poly Terms", "RDTRMS" },
-    
+
     {NITF_LOOP, 0, NULL, "RDTRMS"},
 
     {NITF_BCS_A, 21, "Poly Coeff", "RDPCF" },
@@ -93,7 +93,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 1, "Row Denominator Poly Max Power of Z", "CDPWRZ" },
 
     {NITF_BCS_N, 3, "Row Denominator Poly Number of Poly Terms", "CDTRMS" },
-    
+
     {NITF_LOOP, 0, NULL, "CDTRMS"},
 
     {NITF_BCS_A, 21, "Poly Coeff", "CDPCF" },
@@ -102,7 +102,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_END, 0, NULL, NULL}
 
-    
+
 };
 
 NITF_DECLARE_SINGLE_PLUGIN(RSMPCA, description)

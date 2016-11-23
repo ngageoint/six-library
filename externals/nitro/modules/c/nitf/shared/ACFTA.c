@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -121,7 +121,7 @@ static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
 NITF_DECLARE_PLUGIN(ACFTA)
 #else
 static const char *ident[] = { NITF_PLUGIN_TRE_KEY, "ACFTA", NULL };
-    
+
 
 static nitf_TREHandler* acftaHandler = NULL;
 NITFAPI(const char**) ACFTA_init(nitf_Error* error)
@@ -132,8 +132,8 @@ NITFAPI(const char**) ACFTA_init(nitf_Error* error)
 		return NULL;
 
 	return ident;
-} 
-    
+}
+
 NITFAPI(void) ACFTA_cleanup(void){}
 #endif
 

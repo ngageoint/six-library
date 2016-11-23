@@ -2337,7 +2337,7 @@ nitf_Writer_newImageWriter(nitf_Writer *writer,
     assert(currentSegment);
     assert(currentSegment->subheader);
 
-    imageWriter = nitf_ImageWriter_construct(currentSegment->subheader, 
+    imageWriter = nitf_ImageWriter_construct(currentSegment->subheader,
                                              options, error);
     if (!imageWriter)
         goto CATCH_ERROR;

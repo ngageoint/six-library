@@ -54,14 +54,14 @@ typedef enum _NITF_CLEVEL
  *  ComplexityLevel class publicly.  Internally, its represented as a set
  *  of function pointers that act on the nitf_Record.
  *
- *  This API call is new for 2.5.  As of 2.5, the Writer will 
+ *  This API call is new for 2.5.  As of 2.5, the Writer will
  *  also use this function internally to checking if a Record's
- *  complexity level has not yet been set, and if not, it will 
+ *  complexity level has not yet been set, and if not, it will
  *  attempt to auto-calculate it.
  *
  *  \param record The input record (its clevel is not modified for this op)
  *
- *  \param error [output] Contains an error if one exists (in which case 
+ *  \param error [output] Contains an error if one exists (in which case
  *  the return value will be NITF_CLEVEL_CHECK_FAILED
  *
  *  \return A clevel if determined, NITF_CLEVEL_CHECK_FAILED on error
@@ -74,7 +74,7 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
  *  Get the CLEVEL as recorded in the file
  *  \return The CLEVEL, unknown if not 03,05,06,07 or 09
  */
-NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record);       
+NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record);
 
 /*!
  *  Turn the enumeration into a 2-byte char.  This function should
