@@ -432,6 +432,7 @@ typedef NRT_TREE_TRAVERSER          NITF_TREE_TRAVERSER;
 #define nitf_Utils_decimalLatToGeoCharArray     nrt_Utils_decimalLatToGeoCharArray
 #define nitf_Utils_decimalLonToGeoCharArray     nrt_Utils_decimalLonToGeoCharArray
 #define nitf_Utils_cornersTypeAsCoordRep        nrt_Utils_cornersTypeAsCoordRep
+#define nitf_Utils_byteSwap                     nrt_Utils_byteSwap
 
 /******************************************************************************/
 /* NITRO-SPECIFIC DEFINES/TYPES                                               */

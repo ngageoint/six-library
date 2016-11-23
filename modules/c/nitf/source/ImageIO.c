@@ -6529,36 +6529,31 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
              | NITF_IMAGE_IO_COMPRESSION_M8)) == 0 /* No masks */ )
         return NITF_SUCCESS;
 
-    /* A copy of the structure is made so it can be byte swapped if needed */
-
-    maskHeader = nitf->maskHeader;
-    if (!nitf_ImageIO_bigEndian())
-        nitf_ImageIO_swapMaskHeader(&maskHeader);
-
-    /* Format and write the header buffer */
-
-    buffer[0] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[0];
-    buffer[1] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[1];
-    buffer[2] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[2];
-    buffer[3] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[3];
-
-    buffer[4] = ((nitf_Uint8 *) & maskHeader.blockRecordLength)[0];
-    buffer[5] = ((nitf_Uint8 *) & maskHeader.blockRecordLength)[1];
-    buffer[6] = ((nitf_Uint8 *) & maskHeader.padRecordLength)[0];
-    buffer[7] = ((nitf_Uint8 *) & maskHeader.padRecordLength)[1];
 
     /*
        Write pad output pixel code length actually NBPP, M3 is a special case
        fix later XXX
      */
-
     if (nitf->maskHeader.padPixelValueLength != 0)
         padCodeLength = 8 * (nitf->pixel.bytes);
     else
         padCodeLength = 0;
 
-    ((nitf_Uint8 *) buffer)[9] = padCodeLength >> 8;
-    ((nitf_Uint8 *) buffer)[8] = padCodeLength & 0xff;
+    /* A copy of the structure is made so it can be byte swapped if needed */
+
+    maskHeader = nitf->maskHeader;
+    if (!nitf_ImageIO_bigEndian())
+    {
+        nitf_ImageIO_swapMaskHeader(&maskHeader);
+        nitf_Utils_byteSwap(&(padCodeLength), 2);
+    }
+
+        /* Format and write the header buffer */
+
+    memcpy(buffer, &maskHeader.imageDataOffset, 4);
+    memcpy(buffer + 4, &maskHeader.blockRecordLength, 2);
+    memcpy(buffer + 6, &maskHeader.padRecordLength, 2);
+    memcpy(buffer + 8, &padCodeLength, 2);
 
     if (!nitf_ImageIO_writeToFile(io, nitf->imageBase,
                                   buffer, NITF_IMAGE_IO_MASK_HEADER_LEN,
@@ -6688,31 +6683,10 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header)
 {
-    nitf_Uint8 *hp;             /* Points into header */
-    nitf_Uint8 tmp;             /* Temp value for byte swaps */
-
-    hp = (nitf_Uint8 *) & (header->imageDataOffset);
-    tmp = hp[0];
-    hp[0] = hp[3];
-    hp[3] = tmp;
-    tmp = hp[1];
-    hp[1] = hp[2];
-    hp[2] = tmp;
-
-    hp = (nitf_Uint8 *) & (header->blockRecordLength);
-    tmp = hp[0];
-    hp[0] = hp[1];
-    hp[1] = tmp;
-
-    hp = (nitf_Uint8 *) & (header->padRecordLength);
-    tmp = hp[0];
-    hp[0] = hp[1];
-    hp[1] = tmp;
-
-    hp = (nitf_Uint8 *) & (header->padPixelValueLength);
-    tmp = hp[0];
-    hp[0] = hp[1];
-    hp[1] = tmp;
+    nitf_Utils_byteSwap(&(header->imageDataOffset), 4);
+    nitf_Utils_byteSwap(&(header->blockRecordLength), 2);
+    nitf_Utils_byteSwap(&(header->padRecordLength), 2);
+    nitf_Utils_byteSwap(&(header->padPixelValueLength), 2);
 
     return;
 }
