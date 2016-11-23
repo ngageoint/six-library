@@ -35,14 +35,16 @@
 #include <cstddef>
 using std::ptrdiff_t;
 
-#include "import/six.h"
-
-/* this isn't imported by the above include */
-#include "six/Radiometric.h"
-
 #include "import/nitf.hpp"
+#include "import/six.h"
+#include "Python.h"
+#include "datetime.h"
 
 using namespace six;
+%}
+
+%init %{
+    PyDateTime_IMPORT;
 %}
 
 // This allows functions that deal with auto_ptrs to work properly
@@ -99,6 +101,39 @@ def setValue(self, *args):
     return $action(self, str(args[0]))
 %}
 
+
+%extend nitf::DateTime
+{
+  public:
+    PyObject* toPythonDateTime()
+    {
+        PyObject* nitfDateTime = NULL;
+        int year = self->getYear();
+        int month = self->getMonth();
+        int day = self->getDayOfMonth();
+        int hour = self->getHour();
+        int minute = self->getMinute();
+        int second = static_cast<int>(self->getSecond());
+        int microsecond = static_cast<int>((self->getSecond() - second) * 1e6);
+        nitfDateTime = PyDateTime_FromDateAndTime(year, month, day,
+                hour, minute, second, microsecond);
+        return nitfDateTime;
+    }
+
+    %pythoncode
+    %{
+        @staticmethod
+        def fromPythonDateTime(pyDatetime):
+            second = pyDatetime.second + (pyDatetime.microsecond / 1e6);
+            sixDatetime = DateTime(pyDatetime.year,
+                    pyDatetime.month,
+                    pyDatetime.day,
+                    pyDatetime.hour,
+                    pyDatetime.minute,
+                    second)
+            return sixDatetime
+    %}
+}
 
 %extend six::Parameter
 {

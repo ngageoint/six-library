@@ -367,6 +367,23 @@ class DateTime(_object):
         """setTimeInMillis(DateTime self, double timeInMillis)"""
         return _six_base.DateTime_setTimeInMillis(self, timeInMillis)
 
+
+    def toPythonDateTime(self):
+        """toPythonDateTime(DateTime self) -> PyObject *"""
+        return _six_base.DateTime_toPythonDateTime(self)
+
+
+    @staticmethod
+    def fromPythonDateTime(pyDatetime):
+        second = pyDatetime.second + (pyDatetime.microsecond / 1e6);
+        sixDatetime = DateTime(pyDatetime.year,
+                pyDatetime.month,
+                pyDatetime.day,
+                pyDatetime.hour,
+                pyDatetime.minute,
+                second)
+        return sixDatetime
+
 DateTime_swigregister = _six_base.DateTime_swigregister
 DateTime_swigregister(DateTime)
 

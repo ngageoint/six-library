@@ -37,6 +37,7 @@
 #include "six/Types.h"
 #include "six/Utilities.h"
 #include "six/Parameter.h"
+#include "six/Radiometric.h"
 #include "six/Region.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
