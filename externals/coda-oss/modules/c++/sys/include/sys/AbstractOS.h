@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -33,7 +33,7 @@
 /*!
  *  \file
  *  \brief This class is the interface for an OS Abstraction layer.
- *  
+ *
  *  The class contains the interface for the abstraction layer for
  *  an operating system independent layer.
  *
@@ -58,7 +58,7 @@ public:
      *  Get the name of the platform this was compiled for
      *  This is done by retrieving the 'target' variable
      *  in configure and forcing it to be defined for sys
-     *  
+     *
      *  \return The name of the platform.
      *
      */
@@ -81,7 +81,7 @@ public:
 
     /*!
      *  Search recursively for some fragment with the directory.
-     *  This will return both directories and files with the 
+     *  This will return both directories and files with the
      *  fragment, unless the user specifies the extension.
      *
      *  \param elementsFound  All retrieved enumerations
@@ -112,7 +112,7 @@ public:
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
-    virtual bool move(const std::string& path, 
+    virtual bool move(const std::string& path,
                       const std::string& newPath) const = 0;
 
     /*!
@@ -154,7 +154,7 @@ public:
      *  \return The file name
      *
      */
-    virtual std::string getTempName(const std::string& path = "", 
+    virtual std::string getTempName(const std::string& path = "",
                                     const std::string& prefix = "") const = 0;
 
     /*!
@@ -200,7 +200,7 @@ public:
     /*!
      *  Set an environment variable
      */
-    virtual void setEnv(const std::string& var, 
+    virtual void setEnv(const std::string& var,
                         const std::string& val,
                         bool overwrite) = 0;
 
@@ -218,11 +218,11 @@ public:
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
-    virtual void createSymlink(const std::string& origPathname, 
+    virtual void createSymlink(const std::string& origPathname,
                                const std::string& symlinkPathname) const = 0;
 
     /*!
-     * Remove a symlink, pathname can be absolute or relative
+     *  Remove a symlink, pathname can be absolute or relative
      */
     virtual void removeSymlink(const std::string& symlinkPathname) const = 0;
 
@@ -230,6 +230,15 @@ public:
      *  Get the total RAM and available RAM on the system in megabytes
      */
     virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const = 0;
+
+    /*!
+     *  Get the absolute path to the current executable
+     *  \param argvPathname optional value of argv[0], in case the normal
+     *          way fails
+     *  \return absolute path to the current exectuable
+     */
+    virtual std::string getCurrentExecutable(
+            const std::string& argvPathname="") const;
 
 protected:
     /*!

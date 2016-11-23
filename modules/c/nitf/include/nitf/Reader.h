@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -98,14 +98,14 @@ NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
  * This creates a new ImageReader object that can be used to access the
  * data in the image segment.  This should be done after the read()
  * function has been called and a record loaded.
- * 
+ *
  * The ImageReader object is a specialized reader for dealing with images. It is
  * provided by the library, and should almost always be used when reading
  * images.
  *
  *  \param reader The reader object
  *  \param imageSegmentNumber The index
- *  \param options 
+ *  \param options
  *  \param error A populated error if return value is zero
  *  \return new nitf_ImageReader* for the image in question
  */

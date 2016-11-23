@@ -385,7 +385,7 @@ TEST_CASE(testOperators)
             TEST_ASSERT_EQ(op[ii][jj], opEquals[ii][jj]);
         }
     }
-    
+
     // x^0*(0*y^0 0.5*y^1 1*y^2 )
     // x^1*(1*y^0 1.5*y^1 2*y^2 )
     // x^2*(2*y^0 2.5*y^1 3*y^2 )
@@ -419,6 +419,29 @@ TEST_CASE(testOperators)
     TEST_ASSERT_TRUE(op == opEquals);
     TEST_ASSERT_FALSE(op != opEquals);
 }
+
+TEST_CASE(testIsScalar)
+{
+    math::poly::TwoD<double> p1(2, 2);
+
+    // x^0*(0*y^0 1*y^1 2*y^2 )
+    // x^1*(2*y^0 3*y^1 4*y^2 )
+    // x^2*(4*y^0 5*y^1 6*y^2 )
+    for (size_t ii = 0; ii <= p1.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p1.orderY(); ++jj)
+        {
+            p1[ii][jj] = ii * p1.orderY() + jj;
+        }
+    }
+
+    TEST_ASSERT(!p1.isScalar());
+
+
+    math::poly::TwoD<double> p2(1, 3);
+    p2[0][0] = 1;
+    TEST_ASSERT(p2.isScalar());
+}
 }
 
 int main(int, char**)
@@ -429,4 +452,6 @@ int main(int, char**)
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
     TEST_CHECK(testOperators);
+    TEST_CHECK(testIsScalar);
 }
+

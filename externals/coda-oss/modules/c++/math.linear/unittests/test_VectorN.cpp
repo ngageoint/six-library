@@ -277,6 +277,17 @@ TEST_CASE(testOperatorMinusEquals)
 }
 
 
+TEST_CASE(testNegate)
+{
+    VectorN<3,double> X;
+    VectorN<3,double> Y;
+    X[0] = Y[2] =  1.;
+    X[1] = Y[1] =  0.;
+    X[2] = Y[0] = -1.;
+    TEST_ASSERT_EQ(X, -Y);
+}
+
+
 TEST_CASE(testAdd)
 {
     VectorN<3,double> v1(2.4);
@@ -463,6 +474,7 @@ int main()
     TEST_CHECK(testOperatorPlusEquals);
     TEST_CHECK(testOperatorPlus);
     TEST_CHECK(testOperatorMinus);
+    TEST_CHECK(testNegate);
     TEST_CHECK(testAdd);
     TEST_CHECK(testSubtract);
     TEST_CHECK(testOperatorMinus);

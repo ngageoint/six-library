@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -48,19 +48,19 @@ void printTRE(nitf_TRE* tre)
     nitf_Uint32 treLength;
     nitf_TREEnumerator* it = NULL;
     const char* treID = NULL;
-    
+
     /* This is just so you know how long the TRE is */
     treLength = tre->handler->getCurrentSize(tre, &error);
 
-    /* 
+    /*
      *  This is the name for the description that was selected to field
      *  this TRE by the handler.
      */
     treID = nitf_TRE_getID(tre);
-    
+
     printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
            tre->tag, treLength, treID ? treID : "null id");
-    
+
     /* Now walk the TRE */
     it = nitf_TRE_begin(tre, &error);
 
@@ -76,7 +76,7 @@ void printTRE(nitf_TRE* tre)
         }
         else
             nitf_Error_print(&error, stdout, "Field retrieval error");
-        
+
     }
     printf("---------------------------------------------\n");
 }
@@ -84,7 +84,7 @@ void printTRE(nitf_TRE* tre)
 /*
  *  Warning!  In order for this test to work properly, you MUST
  *  set the NITF_PLUGIN_PATH to use the XMLTRE plugin provided in
- *  the external/examples area!  
+ *  the external/examples area!
  *
  *  Failing to set this will cause TRE creation to fail!
  *
@@ -100,7 +100,7 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     nitf_TRE* tre = nitf_TRE_construct("XMLTRE",
 				       "xmltre", /* Root element */
 				       error);
-    
+
     if (!tre)
 	return NULL;
 
@@ -112,7 +112,7 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     /* Tests out-of-order set */
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", DESC1, strlen(DESC1), error))
       goto CATCH_ERROR;
-    
+
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/@name", ATT_1, strlen(ATT_1), error))
       goto CATCH_ERROR;
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/@name", ATT_1, strlen(ATT_1), error))
@@ -129,20 +129,20 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 
     if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/pi[0]", "3.14", strlen("3.14"), error))
       goto CATCH_ERROR;
-    
+
 
     if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/c[0]", "299792458.0", strlen("299792458.0"), error))
       goto CATCH_ERROR;
-    
+
 
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", FAKE_DESC, strlen(FAKE_DESC), error))
         goto CATCH_ERROR;
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", DESC2, strlen(DESC2), error))
       goto CATCH_ERROR;
-    
+
     printTRE( tre );
 
-    /* Ahh, but can you go back and set it now?: 
+    /* Ahh, but can you go back and set it now?:
     if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
 
@@ -153,12 +153,12 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/version[1]", VER, strlen(VER), error))
       goto CATCH_ERROR;
 
-    
+
     */
     return tre;
 
  CATCH_ERROR:
-    
+
     nitf_TRE_destruct(&tre);
     return NULL;
 
@@ -467,7 +467,7 @@ int main(int argc, char **argv)
 
 
 
-    if (!nitf_Extensions_appendTRE(record->header->userDefinedSection, 
+    if (!nitf_Extensions_appendTRE(record->header->userDefinedSection,
 				   xmltre, &error))
     {
 	nitf_Error_print(&error, stdout, "Failed to add XMLTRE");

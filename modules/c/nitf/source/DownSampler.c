@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -56,8 +56,8 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
     nitf_Uint32 band;           /* Current band */
 
     /*
-     *  Note: The output buffer is at down-sampled resolution and the 
-     *  part being created may not span the entire user window. 
+     *  Note: The output buffer is at down-sampled resolution and the
+     *  part being created may not span the entire user window.
      *  Therefore a separate row increment must be calculated.
      *
      *  Since the data is being copied, not interpreted. any type of the right

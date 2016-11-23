@@ -23,8 +23,8 @@
 #ifndef __IMPORT_RE_H__
 #define __IMPORT_RE_H__
 
-#include "re/PCREException.h"
-#include "re/PCRE.h"
+#include "re/RegexException.h"
+#include "re/Regex.h"
 #include "re/RegexPredicate.h"
 
 #endif

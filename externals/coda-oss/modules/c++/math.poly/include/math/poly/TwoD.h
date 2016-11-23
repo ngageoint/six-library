@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math.poly-c++ 
+ * This file is part of math.poly-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.poly-c++ is free software; you can redistribute it and/or modify
@@ -14,12 +14,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 #ifndef __MATH_POLY_TWOD_H__
 #define __MATH_POLY_TWOD_H__
 
@@ -44,7 +44,7 @@ namespace poly
 
     And, it supports the multiplication/addtion/subtraction of 2-D polynomials.
 
-    Also note: 
+    Also note:
     In a 2-D sense,
        X -> line
        Y -> elem
@@ -55,7 +55,7 @@ class TwoD
 protected:
     //! using a vector of one-d polynomials simplify the implementation.
     std::vector<OneD<_T> > mCoef;
-    
+
 public:
 
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
@@ -63,7 +63,7 @@ public:
     //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
     TwoD() {}
 
-    TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}   
+    TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
 
     template<typename Vector_T> TwoD(size_t orderX, size_t orderY,
                                      const Vector_T& coeffs)
@@ -77,12 +77,12 @@ public:
             }
         }
     }
-    
-     TwoD(const std::vector<OneD<_T> >& v) : 
-        mCoef(v) 
+
+    TwoD(const std::vector<OneD<_T> >& v) :
+        mCoef(v)
     {
     }
-    
+
     bool empty() const
     {
         return mCoef.empty();
@@ -98,7 +98,7 @@ public:
     {
         if (empty())
             throw except::IndexOutOfRangeException(Ctxt("Can't have an order less than zero"));
-        return mCoef[0].order(); 
+        return mCoef[0].order();
     }
     _T operator () (double atX, double atY) const;
     _T integrate(double xStart, double xEnd, double yStart, double yEnd) const;
@@ -110,13 +110,13 @@ public:
     {
         if (i > orderX())
             throw except::Exception(
-                Ctxt("Index [" + str::toString<size_t>(i) + 
-                "] is out of bounds for orderX [" + 
+                Ctxt("Index [" + str::toString<size_t>(i) +
+                "] is out of bounds for orderX [" +
                 str::toString<size_t>(orderX()) + "]"));
         else if (p.order() != orderY())
             throw except::Exception(
-                Ctxt("OneD poly [" + str::toString<size_t>(p.order()) + 
-                "] is of the incorrect size for orderY [" + 
+                Ctxt("OneD poly [" + str::toString<size_t>(p.order()) +
+                "] is of the incorrect size for orderY [" +
                 str::toString<size_t>(orderY()) + "]"));
         else
             mCoef[i] = p;
@@ -238,9 +238,9 @@ public:
     TwoD<_T> operator / (double cv) const;
     bool operator == (const TwoD<_T>& p) const;
     bool operator != (const TwoD<_T>& p) const;
-    
+
     TwoD<_T> power(size_t toThe) const;
-    
+
     template<typename _TT>
         friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
 
@@ -252,6 +252,12 @@ public:
     {
         ar & mCoef;
     }
+
+    /*
+     * Return true if polynomial represents  scalar value
+     * That is, every element other than [0][0] is 0
+     */
+    bool isScalar() const;
 };
 
 } // poly

@@ -13,13 +13,15 @@ class dumpconfig(BuildContext):
             self.load_envs()
 
         self.recurse([self.run_dir])
-    
+
         targetsStr = '--targets=' + self.targets
 
         # Create the output string
         output = os.path.join(self.env['PREFIX'], 'include')
         output += '\n'
-        proc = subprocess.Popen(['python', 'waf', 'dumpenv', targetsStr], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(['python', 'waf', 'dumpenv', targetsStr],
+                stdout=subprocess.PIPE,
+                universal_newlines=True)
         dump = proc.stdout.read().rstrip().split(' ')
 
         # Remove PYTHONDIR and PYTHONARCHDIR
@@ -28,14 +30,16 @@ class dumpconfig(BuildContext):
                 output += value + ' '
 
         output += '\n'
-        proc = subprocess.Popen(['python', 'waf', 'dumplib-raw', targetsStr], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(['python', 'waf', 'dumplib-raw', targetsStr],
+                stdout=subprocess.PIPE,
+                universal_newlines=True)
         dump = proc.stdout.read().rstrip()
         if not dump.startswith('No dependencies'):
             output += dump
         output += '\n'
         output += os.path.join(self.env['PREFIX'], 'lib')
         output += '\n'
-        
+
         # Write the output to file
         f = open(os.path.join(self.env['PREFIX'], 'prebuilt_config.txt'), 'w')
         f.write(output)

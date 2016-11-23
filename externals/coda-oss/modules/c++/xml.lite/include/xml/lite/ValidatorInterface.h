@@ -109,9 +109,9 @@ public:
      *  \param recursive    Do a recursive search for schemas on directory 
      *                      input
      */
-    ValidatorInterface(const std::vector<std::string>& schemaPaths, 
-                       logging::Logger* log,
-                       bool recursive = true) {}
+    ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) {}
 
     //! Destructor.
     virtual ~ValidatorInterface() {}

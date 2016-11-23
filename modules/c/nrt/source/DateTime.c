@@ -550,7 +550,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 return NULL;
             break;
 
-            /* 
+            /*
              * "Alternative" modifiers. Just set the appropriate flag
              * and start over again.
              */
@@ -564,7 +564,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             alt_format |= ALT_O;
             goto again;
 
-            /* 
+            /*
              * "Complex" conversion rules, implemented through recursion.
              */
         case 'c':              /* Date and time, using the locale's format. */
@@ -616,7 +616,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 return NULL;
             break;
 
-            /* 
+            /*
              * "Elementary" conversion rules.
              */
         case 'A':              /* The day of week, using the locale's form. */
@@ -799,7 +799,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
         case 'U':              /* The week of year, beginning on sunday. */
         case 'W':              /* The week of year, beginning on monday. */
             LEGAL_ALT(ALT_O);
-            /* 
+            /*
              * XXX This is bogus, as we can not assume any valid
              * information present in the tm structure at this
              * point to calculate a real value, so just check the
@@ -839,7 +839,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             else
                 tm->tm_year = i + 1900 - TM_YEAR_BASE;
             break;
-            /* 
+            /*
              * Miscellaneous conversions.
              */
         case 'n':              /* Any kind of white-space. */
