@@ -22,7 +22,7 @@
 #ifndef __SIX_PARAMETER_H__
 #define __SIX_PARAMETER_H__
 
-#include "six/Types.h"
+#include "six/Typedefs.h"
 #include <import/str.h>
 
 namespace six
@@ -53,7 +53,7 @@ public:
         mName(other.mName)
     {
     }
-    
+
     //!  Templated constructor, constructs from given value
     template<typename T>
     Parameter(T value)

@@ -99,8 +99,6 @@ public:
     GeoData() :
         earthModel(EarthModelType::WGS84)
     {
-        scp.ecf = Init::undefined<Vector3>();
-        scp.llh = Init::undefined<LatLonAlt>();
     }
 
     //!  Clone, including non-NULL GeoInfo objects

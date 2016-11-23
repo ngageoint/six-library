@@ -34,6 +34,8 @@
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
+#include "six/Init.h"
+#include "six/Typedefs.h"
 
 namespace six
 {
@@ -44,79 +46,6 @@ static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
  * \brief Throwable related to Six schema validation problems.
  */
 DECLARE_EXCEPTION(DESValidation)
-
-//! Vector types
-typedef math::linear::VectorN<3> Vector3;
-
-//! Date type
-typedef nitf::DateTime DateTime;
-
-typedef unsigned char UByte;
-
-//! POLY type
-typedef math::poly::OneD<double> Poly1D;
-
-//! 2D_POLY
-typedef math::poly::TwoD<double> Poly2D;
-
-//! XYZ_POLY
-typedef math::poly::OneD<Vector3> PolyXYZ;
-
-//! Angle Magnitude
-typedef scene::AngleMagnitude AngleMagnitude;
-
-//! Lat Lon
-typedef scene::LatLon LatLon;
-
-//! Lat Lon Alt
-typedef scene::LatLonAlt LatLonAlt;
-
-typedef except::Context ValidationContext;
-
-// These are heavily used and we don't want any mistakes
-typedef types::RowCol<double> RowColDouble;
-typedef types::RowCol<sys::SSize_T> RowColInt;
-
-typedef scene::FrameType FrameType;
-
-/*!
- *  \struct DecorrType
- *  \brief Reuse type for ErrorStatistics
- *
- *  Just a simple pair for error stats
- */
-struct DecorrType
-{
-    DecorrType(double ccz = 0, double dr = 0) :
-        corrCoefZero(ccz), decorrRate(dr)
-    {
-    }
-
-    DecorrType(const DecorrType& dt) :
-        corrCoefZero(dt.corrCoefZero), decorrRate(dt.decorrRate)
-    {
-    }
-
-    bool operator==(const DecorrType& rhs) const
-    {
-        return (corrCoefZero == rhs.corrCoefZero &&
-                decorrRate == rhs.decorrRate);
-    }
-
-    double corrCoefZero;
-    double decorrRate;
-};
-
-/*!
- *  2-D polynomial pair
- */
-
-typedef types::RowCol<Poly2D> RowColPoly2D;
-
-/*!
- *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
- */
-typedef types::RowCol<LatLon> RowColLatLon;
 
 /*!
  *  \struct Constants
@@ -181,54 +110,6 @@ struct Constants
                                               (int) type)));
         }
     }
-
-};
-
-/*!
- *  \struct ReferencePoint
- *  \brief Information grouping for a reference point
- *
- *  This object contains a vector (in ECEF, IOW tail from center of spheroid),
- *  and row-column position for a point.
- *
- */
-struct ReferencePoint
-{
-    //!  ECEF location of point
-    Vector3 ecef;
-
-    //!  Row col pixel location of point
-    RowColDouble rowCol;
-
-    //!  (Optional) name.  Leave it blank if you don't need it
-    std::string name;
-
-    //!  Construct, init all fields at once (except optional name)
-    ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-                   double col = 0) :
-        rowCol(row, col)
-    {
-        ecef[0] = x;
-        ecef[1] = y;
-        ecef[2] = z;
-    }
-    //!  Alternate construct, still init all fields at once
-    ReferencePoint(Vector3 xyz, RowColDouble rcd) :
-        ecef(xyz), rowCol(rcd)
-    {
-    }
-
-    //!  Are two points the same
-    bool operator==(const ReferencePoint& x) const
-    {
-        return ecef == x.ecef && rowCol == x.rowCol;
-    }
-
-    //! Are two point different
-    bool operator!=(const ReferencePoint& x) const
-    {
-        return !((*this) == x);
-    }
 };
 
 /*!
@@ -242,6 +123,12 @@ struct SCP
 {
     Vector3 ecf;
     LatLonAlt llh;
+
+    SCP() :
+       ecf(Init::undefined<Vector3>()),
+       llh(Init::undefined<LatLonAlt>())
+    {
+    }
 
     bool operator==(const SCP& rhs) const
     {
@@ -369,102 +256,6 @@ struct AmplitudeTable : public LUT
         return ret;
     }
 };
-
-/*!
- *  \struct Corners
- *  \brief Image corners
- *
- *  This represents the four image corners.  It's used rather than a vector
- *  of LatLon's to make explicit which corner is which rather than assuming
- *  they're stored in clockwise order.
- */
-template <typename LatLonT>
-struct Corners
-{
-    static const size_t NUM_CORNERS = 4;
-
-    //! These can be used with getCorner() below
-    static const size_t UPPER_LEFT = 0;
-    static const size_t FIRST_ROW_FIRST_COL = UPPER_LEFT;
-
-    static const size_t UPPER_RIGHT = 1;
-    static const size_t FIRST_ROW_LAST_COL = UPPER_RIGHT;
-
-    static const size_t LOWER_RIGHT = 2;
-    static const size_t LAST_ROW_LAST_COL = LOWER_RIGHT;
-
-    static const size_t LOWER_LEFT = 3;
-    static const size_t LAST_ROW_FIRST_COL = LOWER_LEFT;
-
-    //! Returns the corners in clockwise order
-    const LatLonT& getCorner(size_t idx) const
-    {
-        switch (idx)
-        {
-        case UPPER_LEFT:
-            return upperLeft;
-        case UPPER_RIGHT:
-            return upperRight;
-        case LOWER_RIGHT:
-            return lowerRight;
-        case LOWER_LEFT:
-            return lowerLeft;
-        default:
-            throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
-        }
-    }
-
-    //! Returns the corners in clockwise order
-    LatLonT& getCorner(size_t idx)
-    {
-        switch (idx)
-        {
-        case UPPER_LEFT:
-            return upperLeft;
-        case UPPER_RIGHT:
-            return upperRight;
-        case LOWER_RIGHT:
-            return lowerRight;
-        case LOWER_LEFT:
-            return lowerLeft;
-        default:
-            throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
-        }
-    }
-
-    bool operator==(const Corners& rhs) const
-    {
-        return (upperLeft == rhs.upperLeft &&
-            upperRight == rhs.upperRight &&
-            lowerRight == rhs.lowerRight &&
-            lowerLeft == rhs.lowerLeft);
-    }
-
-    bool operator!=(const Corners& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    LatLonT upperLeft;
-    LatLonT upperRight;
-    LatLonT lowerRight;
-    LatLonT lowerLeft;
-};
-
-template <typename LatLonT> const size_t Corners<LatLonT>::NUM_CORNERS;
-template <typename LatLonT> const size_t Corners<LatLonT>::UPPER_LEFT;
-template <typename LatLonT> const size_t Corners<LatLonT>::FIRST_ROW_FIRST_COL;
-template <typename LatLonT> const size_t Corners<LatLonT>::UPPER_RIGHT;
-template <typename LatLonT> const size_t Corners<LatLonT>::FIRST_ROW_LAST_COL;
-template <typename LatLonT> const size_t Corners<LatLonT>::LOWER_RIGHT;
-template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_LAST_COL;
-template <typename LatLonT> const size_t Corners<LatLonT>::LOWER_LEFT;
-template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_FIRST_COL;
-
-typedef Corners<LatLon> LatLonCorners;
-typedef Corners<LatLonAlt> LatLonAltCorners;
 
 /*!
  *   \enum ImageMode

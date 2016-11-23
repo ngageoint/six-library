@@ -34,6 +34,7 @@
 #include "six/NITFWriteControl.h"
 #include "six/Options.h"
 #include "six/Init.h"
+#include "six/Typedefs.h"
 #include "six/Types.h"
 #include "six/Utilities.h"
 #include "six/Parameter.h"
