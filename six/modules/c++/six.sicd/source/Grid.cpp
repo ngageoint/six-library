@@ -640,8 +640,11 @@ void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
         col->unitVector = derivedColUnitVector(scpcoa, scp);
     }
 
-    row->fillDerivedFields(rgAzComp, geoData,
-            fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+    if (!Init::isUndefined<double>(fc))
+    {
+        row->fillDerivedFields(rgAzComp, geoData,
+                fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
+    }
     col->fillDerivedFields(rgAzComp, geoData, 0);
 }
 
