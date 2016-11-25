@@ -28,6 +28,16 @@ import traceback
 from datetime import datetime
 from pysix.six_base import DateTime
 
+def computeError(lhs, rhs):
+    if lhs == 0 and rhs == 0:
+        error = 0
+    elif lhs == 0:
+        error = abs(lhs - rhs) / rhs
+    else:
+        error = abs(lhs - rhs) / lhs
+    return error
+
+
 def convertToPython():
     original = DateTime()
     converted = original.toPythonDateTime()
@@ -39,7 +49,7 @@ def convertToPython():
         assert(original.getMinute() == converted.minute)
         assert(int(original.getSecond()) == converted.second)
         microseconds = (original.getSecond() - int(original.getSecond())) * 1e6
-        assert(int(microseconds) == converted.microsecond)
+        assert(computeError(microseconds, converted.microsecond) < 1e-5)
     except AssertionError as error:
         traceback.print_exc()
         return False
@@ -56,7 +66,7 @@ def convertFromPython():
         assert(converted.getMinute() == original.minute)
         assert(int(converted.getSecond()) == original.second)
         microsecond = (converted.getSecond() - int(converted.getSecond())) * 1e6
-        assert(int(microsecond) == original.microsecond)
+        assert(computeError(microsecond, original.microsecond) < 1e-5)
     except AssertionError as error:
         traceback.print_exc()
         return False
