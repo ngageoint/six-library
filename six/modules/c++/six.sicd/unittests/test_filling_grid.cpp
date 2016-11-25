@@ -85,12 +85,13 @@ TEST_CASE(HammingWindow)
 
     six::sicd::ImageData imageData;
     row.fillDerivedFields(imageData);
+
     TEST_ASSERT_EQ(row.weights.size(), 512);
     //Just grabbing some random values to make sure they line up with MATLAB
     //TEST_ASSERT_ALMOST_EQ is too picky for what we have, so doing something
     //more manual.
-    TEST_ASSERT_LESSER(std::abs(row.weights[163] - .7332), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[300] - .9328), .0001)
+    TEST_ASSERT_ALMOST_EQ(row.weights[163], .733193239);
+    TEST_ASSERT_ALMOST_EQ(row.weights[300], .9328411378);
 }
 
 TEST_CASE(KaiserWindow)
@@ -105,9 +106,9 @@ TEST_CASE(KaiserWindow)
 
     six::sicd::ImageData imageData;
     row.fillDerivedFields(imageData);
-    TEST_ASSERT_LESSER(std::abs(row.weights[10] - .0014), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[300] - .8651), .0001);
-    TEST_ASSERT_LESSER(std::abs(row.weights[460] - .0238), .0001);
+    TEST_ASSERT_ALMOST_EQ(row.weights[10], .001442113);
+    TEST_ASSERT_ALMOST_EQ(row.weights[300], .865089423);
+    TEST_ASSERT_ALMOST_EQ(row.weights[460], .023764757);
 }
 
 TEST_CASE(FillUnitVectorsFromRMAT)

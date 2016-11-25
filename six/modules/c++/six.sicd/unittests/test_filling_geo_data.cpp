@@ -30,15 +30,15 @@ TEST_CASE(ecfFromLlh)
     six::sicd::ImageData imageData;
     geoData.fillDerivedFields(imageData);
     std::vector<double> expectedData(3);
-    expectedData[0] = 5.9031e6;
-    expectedData[1] = 2.1485e6;
-    expectedData[2] = 1.1003e6;
+    expectedData[0] = 5903057.30519;
+    expectedData[1] = 2148537.15026;
+    expectedData[2] = 1100253.75718;
     six::Vector3 expected(expectedData);
     for (size_t ii = 0; ii < 3; ++ii)
     {
         // This is as much accuracy as the results from
         // MATLAB give.
-        TEST_ASSERT_LESSER(std::abs(expected[ii] - geoData.scp.ecf[ii]), 100);
+        TEST_ASSERT_ALMOST_EQ_EPS(expected[ii], geoData.scp.ecf[ii], 1e-4);
     }
 }
 
