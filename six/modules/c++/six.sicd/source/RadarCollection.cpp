@@ -122,7 +122,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     if (std::abs(txRFBandwidth / (txPulseLength * txFMRate) - 1) > WF_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxFRBandwidth: "
             << txRFBandwidth << std::endl
             << "SICD.RadarCollection.TxFrequency.txFMRate * txPulseLength: "
@@ -136,7 +136,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         rcvFMRate != 0)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
             << rcvDemodType.toString() << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
@@ -150,7 +150,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         std::abs(rcvFMRate / txFMRate - 1) > WGT_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
             << rcvDemodType << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
@@ -167,7 +167,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         txFrequencyStart <= 0)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.txFreqStart: "
             << txFrequencyStart << std::endl;
         log.error(messageBuilder.str());
@@ -180,7 +180,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             rcvFrequencyStart <= 0)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.rcvFreqStart: "
             << rcvFrequencyStart << std::endl;
         log.error(messageBuilder.str());
@@ -191,7 +191,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     if (txPulseLength > rcvWindowLength)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxPulseLength: "
             << txPulseLength << std::endl
             << "SICD.RadarCollection.Waveform.WFPArameters.RcvWindowLength: "
@@ -204,7 +204,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     if (rcvIFBandwidth > adcSampleRate)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvIFBandwidth: "
             << rcvIFBandwidth << std::endl
             << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
@@ -217,7 +217,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     if (rcvDemodType == DemodType::CHIRP && txRFBandwidth > adcSampleRate)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
             << rcvDemodType << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxRFBandwidth: "
@@ -234,7 +234,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         rcvFrequencyStart <= txFrequencyStart - freq_tol)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
             << rcvFrequencyStart << std::endl;
         log.error(messageBuilder.str());
@@ -447,7 +447,7 @@ bool RadarCollection::validate(logging::Logger& log) const
         std::abs((wfMin / txFrequencyMin) - 1) > WF_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart: "
             << wfMin << std::endl
             << "SICD.RadarCollection.TxFrequency.Min: " << txFrequencyMin
@@ -461,7 +461,7 @@ bool RadarCollection::validate(logging::Logger& log) const
         std::abs((wfMax / txFrequencyMax) - 1) > WF_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxFreqStart"
             << " + TxFRBandwidth: " << wfMax << std::endl
             << "SICD.RadarCollection.TxFrequency.Max: "
@@ -475,7 +475,7 @@ bool RadarCollection::validate(logging::Logger& log) const
     if (six::Init::isUndefined<int>(refFrequencyIndex) && txFrequencyMin <= 0)
     {
         messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR
+        messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.txFrequencyMin: "
             << txFrequencyMin << std::endl;
         log.error(messageBuilder.str());
