@@ -150,7 +150,9 @@ public:
     virtual bool changeDirectory(const std::string& path) const = 0;
 
     /*!
-     *  Get a suitable temporary file name
+     *  Create a temporary file with random name in the specified
+     *  directory with the given prefix
+     *
      *  \return The file name
      *
      */
