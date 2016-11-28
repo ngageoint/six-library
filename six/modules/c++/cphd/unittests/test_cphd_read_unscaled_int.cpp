@@ -31,38 +31,12 @@
 #include <cphd/CPHDWriter.h>
 #include <types/RowCol.h>
 #include <cli/ArgumentParser.h>
+#include <io/TempFile.h>
 
 #include "TestCase.h"
 
 namespace
 {
-class TempFile
-{
-public:
-    TempFile();
-    ~TempFile();
-    std::string pathname() const;
-private:
-    std::string mName;
-};
-
-TempFile::TempFile()
-{
-    char nameBuffer[L_tmpnam];
-    std::tmpnam(nameBuffer);
-    mName = nameBuffer;
-}
-
-TempFile::~TempFile()
-{
-    std::remove(mName.c_str());
-}
-
-std::string TempFile::pathname() const
-{
-    return mName;
-}
-
 
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
@@ -173,8 +147,8 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    sys::ubyte scratchData[sizeInBytes];
-    mem::BufferView<sys::ubyte> scratch(scratchData, sizeInBytes);
+    mem::ScopedArray<sys::ubyte> scratchData(new sys::ubyte[sizeInBytes]);
+    mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
     mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
@@ -210,7 +184,7 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
 template<typename T>
 bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 {
-    TempFile tempfile;
+    io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<double> scaleFactors =
@@ -286,7 +260,7 @@ int main(int argc, char** argv)
         TEST_CHECK(testScaledInt16);
         TEST_CHECK(testUnscaledFloat);
         TEST_CHECK(testScaledFloat);
-        TempFile tempfile;
+        return 0;
     }
     catch (const std::exception& ex)
     {
