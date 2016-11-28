@@ -237,7 +237,16 @@ bool ComplexData::validate(logging::Logger& log) const
 
 void ComplexData::fillDerivedFields(bool includeDefault)
 {
-    geoData->fillDerivedFields(*imageData);
+    const scene::PlaneProjectionModel model(
+            scpcoa->slantPlaneNormal(geoData->scp.ecf),
+            grid->row->unitVector,
+            grid->col->unitVector,
+            geoData->scp.ecf,
+            position->arpPoly,
+            grid->timeCOAPoly,
+            scpcoa->look(geoData->scp.ecf));
+
+    geoData->fillDerivedFields(*imageData, model);
     grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
     position->fillDerivedFields(*scpcoa);
     radarCollection->fillDerivedFields();

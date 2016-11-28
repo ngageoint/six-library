@@ -21,6 +21,7 @@
  */
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
+#include "six/sicd/Utilities.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -103,15 +104,22 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
             }
             if (!minimumColComesFirst)
             {
+                messageBuilder.str();
                 messageBuilder << "ImageData.ValidData first col of matching"
                     << "minimum row index should have minimum col index";
                 log.error(messageBuilder.str());
                 valid = false;
             }
         }
+        if (!Utilities::isClockwise(validData))
+        {
+            messageBuilder.str();
+            messageBuilder << "ImageData.ValidData should be arrange clockwise";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
     }
 
-    //TODO: figure out how to tell if corners are clockwise
     return valid;
 }
 

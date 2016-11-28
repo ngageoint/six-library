@@ -330,6 +330,11 @@ class LatLon(_object):
         """__eq__(LatLon self, LatLon x) -> bool"""
         return _scene.LatLon___eq__(self, x)
 
+
+    def __ne__(self, x):
+        """__ne__(LatLon self, LatLon x) -> bool"""
+        return _scene.LatLon___ne__(self, x)
+
     __swig_destroy__ = _scene.delete_LatLon
     __del__ = lambda self: None
 LatLon_swigregister = _scene.LatLon_swigregister

@@ -539,6 +539,34 @@ Vector3 Utilities::wgs84Norm(const Vector3& point)
     return normal.unit();
 }
 
+bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
+                            bool isUpPositive)
+{
+    if (vertices.size() < 3)
+    {
+        throw except::Exception(Ctxt(
+                "Polygons must have at least three points"));
+    }
+
+    // If the signed area is positive, and y values are ascending,
+    // then it is clockwise
+    int area = 0;
+    for (size_t ii = 0; ii < vertices.size(); ++ii)
+    {
+        const int x1 = vertices[ii].col;
+        const int y1 = vertices[ii].row;
+        const size_t nextIndex = (ii == vertices.size() - 1) ? 0 : ii + 1;
+        const int x2 = vertices[nextIndex].col;
+        const int y2 = vertices[nextIndex].row;
+        area += (x1 * y2 - x2 * y1);
+    }
+    if (!isUpPositive)
+    {
+        area *= -1;
+    }
+    return (area > 0);
+}
+
 std::auto_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,

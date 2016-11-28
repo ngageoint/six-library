@@ -267,6 +267,17 @@ public:
      */
     static Vector3 wgs84Norm(const Vector3& point);
 
+    /*
+     * Determine if the vertices of a simple polygon are clockwise
+     * Throw an exception if vertices has less than three points
+     *
+     * \param vertices The vertices of what is assumed to be a simple polygon
+     * \param isUpPositive True if y value increased while going up the axis
+     * \return True if vertices are clockwise
+     */
+    static bool isClockwise(const std::vector<RowColInt>& vertices,
+                            bool isUpPositive=false);
+
      /* Parses the XML in 'xmlStream' and converts it into a ComplexData object.
      * Throws if the underlying type is not complex.
      *

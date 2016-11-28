@@ -26,6 +26,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "scene/ProjectionModel.h"
 #include <mem/ScopedCloneablePtr.h>
 #include <logging/Logger.h>
 
@@ -145,7 +146,8 @@ public:
     }
 
     //Doesn't currently do anything
-    void fillDerivedFields(const ImageData& imageData);
+    void fillDerivedFields(const ImageData& imageData,
+            const scene::ProjectionModel& model);
     bool validate(logging::Logger& log) const;
 
 private:

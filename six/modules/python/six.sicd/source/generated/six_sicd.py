@@ -583,9 +583,9 @@ class GeoData(_object):
         return _six_sicd.GeoData___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, imageData):
-        """fillDerivedFields(GeoData self, ImageData imageData)"""
-        return _six_sicd.GeoData_fillDerivedFields(self, imageData)
+    def fillDerivedFields(self, imageData, model):
+        """fillDerivedFields(GeoData self, ImageData imageData, ProjectionModel model)"""
+        return _six_sicd.GeoData_fillDerivedFields(self, imageData, model)
 
 
     def validate(self, log):
@@ -3202,6 +3202,15 @@ class SixSicdUtilities(_object):
 
     wgs84Norm = staticmethod(wgs84Norm)
 
+    def isClockwise(vertices, isUpPositive=False):
+        """
+        isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
+        isClockwise(VectorRowColInt vertices) -> bool
+        """
+        return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
+
+    isClockwise = staticmethod(isClockwise)
+
     def parseData(xmlStream, schemaPaths, log):
         """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
@@ -3287,6 +3296,13 @@ def SixSicdUtilities_nPoly(poly, index):
 def SixSicdUtilities_wgs84Norm(point):
     """SixSicdUtilities_wgs84Norm(Vector3 point) -> Vector3"""
     return _six_sicd.SixSicdUtilities_wgs84Norm(point)
+
+def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
+    """
+    isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
+    SixSicdUtilities_isClockwise(VectorRowColInt vertices) -> bool
+    """
+    return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
 
 def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
     """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
@@ -3762,9 +3778,9 @@ class ScopedCloneableGeoData(_object):
         return _six_sicd.ScopedCloneableGeoData___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, imageData):
-        """fillDerivedFields(ScopedCloneableGeoData self, ImageData imageData)"""
-        return _six_sicd.ScopedCloneableGeoData_fillDerivedFields(self, imageData)
+    def fillDerivedFields(self, imageData, model):
+        """fillDerivedFields(ScopedCloneableGeoData self, ImageData imageData, ProjectionModel model)"""
+        return _six_sicd.ScopedCloneableGeoData_fillDerivedFields(self, imageData, model)
 
 
     def validate(self, log):

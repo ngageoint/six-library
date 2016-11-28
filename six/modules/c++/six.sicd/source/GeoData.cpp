@@ -53,7 +53,8 @@ bool GeoData::operator==(const GeoData& rhs) const
             && geoInfos == rhs.geoInfos);
 }
 
-void GeoData::fillDerivedFields(const ImageData& imageData)
+void GeoData::fillDerivedFields(const ImageData& imageData,
+        const scene::ProjectionModel& model)
 {
     if (!Init::isUndefined<Vector3>(scp.ecf) &&
         Init::isUndefined<LatLonAlt>(scp.llh))
@@ -82,6 +83,8 @@ void GeoData::fillDerivedFields(const ImageData& imageData)
         cornerLineSample[2].col = imageData.numCols;
         cornerLineSample[3].row = imageData.numRows;
         cornerLineSample[4].col = 1;
+
+
         // line 746; requires point_slant_to_ground
     }
 
@@ -89,6 +92,15 @@ void GeoData::fillDerivedFields(const ImageData& imageData)
     if (!imageData.validData.empty() &&
         validData.empty())
     {
+        validData.resize(imageData.validData.size());
+        scene::ECEFToLLATransform transformer;
+        for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
+        {
+            // TODO: test
+            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+                    imageData.validData[ii]));
+            validData[ii] = LatLon(lla.getLat(), lla.getLon());
+        }
         // line 757; requires point slant to ground
     }
 }

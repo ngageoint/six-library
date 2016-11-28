@@ -7248,6 +7248,70 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_LatLon___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::LatLon *arg1 = (scene::LatLon *) 0 ;
+  scene::LatLon *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:LatLon___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__LatLon, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LatLon___ne__" "', argument " "1"" of type '" "scene::LatLon const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::LatLon * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_scene__LatLon,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LatLon___ne__" "', argument " "2"" of type '" "scene::LatLon const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LatLon___ne__" "', argument " "2"" of type '" "scene::LatLon const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::LatLon * >(argp2);
+  {
+    try
+    {
+      result = (bool)((scene::LatLon const *)arg1)->operator !=((scene::LatLon const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_LatLon(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::LatLon *arg1 = (scene::LatLon *) 0 ;
@@ -26111,6 +26175,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLon_setLatRadians", _wrap_LatLon_setLatRadians, METH_VARARGS, (char *)"LatLon_setLatRadians(LatLon self, double lat)"},
 	 { (char *)"LatLon_setLonRadians", _wrap_LatLon_setLonRadians, METH_VARARGS, (char *)"LatLon_setLonRadians(LatLon self, double lon)"},
 	 { (char *)"LatLon___eq__", _wrap_LatLon___eq__, METH_VARARGS, (char *)"LatLon___eq__(LatLon self, LatLon x) -> bool"},
+	 { (char *)"LatLon___ne__", _wrap_LatLon___ne__, METH_VARARGS, (char *)"LatLon___ne__(LatLon self, LatLon x) -> bool"},
 	 { (char *)"delete_LatLon", _wrap_delete_LatLon, METH_VARARGS, (char *)"delete_LatLon(LatLon self)"},
 	 { (char *)"LatLon_swigregister", LatLon_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_LatLonAlt", _wrap_new_LatLonAlt, METH_VARARGS, (char *)"\n"
