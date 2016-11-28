@@ -174,6 +174,7 @@ struct ReferencePoint
 template <typename LatLonT>
 struct Corners
 {
+    Corners();
     static const size_t NUM_CORNERS = 4;
 
     //! These can be used with getCorner() below
@@ -257,6 +258,7 @@ template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_FIRST_COL;
 
 typedef Corners<LatLon> LatLonCorners;
 typedef Corners<LatLonAlt> LatLonAltCorners;
+
 
 }
 

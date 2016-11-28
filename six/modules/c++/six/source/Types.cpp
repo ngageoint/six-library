@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/Typedefs.h"
 #include "six/Types.h"
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
@@ -53,7 +54,7 @@ const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";
 const sys::Uint64_T Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
 
-const char Constants::SICD_DESSHSI[] = 
+const char Constants::SICD_DESSHSI[] =
         "SICD Volume 1 Design & Implementation Description Document";
 const char Constants::SIDD_DESSHSI[] =
         "SIDD Volume 1 Design & Implementation Description Document";
@@ -72,4 +73,24 @@ ImageMode getImageMode(RadarModeType radarMode)
         return FRAME_MODE;
     }
 }
+
+template<>
+Corners<LatLon>::Corners() :
+    upperLeft(Init::undefined<LatLon>()),
+    upperRight(Init::undefined<LatLon>()),
+    lowerRight(Init::undefined<LatLon>()),
+    lowerLeft(Init::undefined<LatLon>())
+{
 }
+
+template<>
+Corners<LatLonAlt>::Corners() :
+    upperLeft(Init::undefined<LatLonAlt>()),
+    upperRight(Init::undefined<LatLonAlt>()),
+    lowerRight(Init::undefined<LatLonAlt>()),
+    lowerLeft(Init::undefined<LatLonAlt>())
+{
+}
+
+}
+

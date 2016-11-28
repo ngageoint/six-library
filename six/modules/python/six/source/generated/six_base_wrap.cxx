@@ -64815,6 +64815,49 @@ SWIGINTERN PyObject *VectorString_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Corners< scene::LatLon > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_LatLonCorners")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::Corners< scene::LatLon > *)new six::Corners< scene::LatLon >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_LatLonCorners_getCorner__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Corners< scene::LatLon > *arg1 = (six::Corners< scene::LatLon > *) 0 ;
@@ -65565,49 +65608,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Corners< scene::LatLon > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_LatLonCorners")) SWIG_fail;
-  {
-    try
-    {
-      result = (six::Corners< scene::LatLon > *)new six::Corners< scene::LatLon >();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Corners< scene::LatLon > *arg1 = (six::Corners< scene::LatLon > *) 0 ;
@@ -65665,6 +65665,49 @@ SWIGINTERN PyObject *LatLonCorners_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap_new_LatLonAltCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Corners< scene::LatLonAlt > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_LatLonAltCorners")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::Corners< scene::LatLonAlt > *)new six::Corners< scene::LatLonAlt >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_LatLonAltCorners_getCorner__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -66410,49 +66453,6 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_lowerLeft_get(PyObject *SWIGUNUSEDPA
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_LatLonAltCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Corners< scene::LatLonAlt > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_LatLonAltCorners")) SWIG_fail;
-  {
-    try
-    {
-      result = (six::Corners< scene::LatLonAlt > *)new six::Corners< scene::LatLonAlt >();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -82671,6 +82671,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorString_capacity", _wrap_VectorString_capacity, METH_VARARGS, (char *)"VectorString_capacity(VectorString self) -> std::vector< std::string >::size_type"},
 	 { (char *)"delete_VectorString", _wrap_delete_VectorString, METH_VARARGS, (char *)"delete_VectorString(VectorString self)"},
 	 { (char *)"VectorString_swigregister", VectorString_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"LatLonCorners_getCorner", _wrap_LatLonCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLon\n"
 		"LatLonCorners_getCorner(LatLonCorners self, size_t idx) -> LatLon\n"
@@ -82685,9 +82686,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLonCorners_lowerRight_get", _wrap_LatLonCorners_lowerRight_get, METH_VARARGS, (char *)"LatLonCorners_lowerRight_get(LatLonCorners self) -> LatLon"},
 	 { (char *)"LatLonCorners_lowerLeft_set", _wrap_LatLonCorners_lowerLeft_set, METH_VARARGS, (char *)"LatLonCorners_lowerLeft_set(LatLonCorners self, LatLon lowerLeft)"},
 	 { (char *)"LatLonCorners_lowerLeft_get", _wrap_LatLonCorners_lowerLeft_get, METH_VARARGS, (char *)"LatLonCorners_lowerLeft_get(LatLonCorners self) -> LatLon"},
-	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"delete_LatLonCorners", _wrap_delete_LatLonCorners, METH_VARARGS, (char *)"delete_LatLonCorners(LatLonCorners self)"},
 	 { (char *)"LatLonCorners_swigregister", LatLonCorners_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_LatLonAltCorners", _wrap_new_LatLonAltCorners, METH_VARARGS, (char *)"new_LatLonAltCorners() -> LatLonAltCorners"},
 	 { (char *)"LatLonAltCorners_getCorner", _wrap_LatLonAltCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLonAlt\n"
 		"LatLonAltCorners_getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt\n"
@@ -82702,7 +82703,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLonAltCorners_lowerRight_get", _wrap_LatLonAltCorners_lowerRight_get, METH_VARARGS, (char *)"LatLonAltCorners_lowerRight_get(LatLonAltCorners self) -> LatLonAlt"},
 	 { (char *)"LatLonAltCorners_lowerLeft_set", _wrap_LatLonAltCorners_lowerLeft_set, METH_VARARGS, (char *)"LatLonAltCorners_lowerLeft_set(LatLonAltCorners self, LatLonAlt lowerLeft)"},
 	 { (char *)"LatLonAltCorners_lowerLeft_get", _wrap_LatLonAltCorners_lowerLeft_get, METH_VARARGS, (char *)"LatLonAltCorners_lowerLeft_get(LatLonAltCorners self) -> LatLonAlt"},
-	 { (char *)"new_LatLonAltCorners", _wrap_new_LatLonAltCorners, METH_VARARGS, (char *)"new_LatLonAltCorners() -> LatLonAltCorners"},
 	 { (char *)"delete_LatLonAltCorners", _wrap_delete_LatLonAltCorners, METH_VARARGS, (char *)"delete_LatLonAltCorners(LatLonAltCorners self)"},
 	 { (char *)"LatLonAltCorners_swigregister", LatLonAltCorners_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StdAutoRadiometric", _wrap_new_StdAutoRadiometric, METH_VARARGS, (char *)"new_StdAutoRadiometric() -> StdAutoRadiometric"},

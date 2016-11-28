@@ -4598,6 +4598,14 @@ class LatLonCorners(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, LatLonCorners, name)
     __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::Corners<(scene::LatLon)> self) -> LatLonCorners"""
+        this = _six_base.new_LatLonCorners()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
     NUM_CORNERS = _six_base.LatLonCorners_NUM_CORNERS
     UPPER_LEFT = _six_base.LatLonCorners_UPPER_LEFT
     FIRST_ROW_FIRST_COL = _six_base.LatLonCorners_FIRST_ROW_FIRST_COL
@@ -4641,14 +4649,6 @@ class LatLonCorners(_object):
     __swig_getmethods__["lowerLeft"] = _six_base.LatLonCorners_lowerLeft_get
     if _newclass:
         lowerLeft = _swig_property(_six_base.LatLonCorners_lowerLeft_get, _six_base.LatLonCorners_lowerLeft_set)
-
-    def __init__(self):
-        """__init__(six::Corners<(scene::LatLon)> self) -> LatLonCorners"""
-        this = _six_base.new_LatLonCorners()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
     __swig_destroy__ = _six_base.delete_LatLonCorners
     __del__ = lambda self: None
 LatLonCorners_swigregister = _six_base.LatLonCorners_swigregister
@@ -4662,6 +4662,14 @@ class LatLonAltCorners(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, LatLonAltCorners, name)
     __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::Corners<(scene::LatLonAlt)> self) -> LatLonAltCorners"""
+        this = _six_base.new_LatLonAltCorners()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
     NUM_CORNERS = _six_base.LatLonAltCorners_NUM_CORNERS
     UPPER_LEFT = _six_base.LatLonAltCorners_UPPER_LEFT
     FIRST_ROW_FIRST_COL = _six_base.LatLonAltCorners_FIRST_ROW_FIRST_COL
@@ -4705,14 +4713,6 @@ class LatLonAltCorners(_object):
     __swig_getmethods__["lowerLeft"] = _six_base.LatLonAltCorners_lowerLeft_get
     if _newclass:
         lowerLeft = _swig_property(_six_base.LatLonAltCorners_lowerLeft_get, _six_base.LatLonAltCorners_lowerLeft_set)
-
-    def __init__(self):
-        """__init__(six::Corners<(scene::LatLonAlt)> self) -> LatLonAltCorners"""
-        this = _six_base.new_LatLonAltCorners()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
     __swig_destroy__ = _six_base.delete_LatLonAltCorners
     __del__ = lambda self: None
 LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister

@@ -62,6 +62,9 @@ TEST_CASE(fillValidData)
     imageData.validData[1] = six::RowColInt(30, 40);
     imageData.validData[2] = six::RowColInt(50, 60);
 
+    imageData.numRows = 123;
+    imageData.numCols = 456;
+
     // TODO: Figure out how to make this populate with actual numbers
     geoData.fillDerivedFields(imageData, model);
 
@@ -72,6 +75,12 @@ TEST_CASE(fillValidData)
         TEST_ASSERT(isNaN(geoData.validData[ii].getLon()));
     }
 
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        // If this fails, try with -ffast-math not set
+        TEST_ASSERT(isNaN(geoData.imageCorners.getCorner(ii).getLat()));
+        TEST_ASSERT(isNaN(geoData.imageCorners.getCorner(ii).getLon()));
+    }
 }
 
 TEST_CASE(ecfFromLlh)

@@ -75,17 +75,19 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
     {
         std::vector<RowColDouble> cornerLineSample;
         cornerLineSample.resize(4);
-        cornerLineSample[0].row = 1;
-        cornerLineSample[0].col = 1;
-        cornerLineSample[1].row = 1;
-        cornerLineSample[1].col = imageData.numCols;
-        cornerLineSample[2].row = imageData.numRows;
-        cornerLineSample[2].col = imageData.numCols;
-        cornerLineSample[3].row = imageData.numRows;
-        cornerLineSample[4].col = 1;
+        cornerLineSample[0] = RowColDouble(1, 1);
+        cornerLineSample[1] = RowColDouble(1, imageData.numCols);
+        cornerLineSample[2] = RowColDouble(imageData.numRows, imageData.numCols);
+        cornerLineSample[3] = RowColDouble(imageData.numRows, 1);
 
-
-        // line 746; requires point_slant_to_ground
+        scene::ECEFToLLATransform transformer;
+        for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)
+        {
+            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+                    imageData.validData[ii]));
+            imageCorners.getCorner(ii).setLat(lla.getLat());
+            imageCorners.getCorner(ii).setLon(lla.getLon());
+        }
     }
 
     // Derived: Add ValidData geocoords
@@ -96,12 +98,10 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
         {
-            // TODO: test
             LatLonAlt lla = transformer.transform(model.imageGridToECEF(
                     imageData.validData[ii]));
             validData[ii] = LatLon(lla.getLat(), lla.getLon());
         }
-        // line 757; requires point slant to ground
     }
 }
 
