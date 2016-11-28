@@ -22,7 +22,7 @@
 #ifndef __SIX_PARAMETER_H__
 #define __SIX_PARAMETER_H__
 
-#include "six/Typedefs.h"
+#include "six/Types.h"
 #include <import/str.h>
 
 namespace six

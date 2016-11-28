@@ -80,7 +80,6 @@ using namespace six;
 %include "nitf/DateTime.hpp"
 %include "six/Enums.h"
 %include "six/Types.h"
-%include "six/Typedefs.h"
 %include "six/Init.h"
 %include "six/Parameter.h"
 %include "six/ParameterCollection.h"

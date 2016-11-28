@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/Typedefs.h"
+#include "six/Init.h"
 #include "six/Types.h"
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
@@ -75,7 +75,7 @@ ImageMode getImageMode(RadarModeType radarMode)
 }
 
 template<>
-Corners<LatLon>::Corners() :
+LatLonCorners::Corners() :
     upperLeft(Init::undefined<LatLon>()),
     upperRight(Init::undefined<LatLon>()),
     lowerRight(Init::undefined<LatLon>()),
@@ -84,11 +84,17 @@ Corners<LatLon>::Corners() :
 }
 
 template<>
-Corners<LatLonAlt>::Corners() :
+LatLonAltCorners::Corners() :
     upperLeft(Init::undefined<LatLonAlt>()),
     upperRight(Init::undefined<LatLonAlt>()),
     lowerRight(Init::undefined<LatLonAlt>()),
     lowerLeft(Init::undefined<LatLonAlt>())
+{
+}
+
+SCP::SCP() :
+   ecf(Init::undefined<Vector3>()),
+   llh(Init::undefined<LatLonAlt>())
 {
 }
 

@@ -2957,6 +2957,45 @@ DESValidationException_swigregister = _six_base.DESValidationException_swigregis
 DESValidationException_swigregister(DESValidationException)
 SCHEMA_PATH = cvar.SCHEMA_PATH
 
+class DecorrType(_object):
+    """Proxy of C++ six::DecorrType class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DecorrType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DecorrType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::DecorrType self, double ccz=0, double dr=0) -> DecorrType
+        __init__(six::DecorrType self, double ccz=0) -> DecorrType
+        __init__(six::DecorrType self) -> DecorrType
+        __init__(six::DecorrType self, DecorrType dt) -> DecorrType
+        """
+        this = _six_base.new_DecorrType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, rhs):
+        """__eq__(DecorrType self, DecorrType rhs) -> bool"""
+        return _six_base.DecorrType___eq__(self, rhs)
+
+    __swig_setmethods__["corrCoefZero"] = _six_base.DecorrType_corrCoefZero_set
+    __swig_getmethods__["corrCoefZero"] = _six_base.DecorrType_corrCoefZero_get
+    if _newclass:
+        corrCoefZero = _swig_property(_six_base.DecorrType_corrCoefZero_get, _six_base.DecorrType_corrCoefZero_set)
+    __swig_setmethods__["decorrRate"] = _six_base.DecorrType_decorrRate_set
+    __swig_getmethods__["decorrRate"] = _six_base.DecorrType_decorrRate_get
+    if _newclass:
+        decorrRate = _swig_property(_six_base.DecorrType_decorrRate_get, _six_base.DecorrType_decorrRate_set)
+    __swig_destroy__ = _six_base.delete_DecorrType
+    __del__ = lambda self: None
+DecorrType_swigregister = _six_base.DecorrType_swigregister
+DecorrType_swigregister(DecorrType)
+
 class Constants(_object):
     """Proxy of C++ six::Constants class."""
 
@@ -3000,6 +3039,57 @@ def Constants_getNumBytesPerPixel(type):
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
     return _six_base.Constants_getNumBytesPerPixel(type)
 
+class ReferencePoint(_object):
+    """Proxy of C++ six::ReferencePoint class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ReferencePoint, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ReferencePoint, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["ecef"] = _six_base.ReferencePoint_ecef_set
+    __swig_getmethods__["ecef"] = _six_base.ReferencePoint_ecef_get
+    if _newclass:
+        ecef = _swig_property(_six_base.ReferencePoint_ecef_get, _six_base.ReferencePoint_ecef_set)
+    __swig_setmethods__["rowCol"] = _six_base.ReferencePoint_rowCol_set
+    __swig_getmethods__["rowCol"] = _six_base.ReferencePoint_rowCol_get
+    if _newclass:
+        rowCol = _swig_property(_six_base.ReferencePoint_rowCol_get, _six_base.ReferencePoint_rowCol_set)
+    __swig_setmethods__["name"] = _six_base.ReferencePoint_name_set
+    __swig_getmethods__["name"] = _six_base.ReferencePoint_name_get
+    if _newclass:
+        name = _swig_property(_six_base.ReferencePoint_name_get, _six_base.ReferencePoint_name_set)
+
+    def __init__(self, *args):
+        """
+        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0, double row=0, double col=0) -> ReferencePoint
+        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0, double row=0) -> ReferencePoint
+        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0) -> ReferencePoint
+        __init__(six::ReferencePoint self, double x=0, double y=0) -> ReferencePoint
+        __init__(six::ReferencePoint self, double x=0) -> ReferencePoint
+        __init__(six::ReferencePoint self) -> ReferencePoint
+        __init__(six::ReferencePoint self, Vector3 xyz, RowColDouble rcd) -> ReferencePoint
+        """
+        this = _six_base.new_ReferencePoint(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, x):
+        """__eq__(ReferencePoint self, ReferencePoint x) -> bool"""
+        return _six_base.ReferencePoint___eq__(self, x)
+
+
+    def __ne__(self, x):
+        """__ne__(ReferencePoint self, ReferencePoint x) -> bool"""
+        return _six_base.ReferencePoint___ne__(self, x)
+
+    __swig_destroy__ = _six_base.delete_ReferencePoint
+    __del__ = lambda self: None
+ReferencePoint_swigregister = _six_base.ReferencePoint_swigregister
+ReferencePoint_swigregister(ReferencePoint)
+
 class SCP(_object):
     """Proxy of C++ six::SCP class."""
 
@@ -3008,14 +3098,6 @@ class SCP(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, SCP, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["ecf"] = _six_base.SCP_ecf_set
-    __swig_getmethods__["ecf"] = _six_base.SCP_ecf_get
-    if _newclass:
-        ecf = _swig_property(_six_base.SCP_ecf_get, _six_base.SCP_ecf_set)
-    __swig_setmethods__["llh"] = _six_base.SCP_llh_set
-    __swig_getmethods__["llh"] = _six_base.SCP_llh_get
-    if _newclass:
-        llh = _swig_property(_six_base.SCP_llh_get, _six_base.SCP_llh_set)
 
     def __init__(self):
         """__init__(six::SCP self) -> SCP"""
@@ -3024,6 +3106,14 @@ class SCP(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+    __swig_setmethods__["ecf"] = _six_base.SCP_ecf_set
+    __swig_getmethods__["ecf"] = _six_base.SCP_ecf_get
+    if _newclass:
+        ecf = _swig_property(_six_base.SCP_ecf_get, _six_base.SCP_ecf_set)
+    __swig_setmethods__["llh"] = _six_base.SCP_llh_set
+    __swig_getmethods__["llh"] = _six_base.SCP_llh_get
+    if _newclass:
+        llh = _swig_property(_six_base.SCP_llh_get, _six_base.SCP_llh_set)
 
     def __eq__(self, rhs):
         """__eq__(SCP self, SCP rhs) -> bool"""
@@ -3115,101 +3205,6 @@ class MissingRequiredException(coda.coda_except.Exception):
 
 MissingRequiredException_swigregister = _six_base.MissingRequiredException_swigregister
 MissingRequiredException_swigregister(MissingRequiredException)
-
-class DecorrType(_object):
-    """Proxy of C++ six::DecorrType class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, DecorrType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, DecorrType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(six::DecorrType self, double ccz=0, double dr=0) -> DecorrType
-        __init__(six::DecorrType self, double ccz=0) -> DecorrType
-        __init__(six::DecorrType self) -> DecorrType
-        __init__(six::DecorrType self, DecorrType dt) -> DecorrType
-        """
-        this = _six_base.new_DecorrType(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __eq__(self, rhs):
-        """__eq__(DecorrType self, DecorrType rhs) -> bool"""
-        return _six_base.DecorrType___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(DecorrType self, DecorrType rhs) -> bool"""
-        return _six_base.DecorrType___ne__(self, rhs)
-
-    __swig_setmethods__["corrCoefZero"] = _six_base.DecorrType_corrCoefZero_set
-    __swig_getmethods__["corrCoefZero"] = _six_base.DecorrType_corrCoefZero_get
-    if _newclass:
-        corrCoefZero = _swig_property(_six_base.DecorrType_corrCoefZero_get, _six_base.DecorrType_corrCoefZero_set)
-    __swig_setmethods__["decorrRate"] = _six_base.DecorrType_decorrRate_set
-    __swig_getmethods__["decorrRate"] = _six_base.DecorrType_decorrRate_get
-    if _newclass:
-        decorrRate = _swig_property(_six_base.DecorrType_decorrRate_get, _six_base.DecorrType_decorrRate_set)
-    __swig_destroy__ = _six_base.delete_DecorrType
-    __del__ = lambda self: None
-DecorrType_swigregister = _six_base.DecorrType_swigregister
-DecorrType_swigregister(DecorrType)
-
-class ReferencePoint(_object):
-    """Proxy of C++ six::ReferencePoint class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ReferencePoint, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ReferencePoint, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["ecef"] = _six_base.ReferencePoint_ecef_set
-    __swig_getmethods__["ecef"] = _six_base.ReferencePoint_ecef_get
-    if _newclass:
-        ecef = _swig_property(_six_base.ReferencePoint_ecef_get, _six_base.ReferencePoint_ecef_set)
-    __swig_setmethods__["rowCol"] = _six_base.ReferencePoint_rowCol_set
-    __swig_getmethods__["rowCol"] = _six_base.ReferencePoint_rowCol_get
-    if _newclass:
-        rowCol = _swig_property(_six_base.ReferencePoint_rowCol_get, _six_base.ReferencePoint_rowCol_set)
-    __swig_setmethods__["name"] = _six_base.ReferencePoint_name_set
-    __swig_getmethods__["name"] = _six_base.ReferencePoint_name_get
-    if _newclass:
-        name = _swig_property(_six_base.ReferencePoint_name_get, _six_base.ReferencePoint_name_set)
-
-    def __init__(self, *args):
-        """
-        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0, double row=0, double col=0) -> ReferencePoint
-        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0, double row=0) -> ReferencePoint
-        __init__(six::ReferencePoint self, double x=0, double y=0, double z=0) -> ReferencePoint
-        __init__(six::ReferencePoint self, double x=0, double y=0) -> ReferencePoint
-        __init__(six::ReferencePoint self, double x=0) -> ReferencePoint
-        __init__(six::ReferencePoint self) -> ReferencePoint
-        __init__(six::ReferencePoint self, Vector3 xyz, RowColDouble rcd) -> ReferencePoint
-        """
-        this = _six_base.new_ReferencePoint(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __eq__(self, x):
-        """__eq__(ReferencePoint self, ReferencePoint x) -> bool"""
-        return _six_base.ReferencePoint___eq__(self, x)
-
-
-    def __ne__(self, x):
-        """__ne__(ReferencePoint self, ReferencePoint x) -> bool"""
-        return _six_base.ReferencePoint___ne__(self, x)
-
-    __swig_destroy__ = _six_base.delete_ReferencePoint
-    __del__ = lambda self: None
-ReferencePoint_swigregister = _six_base.ReferencePoint_swigregister
-ReferencePoint_swigregister(ReferencePoint)
 
 class UninitializedValueException(coda.coda_except.Exception):
     """Proxy of C++ six::UninitializedValueException class."""
