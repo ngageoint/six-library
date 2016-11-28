@@ -38,7 +38,7 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
     int nrows, ncols;
 
     if (!nitf_Field_get(subhdr->NITF_ILOC, iloc,
-                        NITF_CONV_STRING, 
+                        NITF_CONV_STRING,
                         NITF_ILOC_SZ + 1, error))
         return NITF_CLEVEL_CHECK_FAILED;
 
@@ -48,11 +48,11 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
     memcpy(num, &iloc[5], 5);
     colCoord = atoi(num);
 
-    if (!nitf_Field_get(subhdr->NITF_NROWS, &nrows, 
+    if (!nitf_Field_get(subhdr->NITF_NROWS, &nrows,
                         NITF_CONV_INT, sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
-    if (!nitf_Field_get(subhdr->NITF_NCOLS, &ncols, 
+    if (!nitf_Field_get(subhdr->NITF_NCOLS, &ncols,
                         NITF_CONV_INT, sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
@@ -77,17 +77,17 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
 }
 
 
-NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record, 
+NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record,
                                      nitf_Error* error)
 {
     int i = 0;
     int clevel = NITF_CLEVEL_03;
     nitf_ListIterator it = nitf_List_begin(record->images);
     nitf_ListIterator end = nitf_List_end(record->images);
-    
+
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
-        nitf_ImageSegment* imageSegment = 
+        nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
 
         int result = checkILOC(imageSegment->subheader, error);
@@ -100,13 +100,13 @@ NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record,
         }
         ++i;
         nitf_ListIterator_increment(&it);
-        
+
     }
     return clevel;
 
 }
 
-NITFPRIV(NITF_CLEVEL) checkFileSize(nitf_Record* record, 
+NITFPRIV(NITF_CLEVEL) checkFileSize(nitf_Record* record,
                                     nitf_Error* error)
 {
     nitf_Int64 fl;
@@ -129,28 +129,28 @@ NITFPRIV(NITF_CLEVEL) checkFileSize(nitf_Record* record,
 
 }
 
-NITFPRIV(NITF_CLEVEL) checkImage(nitf_ImageSubheader* subhdr, 
+NITFPRIV(NITF_CLEVEL) checkImage(nitf_ImageSubheader* subhdr,
                                  nitf_Error* error)
 {
     int nrows, ncols;
-    if (!nitf_Field_get(subhdr->NITF_NROWS, &nrows, NITF_CONV_INT, 
+    if (!nitf_Field_get(subhdr->NITF_NROWS, &nrows, NITF_CONV_INT,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
 
-    if (!nitf_Field_get(subhdr->NITF_NCOLS, &ncols, NITF_CONV_INT, 
+    if (!nitf_Field_get(subhdr->NITF_NCOLS, &ncols, NITF_CONV_INT,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
     if (nrows <= 2048 && ncols <= 2048)
         return NITF_CLEVEL_03;
-    
+
     if (nrows <= 8192 && ncols <= 8192)
         return NITF_CLEVEL_05;
-    
+
     if (nrows <= 65536 && ncols <= 65536)
         return NITF_CLEVEL_06;
-    
+
     if (nrows <= 99999999 && ncols <= 99999999)
         return NITF_CLEVEL_07;
 
@@ -158,23 +158,23 @@ NITFPRIV(NITF_CLEVEL) checkImage(nitf_ImageSubheader* subhdr,
 
 }
 
-NITFPRIV(NITF_CLEVEL) checkImageSize(nitf_Record* record, 
+NITFPRIV(NITF_CLEVEL) checkImageSize(nitf_Record* record,
                                      nitf_Error* error)
 {
     int clevel = NITF_CLEVEL_03;
-    
+
     nitf_ListIterator it = nitf_List_begin(record->images);
     nitf_ListIterator end = nitf_List_end(record->images);
-    
+
     int i = 0;
 
     while (nitf_ListIterator_notEqualTo(&it, &end) )
     {
-        nitf_ImageSegment* imageSegment = 
+        nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
         int result = checkImage(imageSegment->subheader, error);
         if ( result == NITF_CLEVEL_CHECK_FAILED ) return result;
-        
+
         if ( result > clevel )
         {
             clevel = result;
@@ -186,22 +186,22 @@ NITFPRIV(NITF_CLEVEL) checkImageSize(nitf_Record* record,
     return clevel;
 }
 
-NITFPRIV(NITF_CLEVEL) checkImageBlock(nitf_ImageSubheader* subhdr, 
+NITFPRIV(NITF_CLEVEL) checkImageBlock(nitf_ImageSubheader* subhdr,
                                       nitf_Error* error)
 {
     int nppbh, nppbv;
-    if (!nitf_Field_get(subhdr->NITF_NPPBH, &nppbh, NITF_CONV_INT, 
+    if (!nitf_Field_get(subhdr->NITF_NPPBH, &nppbh, NITF_CONV_INT,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
 
-    if (!nitf_Field_get(subhdr->NITF_NPPBV, &nppbv, NITF_CONV_INT, 
+    if (!nitf_Field_get(subhdr->NITF_NPPBV, &nppbv, NITF_CONV_INT,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
     if (nppbh <= 0 || nppbv <= 0)
         return NITF_CLEVEL_09;
-    
+
     if (nppbh <= 2048 && nppbv <= 2048)
         return NITF_CLEVEL_03;
 
@@ -215,19 +215,19 @@ NITFPRIV(NITF_CLEVEL) checkImageBlock(nitf_ImageSubheader* subhdr,
 NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
 {
     int clevel = NITF_CLEVEL_03;
-    
+
     nitf_ListIterator it = nitf_List_begin(record->images);
     nitf_ListIterator end = nitf_List_end(record->images);
-    
+
     int i = 0;
 
     while (nitf_ListIterator_notEqualTo(&it, &end) )
     {
-        nitf_ImageSegment* imageSegment = 
+        nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
         int result = checkImageBlock(imageSegment->subheader, error);
         if ( result == NITF_CLEVEL_CHECK_FAILED ) return result;
-        
+
         if ( result > clevel )
         {
             clevel = result;
@@ -237,7 +237,7 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
         nitf_ListIterator_increment(&it);
     }
     return clevel;
-    
+
 
 
 }
@@ -263,7 +263,7 @@ NITFPRIV(NITF_CLEVEL) checkNumDES(nitf_Record* record, nitf_Error* error)
 
         if (numdes <= 100)
             clevel = NITF_CLEVEL_07;
-       
+
         else
             clevel = NITF_CLEVEL_09;
 
@@ -303,7 +303,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
     {
         clevel = NITF_CLEVEL_09;
     }
-    
+
     if (nbands != 3)
     {
         clevel = NITF_CLEVEL_09;
@@ -333,7 +333,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
     return clevel;
 }
 
-NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr, 
+NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
                                        nitf_Error* error)
 {
     int clevel = NITF_CLEVEL_03;
@@ -368,7 +368,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
 
 }
 
-NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr, 
+NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
                                      nitf_Error* error)
 {
     int clevel = NITF_CLEVEL_03;
@@ -415,16 +415,16 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
 /*                                      nitf_Error* error) */
 /* { */
 /*     /\* Is it elevation data? *\/ */
-    
+
 /*     /\* Is it location grid? *\/ */
 
 /*     /\* Is it matrix data? *\/ */
 
-    
+
 
 /* } */
 
-NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr, 
+NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr,
                                       nitf_Error* error)
 {
     int clevel = NITF_CLEVEL_03;
@@ -445,7 +445,7 @@ NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr,
     {
         if (imode == 'B' || nbpp > 32)
             clevel = NITF_CLEVEL_09;
-        
+
     }
     /*  Normal JPEG */
     else if (memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0 ||
@@ -477,8 +477,8 @@ NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr,
                 clevel = NITF_CLEVEL_07;
         }
         else clevel = NITF_CLEVEL_09;
-                
-        
+
+
     }
 
     if (nbpp != 8 &&
@@ -502,11 +502,11 @@ NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
                                          nitf_Error* error)
 {
     NITF_CLEVEL clevel = NITF_CLEVEL_03;
-    
-  
+
+
     nitf_ListIterator it = nitf_List_begin(record->images);
     nitf_ListIterator end = nitf_List_end(record->images);
-    
+
     int i = 0;
 
     while (nitf_ListIterator_notEqualTo(&it, &end) )
@@ -515,7 +515,7 @@ NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
         NITF_CLEVEL result = NITF_CLEVEL_UNKNOWN;
         char irep[ NITF_IREP_SZ + 1];
 
-        nitf_ImageSegment* imageSegment = 
+        nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
 
         if (!nitf_Field_get(imageSegment->subheader->NITF_IREP,
@@ -549,7 +549,7 @@ NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
         }
 
         if ( result == NITF_CLEVEL_CHECK_FAILED ) return result;
-        
+
         if ( result > clevel )
         {
             clevel = result;
@@ -618,7 +618,7 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record)
     if (memcmp(c2, "09", 2) == 0)
         return NITF_CLEVEL_09;
     else return NITF_CLEVEL_UNKNOWN;
-            
+
 
 }
 
@@ -626,13 +626,13 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record)
 NITFAPI(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
                                                  char* c2)
 {
-    
+
     NITF_BOOL success = NITF_FAILURE;
     switch (clevel)
     {
     case NITF_CLEVEL_CHECK_FAILED:
         break;
-        
+
     case NITF_CLEVEL_03:
         memcpy(c2, "03", 2);
         success = NITF_SUCCESS;
@@ -642,7 +642,7 @@ NITFAPI(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
         memcpy(c2, "05", 2);
         success = NITF_SUCCESS;
         break;
-        
+
     case NITF_CLEVEL_06:
         memcpy(c2, "06", 2);
         success = NITF_SUCCESS;

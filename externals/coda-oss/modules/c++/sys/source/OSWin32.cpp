@@ -182,7 +182,10 @@ std::string sys::OSWin32::getTempName(const std::string& path,
     char buffer[MAX_PATH];
     if (GetTempFileName(path.c_str(),
                         prefix.c_str(),
-                        0, buffer) == 0) return std::string("");
+                        0, buffer) == 0)
+    {
+        throw except::Exception(Ctxt("Unable to create a temporary file"));
+    }
     return std::string(buffer);
 }
 

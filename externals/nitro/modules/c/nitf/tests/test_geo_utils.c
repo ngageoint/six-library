@@ -78,7 +78,7 @@ int main(int argc, char**argv)
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     printf("\tRound trip: %d %d %f\n", d, m, s);
 
-    
+
 
     /* Try decimal stuff */
     if (!nitf_Utils_parseDecimalString(DECIMAL_LAT_STR, &decimal, &e))

@@ -126,8 +126,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
  * \return A new ImageWriter, or NULL on failure
  */
 NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer* writer,
-                                                       int index, 
-                                                       nrt_HashTable* options, 
+                                                       int index,
+                                                       nrt_HashTable* options,
                                                        nitf_Error* error);
 
 /*!

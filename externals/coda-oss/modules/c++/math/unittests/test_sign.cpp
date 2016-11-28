@@ -21,7 +21,7 @@
  */
 
 #include <TestCase.h>
-#include <math/Sign.h>
+#include <math/Utilities.h>
 #include <limits>
 
 namespace

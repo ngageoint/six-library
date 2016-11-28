@@ -37,9 +37,9 @@ typedef nitf_WriteHandler nitf_ImageWriter;
  * Constructs a new ImageWriter, using the passed-in subheader as the basis
  * for the values.
  */
-NITFAPI(nitf_ImageWriter*) 
-    nitf_ImageWriter_construct(nitf_ImageSubheader *subheader, 
-                               nrt_HashTable* options, 
+NITFAPI(nitf_ImageWriter*)
+    nitf_ImageWriter_construct(nitf_ImageSubheader *subheader,
+                               nrt_HashTable* options,
                                nitf_Error * error);
 
 
@@ -59,7 +59,7 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * writer,
  * nitf_ImageWriter_setWriteCaching enables/disables cached writes. Enabling
  * cached writes causes the system to accumulate full blocks of data prior to
  * writing. This is more efficent in terms of writing but requires more memory.
- * 
+ *
  * For blocking modes, R, P, and B blocking modes, one block sized buffer is
  * required for each block column (number of blocks/row). For S mode one
  * block is required for each band for each block column, however for the
@@ -77,13 +77,13 @@ NITFAPI(int) nitf_ImageWriter_setWriteCaching
 
 /*!
  * \brief nitf_ImageWriter_setDirectBlockWrite - Enable/disable direct block writing
- * 
+ *
  * nitf_ImageWriter_setDirectBlockWrite enables/disables direct block writing.
- * If this is set to 1 and the number of image bands is 1, then each block of data 
+ * If this is set to 1 and the number of image bands is 1, then each block of data
  * will be written directly to the NITF and bypass any manipulation or re-organization.
- * If you know for certain that you're band sources will give you the data formatted 
- * precisely as required for whatever you're writing out, then enable this for better 
- * write performance.  This is most useful in conjunction with the DirectBlockSource 
+ * If you know for certain that you're band sources will give you the data formatted
+ * precisely as required for whatever you're writing out, then enable this for better
+ * write performance.  This is most useful in conjunction with the DirectBlockSource
  * band source for file copies.
  */
 NITFAPI(void) nitf_ImageWriter_setDirectBlockWrite
@@ -96,7 +96,7 @@ NITFAPI(void) nitf_ImageWriter_setDirectBlockWrite
  *  Function allows the user access to the product's pad pixels.
  *  For example, if you wanted transparent pixels for fill, you would
  *  set this function using arguments (writer, 0, 1, error)
- *  
+ *
  *  \param writer  The image writer
  *  \param value   The pixel fill value
  *  \param length  The length in bytes of the pixel

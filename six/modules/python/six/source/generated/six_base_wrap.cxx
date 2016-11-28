@@ -3779,12 +3779,10 @@ SWIG_AsVal_ptrdiff_t (PyObject * obj, ptrdiff_t *val)
 #include <cstddef>
 using std::ptrdiff_t;
 
-#include "import/six.h"
-
-/* this isn't imported by the above include */
-#include "six/Radiometric.h"
-
 #include "import/nitf.hpp"
+#include "import/six.h"
+#include "Python.h"
+#include "datetime.h"
 
 using namespace six;
 
@@ -5026,6 +5024,19 @@ SWIGINTERNINLINE PyObject*
 
   #define SWIG_From_double   PyFloat_FromDouble 
 
+SWIGINTERN PyObject *nitf_DateTime_toPythonDateTime(nitf::DateTime *self){
+        PyObject* nitfDateTime = NULL;
+        int year = self->getYear();
+        int month = self->getMonth();
+        int day = self->getDayOfMonth();
+        int hour = self->getHour();
+        int minute = self->getMinute();
+        int second = static_cast<int>(self->getSecond());
+        int microsecond = static_cast<int>((self->getSecond() - second) * 1e6);
+        nitfDateTime = PyDateTime_FromDateAndTime(year, month, day,
+                hour, minute, second, microsecond);
+        return nitfDateTime;
+    }
 
 SWIGINTERNINLINE PyObject* 
 SWIG_From_unsigned_SS_long  (unsigned long value)
@@ -8883,6 +8894,58 @@ SWIGINTERN PyObject *_wrap_DateTime_setTimeInMillis(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DateTime_toPythonDateTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf::DateTime *arg1 = (nitf::DateTime *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:DateTime_toPythonDateTime",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_nitf__DateTime, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTime_toPythonDateTime" "', argument " "1"" of type '" "nitf::DateTime *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf::DateTime * >(argp1);
+  {
+    try
+    {
+      result = (PyObject *)nitf_DateTime_toPythonDateTime(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -81393,6 +81456,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_setMinute", _wrap_DateTime_setMinute, METH_VARARGS, (char *)"DateTime_setMinute(DateTime self, int minute)"},
 	 { (char *)"DateTime_setSecond", _wrap_DateTime_setSecond, METH_VARARGS, (char *)"DateTime_setSecond(DateTime self, double second)"},
 	 { (char *)"DateTime_setTimeInMillis", _wrap_DateTime_setTimeInMillis, METH_VARARGS, (char *)"DateTime_setTimeInMillis(DateTime self, double timeInMillis)"},
+	 { (char *)"DateTime_toPythonDateTime", _wrap_DateTime_toPythonDateTime, METH_VARARGS, (char *)"DateTime_toPythonDateTime(DateTime self) -> PyObject *"},
 	 { (char *)"DateTime_swigregister", DateTime_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_AppliedType", _wrap_new_AppliedType, METH_VARARGS, (char *)"\n"
 		"AppliedType()\n"
@@ -84330,6 +84394,9 @@ SWIG_init(void) {
 #endif
   
   SWIG_InstallConstants(d,swig_const_table);
+  
+  
+  PyDateTime_IMPORT;
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"NOT_SET_VALUE",Swig_var_NOT_SET_VALUE_get, Swig_var_NOT_SET_VALUE_set);

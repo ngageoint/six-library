@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,23 +14,23 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <import/nitf.h>
 
-void lookForTREField(nitf_Extensions* ext, 
-		     const char* tag, 
+void lookForTREField(nitf_Extensions* ext,
+		     const char* tag,
 		     const char* pattern)
 {
     nitf_ListIterator current, last;
 
     nitf_List* list = nitf_Extensions_getTREsByName(ext, tag);
     if (list == NULL) return;
-    
+
     current = nitf_List_begin(list);
     last = nitf_List_end(list);
 
@@ -40,14 +40,14 @@ void lookForTREField(nitf_Extensions* ext,
 	nitf_TRE* tre = nitf_ListIterator_get(&current);
 	nitf_ListIterator currentInst;
 	nitf_ListIterator lastInst;
-	
+
 	nitf_List* found = nitf_TRE_find(tre, pattern, &error);
 	if (!found) return;
-	
+
 
 	currentInst = nitf_List_begin(found);
 	lastInst = nitf_List_end(found);
-	
+
 	while (nitf_ListIterator_notEqualTo(&currentInst, &lastInst))
 	{
 	    nitf_Pair* pair = nitf_ListIterator_get(&currentInst);
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     /*  This is the reader object  */
     nitf_Reader *reader;
     nitf_Record *record;
-	
+
     /*  The IO handle  */
     nitf_IOHandle io;
     int num;
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 	printf("File: %s is not a NITF\n", argv[1]);
 	exit(EXIT_FAILURE);
     }
-	
+
     treName = argv[2];
     fieldName = argv[3];
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         nitf_Error_print(&error, stdout, "Exiting (1) ...");
         exit(EXIT_FAILURE);
     }
-   
+
 #if NITF_VERBOSE_READER
     printf("Here are the loaded handlers\n");
     printf("* * * * * * * * * * * * * * * *\n");

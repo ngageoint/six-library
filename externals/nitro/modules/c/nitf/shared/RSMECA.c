@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -31,7 +31,7 @@ static int numopg(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
     char fname[64];
     strcpy(fname, "NUMOPG");
     x = strlen(idx[0]);
-    
+
     strcat(fname, idx[0]);
 
     field = nitf_TRE_getField(tre, fname);
@@ -62,14 +62,14 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 1, "Include Indirect Error Covariance", "INCLUC" },
 
    /*  {NITF_IF, 0, NITF_FUNCTION, &inclic }, */
-    
+
     {NITF_IF, 0, "eq Y", "INCLIC"},
     {NITF_BCS_N, 2, "Number of Parameters", "NPAR" },
     {NITF_BCS_N, 2, "Number of Original Adjustable Params", "NPAR0" },
     {NITF_BCS_N, 2, "Number of Independent Subgroups", "IGN" },
 
     {NITF_BCS_A, 8, "Version Date of the Orig Image Err Cov", "CVDATE"},
-    
+
 
     {NITF_BCS_A, 21, "Local Coord Origin (XUOL)", "XUOL" },
     {NITF_BCS_A, 21, "Local Coord Origin (YUOL)", "YUOL" },
@@ -86,7 +86,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Local Coord Unit Vector (ZUXL)", "ZUXL" },
     {NITF_BCS_A, 21, "Local Coord Unit Vector (ZUYL)", "ZUYL" },
     {NITF_BCS_A, 21, "Local Coord Unit Vector (ZUZL)", "ZUZL" },
-    
+
 
     {NITF_BCS_A, 2, "Image Row Constant Index", "IR0" },
     {NITF_BCS_A, 2, "Image Row X Index", "IRX" },
@@ -153,12 +153,12 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Original Error Covariance Element", "ERRCVG" },
 
     {NITF_ENDLOOP, 0, NULL, NULL},
-    
+
     {NITF_BCS_N, 1, "Time Correlation Domain Flag", "TCDF" },
     {NITF_BCS_N, 1, "Number of Correlation Segments", "NCSEG" },
 
     {NITF_LOOP, 0, NULL, "NCSEG" },
-    
+
     {NITF_BCS_A, 21, "Segment Correlation Value", "CORSEG" },
     {NITF_BCS_A, 21, "Segment Tau Value", "TAUSEG" },
 
@@ -172,14 +172,14 @@ static nitf_TREDescription description[] = {
     {NITF_ENDLOOP, 0, NULL, NULL}, /* MAP */
 
     {NITF_ENDIF, 0, NULL, NULL },
-    
+
     {NITF_IF, 0, "eq Y", "INCLUC"},
 
     {NITF_BCS_A, 21, "Unmodeled Row Variance", "URR" },
     {NITF_BCS_A, 21, "Unmodeled Row-Column Covariance", "URC" },
     {NITF_BCS_A, 21, "Unmodeled Column Variance", "UCC" },
     {NITF_BCS_N, 1, "Number of Corr Segs for ind-variable Row distance", "UNCSR" },
-    
+
     {NITF_LOOP, 0, NULL, "UNCSR" },
 
     {NITF_BCS_A, 21, "Segment Correlation Value", "UCORSR" },
@@ -195,12 +195,12 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Segment Tau Value", "UTAUSC" },
 
     {NITF_ENDLOOP, 0, NULL, NULL},
-    
+
     {NITF_ENDIF, 0, NULL, NULL },
 
     {NITF_END, 0, NULL, NULL}
 
-    
+
 };
 
 
