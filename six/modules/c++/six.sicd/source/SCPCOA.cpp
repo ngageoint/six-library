@@ -84,94 +84,19 @@ double SCPCOA::derivedGroundRange(const Vector3& scp) const
     return scp.norm() * arpPos.angle(scp);
 }
 
-double SCPCOA::derivedDopplerConeAngle(const Vector3& scp) const
-{
-    return std::acos(arpVel.unit().dot(uLOS(scp))) *
-            math::Constants::RADIANS_TO_DEGREES;
-}
-
-Vector3 SCPCOA::earthTangentPlane(const Vector3& scp) const
-{
-    return Utilities::wgs84Norm(scp);
-}
-
-double SCPCOA::derivedGrazeAngle(const Vector3& scp) const
-{
-    return std::asin(earthTangentPlane(scp).dot(uLOS(scp) * -1)) *
-            math::Constants::RADIANS_TO_DEGREES;
-}
-
-double SCPCOA::derivedIncidenceAngle(const Vector3& scp) const
-{
-    return 90 - derivedGrazeAngle(scp);
-}
-
-double SCPCOA::derivedSlopeAngle(const Vector3& scp) const
-{
-    return std::acos(earthTangentPlane(scp).dot(slantPlaneNormal(scp))) *
-            math::Constants::RADIANS_TO_DEGREES;
-}
-
 Vector3 SCPCOA::slantPlaneNormal(const Vector3& scp) const
 {
-    return cross(arpVel, uLOS(scp)).unit() * look(scp);
+    const scene::SceneGeometry geometry(arpVel, arpPos, scp);
+    return geometry.getSlantPlaneZ();
 }
 
-Vector3 SCPCOA::uGPX(const Vector3& scp) const
-{
-    return ((uLOS(scp) * -1) -
-        earthTangentPlane(scp) *
-        (earthTangentPlane(scp).dot(uLOS(scp) * -1))).unit();
-}
-
-Vector3 SCPCOA::uEast(const Vector3& scp) const
-{
-    return cross(uNorth(scp), earthTangentPlane(scp));
-}
-
-Vector3 SCPCOA::uNorth(const Vector3& scp) const
-{
-    std::vector<double> coordinates;
-    coordinates.resize(3);
-    coordinates[0] = 0;
-    coordinates[1] = 0;
-    coordinates[2] = 1;
-    Vector3 base(coordinates);
-
-    // Project north onto ground plane
-    Vector3 northGround = base -
-            (earthTangentPlane(scp) * earthTangentPlane(scp).dot(base));
-    return northGround.unit();
-}
-
-double SCPCOA::derivedTwistAngle(const Vector3& scp) const
+double SCPCOA::derivedTwistAngle(const scene::SceneGeometry& geometry) const
 {
     // Angle from +GPY axis to the +SPY axis in plane of incidence
-    Vector3 uGPY = cross(earthTangentPlane(scp), uGPX(scp));
-    return -1 * std::asin(uGPY.dot(slantPlaneNormal(scp))) *
+    Vector3 uGPY = cross(geometry.getGroundPlaneNormal(),
+            -geometry.getGroundRange().unit());
+    return -1 * std::asin(uGPY.dot(geometry.getSlantPlaneZ())) *
         math::Constants::RADIANS_TO_DEGREES;
-}
-
-double SCPCOA::derivedAzimAngle(const Vector3& scp) const
-{
-    double azNorth = uGPX(scp).dot(uNorth(scp));
-    double azEast = uGPX(scp).dot(uEast(scp));
-    double tempAngle = std::fmod(std::atan2(azEast, azNorth) *
-            math::Constants::RADIANS_TO_DEGREES, 360);
-
-    // squish range from (-360, 360) to [0, 360)
-    return tempAngle >= 0 ? tempAngle : tempAngle + 360;
-}
-
-double SCPCOA::derivedLayoverAngle(const Vector3& scp) const
-{
-    Vector3 layoverGround = earthTangentPlane(scp) -
-        (slantPlaneNormal(scp) / (earthTangentPlane(scp).dot(
-                slantPlaneNormal(scp))));
-    double loNorth = layoverGround.dot(uNorth(scp));
-    double loEast = layoverGround.dot(uEast(scp));
-    return std::fmod(std::atan2(loEast, loNorth) *
-            math::Constants::RADIANS_TO_DEGREES, 360);
 }
 
 void SCPCOA::fillDerivedFields(const GeoData& geoData,
@@ -201,10 +126,12 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
         }
     }
 
+    scene::SceneGeometry geometry(arpVel, arpPos, geoData.scp.ecf);
+
     const Vector3& scp = geoData.scp.ecf;
     if (sideOfTrack == SideOfTrackType::NOT_SET)
     {
-        sideOfTrack = derivedSideOfTrack(geoData);
+        sideOfTrack = geometry.getSideOfTrack();
     }
     if (Init::isUndefined<double>(slantRange))
     {
@@ -216,31 +143,31 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
     }
     if (Init::isUndefined<double>(dopplerConeAngle))
     {
-        dopplerConeAngle = derivedDopplerConeAngle(scp);
+        dopplerConeAngle = geometry.getDopplerConeAngle();
     }
     if (Init::isUndefined<double>(grazeAngle))
     {
-        grazeAngle = derivedGrazeAngle(scp);
+        grazeAngle = std::fabs(geometry.getETPGrazingAngle());
     }
     if (Init::isUndefined<double>(incidenceAngle))
     {
-        incidenceAngle = derivedIncidenceAngle(scp);
+        incidenceAngle = 90 - std::fabs(geometry.getETPGrazingAngle());
     }
     if (Init::isUndefined<double>(twistAngle))
     {
-        twistAngle = derivedTwistAngle(scp);
+        twistAngle = derivedTwistAngle(geometry);
     }
     if (Init::isUndefined<double>(slopeAngle))
     {
-        slopeAngle = derivedSlopeAngle(scp);
+        slopeAngle = geometry.getETPSlopeAngle();
     }
     if (Init::isUndefined<double>(azimAngle))
     {
-        azimAngle = derivedAzimAngle(scp);
+        azimAngle = geometry.getAzimuthAngle();
     }
     if (Init::isUndefined<double>(layoverAngle))
     {
-        layoverAngle = derivedLayoverAngle(scp);
+        layoverAngle = geometry.getETPLayoverAngle();
     }
 }
 
@@ -276,12 +203,6 @@ std::vector<Vector3> SCPCOA::derivedArpVectors(const Position& position) const
     return vectors;
 }
 
-SideOfTrackType SCPCOA::derivedSideOfTrack(const GeoData& geoData) const
-{
-    return look(geoData.scp.ecf) < 0 ? SideOfTrackType::RIGHT :
-        SideOfTrackType::LEFT;
-}
-
 bool SCPCOA::validate(const GeoData& geoData,
         const Grid& grid,
         const Position& position,
@@ -290,6 +211,7 @@ bool SCPCOA::validate(const GeoData& geoData,
     std::ostringstream messageBuilder;
     bool valid = true;
     const Vector3& scp = geoData.scp.ecf;
+    scene::SceneGeometry geometry(arpVel, arpPos, scp);
     // 2.7.1
     // SCPTime has stricter tolerance because everything else depends on it
     if (std::abs(derivedSCPTime(grid) - scpTime) >
@@ -315,12 +237,12 @@ bool SCPCOA::validate(const GeoData& geoData,
     valid = compareFields(arpAcc, arpVectors[2], "arpAcc", log) && valid;
 
     // 2.7.5 SideOfTrack
-    if (sideOfTrack != derivedSideOfTrack(geoData))
+    if (sideOfTrack != geometry.getSideOfTrack())
     {
         messageBuilder.str("");
         messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
             "SCPCOA.SideOfTrack: " << sideOfTrack << std::endl <<
-            "Derived SideOfTrack: " << derivedSideOfTrack(geoData)
+            "Derived SideOfTrack: " << geometry.getSideOfTrack()
             << std::endl;
         log.error(messageBuilder.str());
         valid = false;
@@ -331,19 +253,20 @@ bool SCPCOA::validate(const GeoData& geoData,
             "slantRange", log) && valid;
     valid = compareFields(groundRange, derivedGroundRange(scp),
             "groundRange", log) && valid;
-    valid = compareFields(dopplerConeAngle,
-            derivedDopplerConeAngle(scp), "dopplerConeAngle", log) && valid;
-    valid = compareFields(grazeAngle, derivedGrazeAngle(scp),
+    valid = compareFields(dopplerConeAngle, geometry.getDopplerConeAngle(),
+            "dopplerConeAngle", log) && valid;
+    valid = compareFields(grazeAngle, geometry.getETPGrazingAngle(),
             "grazeAngle", log) && valid;;
-    valid = compareFields(incidenceAngle, derivedIncidenceAngle(scp),
+    valid = compareFields(incidenceAngle,
+            90 - std::fabs(geometry.getETPGrazingAngle()),
             "incidenceAngle", log) && valid;
-    valid = compareFields(twistAngle, derivedTwistAngle(scp),
+    valid = compareFields(twistAngle, derivedTwistAngle(geometry),
             "twistAngle", log) && valid;
-    valid = compareFields(slopeAngle, derivedSlopeAngle(scp),
+    valid = compareFields(slopeAngle, geometry.getETPSlopeAngle(),
             "slopeAngle", log) && valid;
-    valid = compareFields(azimAngle, derivedAzimAngle(scp),
+    valid = compareFields(azimAngle, geometry.getAzimuthAngle(),
             "azimAngle", log) && valid;
-    valid = compareFields(layoverAngle, derivedLayoverAngle(scp),
+    valid = compareFields(layoverAngle, geometry.getETPLayoverAngle(),
             "layoverAngle", log) && valid;
     return valid;
 }

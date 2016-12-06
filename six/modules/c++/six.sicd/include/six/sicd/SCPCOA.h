@@ -26,6 +26,7 @@
 #include "six/Init.h"
 #include "six/Types.h"
 #include "six/Parameter.h"
+#include "scene/SceneGeometry.h"
 
 namespace six
 {
@@ -118,24 +119,13 @@ struct SCPCOA
     int look(const Vector3& scp) const;
     Vector3 left() const;
     Vector3 slantPlaneNormal(const Vector3& scp) const;
-    Vector3 earthTangentPlane(const Vector3& scp) const;
 
 private:
     double derivedSCPTime(const Grid& grid) const;
     std::vector<Vector3> derivedArpVectors(const Position& position) const;
-    SideOfTrackType derivedSideOfTrack(const GeoData& geoData) const;
-    Vector3 uGPX(const Vector3& scp) const;
-    Vector3 uNorth(const Vector3& scp) const;
-    Vector3 uEast(const Vector3& scp) const;
     double derivedSlantRange(const Vector3& scp) const;
     double derivedGroundRange(const Vector3& scp) const;
-    double derivedDopplerConeAngle(const Vector3& scp) const;
-    double derivedGrazeAngle(const Vector3& scp) const;
-    double derivedIncidenceAngle(const Vector3& scp) const;
-    double derivedTwistAngle(const Vector3& scp) const;
-    double derivedSlopeAngle(const Vector3& scp) const;
-    double derivedAzimAngle(const Vector3& scp) const;
-    double derivedLayoverAngle(const Vector3& scp) const;
+    double derivedTwistAngle(const scene::SceneGeometry& geometry) const;
     bool compareFields(double given, double expected,
             const std::string& name, logging::Logger& log) const;
     bool compareFields(Vector3 given, Vector3 expected,

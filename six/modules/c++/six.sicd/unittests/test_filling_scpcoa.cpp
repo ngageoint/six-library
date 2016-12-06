@@ -29,26 +29,29 @@ TEST_CASE(DerivedSCPCOA)
     scpcoa.scpTime = 123;
 
     six::sicd::Position position;
-    std::vector<six::Vector3> data(4);
+    position.arpPoly = six::PolyXYZ(4);
+    position.arpPoly[0][0] = 0;
+    position.arpPoly[0][1] = 1;
+    position.arpPoly[0][2] = 2;
 
-    for (size_t ii = 0; ii < data.size(); ++ii)
-    {
-        std::vector<double> current(3);
-        for (size_t jj = 0; jj < current.size(); ++jj)
-        {
-            current[jj] = ii + jj;
-        }
-        data[ii] = six::Vector3(current);
-    }
+    position.arpPoly[1][0] = 1;
+    position.arpPoly[1][1] = 2;
+    position.arpPoly[1][2] = 3;
 
-    position.arpPoly = six::PolyXYZ(data);
+    position.arpPoly[2][0] = 2;
+    position.arpPoly[2][1] = 3;
+    position.arpPoly[2][2] = 4;
 
-    six::sicd::Grid grid;
+    position.arpPoly[3][0] = 3;
+    position.arpPoly[3][1] = 4;
+    position.arpPoly[3][2] = 5;
+
+    six::sicd::Grid grid; // WHY?
     six::sicd::GeoData geoData;
-    for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
-    {
-        geoData.scp.ecf[ii] = ii + 1;
-    }
+
+    geoData.scp.ecf[0] = -1015099;
+    geoData.scp.ecf[1] = 451951;
+    geoData.scp.ecf[2] = 6259542;
 
     scpcoa.fillDerivedFields(geoData, grid, position);
 
@@ -64,16 +67,16 @@ TEST_CASE(DerivedSCPCOA)
     TEST_ASSERT_EQ(scpcoa.arpAcc[1], 2958);
     TEST_ASSERT_EQ(scpcoa.arpAcc[2], 3698);
 
-    TEST_ASSERT_EQ(scpcoa.sideOfTrack.toString(), "LEFT");
-    TEST_ASSERT_ALMOST_EQ(scpcoa.slantRange, 13240071.80623738);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.groundRange, 0.69533621);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.dopplerConeAngle, 179.9922244);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.grazeAngle, 79.21708938);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.incidenceAngle, 10.78291061);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.slopeAngle, 90.12584972);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.twistAngle, -89.32730959);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.azimAngle, 222.4277615);
-    TEST_ASSERT_ALMOST_EQ(scpcoa.layoverAngle, 133.0885753);
+    TEST_ASSERT_EQ(scpcoa.sideOfTrack.toString(), "RIGHT");
+    TEST_ASSERT_ALMOST_EQ(scpcoa.slantRange, 1.015372838920571e7);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.groundRange, 5.327326157987932e6);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.dopplerConeAngle, 152.272143845);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.grazeAngle, 14.27738036);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.incidenceAngle, 75.72261963);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.slopeAngle, 90.05513834);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.twistAngle, -89.9431043);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.azimAngle, 291.9837145);
+    TEST_ASSERT_ALMOST_EQ(scpcoa.layoverAngle, 201.9977459);
 }
 
 int main(int, char**)

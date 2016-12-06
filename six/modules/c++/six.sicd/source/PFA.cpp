@@ -24,6 +24,7 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
+#include "six/sicd/Utilities.h"
 
 namespace six
 {
@@ -83,7 +84,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
             imagePlaneNormal = scpcoa.slantPlaneNormal(scp);
             break;
         case ComplexImagePlaneType::GROUND:
-            imagePlaneNormal = scpcoa.earthTangentPlane(scp);
+            imagePlaneNormal = six::sicd::Utilities::wgs84Norm(scp);
             break;
         case ComplexImagePlaneType::OTHER:
             // Nothing we can do
@@ -93,7 +94,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
 
     if (Init::isUndefined<Vector3>(focusPlaneNormal))
     {
-        focusPlaneNormal = scpcoa.earthTangentPlane(scp);
+        focusPlaneNormal = Utilities::wgs84Norm(scp);
     }
 
     if (!Init::isUndefined<double>(scpcoa.scpTime) &&
