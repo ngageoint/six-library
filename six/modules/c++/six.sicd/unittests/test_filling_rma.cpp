@@ -32,7 +32,6 @@ TEST_CASE(DerivedRMATandRMCR)
     }
 
     six::sicd::Position position;
-    double fc(950);
 
     six::Vector3 refPos;
     six::Vector3 refVel;

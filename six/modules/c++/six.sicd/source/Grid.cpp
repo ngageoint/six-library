@@ -533,6 +533,7 @@ bool Grid::validate(const CollectionInformation& collectionInformation,
     valid = validateFFTSigns(log) && valid;                      //2.2
     valid = row->validate(imageData, log) && valid;              //2.3.1 - 2.3.9
     valid = col->validate(imageData, log) && valid;
+    return valid;
 }
 
 void Grid::fillDerivedFields(
