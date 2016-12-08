@@ -29,6 +29,7 @@
 #include "six/sicd/RgAzComp.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/Utilities.h"
+#include <math/Utilities.h>
 
 using namespace six;
 using namespace six::sicd;
@@ -979,7 +980,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
             {
                 for (size_t jj = 0; jj < differencePoly.orderY(); ++jj)
                 {
-                    norm += std::pow(differencePoly[ii][jj], 2);
+                    norm += math::square(differencePoly[ii][jj]);
                 }
             }
             norm = std::sqrt(norm);

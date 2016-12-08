@@ -26,6 +26,7 @@
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Timeline.h"
 #include "six/sicd/Utilities.h"
+#include <math/Utilities.h>
 
 namespace six
 {
@@ -86,7 +87,7 @@ bool RgAzComp::validate(const GeoData& geoData,
         double norm = 0;
         for (size_t ii = 0; ii < difference.order(); ++ii)
         {
-            norm += std::pow(difference[ii], 2);
+            norm += math::square(difference[ii]);
         }
         norm = std::sqrt(norm);
 

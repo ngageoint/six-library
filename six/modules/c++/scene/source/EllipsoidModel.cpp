@@ -20,6 +20,7 @@
  *
  */
 #include <math/Constants.h>
+#include <math/Utilities.h>
 #include "scene/EllipsoidModel.h"
 
 namespace scene
@@ -84,7 +85,7 @@ double EllipsoidModel::calculateFlattening() const
 
 double EllipsoidModel::calculateEccentricity() const
 {
-    double ecc = 1.0 - pow(polarRadius,2)/pow(equatorialRadius,2);
+    double ecc = 1.0 - math::square(polarRadius)/math::square(equatorialRadius);
     ecc = sqrt(ecc);
     return ecc;
 }

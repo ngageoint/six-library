@@ -26,6 +26,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
+#include <math/Utilities.h>
 #include <types/RowCol.h>
 
 namespace
@@ -531,9 +532,9 @@ Vector3 Utilities::wgs84Norm(const Vector3& point)
     std::vector<double> coordinates;
     coordinates.resize(3);
 
-    coordinates[0] = point[0] / std::pow(model.getEquatorialRadius(), 2);
-    coordinates[1] = point[1] / std::pow(model.getEquatorialRadius(), 2);
-    coordinates[2] = point[2] / std::pow(model.getPolarRadius(), 2);
+    coordinates[0] = point[0] / math::square(model.getEquatorialRadius());
+    coordinates[1] = point[1] / math::square(model.getEquatorialRadius());
+    coordinates[2] = point[2] / math::square(model.getPolarRadius());
 
     Vector3 normal(coordinates);
     return normal.unit();

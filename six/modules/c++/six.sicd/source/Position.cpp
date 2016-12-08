@@ -21,6 +21,7 @@
  */
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
+#include <math/Utilities.h>
 
 namespace six
 {
@@ -49,7 +50,7 @@ void Position::fillDerivedFields(const SCPCOA& scpcoa)
         //constant
         coefs[0] = scpcoa.arpPos -
             scpcoa.arpVel * scpcoa.scpTime +
-            (tempArpAcc / 2) * std::pow(scpcoa.scpTime, 2);
+            (tempArpAcc / 2) * math::square(scpcoa.scpTime);
 
         //linear
         coefs[1] = scpcoa.arpVel -
