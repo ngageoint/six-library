@@ -38,7 +38,7 @@ namespace cphd
 {
 //  This class contains information about the Wideband CPHD data.
 //  It contains the cphd::Data structure (for channel and vector sizes).
-//  
+//
 //  Due to the large size of CPHD wideband, this object does not contain
 //  any actual wideband data
 
@@ -121,7 +121,7 @@ public:
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
               const mem::BufferView<std::complex<float> >& data);
-              
+
     // Same as above but for a raw pointer
     // The pointer needs to be preallocated. Use getBufferDims for this.
     void read(size_t channel,
@@ -139,7 +139,7 @@ public:
         read(channel, firstVector, lastVector, firstSample,
              lastSample, numThreads, buffer);
     }
-              
+
     types::RowCol<size_t> getBufferDims(size_t channel,
                                         size_t firstVector,
                                         size_t lastVector,
@@ -151,7 +151,7 @@ public:
                         firstSample, lastSample, dims);
         return dims;
     }
-    
+
     SampleType getSampleType() const
     {
         return mData.sampleType;

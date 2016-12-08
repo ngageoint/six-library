@@ -26,34 +26,10 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <io/TempFile.h>
 
 namespace
 {
-
-class TempFile
-{
-public:
-    TempFile();
-    ~TempFile();
-    std::string pathname() const;
-private:
-    const std::string mName;
-};
-
-TempFile::TempFile() :
-    mName(std::tmpnam(NULL))
-{
-}
-
-TempFile::~TempFile()
-{
-    std::remove(mName.c_str());
-}
-
-std::string TempFile::pathname() const
-{
-    return mName;
-}
 
 void validateArguments(int argc, char** argv)
 {
@@ -144,7 +120,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     writer.addAdditionalDES(segmentWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());
@@ -191,7 +167,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());
@@ -251,7 +227,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());
