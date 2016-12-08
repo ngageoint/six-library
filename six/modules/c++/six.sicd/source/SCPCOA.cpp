@@ -86,8 +86,7 @@ double SCPCOA::derivedGroundRange(const Vector3& scp) const
 
 Vector3 SCPCOA::slantPlaneNormal(const Vector3& scp) const
 {
-    const scene::SceneGeometry geometry(arpVel, arpPos, scp);
-    return geometry.getSlantPlaneZ();
+    return scene::SceneGeometry(arpVel, arpPos, scp).getSlantPlaneZ();
 }
 
 double SCPCOA::derivedTwistAngle(const scene::SceneGeometry& geometry) const
