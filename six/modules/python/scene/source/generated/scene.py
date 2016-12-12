@@ -542,6 +542,11 @@ class WGS84EllipsoidModel(EllipsoidModel):
         """setPolarRadius(WGS84EllipsoidModel self, double val)"""
         return _scene.WGS84EllipsoidModel_setPolarRadius(self, val)
 
+
+    def getNormalVector(self, point):
+        """getNormalVector(WGS84EllipsoidModel self, Vector3 point) -> Vector3"""
+        return _scene.WGS84EllipsoidModel_getNormalVector(self, point)
+
 WGS84EllipsoidModel_swigregister = _scene.WGS84EllipsoidModel_swigregister
 WGS84EllipsoidModel_swigregister(WGS84EllipsoidModel)
 cvar = _scene.cvar

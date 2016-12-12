@@ -102,69 +102,69 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
         const Grid& grid,
         const Position& position)
 {
-    if (Init::isUndefined<double>(scpTime) &&
-        !Init::isUndefined<Poly2D>(grid.timeCOAPoly))
+    if (Init::isUndefined(scpTime) &&
+        !Init::isUndefined(grid.timeCOAPoly))
     {
         scpTime = derivedSCPTime(grid);
     }
-    if (!Init::isUndefined<PolyXYZ>(position.arpPoly) &&
-        !Init::isUndefined<double>(scpTime))
+    if (!Init::isUndefined(position.arpPoly) &&
+        !Init::isUndefined(scpTime))
     {
         std::vector<Vector3> vectors = derivedArpVectors(position);
-        if (Init::isUndefined<Vector3>(arpPos))
+        if (Init::isUndefined(arpPos))
         {
             arpPos = vectors[0];
         }
-        if (Init::isUndefined<Vector3>(arpVel))
+        if (Init::isUndefined(arpVel))
         {
             arpVel = vectors[1];
         }
-        if (Init::isUndefined<Vector3>(arpAcc))
+        if (Init::isUndefined(arpAcc))
         {
             arpAcc = vectors[2];
         }
     }
 
-    scene::SceneGeometry geometry(arpVel, arpPos, geoData.scp.ecf);
+    const scene::SceneGeometry geometry(arpVel, arpPos, geoData.scp.ecf);
 
     const Vector3& scp = geoData.scp.ecf;
     if (sideOfTrack == SideOfTrackType::NOT_SET)
     {
         sideOfTrack = geometry.getSideOfTrack();
     }
-    if (Init::isUndefined<double>(slantRange))
+    if (Init::isUndefined(slantRange))
     {
         slantRange = derivedSlantRange(scp);
     }
-    if (Init::isUndefined<double>(groundRange))
+    if (Init::isUndefined(groundRange))
     {
         groundRange = derivedGroundRange(scp);
     }
-    if (Init::isUndefined<double>(dopplerConeAngle))
+    if (Init::isUndefined(dopplerConeAngle))
     {
         dopplerConeAngle = geometry.getDopplerConeAngle();
     }
-    if (Init::isUndefined<double>(grazeAngle))
+    if (Init::isUndefined(grazeAngle))
     {
-        grazeAngle = std::fabs(geometry.getETPGrazingAngle());
+        grazeAngle = std::abs(geometry.getETPGrazingAngle());
     }
-    if (Init::isUndefined<double>(incidenceAngle))
+    if (Init::isUndefined(incidenceAngle))
     {
-        incidenceAngle = 90 - std::fabs(geometry.getETPGrazingAngle());
+        incidenceAngle = 90 - std::abs(geometry.getETPGrazingAngle());
     }
-    if (Init::isUndefined<double>(twistAngle))
+    if (Init::isUndefined(twistAngle))
     {
         twistAngle = derivedTwistAngle(geometry);
     }
-    if (Init::isUndefined<double>(slopeAngle))
+    if (Init::isUndefined(slopeAngle))
     {
         slopeAngle = geometry.getETPSlopeAngle();
     }
-    if (Init::isUndefined<double>(azimAngle))
+    if (Init::isUndefined(azimAngle))
     {
         azimAngle = geometry.getAzimuthAngle();
     }
-    if (Init::isUndefined<double>(layoverAngle))
+    if (Init::isUndefined(layoverAngle))
     {
         layoverAngle = geometry.getETPLayoverAngle();
     }
@@ -210,7 +210,7 @@ bool SCPCOA::validate(const GeoData& geoData,
     std::ostringstream messageBuilder;
     bool valid = true;
     const Vector3& scp = geoData.scp.ecf;
-    scene::SceneGeometry geometry(arpVel, arpPos, scp);
+    const scene::SceneGeometry geometry(arpVel, arpPos, scp);
     // 2.7.1
     // SCPTime has stricter tolerance because everything else depends on it
     if (std::abs(derivedSCPTime(grid) - scpTime) >
@@ -257,7 +257,7 @@ bool SCPCOA::validate(const GeoData& geoData,
     valid = compareFields(grazeAngle, geometry.getETPGrazingAngle(),
             "grazeAngle", log) && valid;;
     valid = compareFields(incidenceAngle,
-            90 - std::fabs(geometry.getETPGrazingAngle()),
+            90 - std::abs(geometry.getETPGrazingAngle()),
             "incidenceAngle", log) && valid;
     valid = compareFields(twistAngle, derivedTwistAngle(geometry),
             "twistAngle", log) && valid;

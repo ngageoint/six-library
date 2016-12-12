@@ -60,10 +60,10 @@ bool RMAT::operator==(const RMAT& rhs) const
 
 void RMAT::fillDerivedFields(const Vector3& scp)
 {
-    if (!Init::isUndefined<Vector3>(refPos) &&
-        !Init::isUndefined<Vector3>(refVel))
+    if (!Init::isUndefined(refPos) &&
+        !Init::isUndefined(refVel))
     {
-        if (Init::isUndefined<double>(dopConeAngleRef))
+        if (Init::isUndefined(dopConeAngleRef))
         {
             dopConeAngleRef = derivedDcaRef(scp);
         }
@@ -72,13 +72,13 @@ void RMAT::fillDerivedFields(const Vector3& scp)
 
 void RMAT::fillDefaultFields(const SCPCOA& scpcoa)
 {
-    if (Init::isUndefined<Vector3>(refPos) &&
-        !Init::isUndefined<Vector3>(scpcoa.arpPos))
+    if (Init::isUndefined(refPos) &&
+        !Init::isUndefined(scpcoa.arpPos))
     {
         refPos = scpcoa.arpPos;
     }
-    if (Init::isUndefined<Vector3>(refVel) &&
-        !Init::isUndefined<Vector3>(scpcoa.arpVel))
+    if (Init::isUndefined(refVel) &&
+        !Init::isUndefined(scpcoa.arpVel))
     {
         refVel = scpcoa.arpVel;
     }
@@ -144,11 +144,11 @@ RMCR::RMCR() :
 
 void RMCR::fillDerivedFields(const Vector3& scp)
 {
-    if (!Init::isUndefined<Vector3>(refPos) &&
-        !Init::isUndefined<Vector3>(refVel))
+    if (!Init::isUndefined(refPos) &&
+        !Init::isUndefined(refVel))
     {
         // RCA is a derived field
-        if (Init::isUndefined<double>(dopConeAngleRef))
+        if (Init::isUndefined(dopConeAngleRef))
         {
             dopConeAngleRef = derivedDcaRef(scp);
         }
@@ -157,13 +157,13 @@ void RMCR::fillDerivedFields(const Vector3& scp)
 
 void RMCR::fillDefaultFields(const SCPCOA& scpcoa)
 {
-    if (Init::isUndefined<Vector3>(refPos) &&
-        !Init::isUndefined<Vector3>(scpcoa.arpPos))
+    if (Init::isUndefined(refPos) &&
+        !Init::isUndefined(scpcoa.arpPos))
     {
         refPos = scpcoa.arpPos;
     }
-    if (Init::isUndefined<Vector3>(refVel) &&
-        !Init::isUndefined<Vector3>(scpcoa.arpVel))
+    if (Init::isUndefined(refVel) &&
+        !Init::isUndefined(scpcoa.arpVel))
     {
         refVel = scpcoa.arpVel;
     }
@@ -238,11 +238,11 @@ bool INCA::operator==(const INCA& rhs) const
 void INCA::fillDerivedFields(const Vector3& scp,
         const Position& position)
 {
-    if (!Init::isUndefined<Poly1D>(timeCAPoly) &&
-        !Init::isUndefined<PolyXYZ>(position.arpPoly) &&
-        Init::isUndefined<double>(rangeCA))
+    if (!Init::isUndefined(timeCAPoly) &&
+        !Init::isUndefined(position.arpPoly) &&
+        Init::isUndefined(rangeCA))
     {
-        if (Init::isUndefined<double>(rangeCA))
+        if (Init::isUndefined(rangeCA))
         {
             rangeCA = derivedRangeCa(scp, position.arpPoly);
         }
@@ -258,8 +258,8 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
 
     //2.12.3.4.3
     if (collectionInformation.radarMode == RadarModeType::SPOTLIGHT &&
-        (!Init::isUndefined<Poly2D>(dopplerCentroidPoly) ||
-            !Init::isUndefined<BooleanType>(dopplerCentroidCOA)))
+        (!Init::isUndefined(dopplerCentroidPoly) ||
+            !Init::isUndefined(dopplerCentroidCOA)))
     {
         messageBuilder.str("");
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
@@ -271,8 +271,8 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
 
     //2.12.3.4.4
     if (collectionInformation.radarMode != RadarModeType::SPOTLIGHT &&
-        (Init::isUndefined<Poly2D>(dopplerCentroidPoly) ||
-            Init::isUndefined<BooleanType>(dopplerCentroidCOA)))
+        (Init::isUndefined(dopplerCentroidPoly) ||
+            Init::isUndefined(dopplerCentroidCOA)))
     {
         messageBuilder.str("");
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
@@ -350,8 +350,8 @@ Vector3 INCA::left(const PolyXYZ& arpPoly) const
 
 void INCA::fillDefaultFields(double fc)
 {
-    if (!Init::isUndefined<double>(fc) &&
-        Init::isUndefined<double>(freqZero))
+    if (!Init::isUndefined(fc) &&
+        Init::isUndefined(freqZero))
     {
         freqZero = fc;
     }
@@ -406,12 +406,10 @@ bool RMA::validate(const CollectionInformation& collectionInformation,
     {
         return rmat->validate(scp, log);
     }
-
     else if (rmcr.get())
     {
         return rmcr->validate(scp, log);
     }
-
     else if (inca.get())
     {
         return inca->validate(collectionInformation, scp, arpPoly, fc, log);

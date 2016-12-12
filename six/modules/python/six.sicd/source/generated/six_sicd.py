@@ -3191,12 +3191,6 @@ class SixSicdUtilities(_object):
 
     nPoly = staticmethod(nPoly)
 
-    def wgs84Norm(point):
-        """wgs84Norm(Vector3 point) -> Vector3"""
-        return _six_sicd.SixSicdUtilities_wgs84Norm(point)
-
-    wgs84Norm = staticmethod(wgs84Norm)
-
     def isClockwise(vertices, isUpPositive=False):
         """
         isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
@@ -3287,10 +3281,6 @@ def SixSicdUtilities_getGroundPlaneNormal(data):
 def SixSicdUtilities_nPoly(poly, index):
     """SixSicdUtilities_nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
     return _six_sicd.SixSicdUtilities_nPoly(poly, index)
-
-def SixSicdUtilities_wgs84Norm(point):
-    """SixSicdUtilities_wgs84Norm(Vector3 point) -> Vector3"""
-    return _six_sicd.SixSicdUtilities_wgs84Norm(point)
 
 def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
     """

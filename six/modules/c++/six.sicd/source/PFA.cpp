@@ -62,8 +62,8 @@ bool PFA::operator==(const PFA& rhs) const
 
 void PFA::fillDerivedFields(const Position& position)
 {
-    if (!Init::isUndefined<PolyXYZ>(position.arpPoly) &&
-        !Init::isUndefined<double>(polarAngleRefTime))
+    if (!Init::isUndefined(position.arpPoly) &&
+        !Init::isUndefined(polarAngleRefTime))
     {
         // This doesn't actually do anything currently.
         // Requires re-implemenation of polyfit, pfa_polar_coords, and bsxfun
@@ -75,8 +75,9 @@ void PFA::fillDefaultFields(const GeoData& geoData,
         const Grid& grid, const SCPCOA& scpcoa)
 {
     const Vector3& scp = geoData.scp.ecf;
-    if (Init::isUndefined<Vector3>(imagePlaneNormal))
+    if (Init::isUndefined(imagePlaneNormal))
     {
+        scene::WGS84EllipsoidModel model;
         switch (grid.imagePlane)
         {
         case ComplexImagePlaneType::SLANT:
@@ -84,7 +85,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
             imagePlaneNormal = scpcoa.slantPlaneNormal(scp);
             break;
         case ComplexImagePlaneType::GROUND:
-            imagePlaneNormal = six::sicd::Utilities::wgs84Norm(scp);
+            imagePlaneNormal = model.getNormalVector(scp);
             break;
         case ComplexImagePlaneType::OTHER:
             // Nothing we can do
@@ -92,13 +93,14 @@ void PFA::fillDefaultFields(const GeoData& geoData,
         }
     }
 
-    if (Init::isUndefined<Vector3>(focusPlaneNormal))
+    if (Init::isUndefined(focusPlaneNormal))
     {
-        focusPlaneNormal = Utilities::wgs84Norm(scp);
+        scene::WGS84EllipsoidModel model;
+        focusPlaneNormal = model.getNormalVector(scp);
     }
 
-    if (!Init::isUndefined<double>(scpcoa.scpTime) &&
-        Init::isUndefined<double>(polarAngleRefTime))
+    if (!Init::isUndefined(scpcoa.scpTime) &&
+        Init::isUndefined(polarAngleRefTime))
     {
         polarAngleRefTime = scpcoa.scpTime;
     }

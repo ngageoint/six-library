@@ -32,25 +32,23 @@ namespace six
 {
 namespace sicd
 {
-
-
 void RgAzComp::fillDerivedFields(const GeoData& geoData,
         const Grid& grid,
         const SCPCOA& scpcoa,
         const Timeline& timeline)
 {
     const Vector3& scp = geoData.scp.ecf;
-    if (Init::isUndefined<double>(azSF))
+    if (Init::isUndefined(azSF))
     {
         azSF = derivedAzSf(scpcoa, scp);
     }
 
     if (timeline.interPulsePeriod.get() &&
         timeline.interPulsePeriod->sets.size() == 1 &&
-        !Init::isUndefined<Poly1D>(
+        !Init::isUndefined(
                 timeline.interPulsePeriod->sets[0].interPulsePeriodPoly) &&
-        !Init::isUndefined<double>(grid.row->kCenter) &&
-        Init::isUndefined<Poly1D>(kazPoly))
+        !Init::isUndefined(grid.row->kCenter) &&
+        Init::isUndefined(kazPoly))
     {
         kazPoly = derivedKazPoly(grid, scpcoa, timeline, scp);
     }

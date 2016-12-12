@@ -213,4 +213,14 @@ WGS84EllipsoidModel::operator=(const EllipsoidModel & m)
 
     return *this;
 }
+
+Vector3 WGS84EllipsoidModel::getNormalVector(const Vector3& point) const
+{
+    Vector3 normalVector;
+    normalVector[0] = point[0] / math::square(equatorialRadius);
+    normalVector[1] = point[1] / math::square(equatorialRadius);
+    normalVector[2] = point[2] / math::square(polarRadius);
+
+    return normalVector.unit();
+}
 }

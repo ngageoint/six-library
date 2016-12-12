@@ -56,6 +56,9 @@ const double WaveformParameters::WGT_TOL = 1e-3;
 const char WaveformParameters::WF_INCONSISTENT_STR[] =
         "Waveform fields not consistent";
 
+const double RadarCollection::WF_TOL = 1e-3;
+const char RadarCollection::WF_INCONSISTENT_STR[] =
+        "Waveform fields not consistent";
 
 bool WaveformParameters::operator==(const WaveformParameters& rhs) const
 {
@@ -79,7 +82,7 @@ WaveformParameters* WaveformParameters::clone() const
 void WaveformParameters::fillDerivedFields()
 {
     if (rcvDemodType == DemodType::CHIRP &&
-        Init::isUndefined<double>(rcvFMRate))
+        Init::isUndefined(rcvFMRate))
     {
         rcvFMRate = 0;
     }
@@ -90,23 +93,23 @@ void WaveformParameters::fillDerivedFields()
         rcvDemodType = DemodType::CHIRP;
     }
 
-    if (Init::isUndefined<double>(txRFBandwidth) &&
-        !Init::isUndefined<double>(txPulseLength) &&
-        !Init::isUndefined<double>(txFMRate))
+    if (Init::isUndefined(txRFBandwidth) &&
+        !Init::isUndefined(txPulseLength) &&
+        !Init::isUndefined(txFMRate))
     {
         txRFBandwidth = txPulseLength * txFMRate;
     }
 
-    if (!Init::isUndefined<double>(txRFBandwidth) &&
-        Init::isUndefined<double>(txPulseLength) &&
-        !Init::isUndefined<double>(txFMRate))
+    if (!Init::isUndefined(txRFBandwidth) &&
+        Init::isUndefined(txPulseLength) &&
+        !Init::isUndefined(txFMRate))
     {
         txPulseLength = txRFBandwidth / txFMRate;
     }
 
-    if (!Init::isUndefined<double>(txRFBandwidth) &&
-        !Init::isUndefined<double>(txPulseLength) &&
-        Init::isUndefined<double>(txFMRate))
+    if (!Init::isUndefined(txRFBandwidth) &&
+        !Init::isUndefined(txPulseLength) &&
+        Init::isUndefined(txFMRate))
     {
         txFMRate = txRFBandwidth / txPulseLength;
     }
@@ -155,7 +158,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << rcvDemodType << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
             << rcvFMRate << std::endl
-            << "SICD>RadarCollection.Waveform.WFParameters.TxFMRate: "
+            << "SICD.RadarCollection.Waveform.WFParameters.TxFMRate: "
             << txFMRate << std::endl;
         log.error(messageBuilder.str());
         valid = false;
@@ -163,7 +166,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
 
     //2.8.7
     //Absolute frequencies must be positive
-    if (six::Init::isUndefined<int>(refFrequencyIndex) &&
+    if (six::Init::isUndefined(refFrequencyIndex) &&
         txFrequencyStart <= 0)
     {
         messageBuilder.str("");
@@ -176,7 +179,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
 
     //2.8.8
     //Absolute frequencies must be positive
-    if (six::Init::isUndefined<int>(refFrequencyIndex) &&
+    if (six::Init::isUndefined(refFrequencyIndex) &&
             rcvFrequencyStart <= 0)
     {
         messageBuilder.str("");
@@ -344,10 +347,6 @@ Area* Area::clone() const
     return new Area(*this);
 }
 
-const double RadarCollection::WF_TOL = 1e-3;
-const char RadarCollection::WF_INCONSISTENT_STR[] =
-        "Waveform fields not consistent";
-
 RadarCollection* RadarCollection::clone() const
 {
     return new RadarCollection(*this);
@@ -401,11 +400,11 @@ void RadarCollection::fillDerivedFields()
     // Transmit bandwidth
     if (!waveform.empty())
     {
-        if (Init::isUndefined<double>(txFrequencyMin))
+        if (Init::isUndefined(txFrequencyMin))
         {
             txFrequencyMin = waveformMin();
         }
-        if (Init::isUndefined<double>(txFrequencyMax))
+        if (Init::isUndefined(txFrequencyMax))
         {
             txFrequencyMax = waveformMax();
         }
@@ -422,11 +421,11 @@ void RadarCollection::fillDerivedFields()
     if (waveform.size() == 1 &&
         waveform[0].get() != NULL)
     {
-        if (Init::isUndefined<double>(waveform[0]->txFrequencyStart))
+        if (Init::isUndefined(waveform[0]->txFrequencyStart))
         {
             waveform[0]->txFrequencyStart = txFrequencyMin;
         }
-        if (Init::isUndefined<double>(waveform[0]->txRFBandwidth))
+        if (Init::isUndefined(waveform[0]->txRFBandwidth))
         {
             waveform[0]->txRFBandwidth = txFrequencyMax - txFrequencyMin;
         }
@@ -472,7 +471,7 @@ bool RadarCollection::validate(logging::Logger& log) const
 
     //2.8.6
     //Absolute frequencies must be positive
-    if (six::Init::isUndefined<int>(refFrequencyIndex) && txFrequencyMin <= 0)
+    if (six::Init::isUndefined(refFrequencyIndex) && txFrequencyMin <= 0)
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl

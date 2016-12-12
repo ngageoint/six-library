@@ -42,6 +42,7 @@ class Functor
 {
 public:
     virtual std::vector<double> operator()(size_t n) const = 0;
+    virtual ~Functor() {}
 };
 
 class Identity : public Functor

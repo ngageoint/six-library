@@ -9789,6 +9789,70 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_WGS84EllipsoidModel_getNormalVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::WGS84EllipsoidModel *arg1 = (scene::WGS84EllipsoidModel *) 0 ;
+  scene::Vector3 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  scene::Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:WGS84EllipsoidModel_getNormalVector",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__WGS84EllipsoidModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "WGS84EllipsoidModel_getNormalVector" "', argument " "1"" of type '" "scene::WGS84EllipsoidModel const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::WGS84EllipsoidModel * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "WGS84EllipsoidModel_getNormalVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "WGS84EllipsoidModel_getNormalVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
+  {
+    try
+    {
+      result = ((scene::WGS84EllipsoidModel const *)arg1)->getNormalVector((scene::Vector3 const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *WGS84EllipsoidModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -26224,6 +26288,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"WGS84EllipsoidModel_initRadiusValues", _wrap_WGS84EllipsoidModel_initRadiusValues, METH_VARARGS, (char *)"WGS84EllipsoidModel_initRadiusValues(WGS84EllipsoidModel self)"},
 	 { (char *)"WGS84EllipsoidModel_setEquatorialRadius", _wrap_WGS84EllipsoidModel_setEquatorialRadius, METH_VARARGS, (char *)"WGS84EllipsoidModel_setEquatorialRadius(WGS84EllipsoidModel self, double val)"},
 	 { (char *)"WGS84EllipsoidModel_setPolarRadius", _wrap_WGS84EllipsoidModel_setPolarRadius, METH_VARARGS, (char *)"WGS84EllipsoidModel_setPolarRadius(WGS84EllipsoidModel self, double val)"},
+	 { (char *)"WGS84EllipsoidModel_getNormalVector", _wrap_WGS84EllipsoidModel_getNormalVector, METH_VARARGS, (char *)"WGS84EllipsoidModel_getNormalVector(WGS84EllipsoidModel self, Vector3 point) -> Vector3"},
 	 { (char *)"WGS84EllipsoidModel_swigregister", WGS84EllipsoidModel_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Utilities_latLonToECEF", _wrap_Utilities_latLonToECEF, METH_VARARGS, (char *)"\n"
 		"latLonToECEF(LatLonAlt latLon) -> Vector3\n"

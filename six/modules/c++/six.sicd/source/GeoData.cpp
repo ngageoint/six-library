@@ -28,6 +28,8 @@ namespace six
 {
 namespace sicd
 {
+const double GeoData::ECF_THRESHOLD = 1e-2;
+
 GeoInfo* GeoInfo::clone() const
 {
     return new GeoInfo(*this);
@@ -38,8 +40,6 @@ bool GeoInfo::operator==(const GeoInfo& rhs) const
     return (name == rhs.name && geoInfos == rhs.geoInfos &&
             desc == rhs.desc && geometryLatLon == rhs.geometryLatLon);
 }
-
-const double GeoData::ECF_THRESHOLD = 1e-2;
 
 GeoData* GeoData::clone()
 {
@@ -56,22 +56,22 @@ bool GeoData::operator==(const GeoData& rhs) const
 void GeoData::fillDerivedFields(const ImageData& imageData,
         const scene::ProjectionModel& model)
 {
-    if (!Init::isUndefined<Vector3>(scp.ecf) &&
-        Init::isUndefined<LatLonAlt>(scp.llh))
+    if (!Init::isUndefined(scp.ecf) &&
+        Init::isUndefined(scp.llh))
     {
         scene::ECEFToLLATransform transformer;
         scp.llh = transformer.transform(scp.ecf);
     }
-    if (!Init::isUndefined<LatLonAlt>(scp.llh) &&
-        Init::isUndefined<Vector3>(scp.ecf))
+    if (!Init::isUndefined(scp.llh) &&
+        Init::isUndefined(scp.ecf))
     {
         scene::LLAToECEFTransform transformer;
         scp.ecf = transformer.transform(scp.llh);
     }
 
-    if (Init::isUndefined<LatLon>(imageCorners.getCorner(0)) &&
-        !Init::isUndefined<size_t>(imageData.numRows) &&
-        !Init::isUndefined<size_t>(imageData.numCols))
+    if (Init::isUndefined(imageCorners.getCorner(0)) &&
+        !Init::isUndefined(imageData.numRows) &&
+        !Init::isUndefined(imageData.numCols))
     {
         std::vector<RowColDouble> cornerLineSample;
         cornerLineSample.resize(4);

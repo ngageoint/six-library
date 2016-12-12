@@ -34,6 +34,17 @@
 using namespace six;
 using namespace six::sicd;
 
+const double DirectionParameters::WGT_TOL = 1e-3;
+const size_t DirectionParameters::DEFAULT_WEIGHT_SIZE = 512;
+const char DirectionParameters::BOUNDS_ERROR_MESSAGE[] =
+        "Violation of spatial frequency extent bounds";
+
+const double Grid::UVECT_TOL = 1e-3;
+const double Grid::WF_TOL = 1e-3;
+const char Grid::WF_INCONSISTENT_STR[] = "Waveform fields not consistent";
+const char Grid::BOUNDS_ERROR_MESSAGE[] =
+        "Violation of spatial frequency extent bounds";
+
 WeightType::WeightType() :
     windowName(Init::undefined<std::string>())
 {
@@ -51,11 +62,6 @@ DirectionParameters::DirectionParameters() :
     deltaKCOAPoly(Init::undefined<Poly2D>())
 {
 }
-
-const double DirectionParameters::WGT_TOL = 1e-3;
-const size_t DirectionParameters::DEFAULT_WEIGHT_SIZE = 512;
-const char DirectionParameters::BOUNDS_ERROR_MESSAGE[] =
-        "Violation of spatial frequency extent bounds";
 
 DirectionParameters* DirectionParameters::clone() const 
 {
@@ -89,7 +95,7 @@ std::pair<double, double> DirectionParameters::calculateDeltaKs(
 
     std::vector<RowColInt> vertices = calculateImageVertices(imageData);
 
-    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+    if (!Init::isUndefined(deltaKCOAPoly))
     {
         derivedDeltaK1 = std::numeric_limits<double>::infinity();
         derivedDeltaK2 = -std::numeric_limits<double>::infinity();
@@ -220,7 +226,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
-    const double& epsilon = std::numeric_limits<double>::epsilon();
+    const double epsilon = std::numeric_limits<double>::epsilon();
     //2.3.1, 2.3.5
     if (deltaK2 <= deltaK1)
     {
@@ -392,13 +398,13 @@ void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
         const GeoData& geoData, double offset)
 {
     const Vector3& scp = geoData.scp.ecf;
-    if (Init::isUndefined<double>(kCenter))
+    if (Init::isUndefined(kCenter))
     {
         kCenter = derivedKCenter(rgAzComp, offset);
     }
 
-    if (Init::isUndefined<Poly2D>(deltaKCOAPoly) &&
-        !Init::isUndefined<double>(kCenter))
+    if (Init::isUndefined(deltaKCOAPoly) &&
+        !Init::isUndefined(kCenter))
     {
         deltaKCOAPoly = derivedKcoaPoly(rgAzComp, offset);
     }
@@ -408,7 +414,7 @@ double DirectionParameters::derivedKCenter(const RgAzComp& /*rgAzComp*/,
         double offset) const
 {
     double derivedCenter = offset;
-    if (!Init::isUndefined<Poly2D>(deltaKCOAPoly))
+    if (!Init::isUndefined(deltaKCOAPoly))
     {
         derivedCenter -= deltaKCOAPoly[0][0];
     }
@@ -461,12 +467,6 @@ Grid::Grid() :
     col(new DirectionParameters())
 {
 }
-
-const double Grid::UVECT_TOL = 1e-3;
-const double Grid::WF_TOL = 1e-3;
-const char Grid::WF_INCONSISTENT_STR[] = "Waveform fields not consistent";
-const char Grid::BOUNDS_ERROR_MESSAGE[] =
-        "Violation of spatial frequency extent bounds";
 
 Grid* Grid::clone() const 
 {
@@ -542,9 +542,9 @@ void Grid::fillDerivedFields(
         const ImageData& imageData,
         const SCPCOA& scpcoa)
 {
-    if (!Init::isUndefined<double>(scpcoa.scpTime) &&
+    if (!Init::isUndefined(scpcoa.scpTime) &&
         collectionInformation.radarMode == RadarModeType::SPOTLIGHT &&
-        Init::isUndefined<Poly2D>(timeCOAPoly))
+        Init::isUndefined(timeCOAPoly))
     {
         timeCOAPoly = Poly2D(0, 0);
         timeCOAPoly[0][0] = scpcoa.scpTime;
@@ -574,8 +574,8 @@ void Grid::fillDerivedFields(const RMA& rma, const Vector3& scp,
 void Grid::fillDerivedFields(const RMAT& rmat, const Vector3& scp)
 {
     // Row/Col.UnitVector and Derived fields
-    if (Init::isUndefined<Vector3>(row->unitVector) &&
-        Init::isUndefined<Vector3>(col->unitVector))
+    if (Init::isUndefined(row->unitVector) &&
+        Init::isUndefined(col->unitVector))
     {
         row->unitVector = derivedRowUnitVector(rmat, scp);
         col->unitVector = derivedColUnitVector(rmat, scp);
@@ -585,8 +585,8 @@ void Grid::fillDerivedFields(const RMAT& rmat, const Vector3& scp)
 void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
 {
     // Row/Col.UnitVector and Derived fields
-    if (Init::isUndefined<Vector3>(row->unitVector) &&
-        Init::isUndefined<Vector3>(col->unitVector))
+    if (Init::isUndefined(row->unitVector) &&
+        Init::isUndefined(col->unitVector))
     {
         row->unitVector = derivedRowUnitVector(rmcr, scp);
         col->unitVector = derivedColUnitVector(rmcr, scp);
@@ -596,22 +596,22 @@ void Grid::fillDerivedFields(const RMCR& rmcr, const Vector3& scp)
 void Grid::fillDerivedFields(const INCA& inca, const Vector3& scp,
         const PolyXYZ& arpPoly)
 {
-    if (!Init::isUndefined<Poly1D>(inca.timeCAPoly) &&
-        !Init::isUndefined<PolyXYZ>(arpPoly) &&
-        Init::isUndefined<Vector3>(row->unitVector) &&
-        Init::isUndefined<Vector3>(col->unitVector))
+    if (!Init::isUndefined(inca.timeCAPoly) &&
+        !Init::isUndefined(arpPoly) &&
+        Init::isUndefined(row->unitVector) &&
+        Init::isUndefined(col->unitVector))
     {
         row->unitVector = derivedRowUnitVector(inca, scp, arpPoly);
         col->unitVector = derivedColUnitVector(inca, scp, arpPoly);
     }
 
-    if (Init::isUndefined<double>(col->kCenter))
+    if (Init::isUndefined(col->kCenter))
     {
         col->kCenter = 0;
     }
 
-    if (!Init::isUndefined<double>(inca.freqZero) &&
-        Init::isUndefined<double>(row->kCenter))
+    if (!Init::isUndefined(inca.freqZero) &&
+        Init::isUndefined(row->kCenter))
     {
         row->kCenter = derivedRowKCenter(inca);
     }
@@ -633,16 +633,16 @@ void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
         type = ComplexImageGridType::RGAZIM;
     }
 
-    if (Init::isUndefined<Vector3>(row->unitVector))
+    if (Init::isUndefined(row->unitVector))
     {
         row->unitVector = derivedRowUnitVector(scpcoa, scp);
     }
-    if (Init::isUndefined<Vector3>(col->unitVector))
+    if (Init::isUndefined(col->unitVector))
     {
         col->unitVector = derivedColUnitVector(scpcoa, scp);
     }
 
-    if (!Init::isUndefined<double>(fc))
+    if (!Init::isUndefined(fc))
     {
         row->fillDerivedFields(rgAzComp, geoData,
                 fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
@@ -690,14 +690,14 @@ void Grid::fillDefaultFields(const RMA& rma, double fc)
 
 void Grid::fillDefaultFields(const RMAT& rmat, double fc)
 {
-    if (!Init::isUndefined<double>(fc))
+    if (!Init::isUndefined(fc))
     {
-        if (Init::isUndefined<double>(row->kCenter))
+        if (Init::isUndefined(row->kCenter))
         {
             row->kCenter = derivedRowKCenter(rmat, fc);
         }
 
-        if (Init::isUndefined<double>(col->kCenter))
+        if (Init::isUndefined(col->kCenter))
         {
             col->kCenter = derivedColKCenter(rmat, fc);
         }
@@ -752,13 +752,13 @@ Vector3 Grid::derivedColUnitVector(const INCA& inca, const Vector3& scp,
 
 void Grid::fillDefaultFields(const RMCR& rmcr, double fc)
 {
-    if (!Init::isUndefined<double>(fc))
+    if (!Init::isUndefined(fc))
     {
-        if (Init::isUndefined<double>(row->kCenter))
+        if (Init::isUndefined(row->kCenter))
         {
             row->kCenter = derivedRowKCenter(rmcr, fc);
         }
-        if (Init::isUndefined<double>(col->kCenter))
+        if (Init::isUndefined(col->kCenter))
         {
             col->kCenter = 0;
         }
@@ -772,19 +772,19 @@ void Grid::fillDefaultFields(const PFA& pfa, double fc)
         type = ComplexImageGridType::RGAZIM;
     }
 
-    if (Init::isUndefined<double>(col->kCenter))
+    if (Init::isUndefined(col->kCenter))
     {
         col->kCenter = 0;
     }
-    if (Init::isUndefined<double>(row->kCenter))
+    if (Init::isUndefined(row->kCenter))
     {
-        if (!Init::isUndefined<double>(pfa.krg1) &&
-            !Init::isUndefined<double>(pfa.krg2))
+        if (!Init::isUndefined(pfa.krg1) &&
+            !Init::isUndefined(pfa.krg2))
         {
             // Default: the most reasonable way to compute this
             row->kCenter = (pfa.krg1 + pfa.krg2) / 2;
         }
-        else if (!Init::isUndefined<double>(fc))
+        else if (!Init::isUndefined(fc))
         {
             // Approximation: this may not be quite right, due to
             // rectangular inscription loss in PFA, but it should
@@ -815,12 +815,10 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
     {
         return validate(*rma.rmat, scp, fc, log);
     }
-
     else if (rma.rmcr.get())
     {
         return validate(*rma.rmcr, scp, fc, log);
     }
-
     else if (rma.inca.get())
     {
         return validate(*rma.inca, scp, arpPoly, fc, log);
@@ -927,7 +925,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
     }
 
     // 2.12.3.3.7
-    if (!Init::isUndefined<double>(fc))
+    if (!Init::isUndefined(fc))
     {
         if (std::abs(row->kCenter / derivedRowKCenter(rmcr, fc) - 1) > WF_TOL)
         {
@@ -956,7 +954,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     std::ostringstream messageBuilder;
     const double IFP_POLY_TOL = 1e-5;
 
-    if (!Init::isUndefined<Poly2D>(inca.dopplerCentroidPoly) &&
+    if (!Init::isUndefined(inca.dopplerCentroidPoly) &&
         inca.dopplerCentroidCOA == BooleanType::IS_TRUE)
     {
         const Poly2D& kcoaPoly = col->deltaKCOAPoly;
@@ -1035,7 +1033,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     }
 
     // 2.12.3.4.11
-    if (Init::isUndefined<double>(fc) &&
+    if (Init::isUndefined(fc) &&
         std::abs(row->kCenter - derivedRowKCenter(inca)) >
         std::numeric_limits<double>::epsilon())
     {
@@ -1069,8 +1067,8 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
     }
 
     // Make sure Row.kCtr is consistent with processed RF frequency bandwidth
-    if (Init::isUndefined<double>(radarCollection.refFrequencyIndex) &&
-        !Init::isUndefined<double>(fc))
+    if (Init::isUndefined(radarCollection.refFrequencyIndex) &&
+        !Init::isUndefined(fc))
     {
         // PFA.SpatialFreqSFPoly affects Row.KCtr
         double kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *

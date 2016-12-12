@@ -526,20 +526,6 @@ Poly1D Utilities::nPoly(PolyXYZ poly, size_t idx)
     return ret;
 }
 
-Vector3 Utilities::wgs84Norm(const Vector3& point)
-{
-    scene::WGS84EllipsoidModel model;
-    std::vector<double> coordinates;
-    coordinates.resize(3);
-
-    coordinates[0] = point[0] / math::square(model.getEquatorialRadius());
-    coordinates[1] = point[1] / math::square(model.getEquatorialRadius());
-    coordinates[2] = point[2] / math::square(model.getPolarRadius());
-
-    Vector3 normal(coordinates);
-    return normal.unit();
-}
-
 bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
                             bool isUpPositive)
 {

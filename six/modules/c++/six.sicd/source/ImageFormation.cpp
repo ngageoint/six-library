@@ -96,16 +96,16 @@ bool ImageFormation::operator==(const ImageFormation& rhs) const
 
 void ImageFormation::fillDefaultFields(const RadarCollection& radarCollection)
 {
-    if (!Init::isUndefined<double>(radarCollection.txFrequencyMin) &&
-        !Init::isUndefined<double>(radarCollection.txFrequencyMax))
+    if (!Init::isUndefined(radarCollection.txFrequencyMin) &&
+        !Init::isUndefined(radarCollection.txFrequencyMax))
     {
         // Default: we often assume that all transmitted bandwidth was
         // processed, if given no other information
-        if (Init::isUndefined<double>(txFrequencyProcMin))
+        if (Init::isUndefined(txFrequencyProcMin))
         {
             txFrequencyProcMin = radarCollection.txFrequencyMin;
         }
-        if (Init::isUndefined<double>(txFrequencyProcMax))
+        if (Init::isUndefined(txFrequencyProcMax))
         {
             txFrequencyProcMax = radarCollection.txFrequencyMax;
         }
