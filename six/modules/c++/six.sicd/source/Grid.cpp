@@ -999,7 +999,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
-            << "Grid.Row.UVectECF: " << row->unitVector
+            << "Grid.Row.UVectECF: " << row->unitVector << std::endl
             << "Derived Grid.Row.UVectECF: "
             << derivedRowUnitVector(inca, scp, arpPoly);
         log.error(messageBuilder.str());
@@ -1012,7 +1012,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
     {
         messageBuilder.str("");
         messageBuilder << "UVectFields inconsistent" << std::endl
-            << "Grid.Col.UVectECF: " << col->unitVector
+            << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
             << derivedRowUnitVector(inca, scp, arpPoly);
         log.error(messageBuilder.str());
@@ -1038,7 +1038,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "RMA.INCA.FreqZero * 2 / c: " << derivedRowKCenter(inca)
-            << "Grid.Row.KCenter: " << row->kCenter;
+            << std::endl << "Grid.Row.KCenter: " << row->kCenter;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1243,7 +1243,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
             > UVECT_TOL)
     {
         messageBuilder.str("");
-        messageBuilder << "UVectr fields inconsistent." << std::endl
+        messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: " <<
             derivedColUnitVector(scpcoa, scp);

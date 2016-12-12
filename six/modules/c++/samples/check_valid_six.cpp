@@ -102,9 +102,13 @@ bool runValidation(const std::auto_ptr<six::Data>& data,
             log->info(Ctxt("Successful: No Errors Found!"));
             return true;
         }
+        return false;
     }
-
-    return false;
+    else
+    {
+        // Nothing to validate
+        return true;
+    }
 }
 }
 
