@@ -724,8 +724,8 @@ class DirectionParameters(_object):
     def fillDerivedFields(self, *args):
         """
         fillDerivedFields(DirectionParameters self, ImageData imageData)
-        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp, GeoData geoData, double offset=0)
-        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp, GeoData geoData)
+        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp, double offset=0)
+        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp)
         """
         return _six_sicd.DirectionParameters_fillDerivedFields(self, *args)
 
@@ -6766,8 +6766,8 @@ class ScopedCloneableDirectionParameters(_object):
     def fillDerivedFields(self, *args):
         """
         fillDerivedFields(ScopedCloneableDirectionParameters self, ImageData imageData)
-        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, GeoData geoData, double offset=0)
-        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, GeoData geoData)
+        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, double offset=0)
+        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp)
         """
         return _six_sicd.ScopedCloneableDirectionParameters_fillDerivedFields(self, *args)
 
