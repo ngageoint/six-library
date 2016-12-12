@@ -10,7 +10,6 @@
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU Lesser General Public License for more details.
 *
@@ -252,7 +251,7 @@ TEST_CASE(FillDirectionParamsKCenterFromKCOAPoly)
         geoData.scp.ecf[ii] = (ii + 1) * 100;
     }
 
-    col.fillDerivedFields(rgAzComp, geoData, 0);
+    col.fillDerivedFields(rgAzComp, 0);
     TEST_ASSERT_EQ(col.kCenter, 0);
 }
 

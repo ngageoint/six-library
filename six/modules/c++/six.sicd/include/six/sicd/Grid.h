@@ -145,8 +145,8 @@ struct DirectionParameters
             double offset = 0) const;
 
     void fillDerivedFields(const ImageData& imageData);
-    void fillDerivedFields(const RgAzComp& rgAzComp, const GeoData& geoData,
-            double offset = 0);
+    void fillDerivedFields(const RgAzComp& rgAzComp, double offset = 0);
+
 private:
     std::auto_ptr<Functor> calculateWeightFunction() const;
 

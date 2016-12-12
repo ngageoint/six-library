@@ -395,9 +395,8 @@ bool DirectionParameters::validateWeights(const Functor& weightFunction,
 }
 
 void DirectionParameters::fillDerivedFields(const RgAzComp& rgAzComp,
-        const GeoData& geoData, double offset)
+        double offset)
 {
-    const Vector3& scp = geoData.scp.ecf;
     if (Init::isUndefined(kCenter))
     {
         kCenter = derivedKCenter(rgAzComp, offset);
@@ -641,13 +640,12 @@ void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
     {
         col->unitVector = derivedColUnitVector(scpcoa, scp);
     }
-
     if (!Init::isUndefined(fc))
     {
-        row->fillDerivedFields(rgAzComp, geoData,
+        row->fillDerivedFields(rgAzComp,
                 fc * 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
     }
-    col->fillDerivedFields(rgAzComp, geoData, 0);
+    col->fillDerivedFields(rgAzComp, 0);
 }
 
 Vector3 Grid::derivedRowUnitVector(
@@ -941,7 +939,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
     return valid;
 }
 
-double Grid::derivedRowKCenter(const RMCR& rmcr, double fc) const
+double Grid::derivedRowKCenter(const RMCR& /*rmcr*/, double fc) const
 {
     return fc * (2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC);
 }
@@ -1037,8 +1035,6 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         std::abs(row->kCenter - derivedRowKCenter(inca)) >
         std::numeric_limits<double>::epsilon())
     {
-        const std::string WF_INCONSISTENT_STR =
-                "Waveform fields not consistent";
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "RMA.INCA.FreqZero * 2 / c: " << derivedRowKCenter(inca)
