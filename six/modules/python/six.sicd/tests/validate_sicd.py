@@ -23,15 +23,10 @@
 #
 
 from pysix.six_sicd import *
-from pysix.six_base import *
-from coda.xml_lite import *
-from coda.coda_io import *
 from coda.coda_logging import *
 
 import os
 import sys
-import os.path
-import filecmp
 
 ##############################################################
 #
@@ -39,13 +34,10 @@ import filecmp
 #
 ##############################################################
 
-# This test loads a sicd file as a complex data object and writes
-# it out as an xml file. Unfortunately there is no handy way to compare
-# the resulting xml so it just prints out various information and assumes
-# it worked. Also real sicds can be kind of big so there probably won't
-# be any in the repository, so this is really more of an example.
+# This test loads a sicd file as a complex data object and checks to see
+# if it is valid. Discrepancies get written to stdout
 
-def loadSicd(filename):
+def validateSicd(filename):
   vs = VectorString()
   vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
   cmplx = SixSicdUtilities.getComplexData(filename, vs)
@@ -54,7 +46,15 @@ def loadSicd(filename):
 if 1 == len(sys.argv):
     print("please provide a sicd or XML file")
 
-for arg in sys.argv:
-  if (arg.endswith(".ntf") or arg.endswith(".nitf")):
-    cmplx = loadSicd(arg)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print("Usage: {0} <SICD pathname>".format(sys.argv[0]))
+        sys.exit(1)
+    pathname = sys.argv[1]
+    if (pathname.endswith(".ntf") or pathname.endswith(".nitf")):
+        if validateSicd(pathname):
+            print("SICD is valid")
+            sys.exit(0)
+        print("SICD is invalid")
+    sys.exit(1)
 

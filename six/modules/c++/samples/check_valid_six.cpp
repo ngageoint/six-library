@@ -87,6 +87,25 @@ std::vector<std::string> getPathnames(const std::string& dirname)
                                    std::vector<std::string>(1, dirname),
                                    false);
 }
+
+bool runValidation(const std::auto_ptr<six::Data>& data,
+        std::auto_ptr<logging::Logger>& log)
+{
+    if (data->getDataType() == six::DataType::COMPLEX)
+    {
+        six::sicd::ComplexData* complexData =
+                reinterpret_cast<six::sicd::ComplexData*>(
+                        data.get());
+
+        if (complexData->validate(*log))
+        {
+            log->info(Ctxt("Successful: No Errors Found!"));
+            return true;
+        }
+    }
+
+    return false;
+}
 }
 
 int main(int argc, char** argv)
@@ -138,56 +157,54 @@ int main(int argc, char** argv)
 
         // this validates the DES of the input against the
         // best available schema
-        int retCode = 0;
         six::NITFReadControl reader;
         reader.setLogger(log.get());
         reader.setXMLControlRegistry(&xmlRegistry);
+        bool allValid = true;
         for (size_t ii = 0; ii < inputPathnames.size(); ++ii)
         {
             const std::string& inputPathname(inputPathnames[ii]);
             log->info(Ctxt("Reading " + inputPathname));
+            std::auto_ptr<six::Data> data;
             try
             {
-                std::auto_ptr<six::Data> data =
-                        six::parseDataFromFile(xmlRegistry,
-                                               inputPathname,
-                                               schemaPaths,
-                                               *log);
-
-                six::sicd::ComplexData* complexData =
-                        dynamic_cast<six::sicd::ComplexData*>(data.get());
-
-                if (complexData != NULL)
+                if (nitf::Reader::getNITFVersion(inputPathname) ==
+                        NITF_VER_UNKNOWN)
                 {
-                    if (!complexData->validate(*log))
+                    data = six::parseDataFromFile(xmlRegistry,
+                                                  inputPathname,
+                                                  schemaPaths,
+                                                  *log);
+                    allValid = allValid && runValidation(data, log);
+                }
+                else
+                {
+                    reader.load(inputPathname, schemaPaths);
+                    mem::SharedPtr<six::Container> container =
+                            reader.getContainer();
+                    for (size_t jj = 0; jj < container->getNumData(); ++jj)
                     {
-                        retCode = 1;
+                        data.reset(container->getData(jj)->clone());
+                        allValid = allValid && runValidation(data, log);
                     }
                 }
 
-                if (nitf::Reader::getNITFVersion(inputPathname) !=
-                        NITF_VER_UNKNOWN)
-
-                {
-                    reader.load(inputPathname, schemaPaths);
-                }
-                log->info(Ctxt("Successful: No Errors Found!"));
             }
             catch (const six::DESValidationException& ex)
             {
                 log->error(ex);
                 log->error(Ctxt("Unsuccessful: Please contact your product "
                                "vendor with these details!"));
-                retCode = 1;
+                allValid = false;
             }
             catch (const except::Exception& ex)
             {
                 log->error(ex);
-                retCode = 1;
+                allValid = false;
             }
         }
 
-        return retCode;
+        return allValid ? 0 : 1;
     }
     catch (const std::exception& ex)
     {

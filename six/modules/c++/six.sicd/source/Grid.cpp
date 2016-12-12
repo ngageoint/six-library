@@ -838,7 +838,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
-            << "Grid.Row.UVectECF: " << row->unitVector
+            << "Grid.Row.UVectECF: " << row->unitVector << std::endl
             << "Derived grid.Row.UVectECT: "
             << derivedRowUnitVector(rmat, scp);
         log.error(messageBuilder.str());
@@ -850,7 +850,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
     {
         messageBuilder.str("");
         messageBuilder << "UVect fields inconsistent." << std::endl
-            << "Grid.Col.UVectECF: " << col->unitVector
+            << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
             << derivedColUnitVector(rmat, scp);
         log.error(messageBuilder.str());
