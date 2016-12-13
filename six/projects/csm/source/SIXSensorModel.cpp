@@ -1115,9 +1115,9 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
 DataType SIXSensorModel::getDataType(const csm::Des& des)
 {
     static const size_t DES_SUBHEADER_LENGTH = 200;
-    std::string desid = des.subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
+    const std::string subheader = des.subHeader();
+    std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
-
     if (desid == "SICD_XML")
     {
         return DataType::COMPLEX;
@@ -1127,15 +1127,13 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
         return DataType::DERIVED;
     }
 
-    const std::string& subheader = des.subHeader();
-
-    // DESSHSI occurs 73 bytes past the subheader
+    const size_t treLength = six::toType<size_t>(subheader.substr(196, 4));
+    if (treLength != 283 && treLength != 773)
+    {
+        return DataType::NOT_SET;
+    }
     const size_t desshsiOffset = 73 + DES_SUBHEADER_LENGTH;
-
-    nitf::TRE tre("XML_DATA_CONTENT");
-    const size_t desshsiLength = tre.getField("DESSHSI").getLength();
-    std::string desshsiField = subheader.substr(
-            desshsiOffset, desshsiLength);
+    std::string desshsiField = subheader.substr(desshsiOffset, 60);
     str::trim(desshsiField);
 
     return NITFReadControl::getDataType(desid,
