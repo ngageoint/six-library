@@ -43,9 +43,6 @@ def validateSicd(filename):
   cmplx = SixSicdUtilities.getComplexData(filename, vs)
   return cmplx.validate(getLogger())
 
-if 1 == len(sys.argv):
-    print("please provide a sicd or XML file")
-
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: {0} <SICD pathname>".format(sys.argv[0]))
