@@ -237,6 +237,13 @@ bool ComplexData::validate(logging::Logger& log) const
 
 void ComplexData::fillDerivedFields(bool includeDefault)
 {
+    grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
+    position->fillDerivedFields(*scpcoa);
+    radarCollection->fillDerivedFields();
+
+    // SCPCOA only needs geoData for the SCP, which is not derivable from
+    // SCPCOA, so it's safe to do it backwards like this
+    scpcoa->fillDerivedFields(*geoData, *grid, *position);
     const scene::PlaneProjectionModel model(
             scpcoa->slantPlaneNormal(geoData->scp.ecf),
             grid->row->unitVector,
@@ -247,10 +254,6 @@ void ComplexData::fillDerivedFields(bool includeDefault)
             scpcoa->look(geoData->scp.ecf));
 
     geoData->fillDerivedFields(*imageData, model);
-    grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
-    position->fillDerivedFields(*scpcoa);
-    radarCollection->fillDerivedFields();
-    scpcoa->fillDerivedFields(*geoData, *grid, *position);
 
     double fc = computeFc();
 

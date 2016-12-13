@@ -1908,11 +1908,21 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geoInfo->geographicInformationExtensions.push_back(param);
 
     geoCoverage->geographicInformation = geoInfo;
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        geoCoverage->footprint.getCorner(ii).setLat(
+                geographicAndTarget.geographicCoverage.footprint.
+                getCorner(ii).getLat());
+        geoCoverage->footprint.getCorner(ii).setLon(
+                geographicAndTarget.geographicCoverage.footprint.
+                getCorner(ii).getLon());
+
+    }
+
     geographicAndTarget.geographicCoverage.subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
     targetInfo->identifiers.push_back(param);
-    targetInfo->footprint.reset(new six::LatLonCorners());
     targetInfo->targetInformationExtensions.push_back(param);
     geographicAndTarget.targetInformation.push_back(targetInfo);
 }
@@ -2129,6 +2139,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
         siddData.setNumRows(IMAGE.height);
         siddData.setNumCols(IMAGE.width);
     }
+
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
