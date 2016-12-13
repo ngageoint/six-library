@@ -45,7 +45,7 @@ TEST_CASE(DefaultPFA)
     six::sicd::PFA pfa;
     pfa.fillDefaultFields(geoData, grid, scpcoa);
 
-    TEST_ASSERT_ALMOST_EQ_EPS(pfa.imagePlaneNormal[0], -0.40824829, 1e-6);
+    TEST_ASSERT_ALMOST_EQ(pfa.imagePlaneNormal[0], -0.40824829);
     TEST_ASSERT_ALMOST_EQ(pfa.imagePlaneNormal[1], 0.81649658);
     TEST_ASSERT_ALMOST_EQ(pfa.imagePlaneNormal[2], -0.40824829);
     TEST_ASSERT_ALMOST_EQ(pfa.focusPlaneNormal[0], 0.26610694);
