@@ -1125,7 +1125,7 @@ std::string six::findSchemaPath(const std::string& progname)
 }
 
 void six::getErrors(const ErrorStatistics* errorStats,
-                    const types::RgAz<double>& sampleSpacing,
+                    const types::RgAz<double>& /*sampleSpacing*/,
                     scene::Errors& errors)
 {
     errors.clear();
