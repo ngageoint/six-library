@@ -189,6 +189,14 @@ int main(int argc, char** argv)
 {
     try
     {
+        //nitf::TRE tre("XML_DATA_CONTENT");
+        //const size_t desshsiLength = tre.getField("DESSHSI").getLength();
+        //std::cout << "Length is " << desshsiLength << std::endl;
+
+        //std::string str;
+        //std::cout << "Hey: '" << str.substr(2, 5) << "'\n";
+        //return 1;
+
         // Parse the command line
         if (argc != 4)
         {
