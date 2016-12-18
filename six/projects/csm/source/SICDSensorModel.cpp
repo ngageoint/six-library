@@ -323,10 +323,24 @@ SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
     const types::RowCol<double> aoiOffset(imageData.firstRow,
                                           imageData.firstCol);
 
-    const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
+    // NOTE: The CSM convention is that the upper-left corner of a pixel is
+    //       defined as 0,0, but the SICD convention is that the center of a
+    //       pixel is defined as 0,0.  Here we are going to do all our math
+    //       in the SICD convention but then we need to add on that half pixel
+    //       at the end to get it in the convention CSM expects
+    const types::RowCol<double> csmOffset(0.5, 0.5);
 
+    const types::RowCol<double> offset(
+            imageData.scpPixel.row - aoiOffset.row + csmOffset.row,
+            imageData.scpPixel.col - aoiOffset.col + csmOffset.col);
+
+    // 'pos' is a distance in meters from the SCP
+    // We want to return the position in the image plane in pixels
+    // So, first we divide by sample spacing (in meters/pixel) to get a distance
+    // in pixels from the SCP
+    // Then, we add on the SCP pixel (if we were 0 meters from the SCP, we want
+    // to return the SCP pixel location) and account for an AOI SICD as well as
+    // the CSM coordinate convention mentioned above.
     return types::RowCol<double>(
             (pos.row / mData->grid->row->sampleSpacing) + offset.row,
             (pos.col / mData->grid->col->sampleSpacing) + offset.col);
@@ -339,13 +353,26 @@ SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
     const types::RowCol<double> aoiOffset(imageData.firstRow,
                                           imageData.firstCol);
 
-    const types::RowCol<double> adjustedPos(
-            pos.line - (imageData.scpPixel.row - aoiOffset.row),
-            pos.samp - (imageData.scpPixel.col - aoiOffset.col));
+    // NOTE: The CSM convention is that the upper-left corner of a pixel is
+    //       defined as 0,0, but the SICD convention is that the center of a
+    //       pixel is defined as 0,0.  Here 'pos' comes in in the CSM convention
+    //       so we need to subtract half a pixel before we start; then we can
+    //       do all our math in the SICD convention.
+    const types::RowCol<double> csmOffset(0.5, 0.5);
+    const types::RowCol<double> sixPos(pos.line - csmOffset.row,
+                                       pos.samp - csmOffset.col);
 
+    const types::RowCol<double> pixelsFromSCP(
+            sixPos.row - (imageData.scpPixel.row - aoiOffset.row),
+            sixPos.col - (imageData.scpPixel.col - aoiOffset.col));
+
+    // 'sixPos' is a position in pixels in the image plane
+    // 'pixelsFromSCP' is a distance in pixels from the SCP
+    // Here we'll multiply by sample spacing (meters/pixel) to return a distance
+    // in meters from the SCP
     return types::RowCol<double>(
-            adjustedPos.row * mData->grid->row->sampleSpacing,
-            adjustedPos.col * mData->grid->col->sampleSpacing);
+            pixelsFromSCP.row * mData->grid->row->sampleSpacing,
+            pixelsFromSCP.col * mData->grid->col->sampleSpacing);
 }
 
 types::RowCol<double>
