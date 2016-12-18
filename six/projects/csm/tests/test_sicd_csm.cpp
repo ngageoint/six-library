@@ -69,20 +69,25 @@ std::string toString(nitf::FileSecurity security)
 
 std::string toString(nitf::DESubheader subheader)
 {
+    const nitf::Uint32 subheaderFieldsLen(subheader.getSubheaderFieldsLength());
+
     std::ostringstream ostr;
     ostr << subheader.getFilePartType().toString()
          << subheader.getTypeID().toString()
          << subheader.getVersion().toString()
          << subheader.getSecurityClass().toString()
          << toString(subheader.getSecurityGroup())
-         << std::setw(4) << std::setfill('0')
-         << static_cast<nitf::Uint32>(subheader.getSubheaderFieldsLength());
+         << std::setw(4) << std::setfill('0') << subheaderFieldsLen;
 
-    nitf::TRE tre = subheader.getSubheaderFields();
-    for (nitf::TRE::Iterator iter = tre.begin(); iter != tre.end(); ++iter)
+    // This tacks on XML_DATA_CONTENT when applicable
+    if (subheaderFieldsLen > 0)
     {
-        nitf::Pair pair = *iter;
-        ostr << tre.getField(pair.getKey()).toString();
+        nitf::TRE tre = subheader.getSubheaderFields();
+        for (nitf::TRE::Iterator iter = tre.begin(); iter != tre.end(); ++iter)
+        {
+            nitf::Pair pair = *iter;
+            ostr << tre.getField(pair.getKey()).toString();
+        }
     }
 
     return ostr.str();

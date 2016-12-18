@@ -1122,41 +1122,30 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
         return DataType::NOT_SET;
     }
 
-    // For older SICDs and SIDDs, we can tell right from the DESID what type
-    // this is
+    // Pull out DESID
     std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
-    if (desid == "SICD_XML")
-    {
-        return DataType::COMPLEX;
-    }
-    if (desid == "SIDD_XML")
-    {
-        return DataType::DERIVED;
-    }
-    else if (desid != "XML_DATA_CONTENT")
-    {
-        return DataType::NOT_SET;
-    }
 
-    // DESSHL is the last 4 byte field in the first 200 bytes
+    // Pull out DESSHL
+    // This is the last 4 byte field in the first 200 bytes
     const size_t desshl = six::toType<size_t>(
-            subheader.substr(DES_SUBHEADER_LENGTH - 4, 4));
+            subheader.substr(DES_SUBHEADER_LENGTH - NITF_DESSHL_SZ,
+                             NITF_DESSHL_SZ));
 
-    // If this is a valid SICD/SIDD, DESSHL should be 773 and the total
-    // subheader length should be 200 + 773
-    static const size_t EXPECTED_LENGTH =
-            DES_SUBHEADER_LENGTH + Constants::DES_USER_DEFINED_SUBHEADER_LENGTH;
-    if (desshl != Constants::DES_USER_DEFINED_SUBHEADER_LENGTH ||
-        subheader.length() != EXPECTED_LENGTH)
-    {
-        return DataType::NOT_SET;
-    }
-
-    // We need to key off of DESSHSI to determine SICD vs. SIDD
+    // For newer SICDs/SIDDs, we have XML_DATA_CONTENT which contains DESSHSI
+    // which we also need to use
+    // If we've got it, grab it
+    // Otherwise, leave it as an empty string - NITFReadControl won't be using
+    // it
     static const size_t DESSHSI_OFFSET = DES_SUBHEADER_LENGTH + 73;
-    std::string desshsi = subheader.substr(DESSHSI_OFFSET, 60);
-    str::trim(desshsi);
+    static const size_t DESSHSI_LENGTH = 60;
+
+    std::string desshsi;
+    if (subheader.length() >= DESSHSI_OFFSET + DESSHSI_LENGTH)
+    {
+        desshsi = subheader.substr(DESSHSI_OFFSET, 60);
+        str::trim(desshsi);
+    }
 
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
