@@ -44,7 +44,7 @@ def build(bld):
         bld.program(target='vts', name='vts',
                     includes='include',
                     source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-                    use='CSMAPI THREAD DL',
+                    use='CSMAPI THREAD DL sys-c++',
                     path=bld.path.find_dir(vtsDir),
                     install_path=bld.env['install_bindir'])
 

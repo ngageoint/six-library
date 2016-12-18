@@ -1,5 +1,6 @@
 ./results/test/test_script_sicd.csv
-vtsRead21ISDFile path/to/sicd.nitf
+#vtsRead21ISDFile C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
+vtsReadFilename C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
 makeModelListFromISD SICD_SENSOR_MODEL SIX
 constructModelFromISD SICD_SENSOR_MODEL
 getImageSize 
@@ -8,5 +9,6 @@ getSensorIdentifier
 getCollectionIdentifier
 getReferenceDateAndTime
 getReferencePoint
+imageToGround1 4839.5 4299.5 488.0295281264820
 
 Exit

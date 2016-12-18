@@ -177,6 +177,7 @@ bool SIXPlugin::canModelBeConstructedFromISD(const csm::Isd& imageSupportData,
         six::NITFReadControl readControl;
         try
         {
+            //std::cout << "In here I can get the filename as " << imageSupportData.filename() << std::endl;
             const six::DataType fileDataType =
                     readControl.getDataType(imageSupportData.filename());
 
@@ -230,6 +231,8 @@ SIX_CSM_EXPORT_API csm::Model* SIXPlugin::constructModelFromISD(
        const std::string& modelName,
        csm::WarningList* ) const
 {
+    std::cout << "OK I made it this far!" << std::endl;
+
     if (modelName == SICDSensorModel::NAME)
     {
         return new SICDSensorModel(imageSupportData, getDataDirectory());

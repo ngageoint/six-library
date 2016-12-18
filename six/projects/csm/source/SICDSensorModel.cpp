@@ -55,6 +55,7 @@ SICDSensorModel::SICDSensorModel(const csm::Isd& isd,
     }
     else if (format == "FILENAME")
     {
+        std::cout << "Here we go!!" << std::endl;
         // Note: this case has not been tested
         initializeFromFile(isd.filename());
     }
@@ -77,6 +78,8 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
 {
     try
     {
+        std::cout << "*** I am in here with " << pathname << std::endl;
+
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
@@ -84,10 +87,14 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         xmlRegistry.addCreator(six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
+        std::cout << "Created registry" << std::endl;
+
         // create a reader and load the file
         six::NITFReadControl reader;
         reader.setXMLControlRegistry(&xmlRegistry);
+        std::cout << "About to load" << std::endl;
         reader.load(pathname, mSchemaDirs);
+        std::cout << "Loaded" << std::endl;
 
         const mem::SharedPtr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
@@ -100,16 +107,21 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         }
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(
-                container->getData(0)));
-        container->removeData(mData.get());
+                container->getData(0)->clone()));
+        std::cout << "Made a copy of this data" << std::endl;
+        std::cout << "yy And... tried to remove this thing" << std::endl;
 
         // get xml as string for sensor model state
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
+        std::cout << "Here is my state: " << mSensorModelState << std::endl;
         reinitialize();
+        std::cout << "I initialized!" << std::endl;
     }
     catch (const except::Exception& ex)
     {
+        std::cout << "Well - bad: " << ex.getMessage() << std::endl;
+
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
                            "SICDSensorModel::initializeFromFile");
@@ -328,8 +340,8 @@ SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
             imageData.scpPixel.col - aoiOffset.col);
 
     return types::RowCol<double>(
-            (pos.row / mData->grid->row->sampleSpacing) + offset.row,
-            (pos.col / mData->grid->col->sampleSpacing) + offset.col);
+            (pos.row / mData->grid->row->sampleSpacing) + offset.row + 0.5,
+            (pos.col / mData->grid->col->sampleSpacing) + offset.col + 0.5);
 }
 
 types::RowCol<double>
@@ -340,8 +352,8 @@ SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
                                           imageData.firstCol);
 
     const types::RowCol<double> adjustedPos(
-            pos.line - (imageData.scpPixel.row - aoiOffset.row),
-            pos.samp - (imageData.scpPixel.col - aoiOffset.col));
+            pos.line - (imageData.scpPixel.row - aoiOffset.row) - 0.5,
+            pos.samp - (imageData.scpPixel.col - aoiOffset.col) - 0.5);
 
     return types::RowCol<double>(
             adjustedPos.row * mData->grid->row->sampleSpacing,
