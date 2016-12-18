@@ -1114,8 +1114,16 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
 
 DataType SIXSensorModel::getDataType(const csm::Des& des)
 {
+    // This should be the length of everything up to the user-defined section
     static const size_t DES_SUBHEADER_LENGTH = 200;
-    const std::string subheader = des.subHeader();
+    const std::string& subheader = des.subHeader();
+    if (subheader.length() < DES_SUBHEADER_LENGTH)
+    {
+        return DataType::NOT_SET;
+    }
+
+    // For older SICDs and SIDDs, we can tell right from the DESID what type
+    // this is
     std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
     if (desid == "SICD_XML")
@@ -1126,20 +1134,31 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     {
         return DataType::DERIVED;
     }
-
-    const size_t treLength = six::toType<size_t>(subheader.substr(196, 4));
-    if (treLength != 283 && treLength != 773)
+    else if (desid != "XML_DATA_CONTENT")
     {
         return DataType::NOT_SET;
     }
-    const size_t desshsiOffset = 73 + DES_SUBHEADER_LENGTH;
-    std::string desshsiField = subheader.substr(desshsiOffset, 60);
-    str::trim(desshsiField);
 
-    return NITFReadControl::getDataType(desid,
-            subheader.size() - DES_SUBHEADER_LENGTH,
-            desshsiField,
-            desid);
+    // DESSHL is the last 4 byte field in the first 200 bytes
+    const size_t desshl = six::toType<size_t>(
+            subheader.substr(DES_SUBHEADER_LENGTH - 4, 4));
+
+    // If this is a valid SICD/SIDD, DESSHL should be 773 and the total
+    // subheader length should be 200 + 773
+    static const size_t EXPECTED_LENGTH =
+            DES_SUBHEADER_LENGTH + Constants::DES_USER_DEFINED_SUBHEADER_LENGTH;
+    if (desshl != Constants::DES_USER_DEFINED_SUBHEADER_LENGTH ||
+        subheader.length() != EXPECTED_LENGTH)
+    {
+        return DataType::NOT_SET;
+    }
+
+    // We need to key off of DESSHSI to determine SICD vs. SIDD
+    static const size_t DESSHSI_OFFSET = DES_SUBHEADER_LENGTH + 73;
+    std::string desshsi = subheader.substr(DESSHSI_OFFSET, 60);
+    str::trim(desshsi);
+
+    return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
 }
 }
