@@ -99,12 +99,12 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                                "SICDSensorModel::initializeFromFile");
         }
 
+        // Cast it and grab a copy
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(
-                container->getData(0)));
-        container->removeData(mData.get());
+                container->getData(0)->clone()));
 
         // get xml as string for sensor model state
-        std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }

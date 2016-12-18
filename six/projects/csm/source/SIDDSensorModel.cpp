@@ -133,12 +133,11 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
                                "SIDDSensorModel::initializeFromFile");
         }
 
-        // Cast it and take ownership
-        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data));
-        container->removeData(mData.get());
+        // Cast it and grab a copy
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data->clone()));
 
         // get xml as string for sensor model state
-        std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }
