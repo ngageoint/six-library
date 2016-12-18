@@ -1,6 +1,6 @@
 ./results/test/test_script_sicd.csv
-#vtsRead21ISDFile C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
-vtsReadFilename C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
+vtsRead21ISDFile C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
+#vtsReadFilename C:\Users\Adam\Downloads\sicd_example_RMA_RGZERO_RE32F_IM32F.nitf
 makeModelListFromISD SICD_SENSOR_MODEL SIX
 constructModelFromISD SICD_SENSOR_MODEL
 getImageSize 

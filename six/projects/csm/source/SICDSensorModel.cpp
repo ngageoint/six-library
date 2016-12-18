@@ -114,7 +114,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         // get xml as string for sensor model state
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
-        std::cout << "Here is my state: " << mSensorModelState << std::endl;
+        //std::cout << "Here is my state: " << mSensorModelState << std::endl;
         reinitialize();
         std::cout << "I initialized!" << std::endl;
     }
@@ -139,6 +139,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
+            std::cout << "** Trying to get data type" << std::endl;
             DataType dataType = getDataType(desList[ii]);
             if (dataType != DataType::COMPLEX)
             {

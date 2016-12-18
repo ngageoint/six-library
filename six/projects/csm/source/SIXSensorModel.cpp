@@ -1114,9 +1114,28 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
 
 DataType SIXSensorModel::getDataType(const csm::Des& des)
 {
+    std::cout << "I am in getDataType" << std::endl;
     static const size_t DES_SUBHEADER_LENGTH = 200;
     const std::string subheader = des.subHeader();
-    std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
+
+    if (subheader.length() < NITF_DE_SZ + NITF_DESTAG_SZ)
+    {
+        return DataType::NOT_SET;
+    }
+
+    std::cout << "Subheader '" << subheader << "'" << std::endl;
+    std::cout << "Total subheader length is " << subheader.length() << std::endl;
+    std::string desid;
+    try
+    {
+    desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
+    }
+    catch (...)
+    {
+        std::cerr << "I threw!!" << std::endl;
+        throw except::Exception(Ctxt("BAM"));
+    }
+    std::cout << "Desid is '" << desid << "'" << std::endl;
     str::trim(desid);
     if (desid == "SICD_XML")
     {
@@ -1128,6 +1147,7 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     }
 
     const size_t treLength = six::toType<size_t>(subheader.substr(196, 4));
+    std::cout << "Got a length of " << treLength << std::endl;
     if (treLength != 283 && treLength != 773)
     {
         return DataType::NOT_SET;
