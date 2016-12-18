@@ -1,3 +1,24 @@
+/* =========================================================================
+ * This file is part of six-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * six-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
 #include <iostream>
 #include <sstream>
 
@@ -12,6 +33,16 @@
 #include <RasterGM.h>
 #include <Plugin.h>
 #include <NitfIsd.h>
+
+// TODO
+// - Test each SICD version (0.4.0, 0.4.1, 0.5.0, 1.0.0, 1.0.1, 1.1.0)
+// - Test SICD with extra non-SICD XML_DATA_CONTENT
+// - Test 0.5 pixel on either side of the SCP, test that what we have below is
+//   the closest, and test that it's close to the original within some small
+//   tolerance (and fail if these aren't all true)
+// - If practical, auto-find config dir and CSM DLL dir (scan DLL dir to find
+//   plugin filename)
+// - Build equivalent test for SIDD
 
 namespace
 {
@@ -89,8 +120,8 @@ public:
 
         csm::Des des;
 
-        // NITRO parsed the subheader into a nice structure - need to grab all the
-        // fields and jam them back into a string like CSM wants
+        // NITRO parsed the subheader into a nice structure - need to grab all
+        // the fields and jam them back into a string like CSM wants
         nitf::DESegment segment = static_cast<nitf::DESegment>(
                 mReader.getRecord().getDataExtensions().getFirst().getData());
         des.setSubHeader(toString(segment.getSubheader()));
