@@ -64,12 +64,17 @@ def build(bld):
         modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']]
     bld.plugin(**modArgs)
 
+    bld.program_helper(module_deps='six.sicd',
+                           source='tests/test_sicd_csm.cpp',
+                           use='CSMAPI',
+                           name='test_sicd_csm')
+
     # TODO: It seems like instead of this, I should be able to set
     #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the name
     #       of the target.  This works fine when building, but something about
     #       how 'waf list' and 'waf msvs' operate makes this not work right.
     bld(features='add_targets', target='six-csm',
-        targets_to_add=name)
+        targets_to_add=[name, 'test_sicd_csm'])
 
 def distclean(context):
     context.recurse(DIRS)
