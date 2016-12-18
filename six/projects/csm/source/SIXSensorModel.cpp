@@ -1114,34 +1114,40 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
 
 DataType SIXSensorModel::getDataType(const csm::Des& des)
 {
+    // This should be the length of everything up to the user-defined section
     static const size_t DES_SUBHEADER_LENGTH = 200;
-    std::string desid = des.subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
+    const std::string& subheader = des.subHeader();
+    if (subheader.length() < DES_SUBHEADER_LENGTH)
+    {
+        return DataType::NOT_SET;
+    }
+
+    // Pull out DESID
+    std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
     str::trim(desid);
 
-    if (desid == "SICD_XML")
+    // Pull out DESSHL
+    // This is the last 4 byte field in the first 200 bytes
+    const size_t desshl = six::toType<size_t>(
+            subheader.substr(DES_SUBHEADER_LENGTH - NITF_DESSHL_SZ,
+                             NITF_DESSHL_SZ));
+
+    // For newer SICDs/SIDDs, we have XML_DATA_CONTENT which contains DESSHSI
+    // which we also need to use
+    // If we've got it, grab it
+    // Otherwise, leave it as an empty string - NITFReadControl won't be using
+    // it
+    static const size_t DESSHSI_OFFSET = DES_SUBHEADER_LENGTH + 73;
+    static const size_t DESSHSI_LENGTH = 60;
+
+    std::string desshsi;
+    if (subheader.length() >= DESSHSI_OFFSET + DESSHSI_LENGTH)
     {
-        return DataType::COMPLEX;
-    }
-    if (desid == "SIDD_XML")
-    {
-        return DataType::DERIVED;
+        desshsi = subheader.substr(DESSHSI_OFFSET, DESSHSI_LENGTH);
+        str::trim(desshsi);
     }
 
-    const std::string& subheader = des.subHeader();
-
-    // DESSHSI occurs 73 bytes past the subheader
-    const size_t desshsiOffset = 73 + DES_SUBHEADER_LENGTH;
-
-    nitf::TRE tre("XML_DATA_CONTENT");
-    const size_t desshsiLength = tre.getField("DESSHSI").getLength();
-    std::string desshsiField = subheader.substr(
-            desshsiOffset, desshsiLength);
-    str::trim(desshsiField);
-
-    return NITFReadControl::getDataType(desid,
-            subheader.size() - DES_SUBHEADER_LENGTH,
-            desshsiField,
-            desid);
+    return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
 }
 }
