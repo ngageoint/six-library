@@ -74,7 +74,7 @@ def build(bld):
     #       of the target.  This works fine when building, but something about
     #       how 'waf list' and 'waf msvs' operate makes this not work right.
     bld(features='add_targets', target='six-csm',
-        targets_to_add=[name, 'test_sicd_csm'])
+        targets_to_add=name)
 
 def distclean(context):
     context.recurse(DIRS)
