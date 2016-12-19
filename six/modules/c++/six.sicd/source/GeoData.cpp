@@ -80,7 +80,7 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
                 RowColDouble(1, static_cast<double>(imageData.numCols));
         cornerLineSample[2] =
                 RowColDouble(static_cast<double>(imageData.numRows),
-                static_cast<double>(imageData.numCols));
+                    static_cast<double>(imageData.numCols));
         cornerLineSample[3] =
                 RowColDouble(static_cast<double>(imageData.numRows), 1);
 
