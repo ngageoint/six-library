@@ -2125,7 +2125,7 @@ void initAnnotations(six::sidd::Annotations& annotations)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage, const std::string& version)
+        lutType, bool smallImage)
 {
 
     // These things are essential to forming the file
@@ -2231,9 +2231,6 @@ int main(int argc, char** argv)
     argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
             "sicdXML", "sicd-xml", 0, 1);
 
-    //We'll get this from command line args once it matters
-    const std::string version("1.0.0");
-
     try
     {
         std::auto_ptr<cli::Results> options(argParser.parse(argc, argv));
@@ -2337,7 +2334,7 @@ int main(int argc, char** argv)
             std::auto_ptr<six::sidd::DerivedData> siddData =
                     initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
+            populateData(*siddData, lutType, smallImage);
             container->addData(siddData->clone());
             if (!smallImage)
             {

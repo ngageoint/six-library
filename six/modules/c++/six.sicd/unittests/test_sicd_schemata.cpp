@@ -249,7 +249,7 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
     char  geoText[256];
 
     // All GeoInfo blocks start the same
-    sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
+    sprintf(geoText, "<GeoInfo name=\"geoinfo%zu\">", numInfos);
     xmlText = std::string(geoText);
 
 
@@ -2487,7 +2487,7 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
             return false;
         }
     }
-    catch (except::Exception& ex)
+    catch (except::Exception& /*ex*/)
     {
         return false;
     }

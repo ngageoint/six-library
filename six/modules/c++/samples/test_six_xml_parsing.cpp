@@ -65,7 +65,7 @@ XMLVerifier::XMLVerifier()
     {
         mSchemaPaths.push_back(os.getEnv(six::SCHEMA_PATH));
     }
-    catch(const except::Exception& ex)
+    catch(const except::Exception& /*ex*/)
     {
         std::ostringstream oss;
         oss << "Must specify SICD/SIDD schema path via "

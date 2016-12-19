@@ -154,9 +154,10 @@ struct TestHelper
              ii < mRgbLegend.mLUT->numEntries;
              ++ii, idx += 3)
         {
-            mRgbLegend.mLUT->getTable()[idx] = ii;
-            mRgbLegend.mLUT->getTable()[idx + 1] = ii;
-            mRgbLegend.mLUT->getTable()[idx + 2] = ii;
+            const unsigned char lutValue = static_cast<unsigned char>(ii);
+            mRgbLegend.mLUT->getTable()[idx] = lutValue;
+            mRgbLegend.mLUT->getTable()[idx + 1] = lutValue;
+            mRgbLegend.mLUT->getTable()[idx + 2] = lutValue;
         }
 
         write();

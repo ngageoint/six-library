@@ -165,7 +165,7 @@ bool run(bool useStream = false, bool byteswap = false)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {

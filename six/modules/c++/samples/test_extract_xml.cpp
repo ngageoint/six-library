@@ -101,8 +101,8 @@ int main(int argc, char** argv)
             io::StringStream oss;
             oss.write(xml, size);
 
-            xml::lite::MinidomParser parser;
-            parser.parse(oss);
+            xml::lite::MinidomParser xmlParser;
+            xmlParser.parse(oss);
 
             std::auto_ptr<io::OutputStream> os;
             if (toConsole)
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
             if (prettyPrint)
             {
                 // Pretty print it
-                parser.getDocument()->getRootElement()->prettyPrint(*os);
+                xmlParser.getDocument()->getRootElement()->prettyPrint(*os);
             }
             else
             {

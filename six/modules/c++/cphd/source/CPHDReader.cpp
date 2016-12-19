@@ -55,7 +55,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
     mFileHeader.read(*inStream);
 
     // Read in the XML string
-    const size_t xmlSize = mFileHeader.getXMLsize();
+    const int xmlSize = static_cast<const int>(mFileHeader.getXMLsize());
     inStream->seek(mFileHeader.getXMLoffset(), io::Seekable::START);
 
     xml::lite::MinidomParser xmlParser;
