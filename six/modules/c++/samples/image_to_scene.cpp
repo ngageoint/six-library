@@ -107,8 +107,8 @@ Converter::Converter(const std::string& pathname)
     mSampleSpacing.row = sicdData->grid->row->sampleSpacing;
     mSampleSpacing.col = sicdData->grid->col->sampleSpacing;
     mSCP = sicdData->imageData->scpPixel;
-    mAOIOffset.row = sicdData->imageData->firstRow;
-    mAOIOffset.col = sicdData->imageData->firstCol;
+    mAOIOffset.row = static_cast<double>(sicdData->imageData->firstRow);
+    mAOIOffset.col = static_cast<double>(sicdData->imageData->firstCol);
     mGroundPlaneNormal = six::sicd::Utilities::getGroundPlaneNormal(*sicdData);
 }
 

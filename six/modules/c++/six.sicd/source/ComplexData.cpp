@@ -96,8 +96,8 @@ types::RowCol<double>
 ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 {
     const types::RowCol<double> scpPixel(imageData->scpPixel);
-    const types::RowCol<double> aoiOffset(imageData->firstRow,
-                                          imageData->firstCol);
+    const types::RowCol<double> aoiOffset(static_cast<double>(imageData->firstRow),
+                                          static_cast<double>(imageData->firstCol));
 
     const types::RowCol<double> offset(scpPixel - aoiOffset);
 

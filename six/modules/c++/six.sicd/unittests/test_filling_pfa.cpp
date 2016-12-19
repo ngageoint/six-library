@@ -28,7 +28,7 @@ TEST_CASE(DefaultPFA)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
     {
-        geoData.scp.ecf[ii] = 100 * (ii + 1);
+        geoData.scp.ecf[ii] = 100.0 * (ii + 1);
     }
 
     six::sicd::Grid grid;
@@ -38,8 +38,8 @@ TEST_CASE(DefaultPFA)
     scpcoa.scpTime = 123;
     for (size_t ii = 0; ii < scpcoa.arpVel.size(); ++ii)
     {
-        scpcoa.arpPos[ii] = ii;
-        scpcoa.arpVel[ii] = ii + 1;
+        scpcoa.arpPos[ii] = ii + 0.0;
+        scpcoa.arpVel[ii] = ii + 1.0;
     }
 
     six::sicd::PFA pfa;

@@ -28,7 +28,7 @@ TEST_CASE(DerivedRMATandRMCR)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
     {
-        geoData.scp.ecf[ii] = 100 * (ii + 1);
+        geoData.scp.ecf[ii] = 100.0 * (ii + 1);
     }
 
     six::sicd::Position position;
@@ -37,8 +37,8 @@ TEST_CASE(DerivedRMATandRMCR)
     six::Vector3 refVel;
     for (size_t ii = 0; ii < refPos.size(); ++ii)
     {
-        refPos[ii] = ii;
-        refVel[ii] = ii + 1;
+        refPos[ii] = ii + 0.0;
+        refVel[ii] = ii + 1.0;
     }
 
     six::sicd::RMA rma;
@@ -77,7 +77,7 @@ TEST_CASE(DerivedINCA)
         std::vector<double> nextTerm(3);
         for (size_t jj = 0; jj < nextTerm.size(); ++jj)
         {
-            nextTerm[jj] = ii + jj;
+            nextTerm[jj] = ii + jj + 0.0;
         }
         arpPolyData[ii] = six::Vector3(nextTerm);
     }
@@ -87,7 +87,7 @@ TEST_CASE(DerivedINCA)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
     {
-        geoData.scp.ecf[ii] = 100 * (ii + 1);
+        geoData.scp.ecf[ii] = 100.0 * (ii + 1);
     }
 
     rma.fillDerivedFields(geoData, position);

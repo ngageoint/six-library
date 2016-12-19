@@ -64,8 +64,8 @@ void writeSIOFileHeader(size_t numRows,
     }
 
     // Write out the SIO header first
-    sio::lite::FileHeader(numRows,
-                          numCols,
+    sio::lite::FileHeader(static_cast<int>(numRows),
+                          static_cast<int>(numCols),
                           elementSize,
                           elementType).to(1, outputStream);
 }

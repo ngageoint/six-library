@@ -267,10 +267,10 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
             setAttribute(ampXML, "index", str::toString(i));
         }
     }
-    createInt("NumRows", imageData->numRows, imageDataXML);
-    createInt("NumCols", imageData->numCols, imageDataXML);
-    createInt("FirstRow", imageData->firstRow, imageDataXML);
-    createInt("FirstCol", imageData->firstCol, imageDataXML);
+    createInt("NumRows", static_cast<int>(imageData->numRows), imageDataXML);
+    createInt("NumCols", static_cast<int>(imageData->numCols), imageDataXML);
+    createInt("FirstRow", static_cast<int>(imageData->firstRow), imageDataXML);
+    createInt("FirstCol", static_cast<int>(imageData->firstCol), imageDataXML);
 
     common().createRowCol("FullImage", "NumRows", "NumCols", imageData->fullImage,
                  imageDataXML);
@@ -429,7 +429,7 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
         {
             const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
-            setXML->attribute("index") = str::toString<int>(i + 1);
+            setXML->attribute("index") = str::toString<size_t>(i + 1);
 
             createDouble("TStart", timelineSet.tStart, setXML);
             createDouble("TEnd", timelineSet.tEnd, setXML);
@@ -645,8 +645,8 @@ XMLElem ComplexXMLParser::areaLineDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("LineSpacing", adp->spacing, adpXML);
-    createInt("NumLines", adp->elements, adpXML);
-    createInt("FirstLine", adp->first, adpXML);
+    createInt("NumLines", static_cast<int>(adp->elements), adpXML);
+    createInt("FirstLine", static_cast<int>(adp->first), adpXML);
     return adpXML;
 }
 
@@ -658,8 +658,8 @@ XMLElem ComplexXMLParser::areaSampleDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("SampleSpacing", adp->spacing, adpXML);
-    createInt("NumSamples", adp->elements, adpXML);
-    createInt("FirstSample", adp->first, adpXML);
+    createInt("NumSamples", static_cast<int>(adp->elements), adpXML);
+    createInt("FirstSample", static_cast<int>(adp->first), adpXML);
     return adpXML;
 }
 
@@ -1810,7 +1810,7 @@ void ComplexXMLParser::parseAreaFromXML(
             area->plane->referencePoint.name
                     = refPtXML->getAttributes().getValue("name");
         }
-        catch (const except::Exception &ex)
+        catch (const except::Exception& /*ex*/)
         {
         }
 

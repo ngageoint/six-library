@@ -76,9 +76,13 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         std::vector<RowColDouble> cornerLineSample;
         cornerLineSample.resize(4);
         cornerLineSample[0] = RowColDouble(1, 1);
-        cornerLineSample[1] = RowColDouble(1, imageData.numCols);
-        cornerLineSample[2] = RowColDouble(imageData.numRows, imageData.numCols);
-        cornerLineSample[3] = RowColDouble(imageData.numRows, 1);
+        cornerLineSample[1] =
+                RowColDouble(1, static_cast<double>(imageData.numCols));
+        cornerLineSample[2] =
+                RowColDouble(static_cast<double>(imageData.numRows),
+                static_cast<double>(imageData.numCols));
+        cornerLineSample[3] =
+                RowColDouble(static_cast<double>(imageData.numRows), 1);
 
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)

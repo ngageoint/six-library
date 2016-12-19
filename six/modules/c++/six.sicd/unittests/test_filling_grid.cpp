@@ -33,7 +33,7 @@ TEST_CASE(DerivedDeltaKsNoImageData)
     {
         for (size_t jj = 0; jj <= row.deltaKCOAPoly.orderY(); ++jj)
         {
-            row.deltaKCOAPoly[ii][jj] = ii + jj;
+            row.deltaKCOAPoly[ii][jj] = static_cast<double>(ii + jj);
         }
     }
     row.fillDerivedFields(imageData);
@@ -55,7 +55,7 @@ TEST_CASE(DerivedDeltaKsWithImageData)
     {
         for (size_t jj = 0; jj <= row.deltaKCOAPoly.orderY(); ++jj)
         {
-            row.deltaKCOAPoly[ii][jj] = ii + jj;
+            row.deltaKCOAPoly[ii][jj] = static_cast<double>(ii + jj);
         }
     }
     row.fillDerivedFields(imageData);
@@ -119,9 +119,9 @@ TEST_CASE(FillUnitVectorsFromRMAT)
     six::Vector3 scp;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        rma.rmat->refPos[ii] = ii;
-        rma.rmat->refVel[ii] = ii + 1;
-        scp[ii] = (ii + 1) * 100;
+        rma.rmat->refPos[ii] = static_cast<double>(ii);
+        rma.rmat->refVel[ii] = ii + 1.0;
+        scp[ii] = (ii + 1) * 100.0;
     }
 
     grid.fillDerivedFields(rma, scp, poly);
@@ -144,9 +144,9 @@ TEST_CASE(FillUnitVectorsFromRMCR)
     six::Vector3 scp;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        rma.rmcr->refPos[ii] = ii;
-        rma.rmcr->refVel[ii] = ii + 1;
-        scp[ii] = (ii + 1) * 100;
+        rma.rmcr->refPos[ii] = ii + 0.0;
+        rma.rmcr->refVel[ii] = ii + 1.0;
+        scp[ii] = (ii + 1) * 100.0;
     }
 
     grid.fillDerivedFields(rma, scp, poly);
@@ -171,7 +171,7 @@ TEST_CASE(FillUnitVectorsFromINCA)
     six::Vector3 scp;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scp[ii] = (ii + 1) * 100;
+        scp[ii] = (ii + 1) * 100.0;
     }
 
     std::vector<six::Vector3> arpPolyData(4);
@@ -180,7 +180,7 @@ TEST_CASE(FillUnitVectorsFromINCA)
         std::vector<double> nextTerm(3);
         for (size_t jj = 0; jj < nextTerm.size(); ++jj)
         {
-            nextTerm[jj] = ii + jj;
+            nextTerm[jj] = ii + jj + 0.0;
         }
         arpPolyData[ii] = six::Vector3(nextTerm);
     }
@@ -216,9 +216,9 @@ TEST_CASE(FillUnitVectorsFromRgAzComp)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scpcoa.arpPos[ii] = ii;
-        scpcoa.arpVel[ii] = ii + 1;
-        geoData.scp.ecf[ii] = (ii + 1) * 100;
+        scpcoa.arpPos[ii] = ii + 0.0;
+        scpcoa.arpVel[ii] = ii + 1.0;
+        geoData.scp.ecf[ii] = (ii + 1) * 100.0;
     }
 
     grid.fillDerivedFields(rgAzComp, geoData, scpcoa, 10);
@@ -241,14 +241,14 @@ TEST_CASE(FillDirectionParamsKCenterFromKCOAPoly)
     {
         for (size_t jj = 0; jj <= col.deltaKCOAPoly.orderY(); ++jj)
         {
-            col.deltaKCOAPoly[ii][jj] = ii + jj;
+            col.deltaKCOAPoly[ii][jj] = ii + jj + 0.0;
         }
     }
     six::sicd::RgAzComp rgAzComp;
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        geoData.scp.ecf[ii] = (ii + 1) * 100;
+        geoData.scp.ecf[ii] = (ii + 1) * 100.0;
     }
 
     col.fillDerivedFields(rgAzComp, 0);

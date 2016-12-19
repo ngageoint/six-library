@@ -205,8 +205,8 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
+    const types::RowCol<double> aoiOffset(static_cast<double>(imageData.firstRow),
+                                          static_cast<double>(imageData.firstCol));
 
     const types::RowCol<double> offset(
             imageData.scpPixel.row - aoiOffset.row,
@@ -218,7 +218,8 @@ void cropSICD(six::NITFReadControl& reader,
     std::auto_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
-    types::RowCol<double> minPixel(data->getNumRows(), data->getNumCols());
+    types::RowCol<double> minPixel(static_cast<double>(data->getNumRows()),
+                                   static_cast<double>(data->getNumCols()));
     types::RowCol<double> maxPixel(0.0, 0.0);
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {
@@ -239,8 +240,9 @@ void cropSICD(six::NITFReadControl& reader,
     maxPixel.row = std::ceil(maxPixel.row);
     maxPixel.col = std::ceil(maxPixel.col);
 
-    const types::RowCol<double> lastDim(data->getNumRows() - 1,
-                                        data->getNumCols() - 1);
+    const types::RowCol<double> lastDim(
+            static_cast<double>(data->getNumRows() - 1),
+            static_cast<double>(data->getNumCols() - 1));
 
     if (!trimCornersIfNeeded &&
         (minPixel.row < 0 ||

@@ -31,7 +31,7 @@ TEST_CASE(DerivedRgAzComp)
     set.interPulsePeriodPoly = six::Poly1D(3);
     for (size_t ii = 0; ii < set.interPulsePeriodPoly.size(); ++ii)
     {
-        set.interPulsePeriodPoly[ii] = ii * 10;
+        set.interPulsePeriodPoly[ii] = ii * 10.0;
     }
     timeline.interPulsePeriod->sets.push_back(set);
 
@@ -42,7 +42,7 @@ TEST_CASE(DerivedRgAzComp)
     {
         for (size_t jj = 0; jj <= grid.row->deltaKCOAPoly.orderY(); ++jj)
         {
-            grid.row->deltaKCOAPoly[ii][jj] = ii + jj;
+            grid.row->deltaKCOAPoly[ii][jj] = ii + jj + 0.0;
         }
     }
 
@@ -54,7 +54,7 @@ TEST_CASE(DerivedRgAzComp)
     scpcoa.scpTime = 123;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scpcoa.arpPos[ii] = ii;
+        scpcoa.arpPos[ii] = ii + 0.0;
         scpcoa.arpVel[ii] = std::pow(ii, 3);
     }
     scpcoa.dopplerConeAngle = 66;
@@ -63,7 +63,7 @@ TEST_CASE(DerivedRgAzComp)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < geoData.scp.ecf.size(); ++ii)
     {
-        geoData.scp.ecf[ii] = 100 * (ii + 1);
+        geoData.scp.ecf[ii] = 100.0 * (ii + 1);
     }
 
     six::sicd::RgAzComp rgAzComp;
