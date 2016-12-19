@@ -114,12 +114,12 @@ public:
         mComplexData = six::sicd::Utilities::getComplexData(mReader);
     }
 
-    void testFileISD()
+    bool testFileISD()
     {
-        testISD(csm::Isd(mSicdPathname));
+        return testISD(csm::Isd(mSicdPathname));
     }
 
-    void testNitfISD()
+    bool testNitfISD()
     {
         csm::Nitf21Isd nitfIsd(mSicdPathname);
 
@@ -136,12 +136,38 @@ public:
 
         nitfIsd.addFileDes(des);
 
-        testISD(nitfIsd);
+        return testISD(nitfIsd);
     }
 
 private:
-    void testISD(const csm::Isd& isd)
+    scene::Vector3 imageToGround(std::auto_ptr<csm::RasterGM> model,
+            const six::RowColInt& scpPixel, double height, double offset)
     {
+        csm::ImageCoord imagePt(scpPixel.row + offset, scpPixel.col + offset);
+        csm::EcefCoord groundPt = model->imageToGround(
+                imagePt,
+                height,
+                0);
+        scene::Vector3 returnedGroundPoint;
+
+        returnedGroundPoint[0] = groundPt.x;
+        returnedGroundPoint[1] = groundPt.y;
+        returnedGroundPoint[2] = groundPt.z;
+        return returnedGroundPoint;
+    }
+
+    six::RowColDouble groundToImage(std::auto_ptr<csm::RasterGM> model,
+            const six::SCP& scp, double offset)
+    {
+        csm::EcefCoord coord(scp.ecf[0], scp.ecf[1], scp.ecf[2]);
+        csm::ImageCoord rtCoord = model->groundToImage(coord, 0);
+        return six::RowColDouble(rtCoord.line - offset, rtCoord.samp - offset);
+    }
+
+    bool testISD(const csm::Isd& isd)
+    {
+        bool testPassed = true;
+
         // Construct the model
         // We take ownership of the memory for this
         if (!mPlugin.canModelBeConstructedFromISD(isd, MODEL_NAME))
@@ -154,26 +180,70 @@ private:
 
         const six::RowColInt scpPixel = mComplexData->imageData->scpPixel;
         const six::SCP scp = mComplexData->geoData->scp;
-
-        csm::ImageCoord imagePt(scpPixel.row + 0.5, scpPixel.col + 0.5);
         const double height = scp.llh.getAlt();
 
-        csm::EcefCoord coord = model->imageToGround(
-                imagePt,
-                height,
-                0);
-        std::cout << "CSM ECEF coord is " << coord.x << " " << coord.y << " " << coord.z << std::endl;
+        // The offsets past the first should result in a number farther off
+        // than the others
+        std::vector<double> offsets(3);
+        std::vector<double> imageDifferences(offsets.size());
+        std::vector<double> groundDifferences(offsets.size());
+        offsets[0] = .5;
+        offsets[1] = 0;
+        offsets[2] = -.5;
+        offsets[3] = 1;
 
-        scene::Vector3 csmCoord;
-        csmCoord[0] = coord.x;
-        csmCoord[1] = coord.y;
-        csmCoord[2] = coord.z;
-        scene::Vector3 diff = scp.ecf - csmCoord;
-        std::cout << "Diff " << diff[0] << " " << diff[1] << " " << diff[2] << std::endl;
+        for (size_t ii = 0; ii < offsets.size(); ++ii)
+        {
+            six::RowColDouble convertedImagePoint =
+                    groundToImage(model, scp, offsets[ii]);
 
-        // Round trip it
-        csm::ImageCoord rtCoord = model->groundToImage(coord, 0);
-        std::cout << "Got back " << rtCoord.line << " " << rtCoord.samp << std::endl;
+            six::RowColDouble doubleImagePoint(
+                    static_cast<double>(scpPixel.row),
+                    static_cast<double>(scpPixel.col));
+
+            six::RowColDouble imagePointDifference =
+                    convertedImagePoint - doubleImagePoint;
+            imagePointDifference.row = std::abs(imagePointDifference.row);
+            imagePointDifference.col = std::abs(imagePointDifference.col);
+            imageDifferences[ii] = std::max(imagePointDifference.row,
+                    imagePointDifference.col);
+
+            scene::Vector3 convertedGroundPoint =
+                    imageToGround(model, scpPixel, height, offsets[ii]);
+            scene::Vector3 groundPointDifference =
+                    convertedGroundPoint - scp.ecf;
+            for (size_t jj = 0; jj < 3; ++jj)
+            {
+                groundPointDifference[jj] = std::abs(groundPointDifference[jj]);
+            }
+            groundDifferences[ii] = std::max(groundPointDifference[0],
+                    std::max(groundPointDifference[1],
+                            groundPointDifference[2]));
+        }
+
+        double leastGroundDifference = *std::min_element(
+                groundDifferences.begin(), groundDifferences.end());
+        double leastImageDifference = *std::min_element(
+                imageDifferences.begin(), imageDifferences.end());
+
+        if (leastGroundDifference != groundDifferences[0] ||
+            leastImageDifference != imageDifferences[0])
+        {
+            std::cerr << "There was an offset better than +.5\n";
+            testPassed = false;
+        }
+
+        if (leastGroundDifference > .1)
+        {
+            std::cerr << "Converted ground point > .1 away from SCP\n";
+            testPassed = false;
+        }
+
+        if (leastImageDifference > .1)
+        {
+            std::cerr << "Converted image point > .1 away from scpPixel\n";
+        }
+        return testPassed;
     }
 
 private:
@@ -231,11 +301,11 @@ int main(int argc, char** argv)
         }
 
         Test test(sicdPathname, confDir, plugin);
-        test.testFileISD();
-        test.testNitfISD();
+        const bool testPassed = test.testFileISD() && test.testNitfISD();
 
-        return 0;
+        return testPassed ? 0 : 1;
     }
+
     // TODO: At least on Windows we don't ever seem to actually get exceptions
     //       that make it out of the plugin
     catch (const std::exception& ex)
