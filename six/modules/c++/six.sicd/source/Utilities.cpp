@@ -235,8 +235,11 @@ void Utilities::getValidDataPolygon(
 
         std::vector<types::RowCol<double> > opCorners(4);
         opCorners[0] = opOffset;
-        opCorners[1] = types::RowCol<double>(opOffset.row, lastOPPixel.col);
-        opCorners[2] = types::RowCol<double>(lastOPPixel.row, opOffset.col);
+        opCorners[1] = types::RowCol<double>(static_cast<double>(opOffset.row),
+				static_cast<double>(lastOPPixel.col));
+        opCorners[2] = types::RowCol<double>(
+				static_cast<double>(lastOPPixel.row),
+				static_cast<double>(opOffset.col));
         opCorners[3] = lastOPPixel;
 
         const six::sicd::AreaPlane& areaPlane =
@@ -259,8 +262,9 @@ void Utilities::getValidDataPolygon(
                 areaPlane.referencePoint.ecef);
 
         const types::RowCol<double> spSCP(sicdData.imageData->scpPixel);
-        const types::RowCol<double> spOrigOffset(sicdData.imageData->firstRow,
-                                                 sicdData.imageData->firstCol);
+        const types::RowCol<double> spOrigOffset(
+				static_cast<double>(sicdData.imageData->firstRow),
+				static_cast<double>(sicdData.imageData->firstCol));
 
         const types::RowCol<double> spOffset(
                 spSCP.row - spOrigOffset.row,
@@ -457,7 +461,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
 void Utilities::getWidebandData(
         const std::string& sicdPathname,
-        const std::vector<std::string>& schemaPaths,
+        const std::vector<std::string>& /*schemaPaths*/,
         const ComplexData& complexData,
         const types::RowCol<size_t>& offset,
         const types::RowCol<size_t>& extent,
@@ -540,11 +544,11 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     int area = 0;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        const int x1 = vertices[ii].col;
-        const int y1 = vertices[ii].row;
+        const int x1 = static_cast<int>(vertices[ii].col);
+        const int y1 = static_cast<int>(vertices[ii].row);
         const size_t nextIndex = (ii == vertices.size() - 1) ? 0 : ii + 1;
-        const int x2 = vertices[nextIndex].col;
-        const int y2 = vertices[nextIndex].row;
+        const int x2 = static_cast<int>(vertices[nextIndex].col);
+        const int y2 = static_cast<int>(vertices[nextIndex].row);
         area += (x1 * y2 - x2 * y1);
     }
     if (!isUpPositive)

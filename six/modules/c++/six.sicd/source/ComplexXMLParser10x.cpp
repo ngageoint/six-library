@@ -131,7 +131,7 @@ XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
     createInt("NumMatchTypes",
-              matchInfo->types.size(),
+              static_cast<int>(matchInfo->types.size()),
               matchInfoXML);
 
     for (size_t i = 0; i < matchInfo->types.size(); ++i)
@@ -142,7 +142,8 @@ XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
 
         createString("TypeID", mt->typeID, mtXML);
         createInt("CurrentIndex", mt->currentIndex, mtXML);
-        createInt("NumMatchCollections", mt->matchCollects.size(), mtXML);
+        createInt("NumMatchCollections",
+				static_cast<int>(mt->matchCollects.size()), mtXML);
 
         for (size_t j = 0; j < mt->matchCollects.size(); ++j)
         {
