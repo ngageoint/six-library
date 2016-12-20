@@ -185,13 +185,14 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * Older versions of Visual Studio do not support `inline` for C
  * Using `__inline` for Windows instead
  */
+NRTPRIV(void)
 #ifdef WIN32
-NRTPRIV(void) __inline nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
-        size_t indexTwo)
+__inline
 #else
-NRTPRIV(void) inline nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
-        size_t indexTwo)
+inline
 #endif
+nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+        size_t indexTwo)
 {
     nrt_Uint8 temp;
     temp = value[indexOne];
