@@ -37,11 +37,6 @@
 // TODO
 // - Test each SICD version (0.4.0, 0.4.1, 0.5.0, 1.0.0, 1.0.1, 1.1.0)
 // - Test SICD with extra non-SICD XML_DATA_CONTENT
-// - Test 0.5 pixel on either side of the SCP, test that what we have below is
-//   the closest, and test that it's close to the original within some small
-//   tolerance (and fail if these aren't all true)
-// - If practical, auto-find config dir and CSM DLL dir (scan DLL dir to find
-//   plugin filename)
 // - Build equivalent test for SIDD
 
 namespace
@@ -140,11 +135,11 @@ public:
     }
 
 private:
-    scene::Vector3 imageToGround(std::auto_ptr<csm::RasterGM> model,
+    scene::Vector3 imageToGround(const csm::RasterGM& model,
             const six::RowColInt& scpPixel, double height, double offset)
     {
         csm::ImageCoord imagePt(scpPixel.row + offset, scpPixel.col + offset);
-        csm::EcefCoord groundPt = model->imageToGround(
+        csm::EcefCoord groundPt = model.imageToGround(
                 imagePt,
                 height,
                 0);
@@ -156,12 +151,13 @@ private:
         return returnedGroundPoint;
     }
 
-    six::RowColDouble groundToImage(std::auto_ptr<csm::RasterGM> model,
+    six::RowColDouble groundToImage(const csm::RasterGM& model,
             const six::SCP& scp, double offset)
     {
-        csm::EcefCoord coord(scp.ecf[0], scp.ecf[1], scp.ecf[2]);
-        csm::ImageCoord rtCoord = model->groundToImage(coord, 0);
-        return six::RowColDouble(rtCoord.line - offset, rtCoord.samp - offset);
+        csm::EcefCoord groundCoord(scp.ecf[0], scp.ecf[1], scp.ecf[2]);
+        csm::ImageCoord imageCoord = model.groundToImage(groundCoord, 0);
+        return six::RowColDouble(imageCoord.line - offset,
+                imageCoord.samp - offset);
     }
 
     bool testISD(const csm::Isd& isd)
@@ -184,18 +180,19 @@ private:
 
         // The offsets past the first should result in a number farther off
         // than the others
-        std::vector<double> offsets(3);
+        std::vector<double> offsets(4);
         std::vector<double> imageDifferences(offsets.size());
         std::vector<double> groundDifferences(offsets.size());
         offsets[0] = .5;
         offsets[1] = 0;
         offsets[2] = -.5;
         offsets[3] = 1;
+        const double tolerance = 1e-4;
 
         for (size_t ii = 0; ii < offsets.size(); ++ii)
         {
             six::RowColDouble convertedImagePoint =
-                    groundToImage(model, scp, offsets[ii]);
+                    groundToImage(*model, scp, offsets[ii]);
 
             six::RowColDouble doubleImagePoint(
                     static_cast<double>(scpPixel.row),
@@ -209,7 +206,7 @@ private:
                     imagePointDifference.col);
 
             scene::Vector3 convertedGroundPoint =
-                    imageToGround(model, scpPixel, height, offsets[ii]);
+                    imageToGround(*model, scpPixel, height, offsets[ii]);
             scene::Vector3 groundPointDifference =
                     convertedGroundPoint - scp.ecf;
             for (size_t jj = 0; jj < 3; ++jj)
@@ -229,19 +226,22 @@ private:
         if (leastGroundDifference != groundDifferences[0] ||
             leastImageDifference != imageDifferences[0])
         {
-            std::cerr << "There was an offset better than +.5\n";
+            std::cerr << "There was an offset better than " <<
+                    offsets[0] << "\n";
             testPassed = false;
         }
 
-        if (leastGroundDifference > .1)
+        if (leastGroundDifference > tolerance)
         {
-            std::cerr << "Converted ground point > .1 away from SCP\n";
+            std::cerr << "Converted ground point > " << tolerance <<
+                    " away from SCP\n";
             testPassed = false;
         }
 
-        if (leastImageDifference > .1)
+        if (leastImageDifference > tolerance)
         {
-            std::cerr << "Converted image point > .1 away from scpPixel\n";
+            std::cerr << "Converted image point > " << tolerance <<
+                    " away from scpPixel\n";
         }
         return testPassed;
     }
@@ -257,6 +257,27 @@ private:
     std::auto_ptr<six::sicd::ComplexData> mComplexData;
 };
 
+std::string findDllPathname(const std::string& installPathname)
+{
+    const std::string csmPluginPathname =
+            sys::Path(installPathname).join("share").join("CSM").join("plugins");
+    const std::vector<std::string> csmPlugins =
+            sys::Path::list(csmPluginPathname);
+
+    // TODO: If multiple plugins, which is correct?
+    for (size_t ii = 0; ii < csmPlugins.size(); ++ii)
+    {
+        const std::string pathname = sys::Path::joinPaths(csmPluginPathname,
+                csmPlugins[ii]);
+        if (sys::Path(pathname).isFile())
+        {
+            return pathname;
+        }
+    }
+
+    throw except::Exception(Ctxt("Could not find CSM plugin."));
+}
+
 const char Test::MODEL_NAME[] = "SICD_SENSOR_MODEL";
 }
 
@@ -265,16 +286,28 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        if (argc != 4)
+        if (argc != 2)
         {
             std::cerr << "Usage: " << sys::Path::basename(argv[0])
-                      << " <SIX CSM DLL pathname> <SICD pathname>"
-                      << " <SIX conf directory>\n\n";
+                      << " <SICD pathname>\n\n";
             return 1;
         }
-        const std::string dllPathname(argv[1]);
-        const std::string sicdPathname(argv[2]);
-        const std::string confDir(argv[3]);
+        sys::OS os;
+
+        // Go up two levels from current dir
+        const std::string installPathname =
+                sys::Path::splitPath(sys::Path::splitPath(
+                        os.getCurrentExecutable()).first).first;
+
+        const std::string dllPathname = findDllPathname(installPathname);
+        const std::string confDir =
+                sys::Path::joinPaths(installPathname, "conf");
+        if (!os.exists(confDir))
+        {
+            throw except::Exception(Ctxt("Unable to find conf dir."));
+        }
+
+        const std::string sicdPathname(argv[1]);
 
         // Load the SIX CSM DLL
         // Quite frankly I don't know by what magic csm::Plugin::getList() finds
