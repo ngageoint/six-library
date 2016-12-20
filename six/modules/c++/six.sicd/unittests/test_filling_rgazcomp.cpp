@@ -42,7 +42,7 @@ TEST_CASE(DerivedRgAzComp)
     {
         for (size_t jj = 0; jj <= grid.row->deltaKCOAPoly.orderY(); ++jj)
         {
-            grid.row->deltaKCOAPoly[ii][jj] = ii + jj + 0.0;
+            grid.row->deltaKCOAPoly[ii][jj] = static_cast<double>(ii + jj);
         }
     }
 
@@ -54,7 +54,7 @@ TEST_CASE(DerivedRgAzComp)
     scpcoa.scpTime = 123;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scpcoa.arpPos[ii] = ii + 0.0;
+        scpcoa.arpPos[ii] = static_cast<double>(ii);
         scpcoa.arpVel[ii] = std::pow(ii, 3);
     }
     scpcoa.dopplerConeAngle = 66;

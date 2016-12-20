@@ -240,9 +240,8 @@ void cropSICD(six::NITFReadControl& reader,
     maxPixel.row = std::ceil(maxPixel.row);
     maxPixel.col = std::ceil(maxPixel.col);
 
-    const types::RowCol<double> lastDim(
-            static_cast<double>(data->getNumRows() - 1),
-            static_cast<double>(data->getNumCols() - 1));
+    const types::RowCol<double> lastDim(data->getNumRows() - 1.0,
+                                        data->getNumCols() - 1.0);
 
     if (!trimCornersIfNeeded &&
         (minPixel.row < 0 ||

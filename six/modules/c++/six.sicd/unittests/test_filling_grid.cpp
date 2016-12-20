@@ -144,7 +144,7 @@ TEST_CASE(FillUnitVectorsFromRMCR)
     six::Vector3 scp;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        rma.rmcr->refPos[ii] = ii + 0.0;
+        rma.rmcr->refPos[ii] = static_cast<double>(ii);
         rma.rmcr->refVel[ii] = ii + 1.0;
         scp[ii] = (ii + 1) * 100.0;
     }
@@ -180,7 +180,7 @@ TEST_CASE(FillUnitVectorsFromINCA)
         std::vector<double> nextTerm(3);
         for (size_t jj = 0; jj < nextTerm.size(); ++jj)
         {
-            nextTerm[jj] = ii + jj + 0.0;
+            nextTerm[jj] = static_cast<double>(ii + jj);
         }
         arpPolyData[ii] = six::Vector3(nextTerm);
     }
@@ -216,7 +216,7 @@ TEST_CASE(FillUnitVectorsFromRgAzComp)
     six::sicd::GeoData geoData;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scpcoa.arpPos[ii] = ii + 0.0;
+        scpcoa.arpPos[ii] = static_cast<double>(ii);
         scpcoa.arpVel[ii] = ii + 1.0;
         geoData.scp.ecf[ii] = (ii + 1) * 100.0;
     }
@@ -241,7 +241,7 @@ TEST_CASE(FillDirectionParamsKCenterFromKCOAPoly)
     {
         for (size_t jj = 0; jj <= col.deltaKCOAPoly.orderY(); ++jj)
         {
-            col.deltaKCOAPoly[ii][jj] = ii + jj + 0.0;
+            col.deltaKCOAPoly[ii][jj] = static_cast<double>(ii + jj);
         }
     }
     six::sicd::RgAzComp rgAzComp;

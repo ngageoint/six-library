@@ -541,14 +541,19 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
 
     // If the signed area is positive, and y values are ascending,
     // then it is clockwise
-    int area = 0;
+    sys::SSize_T area = 0;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        const int x1 = static_cast<int>(vertices[ii].col);
-        const int y1 = static_cast<int>(vertices[ii].row);
+        const sys::SSize_T x1 = static_cast<sys::SSize_T>(vertices[ii].col);
+        const sys::SSize_T y1 = static_cast<sys::SSize_T>(vertices[ii].row);
+
         const size_t nextIndex = (ii == vertices.size() - 1) ? 0 : ii + 1;
-        const int x2 = static_cast<int>(vertices[nextIndex].col);
-        const int y2 = static_cast<int>(vertices[nextIndex].row);
+
+        const sys::SSize_T x2 =
+                static_cast<sys::SSize_T>(vertices[nextIndex].col);
+        const sys::SSize_T y2 =
+                static_cast<sys::SSize_T>(vertices[nextIndex].row);
+
         area += (x1 * y2 - x2 * y1);
     }
     if (!isUpPositive)

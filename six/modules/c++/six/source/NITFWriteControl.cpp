@@ -629,7 +629,7 @@ std::string NITFWriteControl::getNITFClassification(const std::string& level)
     // return the correct identifier
     for (size_t ii = 0; ii < level.length(); ++ii)
     {
-        const char ch(static_cast<const char>(::toupper(level[ii])));
+        const char ch(static_cast<char>(::toupper(level[ii])));
         switch (ch)
         {
         case 'U':

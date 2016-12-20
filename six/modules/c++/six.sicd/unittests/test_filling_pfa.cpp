@@ -38,7 +38,7 @@ TEST_CASE(DefaultPFA)
     scpcoa.scpTime = 123;
     for (size_t ii = 0; ii < scpcoa.arpVel.size(); ++ii)
     {
-        scpcoa.arpPos[ii] = ii + 0.0;
+        scpcoa.arpPos[ii] = static_cast<double>(ii);
         scpcoa.arpVel[ii] = ii + 1.0;
     }
 

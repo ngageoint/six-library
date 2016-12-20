@@ -37,7 +37,7 @@ TEST_CASE(DerivedRMATandRMCR)
     six::Vector3 refVel;
     for (size_t ii = 0; ii < refPos.size(); ++ii)
     {
-        refPos[ii] = ii + 0.0;
+        refPos[ii] = static_cast<double>(ii);
         refVel[ii] = ii + 1.0;
     }
 
@@ -77,7 +77,7 @@ TEST_CASE(DerivedINCA)
         std::vector<double> nextTerm(3);
         for (size_t jj = 0; jj < nextTerm.size(); ++jj)
         {
-            nextTerm[jj] = ii + jj + 0.0;
+            nextTerm[jj] = static_cast<double>(ii + jj);
         }
         arpPolyData[ii] = six::Vector3(nextTerm);
     }
