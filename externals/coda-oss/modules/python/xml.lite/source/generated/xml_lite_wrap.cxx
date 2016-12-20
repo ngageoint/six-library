@@ -14,6 +14,7 @@
 #endif
 
 #define SWIG_PYTHON_DIRECTOR_NO_VTABLE
+#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
 
 
 #ifdef __cplusplus
