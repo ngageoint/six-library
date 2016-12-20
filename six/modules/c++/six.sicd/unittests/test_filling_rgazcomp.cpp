@@ -54,8 +54,9 @@ TEST_CASE(DerivedRgAzComp)
     scpcoa.scpTime = 123;
     for (size_t ii = 0; ii < 3; ++ii)
     {
-        scpcoa.arpPos[ii] = static_cast<double>(ii);
-        scpcoa.arpVel[ii] = std::pow(ii, 3);
+        const double castedIndex = static_cast<double>(ii);
+        scpcoa.arpPos[ii] = castedIndex;
+        scpcoa.arpVel[ii] = std::pow(castedIndex, 3);
     }
     scpcoa.dopplerConeAngle = 66;
     scpcoa.slantRange = 88;
