@@ -22,6 +22,7 @@
 #ifndef __SIX_POSITION_H__
 #define __SIX_POSITION_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
@@ -31,6 +32,8 @@ namespace six
 {
 namespace sicd
 {
+struct SCPCOA;
+
 /*!
  *  \struct RcvAPC
  *  \brief SICD RcvAPC
@@ -107,6 +110,9 @@ struct Position
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const SCPCOA& scpcoa);
+    bool validate(logging::Logger& log) const;
 };
 
 }

@@ -30,6 +30,7 @@
 #include "six/sicd/ComplexDataBuilder.h"
 #include "six/sicd/ComplexXMLControl.h"
 #include "six/sicd/CropUtils.h"
+#include "six/sicd/Functor.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
@@ -38,6 +39,7 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RadarCollection.h"
+#include "six/sicd/RgAzComp.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 

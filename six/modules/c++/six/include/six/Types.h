@@ -240,6 +240,8 @@ struct ReferencePoint
  */
 struct SCP
 {
+    SCP();
+
     Vector3 ecf;
     LatLonAlt llh;
 
@@ -381,6 +383,7 @@ struct AmplitudeTable : public LUT
 template <typename LatLonT>
 struct Corners
 {
+    Corners();
     static const size_t NUM_CORNERS = 4;
 
     //! These can be used with getCorner() below

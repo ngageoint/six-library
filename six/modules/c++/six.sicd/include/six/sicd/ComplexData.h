@@ -335,8 +335,32 @@ public:
 
     bool operator==(const ComplexData& rhs) const;
 
+    /*
+     * Check that class members are consistent with each other
+     *
+     * \param log Desired logger
+     * \return true if valid, false otherwise
+     */
+    bool validate(logging::Logger& log) const;
+
+    /*
+     * For all members, fill in any empty fields which can be derived
+     * from data already in the class
+     *
+     * \param includeDefault Flag to populate with default values as well
+     */
+    void fillDerivedFields(bool includeDefault=true);
+
+    /*
+     * For all members, fill in any empty fields which have a default value
+     */
+    void fillDefaultFields();
+
 private:
     virtual bool equalTo(const Data& rhs) const;
+
+    // This is possibly the center processed frequency
+    double computeFc() const;
     static const char VENDOR_ID[];
 
     std::string mVersion;

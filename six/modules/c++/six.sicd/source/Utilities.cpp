@@ -26,6 +26,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
+#include <math/Utilities.h>
 #include <types/RowCol.h>
 
 namespace
@@ -234,8 +235,11 @@ void Utilities::getValidDataPolygon(
 
         std::vector<types::RowCol<double> > opCorners(4);
         opCorners[0] = opOffset;
-        opCorners[1] = types::RowCol<double>(opOffset.row, lastOPPixel.col);
-        opCorners[2] = types::RowCol<double>(lastOPPixel.row, opOffset.col);
+        opCorners[1] = types::RowCol<double>(static_cast<double>(opOffset.row),
+				static_cast<double>(lastOPPixel.col));
+        opCorners[2] = types::RowCol<double>(
+				static_cast<double>(lastOPPixel.row),
+				static_cast<double>(opOffset.col));
         opCorners[3] = lastOPPixel;
 
         const six::sicd::AreaPlane& areaPlane =
@@ -258,8 +262,9 @@ void Utilities::getValidDataPolygon(
                 areaPlane.referencePoint.ecef);
 
         const types::RowCol<double> spSCP(sicdData.imageData->scpPixel);
-        const types::RowCol<double> spOrigOffset(sicdData.imageData->firstRow,
-                                                 sicdData.imageData->firstCol);
+        const types::RowCol<double> spOrigOffset(
+				static_cast<double>(sicdData.imageData->firstRow),
+				static_cast<double>(sicdData.imageData->firstCol));
 
         const types::RowCol<double> spOffset(
                 spSCP.row - spOrigOffset.row,
@@ -456,7 +461,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
 void Utilities::getWidebandData(
         const std::string& sicdPathname,
-        const std::vector<std::string>& schemaPaths,
+        const std::vector<std::string>& /*schemaPaths*/,
         const ComplexData& complexData,
         const types::RowCol<size_t>& offset,
         const types::RowCol<size_t>& extent,
@@ -507,6 +512,55 @@ Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
     }
 
     return groundPlaneNormal.unit();
+}
+
+Poly1D Utilities::nPoly(PolyXYZ poly, size_t idx)
+{
+    if (idx >= 3)
+    {
+        throw except::Exception(Ctxt("Idx should be < 3"));
+    }
+
+    std::vector<double> coefs;
+    for (size_t ii = 0; ii < poly.size(); ++ii)
+    {
+        coefs.push_back(poly[ii][idx]);
+    }
+    Poly1D ret(coefs);
+    return ret;
+}
+
+bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
+                            bool isUpPositive)
+{
+    if (vertices.size() < 3)
+    {
+        throw except::Exception(Ctxt(
+                "Polygons must have at least three points"));
+    }
+
+    // If the signed area is positive, and y values are ascending,
+    // then it is clockwise
+    sys::SSize_T area = 0;
+    for (size_t ii = 0; ii < vertices.size(); ++ii)
+    {
+        const sys::SSize_T x1 = static_cast<sys::SSize_T>(vertices[ii].col);
+        const sys::SSize_T y1 = static_cast<sys::SSize_T>(vertices[ii].row);
+
+        const size_t nextIndex = (ii == vertices.size() - 1) ? 0 : ii + 1;
+
+        const sys::SSize_T x2 =
+                static_cast<sys::SSize_T>(vertices[nextIndex].col);
+        const sys::SSize_T y2 =
+                static_cast<sys::SSize_T>(vertices[nextIndex].row);
+
+        area += (x1 * y2 - x2 * y1);
+    }
+    if (!isUpPositive)
+    {
+        area *= -1;
+    }
+    return (area > 0);
 }
 
 std::auto_ptr<ComplexData> Utilities::parseData(

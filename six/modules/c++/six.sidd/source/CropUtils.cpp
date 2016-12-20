@@ -91,7 +91,9 @@ public:
 
     types::RowCol<double> operator()(size_t row, size_t col) const
     {
-        return operator()(types::RowCol<double>(row, col));
+        return operator()(types::RowCol<double>(
+                static_cast<double>(row),
+                static_cast<double>(col)));
     }
 
 private:

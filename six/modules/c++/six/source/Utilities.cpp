@@ -25,18 +25,13 @@
 
 #include <nitf/PluginRegistry.hpp>
 #include <logging/NullLogger.h>
+#include <math/Utilities.h>
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
-
-inline
-double square(double val)
-{
-    return (val * val);
-}
 
 void assign(math::linear::MatrixMxN<7, 7>& sensorCovar,
             size_t row,
@@ -50,13 +45,13 @@ void getSensorCovariance(const six::PosVelError& error,
                          double rangeBias,
                          math::linear::MatrixMxN<7, 7>& sensorCovar)
 {
-    sensorCovar(0, 0) = square(error.p1);
-    sensorCovar(1, 1) = square(error.p2);
-    sensorCovar(2, 2) = square(error.p3);
-    sensorCovar(3, 3) = square(error.v1);
-    sensorCovar(4, 4) = square(error.v2);
-    sensorCovar(5, 5) = square(error.v3);
-    sensorCovar(6, 6) = square(rangeBias);
+    sensorCovar(0, 0) = math::square(error.p1);
+    sensorCovar(1, 1) = math::square(error.p2);
+    sensorCovar(2, 2) = math::square(error.p3);
+    sensorCovar(3, 3) = math::square(error.v1);
+    sensorCovar(4, 4) = math::square(error.v2);
+    sensorCovar(5, 5) = math::square(error.v3);
+    sensorCovar(6, 6) = math::square(rangeBias);
 
     if (error.corrCoefs.get())
     {
@@ -1039,8 +1034,8 @@ void six::loadXmlDataContentHandler()
     }
 }
 
-std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg, 
-                                   ::io::InputStream& xmlStream, 
+std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+                                   ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger& log)
@@ -1066,17 +1061,17 @@ std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
         xmlDataType = DataType::DERIVED;
     else
         throw except::Exception(Ctxt("Unexpected XML type"));
-    
+
     //! Only SIDDs can have mismatched types
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)
     {
         throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
     }
-    
+
     //! Create the correct type of XMLControl
     const std::auto_ptr<XMLControl>
         xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
-    
+
     return std::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
@@ -1130,7 +1125,7 @@ std::string six::findSchemaPath(const std::string& progname)
 }
 
 void six::getErrors(const ErrorStatistics* errorStats,
-                    const types::RgAz<double>& sampleSpacing,
+                    const types::RgAz<double>& /*sampleSpacing*/,
                     scene::Errors& errors)
 {
     errors.clear();
@@ -1183,9 +1178,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
-                        square(ionoError.ionoRangeVertical);
+                        math::square(ionoError.ionoRangeVertical);
                 errors.mIonoErrorCovar(1, 1) =
-                        square(ionoError.ionoRangeRateVertical);
+                        math::square(ionoError.ionoRangeRateVertical);
                 errors.mIonoErrorCovar(0, 1) =
                         errors.mIonoErrorCovar(1, 0) =
                                 ionoError.ionoRangeVertical *
@@ -1196,7 +1191,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
             if (components->tropoError.get())
             {
                 errors.mTropoErrorCovar(0, 0) =
-                        square(components->tropoError->tropoRangeVertical);
+                        math::square(components->tropoError->tropoRangeVertical);
             }
         }
 
@@ -1208,8 +1203,8 @@ void six::getErrors(const ErrorStatistics* errorStats,
                     errorStats->compositeSCP->yErr);
             const double corr = errorStats->compositeSCP->xyErr;
 
-            errors.mUnmodeledErrorCovar(0, 0) = square(composite.rg);
-            errors.mUnmodeledErrorCovar(1, 1) = square(composite.az);
+            errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
+            errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);
             errors.mUnmodeledErrorCovar(0, 1) =
                     errors.mUnmodeledErrorCovar(1, 0) =
                             corr * (composite.rg * composite.az);

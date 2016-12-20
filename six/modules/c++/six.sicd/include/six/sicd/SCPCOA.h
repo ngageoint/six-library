@@ -22,14 +22,19 @@
 #ifndef __SIX_SCPCOA_H__
 #define __SIX_SCPCOA_H__
 
+#include <logging/Logger.h>
 #include "six/Init.h"
 #include "six/Types.h"
 #include "six/Parameter.h"
+#include "scene/SceneGeometry.h"
 
 namespace six
 {
 namespace sicd
 {
+class GeoData;
+struct Grid;
+struct Position;
 /*!
  *  \struct SCPCOA
  *  \brief SICD SCPCOA parameter
@@ -38,7 +43,7 @@ namespace sicd
  */
 struct SCPCOA
 {
-    
+
     /*!
      *  Constructor.  All fields are set as undefined, and all fields
      *  are required, and so, must be filled in.
@@ -100,6 +105,35 @@ struct SCPCOA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+            const Grid& grid,
+            const Position& position);
+
+    bool validate(const GeoData& geoData,
+            const Grid& grid,
+            const Position& position,
+            logging::Logger& log);
+
+    Vector3 uLOS(const Vector3& scp) const;
+    int look(const Vector3& scp) const;
+    Vector3 left() const;
+    Vector3 slantPlaneNormal(const Vector3& scp) const;
+
+private:
+    double derivedSCPTime(const Grid& grid) const;
+    std::vector<Vector3> derivedArpVectors(const Position& position) const;
+    double derivedSlantRange(const Vector3& scp) const;
+    double derivedGroundRange(const Vector3& scp) const;
+    double derivedTwistAngle(const scene::SceneGeometry& geometry) const;
+    bool compareFields(double given, double expected,
+            const std::string& name, logging::Logger& log) const;
+    bool compareFields(Vector3 given, Vector3 expected,
+            const std::string& name, logging::Logger& log) const;
+
+
+    static const char SCPCOA_INCONSISTENT_STR[];
+    static const double SCPCOA_TOL;
 };
 
 }

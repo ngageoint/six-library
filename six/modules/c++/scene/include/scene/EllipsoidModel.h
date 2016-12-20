@@ -164,11 +164,11 @@ public:
 
     /**
      * This constructor initializes the object with default values.  By default
-     * the units are meters and the angular units are radians.  The radius 
-     * values are those specified by the WGS84 model and cannot be set by the 
+     * the units are meters and the angular units are radians.  The radius
+     * values are those specified by the WGS84 model and cannot be set by the
      * user.
      */
-    WGS84EllipsoidModel(); 
+    WGS84EllipsoidModel();
 
     /**
      * This constructor initializes the object with the specified values
@@ -195,7 +195,7 @@ public:
     virtual ~WGS84EllipsoidModel(){}
 
     /**
-     * This function sets the radius values to those specified by the WGS84 
+     * This function sets the radius values to those specified by the WGS84
      * model.  The values set will be in the units given by the object's units
      * attribute.
      */
@@ -223,12 +223,19 @@ public:
      * This operator sets the attributes of the EllipsoidModel object with
      * the attributes from the supplied EllipsoidModel.  The operator
      * just copies the attribute values from the given EllipsoidModel object
-     * to its own attributes.  This operator overloads the base class 
+     * to its own attributes.  This operator overloads the base class
      * implementation so that the radius values cannot be changed by the user.
      *
-     * @param m      The EllipsoidModel to copy attribute values from 
+     * @param m      The EllipsoidModel to copy attribute values from
      */
     virtual EllipsoidModel & operator=(const EllipsoidModel & m);
+
+    /**
+     * Compute normal vector at given point
+     * \param point A point in ECEF space
+     * \return Normal vector to ellipsoid at given point
+     */
+    Vector3 getNormalVector(const Vector3& point) const;
 
 };
 

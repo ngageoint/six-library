@@ -1908,11 +1908,21 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geoInfo->geographicInformationExtensions.push_back(param);
 
     geoCoverage->geographicInformation = geoInfo;
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        geoCoverage->footprint.getCorner(ii).setLat(
+                geographicAndTarget.geographicCoverage.footprint.
+                getCorner(ii).getLat());
+        geoCoverage->footprint.getCorner(ii).setLon(
+                geographicAndTarget.geographicCoverage.footprint.
+                getCorner(ii).getLon());
+
+    }
+
     geographicAndTarget.geographicCoverage.subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
     targetInfo->identifiers.push_back(param);
-    targetInfo->footprint.reset(new six::LatLonCorners());
     targetInfo->targetInformationExtensions.push_back(param);
     geographicAndTarget.targetInformation.push_back(targetInfo);
 }
@@ -2115,7 +2125,7 @@ void initAnnotations(six::sidd::Annotations& annotations)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage, const std::string& version)
+        lutType, bool smallImage)
 {
 
     // These things are essential to forming the file
@@ -2129,6 +2139,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
         siddData.setNumRows(IMAGE.height);
         siddData.setNumCols(IMAGE.width);
     }
+
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
@@ -2219,9 +2230,6 @@ int main(int argc, char** argv)
             "output-file", 1, 1, true);
     argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
             "sicdXML", "sicd-xml", 0, 1);
-
-    //We'll get this from command line args once it matters
-    const std::string version("1.0.0");
 
     try
     {
@@ -2317,7 +2325,6 @@ int main(int argc, char** argv)
         buffers.resize(numImages);
         for (size_t ii = 0; ii < numImages; ++ii)
         {
-
             std::string lutType = "None";
             if (options->hasValue("lut"))
             {
@@ -2327,7 +2334,7 @@ int main(int argc, char** argv)
             std::auto_ptr<six::sidd::DerivedData> siddData =
                     initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
+            populateData(*siddData, lutType, smallImage);
             container->addData(siddData->clone());
             if (!smallImage)
             {

@@ -330,6 +330,11 @@ class LatLon(_object):
         """__eq__(LatLon self, LatLon x) -> bool"""
         return _scene.LatLon___eq__(self, x)
 
+
+    def __ne__(self, x):
+        """__ne__(LatLon self, LatLon x) -> bool"""
+        return _scene.LatLon___ne__(self, x)
+
     __swig_destroy__ = _scene.delete_LatLon
     __del__ = lambda self: None
 LatLon_swigregister = _scene.LatLon_swigregister
@@ -536,6 +541,11 @@ class WGS84EllipsoidModel(EllipsoidModel):
     def setPolarRadius(self, val):
         """setPolarRadius(WGS84EllipsoidModel self, double val)"""
         return _scene.WGS84EllipsoidModel_setPolarRadius(self, val)
+
+
+    def getNormalVector(self, point):
+        """getNormalVector(WGS84EllipsoidModel self, Vector3 point) -> Vector3"""
+        return _scene.WGS84EllipsoidModel_getNormalVector(self, point)
 
 WGS84EllipsoidModel_swigregister = _scene.WGS84EllipsoidModel_swigregister
 WGS84EllipsoidModel_swigregister(WGS84EllipsoidModel)

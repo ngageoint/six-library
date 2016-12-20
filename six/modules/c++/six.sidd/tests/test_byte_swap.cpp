@@ -61,6 +61,15 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->setNumCols(40);
     derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
 
+    // Set image corners
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+                getCorner(ii).setLat(0);
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+            getCorner(ii).setLon(0);
+    }
+
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resolution.row = 0;
     derivedData->exploitationFeatures->product.resolution.col = 0;
@@ -156,7 +165,7 @@ bool run(bool useStream = false, bool byteswap = false)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {

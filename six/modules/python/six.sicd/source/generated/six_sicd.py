@@ -469,6 +469,11 @@ class ImageData(_object):
         """__ne__(ImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ImageData___ne__(self, rhs)
 
+
+    def validate(self, geoData, log):
+        """validate(ImageData self, GeoData geoData, logging::Logger & log) -> bool"""
+        return _six_sicd.ImageData_validate(self, geoData, log)
+
     __swig_destroy__ = _six_sicd.delete_ImageData
     __del__ = lambda self: None
 ImageData_swigregister = _six_sicd.ImageData_swigregister
@@ -576,6 +581,16 @@ class GeoData(_object):
     def __ne__(self, rhs):
         """__ne__(GeoData self, GeoData rhs) -> bool"""
         return _six_sicd.GeoData___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, imageData, model):
+        """fillDerivedFields(GeoData self, ImageData imageData, ProjectionModel model)"""
+        return _six_sicd.GeoData_fillDerivedFields(self, imageData, model)
+
+
+    def validate(self, log):
+        """validate(GeoData self, logging::Logger & log) -> bool"""
+        return _six_sicd.GeoData_validate(self, log)
 
     __swig_destroy__ = _six_sicd.delete_GeoData
     __del__ = lambda self: None
@@ -696,6 +711,24 @@ class DirectionParameters(_object):
         """__ne__(DirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.DirectionParameters___ne__(self, rhs)
 
+
+    def validate(self, *args):
+        """
+        validate(DirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
+        validate(DirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
+        validate(DirectionParameters self, RgAzComp rgAzComp, logging::Logger & log) -> bool
+        """
+        return _six_sicd.DirectionParameters_validate(self, *args)
+
+
+    def fillDerivedFields(self, *args):
+        """
+        fillDerivedFields(DirectionParameters self, ImageData imageData)
+        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp, double offset=0)
+        fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp)
+        """
+        return _six_sicd.DirectionParameters_fillDerivedFields(self, *args)
+
     __swig_destroy__ = _six_sicd.delete_DirectionParameters
     __del__ = lambda self: None
 DirectionParameters_swigregister = _six_sicd.DirectionParameters_swigregister
@@ -751,6 +784,33 @@ class Grid(_object):
     def __ne__(self, rhs):
         """__ne__(Grid self, Grid rhs) -> bool"""
         return _six_sicd.Grid___ne__(self, rhs)
+
+
+    def validate(self, *args):
+        """
+        validate(Grid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
+        validate(Grid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
+        validate(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
+        """
+        return _six_sicd.Grid_validate(self, *args)
+
+
+    def fillDerivedFields(self, *args):
+        """
+        fillDerivedFields(Grid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
+        fillDerivedFields(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
+        """
+        return _six_sicd.Grid_fillDerivedFields(self, *args)
+
+
+    def fillDefaultFields(self, *args):
+        """
+        fillDefaultFields(Grid self, RMA const & rma, double fc)
+        fillDefaultFields(Grid self, PFA pfa, double fc)
+        """
+        return _six_sicd.Grid_fillDefaultFields(self, *args)
 
     __swig_destroy__ = _six_sicd.delete_Grid
     __del__ = lambda self: None
@@ -963,6 +1023,16 @@ class Position(_object):
         """__ne__(Position self, Position rhs) -> bool"""
         return _six_sicd.Position___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, scpcoa):
+        """fillDerivedFields(Position self, SCPCOA scpcoa)"""
+        return _six_sicd.Position_fillDerivedFields(self, scpcoa)
+
+
+    def validate(self, log):
+        """validate(Position self, logging::Logger & log) -> bool"""
+        return _six_sicd.Position_validate(self, log)
+
     __swig_destroy__ = _six_sicd.delete_Position
     __del__ = lambda self: None
 Position_swigregister = _six_sicd.Position_swigregister
@@ -1084,6 +1154,16 @@ class WaveformParameters(_object):
     def __ne__(self, rhs):
         """__ne__(WaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.WaveformParameters___ne__(self, rhs)
+
+
+    def fillDerivedFields(self):
+        """fillDerivedFields(WaveformParameters self)"""
+        return _six_sicd.WaveformParameters_fillDerivedFields(self)
+
+
+    def validate(self, refFrequencyIndex, log):
+        """validate(WaveformParameters self, int refFrequencyIndex, logging::Logger & log) -> bool"""
+        return _six_sicd.WaveformParameters_validate(self, refFrequencyIndex, log)
 
 WaveformParameters_swigregister = _six_sicd.WaveformParameters_swigregister
 WaveformParameters_swigregister(WaveformParameters)
@@ -1431,6 +1511,16 @@ class RadarCollection(_object):
         """__ne__(RadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.RadarCollection___ne__(self, rhs)
 
+
+    def fillDerivedFields(self):
+        """fillDerivedFields(RadarCollection self)"""
+        return _six_sicd.RadarCollection_fillDerivedFields(self)
+
+
+    def validate(self, log):
+        """validate(RadarCollection self, logging::Logger & log) -> bool"""
+        return _six_sicd.RadarCollection_validate(self, log)
+
     __swig_destroy__ = _six_sicd.delete_RadarCollection
     __del__ = lambda self: None
 RadarCollection_swigregister = _six_sicd.RadarCollection_swigregister
@@ -1730,6 +1820,11 @@ class ImageFormation(_object):
         """__ne__(ImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ImageFormation___ne__(self, rhs)
 
+
+    def fillDefaultFields(self, radarCollection):
+        """fillDefaultFields(ImageFormation self, RadarCollection radarCollection)"""
+        return _six_sicd.ImageFormation_fillDefaultFields(self, radarCollection)
+
     __swig_destroy__ = _six_sicd.delete_ImageFormation
     __del__ = lambda self: None
 ImageFormation_swigregister = _six_sicd.ImageFormation_swigregister
@@ -1816,6 +1911,36 @@ class SCPCOA(_object):
     def __ne__(self, rhs):
         """__ne__(SCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.SCPCOA___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, geoData, grid, position):
+        """fillDerivedFields(SCPCOA self, GeoData geoData, Grid grid, Position position)"""
+        return _six_sicd.SCPCOA_fillDerivedFields(self, geoData, grid, position)
+
+
+    def validate(self, geoData, grid, position, log):
+        """validate(SCPCOA self, GeoData geoData, Grid grid, Position position, logging::Logger & log) -> bool"""
+        return _six_sicd.SCPCOA_validate(self, geoData, grid, position, log)
+
+
+    def uLOS(self, scp):
+        """uLOS(SCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.SCPCOA_uLOS(self, scp)
+
+
+    def look(self, scp):
+        """look(SCPCOA self, Vector3 scp) -> int"""
+        return _six_sicd.SCPCOA_look(self, scp)
+
+
+    def left(self):
+        """left(SCPCOA self) -> Vector3"""
+        return _six_sicd.SCPCOA_left(self)
+
+
+    def slantPlaneNormal(self, scp):
+        """slantPlaneNormal(SCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.SCPCOA_slantPlaneNormal(self, scp)
 
     __swig_destroy__ = _six_sicd.delete_SCPCOA
     __del__ = lambda self: None
@@ -2301,6 +2426,21 @@ class PFA(_object):
         """__ne__(PFA self, PFA rhs) -> bool"""
         return _six_sicd.PFA___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, position):
+        """fillDerivedFields(PFA self, Position position)"""
+        return _six_sicd.PFA_fillDerivedFields(self, position)
+
+
+    def fillDefaultFields(self, geoData, arg3, scpcoa):
+        """fillDefaultFields(PFA self, GeoData geoData, Grid arg3, SCPCOA scpcoa)"""
+        return _six_sicd.PFA_fillDefaultFields(self, geoData, arg3, scpcoa)
+
+
+    def validate(self, scpcoa, log):
+        """validate(PFA self, SCPCOA scpcoa, logging::Logger & log) -> bool"""
+        return _six_sicd.PFA_validate(self, scpcoa, log)
+
     __swig_destroy__ = _six_sicd.delete_PFA
     __del__ = lambda self: None
 PFA_swigregister = _six_sicd.PFA_swigregister
@@ -2372,6 +2512,46 @@ class RMAT(_object):
         """__ne__(RMAT self, RMAT rhs) -> bool"""
         return _six_sicd.RMAT___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, scp):
+        """fillDerivedFields(RMAT self, Vector3 scp)"""
+        return _six_sicd.RMAT_fillDerivedFields(self, scp)
+
+
+    def fillDefaultFields(self, scpcoa):
+        """fillDefaultFields(RMAT self, SCPCOA scpcoa)"""
+        return _six_sicd.RMAT_fillDefaultFields(self, scpcoa)
+
+
+    def validate(self, scp, log):
+        """validate(RMAT self, Vector3 scp, logging::Logger & log) -> bool"""
+        return _six_sicd.RMAT_validate(self, scp, log)
+
+
+    def look(self, scp):
+        """look(RMAT self, Vector3 scp) -> int"""
+        return _six_sicd.RMAT_look(self, scp)
+
+
+    def uYAT(self, scp):
+        """uYAT(RMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMAT_uYAT(self, scp)
+
+
+    def spn(self, scp):
+        """spn(RMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMAT_spn(self, scp)
+
+
+    def uXCT(self, scp):
+        """uXCT(RMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMAT_uXCT(self, scp)
+
+
+    def uLOS(self, scp):
+        """uLOS(RMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMAT_uLOS(self, scp)
+
     __swig_destroy__ = _six_sicd.delete_RMAT
     __del__ = lambda self: None
 RMAT_swigregister = _six_sicd.RMAT_swigregister
@@ -2414,6 +2594,41 @@ class RMCR(_object):
     def __ne__(self, rhs):
         """__ne__(RMCR self, RMCR rhs) -> bool"""
         return _six_sicd.RMCR___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, scp):
+        """fillDerivedFields(RMCR self, Vector3 scp)"""
+        return _six_sicd.RMCR_fillDerivedFields(self, scp)
+
+
+    def fillDefaultFields(self, scpcoa):
+        """fillDefaultFields(RMCR self, SCPCOA scpcoa)"""
+        return _six_sicd.RMCR_fillDefaultFields(self, scpcoa)
+
+
+    def validate(self, scp, log):
+        """validate(RMCR self, Vector3 scp, logging::Logger & log) -> bool"""
+        return _six_sicd.RMCR_validate(self, scp, log)
+
+
+    def uXRG(self, scp):
+        """uXRG(RMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMCR_uXRG(self, scp)
+
+
+    def uYCR(self, scp):
+        """uYCR(RMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMCR_uYCR(self, scp)
+
+
+    def spn(self, scp):
+        """spn(RMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.RMCR_spn(self, scp)
+
+
+    def look(self, scp):
+        """look(RMCR self, Vector3 scp) -> int"""
+        return _six_sicd.RMCR_look(self, scp)
 
     __swig_destroy__ = _six_sicd.delete_RMCR
     __del__ = lambda self: None
@@ -2470,6 +2685,56 @@ class INCA(_object):
         """__ne__(INCA self, INCA rhs) -> bool"""
         return _six_sicd.INCA___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, scp, position):
+        """fillDerivedFields(INCA self, Vector3 scp, Position position)"""
+        return _six_sicd.INCA_fillDerivedFields(self, scp, position)
+
+
+    def caPos(self, arpPoly):
+        """caPos(INCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_caPos(self, arpPoly)
+
+
+    def caVel(self, arpPoly):
+        """caVel(INCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_caVel(self, arpPoly)
+
+
+    def uRG(self, scp, arpPoly):
+        """uRG(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_uRG(self, scp, arpPoly)
+
+
+    def uAZ(self, scp, arpPoly):
+        """uAZ(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_uAZ(self, scp, arpPoly)
+
+
+    def spn(self, scp, arpPoly):
+        """spn(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_spn(self, scp, arpPoly)
+
+
+    def look(self, scp, arpPoly):
+        """look(INCA self, Vector3 scp, PolyVector3 arpPoly) -> int"""
+        return _six_sicd.INCA_look(self, scp, arpPoly)
+
+
+    def left(self, arpPoly):
+        """left(INCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.INCA_left(self, arpPoly)
+
+
+    def fillDefaultFields(self, fc):
+        """fillDefaultFields(INCA self, double fc)"""
+        return _six_sicd.INCA_fillDefaultFields(self, fc)
+
+
+    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+        """validate(INCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        return _six_sicd.INCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
+
     __swig_destroy__ = _six_sicd.delete_INCA
     __del__ = lambda self: None
 INCA_swigregister = _six_sicd.INCA_swigregister
@@ -2517,6 +2782,21 @@ class RMA(_object):
         """__ne__(RMA self, RMA rhs) -> bool"""
         return _six_sicd.RMA___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, geoData, position):
+        """fillDerivedFields(RMA self, GeoData geoData, Position position)"""
+        return _six_sicd.RMA_fillDerivedFields(self, geoData, position)
+
+
+    def fillDefaultFields(self, scpcoa, fc):
+        """fillDefaultFields(RMA self, SCPCOA scpcoa, double fc)"""
+        return _six_sicd.RMA_fillDefaultFields(self, scpcoa, fc)
+
+
+    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+        """validate(RMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        return _six_sicd.RMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
+
     __swig_destroy__ = _six_sicd.delete_RMA
     __del__ = lambda self: None
 RMA_swigregister = _six_sicd.RMA_swigregister
@@ -2555,6 +2835,16 @@ class RgAzComp(_object):
     def __ne__(self, rhs):
         """__ne__(RgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.RgAzComp___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, geoData, grid, scpcoa, timeline):
+        """fillDerivedFields(RgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline)"""
+        return _six_sicd.RgAzComp_fillDerivedFields(self, geoData, grid, scpcoa, timeline)
+
+
+    def validate(self, geoData, grid, scpcoa, timeline, log):
+        """validate(RgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline, logging::Logger & log) -> bool"""
+        return _six_sicd.RgAzComp_validate(self, geoData, grid, scpcoa, timeline, log)
 
     __swig_destroy__ = _six_sicd.delete_RgAzComp
     __del__ = lambda self: None
@@ -2784,6 +3074,24 @@ class ComplexData(pysix.six_base.Data):
         """__eq__(ComplexData self, ComplexData rhs) -> bool"""
         return _six_sicd.ComplexData___eq__(self, rhs)
 
+
+    def validate(self, log):
+        """validate(ComplexData self, logging::Logger & log) -> bool"""
+        return _six_sicd.ComplexData_validate(self, log)
+
+
+    def fillDerivedFields(self, includeDefault=True):
+        """
+        fillDerivedFields(ComplexData self, bool includeDefault=True)
+        fillDerivedFields(ComplexData self)
+        """
+        return _six_sicd.ComplexData_fillDerivedFields(self, includeDefault)
+
+
+    def fillDefaultFields(self):
+        """fillDefaultFields(ComplexData self)"""
+        return _six_sicd.ComplexData_fillDefaultFields(self)
+
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 
@@ -2877,6 +3185,21 @@ class SixSicdUtilities(_object):
 
     getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
 
+    def nPoly(poly, index):
+        """nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
+        return _six_sicd.SixSicdUtilities_nPoly(poly, index)
+
+    nPoly = staticmethod(nPoly)
+
+    def isClockwise(vertices, isUpPositive=False):
+        """
+        isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
+        isClockwise(VectorRowColInt vertices) -> bool
+        """
+        return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
+
+    isClockwise = staticmethod(isClockwise)
+
     def parseData(xmlStream, schemaPaths, log):
         """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
@@ -2954,6 +3277,17 @@ def SixSicdUtilities_getWidebandData(*args):
 def SixSicdUtilities_getGroundPlaneNormal(data):
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
+
+def SixSicdUtilities_nPoly(poly, index):
+    """SixSicdUtilities_nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
+    return _six_sicd.SixSicdUtilities_nPoly(poly, index)
+
+def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
+    """
+    isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
+    SixSicdUtilities_isClockwise(VectorRowColInt vertices) -> bool
+    """
+    return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
 
 def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
     """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
@@ -3315,6 +3649,11 @@ class ScopedCopyableImageData(_object):
         """__ne__(ScopedCopyableImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageData___ne__(self, rhs)
 
+
+    def validate(self, geoData, log):
+        """validate(ScopedCopyableImageData self, GeoData geoData, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableImageData_validate(self, geoData, log)
+
 ScopedCopyableImageData_swigregister = _six_sicd.ScopedCopyableImageData_swigregister
 ScopedCopyableImageData_swigregister(ScopedCopyableImageData)
 
@@ -3423,6 +3762,16 @@ class ScopedCloneableGeoData(_object):
         """__ne__(ScopedCloneableGeoData self, GeoData rhs) -> bool"""
         return _six_sicd.ScopedCloneableGeoData___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, imageData, model):
+        """fillDerivedFields(ScopedCloneableGeoData self, ImageData imageData, ProjectionModel model)"""
+        return _six_sicd.ScopedCloneableGeoData_fillDerivedFields(self, imageData, model)
+
+
+    def validate(self, log):
+        """validate(ScopedCloneableGeoData self, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCloneableGeoData_validate(self, log)
+
 ScopedCloneableGeoData_swigregister = _six_sicd.ScopedCloneableGeoData_swigregister
 ScopedCloneableGeoData_swigregister(ScopedCloneableGeoData)
 
@@ -3530,6 +3879,33 @@ class ScopedCloneableGrid(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCloneableGrid self, Grid rhs) -> bool"""
         return _six_sicd.ScopedCloneableGrid___ne__(self, rhs)
+
+
+    def validate(self, *args):
+        """
+        validate(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
+        """
+        return _six_sicd.ScopedCloneableGrid_validate(self, *args)
+
+
+    def fillDerivedFields(self, *args):
+        """
+        fillDerivedFields(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
+        fillDerivedFields(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
+        """
+        return _six_sicd.ScopedCloneableGrid_fillDerivedFields(self, *args)
+
+
+    def fillDefaultFields(self, *args):
+        """
+        fillDefaultFields(ScopedCloneableGrid self, RMA const & rma, double fc)
+        fillDefaultFields(ScopedCloneableGrid self, PFA pfa, double fc)
+        """
+        return _six_sicd.ScopedCloneableGrid_fillDefaultFields(self, *args)
 
 ScopedCloneableGrid_swigregister = _six_sicd.ScopedCloneableGrid_swigregister
 ScopedCloneableGrid_swigregister(ScopedCloneableGrid)
@@ -3724,6 +4100,16 @@ class ScopedCopyablePosition(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCopyablePosition self, Position rhs) -> bool"""
         return _six_sicd.ScopedCopyablePosition___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, scpcoa):
+        """fillDerivedFields(ScopedCopyablePosition self, SCPCOA scpcoa)"""
+        return _six_sicd.ScopedCopyablePosition_fillDerivedFields(self, scpcoa)
+
+
+    def validate(self, log):
+        """validate(ScopedCopyablePosition self, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyablePosition_validate(self, log)
 
 ScopedCopyablePosition_swigregister = _six_sicd.ScopedCopyablePosition_swigregister
 ScopedCopyablePosition_swigregister(ScopedCopyablePosition)
@@ -3940,6 +4326,16 @@ class ScopedCloneableRadarCollection(_object):
         """__ne__(ScopedCloneableRadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.ScopedCloneableRadarCollection___ne__(self, rhs)
 
+
+    def fillDerivedFields(self):
+        """fillDerivedFields(ScopedCloneableRadarCollection self)"""
+        return _six_sicd.ScopedCloneableRadarCollection_fillDerivedFields(self)
+
+
+    def validate(self, log):
+        """validate(ScopedCloneableRadarCollection self, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCloneableRadarCollection_validate(self, log)
+
 ScopedCloneableRadarCollection_swigregister = _six_sicd.ScopedCloneableRadarCollection_swigregister
 ScopedCloneableRadarCollection_swigregister(ScopedCloneableRadarCollection)
 
@@ -4079,6 +4475,11 @@ class ScopedCopyableImageFormation(_object):
         """__ne__(ScopedCopyableImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageFormation___ne__(self, rhs)
 
+
+    def fillDefaultFields(self, radarCollection):
+        """fillDefaultFields(ScopedCopyableImageFormation self, RadarCollection radarCollection)"""
+        return _six_sicd.ScopedCopyableImageFormation_fillDefaultFields(self, radarCollection)
+
 ScopedCopyableImageFormation_swigregister = _six_sicd.ScopedCopyableImageFormation_swigregister
 ScopedCopyableImageFormation_swigregister(ScopedCopyableImageFormation)
 
@@ -4217,6 +4618,36 @@ class ScopedCopyableSCPCOA(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCopyableSCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.ScopedCopyableSCPCOA___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, geoData, grid, position):
+        """fillDerivedFields(ScopedCopyableSCPCOA self, GeoData geoData, Grid grid, Position position)"""
+        return _six_sicd.ScopedCopyableSCPCOA_fillDerivedFields(self, geoData, grid, position)
+
+
+    def validate(self, geoData, grid, position, log):
+        """validate(ScopedCopyableSCPCOA self, GeoData geoData, Grid grid, Position position, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableSCPCOA_validate(self, geoData, grid, position, log)
+
+
+    def uLOS(self, scp):
+        """uLOS(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableSCPCOA_uLOS(self, scp)
+
+
+    def look(self, scp):
+        """look(ScopedCopyableSCPCOA self, Vector3 scp) -> int"""
+        return _six_sicd.ScopedCopyableSCPCOA_look(self, scp)
+
+
+    def left(self):
+        """left(ScopedCopyableSCPCOA self) -> Vector3"""
+        return _six_sicd.ScopedCopyableSCPCOA_left(self)
+
+
+    def slantPlaneNormal(self, scp):
+        """slantPlaneNormal(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableSCPCOA_slantPlaneNormal(self, scp)
 
 ScopedCopyableSCPCOA_swigregister = _six_sicd.ScopedCopyableSCPCOA_swigregister
 ScopedCopyableSCPCOA_swigregister(ScopedCopyableSCPCOA)
@@ -4614,6 +5045,21 @@ class ScopedCopyablePFA(_object):
         """__ne__(ScopedCopyablePFA self, PFA rhs) -> bool"""
         return _six_sicd.ScopedCopyablePFA___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, position):
+        """fillDerivedFields(ScopedCopyablePFA self, Position position)"""
+        return _six_sicd.ScopedCopyablePFA_fillDerivedFields(self, position)
+
+
+    def fillDefaultFields(self, geoData, arg3, scpcoa):
+        """fillDefaultFields(ScopedCopyablePFA self, GeoData geoData, Grid arg3, SCPCOA scpcoa)"""
+        return _six_sicd.ScopedCopyablePFA_fillDefaultFields(self, geoData, arg3, scpcoa)
+
+
+    def validate(self, scpcoa, log):
+        """validate(ScopedCopyablePFA self, SCPCOA scpcoa, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyablePFA_validate(self, scpcoa, log)
+
 ScopedCopyablePFA_swigregister = _six_sicd.ScopedCopyablePFA_swigregister
 ScopedCopyablePFA_swigregister(ScopedCopyablePFA)
 
@@ -4713,6 +5159,21 @@ class ScopedCopyableRMA(_object):
         """__ne__(ScopedCopyableRMA self, RMA rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMA___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, geoData, position):
+        """fillDerivedFields(ScopedCopyableRMA self, GeoData geoData, Position position)"""
+        return _six_sicd.ScopedCopyableRMA_fillDerivedFields(self, geoData, position)
+
+
+    def fillDefaultFields(self, scpcoa, fc):
+        """fillDefaultFields(ScopedCopyableRMA self, SCPCOA scpcoa, double fc)"""
+        return _six_sicd.ScopedCopyableRMA_fillDefaultFields(self, scpcoa, fc)
+
+
+    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+        """validate(ScopedCopyableRMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableRMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
+
 ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
 ScopedCopyableRMA_swigregister(ScopedCopyableRMA)
 
@@ -4803,6 +5264,16 @@ class ScopedCopyableRgAzComp(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCopyableRgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.ScopedCopyableRgAzComp___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, geoData, grid, scpcoa, timeline):
+        """fillDerivedFields(ScopedCopyableRgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline)"""
+        return _six_sicd.ScopedCopyableRgAzComp_fillDerivedFields(self, geoData, grid, scpcoa, timeline)
+
+
+    def validate(self, geoData, grid, scpcoa, timeline, log):
+        """validate(ScopedCopyableRgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableRgAzComp_validate(self, geoData, grid, scpcoa, timeline, log)
 
 ScopedCopyableRgAzComp_swigregister = _six_sicd.ScopedCopyableRgAzComp_swigregister
 ScopedCopyableRgAzComp_swigregister(ScopedCopyableRgAzComp)
@@ -6282,6 +6753,24 @@ class ScopedCloneableDirectionParameters(_object):
         """__ne__(ScopedCloneableDirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableDirectionParameters___ne__(self, rhs)
 
+
+    def validate(self, *args):
+        """
+        validate(ScopedCloneableDirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
+        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
+        validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, logging::Logger & log) -> bool
+        """
+        return _six_sicd.ScopedCloneableDirectionParameters_validate(self, *args)
+
+
+    def fillDerivedFields(self, *args):
+        """
+        fillDerivedFields(ScopedCloneableDirectionParameters self, ImageData imageData)
+        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, double offset=0)
+        fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp)
+        """
+        return _six_sicd.ScopedCloneableDirectionParameters_fillDerivedFields(self, *args)
+
 ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirectionParameters_swigregister
 ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
 
@@ -6845,6 +7334,16 @@ class ScopedCloneableWaveformParameters(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCloneableWaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableWaveformParameters___ne__(self, rhs)
+
+
+    def fillDerivedFields(self):
+        """fillDerivedFields(ScopedCloneableWaveformParameters self)"""
+        return _six_sicd.ScopedCloneableWaveformParameters_fillDerivedFields(self)
+
+
+    def validate(self, refFrequencyIndex, log):
+        """validate(ScopedCloneableWaveformParameters self, int refFrequencyIndex, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCloneableWaveformParameters_validate(self, refFrequencyIndex, log)
 
 ScopedCloneableWaveformParameters_swigregister = _six_sicd.ScopedCloneableWaveformParameters_swigregister
 ScopedCloneableWaveformParameters_swigregister(ScopedCloneableWaveformParameters)
@@ -9214,6 +9713,46 @@ class ScopedCopyableRMAT(_object):
         """__ne__(ScopedCopyableRMAT self, RMAT rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMAT___ne__(self, rhs)
 
+
+    def fillDerivedFields(self, scp):
+        """fillDerivedFields(ScopedCopyableRMAT self, Vector3 scp)"""
+        return _six_sicd.ScopedCopyableRMAT_fillDerivedFields(self, scp)
+
+
+    def fillDefaultFields(self, scpcoa):
+        """fillDefaultFields(ScopedCopyableRMAT self, SCPCOA scpcoa)"""
+        return _six_sicd.ScopedCopyableRMAT_fillDefaultFields(self, scpcoa)
+
+
+    def validate(self, scp, log):
+        """validate(ScopedCopyableRMAT self, Vector3 scp, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableRMAT_validate(self, scp, log)
+
+
+    def look(self, scp):
+        """look(ScopedCopyableRMAT self, Vector3 scp) -> int"""
+        return _six_sicd.ScopedCopyableRMAT_look(self, scp)
+
+
+    def uYAT(self, scp):
+        """uYAT(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMAT_uYAT(self, scp)
+
+
+    def spn(self, scp):
+        """spn(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMAT_spn(self, scp)
+
+
+    def uXCT(self, scp):
+        """uXCT(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMAT_uXCT(self, scp)
+
+
+    def uLOS(self, scp):
+        """uLOS(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMAT_uLOS(self, scp)
+
 ScopedCopyableRMAT_swigregister = _six_sicd.ScopedCopyableRMAT_swigregister
 ScopedCopyableRMAT_swigregister(ScopedCopyableRMAT)
 
@@ -9308,6 +9847,41 @@ class ScopedCopyableRMCR(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCopyableRMCR self, RMCR rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMCR___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, scp):
+        """fillDerivedFields(ScopedCopyableRMCR self, Vector3 scp)"""
+        return _six_sicd.ScopedCopyableRMCR_fillDerivedFields(self, scp)
+
+
+    def fillDefaultFields(self, scpcoa):
+        """fillDefaultFields(ScopedCopyableRMCR self, SCPCOA scpcoa)"""
+        return _six_sicd.ScopedCopyableRMCR_fillDefaultFields(self, scpcoa)
+
+
+    def validate(self, scp, log):
+        """validate(ScopedCopyableRMCR self, Vector3 scp, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableRMCR_validate(self, scp, log)
+
+
+    def uXRG(self, scp):
+        """uXRG(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMCR_uXRG(self, scp)
+
+
+    def uYCR(self, scp):
+        """uYCR(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMCR_uYCR(self, scp)
+
+
+    def spn(self, scp):
+        """spn(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
+        return _six_sicd.ScopedCopyableRMCR_spn(self, scp)
+
+
+    def look(self, scp):
+        """look(ScopedCopyableRMCR self, Vector3 scp) -> int"""
+        return _six_sicd.ScopedCopyableRMCR_look(self, scp)
 
 ScopedCopyableRMCR_swigregister = _six_sicd.ScopedCopyableRMCR_swigregister
 ScopedCopyableRMCR_swigregister(ScopedCopyableRMCR)
@@ -9415,6 +9989,56 @@ class ScopedCopyableINCA(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCopyableINCA self, INCA rhs) -> bool"""
         return _six_sicd.ScopedCopyableINCA___ne__(self, rhs)
+
+
+    def fillDerivedFields(self, scp, position):
+        """fillDerivedFields(ScopedCopyableINCA self, Vector3 scp, Position position)"""
+        return _six_sicd.ScopedCopyableINCA_fillDerivedFields(self, scp, position)
+
+
+    def caPos(self, arpPoly):
+        """caPos(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_caPos(self, arpPoly)
+
+
+    def caVel(self, arpPoly):
+        """caVel(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_caVel(self, arpPoly)
+
+
+    def uRG(self, scp, arpPoly):
+        """uRG(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_uRG(self, scp, arpPoly)
+
+
+    def uAZ(self, scp, arpPoly):
+        """uAZ(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_uAZ(self, scp, arpPoly)
+
+
+    def spn(self, scp, arpPoly):
+        """spn(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_spn(self, scp, arpPoly)
+
+
+    def look(self, scp, arpPoly):
+        """look(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> int"""
+        return _six_sicd.ScopedCopyableINCA_look(self, scp, arpPoly)
+
+
+    def left(self, arpPoly):
+        """left(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
+        return _six_sicd.ScopedCopyableINCA_left(self, arpPoly)
+
+
+    def fillDefaultFields(self, fc):
+        """fillDefaultFields(ScopedCopyableINCA self, double fc)"""
+        return _six_sicd.ScopedCopyableINCA_fillDefaultFields(self, fc)
+
+
+    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+        """validate(ScopedCopyableINCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableINCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
 ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister
 ScopedCopyableINCA_swigregister(ScopedCopyableINCA)

@@ -115,7 +115,7 @@ scene::PlanarGridGeometry::gridToScene(const scene::Vector3& gridPt,
         // and update the lla object
         p += deltaP;
         lla = scene::Utilities::ecefToLatLon(p);
-        scene::ENUCoordinateTransform enu(lla);
+        enu = scene::ENUCoordinateTransform(lla);
         up = enu.getUnitVectorZ();
 
         if (deltaP.norm() < 0.00001)

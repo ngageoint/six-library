@@ -167,7 +167,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
     const DateTime dt(mContainer->getData(0)->getCreationTime());
     mRecord.getHeader().getFileDateTime().set(dt.format(NITF_DATE_FORMAT_21));
 
-    int startIndex = 0;
+    size_t startIndex = 0;
     for (size_t ii = 0; ii < mInfos.size(); ++ii)
     {
         NITFImageInfo& info = *mInfos[ii];
@@ -176,8 +176,9 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                 = info.getImageSegments();
 
         size_t numIS = imageSegments.size();
-        int nbpp = info.getNumBitsPerPixel();
-        int numCols = info.getData()->getNumCols();
+        nitf::Uint32 nbpp =
+                static_cast<nitf::Uint32>(info.getNumBitsPerPixel());
+        size_t numCols = info.getData()->getNumCols();
         std::string irep = info.getRepresentation();
         std::string imode = info.getMode();
         std::string pvtype = info.getPixelValueType();
@@ -295,7 +296,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
             // Set NBPP and sanity check if LUT is set appropriately
-            size_t legendNbpp;
+            nitf::Uint32 legendNbpp;
             switch (legend->mType)
             {
             case PixelType::MONO8I:
@@ -335,8 +336,9 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                     "LEG",
                     bandInfo);
 
-            subheader.setBlocking(legend->mDims.row, legend->mDims.col, 0, 0,
-                                  NITFImageInfo::getMode(legend->mType));
+            subheader.setBlocking(static_cast<nitf::Uint32>(legend->mDims.row),
+                                  static_cast<nitf::Uint32>(legend->mDims.col),
+                                  0, 0, NITFImageInfo::getMode(legend->mType));
 
             // While we never set IDLVL explicitly in here, NITRO will
             // kindly do that for us (incrementing it once for each segment).
@@ -437,7 +439,7 @@ void NITFWriteControl::setBlocking(const std::string& imode,
     {
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numRowsPerBlock = (segmentDims.row > 8192) ?
-                0 : segmentDims.row;
+                0 : static_cast<nitf::Uint32>(segmentDims.row);
     }
 
     nitf::Uint32 numColsPerBlock;
@@ -457,11 +459,12 @@ void NITFWriteControl::setBlocking(const std::string& imode,
     else
     {
         // Unblocked (per 2500C, if > 8192, should be set to 0)
-        numColsPerBlock = (segmentDims.col > 8192) ? 0 : segmentDims.col;
+        numColsPerBlock = (segmentDims.col > 8192) ? 0 :
+                static_cast<nitf::Uint32>(segmentDims.col);
     }
 
-    subheader.setBlocking(segmentDims.row,
-                          segmentDims.col,
+    subheader.setBlocking(static_cast<nitf::Uint32>(segmentDims.row),
+                          static_cast<nitf::Uint32>(segmentDims.col),
                           numRowsPerBlock,
                           numColsPerBlock,
                           imode);
@@ -626,7 +629,7 @@ std::string NITFWriteControl::getNITFClassification(const std::string& level)
     // return the correct identifier
     for (size_t ii = 0; ii < level.length(); ++ii)
     {
-        const char ch(::toupper(level[ii]));
+        const char ch(static_cast<char>(::toupper(level[ii])));
         switch (ch)
         {
         case 'U':
@@ -654,16 +657,18 @@ void NITFWriteControl::updateFileHeaderSecurity()
     std::string classOrder = "URCST";
     size_t foundLoc =
             classOrder.find(mRecord.getHeader().getClassification().toString());
-    int classIndex = foundLoc != std::string::npos ? foundLoc : -1;
+    int classIndex = foundLoc != std::string::npos ?
+            static_cast<int>(foundLoc) : -1;
 
     nitf::FileSecurity highest = mRecord.getHeader().getSecurityGroup();
 
-    for (int i = 0, size = mRecord.getImages().getSize(); i < size; i++)
+    for (size_t i = 0, size = mRecord.getImages().getSize(); i < size; i++)
     {
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(mRecord.getImages()[i]).getSubheader();
         foundLoc = classOrder.find(subheader.getImageSecurityClass().toString());
-        int idx = foundLoc != std::string::npos ? foundLoc : -1;
+        int idx = foundLoc != std::string::npos ?
+                static_cast<int>(foundLoc) : -1;
 
         if (idx > classIndex)
         {
@@ -673,12 +678,13 @@ void NITFWriteControl::updateFileHeaderSecurity()
         }
     }
 
-    for (int i = 0, size = mRecord.getDataExtensions().getSize(); i < size; i++)
+    for (size_t i = 0, size = mRecord.getDataExtensions().getSize(); i < size; i++)
     {
         nitf::DESubheader subheader =
                 nitf::DESegment(mRecord.getDataExtensions()[i]).getSubheader();
         foundLoc = classOrder.find(subheader.getSecurityClass().toString());
-        int idx = foundLoc != std::string::npos ? foundLoc : -1;
+        int idx = foundLoc != std::string::npos ?
+            static_cast<int>(foundLoc) : -1;
 
         if (idx > classIndex)
         {
@@ -773,8 +779,9 @@ void NITFWriteControl::save(
                 new StreamWriteHandler (segmentInfo, imageData[i], numCols,
                                         numChannels, pixelSize, doByteSwap));
 
-            mWriter.setImageWriteHandler(info.getStartIndex() + j,
-                                         writeHandler);
+            mWriter.setImageWriteHandler(
+                    static_cast<int>(info.getStartIndex() + j),
+                    writeHandler);
         }
     }
 
@@ -824,7 +831,8 @@ void NITFWriteControl::save(
         std::vector < NITFSegmentInfo > imageSegments
                 = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const size_t pixelSize = info.getData()->getNumBytesPerPixel();
+        const int pixelSize = static_cast<int>(
+                info.getData()->getNumBytesPerPixel());
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
@@ -852,8 +860,9 @@ void NITFWriteControl::save(
                 // We will use the ImageWriter provided by NITRO so that we can
                 // take advantage of the built-in compression capabilities
                 nitf::ImageWriter iWriter =
-                    mWriter.newImageWriter(info.getStartIndex() + jj,
-                                           mCompressionOptions);
+                    mWriter.newImageWriter(
+                            static_cast<int>(info.getStartIndex() + jj),
+                            mCompressionOptions);
                 iWriter.setWriteCaching(1);
 
                 nitf::ImageSource iSource;
@@ -881,8 +890,9 @@ void NITFWriteControl::save(
                                            segmentInfo.firstRow, numCols,
                                            numChannels, pixelSize, doByteSwap));
                 // Could set start index here
-                mWriter.setImageWriteHandler(info.getStartIndex() + jj,
-                                             writeHandler);
+                mWriter.setImageWriteHandler(
+                        static_cast<int>(info.getStartIndex() + jj),
+                        writeHandler);
             }
         }
 
@@ -910,7 +920,8 @@ void NITFWriteControl::save(
             iSource.addBand(memSource);
 
             nitf::ImageWriter iWriter =
-                mWriter.newImageWriter(info.getStartIndex() + numIS);
+                mWriter.newImageWriter(static_cast<int>(
+                        info.getStartIndex() + numIS));
             iWriter.setWriteCaching(1);
             iWriter.attachSource(iSource);
         }
@@ -933,7 +944,7 @@ void NITFWriteControl::addDataAndWrite(
         std::string& desStr(desStrs[ii]);
 
         desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        nitf::SegmentWriter deWriter = mWriter.newDEWriter(ii);
+        nitf::SegmentWriter deWriter = mWriter.newDEWriter(static_cast<int>(ii));
         nitf::SegmentMemorySource segSource(desStr.c_str(),
                                             desStr.length(),
                                             0,
@@ -942,7 +953,7 @@ void NITFWriteControl::addDataAndWrite(
         deWriter.attachSource(segSource);
     }
 
-    int deWriterIndex = mContainer->getNumData();
+    int deWriterIndex = static_cast<int>(mContainer->getNumData());
     for (size_t ii = 0; ii < mSegmentWriters.size(); ++ii)
     {
         mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);

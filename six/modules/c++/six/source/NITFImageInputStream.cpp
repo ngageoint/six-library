@@ -111,7 +111,7 @@ sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, sys::Size_T len)
 
 sys::SSize_T six::NITFImageInputStream::readRow()
 {
-    mWindow.setStartRow(mRowOffset++);
+    mWindow.setStartRow(static_cast<nitf::Uint32>(mRowOffset++));
     int padded;
     nitf::Uint8* buffer = mRowBuffer.get();
     mReader.read(mWindow, &buffer, &padded);

@@ -270,7 +270,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     nitf::List des = mRecord.getDataExtensions();
     nitf::ListIterator desIter = des.begin();
 
-    for (size_t i = 0, productNum = 0; desIter != des.end(); ++desIter, ++i)
+    for (int i = 0, productNum = 0; desIter != des.end(); ++desIter, ++i)
     {
         nitf::DESegment segment = (nitf::DESegment) *desIter;
         nitf::DESubheader subheader = segment.getSubheader();
@@ -639,8 +639,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     // Do segmenting here
     nitf::SubWindow sw;
-    sw.setStartCol(startCol);
-    sw.setNumCols(numColsReq);
+    sw.setStartCol(static_cast<nitf::Uint32>(startCol));
+    sw.setNumCols(static_cast<nitf::Uint32>(numColsReq));
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
@@ -668,7 +668,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     --i; // Need to get rid of the last one
     size_t totalRead = 0;
     size_t numRowsLeft = numRowsReq;
-    sw.setStartRow(startRow - startOff);
+    sw.setStartRow(static_cast<nitf::Uint32>(startRow - startOff));
 #if DEBUG_OFFSETS
     std::cout << "startRow: " << startRow
     << " startOff: " << startOff
@@ -676,8 +676,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " i: " << i << std::endl;
 #endif
 
-    int nbpp = thisImage->getData()->getNumBytesPerPixel();
-    int startIndex = thisImage->getStartIndex();
+    size_t nbpp = thisImage->getData()->getNumBytesPerPixel();
+    size_t startIndex = thisImage->getStartIndex();
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
@@ -685,9 +685,10 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                 std::min<size_t>(numRowsLeft, imageSegments[i].numRows
                         - sw.getStartRow());
 
-        sw.setNumRows(numRowsReqSeg);
-        nitf::ImageReader imageReader = mReader.newImageReader(startIndex + i,
-                                                               mCompressionOptions);
+        sw.setNumRows(static_cast<nitf::Uint32>(numRowsReqSeg));
+        nitf::ImageReader imageReader = mReader.newImageReader(
+                static_cast<int>(startIndex + i),
+                mCompressionOptions);
 
         nitf::Uint8* bufferPtr = buffer + totalRead;
 
@@ -746,7 +747,7 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
-    const types::RowCol<size_t> dims(
+    const types::RowCol<nitf::Uint32> dims(
             static_cast<nitf::Uint32>(subheader.getNumRows()),
             static_cast<nitf::Uint32>(subheader.getNumCols()));
 
@@ -765,7 +766,8 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
     {
         int padded;
         nitf::Uint8* bufferPtr = &legend.mImage[0];
-        nitf::ImageReader imageReader = mReader.newImageReader(imageSeg);
+        nitf::ImageReader imageReader = mReader.newImageReader(
+                static_cast<int>(imageSeg));
         imageReader.read(sw, &bufferPtr, &padded);
     }
 }

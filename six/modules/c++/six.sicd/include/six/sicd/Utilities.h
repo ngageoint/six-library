@@ -253,7 +253,25 @@ public:
     static Vector3 getGroundPlaneNormal(const ComplexData& data);
 
     /*
-     * Parses the XML in 'xmlStream' and converts it into a ComplexData object.
+     * Extracts a Poly1D in the dimention given by index
+     * \param poly The source polynomial
+     * \param index Number specifying dimension. 0-2 for X-Z
+     * \return Poly1D in specified dimension
+     */
+    static Poly1D nPoly(PolyXYZ poly, size_t index);
+
+    /*
+     * Determine if the vertices of a simple polygon are clockwise
+     * Throw an exception if vertices has less than three points
+     *
+     * \param vertices The vertices of what is assumed to be a simple polygon
+     * \param isUpPositive True if y value increased while going up the axis
+     * \return True if vertices are clockwise
+     */
+    static bool isClockwise(const std::vector<RowColInt>& vertices,
+                            bool isUpPositive=false);
+
+     /* Parses the XML in 'xmlStream' and converts it into a ComplexData object.
      * Throws if the underlying type is not complex.
      *
      * \param xmlStream Input stream containing XML

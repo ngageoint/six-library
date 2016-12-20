@@ -22,6 +22,7 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
+#include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -31,6 +32,7 @@ namespace six
 namespace sicd
 {
 
+class GeoData;
 /*!
  *  \struct ImageData
  *  \brief SICD ImageData parameters
@@ -91,6 +93,8 @@ struct ImageData
     {
         return !(*this == rhs);
     }
+
+    bool validate(const GeoData& geoData, logging::Logger& log) const;
 
 };
 }

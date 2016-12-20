@@ -26,13 +26,15 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "scene/ProjectionModel.h"
 #include <mem/ScopedCloneablePtr.h>
+#include <logging/Logger.h>
 
 namespace six
 {
 namespace sicd
 {
-
+struct ImageData;
 /*!
  *  \struct GeoInfo
  *  \brief (Optional) SICD GeoInfo parameters
@@ -72,7 +74,7 @@ public:
 
     /*!
      *  This could be a point if one, a line if 2, or a polygon if > 2
-     *  In other words, this simultaneously represents SICD's 
+     *  In other words, this simultaneously represents SICD's
      *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
      */
     std::vector<LatLon> geometryLatLon;
@@ -104,14 +106,14 @@ public:
     GeoData* clone();
 
     /*!
-     *  Identifies the earth model used for 
+     *  Identifies the earth model used for
      *  latitude, longitude and height parameters.  All
      *  height values are Height Above Ellipsoid (HAE)
      */
     EarthModelType earthModel;
 
     /*!
-     *  Scene Center Point in fulll image.  This is the
+     *  Scene Center Point in full image.  This is the
      *  precise location
      */
     SCP scp;
@@ -142,6 +144,14 @@ public:
     {
         return !(*this == rhs);
     }
+
+    //Doesn't currently do anything
+    void fillDerivedFields(const ImageData& imageData,
+            const scene::ProjectionModel& model);
+    bool validate(logging::Logger& log) const;
+
+private:
+    static const double ECF_THRESHOLD;
 };
 
 }

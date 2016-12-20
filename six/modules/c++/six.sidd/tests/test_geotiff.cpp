@@ -48,7 +48,7 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->productCreation->classification.classification = "U";
     derivedData->measurement.reset(
             new six::sidd::Measurement(six::ProjectionType::GEOGRAPHIC));
-    six::sidd::GeographicProjection* geographicProjection = 
+    six::sidd::GeographicProjection* geographicProjection =
             (six::sidd::GeographicProjection*)
             derivedData->measurement->projection.get();
     geographicProjection->timeCOAPoly = six::Poly2D(0, 0);
@@ -60,6 +60,14 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
     derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
+
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+                getCorner(ii).setLat(0);
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+                getCorner(ii).setLon(0);
+    }
 
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resolution.row = 0;
@@ -134,7 +142,7 @@ bool run()
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
