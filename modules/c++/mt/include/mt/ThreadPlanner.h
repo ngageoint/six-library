@@ -23,43 +23,72 @@
 #ifndef __MT_THREAD_PLANNER_H__
 #define __MT_THREAD_PLANNER_H__
 
-#include <algorithm>
+#include <stddef.h>
 
 namespace mt
 {
-    class ThreadPlanner
+/*!
+ * \class ThreadPlanner
+ * \brief Assists with dividing up work evenly between threads
+ */
+class ThreadPlanner
+{
+public:
+    /*!
+     * Constructor
+     *
+     * \param numElements The total number of elements of work to be divided
+     * among threads
+     * \param numThreads The number of threads that will be used for the work
+     */
+    ThreadPlanner(size_t numElements, size_t numThreads);
+
+    /*!
+     * \return The number of elements each thread will work on (this is true
+     * for the early threads.  If the work doesn't divide evenly, later
+     * threads may have fewer elements or, in the extreme, no work at all.)
+     */
+    size_t getNumElementsPerThread() const
     {
-    private:
-       size_t mNumElements;
-       size_t mNumThreads;
-       size_t mNumElementsPerThread;
-    public:
-        ThreadPlanner(size_t numElements, size_t numThreads) : 
-            mNumElements(numElements), mNumThreads(numThreads) 
-        {
-            mNumElementsPerThread = (mNumElements / mNumThreads) + (mNumElements % mNumThreads != 0);
-        }
+        return mNumElementsPerThread;
+    }
 
-        size_t getNumElementsPerThread() const
-        {
-            return mNumElementsPerThread;
-        }
+    /*!
+     * Provides the start element and number of elements that 0-based thread
+     * 'threadNum' should operate on
+     *
+     * \param threadNum The thread number
+     * \param startElement Provides the start element this thread should
+     * operate on
+     * \param numEementsThisThread Provides the number of elements of work
+     * this thread should operate on
+     *
+     * \return True if this thread has work to do, false otherwise.  Note that
+     * the way work is divided among threads, it's possible that the last
+     * thread will have no work at all.  This will occur for example with
+     * 100 elements and 11 threads - the first 10 threads will have 10
+     * elements of work and the last thread will have no work.  We could have
+     * instead given all threads 9 elements and one thread 10 elements but
+     * this would not have sped up the calculation since we'd still have to
+     * wait for one thread to operate on 10 elements.
+     */
+    bool getThreadInfo(size_t threadNum,
+                       size_t& startElement,
+                       size_t& numElementsThisThread) const;
 
-        bool getThreadInfo(size_t threadNum, size_t& startElement, size_t& numElementsThisThread) const
-        {
-            startElement = threadNum * mNumElementsPerThread;
-            if(startElement > mNumElements)
-            {
-                numElementsThisThread = 0;
-            }
-            else
-            {
-                size_t numElementsRemaining = mNumElements - startElement; 
-                numElementsThisThread = std::min<size_t>(mNumElementsPerThread, numElementsRemaining);
-            }
-            return (numElementsThisThread != 0);
-        }
-    };
+    /*!
+     * Provides the number of threads that will actually be used.  For example,
+     * with 100 elements and 11 threads, we will actually only use 10 threads.
+     *
+     * \return The number of threads that will be used
+     */
+    size_t getNumThreadsThatWillBeUsed() const;
+
+private:
+   size_t mNumElements;
+   size_t mNumThreads;
+   size_t mNumElementsPerThread;
+};
 }
 
 #endif
