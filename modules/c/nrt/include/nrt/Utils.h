@@ -181,8 +181,13 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * \param indexOne Index of first byte to be swapped
  * \param indexTwo Index of second byte to be swapped
  */
+ #ifdef WIN32
+NRTPRIV(void) __inline nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+        size_t indexTwo)
+#else
 NRTPRIV(void) inline nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
         size_t indexTwo)
+#endif		
 {
     nrt_Uint8 temp;
     temp = value[indexOne];
