@@ -37,10 +37,24 @@ import utils
 from runner import CppTestRunner
 
 
-def clean(files):
-    for pathname in files:
-        if os.path.exists(pathname):
-            os.remove(pathname)
+def runCsmTests():
+    nitfPathname = os.path.join(utils.findSixHome(), 'croppedNitfs')
+    sicdPathname = os.path.join(nitfPathname, 'SICD')
+    siddPathname = os.path.join(nitfPathname, 'SIDD')
+    testRunner = CppTestRunner(os.path.join(utils.installPath(), 'bin'))
+
+    if os.path.exists(sicdPathname):
+        for sicd in os.listdir(sicdPathname):
+            sicd = os.path.join(sicdPathname, sicd)
+            if not testRunner.run('test_sicd_csm', sicd):
+                return False
+
+    if os.path.exists(siddPathname):
+        for sidd in os.listdir(siddPathname):
+            sidd = os.path.join(siddPathname, sidd)
+            if not testRunner.run('test_sidd_csm', sidd):
+                return False
+    return True
 
 
 def run(sourceDir):
@@ -94,13 +108,9 @@ def run(sourceDir):
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
-    sampleTestDir = os.path.join(utils.installPath(), 'bin')
-
-    newFiles = utils.installVts()
 
     sicdTestRunner = CppTestRunner(sicdTestDir)
     siddTestRunner = CppTestRunner(siddTestDir)
-    sampleTestRunner = CppTestRunner(sampleTestDir)
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
@@ -110,21 +120,8 @@ def run(sourceDir):
         if not sicdTestRunner.run('test_streaming_write'):
             return False
 
-        for nitf in os.listdir(sicdDir):
-            nitf = os.path.join(sicdDir, nitf)
-            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
-                    'out.nitf'):
-                clean(newFiles)
-                return False
-
-        for nitf in os.listdir(siddDir):
-            nitf = os.path.join(siddDir, nitf)
-            if not sampleTestRunner.run('test_read_nitf_from_vts', nitf,
-                    'out.nitf'):
-                clean(newFiles)
-                return False
-
-        clean(newFiles)
+        if not runCsmTests():
+            return False
 
         if not (siddTestRunner.run('test_byte_swap') and
                 siddTestRunner.run('test_geotiff')):
