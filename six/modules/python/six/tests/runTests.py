@@ -38,6 +38,14 @@ from runner import CppTestRunner
 
 
 def runCsmTests():
+    pathKey = None
+    if platform.system() == 'Windows':
+        pathKey = 'PATH'
+    else:
+        pathKey = 'LD_LIBRARY_PATH'
+    os.environ[pathKey] = (os.environ[pathKey] + os.pathsep +
+            os.path.join(utils.installPath(), 'lib'))
+
     nitfPathname = os.path.join(utils.findSixHome(), 'croppedNitfs')
     sicdPathname = os.path.join(nitfPathname, 'SICD')
     siddPathname = os.path.join(nitfPathname, 'SIDD')
