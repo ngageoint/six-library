@@ -192,6 +192,7 @@ private:
         {
             std::cerr << "Converted image point > " << pixelTolerance <<
                     " away from scpPixel\n";
+            testPassed = false;
         }
         return testPassed;
     }
