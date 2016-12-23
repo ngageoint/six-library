@@ -53,7 +53,7 @@ public:
         mName(other.mName)
     {
     }
-    
+
     //!  Templated constructor, constructs from given value
     template<typename T>
     Parameter(T value)

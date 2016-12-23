@@ -22,10 +22,15 @@
 #ifndef __SIX_RMA_H__
 #define __SIX_RMA_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
+#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
@@ -48,7 +53,7 @@ struct RMAT
     double refTime;
 
     //! Platform reference position used to establish the reference
-    //  trajectory line.  
+    //  trajectory line.
     Vector3 refPos;
 
     //! Reference unit velocity vector used to establish the
@@ -82,15 +87,26 @@ struct RMAT
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp);
+    void fillDefaultFields(const SCPCOA& scpcoa);
+    bool validate(const Vector3& scp, logging::Logger& log);
+    int look(const Vector3& scp) const;
+    Vector3 uYAT(const Vector3& scp) const;
+    Vector3 spn(const Vector3& scp) const;
+    Vector3 uXCT(const Vector3& scp) const;
+    Vector3 uLOS(const Vector3& scp) const;
+private:
+    double derivedDcaRef(const Vector3& scp) const;
 };
 
 /*!
  *  \struct  RMCR
- *  \brief   Parameters for Range Migration with 
+ *  \brief   Parameters for Range Migration with
  *           Cross Range Motion Compensation
  *           Added in 1.0.0
  *
- *  Note: this is a repeat of parameters in RMAT but 
+ *  Note: this is a repeat of parameters in RMAT but
  *        we recreate them to avoid confusion
  */
 struct RMCR
@@ -114,7 +130,7 @@ struct RMCR
     //! Equality operator
     bool operator==(const RMCR& rhs) const
     {
-        return (refPos == rhs.refPos && refVel == rhs.refVel && 
+        return (refPos == rhs.refPos && refVel == rhs.refVel &&
             dopConeAngleRef == rhs.dopConeAngleRef);
     }
 
@@ -122,6 +138,16 @@ struct RMCR
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp);
+    void fillDefaultFields(const SCPCOA& scpcoa);
+    bool validate(const Vector3& scp, logging::Logger& log);
+    Vector3 uXRG(const Vector3& scp) const;
+    Vector3 uYCR(const Vector3& scp) const;
+    Vector3 spn(const Vector3& scp) const;
+    int look(const Vector3& scp) const;
+private:
+    double derivedDcaRef(const Vector3& scp) const;
 };
 
 /*!
@@ -163,6 +189,24 @@ struct INCA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Vector3& scp,
+            const Position& position);
+
+    Vector3 caPos(const PolyXYZ& arpPoly) const;
+    Vector3 caVel(const PolyXYZ& arpPoly) const;
+    Vector3 uRG(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 uAZ(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 spn(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    int look(const Vector3& scp, const PolyXYZ& arpPoly) const;
+    Vector3 left(const PolyXYZ& arpPoly) const;
+
+    void fillDefaultFields(double fc);
+    bool validate(const CollectionInformation& collectionInformation,
+            const Vector3& scp, const PolyXYZ& arpPoly,
+            double fc, logging::Logger& log) const;
+private:
+    double derivedRangeCa(const Vector3& scp, const PolyXYZ& arpPoly) const;
 };
 
 /*!
@@ -201,6 +245,13 @@ struct RMA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+            const Position& position);
+    void fillDefaultFields(const SCPCOA& scpcoa, double fc);
+    bool validate(const CollectionInformation& collectionInformation,
+            const Vector3& scp, const PolyXYZ& arpPoly,
+            double fc, logging::Logger& log) const;
 };
 
 }

@@ -1273,7 +1273,6 @@ XMLElem DerivedXMLParser::convertGeographicTargetToXML(
         XMLElem parent) const
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
-
     convertGeographicCoverageToXML(
             "GeographicCoverage",
             &geographicAndTarget->geographicCoverage,
@@ -1315,7 +1314,6 @@ XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
     // optional to unbounded
     common().addParameters("GeoregionIdentifier", geoCoverage->georegionIdentifiers,
                   geoCoverageXML);
-
     createFootprint("Footprint", "Vertex", geoCoverage->footprint,
                     geoCoverageXML);
 
@@ -1725,33 +1723,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
         common().createLatLon(cornerName,
                              corners.getCorner(corner),
                              footprint)->getAttributes().add(node);
-    }
 
-    return footprint;
-}
-
-XMLElem DerivedXMLParser::createFootprint(const std::string& name,
-                                          const std::string& cornerName,
-                                          const LatLonAltCorners& corners,
-                                          XMLElem parent) const
-{
-    XMLElem footprint = newElement(name, getDefaultURI(), parent);
-    xml::lite::AttributeNode node;
-    node.setQName("size");
-    node.setValue(str::toString(LatLonAltCorners::NUM_CORNERS));
-
-    footprint->getAttributes().add(node);
-
-    // Write the corners out in CW order
-    // The index attribute is 1-based
-    node.setQName("index");
-
-    for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
-    {
-        node.setValue(str::toString(corner + 1));
-        common().createLatLonAlt(cornerName,
-                                corners.getCorner(corner),
-                                footprint)->getAttributes().add(node);
     }
 
     return footprint;

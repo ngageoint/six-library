@@ -46,7 +46,7 @@ void validate(const xml::lite::Document* doc,
             }
         }
     }
-    catch (const except::Exception& ex)
+    catch (const except::Exception& )
     {
         // do nothing here
     }

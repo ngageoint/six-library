@@ -156,8 +156,9 @@ public:
                 byteSwap(input, real);
                 byteSwap(input + sizeof(InT), imag);
 
-                mOutput[outIdx] = std::complex<float>(real * scaleFactor,
-                                                      imag * scaleFactor);
+                mOutput[outIdx] = std::complex<float>(
+                        static_cast<float>(real * scaleFactor),
+                        static_cast<float>(imag * scaleFactor));
             }
         }
     }

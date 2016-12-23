@@ -27,6 +27,7 @@
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -42,10 +43,10 @@ struct TxStep
 {
     //!  Constructor
     TxStep();
-    
+
     //!  Destructor
     ~TxStep() {}
-  
+
     //!  Clone this object
     TxStep* clone() const;
 
@@ -123,6 +124,13 @@ struct WaveformParameters
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
+    bool validate(int refFrequencyIndex, logging::Logger& log) const;
+private:
+    static const double WF_TOL;
+    static const double WGT_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 /*!
@@ -178,7 +186,7 @@ struct AreaDirectionParameters
 {
     //!  Constructor
     AreaDirectionParameters();
-    
+
     //!  Clone (copy) params
     AreaDirectionParameters* clone() const;
 
@@ -273,12 +281,12 @@ struct Segment
      *  be 0-based or 1-based but does not necessarily have to be.
      */
     int endLine;
-    
+
     /*!
      *  SICD EndSample parameter.  Defines end sample in collection plane
      *  corresponding to the full image.  This is inclusive.  It will normally
      *  be 0-based or 1-based but does not necessarily have to be.
-     */    
+     */
     int endSample;
 
     /*!
@@ -309,7 +317,7 @@ struct AreaPlane
      *
      */
     AreaPlane();
-    
+
     /*!
      *  Make a deep copy of xDirection, yDirection, and any existing
      *  segments
@@ -394,7 +402,7 @@ struct Area
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.
-     *  
+     *
      */
     mem::ScopedCloneablePtr<AreaPlane> plane;
 
@@ -415,7 +423,7 @@ struct Area
  *
  *  Describes the radar collection information.  The SICD RefFreqIndex,
  *  called here refFrequencyIndex for API consistency is not initialized,
- *  since it is optional.  If required for profile, it must be manually 
+ *  since it is optional.  If required for profile, it must be manually
  *  populated by the application developer.
  *
  */
@@ -476,6 +484,14 @@ struct RadarCollection
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
+    bool validate(logging::Logger& log) const;
+private:
+    double waveformMin() const;
+    double waveformMax() const;
+    static const double WF_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 }

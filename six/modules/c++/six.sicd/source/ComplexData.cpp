@@ -96,8 +96,8 @@ types::RowCol<double>
 ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 {
     const types::RowCol<double> scpPixel(imageData->scpPixel);
-    const types::RowCol<double> aoiOffset(imageData->firstRow,
-                                          imageData->firstCol);
+    const types::RowCol<double> aoiOffset(static_cast<double>(imageData->firstRow),
+                                          static_cast<double>(imageData->firstCol));
 
     const types::RowCol<double> offset(scpPixel - aoiOffset);
 
@@ -140,6 +140,175 @@ bool ComplexData::equalTo(const Data& rhs) const
         return *this == *data;
     }
     return false;
+}
+
+double ComplexData::computeFc() const
+{
+    double fc(Init::undefined<double>());
+    if (radarCollection->refFrequencyIndex == 0)
+    {
+        fc = (imageFormation->txFrequencyProcMin +
+            imageFormation->txFrequencyProcMax) / 2;
+    }
+    return fc;
+}
+
+bool ComplexData::validate(logging::Logger& log) const
+{
+    // This function is a transcription of MATLAB file validate_sicd.m by Wade Schwartzkopf
+    // Reference numbers (e.g. 2.3) reference the corresponding sections of the MATLAB file
+    bool valid = grid->validate(*collectionInformation, *imageData, log);
+    valid = position->validate(log) && valid;
+    valid = scpcoa->validate(*geoData, *grid, *position, log) && valid;
+    valid = imageData->validate(*geoData, log) && valid;
+    valid = geoData->validate(log) && valid;
+    valid = radarCollection->validate(log) && valid;
+
+    double fc = computeFc();
+
+    std::ostringstream messageBuilder;
+    switch (imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::RGAZCOMP: // 2.12.1
+        if (rgAzComp.get())
+        {
+            valid = rgAzComp->validate(
+                    *geoData, *grid, *scpcoa, *timeline, log) && valid;
+            valid = grid->validate(
+                    *rgAzComp, *geoData, *scpcoa, fc, log) && valid;
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "RgAzComp specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        break;
+    case ImageFormationType::PFA:      // 2.12.2
+
+        if (pfa.get())
+        {
+            valid = pfa->validate(*scpcoa, log) && valid;
+            valid = grid->validate(*pfa, *radarCollection, fc, log) && valid;
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "PFA specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        break;
+    case ImageFormationType::RMA:      // 2.12.3.*
+        if (rma.get())
+        {
+            valid = rma->validate(*collectionInformation, geoData->scp.ecf,
+                    position->arpPoly, fc, log) && valid;
+            valid = grid->validate(*rma, geoData->scp.ecf, position->arpPoly,
+                    fc, log) && valid;
+        }
+        else
+        {
+            messageBuilder.str("");
+            messageBuilder <<
+                "RMA specified in imageFormation.imageFormationAlgorithm,"
+                << " but member pointer is NULL.";
+            log.error(messageBuilder.str());
+            valid = false;
+        }
+        break;
+    default:
+        //2.12.3 (This is not a typo)
+
+        messageBuilder << "Image formation not fully defined." << std::endl
+            << "SICD.ImageFormation.ImageFormAlgo = OTHER or is not set.";
+        log.warn(messageBuilder.str());
+        valid = false;
+        break;
+    }
+
+    return valid;
+}
+
+void ComplexData::fillDerivedFields(bool includeDefault)
+{
+    grid->fillDerivedFields(*collectionInformation, *imageData, *scpcoa);
+    position->fillDerivedFields(*scpcoa);
+    radarCollection->fillDerivedFields();
+
+    // SCPCOA only needs geoData for the SCP, which is not derivable from
+    // SCPCOA, so it's safe to do it backwards like this
+    scpcoa->fillDerivedFields(*geoData, *grid, *position);
+    const scene::PlaneProjectionModel model(
+            scpcoa->slantPlaneNormal(geoData->scp.ecf),
+            grid->row->unitVector,
+            grid->col->unitVector,
+            geoData->scp.ecf,
+            position->arpPoly,
+            grid->timeCOAPoly,
+            scpcoa->look(geoData->scp.ecf));
+
+    geoData->fillDerivedFields(*imageData, model);
+
+    double fc = computeFc();
+
+    switch (imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::RGAZCOMP:
+        if (rgAzComp.get())
+        {
+            rgAzComp->fillDerivedFields(*geoData, *grid, *scpcoa, *timeline);
+            grid->fillDerivedFields(*rgAzComp, *geoData, *scpcoa, fc);
+        }
+        break;
+    case ImageFormationType::PFA:
+        if (pfa.get())
+        {
+            pfa->fillDerivedFields(*position);
+        }
+        break;
+    case ImageFormationType::RMA:
+        if (rma.get())
+        {
+            rma->fillDerivedFields(*geoData, *position);
+            grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
+        }
+        break;
+    }
+
+    if (includeDefault)
+    {
+        fillDefaultFields();
+    }
+}
+
+void ComplexData::fillDefaultFields()
+{
+    imageFormation->fillDefaultFields(*radarCollection);
+    double fc = computeFc();
+
+    switch (imageFormation->imageFormationAlgorithm)
+    {
+    case ImageFormationType::PFA:
+        if (pfa.get())
+        {
+            pfa->fillDefaultFields(*geoData, *grid, *scpcoa);
+            grid->fillDefaultFields(*pfa, fc);
+        }
+        break;
+    case ImageFormationType::RMA:
+        if (rma.get())
+        {
+            rma->fillDefaultFields(*scpcoa, fc);
+            grid->fillDefaultFields(*rma, fc);
+        }
+        break;
+    }
 }
 }
 }

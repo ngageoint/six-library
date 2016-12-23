@@ -14,6 +14,7 @@
 #endif
 
 #define SWIG_PYTHON_DIRECTOR_NO_VTABLE
+#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
 
 
 #ifdef __cplusplus
@@ -3618,6 +3619,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ThreadPlanner_getNumThreadsThatWillBeUsed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mt::ThreadPlanner *arg1 = (mt::ThreadPlanner *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ThreadPlanner_getNumThreadsThatWillBeUsed",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mt__ThreadPlanner, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ThreadPlanner_getNumThreadsThatWillBeUsed" "', argument " "1"" of type '" "mt::ThreadPlanner const *""'"); 
+  }
+  arg1 = reinterpret_cast< mt::ThreadPlanner * >(argp1);
+  {
+    try
+    {
+      result = ((mt::ThreadPlanner const *)arg1)->getNumThreadsThatWillBeUsed();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ThreadPlanner_getThreadInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mt::ThreadPlanner *arg1 = (mt::ThreadPlanner *) 0 ;
@@ -3950,6 +4003,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Runnable_swigregister", Runnable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ThreadPlanner", _wrap_new_ThreadPlanner, METH_VARARGS, (char *)"new_ThreadPlanner(size_t numElements, size_t numThreads) -> ThreadPlanner"},
 	 { (char *)"ThreadPlanner_getNumElementsPerThread", _wrap_ThreadPlanner_getNumElementsPerThread, METH_VARARGS, (char *)"ThreadPlanner_getNumElementsPerThread(ThreadPlanner self) -> size_t"},
+	 { (char *)"ThreadPlanner_getNumThreadsThatWillBeUsed", _wrap_ThreadPlanner_getNumThreadsThatWillBeUsed, METH_VARARGS, (char *)"ThreadPlanner_getNumThreadsThatWillBeUsed(ThreadPlanner self) -> size_t"},
 	 { (char *)"ThreadPlanner_getThreadInfo", _wrap_ThreadPlanner_getThreadInfo, METH_VARARGS, (char *)"ThreadPlanner_getThreadInfo(ThreadPlanner self, size_t threadNum) -> PyObject *"},
 	 { (char *)"delete_ThreadPlanner", _wrap_delete_ThreadPlanner, METH_VARARGS, (char *)"delete_ThreadPlanner(ThreadPlanner self)"},
 	 { (char *)"ThreadPlanner_swigregister", ThreadPlanner_swigregister, METH_VARARGS, NULL},

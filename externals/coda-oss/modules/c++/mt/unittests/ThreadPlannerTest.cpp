@@ -20,26 +20,21 @@
  *
  */
 
-#include "import/sys.h"
-#include "import/mt.h"
+#include <mt/ThreadPlanner.h>
 #include "TestCase.h"
 
-using namespace sys;
-using namespace mt;
-using namespace std;
-
-TEST_CASE(ThreadPlannerTest)
+namespace
 {
-    size_t numThreads(16);
-    ThreadPlanner planner(500, numThreads);
-    std::cout << "Num Elements Per Thread: " << planner.getNumElementsPerThread() << std::endl;
+TEST_CASE(GetThreadInfoTest)
+{
+    const size_t numThreads(16);
+    const mt::ThreadPlanner planner(500, numThreads);
     size_t startElement(0);
     size_t numElements(0);
-    for(size_t i=0; i < numThreads; ++i)
+    for (size_t ii = 0; ii < numThreads; ++ii)
     {
-        planner.getThreadInfo(i, startElement, numElements);
-        std::cout << "Thread: " << i << " Start: " << startElement << " Num: " << numElements << std::endl;
-        if(i == numThreads-1)
+        planner.getThreadInfo(ii, startElement, numElements);
+        if (ii == numThreads - 1)
         {
             TEST_ASSERT_EQ(numElements, 20)
         }
@@ -50,9 +45,46 @@ TEST_CASE(ThreadPlannerTest)
     }
 }
 
+TEST_CASE(GetNumThreadsThatWillBeUsedTest)
+{
+    static const size_t NUM_ELEMENTS = 100;
+
+    // This divides evenly
+    const mt::ThreadPlanner planner1(NUM_ELEMENTS, 10);
+    TEST_ASSERT_EQ(planner1.getNumThreadsThatWillBeUsed(), 10);
+
+    // This doesn't divide evenly but we still need all the threads
+    const mt::ThreadPlanner planner2(NUM_ELEMENTS, 9);
+    TEST_ASSERT_EQ(planner2.getNumThreadsThatWillBeUsed(), 9);
+
+    // This doesn't divide evenly - we only need 10 threads
+    const mt::ThreadPlanner planner3(NUM_ELEMENTS, 11);
+    TEST_ASSERT_EQ(planner3.getNumThreadsThatWillBeUsed(), 10);
+
+    // Have one less thread than the number of elements - at least one thread
+    // is going to need two elements, so we might as well just use 50 threads
+    // and give them all two elements
+    const mt::ThreadPlanner planner4(NUM_ELEMENTS, 99);
+    TEST_ASSERT_EQ(planner4.getNumThreadsThatWillBeUsed(), 50);
+
+    // Have as many elements as threads - one element per thread
+    const mt::ThreadPlanner planner5(NUM_ELEMENTS, 100);
+    TEST_ASSERT_EQ(planner5.getNumThreadsThatWillBeUsed(), 100);
+
+    // Have more elements than threads - only the first NUM_ELEMENTS threads
+    // are needed
+    const mt::ThreadPlanner planner6(NUM_ELEMENTS, 101);
+    TEST_ASSERT_EQ(planner6.getNumThreadsThatWillBeUsed(), 100);
+
+    const mt::ThreadPlanner planner7(NUM_ELEMENTS, 9999);
+    TEST_ASSERT_EQ(planner7.getNumThreadsThatWillBeUsed(), 100);
+}
+}
+
 int main(int, char**)
 {
-    TEST_CHECK(ThreadPlannerTest);
+    TEST_CHECK(GetThreadInfoTest);
+    TEST_CHECK(GetNumThreadsThatWillBeUsedTest);
 
     return 0;
 }

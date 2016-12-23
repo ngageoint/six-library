@@ -20,6 +20,7 @@
  *
  */
 #include "scene/LLAToECEFTransform.h"
+#include <math/Utilities.h>
 
 scene::LLAToECEFTransform::LLAToECEFTransform()
  : CoordinateTransform()
@@ -41,9 +42,9 @@ scene::LLAToECEFTransform* scene::LLAToECEFTransform::clone() const
 scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
 {
     Vector3 ecef;
-    
+
     LatLonAlt mylla = lla;
-    
+
     if (std::abs(mylla.getLatRadians()) > M_PI/2
 	|| std::abs(mylla.getLonRadians()) > M_PI)
     {
@@ -56,56 +57,56 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
 	str << lla.getLonRadians();
 	str << ", alt=";
 	str << lla.getAlt();
-	
+
 	throw except::InvalidFormatException(str.str());
     }
-    
+
     //do conversion here; store result in ecef struct
-    
+
     double r = computeRadius(mylla);
     double flatLat = computeLatitude(mylla.getLatRadians());
-    
+
     double coslat = cos(mylla.getLatRadians());
     double coslon = cos(mylla.getLonRadians());
     double cosflatlat = cos(flatLat);
     double sinlat = sin(mylla.getLatRadians());
     double sinlon = sin(mylla.getLonRadians());
     double sinflatlat = sin(flatLat);
-    
-    
+
+
     ecef[0] = (r * cosflatlat * coslon) + (mylla.getAlt() * coslat * coslon);
     ecef[1] = (r * cosflatlat * sinlon) + (mylla.getAlt() * coslat * sinlon);
     ecef[2] = (r * sinflatlat) + (mylla.getAlt() * sinlat);
-    
+
     return ecef;
 }
 
 double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
 {
     double f = model->calculateFlattening();
-    
+
     double flatLat = computeLatitude(lla.getLatRadians());
-    
-    double denominator = (1.0 / pow((1.0 - f), 2)) - 1.0;
-    denominator *= pow(sin(flatLat), 2);
+
+    double denominator = (1.0 / math::square(1.0 - f)) - 1.0;
+    denominator *= math::square(sin(flatLat));
     denominator += 1.0;
-    
+
     double flatRadius = model->getEquatorialRadius();
-    flatRadius = pow(flatRadius, 2);
+    flatRadius = math::square(flatRadius);
     flatRadius /= denominator;
     flatRadius = sqrt(flatRadius);
-    
+
     return flatRadius;
 }
 
 double scene::LLAToECEFTransform::computeLatitude(const double lat)
 {
     double f = model->calculateFlattening();
-    
-    double flatLat = pow((1.0 - f), 2);
+
+    double flatLat = math::square((1.0 - f));
     flatLat *= tan(lat);
     flatLat = atan(flatLat);
-    
+
     return flatLat;
 }
 
