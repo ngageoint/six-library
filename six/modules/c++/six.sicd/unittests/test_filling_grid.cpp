@@ -265,8 +265,8 @@ TEST_CASE(DefaultFromRMAT)
 
     grid.fillDefaultFields(rma, 950);
 
-    TEST_ASSERT_EQ(grid.imagePlane, six::ComplexImagePlaneType::SLANT);
-    TEST_ASSERT_EQ(grid.type, six::ComplexImageGridType::XCTYAT);
+    TEST_ASSERT_EQ(grid.imagePlane.toString(), "SLANT");
+    TEST_ASSERT_EQ(grid.type.toString(), "XCTYAT");
     TEST_ASSERT_ALMOST_EQ(grid.row->kCenter, 5.52368502e-7);
     TEST_ASSERT_ALMOST_EQ(grid.col->kCenter, 6.31360087e-6);
 }
@@ -280,8 +280,8 @@ TEST_CASE(DefaultFromRMCR)
 
     grid.fillDefaultFields(rma, 950);
 
-    TEST_ASSERT_EQ(grid.imagePlane, six::ComplexImagePlaneType::SLANT);
-    TEST_ASSERT_EQ(grid.type, six::ComplexImageGridType::XRGYCR);
+    TEST_ASSERT_EQ(grid.imagePlane.toString(), "SLANT");
+    TEST_ASSERT_EQ(grid.type.toString(), "XRGYCR");
     TEST_ASSERT_ALMOST_EQ(grid.row->kCenter, 6.33771780e-6);
     TEST_ASSERT_ALMOST_EQ(grid.col->kCenter, 0);
 }
@@ -297,7 +297,7 @@ TEST_CASE(DefaultFromPFA)
 
     grid.fillDefaultFields(pfa, fc);
 
-    TEST_ASSERT_EQ(grid.type, six::ComplexImageGridType::RGAZIM);
+    TEST_ASSERT_EQ(grid.type.toString(), "RGAZIM");
     TEST_ASSERT_ALMOST_EQ(grid.row->kCenter, 1160);
     TEST_ASSERT_ALMOST_EQ(grid.col->kCenter, 0);
 
