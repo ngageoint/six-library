@@ -30,7 +30,7 @@ from itertools import product
 
 import utils
 
-    
+
 def checkArgs(version, alg, imageType):
     if imageType != '' and alg != 'RMA':
         return False
@@ -45,14 +45,14 @@ def createNITFs(version, alg, imageType, home):
     imp.load_source('test_create_sicd_xml', os.path.join(home, 'six',
 	    	'modules', 'python', 'six.sicd', 'tests',
                 'test_create_sicd_xml.py'))
-    
+
     from test_create_sicd_xml import initData, writeNITF
     if not checkArgs(version, alg, imageType):
-        return 
+        return
 
     outputName = "sicd_{0}({1}){2}".format(version, alg, imageType)
     print('Creating file {}.nitf'.format(outputName))
-    
+
     cmplx = initData(includeNITF=True, version=version, alg=alg,
                      imageType=imageType)
     writeNITF(os.path.join(home, 'regression_files', 'six.sicd', outputName),
@@ -71,4 +71,4 @@ def run():
         if args[1] != 'RMA':
             args = (args[0], args[1], '')
         createNITFs(args[0], args[1], args[2], home)
- 
+

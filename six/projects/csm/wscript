@@ -64,6 +64,17 @@ def build(bld):
         modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']]
     bld.plugin(**modArgs)
 
+    bld.program_helper(module_deps='six.sicd',
+                           source='tests/test_sicd_csm.cpp',
+                           use='CSMAPI',
+                           name='test_sicd_csm')
+
+    bld.program_helper(module_deps='scene six.sidd',
+                           source='tests/test_sidd_csm.cpp',
+                           use='CSMAPI',
+                           name='test_sidd_csm')
+
+
     # TODO: It seems like instead of this, I should be able to set
     #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the name
     #       of the target.  This works fine when building, but something about
