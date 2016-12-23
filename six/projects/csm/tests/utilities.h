@@ -21,7 +21,11 @@
  */
 
 #include <six/Utilities.h>
+#include <NitfIsd.h>
 
+/**
+ * Write FileSecurity as string so CSM can use it
+ */
 std::string toString(nitf::FileSecurity security)
 {
     const std::string str = security.getClassificationSystem().toString() +
@@ -43,6 +47,9 @@ std::string toString(nitf::FileSecurity security)
     return str;
 }
 
+/**
+ * Write a DESubheader as a string so CSM can use it
+ */
 std::string toString(nitf::DESubheader subheader)
 {
     const nitf::Uint32 subheaderFieldsLen(subheader.getSubheaderFieldsLength());
@@ -69,6 +76,96 @@ std::string toString(nitf::DESubheader subheader)
     return ostr.str();
 }
 
+/**
+ * Find DLL required to run CSM
+ * \param installPathname Directory where SIX is installed
+ * \return path to CSM DLL
+ */
+std::string findDllPathname(const std::string& installPathname)
+{
+    const std::string csmPluginPathname =
+            sys::Path(installPathname).join("share").join("CSM").join("plugins");
 
+    const std::vector<std::string> csmPluginContents =
+            sys::Path::list(csmPluginPathname);
 
+    // Get rid of contents like '.' and '..'
+    std::vector<std::string> csmPlugins;
+    for (size_t ii = 0; ii < csmPluginContents.size(); ++ii)
+    {
+        const std::string pathname = sys::Path::joinPaths(csmPluginPathname,
+                csmPluginContents[ii]);
+        if (sys::Path(pathname).isFile())
+        {
+            csmPlugins.push_back(pathname);
+        }
+    }
+
+    if (csmPlugins.size() != 1)
+    {
+        throw except::Exception(Ctxt("Expected exactly one plugin in "
+                + csmPluginPathname));
+    }
+
+    return csmPlugins[0];
+}
+
+/**
+ * Construct Nitf21ISD with DES
+ * \param pathname Path to NITF
+ * \param loadedReadControl NITFReadControl that has already been loaded
+ * \param data SICD/SIDD metadata
+ * \param registry XMLControlRegistry set up for either Complex or Derived data
+ *
+ * \return A Nitf21ISD object
+ */
+std::auto_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
+        const six::NITFReadControl& loadedReadControl, const six::Data* data,
+        const six::XMLControlRegistry& registry)
+{
+    std::auto_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
+    csm::Des des;
+
+    // NITRO parsed the subheader into a nice structure - need to grab all
+    // the fields and jam them back into a string like CSM wants
+    nitf::DESegment segment = static_cast<nitf::DESegment>(
+           loadedReadControl.getRecord().getDataExtensions().
+           getFirst().getData());
+
+    des.setSubHeader(toString(segment.getSubheader()));
+
+    // The DES's data is just the XML string
+    des.setData(six::toXMLString(data, &registry));
+    nitfIsd->addFileDes(des);
+
+    return nitfIsd;
+}
+
+/**
+ * Return the absolute value of the difference between each element of a
+ * Vector3
+ */
+six::Vector3 absoluteDifference(const six::Vector3& lhs, const six::Vector3& rhs)
+{
+    six::Vector3 difference = lhs - rhs;
+    for (size_t ii = 0; ii < 3; ++ii)
+    {
+        difference[ii] = std::abs(difference[ii]);
+    }
+
+    return difference;
+}
+
+/**
+ * Return the absolute value of the difference between each element of a
+ * RowColDouble
+ */
+six::RowColDouble absoluteDifference(const six::RowColDouble& lhs,
+        const six::RowColDouble& rhs)
+{
+    six::RowColDouble difference = lhs - rhs;
+    difference.row = std::abs(difference.row);
+    difference.col = std::abs(difference.col);
+    return difference;
+}
 

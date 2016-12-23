@@ -62,7 +62,6 @@ public:
         mem::SharedPtr<six::Container> container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
                 container->getData(0)->clone()));
-
     }
 
     bool testFileISD()
@@ -72,22 +71,9 @@ public:
 
     bool testNitfISD()
     {
-        csm::Nitf21Isd nitfIsd(mSiddPathname);
-
-        csm::Des des;
-
-        // NITRO parsed the subheader into a nice structure - need to grab all
-        // the fields and jam them back into a string like CSM wants
-        nitf::DESegment segment = static_cast<nitf::DESegment>(
-                mReader.getRecord().getDataExtensions().getFirst().getData());
-        des.setSubHeader(toString(segment.getSubheader()));
-
-        // The DES's data is just the SIDD XML string
-        des.setData(six::toXMLString(mDerivedData.get(), &mXmlRegistry));
-
-        nitfIsd.addFileDes(des);
-
-        return testISD(nitfIsd);
+        std::auto_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
+                mReader, mDerivedData.get(), mXmlRegistry);
+        return testISD(*nitfIsd);
     }
 
 private:
@@ -162,21 +148,14 @@ private:
             // Find difference between converted and given scpPixel
             six::RowColDouble convertedImagePoint =
                     groundToImage(*model, scp, offsets[ii]);
-
-            six::RowColDouble imagePointDifference =
-                    convertedImagePoint - scpPixel;
-            imagePointDifference.row = std::abs(imagePointDifference.row);
-            imagePointDifference.col = std::abs(imagePointDifference.col);
+            six::RowColDouble imagePointDifference = absoluteDifference(
+                    convertedImagePoint, scpPixel);
 
             // Find difference between converted and given SCP
             scene::Vector3 convertedGroundPoint =
                     imageToGround(*model, scpPixel, height, offsets[ii]);
-            scene::Vector3 groundPointDifference =
-                    convertedGroundPoint - scp;
-            for (size_t jj = 0; jj < 3; ++jj)
-            {
-                groundPointDifference[jj] = std::abs(groundPointDifference[jj]);
-            }
+            scene::Vector3 groundPointDifference = absoluteDifference(
+                    convertedGroundPoint, scp);
 
             // Just need to check that the greatest difference is
             // under our tolerance
@@ -227,27 +206,6 @@ private:
     six::NITFReadControl mReader;
     std::auto_ptr<six::sidd::DerivedData> mDerivedData;
 };
-
-std::string findDllPathname(const std::string& installPathname)
-{
-    const std::string csmPluginPathname =
-            sys::Path(installPathname).join("share").join("CSM").join("plugins");
-    const std::vector<std::string> csmPlugins =
-            sys::Path::list(csmPluginPathname);
-
-    // TODO: If multiple plugins, which is correct?
-    for (size_t ii = 0; ii < csmPlugins.size(); ++ii)
-    {
-        const std::string pathname = sys::Path::joinPaths(csmPluginPathname,
-                csmPlugins[ii]);
-        if (sys::Path(pathname).isFile())
-        {
-            return pathname;
-        }
-    }
-
-    throw except::Exception(Ctxt("Could not find CSM plugin."));
-}
 
 const char Test::MODEL_NAME[] = "SIDD_SENSOR_MODEL";
 }
