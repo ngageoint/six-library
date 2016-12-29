@@ -359,19 +359,28 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
 }
 
 std::auto_ptr<ComplexData> Utilities::getComplexData(
-        const std::string& sicdPathname,
+        const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<
-                                   six::sicd::ComplexXMLControl>());
+    if (str::endsWith(pathname, "xml"))
+    {
+        logging::Logger log;
+        return parseDataFromFile(pathname, schemaPaths, log);
+    }
 
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(sicdPathname, schemaPaths);
+    else
+    {
+        six::XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator(six::DataType::COMPLEX,
+                new six::XMLControlCreatorT<
+                        six::sicd::ComplexXMLControl>());
 
-    return getComplexData(reader);
+        six::NITFReadControl reader;
+        reader.setXMLControlRegistry(&xmlRegistry);
+        reader.load(pathname, schemaPaths);
+
+        return getComplexData(reader);
+    }
 }
 
 void Utilities::getWidebandData(NITFReadControl& reader,

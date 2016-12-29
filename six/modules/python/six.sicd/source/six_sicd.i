@@ -285,6 +285,8 @@ void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>&
 %pythoncode %{
 import numpy as np
 from pysix.six_base import VectorString
+from coda.coda_io import FileOutputStream
+from coda.xml_lite import *
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
@@ -306,6 +308,19 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
     getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
+
+def writeXML(complexData, pathname):
+    schemaPaths = VectorString()
+    schemaPaths.push_back( os.environ['SIX_SCHEMA_PATH'] )
+    xmlControl = ComplexXMLControl()
+    outputStream = FileOutputStream(pathname)
+    try:
+        xml = xmlControl.toXML(complexData, schemaPaths)
+        root = xml.getRootElement()
+        root.prettyPrint(outputStream)
+    finally:
+        outputStream.close()
+
 def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])

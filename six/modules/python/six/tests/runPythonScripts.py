@@ -43,7 +43,8 @@ def run():
         sicdRunner.run('test_read_sicd_xml.py', sampleNITF) and
         sicdRunner.run('test_six_sicd.py', sampleNITF) and
         sicdRunner.run('test_create_sicd_xml.py', '-v', '1.2.0') and
-        sicdRunner.run('sicd_to_sio.py', sampleNITF, schemaPath))
+        sicdRunner.run('sicd_to_sio.py', sampleNITF, schemaPath) and
+        sicdRunner.run('test_read_complex_data.py', sampleNITF))
 
     # SIX tests
     testsDir = os.path.join(utils.findSixHome(), 'six',

@@ -790,21 +790,6 @@ def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
 
     return cmplx
 
-def writeXML(name, cmplxData):
-    schemaPaths = VectorString()
-    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
-    xml_ctrl = ComplexXMLControl()
-    pathName = '{0}.xml'.format(name)
-    fos = FileOutputStream(pathName)
-    try:
-        out_doc = xml_ctrl.toXML(cmplxData, schemaPaths)
-        root = out_doc.getRootElement()
-        root.prettyPrint(fos)
-    except RuntimeError:
-        pass
-    finally:
-        fos.close()
-
 def writeNITF(pathName, cmplxData):
     schemaPaths = VectorString()
     schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
@@ -829,7 +814,7 @@ def readXML(pathNameBase):
 
 def doRoundTrip(cmplx, includeNITF, outputFilename):
 
-    writeXML(outputFilename, cmplx)
+    writeXML(cmplx, outputFilename)
     if includeNITF:
         writeNITF(outputFilename, cmplx)
 
@@ -844,7 +829,7 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
         cmplxFromNITF = readFromNITF(outputFilename)
     # And then write it out one more time #
     newPathnameBase = '{0}_rt'.format(outputFilename)
-    writeXML(newPathnameBase, cmplxReadBackIn)
+    writeXML(cmplxReadBackIn, newPathnameBase)
     if includeNITF:
         writeNITF(newPathnameBase, cmplxReadBackIn)
 
