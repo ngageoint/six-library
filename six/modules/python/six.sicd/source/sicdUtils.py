@@ -3,7 +3,7 @@
  * This file is part of six.sicd-python
  * =========================================================================
  *
- * (C) Copyright 2004 - 2015, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * six.sicd-python is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -38,5 +38,4 @@ def writeXML(complexData, pathname):
         root.prettyPrint(outputStream)
     finally:
         outputStream.close()
-
 
