@@ -27,6 +27,7 @@ import sys
 import filecmp
 
 from pysix.scene import *
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -790,17 +791,18 @@ def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
 
     return cmplx
 
-def writeNITF(pathName, cmplxData):
+
+def writeNITF(pathname, cmplxData):
     schemaPaths = VectorString()
     schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     imageBuffer = np.array([[1. + 2.j, 7.j], [8., 0.]])
-    writeAsNITF('{0}.nitf'.format(pathName), schemaPaths,
-            cmplxData, imageBuffer)
+    writeAsNITF(pathname, schemaPaths, cmplxData, imageBuffer)
 
-def readXML(pathNameBase):
+
+def readXML(pathname):
     schemaPaths = VectorString()
     schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
-    fis = FileInputStream('{0}.xml'.format(pathNameBase))
+    fis = FileInputStream(pathname)
     xmlparser = MinidomParser()
     xmlparser.preserveCharacterData(True)
     xmlparser.parse(fis)
@@ -812,11 +814,14 @@ def readXML(pathNameBase):
     return cmplxReadBackIn
 
 
-def doRoundTrip(cmplx, includeNITF, outputFilename):
+def doRoundTrip(cmplx, includeNITF, outputPathnameBase):
 
-    writeXML(cmplx, outputFilename)
+    xmlPathname = outputPathnameBase + '.xml'
+    nitfPathname = outputPathnameBase + '.nitf'
+
+    writeXML(cmplx, xmlPathname)
     if includeNITF:
-        writeNITF(outputFilename, cmplx)
+        writeNITF(nitfPathname, cmplx)
 
     # If we made it to here, all the Python bindings must be present and
     # what we wrote out must have passed schema validation
@@ -824,26 +829,30 @@ def doRoundTrip(cmplx, includeNITF, outputFilename):
     # get written out though
 
     ### Now read it back in again ###
-    cmplxReadBackIn = readXML(outputFilename)
+    cmplxReadBackIn = readXML(xmlPathname)
     if includeNITF:
-        cmplxFromNITF = readFromNITF(outputFilename)
+        cmplxFromNITF = readFromNITF(nitfPathname)
+
     # And then write it out one more time #
-    newPathnameBase = '{0}_rt'.format(outputFilename)
-    writeXML(cmplxReadBackIn, newPathnameBase)
+    roundTrippedPathnameBase = '{0}_rt'.format(outputPathnameBase)
+    roundTrippedXmlPathname = roundTrippedPathnameBase + '.xml'
+    roundTrippedNitfPathname = roundTrippedPathnameBase + '.nitf'
+
+    writeXML(cmplxReadBackIn, roundTrippedXmlPathname)
     if includeNITF:
-        writeNITF(newPathnameBase, cmplxReadBackIn)
+        writeNITF(roundTrippedNitfPathname, cmplxReadBackIn)
 
     successCode = 0
     # These should match #
 
-    if filecmp.cmp(outputFilename + ".xml", newPathnameBase + ".xml"):
+    if filecmp.cmp(xmlPathname, roundTrippedXmlPathname):
         print('XML round trip succeeded!')
     else:
         successCode = 1
         print('XML round trip failed')
 
     if includeNITF:
-        if filecmp.cmp(outputFilename + ".nitf", newPathnameBase + ".nitf"):
+        if filecmp.cmp(nitfPathname, roundTrippedNitfPathname):
             print('NITF round trip succeeded!')
         else:
             successCode = 1
@@ -872,5 +881,4 @@ if __name__ == '__main__':
     cmplx = initData(includeNITF, args.version)
     successCode = doRoundTrip(cmplx, includeNITF, 'test_create_sicd')
     sys.exit(successCode)
-
 

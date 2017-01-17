@@ -82,7 +82,7 @@ public:
      * Given a SICD pathname and list of schemas, provides a representation
      * of the SICD XML as a ComplexData object
      *
-     * \param sicdPathname SICD NITF or XML pathname
+     * \param pathname SICD NITF or XML pathname
      * \param schemaPaths One or more files or directories containing SICD
      * schemas
      *

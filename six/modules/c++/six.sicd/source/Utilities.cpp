@@ -362,9 +362,9 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    if (str::endsWith(pathname, "xml"))
+    if (sys::Path::splitExt(pathname).second == ".xml")
     {
-        logging::Logger log;
+        logging::NullLogger log;
         return parseDataFromFile(pathname, schemaPaths, log);
     }
 
