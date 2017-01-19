@@ -78,7 +78,7 @@ public:
 
 private:
     scene::Vector3 imageToGround(const csm::RasterGM& model,
-            const six::RowColInt& scpPixel, double height, double offset)
+            const six::RowColDouble& scpPixel, double height, double offset)
     {
         csm::ImageCoord imagePt(scpPixel.row + offset, scpPixel.col + offset);
         csm::EcefCoord groundPt = model.imageToGround(
@@ -141,7 +141,7 @@ private:
         offsets[2] = -.5;
         offsets[3] = 1;
         const double pixelTolerance = 0;
-        const double groundTolerance = 2;
+        const double groundTolerance = .001;
 
         for (size_t ii = 0; ii < offsets.size(); ++ii)
         {
@@ -172,9 +172,14 @@ private:
         double leastImageDifference = *std::min_element(
                 imageDifferences.begin(), imageDifferences.end());
 
-        // TODO: The reference point isn't exactly right, so we're
-        // being loose with the tests for now
         if (leastImageDifference != imageDifferences[0])
+        {
+            std::cerr << "There was an offset better than " <<
+                    offsets[0] << "\n";
+            testPassed = false;
+        }
+
+        if (leastGroundDifference != groundDifferences[0])
         {
             std::cerr << "There was an offset better than " <<
                     offsets[0] << "\n";
