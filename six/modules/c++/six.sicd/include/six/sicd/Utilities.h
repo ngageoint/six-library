@@ -82,17 +82,17 @@ public:
      * Given a SICD pathname and list of schemas, provides a representation
      * of the SICD XML as a ComplexData object
      *
-     * \param sicdPathname SICD NITF pathname
+     * \param pathname SICD NITF or XML pathname
      * \param schemaPaths One or more files or directories containing SICD
      * schemas
      *
-     * \return ComplexData associated with the SICD NITF
+     * \return ComplexData associated with the SICD NITF or XML
      *
-     * \throws except::Exception if file is not a SICD
+     * \throws except::Exception if file is not a SICD or Complex XML
      */
     static
     std::auto_ptr<ComplexData> getComplexData(
-            const std::string& sicdPathname,
+            const std::string& pathname,
             const std::vector<std::string>& schemaPaths);
 
     /*

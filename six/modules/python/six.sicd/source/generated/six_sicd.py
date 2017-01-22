@@ -3159,7 +3159,7 @@ class SixSicdUtilities(_object):
 
     def getComplexData(*args):
         """
-        getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
         getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
         """
         return _six_sicd.SixSicdUtilities_getComplexData(*args)
@@ -3258,7 +3258,7 @@ def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandDa
 
 def SixSicdUtilities_getComplexData(*args):
     """
-    getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
     SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
     """
     return _six_sicd.SixSicdUtilities_getComplexData(*args)
@@ -10361,6 +10361,8 @@ def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows,
 
 import numpy as np
 from pysix.six_base import VectorString
+from coda.coda_io import FileOutputStream
+from coda.xml_lite import *
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
@@ -10382,12 +10384,13 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
     getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
+
+
 def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
 def readFromNITF(pathname, schemaPaths=VectorString()):
-    pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
 
 class SICDWriteControl(_object):
