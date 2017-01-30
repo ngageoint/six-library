@@ -172,7 +172,6 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
     const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata));
 
     FileHeader header;
-    header.set(xmlMetadata.size(), vbmSize, cphdSize);
     if (!classification.empty())
     {
         header.setClassification(classification);
@@ -182,6 +181,8 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
         header.setReleaseInfo(releaseInfo);
     }
 
+    // set header size, final step before write
+    header.set(xmlMetadata.size(), vbmSize, cphdSize);
     mFile.write(header.toString().c_str(), header.size());
     mFile.write("\f\n", 2);
     mFile.write(xmlMetadata.c_str(), xmlMetadata.size());
