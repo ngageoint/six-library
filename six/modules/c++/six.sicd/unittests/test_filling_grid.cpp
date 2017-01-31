@@ -86,11 +86,9 @@ TEST_CASE(HammingWindow)
     row.fillDerivedFields(imageData);
 
     TEST_ASSERT_EQ(row.weights.size(), 512);
-    //Just grabbing some random values to make sure they line up with MATLAB
-    //TEST_ASSERT_ALMOST_EQ is too picky for what we have, so doing something
-    //more manual.
     TEST_ASSERT_ALMOST_EQ(row.weights[163], .733193239);
     TEST_ASSERT_ALMOST_EQ(row.weights[300], .9328411378);
+    TEST_ASSERT_ALMOST_EQ(row.weights[0], row.weights[511]);
 }
 
 TEST_CASE(KaiserWindow)
