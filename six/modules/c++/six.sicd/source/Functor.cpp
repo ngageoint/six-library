@@ -38,19 +38,12 @@ RaisedCos::RaisedCos(double coef) :
 
 std::vector<double> RaisedCos::operator()(size_t n) const
 {
-    std::vector<double> ret;
-    ret.resize(static_cast<size_t>(std::ceil(n / 2.0)));
-    for (size_t ii = 0; ii < ret.size(); ++ii)
+    std::vector<double> ret(n);
+    const size_t halfSize = static_cast<size_t>(std::ceil(n / 2.0));
+    for (size_t ii = 0; ii < halfSize; ++ii)
     {
         ret[ii] = mCoef - (1 - mCoef) * std::cos(2 * M_PI * ii / (n - 1));
-    }
-    if (n % 2 == 0)
-    {
-        std::reverse_copy(ret.begin(), ret.end(), std::back_inserter(ret));
-    }
-    else
-    {
-        std::copy(ret.begin(), ret.end() - 1, std::back_inserter(ret));
+        ret[(ret.size() - 1) - ii] = ret[ii];
     }
     return ret;
 }
