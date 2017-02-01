@@ -1090,7 +1090,8 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
 
     //Slow-time deskew would allow for PFA.Kaz2-PFA.Kaz1>(1/Grid.Col.SS),
     //since Kaz bandwidth is compressed from original polar annulus.
-    if (pfa.slowTimeDeskew->applied != BooleanType::IS_TRUE)
+    if (pfa.slowTimeDeskew.get() != NULL &&
+        pfa.slowTimeDeskew->applied != BooleanType::IS_TRUE)
     {
         //2.3.10
         if ((pfa.kaz2 - col->kCenter) >
