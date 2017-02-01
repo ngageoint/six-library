@@ -565,7 +565,7 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
 
         area += (x1 * y2 - x2 * y1);
     }
-    if (!isUpPositive)
+    if (isUpPositive)
     {
         area *= -1;
     }
