@@ -30,8 +30,8 @@ TEST_CASE(testClockwiseBox)
     vertices[1] = six::RowColInt(1, 0);
     vertices[2] = six::RowColInt(1, 1);
     vertices[3] = six::RowColInt(0, 1);
-    TEST_ASSERT(six::sicd::Utilities::isClockwise(vertices));
-    TEST_ASSERT(!six::sicd::Utilities::isClockwise(vertices, true));
+    TEST_ASSERT(!six::sicd::Utilities::isClockwise(vertices));
+    TEST_ASSERT(six::sicd::Utilities::isClockwise(vertices, true));
 
 }
 
@@ -41,8 +41,8 @@ TEST_CASE(testCounterClockwiseTriangle)
     vertices[0] = six::RowColInt(0, 0);
     vertices[1] = six::RowColInt(0, 1);
     vertices[2] = six::RowColInt(1, 0);
-    TEST_ASSERT(six::sicd::Utilities::isClockwise(vertices, true));
-    TEST_ASSERT(!six::sicd::Utilities::isClockwise(vertices));
+    TEST_ASSERT(!six::sicd::Utilities::isClockwise(vertices, true));
+    TEST_ASSERT(six::sicd::Utilities::isClockwise(vertices));
 }
 
 int main(int, char**)
