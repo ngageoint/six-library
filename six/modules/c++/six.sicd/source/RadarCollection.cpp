@@ -438,8 +438,8 @@ bool RadarCollection::validate(logging::Logger& log) const
     std::ostringstream messageBuilder;
 
     // 2.8 Waveform description consistency
-    double wfMin = waveformMax();
-    double wfMax = waveformMin();
+    double wfMin = waveformMin();
+    double wfMax = waveformMax();
 
     // 2.8.1
     if (wfMin != std::numeric_limits<double>::infinity() &&
