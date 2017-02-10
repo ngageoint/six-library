@@ -32,7 +32,7 @@ namespace cphd
 CPHDWriter::DataWriter::DataWriter(io::FileOutputStream& stream,
             size_t numThreads) :
     mStream(stream),
-    mNumThreads(numThreads)
+    mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
 {
 }
 
