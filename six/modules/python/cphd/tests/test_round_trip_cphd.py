@@ -5,7 +5,7 @@
 # This file is part of cphd-python
 # =========================================================================
 #
-# (C) Copyright 2004 - 2015, MDA Information Systems LLC
+# (C) Copyright 2004 - 2017, MDA Information Systems LLC
 #
 # cphd-python is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -22,27 +22,31 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-from pysix.cphd import CPHDReader
+from pysix.cphd import CPHDReader, CPHDWriter, Wideband
 import sys
 import multiprocessing
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
+    if len(sys.argv) >= 3:
         inputPathname = sys.argv[1]
+        outputPathname = sys.argv[2]
     else:
-        print "Usage: " + sys.argv[0] + " <Input CPHD>"
+        print("Usage: " + sys.argv[0] + " <Input CPHD> <Output CPHD>")
         sys.exit(0)
 
     reader = CPHDReader(inputPathname, multiprocessing.cpu_count())
+    writer = CPHDWriter(reader.getMetadata())
+    wideband = reader.getWideband()
+    dims = wideband.getBufferDims(0, 0, Wideband.ALL, 0, Wideband.ALL)
+    writer.writeCPHD(outputPathname, wideband.read(), dims,
+            reader.getVBM().toBuffer(0))
 
-    print reader.getFileHeader()
-    print reader.getMetadata()
-    print reader.getVBM()
-    print ''
-    print 'VBM Data:'
-    print reader.getVBM().toBuffer(0)
-    print ''
-    print 'Wideband Data:'
-    print reader.getWideband().read()
-
+    roundTrippedReader = CPHDReader(outputPathname, multiprocessing.cpu_count())
+    roundTrippedWideband = roundTrippedReader.getWideband()
+    assert (roundTrippedWideband.read() == wideband.read()).all()
+    assert (roundTrippedReader.getVBM().toBuffer(0) ==
+            reader.getVBM().toBuffer(0)).all()
+    assert (roundTrippedReader.getFileHeader().toString() ==
+            reader.getFileHeader().toString())
+    assert roundTrippedReader.getMetadata() == reader.getMetadata()
 

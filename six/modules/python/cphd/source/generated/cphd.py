@@ -1970,8 +1970,63 @@ class CPHDReader(_object):
 CPHDReader_swigregister = _cphd.CPHDReader_swigregister
 CPHDReader_swigregister(CPHDReader)
 
+class CPHDWriter(_object):
+    """Proxy of C++ cphd::CPHDWriter class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CPHDWriter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CPHDWriter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, metadata, numThreads=0, scratchSpaceSize=4):
+        """
+        __init__(cphd::CPHDWriter self, Metadata metadata, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata) -> CPHDWriter
+        """
+        this = _cphd.new_CPHDWriter(metadata, numThreads, scratchSpaceSize)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def writeMetadata(self, *args):
+        """
+        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification, std::string const & releaseInfo)
+        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification)
+        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm)
+        """
+        return _cphd.CPHDWriter_writeMetadata(self, *args)
+
+
+    def write(self, *args):
+        """
+        write(CPHDWriter self, std::string const & pathname, std::string const & classification, std::string const & releaseInfo)
+        write(CPHDWriter self, std::string const & pathname, std::string const & classification)
+        write(CPHDWriter self, std::string const & pathname)
+        """
+        return _cphd.CPHDWriter_write(self, *args)
+
+
+    def close(self):
+        """close(CPHDWriter self)"""
+        return _cphd.CPHDWriter_close(self)
+
+
+    def addImageImpl(self, image, dims, vbm):
+        """addImageImpl(CPHDWriter self, long long image, RowColSizeT dims, long long vbm)"""
+        return _cphd.CPHDWriter_addImageImpl(self, image, dims, vbm)
+
+    __swig_destroy__ = _cphd.delete_CPHDWriter
+    __del__ = lambda self: None
+CPHDWriter_swigregister = _cphd.CPHDWriter_swigregister
+CPHDWriter_swigregister(CPHDWriter)
+
 
 import numpy
+import multiprocessing
+from coda.coda_types import RowColSizeT
 
 def toBuffer(self, channel = 0):
 
@@ -1983,10 +2038,19 @@ def toBuffer(self, channel = 0):
 
 VBM.toBuffer = toBuffer
 
+def write(self, pathname, data, dims, vbm):
+    imagePointer, _ = data.__array_interface__['data']
+    vbmPointer, _ = vbm.__array_interface__['data']
+    if data.dtype != numpy.dtype('complex64'):
+        raise TypeError('Python CPHDWriter only supports complex float data')
+    self.addImageImpl(imagePointer, dims, vbmPointer)
+    self.write(pathname)
 
-import numpy
-import multiprocessing
-from coda.coda_types import RowColSizeT
+def __del__(self):
+    self.close()
+
+CPHDWriter.writeCPHD = write
+CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,

@@ -32,13 +32,19 @@ namespace cphd
 CPHDWriter::DataWriter::DataWriter(io::FileOutputStream& stream,
             size_t numThreads) :
     mStream(stream),
-    mNumThreads(numThreads)
+    mNumThreads(initNumThreads(numThreads))
 {
 }
 
 CPHDWriter::DataWriter::~DataWriter()
 {
 }
+
+size_t CPHDWriter::initNumThreads(size_t numThreads)
+{
+    return numThreads == 0 ? sys::OS().getNumCPUs() : numThreads;
+}
+
 
 CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
         io::FileOutputStream& stream,

@@ -31,6 +31,7 @@
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <cphd/VBM.h>
+#include <sys/OS.h>
 
 namespace cphd
 {
@@ -46,6 +47,11 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  However, SWIG doesn't seem to like that.
+     *  As a workaround, we pass in 0 for the default, and the ctor sets the
+     *  number of threads to the number of CPUs if this happens.
+     *
      *  \param metadata A filled out metadata struct for the file that will be
      *         written. The data.arraySize and data.numCPHDChannels will be
      *         filled in internally. All other data must be provided.
@@ -55,7 +61,7 @@ public:
      *         Default is 4 MB
      */
     CPHDWriter(const Metadata& metadata,
-               size_t numThreads = sys::OS().getNumCPUs(),
+               size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
 
     /*
@@ -150,6 +156,8 @@ private:
 
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
+
+    static size_t initNumThreads(size_t numThreads);
 
     class DataWriter
     {
