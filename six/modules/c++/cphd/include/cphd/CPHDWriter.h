@@ -157,8 +157,6 @@ private:
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
-    static size_t initNumThreads(size_t numThreads);
-
     class DataWriter
     {
     public:

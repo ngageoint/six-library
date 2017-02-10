@@ -49,5 +49,5 @@ if __name__ == '__main__':
     assert (roundTrippedReader.getFileHeader().toString() ==
             reader.getFileHeader().toString())
     assert roundTrippedReader.getMetadata() == reader.getMetadata()
-    return 0
+    sys.exit(0)
 
