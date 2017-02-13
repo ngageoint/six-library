@@ -38,7 +38,8 @@ def createSampleCPHD():
         programPathname += '.exe'
     if not os.path.exists(programPathname):
         raise IOError('Unable to find ' + programPathname)
-    _, cphdPathname = tempfile.mkstemp()
+    cphdHandle, cphdPathname = tempfile.mkstemp()
+    os.close(cphdHandle)
     os.remove(cphdPathname)
     success = subprocess.check_call([programPathname, cphdPathname])
     if success != 0:
