@@ -961,7 +961,6 @@ void NITFWriteControl::addDataAndWrite(
     int deWriterIndex = static_cast<int>(mContainer->getNumData());
     for (size_t ii = 0; ii < mSegmentWriters.size(); ++ii)
     {
-        // TODO: Investigate
         mWriter.setDEWriteHandler(deWriterIndex++, mSegmentWriters[ii]);
     }
     mWriter.write();
