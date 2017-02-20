@@ -27,6 +27,7 @@
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include <mem/ScopedArray.h>
 #include <import/logging.h>
 
 namespace six
@@ -112,6 +113,24 @@ public:
      *  and in the return value, for convenience
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
+
+    /*!
+     * Read entire image
+     *
+     * \param imageNumber Index of the image to read
+     * \param buffer Scoped array that holds the memory for the read-in image.
+     * This will be allocated by this function.
+     *
+     * \return Buffer of image data.  This is simply equal to buffer.get() and
+     * is provided as a convenience.
+     */
+    UByte* interleaved(size_t imageNumber, mem::ScopedArray<UByte>& buffer)
+    {
+        // Default constructor will set this to the full AOI
+        Region region;
+        buffer.reset(interleaved(region, imageNumber));
+        return buffer.get();
+    }
 
     /*!
      *  Get the file type.  For SICD, this will only include "NITF", but

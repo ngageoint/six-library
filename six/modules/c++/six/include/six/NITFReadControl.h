@@ -30,7 +30,6 @@
 #include "six/Adapters.h"
 #include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
-#include <mem/ScopedArray.h>
 #include <nitf/IOStreamReader.hpp>
 
 namespace six
@@ -152,18 +151,6 @@ public:
      * it is up to the caller to delete the memory.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber);
-
-    /*!
-     * Read entire image
-     *
-     * \param imageNumber Index of the image to read
-     * \param buffer Scoped array that holds the memory for the read-in image.
-     * This will be allocated by this function.
-     *
-     * \return Buffer of image data.  This is simply equal to buffer.get() and
-     * is provided as a convenience.
-     */
-    UByte* interleaved(size_t imageNumber, mem::ScopedArray<UByte>& buffer);
 
     virtual std::string getFileType() const
     {
