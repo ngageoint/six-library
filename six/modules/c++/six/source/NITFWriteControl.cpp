@@ -836,8 +836,8 @@ void NITFWriteControl::save(
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
-        nitf::ImageSegment imageSegment = mRecord.getImages()[info.getStartIndex()];
-        //nitf::ImageSegment imageSegment = mRecord.getImages()[i];
+        nitf::ImageSegment imageSegment =
+                mRecord.getImages()[info.getStartIndex()];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
         const bool isBlocking =

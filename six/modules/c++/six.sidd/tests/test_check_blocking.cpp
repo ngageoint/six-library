@@ -21,9 +21,9 @@
 */
 
 #include <iostream>
-#include <iterator>
 #include <import/six/sidd.h>
 #include <cli/ArgumentParser.h>
+#include <io/TempFile.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
@@ -33,7 +33,10 @@ void generateData(const six::Data& data, mem::ScopedArray<six::UByte>& buffer)
 {
     const size_t size = data.getNumRows() * data.getNumCols();
     buffer.reset(new six::UByte[size]);
-    memset(buffer.get(), 1, size);
+    for (size_t ii = 0; ii < size; ++ii)
+    {
+        buffer[ii] = static_cast<six::UByte>(ii % 100);
+    }
 }
 
 std::auto_ptr<six::Data> read(const std::string& filename)
@@ -45,7 +48,35 @@ std::auto_ptr<six::Data> read(const std::string& filename)
     return data;
 }
 
-void write(const six::Data& data, const std::string& pathname,
+void writeSingleImage(const six::Data& data, const std::string& pathname,
+        const std::string& blockSize, size_t imageSideSize)
+{
+    std::auto_ptr<six::Data> workingData(data.clone());
+    workingData->setNumRows(imageSideSize);
+    workingData->setNumCols(imageSideSize);
+
+    mem::ScopedArray<six::UByte> buffer;
+    generateData(*workingData, buffer);
+
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
+    container->addData(workingData);
+
+    six::BufferList buffers(1);
+    buffers[0] = buffer.get();
+
+    six::NITFWriteControl writer;
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK, blockSize);
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK, blockSize);
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "110");
+    writer.initialize(container);
+    writer.save(buffers, pathname, std::vector<std::string>());
+
+}
+void writeTwoImages(const six::Data& data, const std::string& pathname,
         const std::string& blockSize)
 
 {
@@ -95,21 +126,25 @@ void assignBuffer(std::pair<mem::ScopedArray<six::UByte>, size_t>& buffer,
     buffer.second = region.getNumRows() * region.getNumCols();
 }
 
-bool compare(const std::string& lhs, const std::string& rhs)
+bool compare(const std::string& twoImageSidd,
+        const std::string& firstImage,
+        const std::string& secondImage)
 {
     six::NITFReadControl firstReader;
-    firstReader.load(lhs);
+    firstReader.load(twoImageSidd);
 
     std::pair<mem::ScopedArray<six::UByte>, size_t> firstBuffers[2];
     assignBuffer(firstBuffers[0], 0, firstReader);
     assignBuffer(firstBuffers[1], 1, firstReader);
 
     six::NITFReadControl secondReader;
-    secondReader.load(rhs);
+    secondReader.load(firstImage);
+    six::NITFReadControl thirdReader;
+    thirdReader.load(secondImage);
 
     std::pair<mem::ScopedArray<six::UByte>, size_t> secondBuffers[2];
     assignBuffer(secondBuffers[0], 0, secondReader);
-    assignBuffer(secondBuffers[1], 1, secondReader);
+    assignBuffer(secondBuffers[1], 0, thirdReader);
 
     if (firstBuffers[0].second != secondBuffers[0].second ||
         firstBuffers[1].second != secondBuffers[1].second)
@@ -167,10 +202,16 @@ int main(int argc, char** argv)
         }
 
         sidd->setPixelType(six::PixelType::MONO8I);
-        write(*sidd, "firstTest.nitf", "10");
-        write(*sidd, "secondTest.nitf", "15");
-        compare("firstTest.nitf", "secondTest.nitf");
-        return 0;
+        io::TempFile twoImageSIDD;
+        io::TempFile singleImageBlocked;
+        io::TempFile singleImageUnblocked;
+        writeTwoImages(*sidd, twoImageSIDD.pathname(), "10");
+        writeSingleImage(*sidd, singleImageBlocked.pathname(), "10", 11);
+        writeSingleImage(*sidd, singleImageUnblocked.pathname(), "10", 9);
+
+        return compare(twoImageSIDD.pathname(),
+                singleImageBlocked.pathname(),
+                singleImageUnblocked.pathname()) ? 0 : 1;
     }
     catch (const except::Exception& ex)
     {
