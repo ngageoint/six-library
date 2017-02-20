@@ -590,12 +590,13 @@ NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
     return imageAndSegment;
 }
 
-UByte* NITFReadControl::interleaved(size_t imageNumber)
+UByte* NITFReadControl::interleaved(size_t imageNumber,
+                                    mem::ScopedArray<UByte>& buffer)
 {
+    // Default constructor will set this to the full AOI
     Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    return interleaved(region, imageNumber);
+    buffer.reset(interleaved(region, imageNumber));
+    return buffer.get();
 }
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)

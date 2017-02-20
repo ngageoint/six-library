@@ -118,11 +118,15 @@ void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
     }
 }
 
-sys::Int16_T* read(const std::string& filename)
+sys::Int16_T* read(const std::string& filename, sys::Int16_T* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
-    return reinterpret_cast<sys::Int16_T*>(reader.interleaved(0));
+
+    six::Region region;
+    region.setBuffer(reinterpret_cast<six::UByte*>(data));
+
+    return reinterpret_cast<sys::Int16_T*>(reader.interleaved(region, 0));
 }
 
 bool run(bool useStream = false, bool byteswap = false)
@@ -140,7 +144,7 @@ bool run(bool useStream = false, bool byteswap = false)
                 BYTES_PER_PIXEL, DATA_LENGTH);
     }
     write(testData.get(), useStream, byteswap);
-    testData.reset(read(OUTPUT_NAME));
+    read(OUTPUT_NAME, testData.get());
 
     if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)
     {

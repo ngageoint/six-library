@@ -23,12 +23,14 @@
 #define __SIX_NITF_READ_CONTROL_H__
 
 #include <map>
+
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
 #include "six/Adapters.h"
 #include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
+#include <mem/ScopedArray.h>
 #include <nitf/IOStreamReader.hpp>
 
 namespace six
@@ -136,18 +138,32 @@ public:
 
     /*!
      * Read section of image data specified by region
-     * \param region Rows and columns of the image to read
+     *
+     * \param region Rows and columns of the image to read.  If the number
+     * of rows and/or number of columns is set to -1, this indicates to read
+     * the entirety of the image in that dimension.  In this case, this
+     * parameter will be updated with the actual number of rows and/or
+     * columns that were read.
      * \param imageNumber Index of the image to read
-     * \return Buffer of image data
+     *
+     * \return Buffer of image data.  This is simply a pointer to the buffer
+     * that is held by 'region'.  If it is NULL in the incoming region, the
+     * memory is allocated and the region's buffer is updated.  In this case
+     * it is up to the caller to delete the memory.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber);
 
     /*!
      * Read entire image
+     *
      * \param imageNumber Index of the image to read
-     * \return Buffer of image data
+     * \param buffer Scoped array that holds the memory for the read-in image.
+     * This will be allocated by this function.
+     *
+     * \return Buffer of image data.  This is simply equal to buffer.get() and
+     * is provided as a convenience.
      */
-    virtual UByte* interleaved(size_t imageNumber);
+    UByte* interleaved(size_t imageNumber, mem::ScopedArray<UByte>& buffer);
 
     virtual std::string getFileType() const
     {
