@@ -134,7 +134,19 @@ public:
     void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
+    /*!
+     * Read section of image data specified by region
+     * \param region Rows and columns of the image to read
+     * \param imageNumber Index of the image to read
+     * \return Buffer of image data
+     */
     virtual UByte* interleaved(Region& region, size_t imageNumber);
+
+    /*!
+     * Read entire image
+     * \param imageNumber Index of the image to read
+     * \return Buffer of image data
+     */
     virtual UByte* interleaved(size_t imageNumber);
 
     virtual std::string getFileType() const
