@@ -23,8 +23,7 @@
 #include <iostream>
 #include <iterator>
 #include <import/six/sidd.h>
-#include <import/six/sicd.h>
-#include <import/cli.h>
+#include <cli/ArgumentParser.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
@@ -53,6 +52,9 @@ void write(const six::Data& data, const std::string& pathname,
     std::auto_ptr<six::Data> firstData(data.clone());
     std::auto_ptr<six::Data> secondData(data.clone());
 
+    // The first time through, the first image will be blocked, and the second
+    // is too small.
+    // Next call, the size is 15, so neither will be blocked.
     firstData->setNumRows(11);
     firstData->setNumCols(11);
     secondData->setNumRows(9);
@@ -152,10 +154,6 @@ int main(int argc, char** argv)
         const std::string siddPathname(options->get<std::string>("sidd"));
 
         six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<
-                six::sicd::ComplexXMLControl>());
-        six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::DERIVED,
                 new six::XMLControlCreatorT<
                 six::sidd::DerivedXMLControl>());
@@ -189,3 +187,4 @@ int main(int argc, char** argv)
 
     return 1;
 }
+

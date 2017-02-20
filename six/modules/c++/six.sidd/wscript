@@ -1,6 +1,6 @@
 NAME            = 'six.sidd'
 MAINTAINER      = 'adam.sylvester@mdaus.com'
-MODULE_DEPS     = 'scene tiff nitf xml.lite six mem'
+MODULE_DEPS     = 'cli scene tiff nitf xml.lite six mem'
 
 options = configure = distclean = lambda p: None
 
