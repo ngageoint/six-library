@@ -171,14 +171,14 @@ xml::lite::Document* XMLControl::toXML(
         const std::vector<std::string>& schemaPaths)
 {
     xml::lite::Document* doc = toXMLImpl(data);
-    //validate(doc, schemaPaths, mLog);
+    validate(doc, schemaPaths, mLog);
     return doc;
 }
 
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths)
 {
-    //validate(doc, schemaPaths, mLog);
+    validate(doc, schemaPaths, mLog);
     Data* const data = fromXMLImpl(doc);
     data->setVersion(getVersionFromURI(doc));
     return data;
