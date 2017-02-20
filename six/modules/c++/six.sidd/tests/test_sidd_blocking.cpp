@@ -94,6 +94,27 @@ void getMultiImageSIDD(const std::string& installPathname,
     createSiddCommand.run();
 }
 
+void makeMultiBandSIDD(const std::string& inputPathname,
+        const std::string& outputPathname)
+{
+    six::NITFReadControl reader;
+    reader.load(inputPathname);
+    std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    data->setPixelType(six::PixelType::MONO16I);
+    data->setNumRows(data->getNumRows() / 2);
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::DERIVED));
+    container->addData(data);
+
+    six::NITFWriteControl writer;
+    writer.initialize(container);
+    six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+    writer.save(reader.interleaved(region, 0), outputPathname,
+            std::vector<std::string>());
+}
+
 void roundTripAndBlock(const std::string& installPathname,
         const std::string& inputPathname,
         const std::string& outputPathname)
@@ -164,13 +185,22 @@ int main(int argc, char** argv)
 
         const std::string installPathname(argv[1]);
         TempFileWithExtension multiImageSidd(".nitf");
+        TempFileWithExtension multiBandMultiImageSidd(".nitf");
         TempFileWithExtension roundTrippedSidd(".nitf");
+        TempFileWithExtension roundTrippedMultiBandSidd(".nitf");
         getMultiImageSIDD(installPathname, multiImageSidd.pathname());
+        makeMultiBandSIDD(multiImageSidd.pathname(),
+                multiBandMultiImageSidd.pathname());
         roundTripAndBlock(installPathname,
                 multiImageSidd.pathname(), roundTrippedSidd.pathname());
+        roundTripAndBlock(installPathname,
+                multiBandMultiImageSidd.pathname(),
+                roundTrippedMultiBandSidd.pathname());
 
         if (checkBlocking(multiImageSidd.pathname(),
-                roundTrippedSidd.pathname()))
+                roundTrippedSidd.pathname()) and
+            checkBlocking(multiBandMultiImageSidd.pathname(),
+                roundTrippedMultiBandSidd.pathname()))
         {
             return 0;
         }
