@@ -135,6 +135,7 @@ public:
               const std::vector<std::string>& schemaPaths);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(size_t imageNumber);
 
     virtual std::string getFileType() const
     {

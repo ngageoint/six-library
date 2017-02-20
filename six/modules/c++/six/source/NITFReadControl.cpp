@@ -590,6 +590,14 @@ NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
     return imageAndSegment;
 }
 
+UByte* NITFReadControl::interleaved(size_t imageNumber)
+{
+    Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+    return interleaved(region, imageNumber);
+}
+
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     NITFImageInfo* thisImage = mInfos[imageNumber];
