@@ -171,6 +171,10 @@ int main(int argc, char** argv)
                               "to file.");
         parser.addArgument("-r --rows", "ILOC rows limit", cli::STORE, "maxRows",
                            "ROWS");
+        parser.addArgument("--rowsPerBlock", "Max rows per block", cli::STORE,
+                           "rowsPerBlock", "ROWS_PER_BLOCK");
+        parser.addArgument("--colsPerBlock", "Max cols per block", cli::STORE,
+                           "colsPerBlock", "COLS_PER_BLOCK");
         parser.addArgument("--size", "Max image segment size", cli::STORE,
                            "maxSize", "BYTES");
         parser.addArgument("--version", "Version", cli::STORE,
@@ -219,6 +223,18 @@ int main(int argc, char** argv)
         if (options->hasValue("maxRows"))
         {
             maxILOC = options->get<std::string>("maxRows");
+        }
+
+        std::string rowsPerBlock;
+        if (options->hasValue("rowsPerBlock"))
+        {
+            rowsPerBlock = options->get<std::string>("rowsPerBlock");
+        }
+
+        std::string colsPerBlock;
+        if (options->hasValue("colsPerBlock"))
+        {
+            colsPerBlock = options->get<std::string>("colsPerBlock");
         }
 
         std::string version;
@@ -339,6 +355,20 @@ int main(int argc, char** argv)
             writer.getOptions().setParameter(
                     six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                     maxSize);
+        }
+
+        if (!rowsPerBlock.empty())
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    rowsPerBlock);
+        }
+
+        if (!colsPerBlock.empty())
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    colsPerBlock);
         }
 
         writer.setLogger(&log);
