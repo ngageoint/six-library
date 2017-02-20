@@ -9,6 +9,7 @@ def build(bld):
                'crop_sidd'                 : 'cli six.sidd',
                'image_to_scene'            : 'six.sicd six.sidd',
                'round_trip_six'            : 'cli six.sicd six.sidd',
+               'test_check_blocking'        : 'cli six.sicd six.sidd',
                'test_create_sicd'          : 'cli six.sicd sio.lite',
                'test_create_sicd_from_mem' : 'cli six.sicd',
                'test_create_sidd_from_mem' : 'cli six.sicd six.sidd',
