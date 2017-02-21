@@ -811,8 +811,8 @@ void NITFWriteControl::save(
     const bool doByteSwap = shouldByteSwap();
 
     if (mInfos.size() != imageData.size())
-        throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
-                                          mInfos.size(), imageData.size())));
+        throw except::Exception(Ctxt("Require " + str::toString(mInfos.size())
+                + " images, received " + str::toString(imageData.size())));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)mOptions.getParameter(
@@ -836,7 +836,8 @@ void NITFWriteControl::save(
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
-        nitf::ImageSegment imageSegment = mRecord.getImages()[i];
+        nitf::ImageSegment imageSegment =
+                mRecord.getImages()[info.getStartIndex()];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
         const bool isBlocking =

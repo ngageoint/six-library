@@ -122,6 +122,7 @@ def run(sourceDir):
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
+        sampleSidd = os.path.join(siddDir, os.listdir(siddDir)[0])
         if not sicdTestRunner.run('test_load_from_input_stream', sampleSicd):
             return False
 
@@ -133,6 +134,7 @@ def run(sourceDir):
 
         if not (siddTestRunner.run('test_byte_swap') and
                 siddTestRunner.run('test_geotiff') and
+                siddTestRunner.run('test_check_blocking', sampleSidd) and
                 siddTestRunner.run('test_sidd_blocking', utils.installPath())):
             return False
 
