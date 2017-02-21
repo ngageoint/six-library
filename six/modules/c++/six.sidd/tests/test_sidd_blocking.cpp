@@ -72,10 +72,23 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    const sys::Path testPath = sys::Path(installPathname).join("bin").
-            join(programName);
-    const std::string testPathname = testPath.exists() ? testPath.getPath() :
-            std::string("\"") + testPath.getPath() + std::string("\"");
+    std::string testPathname = str::toString(sys::Path(installPathname).
+        join("bin").join(programName));
+
+    // Clean it up so path is readable
+    if (str::contains(testPathname, ""))
+    {
+        testPathname = "\"" + testPathname + "\"";
+    }
+   
+    if (!sys::OS().exists(testPathname))
+    {
+        str::replaceAll(testPathname, "\"", "");
+        testPathname += ".exe";
+
+        // May as well just wrap it in quotes regardless
+        testPathname + "\"" + testPathname + "\"";
+    }
 
     if (!sys::OS().exists(testPathname))
     {
@@ -185,9 +198,7 @@ int main(int argc, char** argv)
 
         const std::string installPathname(argv[1]);
         TempFileWithExtension multiImageSidd(".nitf");
-        std::cerr << multiImageSidd.pathname() << std::endl;
         TempFileWithExtension multiBandMultiImageSidd(".nitf");
-        std::cerr << multiBandMultiImageSidd.pathname() << std::endl;
         TempFileWithExtension roundTrippedSidd(".nitf");
         TempFileWithExtension roundTrippedMultiBandSidd(".nitf");
         getMultiImageSIDD(installPathname, multiImageSidd.pathname());
