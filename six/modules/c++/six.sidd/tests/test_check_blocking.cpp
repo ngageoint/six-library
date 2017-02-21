@@ -115,14 +115,12 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     writer.save(buffers, pathname, std::vector<std::string>());
 }
 
-void assignBuffer(std::pair<mem::ScopedArray<six::UByte>, size_t>& buffer,
+void assignBuffer(mem::ScopedArray<six::UByte>& buffer, size_t& bufferSize,
         size_t index, six::NITFReadControl& reader)
 {
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    buffer.first.reset(reader.interleaved(region, index));
-    buffer.second = region.getNumRows() * region.getNumCols();
+    buffer.reset(reader.interleaved(region, index));
+    bufferSize = region.getNumRows() * region.getNumCols();
 }
 
 bool compare(const std::string& twoImageSidd,
@@ -132,38 +130,40 @@ bool compare(const std::string& twoImageSidd,
     six::NITFReadControl firstReader;
     firstReader.load(twoImageSidd);
 
-    std::pair<mem::ScopedArray<six::UByte>, size_t> firstBuffers[2];
-    assignBuffer(firstBuffers[0], 0, firstReader);
-    assignBuffer(firstBuffers[1], 1, firstReader);
+    mem::ScopedArray<six::UByte> firstBuffers[2];
+    size_t firstBufferSizes[2];
+    assignBuffer(firstBuffers[0], firstBufferSizes[0], 0, firstReader);
+    assignBuffer(firstBuffers[1], firstBufferSizes[1], 1, firstReader);
 
     six::NITFReadControl secondReader;
     secondReader.load(firstImage);
     six::NITFReadControl thirdReader;
     thirdReader.load(secondImage);
 
-    std::pair<mem::ScopedArray<six::UByte>, size_t> secondBuffers[2];
-    assignBuffer(secondBuffers[0], 0, secondReader);
-    assignBuffer(secondBuffers[1], 0, thirdReader);
+    mem::ScopedArray<six::UByte> secondBuffers[2];
+    size_t secondBufferSizes[2];
+    assignBuffer(secondBuffers[0], secondBufferSizes[0], 0, secondReader);
+    assignBuffer(secondBuffers[1], secondBufferSizes[1], 0, thirdReader);
 
-    if (firstBuffers[0].second != secondBuffers[0].second ||
-        firstBuffers[1].second != secondBuffers[1].second)
+    if (firstBufferSizes[0] != secondBufferSizes[0] ||
+        firstBufferSizes[1] != secondBufferSizes[1])
     {
         std::cerr << "Buffer lengths do not match\n";
         return false;
     }
 
-    for (size_t ii = 0; ii < firstBuffers[0].second; ++ii)
+    for (size_t ii = 0; ii < firstBufferSizes[0]; ++ii)
     {
-        if (firstBuffers[0].first[ii] != secondBuffers[0].first[ii])
+        if (firstBuffers[0][ii] != secondBuffers[0][ii])
         {
             std::cerr << "Buffer mismatch at index " << ii << std::endl;
             return false;
         }
     }
 
-    for (size_t ii = 0; ii < firstBuffers[1].second; ++ii)
+    for (size_t ii = 0; ii < firstBufferSizes[1]; ++ii)
     {
-        if (firstBuffers[1].first[ii] != secondBuffers[1].first[ii])
+        if (firstBuffers[1][ii] != secondBuffers[1][ii])
         {
             std::cerr << "Buffer mismatch at index " << ii << std::endl;
             return false;
