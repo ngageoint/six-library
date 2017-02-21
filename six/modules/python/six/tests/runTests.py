@@ -72,6 +72,7 @@ def run(sourceDir):
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
 
+    '''
     if sourceDir != '':
         os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
                 os.path.join(utils.installPath(), 'bin'))
@@ -91,10 +92,10 @@ def run(sourceDir):
         if success != 0:
             print("Error running crop_sicd")
             return False
-
+    '''
     utils.setPaths()
 
-    if platform.system() != 'SunOS':
+    if platform.system() == 'SunOS':
         if makeRegressionFiles.run() == False:
             print("Error generating regression files")
             return False
@@ -123,6 +124,7 @@ def run(sourceDir):
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
         sampleSidd = os.path.join(siddDir, os.listdir(siddDir)[0])
+        '''
         if not sicdTestRunner.run('test_load_from_input_stream', sampleSicd):
             return False
 
@@ -131,6 +133,7 @@ def run(sourceDir):
 
         if not runCsmTests():
             return False
+        '''
 
         if not (siddTestRunner.run('test_byte_swap') and
                 siddTestRunner.run('test_geotiff') and

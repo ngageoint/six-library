@@ -75,7 +75,7 @@ std::string getProgramPathname(const std::string& installPathname,
     const sys::Path testPath = sys::Path(installPathname).join("bin").
             join(programName);
     const std::string testPathname = testPath.exists() ? testPath.getPath() :
-            testPath.getPath() + ".exe";
+            testPath.getPath();
 
     if (!sys::OS().exists(testPathname))
     {
@@ -183,12 +183,14 @@ int main(int argc, char** argv)
             new six::XMLControlCreatorT<
             six::sidd::DerivedXMLControl>());
 
-        const std::string installPathname(argv[1]);
+        const std::string installPathname(std::string("\"") + argv[1] + std::string("\""));
         TempFileWithExtension multiImageSidd(".nitf");
+        std::cerr << multiImageSidd.pathname() << std::endl;
         TempFileWithExtension multiBandMultiImageSidd(".nitf");
         TempFileWithExtension roundTrippedSidd(".nitf");
         TempFileWithExtension roundTrippedMultiBandSidd(".nitf");
         getMultiImageSIDD(installPathname, multiImageSidd.pathname());
+        std::cerr << "Created\n";
         makeMultiBandSIDD(multiImageSidd.pathname(),
                 multiBandMultiImageSidd.pathname());
         roundTripAndBlock(installPathname,
