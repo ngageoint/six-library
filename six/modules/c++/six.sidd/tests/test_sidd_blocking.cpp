@@ -76,6 +76,10 @@ std::string getProgramPathname(const std::string& installPathname,
         join("bin").join(programName));
 
     // Clean it up so path is readable
+    if (str::contains(testPathname, "-"))
+    {
+       str::replaceAll(testPathname, "-", "^-");
+    }
     if (str::contains(testPathname, " "))
     {
         testPathname = "\"" + testPathname + "\"";
