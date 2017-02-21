@@ -102,22 +102,12 @@ void write(const sys::Int16_T* data)
     writer.save(reinterpret_cast<const six::UByte*>(data), OUTPUT_NAME);
 }
 
-void read(const std::string& filename, sys::Int16_T* data)
+void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 {
-    six::sidd::GeoTIFFReadControl reader;
-    reader.load(filename);
-    mem::SharedPtr<const six::Container> container = reader.getContainer();
-    const six::Data* const inData = container->getData(0);
-
-    const size_t numRows = inData->getNumRows();
-    const size_t numCols = inData->getNumCols();
+    std::auto_ptr<six::ReadControl> reader(new six::sidd::GeoTIFFReadControl());
+    reader->load(filename);
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(numRows);
-    region.setNumCols(numCols);
-    region.setBuffer(reinterpret_cast<six::UByte*>(data));
-    reader.interleaved(region, 0);
+    reader->interleaved(region, 0, data);
 }
 
 bool run()
@@ -125,10 +115,12 @@ bool run()
     mem::ScopedArray<sys::Int16_T> imageData(new sys::Int16_T[DATA_LENGTH]);
     generateData(imageData.get());
 
-    mem::ScopedArray<sys::Int16_T> testData(new sys::Int16_T[DATA_LENGTH]);
+    //mem::ScopedArray<sys::Int16_T> testData(new sys::Int16_T[DATA_LENGTH]);
 
     write(imageData.get());
-    read(OUTPUT_NAME, testData.get());
+
+    mem::ScopedArray<sys::Int16_T> testData;
+    read(OUTPUT_NAME, testData);
 
     if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)
     {

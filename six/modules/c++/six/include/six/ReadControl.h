@@ -109,14 +109,27 @@ public:
      *  This function reads in the image area specified by the region.
      *  If you want us to use a work buffer, you can set it through region.
      *
+     *  To simply read the entire image, pass a default-constructed
+     *  Region as the first parameter
+     *
      *  Once read, the image buffer is set in both the region pointer,
      *  and in the return value, for convenience
+     *
+     *  For safety, prefer the overload below.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
 
     /*!
-     * Read entire image
+     *  This function reads in the image area specified by the region.
+     *  If you want us to use a work buffer, you can set it through region.
      *
+     *  To simply read the entire image, pass a default-constructed
+     *  Region as the first parameter.
+     *
+     *  Once read, the image buffer is set in the passed buffer, and
+     *  also the region pointer and the return value for convenience.
+     *
+     * \param region Region stores row and cols to be read
      * \param imageNumber Index of the image to read
      * \param buffer Scoped array that holds the memory for the read-in image.
      * This will be allocated by this function.
@@ -124,12 +137,12 @@ public:
      * \return Buffer of image data.  This is simply equal to buffer.get() and
      * is provided as a convenience.
      */
-    UByte* interleaved(size_t imageNumber, mem::ScopedArray<UByte>& buffer)
+    template<typename T>
+    UByte* interleaved(Region& region, size_t imageNumber,
+            mem::ScopedArray<T>& buffer)
     {
-        // Default constructor will set this to the full AOI
-        Region region;
-        buffer.reset(interleaved(region, imageNumber));
-        return buffer.get();
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return reinterpret_cast<UByte*>(buffer.get());
     }
 
     /*!
