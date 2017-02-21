@@ -78,7 +78,6 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
 }
 void writeTwoImages(const six::Data& data, const std::string& pathname,
         const std::string& blockSize)
-
 {
     std::auto_ptr<six::Data> firstData(data.clone());
     std::auto_ptr<six::Data> secondData(data.clone());
