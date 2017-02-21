@@ -867,12 +867,17 @@ void NITFWriteControl::save(
                 iWriter.setWriteCaching(1);
 
                 nitf::ImageSource iSource;
-                const size_t bandSize = numCols * info.getData()->getNumRows();
+                const NITFSegmentInfo segmentInfo = imageSegments[jj];
+                const size_t bandSize =
+                        pixelSize * numCols * segmentInfo.numRows;
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
-                    nitf::MemorySource ms(imageData[i], bandSize,
-                                          bandSize * chan, pixelSize, 0);
+                    nitf::MemorySource ms(imageData[i] +
+                            pixelSize * segmentInfo.firstRow * numCols,
+                            bandSize,
+                            bandSize * chan,
+                            pixelSize, 0);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
