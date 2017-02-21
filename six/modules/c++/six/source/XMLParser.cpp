@@ -120,7 +120,18 @@ XMLElem XMLParser::createString(const std::string& name,
 XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
         int p, XMLElem parent) const
 {
-    XMLElem const elem = newElement(name, uri, six::toString<int>(p), parent);
+    std::string elementValue;
+    try
+    {
+        elementValue = six::toString<int>(p);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << "Unable to create " << name <<
+                " in element " << parent->getLocalName() << std::endl;
+        throw e;
+    }
+    XMLElem const elem = newElement(name, uri, elementValue, parent);
     if (mAddClassAttributes)
     {
         xml::lite::AttributeNode node;
@@ -157,7 +168,18 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
-    XMLElem elem = newElement(name, uri, six::toString<double>(p), parent);
+    std::string elementValue;
+    try
+    {
+        elementValue = six::toString<double>(p);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << "Unable to create " << name <<
+                " in element " << parent->getLocalName() << std::endl;
+        throw e;
+    }
+    XMLElem elem = newElement(name, uri, elementValue, parent);
     if (mAddClassAttributes)
     {
         xml::lite::AttributeNode node;
