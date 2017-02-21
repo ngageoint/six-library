@@ -90,10 +90,10 @@ std::string getProgramPathname(const std::string& installPathname,
     }
 
     // Clean it up so path is readable
-    if (str::contains(testPathname, " "))
-    {
-        testPathname = "\"" + testPathname + "\"";
-    }
+    //if (str::contains(testPathname, " "))
+    //{
+    //    testPathname = "\"" + testPathname + "\"";
+    //}
 
     return testPathname;
 }
