@@ -75,13 +75,6 @@ std::string getProgramPathname(const std::string& installPathname,
     std::string testPathname = str::toString(sys::Path(installPathname).
         join("bin").join(programName));
 
-    // Clean it up so path is readable
-    if (str::contains(testPathname, " "))
-    {
-        testPathname = "\"" + testPathname + "\"";
-        std::cerr << "319: " << testPathname << std::endl;
-    }
-   
     if (!sys::OS().exists(testPathname))
     {
         str::replaceAll(testPathname, "\"", "");
@@ -95,6 +88,13 @@ std::string getProgramPathname(const std::string& installPathname,
     {
         throw except::Exception(Ctxt("Unable to find " + testPathname));
     }
+
+    // Clean it up so path is readable
+    if (str::contains(testPathname, " "))
+    {
+        testPathname = "\"" + testPathname + "\"";
+    }
+
     return testPathname;
 }
 
