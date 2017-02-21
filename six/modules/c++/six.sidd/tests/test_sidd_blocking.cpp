@@ -198,7 +198,7 @@ int main(int argc, char** argv)
                 roundTrippedMultiBandSidd.pathname());
 
         if (checkBlocking(multiImageSidd.pathname(),
-                roundTrippedSidd.pathname()) and
+                roundTrippedSidd.pathname()) &&
             checkBlocking(multiBandMultiImageSidd.pathname(),
                 roundTrippedMultiBandSidd.pathname()))
         {
