@@ -58,7 +58,7 @@ def wrapObject(obj, parent):
     if ('Vector' in type(obj).__name__ and
         hasattr(obj, 'pop')):
         wrappedVector = []
-        for ii in range(obj.size())
+        for ii in range(obj.size()):
             wrappedElement, typemap = wrapObject(obj[ii], parent)
             wrappedVector.append(wrappedElement)
         return wrappedVector, typemap
