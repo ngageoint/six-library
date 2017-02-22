@@ -138,11 +138,11 @@ public:
      * is provided as a convenience.
      */
     template<typename T>
-    UByte* interleaved(Region& region, size_t imageNumber,
+    T* interleaved(Region& region, size_t imageNumber,
             mem::ScopedArray<T>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
-        return reinterpret_cast<UByte*>(buffer.get());
+        return buffer.get();
     }
 
     /*!

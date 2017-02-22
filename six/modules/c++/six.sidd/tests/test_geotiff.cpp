@@ -104,10 +104,10 @@ void write(const sys::Int16_T* data)
 
 void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 {
-    std::auto_ptr<six::ReadControl> reader(new six::sidd::GeoTIFFReadControl());
-    reader->load(filename);
+    six::NITFReadControl reader;
+    reader.load(filename);
     six::Region region;
-    reader->interleaved(region, 0, data);
+    reader.interleaved(region, 0, data);
 }
 
 bool run()

@@ -120,11 +120,11 @@ void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
 
 void read(const std::string& filename, mem::ScopedArray<sys::Int16_T>& data)
 {
-    std::auto_ptr<six::ReadControl> reader(new six::NITFReadControl());
-    reader->load(filename);
+    six::NITFReadControl reader;
+    reader.load(filename);
 
     six::Region region;
-    reader->interleaved(region, 0, data);
+    reader.interleaved(region, 0, data);
 }
 
 bool run(bool useStream = false, bool byteswap = false)

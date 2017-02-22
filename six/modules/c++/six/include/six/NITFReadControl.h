@@ -135,6 +135,8 @@ public:
     void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
+
+    using ReadControl::interleaved;
     /*!
      * Read section of image data specified by region
      *
