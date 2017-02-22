@@ -77,11 +77,8 @@ std::string getProgramPathname(const std::string& installPathname,
 
     if (!sys::OS().exists(testPathname))
     {
-        str::replaceAll(testPathname, "\"", "");
+        //str::replaceAll(testPathname, "\"", "");
         testPathname += ".exe";
-
-        // May as well just wrap it in quotes regardless
-        //testPathname + "\"" + testPathname + "\"";
     }
 
     if (!sys::OS().exists(testPathname))
