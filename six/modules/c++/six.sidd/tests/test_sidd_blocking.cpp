@@ -199,7 +199,6 @@ int main(int argc, char** argv)
         TempFileWithExtension roundTrippedSidd(".nitf");
         TempFileWithExtension roundTrippedMultiBandSidd(".nitf");
         getMultiImageSIDD(installPathname, multiImageSidd.pathname());
-        std::cerr << "Created\n";
         makeMultiBandSIDD(multiImageSidd.pathname(),
                 multiBandMultiImageSidd.pathname());
         roundTripAndBlock(installPathname,

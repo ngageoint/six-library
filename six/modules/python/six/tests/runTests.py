@@ -123,7 +123,6 @@ def run(sourceDir):
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
         sampleSidd = os.path.join(siddDir, os.listdir(siddDir)[0])
-
         if not sicdTestRunner.run('test_load_from_input_stream', sampleSicd):
             return False
 
