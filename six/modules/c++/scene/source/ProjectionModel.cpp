@@ -62,11 +62,19 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal(slantPlaneNormal),
     mSCP(scp),
     mARPPoly(arpPoly),
-    mARPVelPoly(mARPPoly.derivative()),
     mTimeCOAPoly(timeCOAPoly),
     mLookDir(lookDir),
     mErrors(errors)
 {
+    try
+    {
+        mARPVelPoly = mARPPoly.derivative();
+    }
+    catch (const except::Exception& ex)
+    {
+        throw except::Exception(Ctxt("Unable to take derivate of arpPoly: " +
+                ex.getMessage()));
+    }
     mSlantPlaneNormal.normalize();
 }
 
@@ -793,10 +801,30 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                                     lookDir,
                                     errors),
     mPolarAnglePoly(polarAnglePoly),
-    mPolarAnglePolyPrime(mPolarAnglePoly.derivative()),
-    mKSFPoly(ksfPoly),
-    mKSFPolyPrime(mKSFPoly.derivative())
+    mKSFPoly(ksfPoly)
 {
+
+    try
+    {
+        mPolarAnglePolyPrime = mPolarAnglePoly.derivative();
+    }
+    catch (const except::Exception& ex)
+    {
+        throw except::Exception(Ctxt(
+            "Unable to take derivate of polarAnglePoly: " +
+            ex.getMessage()));
+    }
+
+    try
+    {
+        mKSFPolyPrime = mKSFPoly.derivative();
+    }
+    catch (const except::Exception& ex)
+    {
+        throw except::Exception(Ctxt(
+            "Unable to take derivate of ksfPoly: " +
+            ex.getMessage()));
+    }
 }
 
 void RangeAzimProjectionModel::
