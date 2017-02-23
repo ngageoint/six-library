@@ -72,15 +72,25 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    const sys::Path testPath = sys::Path(installPathname).join("bin").
-            join(programName);
-    const std::string testPathname = testPath.exists() ? testPath.getPath() :
-            testPath.getPath() + ".exe";
+    std::string testPathname = str::toString(sys::Path(installPathname).
+        join("bin").join(programName));
+
+    if (!sys::OS().exists(testPathname))
+    {
+        testPathname += ".exe";
+    }
 
     if (!sys::OS().exists(testPathname))
     {
         throw except::Exception(Ctxt("Unable to find " + testPathname));
     }
+
+    // Clean it up so path is readable
+    if (str::contains(testPathname, " "))
+    {
+        testPathname = "\"" + testPathname + "\"";
+    }
+
     return testPathname;
 }
 
