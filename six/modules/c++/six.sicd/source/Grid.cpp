@@ -487,20 +487,28 @@ bool Grid::validateTimeCOAPoly(
     const RadarModeType& mode = collectionInformation.radarMode;
 
     //2.1. Scalar TimeCOAPoly means SPOTLIGHT data
-    bool isScalar = timeCOAPoly.isScalar();
     bool valid = true;
-
-    if (mode == RadarModeType::SPOTLIGHT && !isScalar)
+    if (timeCOAPoly.empty())
     {
-        log.error("SPOTLIGHT data should only have scalar TimeCOAPoly.");
+        log.error("No timeCOAPoly for Grid.");
         valid = false;
     }
-
-    if (mode != RadarModeType::SPOTLIGHT && isScalar)
+    else
     {
-        log.warn("Non-SPOTLIGHT data will generally have more than one nonzero"
-            "term in TimeCOAPoly unless \"formed as spotlight\".");
-        valid = false;
+        bool isScalar = timeCOAPoly.isScalar();
+
+        if (mode == RadarModeType::SPOTLIGHT && !isScalar)
+        {
+            log.error("SPOTLIGHT data should only have scalar TimeCOAPoly.");
+            valid = false;
+        }
+
+        if (mode != RadarModeType::SPOTLIGHT && isScalar)
+        {
+            log.warn("Non-SPOTLIGHT data will generally have more than one "
+                "nonzero term in TimeCOAPoly unless \"formed as spotlight\".");
+            valid = false;
+        }
     }
 
     return valid;
