@@ -48,6 +48,17 @@ scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
 
     return unitVector;
 }
+
+template<typename PolyType>
+PolyType verboseDerivative(const PolyType& polynomial, const std::string& name)
+{
+    if (polynomial.empty())
+    {
+        throw except::Exception(Ctxt("Unable to take derivative of " + name +
+                ". Polynomial is empty."));
+    }
+    return polynomial.derivative();
+}
 }
 
 namespace scene
@@ -62,19 +73,11 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal(slantPlaneNormal),
     mSCP(scp),
     mARPPoly(arpPoly),
+    mARPVelPoly(verboseDerivative(arpPoly, "arpPoly")),
     mTimeCOAPoly(timeCOAPoly),
     mLookDir(lookDir),
     mErrors(errors)
 {
-    try
-    {
-        mARPVelPoly = mARPPoly.derivative();
-    }
-    catch (const except::Exception& ex)
-    {
-        throw except::Exception(Ctxt("Unable to take derivate of arpPoly: " +
-                ex.getMessage()));
-    }
     mSlantPlaneNormal.normalize();
 }
 
@@ -801,30 +804,10 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                                     lookDir,
                                     errors),
     mPolarAnglePoly(polarAnglePoly),
-    mKSFPoly(ksfPoly)
+    mPolarAnglePolyPrime(verboseDerivative(mPolarAnglePoly, "mPolarAnglePoly")),
+    mKSFPoly(ksfPoly),
+    mKSFPolyPrime(verboseDerivative(mKSFPoly, "mKSFPoly"))
 {
-
-    try
-    {
-        mPolarAnglePolyPrime = mPolarAnglePoly.derivative();
-    }
-    catch (const except::Exception& ex)
-    {
-        throw except::Exception(Ctxt(
-            "Unable to take derivate of polarAnglePoly: " +
-            ex.getMessage()));
-    }
-
-    try
-    {
-        mKSFPolyPrime = mKSFPoly.derivative();
-    }
-    catch (const except::Exception& ex)
-    {
-        throw except::Exception(Ctxt(
-            "Unable to take derivate of ksfPoly: " +
-            ex.getMessage()));
-    }
 }
 
 void RangeAzimProjectionModel::
