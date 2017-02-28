@@ -54,10 +54,10 @@ six::sicd::ComplexData * asComplexData(six::Data* data)
   }
 }
 
-void writeNITF(const std::string& pathname, const std::vector<std::string>&
+void writeNITFImpl(const std::string& pathname, const std::vector<std::string>&
         schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
 
-void writeNITF(const std::string& pathname, const std::vector<std::string>&
+void writeNITFImpl(const std::string& pathname, const std::vector<std::string>&
         schemaPaths, const six::sicd::ComplexData& data, long long imageAdr)
 {
     const std::complex<float>* image = reinterpret_cast<
@@ -106,7 +106,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
 
-void writeNITF(const std::string& pathname, const std::vector<std::string>&
+void writeNITFImpl(const std::string& pathname, const std::vector<std::string>&
         schemaPaths, const six::sicd::ComplexData& data, long long imageAdr);
 
 %pythoncode
@@ -245,17 +245,6 @@ void getWidebandRegion(std::string sicdPathname,
         long long startRow, long long numRows,
         long long startCol, long long numCols, long long arrayBuffer);
 
-%pythoncode %{
-import numpy as np
-from pysix.six_base import VectorString
-from coda.coda_io import FileOutputStream
-from coda.xml_lite import *
-
-def writeAsNITF(outFile, schemaPaths, complexData, image):
-    writeNITF(outFile, schemaPaths, complexData,
-        image.__array_interface__["data"][0])
-
-%}
 
 %include "six/sicd/SICDWriteControl.h"
 %extend six::sicd::SICDWriteControl

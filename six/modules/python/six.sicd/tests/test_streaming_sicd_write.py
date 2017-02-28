@@ -28,7 +28,9 @@
 # match.
 
 import sys, os, filecmp
+import numpy as np
 from pysix.scene import *
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -701,7 +703,7 @@ if __name__ == '__main__':
     # Write a normal NITF                                                     #
     ###########################################################################
     normalPathname = 'normal.nitf'
-    writeAsNITF(normalPathname, schemaPaths, cmplx, imageBuffer)
+    writeNITF(normalPathname, cmplx, imageBuffer, schemaPaths)
 
     ###########################################################################
     # Write a streaming NITF                                                  #

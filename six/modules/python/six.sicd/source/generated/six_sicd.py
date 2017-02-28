@@ -219,9 +219,9 @@ def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
 
-def writeNITF(pathname, schemaPaths, data, imageAdr):
-    """writeNITF(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
-    return _six_sicd.writeNITF(pathname, schemaPaths, data, imageAdr)
+def writeNITFImpl(pathname, schemaPaths, data, imageAdr):
+    """writeNITFImpl(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
+    return _six_sicd.writeNITFImpl(pathname, schemaPaths, data, imageAdr)
 
 import os
 import sys
@@ -10350,17 +10350,6 @@ VectorTimelineSet_swigregister(VectorTimelineSet)
 def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer):
     """getWidebandRegion(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
-
-import numpy as np
-from pysix.six_base import VectorString
-from coda.coda_io import FileOutputStream
-from coda.xml_lite import *
-
-def writeAsNITF(outFile, schemaPaths, complexData, image):
-    writeNITF(outFile, schemaPaths, complexData,
-        image.__array_interface__["data"][0])
-
-
 class SICDWriteControl(_object):
     """Proxy of C++ six::sicd::SICDWriteControl class."""
 

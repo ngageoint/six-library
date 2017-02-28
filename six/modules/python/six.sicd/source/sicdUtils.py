@@ -21,9 +21,11 @@
 '''
 
 import os
+import numpy as np
 from coda.coda_io import FileOutputStream
 from coda.xml_lite import *
 from pysix.six_sicd import *
+from pysix.six_base import VectorString
 
 
 def writeXML(complexData, pathname):
@@ -38,6 +40,16 @@ def writeXML(complexData, pathname):
         root.prettyPrint(outputStream)
     finally:
         outputStream.close()
+
+
+def writeNITF(pathname, complexData, image, schemaPaths=VectorString()):
+    writeNITFImpl(pathname, schemaPaths, complexData,
+            image.__array_interface__['data'][0])
+
+
+def readComplexData(inputPathname, schemaPaths=VectorString()):
+    return SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
+
 
 def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
         schemaPaths=VectorString()):
