@@ -32,10 +32,10 @@ def isLikeAPrimitive(value):
 def wrapVector(vector):
     wrappedVector = []
     for ii in range(vector.size()):
-        wrappedVector.append(wrapMembers(vector[ii]))
+        wrappedVector.append(wrap(vector[ii]))
     return wrappedVector
 
-def wrapMembers(obj):
+def wrap(obj):
     if isLikeAPrimitive(obj):
         return obj
     # Not wrapping this for now, because not sure what the array
@@ -45,15 +45,11 @@ def wrapMembers(obj):
     elif isVector(obj):
         return wrapVector(obj)
     elif isSmartPointer(obj):
-        return wrapMembers(obj.get())
+        return wrap(obj.get())
     elif isPoly(obj):
         return obj.asArray()
     wrapper = type(type(obj).__name__, (), {})
     for (name, value) in getMemberVariables(obj):
-        setattr(wrapper, name, wrapMembers(value))
+        setattr(wrapper, name, wrap(value))
     return wrapper
-
-def wrap(obj):
-    wrappedObject = wrapMembers(obj)
-    return wrappedObject
 

@@ -30,7 +30,6 @@ from pysix.scene import *
 from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
-from pysix.wrapper import wrapClass
 from coda.xml_lite import *
 from coda.coda_io import *
 from coda.coda_types import *
@@ -879,7 +878,7 @@ if __name__ == '__main__':
     includeNITF = args.includeNITF
 
     # Build up a giant ComplexData from scratch with everything populated
-    cmplx = wrapClass(initData(includeNITF, args.version))
+    cmplx = initData(includeNITF, args.version)
     successCode = doRoundTrip(cmplx, includeNITF, 'test_create_sicd')
     sys.exit(successCode)
 

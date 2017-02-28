@@ -35,11 +35,19 @@ def run():
     for childDir in childDirs:
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
             print(os.path.join(unitTestDir, childDir, test))
-            if call([utils.executableName(os.path.join(unitTestDir, childDir, test))]) != 0:
+            if call([utils.executableName(os.path.join(
+                    unitTestDir, childDir, test))]) != 0:
                 success = False
+
+    pythonUnitTestDir = os.path.join(utils.findSixHome(), 'six', 'modules',
+            'python', 'six', 'unittests')
+    for test in os.listdir(pythonUnitTestDir):
+        testPathname = os.path.join(pythonUnitTestDir, test)
+        print(testPathname)
+        success = (call(['python', testPathname]) == 0) and success
 
     return success
 
 if __name__ == '__main__':
     run()
-    
+
