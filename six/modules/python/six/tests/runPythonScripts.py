@@ -56,7 +56,6 @@ def run():
 
     sicdRunner = PythonTestRunner(testsDir)
     result = (sicdRunner.run('test_streaming_sicd_write.py') and
-        sicdRunner.run('test_read_region.py') and
         sicdRunner.run('test_read_sicd_xml.py', sampleNITF) and
         sicdRunner.run('test_six_sicd.py', sampleNITF) and
         sicdRunner.run('test_create_sicd_xml.py', '-v', '1.2.0') and

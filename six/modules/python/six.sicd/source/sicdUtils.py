@@ -39,3 +39,22 @@ def writeXML(complexData, pathname):
     finally:
         outputStream.close()
 
+def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
+        schemaPaths=VectorString()):
+
+    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
+
+    if numRows == -1:
+        numRows = complexData.getNumRows()
+    if numCols == -1:
+        numCols = complexData.getNumCols()
+
+    widebandData = np.empty(shape = (numRows, numCols), dtype='complex64')
+    widebandBuffer, _ = widebandData.__array_interface__['data']
+
+    getWidebandRegion(inputPathname, schemaPaths, complexData, startRow,
+            numRows, startCol, numCols, widebandBuffer)
+
+    return widebandData, complexData
+
+

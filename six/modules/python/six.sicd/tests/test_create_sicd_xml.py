@@ -831,7 +831,7 @@ def doRoundTrip(cmplx, includeNITF, outputPathnameBase):
     ### Now read it back in again ###
     cmplxReadBackIn = readXML(xmlPathname)
     if includeNITF:
-        cmplxFromNITF = readFromNITF(nitfPathname)
+        _, cmplxFromNITF = readNITF(nitfPathname)
 
     # And then write it out one more time #
     roundTrippedPathnameBase = '{0}_rt'.format(outputPathnameBase)

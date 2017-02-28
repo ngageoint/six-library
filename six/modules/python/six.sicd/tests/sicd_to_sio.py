@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-from pysix import six_base, six_sicd
+from pysix import six_base, six_sicd, sicdUtils
 from coda import sio_lite
 
 if __name__ == '__main__':
@@ -24,8 +24,10 @@ if __name__ == '__main__':
         sne = int(sys.argv[6])
         widebandData, complexData = six_sicd.readRegion(nitfPath, sfl, snl, sfe, sne, schemaPaths)
     else:
-        widebandData, complexData = six_sicd.read(nitfPath, schemaPaths)
+        widebandData, complexData = sicdUtils.readNITF(nitfPath,
+                schemaPaths=schemaPaths)
 
     sio_lite.write(widebandData, sioPath)
 
     print("Wrote " + sioPath)
+
