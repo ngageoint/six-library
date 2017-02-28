@@ -80,11 +80,6 @@ class TestWrapping(unittest.TestCase):
         self.assertEqual(wrappedObject.geoInfos[1], None)
         self.assertEqual(wrappedObject.geoInfos[2].name, "third name")
 
-    def testWrappingComplexData(self):
-        originalObject = ComplexData()
-        wrappedObject = wrap(ComplexData())
-        print(dir(wrappedObject))
-
 
 if __name__ == '__main__':
     unittest.main()

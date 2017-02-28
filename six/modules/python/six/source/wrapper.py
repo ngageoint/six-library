@@ -2,14 +2,17 @@ import inspect
 import numpy
 import types
 from coda.math_poly import Poly1D, Poly2D
-from pysix.six_sicd import *
 
 def getMemberVariables(obj):
-    return [(attribute, getattr(obj, attribute)) for attribute in dir(obj)
-            if not inspect.ismethod(getattr(obj, attribute))
-            and not attribute.startswith('_')
-            and not isinstance(getattr(obj, attribute), types.BuiltinFunctionType)
-            and not isinstance(getattr(obj, attribute), types.BuiltinMethodType)]
+    members = []
+    for attribute in dir(obj):
+        value = getattr(obj, attribute)
+        if (not inspect.ismethod(value) and
+            not attribute.startswith('_') and
+            not isinstance(value, types.BuiltinFunctionType) and
+            not isinstance(value, types.BuiltinMethodType)):
+            members.append((attribute, value))
+    return members
 
 def getMethods(obj):
     return inspect.getmembers(obj, inspect.ismethod)
