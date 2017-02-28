@@ -8,7 +8,8 @@ def getMemberVariables(obj):
     return [(attribute, getattr(obj, attribute)) for attribute in dir(obj)
             if not inspect.ismethod(getattr(obj, attribute))
             and not attribute.startswith('_')
-            and not isinstance(obj, types.BuiltinFunctionType)]
+            and not isinstance(getattr(obj, attribute), types.BuiltinFunctionType)
+            and not isinstance(getattr(obj, attribute), types.BuiltinMethodType)]
 
 def getMethods(obj):
     return inspect.getmembers(obj, inspect.ismethod)
@@ -26,7 +27,7 @@ def isVector(value):
 
 def isLikeAPrimitive(value):
     return isinstance(value, (types.IntType, types.FloatType, types.StringType,
-            types.NoneType, types.BooleanType))
+            types.NoneType, types.BooleanType, types.TupleType, types.LongType))
 
 def wrapVector(vector):
     wrappedVector = []
