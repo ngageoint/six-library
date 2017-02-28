@@ -113,21 +113,6 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 
 bool ComplexData::operator==(const ComplexData& rhs) const
 {
-    std::cerr << "ComplexData::operator==()\n";
-    if (collectionInformation != rhs.collectionInformation)
-    {
-        std::cerr << "CollectionInformation\n";
-    }
-
-    if (imageCreation != rhs.imageCreation)
-    {
-        std::cerr << "ImageCreation\n";
-    }
-
-    if (scpcoa != rhs.scpcoa)
-    {
-        std::cerr << "SCPCOA\n";
-    }
     return (collectionInformation == rhs.collectionInformation &&
         imageCreation == rhs.imageCreation &&
         imageData == rhs.imageData &&

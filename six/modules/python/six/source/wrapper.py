@@ -3,47 +3,57 @@ from functools import wraps
 import numpy
 import types
 from coda.math_poly import Poly1D, Poly2D
+from pysix.six_sicd import *
 
 def getMemberVariables(obj):
     return [(attribute, getattr(obj, attribute)) for attribute in dir(obj)
             if not inspect.ismethod(getattr(obj, attribute))
-            and not attribute.startswith('_')]
-
+            and not attribute.startswith('_')
+            and not isinstance(obj, types.BuiltinFunctionType)]
 
 def getMethods(obj):
     return inspect.getmembers(obj, inspect.ismethod)
 
+def isPoly(value):
+    polyTypes = ['Poly1D', 'Poly2D']
+    return any(typename in type(value).__name__ for typename in polyTypes)
 
-def wrapMember(wrapper, name, value):
-    setattr(wrapper, name, value)
+def isSmartPointer(value):
+    return ('ScopedCloneable' in type(value).__name__ or
+            'ScopedCopyable' in type(value).__name__)
 
-def unwrapMember(obj, name, value):
-    setattr(obj, name, value)
+def isVector(value):
+    return 'Vector' in type(value).__name__
 
-def reflectChangesInWrapper(wrapper, obj):
-    for (name, value) in getMemberVariables(wrapper):
-        unwrapMember(obj, name, value)
+def isLikeAPrimitive(value):
+    return isinstance(value, (types.IntType, types.FloatType, types.StringType,
+            types.NoneType, types.BooleanType))
 
-def reflectChangesInObject(wrapper, obj):
+def wrapVector(vector):
+    wrappedVector = []
+    for ii in range(vector.size()):
+        wrappedVector.append(wrapMembers(vector[ii]))
+    return wrappedVector
+
+def wrapMembers(obj):
+    if isLikeAPrimitive(obj):
+        return obj
+    # Not wrapping this for now, because not sure what the array
+    # should look like
+    elif 'PolyVector3' in type(obj).__name__:
+        return obj
+    elif isVector(obj):
+        return wrapVector(obj)
+    elif isSmartPointer(obj):
+        return wrapMembers(obj.get())
+    elif isPoly(obj):
+        return obj.asArray()
+    wrapper = type(type(obj).__name__, (), {})
     for (name, value) in getMemberVariables(obj):
-        wrapMember(wrapper, name, value)
-
-def wrapMethod(obj, wrapper, name, method):
-    def wrappedMethod(self, *args):
-        reflectChangesInWrapper(wrapper, obj)
-        returnValue = method(*args)
-        reflectChangesInObject(wrapper, obj)
-        return returnValue
-    wrappedMethod.__doc__ = method.__doc__
-    wrappedMethod.__name__ = method.__name__
-    setattr(wrapper, name, types.MethodType(wrappedMethod, wrapper))
-
+        setattr(wrapper, name, wrapMembers(value))
+    return wrapper
 
 def wrap(obj):
-    wrappedObject = type(type(obj).__name__, (), {})
-    for (name, value) in getMemberVariables(obj):
-        wrapMember(wrappedObject, name, value)
-    for (name, method) in getMethods(obj):
-        wrapMethod(obj, wrappedObject, name, method)
+    wrappedObject = wrapMembers(obj)
     return wrappedObject
 
