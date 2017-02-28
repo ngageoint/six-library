@@ -60,7 +60,8 @@ def run():
         sicdRunner.run('test_six_sicd.py', sampleNITF) and
         sicdRunner.run('test_create_sicd_xml.py', '-v', '1.2.0') and
         sicdRunner.run('sicd_to_sio.py', sampleNITF, schemaPath) and
-        sicdRunner.run('test_read_complex_data.py', sampleNITF))
+        sicdRunner.run('test_read_complex_data.py', sampleNITF) and
+        sicdRunner.run('test_simple_round_trip.py', sampleNITF, 'out.xml'))
 
     # CPHD tests
     cphdPathname = createSampleCPHD()
