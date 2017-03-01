@@ -58,6 +58,17 @@ def updateWrapper(wrapper):
         setattr(wrapper, name, wrap(value))
 
 def wrap(obj):
+    '''
+    Dynamically create new type to represent the given-object in a more
+    Python-friendly manner. Poly1D and Poly2D members will be converted to
+    numpy arrays. You shouldn't segfault from misusing smart pointers.
+    Vectors become lists.
+
+    WARNING: The object you call this function on becomes a member of the
+    wrapper class. I don't think it will cause any problems to continue
+    using the original object after you call this function, but it is probably
+    a bad idea.
+    '''
     if isLikeAPrimitive(obj):
         return obj
     # Not wrapping this for now, because not sure what the array
@@ -122,6 +133,16 @@ def unwrapToVector(wrapper, source):
     return source
 
 def unwrap(wrapper):
+    '''
+    Return the original type from a dynamic wrapper.
+
+    WARNING: The returned object is still a member of the wrapper. You should
+    not continue using the wrapper after you unwrap it. Calling the wrapper's
+    methods can change the data in the returned object.
+
+    If you really need to continue using both, you can try calling clone
+    on the result
+    '''
     return unwrapImpl(wrapper, wrapper._source)
 
 def unwrapImpl(wrapper, source):
