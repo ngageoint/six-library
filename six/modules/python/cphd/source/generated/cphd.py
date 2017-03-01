@@ -2039,6 +2039,18 @@ def toBuffer(self, channel = 0):
 VBM.toBuffer = toBuffer
 
 def write(self, pathname, data, vbm, channel):
+    '''
+    Write CPHD data to a file
+
+    Args:
+        pathname: Name of file to write to
+        data: Numpy array of complex64 wideband data of size [npulse, nsamps]
+        vbm: VBM object
+        channel: Channel of VBM to write
+
+    Throws:
+        TypeError if trying to write non-complex64 wideband data
+    '''
     if data.dtype != numpy.dtype('complex64'):
         raise TypeError('Python CPHDWriter only supports complex float data')
 
