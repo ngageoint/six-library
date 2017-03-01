@@ -162,8 +162,9 @@ class TestUnwrapping(unittest.TestCase):
         unwrap(wrappedObject, originalObject)
 
         self.assertEqual(originalObject.geoInfos.size(), 3)
-        self.assertEqual(wrappedObject.geoInfos[1].name, "second name")
-        self.assertIsNone(wrappedObject.geoInfos[2])
+        self.assertIsNotNone(originalObject.geoInfos[1].get())
+        self.assertEqual(originalObject.geoInfos[1].name, "second name")
+        self.assertIsNone(originalObject.geoInfos[2].get())
 
 if __name__ == '__main__':
     unittest.main()

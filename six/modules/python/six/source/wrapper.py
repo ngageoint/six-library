@@ -96,7 +96,7 @@ def unwrapToVector(wrapper, source):
                 sourceElement.reset()
             else:
                 unwrap(element, sourceElement)
-        source[ii] = sourceElement
+            source[ii] = sourceElement
     else:
         for ii in range(len(wrapper)):
             source[ii] = unwrap(wrapper[ii], source[ii])
