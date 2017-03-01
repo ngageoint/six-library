@@ -795,10 +795,8 @@ def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
 
 
 def writeNITF(pathname, cmplxData):
-    schemaPaths = VectorString()
-    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     imageBuffer = np.array([[1. + 2.j, 7.j], [8., 0.]])
-    sicdUtils.writeNITF(pathname, cmplxData, imageBuffer, schemaPaths)
+    sicdUtils.writeNITF(pathname, cmplxData, imageBuffer)
 
 
 def doRoundTrip(cmplx, includeNITF, outputPathnameBase):

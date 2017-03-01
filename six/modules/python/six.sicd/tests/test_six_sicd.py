@@ -22,6 +22,7 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -44,33 +45,15 @@ import filecmp
 # they match
 
 def roundTrip(filename):
-  vs = VectorString()
-  schemapath = os.environ['SIX_SCHEMA_PATH']
-  vs.push_back(schemapath)
-  fis = FileInputStream(filename)
-  xmlparser = MinidomParser()
-  xmlparser.preserveCharacterData(True)
-  xmlparser.parse(fis)
-  doc = xmlparser.getDocument()
-  dt = DataType(DataType.COMPLEX)
-  xml_ctrl = ComplexXMLControl()
-  data = xml_ctrl.fromXML(doc, vs)
-  cmplx = asComplexData(data)
-
-  out_doc = xml_ctrl.toXML(cmplx, vs)
-
+  cmplx = readComplexData(filename)
   out_filename = 'round_trip_' + os.path.basename(filename)
-
-  fos = FileOutputStream(out_filename)
-  root = out_doc.getRootElement()
-  root.prettyPrint(fos)
-  round_tripped_cmplx = SixSicdUtilities_parseDataFromFile(out_filename,
-      vs, Logger())
+  writeXML(cmplx, out_filename)
+  round_tripped_cmplx = readComplexData(out_filename)
 
   if cmplx == round_tripped_cmplx:
-    print(filename + " passed")
+      print(filename + " passed")
   else:
-    print("handling " + filename + " failed")
+      print("handling " + filename + " failed")
 
 
 ##############################################################
@@ -86,16 +69,10 @@ def roundTrip(filename):
 # be any in the repository, so this is really more of an example.
 
 def loadSicd(filename):
-  vs = VectorString()
-  vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
-  cmplx = SixSicdUtilities.getComplexData(filename, vs)
+  cmplx = readComplexData(filename)
   showInfo(cmplx)
   out_filename = 'from_sicd_' + os.path.basename(filename) + '.xml'
-  xml_ctrl = ComplexXMLControl()
-  fos = FileOutputStream(out_filename)
-  out_doc = xml_ctrl.toXML(cmplx, vs)
-  root = out_doc.getRootElement()
-  root.prettyPrint(fos)
+  writeXML(cmplx, out_filename)
   print(filename + " probably passed")
   return cmplx
 

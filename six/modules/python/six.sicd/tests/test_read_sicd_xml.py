@@ -25,6 +25,7 @@
 # Simple program to show how you can go from XML to and from SIX
 
 from pysix.six_sicd import *
+from pysix.sicdUtils import readComplexData
 from pysix.six_base import *
 from coda.coda_logging import *
 import sys, os
@@ -45,7 +46,7 @@ logger = NullLogger()
 gotNITF = inPathname.endswith('.ntf') or inPathname.endswith('.nitf')
 if gotNITF:
     xmlPathname = inPathname + '.xml'
-    data = SixSicdUtilities.getComplexData(inPathname, schemaPaths)
+    data = readComplexData(inPathname)
     xmlStr = SixSicdUtilities.toXMLString(data, schemaPaths, logger)
     file = open(xmlPathname, 'w')
     file.write(xmlStr)
@@ -54,7 +55,7 @@ else:
     xmlPathname = inPathname
 
 # Go from XML file on disk to ComplexData
-data = SixSicdUtilities.parseDataFromFile(xmlPathname, schemaPaths, logger)
+data = readComplexData(xmlPathname)
 if gotNITF:
     os.remove(xmlPathname)
 
@@ -81,3 +82,4 @@ if xmlStr == xmlStr2:
     print('Strings match')
 else:
     sys.exit('Strings do not match!')
+

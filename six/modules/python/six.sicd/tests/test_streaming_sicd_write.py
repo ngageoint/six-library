@@ -703,7 +703,7 @@ if __name__ == '__main__':
     # Write a normal NITF                                                     #
     ###########################################################################
     normalPathname = 'normal.nitf'
-    writeNITF(normalPathname, cmplx, imageBuffer, schemaPaths)
+    writeNITF(normalPathname, cmplx, imageBuffer)
 
     ###########################################################################
     # Write a streaming NITF                                                  #

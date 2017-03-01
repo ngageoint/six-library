@@ -14,15 +14,15 @@ if __name__ == '__main__':
         print("Usage: python " + sys.argv[0] + " <NITF path> <Schema path> [startRow numRows startCol numCols]")
         sys.exit(0)
 
-    schemaPaths = six_base.VectorString()
-    schemaPaths.push_back(schemaPath)
+    schemaPaths = [schemaPath]
 
     if len(sys.argv) == 7:
         sfl = int(sys.argv[3])
         snl = int(sys.argv[4])
         sfe = int(sys.argv[5])
         sne = int(sys.argv[6])
-        widebandData, complexData = six_sicd.readRegion(nitfPath, sfl, snl, sfe, sne, schemaPaths)
+        widebandData, complexData = sicdUtils.readNITF(nitfPath, sfl, snl, sfe,
+                sne, schemaPaths)
     else:
         widebandData, complexData = sicdUtils.readNITF(nitfPath,
                 schemaPaths=schemaPaths)

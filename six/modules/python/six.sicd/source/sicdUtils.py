@@ -28,33 +28,44 @@ from pysix.six_sicd import *
 from pysix.six_base import VectorString
 
 
-def writeXML(complexData, pathname):
+def _convertSchemaPaths(lst):
+    vectorString = VectorString()
+    if lst is not None:
+        for element in lst:
+            vectorString.push_back(element)
+    else:
+        vectorString.push_back( os.environ['SIX_SCHEMA_PATH'] )
+
+    return vectorString
+
+
+def writeXML(complexData, pathname, schemaPaths=None):
     ''' Write complexData to pathname as XML. '''
-    schemaPaths = VectorString()
-    schemaPaths.push_back( os.environ['SIX_SCHEMA_PATH'] )
     xmlControl = ComplexXMLControl()
     outputStream = FileOutputStream(pathname)
     try:
-        xml = xmlControl.toXML(complexData, schemaPaths)
+        xml = xmlControl.toXML(complexData, _convertSchemaPaths(schemaPaths))
         root = xml.getRootElement()
         root.prettyPrint(outputStream)
     finally:
         outputStream.close()
 
 
-def writeNITF(pathname, complexData, image, schemaPaths=VectorString()):
-    writeNITFImpl(pathname, schemaPaths, complexData,
-            image.__array_interface__['data'][0])
+def writeNITF(pathname, complexData, image, schemaPaths=None):
+        writeNITFImpl(pathname, _convertSchemaPaths(schemaPaths),
+            complexData, image.__array_interface__['data'][0])
 
 
-def readComplexData(inputPathname, schemaPaths=VectorString()):
-    return SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
+def readComplexData(inputPathname, schemaPaths=None):
+    return SixSicdUtilities.getComplexData(inputPathname,
+            _convertSchemaPaths(schemaPaths))
 
 
 def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
-        schemaPaths=VectorString()):
+        schemaPaths=None):
 
-    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
+    pathsVector = _convertSchemaPaths(schemaPaths)
+    complexData = SixSicdUtilities.getComplexData(inputPathname, pathsVector)
 
     if numRows == -1:
         numRows = complexData.getNumRows()
@@ -64,7 +75,7 @@ def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
     widebandData = np.empty(shape = (numRows, numCols), dtype='complex64')
     widebandBuffer, _ = widebandData.__array_interface__['data']
 
-    getWidebandRegion(inputPathname, schemaPaths, complexData, startRow,
+    getWidebandRegion(inputPathname, pathsVector, complexData, startRow,
             numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
