@@ -40,7 +40,14 @@ def _convertSchemaPaths(lst):
 
 
 def writeXML(complexData, pathname, schemaPaths=None):
-    ''' Write complexData to pathname as XML. '''
+    '''
+    Write complexData to pathname as XML.
+
+    Args:
+        complexData: ComplexData to write to file
+        pathname: File to be written to
+        schemaPaths: List containing where to look for schema
+    '''
     xmlControl = ComplexXMLControl()
     outputStream = FileOutputStream(pathname)
     try:
@@ -52,18 +59,51 @@ def writeXML(complexData, pathname, schemaPaths=None):
 
 
 def writeNITF(pathname, complexData, image, schemaPaths=None):
-        writeNITFImpl(pathname, _convertSchemaPaths(schemaPaths),
+    '''
+    Write a NITF from provided data
+
+    Args:
+        pathname: File to be written to
+        complexData: ComplexData to write to file
+        image: Numpy array containing image data
+        schemaPaths: List containing where to look for schema
+    '''
+    writeNITFImpl(pathname, _convertSchemaPaths(schemaPaths),
             complexData, image.__array_interface__['data'][0])
 
 
 def readComplexData(inputPathname, schemaPaths=None):
+    '''
+    Read ComplexData from either NITF or XML file
+
+    Args:
+        inputPathname: File to read
+        schemaPaths: List containing where to look for schema
+
+    Returns:
+        ComplexData from file
+    '''
     return SixSicdUtilities.getComplexData(inputPathname,
             _convertSchemaPaths(schemaPaths))
 
 
 def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
         schemaPaths=None):
+    '''
+    Read ComplexData and image data from NITF. To read entire image,
+    omit default row/col arguments.
 
+    Args:
+        inputPathname: File to read
+        startRow: First row to read
+        numRows:  How many rows to read
+        startCol: First col to read
+        numCols:  How many cols to read.
+        schemaPaths: List containing where to look for schema
+
+    Returns:
+        (widebandData, ComplexData) from file
+    '''
     pathsVector = _convertSchemaPaths(schemaPaths)
     complexData = SixSicdUtilities.getComplexData(inputPathname, pathsVector)
 
@@ -79,5 +119,4 @@ def readNITF(inputPathname, startRow=0, numRows=-1, startCol=0, numCols=-1,
             numRows, startCol, numCols, widebandBuffer)
 
     return widebandData, complexData
-
 
