@@ -114,19 +114,29 @@ bool GeoData::validate(logging::Logger& log) const
     bool valid = true;
     std::ostringstream messageBuilder;
 
-    // 2.10
-    scene::LLAToECEFTransform transformer;
-    Vector3 derivedEcf = transformer.transform(scp.llh);
-    double ecfDiff = (scp.ecf - derivedEcf).norm();
-
-    if (ecfDiff > ECF_THRESHOLD)
+    if (Init::isUndefined(scp.llh) ||
+        Init::isUndefined(scp.ecf))
     {
-        messageBuilder.str("");
-        messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent."
-            << std::endl << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
-            << ecfDiff << " (m)" << std::endl;
-        log.error(messageBuilder.str());
+        log.error("GeoData.SCP is undefined\n");
         valid = false;
+    }
+    else
+    {
+        // 2.10
+        scene::LLAToECEFTransform transformer;
+        Vector3 derivedEcf = transformer.transform(scp.llh);
+        double ecfDiff = (scp.ecf - derivedEcf).norm();
+
+        if (ecfDiff > ECF_THRESHOLD)
+        {
+            messageBuilder.str("");
+            messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH "
+                << "not consistent." << std::endl
+                << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
+                << ecfDiff << " (m)" << std::endl;
+            log.error(messageBuilder.str());
+            valid = false;
+        }
     }
     return valid;
 }

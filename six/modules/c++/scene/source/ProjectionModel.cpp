@@ -48,6 +48,17 @@ scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
 
     return unitVector;
 }
+
+template<typename PolyType>
+PolyType verboseDerivative(const PolyType& polynomial, const std::string& name)
+{
+    if (polynomial.empty())
+    {
+        throw except::Exception(Ctxt("Unable to take derivative of " + name +
+                ". Polynomial is empty."));
+    }
+    return polynomial.derivative();
+}
 }
 
 namespace scene
@@ -62,7 +73,7 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal(slantPlaneNormal),
     mSCP(scp),
     mARPPoly(arpPoly),
-    mARPVelPoly(mARPPoly.derivative()),
+    mARPVelPoly(verboseDerivative(arpPoly, "arpPoly")),
     mTimeCOAPoly(timeCOAPoly),
     mLookDir(lookDir),
     mErrors(errors)
@@ -793,9 +804,9 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                                     lookDir,
                                     errors),
     mPolarAnglePoly(polarAnglePoly),
-    mPolarAnglePolyPrime(mPolarAnglePoly.derivative()),
+    mPolarAnglePolyPrime(verboseDerivative(mPolarAnglePoly, "mPolarAnglePoly")),
     mKSFPoly(ksfPoly),
-    mKSFPolyPrime(mKSFPoly.derivative())
+    mKSFPolyPrime(verboseDerivative(mKSFPoly, "mKSFPoly"))
 {
 }
 
