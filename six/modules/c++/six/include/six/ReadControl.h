@@ -122,12 +122,18 @@ public:
     /*!
      *  This function reads in the image area specified by the region.
      *  If you want us to use a work buffer, you can set it through region.
+     *  If the region has a work buffer set, ownership will pass to
+     *  the buffer parameter, so be careful about doing this.
      *
      *  To simply read the entire image, pass a default-constructed
      *  Region as the first parameter.
      *
      *  Once read, the image buffer is set in the passed buffer, and
      *  also the region pointer and the return value for convenience.
+     *
+     *  The method will attempt to read the data as whatever type
+     *  you call it with. So using a buffer of floats to read integer
+     *  data would be a mistake.
      *
      * \param region Region stores row and cols to be read
      * \param imageNumber Index of the image to read
