@@ -29,34 +29,35 @@
 import sys, os, argparse
 from coda.math_linear import *
 from coda.coda_types import *
-from pysix import scene, six_base, six_sicd, sicdUtils
+from pysix import scene, six_base, six_sicd
 
 if __name__ == '__main__':
     # Parse the command line
     parser = argparse.ArgumentParser(description=
-    """Convert a pixel location in a SICD to a scene (ground) point in
+    """Convert a pixel location in a SICD to a scene (ground) point in 
        lat/lon/alt and ECEF""")
 
     parser.add_argument('--row', help='Image row (pixels)', type=float, required=True)
     parser.add_argument('--col', help='Image col (pixels) ', type=float, required=True)
     parser.add_argument('--alt', help='Altitude (meters)', type=float)
     parser.add_argument('--sicd', help='SICD NITF pathname', required=True)
-    parser.add_argument('--schema',
+    parser.add_argument('--schema', 
         help="""Schema directory.  Required if SIX_SCHEMA_PATH environment
                 variable is not set.""")
 
     args = parser.parse_args()
-
+    
     # Set the schema paths
     # Try to use the environment variable if we've got it
     schemaPath = os.getenv('SIX_SCHEMA_PATH', args.schema)
     if schemaPath == None:
-        sys.exit('If SIX_SCHEMA_PATH environment variable is not set, schema ' +
+        sys.exit('If SIX_SCHEMA_PATH environment variable is not set, schema ' + 
                  'dir must be passed in')
-    schemaPaths = [schemaPath]
+    schemaPaths = six_base.VectorString()
+    schemaPaths.push_back(schemaPath)
 
     # Read in the XML portion of the SICD
-    complexData = sicdUtils.readComplexData(args.sicd, schemaPaths)
+    complexData = six_sicd.SixSicdUtilities.getComplexData(args.sicd, schemaPaths)
 
     # Derive geometry info from this
     geom = six_sicd.SixSicdUtilities.getSceneGeometry(complexData)
@@ -75,7 +76,7 @@ if __name__ == '__main__':
         # If the SICD defines an output plane, we'll base it on this
         # Otherwise we'll use the ETP
         groundPlaneNormal = six_sicd.SixSicdUtilities.getGroundPlaneNormal(complexData)
-
+    
         groundPt = projModel.imageToScene(imagePt, geom.getReferencePosition(),
                                           groundPlaneNormal)
 

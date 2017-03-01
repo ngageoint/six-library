@@ -22,7 +22,6 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from coda.coda_logging import *
 
@@ -38,19 +37,21 @@ import sys
 # This test loads a sicd file as a complex data object and checks to see
 # if it is valid. Discrepancies get written to stdout
 
+def validateSicd(filename):
+  vs = VectorString()
+  vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
+  cmplx = SixSicdUtilities.getComplexData(filename, vs)
+  return cmplx.validate(getLogger())
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: {0} <SICD pathname>".format(sys.argv[0]))
         sys.exit(1)
-
     pathname = sys.argv[1]
     if (pathname.endswith(".ntf") or pathname.endswith(".nitf")):
-        cmplx = readComplexData(pathname)
-        if cmplx.validate(getLogger()):
+        if validateSicd(pathname):
             print("SICD is valid")
             sys.exit(0)
-
         print("SICD is invalid")
     sys.exit(1)
 

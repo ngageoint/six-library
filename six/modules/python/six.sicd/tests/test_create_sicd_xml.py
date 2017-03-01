@@ -26,10 +26,8 @@ import os
 import sys
 import filecmp
 
-import numpy as np
-
 from pysix.scene import *
-from pysix import sicdUtils
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -795,8 +793,25 @@ def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
 
 
 def writeNITF(pathname, cmplxData):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
     imageBuffer = np.array([[1. + 2.j, 7.j], [8., 0.]])
-    sicdUtils.writeNITF(pathname, cmplxData, imageBuffer)
+    writeAsNITF(pathname, schemaPaths, cmplxData, imageBuffer)
+
+
+def readXML(pathname):
+    schemaPaths = VectorString()
+    schemaPaths.push_back(os.environ['SIX_SCHEMA_PATH'])
+    fis = FileInputStream(pathname)
+    xmlparser = MinidomParser()
+    xmlparser.preserveCharacterData(True)
+    xmlparser.parse(fis)
+    in_doc = xmlparser.getDocument()
+
+    xml_ctrl = ComplexXMLControl()
+    data = xml_ctrl.fromXML(in_doc, schemaPaths)
+    cmplxReadBackIn = asComplexData(data)
+    return cmplxReadBackIn
 
 
 def doRoundTrip(cmplx, includeNITF, outputPathnameBase):
@@ -804,7 +819,7 @@ def doRoundTrip(cmplx, includeNITF, outputPathnameBase):
     xmlPathname = outputPathnameBase + '.xml'
     nitfPathname = outputPathnameBase + '.nitf'
 
-    sicdUtils.writeXML(cmplx, xmlPathname)
+    writeXML(cmplx, xmlPathname)
     if includeNITF:
         writeNITF(nitfPathname, cmplx)
 
@@ -814,16 +829,16 @@ def doRoundTrip(cmplx, includeNITF, outputPathnameBase):
     # get written out though
 
     ### Now read it back in again ###
-    cmplxReadBackIn = sicdUtils.readComplexData(xmlPathname)
+    cmplxReadBackIn = readXML(xmlPathname)
     if includeNITF:
-        _, cmplxFromNITF = sicdUtils.readNITF(nitfPathname)
+        cmplxFromNITF = readFromNITF(nitfPathname)
 
     # And then write it out one more time #
     roundTrippedPathnameBase = '{0}_rt'.format(outputPathnameBase)
     roundTrippedXmlPathname = roundTrippedPathnameBase + '.xml'
     roundTrippedNitfPathname = roundTrippedPathnameBase + '.nitf'
 
-    sicdUtils.writeXML(cmplxReadBackIn, roundTrippedXmlPathname)
+    writeXML(cmplxReadBackIn, roundTrippedXmlPathname)
     if includeNITF:
         writeNITF(roundTrippedNitfPathname, cmplxReadBackIn)
 
