@@ -87,10 +87,10 @@ class TestUnwrapping(unittest.TestCase):
         wrappedObject.dcx = 5.0
         wrappedObject.dcy = 3.4
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertEqual(originalObject.dcx, 5)
-        self.assertEqual(originalObject.dcy, 3.4)
+        self.assertEqual(unwrapped.dcx, 5)
+        self.assertEqual(unwrapped.dcy, 3.4)
 
     def testUnwrappingPoly1D(self):
         originalObject = ElectricalBoresight()
@@ -100,11 +100,11 @@ class TestUnwrapping(unittest.TestCase):
         wrappedObject.dcxPoly = numpy.zeros(0)
         wrappedObject.dcyPoly = numpy.ones(1)
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertTrue(originalObject.dcxPoly.empty())
-        self.assertEqual(originalObject.dcyPoly[0], 1)
-        self.assertIsInstance(originalObject.dcxPoly, Poly1D)
+        self.assertTrue(unwrapped.dcxPoly.empty())
+        self.assertEqual(unwrapped.dcyPoly[0], 1)
+        self.assertIsInstance(unwrapped.dcxPoly, Poly1D)
 
     def testUnwrappingPoly2D(self):
         originalObject = GainAndPhasePolys()
@@ -113,12 +113,12 @@ class TestUnwrapping(unittest.TestCase):
         wrappedObject.gainPoly = numpy.zeros(0)
         wrappedObject.phasePoly = numpy.ones((1, 1))
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertIsInstance(originalObject.gainPoly, Poly2D)
-        self.assertTrue(originalObject.gainPoly.empty())
-        self.assertIsInstance(originalObject.phasePoly, Poly2D)
-        self.assertEqual(originalObject.phasePoly[(0,0)], 1)
+        self.assertIsInstance(unwrapped.gainPoly, Poly2D)
+        self.assertTrue(unwrapped.gainPoly.empty())
+        self.assertIsInstance(unwrapped.phasePoly, Poly2D)
+        self.assertEqual(unwrapped.phasePoly[(0,0)], 1)
 
     def testCanUnwrapSmartPointer(self):
         originalObject = AntennaParameters()
@@ -130,11 +130,11 @@ class TestUnwrapping(unittest.TestCase):
                 makeScopedCopyableHalfPowerBeamwidths())
         wrappedObject.halfPowerBeamwidths.dcx = 3
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertIsNone(originalObject.electricalBoresight.get())
-        self.assertIsNotNone(originalObject.halfPowerBeamwidths.get())
-        self.assertEqual(originalObject.halfPowerBeamwidths.dcx, 3)
+        self.assertIsNone(unwrapped.electricalBoresight.get())
+        self.assertIsNotNone(unwrapped.halfPowerBeamwidths.get())
+        self.assertEqual(unwrapped.halfPowerBeamwidths.dcx, 3)
 
     def testUnwrapList(self):
         originalObject = CollectionInformation()
@@ -142,10 +142,10 @@ class TestUnwrapping(unittest.TestCase):
         wrappedObject = wrap(originalObject)
         wrappedObject.countryCodes.append('secondElement')
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertIn('Vector', type(originalObject.countryCodes).__name__)
-        self.assertEqual(originalObject.countryCodes[1], 'secondElement')
+        self.assertIn('Vector', type(unwrapped.countryCodes).__name__)
+        self.assertEqual(unwrapped.countryCodes[1], 'secondElement')
 
     def testUnwrapVectorOfSmartPointers(self):
         originalObject = GeoData()
@@ -159,12 +159,37 @@ class TestUnwrapping(unittest.TestCase):
         wrappedObject.geoInfos[1] = makeScopedCloneableGeoInfo()
         wrappedObject.geoInfos[1].name = "second name"
 
-        unwrap(wrappedObject, originalObject)
+        unwrapped = unwrap(wrappedObject)
 
-        self.assertEqual(originalObject.geoInfos.size(), 3)
-        self.assertIsNotNone(originalObject.geoInfos[1].get())
-        self.assertEqual(originalObject.geoInfos[1].name, "second name")
-        self.assertIsNone(originalObject.geoInfos[2].get())
+        self.assertEqual(unwrapped.geoInfos.size(), 3)
+        self.assertIsNotNone(unwrapped.geoInfos[1].get())
+        self.assertEqual(unwrapped.geoInfos[1].name, "second name")
+        self.assertIsNone(unwrapped.geoInfos[2].get())
+
+
+class TestMethods(unittest.TestCase):
+
+    def testMethodsUseUpdatedValues(self):
+        originalObject = ComplexData()
+        originalObject.imageData.numRows = 3
+        wrappedObject = wrap(originalObject)
+        wrappedObject.imageData.numRows = 5
+        self.assertEqual(wrappedObject.getNumRows(), 5)
+
+    def testMethodsCanChangeWrapper(self):
+        originalObject = ComplexData()
+        wrappedObject = wrap(originalObject)
+        wrappedObject.setNumRows(5)
+        self.assertEqual(wrappedObject.getNumRows(), 5)
+
+    def testMethodsDeep(self):
+        originalObject = ComplexData()
+        wrappedObject = wrap(ComplexData())
+        wrappedObject.fillDefaultFields()
+        originalObject.fillDefaultFields()
+        unwrapped = unwrap(wrappedObject)
+        self.assertEqual(originalObject, unwrapped)
+
 
 if __name__ == '__main__':
     unittest.main()

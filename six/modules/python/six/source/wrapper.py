@@ -17,7 +17,9 @@ def getMemberVariables(obj):
     return members
 
 def getMethods(obj):
-    return inspect.getmembers(obj, inspect.ismethod)
+    return [method for method in
+            inspect.getmembers(obj, inspect.ismethod) if not
+            method[0].startswith('_')]
 
 def isPoly(value):
     polyTypes = ['Poly1D', 'Poly2D']
@@ -41,6 +43,20 @@ def wrapVector(vector):
         wrappedVector.append(wrap(vector[ii]))
     return wrappedVector
 
+def wrapMethod(obj, parent):
+
+    def wrappedMethod(self, *args):
+        unwrap(self)
+        val = wrap(getattr(self._source, obj.__name__)(*args))
+        updateWrapper(self)
+        return val
+
+    return wrappedMethod
+
+def updateWrapper(wrapper):
+    for (name, value) in getMemberVariables(wrapper._source):
+        setattr(wrapper, name, wrap(value))
+
 def wrap(obj):
     if isLikeAPrimitive(obj):
         return obj
@@ -55,8 +71,11 @@ def wrap(obj):
     elif isPoly(obj):
         return obj.asArray()
     wrapper = type(type(obj).__name__, (), {})
+    setattr(wrapper, '_source', obj)
     for (name, value) in getMemberVariables(obj):
         setattr(wrapper, name, wrap(value))
+    for (name, value) in getMethods(obj):
+        setattr(wrapper, name, types.MethodType(wrapMethod(value, obj), wrapper))
     return wrapper
 
 def unwrapPoly(wrapper, source):
@@ -76,7 +95,7 @@ def unwrapSmartPointer(wrapper, source):
     else:
         constructorName = 'make' + type(source).__name__
         source = globals()[constructorName]()
-        unwrap(wrapper, source)
+        unwrapImpl(wrapper, source.get())
     return source
 
 def unwrapToVector(wrapper, source):
@@ -95,14 +114,17 @@ def unwrapToVector(wrapper, source):
             if element is None:
                 sourceElement.reset()
             else:
-                unwrap(element, sourceElement)
+                unwrapImpl(element, sourceElement)
             source[ii] = sourceElement
     else:
         for ii in range(len(wrapper)):
-            source[ii] = unwrap(wrapper[ii], source[ii])
+            source[ii] = unwrapImpl(wrapper[ii], source[ii])
     return source
 
-def unwrap(wrapper, source):
+def unwrap(wrapper):
+    return unwrapImpl(wrapper, wrapper._source)
+
+def unwrapImpl(wrapper, source):
     if isLikeAPrimitive(source):
         return wrapper
     for (name, unwrappedValue) in getMemberVariables(source):
@@ -121,7 +143,7 @@ def unwrap(wrapper, source):
         elif isPoly(unwrappedValue):
             unwrappedValue = unwrapPoly(wrappedValue, unwrappedValue)
         else:
-            unwrap(wrappedValue, unwrappedValue)
+            unwrapImpl(wrappedValue, unwrappedValue)
         setattr(source, name, unwrappedValue)
     return source
 
