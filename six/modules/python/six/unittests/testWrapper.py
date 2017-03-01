@@ -165,6 +165,15 @@ class TestUnwrapping(unittest.TestCase):
         self.assertEqual(wrappedObject.geoInfos[1].name, "second name")
         self.assertIsNone(wrappedObject.geoInfos[2])
 
+class TestMethods(unittest.TestCase):
+    def testMethodsUseUpdatedValues(self):
+        originalObject = ComplexData()
+        originalObject.imageData.numRows = 3
+        wrappedObject = wrap(originalObject)
+        wrappedObject.imageData.numRows = 5
+        self.assertEqual(wrappedObject.getNumRows(), 5)
+
+
 if __name__ == '__main__':
     unittest.main()
 

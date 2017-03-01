@@ -41,6 +41,16 @@ def wrapVector(vector):
         wrappedVector.append(wrap(vector[ii]))
     return wrappedVector
 
+def wrapMethod(obj, parent):
+
+    def wrappedMethod(self, *args):
+        unwrap(self, parent)
+        val = wrap(obj(*args))
+        #TODO: Side-effects
+        return val
+
+    return wrappedMethod
+
 def wrap(obj):
     if isLikeAPrimitive(obj):
         return obj
@@ -57,6 +67,8 @@ def wrap(obj):
     wrapper = type(type(obj).__name__, (), {})
     for (name, value) in getMemberVariables(obj):
         setattr(wrapper, name, wrap(value))
+    for (name, value) in getMethods(obj):
+        setattr(wrapper, name, types.MethodType(wrapMethod(value, obj), wrapper))
     return wrapper
 
 def unwrapPoly(wrapper, source):
