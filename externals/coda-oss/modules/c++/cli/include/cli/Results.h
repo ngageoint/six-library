@@ -69,7 +69,10 @@ public:
     {
         ConstValueIter_T p = mValues.find(key);
         if (p == mValues.end())
-            throw except::NoSuchKeyException(Ctxt(key));
+        {
+            const std::string errorMessage = "No argument named " + key;
+            throw except::NoSuchKeyException(Ctxt(errorMessage));
+        }
         return p->second;
     }
 
@@ -92,7 +95,9 @@ public:
     {
         ConstResultsIter_T p = mResults.find(key);
         if (p == mResults.end())
+        {
             throw except::NoSuchKeyException(Ctxt(key));
+        }
         return p->second;
     }
 

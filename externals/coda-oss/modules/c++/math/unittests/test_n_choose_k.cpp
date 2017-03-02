@@ -2,7 +2,7 @@
  * This file is part of math-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * math-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,48 +20,38 @@
  *
  */
 
-#ifndef __MATH_UTILITIES_H__
-#define __MATH_UTILITIES_H__
+#include <TestCase.h>
+#include <math/Utilities.h>
 
-#include <stdlib.h>
-#include <sys/Conf.h>
-namespace math
+namespace
 {
-/*!
- * Find sign of input, expressed as -1, 0, or 1
- * \param val A signed number
- * \return 1 if val is positive, -1 if negative, 0 otherwise
- */
-template <typename T>
-int sign(T val)
+TEST_CASE(testNChooseK)
 {
-    if (val < 0)
+    TEST_ASSERT_EQ(math::nChooseK(0, 0), 1);
+    TEST_ASSERT_EQ(math::nChooseK(1, 1), 1);
+    TEST_ASSERT_EQ(math::nChooseK(3, 2), 3);
+    TEST_ASSERT_EQ(math::nChooseK(10, 3), 120);
+}
+
+TEST_CASE(testNLessThanK)
+{
+    bool exceptionCaught = false;
+    try
     {
-        return -1;
+        math::nChooseK(3, 10);
     }
-    if (val > 0)
+    catch(const except::Exception& /*exception*/)
     {
-        return 1;
+       exceptionCaught = true;
     }
+    TEST_ASSERT(exceptionCaught);
+}
+}
+
+int main()
+{
+    TEST_CHECK(testNChooseK);
+    TEST_CHECK(testNLessThanK);
     return 0;
 }
-
-inline double square(double val)
-{
-    return val * val;
-}
-
-
-/*
- * Calculate the binomial coefficient
- * Be wary of the possibility of overflow from integer arithmetic.
- *
- * \param n number of possibilities
- * \param k number of outcomes
- * \return n choose k
- */
-sys::Uint64_T nChooseK(size_t n, size_t k);
-}
-
-#endif
 
