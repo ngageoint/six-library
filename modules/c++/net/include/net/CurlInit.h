@@ -2,7 +2,7 @@
  * This file is part of net-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * net-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,27 +20,37 @@
  *
  */
 
-#ifndef __IMPORT_NET_H__
-#define __IMPORT_NET_H__
+#ifndef __NET_CURL_INIT_H__
+#define __NET_CURL_INIT_H__
 
-#include "net/ClientSocketFactory.h"
-#include "net/NetConnectionClientFactory.h"
-#include "net/NetConnection.h"
-#include "net/NetConnectionServer.h"
-#include "net/NetExceptions.h"
-#include "net/SerializableConnection.h"
-#include "net/ServerSocketFactory.h"
-#include "net/SocketAddress.h"
-#include "net/Socket.h"
-#include "net/SingleThreadedAllocStrategy.h"
-#include "net/PerRequestThreadAllocStrategy.h"
-#include "net/ThreadPoolAllocStrategy.h"
-#include "net/URL.h"
-#include "net/AllocStrategy.h"
-#include "net/NetUtils.h"
-#include "net/URLBuilder.h"
-#include "net/Daemon.h"
-#include "net/CurlHandle.h"
-#include "net/CurlInit.h"
+#include <net/net_config.h>
 
+#ifdef NET_CURL_SUPPORT
+
+namespace net
+{
+/*
+ *  \class CurlInit
+ *  \brief RAII class for the CURL initialization calls that must be called
+ *         at least once prior to any other CURL calls.
+ *         NOTE: It seems this is not always required, but is probably good
+ *         practice.
+ */
+struct CurlInit
+{
+    /*
+     *  \func Constructor
+     *  \brief Initializes CURL
+     */
+    CurlInit();
+
+    /*
+     *  \func Destructor
+     *  \brief Shuts down CURL.
+     */
+    ~CurlInit();
+};
+}
+
+#endif
 #endif

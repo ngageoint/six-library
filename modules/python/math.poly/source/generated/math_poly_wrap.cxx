@@ -4844,8 +4844,12 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_double_Sg____call____SWIG_1(math::poly::O
         return pyresult;
     }
 SWIGINTERN PyObject *math_poly_OneD_Sl_double_Sg__asArray(math::poly::OneD< double > *self){
-        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
-                &((*self)[0]));
+        if (!self->empty())
+        {
+            return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                    &((*self)[0]));
+        }
+        return numpyutils::toNumpyArray(1, 0, NPY_DOUBLE, 0);
     }
 
   namespace swig {
@@ -5089,8 +5093,18 @@ SWIGINTERN PyObject *math_poly_TwoD_Sl_double_Sg____call____SWIG_1(math::poly::T
         return pyresult;
     }
 SWIGINTERN PyObject *math_poly_TwoD_Sl_double_Sg__asArray(math::poly::TwoD< double > *self){
-        size_t numRows = self->orderX() + 1;
-        size_t numColumns = self->orderY() + 1;
+        size_t numRows;
+        size_t numColumns;
+        if (self->empty())
+        {
+            numRows = 0;
+            numColumns = 0;
+        }
+        else
+        {
+            numRows = self->orderX() + 1;
+            numColumns = self->orderY() + 1;
+        }
         std::vector<void*> rows(numRows);
         for (size_t ii = 0; ii < rows.size(); ++ii)
         {
@@ -5241,6 +5255,14 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_Vector3_Sg____call____SWIG_1(math::poly::
                 PyList_SetItem(pyresult, i, pytmp);
             }
             return pyresult;
+        }
+SWIGINTERN PyObject *math_poly_OneD_Sl_Vector3_Sg__asArray(math::poly::OneD< Vector3 > *self){
+            if (!self->empty())
+            {
+                return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                        &((*self)[0]));
+            }
+            return numpyutils::toNumpyArray(1, 0, NPY_DOUBLE, 0);
         }
 SWIGINTERN swig::SwigPyIterator *std_vector_Sl_double_Sg__iterator(std::vector< double > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
@@ -20840,6 +20862,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PolyVector3_asArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolyVector3_asArray",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_asArray" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      result = (PyObject *)math_poly_OneD_Sl_Vector3_Sg__asArray(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_PolyVector3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
@@ -24644,6 +24718,7 @@ static PyMethodDef SwigMethods[] = {
 		"__call__(double at) -> Vector3\n"
 		"PolyVector3___call__(PolyVector3 self, PyObject * input) -> PyObject *\n"
 		""},
+	 { (char *)"PolyVector3_asArray", _wrap_PolyVector3_asArray, METH_VARARGS, (char *)"PolyVector3_asArray(PolyVector3 self) -> PyObject *"},
 	 { (char *)"delete_PolyVector3", _wrap_delete_PolyVector3, METH_VARARGS, (char *)"delete_PolyVector3(PolyVector3 self)"},
 	 { (char *)"PolyVector3_swigregister", PolyVector3_swigregister, METH_VARARGS, NULL},
 	 { (char *)"StdVectorDouble_iterator", _wrap_StdVectorDouble_iterator, METH_VARARGS, (char *)"StdVectorDouble_iterator(std_vector_double self) -> SwigPyIterator"},

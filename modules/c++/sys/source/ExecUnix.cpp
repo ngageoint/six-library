@@ -93,7 +93,9 @@ FILE* ExecPipe::openPipe(const std::string& command,
             //! call our command --
             //  this command replaces the forked process with
             //  command the user specified
-            execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
+            execl("/bin/sh", "sh", "-c",
+                  command.c_str(),
+                  static_cast<char*>(NULL));
 
             //! exit the subprocess once it has completed
             exit(127);
