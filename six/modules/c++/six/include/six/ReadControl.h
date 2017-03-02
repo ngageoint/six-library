@@ -27,6 +27,7 @@
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include <mem/ScopedArray.h>
 #include <import/logging.h>
 
 namespace six
@@ -108,10 +109,47 @@ public:
      *  This function reads in the image area specified by the region.
      *  If you want us to use a work buffer, you can set it through region.
      *
+     *  To simply read the entire image, pass a default-constructed
+     *  Region as the first parameter
+     *
      *  Once read, the image buffer is set in both the region pointer,
      *  and in the return value, for convenience
+     *
+     *  For safety, prefer the overload below.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
+
+    /*!
+     *  This function reads in the image area specified by the region.
+     *  If you want us to use a work buffer, you can set it through region.
+     *  If the region has a work buffer set, ownership will pass to
+     *  the buffer parameter, so be careful about doing this.
+     *
+     *  To simply read the entire image, pass a default-constructed
+     *  Region as the first parameter.
+     *
+     *  Once read, the image buffer is set in the passed buffer, and
+     *  also the region pointer and the return value for convenience.
+     *
+     *  The method will attempt to read the data as whatever type
+     *  you call it with. So using a buffer of floats to read integer
+     *  data would be a mistake.
+     *
+     * \param region Region stores row and cols to be read
+     * \param imageNumber Index of the image to read
+     * \param buffer Scoped array that holds the memory for the read-in image.
+     * This will be allocated by this function.
+     *
+     * \return Buffer of image data.  This is simply equal to buffer.get() and
+     * is provided as a convenience.
+     */
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+            mem::ScopedArray<T>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
 
     /*!
      *  Get the file type.  For SICD, this will only include "NITF", but
