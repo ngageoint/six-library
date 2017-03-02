@@ -122,16 +122,8 @@ void read(const std::string& filename, sys::Int16_T* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
-    mem::SharedPtr<const six::Container> container = reader.getContainer();
-    const six::Data* const inData = container->getData(0);
 
-    const size_t numRows = inData->getNumRows();
-    const size_t numCols = inData->getNumCols();
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(numRows);
-    region.setNumCols(numCols);
     region.setBuffer(reinterpret_cast<six::UByte*>(data));
     reader.interleaved(region, 0);
 }
