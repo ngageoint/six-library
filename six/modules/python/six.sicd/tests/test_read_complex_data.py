@@ -40,13 +40,10 @@ if __name__ == '__main__':
     pathname = sys.argv[1]
 
     if (pathname.endswith(".nitf") or pathname.endswith(".ntf")):
-        vs = VectorString()
-        vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
-
-        complexDataFromNITF = SixSicdUtilities.getComplexData(pathname, vs)
+        complexDataFromNITF = readComplexData(pathname)
         xmlPathname = os.path.basename(os.path.splitext(pathname)[0] + '.xml')
         writeXML(complexDataFromNITF, xmlPathname)
-        complexDataFromXML = SixSicdUtilities.getComplexData(xmlPathname, vs)
+        complexDataFromXML = readComplexData(xmlPathname)
 
         success = complexDataFromNITF == complexDataFromXML
         if os.path.exists(xmlPathname):

@@ -219,13 +219,9 @@ def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
 
-def writeNITF(pathname, schemaPaths, data, imageAdr):
-    """writeNITF(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
-    return _six_sicd.writeNITF(pathname, schemaPaths, data, imageAdr)
-
-def readNITF(pathname, schemaPaths):
-    """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
-    return _six_sicd.readNITF(pathname, schemaPaths)
+def writeNITFImpl(pathname, schemaPaths, data, imageAdr):
+    """writeNITFImpl(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
+    return _six_sicd.writeNITFImpl(pathname, schemaPaths, data, imageAdr)
 
 import os
 import sys
@@ -10351,48 +10347,9 @@ VectorTimelineSet_swigregister = _six_sicd.VectorTimelineSet_swigregister
 VectorTimelineSet_swigregister(VectorTimelineSet)
 
 
-def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
-    """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long arrayBuffer)"""
-    return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
-
 def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer):
     """getWidebandRegion(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
-
-import numpy as np
-from pysix.six_base import VectorString
-from coda.coda_io import FileOutputStream
-from coda.xml_lite import *
-
-def read(inputPathname, schemaPaths = VectorString()):
-    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
-
-#Numpy has no concept of complex integers, so dtype will always be complex64
-    widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
-    widebandBuffer, ro = widebandData.__array_interface__["data"]
-
-    getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
-
-    return widebandData, complexData
-
-def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths = VectorString()):
-    complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
-
-    widebandData = np.empty(shape = (numRows, numCols), dtype = "complex64")
-    widebandBuffer, ro = widebandData.__array_interface__["data"]
-
-    getWidebandRegion(inputPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, widebandBuffer)
-
-    return widebandData, complexData
-
-
-def writeAsNITF(outFile, schemaPaths, complexData, image):
-    writeNITF(outFile, schemaPaths, complexData,
-        image.__array_interface__["data"][0])
-
-def readFromNITF(pathname, schemaPaths=VectorString()):
-    return readNITF(pathname, schemaPaths)
-
 class SICDWriteControl(_object):
     """Proxy of C++ six::sicd::SICDWriteControl class."""
 

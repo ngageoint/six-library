@@ -28,13 +28,13 @@
 
 import sys, os, argparse, pdb
 from coda.math_linear import *
-from pysix import scene, six_base, six_sicd
+from pysix import scene, six_base, six_sicd, sicdUtils
 
 if __name__ == '__main__':
     # Parse the command line
     parser = argparse.ArgumentParser(description=
     """Convert a scene (ground) point to a pixel location in a SICD.  Input can
-       be lat/lon (in which case the SCP's altitude will be used), lat/lon/alt, 
+       be lat/lon (in which case the SCP's altitude will be used), lat/lon/alt,
        or ECEF.""")
 
     parser.add_argument('--lat', help='Latitude', type=float)
@@ -42,28 +42,27 @@ if __name__ == '__main__':
     parser.add_argument('--alt', help='Altitude in meters', type=float)
     parser.add_argument('--ecef', nargs=3, help='ECEF meters <x y z>', type=float)
     parser.add_argument('--sicd', help='SICD NITF pathname', required=True)
-    parser.add_argument('--schema', 
+    parser.add_argument('--schema',
         help="""Schema directory.  Required if SIX_SCHEMA_PATH environment
                 variable is not set.""")
 
     args = parser.parse_args()
-    
+
     # Set the schema paths
     # Try to use the environment variable if we've got it
     schemaPath = os.getenv('SIX_SCHEMA_PATH', args.schema)
     if schemaPath == None:
-        sys.exit('If SIX_SCHEMA_PATH environment variable is not set, schema ' + 
+        sys.exit('If SIX_SCHEMA_PATH environment variable is not set, schema ' +
                  'dir must be passed in')
-    schemaPaths = six_base.VectorString()
-    schemaPaths.push_back(schemaPath)
 
+    schemaPaths = [schemaPath]
     # Read in the XML portion of the SICD
-    complexData = six_sicd.SixSicdUtilities.getComplexData(args.sicd, schemaPaths)
+    complexData = sicdUtils.readComplexData(args.sicd, schemaPaths)
 
     # Derive geometry info from this
     geom = six_sicd.SixSicdUtilities.getSceneGeometry(complexData)
     projModel = six_sicd.SixSicdUtilities.getProjectionModel(complexData, geom)
-    
+
     # To actually call sceneToImage(), we need ECEF
     # So if they gave us lat/lon, we need to convert
     if args.lat != None:
@@ -74,15 +73,15 @@ if __name__ == '__main__':
             print("Using SCP's height of %f meters" % alt)
         latLonAlt = scene.LatLonAlt(args.lat, args.lon, alt)
         groundPt = scene.Utilities.latLonToECEF(latLonAlt)
-    else:    
+    else:
         groundPt = coda.math_linear.Vector3()
         for idx, val in enumerate(args.ecef):
             groundPt[idx] = val
-    
+
     # Convert to image coordinates
     # This is in meters from the SCP
     imagePt = projModel.sceneToImage(groundPt)
-    
+
     # Convert to pixel coordinates
     pixelRow = imagePt.row / complexData.grid.row.sampleSpacing + \
             complexData.imageData.scpPixel.row - complexData.imageData.firstRow
