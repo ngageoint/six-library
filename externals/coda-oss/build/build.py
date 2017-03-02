@@ -90,68 +90,31 @@ class CPPContext(Context.Context):
                     defines.append('%s=%s' % (key, value))
         return defines
 
-    def pprint(self, *strs, **kw):
-        colors = listify(kw.get('colors', 'blue'))
-        colors = list(map(str.upper, colors))
-        for i, s in enumerate(strs):
-            sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
-        sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
-
-    def install_tgt(tsk, **modArgs):
-        # The main purpose this serves is to recursively copy all the wscript's
-        # involved when we have a wscript whose sole job is to install files
-        modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
+    def _getEnv(self, modArgs):
         if 'env' in modArgs:
             env = modArgs['env']
         else:
-            variant = modArgs.get('variant', tsk.env['VARIANT'] or 'default')
-            env = tsk.all_envs[variant]
+            variant = modArgs.get('variant', self.env['VARIANT'] or 'default')
+            env = self.all_envs[variant]
+        return env
 
-        features = 'install_tgt'
-        if env['install_source']:
-            targetsToAdd = modArgs.get('targets_to_add', [])
-            targetsToAdd = targetsToAdd + getWscriptTargets(tsk, env, tsk.path)
-            modArgs['targets_to_add'] = targetsToAdd
-            features += ' add_targets'
-        return tsk(features = features, **modArgs)
-
-    def module(self, **modArgs):
-        """
-        Builds a module, along with optional tests.
-        It makes assumptions, but most can be overridden by passing in args.
-        """
-        bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
-
-        modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
-
-        for func in self.module_hooks:
-            func(modArgs, env)
-
+    def _extendGlobPatterns(self, globPatterns, modArgs):
         lang = modArgs.get('lang', 'c++')
-        libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
-        sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
-        if modArgs.get('nosuffix', False) :
-            libName = modArgs['name']
-        else :
-            libName = '%s-%s' % (modArgs['name'], lang)
-        path = modArgs.get('path',
-                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
+        sourceExtensions = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+        allSourceExtensions = (listify(modArgs.get('source_ext', '')) +
+                [sourceExtensions])
 
-        module_deps = list(['%s-%s' % (x, lang) for x in listify(modArgs.get('module_deps', ''))])
-        defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
-        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
-        includes = listify(modArgs.get('includes', 'include'))
-        exportIncludes = listify(modArgs.get('export_includes', 'include'))
-        libVersion = modArgs.get('version', None)
-        installPath = modArgs.get('install_path', None)
+        # Entire source directories can also be provided via
+        # 'source_dir' or 'sourcedir'
+        sourceDirs = listify(modArgs.get('source_dir',
+                modArgs.get('sourcedir', 'source')))
+        for dir in sourceDirs:
+            for ext in allSourceExtensions:
+                globPatterns.append(join(dir, '*%s' % ext))
 
+        return globPatterns
+
+    def _configureUselibs(self, targetsToAdd, modArgs):
         # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
         # If we're doing a source installation and we built it locally, the
@@ -159,6 +122,14 @@ class CPPContext(Context.Context):
         # build it locally, we need to add the source target on here since
         # in that case this module doesn't depend on a task associated with
         # the external library.
+        env = self._getEnv(modArgs)
+        lang = modArgs.get('lang', 'c++')
+        module_deps = list(['%s-%s' % (x, lang) for x in listify(
+                modArgs.get('module_deps', ''))])
+        uselib_local = module_deps + (listify(modArgs.get('uselib_local', ''))
+                + listify(modArgs.get('use','')))
+        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
+
         uselibCheck = modArgs.get('uselib_check', None)
         if uselibCheck:
             for currentLib in listify(uselibCheck):
@@ -168,7 +139,7 @@ class CPPContext(Context.Context):
                     uselib += [currentLib]
                     if env['install_source']:
                         sourceTarget = '%s_SOURCE_INSTALL' % currentLib
-                        targets_to_add += [sourceTarget]
+                        targetsToAdd.append(sourceTarget)
 
         # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
@@ -179,29 +150,75 @@ class CPPContext(Context.Context):
             else:
                 uselib.append(uselibCheck)
 
+        return uselib_local, uselib
+
+
+    def pprint(self, *strs, **kw):
+        colors = listify(kw.get('colors', 'blue'))
+        colors = list(map(str.upper, colors))
+        for i, s in enumerate(strs):
+            sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
+        sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
+
+    def install_tgt(self, **modArgs):
+        # The main purpose this serves is to recursively copy all the wscript's
+        # involved when we have a wscript whose sole job is to install files
+        modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
+        env = self._getEnv(modArgs)
+
+        features = 'install_tgt'
+        if env['install_source']:
+            targetsToAdd = modArgs.get('targets_to_add', [])
+            targetsToAdd = targetsToAdd + getWscriptTargets(self, env, self.path)
+            modArgs['targets_to_add'] = targetsToAdd
+            features += ' add_targets'
+        return self(features = features, **modArgs)
+
+    def module(self, **modArgs):
+        """
+        Builds a module, along with optional tests.
+        It makes assumptions, but most can be overridden by passing in args.
+        """
+        bld = self
+        env = self._getEnv(modArgs)
+
+        modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
+
+        for func in self.module_hooks:
+            func(modArgs, env)
+
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
+        if modArgs.get('nosuffix', False) :
+            libName = modArgs['name']
+        else :
+            libName = '%s-%s' % (modArgs['name'], lang)
+        path = modArgs.get('path',
+                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
+
+        defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
+        includes = listify(modArgs.get('includes', 'include'))
+        exportIncludes = listify(modArgs.get('export_includes', 'include'))
+        libVersion = modArgs.get('version', None)
+        installPath = modArgs.get('install_path', None)
+
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targetsToAdd, modArgs)
+
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
         else:
             targetName = libName
 
-        allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
-
-        # Source files can be individually listed via 'source'
         glob_patterns = listify(modArgs.get('source', '')) or []
-
-        # Entire source directories can also be provided via
-        # 'source_dir' or 'sourcedir'
-        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        for dir in sourcedirs:
-            for ext in allSourceExt:
-                glob_patterns.append(join(dir, '*%s' % ext))
+        glob_patterns = self._extendGlobPatterns(glob_patterns, modArgs)
 
         # Build the lib
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
-                source=path.ant_glob(glob_patterns), targets_to_add=targets_to_add)
+                source=path.ant_glob(glob_patterns), targets_to_add=targetsToAdd)
         lib.source = list(filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source))
 
         if env['install_libs']:
@@ -249,7 +266,8 @@ class CPPContext(Context.Context):
 
             test_deps = list(['%s-%s' % (x, lang) for x in test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use',''))])
 
-            for test in testNode.ant_glob('*%s' % sourceExt):
+            sourceExtension = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+            for test in testNode.ant_glob('*%s' % sourceExtension):
                 if str(test) not in listify(modArgs.get('test_filter', '')):
                     testName = splitext(str(test))[0]
                     self.program(env=env.derive(), name=testName, target=testName, source=str(test),
@@ -260,9 +278,14 @@ class CPPContext(Context.Context):
 
         pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
         if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
-            for test in pythonTestNode.ant_glob('*.py'):
-                if str(test) not in listify(modArgs.get('test_filter', '')):
-                    self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
+            tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
+                    str(test) not in listify(modArgs.get('test_filter', ''))]
+            for test in tests:
+                bld(features='install_tgt',
+                        files=[test], dir=pythonTestNode,
+                        name=test, target=test,
+                        install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -277,9 +300,9 @@ class CPPContext(Context.Context):
 
                 test_deps = list(['%s-%s' % (x, lang) for x in test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use',''))])
 
-                sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
                 tests = []
-                for test in testNode.ant_glob('*%s' % sourceExt):
+                sourceExtensions = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+                for test in testNode.ant_glob('*%s' % sourceExtensions):
                     if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
                         exe = self(features='%s %sprogram' % (libExeType, libExeType),
@@ -316,11 +339,7 @@ class CPPContext(Context.Context):
         plugin (via the plugin kwarg).
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env'].derive()
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant].derive()
+        env = self._getEnv(modArgs)
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -331,11 +350,7 @@ class CPPContext(Context.Context):
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        module_deps = list(['%s-%s' % (x, lang) for x in listify(modArgs.get('module_deps', ''))])
         defines = self.__getDefines(env) + listify(modArgs.get('defines', '')) + ['PLUGIN_MODULE_EXPORTS']
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
-        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
@@ -348,47 +363,18 @@ class CPPContext(Context.Context):
             if env['cxxshlib_PATTERN'].startswith('lib'):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
 
-        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        # If we're doing a source installation and we built it locally, the
-        # source target already got added on as a dependency.  If we didn't
-        # build it locally, we need to add the source target on here since
-        # in that case this module doesn't depend on a task associated with
-        # the external library.
-        uselibCheck = modArgs.get('uselib_check', None)
-        if uselibCheck:
-            for currentLib in listify(uselibCheck):
-                if ('MAKE_%s' % currentLib) in env:
-                    uselib_local += [currentLib]
-                else:
-                    uselib += [currentLib]
-                    if env['install_source']:
-                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
-                        targets_to_add += [sourceTarget]
 
-        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        uselibCheck = modArgs.pop('uselib_check', None)
-        if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                uselib_local.append(uselibCheck)
-            else:
-                uselib.append(uselibCheck)
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targetsToAdd, modArgs)
 
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
-                defines=defines, path=path, targets_to_add=targets_to_add,
+                defines=defines, path=path, targets_to_add=targetsToAdd,
                 install_path=join(env['install_sharedir'], plugin, 'plugins'))
 
-        sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
-        allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
-        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        glob_patterns = []
-        for dir in sourcedirs:
-            for ext in allSourceExt:
-                glob_patterns.append(join(dir, '*%s' % ext))
+        glob_patterns = self._extendGlobPatterns([], modArgs)
 
         if not source:
             lib.source = path.ant_glob(glob_patterns)
@@ -419,11 +405,7 @@ class CPPContext(Context.Context):
         Builds a program (exe)
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -436,7 +418,7 @@ class CPPContext(Context.Context):
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
         uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         install_path = modArgs.get('install_path', env['install_bindir'])
@@ -450,7 +432,7 @@ class CPPContext(Context.Context):
                                use=uselib_local, uselib=uselib,
                                env=env.derive(), target=progName, path=path,
                                install_path=install_path,
-                               targets_to_add=targets_to_add)
+                               targets_to_add=targetsToAdd)
 
         addSourceTargets(bld, env, path, exe)
 
@@ -517,11 +499,24 @@ class CPPContext(Context.Context):
 
             # this turns the folder at the destination path into a package
 
+            # Our package might be 'coda,' and then the modules under that
+            # package would be mem, coda_sys, etc.
+            # The current function executes for each module.
+            # However, __init__.py gets installed at the package level.
+            # So we're checking for the existence of a task generator
+            # for the __init__.py for this module's package.
+            # If we omit the check and have duplicate tgens,
+            # the init's will overwrite each other and we get
+            # nasty race conditions.
             initTarget = init_tgen_name
-            bld(features = 'python_package',
-                name = initTarget,
-                target='__init__.py',
-                install_path = installPath)
+            try:
+                # This will throw if the task generator hasn't been created yet
+                bld.get_tgen_by_name(init_tgen_name)
+            except Errors.WafError:
+                bld(features = 'python_package',
+                    name = initTarget,
+                    target='__init__.py',
+                    install_path = installPath)
 
             targetsToAdd = [copyFilesTarget, initTarget]
 
@@ -589,11 +584,7 @@ class CPPContext(Context.Context):
         Utility for compiling a mex file (with mexFunction) to a mex shared lib
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         if 'HAVE_MATLAB' in self.env:
             modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
@@ -1461,15 +1452,15 @@ def python_package(tg):
     if not os.path.isfile(fname):
         open(fname,'a').close()
 
-        # to install files the 'node' associated with the file
-        # needs to have a signature; the hash of the file is
-        # good enough for us.
-        relpath = os.path.join(pkg_name, tg.target)
-        nod = tg.bld.bldnode.make_node(relpath)
-        nod.sig = h_file(fname)
+    # to install files the 'node' associated with the file
+    # needs to have a signature; the hash of the file is
+    # good enough for us.
+    relpath = os.path.join(pkg_name, tg.target)
+    nod = tg.bld.bldnode.make_node(relpath)
+    nod.sig = h_file(fname)
 
-        # schedule the file for installation
-        tg.bld.install_files(install_path,nod)
+    # schedule the file for installation
+    tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')
