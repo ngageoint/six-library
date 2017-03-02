@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-from pysix import six_base, six_sicd, sicdUtils
+from pysix import six_base, six_sicd
 from coda import sio_lite
 
 if __name__ == '__main__':
@@ -14,20 +14,18 @@ if __name__ == '__main__':
         print("Usage: python " + sys.argv[0] + " <NITF path> <Schema path> [startRow numRows startCol numCols]")
         sys.exit(0)
 
-    schemaPaths = [schemaPath]
+    schemaPaths = six_base.VectorString()
+    schemaPaths.push_back(schemaPath)
 
     if len(sys.argv) == 7:
         sfl = int(sys.argv[3])
         snl = int(sys.argv[4])
         sfe = int(sys.argv[5])
         sne = int(sys.argv[6])
-        widebandData, complexData = sicdUtils.readNITF(nitfPath, sfl, snl, sfe,
-                sne, schemaPaths)
+        widebandData, complexData = six_sicd.readRegion(nitfPath, sfl, snl, sfe, sne, schemaPaths)
     else:
-        widebandData, complexData = sicdUtils.readNITF(nitfPath,
-                schemaPaths=schemaPaths)
+        widebandData, complexData = six_sicd.read(nitfPath, schemaPaths)
 
     sio_lite.write(widebandData, sioPath)
 
     print("Wrote " + sioPath)
-
