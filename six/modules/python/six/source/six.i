@@ -173,7 +173,6 @@ def setValue(self, *args):
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-%template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
 %template(LatLonAltCorners) six::Corners<scene::LatLonAlt>;
 

@@ -23,6 +23,7 @@
 #
 
 from pysix.six_sicd import *
+from coda.coda_types import *
 from coda.coda_logging import *
 
 import os

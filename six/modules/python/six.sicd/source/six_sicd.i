@@ -284,7 +284,7 @@ void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>&
 
 %pythoncode %{
 import numpy as np
-from pysix.six_base import VectorString
+from coda.coda_types import VectorString
 from coda.coda_io import FileOutputStream
 from coda.xml_lite import *
 

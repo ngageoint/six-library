@@ -220,11 +220,11 @@ def asComplexData(data):
     return _six_sicd.asComplexData(data)
 
 def writeNITF(pathname, schemaPaths, data, imageAdr):
-    """writeNITF(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
+    """writeNITF(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData data, long long imageAdr)"""
     return _six_sicd.writeNITF(pathname, schemaPaths, data, imageAdr)
 
 def readNITF(pathname, schemaPaths):
-    """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
+    """readNITF(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
 
 import os
@@ -3152,14 +3152,14 @@ class SixSicdUtilities(_object):
     getValidDataPolygon = staticmethod(getValidDataPolygon)
 
     def readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-        """readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
+        """readSicd(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
         return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
 
     readSicd = staticmethod(readSicd)
 
     def getComplexData(*args):
         """
-        getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
         getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
         """
         return _six_sicd.SixSicdUtilities_getComplexData(*args)
@@ -3172,8 +3172,8 @@ class SixSicdUtilities(_object):
         getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
         getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
         getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
-        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+        getWidebandData(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, std::complex< float > * buffer)
+        getWidebandData(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
         """
         return _six_sicd.SixSicdUtilities_getWidebandData(*args)
 
@@ -3201,27 +3201,27 @@ class SixSicdUtilities(_object):
     isClockwise = staticmethod(isClockwise)
 
     def parseData(xmlStream, schemaPaths, log):
-        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        """parseData(InputStream xmlStream, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
     parseData = staticmethod(parseData)
 
     def parseDataFromFile(pathname, schemaPaths, log):
-        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        """parseDataFromFile(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
     parseDataFromFile = staticmethod(parseDataFromFile)
 
     def parseDataFromString(xmlStr, schemaPaths, log):
-        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        """parseDataFromString(std::string const & xmlStr, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
     parseDataFromString = staticmethod(parseDataFromString)
 
     def toXMLString(*args):
         """
-        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+        toXMLString(ComplexData data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * logger=None) -> std::string
+        toXMLString(ComplexData data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> std::string
         toXMLString(ComplexData data) -> std::string
         """
         return _six_sicd.SixSicdUtilities_toXMLString(*args)
@@ -3253,12 +3253,12 @@ def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
     return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
 def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-    """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
+    """SixSicdUtilities_readSicd(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
     return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
 
 def SixSicdUtilities_getComplexData(*args):
     """
-    getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    getComplexData(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
     SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
     """
     return _six_sicd.SixSicdUtilities_getComplexData(*args)
@@ -3269,8 +3269,8 @@ def SixSicdUtilities_getWidebandData(*args):
     getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
     getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
     getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-    getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
-    SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+    getWidebandData(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, std::complex< float > * buffer)
+    SixSicdUtilities_getWidebandData(std::string const & sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
     """
     return _six_sicd.SixSicdUtilities_getWidebandData(*args)
 
@@ -3290,21 +3290,21 @@ def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
     return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
 
 def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
-    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    """SixSicdUtilities_parseData(InputStream xmlStream, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
 def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
-    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
 def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
-    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
 def SixSicdUtilities_toXMLString(*args):
     """
-    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+    toXMLString(ComplexData data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * logger=None) -> std::string
+    toXMLString(ComplexData data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> std::string
     SixSicdUtilities_toXMLString(ComplexData data) -> std::string
     """
     return _six_sicd.SixSicdUtilities_toXMLString(*args)
@@ -10352,15 +10352,15 @@ VectorTimelineSet_swigregister(VectorTimelineSet)
 
 
 def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
-    """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long arrayBuffer)"""
+    """getWidebandData(std::string sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, long long arrayBuffer)"""
     return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
 
 def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer):
-    """getWidebandRegion(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
+    """getWidebandRegion(std::string sicdPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
 
 import numpy as np
-from pysix.six_base import VectorString
+from coda.coda_types import VectorString
 from coda.coda_io import FileOutputStream
 from coda.xml_lite import *
 
@@ -10403,7 +10403,7 @@ class SICDWriteControl(_object):
     __repr__ = _swig_repr
 
     def __init__(self, outputPathname, schemaPaths):
-        """__init__(six::sicd::SICDWriteControl self, std::string const & outputPathname, VectorString schemaPaths) -> SICDWriteControl"""
+        """__init__(six::sicd::SICDWriteControl self, std::string const & outputPathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> SICDWriteControl"""
         this = _six_sicd.new_SICDWriteControl(outputPathname, schemaPaths)
         try:
             self.this.append(this)
