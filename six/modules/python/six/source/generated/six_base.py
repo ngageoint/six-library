@@ -4168,12 +4168,12 @@ class XMLControl(_object):
 
 
     def toXML(self, data, schemaPaths):
-        """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
+        """toXML(XMLControl self, Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
 
 
     def fromXML(self, doc, schemaPaths):
-        """fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"""
+        """fromXML(XMLControl self, xml::lite::Document const * doc, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> Data"""
         return _six_base.XMLControl_fromXML(self, doc, schemaPaths)
 
 
@@ -4210,22 +4210,22 @@ def loadXmlDataContentHandler():
 
 def parseData(*args):
     """
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseData(*args)
 
 def parseDataFromFile(*args):
     """
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromFile(*args)
 
 def parseDataFromString(*args):
     """
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromString(*args)
 
@@ -4365,226 +4365,10 @@ def toXMLString(data, xmlRegistry=None):
 
 def toValidXMLString(data, schemaPaths, log, xmlRegistry=None):
     """
-    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
-    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
+    toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
+    toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log) -> std::string
     """
     return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
-class VectorString(_object):
-    """Proxy of C++ std::vector<(std::string)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorString, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorString, name)
-    __repr__ = _swig_repr
-
-    def iterator(self):
-        """iterator(VectorString self) -> SwigPyIterator"""
-        return _six_base.VectorString_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self):
-        """__nonzero__(VectorString self) -> bool"""
-        return _six_base.VectorString___nonzero__(self)
-
-
-    def __bool__(self):
-        """__bool__(VectorString self) -> bool"""
-        return _six_base.VectorString___bool__(self)
-
-
-    def __len__(self):
-        """__len__(VectorString self) -> std::vector< std::string >::size_type"""
-        return _six_base.VectorString___len__(self)
-
-
-    def __getslice__(self, i, j):
-        """__getslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j) -> VectorString"""
-        return _six_base.VectorString___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args):
-        """
-        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)
-        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j, VectorString v)
-        """
-        return _six_base.VectorString___setslice__(self, *args)
-
-
-    def __delslice__(self, i, j):
-        """__delslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)"""
-        return _six_base.VectorString___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args):
-        """
-        __delitem__(VectorString self, std::vector< std::string >::difference_type i)
-        __delitem__(VectorString self, PySliceObject * slice)
-        """
-        return _six_base.VectorString___delitem__(self, *args)
-
-
-    def __getitem__(self, *args):
-        """
-        __getitem__(VectorString self, PySliceObject * slice) -> VectorString
-        __getitem__(VectorString self, std::vector< std::string >::difference_type i) -> std::vector< std::string >::value_type const &
-        """
-        return _six_base.VectorString___getitem__(self, *args)
-
-
-    def __setitem__(self, *args):
-        """
-        __setitem__(VectorString self, PySliceObject * slice, VectorString v)
-        __setitem__(VectorString self, PySliceObject * slice)
-        __setitem__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::value_type const & x)
-        """
-        return _six_base.VectorString___setitem__(self, *args)
-
-
-    def pop(self):
-        """pop(VectorString self) -> std::vector< std::string >::value_type"""
-        return _six_base.VectorString_pop(self)
-
-
-    def append(self, x):
-        """append(VectorString self, std::vector< std::string >::value_type const & x)"""
-        return _six_base.VectorString_append(self, x)
-
-
-    def empty(self):
-        """empty(VectorString self) -> bool"""
-        return _six_base.VectorString_empty(self)
-
-
-    def size(self):
-        """size(VectorString self) -> std::vector< std::string >::size_type"""
-        return _six_base.VectorString_size(self)
-
-
-    def swap(self, v):
-        """swap(VectorString self, VectorString v)"""
-        return _six_base.VectorString_swap(self, v)
-
-
-    def begin(self):
-        """begin(VectorString self) -> std::vector< std::string >::iterator"""
-        return _six_base.VectorString_begin(self)
-
-
-    def end(self):
-        """end(VectorString self) -> std::vector< std::string >::iterator"""
-        return _six_base.VectorString_end(self)
-
-
-    def rbegin(self):
-        """rbegin(VectorString self) -> std::vector< std::string >::reverse_iterator"""
-        return _six_base.VectorString_rbegin(self)
-
-
-    def rend(self):
-        """rend(VectorString self) -> std::vector< std::string >::reverse_iterator"""
-        return _six_base.VectorString_rend(self)
-
-
-    def clear(self):
-        """clear(VectorString self)"""
-        return _six_base.VectorString_clear(self)
-
-
-    def get_allocator(self):
-        """get_allocator(VectorString self) -> std::vector< std::string >::allocator_type"""
-        return _six_base.VectorString_get_allocator(self)
-
-
-    def pop_back(self):
-        """pop_back(VectorString self)"""
-        return _six_base.VectorString_pop_back(self)
-
-
-    def erase(self, *args):
-        """
-        erase(VectorString self, std::vector< std::string >::iterator pos) -> std::vector< std::string >::iterator
-        erase(VectorString self, std::vector< std::string >::iterator first, std::vector< std::string >::iterator last) -> std::vector< std::string >::iterator
-        """
-        return _six_base.VectorString_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(std::string)> self) -> VectorString
-        __init__(std::vector<(std::string)> self, VectorString arg2) -> VectorString
-        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size) -> VectorString
-        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size, std::vector< std::string >::value_type const & value) -> VectorString
-        """
-        this = _six_base.new_VectorString(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x):
-        """push_back(VectorString self, std::vector< std::string >::value_type const & x)"""
-        return _six_base.VectorString_push_back(self, x)
-
-
-    def front(self):
-        """front(VectorString self) -> std::vector< std::string >::value_type const &"""
-        return _six_base.VectorString_front(self)
-
-
-    def back(self):
-        """back(VectorString self) -> std::vector< std::string >::value_type const &"""
-        return _six_base.VectorString_back(self)
-
-
-    def assign(self, n, x):
-        """assign(VectorString self, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)"""
-        return _six_base.VectorString_assign(self, n, x)
-
-
-    def resize(self, *args):
-        """
-        resize(VectorString self, std::vector< std::string >::size_type new_size)
-        resize(VectorString self, std::vector< std::string >::size_type new_size, std::vector< std::string >::value_type const & x)
-        """
-        return _six_base.VectorString_resize(self, *args)
-
-
-    def insert(self, *args):
-        """
-        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::value_type const & x) -> std::vector< std::string >::iterator
-        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)
-        """
-        return _six_base.VectorString_insert(self, *args)
-
-
-    def reserve(self, n):
-        """reserve(VectorString self, std::vector< std::string >::size_type n)"""
-        return _six_base.VectorString_reserve(self, n)
-
-
-    def capacity(self):
-        """capacity(VectorString self) -> std::vector< std::string >::size_type"""
-        return _six_base.VectorString_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_base.delete_VectorString
-    __del__ = lambda self: None
-VectorString_swigregister = _six_base.VectorString_swigregister
-VectorString_swigregister(VectorString)
-
 class LatLonCorners(_object):
     """Proxy of C++ six::Corners<(scene::LatLon)> class."""
 

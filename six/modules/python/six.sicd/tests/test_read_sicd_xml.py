@@ -27,6 +27,7 @@
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.coda_logging import *
+from coda.coda_types import *
 import sys, os
 
 # Parse the command line

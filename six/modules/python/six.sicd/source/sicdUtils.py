@@ -22,6 +22,7 @@
 
 import os
 from coda.coda_io import FileOutputStream
+from coda.coda_types import VectorString
 from coda.xml_lite import *
 from pysix.six_sicd import *
 
