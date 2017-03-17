@@ -336,7 +336,7 @@ public:
      *
      * \return mock ComplexData object
      */
-    static ComplexData createFakeComplexData();
+    static std::auto_ptr<ComplexData> createFakeComplexData();
 };
 }
 }

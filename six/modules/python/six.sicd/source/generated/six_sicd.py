@@ -3228,6 +3228,12 @@ class SixSicdUtilities(_object):
 
     toXMLString = staticmethod(toXMLString)
 
+    def createFakeComplexData():
+        """createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.SixSicdUtilities_createFakeComplexData()
+
+    createFakeComplexData = staticmethod(createFakeComplexData)
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -3308,6 +3314,10 @@ def SixSicdUtilities_toXMLString(*args):
     SixSicdUtilities_toXMLString(ComplexData data) -> std::string
     """
     return _six_sicd.SixSicdUtilities_toXMLString(*args)
+
+def SixSicdUtilities_createFakeComplexData():
+    """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""
