@@ -623,5 +623,67 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    (logger == NULL) ? &nullLogger : logger,
                                    &xmlRegistry);
 }
+
+std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
+{
+    std::auto_ptr<ComplexData> data;
+    data->position->arpPoly = six::PolyXYZ(5);
+    data->position->arpPoly[0][0] = 4.45303008e6;
+    data->position->arpPoly[1][0] = 5.75153322e3;
+    data->position->arpPoly[2][0] = -2.7014602e0;
+    data->position->arpPoly[3][0] = -1.2323143e-3;
+    data->position->arpPoly[4][0] = 2.76797758e-7;
+    data->position->arpPoly[5][0] = 8.57355543e-11;
+
+    data->position->arpPoly[0][1] = 1.49876146e6;
+    data->position->arpPoly[1][1] = 4.95848815e1;
+    data->position->arpPoly[2][1] = -1.3299011e0;
+    data->position->arpPoly[3][1] = 1.20353768e-4;
+    data->position->arpPoly[4][1] = 1.79750748e-7;
+    data->position->arpPoly[5][1] = -1.8053533e-11;
+
+    data->grid->timeCOAPoly = six::Poly2D(2, 2);
+    data->grid->timeCOAPoly[0][0] = 1.9789488e0;
+    data->grid->timeCOAPoly[0][1] = 2.6269628e-4;
+    data->grid->timeCOAPoly[0][2] = 6.1316813e-16;
+
+    data->grid->timeCOAPoly[1][0] = -8.953947e-9;
+    data->grid->timeCOAPoly[1][1] = -9.8252154e-13;
+    data->grid->timeCOAPoly[1][2] = -9.6216278e-24;
+
+    data->grid->timeCOAPoly[0][0] = 3.3500568e-17;
+    data->grid->timeCOAPoly[0][1] = 3.6743435e-21;
+    data->grid->timeCOAPoly[0][2] = -3.95088507e-28;
+
+    data->geoData->scp.llh.setLat(4.785840035e1);
+    data->geoData->scp.llh.setLon(1.213899391e1);
+    data->geoData->scp.llh.setAlt(4.880295281e2);
+
+    data->geoData->scp.ecf[0] = 4.19186033e6;
+    data->geoData->scp.ecf[1] = 9.01641404e5;
+    data->geoData->scp.ecf[2] = 4.70668874e6;
+
+    // Don't have data for this. Just putting something in to prevent
+    // a segfault.
+    // Later, we can switch on ImageFormation type
+    data->pfa.reset(new six::sicd::PFA());
+    data->pfa->polarAnglePoly = six::Poly1D(1);
+    data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(1);
+
+    data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+
+    data->imageData->validData = std::vector<six::RowColInt>(8);
+    data->imageData->validData[0] = six::RowColInt(0, 0);
+    data->imageData->validData[1] = six::RowColInt(0, 6163);
+    data->imageData->validData[2] = six::RowColInt(2760, 6163);
+    data->imageData->validData[3] = six::RowColInt(7902, 6163);
+    data->imageData->validData[4] = six::RowColInt(11623, 6163);
+    data->imageData->validData[5] = six::RowColInt(11790, 6163);
+    data->imageData->validData[6] = six::RowColInt(11790, 0);
+    data->imageData->validData[7] = six::RowColInt(1028, 0);
+
+    return data;
 }
 }
+}
+
