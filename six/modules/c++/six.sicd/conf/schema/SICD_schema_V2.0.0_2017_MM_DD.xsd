@@ -1136,7 +1136,7 @@
             <xs:element name="Error" type="xs:double"/>
         </xs:sequence>
     </xs:complexType>
-    
+
    <xs:complexType name="SVParamsType">
        <xs:sequence>
            <xs:element name="SVGridProjection">
@@ -1153,7 +1153,7 @@
            </xs:element>
        </xs:sequence>
    </xs:complexType>
-    
+
 <!-- SICD MASTER -->
    <xs:element name="SICD">
       <xs:complexType>
