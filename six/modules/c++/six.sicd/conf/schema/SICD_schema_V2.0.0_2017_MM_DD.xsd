@@ -240,6 +240,21 @@
       <xs:attribute name="size" type="xs:int" use="required"/>
    </xs:complexType>
 
+    <xs:complexType name="ImagePolygonType">
+        <xs:sequence>
+            <xs:element name="Vertex" minOccurs="3" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="RowColvertexType">
+                            <xs:attribute name="index" type="xs:int" use="required"/>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="size" type="xs:int" use="required"/>
+    </xs:complexType>
+
    <xs:complexType name="ArrayDouble">
       <xs:simpleContent>
          <xs:extension base="xs:double">
@@ -400,7 +415,7 @@
             </xs:complexType>
          </xs:element>
          <xs:element name="SCPPixel" type="RowColType"/>
-         <xs:element name="ValidData" type="PolygonType" minOccurs="0"/>
+         <xs:element name="ValidData" type="ImagePolygonType" minOccurs="0"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -671,7 +686,7 @@
                                  </xs:sequence>
                               </xs:complexType>
                            </xs:element>
-                           <xs:element name="ValidData" type="PolygonType" minOccurs="0"/>
+                           <xs:element name="ValidData" type="ImagePolygonType" minOccurs="0"/>
                            <xs:element name="SegmentList" minOccurs="0">
                               <xs:complexType>
                                  <xs:sequence>
@@ -682,7 +697,7 @@
                                              <xs:element name="StartSample" type="xs:int"/>
                                              <xs:element name="EndLine" type="xs:int"/>
                                              <xs:element name="EndSample" type="xs:int"/>
-                                             <xs:element name="ValidData" type="PolygonType" minOccurs="0"/>
+                                             <xs:element name="ValidData" type="ImagePolygonType" minOccurs="0"/>
                                              <xs:element name="Identifier" type="xs:string"/>
                                           </xs:sequence>
                                        <xs:attribute name="index" type="xs:int" use="required"/>
