@@ -4168,12 +4168,12 @@ class XMLControl(_object):
 
 
     def toXML(self, data, schemaPaths):
-        """toXML(XMLControl self, Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> xml::lite::Document *"""
+        """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
 
 
     def fromXML(self, doc, schemaPaths):
-        """fromXML(XMLControl self, xml::lite::Document const * doc, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> Data"""
+        """fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"""
         return _six_base.XMLControl_fromXML(self, doc, schemaPaths)
 
 
@@ -4210,22 +4210,22 @@ def loadXmlDataContentHandler():
 
 def parseData(*args):
     """
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseData(*args)
 
 def parseDataFromFile(*args):
     """
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromFile(*args)
 
 def parseDataFromString(*args):
     """
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromString(*args)
 
@@ -4365,8 +4365,8 @@ def toXMLString(data, xmlRegistry=None):
 
 def toValidXMLString(data, schemaPaths, log, xmlRegistry=None):
     """
-    toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
-    toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log) -> std::string
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
+    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
     """
     return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
 class LatLonCorners(_object):

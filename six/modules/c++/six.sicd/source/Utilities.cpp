@@ -626,7 +626,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
 
 std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
 {
-    std::auto_ptr<ComplexData> data;
+    std::auto_ptr<ComplexData> data(new six::sicd::ComplexData());
     data->position->arpPoly = six::PolyXYZ(5);
     data->position->arpPoly[0][0] = 4.45303008e6;
     data->position->arpPoly[1][0] = 5.75153322e3;
