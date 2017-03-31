@@ -334,8 +334,26 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:complexType name="NoisePosType">
+        <xs:sequence>
+            <xs:element name="NoisePoly" type="Poly2DType"/>
+        </xs:sequence>
+    </xs:complexType>
 
+    <xs:complexType name="NoiseTimeType">
+        <xs:sequence>
+            <xs:element name="SignalPower" type="Poly1DType"/>
+            <xs:element name="NoisePower" type="Poly1DType"/>
+        </xs:sequence>
+    </xs:complexType>
 
+    <xs:complexType name="NoisePosAndTimeType">
+        <xs:sequence>
+            <xs:element name="NoisePoly" type="Poly2DType"/>
+            <xs:element name="SignalPower" type="Poly1DType"/>
+            <xs:element name="NoisePower" type="Poly1DType"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <!-- sicd blocks -->
 
@@ -872,12 +890,11 @@
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
-                        <!-- This is almost correct. However, it allows for there to be no polys here. -->
-                        <xs:element name="NoisePoly" type="Poly2DType" minOccurs="0" maxOccurs="1"/>
-                        <xs:sequence minOccurs="0" maxOccurs="1">
-                            <xs:element name="SignalPower" type="Poly1DType"/>
-                            <xs:element name="NoisePower" type="Poly1DType"/>
-                        </xs:sequence>
+                        <xs:choice>
+                            <xs:element name="NoisePos" type="NoisePosType"/>
+                            <xs:element name="NoiseTime" type="NoiseTimeType"/>
+                            <xs:element name="NoisePosAndTime" type="NoisePosAndTimeType"/>
+                        </xs:choice>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
