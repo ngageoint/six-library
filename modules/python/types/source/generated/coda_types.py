@@ -1247,6 +1247,222 @@ class VectorSizeT(_object):
 VectorSizeT_swigregister = _coda_types.VectorSizeT_swigregister
 VectorSizeT_swigregister(VectorSizeT)
 
+class VectorString(_object):
+    """Proxy of C++ std::vector<(std::string)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorString, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorString, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorString self) -> SwigPyIterator"""
+        return _coda_types.VectorString_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorString self) -> bool"""
+        return _coda_types.VectorString___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorString self) -> bool"""
+        return _coda_types.VectorString___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorString self) -> std::vector< std::string >::size_type"""
+        return _coda_types.VectorString___len__(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j) -> VectorString"""
+        return _coda_types.VectorString___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)
+        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j, VectorString v)
+        """
+        return _coda_types.VectorString___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)"""
+        return _coda_types.VectorString___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorString self, std::vector< std::string >::difference_type i)
+        __delitem__(VectorString self, PySliceObject * slice)
+        """
+        return _coda_types.VectorString___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorString self, PySliceObject * slice) -> VectorString
+        __getitem__(VectorString self, std::vector< std::string >::difference_type i) -> std::vector< std::string >::value_type const &
+        """
+        return _coda_types.VectorString___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorString self, PySliceObject * slice, VectorString v)
+        __setitem__(VectorString self, PySliceObject * slice)
+        __setitem__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::value_type const & x)
+        """
+        return _coda_types.VectorString___setitem__(self, *args)
+
+
+    def pop(self):
+        """pop(VectorString self) -> std::vector< std::string >::value_type"""
+        return _coda_types.VectorString_pop(self)
+
+
+    def append(self, x):
+        """append(VectorString self, std::vector< std::string >::value_type const & x)"""
+        return _coda_types.VectorString_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorString self) -> bool"""
+        return _coda_types.VectorString_empty(self)
+
+
+    def size(self):
+        """size(VectorString self) -> std::vector< std::string >::size_type"""
+        return _coda_types.VectorString_size(self)
+
+
+    def swap(self, v):
+        """swap(VectorString self, VectorString v)"""
+        return _coda_types.VectorString_swap(self, v)
+
+
+    def begin(self):
+        """begin(VectorString self) -> std::vector< std::string >::iterator"""
+        return _coda_types.VectorString_begin(self)
+
+
+    def end(self):
+        """end(VectorString self) -> std::vector< std::string >::iterator"""
+        return _coda_types.VectorString_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorString self) -> std::vector< std::string >::reverse_iterator"""
+        return _coda_types.VectorString_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorString self) -> std::vector< std::string >::reverse_iterator"""
+        return _coda_types.VectorString_rend(self)
+
+
+    def clear(self):
+        """clear(VectorString self)"""
+        return _coda_types.VectorString_clear(self)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorString self) -> std::vector< std::string >::allocator_type"""
+        return _coda_types.VectorString_get_allocator(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorString self)"""
+        return _coda_types.VectorString_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorString self, std::vector< std::string >::iterator pos) -> std::vector< std::string >::iterator
+        erase(VectorString self, std::vector< std::string >::iterator first, std::vector< std::string >::iterator last) -> std::vector< std::string >::iterator
+        """
+        return _coda_types.VectorString_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::string)> self) -> VectorString
+        __init__(std::vector<(std::string)> self, VectorString arg2) -> VectorString
+        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size) -> VectorString
+        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size, std::vector< std::string >::value_type const & value) -> VectorString
+        """
+        this = _coda_types.new_VectorString(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorString self, std::vector< std::string >::value_type const & x)"""
+        return _coda_types.VectorString_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorString self) -> std::vector< std::string >::value_type const &"""
+        return _coda_types.VectorString_front(self)
+
+
+    def back(self):
+        """back(VectorString self) -> std::vector< std::string >::value_type const &"""
+        return _coda_types.VectorString_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorString self, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)"""
+        return _coda_types.VectorString_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorString self, std::vector< std::string >::size_type new_size)
+        resize(VectorString self, std::vector< std::string >::size_type new_size, std::vector< std::string >::value_type const & x)
+        """
+        return _coda_types.VectorString_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::value_type const & x) -> std::vector< std::string >::iterator
+        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)
+        """
+        return _coda_types.VectorString_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorString self, std::vector< std::string >::size_type n)"""
+        return _coda_types.VectorString_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorString self) -> std::vector< std::string >::size_type"""
+        return _coda_types.VectorString_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _coda_types.delete_VectorString
+    __del__ = lambda self: None
+VectorString_swigregister = _coda_types.VectorString_swigregister
+VectorString_swigregister(VectorString)
+
 # This file is compatible with both classic and new-style classes.
 
 

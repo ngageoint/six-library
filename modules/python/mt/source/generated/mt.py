@@ -143,6 +143,11 @@ class ThreadPlanner(_object):
         return _mt.ThreadPlanner_getNumElementsPerThread(self)
 
 
+    def getNumThreadsThatWillBeUsed(self):
+        """getNumThreadsThatWillBeUsed(ThreadPlanner self) -> size_t"""
+        return _mt.ThreadPlanner_getNumThreadsThatWillBeUsed(self)
+
+
     def getThreadInfo(self, threadNum):
         """getThreadInfo(ThreadPlanner self, size_t threadNum) -> PyObject *"""
         return _mt.ThreadPlanner_getThreadInfo(self, threadNum)

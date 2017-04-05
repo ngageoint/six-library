@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of logging-c++ 
+ * This file is part of logging-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * logging-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,26 +26,41 @@
 
 #include "logging/StreamHandler.h"
 
-logging::StreamHandler::StreamHandler(logging::LogLevel level) :
-    logging::Handler(level)
-{    
+namespace logging
+{
+StreamHandler::StreamHandler(LogLevel level) :
+    Handler(level),
+    mClosed(false)
+{
     mStream.reset(new io::StandardOutStream());
 
     // write prologue to stream
     write(mFormatter->getPrologue());
 }
 
-logging::StreamHandler::StreamHandler(io::OutputStream* stream,
-                                      logging::LogLevel level) :
-    logging::Handler(level)
+StreamHandler::StreamHandler(io::OutputStream* stream,
+                             LogLevel level) :
+    Handler(level),
+    mClosed(false)
 {
     mStream.reset(stream);
-    
+
     // write prologue to stream
     write(mFormatter->getPrologue());
 }
 
-void logging::StreamHandler::setFormatter(logging::Formatter* formatter)
+StreamHandler::~StreamHandler()
+{
+    try
+    {
+        closeImpl();
+    }
+    catch (...)
+    {
+    }
+}
+
+void StreamHandler::setFormatter(Formatter* formatter)
 {
     // end log with formatter injection
     write(mFormatter->getEpilogue());
@@ -57,19 +72,30 @@ void logging::StreamHandler::setFormatter(logging::Formatter* formatter)
     write(mFormatter->getPrologue());
 }
 
-void logging::StreamHandler::close()
+void StreamHandler::close()
 {
-    // end log with formatter injection
-    write(mFormatter->getEpilogue());
-
-    // delete formatter
-    Handler::close();
-
-    // kill stream
-    if (mStream.get())
-        mStream->close();
+    closeImpl();
 }
-void logging::StreamHandler::write(const std::string& str)
+
+void StreamHandler::closeImpl()
+{
+    if (!mClosed)
+    {
+        // end log with formatter injection
+        write(mFormatter->getEpilogue());
+
+        // delete formatter
+        Handler::close();
+
+        // kill stream
+        if (mStream.get())
+            mStream->close();
+
+        mClosed = true;
+    }
+}
+
+void StreamHandler::write(const std::string& str)
 {
     if (!str.empty())
     {
@@ -81,8 +107,9 @@ void logging::StreamHandler::write(const std::string& str)
         mStream->flush();
     }
 }
-void logging::StreamHandler::emitRecord(const LogRecord* record)
+void StreamHandler::emitRecord(const LogRecord* record)
 {
     mFormatter->format(record, *mStream);
     mStream->flush();
+}
 }

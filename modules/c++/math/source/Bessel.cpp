@@ -135,7 +135,6 @@ double besselIOrderN(size_t order, double x)
     const double ACC = 200;
     const int IEXP = std::numeric_limits<double>::max_exponent / 2;
     int k;
-    double bm, dum;
 
     if (x * x <= 8.0 * std::numeric_limits<double>::min())
     {
@@ -153,7 +152,7 @@ double besselIOrderN(size_t order, double x)
         double bim = bip + (jj * tox * bi);
         bip = bi;
         bi = bim;
-        dum = std::frexp(bi, &k);
+        std::frexp(bi, &k);
 
         //Renormalize to prevent overflow
         if (k > IEXP)

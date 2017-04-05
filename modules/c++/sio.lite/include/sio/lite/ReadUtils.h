@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIO_LITE_SIO_READER_H__
-#define __SIO_LITE_SIO_READER_H__
+#ifndef __SIO_LITE_READ_UTILS_H__
+#define __SIO_LITE_READ_UTILS_H__
 
 #include <string>
 #include <sys/Conf.h>
