@@ -4767,9 +4767,9 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
 {
     _nitf_ImageIO *nitf;             /* Parent _nitf_ImageIO object */
     nitf_Uint32 bytes;               /* Bytes per pixel */
-    nitf_Uint32 modeBlockBaseOffset; /* Block pixel offset based on mode*/
-    nitf_Uint32 maskOffset;          /* Mask offset based on mode */
-    nitf_Uint32 markOffset;          /* Mark offset based on mode */
+    nitf_Uint64 modeBlockBaseOffset; /* Block pixel offset based on mode*/
+    nitf_Uint64 maskOffset;          /* Mask offset based on mode */
+    nitf_Uint64 markOffset;          /* Mark offset based on mode */
     nitf_Uint32 numColsFR;           /* Number of columns at full resolution */
     nitf_Uint32 startRowThisBlock;   /* Row of this block to start at */
 
@@ -4815,8 +4815,8 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
          *  In diagram, all rows between vertical lines are stored contiguously
          *  So the goal is to jump between entire sections
          */
-        modeBlockBaseOffset =
-            band * nitf->numColumnsPerBlock * nitf->numRowsPerBlock;
+        modeBlockBaseOffset = (nitf_Uint64)band *
+                nitf->numColumnsPerBlock * nitf->numRowsPerBlock;
     }
     else if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R)
     {
@@ -4826,7 +4826,7 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
          * 00000 11111 22222
          * For band 1, jump to pixel 1 * 5 = 5
          */
-        modeBlockBaseOffset = band * nitf->numColumnsPerBlock;
+        modeBlockBaseOffset = (nitf_Uint64)band * nitf->numColumnsPerBlock;
     }
 
     blockIO->blockOffset.orig = (modeBlockBaseOffset + startColumn) * bytes;
@@ -4838,7 +4838,7 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
     }
 
     /* Advance to starting row*/
-    markOffset = startRowThisBlock * nitf->numColumnsPerBlock * bytes;
+    markOffset = (nitf_Uint64)startRowThisBlock * nitf->numColumnsPerBlock * bytes;
     if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R ||
         nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
     {
@@ -4850,7 +4850,8 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
     maskOffset = 0;
     if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_S)
     {
-        maskOffset = band * nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
+        maskOffset = (nitf_Uint64)band *
+                nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
     }
 
     blockIO->blockMask = nitf->blockMask + maskOffset;
@@ -5157,7 +5158,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     myResidual = 0;
     blockNumber = startBlock;
 
-    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NULL)
+    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NITF_FAILURE)
     {
         return NITF_FAILURE;
     }
@@ -5440,7 +5441,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     myResidual = 0;
     blockNumber = startBlock;
 
-    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NULL)
+    if (nitf_ImageIO_setup_common(cntl, nBlockCols, error) == NITF_FAILURE)
     {
         return NITF_FAILURE;
     }

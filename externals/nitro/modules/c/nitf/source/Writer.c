@@ -568,9 +568,9 @@ CATCH_ERROR:
 
 
 /* This function writes the IGEOLO field */
-NITFPRIV(NITF_BOOL) writeCorners(nitf_Writer * writer,
-                                 nitf_ImageSubheader * subhdr,
-                                 nitf_Version fver, nitf_Error * error)
+NITFPRIV(NITF_BOOL) writeCorners(nitf_Writer* writer,
+                                 const nitf_ImageSubheader* subhdr,
+                                 nitf_Version fver, nitf_Error* error)
 {
     if ((IS_NITF21(fver) &&
             (subhdr->NITF_ICORDS->raw[0] == 'U' ||
