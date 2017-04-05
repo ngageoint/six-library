@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of math-c++
+ * This file is part of io-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
- * math-c++ is free software; you can redistribute it and/or modify
+ * io-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,48 +20,26 @@
  *
  */
 
-#ifndef __MATH_UTILITIES_H__
-#define __MATH_UTILITIES_H__
+#include <io/TempFile.h>
 
-#include <stdlib.h>
-#include <sys/Conf.h>
-namespace math
+io::TempFile::TempFile(const std::string& dirname) :
+    mOS(sys::OS()),
+    mPathname(mOS.getTempName(dirname))
 {
-/*!
- * Find sign of input, expressed as -1, 0, or 1
- * \param val A signed number
- * \return 1 if val is positive, -1 if negative, 0 otherwise
- */
-template <typename T>
-int sign(T val)
+}
+
+io::TempFile::~TempFile()
 {
-    if (val < 0)
+    try
     {
-        return -1;
+        if (mOS.exists(mPathname))
+        {
+            mOS.remove(mPathname);
+        }
     }
-    if (val > 0)
+    catch (...)
     {
-        return 1;
+        // Do nothing
     }
-    return 0;
 }
-
-inline double square(double val)
-{
-    return val * val;
-}
-
-
-/*
- * Calculate the binomial coefficient
- * Be wary of the possibility of overflow from integer arithmetic.
- *
- * \param n number of possibilities
- * \param k number of outcomes
- * \return n choose k
- */
-sys::Uint64_T nChooseK(size_t n, size_t k);
-}
-
-#endif
 

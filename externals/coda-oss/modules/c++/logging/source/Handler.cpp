@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of logging-c++ 
+ * This file is part of logging-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * logging-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,8 +26,9 @@
 
 #include "logging/Handler.h"
 
-
-logging::Handler::Handler(logging::LogLevel level)
+namespace logging
+{
+Handler::Handler(LogLevel level)
 {
     mLevel = level;
 
@@ -35,20 +36,23 @@ logging::Handler::Handler(logging::LogLevel level)
     mFormatter = &mDefaultFormatter;
 }
 
-void logging::Handler::close()
+void Handler::close()
 {
     // delete if necessary
     if (mFormatter != &mDefaultFormatter &&
         mFormatter != NULL)
+    {
         delete mFormatter;
+        mFormatter = NULL;
+    }
 }
 
-void logging::Handler::setLevel(logging::LogLevel level)
+void Handler::setLevel(LogLevel level)
 {
     mLevel = level;
 }
 
-bool logging::Handler::handle(const logging::LogRecord* record)
+bool Handler::handle(const LogRecord* record)
 {
     bool rv = false;
     if (filter(record))
@@ -68,7 +72,7 @@ bool logging::Handler::handle(const logging::LogRecord* record)
     }
     return rv;
 }
-void logging::Handler::setFormatter(logging::Formatter* formatter)
+void Handler::setFormatter(Formatter* formatter)
 {
     //check if current formatter
     if (mFormatter != formatter)
@@ -78,4 +82,5 @@ void logging::Handler::setFormatter(logging::Formatter* formatter)
 
         mFormatter = formatter;
     }
+}
 }

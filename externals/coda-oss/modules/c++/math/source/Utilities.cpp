@@ -2,7 +2,7 @@
  * This file is part of math-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * math-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,48 +20,30 @@
  *
  */
 
-#ifndef __MATH_UTILITIES_H__
-#define __MATH_UTILITIES_H__
+#include <except/Exception.h>
+#include <str/Convert.h>
+#include <math/Utilities.h>
 
-#include <stdlib.h>
-#include <sys/Conf.h>
 namespace math
 {
-/*!
- * Find sign of input, expressed as -1, 0, or 1
- * \param val A signed number
- * \return 1 if val is positive, -1 if negative, 0 otherwise
- */
-template <typename T>
-int sign(T val)
+sys::Uint64_T nChooseK(size_t n, size_t k)
 {
-    if (val < 0)
+    if (n < k)
     {
-        return -1;
+        throw except::Exception(Ctxt("n Choose k undefined for n < k.\n"
+                "n: " + str::toString(n) + " k: " + str::toString(k)));
     }
-    if (val > 0)
+
+    // Algorithm to compute n Choose k without using factorials found here:
+    // http://csharphelper.com/blog/2014/08/
+    //         calculate-the-binomial-coefficient-n-choose-k-efficiently-in-c
+    sys::Uint64_T coefficient = 1;
+    for (size_t ii = 1; ii <= k; ++ii)
     {
-        return 1;
+        coefficient *= (n - (k - ii));
+        coefficient /= ii;
     }
-    return 0;
+    return coefficient;
 }
-
-inline double square(double val)
-{
-    return val * val;
 }
-
-
-/*
- * Calculate the binomial coefficient
- * Be wary of the possibility of overflow from integer arithmetic.
- *
- * \param n number of possibilities
- * \param k number of outcomes
- * \return n choose k
- */
-sys::Uint64_T nChooseK(size_t n, size_t k);
-}
-
-#endif
 

@@ -94,6 +94,7 @@
 %template(VectorRowColInt) std::vector<types::RowCol<sys::SSize_T> >;
 %template(VectorRowColDouble) std::vector<types::RowCol<double> >;
 %template(VectorSizeT) std::vector<size_t>;
+%template(VectorString) std::vector<std::string>;
 
 /* This defines a macro for pickling other generic swig types that do not
  * require special get/set/init options. */
