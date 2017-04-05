@@ -126,14 +126,20 @@ typedef math::linear::Vector<double> VectorDouble;
 
     PyObject* asArray()
     {
-        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
-                &((*self)[0]));
+        if (!self->empty())
+        {
+            return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                    &((*self)[0]));
+        }
+        return numpyutils::toNumpyArray(1, 0, NPY_DOUBLE, 0);
     }
 
     %pythoncode
     %{
         @staticmethod
         def fromArray(array):
+            if array.size == 0:
+                return Poly1D()
             return Poly1D(array.tolist())
     %}
 
@@ -249,8 +255,18 @@ typedef math::linear::Vector<double> VectorDouble;
 
     PyObject* asArray()
     {
-        size_t numRows = self->orderX() + 1;
-        size_t numColumns = self->orderY() + 1;
+        size_t numRows;
+        size_t numColumns;
+        if (self->empty())
+        {
+            numRows = 0;
+            numColumns = 0;
+        }
+        else
+        {
+            numRows = self->orderX() + 1;
+            numColumns = self->orderY() + 1;
+        }
         std::vector<void*> rows(numRows);
         for (size_t ii = 0; ii < rows.size(); ++ii)
         {
@@ -262,6 +278,8 @@ typedef math::linear::Vector<double> VectorDouble;
     %{
         @staticmethod
         def fromArray(array):
+            if len(array) == 0:
+                return Poly2D()
             twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
             for i in range(len(array)):
                 for j in range(len(array[0])):
@@ -301,7 +319,7 @@ typedef math::linear::Vector<double> VectorDouble;
             return math::poly::OneD<Vector3>(*$self);
         }
 
-	PyObject* __call__(PyObject* input)
+        PyObject* __call__(PyObject* input)
         {
             if (!PySequence_Check(input))
             {
@@ -323,6 +341,23 @@ typedef math::linear::Vector<double> VectorDouble;
             }
             return pyresult;
         }
+        PyObject* asArray()
+        {
+            if (!self->empty())
+            {
+                return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                        &((*self)[0]));
+            }
+            return numpyutils::toNumpyArray(1, 0, NPY_DOUBLE, 0);
+        }
+
+        %pythoncode
+        %{
+            @staticmethod
+            def fromArray(array):
+                return Poly1D(array.tolist())
+        %}
+
 };
 
 // Define Python bindings for std::vector<double> to be used by tests

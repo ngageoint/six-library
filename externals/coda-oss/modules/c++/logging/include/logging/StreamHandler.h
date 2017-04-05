@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of logging-c++ 
+ * This file is part of logging-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * logging-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -48,28 +48,30 @@ public:
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LogLevel::LOG_NOTSET);
 
-    virtual ~StreamHandler()
-    {
-        close();
-    }
+    virtual ~StreamHandler();
 
     //! adds the need to write epilogue before deleting formatter
     //  and then writing the prologue with the new formatter
     virtual void setFormatter(Formatter* formatter);
-    
+
     virtual void close();
 
 protected:
+    // This is necessary so this class and an inherited class can call a
+    // non-virtual version of close in its destructor.
+    void closeImpl();
 
     //! for general string write
     virtual void write(const std::string&);
 
-    //! for writing directly to stream, 
+    //! for writing directly to stream,
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record);
 
-
     std::auto_ptr<io::OutputStream> mStream;
+
+private:
+    bool mClosed;
 };
 
 }

@@ -2,7 +2,7 @@
  * This file is part of net-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * net-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,27 +20,22 @@
  *
  */
 
-#ifndef __IMPORT_NET_H__
-#define __IMPORT_NET_H__
+#include <net/CurlInit.h>
 
-#include "net/ClientSocketFactory.h"
-#include "net/NetConnectionClientFactory.h"
-#include "net/NetConnection.h"
-#include "net/NetConnectionServer.h"
-#include "net/NetExceptions.h"
-#include "net/SerializableConnection.h"
-#include "net/ServerSocketFactory.h"
-#include "net/SocketAddress.h"
-#include "net/Socket.h"
-#include "net/SingleThreadedAllocStrategy.h"
-#include "net/PerRequestThreadAllocStrategy.h"
-#include "net/ThreadPoolAllocStrategy.h"
-#include "net/URL.h"
-#include "net/AllocStrategy.h"
-#include "net/NetUtils.h"
-#include "net/URLBuilder.h"
-#include "net/Daemon.h"
-#include "net/CurlHandle.h"
-#include "net/CurlInit.h"
+#ifdef NET_CURL_SUPPORT
+#include <curl/curl.h>
+
+namespace net
+{
+CurlInit::CurlInit()
+{
+    curl_global_init(CURL_GLOBAL_ALL);
+}
+
+CurlInit::~CurlInit()
+{
+    curl_global_cleanup();
+}
+}
 
 #endif

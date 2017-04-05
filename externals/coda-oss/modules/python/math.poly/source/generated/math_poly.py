@@ -325,6 +325,8 @@ class Poly1D(_object):
 
     @staticmethod
     def fromArray(array):
+        if array.size == 0:
+            return Poly1D()
         return Poly1D(array.tolist())
 
     __swig_destroy__ = _math_poly.delete_Poly1D
@@ -770,6 +772,8 @@ class Poly2D(_object):
 
     @staticmethod
     def fromArray(array):
+        if len(array) == 0:
+            return Poly2D()
         twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
         for i in range(len(array)):
             for j in range(len(array[0])):
@@ -1181,6 +1185,16 @@ class PolyVector3(_object):
         __call__(PolyVector3 self, PyObject * input) -> PyObject *
         """
         return _math_poly.PolyVector3___call__(self, *args)
+
+
+    def asArray(self):
+        """asArray(PolyVector3 self) -> PyObject *"""
+        return _math_poly.PolyVector3_asArray(self)
+
+
+    @staticmethod
+    def fromArray(array):
+        return Poly1D(array.tolist())
 
     __swig_destroy__ = _math_poly.delete_PolyVector3
     __del__ = lambda self: None
