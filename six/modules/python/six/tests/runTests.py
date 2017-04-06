@@ -116,9 +116,11 @@ def run(sourceDir):
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
+    sampleTestDir = os.path.join(utils.installPath(), 'bin')
 
     sicdTestRunner = CppTestRunner(sicdTestDir)
     siddTestRunner = CppTestRunner(siddTestDir)
+    sampleTestRunner = CppTestRunner(sampleTestDir)
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
@@ -136,6 +138,10 @@ def run(sourceDir):
                 siddTestRunner.run('test_geotiff') and
                 siddTestRunner.run('test_check_blocking', sampleSidd) and
                 siddTestRunner.run('test_sidd_blocking', utils.installPath())):
+            return False
+
+        if not (sampleTestRunner.run('test_large_offset', sampleSicd) and
+                sampleTestRunner.run('test_large_offset', sampleSidd)):
             return False
 
     if runUnitTests.run() == False:
