@@ -29,17 +29,19 @@
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 
 namespace
 {
-const size_t NUM_ROWS_IN_FIRST_SEGMENT = 47673; // By manual inspection
-const size_t ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SEGMENT - 1000;
-const size_t SICD_ELEMENT_SIZE = sizeof(std::complex<sys::Int16_T>);
-const size_t SIDD_ELEMENT_SIZE = sizeof(sys::Int16_T);
+static const size_t NUM_ROWS_IN_FIRST_SEGMENT = 47673; // By manual inspection
+static const size_t ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SEGMENT - 1000;
+static const size_t SICD_ELEMENT_SIZE = sizeof(std::complex<sys::Int16_T>);
+static const size_t SIDD_ELEMENT_SIZE = sizeof(sys::Int16_T);
 
 void createNITF(const std::string& inputPathname,
-        const std::string& outputPathname)
+        const std::string& outputPathname,
+        const six::DataType& datatype)
 {
     six::XMLControlRegistry registry;
     registry.addCreator(six::DataType::COMPLEX,
@@ -53,7 +55,15 @@ void createNITF(const std::string& inputPathname,
     reader.setXMLControlRegistry(&registry);
     reader.load(inputPathname, schemaPaths);
 
-    std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    std::auto_ptr<six::Data> data;
+    if (datatype == six::DataType::COMPLEX)
+    {
+        data = six::sicd::Utilities::createFakeComplexData();
+    }
+    else
+    {
+        data.reset(reader.getContainer()->getData(0)->clone());
+    }
     size_t elementSize;
     if (data->getDataType() == six::DataType::COMPLEX)
     {
@@ -124,7 +134,7 @@ int main(int argc, char** argv)
         }
         const io::TempFile temp;
         const std::string nitfPathname(argv[1]);
-        createNITF(nitfPathname, temp.pathname());
+        createNITF(nitfPathname, temp.pathname(), six::DataType::COMPLEX);
         if (checkNITF(temp.pathname()))
         {
             std::cout << "Test passed\n";
