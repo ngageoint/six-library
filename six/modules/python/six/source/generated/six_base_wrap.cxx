@@ -3149,22 +3149,21 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[138]
 #define SWIGTYPE_p_std__ostream swig_types[139]
 #define SWIGTYPE_p_std__string swig_types[140]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[141]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[142]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[143]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[144]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[145]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[146]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[147]
-#define SWIGTYPE_p_uint16_t swig_types[148]
-#define SWIGTYPE_p_uint32_t swig_types[149]
-#define SWIGTYPE_p_uint64_t swig_types[150]
-#define SWIGTYPE_p_uint8_t swig_types[151]
-#define SWIGTYPE_p_unsigned_char swig_types[152]
-#define SWIGTYPE_p_value_type swig_types[153]
-#define SWIGTYPE_p_xml__lite__Document swig_types[154]
-static swig_type_info *swig_types[156];
-static swig_module_info swig_module = {swig_types, 155, 0, 0, 0, 0};
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[141]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[142]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[143]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[144]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[145]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[146]
+#define SWIGTYPE_p_uint16_t swig_types[147]
+#define SWIGTYPE_p_uint32_t swig_types[148]
+#define SWIGTYPE_p_uint64_t swig_types[149]
+#define SWIGTYPE_p_uint8_t swig_types[150]
+#define SWIGTYPE_p_unsigned_char swig_types[151]
+#define SWIGTYPE_p_value_type swig_types[152]
+#define SWIGTYPE_p_xml__lite__Document swig_types[153]
+static swig_type_info *swig_types[155];
+static swig_module_info swig_module = {swig_types, 154, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5116,6 +5115,151 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   return SWIG_OK;
 }
 
+
+SWIGINTERN int
+SWIG_AsVal_std_string (PyObject * obj, std::string *val)
+{
+  std::string* v = (std::string *) 0;
+  int res = SWIG_AsPtr_std_string (obj, &v);
+  if (!SWIG_IsOK(res)) return res;
+  if (v) {
+    if (val) *val = *v;
+    if (SWIG_IsNewObj(res)) {
+      delete v;
+      res = SWIG_DelNewMask(res);
+    }
+    return res;
+  }
+  return SWIG_ERROR;
+}
+
+
+namespace swig {
+  template <> struct traits< std::string > {
+    typedef value_category category;
+    static const char* type_name() { return"std::string"; }
+  };
+  template <>  struct traits_asval< std::string > {
+    typedef std::string value_type;
+    static int asval(PyObject *obj, value_type *val) {
+      return SWIG_AsVal_std_string (obj, val);
+    }
+  };
+  template <>  struct traits_from< std::string > {
+    typedef std::string value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_std_string  (val);
+    }
+  };
+}
+
+
+namespace swig {
+  template <class SwigPySeq, class Seq>
+  inline void
+  assign(const SwigPySeq& swigpyseq, Seq* seq) {
+    // seq->assign(swigpyseq.begin(), swigpyseq.end()); // not used as not always implemented
+    typedef typename SwigPySeq::value_type value_type;
+    typename SwigPySeq::const_iterator it = swigpyseq.begin();
+    for (;it != swigpyseq.end(); ++it) {
+      seq->insert(seq->end(),(value_type)(*it));
+    }
+  }
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_asptr_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+
+    static int asptr(PyObject *obj, sequence **seq) {
+      if (obj == Py_None || SWIG_Python_GetSwigThis(obj)) {
+	sequence *p;
+	if (::SWIG_ConvertPtr(obj,(void**)&p,
+			      swig::type_info<sequence>(),0) == SWIG_OK) {
+	  if (seq) *seq = p;
+	  return SWIG_OLDOBJ;
+	}
+      } else if (PySequence_Check(obj)) {
+	try {
+	  SwigPySequence_Cont<value_type> swigpyseq(obj);
+	  if (seq) {
+	    sequence *pseq = new sequence();
+	    assign(swigpyseq, pseq);
+	    *seq = pseq;
+	    return SWIG_NEWOBJ;
+	  } else {
+	    return swigpyseq.check() ? SWIG_OK : SWIG_ERROR;
+	  }
+	} catch (std::exception& e) {
+	  if (seq) {
+	    if (!PyErr_Occurred()) {
+	      PyErr_SetString(PyExc_TypeError, e.what());
+	    }
+	  }
+	  return SWIG_ERROR;
+	}
+      }
+      return SWIG_ERROR;
+    }
+  };
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_from_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+    typedef typename Seq::size_type size_type;
+    typedef typename sequence::const_iterator const_iterator;
+
+    static PyObject *from(const sequence& seq) {
+#ifdef SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
+      swig_type_info *desc = swig::type_info<sequence>();
+      if (desc && desc->clientdata) {
+	return SWIG_NewPointerObj(new sequence(seq), desc, SWIG_POINTER_OWN);
+      }
+#endif
+      size_type size = seq.size();
+      if (size <= (size_type)INT_MAX) {
+	PyObject *obj = PyTuple_New((Py_ssize_t)size);
+	Py_ssize_t i = 0;
+	for (const_iterator it = seq.begin(); it != seq.end(); ++it, ++i) {
+	  PyTuple_SetItem(obj,i,swig::from<value_type>(*it));
+	}
+	return obj;
+      } else {
+	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
+	return NULL;
+      }
+    }
+  };
+}
+
+
+  namespace swig {
+    template <class T>
+    struct traits_asptr<std::vector<T> >  {
+      static int asptr(PyObject *obj, std::vector<T> **vec) {
+	return traits_asptr_stdseq<std::vector<T> >::asptr(obj, vec);
+      }
+    };
+    
+    template <class T>
+    struct traits_from<std::vector<T> > {
+      static PyObject *from(const std::vector<T>& vec) {
+	return traits_from_stdseq<std::vector<T> >::from(vec);
+      }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector< std::string, std::allocator< std::string > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "std::string" "," "std::allocator< std::string >" " >";
+	  }
+	};
+      }
+    
 
 mem::ScopedCopyablePtr< six::Radiometric > makeScopedCopyableRadiometric()
 {
@@ -57888,8 +58032,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyOb
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -57906,14 +58049,17 @@ SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_toXML" "', argument " "2"" of type '" "six::Data const *""'"); 
   }
   arg2 = reinterpret_cast< six::Data * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   {
     try
     {
@@ -57946,8 +58092,10 @@ SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -57961,8 +58109,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_fromXML(PyObject *SWIGUNUSEDPARM(self), Py
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -57979,14 +58126,17 @@ SWIGINTERN PyObject *_wrap_XMLControl_fromXML(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_fromXML" "', argument " "2"" of type '" "xml::lite::Document const *""'"); 
   }
   arg2 = reinterpret_cast< xml::lite::Document * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   {
     try
     {
@@ -58019,8 +58169,10 @@ SWIGINTERN PyObject *_wrap_XMLControl_fromXML(PyObject *SWIGUNUSEDPARM(self), Py
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Data, 0 |  0 );
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -58370,8 +58522,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
   int res2 = 0 ;
   void *argp3 ;
   int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
   void *argp5 = 0 ;
   int res5 = 0 ;
   PyObject * obj0 = 0 ;
@@ -58411,14 +58562,17 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
       if (SWIG_IsNewObj(res3)) delete temp;
     }
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseData" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseData" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseData" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg4 = ptr;
   }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseData" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "parseData" "', argument " "5"" of type '" "logging::Logger &""'"); 
@@ -58461,8 +58615,10 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
   
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return NULL;
 }
 
@@ -58477,8 +58633,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   void *argp4 = 0 ;
   int res4 = 0 ;
   PyObject * obj0 = 0 ;
@@ -58504,14 +58659,17 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseData" "', argument " "2"" of type '" "::io::InputStream &""'"); 
   }
   arg2 = reinterpret_cast< ::io::InputStream * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseData" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseData" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseData" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseData" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseData" "', argument " "4"" of type '" "logging::Logger &""'"); 
@@ -58554,8 +58712,10 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
   
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -58581,7 +58741,7 @@ SWIGINTERN PyObject *_wrap_parseData(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__InputStream, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+        int res = swig::asptr(argv[2], (std::vector< std::string,std::allocator< std::string > >**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
           void *vptr = 0;
@@ -58606,7 +58766,7 @@ SWIGINTERN PyObject *_wrap_parseData(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__DataType, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = swig::asptr(argv[3], (std::vector< std::string,std::allocator< std::string > >**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
             void *vptr = 0;
@@ -58642,8 +58802,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   int res2 = SWIG_OLDOBJ ;
   void *argp3 ;
   int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
   void *argp5 = 0 ;
   int res5 = 0 ;
   PyObject * obj0 = 0 ;
@@ -58686,14 +58845,17 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       if (SWIG_IsNewObj(res3)) delete temp;
     }
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromFile" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromFile" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromFile" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg4 = ptr;
   }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromFile" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "parseDataFromFile" "', argument " "5"" of type '" "logging::Logger &""'"); 
@@ -58737,9 +58899,11 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return NULL;
 }
 
@@ -58753,8 +58917,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   void *argp4 = 0 ;
   int res4 = 0 ;
   PyObject * obj0 = 0 ;
@@ -58783,14 +58946,17 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
     arg2 = ptr;
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseDataFromFile" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseDataFromFile" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromFile" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromFile" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromFile" "', argument " "4"" of type '" "logging::Logger &""'"); 
@@ -58834,9 +59000,11 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -58861,7 +59029,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile(PyObject *self, PyObject *args) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+        int res = swig::asptr(argv[2], (std::vector< std::string,std::allocator< std::string > >**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
           void *vptr = 0;
@@ -58885,7 +59053,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__DataType, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = swig::asptr(argv[3], (std::vector< std::string,std::allocator< std::string > >**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
             void *vptr = 0;
@@ -58921,8 +59089,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
   int res2 = SWIG_OLDOBJ ;
   void *argp3 ;
   int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
   void *argp5 = 0 ;
   int res5 = 0 ;
   PyObject * obj0 = 0 ;
@@ -58965,14 +59132,17 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
       if (SWIG_IsNewObj(res3)) delete temp;
     }
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromString" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromString" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromString" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg4 = ptr;
   }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromString" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "parseDataFromString" "', argument " "5"" of type '" "logging::Logger &""'"); 
@@ -59016,9 +59186,11 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return NULL;
 }
 
@@ -59032,8 +59204,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   void *argp4 = 0 ;
   int res4 = 0 ;
   PyObject * obj0 = 0 ;
@@ -59062,14 +59233,17 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
     }
     arg2 = ptr;
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseDataFromString" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "parseDataFromString" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromString" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "parseDataFromString" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_logging__Logger,  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "parseDataFromString" "', argument " "4"" of type '" "logging::Logger &""'"); 
@@ -59113,9 +59287,11 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj((&result)->release(), SWIGTYPE_p_six__Data, SWIG_POINTER_OWN |  0 );
   
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -59140,7 +59316,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString(PyObject *self, PyObject *args) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+        int res = swig::asptr(argv[2], (std::vector< std::string,std::allocator< std::string > >**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
           void *vptr = 0;
@@ -59164,7 +59340,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__DataType, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = swig::asptr(argv[3], (std::vector< std::string,std::allocator< std::string > >**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
             void *vptr = 0;
@@ -61027,8 +61203,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   six::XMLControlRegistry *arg4 = (six::XMLControlRegistry *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   void *argp3 = 0 ;
   int res3 = 0 ;
   void *argp4 = 0 ;
@@ -61045,14 +61220,17 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toValidXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
   }
   arg1 = reinterpret_cast< six::Data * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "toValidXMLString" "', argument " "3"" of type '" "logging::Logger *""'"); 
@@ -61095,8 +61273,10 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -61108,8 +61288,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   logging::Logger *arg3 = (logging::Logger *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   void *argp3 = 0 ;
   int res3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -61123,14 +61302,17 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toValidXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
   }
   arg1 = reinterpret_cast< six::Data * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "toValidXMLString" "', argument " "3"" of type '" "logging::Logger *""'"); 
@@ -61168,8 +61350,10 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -61192,7 +61376,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector< std::string,std::allocator< std::string > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         void *vptr = 0;
@@ -61210,7 +61394,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector< std::string,std::allocator< std::string > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         void *vptr = 0;
@@ -78970,8 +79154,8 @@ static PyMethodDef SwigMethods[] = {
 		"setLogger(logging::Logger * log, bool ownLog=False)\n"
 		"XMLControl_setLogger(XMLControl self, logging::Logger * log)\n"
 		""},
-	 { (char *)"XMLControl_toXML", _wrap_XMLControl_toXML, METH_VARARGS, (char *)"XMLControl_toXML(XMLControl self, Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> xml::lite::Document *"},
-	 { (char *)"XMLControl_fromXML", _wrap_XMLControl_fromXML, METH_VARARGS, (char *)"XMLControl_fromXML(XMLControl self, xml::lite::Document const * doc, std::vector< std::string,std::allocator< std::string > > const & schemaPaths) -> Data"},
+	 { (char *)"XMLControl_toXML", _wrap_XMLControl_toXML, METH_VARARGS, (char *)"XMLControl_toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"},
+	 { (char *)"XMLControl_fromXML", _wrap_XMLControl_fromXML, METH_VARARGS, (char *)"XMLControl_fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"},
 	 { (char *)"XMLControl_dataTypeToString", _wrap_XMLControl_dataTypeToString, METH_VARARGS, (char *)"\n"
 		"dataTypeToString(DataType dataType, bool appendXML=True) -> std::string\n"
 		"XMLControl_dataTypeToString(DataType dataType) -> std::string\n"
@@ -78981,16 +79165,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
 	 { (char *)"loadXmlDataContentHandler", _wrap_loadXmlDataContentHandler, METH_VARARGS, (char *)"loadXmlDataContentHandler()"},
 	 { (char *)"parseData", _wrap_parseData, METH_VARARGS, (char *)"\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromFile", _wrap_parseDataFromFile, METH_VARARGS, (char *)"\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromString", _wrap_parseDataFromString, METH_VARARGS, (char *)"\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"getErrors", _wrap_getErrors, METH_VARARGS, (char *)"getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"},
 	 { (char *)"findSchemaPath", _wrap_findSchemaPath, METH_VARARGS, (char *)"findSchemaPath(std::string const & progname) -> std::string"},
@@ -79028,8 +79212,8 @@ static PyMethodDef SwigMethods[] = {
 		"toXMLString(Data data) -> std::string\n"
 		""},
 	 { (char *)"toValidXMLString", _wrap_toValidXMLString, METH_VARARGS, (char *)"\n"
-		"toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string\n"
-		"toValidXMLString(Data data, std::vector< std::string,std::allocator< std::string > > const & schemaPaths, logging::Logger * log) -> std::string\n"
+		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string\n"
+		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string\n"
 		""},
 	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"LatLonCorners_getCorner", _wrap_LatLonCorners_getCorner, METH_VARARGS, (char *)"\n"
@@ -79642,7 +79826,6 @@ static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argume
 static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "six::RowColDouble *|types::RowCol< double > *", 0, 0, (void*)0, 0};
@@ -79799,7 +79982,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   &_swigt__p_std__ostream,
   &_swigt__p_std__string,
-  &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_types__RgAzT_double_t,
   &_swigt__p_types__RowColT_double_t,
@@ -79956,7 +80138,6 @@ static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__in
 static swig_cast_info _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator[] = {  {&_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RgAzT_double_t[] = {  {&_swigt__p_types__RgAzT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RowColT_double_t[] = {  {&_swigt__p_types__RowColT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -80113,7 +80294,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   _swigc__p_std__ostream,
   _swigc__p_std__string,
-  _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_types__RgAzT_double_t,
   _swigc__p_types__RowColT_double_t,
