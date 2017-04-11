@@ -31,16 +31,14 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/Utilities.h>
 
 namespace
 {
 static const size_t NUM_ROWS_IN_FIRST_SEGMENT = 47673; // By manual inspection
 static const size_t ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SEGMENT - 1000;
-static const size_t SICD_ELEMENT_SIZE = sizeof(std::complex<sys::Int16_T>);
-static const size_t SIDD_ELEMENT_SIZE = sizeof(sys::Int16_T);
 
-void createNITF(const std::string& inputPathname,
-        const std::string& outputPathname,
+void createNITF(const std::string& outputPathname,
         const six::DataType& datatype)
 {
     six::XMLControlRegistry registry;
@@ -51,37 +49,26 @@ void createNITF(const std::string& inputPathname,
             new six::XMLControlCreatorT<
                     six::sidd::DerivedXMLControl>());
     const std::vector<std::string> schemaPaths;
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&registry);
-    reader.load(inputPathname, schemaPaths);
 
     std::auto_ptr<six::Data> data;
     if (datatype == six::DataType::COMPLEX)
     {
         data = six::sicd::Utilities::createFakeComplexData();
-    }
-    else
-    {
-        data.reset(reader.getContainer()->getData(0)->clone());
-    }
-    size_t elementSize;
-    if (data->getDataType() == six::DataType::COMPLEX)
-    {
         data->setNumRows(52440); // (11GB / 4) ^ (1/2)
         data->setNumCols(52440);
         data->setPixelType(six::PixelType::RE16I_IM16I);
-        elementSize = SICD_ELEMENT_SIZE;
     }
     else
     {
+        data = six::sidd::Utilities::createFakeDerivedData();
         data->setNumRows(74152); // (11GB / 2) ^ (1/2)
         data->setNumCols(74162);
         data->setPixelType(six::PixelType::MONO16I);
-        elementSize = SIDD_ELEMENT_SIZE;
     }
 
-    const size_t AREA = data->getNumRows() * data->getNumCols();
-    const size_t FIRST_SIZE = elementSize * data->getNumCols() * ROWS_TO_SKIP;
+    const size_t bytesPerRow = data->getNumCols() * data->getNumBytesPerPixel();
+    const size_t imageSize = data->getNumRows() * bytesPerRow;
+
     mem::SharedPtr<six::Container> container(
             new six::Container(data->getDataType()));
     container->addData(data.release());
@@ -90,11 +77,11 @@ void createNITF(const std::string& inputPathname,
     writer.setXMLControlRegistry(&registry);
     writer.initialize(container);
 
-    mem::ScopedArray<six::UByte> imageData(new six::UByte[elementSize * AREA]);
-    std::memset(imageData.get(), 0, FIRST_SIZE);
-    std::memset(imageData.get() + FIRST_SIZE, 1,
-            (AREA * elementSize) - FIRST_SIZE);
-
+    mem::ScopedArray<six::UByte> imageData(new six::UByte[imageSize]);
+    for (size_t ii = 0; ii < imageSize; ++ii)
+    {
+        imageData[ii] = static_cast<six::UByte>(ii);
+    }
     writer.save(imageData.get(), outputPathname);
 }
 
@@ -119,7 +106,36 @@ bool checkNITF(const std::string& pathname)
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
     region.setStartCol(0);
     reader.interleaved(region, 0);
-    return static_cast<sys::Int8_T>(region.getBuffer()[0]) == 1;
+    six::UByte* buffer = region.getBuffer();
+
+    const size_t bytesPerRow = data->getNumCols() * data->getNumBytesPerPixel();
+    const size_t skipSize = ROWS_TO_SKIP * bytesPerRow;
+    const size_t imageSize = data->getNumRows() * bytesPerRow;
+
+    for (size_t ii = skipSize; ii < imageSize; ++ii)
+    {
+        if (buffer[ii - skipSize] != static_cast<six::UByte>(ii))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool runTest(const six::DataType& datatype)
+{
+    std::cerr << "Running offset test for datatype " << datatype.toString()
+              << "\n";
+
+    const io::TempFile temp;
+    createNITF(temp.pathname(), datatype);
+    if (checkNITF(temp.pathname()))
+    {
+        std::cout << "Test passed\n";
+        return true;
+    }
+    std::cerr << "Test failed\n";
+    return false;
 }
 }
 
@@ -127,21 +143,9 @@ int main(int argc, char** argv)
 {
     try
     {
-        if (argc != 2)
-        {
-            std::cerr << "Usage: " << argv[0] << " <Input NITF>\n";
-            return 1;
-        }
-        const io::TempFile temp;
-        const std::string nitfPathname(argv[1]);
-        createNITF(nitfPathname, temp.pathname(), six::DataType::COMPLEX);
-        if (checkNITF(temp.pathname()))
-        {
-            std::cout << "Test passed\n";
-            return 0;
-        }
-        std::cerr << "Failed to read expected data\n";
-        return 1;
+        bool testPassed = runTest(six::DataType::COMPLEX);
+        testPassed = runTest(six::DataType::DERIVED);
+        return testPassed ? 0 : 1;
     }
     catch (const except::Exception& ex)
     {

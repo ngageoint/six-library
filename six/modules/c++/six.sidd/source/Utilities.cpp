@@ -547,5 +547,68 @@ std::string Utilities::toXMLString(const DerivedData& data,
         (logger == NULL) ? &nullLogger : logger,
         &xmlRegistry);
 }
+
+std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+{
+    std::auto_ptr<DerivedData> data(new DerivedData());
+    data->productCreation.reset(new ProductCreation());
+    data->productCreation->classification.classification = "U";
+    data->display.reset(new Display());
+    data->geographicAndTarget.reset(new GeographicAndTarget(
+            RegionType::SUB_REGION));
+    data->geographicAndTarget->geographicCoverage.geographicInformation.reset(
+            new GeographicInformation());
+    LatLonCorners& imageCorners =
+            data->geographicAndTarget->geographicCoverage.footprint;
+    imageCorners.getCorner(0).setLat(3.001596271329710E01);
+    imageCorners.getCorner(0).setLon(-9.331563100917214E01);
+
+    imageCorners.getCorner(1).setLat(3.051902395021247E01);
+    imageCorners.getCorner(1).setLon(-9.341349915372815E01);
+
+    imageCorners.getCorner(2).setLat(3.054375544528100E01);
+    imageCorners.getCorner(2).setLon(-9.324399299230399E01);
+
+    imageCorners.getCorner(3).setLat(3.004057030343078E01);
+    imageCorners.getCorner(3).setLon(-9.314696314152951E01);
+
+    data->measurement.reset(new Measurement(ProjectionType::PLANE));
+    PlaneProjection* projection = dynamic_cast<PlaneProjection*>(
+            data->measurement->projection.get());
+    projection->timeCOAPoly = Poly2D(1, 1);
+    projection->timeCOAPoly[0][0] = 0;
+    projection->timeCOAPoly[1][0] = 0;
+    projection->timeCOAPoly[0][1] = 0;
+    projection->timeCOAPoly[1][1] = 0;
+    projection->productPlane.rowUnitVector[0] = 0;
+    projection->productPlane.rowUnitVector[1] = 0;
+    projection->productPlane.rowUnitVector[2] = 0;
+
+    projection->productPlane.colUnitVector[0] = 0;
+    projection->productPlane.colUnitVector[1] = 0;
+    projection->productPlane.colUnitVector[2] = 0;
+
+    data->measurement->arpPoly = PolyXYZ(1);
+    data->measurement->arpPoly[0][0] = 0;
+    data->measurement->arpPoly[0][1] = 0;
+    data->measurement->arpPoly[0][2] = 0;
+
+    data->exploitationFeatures.reset(new ExploitationFeatures());
+    data->exploitationFeatures->collections.push_back(
+            mem::ScopedCloneablePtr<Collection>());
+    data->exploitationFeatures->collections[0].reset(new Collection());
+    data->exploitationFeatures->collections[0]->information.reset(
+            new Information());
+    Information& information =
+            *data->exploitationFeatures->collections[0]->information;
+    information.radarMode = RadarModeType::SPOTLIGHT;
+    information.collectionDuration = 0;
+    information.resolution.rg = 0;
+    information.resolution.az = 0;
+
+    data->exploitationFeatures->product.resolution.row = 0;
+    data->exploitationFeatures->product.resolution.col = 0;
+    return data;
+}
 }
 }

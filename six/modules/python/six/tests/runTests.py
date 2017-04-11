@@ -140,8 +140,7 @@ def run(sourceDir):
                 siddTestRunner.run('test_sidd_blocking', utils.installPath())):
             return False
 
-        if not (sampleTestRunner.run('test_large_offset', sampleSicd) and
-                sampleTestRunner.run('test_large_offset', sampleSidd)):
+        if not sampleTestRunner.run('test_large_offset'):
             return False
 
     if runUnitTests.run() == False:

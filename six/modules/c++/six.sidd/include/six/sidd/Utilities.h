@@ -129,6 +129,14 @@ public:
         const std::vector<std::string>& schemaPaths =
         std::vector<std::string>(),
         logging::Logger* logger = NULL);
+
+    /*!
+     * Create a fake SIDD that's populated enough for
+     * general testing code to run without throwing exceptions
+     *
+     * \return mock DerivedData object
+     */
+    static std::auto_ptr<DerivedData> createFakeDerivedData();
 };
 }
 }
