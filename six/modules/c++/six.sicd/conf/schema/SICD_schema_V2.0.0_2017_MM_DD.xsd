@@ -1153,7 +1153,7 @@
         <xs:sequence>
             <xs:element name="DTED" type="xs:int"/>
             <xs:element name="PostSpacing" type="xs:double"/>
-            <xs:element name="EC90" type="xs:double"/>
+            <xs:element name="CE90" type="xs:double"/>
             <xs:element name="LE90" type="xs:double"/>
             <xs:element name="SVGridProjECF" type="XYZRowColType" maxOccurs="unbounded"/>
         </xs:sequence>
