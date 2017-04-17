@@ -32,6 +32,12 @@ namespace six
 {
 namespace convert
 {
+/*!
+ * \class ConvertingReadControl
+ * \brief ReadControl implementation using plugins to read vendor images as SICDs
+ *
+ * Once constructed, it is used just like NITFReadControl
+ */
 class ConvertingReadControl : public ReadControl
 {
 public:

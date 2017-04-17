@@ -192,7 +192,8 @@ int main(int argc, char** argv)
                            str::split("debug info warn error"))->setDefault(
                            "info");
         parser.addArgument("-p --plugin",
-                           "Specify a plugin or directory of plugins",
+                           "Specify a plugin or directory of plugins for "
+                           "converting from external vendor format to SICD",
                            cli::STORE);
         parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",

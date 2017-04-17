@@ -33,6 +33,10 @@ namespace six
 {
 namespace convert
 {
+/*!
+ * \class ConverterProvider
+ * Interface for plugins that convert external vendor formats to SICDs
+ */
 class ConverterProvider
 {
 public:
@@ -50,18 +54,20 @@ public:
     /*!
      * Read given region from image
      * \param startingLocations Starting row and column
-     * \param readLengths Number of rows and columns to reade
-     * \param buffer Pre-allocated buffer for storing image data
+     * \param dims Number of rows and columns to reade
+     * \param buffer Pre-allocated buffer for storing image data. Should be
+     * `getDataSizeInBytes()` bytes long
      */
     virtual void readData(const types::RowCol<size_t>& startingLocations,
-            const types::RowCol<size_t>& readLengths, UByte* buffer) = 0;
+            const types::RowCol<size_t>& dims, void* buffer) = 0;
 
     /*!
      * Read entire image
      * Use getDataSizeInBytes() to determine buffer size
-     * \param buffer Pre-allocated buffer for storing image data
+     * \param buffer Pre-allocated buffer for storing image data. Should be
+     * `getDataSizeInBytes()` bytes long
      */
-    virtual void readData(six::UByte* buffer) = 0;
+    virtual void readData(void* buffer) = 0;
 
     /*!
      * \return size of image data in bytes
