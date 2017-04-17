@@ -175,7 +175,7 @@ bool checkNITF(const std::string& pathname)
 
 bool runTest(const six::DataType& datatype)
 {
-    std::cerr << "Running offset test for datatype " << datatype.toString()
+    std::cout << "Running offset test for datatype " << datatype.toString()
               << "\n";
 
     const io::TempFile temp;
