@@ -663,6 +663,18 @@ std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->geoData->scp.ecf[1] = 9.01641404e5;
     data->geoData->scp.ecf[2] = 4.70668874e6;
 
+    data->geoData->imageCorners.getCorner(0).setLat(22.0493529164731);
+    data->geoData->imageCorners.getCorner(0).setLon(-159.744920871161);
+
+    data->geoData->imageCorners.getCorner(1).setLat(21.999989220946);
+    data->geoData->imageCorners.getCorner(1).setLon(-159.75130136289);
+
+    data->geoData->imageCorners.getCorner(2).setLat(22.0103386157109);
+    data->geoData->imageCorners.getCorner(2).setLon(-159.818163639552);
+
+    data->geoData->imageCorners.getCorner(3).setLat(22.0593288745824);
+    data->geoData->imageCorners.getCorner(3).setLon(-159.809407055003);
+
     // Don't have data for this. Just putting something in to prevent
     // a segfault.
     // Later, we can switch on ImageFormation type
@@ -682,6 +694,56 @@ std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->imageData->validData[6] = six::RowColInt(11790, 0);
     data->imageData->validData[7] = six::RowColInt(1028, 0);
 
+
+    // The fields below here aren't really used,
+    // just need to be filled with something so things are valid
+    data->imageCreation.reset(new ImageCreation());
+    data->grid->row->unitVector[0] = 0;
+    data->grid->row->unitVector[1] = 0;
+    data->grid->row->unitVector[2] = 0;
+    data->grid->row->sampleSpacing = 0;
+    data->grid->row->impulseResponseWidth = 0;
+    data->grid->row->impulseResponseBandwidth = 0;
+    data->grid->row->kCenter = 0;
+    data->grid->row->deltaK1 = 0;
+    data->grid->row->deltaK2 = 0;
+
+    data->grid->col->unitVector[0] = 0;
+    data->grid->col->unitVector[1] = 0;
+    data->grid->col->unitVector[2] = 0;
+    data->grid->col->sampleSpacing = 0;
+    data->grid->col->impulseResponseWidth = 0;
+    data->grid->col->impulseResponseBandwidth = 0;
+    data->grid->col->kCenter = 0;
+    data->grid->col->deltaK1 = 0;
+    data->grid->col->deltaK2 = 0;
+
+    data->timeline->collectDuration = 0;
+    data->radarCollection->txFrequencyMin = 0;
+    data->radarCollection->txFrequencyMax = 0;
+    data->radarCollection->txPolarization = PolarizationType::V;
+    data->radarCollection->rcvChannels.resize(1);
+    data->radarCollection->rcvChannels[0].reset(new ChannelParameters());
+    data->radarCollection->rcvChannels[0]->txRcvPolarization =
+            DualPolarizationType::V_V;
+
+    data->imageFormation->rcvChannelProcessed.reset(new RcvChannelProcessed());
+    data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
+    data->imageFormation->rcvChannelProcessed->prfScaleFactor = 0;
+    data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
+    data->imageFormation->txRcvPolarizationProc = DualPolarizationType::V_V;
+    data->imageFormation->tStartProc = 0;
+    data->imageFormation->tEndProc = 0;
+    data->imageFormation->txFrequencyProcMin = 0;
+    data->imageFormation->txFrequencyProcMax = 0;
+
+    data->scpcoa->scpTime = 0;
+    data->fillDerivedFields();
+
+    data->pfa->krg1 = 0;
+    data->pfa->krg2 = 0;
+    data->pfa->kaz1 = 0;
+    data->pfa->kaz2 = 0;
     return data;
 }
 }
