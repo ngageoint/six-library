@@ -35,8 +35,18 @@
 
 namespace
 {
-static const size_t NUM_ROWS_IN_FIRST_SEGMENT = 47673; // By manual inspection
-static const size_t ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SEGMENT - 1000;
+// By manual inspection
+static const size_t NUM_ROWS_IN_FIRST_SICD_SEGMENT = 33710;
+static const size_t NUM_ROWS_IN_FIRST_SIDD_SEGMENT = 67420;
+static const size_t SICD_ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SICD_SEGMENT - 1000;
+static const size_t SIDD_ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SIDD_SEGMENT - 1000;
+
+size_t calculateEdgeLength(size_t elementSize)
+{
+    const float desiredImageSize = 11e9;
+    const float elementsPerImage = desiredImageSize / elementSize;
+    return static_cast<size_t>(std::sqrt(elementsPerImage));
+}
 
 void createNITF(const std::string& outputPathname,
         const six::DataType& datatype)
@@ -54,20 +64,20 @@ void createNITF(const std::string& outputPathname,
     if (datatype == six::DataType::COMPLEX)
     {
         data = six::sicd::Utilities::createFakeComplexData();
-        data->setNumRows(52440); // (11GB / 4) ^ (1/2)
-        data->setNumCols(52440);
-        data->setPixelType(six::PixelType::RE16I_IM16I);
+        data->setNumRows(calculateEdgeLength(8));
+        data->setNumCols(calculateEdgeLength(8));
+        data->setPixelType(six::PixelType::RE32F_IM32F);
     }
     else
     {
         data = six::sidd::Utilities::createFakeDerivedData();
-        data->setNumRows(74152); // (11GB / 2) ^ (1/2)
-        data->setNumCols(74162);
+        data->setNumRows(calculateEdgeLength(2));
+        data->setNumCols(calculateEdgeLength(2));
         data->setPixelType(six::PixelType::MONO16I);
     }
 
-    const size_t bytesPerRow = data->getNumCols() * data->getNumBytesPerPixel();
-    const size_t imageSize = data->getNumRows() * bytesPerRow;
+    const size_t elementsInImage = data->getNumRows() * data->getNumCols();
+    const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
     mem::SharedPtr<six::Container> container(
             new six::Container(data->getDataType()));
@@ -78,9 +88,25 @@ void createNITF(const std::string& outputPathname,
     writer.initialize(container);
 
     mem::ScopedArray<six::UByte> imageData(new six::UByte[imageSize]);
-    for (size_t ii = 0; ii < imageSize; ++ii)
+    if (container->getDataType() == six::DataType::COMPLEX)
     {
-        imageData[ii] = static_cast<six::UByte>(ii);
+        std::complex<float>* complexData =
+                reinterpret_cast<std::complex<float>* >(imageData.get());
+
+        for (size_t ii = 0; ii < elementsInImage; ++ii)
+        {
+            complexData[ii].real() = static_cast<float>(ii);
+            complexData[ii].imag() = static_cast<float>(ii) * -1;
+        }
+    }
+    else
+    {
+        sys::Uint16_T* derivedData =
+                reinterpret_cast<sys::Uint16_T*>(imageData.get());
+        for (size_t ii = 0; ii < elementsInImage; ++ii)
+        {
+            derivedData[ii] = static_cast<sys::Uint16_T>(ii);
+        }
     }
     writer.save(imageData.get(), outputPathname);
 }
@@ -100,6 +126,8 @@ bool checkNITF(const std::string& pathname)
     const std::vector<std::string> schemaPaths;
     reader.load(pathname, schemaPaths);
     std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    const size_t ROWS_TO_SKIP = data->getDataType() ==
+            six::DataType::COMPLEX ? SICD_ROWS_TO_SKIP : SIDD_ROWS_TO_SKIP;
 
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
@@ -108,15 +136,38 @@ bool checkNITF(const std::string& pathname)
     reader.interleaved(region, 0);
     six::UByte* buffer = region.getBuffer();
 
-    const size_t bytesPerRow = data->getNumCols() * data->getNumBytesPerPixel();
-    const size_t skipSize = ROWS_TO_SKIP * bytesPerRow;
-    const size_t imageSize = data->getNumRows() * bytesPerRow;
+    const size_t elementsPerRow = data->getNumCols();
+    const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
+    const size_t imageSize = data->getNumRows() * elementsPerRow;
 
-    for (size_t ii = skipSize; ii < imageSize; ++ii)
+    if (data->getDataType() == six::DataType::COMPLEX)
     {
-        if (buffer[ii - skipSize] != static_cast<six::UByte>(ii))
+        std::complex<float>* complexBuffer =
+                reinterpret_cast<std::complex<float>* >(buffer);
+        for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
-            return false;
+            const std::complex<float> currentElement =
+                    complexBuffer[ii - skipSize];
+            if (currentElement.real() != static_cast<float>(ii))
+            {
+                return false;
+            }
+            if (currentElement.imag() != -1 * static_cast<float>(ii))
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        sys::Uint16_T* derivedBuffer =
+                reinterpret_cast<sys::Uint16_T*>(buffer);
+        for (size_t ii = skipSize; ii < imageSize; ++ii)
+        {
+            if (derivedBuffer[ii - skipSize] != static_cast<sys::Uint16_T>(ii))
+            {
+                return false;
+            }
         }
     }
     return true;
@@ -144,7 +195,7 @@ int main(int argc, char** argv)
     try
     {
         bool testPassed = runTest(six::DataType::COMPLEX);
-        testPassed = runTest(six::DataType::DERIVED);
+        testPassed = runTest(six::DataType::DERIVED) && testPassed;
         return testPassed ? 0 : 1;
     }
     catch (const except::Exception& ex)
