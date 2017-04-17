@@ -1,0 +1,110 @@
+#include <six/convert/ConvertingReadControl.h>
+#include <types/RowCol.h>
+
+namespace six
+{
+namespace convert
+{
+ConvertingReadControl::ConvertingReadControl(
+        const std::string& pluginPathname) :
+    mPluginPathnames(std::vector<std::string>(1, pluginPathname))
+{
+}
+
+ConvertingReadControl::ConvertingReadControl(
+        const std::vector<std::string>& pluginPathnames) :
+    mPluginPathnames(pluginPathnames)
+{
+}
+
+DataType ConvertingReadControl::getDataType(const std::string& /*pathname*/) const
+{
+    // Only SICDs
+    return DataType::COMPLEX;
+}
+
+void ConvertingReadControl::load(const std::string& pathname,
+        const std::vector<std::string>& /*schemaPaths*/)
+{
+    mContainer.reset(new Container(getDataType(pathname)));
+    mConverter = mRegistry.loadAndFind(mPluginPathnames, pathname);
+    if (mConverter == NULL)
+    {
+        throw except::Exception(Ctxt("Unable to load " + pathname));
+    }
+    mConverter->load(pathname);
+    mContainer->addData(mConverter->convert().release());
+}
+
+std::string ConvertingReadControl::getFileType() const
+{
+    if (mConverter == NULL)
+    {
+        throw except::Exception(Ctxt("Please load ConvertingReadControl "
+                "before calling getFileType()"));
+    }
+    return mConverter->getFileType();
+}
+
+UByte* ConvertingReadControl::interleaved(size_t imageNumber)
+{
+    Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+    region.setNumRows(-1);
+    region.setNumCols(-1);
+    return interleaved(region, imageNumber);
+}
+
+UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
+{
+    if (mConverter == NULL)
+    {
+        throw except::Exception(Ctxt("Please load ConvertingReadControl "
+                "before calling interleaved()"));
+    }
+    const Data* data = mContainer->getData(imageNumber);
+    if (region.getNumRows() == -1)
+    {
+        region.setNumRows(data->getNumRows());
+    }
+    if (region.getNumCols() == -1)
+    {
+        region.setNumCols(data->getNumCols());
+    }
+
+    const types::RowCol<size_t> extent(
+            region.getStartRow() + region.getNumRows(),
+            region.getStartCol() + region.getNumCols());
+
+    if (extent.row > data->getNumRows() ||
+            static_cast<size_t>(region.getStartRow()) > data->getNumRows())
+    {
+        throw except::Exception(Ctxt("Too many rows requested [" +
+                str::toString(region.getNumRows()) + "]"));
+    }
+    if (extent.col > data->getNumCols() ||
+            static_cast<size_t>(region.getStartCol()) > data->getNumCols())
+    {
+        throw except::Exception(Ctxt("Too many cols requested [" +
+                str::toString(region.getNumCols()) + "]"));
+    }
+
+    UByte* buffer = region.getBuffer();
+    if (buffer == NULL)
+    {
+        buffer = new UByte[region.getNumRows() * region.getNumCols() *
+                data->getNumBytesPerPixel()];
+        region.setBuffer(buffer);
+    }
+
+    const types::RowCol<size_t> startingLocation(region.getStartRow(),
+            region.getStartCol());
+    const types::RowCol<size_t> readLength(region.getNumRows(),
+            region.getNumCols());
+    mConverter->readData(startingLocation, readLength, buffer);
+    return buffer;
+}
+}
+}
+

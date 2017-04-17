@@ -1,0 +1,14 @@
+NAME            = 'six.convert'
+MAINTAINER      = 'adam.sylvester@mdaus.com'
+MODULE_DEPS     = 'cli io plugin six.sicd sys xml.lite'
+UNITTEST_DEPS   = 'cli sio.lite'
+
+import os
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['SIX_VERSION'] = bld.env['SIX_VERSION']
+    bld.module(**modArgs)
+

@@ -25,6 +25,7 @@
 #include <import/io.h>
 #include <import/mem.h>
 #include <import/six.h>
+#include <import/six/convert.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include "utils.h"
@@ -190,6 +191,9 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
+        parser.addArgument("-p --plugin",
+                           "Specify a plugin or directory of plugins",
+                           cli::STORE);
         parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE);
@@ -231,6 +235,12 @@ int main(int argc, char** argv)
             rowsPerBlock = options->get<std::string>("rowsPerBlock");
         }
 
+        std::string plugin;
+        if (options->hasValue("plugin"))
+        {
+            plugin = options->get<std::string>("plugin");
+        }
+
         std::string colsPerBlock;
         if (options->hasValue("colsPerBlock"))
         {
@@ -264,12 +274,22 @@ int main(int argc, char** argv)
         else
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
-        six::NITFReadControl reader;
-        reader.setLogger(&log);
-        reader.setXMLControlRegistry(&xmlRegistry);
+        std::auto_ptr<six::ReadControl> reader;
+        const std::string extension = sys::Path::splitExt(inputFile).second;
+        if (extension == ".nitf" || extension == ".ntf")
+        {
+            reader.reset(new six::NITFReadControl());
+        }
+        else
+        {
+            reader.reset(new six::convert::ConvertingReadControl(plugin));
+        }
 
-        reader.load(inputFile, schemaPaths);
-        mem::SharedPtr<six::Container> container(reader.getContainer());
+        reader->setLogger(&log);
+        reader->setXMLControlRegistry(&xmlRegistry);
+
+        reader->load(inputFile, schemaPaths);
+        mem::SharedPtr<six::Container> container(reader->getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)
@@ -324,7 +344,7 @@ int main(int argc, char** argv)
                 region.setNumRows(extent.row);
                 region.setNumCols(extent.col);
                 region.setBuffer(buffer + offset);
-                reader.interleaved(region, imageNum++);
+                reader->interleaved(region, imageNum++);
 
                 if (expandIt)
                 {
