@@ -1,10 +1,19 @@
+from build import writeConfig
 NAME            = 'math'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '0.1'
 USELIB          = 'MATH'
-MODULE_DEPS     = 'sys'
+MODULE_DEPS     = 'except str sys types'
 
-options = configure = distclean = lambda p: None
+options = distclean = lambda p: None
+
+
+def configure(conf):
+    def math_callback(conf):
+        conf.check_cc(function_name='isnan', header_name='math.h',
+                mandatory=False)
+
+    writeConfig(conf, math_callback, NAME)
 
 def build(bld):
     bld.module(**globals())
