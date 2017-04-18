@@ -144,6 +144,8 @@ struct Constants
     static const char SICD_DESSHSI[];
     static const char SIDD_DESSHSI[];
 
+    static const double EXCESS_BANDWIDTH_FACTOR;
+
     enum
     {
         ILOC_MAX = 99999

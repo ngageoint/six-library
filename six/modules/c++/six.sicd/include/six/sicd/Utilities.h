@@ -337,6 +337,49 @@ public:
      * \return mock ComplexData object
      */
     static std::auto_ptr<ComplexData> createFakeComplexData();
+
+    /*!
+     * If data has no areaPlane, derive it and set it
+     * \param data ComplexData to populate with areaPlane
+     * \param includeSegmentList Should the areaPlane's segmentlist be filled?
+     */
+    static void setAreaPlane(
+            six::sicd::ComplexData& data,
+            bool includeSegmentList=true);
+
+    /*!
+     * Just fill in an AreaPlane separate from the ComplexData
+     * \param data ComplexData from which to derived AreaPlane
+     * \param areaPlane AreaPlane to populate
+     */
+    static void deriveAreaPlane(
+            const six::sicd::ComplexData& data,
+            six::sicd::AreaPlane& areaPlane);
+
+private:
+    static void deriveAreaPlane(
+            six::sicd::ComplexData& data,
+            bool includeSegmentList=true);
+    static types::RowCol<double> deriveReferencePoint(
+            const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
+            const types::RowCol<double>& spacing,
+            const six::sicd::AreaPlane& areaPlane);
+    static std::vector<types::RowCol<double> > computeCornersPix(
+            const six::sicd::ComplexData& data);
+    static std::vector<scene::Vector3> computeInPlaneCorners(
+            const six::sicd::ComplexData& data,
+            const types::RowCol<scene::Vector3>& unitVectors);
+    static types::RgAz<std::vector<double> > computeMetersFromCenter(
+            const six::sicd::ComplexData& data,
+            const types::RowCol<scene::Vector3>& unitVectors);
+    static types::RowCol<scene::Vector3> deriveUnitVectors(
+            const six::sicd::ComplexData& data);
+    static types::RowCol<double> deriveSpacing(
+            const six::sicd::ComplexData& data,
+            const types::RowCol<scene::Vector3>& unitVectors);
+    static types::RowCol<size_t> derivePlaneDimensions(
+            const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
+            const types::RowCol<double>& spacing);
 };
 }
 }
