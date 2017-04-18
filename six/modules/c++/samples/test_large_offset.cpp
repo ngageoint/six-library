@@ -198,6 +198,12 @@ int main(int argc, char** argv)
         testPassed = runTest(six::DataType::DERIVED) && testPassed;
         return testPassed ? 0 : 1;
     }
+    catch (const std::bad_alloc& ex)
+    {
+        std::cerr << "Not enough memory available to build test NITF. "
+                "Skipping test.\n";
+        return 0;
+    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
