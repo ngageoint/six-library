@@ -373,6 +373,14 @@ struct AreaPlane
     {
         return !(*this == rhs);
     }
+
+    /*!
+     * Find the first segment with the given identifier
+     * Throws if no segments match
+     * \param segmentId The Segment identifier
+     * \return Reference to Segment
+     */
+    const Segment& getSegment(const std::string& segmentId) const;
 };
 
 /*!

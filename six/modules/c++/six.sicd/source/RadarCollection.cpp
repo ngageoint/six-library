@@ -333,6 +333,18 @@ types::RowCol<double> AreaPlane::getAdjustedReferencePoint() const
     return refPt;
 }
 
+const Segment& AreaPlane::getSegment(const std::string& segmentId) const
+{
+    for (size_t ii = 0; ii < segmentList.size(); ++ii)
+    {
+        if (segmentList[ii].get() && segmentList[ii]->identifier == segmentId)
+        {
+            return *segmentList[ii];
+        }
+    }
+    throw except::Exception(Ctxt("No segment with identifier " + segmentId));
+}
+
 Area::Area()
 {
     const LatLonAlt initial = Init::undefined<LatLonAlt>();
