@@ -1391,6 +1391,11 @@ class AreaPlane(_object):
         """__ne__(AreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.AreaPlane___ne__(self, rhs)
 
+
+    def getSegment(self, segmentId):
+        """getSegment(AreaPlane self, std::string const & segmentId) -> Segment"""
+        return _six_sicd.AreaPlane_getSegment(self, segmentId)
+
     __swig_destroy__ = _six_sicd.delete_AreaPlane
     __del__ = lambda self: None
 AreaPlane_swigregister = _six_sicd.AreaPlane_swigregister
@@ -6893,6 +6898,11 @@ class ScopedCloneableAreaPlane(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCloneableAreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.ScopedCloneableAreaPlane___ne__(self, rhs)
+
+
+    def getSegment(self, segmentId):
+        """getSegment(ScopedCloneableAreaPlane self, std::string const & segmentId) -> Segment"""
+        return _six_sicd.ScopedCloneableAreaPlane_getSegment(self, segmentId)
 
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
