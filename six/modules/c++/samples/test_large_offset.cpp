@@ -95,8 +95,9 @@ void createNITF(const std::string& outputPathname,
 
         for (size_t ii = 0; ii < elementsInImage; ++ii)
         {
-            complexData[ii].real() = static_cast<float>(ii);
-            complexData[ii].imag() = static_cast<float>(ii) * -1;
+            complexData[ii] = std::complex<float>(
+                    static_cast<float>(ii),
+                    static_cast<float>(ii) * -1);
         }
     }
     else
