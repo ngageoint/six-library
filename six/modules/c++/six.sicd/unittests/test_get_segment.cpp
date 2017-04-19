@@ -58,16 +58,7 @@ TEST_CASE(testThrowIfMissingSegment)
     segment->identifier = "id";
     areaPlane.segmentList.push_back(segment);
 
-    bool methodThrew = false;
-    try
-    {
-        areaPlane.getSegment("Wrong id");
-    }
-    catch (const except::Exception& /*ex*/)
-    {
-        methodThrew = true;
-    }
-    TEST_ASSERT(methodThrew);
+    TEST_EXCEPTION(areaPlane.getSegment("Wrong id"));
 }
 
 TEST_CASE(testHandlesNullPointers)
