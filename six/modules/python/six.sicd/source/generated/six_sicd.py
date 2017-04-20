@@ -3234,21 +3234,6 @@ class SixSicdUtilities(_object):
 
     createFakeComplexData = staticmethod(createFakeComplexData)
 
-    def setAreaPlane(data, includeSegmentList=True):
-        """
-        setAreaPlane(ComplexData data, bool includeSegmentList=True)
-        setAreaPlane(ComplexData data)
-        """
-        return _six_sicd.SixSicdUtilities_setAreaPlane(data, includeSegmentList)
-
-    setAreaPlane = staticmethod(setAreaPlane)
-
-    def deriveAreaPlane(data, areaPlane):
-        """deriveAreaPlane(ComplexData data, AreaPlane areaPlane)"""
-        return _six_sicd.SixSicdUtilities_deriveAreaPlane(data, areaPlane)
-
-    deriveAreaPlane = staticmethod(deriveAreaPlane)
-
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -3333,17 +3318,6 @@ def SixSicdUtilities_toXMLString(*args):
 def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
-
-def SixSicdUtilities_setAreaPlane(data, includeSegmentList=True):
-    """
-    setAreaPlane(ComplexData data, bool includeSegmentList=True)
-    SixSicdUtilities_setAreaPlane(ComplexData data)
-    """
-    return _six_sicd.SixSicdUtilities_setAreaPlane(data, includeSegmentList)
-
-def SixSicdUtilities_deriveAreaPlane(data, areaPlane):
-    """SixSicdUtilities_deriveAreaPlane(ComplexData data, AreaPlane areaPlane)"""
-    return _six_sicd.SixSicdUtilities_deriveAreaPlane(data, areaPlane)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""

@@ -1,0 +1,81 @@
+/* =========================================================================
+ * This file is part of six.sicd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+#ifndef __SIX_SICD_AREA_PLANE_UTILITY_H__
+#define __SIX_SICD_AREA_PLNAE_UTILITY_H__
+
+#include <vector>
+
+#include <six/Types.h>
+#include <six/sicd/ComplexData.h>
+#include <six/sicd/RadarCollection.h>
+
+#include <types/RgAz.h>
+#include <types/RowCol.h>
+
+namespace six
+{
+namespace sicd
+{
+class AreaPlaneUtility
+{
+public:
+    /*!
+     * If data has no areaPlane, derive it and set it
+     * \param data ComplexData to populate with areaPlane
+     * \param includeSegmentList Should the areaPlane's segmentlist be filled?
+     */
+    static void setAreaPlane(ComplexData& data, bool includeSegmentList=true);
+
+    /*!
+     * Derives an output plane definition from existing SICD metadata
+     * \param data ComplexData from which to derived AreaPlane
+     * \param areaPlane AreaPlane to populate
+     */
+    static void deriveAreaPlane(const ComplexData& data, AreaPlane& areaPlane);
+
+private:
+    static RowColDouble deriveReferencePoint(
+            const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
+            const RowColDouble& spacing,
+            const AreaPlane& areaPlane);
+    static std::vector<RowColDouble > computeCornersPix(
+            const ComplexData& data);
+    static std::vector<Vector3> computeInPlaneCorners(
+            const ComplexData& data,
+            const types::RowCol<Vector3>& unitVectors);
+    static types::RgAz<std::vector<double> > computeMetersFromCenter(
+            const ComplexData& data,
+            const types::RowCol<Vector3>& unitVectors);
+    static types::RowCol<Vector3> deriveUnitVectors(
+            const ComplexData& data);
+    static RowColDouble deriveSpacing(
+            const ComplexData& data,
+            const types::RowCol<Vector3>& unitVectors);
+    static types::RowCol<size_t> derivePlaneDimensions(
+            const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
+            const RowColDouble& spacing);
+};
+}
+}
+
+#endif
+

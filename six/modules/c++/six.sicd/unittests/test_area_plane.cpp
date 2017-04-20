@@ -1,4 +1,5 @@
 #include <math/Utilities.h>
+#include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/Utilities.h>
 #include "TestCase.h"
 
@@ -13,7 +14,7 @@ TEST_CASE(testAreaPlane)
     data->grid->col.reset(new six::sicd::DirectionParameters());
     data->grid->col->sign = -1;
 
-    six::sicd::Utilities::setAreaPlane(*data);
+    six::sicd::AreaPlaneUtility::setAreaPlane(*data);
     const six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
 
     TEST_ASSERT_EQ(areaPlane.segmentList[0]->getNumLines(), 1);
@@ -59,7 +60,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
     data->radarCollection->area.reset(new six::sicd::Area());
     data->radarCollection->area->plane.reset(new six::sicd::AreaPlane());
     six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
-    six::sicd::Utilities::deriveAreaPlane(*data, areaPlane);
+    six::sicd::AreaPlaneUtility::deriveAreaPlane(*data, areaPlane);
 
     std::auto_ptr<six::sicd::ComplexData> secondData =
             six::sicd::Utilities::createFakeComplexData();
@@ -68,7 +69,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
     secondData->grid->col.reset(new six::sicd::DirectionParameters());
     secondData->grid->col->sign = -1;
 
-    six::sicd::Utilities::setAreaPlane(*secondData, false);
+    six::sicd::AreaPlaneUtility::setAreaPlane(*secondData, false);
     const six::sicd::AreaPlane& secondAreaPlane =
             *secondData->radarCollection->area->plane;
 
