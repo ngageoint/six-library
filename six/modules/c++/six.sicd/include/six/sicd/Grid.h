@@ -30,7 +30,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
-#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/RadarCollection.h"

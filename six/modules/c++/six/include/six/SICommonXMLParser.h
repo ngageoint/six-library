@@ -49,25 +49,25 @@ public:
             XMLElem parent = NULL) const;
     XMLElem createVector3D(const std::string& name, const std::string& uri,
             Vector3 p = 0.0, XMLElem parent = NULL) const;
-    XMLElem createVector3D(const std::string& name, Vector3 p = 0.0, 
+    XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
-            const std::string& rowName, const std::string& colName, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
+            const std::string& rowName, const std::string& colName,
             const RowColInt& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColInt& value,
             XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
-            const std::string& rowName, const std::string& colName, 
+            const std::string& rowName, const std::string& colName,
             const RowColDouble& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColDouble& value,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
             const RowColInt& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const RowColInt& value,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
             const RowColDouble& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const RowColDouble& value,
             XMLElem parent = NULL) const;
@@ -145,11 +145,11 @@ public:
         ErrorStatistics* errorStatistics) const;
 
     virtual XMLElem convertRadiometryToXML(
-        const Radiometric *obj, 
+        const Radiometric *obj,
         XMLElem parent = NULL) const = 0;
 
     virtual void parseRadiometryFromXML(
-        const XMLElem radiometricXML, 
+        const XMLElem radiometricXML,
         Radiometric *obj) const = 0;
 
 

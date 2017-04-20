@@ -122,7 +122,7 @@ XMLElem CPHDXMLControl::toXML(const CollectionInformation& collInfo,
         createString("ModeID", collInfo.radarModeID, radarModeXML);
 
     //TODO maybe add more class. info in the future
-    createString("Classification", collInfo.classification.level,
+    createString("Classification", collInfo.getClassificationLevel(),
                  collInfoXML);
 
     for (std::vector<std::string>::const_iterator it =
@@ -585,8 +585,10 @@ void CPHDXMLControl::fromXML(const XMLElem collectionInfoXML,
         parseString(element, collInfo.radarModeID);
     }
 
+    std::string classification;
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
-                collInfo.classification.level);
+                classification);
+    collInfo.setClassificationLevel(classification);
 
     std::vector<XMLElem> countryCodeXML;
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
@@ -639,7 +641,7 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
     global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
     tmpElem = getOptional(globalXML, "RefFreqIndex");
-    if (tmpElem) 
+    if (tmpElem)
     {
         //optional
         parseInt(tmpElem, global.refFrequencyIndex);

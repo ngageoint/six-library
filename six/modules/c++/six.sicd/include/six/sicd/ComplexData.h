@@ -29,7 +29,7 @@
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
 #include "six/Radiometric.h"
-#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/ImageCreation.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/GeoData.h"
@@ -73,7 +73,7 @@ class ComplexData: public Data
 {
 public:
     //!  CollectionInfo block.  Contains the general collection information
-    mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
+    mem::ScopedCloneablePtr<ComplexCollectionInformation> collectionInformation;
 
     //!  (Optional) Block contains general information about the image creation
     mem::ScopedCloneablePtr<ImageCreation> imageCreation;
@@ -279,12 +279,12 @@ public:
      */
     virtual const Classification& getClassification() const
     {
-        return collectionInformation->classification;
+        return collectionInformation->getClassification();
     }
 
     virtual Classification& getClassification()
     {
-        return collectionInformation->classification;
+        return collectionInformation->getClassification();
     }
 
     // Okay, little bit of a hack for now

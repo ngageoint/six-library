@@ -25,7 +25,7 @@
 #include <import/six.h>
 
 #include "six/sicd/Antenna.h"
-#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/ComplexDataBuilder.h"
 #include "six/sicd/ComplexXMLControl.h"

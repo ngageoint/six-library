@@ -111,7 +111,7 @@ createData(const types::RowCol<size_t>& dims)
     data->setNumCols(dims.col);
     data->setName("corename");
     data->setSource("sensorname");
-    data->collectionInformation->classification.level = "UNCLASSIFIED";
+    data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
     data->setCreationTime(six::DateTime());
     data->setImageCorners(makeUpCornersFromDMS());
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;

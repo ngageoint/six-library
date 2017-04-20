@@ -283,77 +283,49 @@ class ComplexClassification(pysix.six_base.Classification):
 ComplexClassification_swigregister = _six_sicd.ComplexClassification_swigregister
 ComplexClassification_swigregister(ComplexClassification)
 
-class CollectionInformation(_object):
-    """Proxy of C++ six::sicd::CollectionInformation class."""
+class ComplexCollectionInformation(_object):
+    """Proxy of C++ six::sicd::ComplexCollectionInformation class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ComplexCollectionInformation, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.CollectionInformation_collectorName_get, _six_sicd.CollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.CollectionInformation_illuminatorName_get, _six_sicd.CollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.CollectionInformation_coreName_get, _six_sicd.CollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_get
-    if _newclass:
-        collectType = _swig_property(_six_sicd.CollectionInformation_collectType_get, _six_sicd.CollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_get
-    if _newclass:
-        radarMode = _swig_property(_six_sicd.CollectionInformation_radarMode_get, _six_sicd.CollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.CollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.CollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.CollectionInformation_classification_get, _six_sicd.CollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.CollectionInformation_countryCodes_get, _six_sicd.CollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.CollectionInformation_parameters_get, _six_sicd.CollectionInformation_parameters_set)
 
     def __init__(self):
-        """__init__(six::sicd::CollectionInformation self) -> CollectionInformation"""
-        this = _six_sicd.new_CollectionInformation()
+        """__init__(six::sicd::ComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        this = _six_sicd.new_ComplexCollectionInformation()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_CollectionInformation
-    __del__ = lambda self: None
 
     def clone(self):
-        """clone(CollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.CollectionInformation_clone(self)
+        """clone(ComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ComplexCollectionInformation_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_ComplexCollectionInformation
+    __del__ = lambda self: None
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(ComplexCollectionInformation self) -> std::string"""
+        return _six_sicd.ComplexCollectionInformation_getClassificationLevel(self)
 
 
-    def __eq__(self, other):
-        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___eq__(self, other)
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(ComplexCollectionInformation self, std::string const & classification)"""
+        return _six_sicd.ComplexCollectionInformation_setClassificationLevel(self, classification)
 
 
-    def __ne__(self, other):
-        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___ne__(self, other)
+    def getClassification(self, *args):
+        """
+        getClassification(ComplexCollectionInformation self) -> ComplexClassification
+        getClassification(ComplexCollectionInformation self) -> ComplexClassification
+        """
+        return _six_sicd.ComplexCollectionInformation_getClassification(self, *args)
 
-CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
-CollectionInformation_swigregister(CollectionInformation)
+ComplexCollectionInformation_swigregister = _six_sicd.ComplexCollectionInformation_swigregister
+ComplexCollectionInformation_swigregister(ComplexCollectionInformation)
 
 class ImageCreation(_object):
     """Proxy of C++ six::sicd::ImageCreation class."""
@@ -788,7 +760,7 @@ class Grid(_object):
 
     def validate(self, *args):
         """
-        validate(Grid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(Grid self, CollectionInformation const & collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
         validate(Grid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
@@ -798,7 +770,7 @@ class Grid(_object):
 
     def fillDerivedFields(self, *args):
         """
-        fillDerivedFields(Grid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(Grid self, CollectionInformation const & collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
@@ -2732,7 +2704,7 @@ class INCA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(INCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(INCA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.INCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
     __swig_destroy__ = _six_sicd.delete_INCA
@@ -2794,7 +2766,7 @@ class RMA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(RMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(RMA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.RMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
     __swig_destroy__ = _six_sicd.delete_RMA
@@ -3319,130 +3291,102 @@ def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
-class StdAutoCollectionInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""
+class StdAutoComplexCollectionInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::ComplexCollectionInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComplexCollectionInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::CollectionInformation)> self) -> StdAutoCollectionInformation"""
-        this = _six_sicd.new_StdAutoCollectionInformation()
+        """__init__(std::auto_ptr<(six::sicd::ComplexCollectionInformation)> self) -> StdAutoComplexCollectionInformation"""
+        this = _six_sicd.new_StdAutoComplexCollectionInformation()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_StdAutoComplexCollectionInformation
     __del__ = lambda self: None
-StdAutoCollectionInformation_swigregister = _six_sicd.StdAutoCollectionInformation_swigregister
-StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+StdAutoComplexCollectionInformation_swigregister = _six_sicd.StdAutoComplexCollectionInformation_swigregister
+StdAutoComplexCollectionInformation_swigregister(StdAutoComplexCollectionInformation)
 
-class ScopedCloneableCollectionInformation(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> class."""
+class ScopedCloneableComplexCollectionInformation(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableComplexCollectionInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self, ComplexCollectionInformation ptr=None) -> ScopedCloneableComplexCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self) -> ScopedCloneableComplexCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self, ScopedCloneableComplexCollectionInformation rhs) -> ScopedCloneableComplexCollectionInformation
         """
-        this = _six_sicd.new_ScopedCloneableCollectionInformation(*args)
+        this = _six_sicd.new_ScopedCloneableComplexCollectionInformation(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_get(self)
+        """get(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ref__(self)
+        """__ref__(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___deref__(self)
+        """__deref__(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
-        reset(ScopedCloneableCollectionInformation self)
+        reset(ScopedCloneableComplexCollectionInformation self, ComplexCollectionInformation ptr=None)
+        reset(ScopedCloneableComplexCollectionInformation self)
         """
-        return _six_sicd.ScopedCloneableCollectionInformation_reset(self, ptr)
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_ScopedCloneableComplexCollectionInformation
     __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectorName_get, _six_sicd.ScopedCloneableCollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get, _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_coreName_get, _six_sicd.ScopedCloneableCollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_get
-    if _newclass:
-        collectType = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectType_get, _six_sicd.ScopedCloneableCollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_get
-    if _newclass:
-        radarMode = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarMode_get, _six_sicd.ScopedCloneableCollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_classification_get, _six_sicd.ScopedCloneableCollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_countryCodes_get, _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_parameters_get, _six_sicd.ScopedCloneableCollectionInformation_parameters_set)
 
     def clone(self):
-        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_clone(self)
+        """clone(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_clone(self)
 
 
-    def __eq__(self, other):
-        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___eq__(self, other)
+    def getClassificationLevel(self):
+        """getClassificationLevel(ScopedCloneableComplexCollectionInformation self) -> std::string"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_getClassificationLevel(self)
 
 
-    def __ne__(self, other):
-        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ne__(self, other)
-
-ScopedCloneableCollectionInformation_swigregister = _six_sicd.ScopedCloneableCollectionInformation_swigregister
-ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(ScopedCloneableComplexCollectionInformation self, std::string const & classification)"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_setClassificationLevel(self, classification)
 
 
-def makeScopedCloneableCollectionInformation():
-    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
-    return _six_sicd.makeScopedCloneableCollectionInformation()
+    def getClassification(self, *args):
+        """
+        getClassification(ScopedCloneableComplexCollectionInformation self) -> ComplexClassification
+        getClassification(ScopedCloneableComplexCollectionInformation self) -> ComplexClassification
+        """
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_getClassification(self, *args)
+
+ScopedCloneableComplexCollectionInformation_swigregister = _six_sicd.ScopedCloneableComplexCollectionInformation_swigregister
+ScopedCloneableComplexCollectionInformation_swigregister(ScopedCloneableComplexCollectionInformation)
+
+
+def makeScopedCloneableComplexCollectionInformation():
+    """makeScopedCloneableComplexCollectionInformation() -> ScopedCloneableComplexCollectionInformation"""
+    return _six_sicd.makeScopedCloneableComplexCollectionInformation()
 class StdAutoImageCreation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::ImageCreation)> class."""
 
@@ -3893,7 +3837,7 @@ class ScopedCloneableGrid(_object):
 
     def validate(self, *args):
         """
-        validate(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, CollectionInformation const & collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
@@ -3903,7 +3847,7 @@ class ScopedCloneableGrid(_object):
 
     def fillDerivedFields(self, *args):
         """
-        fillDerivedFields(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(ScopedCloneableGrid self, CollectionInformation const & collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
@@ -5181,7 +5125,7 @@ class ScopedCopyableRMA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(ScopedCopyableRMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(ScopedCopyableRMA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
 ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
@@ -10047,7 +9991,7 @@ class ScopedCopyableINCA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(ScopedCopyableINCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(ScopedCopyableINCA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableINCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
 ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister

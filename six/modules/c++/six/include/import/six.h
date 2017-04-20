@@ -23,6 +23,7 @@
 #define __IMPORT_SIX_H__
 
 #include "six/Adapters.h"
+#include "six/CollectionInformation.h"
 #include "six/Container.h"
 #include "six/Data.h"
 #include "six/Enums.h"

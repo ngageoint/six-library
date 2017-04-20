@@ -47,27 +47,27 @@ template<> std::string toString(const CollectionInformation& ci)
 
     os << "CollectionInformation::" << "\n";
     os << "  collectorName  : " << ci.collectorName << "\n";
-    
+
     if (!six::Init::isUndefined(ci.illuminatorName))
     {
         os << "  illuminatorName: " << ci.illuminatorName << "\n";
     }
-    
+
     os << "  coreName       : " << ci.coreName << "\n";
 
     if (ci.collectType != CollectType::NOT_SET )
     {
         os << "  collectType    : " << ci.collectType.toString() << "\n";
     }
-    
+
     os << "  radarMode      : " << ci.radarMode.toString() << "\n";
 
     if (!six::Init::isUndefined(ci.radarModeID))
     {
         os << "  radarModeID    : " << ci.radarModeID << "\n";
     }
-    
-    os << "  classification : " << ci.classification.level << "\n";
+
+    os << "  classification : " << ci.getClassificationLevel() << "\n";
 
     for (size_t ii = 0; ii < ci.countryCodes.size(); ++ii)
     {

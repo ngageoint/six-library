@@ -216,7 +216,7 @@ XMLElem ComplexXMLParser::convertCollectionInformationToXML(
         createString("ModeID", si, collInfo->radarModeID, radarModeXML);
 
     //TODO maybe add more class. info in the future
-    createString("Classification", si, collInfo->classification.level,
+    createString("Classification", si, collInfo->getClassificationLevel(),
                  collInfoXML);
 
     for (std::vector<std::string>::const_iterator it =
@@ -957,8 +957,10 @@ void ComplexXMLParser::parseCollectionInformationFromXML(
     if (element)
         parseString(element, collInfo->radarModeID);
 
+    std::string classification;
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
-                collInfo->classification.level);
+                classification);
+    collInfo->setClassificationLevel(classification);
 
     std::vector < XMLElem > countryCodeXML;
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);

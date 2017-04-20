@@ -167,7 +167,7 @@ def schema_path():
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
 %include "six/sicd/ComplexClassification.h"
-%include "six/sicd/CollectionInformation.h"
+%include "six/sicd/ComplexCollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
 %include "six/sicd/ImageData.h"
 %include "six/sicd/GeoData.h"
@@ -189,7 +189,7 @@ def schema_path():
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-SCOPED_CLONEABLE(six::sicd, CollectionInformation)
+SCOPED_CLONEABLE(six::sicd, ComplexCollectionInformation)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_COPYABLE(six::sicd, ImageData)
 SCOPED_CLONEABLE(six::sicd, GeoData)

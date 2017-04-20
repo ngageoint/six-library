@@ -3078,17 +3078,17 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[67]
 #define SWIGTYPE_p_six__BooleanType swig_types[68]
 #define SWIGTYPE_p_six__CollectType swig_types[69]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[70]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[71]
-#define SWIGTYPE_p_six__Data swig_types[72]
-#define SWIGTYPE_p_six__DataType swig_types[73]
-#define SWIGTYPE_p_six__FFTSign swig_types[74]
-#define SWIGTYPE_p_six__RadarModeType swig_types[75]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[76]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[77]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[78]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[79]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[80]
+#define SWIGTYPE_p_six__CollectionInformation swig_types[70]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[71]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[72]
+#define SWIGTYPE_p_six__Data swig_types[73]
+#define SWIGTYPE_p_six__DataType swig_types[74]
+#define SWIGTYPE_p_six__FFTSign swig_types[75]
+#define SWIGTYPE_p_six__RadarModeType swig_types[76]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[77]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[78]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[79]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[80]
 #define SWIGTYPE_p_six__sicd__ComplexData swig_types[81]
 #define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[82]
 #define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[83]
@@ -23213,10 +23213,10 @@ fail:
 SWIGINTERN PyObject *_wrap_Metadata_collectionInformation_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::Metadata *arg1 = (cphd::Metadata *) 0 ;
-  cphd::CollectionInformation *arg2 = (cphd::CollectionInformation *) 0 ;
+  cphd::CollectionInformation arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
+  void *argp2 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -23227,15 +23227,23 @@ SWIGINTERN PyObject *_wrap_Metadata_collectionInformation_set(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Metadata_collectionInformation_set" "', argument " "1"" of type '" "cphd::Metadata *""'"); 
   }
   arg1 = reinterpret_cast< cphd::Metadata * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__sicd__CollectionInformation, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Metadata_collectionInformation_set" "', argument " "2"" of type '" "cphd::CollectionInformation *""'"); 
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Metadata_collectionInformation_set" "', argument " "2"" of type '" "cphd::CollectionInformation""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Metadata_collectionInformation_set" "', argument " "2"" of type '" "cphd::CollectionInformation""'");
+    } else {
+      cphd::CollectionInformation * temp = reinterpret_cast< cphd::CollectionInformation * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
   }
-  arg2 = reinterpret_cast< cphd::CollectionInformation * >(argp2);
   {
     try
     {
-      if (arg1) (arg1)->collectionInformation = *arg2;
+      if (arg1) (arg1)->collectionInformation = arg2;
     } 
     catch (const std::exception& e)
     {
@@ -23276,7 +23284,7 @@ SWIGINTERN PyObject *_wrap_Metadata_collectionInformation_get(PyObject *SWIGUNUS
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  cphd::CollectionInformation *result = 0 ;
+  cphd::CollectionInformation result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:Metadata_collectionInformation_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Metadata, 0 |  0 );
@@ -23287,7 +23295,7 @@ SWIGINTERN PyObject *_wrap_Metadata_collectionInformation_get(PyObject *SWIGUNUS
   {
     try
     {
-      result = (cphd::CollectionInformation *)& ((arg1)->collectionInformation);
+      result =  ((arg1)->collectionInformation);
     } 
     catch (const std::exception& e)
     {
@@ -23315,7 +23323,7 @@ SWIGINTERN PyObject *_wrap_Metadata_collectionInformation_get(PyObject *SWIGUNUS
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__sicd__CollectionInformation, 0 |  0 );
+  resultobj = SWIG_NewPointerObj((new cphd::CollectionInformation(static_cast< const cphd::CollectionInformation& >(result))), SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -53481,8 +53489,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Metadata_isTOA", _wrap_Metadata_isTOA, METH_VARARGS, (char *)"Metadata_isTOA(Metadata self) -> bool"},
 	 { (char *)"Metadata_getDomainTypeString", _wrap_Metadata_getDomainTypeString, METH_VARARGS, (char *)"Metadata_getDomainTypeString(Metadata self) -> std::string"},
 	 { (char *)"Metadata_getDomainType", _wrap_Metadata_getDomainType, METH_VARARGS, (char *)"Metadata_getDomainType(Metadata self) -> DomainType"},
-	 { (char *)"Metadata_collectionInformation_set", _wrap_Metadata_collectionInformation_set, METH_VARARGS, (char *)"Metadata_collectionInformation_set(Metadata self, CollectionInformation collectionInformation)"},
-	 { (char *)"Metadata_collectionInformation_get", _wrap_Metadata_collectionInformation_get, METH_VARARGS, (char *)"Metadata_collectionInformation_get(Metadata self) -> CollectionInformation"},
+	 { (char *)"Metadata_collectionInformation_set", _wrap_Metadata_collectionInformation_set, METH_VARARGS, (char *)"Metadata_collectionInformation_set(Metadata self, cphd::CollectionInformation collectionInformation)"},
+	 { (char *)"Metadata_collectionInformation_get", _wrap_Metadata_collectionInformation_get, METH_VARARGS, (char *)"Metadata_collectionInformation_get(Metadata self) -> cphd::CollectionInformation"},
 	 { (char *)"Metadata_data_set", _wrap_Metadata_data_set, METH_VARARGS, (char *)"Metadata_data_set(Metadata self, Data data)"},
 	 { (char *)"Metadata_data_get", _wrap_Metadata_data_get, METH_VARARGS, (char *)"Metadata_data_get(Metadata self) -> Data"},
 	 { (char *)"Metadata__global_set", _wrap_Metadata__global_set, METH_VARARGS, (char *)"Metadata__global_set(Metadata self, Global arg3)"},
@@ -54129,6 +54137,7 @@ static swig_type_info _swigt__p_scene__LatLonAlt = {"_p_scene__LatLonAlt", "scen
 static swig_type_info _swigt__p_scene__PlaneProjectionModel = {"_p_scene__PlaneProjectionModel", "scene::PlaneProjectionModel *|scene::XRGYCRProjectionModel *|scene::XCTYATProjectionModel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__BooleanType = {"_p_six__BooleanType", "six::BooleanType *|cphd::BooleanType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectType = {"_p_six__CollectType", "six::CollectType *|cphd::CollectType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__CollectionInformation = {"_p_six__CollectionInformation", "six::CollectionInformation *|cphd::CollectionInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CornersT_scene__LatLonAlt_t = {"_p_six__CornersT_scene__LatLonAlt_t", "six::Corners< scene::LatLonAlt > *|six::LatLonAltCorners *|cphd::LatLonAltCorners *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CornersT_scene__LatLon_t = {"_p_six__CornersT_scene__LatLon_t", "six::LatLonCorners *|cphd::LatLonCorners *|six::Corners< scene::LatLon > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Data = {"_p_six__Data", "six::Data *", 0, 0, (void*)0, 0};
@@ -54139,7 +54148,6 @@ static swig_type_info _swigt__p_six__ReferencePoint = {"_p_six__ReferencePoint",
 static swig_type_info _swigt__p_six__XMLControlCreator = {"_p_six__XMLControlCreator", "six::XMLControlCreator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__AntennaParameters = {"_p_six__sicd__AntennaParameters", "std::vector< six::sicd::AntennaParameters >::value_type *|six::sicd::AntennaParameters *|cphd::AntennaParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__AreaDirectionParameters = {"_p_six__sicd__AreaDirectionParameters", "six::sicd::AreaDirectionParameters *|cphd::AreaDirectionParameters *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_six__sicd__CollectionInformation = {"_p_six__sicd__CollectionInformation", "six::sicd::CollectionInformation *|cphd::CollectionInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ComplexData = {"_p_six__sicd__ComplexData", "six::sicd::ComplexData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd__ElectricalBoresight", "six::sicd::ElectricalBoresight *|cphd::ElectricalBoresight *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__GainAndPhasePolys", "six::sicd::GainAndPhasePolys *|cphd::GainAndPhasePolys *", 0, 0, (void*)0, 0};
@@ -54248,6 +54256,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_scene__PlaneProjectionModel,
   &_swigt__p_six__BooleanType,
   &_swigt__p_six__CollectType,
+  &_swigt__p_six__CollectionInformation,
   &_swigt__p_six__CornersT_scene__LatLonAlt_t,
   &_swigt__p_six__CornersT_scene__LatLon_t,
   &_swigt__p_six__Data,
@@ -54258,7 +54267,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__XMLControlCreator,
   &_swigt__p_six__sicd__AntennaParameters,
   &_swigt__p_six__sicd__AreaDirectionParameters,
-  &_swigt__p_six__sicd__CollectionInformation,
   &_swigt__p_six__sicd__ComplexData,
   &_swigt__p_six__sicd__ElectricalBoresight,
   &_swigt__p_six__sicd__GainAndPhasePolys,
@@ -54367,6 +54375,7 @@ static swig_cast_info _swigc__p_scene__LatLonAlt[] = {  {&_swigt__p_scene__LatLo
 static swig_cast_info _swigc__p_scene__PlaneProjectionModel[] = {  {&_swigt__p_scene__PlaneProjectionModel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__BooleanType[] = {  {&_swigt__p_six__BooleanType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CollectType[] = {  {&_swigt__p_six__CollectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__CollectionInformation[] = {  {&_swigt__p_six__CollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CornersT_scene__LatLonAlt_t[] = {  {&_swigt__p_six__CornersT_scene__LatLonAlt_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CornersT_scene__LatLon_t[] = {  {&_swigt__p_six__CornersT_scene__LatLon_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Data[] = {  {&_swigt__p_six__Data, 0, 0, 0},  {&_swigt__p_six__sicd__ComplexData, _p_six__sicd__ComplexDataTo_p_six__Data, 0, 0},{0, 0, 0, 0}};
@@ -54377,7 +54386,6 @@ static swig_cast_info _swigc__p_six__ReferencePoint[] = {  {&_swigt__p_six__Refe
 static swig_cast_info _swigc__p_six__XMLControlCreator[] = {  {&_swigt__p_six__XMLControlCreator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__AntennaParameters[] = {  {&_swigt__p_six__sicd__AntennaParameters, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__AreaDirectionParameters[] = {  {&_swigt__p_six__sicd__AreaDirectionParameters, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_six__sicd__CollectionInformation[] = {  {&_swigt__p_six__sicd__CollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ComplexData[] = {  {&_swigt__p_six__sicd__ComplexData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ElectricalBoresight[] = {  {&_swigt__p_six__sicd__ElectricalBoresight, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__GainAndPhasePolys[] = {  {&_swigt__p_six__sicd__GainAndPhasePolys, 0, 0, 0},{0, 0, 0, 0}};
@@ -54486,6 +54494,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_scene__PlaneProjectionModel,
   _swigc__p_six__BooleanType,
   _swigc__p_six__CollectType,
+  _swigc__p_six__CollectionInformation,
   _swigc__p_six__CornersT_scene__LatLonAlt_t,
   _swigc__p_six__CornersT_scene__LatLon_t,
   _swigc__p_six__Data,
@@ -54496,7 +54505,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__XMLControlCreator,
   _swigc__p_six__sicd__AntennaParameters,
   _swigc__p_six__sicd__AreaDirectionParameters,
-  _swigc__p_six__sicd__CollectionInformation,
   _swigc__p_six__sicd__ComplexData,
   _swigc__p_six__sicd__ElectricalBoresight,
   _swigc__p_six__sicd__GainAndPhasePolys,
