@@ -25,7 +25,7 @@
 
 #include <six/Types.h>
 #include <six/Enums.h>
-#include <six/sicd/CollectionInformation.h>
+#include <six/CollectionInformation.h>
 
 namespace cphd
 {
@@ -52,7 +52,7 @@ typedef six::LatLonCorners LatLonCorners;
 typedef six::LatLonAltCorners LatLonAltCorners;
 
 typedef six::FFTSign FFTSign;
- 
+
 typedef six::RadarModeType RadarModeType;
 
 typedef six::CollectType CollectType;
@@ -61,7 +61,7 @@ typedef six::DataType DataType;
 
 typedef six::BooleanType BooleanType;
 
-typedef six::sicd::CollectionInformation CollectionInformation;
+typedef six::CollectionInformation CollectionInformation;
 }
 
 #endif

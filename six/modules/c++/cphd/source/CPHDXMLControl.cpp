@@ -81,7 +81,8 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     doc->setRootElement(root);
 
     // Fill in the rest...
-    toXML(metadata.collectionInformation, root);
+    mCommon.convertCollectionInformationToXML(&metadata.collectionInformation,
+            root);
     toXML(metadata.data, root);
     toXML(metadata.global, root);
     toXML(metadata.channel, root);
@@ -96,42 +97,6 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     root->setNamespacePrefix("", getDefaultURI());
 
     return doc;
-}
-
-XMLElem CPHDXMLControl::toXML(const CollectionInformation& collInfo,
-                              XMLElem parent)
-{
-    XMLElem collInfoXML = newElement("CollectionInfo", parent);
-
-    createString("CollectorName", collInfo.collectorName, collInfoXML);
-    if (!collInfo.illuminatorName.empty())
-        createString("IlluminatorName", collInfo.illuminatorName,
-                     collInfoXML);
-    createString("CoreName", collInfo.coreName, collInfoXML);
-    if (!six::Init::isUndefined(collInfo.collectType))
-    {
-        createString("CollectType",
-                     six::toString(collInfo.collectType),
-                     collInfoXML);
-    }
-
-    XMLElem radarModeXML = newElement("RadarMode",collInfoXML);
-    createString("ModeType", six::toString(collInfo.radarMode),
-                 radarModeXML);
-    if (!collInfo.radarModeID.empty())
-        createString("ModeID", collInfo.radarModeID, radarModeXML);
-
-    //TODO maybe add more class. info in the future
-    createString("Classification", collInfo.classification.level,
-                 collInfoXML);
-
-    for (std::vector<std::string>::const_iterator it =
-            collInfo.countryCodes.begin(); it != collInfo.countryCodes.end(); ++it)
-    {
-        createString("CountryCode", *it, collInfoXML);
-    }
-    mCommon.addParameters("Parameter", collInfo.parameters, collInfoXML);
-    return collInfoXML;
 }
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
@@ -536,7 +501,8 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     XMLElem vectorParametersXML = getFirstAndOnly(root, "VectorParameters");
 
     // Parse XML for each section
-    fromXML(collectionInfoXML, cphd->collectionInformation);
+    mCommon.parseCollectionInformationFromXML(collectionInfoXML,
+            &cphd->collectionInformation);
     fromXML(dataXML, cphd->data);
     fromXML(globalXML, cphd->global);
     fromXML(channelXML, cphd->channel);
@@ -551,58 +517,6 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     fromXML(vectorParametersXML, cphd->vectorParameters);
 
     return cphd;
-}
-
-void CPHDXMLControl::fromXML(const XMLElem collectionInfoXML,
-                             CollectionInformation& collInfo)
-{
-    parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
-                collInfo.collectorName);
-
-    XMLElem element = getOptional(collectionInfoXML, "IlluminatorName");
-    if (element)
-        parseString(element, collInfo.illuminatorName);
-
-    element = getOptional(collectionInfoXML, "CoreName");
-    if (element)
-        parseString(element, collInfo.coreName);
-
-    element = getOptional(collectionInfoXML, "CollectType");
-    if (element)
-    {
-        collInfo.collectType = six::toType<six::CollectType>(
-                element->getCharacterData());
-    }
-
-    XMLElem radarModeXML = getFirstAndOnly(collectionInfoXML, "RadarMode");
-
-    collInfo.radarMode = six::toType<RadarModeType>(
-        getFirstAndOnly(radarModeXML, "ModeType")->getCharacterData());
-
-    element = getOptional(radarModeXML, "ModeID");
-    if (element)
-    {
-        parseString(element, collInfo.radarModeID);
-    }
-
-    parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
-                collInfo.classification.level);
-
-    std::vector<XMLElem> countryCodeXML;
-    collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
-
-    //optional
-    for (std::vector<XMLElem>::const_iterator it = countryCodeXML.begin();
-         it != countryCodeXML.end(); ++it)
-    {
-        std::string cc;
-
-        parseString(*it, cc);
-        collInfo.countryCodes.push_back(cc);
-    }
-
-    //optional
-    mCommon.parseParameters(collectionInfoXML, "Parameter", collInfo.parameters);
 }
 
 void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
@@ -639,7 +553,7 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
     global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
     tmpElem = getOptional(globalXML, "RefFreqIndex");
-    if (tmpElem) 
+    if (tmpElem)
     {
         //optional
         parseInt(tmpElem, global.refFrequencyIndex);

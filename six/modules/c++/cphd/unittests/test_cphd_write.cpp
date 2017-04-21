@@ -159,7 +159,7 @@ void buildRandomMetadata(cphd::Metadata& metadata)
     metadata.collectionInformation.radarMode = getRandomInt(
             cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
     metadata.collectionInformation.radarModeID = "DummyRadarModeID";
-    metadata.collectionInformation.classification.level = "UNCLASSIFIED";
+    metadata.collectionInformation.setClassificationLevel("UNCLASSIFIED");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode1");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode2");
     metadata.collectionInformation.parameters.push_back(six::Parameter("DummyParameter1"));

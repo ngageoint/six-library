@@ -239,6 +239,84 @@ def schema_path():
         pysix_path = os.path.dirname(sys.argv[0])
     return os.path.abspath(os.path.join(pysix_path, 'schemas'))
 
+class CollectionInformation(_object):
+    """Proxy of C++ six::CollectionInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.CollectionInformation_collectorName_get, _six_sicd.CollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.CollectionInformation_illuminatorName_get, _six_sicd.CollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_sicd.CollectionInformation_coreName_get, _six_sicd.CollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_sicd.CollectionInformation_collectType_get, _six_sicd.CollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_sicd.CollectionInformation_radarMode_get, _six_sicd.CollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_sicd.CollectionInformation_countryCodes_get, _six_sicd.CollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_sicd.CollectionInformation_parameters_get, _six_sicd.CollectionInformation_parameters_set)
+
+    def __init__(self):
+        """__init__(six::CollectionInformation self) -> CollectionInformation"""
+        this = _six_sicd.new_CollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_CollectionInformation
+    __del__ = lambda self: None
+
+    def clone(self):
+        """clone(CollectionInformation self) -> CollectionInformation"""
+        return _six_sicd.CollectionInformation_clone(self)
+
+
+    def __eq__(self, other):
+        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.CollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.CollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(CollectionInformation self) -> std::string"""
+        return _six_sicd.CollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(CollectionInformation self, std::string const & classification)"""
+        return _six_sicd.CollectionInformation_setClassificationLevel(self, classification)
+
+CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
+CollectionInformation_swigregister(CollectionInformation)
+
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class."""
 
@@ -283,77 +361,53 @@ class ComplexClassification(pysix.six_base.Classification):
 ComplexClassification_swigregister = _six_sicd.ComplexClassification_swigregister
 ComplexClassification_swigregister(ComplexClassification)
 
-class CollectionInformation(_object):
-    """Proxy of C++ six::sicd::CollectionInformation class."""
+class ComplexCollectionInformation(CollectionInformation):
+    """Proxy of C++ six::sicd::ComplexCollectionInformation class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    for _s in [CollectionInformation]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    for _s in [CollectionInformation]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ComplexCollectionInformation, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.CollectionInformation_collectorName_get, _six_sicd.CollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.CollectionInformation_illuminatorName_get, _six_sicd.CollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.CollectionInformation_coreName_get, _six_sicd.CollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_get
-    if _newclass:
-        collectType = _swig_property(_six_sicd.CollectionInformation_collectType_get, _six_sicd.CollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_get
-    if _newclass:
-        radarMode = _swig_property(_six_sicd.CollectionInformation_radarMode_get, _six_sicd.CollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.CollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.CollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.CollectionInformation_classification_get, _six_sicd.CollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.CollectionInformation_countryCodes_get, _six_sicd.CollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.CollectionInformation_parameters_get, _six_sicd.CollectionInformation_parameters_set)
 
     def __init__(self):
-        """__init__(six::sicd::CollectionInformation self) -> CollectionInformation"""
-        this = _six_sicd.new_CollectionInformation()
+        """__init__(six::sicd::ComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        this = _six_sicd.new_ComplexCollectionInformation()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_CollectionInformation
-    __del__ = lambda self: None
 
     def clone(self):
-        """clone(CollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.CollectionInformation_clone(self)
+        """clone(ComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ComplexCollectionInformation_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_ComplexCollectionInformation
+    __del__ = lambda self: None
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(ComplexCollectionInformation self) -> std::string"""
+        return _six_sicd.ComplexCollectionInformation_getClassificationLevel(self)
 
 
-    def __eq__(self, other):
-        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___eq__(self, other)
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(ComplexCollectionInformation self, std::string const & classification)"""
+        return _six_sicd.ComplexCollectionInformation_setClassificationLevel(self, classification)
 
 
-    def __ne__(self, other):
-        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___ne__(self, other)
+    def getClassification(self, *args):
+        """
+        getClassification(ComplexCollectionInformation self) -> ComplexClassification
+        getClassification(ComplexCollectionInformation self) -> ComplexClassification
+        """
+        return _six_sicd.ComplexCollectionInformation_getClassification(self, *args)
 
-CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
-CollectionInformation_swigregister(CollectionInformation)
+ComplexCollectionInformation_swigregister = _six_sicd.ComplexCollectionInformation_swigregister
+ComplexCollectionInformation_swigregister(ComplexCollectionInformation)
 
 class ImageCreation(_object):
     """Proxy of C++ six::sicd::ImageCreation class."""
@@ -2193,139 +2247,6 @@ class Antenna(_object):
 Antenna_swigregister = _six_sicd.Antenna_swigregister
 Antenna_swigregister(Antenna)
 
-class MatchCollect(_object):
-    """Proxy of C++ six::sicd::MatchCollect class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchCollect, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchCollect, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::sicd::MatchCollect self) -> MatchCollect"""
-        this = _six_sicd.new_MatchCollect()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["coreName"] = _six_sicd.MatchCollect_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.MatchCollect_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.MatchCollect_coreName_get, _six_sicd.MatchCollect_coreName_set)
-    __swig_setmethods__["matchIndex"] = _six_sicd.MatchCollect_matchIndex_set
-    __swig_getmethods__["matchIndex"] = _six_sicd.MatchCollect_matchIndex_get
-    if _newclass:
-        matchIndex = _swig_property(_six_sicd.MatchCollect_matchIndex_get, _six_sicd.MatchCollect_matchIndex_set)
-    __swig_setmethods__["parameters"] = _six_sicd.MatchCollect_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.MatchCollect_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.MatchCollect_parameters_get, _six_sicd.MatchCollect_parameters_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchCollect self, MatchCollect rhs) -> bool"""
-        return _six_sicd.MatchCollect___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchCollect self, MatchCollect rhs) -> bool"""
-        return _six_sicd.MatchCollect___ne__(self, rhs)
-
-    __swig_destroy__ = _six_sicd.delete_MatchCollect
-    __del__ = lambda self: None
-MatchCollect_swigregister = _six_sicd.MatchCollect_swigregister
-MatchCollect_swigregister(MatchCollect)
-
-class MatchType(_object):
-    """Proxy of C++ six::sicd::MatchType class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::sicd::MatchType self) -> MatchType"""
-        this = _six_sicd.new_MatchType()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["collectorName"] = _six_sicd.MatchType_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.MatchType_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.MatchType_collectorName_get, _six_sicd.MatchType_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.MatchType_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.MatchType_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.MatchType_illuminatorName_get, _six_sicd.MatchType_illuminatorName_set)
-    __swig_setmethods__["matchType"] = _six_sicd.MatchType_matchType_set
-    __swig_getmethods__["matchType"] = _six_sicd.MatchType_matchType_get
-    if _newclass:
-        matchType = _swig_property(_six_sicd.MatchType_matchType_get, _six_sicd.MatchType_matchType_set)
-    __swig_setmethods__["typeID"] = _six_sicd.MatchType_typeID_set
-    __swig_getmethods__["typeID"] = _six_sicd.MatchType_typeID_get
-    if _newclass:
-        typeID = _swig_property(_six_sicd.MatchType_typeID_get, _six_sicd.MatchType_typeID_set)
-    __swig_setmethods__["currentIndex"] = _six_sicd.MatchType_currentIndex_set
-    __swig_getmethods__["currentIndex"] = _six_sicd.MatchType_currentIndex_get
-    if _newclass:
-        currentIndex = _swig_property(_six_sicd.MatchType_currentIndex_get, _six_sicd.MatchType_currentIndex_set)
-    __swig_setmethods__["matchCollects"] = _six_sicd.MatchType_matchCollects_set
-    __swig_getmethods__["matchCollects"] = _six_sicd.MatchType_matchCollects_get
-    if _newclass:
-        matchCollects = _swig_property(_six_sicd.MatchType_matchCollects_get, _six_sicd.MatchType_matchCollects_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchType self, MatchType rhs) -> bool"""
-        return _six_sicd.MatchType___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchType self, MatchType rhs) -> bool"""
-        return _six_sicd.MatchType___ne__(self, rhs)
-
-    __swig_destroy__ = _six_sicd.delete_MatchType
-    __del__ = lambda self: None
-MatchType_swigregister = _six_sicd.MatchType_swigregister
-MatchType_swigregister(MatchType)
-
-class MatchInformation(_object):
-    """Proxy of C++ six::sicd::MatchInformation class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchInformation, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchInformation, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::sicd::MatchInformation self) -> MatchInformation"""
-        this = _six_sicd.new_MatchInformation()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["types"] = _six_sicd.MatchInformation_types_set
-    __swig_getmethods__["types"] = _six_sicd.MatchInformation_types_get
-    if _newclass:
-        types = _swig_property(_six_sicd.MatchInformation_types_get, _six_sicd.MatchInformation_types_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_sicd.MatchInformation___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_sicd.MatchInformation___ne__(self, rhs)
-
-    __swig_destroy__ = _six_sicd.delete_MatchInformation
-    __del__ = lambda self: None
-MatchInformation_swigregister = _six_sicd.MatchInformation_swigregister
-MatchInformation_swigregister(MatchInformation)
-
 class SlowTimeDeskew(_object):
     """Proxy of C++ six::sicd::SlowTimeDeskew class."""
 
@@ -3324,130 +3245,144 @@ def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
-class StdAutoCollectionInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""
+class StdAutoComplexCollectionInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::ComplexCollectionInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComplexCollectionInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::CollectionInformation)> self) -> StdAutoCollectionInformation"""
-        this = _six_sicd.new_StdAutoCollectionInformation()
+        """__init__(std::auto_ptr<(six::sicd::ComplexCollectionInformation)> self) -> StdAutoComplexCollectionInformation"""
+        this = _six_sicd.new_StdAutoComplexCollectionInformation()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_StdAutoComplexCollectionInformation
     __del__ = lambda self: None
-StdAutoCollectionInformation_swigregister = _six_sicd.StdAutoCollectionInformation_swigregister
-StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+StdAutoComplexCollectionInformation_swigregister = _six_sicd.StdAutoComplexCollectionInformation_swigregister
+StdAutoComplexCollectionInformation_swigregister(StdAutoComplexCollectionInformation)
 
-class ScopedCloneableCollectionInformation(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> class."""
+class ScopedCloneableComplexCollectionInformation(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableComplexCollectionInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self, ComplexCollectionInformation ptr=None) -> ScopedCloneableComplexCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self) -> ScopedCloneableComplexCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::sicd::ComplexCollectionInformation)> self, ScopedCloneableComplexCollectionInformation rhs) -> ScopedCloneableComplexCollectionInformation
         """
-        this = _six_sicd.new_ScopedCloneableCollectionInformation(*args)
+        this = _six_sicd.new_ScopedCloneableComplexCollectionInformation(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_get(self)
+        """get(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ref__(self)
+        """__ref__(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___deref__(self)
+        """__deref__(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
-        reset(ScopedCloneableCollectionInformation self)
+        reset(ScopedCloneableComplexCollectionInformation self, ComplexCollectionInformation ptr=None)
+        reset(ScopedCloneableComplexCollectionInformation self)
         """
-        return _six_sicd.ScopedCloneableCollectionInformation_reset(self, ptr)
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_ScopedCloneableComplexCollectionInformation
     __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectorName_get, _six_sicd.ScopedCloneableCollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get, _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_coreName_get, _six_sicd.ScopedCloneableCollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_get
-    if _newclass:
-        collectType = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectType_get, _six_sicd.ScopedCloneableCollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_get
-    if _newclass:
-        radarMode = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarMode_get, _six_sicd.ScopedCloneableCollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_classification_get, _six_sicd.ScopedCloneableCollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_countryCodes_get, _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_parameters_get, _six_sicd.ScopedCloneableCollectionInformation_parameters_set)
 
     def clone(self):
-        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_clone(self)
+        """clone(ScopedCloneableComplexCollectionInformation self) -> ComplexCollectionInformation"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_clone(self)
 
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(ScopedCloneableComplexCollectionInformation self) -> std::string"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(ScopedCloneableComplexCollectionInformation self, std::string const & classification)"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_setClassificationLevel(self, classification)
+
+
+    def getClassification(self, *args):
+        """
+        getClassification(ScopedCloneableComplexCollectionInformation self) -> ComplexClassification
+        getClassification(ScopedCloneableComplexCollectionInformation self) -> ComplexClassification
+        """
+        return _six_sicd.ScopedCloneableComplexCollectionInformation_getClassification(self, *args)
+
+    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_coreName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_collectType_get, _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_get, _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_set)
+    __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_get, _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_parameters_get, _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_set)
 
     def __eq__(self, other):
-        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___eq__(self, other)
+        """__eq__(ScopedCloneableComplexCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___eq__(self, other)
 
 
     def __ne__(self, other):
-        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ne__(self, other)
+        """__ne__(ScopedCloneableComplexCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___ne__(self, other)
 
-ScopedCloneableCollectionInformation_swigregister = _six_sicd.ScopedCloneableCollectionInformation_swigregister
-ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+ScopedCloneableComplexCollectionInformation_swigregister = _six_sicd.ScopedCloneableComplexCollectionInformation_swigregister
+ScopedCloneableComplexCollectionInformation_swigregister(ScopedCloneableComplexCollectionInformation)
 
 
-def makeScopedCloneableCollectionInformation():
-    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
-    return _six_sicd.makeScopedCloneableCollectionInformation()
+def makeScopedCloneableComplexCollectionInformation():
+    """makeScopedCloneableComplexCollectionInformation() -> ScopedCloneableComplexCollectionInformation"""
+    return _six_sicd.makeScopedCloneableComplexCollectionInformation()
 class StdAutoImageCreation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::ImageCreation)> class."""
 
@@ -4766,93 +4701,6 @@ ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
 def makeScopedCopyableAntenna():
     """makeScopedCopyableAntenna() -> ScopedCopyableAntenna"""
     return _six_sicd.makeScopedCopyableAntenna()
-class StdAutoMatchInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::MatchInformation)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchInformation, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchInformation, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::MatchInformation)> self) -> StdAutoMatchInformation"""
-        this = _six_sicd.new_StdAutoMatchInformation()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoMatchInformation
-    __del__ = lambda self: None
-StdAutoMatchInformation_swigregister = _six_sicd.StdAutoMatchInformation_swigregister
-StdAutoMatchInformation_swigregister(StdAutoMatchInformation)
-
-class ScopedCopyableMatchInformation(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchInformation, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchInformation, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> self, MatchInformation ptr=None) -> ScopedCopyableMatchInformation
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> self) -> ScopedCopyableMatchInformation
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> self, ScopedCopyableMatchInformation rhs) -> ScopedCopyableMatchInformation
-        """
-        this = _six_sicd.new_ScopedCopyableMatchInformation(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_sicd.ScopedCopyableMatchInformation_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_sicd.ScopedCopyableMatchInformation___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_sicd.ScopedCopyableMatchInformation___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableMatchInformation self, MatchInformation ptr=None)
-        reset(ScopedCopyableMatchInformation self)
-        """
-        return _six_sicd.ScopedCopyableMatchInformation_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableMatchInformation
-    __del__ = lambda self: None
-    __swig_setmethods__["types"] = _six_sicd.ScopedCopyableMatchInformation_types_set
-    __swig_getmethods__["types"] = _six_sicd.ScopedCopyableMatchInformation_types_get
-    if _newclass:
-        types = _swig_property(_six_sicd.ScopedCopyableMatchInformation_types_get, _six_sicd.ScopedCopyableMatchInformation_types_set)
-
-    def __eq__(self, rhs):
-        """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_sicd.ScopedCopyableMatchInformation___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_sicd.ScopedCopyableMatchInformation___ne__(self, rhs)
-
-ScopedCopyableMatchInformation_swigregister = _six_sicd.ScopedCopyableMatchInformation_swigregister
-ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
-
-
-def makeScopedCopyableMatchInformation():
-    """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
-    return _six_sicd.makeScopedCopyableMatchInformation()
 class StdAutoSlowTimeDeskew(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::SlowTimeDeskew)> class."""
 
@@ -6229,113 +6077,6 @@ ScopedCopyableGainAndPhasePolys_swigregister(ScopedCopyableGainAndPhasePolys)
 def makeScopedCopyableGainAndPhasePolys():
     """makeScopedCopyableGainAndPhasePolys() -> ScopedCopyableGainAndPhasePolys"""
     return _six_sicd.makeScopedCopyableGainAndPhasePolys()
-class StdAutoMatchType(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::MatchType)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::MatchType)> self) -> StdAutoMatchType"""
-        this = _six_sicd.new_StdAutoMatchType()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoMatchType
-    __del__ = lambda self: None
-StdAutoMatchType_swigregister = _six_sicd.StdAutoMatchType_swigregister
-StdAutoMatchType_swigregister(StdAutoMatchType)
-
-class ScopedCopyableMatchType(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchType)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, MatchType ptr=None) -> ScopedCopyableMatchType
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self) -> ScopedCopyableMatchType
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, ScopedCopyableMatchType rhs) -> ScopedCopyableMatchType
-        """
-        this = _six_sicd.new_ScopedCopyableMatchType(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyableMatchType_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyableMatchType___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyableMatchType___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableMatchType self, MatchType ptr=None)
-        reset(ScopedCopyableMatchType self)
-        """
-        return _six_sicd.ScopedCopyableMatchType_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableMatchType
-    __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.ScopedCopyableMatchType_collectorName_get, _six_sicd.ScopedCopyableMatchType_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.ScopedCopyableMatchType_illuminatorName_get, _six_sicd.ScopedCopyableMatchType_illuminatorName_set)
-    __swig_setmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_set
-    __swig_getmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_get
-    if _newclass:
-        matchType = _swig_property(_six_sicd.ScopedCopyableMatchType_matchType_get, _six_sicd.ScopedCopyableMatchType_matchType_set)
-    __swig_setmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_set
-    __swig_getmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_get
-    if _newclass:
-        typeID = _swig_property(_six_sicd.ScopedCopyableMatchType_typeID_get, _six_sicd.ScopedCopyableMatchType_typeID_set)
-    __swig_setmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_set
-    __swig_getmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_get
-    if _newclass:
-        currentIndex = _swig_property(_six_sicd.ScopedCopyableMatchType_currentIndex_get, _six_sicd.ScopedCopyableMatchType_currentIndex_set)
-    __swig_setmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_set
-    __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_get
-    if _newclass:
-        matchCollects = _swig_property(_six_sicd.ScopedCopyableMatchType_matchCollects_get, _six_sicd.ScopedCopyableMatchType_matchCollects_set)
-
-    def __eq__(self, rhs):
-        """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
-        return _six_sicd.ScopedCopyableMatchType___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
-        return _six_sicd.ScopedCopyableMatchType___ne__(self, rhs)
-
-ScopedCopyableMatchType_swigregister = _six_sicd.ScopedCopyableMatchType_swigregister
-ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
-
-
-def makeScopedCopyableMatchType():
-    """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
-    return _six_sicd.makeScopedCopyableMatchType()
 class StdAutoWeightType(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::WeightType)> class."""
 
@@ -9185,438 +8926,6 @@ ScopedCopyableDistortion_swigregister(ScopedCopyableDistortion)
 def makeScopedCopyableDistortion():
     """makeScopedCopyableDistortion() -> ScopedCopyableDistortion"""
     return _six_sicd.makeScopedCopyableDistortion()
-class VectorMatchCollect(_object):
-    """Proxy of C++ std::vector<(six::sicd::MatchCollect)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorMatchCollect, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchCollect, name)
-    __repr__ = _swig_repr
-
-    def iterator(self):
-        """iterator(VectorMatchCollect self) -> SwigPyIterator"""
-        return _six_sicd.VectorMatchCollect_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self):
-        """__nonzero__(VectorMatchCollect self) -> bool"""
-        return _six_sicd.VectorMatchCollect___nonzero__(self)
-
-
-    def __bool__(self):
-        """__bool__(VectorMatchCollect self) -> bool"""
-        return _six_sicd.VectorMatchCollect___bool__(self)
-
-
-    def __len__(self):
-        """__len__(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::size_type"""
-        return _six_sicd.VectorMatchCollect___len__(self)
-
-
-    def __getslice__(self, i, j):
-        """__getslice__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i, std::vector< six::sicd::MatchCollect >::difference_type j) -> VectorMatchCollect"""
-        return _six_sicd.VectorMatchCollect___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args):
-        """
-        __setslice__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i, std::vector< six::sicd::MatchCollect >::difference_type j)
-        __setslice__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i, std::vector< six::sicd::MatchCollect >::difference_type j, VectorMatchCollect v)
-        """
-        return _six_sicd.VectorMatchCollect___setslice__(self, *args)
-
-
-    def __delslice__(self, i, j):
-        """__delslice__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i, std::vector< six::sicd::MatchCollect >::difference_type j)"""
-        return _six_sicd.VectorMatchCollect___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args):
-        """
-        __delitem__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i)
-        __delitem__(VectorMatchCollect self, PySliceObject * slice)
-        """
-        return _six_sicd.VectorMatchCollect___delitem__(self, *args)
-
-
-    def __getitem__(self, *args):
-        """
-        __getitem__(VectorMatchCollect self, PySliceObject * slice) -> VectorMatchCollect
-        __getitem__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i) -> MatchCollect
-        """
-        return _six_sicd.VectorMatchCollect___getitem__(self, *args)
-
-
-    def __setitem__(self, *args):
-        """
-        __setitem__(VectorMatchCollect self, PySliceObject * slice, VectorMatchCollect v)
-        __setitem__(VectorMatchCollect self, PySliceObject * slice)
-        __setitem__(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::difference_type i, MatchCollect x)
-        """
-        return _six_sicd.VectorMatchCollect___setitem__(self, *args)
-
-
-    def pop(self):
-        """pop(VectorMatchCollect self) -> MatchCollect"""
-        return _six_sicd.VectorMatchCollect_pop(self)
-
-
-    def append(self, x):
-        """append(VectorMatchCollect self, MatchCollect x)"""
-        return _six_sicd.VectorMatchCollect_append(self, x)
-
-
-    def empty(self):
-        """empty(VectorMatchCollect self) -> bool"""
-        return _six_sicd.VectorMatchCollect_empty(self)
-
-
-    def size(self):
-        """size(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::size_type"""
-        return _six_sicd.VectorMatchCollect_size(self)
-
-
-    def swap(self, v):
-        """swap(VectorMatchCollect self, VectorMatchCollect v)"""
-        return _six_sicd.VectorMatchCollect_swap(self, v)
-
-
-    def begin(self):
-        """begin(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::iterator"""
-        return _six_sicd.VectorMatchCollect_begin(self)
-
-
-    def end(self):
-        """end(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::iterator"""
-        return _six_sicd.VectorMatchCollect_end(self)
-
-
-    def rbegin(self):
-        """rbegin(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::reverse_iterator"""
-        return _six_sicd.VectorMatchCollect_rbegin(self)
-
-
-    def rend(self):
-        """rend(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::reverse_iterator"""
-        return _six_sicd.VectorMatchCollect_rend(self)
-
-
-    def clear(self):
-        """clear(VectorMatchCollect self)"""
-        return _six_sicd.VectorMatchCollect_clear(self)
-
-
-    def get_allocator(self):
-        """get_allocator(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::allocator_type"""
-        return _six_sicd.VectorMatchCollect_get_allocator(self)
-
-
-    def pop_back(self):
-        """pop_back(VectorMatchCollect self)"""
-        return _six_sicd.VectorMatchCollect_pop_back(self)
-
-
-    def erase(self, *args):
-        """
-        erase(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::iterator pos) -> std::vector< six::sicd::MatchCollect >::iterator
-        erase(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::iterator first, std::vector< six::sicd::MatchCollect >::iterator last) -> std::vector< six::sicd::MatchCollect >::iterator
-        """
-        return _six_sicd.VectorMatchCollect_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(six::sicd::MatchCollect)> self) -> VectorMatchCollect
-        __init__(std::vector<(six::sicd::MatchCollect)> self, VectorMatchCollect arg2) -> VectorMatchCollect
-        __init__(std::vector<(six::sicd::MatchCollect)> self, std::vector< six::sicd::MatchCollect >::size_type size) -> VectorMatchCollect
-        __init__(std::vector<(six::sicd::MatchCollect)> self, std::vector< six::sicd::MatchCollect >::size_type size, MatchCollect value) -> VectorMatchCollect
-        """
-        this = _six_sicd.new_VectorMatchCollect(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x):
-        """push_back(VectorMatchCollect self, MatchCollect x)"""
-        return _six_sicd.VectorMatchCollect_push_back(self, x)
-
-
-    def front(self):
-        """front(VectorMatchCollect self) -> MatchCollect"""
-        return _six_sicd.VectorMatchCollect_front(self)
-
-
-    def back(self):
-        """back(VectorMatchCollect self) -> MatchCollect"""
-        return _six_sicd.VectorMatchCollect_back(self)
-
-
-    def assign(self, n, x):
-        """assign(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::size_type n, MatchCollect x)"""
-        return _six_sicd.VectorMatchCollect_assign(self, n, x)
-
-
-    def resize(self, *args):
-        """
-        resize(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::size_type new_size)
-        resize(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::size_type new_size, MatchCollect x)
-        """
-        return _six_sicd.VectorMatchCollect_resize(self, *args)
-
-
-    def insert(self, *args):
-        """
-        insert(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::iterator pos, MatchCollect x) -> std::vector< six::sicd::MatchCollect >::iterator
-        insert(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::iterator pos, std::vector< six::sicd::MatchCollect >::size_type n, MatchCollect x)
-        """
-        return _six_sicd.VectorMatchCollect_insert(self, *args)
-
-
-    def reserve(self, n):
-        """reserve(VectorMatchCollect self, std::vector< six::sicd::MatchCollect >::size_type n)"""
-        return _six_sicd.VectorMatchCollect_reserve(self, n)
-
-
-    def capacity(self):
-        """capacity(VectorMatchCollect self) -> std::vector< six::sicd::MatchCollect >::size_type"""
-        return _six_sicd.VectorMatchCollect_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_sicd.delete_VectorMatchCollect
-    __del__ = lambda self: None
-VectorMatchCollect_swigregister = _six_sicd.VectorMatchCollect_swigregister
-VectorMatchCollect_swigregister(VectorMatchCollect)
-
-class VectorScopedCopyableMatchType(_object):
-    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableMatchType, name)
-    __repr__ = _swig_repr
-
-    def iterator(self):
-        """iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"""
-        return _six_sicd.VectorScopedCopyableMatchType_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self):
-        """__nonzero__(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_sicd.VectorScopedCopyableMatchType___nonzero__(self)
-
-
-    def __bool__(self):
-        """__bool__(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_sicd.VectorScopedCopyableMatchType___bool__(self)
-
-
-    def __len__(self):
-        """__len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type"""
-        return _six_sicd.VectorScopedCopyableMatchType___len__(self)
-
-
-    def __getslice__(self, i, j):
-        """__getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"""
-        return _six_sicd.VectorScopedCopyableMatchType___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args):
-        """
-        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type j)
-        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)
-        """
-        return _six_sicd.VectorScopedCopyableMatchType___setslice__(self, *args)
-
-
-    def __delslice__(self, i, j):
-        """__delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type j)"""
-        return _six_sicd.VectorScopedCopyableMatchType___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args):
-        """
-        __delitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i)
-        __delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        """
-        return _six_sicd.VectorScopedCopyableMatchType___delitem__(self, *args)
-
-
-    def __getitem__(self, *args):
-        """
-        __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
-        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i) -> ScopedCopyableMatchType
-        """
-        return _six_sicd.VectorScopedCopyableMatchType___getitem__(self, *args)
-
-
-    def __setitem__(self, *args):
-        """
-        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
-        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, ScopedCopyableMatchType x)
-        """
-        return _six_sicd.VectorScopedCopyableMatchType___setitem__(self, *args)
-
-
-    def pop(self):
-        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_sicd.VectorScopedCopyableMatchType_pop(self)
-
-
-    def append(self, x):
-        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
-        return _six_sicd.VectorScopedCopyableMatchType_append(self, x)
-
-
-    def empty(self):
-        """empty(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_sicd.VectorScopedCopyableMatchType_empty(self)
-
-
-    def size(self):
-        """size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type"""
-        return _six_sicd.VectorScopedCopyableMatchType_size(self)
-
-
-    def swap(self, v):
-        """swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"""
-        return _six_sicd.VectorScopedCopyableMatchType_swap(self, v)
-
-
-    def begin(self):
-        """begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator"""
-        return _six_sicd.VectorScopedCopyableMatchType_begin(self)
-
-
-    def end(self):
-        """end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator"""
-        return _six_sicd.VectorScopedCopyableMatchType_end(self)
-
-
-    def rbegin(self):
-        """rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::reverse_iterator"""
-        return _six_sicd.VectorScopedCopyableMatchType_rbegin(self)
-
-
-    def rend(self):
-        """rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::reverse_iterator"""
-        return _six_sicd.VectorScopedCopyableMatchType_rend(self)
-
-
-    def clear(self):
-        """clear(VectorScopedCopyableMatchType self)"""
-        return _six_sicd.VectorScopedCopyableMatchType_clear(self)
-
-
-    def get_allocator(self):
-        """get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::allocator_type"""
-        return _six_sicd.VectorScopedCopyableMatchType_get_allocator(self)
-
-
-    def pop_back(self):
-        """pop_back(VectorScopedCopyableMatchType self)"""
-        return _six_sicd.VectorScopedCopyableMatchType_pop_back(self)
-
-
-    def erase(self, *args):
-        """
-        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
-        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
-        """
-        return _six_sicd.VectorScopedCopyableMatchType_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
-        """
-        this = _six_sicd.new_VectorScopedCopyableMatchType(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x):
-        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
-        return _six_sicd.VectorScopedCopyableMatchType_push_back(self, x)
-
-
-    def front(self):
-        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_sicd.VectorScopedCopyableMatchType_front(self)
-
-
-    def back(self):
-        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_sicd.VectorScopedCopyableMatchType_back(self)
-
-
-    def assign(self, n, x):
-        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
-        return _six_sicd.VectorScopedCopyableMatchType_assign(self, n, x)
-
-
-    def resize(self, *args):
-        """
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size)
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
-        """
-        return _six_sicd.VectorScopedCopyableMatchType_resize(self, *args)
-
-
-    def insert(self, *args):
-        """
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyableMatchType x)
-        """
-        return _six_sicd.VectorScopedCopyableMatchType_insert(self, *args)
-
-
-    def reserve(self, n):
-        """reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n)"""
-        return _six_sicd.VectorScopedCopyableMatchType_reserve(self, n)
-
-
-    def capacity(self):
-        """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type"""
-        return _six_sicd.VectorScopedCopyableMatchType_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_sicd.delete_VectorScopedCopyableMatchType
-    __del__ = lambda self: None
-VectorScopedCopyableMatchType_swigregister = _six_sicd.VectorScopedCopyableMatchType_swigregister
-VectorScopedCopyableMatchType_swigregister(VectorScopedCopyableMatchType)
-
 class StdAutoRMAT(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::RMAT)> class."""
 

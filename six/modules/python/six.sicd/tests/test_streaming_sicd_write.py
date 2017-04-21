@@ -29,6 +29,7 @@
 
 import sys, os, filecmp
 from pysix.scene import *
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -38,14 +39,14 @@ from coda.math_poly import *
 from coda.math_linear import *
 
 def initCollectionInfo(cmplx):
-    collectionInfo = makeScopedCloneableCollectionInformation()
+    collectionInfo = makeScopedCloneableComplexCollectionInformation()
     collectionInfo.collectorName = 'Some collector'
     collectionInfo.illuminatorName = 'Some illuminator'
     collectionInfo.coreName = 'Some corename'
     collectionInfo.collectType = CollectType('MONOSTATIC')
     collectionInfo.radarMode = RadarModeType('SPOTLIGHT')
     collectionInfo.radarModeID = 'Some ID'
-    collectionInfo.classification.level = 'UNCLASSIFIED'
+    collectionInfo.setClassificationLevel('UNCLASSIFIED')
     collectionInfo.countryCodes.push_back('US')
 
     param = Parameter()
