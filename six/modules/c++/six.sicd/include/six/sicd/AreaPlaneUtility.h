@@ -2,7 +2,7 @@
  * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -47,18 +47,25 @@ public:
      * If data has no areaPlane, derive it and set it
      * \param data ComplexData to populate with areaPlane
      * \param includeSegmentList Should the areaPlane's segmentlist be filled?
+     * \param sampleDensity Value to use to calculate SampleSpacing
      */
-    static void setAreaPlane(ComplexData& data, bool includeSegmentList=true,
-            double sampleDensity=SAMPLE_DENSITY);
+    static void setAreaPlane(ComplexData& data,
+            bool includeSegmentList=true,
+            double sampleDensity=DEFAULT_SAMPLE_DENSITY);
 
     /*!
      * Derives an output plane definition from existing SICD metadata
      * \param data ComplexData from which to derived AreaPlane
      * \param areaPlane AreaPlane to populate
+     * \param includeSegmentList Should the areaPlane's segmentlist be filled?
+     * \param sampleDensity Value to use to calculate SampleSpacing
      */
-    static void deriveAreaPlane(const ComplexData& data, AreaPlane& areaPlane,
+    static void deriveAreaPlane(const ComplexData& data,
+            AreaPlane& areaPlane,
             bool includeSegmentList=true,
-            double sampleDensity=SAMPLE_DENSITY);
+            double sampleDensity=DEFAULT_SAMPLE_DENSITY);
+
+    static const double DEFAULT_SAMPLE_DENSITY;
 
 private:
     static RowColDouble deriveReferencePoint(
@@ -82,8 +89,6 @@ private:
     static types::RowCol<size_t> derivePlaneDimensions(
             const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
             const RowColDouble& spacing);
-private:
-    static const double SAMPLE_DENSITY;
 };
 }
 }

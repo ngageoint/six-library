@@ -7,7 +7,7 @@ namespace six
 {
 namespace sicd
 {
-const double AreaPlaneUtility::SAMPLE_DENSITY = 1.5;
+const double AreaPlaneUtility::DEFAULT_SAMPLE_DENSITY = 1.5;
 std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
         const ComplexData& data)
 {
