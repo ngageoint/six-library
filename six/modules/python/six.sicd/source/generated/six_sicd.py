@@ -239,6 +239,84 @@ def schema_path():
         pysix_path = os.path.dirname(sys.argv[0])
     return os.path.abspath(os.path.join(pysix_path, 'schemas'))
 
+class CollectionInformation(_object):
+    """Proxy of C++ six::CollectionInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.CollectionInformation_collectorName_get, _six_sicd.CollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.CollectionInformation_illuminatorName_get, _six_sicd.CollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_sicd.CollectionInformation_coreName_get, _six_sicd.CollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_sicd.CollectionInformation_collectType_get, _six_sicd.CollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_sicd.CollectionInformation_radarMode_get, _six_sicd.CollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_sicd.CollectionInformation_countryCodes_get, _six_sicd.CollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_sicd.CollectionInformation_parameters_get, _six_sicd.CollectionInformation_parameters_set)
+
+    def __init__(self):
+        """__init__(six::CollectionInformation self) -> CollectionInformation"""
+        this = _six_sicd.new_CollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_CollectionInformation
+    __del__ = lambda self: None
+
+    def clone(self):
+        """clone(CollectionInformation self) -> CollectionInformation"""
+        return _six_sicd.CollectionInformation_clone(self)
+
+
+    def __eq__(self, other):
+        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.CollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.CollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(CollectionInformation self) -> std::string"""
+        return _six_sicd.CollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(CollectionInformation self, std::string const & classification)"""
+        return _six_sicd.CollectionInformation_setClassificationLevel(self, classification)
+
+CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
+CollectionInformation_swigregister(CollectionInformation)
+
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class."""
 
@@ -283,12 +361,16 @@ class ComplexClassification(pysix.six_base.Classification):
 ComplexClassification_swigregister = _six_sicd.ComplexClassification_swigregister
 ComplexClassification_swigregister(ComplexClassification)
 
-class ComplexCollectionInformation(_object):
+class ComplexCollectionInformation(CollectionInformation):
     """Proxy of C++ six::sicd::ComplexCollectionInformation class."""
 
     __swig_setmethods__ = {}
+    for _s in [CollectionInformation]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexCollectionInformation, name, value)
     __swig_getmethods__ = {}
+    for _s in [CollectionInformation]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexCollectionInformation, name)
     __repr__ = _swig_repr
 
@@ -760,7 +842,7 @@ class Grid(_object):
 
     def validate(self, *args):
         """
-        validate(Grid self, CollectionInformation const & collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(Grid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
         validate(Grid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
@@ -770,7 +852,7 @@ class Grid(_object):
 
     def fillDerivedFields(self, *args):
         """
-        fillDerivedFields(Grid self, CollectionInformation const & collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(Grid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(Grid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
@@ -2704,7 +2786,7 @@ class INCA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(INCA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(INCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.INCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
     __swig_destroy__ = _six_sicd.delete_INCA
@@ -2766,7 +2848,7 @@ class RMA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(RMA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(RMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.RMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
     __swig_destroy__ = _six_sicd.delete_RMA
@@ -3380,6 +3462,48 @@ class ScopedCloneableComplexCollectionInformation(_object):
         """
         return _six_sicd.ScopedCloneableComplexCollectionInformation_getClassification(self, *args)
 
+    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_coreName_get, _six_sicd.ScopedCloneableComplexCollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_collectType_get, _six_sicd.ScopedCloneableComplexCollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_get, _six_sicd.ScopedCloneableComplexCollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_set)
+    __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_get, _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_parameters_get, _six_sicd.ScopedCloneableComplexCollectionInformation_parameters_set)
+
+    def __eq__(self, other):
+        """__eq__(ScopedCloneableComplexCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCloneableComplexCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_sicd.ScopedCloneableComplexCollectionInformation___ne__(self, other)
+
 ScopedCloneableComplexCollectionInformation_swigregister = _six_sicd.ScopedCloneableComplexCollectionInformation_swigregister
 ScopedCloneableComplexCollectionInformation_swigregister(ScopedCloneableComplexCollectionInformation)
 
@@ -3837,7 +3961,7 @@ class ScopedCloneableGrid(_object):
 
     def validate(self, *args):
         """
-        validate(ScopedCloneableGrid self, CollectionInformation const & collectionInformation, ImageData imageData, logging::Logger & log) -> bool
+        validate(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, PFA pfa, RadarCollection const & radarCollection, double fc, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc, logging::Logger & log) -> bool
@@ -3847,7 +3971,7 @@ class ScopedCloneableGrid(_object):
 
     def fillDerivedFields(self, *args):
         """
-        fillDerivedFields(ScopedCloneableGrid self, CollectionInformation const & collectionInformation, ImageData imageData, SCPCOA scpcoa)
+        fillDerivedFields(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
         fillDerivedFields(ScopedCloneableGrid self, RgAzComp rgAzComp, GeoData geoData, SCPCOA scpcoa, double fc)
         """
@@ -5125,7 +5249,7 @@ class ScopedCopyableRMA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(ScopedCopyableRMA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(ScopedCopyableRMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
 ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
@@ -9991,7 +10115,7 @@ class ScopedCopyableINCA(_object):
 
 
     def validate(self, collectionInformation, scp, arpPoly, fc, log):
-        """validate(ScopedCopyableINCA self, CollectionInformation const & collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
+        """validate(ScopedCopyableINCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableINCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
 ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister

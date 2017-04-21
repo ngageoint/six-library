@@ -23,6 +23,7 @@
 #ifndef __SIX_SI_COMMON_XML_PARSER_H__
 #define __SIX_SI_COMMON_XML_PARSER_H__
 
+#include <six/CollectionInformation.h>
 #include <six/XMLParser.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
@@ -144,6 +145,14 @@ public:
         const XMLElem errorStatsXML,
         ErrorStatistics* errorStatistics) const;
 
+    XMLElem convertCollectionInformationToXML(
+        const CollectionInformation *obj,
+        XMLElem parent = NULL) const;
+
+    void parseCollectionInformationFromXML(
+        const XMLElem collectionInfoXML,
+        CollectionInformation *obj) const;
+
     virtual XMLElem convertRadiometryToXML(
         const Radiometric *obj,
         XMLElem parent = NULL) const = 0;
@@ -151,7 +160,6 @@ public:
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML,
         Radiometric *obj) const = 0;
-
 
 protected:
 

@@ -69,10 +69,6 @@ private:
     typedef xml::lite::Element* XMLElem;
 
     // TODO: These are copies from some of the six.sicd XMLParsers
-    XMLElem toXML(const CollectionInformation& obj, XMLElem parent = NULL);
-
-    void fromXML(const XMLElem collectionInfoXML, CollectionInformation& obj);
-
     XMLElem createLatLonAltFootprint(const std::string& name,
                                      const std::string& cornerName,
                                      const LatLonAltCorners& corners,

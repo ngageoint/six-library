@@ -166,6 +166,7 @@ def schema_path():
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
+%include "six/CollectionInformation.h"
 %include "six/sicd/ComplexClassification.h"
 %include "six/sicd/ComplexCollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
