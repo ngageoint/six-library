@@ -26,7 +26,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
-#include <math/ConvexHull.h>
 #include <math/Utilities.h>
 #include <types/RowCol.h>
 

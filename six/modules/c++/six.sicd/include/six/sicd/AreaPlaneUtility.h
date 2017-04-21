@@ -20,7 +20,7 @@
  *
  */
 #ifndef __SIX_SICD_AREA_PLANE_UTILITY_H__
-#define __SIX_SICD_AREA_PLNAE_UTILITY_H__
+#define __SIX_SICD_AREA_PLANE_UTILITY_H__
 
 #include <vector>
 
@@ -35,6 +35,11 @@ namespace six
 {
 namespace sicd
 {
+/*!
+ * \class AreaPlaneUtility
+ * \brief Provides functions to populate
+ * ComplexData->RadarCollection->Area->Plane if unset
+ */
 class AreaPlaneUtility
 {
 public:
@@ -43,14 +48,16 @@ public:
      * \param data ComplexData to populate with areaPlane
      * \param includeSegmentList Should the areaPlane's segmentlist be filled?
      */
-    static void setAreaPlane(ComplexData& data, bool includeSegmentList=true);
+    static void setAreaPlane(ComplexData& data, bool includeSegmentList=true,
+            double sampleDensity=SAMPLE_DENSITY);
 
     /*!
      * Derives an output plane definition from existing SICD metadata
      * \param data ComplexData from which to derived AreaPlane
      * \param areaPlane AreaPlane to populate
      */
-    static void deriveAreaPlane(const ComplexData& data, AreaPlane& areaPlane);
+    static void deriveAreaPlane(const ComplexData& data, AreaPlane& areaPlane,
+            double sampleDensity=SAMPLE_DENSITY);
 
 private:
     static RowColDouble deriveReferencePoint(
@@ -69,10 +76,13 @@ private:
             const ComplexData& data);
     static RowColDouble deriveSpacing(
             const ComplexData& data,
-            const types::RowCol<Vector3>& unitVectors);
+            const types::RowCol<Vector3>& unitVectors,
+            double sampleDensity);
     static types::RowCol<size_t> derivePlaneDimensions(
             const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
             const RowColDouble& spacing);
+private:
+    static const double SAMPLE_DENSITY;
 };
 }
 }

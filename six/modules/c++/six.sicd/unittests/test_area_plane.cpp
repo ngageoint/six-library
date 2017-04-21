@@ -125,7 +125,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {

@@ -7,6 +7,7 @@ namespace six
 {
 namespace sicd
 {
+const double AreaPlaneUtility::SAMPLE_DENSITY = 1.5;
 std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
         const ComplexData& data)
 {
@@ -74,7 +75,8 @@ types::RowCol<Vector3> AreaPlaneUtility::deriveUnitVectors(
 
 RowColDouble AreaPlaneUtility::deriveSpacing(
         const ComplexData& data,
-        const types::RowCol<Vector3>& unitVectors)
+        const types::RowCol<Vector3>& unitVectors,
+        double sampleDensity)
 {
     std::auto_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
@@ -93,11 +95,10 @@ RowColDouble AreaPlaneUtility::deriveSpacing(
             origResolution.col / k.col);
     const RowColDouble groundResolution =
             geometry->getGroundResolution(resolution);
-    const double SAMPLE_DENSITY = 1.5;
 
     RowColDouble spacing;
     spacing.row = std::max(groundResolution.row, groundResolution.col);
-    spacing.col = spacing.row / SAMPLE_DENSITY;
+    spacing.col = spacing.row / sampleDensity;
     return spacing;
 }
 
@@ -194,7 +195,8 @@ RowColDouble AreaPlaneUtility::deriveReferencePoint(
 }
 
 void AreaPlaneUtility::setAreaPlane(ComplexData& data,
-        bool includeSegmentList)
+        bool includeSegmentList,
+        double sampleDensity)
 {
     if (!data.radarCollection.get())
     {
@@ -208,17 +210,20 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
     {
         data.radarCollection->area->plane.reset(new AreaPlane());
         AreaPlane& areaPlane = *data.radarCollection->area->plane;
-        deriveAreaPlane(data, areaPlane);
+        deriveAreaPlane(data, areaPlane, sampleDensity);
         if (includeSegmentList)
         {
             areaPlane.segmentList.resize(1);
             areaPlane.segmentList[0].reset(new Segment());
             areaPlane.segmentList[0]->startLine = 0;
             areaPlane.segmentList[0]->startSample = 0;
+
+            // End values are inclusive
             areaPlane.segmentList[0]->endLine =
                     areaPlane.xDirection->elements - 1;
             areaPlane.segmentList[0]->endSample =
                     areaPlane.yDirection->elements - 1;
+
             areaPlane.segmentList[0]->identifier = "AA";
             data.imageFormation->segmentIdentifier = "AA";
         }
@@ -226,7 +231,7 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
 }
 
 void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
-        AreaPlane& areaPlane)
+        AreaPlane& areaPlane, double sampleDensity)
 {
     areaPlane.xDirection.reset(new AreaDirectionParameters());
     areaPlane.yDirection.reset(new AreaDirectionParameters());
@@ -235,7 +240,7 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
     areaPlane.xDirection->unitVector = unitVectors.row;
     areaPlane.yDirection->unitVector = unitVectors.col;
 
-    const RowColDouble spacing = deriveSpacing(data, unitVectors);
+    const RowColDouble spacing = deriveSpacing(data, unitVectors, sampleDensity);
     areaPlane.xDirection->spacing = spacing.row;
     areaPlane.yDirection->spacing = spacing.col;
 
