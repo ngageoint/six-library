@@ -60,7 +60,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
     data->radarCollection->area.reset(new six::sicd::Area());
     data->radarCollection->area->plane.reset(new six::sicd::AreaPlane());
     six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
-    six::sicd::AreaPlaneUtility::deriveAreaPlane(*data, areaPlane);
+    six::sicd::AreaPlaneUtility::deriveAreaPlane(*data, areaPlane, false);
 
     std::auto_ptr<six::sicd::ComplexData> secondData =
             six::sicd::Utilities::createFakeComplexData();

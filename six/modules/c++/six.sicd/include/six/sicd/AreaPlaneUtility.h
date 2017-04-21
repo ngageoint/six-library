@@ -57,6 +57,7 @@ public:
      * \param areaPlane AreaPlane to populate
      */
     static void deriveAreaPlane(const ComplexData& data, AreaPlane& areaPlane,
+            bool includeSegmentList=true,
             double sampleDensity=SAMPLE_DENSITY);
 
 private:

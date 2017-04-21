@@ -210,28 +210,18 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
     {
         data.radarCollection->area->plane.reset(new AreaPlane());
         AreaPlane& areaPlane = *data.radarCollection->area->plane;
-        deriveAreaPlane(data, areaPlane, sampleDensity);
+        deriveAreaPlane(data, areaPlane, includeSegmentList, sampleDensity);
         if (includeSegmentList)
         {
-            areaPlane.segmentList.resize(1);
-            areaPlane.segmentList[0].reset(new Segment());
-            areaPlane.segmentList[0]->startLine = 0;
-            areaPlane.segmentList[0]->startSample = 0;
-
-            // End values are inclusive
-            areaPlane.segmentList[0]->endLine =
-                    areaPlane.xDirection->elements - 1;
-            areaPlane.segmentList[0]->endSample =
-                    areaPlane.yDirection->elements - 1;
-
-            areaPlane.segmentList[0]->identifier = "AA";
             data.imageFormation->segmentIdentifier = "AA";
         }
     }
 }
 
 void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
-        AreaPlane& areaPlane, double sampleDensity)
+        AreaPlane& areaPlane,
+        bool includeSegmentList,
+        double sampleDensity)
 {
     areaPlane.xDirection.reset(new AreaDirectionParameters());
     areaPlane.yDirection.reset(new AreaDirectionParameters());
@@ -258,6 +248,22 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
             metersFromCenter, spacing);
     areaPlane.xDirection->elements = origDims.row;
     areaPlane.yDirection->elements = origDims.col;
+
+    if (includeSegmentList)
+    {
+        areaPlane.segmentList.resize(1);
+        areaPlane.segmentList[0].reset(new Segment());
+        areaPlane.segmentList[0]->startLine = 0;
+        areaPlane.segmentList[0]->startSample = 0;
+
+        // End values are inclusive
+        areaPlane.segmentList[0]->endLine =
+                areaPlane.xDirection->elements - 1;
+        areaPlane.segmentList[0]->endSample =
+                areaPlane.yDirection->elements - 1;
+
+        areaPlane.segmentList[0]->identifier = "AA";
+    }
 }
 
 }
