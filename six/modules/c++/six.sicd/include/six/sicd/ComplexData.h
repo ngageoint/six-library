@@ -323,14 +323,14 @@ public:
 
     /*!
      * Overload that allows caller to pass in their own AreaPlane
+     * \param areaPlane areaPlane to use for data
      * \param offset Output plane offset
      * \param extent Output plane extent
-     * \param areaPlane areaPlane to use for data
      */
     void getOutputPlaneOffsetAndExtent(
+            const AreaPlane& areaPlane,
             types::RowCol<size_t>& offset,
-            types::RowCol<size_t>& extent,
-            const AreaPlane& areaPlane) const;
+            types::RowCol<size_t>& extent) const;
 
     /*
      * Convert the slant plane pixel location into meters from the SCP

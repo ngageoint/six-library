@@ -58,13 +58,13 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
 {
     const six::sicd::AreaPlane& areaPlane =
         *radarCollection->area->plane;
-    getOutputPlaneOffsetAndExtent(offset, extent, areaPlane);
+    getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
 }
 
 void ComplexData::getOutputPlaneOffsetAndExtent(
+        const AreaPlane& areaPlane,
         types::RowCol<size_t>& offset,
-        types::RowCol<size_t>& extent,
-        const AreaPlane& areaPlane) const
+        types::RowCol<size_t>& extent) const
 {
     offset.row = offset.col = 0;
     extent.row = areaPlane.xDirection->elements;
