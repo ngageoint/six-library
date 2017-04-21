@@ -59,6 +59,8 @@ const char Constants::SICD_DESSHSI[] =
 const char Constants::SIDD_DESSHSI[] =
         "SIDD Volume 1 Design & Implementation Description Document";
 
+const double Constants::EXCESS_BANDWIDTH_FACTOR = .885892941;
+
 ImageMode getImageMode(RadarModeType radarMode)
 {
     switch (radarMode)

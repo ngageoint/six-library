@@ -42331,6 +42331,52 @@ fail:
 }
 
 
+SWIGINTERN int Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_EXCESS_BANDWIDTH_FACTOR is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_From_double(static_cast< double >(six::Constants::EXCESS_BANDWIDTH_FACTOR));
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Constants_getNumBytesPerPixel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::PixelType arg1 ;
@@ -81150,6 +81196,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_DES_USER_DEFINED_SUBHEADER_LENGTH",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_SICD_DESSHSI",Swig_var_Constants_SICD_DESSHSI_get, Swig_var_Constants_SICD_DESSHSI_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Constants_SIDD_DESSHSI",Swig_var_Constants_SIDD_DESSHSI_get, Swig_var_Constants_SIDD_DESSHSI_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"Constants_EXCESS_BANDWIDTH_FACTOR",Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get, Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_set);
   SWIG_Python_SetConstant(d, "Constants_ILOC_MAX",SWIG_From_int(static_cast< int >(six::Constants::ILOC_MAX)));
   SWIG_Python_SetConstant(d, "FRAME_MODE",SWIG_From_int(static_cast< int >(six::FRAME_MODE)));
   SWIG_Python_SetConstant(d, "SCAN_MODE",SWIG_From_int(static_cast< int >(six::SCAN_MODE)));
