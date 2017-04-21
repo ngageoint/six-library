@@ -24,6 +24,7 @@
 #define __SIX_SI_COMMON_XML_PARSER_H__
 
 #include <six/CollectionInformation.h>
+#include <six/MatchInformation.h>
 #include <six/XMLParser.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
@@ -152,6 +153,14 @@ public:
     void parseCollectionInformationFromXML(
         const XMLElem collectionInfoXML,
         CollectionInformation *obj) const;
+
+    void parseMatchInformationFromXML(
+            const XMLElem matchInfoXML,
+            MatchInformation* matchInformation) const;
+
+    XMLElem convertMatchInformationToXML(
+            const MatchInformation* matchInformation,
+            XMLElem parent = NULL) const;
 
     virtual XMLElem convertRadiometryToXML(
         const Radiometric *obj,

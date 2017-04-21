@@ -35,7 +35,6 @@
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/ImageFormation.h"
-#include "six/sicd/MatchInformation.h"
 #include "six/sicd/PFA.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RadarCollection.h"

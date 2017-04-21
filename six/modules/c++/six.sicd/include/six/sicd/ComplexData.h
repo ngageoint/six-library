@@ -28,6 +28,7 @@
 
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
+#include "six/MatchInformation.h"
 #include "six/Radiometric.h"
 #include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/ImageCreation.h"
@@ -43,7 +44,6 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/RgAzComp.h"
-#include "six/sicd/MatchInformation.h"
 
 namespace six
 {
