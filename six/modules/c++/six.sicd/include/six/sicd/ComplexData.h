@@ -314,10 +314,23 @@ public:
      * by radarCollection->area->plane.  If this is a multiple segment SICD,
      * this is determined by the radarCollection->area->plane->segmentList
      * entry that corresponds to the imageFormation->segmentIdentifier.
+     * \param offset Output plane offset
+     * \param extent Output plane extent
      */
     void getOutputPlaneOffsetAndExtent(
             types::RowCol<size_t>& offset,
             types::RowCol<size_t>& extent) const;
+
+    /*!
+     * Overload that allows caller to pass in their own AreaPlane
+     * \param offset Output plane offset
+     * \param extent Output plane extent
+     * \param areaPlane areaPlane to use for data
+     */
+    void getOutputPlaneOffsetAndExtent(
+            types::RowCol<size_t>& offset,
+            types::RowCol<size_t>& extent,
+            const AreaPlane& areaPlane) const;
 
     /*
      * Convert the slant plane pixel location into meters from the SCP
