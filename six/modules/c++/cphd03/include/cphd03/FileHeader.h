@@ -28,38 +28,26 @@
 #include <utility>
 
 #include <io/SeekableStreams.h>
+#include <cphd/BaseFileHeader.h>
 
 namespace cphd03
 {
-class FileHeader
+class FileHeader : public cphd::BaseFileHeader
 {
 public:
-    static const char FILE_TYPE[];
     static const char DEFAULT_VERSION[];
-    static const char KVP_DELIMITER[];
-    static const char LINE_TERMINATOR;
-    static const char SECTION_TERMINATOR;
-    static const size_t MAX_HEADER_SIZE;
 
     FileHeader();
 
-    static
-    bool isCPHD(io::SeekableInputStream& inStream);
-    
-    static
-    std::string readVersion(io::SeekableInputStream& inStream);
+    virtual ~FileHeader()
+    {
+    }
 
-    void read(io::SeekableInputStream& inStream);
+    virtual void read(io::SeekableInputStream& inStream);
 
     // Convert header info to string (for writing to file)
     // Does not include section terminator string
-    std::string toString() const;
-
-    // Returns header file size in bytes, not including the section terminator
-    size_t size() const
-    {
-        return toString().size();
-    }
+    virtual std::string toString() const;
 
     // Set the file header to its final state
     // Compute the offsets of the sections that depend on the file header size
@@ -155,28 +143,9 @@ public:
     {
         return mReleaseInfo;
     }
-   
+
 private:
-    typedef std::pair<std::string, std::string> KeyValuePair;
-
     friend std::ostream& operator<< (std::ostream& os, const FileHeader& fh);
-
-    static
-    void tokenize(const std::string& in,
-                  const std::string& delimiter,
-                  KeyValuePair& kvPair);
-
-    static
-    KeyValuePair tokenize(const std::string& in, const std::string& delimiter)
-    {
-        KeyValuePair kvPair;
-        tokenize(in, delimiter, kvPair);
-        return kvPair;
-    }
-
-    void blockReadHeader(io::SeekableInputStream& inStream,
-                         size_t blockSize,
-                         std::string& headerBlock);
 
 private:
     // File type header
@@ -197,3 +166,4 @@ private:
 }
 
 #endif
+

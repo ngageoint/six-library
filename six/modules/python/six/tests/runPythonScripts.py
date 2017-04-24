@@ -33,7 +33,7 @@ from runner import PythonTestRunner
 
 def createSampleCPHD():
     programPathname = os.path.join(utils.installPath(), 'tests',
-            'cphd03', 'test_cphd03_write_simple')
+            'cphd03', 'test_cphd_write_simple')
     if not os.path.exists(programPathname):
         programPathname += '.exe'
     if not os.path.exists(programPathname):
@@ -69,8 +69,8 @@ def run():
     testsDir = os.path.join(utils.findSixHome(), 'six',
             'modules', 'python', 'cphd03', 'tests')
     cphd03Runner = PythonTestRunner(testsDir)
-    result = result and cphd03Runner.run('test_round_trip_cphd03.py', cphd03Pathname,
-            'out.cphd03')
+    result = result and cphd03Runner.run('test_round_trip_cphd.py', cphd03Pathname,
+            'out.cphd')
 
     # SIX tests
     testsDir = os.path.join(utils.findSixHome(), 'six',

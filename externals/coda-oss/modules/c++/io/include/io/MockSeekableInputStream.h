@@ -28,6 +28,7 @@
 #include "except/Exception.h"
 #include "io/InputStream.h"
 #include "io/SeekableStreams.h"
+#include "mem/ScopedArray.h"
 
 
 /*!

@@ -4982,13 +4982,6 @@ SWIG_FromCharPtr(const char *cptr)
 }
 
 
-SWIGINTERNINLINE PyObject *
-SWIG_From_char  (char c) 
-{ 
-  return SWIG_FromCharPtrAndSize(&c,1);
-}
-
-
 SWIGINTERNINLINE PyObject* 
 SWIG_From_unsigned_SS_long  (unsigned long value)
 {
@@ -10715,52 +10708,6 @@ SWIGINTERN PyObject *SRPType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   return SWIG_Py_Void();
 }
 
-SWIGINTERN int Swig_var_FileHeader_FILE_TYPE_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable FileHeader_FILE_TYPE is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_FileHeader_FILE_TYPE_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_FromCharPtr(cphd03::FileHeader::FILE_TYPE);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN int Swig_var_FileHeader_DEFAULT_VERSION_set(PyObject *) {
   SWIG_Error(SWIG_AttributeError,"Variable FileHeader_DEFAULT_VERSION is read-only.");
   return 1;
@@ -10774,190 +10721,6 @@ SWIGINTERN PyObject *Swig_var_FileHeader_DEFAULT_VERSION_get(void) {
     try
     {
       pyobj = SWIG_FromCharPtr(cphd03::FileHeader::DEFAULT_VERSION);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_FileHeader_KVP_DELIMITER_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable FileHeader_KVP_DELIMITER is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_FileHeader_KVP_DELIMITER_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_FromCharPtr(cphd03::FileHeader::KVP_DELIMITER);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_FileHeader_LINE_TERMINATOR_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable FileHeader_LINE_TERMINATOR is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_FileHeader_LINE_TERMINATOR_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_From_char(static_cast< char >(cphd03::FileHeader::LINE_TERMINATOR));
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_FileHeader_SECTION_TERMINATOR_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable FileHeader_SECTION_TERMINATOR is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_FileHeader_SECTION_TERMINATOR_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_From_char(static_cast< char >(cphd03::FileHeader::SECTION_TERMINATOR));
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_FileHeader_MAX_HEADER_SIZE_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable FileHeader_MAX_HEADER_SIZE is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_FileHeader_MAX_HEADER_SIZE_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_From_size_t(static_cast< size_t >(cphd03::FileHeader::MAX_HEADER_SIZE));
     } 
     catch (const std::exception& e)
     {
@@ -11034,27 +10797,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FileHeader_isCPHD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_FileHeader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  io::SeekableInputStream *arg1 = 0 ;
+  cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_isCPHD",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_io__SeekableInputStream,  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_FileHeader",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileHeader_isCPHD" "', argument " "1"" of type '" "io::SeekableInputStream &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FileHeader" "', argument " "1"" of type '" "cphd03::FileHeader *""'"); 
   }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_isCPHD" "', argument " "1"" of type '" "io::SeekableInputStream &""'"); 
-  }
-  arg1 = reinterpret_cast< io::SeekableInputStream * >(argp1);
+  arg1 = reinterpret_cast< cphd03::FileHeader * >(argp1);
   {
     try
     {
-      result = (bool)cphd03::FileHeader::isCPHD(*arg1);
+      delete arg1;
     } 
     catch (const std::exception& e)
     {
@@ -11082,62 +10841,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_isCPHD(PyObject *SWIGUNUSEDPARM(self), PyO
       SWIG_fail;
     }
   }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileHeader_readVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::SeekableInputStream *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_readVersion",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_io__SeekableInputStream,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileHeader_readVersion" "', argument " "1"" of type '" "io::SeekableInputStream &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_readVersion" "', argument " "1"" of type '" "io::SeekableInputStream &""'"); 
-  }
-  arg1 = reinterpret_cast< io::SeekableInputStream * >(argp1);
-  {
-    try
-    {
-      result = cphd03::FileHeader::readVersion(*arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -11253,58 +10957,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_toString(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileHeader_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_size",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileHeader_size" "', argument " "1"" of type '" "cphd03::FileHeader const *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd03::FileHeader * >(argp1);
-  {
-    try
-    {
-      result = ((cphd03::FileHeader const *)arg1)->size();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -12559,57 +12211,6 @@ SWIGINTERN PyObject *_wrap_FileHeader___str__(PyObject *SWIGUNUSEDPARM(self), Py
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_FileHeader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_FileHeader",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FileHeader" "', argument " "1"" of type '" "cphd03::FileHeader *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd03::FileHeader * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -53268,11 +52869,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_SRPType", _wrap_delete_SRPType, METH_VARARGS, (char *)"delete_SRPType(SRPType self)"},
 	 { (char *)"SRPType_swigregister", SRPType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"new_FileHeader() -> FileHeader"},
-	 { (char *)"FileHeader_isCPHD", _wrap_FileHeader_isCPHD, METH_VARARGS, (char *)"FileHeader_isCPHD(SeekableInputStream inStream) -> bool"},
-	 { (char *)"FileHeader_readVersion", _wrap_FileHeader_readVersion, METH_VARARGS, (char *)"FileHeader_readVersion(SeekableInputStream inStream) -> std::string"},
+	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},
 	 { (char *)"FileHeader_read", _wrap_FileHeader_read, METH_VARARGS, (char *)"FileHeader_read(FileHeader self, SeekableInputStream inStream)"},
 	 { (char *)"FileHeader_toString", _wrap_FileHeader_toString, METH_VARARGS, (char *)"FileHeader_toString(FileHeader self) -> std::string"},
-	 { (char *)"FileHeader_size", _wrap_FileHeader_size, METH_VARARGS, (char *)"FileHeader_size(FileHeader self) -> size_t"},
 	 { (char *)"FileHeader_set", _wrap_FileHeader_set, METH_VARARGS, (char *)"\n"
 		"set() -> size_t\n"
 		"FileHeader_set(FileHeader self, sys::Off_T xmlSize, sys::Off_T vbmSize, sys::Off_T cphd03Size) -> size_t\n"
@@ -53295,7 +52894,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileHeader_getClassification", _wrap_FileHeader_getClassification, METH_VARARGS, (char *)"FileHeader_getClassification(FileHeader self) -> std::string"},
 	 { (char *)"FileHeader_getReleaseInfo", _wrap_FileHeader_getReleaseInfo, METH_VARARGS, (char *)"FileHeader_getReleaseInfo(FileHeader self) -> std::string"},
 	 { (char *)"FileHeader___str__", _wrap_FileHeader___str__, METH_VARARGS, (char *)"FileHeader___str__(FileHeader self) -> std::string"},
-	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},
 	 { (char *)"FileHeader_swigregister", FileHeader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_DwellTimeParameters", _wrap_new_DwellTimeParameters, METH_VARARGS, (char *)"new_DwellTimeParameters() -> DwellTimeParameters"},
 	 { (char *)"DwellTimeParameters___eq__", _wrap_DwellTimeParameters___eq__, METH_VARARGS, (char *)"DwellTimeParameters___eq__(DwellTimeParameters self, DwellTimeParameters other) -> bool"},
@@ -55252,12 +54850,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SRPType_PVVPOLY",SWIG_From_int(static_cast< int >(cphd03::SRPType::PVVPOLY)));
   SWIG_Python_SetConstant(d, "SRPType_STEPPED",SWIG_From_int(static_cast< int >(cphd03::SRPType::STEPPED)));
   SWIG_Python_SetConstant(d, "SRPType_NOT_SET",SWIG_From_int(static_cast< int >(cphd03::SRPType::NOT_SET)));
-  SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_FILE_TYPE",Swig_var_FileHeader_FILE_TYPE_get, Swig_var_FileHeader_FILE_TYPE_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_DEFAULT_VERSION",Swig_var_FileHeader_DEFAULT_VERSION_get, Swig_var_FileHeader_DEFAULT_VERSION_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_KVP_DELIMITER",Swig_var_FileHeader_KVP_DELIMITER_get, Swig_var_FileHeader_KVP_DELIMITER_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_LINE_TERMINATOR",Swig_var_FileHeader_LINE_TERMINATOR_get, Swig_var_FileHeader_LINE_TERMINATOR_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_SECTION_TERMINATOR",Swig_var_FileHeader_SECTION_TERMINATOR_get, Swig_var_FileHeader_SECTION_TERMINATOR_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"FileHeader_MAX_HEADER_SIZE",Swig_var_FileHeader_MAX_HEADER_SIZE_get, Swig_var_FileHeader_MAX_HEADER_SIZE_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Wideband_ALL",Swig_var_Wideband_ALL_get, Swig_var_Wideband_ALL_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;

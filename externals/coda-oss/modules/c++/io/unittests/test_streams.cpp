@@ -22,7 +22,10 @@
 
 #include <import/io.h>
 #include <io/MockSeekableInputStream.h>
+<<<<<<< Updated upstream
 #include <io/TempFile.h>
+=======
+>>>>>>> Stashed changes
 #include "TestCase.h"
 
 TEST_CASE(testStringStream)

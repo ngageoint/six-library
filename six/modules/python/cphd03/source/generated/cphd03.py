@@ -528,18 +528,8 @@ class FileHeader(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def isCPHD(inStream):
-        """isCPHD(SeekableInputStream inStream) -> bool"""
-        return _cphd03.FileHeader_isCPHD(inStream)
-
-    isCPHD = staticmethod(isCPHD)
-
-    def readVersion(inStream):
-        """readVersion(SeekableInputStream inStream) -> std::string"""
-        return _cphd03.FileHeader_readVersion(inStream)
-
-    readVersion = staticmethod(readVersion)
+    __swig_destroy__ = _cphd03.delete_FileHeader
+    __del__ = lambda self: None
 
     def read(self, inStream):
         """read(FileHeader self, SeekableInputStream inStream)"""
@@ -549,11 +539,6 @@ class FileHeader(_object):
     def toString(self):
         """toString(FileHeader self) -> std::string"""
         return _cphd03.FileHeader_toString(self)
-
-
-    def size(self):
-        """size(FileHeader self) -> size_t"""
-        return _cphd03.FileHeader_size(self)
 
 
     def set(self, *args):
@@ -653,24 +638,9 @@ class FileHeader(_object):
         """__str__(FileHeader self) -> std::string"""
         return _cphd03.FileHeader___str__(self)
 
-    __swig_destroy__ = _cphd03.delete_FileHeader
-    __del__ = lambda self: None
 FileHeader_swigregister = _cphd03.FileHeader_swigregister
 FileHeader_swigregister(FileHeader)
-FileHeader.FILE_TYPE = _cphd03.cvar.FileHeader_FILE_TYPE
 FileHeader.DEFAULT_VERSION = _cphd03.cvar.FileHeader_DEFAULT_VERSION
-FileHeader.KVP_DELIMITER = _cphd03.cvar.FileHeader_KVP_DELIMITER
-FileHeader.LINE_TERMINATOR = _cphd03.cvar.FileHeader_LINE_TERMINATOR
-FileHeader.SECTION_TERMINATOR = _cphd03.cvar.FileHeader_SECTION_TERMINATOR
-FileHeader.MAX_HEADER_SIZE = _cphd03.cvar.FileHeader_MAX_HEADER_SIZE
-
-def FileHeader_isCPHD(inStream):
-    """FileHeader_isCPHD(SeekableInputStream inStream) -> bool"""
-    return _cphd03.FileHeader_isCPHD(inStream)
-
-def FileHeader_readVersion(inStream):
-    """FileHeader_readVersion(SeekableInputStream inStream) -> std::string"""
-    return _cphd03.FileHeader_readVersion(inStream)
 
 class DwellTimeParameters(_object):
     """Proxy of C++ cphd03::DwellTimeParameters class."""
