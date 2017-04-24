@@ -74,7 +74,7 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
     {
         const std::string& segmentID =
                 imageFormation->segmentIdentifier;
-        try
+        if (!segmentID.empty())
         {
             const six::sicd::Segment& segment = areaPlane.getSegment(segmentID);
 
@@ -88,10 +88,6 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
             offset.col = segment.startSample;
             extent.row = segment.getNumLines();
             extent.col = segment.getNumSamples();
-        }
-        catch (const except::Exception& /*ex*/)
-        {
-            // Do nothing
         }
     }
 }

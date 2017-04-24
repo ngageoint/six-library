@@ -3063,7 +3063,7 @@ class ComplexData(pysix.six_base.Data):
     def getOutputPlaneOffsetAndExtent(self, *args):
         """
         getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
-        getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent, AreaPlane areaPlane)
+        getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane areaPlane, RowColSizeT offset, RowColSizeT extent)
         """
         return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
 
