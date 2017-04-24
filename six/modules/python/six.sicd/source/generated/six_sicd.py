@@ -3060,9 +3060,12 @@ class ComplexData(pysix.six_base.Data):
         return _six_sicd.ComplexData_setVersion(self, version)
 
 
-    def getOutputPlaneOffsetAndExtent(self, offset, extent):
-        """getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)"""
-        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, offset, extent)
+    def getOutputPlaneOffsetAndExtent(self, *args):
+        """
+        getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
+        getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane areaPlane, RowColSizeT offset, RowColSizeT extent)
+        """
+        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
 
 
     def pixelToImagePoint(self, pixelLoc):
