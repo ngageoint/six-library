@@ -120,7 +120,7 @@ int main(int argc, char** argv)
     }
     catch (...)
     {
-        std::cerr << "An known error occured\n";
+        std::cerr << "An unknown error occured\n";
     }
     return 1;
 }
