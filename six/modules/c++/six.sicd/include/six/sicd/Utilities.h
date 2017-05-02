@@ -57,7 +57,7 @@ public:
      * \return ProjectionModel from complexData
      */
     static scene::ProjectionModel* getProjectionModel(const ComplexData* data,
-            const scene::SceneGeometry* geom=NULL);
+            const scene::SceneGeometry* geom);
 
     /*!
      * Build ProjectionPolynomialFitter from complexData and

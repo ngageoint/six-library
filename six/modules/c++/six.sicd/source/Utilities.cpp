@@ -129,10 +129,6 @@ scene::ProjectionModel*
 Utilities::getProjectionModel(const ComplexData* data,
                               const scene::SceneGeometry* geom)
 {
-    if (!geom)
-    {
-        geom = getSceneGeometry(data);
-    }
     const six::ComplexImageGridType gridType = data->grid->type;
     const int lookDir = (data->scpcoa->sideOfTrack == 1) ? 1 : -1;
 
