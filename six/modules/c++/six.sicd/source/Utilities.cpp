@@ -204,8 +204,10 @@ Utilities::getProjectionModel(const ComplexData* data,
 scene::ProjectionPolynomialFitter*
 Utilities::getPolynomialFitter(const ComplexData& complexData)
 {
+    std::auto_ptr<scene::SceneGeometry> geometry(
+            getSceneGeometry(&complexData));
     std::auto_ptr<scene::ProjectionModel> projectionModel(
-            getProjectionModel(&complexData));
+            getProjectionModel(&complexData, geometry.get()));
     AreaPlane areaPlane;
     if (AreaPlaneUtility::hasAreaPlane(complexData))
     {

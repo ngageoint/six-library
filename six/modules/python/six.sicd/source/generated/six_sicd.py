@@ -3147,11 +3147,8 @@ class SixSicdUtilities(_object):
 
     getSceneGeometry = staticmethod(getSceneGeometry)
 
-    def getProjectionModel(data, geom=None):
-        """
-        getProjectionModel(ComplexData data, SceneGeometry geom=None) -> ProjectionModel
-        getProjectionModel(ComplexData data) -> ProjectionModel
-        """
+    def getProjectionModel(data, geom):
+        """getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
         return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
     getProjectionModel = staticmethod(getProjectionModel)
@@ -3267,11 +3264,8 @@ def SixSicdUtilities_getSceneGeometry(data):
     """SixSicdUtilities_getSceneGeometry(ComplexData data) -> SceneGeometry"""
     return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
 
-def SixSicdUtilities_getProjectionModel(data, geom=None):
-    """
-    getProjectionModel(ComplexData data, SceneGeometry geom=None) -> ProjectionModel
-    SixSicdUtilities_getProjectionModel(ComplexData data) -> ProjectionModel
-    """
+def SixSicdUtilities_getProjectionModel(data, geom):
+    """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
 def SixSicdUtilities_getPolynomialFitter(complexData):
