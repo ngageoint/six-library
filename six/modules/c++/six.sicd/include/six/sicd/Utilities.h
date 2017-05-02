@@ -40,10 +40,34 @@ namespace sicd
 class Utilities
 {
 public:
+    // The following three methods return raw pointers because the SWIG wrapper
+    // complains about auto_ptrs
+
+    /*!
+     * Build SceneGeometry from ComplexData members
+     * \param data ComplexData from which to construct Geometry
+     * \return SceneGeometry from ComplexData
+     */
     static scene::SceneGeometry* getSceneGeometry(const ComplexData* data);
 
+    /*!
+     * Build ProjectionModel from ComplexData members
+     * \param data ComplexData from which to construct ProjectionModel
+     * \param geom SceneGeometry for the model
+     * \return ProjectionModel from complexData
+     */
     static scene::ProjectionModel* getProjectionModel(const ComplexData* data,
-            const scene::SceneGeometry* geom);
+            const scene::SceneGeometry* geom=NULL);
+
+    /*!
+     * Build ProjectionPolynomialFitter from complexData and
+     * given GriddedDisplayType.
+     * This always uses a PlanarGridECEFTransform
+     * \param complexData ComplexData from which to construct fitter
+     * \return ProjectionPolynomialFitter from ComplexData
+     */
+    static scene::ProjectionPolynomialFitter*
+    getPolynomialFitter(const ComplexData& complexData);
 
     /*
      * If the SICD contains a valid data polygon, provides this.
@@ -61,7 +85,7 @@ public:
     /*
      * Given a SICD path name and a list of schema, this function reads
      * and parses the SICD in order to provide the wideband data as well
-     * as the ComplexData associated with the image..
+     * as the ComplexData associated with the image.
      *
      * \param sicdPathname SICD NITF pathname
      * \param schemaPaths One or more files or directories containing SICD

@@ -23,6 +23,7 @@
 #include <io/StringStream.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
+#include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
@@ -128,6 +129,10 @@ scene::ProjectionModel*
 Utilities::getProjectionModel(const ComplexData* data,
                               const scene::SceneGeometry* geom)
 {
+    if (!geom)
+    {
+        geom = getSceneGeometry(data);
+    }
     const six::ComplexImageGridType gridType = data->grid->type;
     const int lookDir = (data->scpcoa->sideOfTrack == 1) ? 1 : -1;
 
@@ -198,6 +203,41 @@ Utilities::getProjectionModel(const ComplexData* data,
         throw except::Exception(Ctxt("Invalid grid type: " +
                 gridType.toString()));
     }
+}
+
+scene::ProjectionPolynomialFitter*
+Utilities::getPolynomialFitter(const ComplexData& complexData)
+{
+    std::auto_ptr<scene::ProjectionModel> projectionModel(
+            getProjectionModel(&complexData));
+    AreaPlane areaPlane;
+    if (AreaPlaneUtility::hasAreaPlane(complexData))
+    {
+        areaPlane = *complexData.radarCollection->area->plane;
+    }
+    else
+    {
+        AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
+    }
+
+    const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
+            areaPlane.yDirection->spacing);
+    std::auto_ptr<scene::GridECEFTransform> ecefTransform;
+    ecefTransform.reset(new scene::PlanarGridECEFTransform(
+            sampleSpacing,
+            areaPlane.referencePoint.rowCol,
+            areaPlane.xDirection->unitVector,
+            areaPlane.yDirection->unitVector,
+            areaPlane.referencePoint.ecef));
+
+    types::RowCol<size_t> offset;
+    types::RowCol<size_t> extent;
+    complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
+    return new scene::ProjectionPolynomialFitter(
+            *projectionModel,
+            *ecefTransform,
+            offset,
+            extent);
 }
 
 void Utilities::getValidDataPolygon(

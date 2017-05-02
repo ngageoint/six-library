@@ -3147,11 +3147,20 @@ class SixSicdUtilities(_object):
 
     getSceneGeometry = staticmethod(getSceneGeometry)
 
-    def getProjectionModel(data, geom):
-        """getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
+    def getProjectionModel(data, geom=None):
+        """
+        getProjectionModel(ComplexData data, SceneGeometry geom=None) -> ProjectionModel
+        getProjectionModel(ComplexData data) -> ProjectionModel
+        """
         return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
     getProjectionModel = staticmethod(getProjectionModel)
+
+    def getPolynomialFitter(complexData):
+        """getPolynomialFitter(ComplexData complexData) -> scene::ProjectionPolynomialFitter *"""
+        return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
+
+    getPolynomialFitter = staticmethod(getPolynomialFitter)
 
     def getValidDataPolygon(sicdData, projection, validData):
         """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
@@ -3258,9 +3267,16 @@ def SixSicdUtilities_getSceneGeometry(data):
     """SixSicdUtilities_getSceneGeometry(ComplexData data) -> SceneGeometry"""
     return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
 
-def SixSicdUtilities_getProjectionModel(data, geom):
-    """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
+def SixSicdUtilities_getProjectionModel(data, geom=None):
+    """
+    getProjectionModel(ComplexData data, SceneGeometry geom=None) -> ProjectionModel
+    SixSicdUtilities_getProjectionModel(ComplexData data) -> ProjectionModel
+    """
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
+
+def SixSicdUtilities_getPolynomialFitter(complexData):
+    """SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> scene::ProjectionPolynomialFitter *"""
+    return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
 
 def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
     """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""

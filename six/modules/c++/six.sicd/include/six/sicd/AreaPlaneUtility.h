@@ -55,7 +55,7 @@ public:
 
     /*!
      * Derives an output plane definition from existing SICD metadata
-     * \param data ComplexData from which to derived AreaPlane
+     * \param data ComplexData from which to derive AreaPlane
      * \param areaPlane AreaPlane to populate
      * \param includeSegmentList Should the areaPlane's segmentlist be filled?
      * \param sampleDensity Value to use to calculate SampleSpacing
@@ -64,6 +64,13 @@ public:
             AreaPlane& areaPlane,
             bool includeSegmentList=true,
             double sampleDensity=DEFAULT_SAMPLE_DENSITY);
+
+    /*!
+     * Returns whether ComplexData has an AreaPlane
+     * \param data ComplexData to be queried
+     * \return true if ComplexData has AreaPlane
+     */
+    static bool hasAreaPlane(const ComplexData& data);
 
     static const double DEFAULT_SAMPLE_DENSITY;
 
@@ -82,6 +89,12 @@ private:
             const types::RowCol<Vector3>& unitVectors);
     static types::RowCol<Vector3> deriveUnitVectors(
             const ComplexData& data);
+    static void setAcpCorner(
+            const scene::ProjectionModel& projectionModel,
+            const scene::SceneGeometry& sceneGeometry,
+            const Vector3& groundPlaneNormal,
+            const RowColDouble& imageCorner,
+            LatLonAlt& acpCorner);
     static RowColDouble deriveSpacing(
             const ComplexData& data,
             const types::RowCol<Vector3>& unitVectors,
