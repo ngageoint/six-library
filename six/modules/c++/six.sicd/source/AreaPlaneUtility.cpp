@@ -194,6 +194,13 @@ RowColDouble AreaPlaneUtility::deriveReferencePoint(
     return referencePoint;
 }
 
+bool AreaPlaneUtility::hasAreaPlane(const ComplexData& data)
+{
+    return (data.radarCollection.get() &&
+            data.radarCollection->area.get() &&
+            data.radarCollection->area->plane.get());
+}
+
 void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         bool includeSegmentList,
         double sampleDensity)
@@ -214,6 +221,30 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         if (includeSegmentList)
         {
             data.imageFormation->segmentIdentifier = "AA";
+        }
+
+        std::vector<RowColDouble> imageCorners(4);
+        imageCorners[0] = RowColDouble(0, 0);
+        imageCorners[1] = RowColDouble(0, data.getNumCols() - 1);
+        imageCorners[2] = RowColDouble(data.getNumRows() - 1,
+                data.getNumCols() - 1);
+        imageCorners[3] = RowColDouble(data.getNumRows() - 1, 0);
+        LatLonAltCorners& acpCorners =
+                data.radarCollection->area->acpCorners;
+
+        std::auto_ptr<scene::SceneGeometry> geometry(
+                Utilities::getSceneGeometry(&data));
+        std::auto_ptr<scene::ProjectionModel> projectionModel(
+                Utilities::getProjectionModel(&data, geometry.get()));
+        const Vector3 groundPlaneNormal = Utilities::getGroundPlaneNormal(data);
+        for (size_t ii = 0; ii < imageCorners.size(); ++ii)
+        {
+            const Vector3 groundPoint = projectionModel->imageToScene(
+                    imageCorners[ii],
+                    geometry->getReferencePosition(),
+                    groundPlaneNormal);
+            acpCorners.getCorner(ii) = scene::Utilities::ecefToLatLon(
+                    groundPoint);
         }
     }
 }
@@ -248,6 +279,20 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
             metersFromCenter, spacing);
     areaPlane.xDirection->elements = origDims.row;
     areaPlane.yDirection->elements = origDims.col;
+
+    switch (data.collectionInformation->radarMode)
+    {
+        case RadarModeType::SPOTLIGHT:
+            areaPlane.orientation = OrientationType::DOWN;
+            break;
+        case RadarModeType::STRIPMAP:
+        case RadarModeType::DYNAMIC_STRIPMAP:
+            areaPlane.orientation = OrientationType::ARBITRARY;
+            break;
+        default:
+            areaPlane.orientation = OrientationType::NOT_SET;
+            break;
+    }
 
     if (includeSegmentList)
     {

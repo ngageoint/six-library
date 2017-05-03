@@ -23,6 +23,7 @@
 #include <io/StringStream.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
+#include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
@@ -198,6 +199,43 @@ Utilities::getProjectionModel(const ComplexData* data,
         throw except::Exception(Ctxt("Invalid grid type: " +
                 gridType.toString()));
     }
+}
+
+std::auto_ptr<scene::ProjectionPolynomialFitter>
+Utilities::getPolynomialFitter(const ComplexData& complexData)
+{
+    std::auto_ptr<scene::SceneGeometry> geometry(
+            getSceneGeometry(&complexData));
+    std::auto_ptr<scene::ProjectionModel> projectionModel(
+            getProjectionModel(&complexData, geometry.get()));
+    AreaPlane areaPlane;
+    if (AreaPlaneUtility::hasAreaPlane(complexData))
+    {
+        areaPlane = *complexData.radarCollection->area->plane;
+    }
+    else
+    {
+        AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
+    }
+
+    const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
+            areaPlane.yDirection->spacing);
+    const scene::PlanarGridECEFTransform ecefTransform(
+            sampleSpacing,
+            areaPlane.referencePoint.rowCol,
+            areaPlane.xDirection->unitVector,
+            areaPlane.yDirection->unitVector,
+            areaPlane.referencePoint.ecef);
+
+    types::RowCol<size_t> offset;
+    types::RowCol<size_t> extent;
+    complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
+    return std::auto_ptr<scene::ProjectionPolynomialFitter>(
+            new scene::ProjectionPolynomialFitter(
+                *projectionModel,
+                ecefTransform,
+                offset,
+                extent));
 }
 
 void Utilities::getValidDataPolygon(
