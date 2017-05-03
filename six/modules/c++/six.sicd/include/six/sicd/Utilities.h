@@ -40,9 +40,6 @@ namespace sicd
 class Utilities
 {
 public:
-    // The following three methods return raw pointers because the SWIG wrapper
-    // complains about auto_ptrs
-
     /*!
      * Build SceneGeometry from ComplexData members
      * \param data ComplexData from which to construct Geometry
