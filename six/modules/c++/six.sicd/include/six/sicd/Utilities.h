@@ -66,7 +66,7 @@ public:
      * \param complexData ComplexData from which to construct fitter
      * \return ProjectionPolynomialFitter from ComplexData
      */
-    static scene::ProjectionPolynomialFitter*
+    static std::auto_ptr<scene::ProjectionPolynomialFitter>
     getPolynomialFitter(const ComplexData& complexData);
 
     /*

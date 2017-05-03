@@ -201,7 +201,7 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
-scene::ProjectionPolynomialFitter*
+std::auto_ptr<scene::ProjectionPolynomialFitter>
 Utilities::getPolynomialFitter(const ComplexData& complexData)
 {
     std::auto_ptr<scene::SceneGeometry> geometry(
@@ -220,22 +220,22 @@ Utilities::getPolynomialFitter(const ComplexData& complexData)
 
     const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
             areaPlane.yDirection->spacing);
-    std::auto_ptr<scene::GridECEFTransform> ecefTransform;
-    ecefTransform.reset(new scene::PlanarGridECEFTransform(
+    const scene::PlanarGridECEFTransform ecefTransform(
             sampleSpacing,
             areaPlane.referencePoint.rowCol,
             areaPlane.xDirection->unitVector,
             areaPlane.yDirection->unitVector,
-            areaPlane.referencePoint.ecef));
+            areaPlane.referencePoint.ecef);
 
     types::RowCol<size_t> offset;
     types::RowCol<size_t> extent;
     complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
-    return new scene::ProjectionPolynomialFitter(
-            *projectionModel,
-            *ecefTransform,
-            offset,
-            extent);
+    return std::auto_ptr<scene::ProjectionPolynomialFitter>(
+            new scene::ProjectionPolynomialFitter(
+                *projectionModel,
+                ecefTransform,
+                offset,
+                extent));
 }
 
 void Utilities::getValidDataPolygon(

@@ -89,12 +89,6 @@ private:
             const types::RowCol<Vector3>& unitVectors);
     static types::RowCol<Vector3> deriveUnitVectors(
             const ComplexData& data);
-    static void setAcpCorner(
-            const scene::ProjectionModel& projectionModel,
-            const scene::SceneGeometry& sceneGeometry,
-            const Vector3& groundPlaneNormal,
-            const RowColDouble& imageCorner,
-            LatLonAlt& acpCorner);
     static RowColDouble deriveSpacing(
             const ComplexData& data,
             const types::RowCol<Vector3>& unitVectors,

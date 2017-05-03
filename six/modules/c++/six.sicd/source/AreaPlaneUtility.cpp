@@ -201,22 +201,6 @@ bool AreaPlaneUtility::hasAreaPlane(const ComplexData& data)
             data.radarCollection->area->plane.get());
 }
 
-void AreaPlaneUtility::setAcpCorner(
-        const scene::ProjectionModel& projectionModel,
-        const scene::SceneGeometry& geometry,
-        const Vector3& groundPlaneNormal,
-        const RowColDouble& imageCorner,
-        LatLonAlt& acpCorner)
-{
-    Vector3 groundPoint = projectionModel.imageToScene(imageCorner,
-            geometry.getReferencePosition(),
-            groundPlaneNormal);
-    const LatLonAlt tempCorner = scene::Utilities::ecefToLatLon(groundPoint);
-    acpCorner.setLat(tempCorner.getLat());
-    acpCorner.setLon(tempCorner.getLon());
-    acpCorner.setAlt(tempCorner.getAlt());
-}
-
 void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         bool includeSegmentList,
         double sampleDensity)
@@ -255,10 +239,12 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         const Vector3 groundPlaneNormal = Utilities::getGroundPlaneNormal(data);
         for (size_t ii = 0; ii < imageCorners.size(); ++ii)
         {
-            setAcpCorner(*projectionModel, *geometry,
-                    groundPlaneNormal,
+            const Vector3 groundPoint = projectionModel->imageToScene(
                     imageCorners[ii],
-                    acpCorners.getCorner(ii));
+                    geometry->getReferencePosition(),
+                    groundPlaneNormal);
+            acpCorners.getCorner(ii) = scene::Utilities::ecefToLatLon(
+                    groundPoint);
         }
     }
 }
@@ -293,6 +279,20 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
             metersFromCenter, spacing);
     areaPlane.xDirection->elements = origDims.row;
     areaPlane.yDirection->elements = origDims.col;
+
+    switch (data.collectionInformation->radarMode)
+    {
+        case RadarModeType::SPOTLIGHT:
+            areaPlane.orientation = OrientationType::DOWN;
+            break;
+        case RadarModeType::STRIPMAP:
+        case RadarModeType::DYNAMIC_STRIPMAP:
+            areaPlane.orientation = OrientationType::ARBITRARY;
+            break;
+        default:
+            areaPlane.orientation = OrientationType::NOT_SET;
+            break;
+    }
 
     if (includeSegmentList)
     {

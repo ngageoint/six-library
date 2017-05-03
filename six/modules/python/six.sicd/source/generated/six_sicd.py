@@ -3154,7 +3154,7 @@ class SixSicdUtilities(_object):
     getProjectionModel = staticmethod(getProjectionModel)
 
     def getPolynomialFitter(complexData):
-        """getPolynomialFitter(ComplexData complexData) -> scene::ProjectionPolynomialFitter *"""
+        """getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >"""
         return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
 
     getPolynomialFitter = staticmethod(getPolynomialFitter)
@@ -3269,7 +3269,7 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
 def SixSicdUtilities_getPolynomialFitter(complexData):
-    """SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> scene::ProjectionPolynomialFitter *"""
+    """SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >"""
     return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
 
 def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):

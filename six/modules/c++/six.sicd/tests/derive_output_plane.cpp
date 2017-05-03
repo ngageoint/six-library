@@ -45,7 +45,7 @@ void roundTripNITF(const std::string& sicdPathname,
     }
 
     std::vector<six::UByte*> bufferList(1);
-    bufferList[0] = reinterpret_cast<six::UByte*>(buffer.data());
+    bufferList[0] = reinterpret_cast<six::UByte*>(&buffer[0]);
 
     six::NITFWriteControl writer;
     mem::SharedPtr<six::Container> container(
@@ -70,9 +70,9 @@ void roundTripXML(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    std::auto_ptr<logging::Logger> log(new logging::NullLogger());
+    logging::NullLogger log;
     std::auto_ptr<six::XMLControl> xmlControl(
-            registry.newXMLControl(six::DataType::COMPLEX, log.get()));
+            registry.newXMLControl(six::DataType::COMPLEX, &log));
     std::auto_ptr<xml::lite::Document> document(
             xmlControl->toXML(complexData.get(), schemaPaths));
     io::FileOutputStream xmlStream(outputPathname);

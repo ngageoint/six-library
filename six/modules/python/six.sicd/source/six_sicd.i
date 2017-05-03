@@ -29,11 +29,13 @@
 #include <complex>
 #include <utility>
 
+
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
 #include "six/sicd/SICDWriteControl.h"
 #include <numpyutils/numpyutils.h>
+
 
 using namespace six::sicd;
 using namespace six;
@@ -138,6 +140,7 @@ Data* readNITF(const std::string& pathname,
 
 // This allows functions that return auto_ptrs to work properly
 %auto_ptr(six::sicd::ComplexData);
+%auto_ptr(scene::ProjectionPolynomialFitter);
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
@@ -185,6 +188,7 @@ def schema_path():
 %include "six/sicd/ComplexData.h"
 %include "six/sicd/ComplexXMLControl.h"
 %include "six/sicd/Utilities.h"
+
 
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
