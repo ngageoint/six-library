@@ -5,15 +5,21 @@
 
 namespace
 {
+void setupData(six::sicd::ComplexData& data)
+{
+    data.grid->row.reset(new six::sicd::DirectionParameters());
+    data.grid->row->sign = -1;
+    data.grid->col.reset(new six::sicd::DirectionParameters());
+    data.grid->col->sign = -1;
+    data.setNumRows(100);
+    data.setNumCols(100);
+}
+
 TEST_CASE(testAreaPlane)
 {
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::createFakeComplexData();
-    data->grid->row.reset(new six::sicd::DirectionParameters());
-    data->grid->row->sign = -1;
-    data->grid->col.reset(new six::sicd::DirectionParameters());
-    data->grid->col->sign = -1;
-
+    setupData(*data);
     six::sicd::AreaPlaneUtility::setAreaPlane(*data);
     const six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
 
@@ -52,10 +58,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
 {
     std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::createFakeComplexData();
-    data->grid->row.reset(new six::sicd::DirectionParameters());
-    data->grid->row->sign = -1;
-    data->grid->col.reset(new six::sicd::DirectionParameters());
-    data->grid->col->sign = -1;
+    setupData(*data);
 
     data->radarCollection->area.reset(new six::sicd::Area());
     data->radarCollection->area->plane.reset(new six::sicd::AreaPlane());
@@ -64,10 +67,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
 
     std::auto_ptr<six::sicd::ComplexData> secondData =
             six::sicd::Utilities::createFakeComplexData();
-    secondData->grid->row.reset(new six::sicd::DirectionParameters());
-    secondData->grid->row->sign = -1;
-    secondData->grid->col.reset(new six::sicd::DirectionParameters());
-    secondData->grid->col->sign = -1;
+    setupData(*secondData);
 
     six::sicd::AreaPlaneUtility::setAreaPlane(*secondData, false);
     const six::sicd::AreaPlane& secondAreaPlane =
