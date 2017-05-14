@@ -171,11 +171,10 @@ namespace sys
 
 #define FmtX str::format
 
-#define SYS_TIME sys::TimeStamp().local()
-
 #define SYS_FUNC NativeLayer_func__
 
-#define Ctxt(MESSAGE) except::Context(__FILE__, __LINE__, SYS_FUNC, SYS_TIME, MESSAGE)
+#define Ctxt(MESSAGE) except::Context(__FILE__, __LINE__, SYS_FUNC, \
+        sys::TimeStamp().local(), MESSAGE)
 
 namespace sys
 {
