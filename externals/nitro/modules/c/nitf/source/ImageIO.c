@@ -7408,7 +7408,7 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
             else
             {
                 /* Decompression interface structure */
-                nitf_DecompressionInterface *interface;
+                nitf_DecompressionInterface* decompInterface;
 
                 /* No plugin */
                 if (nitf->decompressor == NULL)
@@ -7419,14 +7419,16 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
                     return NITF_FAILURE;
                 }
 
-                interface = nitf->decompressor;
+                decompInterface = nitf->decompressor;
                 if (nitf->blockControl.block != NULL)
-                    (*(interface->freeBlock)) (nitf->decompressionControl,
-                                               nitf->blockControl.block,
-                                               error);
+                    (*(decompInterface->freeBlock)) (nitf->decompressionControl,
+                                                     nitf->blockControl.block,
+                                                     error);
                 nitf->blockControl.block =
-                    (*(interface->readBlock)) (nitf->decompressionControl,
-                                               blockIO->number, &blockSize, error);
+                    (*(decompInterface->readBlock)) (nitf->decompressionControl,
+                                                     blockIO->number,
+                                                     &blockSize,
+                                                     error);
                 if (nitf->blockControl.block == NULL)
                     return NITF_FAILURE;
             }
@@ -7528,7 +7530,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
         else
         {
             /* Decompression interface structure */
-            nitf_DecompressionInterface *interface;
+            nitf_DecompressionInterface* decompInterface;
 
             /* No plugin */
             if (nitfI->decompressor == NULL)
@@ -7539,15 +7541,15 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                 return NULL;
             }
 
-            interface = nitfI->decompressor;
+            decompInterface = nitfI->decompressor;
             if (nitfI->blockControl.block != NULL)
-                (*(interface->freeBlock)) (nitfI->decompressionControl,
-                                           nitfI->blockControl.block,
-                                           error);
+                (*(decompInterface->freeBlock)) (nitfI->decompressionControl,
+                                                 nitfI->blockControl.block,
+                                                 error);
             nitfI->blockControl.block =
-                (*(interface->readBlock)) (nitfI->decompressionControl,
-                                           blockNumber, blockSize,
-                                           error);
+                (*(decompInterface->readBlock)) (nitfI->decompressionControl,
+                                                 blockNumber, blockSize,
+                                                 error);
             if (nitfI->blockControl.block == NULL)
             {
                 return NULL;
