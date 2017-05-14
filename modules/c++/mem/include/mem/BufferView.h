@@ -92,7 +92,7 @@ struct BufferView
       @n target size of each BufferView fragment
 
      */
-    std::vector<BufferView> split(size_t n)
+    std::vector<BufferView> split(size_t n) const
     {
         const size_t newSize = size / n;
         const size_t lastSize = size - (n - 1) * newSize;

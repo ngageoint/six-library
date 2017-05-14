@@ -846,8 +846,9 @@ def configureCompilerOptions(self):
 
     # GCC / ICC (for Linux or Solaris)
     elif ccCompiler == 'gcc' or ccCompiler == 'icc':
-        self.env.append_value('LIB_DL', 'dl')
-        self.env.append_value('LIB_NSL', 'nsl')
+        if not re.match(winRegex, sys_platform):
+            self.env.append_value('LIB_DL', 'dl')
+            self.env.append_value('LIB_NSL', 'nsl')
         self.env.append_value('LIB_MATH', 'm')
         self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
@@ -969,10 +970,6 @@ def configureCompilerOptions(self):
             self.env.append_value('CFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, sys_platform):
-
-        self.env.append_value('LIB_RPC', 'rpcrt4')
-        self.env.append_value('LIB_SOCKET', 'Ws2_32')
-
         crtFlag = '/%s' % Options.options.crt
         crtDebug = '%sd' % crtFlag
 
@@ -1038,6 +1035,10 @@ def configureCompilerOptions(self):
 
     else:
         self.fatal('OS/platform currently unsupported: %s' % sys_platform)
+
+    if re.match(winRegex, sys_platform):
+        self.env.append_value('LIB_RPC', 'rpcrt4')
+        self.env.append_value('LIB_SOCKET', 'Ws2_32')
 
     #CXX
     if Options.options.warnings:
@@ -1183,7 +1184,7 @@ def configure(self):
     self.msg('Platform', sys_platform, color='GREEN')
 
     # Dirty fix to get around libpath problems..
-    if re.match(winRegex, sys_platform):
+    if 'msvc' in self.options.check_c_compiler and re.match(winRegex, sys_platform):
         # NOTE: Previously there was a workaround here (present until 6f20120)
         #       where we overrode cmd_and_log and had it error out if one of the
         #       paths in libpath did not exist (Kyle added this in 8cc3578).
@@ -1243,7 +1244,7 @@ def configure(self):
     self.load('waf_unit_test')
 
     # Reset LIB and CL
-    if re.match(winRegex, sys_platform):
+    if 'msvc' in self.options.check_c_compiler and re.match(winRegex, sys_platform):
         if env_lib is not None: self.environ['LIB'] = env_lib
         if env_cl is not None: os.environ['CL'] = env_cl
 

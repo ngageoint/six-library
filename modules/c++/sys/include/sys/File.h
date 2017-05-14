@@ -99,13 +99,13 @@ public:
      *  \param creationFlags File creation flags
      */
     File(const Path& path, int accessFlags = READ_ONLY, 
-         int creationFlags = EXISTING) throw (sys::SystemException)
+         int creationFlags = EXISTING)
     {
         create(path.getPath(), accessFlags, creationFlags);
     }
 
     File(const Path& parent, std::string name, int accessFlags = READ_ONLY,
-         int creationFlags = EXISTING) throw (sys::SystemException)
+         int creationFlags = EXISTING)
     {
         create(parent.join(name).getPath(), accessFlags, creationFlags);
     }
@@ -117,7 +117,7 @@ public:
      *  \param creationFlags File creation flags
      */
     File(std::string str, int accessFlags = READ_ONLY, 
-         int creationFlags = EXISTING) throw (sys::SystemException)
+         int creationFlags = EXISTING)
     {
         create(str, accessFlags, creationFlags);
     }
@@ -166,7 +166,7 @@ public:
      *  \param creationFlags File creation flags
      */
     void create(const std::string& str, int accessFlags, 
-                int creationFlags) throw (sys::SystemException);
+                int creationFlags);
 
     /*!
      *  Read from the File into a buffer 'size' bytes.
@@ -178,7 +178,7 @@ public:
      *  \param buffer The buffer to put to
      *  \param size The number of bytes
      */
-    void readInto(char* buffer, Size_T size) throw (sys::SystemException);
+    void readInto(char* buffer, Size_T size);
 
     /*!
      *  Write from a buffer 'size' bytes into the 
@@ -191,7 +191,7 @@ public:
      *  \param size The number of bytes to write out
      */
     void writeFrom(const char* buffer, 
-                   Size_T size) throw (sys::SystemException);
+                   Size_T size);
 
     /*!
      *  Seek to the specified offset, relative to 'whence.'
@@ -201,14 +201,14 @@ public:
      */
 
     sys::Off_T seekTo(sys::Off_T offset, 
-                      int whence) throw (sys::SystemException);
+                      int whence);
 
     /*!
      *  Report current offset within file.
      *
      *  \return Current offset;
      */
-    sys::Off_T getCurrentOffset() throw (sys::SystemException)
+    sys::Off_T getCurrentOffset()
     {
         return seekTo(0, sys::File::FROM_CURRENT);
     }
@@ -217,13 +217,13 @@ public:
      * Report the length of the file.
      * \return The length
      */
-    sys::Off_T length() throw (sys::SystemException);
+    sys::Off_T length();
 
     /*!
      * Returns the last modified time of the file, in millis.
      * \return last modified time
      */
-    sys::Off_T lastModifiedTime() throw (sys::SystemException);
+    sys::Off_T lastModifiedTime();
 
     /*!
      *  Flush the file to disk
