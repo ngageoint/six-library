@@ -46,14 +46,14 @@ IOHandle::open(const char* fname,
                nitf::CreationFlags creation) throw (nitf::NITFException)
 {
     nitf_Error error;
-    nitf_IOInterface* const interface =
+    nitf_IOInterface* const ioInterface =
             nitf_IOHandleAdapter_open(fname, access, creation, &error);
 
-    if (!interface)
+    if (!ioInterface)
     {
         throw nitf::NITFException(&error);
     }
 
-    return interface;
+    return ioInterface;
 }
 }
