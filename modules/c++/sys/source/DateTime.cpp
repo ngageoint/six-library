@@ -94,7 +94,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
     while (isspace(*bp))
         bp++;
 
-    while (bp != '\0' && (fc = *fmt) != '\0')
+    while (*bp != '\0' && (fc = *fmt) != '\0')
     {
         if ((fc = *fmt++) != '%')
         {
