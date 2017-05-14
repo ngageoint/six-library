@@ -29,7 +29,7 @@
 #include <errno.h>
 
 void sys::File::create(const std::string& str, int accessFlags,
-        int creationFlags) throw (sys::SystemException)
+        int creationFlags)
 {
 
     if (accessFlags & sys::File::WRITE_ONLY)
@@ -45,7 +45,6 @@ void sys::File::create(const std::string& str, int accessFlags,
 }
 
 void sys::File::readInto(char *buffer, Size_T size)
-        throw (sys::SystemException)
 {
     SSize_T bytesRead = 0;
     Size_T totalBytesRead = 0;
@@ -92,7 +91,6 @@ void sys::File::readInto(char *buffer, Size_T size)
 }
 
 void sys::File::writeFrom(const char *buffer, Size_T size)
-        throw (sys::SystemException)
 {
     Size_T bytesActuallyWritten = 0;
 
@@ -111,7 +109,6 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
 }
 
 sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
-        throw (sys::SystemException)
 {
     sys::Off_T off = ::lseek(mHandle, offset, whence);
     if (off == (sys::Off_T) - 1)
@@ -119,7 +116,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     return off;
 }
 
-sys::Off_T sys::File::length() throw (sys::SystemException)
+sys::Off_T sys::File::length()
 {
     struct stat buf;
     int rval = fstat(mHandle, &buf);
@@ -128,7 +125,7 @@ sys::Off_T sys::File::length() throw (sys::SystemException)
     return buf.st_size;
 }
 
-sys::Off_T sys::File::lastModifiedTime() throw (sys::SystemException)
+sys::Off_T sys::File::lastModifiedTime()
 {
     struct stat buf;
     int rval = fstat(mHandle, &buf);
