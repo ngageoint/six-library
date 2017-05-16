@@ -97,8 +97,9 @@ RowColDouble AreaPlaneUtility::deriveSpacing(
             geometry->getGroundResolution(resolution);
 
     RowColDouble spacing;
-    spacing.row = std::max(groundResolution.row, groundResolution.col);
-    spacing.col = spacing.row / sampleDensity;
+    spacing.row = std::max(groundResolution.row, groundResolution.col) /
+            sampleDensity;
+    spacing.col = spacing.row;
     return spacing;
 }
 
@@ -183,14 +184,11 @@ types::RowCol<size_t> AreaPlaneUtility::derivePlaneDimensions(
 
 RowColDouble AreaPlaneUtility::deriveReferencePoint(
         const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
-        const RowColDouble& spacing,
-        const AreaPlane& areaPlane)
+        const RowColDouble& spacing)
 {
     RowColDouble referencePoint;
-    referencePoint.row = std::abs(sortedMetersFromCenter.rg[0]) / spacing.row
-                    + areaPlane.xDirection->first;
-    referencePoint.col = std::abs(sortedMetersFromCenter.az[0]) / spacing.col
-                    + areaPlane.yDirection->first;
+    referencePoint.row = std::abs(sortedMetersFromCenter.rg[0]) / spacing.row;
+    referencePoint.col = std::abs(sortedMetersFromCenter.az[0]) / spacing.col;
     return referencePoint;
 }
 
@@ -272,7 +270,7 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
             computeMetersFromCenter(data, unitVectors);
 
     areaPlane.referencePoint.rowCol = deriveReferencePoint(
-            metersFromCenter, spacing, areaPlane);
+            metersFromCenter, spacing);
     areaPlane.referencePoint.ecef = data.geoData->scp.ecf;
 
     const types::RowCol<size_t> origDims = derivePlaneDimensions(

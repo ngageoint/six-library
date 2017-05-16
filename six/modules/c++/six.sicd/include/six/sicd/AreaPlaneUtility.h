@@ -77,8 +77,7 @@ public:
 private:
     static RowColDouble deriveReferencePoint(
             const types::RgAz<std::vector<double> >& sortedMetersFromCenter,
-            const RowColDouble& spacing,
-            const AreaPlane& areaPlane);
+            const RowColDouble& spacing);
     static std::vector<RowColDouble > computeCornersPix(
             const ComplexData& data);
     static std::vector<Vector3> computeInPlaneCorners(
