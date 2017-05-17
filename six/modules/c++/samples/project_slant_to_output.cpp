@@ -26,7 +26,8 @@
  * some massive values that skew the image. Therefore, when viewing the
  * image, you will have to mitigate this. When viewing in MATLAB,
  * for example, this may be done by
- * imagesc(read_sio('outputPlane.sio', [0, mean(img(:))]));
+ * img = read_sio('outputPlane.sio');
+ * imagesc(img, [0, mean(img(:))]);
  */
 
 #include <cli/ArgumentParser.h>
@@ -39,6 +40,7 @@
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include "utils.h"
 
 namespace
 {
@@ -73,6 +75,9 @@ int main(int argc, char** argv)
         cli::ArgumentParser parser;
         parser.setDescription("Read a SICD, project the image data to the "
                 "output plane, and write it as an SIO");
+        parser.addArgument("-s --schema",
+                           "Specify a schema or directory of schemas",
+                           cli::STORE);
         parser.addArgument("-x --polyOrderX", "Order for x-direction polynomials",
                            cli::STORE, "polyOrderX", "POLY_ORDER_X", 1, 1)->
                            setDefault(3);
@@ -90,7 +95,8 @@ int main(int argc, char** argv)
         const std::string outputPathname(options->get<std::string>("output"));
         const size_t polyOrderX(options->get<size_t>("polyOrderX"));
         const size_t polyOrderY(options->get<size_t>("polyOrderY"));
-        const std::vector<std::string> schemaPaths;
+        std::vector<std::string> schemaPaths;
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         six::XMLControlRegistry registry;
         registry.addCreator(six::DataType::COMPLEX,
