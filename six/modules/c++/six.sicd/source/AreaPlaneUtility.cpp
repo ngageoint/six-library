@@ -97,9 +97,8 @@ RowColDouble AreaPlaneUtility::deriveSpacing(
             geometry->getGroundResolution(resolution);
 
     RowColDouble spacing;
-    spacing.row = std::max(groundResolution.row, groundResolution.col) /
-            sampleDensity;
-    spacing.col = spacing.row;
+    spacing.row = spacing.col = std::max(groundResolution.row,
+            groundResolution.col) / sampleDensity;
     return spacing;
 }
 

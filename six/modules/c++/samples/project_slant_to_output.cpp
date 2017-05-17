@@ -20,6 +20,15 @@
  *
  */
 
+/*
+ * This program gets a rough output plane from the SICD, and writes it as
+ * an SIO. No filtering is done. As a result, the output plane contains
+ * some massive values that skew the image. Therefore, when viewing the
+ * image, you will have to mitigate this. When viewing in MATLAB,
+ * for example, this may be done by
+ * imagesc(read_sio('outputPlane.sio', [0, mean(img(:))]));
+ */
+
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
 #include <math/Round.h>
@@ -55,19 +64,10 @@ void findOutputToSlantPolynomials(const six::sicd::ComplexData& complexData,
             toSlantRow,
             toSlantCol);
 }
-
 }
 
 int main(int argc, char** argv)
 {
-    /*
-     * This program gets a rough output plane from the SICD, and writes it as
-     * an SIO. No filtering is done. As a result, the output plane contains
-     * some massive values that skew the image. Therefore, when viewing the
-     * image, you will have to mitigate this. When viewing in MATLAB,
-     * for example, this may be done by
-     * imagesc(read_sio('outputPlane.sio', [0, 50]));
-     */
     try
     {
         cli::ArgumentParser parser;
@@ -118,21 +118,30 @@ int main(int argc, char** argv)
         mem::ScopedArray<float> outputArray(new float[
                 plane.xDirection->elements * plane.yDirection->elements]);
         // Iterate over output plane, grabbing the appropriate input point
-        for (size_t yy = 0; yy < plane.yDirection->elements; ++yy)
+        for (size_t outRow = 0; outRow < plane.yDirection->elements; ++outRow)
         {
-            const six::Poly1D rowPoly = toSlantRow.atY(yy);
-            const six::Poly1D colPoly = toSlantCol.atY(yy);
-            for (size_t xx = 0; xx < plane.xDirection->elements; ++xx)
+            const six::Poly1D rowPoly = toSlantRow.atY(outRow);
+            const six::Poly1D colPoly = toSlantCol.atY(outRow);
+            for (size_t outCol = 0;
+                    outCol < plane.xDirection->elements; ++outCol)
             {
-                const size_t line = math::round(rowPoly(xx));
-                const size_t sample = math::round(colPoly(xx));
-                const size_t inputPoint =
-                        line * complexData->getNumCols() + sample;
-                const size_t outputPoint =
-                        xx + (yy * plane.xDirection->elements);
-                const float outputValue = inputPoint >= buffer.size() ? 0 :
-                        std::abs(buffer[inputPoint]);
-                outputArray[outputPoint] = outputValue;
+                const size_t outIdx = (outRow * plane.xDirection->elements) +
+                        outCol;
+                const double inRowInitial = rowPoly(outCol);
+                const double inColInitial = colPoly(outCol);
+                if (inRowInitial < 0 || inColInitial < 0)
+                {
+                    // Out of bounds values just get assigned to 0
+                    outputArray[outIdx] = 0;
+                    continue;
+                }
+                const size_t inRow = math::round(inRowInitial);
+                const size_t inCol = math::round(inColInitial);
+                const size_t inIdx = (inRow * complexData->getNumCols()) +
+                        inCol;
+                const float outputValue = inIdx >= buffer.size() ? 0 :
+                        std::abs(buffer[inIdx]);
+                outputArray[outIdx] = outputValue;
             }
         }
 

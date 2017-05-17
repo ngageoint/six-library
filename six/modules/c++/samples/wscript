@@ -7,7 +7,7 @@ def build(bld):
     samples = {'check_valid_six'           : 'cli six.sicd six.sidd',
                'crop_sicd'                 : 'cli six.sicd',
                'crop_sidd'                 : 'cli six.sidd',
-               'get_output_plane_image'    : 'cli io six six.sicd sio.lite',
+               'project_slant_to_output'   : 'cli io six six.sicd sio.lite',
                'image_to_scene'            : 'six.sicd six.sidd',
                'round_trip_six'            : 'cli six.convert six.sicd six.sidd',
                'test_create_sicd'          : 'cli six.sicd sio.lite',
