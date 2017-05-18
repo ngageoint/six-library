@@ -46,17 +46,11 @@ class NITFImageInfo
 public:
 
     NITFImageInfo(Data* d,
-    		      size_t maxRows = Constants::ILOC_MAX,
+                  size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
-                  bool computeSegments = false) :
-        data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
-    {
-        productSize = (sys::Uint64_T) data->getNumBytesPerPixel()
-                * (sys::Uint64_T) data->getNumRows()
-                * (sys::Uint64_T) data->getNumCols();
-        if (computeSegments)
-            compute();
-    }
+                  bool computeSegments = false,
+                  sys::Uint32_T rowsPerBlock = 0,
+                  sys::Uint32_T colsPerBlock = 0);
 
     size_t getNumBitsPerPixel() const
     {
@@ -149,6 +143,10 @@ public:
         startIndex = index;
     }
 
+    //! This is the actual size of a dimension (row or column)
+    //! taking into account the possible blocking (pixels)
+    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
+
     //! Number of bytes in the product
     sys::Uint64_T getProductSize() const
     {
@@ -161,7 +159,7 @@ public:
         return numRowsLimit;
     }
 
-    //! This is the total size that each product seg can be
+    //! This is the total size that each product seg can be, bytes
     sys::Uint64_T getMaxProductSize() const
     {
         return maxProductSize;
@@ -284,6 +282,12 @@ private:
 
     //! This is the total number of rows we can have in a NITF segment
     size_t numRowsLimit;
+
+    //! This is the block size in the row direction, pixels
+    size_t numRowsPerBlock;
+
+    //! This is the block size in the column direction, pixels
+    size_t numColsPerBlock;
 
     //! This is the total size that each product seg can be
     sys::Uint64_T maxProductSize;

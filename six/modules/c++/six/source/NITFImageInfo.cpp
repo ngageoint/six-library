@@ -82,16 +82,44 @@ const char NITFImageInfo::SRDT[] = "SRDT";
 //!  File security control number
 const char NITFImageInfo::CTLN[] = "CTLN";
 
+
+void NITFImageInfo::NITFImageInfo(Data* d,
+                                  size_t maxRows,
+                                  sys::Uint64_T,
+                                  bool computeSegments,
+                                  sys::Uint32_T rowsPerBlock,
+                                  sys::Uint32_T colsPerBlock) :
+        data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize),
+        numRowsPerBlock(rowsPerBlock), numColsPerBlock(colsPerBlock)
+{
+    sys::Uint64_T rowSize = getActualDim(data->getNumRows(), rowsPerBlock);
+    sys::Uint64_T colSize = getActualDim(data->getNumCols(), colsPerBlock);
+    productSize = (sys::Uint64_T) data->getNumBytesPerPixel() * rowSize * colSize;
+    if (computeSegments)
+        compute();
+}
+
+size_t NITFImageInfo::getActualDim(size_t dim, size_t numDimsPerBlock)
+{
+    if (numDimsPerBlock == 0)
+        return dim;
+    else {
+        // If we're blocking then we'll always write full blocks
+        const size_t numBlocks = (dim/numDimsPerBlock) + (dim%numDimsPerBlock != 0);
+        return numBlocks * numDimsPerBlock;
+    }
+}
+
 void NITFImageInfo::computeImageInfo()
 {
-    size_t bytesPerRow = data->getNumBytesPerPixel()
-            * data->getNumCols();
+    // Consider possible blocking when determining the maximum number of rows
+    size_t bytesPerRow =
+        data->getNumBytesPerPixel() * getActualDim(data->getNumCols(), colsPerBlock);
 
     // This, to be safe, should be a 64bit number
-    sys::Uint64_T limit1 = (sys::Uint64_T) std::floor((double) maxProductSize
-            / (double) bytesPerRow);
+    sys::Uint64_T maxRows = (sys::Uint64_T) maxProductSize / (sys::Uint64_T) bytesPerRow;
 
-    if (limit1 == 0)
+    if (maxRows == 0)
     {
         std::ostringstream ostr;
         ostr << "maxProductSize [" << maxProductSize << "] < bytesPerRow ["
@@ -100,14 +128,24 @@ void NITFImageInfo::computeImageInfo()
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    if (limit1 < numRowsLimit)
+    // Truncate back to a full block for the maxRows that will actually fit
+    if (numRowsPerBlock) {
+        const size_t numBlocksVert = maxRows / numRowsPerBlock;
+        maxRows = (sys::Uint64_T)numBlocksVert * (sys::Uint64_T)numRowsPerBlock;
+    }
+
+    if (maxRows < numRowsLimit)
     {
-        numRowsLimit = static_cast<size_t>(limit1);
+        numRowsLimit = static_cast<size_t>(maxRows);
     }
 }
 
 void NITFImageInfo::computeSegmentInfo()
 {
+    // TODO: other conditions which should trigger segmentation:
+    //   NCOLS >= 10E8   column direction segmentation, no numColsLimit logic in place
+    //   NROWS >= 10E8   most likely would exceed maxProductSize (ncols < 100 unlikely)
+    //                   and segment to numRowsLimit anyway
     if (productSize <= maxProductSize)
     {
         imageSegments.resize(1);
