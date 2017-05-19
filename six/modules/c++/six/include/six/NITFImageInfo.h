@@ -45,16 +45,16 @@ class NITFImageInfo
 {
 public:
 
-    NITFImageInfo(Data* d,
+    NITFImageInfo(Data* data,
                   size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
                   bool computeSegments = false,
-                  sys::Uint32_T rowsPerBlock = 0,
-                  sys::Uint32_T colsPerBlock = 0);
+                  size_t rowsPerBlock = 0,
+                  size_t colsPerBlock = 0);
 
     size_t getNumBitsPerPixel() const
     {
-        return data->getNumBytesPerPixel() / data->getNumChannels() * 8;
+        return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;
     }
 
     static
@@ -73,7 +73,7 @@ public:
 
     std::string getPixelValueType() const
     {
-        return getPixelValueType(data->getPixelType());
+        return getPixelValueType(mData->getPixelType());
     }
 
     static
@@ -96,7 +96,7 @@ public:
 
     std::string getRepresentation() const
     {
-        return getRepresentation(data->getPixelType());
+        return getRepresentation(mData->getPixelType());
     }
 
     static
@@ -116,53 +116,49 @@ public:
 
     std::string getMode() const
     {
-        return getMode(data->getPixelType());
+        return getMode(mData->getPixelType());
     }
 
     Data* getData() const
     {
-        return data;
+        return mData;
     }
 
     std::vector<NITFSegmentInfo> getImageSegments() const
     {
-        return imageSegments;
+        return mImageSegments;
     }
 
     void addSegment(NITFSegmentInfo info)
     {
-        imageSegments.push_back(info);
+        mImageSegments.push_back(info);
     }
 
     size_t getStartIndex() const
     {
-        return startIndex;
+        return mStartIndex;
     }
     void setStartIndex(size_t index)
     {
-        startIndex = index;
+        mStartIndex = index;
     }
-
-    //! This is the actual size of a dimension (row or column)
-    //! taking into account the possible blocking (pixels)
-    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
 
     //! Number of bytes in the product
     sys::Uint64_T getProductSize() const
     {
-        return productSize;
+        return mProductSize;
     }
 
     //! This is the total number of rows we can have in a NITF segment
     size_t getNumRowsLimit() const
     {
-        return numRowsLimit;
+        return mNumRowsLimit;
     }
 
     //! This is the total size that each product seg can be, bytes
     sys::Uint64_T getMaxProductSize() const
     {
-        return maxProductSize;
+        return mMaxProductSize;
     }
 
     std::vector<nitf::BandInfo> getBandInfo() const;
@@ -212,6 +208,11 @@ public:
             const std::string& prefix = "", int index = -1);
 
 private:
+    //! This is the actual size of a dimension (row or column)
+    //! taking into account the possible blocking (pixels)
+    static
+    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
+
     void computeImageInfo();
 
     /*!
@@ -273,24 +274,23 @@ private:
     /*      } */
 
 private:
-    Data* data;
+    Data* const mData;
 
-    size_t startIndex;
-
-    //! Number of bytes in the product
-    sys::Uint64_T productSize;
+    size_t mStartIndex;
 
     //! This is the total number of rows we can have in a NITF segment
-    size_t numRowsLimit;
+    size_t mNumRowsLimit;
+
+    size_t mNumColsPaddedForBlocking;
 
     //! This is the block size in the row direction, pixels
-    size_t numRowsPerBlock;
-
-    //! This is the block size in the column direction, pixels
-    size_t numColsPerBlock;
+    size_t mNumRowsPerBlock;
 
     //! This is the total size that each product seg can be
-    sys::Uint64_T maxProductSize;
+    sys::Uint64_T mMaxProductSize;
+
+    //! Number of bytes in the product
+    sys::Uint64_T mProductSize;
 
     /*!
      *  This is a vector of segment information that is used to get
@@ -298,7 +298,7 @@ private:
      *
      *  Note that the number of segments has a hard limit of 999
      */
-    std::vector<NITFSegmentInfo> imageSegments;
+    std::vector<NITFSegmentInfo> mImageSegments;
 };
 
 //------------------------------------------------------------------------------
