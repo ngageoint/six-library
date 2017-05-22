@@ -221,7 +221,7 @@ int main(int argc, char** argv)
                     six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            const std::string blockSize("1024");
+            const std::string blockSize("23");
             writer.getOptions().setParameter(
                     six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
                     blockSize);
