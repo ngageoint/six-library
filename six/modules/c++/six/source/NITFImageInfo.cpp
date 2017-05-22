@@ -94,8 +94,8 @@ NITFImageInfo::NITFImageInfo(Data* data,
     mStartIndex(0),
     mNumRowsLimit(maxRows),
     mNumColsPaddedForBlocking(getActualDim(data->getNumCols(), colsPerBlock)),
-    mMaxProductSize(maxSize),
     mNumRowsPerBlock(rowsPerBlock),
+    mMaxProductSize(maxSize),
     mProductSize(static_cast<sys::Uint64_T>(mData->getNumBytesPerPixel()) *
                  getActualDim(mData->getNumRows(), rowsPerBlock) *
                  mNumColsPaddedForBlocking)
@@ -164,7 +164,6 @@ void NITFImageInfo::computeImageInfo()
         std::ostringstream ostr;
         ostr << "maxProductSize [" << mMaxProductSize << "] < bytesPerRow ["
              << bytesPerRow << "]";
-
         throw except::Exception(Ctxt(ostr.str()));
     }
 
@@ -173,9 +172,19 @@ void NITFImageInfo::computeImageInfo()
     {
         const size_t numBlocksVert = maxRows / mNumRowsPerBlock;
         maxRows = numBlocksVert * mNumRowsPerBlock;
+
+        if (maxRows == 0)
+        {
+            std::ostringstream ostr;
+            ostr << "With a max product size of " << mMaxProductSize
+                 << ", bytes per row of " << bytesPerRow
+                 << ", and rows per block of " << mNumRowsPerBlock
+                 << ", cannot fit an entire block into a segment";
+            throw except::Exception(Ctxt(ostr.str()));
+        }
     }
 
-    if (maxRows < mNumRowsLimit)
+    if (mNumRowsLimit > maxRows)
     {
         mNumRowsLimit = maxRows;
     }
@@ -202,6 +211,7 @@ void NITFImageInfo::computeSegmentInfo()
         //       for image segments 1 and above
         const size_t numIS = (size_t) std::ceil(mData->getNumRows()
                 / (double) mNumRowsLimit);
+
         mImageSegments.resize(numIS);
         mImageSegments[0].numRows = mNumRowsLimit;
         mImageSegments[0].firstRow = 0;
