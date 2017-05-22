@@ -105,9 +105,9 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
     mInfos.clear();
     mContainer = container;
 
-    sys::Uint32_T ilocMax = Constants::ILOC_MAX;
-    sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
-                                                  Parameter(ilocMax));
+    const sys::Uint32_T ilocMax = Constants::ILOC_MAX;
+    const sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
+                                                        Parameter(ilocMax));
 
     sys::Uint64_T maxSize =
             (sys::Uint64_T) mOptions.getParameter(
