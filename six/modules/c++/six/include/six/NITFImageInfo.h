@@ -44,23 +44,38 @@ namespace six
 class NITFImageInfo
 {
 public:
-
-    NITFImageInfo(Data* d,
-    		      size_t maxRows = Constants::ILOC_MAX,
+    /*!
+     * \param data Data associated with the NITF
+     * \param maxRows Maximum number of rows allowed in an image segment.
+     * Only applies when there is more than one image segment (we're ensuring
+     * that the 5 characters reserved for the row offset in ILOC don't
+     * overflow, so if there is only one image segment, there is no row offset
+     * and thus no restriction on the number of rows).  Defaults to ILOC_MAX.
+     * \param maxSize Maximum number of bytes allows in an image segment.
+     * Defaults to IS_SIZE_MAX which is the ~10 GB NITF limit.
+     * \param computeSegments Whether or not to compute segmentation at
+     * construction time.  Defaults to false.
+     * \param rowsPerBlock The number of rows in a NITF block.  Set this to 0
+     * if the NITF is not blocked.  This needs to be taken into account as it'll
+     * affect segmentation since NITFs always write entire NITF blocks even
+     * when there are fewer rows than a multiple of the block size.  Defaults to
+     * 0 (no blocking).
+     * \param colsPerBlock The number of columns in a NITF block.  Set this to
+     * 0 if the NITF is not blocked.  This needs to be taken into account as
+     * it'll affect segmentation since NITFs always write entire NITF blocks
+     * even when there are fewer columns than a multiple of the block size.
+     * Defaults to 0 (no blocking).
+     */
+    NITFImageInfo(Data* data,
+                  size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
-                  bool computeSegments = false) :
-        data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
-    {
-        productSize = (sys::Uint64_T) data->getNumBytesPerPixel()
-                * (sys::Uint64_T) data->getNumRows()
-                * (sys::Uint64_T) data->getNumCols();
-        if (computeSegments)
-            compute();
-    }
+                  bool computeSegments = false,
+                  size_t rowsPerBlock = 0,
+                  size_t colsPerBlock = 0);
 
     size_t getNumBitsPerPixel() const
     {
-        return data->getNumBytesPerPixel() / data->getNumChannels() * 8;
+        return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;
     }
 
     static
@@ -79,7 +94,7 @@ public:
 
     std::string getPixelValueType() const
     {
-        return getPixelValueType(data->getPixelType());
+        return getPixelValueType(mData->getPixelType());
     }
 
     static
@@ -102,7 +117,7 @@ public:
 
     std::string getRepresentation() const
     {
-        return getRepresentation(data->getPixelType());
+        return getRepresentation(mData->getPixelType());
     }
 
     static
@@ -122,49 +137,49 @@ public:
 
     std::string getMode() const
     {
-        return getMode(data->getPixelType());
+        return getMode(mData->getPixelType());
     }
 
     Data* getData() const
     {
-        return data;
+        return mData;
     }
 
     std::vector<NITFSegmentInfo> getImageSegments() const
     {
-        return imageSegments;
+        return mImageSegments;
     }
 
     void addSegment(NITFSegmentInfo info)
     {
-        imageSegments.push_back(info);
+        mImageSegments.push_back(info);
     }
 
     size_t getStartIndex() const
     {
-        return startIndex;
+        return mStartIndex;
     }
     void setStartIndex(size_t index)
     {
-        startIndex = index;
+        mStartIndex = index;
     }
 
     //! Number of bytes in the product
     sys::Uint64_T getProductSize() const
     {
-        return productSize;
+        return mProductSize;
     }
 
     //! This is the total number of rows we can have in a NITF segment
     size_t getNumRowsLimit() const
     {
-        return numRowsLimit;
+        return mNumRowsLimit;
     }
 
-    //! This is the total size that each product seg can be
+    //! This is the total size that each product seg can be, bytes
     sys::Uint64_T getMaxProductSize() const
     {
-        return maxProductSize;
+        return mMaxProductSize;
     }
 
     std::vector<nitf::BandInfo> getBandInfo() const;
@@ -214,6 +229,11 @@ public:
             const std::string& prefix = "", int index = -1);
 
 private:
+    //! This is the actual size of a dimension (row or column)
+    //! taking into account the possible blocking (pixels)
+    static
+    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
+
     void computeImageInfo();
 
     /*!
@@ -275,18 +295,23 @@ private:
     /*      } */
 
 private:
-    Data* data;
+    Data* const mData;
 
-    size_t startIndex;
-
-    //! Number of bytes in the product
-    sys::Uint64_T productSize;
+    size_t mStartIndex;
 
     //! This is the total number of rows we can have in a NITF segment
-    size_t numRowsLimit;
+    size_t mNumRowsLimit;
+
+    size_t mNumColsPaddedForBlocking;
+
+    //! This is the block size in the row direction, pixels
+    size_t mNumRowsPerBlock;
 
     //! This is the total size that each product seg can be
-    sys::Uint64_T maxProductSize;
+    sys::Uint64_T mMaxProductSize;
+
+    //! Number of bytes in the product
+    sys::Uint64_T mProductSize;
 
     /*!
      *  This is a vector of segment information that is used to get
@@ -294,7 +319,7 @@ private:
      *
      *  Note that the number of segments has a hard limit of 999
      */
-    std::vector<NITFSegmentInfo> imageSegments;
+    std::vector<NITFSegmentInfo> mImageSegments;
 };
 
 //------------------------------------------------------------------------------

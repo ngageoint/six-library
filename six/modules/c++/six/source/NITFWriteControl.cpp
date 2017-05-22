@@ -131,7 +131,9 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
             info(new NITFImageInfo(mContainer->getData(0),
                                    maxRows,
                                    maxSize,
-                                   true));
+                                   true,
+                                   0,
+                                   0));
 
         mInfos.push_back(info);
     }
@@ -142,13 +144,34 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                 OPT_J2K_COMPRESSION, Parameter(0));
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
+        // get row blocking parameters
+        nitf::Uint32 optNumRowsPerBlock = 0;
+        if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK)) {
+            optNumRowsPerBlock =
+                static_cast<nitf::Uint32>(mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
+        }
+
+        // get column blocking parameters
+        nitf::Uint32 optNumColsPerBlock = 0;
+        if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK)) {
+            optNumColsPerBlock =
+                static_cast<nitf::Uint32>(mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
+        }
+
         for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
         {
             Data* const ith = mContainer->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
+                nitf::Uint32 numRowsPerBlock = std::min((size_t)optNumRowsPerBlock, ith->getNumRows());
+                nitf::Uint32 numColsPerBlock = std::min((size_t)optNumColsPerBlock, ith->getNumCols());
                 mem::SharedPtr<NITFImageInfo>
-                    info(new NITFImageInfo(ith, maxRows, maxSize, true));
+                    info(new NITFImageInfo(ith,
+                                           maxRows,
+                                           maxSize,
+                                           true,
+                                           numRowsPerBlock,
+                                           numColsPerBlock));
 
                 mInfos.push_back(info);
             }
