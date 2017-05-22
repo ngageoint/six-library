@@ -71,7 +71,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK, blockSize);
     writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "110");
+            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "200");
     writer.initialize(container);
     writer.save(buffers, pathname, std::vector<std::string>());
 
@@ -110,7 +110,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK, blockSize);
     writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "110");
+            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "200");
     writer.initialize(container);
     writer.save(buffers, pathname, std::vector<std::string>());
 }
