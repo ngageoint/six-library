@@ -44,7 +44,28 @@ namespace six
 class NITFImageInfo
 {
 public:
-
+    /*!
+     * \param data Data associated with the NITF
+     * \param maxRows Maximum number of rows allowed in an image segment.
+     * Only applies when there is more than one image segment (we're ensuring
+     * that the 5 characters reserved for the row offset in ILOC don't
+     * overflow, so if there is only one image segment, there is no row offset
+     * and thus no restriction on the number of rows).  Defaults to ILOC_MAX.
+     * \param maxSize Maximum number of bytes allows in an image segment.
+     * Defaults to IS_SIZE_MAX which is the ~10 GB NITF limit.
+     * \param computeSegments Whether or not to compute segmentation at
+     * construction time.  Defaults to false.
+     * \param rowsPerBlock The number of rows in a NITF block.  Set this to 0
+     * if the NITF is not blocked.  This needs to be taken into account as it'll
+     * affect segmentation since NITFs always write entire NITF blocks even
+     * when there are fewer rows than a multiple of the block size.  Defaults to
+     * 0 (no blocking).
+     * \param colsPerBlock The number of columns in a NITF block.  Set this to
+     * 0 if the NITF is not blocked.  This needs to be taken into account as
+     * it'll affect segmentation since NITFs always write entire NITF blocks
+     * even when there are fewer columns than a multiple of the block size.
+     * Defaults to 0 (no blocking).
+     */
     NITFImageInfo(Data* data,
                   size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
