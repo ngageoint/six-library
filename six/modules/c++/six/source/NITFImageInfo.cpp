@@ -120,8 +120,8 @@ NITFImageInfo::NITFImageInfo(Data* data,
 
     if (mNumRowsLimit < mNumRowsPerBlock)
     {
-        std::cout << "Requested rows per block incompatible with requested "
-                "max rows per segment. Reducting rows per block to fit.\n";
+        std::cerr << "Requested rows per block incompatible with requested "
+                "max rows per segment. Reducing rows per block to fit.\n";
         mNumRowsPerBlock = mNumRowsLimit;
     }
 
@@ -169,8 +169,8 @@ void NITFImageInfo::computeImageInfo()
 
     if (maxRows < mNumRowsPerBlock)
     {
-        std::cout << "Requested rows per block incompatible with requested "
-                "max product size. Reducting rows per block to fit.\n";
+        std::cerr << "Requested rows per block incompatible with requested "
+                "max product size. Reducing rows per block to fit.\n";
         mNumRowsPerBlock = maxRows;
     }
 
