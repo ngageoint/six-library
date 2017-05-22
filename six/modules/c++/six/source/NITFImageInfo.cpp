@@ -94,8 +94,8 @@ NITFImageInfo::NITFImageInfo(Data* data,
     mStartIndex(0),
     mNumRowsLimit(maxRows),
     mNumColsPaddedForBlocking(getActualDim(data->getNumCols(), colsPerBlock)),
-    mMaxProductSize(maxSize),
     mNumRowsPerBlock(rowsPerBlock),
+    mMaxProductSize(maxSize),
     mProductSize(static_cast<sys::Uint64_T>(mData->getNumBytesPerPixel()) *
                  getActualDim(mData->getNumRows(), rowsPerBlock) *
                  mNumColsPaddedForBlocking)
@@ -116,6 +116,13 @@ NITFImageInfo::NITFImageInfo(Data* data,
              << " but it cannot be greater than " << Constants::IS_SIZE_MAX
              << " per the NITF spec";
         throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    if (mNumRowsLimit < mNumRowsPerBlock)
+    {
+        std::cout << "Requested rows per block incompatible with requested "
+                "max rows per segment. Reducting rows per block to fit.\n";
+        mNumRowsPerBlock = mNumRowsLimit;
     }
 
     if (computeSegments)
@@ -159,13 +166,12 @@ void NITFImageInfo::computeImageInfo()
     }
     size_t maxRows(static_cast<size_t>(maxRowsUint64));
 
-    if (maxRows == 0)
-    {
-        std::ostringstream ostr;
-        ostr << "maxProductSize [" << mMaxProductSize << "] < bytesPerRow ["
-             << bytesPerRow << "]";
 
-        throw except::Exception(Ctxt(ostr.str()));
+    if (maxRows < mNumRowsPerBlock)
+    {
+        std::cout << "Requested rows per block incompatible with requested "
+                "max product size. Reducting rows per block to fit.\n";
+        mNumRowsPerBlock = maxRows;
     }
 
     // Truncate back to a full block for the maxRows that will actually fit
@@ -173,6 +179,15 @@ void NITFImageInfo::computeImageInfo()
     {
         const size_t numBlocksVert = maxRows / mNumRowsPerBlock;
         maxRows = numBlocksVert * mNumRowsPerBlock;
+    }
+
+    if (maxRows == 0)
+    {
+        std::ostringstream ostr;
+        ostr << "maxProductSize [" << mMaxProductSize << "] < bytesPerRow ["
+             << bytesPerRow << "]";
+
+        throw except::Exception(Ctxt(ostr.str()));
     }
 
     if (maxRows < mNumRowsLimit)
@@ -218,7 +233,6 @@ void NITFImageInfo::computeSegmentInfo()
         mImageSegments[i].rowOffset = mNumRowsLimit;
         mImageSegments[i].numRows = mData->getNumRows() - (numIS - 1)
                 * mNumRowsLimit;
-
     }
 
     computeSegmentCorners();
