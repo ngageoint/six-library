@@ -228,7 +228,6 @@ int main(int argc, char** argv)
         writeSingleImage(*sidd, singleImageBlocked.pathname(), "10", 11);
         writeSingleImage(*sidd, singleImageUnblocked.pathname(), "10", 9);
 
-        return 0;
         return compare(twoImageSIDD.pathname(),
                 singleImageBlocked.pathname(),
                 singleImageUnblocked.pathname()) ? 0 : 1;
