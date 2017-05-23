@@ -24,6 +24,8 @@
 #include <import/six/sidd.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
+#include <math/Utilities.h>
+#include <str/Convert.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
@@ -48,10 +50,25 @@ std::auto_ptr<six::Data> read(const std::string& filename)
     return data;
 }
 
+std::string computeProductSize(const std::string& blockSizeStr,
+        size_t imageSideSize,
+        size_t numBytesPerPixel)
+{
+    const size_t blockSize = str::toType<size_t>(blockSizeStr);
+    const size_t totalBlockSize = math::square(blockSize);
+    const size_t totalImageSize = math::square(imageSideSize) *
+            numBytesPerPixel;
+    const size_t numBlocksRequired = std::ceil(
+            static_cast<double>(totalImageSize) / totalBlockSize);
+    return str::toString(numBlocksRequired * totalBlockSize);
+}
+
 void writeSingleImage(const six::Data& data, const std::string& pathname,
         const std::string& blockSize, size_t imageSideSize)
 {
     std::auto_ptr<six::Data> workingData(data.clone());
+    const std::string productSize = computeProductSize(blockSize,
+            imageSideSize, workingData->getNumBytesPerPixel());
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
@@ -71,24 +88,27 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK, blockSize);
     writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "110");
+            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, productSize);
     writer.initialize(container);
     writer.save(buffers, pathname, std::vector<std::string>());
 
 }
+
 void writeTwoImages(const six::Data& data, const std::string& pathname,
-        const std::string& blockSize)
+        const std::string& blockSize, size_t largeImageSize,
+        size_t smallImageSize)
 {
     std::auto_ptr<six::Data> firstData(data.clone());
     std::auto_ptr<six::Data> secondData(data.clone());
 
-    // The first time through, the first image will be blocked, and the second
-    // is too small.
-    // Next call, the size is 15, so neither will be blocked.
-    firstData->setNumRows(11);
-    firstData->setNumCols(11);
-    secondData->setNumRows(9);
-    secondData->setNumCols(9);
+    // The first image will be blocked, and the second is too small.
+    firstData->setNumRows(largeImageSize);
+    firstData->setNumCols(largeImageSize);
+    secondData->setNumRows(smallImageSize);
+    secondData->setNumCols(smallImageSize);
+
+    const std::string productSize = computeProductSize(blockSize,
+            largeImageSize, data.getNumBytesPerPixel());
 
     mem::ScopedArray<six::UByte> firstBuffer;
     mem::ScopedArray<six::UByte> secondBuffer;
@@ -110,7 +130,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK, blockSize);
     writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, "110");
+            six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, productSize);
     writer.initialize(container);
     writer.save(buffers, pathname, std::vector<std::string>());
 }
@@ -204,7 +224,7 @@ int main(int argc, char** argv)
         io::TempFile twoImageSIDD;
         io::TempFile singleImageBlocked;
         io::TempFile singleImageUnblocked;
-        writeTwoImages(*sidd, twoImageSIDD.pathname(), "10");
+        writeTwoImages(*sidd, twoImageSIDD.pathname(), "10", 11, 9);
         writeSingleImage(*sidd, singleImageBlocked.pathname(), "10", 11);
         writeSingleImage(*sidd, singleImageUnblocked.pathname(), "10", 9);
 
