@@ -121,17 +121,19 @@ int main(int argc, char** argv)
         findOutputToSlantPolynomials(*complexData, polyOrderX, polyOrderY,
                 toSlantRow, toSlantCol);
 
+        toSlantRow = toSlantRow.flipXY();
+        toSlantCol = toSlantCol.flipXY();
         mem::ScopedArray<float> outputArray(new float[
                 plane.xDirection->elements * plane.yDirection->elements]);
         // Iterate over output plane, grabbing the appropriate input point
-        for (size_t outRow = 0; outRow < plane.yDirection->elements; ++outRow)
+        for (size_t outRow = 0; outRow < plane.xDirection->elements; ++outRow)
         {
             const six::Poly1D rowPoly = toSlantRow.atY(outRow);
             const six::Poly1D colPoly = toSlantCol.atY(outRow);
             for (size_t outCol = 0;
-                    outCol < plane.xDirection->elements; ++outCol)
+                    outCol < plane.yDirection->elements; ++outCol)
             {
-                const size_t outIdx = (outRow * plane.xDirection->elements) +
+                const size_t outIdx = (outRow * plane.yDirection->elements) +
                         outCol;
                 const double inRowInitial = rowPoly(outCol);
                 const double inColInitial = colPoly(outCol);
@@ -152,7 +154,7 @@ int main(int argc, char** argv)
         }
 
         sio::lite::FileWriter writer(outputPathname);
-        writer.write(plane.yDirection->elements, plane.xDirection->elements,
+        writer.write(plane.xDirection->elements, plane.yDirection->elements,
                 sizeof(float), sio::lite::FileHeader::FLOAT, outputArray.get());
 
         return 0;
