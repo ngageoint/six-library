@@ -23,10 +23,15 @@
 #ifndef __MATH_UTILITIES_H__
 #define __MATH_UTILITIES_H__
 
-#include <math.h>
 #include <stdlib.h>
 #include <math/math_config.h>
 #include <sys/Conf.h>
+#ifdef HAVE_STD_ISNAN
+    #include <cmath>
+#elif HAVE_ISNAN
+    #include <math.h>
+#endif
+
 namespace math
 {
 /*!
@@ -61,7 +66,9 @@ inline double square(double val)
  */
 template <typename T> bool isNaN(T value)
 {
-#ifdef HAVE_ISNAN
+#ifdef HAVE_STD_ISNAN
+    return std::isnan(value);
+#elif HAVE_ISNAN
     return isnan(value);
 #else
     // Make sure the compiler doesn't optimize out the call below or cache the
@@ -70,7 +77,6 @@ template <typename T> bool isNaN(T value)
     return copy != copy;
 #endif
 }
-
 
 /*
  * Calculate the binomial coefficient
