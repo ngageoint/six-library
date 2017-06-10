@@ -452,7 +452,7 @@ void NITFWriteControl::setBlocking(const std::string& imode,
             throw except::Exception(Ctxt("SICDs do not support blocking"));
         }
 
-        const size_t optNumRowsPerBlock = static_cast<size_t>(
+        const size_t optNumRowsPerBlock = static_cast<nitf::Uint64>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
 
         numRowsPerBlock = static_cast<sys::Uint32_T>(
@@ -473,7 +473,7 @@ void NITFWriteControl::setBlocking(const std::string& imode,
             throw except::Exception(Ctxt("SICDs do not support blocking"));
         }
 
-        const size_t optNumColsPerBlock = static_cast<size_t>(
+        const size_t optNumColsPerBlock = static_cast<nitf::Uint64>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
 
         numColsPerBlock = static_cast<sys::Uint32_T>(
@@ -729,9 +729,9 @@ void NITFWriteControl::save(const SourceList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const size_t bufferSize =
+    const size_t bufferSize = static_cast<nitf::Uint64>(
             mOptions.getParameter(OPT_BUFFER_SIZE,
-                                  Parameter(DEFAULT_BUFFER_SIZE));
+                                  Parameter(DEFAULT_BUFFER_SIZE)));
 
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
@@ -816,9 +816,9 @@ void NITFWriteControl::save(const BufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const size_t bufferSize =
+    const size_t bufferSize = static_cast<nitf::Uint64>(
             mOptions.getParameter(OPT_BUFFER_SIZE,
-                                  Parameter(DEFAULT_BUFFER_SIZE));
+                                  Parameter(DEFAULT_BUFFER_SIZE)));
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     save(imageData, bufferedIO, schemaPaths);

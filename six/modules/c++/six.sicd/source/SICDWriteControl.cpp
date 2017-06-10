@@ -103,10 +103,10 @@ void SICDWriteControl::writeHeaders()
         //       SIDD as you will have some pad
         // TODO: Would be nice if ImageSubheader had a method to compute this
         //       for you
-        const size_t numRows(subheader.getNumRows());
-        const size_t numCols(subheader.getNumCols());
-        numBands = subheader.getNumImageBands();
-        const size_t numBitsPerPixel(subheader.getNumBitsPerPixel());
+        const size_t numRows(static_cast<nitf::Uint64>(subheader.getNumRows()));
+        const size_t numCols(static_cast<nitf::Uint64>(subheader.getNumCols()));
+        numBands = static_cast<nitf::Uint64>(subheader.getNumImageBands());
+        const size_t numBitsPerPixel(static_cast<nitf::Uint64>(subheader.getNumBitsPerPixel()));
         numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
         const size_t numBytes = numRows * numCols * numBands * numBytesPerPixel;
         imageDataLens[ii] = numBytes;
