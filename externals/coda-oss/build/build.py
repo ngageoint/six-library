@@ -1407,17 +1407,35 @@ def process_swig_linkage(tsk):
 
     # This builds a soname_str suitable for hopefully any platform,
     # compiler, and linker
-    soname_str = linkarg_pattern % (soname_pattern % (libpattern % tsk.target))
+    codalist = ['_coda', '_sio', '_xml', '_mem', '_math']
+    if re.match(osxRegex, platform):
+        if any([tsk.target.startswith(x) for x in codalist]):
+            ddname = 'coda'
+        else:
+            ddname = 'pysix'
+
+        soname_str = linkarg_pattern % (soname_pattern % ( os.path.join('@rpath','..', ddname, libpattern %tsk.target)))
+    else:
+        soname_str = linkarg_pattern % (soname_pattern % (libpattern % tsk.target))
+
+
     tsk.env.LINKFLAGS.append(soname_str)
 
     # finally, we want to bake the library search paths straight in to
     # our python extensions so we don't need to set an LD_LIBRARY_PATH
     package_set = set(package_list)
-    base_path = os.path.join(':${ORIGIN}', '..')
-    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
-    if dirlist:
-        rpath_str = rpath_pattern % (dirlist)
-        tsk.env.LINKFLAGS.append(rpath_str)
+    if re.match(osxRegex, platform):
+        dirlist = ' '.join(rpath_pattern%(str(os.path.join('..',s))) for s in package_set)
+        if dirlist != " ":
+            tsk.env.LINKFLAGS.append(dirlist)
+
+    else:
+        base_path = os.path.join(':${ORIGIN}', '..')
+
+        dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+        if dirlist:
+            rpath_str = rpath_pattern % (dirlist)
+            tsk.env.LINKFLAGS.append(rpath_str)
 
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
