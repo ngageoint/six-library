@@ -879,13 +879,25 @@ template<> FFTSign six::toType<FFTSign>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "-1")
+    {
         return FFTSign::NEG;
-    else if (type == "+1")
+    }
+    else if (type == "+1" || type == "1")
+    {
+        // NOTE: The SICD Volume 1 spec says only "+1" and "-1" are allowed,
+        //       and while the schema uses those same strings, it sets the
+        //       type to xs:int so that "1" will pass schema validation.  Some
+        //       producers do use "1" so for simplicity just support it here.
         return FFTSign::POS;
+    }
     else if (type == "0")
+    {
         return FFTSign::NOT_SET;
+    }
     else
+    {
         throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const FFTSign& value)
