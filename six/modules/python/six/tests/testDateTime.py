@@ -58,7 +58,7 @@ def convertFromPython():
         assert(converted.getMinute() == original.minute)
         assert(int(converted.getSecond()) == original.second)
         microsecond = (converted.getSecond() - int(converted.getSecond())) * 1e6
-        assert(int(microsecond) == original.microsecond)
+        assert(round(microsecond) == original.microsecond)
     except AssertionError:
         traceback.print_exc()
         return False
