@@ -42,6 +42,37 @@
 
 namespace nitf
 {
+namespace detail
+{
+// Some template metaprogramming to allow us to provide a templated
+// operator T() below - this'll get us the right numeric type and then we
+// have an overloading for std::string below
+// Note that this has to be at the namespace level - we can't define this class
+// inside Field due to the explicit specializations
+template <bool IsIntegerT, bool IsSignedT>
+struct GetConvType
+{
+};
+
+template <>
+struct GetConvType<true, true>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_INT;
+};
+
+template <>
+struct GetConvType<true, false>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_UINT;
+};
+
+template <bool IsSignedT>
+struct GetConvType<false, IsSignedT>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_REAL;
+};
+}
+
 /*!
  *  \class Field
  *  \brief  The C++ wrapper for the nitf_Field
@@ -51,40 +82,6 @@ namespace nitf
  */
 class Field : public nitf::Object<nitf_Field>
 {
-private:
-    // Some template metaprogramming to allow us to provide a templated
-    // operator T() below - this'll get us the right numeric type and then we
-    // have an overloading for std::string below
-    template <bool IsIntegerT, bool IsSignedT>
-    struct GetConvType
-    {
-    };
-
-    template <>
-    struct GetConvType<true, true>
-    {
-        static const nitf_ConvType CONV_TYPE = NITF_CONV_INT;
-    };
-
-    template <>
-    struct GetConvType<true, false>
-    {
-        static const nitf_ConvType CONV_TYPE = NITF_CONV_UINT;
-    };
-
-    template <bool IsSignedT>
-    struct GetConvType<false, IsSignedT>
-    {
-        static const nitf_ConvType CONV_TYPE = NITF_CONV_REAL;
-    };
-
-    template <typename T>
-    nitf_ConvType getConvType() const
-    {
-        return GetConvType<std::numeric_limits<T>::is_integer,
-                           std::numeric_limits<T>::is_signed>::CONV_TYPE;
-    }
-
 public:
 enum FieldType
     {
@@ -358,7 +355,10 @@ enum FieldType
     operator T() const
     {
         T data;
-        get(&data, getConvType<T>(), sizeof(T));
+        get(&data,
+            detail::GetConvType<std::numeric_limits<T>::is_integer,
+                                std::numeric_limits<T>::is_signed>::CONV_TYPE,
+            sizeof(T));
         return data;
     }
 
