@@ -20,6 +20,7 @@
  *
  */
 
+#include <sys/sys_config.h>
 #include <nitf/Field.hpp>
 #include "TestCase.h"
 
@@ -42,10 +43,19 @@ TEST_CASE(testCastOperator)
     field.set(1234567890);
     const nitf::Uint32 valUint32 = field;
     TEST_ASSERT_EQ(valUint32, 1234567890);
+#if SIZEOF_SIZE_T == 4
+    const size_t valSizeT = field;
+    TEST_ASSERT_EQ(valSizeT, 1234567890);
+#endif
 
     field.set(nitf::Uint64(1234567890987));
     const nitf::Uint64 valUint64 = field;
     TEST_ASSERT_EQ(valUint64, 1234567890987);
+
+#if SIZEOF_SIZE_T == 8
+    const size_t valSizeT = field;
+    TEST_ASSERT_EQ(valSizeT, 1234567890987);
+#endif
 
     // Test signed values
     field.set(-123);
@@ -59,12 +69,20 @@ TEST_CASE(testCastOperator)
     field.set(-1234567890);
     const nitf::Int32 valInt32 = field;
     TEST_ASSERT_EQ(valInt32, -1234567890);
+#if SIZEOF_SIZE_T == 4
+    const size_t valSSizeT = field;
+    TEST_ASSERT_EQ(valSSizeT, -1234567890);
+#endif
 
     // TODO: I think the %lld isn't working, at least in VS, in
     //       nitf_Field_setInt64(), so need to do this via string
     field.set("-1234567890987");
     const nitf::Int64 valInt64 = field;
     TEST_ASSERT_EQ(valInt64, -1234567890987);
+#if SIZEOF_SIZE_T == 8
+    const size_t valSSizeT = field;
+    TEST_ASSERT_EQ(valSSizeT, -1234567890987);
+#endif
 
     // Test float values
     field.set(-123.45f);
