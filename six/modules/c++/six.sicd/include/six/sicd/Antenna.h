@@ -110,7 +110,11 @@ std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d);
  */
 struct GainAndPhasePolys
 {
-    //! No init right now, could do that and set const coef to zero
+    /*!
+     * Constructor
+     * gainPoly is initialized to 0-order polynomial with value of 1
+     * phasePoly is initialized to 0-order polynomial with value of 0
+     */
     GainAndPhasePolys();
 
     bool operator==(const GainAndPhasePolys& other) const
@@ -125,7 +129,7 @@ struct GainAndPhasePolys
     }
 
     //! One way signal gain (in dB) as a function of DCX and DCY
-    //! Gain relative to gain at DCX = 0, DCY = 0.  Const coeff = 0 always
+    //! Gain relative to gain at DCX = 0, DCY = 0.
     Poly2D gainPoly;
 
     //! One way signal phase (in cycles) as a function of DCX and DCY.
