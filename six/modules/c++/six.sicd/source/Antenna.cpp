@@ -55,9 +55,11 @@ std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d)
 }
 
 GainAndPhasePolys::GainAndPhasePolys() :
-    gainPoly(Init::undefined<Poly2D>()),
-    phasePoly(Init::undefined<Poly2D>())
+    gainPoly(0, 0),
+    phasePoly(0, 0)
 {
+    gainPoly[0][0] = 1;
+    phasePoly[0][0] = 0;
 }
 
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
@@ -66,7 +68,8 @@ std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
        << "  phasePoly:\n" << d.phasePoly << "\n";
     return os;
 }
-AntennaParameters::AntennaParameters() : 
+
+AntennaParameters::AntennaParameters() :
     xAxisPoly(Init::undefined<PolyXYZ>()),
     yAxisPoly(Init::undefined<PolyXYZ>()),
     frequencyZero(Init::undefined<double>()),
