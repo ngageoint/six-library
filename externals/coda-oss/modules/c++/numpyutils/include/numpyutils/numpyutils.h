@@ -162,6 +162,13 @@ T* getBuffer(PyObject* pyObject)
                 reinterpret_cast<PyArrayObject*>(pyObject)));
 }
 
+/*!
+ * Call this function after creating new PyObject with Numpy C API
+ * If a problem occurred, print error message and throw exception
+ * \param object Array to check
+ */
+void verifyNewPyObject(PyObject* object);
+
 }
 
 #endif

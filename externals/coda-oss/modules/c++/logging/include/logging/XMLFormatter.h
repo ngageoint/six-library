@@ -57,15 +57,12 @@ class XMLFormatter : public logging::Formatter
 public:
 
     static const char DEFAULT_FORMAT[];
-    static const char XML_SAFE_CONVERSION[];
 
     XMLFormatter();
     XMLFormatter(const std::string& fmt, 
                  const std::string& prologue = "<Log>",
                  const std::string& epilogue = "</Log>");
 
-    virtual ~XMLFormatter(){}
-    
     virtual void format(const logging::LogRecord* record, io::OutputStream& os) const;
 
 };
