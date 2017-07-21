@@ -143,6 +143,12 @@ void lower(std::string& s);
 //! Uses std::transform to convert all chars to upper case
 void upper(std::string& s);
 
+/*!
+ * Replaces any characters that are invalid in XML (&, <, >, ', ") with their
+ * escaped counterparts
+ */
+void escapeForXML(std::string& str);
+
 template<typename T>
 std::string join(std::vector<T> toks, std::string with)
 {
