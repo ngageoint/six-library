@@ -521,6 +521,12 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
                                                XMLElem parent) const
 {
     const size_t numChannels = radar->rcvChannels.size();
+    if (numChannels == 0)
+    {
+        throw except::Exception(Ctxt(
+                "RadarCollection.RcvChannels must have at least one element "
+                "for version 1.x"));
+    }
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
     setAttribute(rcvChanXML, "size", str::toString(numChannels));
     for (size_t ii = 0; ii < numChannels; ++ii)
