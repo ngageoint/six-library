@@ -404,18 +404,15 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
 {
     nitf::ImageSegment getImageSegment(size_t index)
     {
-        nitf::List imageList = $self->getImages();
-        nitf::ListIterator iter = imageList.begin();
-        nitf::ListIterator end = imageList.end();
-        for (size_t ii = 0; ii < index; ++ii, ++iter)
+        if (index >= $self->getNumImages())
+        {
+            throw except::Exception(Ctxt("Index out of bounds"));
+        }
+        nitf::ListIterator iter = $self->getImages().begin();
+        for (size_t ii = 0; ii < index; ++ii)
         {
             iter.increment();
-            if (iter == end)
-            {
-                throw except::Exception(Ctxt("Index out of bounds"));
-            }
         }
-
         nitf::ImageSegment segment = *iter;
         return segment;
     }
@@ -427,8 +424,9 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
             throw except::Exception(Ctxt("Index out of bounds"));
         }
         nitf::ListIterator iter = $self->getDataExtensions().begin();
-        for (size_t ii = 0; ii < index; ++ii, iter.increment())
+        for (size_t ii = 0; ii < index; ++ii)
         {
+            iter.increment();
         }
         nitf::DESegment segment = *iter;
         return segment;
