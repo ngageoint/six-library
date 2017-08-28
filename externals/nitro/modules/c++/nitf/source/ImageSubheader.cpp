@@ -462,7 +462,7 @@ size_t ImageSubheader::getNumBytes() const
             NITF_IID2_SZ +
             NITF_ISCLAS_SZ +
             FileSecurity::NUM_BYTES +
-            1 + // ENCRYP
+            NITF_ENCRYP_SZ +
             NITF_ISORCE_SZ +
             NITF_NROWS_SZ +
             NITF_NCOLS_SZ +
@@ -492,6 +492,11 @@ size_t ImageSubheader::getNumBytes() const
         numBands = nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
     }
 
+    for (size_t band = 0; band < numBands; ++band)
+    {
+        numBytes += getBandInfo(band).getNumBytes();
+    }
+
     numBytes +=
             NITF_ISYNC_SZ +
             NITF_IMODE_SZ +
@@ -503,8 +508,10 @@ size_t ImageSubheader::getNumBytes() const
             NITF_IDLVL_SZ +
             NITF_IALVL_SZ +
             NITF_ILOC_SZ  +
-            NITF_IMAG_SZ  +
-            NITF_UDIDL_SZ;
+            NITF_IMAG_SZ;
+
+    // User defined image data
+    numBytes += NITF_UDIDL_SZ;
 
     // TODO: Need to handle this being set to the TRE_OVERFLOW value and
     //       handle UDOFL and UDID
@@ -512,6 +519,9 @@ size_t ImageSubheader::getNumBytes() const
     {
         throw nitf::NITFException(Ctxt("Not set up to handle user-defined data"));
     }
+
+    // Extended subheader data
+    numBytes += NITF_IXSHDL_SZ;
 
     // TODO: Need to handle this being set to the TRE_OVERFLOW value and
     //       handle IXSOFL and IXSHD
