@@ -114,6 +114,11 @@ public:
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode) throw(nitf::NITFException);
 
+    /*!
+     * \return The size in bytes of this block
+     */
+    size_t getNumBytes() const;
+
 private:
     nitf_Error error;
 };

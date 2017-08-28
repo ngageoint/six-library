@@ -22,7 +22,9 @@
 
 #include "nitf/FileSecurity.hpp"
 
-using namespace nitf;
+namespace nitf
+{
+const size_t FileSecurity::NUM_BYTES = NITF_SG_BLOCK_SZ;
 
 FileSecurity::FileSecurity(const FileSecurity & x)
 {
@@ -132,4 +134,5 @@ nitf::Field FileSecurity::getSecuritySourceDate()
 nitf::Field FileSecurity::getSecurityControlNumber()
 {
     return nitf::Field(getNativeOrThrow()->securityControlNumber);
+}
 }

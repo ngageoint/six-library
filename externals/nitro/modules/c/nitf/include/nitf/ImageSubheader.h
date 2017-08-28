@@ -187,7 +187,7 @@ typedef struct _nitf_ImageSubheader
     /*  This section (unfortunately), also has a userDefinedSection  */
     nitf_Extensions *userDefinedSection;
 
-    /*  This section (also unfortunately), has an extededSection as well  */
+    /*  This section (also unfortunately), has an extendedSection as well  */
     nitf_Extensions *extendedSection;
 
 }

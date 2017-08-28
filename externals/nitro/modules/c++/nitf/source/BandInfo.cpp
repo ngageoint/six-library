@@ -22,8 +22,8 @@
 
 #include "nitf/BandInfo.hpp"
 
-using namespace nitf;
-
+namespace nitf
+{
 BandInfo::BandInfo(const BandInfo & x)
 {
     setNative(x.getNative());
@@ -145,3 +145,27 @@ void BandInfo::init(const std::string& representation,
         throw nitf::NITFException(&error);
 }
 
+size_t BandInfo::getNumBytes() const
+{
+    const size_t numLUTs = nitf::Field(getNativeOrThrow()->numLUTs);
+
+    size_t numBytes =
+            NITF_IREPBAND_SZ +
+            NITF_ISUBCAT_SZ +
+            NITF_IFC_SZ +
+            NITF_IMFLT_SZ +
+            NITF_NLUTS_SZ;
+
+    if (numLUTs > 0)
+    {
+        numBytes += NITF_NELUT_SZ;
+
+        const size_t numEntriesPerLUT =
+                nitf::Field(getNativeOrThrow()->bandEntriesPerLUT);
+
+        numBytes += numLUTs * numEntriesPerLUT;
+    }
+
+    return numBytes;
+}
+}

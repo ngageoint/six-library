@@ -23,11 +23,13 @@
 #ifndef __NITF_FILESECURITY_HPP__
 #define __NITF_FILESECURITY_HPP__
 
-#include "nitf/FileSecurity.h"
-#include "nitf/System.hpp"
-#include "nitf/Field.hpp"
-#include "nitf/Object.hpp"
+#include <stddef.h>
 #include <string>
+
+#include <nitf/FileSecurity.h>
+#include <nitf/System.hpp>
+#include <nitf/Field.hpp>
+#include <nitf/Object.hpp>
 
 /*!
  *  \file FileSecurity.hpp
@@ -47,6 +49,9 @@ namespace nitf
 DECLARE_CLASS(FileSecurity)
 {
 public:
+    //! The number of bytes this section takes up on disk
+    static const size_t NUM_BYTES;
+
     //! Copy constructor
     FileSecurity(const FileSecurity & x);
 

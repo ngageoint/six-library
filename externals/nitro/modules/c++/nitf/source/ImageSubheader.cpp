@@ -22,8 +22,8 @@
 
 #include "nitf/ImageSubheader.hpp"
 
-using namespace nitf;
-
+namespace nitf
+{
 ImageSubheader::ImageSubheader(const ImageSubheader & x)
 {
     setNative(x.getNative());
@@ -63,19 +63,20 @@ nitf::ImageSubheader ImageSubheader::clone() throw(nitf::NITFException)
 ImageSubheader::~ImageSubheader(){}
 
 
-void ImageSubheader::setPixelInformation(std::string pvtype,
+void ImageSubheader::setPixelInformation(const std::string& pvtype,
                          nitf::Uint32 nbpp,
                          nitf::Uint32 abpp,
-                         std::string justification,
-                         std::string irep, std::string icat,
-                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
+                         const std::string& justification,
+                         const std::string& irep,
+                         const std::string& icat,
+                         const std::vector<nitf::BandInfo>& bands)
 {
-    nitf::Uint32 bandCount = bands.size();
+    nitf::Uint32 bandCount = static_cast<nitf::Uint32>(bands.size());
     nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
             sizeof(nitf_BandInfo*) * bandCount);
     if (!bandInfo)
     {
-        throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
+        throw nitf::NITFException(Ctxt("Out of Memory"));
     }
 
     for (nitf::Uint32 i = 0; i < bandCount; i++)
@@ -90,19 +91,6 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
         icat.c_str(), bandCount, bandInfo, &error);
     if (!x)
         throw nitf::NITFException(&error);
-}
-
-
-void ImageSubheader::setPixelInformation(std::string pvtype,
-                         nitf::Uint32 nbpp,
-                         nitf::Uint32 abpp,
-                         std::string justification,
-                         std::string irep, std::string icat,
-                         nitf::Uint32 bandCount,
-                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
-{
-    return setPixelInformation(pvtype, nbpp, abpp, justification, irep, icat,
-            bands);
 }
 
 void ImageSubheader::setBlocking(nitf::Uint32 numRows,
@@ -337,7 +325,13 @@ nitf::Field ImageSubheader::getNumMultispectralImageBands()
     return nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
 }
 
-nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band) throw(nitf::NITFException)
+nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band)
+{
+    return nitf::BandInfo(nitf_ImageSubheader_getBandInfo(
+        getNativeOrThrow(), band, &error));
+}
+
+nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band) const
 {
     return nitf::BandInfo(nitf_ImageSubheader_getBandInfo(
         getNativeOrThrow(), band, &error));
@@ -456,4 +450,82 @@ void ImageSubheader::setExtendedSection(nitf::Extensions value)
     //have the library manage the "new" one
     getNativeOrThrow()->extendedSection = value.getNative();
     value.setManaged(true);
+}
+
+size_t ImageSubheader::getNumBytes() const
+{
+    size_t numBytes =
+            NITF_IM_SZ +
+            NITF_IID1_SZ +
+            NITF_IDATIM_SZ +
+            NITF_TGTID_SZ +
+            NITF_IID2_SZ +
+            NITF_ISCLAS_SZ +
+            FileSecurity::NUM_BYTES +
+            1 + // ENCRYP
+            NITF_ISORCE_SZ +
+            NITF_NROWS_SZ +
+            NITF_NCOLS_SZ +
+            NITF_PVTYPE_SZ +
+            NITF_IREP_SZ +
+            NITF_ICAT_SZ +
+            NITF_ABPP_SZ +
+            NITF_PJUST_SZ +
+            NITF_ICORDS_SZ +
+            NITF_IGEOLO_SZ +
+            NITF_NICOM_SZ +
+            getNumImageComments() * NITF_ICOM_SZ +
+            NITF_IC_SZ;
+
+    const std::string imageCompression = getImageCompression();
+    if (imageCompression != "NC" && imageCompression != "NM")
+    {
+        numBytes += NITF_COMRAT_SZ;
+    }
+
+    numBytes += NITF_NBANDS_SZ;
+
+    size_t numBands = nitf::Field(getNativeOrThrow()->numImageBands);
+    if (numBands == 0)
+    {
+        numBytes += NITF_XBANDS_SZ;
+        numBands = nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
+    }
+
+    numBytes +=
+            NITF_ISYNC_SZ +
+            NITF_IMODE_SZ +
+            NITF_NBPR_SZ  +
+            NITF_NBPC_SZ  +
+            NITF_NPPBH_SZ +
+            NITF_NPPBV_SZ +
+            NITF_NBPP_SZ  +
+            NITF_IDLVL_SZ +
+            NITF_IALVL_SZ +
+            NITF_ILOC_SZ  +
+            NITF_IMAG_SZ  +
+            NITF_UDIDL_SZ;
+
+    // TODO: Need to handle this being set to the TRE_OVERFLOW value and
+    //       handle UDOFL and UDID
+    if (getUserDefinedImageDataLength() > 0)
+    {
+        throw nitf::NITFException(Ctxt("Not set up to handle user-defined data"));
+    }
+
+    // TODO: Need to handle this being set to the TRE_OVERFLOW value and
+    //       handle IXSOFL and IXSHD
+    if (getExtendedHeaderLength() > 0)
+    {
+        throw nitf::NITFException(Ctxt("Not set up to handle extended header"));
+    }
+
+    // TODO: Need to handle NITF image data mask table (Table A-3(A) from 2500C)
+    if (str::contains(imageCompression, "M"))
+    {
+        throw nitf::NITFException(Ctxt("Not set up to handle blocking"));
+    }
+
+    return numBytes;
+}
 }

@@ -81,28 +81,13 @@ public:
      *  \param bandCount  Number of bands
      *  \param bands  Band information object list
      */
-    void setPixelInformation(std::string pvtype,
+    void setPixelInformation(const std::string& pvtype,
                              nitf::Uint32 nbpp,
                              nitf::Uint32 abpp,
-                             std::string justification,
-                             std::string irep, std::string icat,
-                             std::vector<nitf::BandInfo>& bands)
-        throw(nitf::NITFException);
-
-
-    /*!
-     *  @deprecated - here for backwards compatibility
-     *  bandCount WILL get ignored
-     */
-    void setPixelInformation(std::string pvtype,
-                             nitf::Uint32 nbpp,
-                             nitf::Uint32 abpp,
-                             std::string justification,
-                             std::string irep, std::string icat,
-                             nitf::Uint32 bandCount,
-                             std::vector<nitf::BandInfo>& bands)
-        throw(nitf::NITFException);
-
+                             const std::string& justification,
+                             const std::string& irep,
+                             const std::string& icat,
+                             const std::vector<nitf::BandInfo>& bands);
 
     /*!
      *  This function allows the user to set the corner coordinates from a
@@ -305,7 +290,7 @@ public:
     nitf::Field getNumMultispectralImageBands();
 
     //! Get the bandInfo
-    nitf::BandInfo getBandInfo(nitf::Uint32 band) throw(nitf::NITFException);
+    nitf::BandInfo getBandInfo(nitf::Uint32 band);
 
     //! Get the imageSyncCode
     nitf::Field getImageSyncCode();
@@ -364,8 +349,36 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    /*!
+     * \return The size in bytes of the image subheader
+     */
+    size_t getNumBytes() const;
+
 private:
-    nitf_Error error;
+    nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band) const;
+
+    size_t getNumImageComments() const
+    {
+        return nitf::Field(getNativeOrThrow()->numImageComments);
+    }
+
+    std::string getImageCompression() const
+    {
+        return nitf::Field(getNativeOrThrow()->imageCompression);
+    }
+
+    size_t getUserDefinedImageDataLength() const
+    {
+        return nitf::Field(getNativeOrThrow()->userDefinedImageDataLength);
+    }
+
+    size_t getExtendedHeaderLength() const
+    {
+        return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
+    }
+
+private:
+    mutable nitf_Error error;
 };
 
 }
