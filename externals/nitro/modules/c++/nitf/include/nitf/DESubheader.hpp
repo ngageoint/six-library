@@ -109,6 +109,22 @@ public:
     //! Set the userDefinedSection
     void setUserDefinedSection(nitf::Extensions value);
 
+    /*!
+     * \return The size in bytes of the data extension subheader
+     */
+    size_t getNumBytes() const;
+
+private:
+    std::string getTypeID() const
+    {
+        return nitf::Field(getNativeOrThrow()->typeID).toString();
+    }
+
+    size_t getSubheaderFieldsLength() const
+    {
+        return nitf::Field(getNativeOrThrow()->subheaderFieldsLength);
+    }
+
 private:
     nitf_Error error;
 };

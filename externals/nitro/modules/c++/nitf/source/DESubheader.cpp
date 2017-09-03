@@ -158,3 +158,24 @@ void DESubheader::setUserDefinedSection(nitf::Extensions value)
     getNativeOrThrow()->userDefinedSection = value.getNative();
     value.setManaged(true);
 }
+
+size_t DESubheader::getNumBytes() const
+{
+    size_t numBytes =
+            NITF_DE_SZ +
+            NITF_DESTAG_SZ +
+            NITF_DESVER_SZ +
+            NITF_DESCLAS_SZ +
+            FileSecurity::NUM_BYTES;
+
+    if (getTypeID() == "TRE_OVERFLOW")
+    {
+        numBytes += NITF_DESOFLW_SZ + NITF_DESITEM_SZ;
+    }
+
+    numBytes +=
+            NITF_DESSHL_SZ +
+            getSubheaderFieldsLength();
+
+    return numBytes;
+}
