@@ -23,15 +23,17 @@
 #ifndef __NITF_FIELD_HPP__
 #define __NITF_FIELD_HPP__
 
-#include "nitf/Field.h"
-#include "nitf/System.hpp"
-#include "nitf/NITFException.hpp"
-#include "nitf/Object.hpp"
-#include "nitf/HashTable.hpp"
-#include "nitf/List.hpp"
-#include "nitf/DateTime.hpp"
-#include <import/str.h>
 #include <string>
+#include <limits>
+
+#include <import/str.h>
+#include <nitf/Field.h>
+#include <nitf/System.hpp>
+#include <nitf/NITFException.hpp>
+#include <nitf/Object.hpp>
+#include <nitf/HashTable.hpp>
+#include <nitf/List.hpp>
+#include <nitf/DateTime.hpp>
 
 /*!
  *  \file Field.hpp
@@ -40,6 +42,37 @@
 
 namespace nitf
 {
+namespace detail
+{
+// Some template metaprogramming to allow us to provide a templated
+// operator T() below - this'll get us the right numeric type and then we
+// have an overloading for std::string below
+// Note that this has to be at the namespace level - we can't define this class
+// inside Field due to the explicit specializations
+template <bool IsIntegerT, bool IsSignedT>
+struct GetConvType
+{
+};
+
+template <>
+struct GetConvType<true, true>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_INT;
+};
+
+template <>
+struct GetConvType<true, false>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_UINT;
+};
+
+template <bool IsSignedT>
+struct GetConvType<false, IsSignedT>
+{
+    static const nitf_ConvType CONV_TYPE = NITF_CONV_REAL;
+};
+}
+
 /*!
  *  \class Field
  *  \brief  The C++ wrapper for the nitf_Field
@@ -49,7 +82,6 @@ namespace nitf
  */
 class Field : public nitf::Object<nitf_Field>
 {
-
 public:
 enum FieldType
     {
@@ -318,76 +350,19 @@ enum FieldType
         field->resizable = resizable;
     }
 
-    operator nitf::Uint8() const
+    //! Returns the field as any numeric type T
+    template <typename T>
+    operator T() const
     {
-        nitf::Uint8 data;
-        get(&data, NITF_CONV_UINT, sizeof(nitf::Uint8));
+        T data;
+        get(&data,
+            detail::GetConvType<std::numeric_limits<T>::is_integer,
+                                std::numeric_limits<T>::is_signed>::CONV_TYPE,
+            sizeof(T));
         return data;
     }
 
-    operator nitf::Uint16() const
-    {
-        nitf::Uint16 data;
-        get(&data, NITF_CONV_UINT, sizeof(nitf::Uint16));
-        return data;
-    }
-
-    operator nitf::Uint32() const
-    {
-        nitf::Uint32 data;
-        get(&data, NITF_CONV_UINT, sizeof(nitf::Uint32));
-        return data;
-    }
-
-    operator nitf::Uint64() const
-    {
-        nitf::Uint64 data;
-        get(&data, NITF_CONV_UINT, sizeof(nitf::Uint64));
-        return data;
-    }
-
-    operator nitf::Int8() const
-    {
-        nitf::Int8 data;
-        get(&data, NITF_CONV_INT, sizeof(nitf::Int8));
-        return data;
-    }
-
-    operator nitf::Int16() const
-    {
-        nitf::Int16 data;
-        get(&data, NITF_CONV_INT, sizeof(nitf::Int16));
-        return data;
-    }
-
-    operator nitf::Int32() const
-    {
-        nitf::Int32 data;
-        get(&data, NITF_CONV_INT, sizeof(nitf::Int32));
-        return data;
-    }
-
-    operator nitf::Int64() const
-    {
-        nitf::Int64 data;
-        get(&data, NITF_CONV_INT, sizeof(nitf::Int64));
-        return data;
-    }
-
-    operator float() const
-    {
-        float data;
-        get(&data, NITF_CONV_REAL, sizeof(float));
-        return data;
-    }
-
-    operator double() const
-    {
-        double data;
-        get(&data, NITF_CONV_REAL, sizeof(double));
-        return data;
-    }
-
+    //! Returns the field as a string
     operator std::string() const
     {
         return toString();
