@@ -37,10 +37,17 @@ bool ThreadPlanner::getThreadInfo(size_t threadNum,
 
 size_t ThreadPlanner::getNumThreadsThatWillBeUsed() const
 {
-    const size_t numThreads =
-            (mNumElements / mNumElementsPerThread) +
-            (mNumElements % mNumElementsPerThread != 0);
+    if (mNumElementsPerThread == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        const size_t numThreads =
+                (mNumElements / mNumElementsPerThread) +
+                (mNumElements % mNumElementsPerThread != 0);
 
-    return numThreads;
+        return numThreads;
+    }
 }
 }
