@@ -202,6 +202,15 @@ public:
      */
     void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
+    // Initialize must be called first!
+    void getFileLayout(const std::vector<std::string>& schemaPaths,
+                       std::vector<sys::byte>& fileHeader,
+                       std::vector<std::vector<sys::byte> >& imageSubheaders,
+                       std::vector<sys::byte>& desSubheaderAndData,
+                       std::vector<size_t>& imageSubheaderFileOffsets,
+                       size_t& desSubheaderFileOffset,
+                       size_t& fileNumBytes) const;
+
 protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;

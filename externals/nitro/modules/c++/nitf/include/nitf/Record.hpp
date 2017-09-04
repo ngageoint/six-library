@@ -155,6 +155,9 @@ public:
     //! Move the RE segment from the oldIndex to the newIndex
     void moveReservedExtensionSegment(nitf::Uint32 oldIndex, int newIndex = -1);
 
+    // Usually this is done for you automatically
+    void setComplexityLevelIfUnset();
+
 private:
     mutable nitf_Error error;
 };

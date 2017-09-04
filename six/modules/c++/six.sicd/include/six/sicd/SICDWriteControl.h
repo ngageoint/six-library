@@ -106,9 +106,9 @@ public:
     void close();
 
 private:
-    void setComplexityLevelIfRequired();
-
     void writeHeaders();
+
+    void write(const std::vector<sys::byte>& data);
 
 private:
     // TODO: You probably want to use a buffered IO for the initial small

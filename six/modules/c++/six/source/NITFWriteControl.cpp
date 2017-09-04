@@ -23,6 +23,8 @@
 #include <sstream>
 
 #include <mem/ScopedArray.h>
+#include <io/ByteStream.h>
+#include <nitf/IOStreamWriter.hpp>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 
@@ -81,6 +83,18 @@ public:
 private:
     const six::Legend& mLegend;
 };
+
+void copyFromStreamAndClear(io::ByteStream& stream,
+                            std::vector<sys::byte>& rawBytes)
+{
+    rawBytes.resize(stream.getSize());
+    if (!rawBytes.empty())
+    {
+        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+    }
+
+    stream.clear();
+}
 }
 
 namespace six
@@ -163,8 +177,14 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
             Data* const ith = mContainer->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                nitf::Uint32 numRowsPerBlock = std::min((size_t)optNumRowsPerBlock, ith->getNumRows());
-                nitf::Uint32 numColsPerBlock = std::min((size_t)optNumColsPerBlock, ith->getNumCols());
+                const nitf::Uint32 numRowsPerBlock = std::min(
+                        optNumRowsPerBlock,
+                        static_cast<nitf::Uint32>(ith->getNumRows()));
+
+                const nitf::Uint32 numColsPerBlock = std::min(
+                        optNumColsPerBlock,
+                        static_cast<nitf::Uint32>(ith->getNumCols()));
+
                 mem::SharedPtr<NITFImageInfo>
                     info(new NITFImageInfo(ith,
                                            maxRows,
@@ -1149,5 +1169,143 @@ void NITFWriteControl::addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> segm
     }
 
     mSegmentWriters.push_back(segmentWriter);
+}
+
+void NITFWriteControl::getFileLayout(
+        const std::vector<std::string>& schemaPaths,
+        std::vector<sys::byte>& fileHeader,
+        std::vector<std::vector<sys::byte> >& imageSubheaders,
+        std::vector<sys::byte>& desSubheaderAndData,
+        std::vector<size_t>& imageSubheaderFileOffsets,
+        size_t& desSubheaderFileOffset,
+        size_t& fileNumBytes) const
+{
+    // TODO: Implement for SIDD too
+    if (mContainer->getNumData() != 1 ||
+        mContainer->getData(0)->getDataType() != DataType::COMPLEX)
+    {
+        throw except::NotImplementedException(Ctxt(
+                "Only SICD is supported currently"));
+    }
+
+    mem::SharedPtr<io::ByteStream> byteStream(new io::ByteStream());
+
+    nitf::IOStreamWriter io(byteStream);
+
+    // Don't use the member variables here just to make sure we don't corrupt
+    // anything since the methods are non-const
+    nitf::Writer writer;
+    nitf::Record record = mRecord.clone();
+    writer.prepareIO(io, record);
+
+    //--------------------------------------------------------------------------
+    // Write image subheaders
+    //--------------------------------------------------------------------------
+    const size_t numImages = record.getNumImages();
+    imageSubheaders.resize(numImages);
+    std::vector<nitf::Off> imageDataLens(numImages);
+    size_t imageSegmentsTotalNumBytes(0);
+
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment imageSegment = record.getImages()[ii];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+        nitf::Off comratOff(0);
+        writer.writeImageSubheader(subheader,
+                                   record.getVersion(),
+                                   comratOff);
+        copyFromStreamAndClear(*byteStream, imageSubheaders[ii]);
+
+        // TODO: This will be more complicated when handling blocking for
+        //       SIDD as you will have some pad
+        // TODO: Would be nice if ImageSubheader had a method to compute this
+        //       for you
+        const size_t numRows(subheader.getNumRows());
+        const size_t numCols(subheader.getNumCols());
+        const size_t numBands = subheader.getNumImageBands();
+        const size_t numBitsPerPixel(subheader.getNumBitsPerPixel());
+        const size_t numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
+        const size_t numBytes = numRows * numCols * numBands * numBytesPerPixel;
+        imageDataLens[ii] = numBytes;
+
+        imageSegmentsTotalNumBytes +=
+                imageSubheaders[ii].size() + imageDataLens[ii];
+    }
+
+    //--------------------------------------------------------------------------
+    // Write DES subheader
+    //--------------------------------------------------------------------------
+    nitf::DESegment deSegment = record.getDataExtensions()[0];
+    nitf::DESubheader subheader = deSegment.getSubheader();
+    nitf::Uint32 userSublen;
+    writer.writeDESubheader(subheader, userSublen, record.getVersion());
+    const size_t desSubheaderLen = byteStream->getSize();
+
+    // Write XML
+    const std::string desStr = six::toValidXMLString(mContainer->getData(0),
+                                                     schemaPaths,
+                                                     mLog,
+                                                     mXMLRegistry);
+    byteStream->write(desStr.c_str(), desStr.length());
+    copyFromStreamAndClear(*byteStream, desSubheaderAndData);
+
+    //--------------------------------------------------------------------------
+    // Write the file header
+    //--------------------------------------------------------------------------
+
+    // This initial write won't set a number of the lengths, so we'll seek
+    // around to set those ourselves
+    nitf_Off fileLenOff;
+    nitf_Uint32 hdrLen;
+    record.setComplexityLevelIfUnset();
+    writer.writeHeader(fileLenOff, hdrLen);
+    const size_t fileHeaderNumBytes = byteStream->getSize();
+
+    // Overall file length and header length
+    fileNumBytes =
+            fileHeaderNumBytes + imageSegmentsTotalNumBytes +
+            desSubheaderAndData.size();
+
+    byteStream->seek(fileLenOff, io::Seekable::START);
+    writer.writeInt64Field(fileNumBytes, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
+    writer.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
+
+    // Image segments
+    byteStream->seek(NITF_NUMI_SZ, io::Seekable::CURRENT);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        writer.writeInt64Field(imageSubheaders[ii].size(), NITF_LISH_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+
+        writer.writeInt64Field(imageDataLens[ii], NITF_LI_SZ, '0',
+                                NITF_WRITER_FILL_LEFT);
+    }
+
+    // Seek past all the 3 byte lengths for the various other types that we
+    // don't have in our file (graphics, NUMX, text, plus the number of DESs
+    // that we've already written to the file anyhow)
+    byteStream->seek(NITF_NUMS_SZ + NITF_NUMX_SZ + NITF_NUMT_SZ + NITF_NUMDES_SZ,
+                     io::Seekable::CURRENT);
+
+    // Data extension segment
+    writer.writeInt64Field(desSubheaderLen, NITF_LDSH_SZ, '0',
+                           NITF_WRITER_FILL_LEFT);
+
+    writer.writeInt64Field(desStr.length(), NITF_LD_SZ, '0',
+                           NITF_WRITER_FILL_LEFT);
+
+    copyFromStreamAndClear(*byteStream, fileHeader);
+
+    // Figure out where the image subheader offsets are
+    size_t offset = fileHeader.size();
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+         imageSubheaderFileOffsets[ii] = offset;
+         offset += imageDataLens[ii];
+    }
+
+    // DES is right after that
+    desSubheaderFileOffset = offset;
 }
 }

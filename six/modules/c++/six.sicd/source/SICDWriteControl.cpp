@@ -34,28 +34,6 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 {
 }
 
-void SICDWriteControl::setComplexityLevelIfRequired()
-{
-    // Fill out the complexity level if they didn't set it
-    char* const clevelRaw =
-            mRecord.getHeader().getComplianceLevel().getRawData();
-
-    if (!strncmp(clevelRaw, "00", 2))
-    {
-        nitf_Error error;
-        const NITF_CLEVEL clevel =
-            nitf_ComplexityLevel_measure(mRecord.getNativeOrThrow(),
-                                         &error);
-
-        if (clevel == NITF_CLEVEL_CHECK_FAILED)
-        {
-            throw nitf::NITFException(&error);
-        }
-
-        nitf_ComplexityLevel_toString(clevel, clevelRaw);
-    }
-}
-
 void SICDWriteControl::initialize(const ComplexData& data)
 {
     mem::SharedPtr<Container> container(new Container(
@@ -67,14 +45,51 @@ void SICDWriteControl::initialize(const ComplexData& data)
     initialize(container);
 }
 
+void SICDWriteControl::write(const std::vector<sys::byte>& data)
+{
+    if (!data.empty())
+    {
+        mIO->write(&data[0], data.size());
+    }
+}
+
 void SICDWriteControl::writeHeaders()
 {
     mWriter.prepareIO(*mIO, mRecord);
 
+    std::vector<sys::byte> fileHeader;
+    std::vector<std::vector<sys::byte> > imageSubheaders;
+    std::vector<sys::byte> desSubheaderAndData;
+    std::vector<size_t> imageSubheaderFileOffsets;
+    size_t desSubheaderFileOffset;
+    size_t fileNumBytes;
+    getFileLayout(mSchemaPaths,
+                  fileHeader,
+                  imageSubheaders,
+                  desSubheaderAndData,
+                  imageSubheaderFileOffsets,
+                  desSubheaderFileOffset,
+                  fileNumBytes);
+
+    // Write the file header
+    write(fileHeader);
+
+    // Write image subheaders
+    for (size_t ii = 0; ii < imageSubheaders.size(); ++ii)
+    {
+        mIO->seek(imageSubheaderFileOffsets[ii], NITF_SEEK_SET);
+        write(imageSubheaders[ii]);
+    }
+
+    // Write DES subheader and data (i.e. XML)
+    mIO->seek(desSubheaderFileOffset, NITF_SEEK_SET);
+    write(desSubheaderAndData);
+
+    /*
     // Write the file header
     nitf_Off fileLenOff;
     nitf_Uint32 hdrLen;
-    setComplexityLevelIfRequired();
+    mRecord.setComplexityLevelIfUnset();
     mWriter.writeHeader(fileLenOff, hdrLen);
 
     // Write image subheaders
@@ -174,6 +189,7 @@ void SICDWriteControl::writeHeaders()
         mWriter.writeInt64Field(deDataLens[ii], NITF_LD_SZ, '0',
                                 NITF_WRITER_FILL_LEFT);
     }
+    */
 }
 
 void SICDWriteControl::save(void* imageData,
