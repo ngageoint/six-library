@@ -1176,9 +1176,9 @@ void NITFWriteControl::getFileLayout(
         std::vector<sys::byte>& fileHeader,
         std::vector<std::vector<sys::byte> >& imageSubheaders,
         std::vector<sys::byte>& desSubheaderAndData,
-        std::vector<size_t>& imageSubheaderFileOffsets,
-        size_t& desSubheaderFileOffset,
-        size_t& fileNumBytes) const
+        std::vector<nitf::Off>& imageSubheaderFileOffsets,
+        nitf::Off& desSubheaderFileOffset,
+        nitf::Off& fileNumBytes) const
 {
     // TODO: Implement for SIDD too
     if (mContainer->getNumData() != 1 ||
@@ -1204,7 +1204,7 @@ void NITFWriteControl::getFileLayout(
     const size_t numImages = record.getNumImages();
     imageSubheaders.resize(numImages);
     std::vector<nitf::Off> imageDataLens(numImages);
-    size_t imageSegmentsTotalNumBytes(0);
+    nitf::Off imageSegmentsTotalNumBytes(0);
 
     for (size_t ii = 0; ii < numImages; ++ii)
     {
@@ -1240,7 +1240,7 @@ void NITFWriteControl::getFileLayout(
     nitf::DESubheader subheader = deSegment.getSubheader();
     nitf::Uint32 userSublen;
     writer.writeDESubheader(subheader, userSublen, record.getVersion());
-    const size_t desSubheaderLen = byteStream->getSize();
+    const nitf::Off desSubheaderLen = byteStream->getSize();
 
     // Write XML
     const std::string desStr = six::toValidXMLString(mContainer->getData(0),
@@ -1260,7 +1260,7 @@ void NITFWriteControl::getFileLayout(
     nitf_Uint32 hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
-    const size_t fileHeaderNumBytes = byteStream->getSize();
+    const nitf::Off fileHeaderNumBytes = byteStream->getSize();
 
     // Overall file length and header length
     fileNumBytes =
@@ -1299,11 +1299,12 @@ void NITFWriteControl::getFileLayout(
 
     // Figure out where the image subheader offsets are
     imageSubheaderFileOffsets.resize(numImages);
-    size_t offset = fileHeader.size();
+    nitf::Off offset = fileHeader.size();
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          imageSubheaderFileOffsets[ii] = offset;
-         offset += imageSubheaders[ii].size() + imageDataLens[ii];
+         offset += static_cast<nitf::Off>(imageSubheaders[ii].size()) +
+                 imageDataLens[ii];
     }
 
     // DES is right after that

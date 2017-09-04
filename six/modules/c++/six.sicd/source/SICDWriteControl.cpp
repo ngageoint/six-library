@@ -60,9 +60,9 @@ void SICDWriteControl::writeHeaders()
     std::vector<sys::byte> fileHeader;
     std::vector<std::vector<sys::byte> > imageSubheaders;
     std::vector<sys::byte> desSubheaderAndData;
-    std::vector<size_t> imageSubheaderFileOffsets;
-    size_t desSubheaderFileOffset;
-    size_t fileNumBytes;
+    std::vector<nitf::Off> imageSubheaderFileOffsets;
+    nitf::Off desSubheaderFileOffset;
+    nitf::Off fileNumBytes;
     getFileLayout(mSchemaPaths,
                   fileHeader,
                   imageSubheaders,
