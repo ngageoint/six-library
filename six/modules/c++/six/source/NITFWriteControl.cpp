@@ -1290,7 +1290,7 @@ void NITFWriteControl::getFileLayout(
 
     // Data extension segment
     writer.writeInt64Field(desSubheaderLen, NITF_LDSH_SZ, '0',
-                           NITF_WRITER_FILL_LEFT);
+                         NITF_WRITER_FILL_LEFT);
 
     writer.writeInt64Field(desStr.length(), NITF_LD_SZ, '0',
                            NITF_WRITER_FILL_LEFT);
@@ -1298,11 +1298,12 @@ void NITFWriteControl::getFileLayout(
     copyFromStreamAndClear(*byteStream, fileHeader);
 
     // Figure out where the image subheader offsets are
+    imageSubheaderFileOffsets.resize(numImages);
     size_t offset = fileHeader.size();
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          imageSubheaderFileOffsets[ii] = offset;
-         offset += imageDataLens[ii];
+         offset += imageSubheaders[ii].size() + imageDataLens[ii];
     }
 
     // DES is right after that

@@ -75,121 +75,17 @@ void SICDWriteControl::writeHeaders()
     write(fileHeader);
 
     // Write image subheaders
+    mImageDataStart.resize(imageSubheaders.size());
     for (size_t ii = 0; ii < imageSubheaders.size(); ++ii)
     {
         mIO->seek(imageSubheaderFileOffsets[ii], NITF_SEEK_SET);
         write(imageSubheaders[ii]);
+        mImageDataStart[ii] = mIO->tell();
     }
 
     // Write DES subheader and data (i.e. XML)
     mIO->seek(desSubheaderFileOffset, NITF_SEEK_SET);
     write(desSubheaderAndData);
-
-    /*
-    // Write the file header
-    nitf_Off fileLenOff;
-    nitf_Uint32 hdrLen;
-    mRecord.setComplexityLevelIfUnset();
-    mWriter.writeHeader(fileLenOff, hdrLen);
-
-    // Write image subheaders
-    const size_t numImages = mRecord.getNumImages();
-    std::vector<nitf::Off> imageSubLens(numImages);
-    std::vector<nitf::Off> imageDataLens(numImages);
-    mImageDataStart.resize(numImages);
-
-    size_t numBands = 0;
-    size_t numBytesPerPixel = 0;
-    for (size_t ii = 0; ii < numImages; ++ii)
-    {
-        nitf::ImageSegment imageSegment = mRecord.getImages()[ii];
-        nitf::ImageSubheader subheader = imageSegment.getSubheader();
-
-        const nitf::Off start = mIO->tell();
-        nitf::Off comratOff(0);
-        mWriter.writeImageSubheader(subheader,
-                                    mRecord.getVersion(),
-                                    comratOff);
-        mImageDataStart[ii] = mIO->tell();
-        imageSubLens[ii] = mImageDataStart[ii] - start;
-
-        // Seek past the pixel data
-        // TODO: This will be more complicated when handling blocking for
-        //       SIDD as you will have some pad
-        // TODO: Would be nice if ImageSubheader had a method to compute this
-        //       for you
-        const size_t numRows(subheader.getNumRows());
-        const size_t numCols(subheader.getNumCols());
-        numBands = subheader.getNumImageBands();
-        const size_t numBitsPerPixel(subheader.getNumBitsPerPixel());
-        numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
-        const size_t numBytes = numRows * numCols * numBands * numBytesPerPixel;
-        imageDataLens[ii] = numBytes;
-        mIO->seek(numBytes, NITF_SEEK_CUR);
-    }
-
-    // Write DE subheader and data
-    const size_t numDEs = mRecord.getNumDataExtensions();
-    std::vector<nitf::Off> deSubLens(numDEs);
-    std::vector<nitf::Off> deDataLens(numDEs);
-
-    for (size_t ii = 0; ii < numDEs; ++ii)
-    {
-        nitf::DESegment deSegment = mRecord.getDataExtensions()[ii];
-        nitf::DESubheader subheader = deSegment.getSubheader();
-
-        // Write subheader
-        const nitf::Off start = mIO->tell();
-        nitf::Uint32 userSublen = 999;
-        mWriter.writeDESubheader(subheader, userSublen, mRecord.getVersion());
-        deSubLens[ii] = mIO->tell() - start;
-
-        // Write XML
-        const Data* data = mContainer->getData(ii);
-
-        const std::string desStr =
-                six::toValidXMLString(data, mSchemaPaths, mLog, mXMLRegistry);
-        deDataLens[ii] = desStr.length();
-        mIO->write(desStr.c_str(), desStr.length());
-    }
-
-    //--------------------------------------------------------------------------
-    // Update file header with real lengths
-    //--------------------------------------------------------------------------
-
-    // Overall file length and header length
-    const nitf::Off fileLen = mIO->tell();
-    mIO->seek(fileLenOff, NITF_SEEK_SET);
-    mWriter.writeInt64Field(fileLen, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
-    mWriter.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
-
-    // Image segments
-    mIO->seek(NITF_NUMI_SZ, NITF_SEEK_CUR);
-    for (size_t ii = 0; ii < numImages; ++ii)
-    {
-        mWriter.writeInt64Field(imageSubLens[ii], NITF_LISH_SZ, '0',
-                                NITF_WRITER_FILL_LEFT);
-
-        mWriter.writeInt64Field(imageDataLens[ii], NITF_LI_SZ, '0',
-                                NITF_WRITER_FILL_LEFT);
-    }
-
-    // Seek past all the 3 byte lengths for the various other types that we
-    // don't have in our file (graphics, NUMX, text, plus the number of DESs
-    // that we've already written to the file anyhow)
-    mIO->seek(NITF_NUMS_SZ + NITF_NUMX_SZ + NITF_NUMT_SZ + NITF_NUMDES_SZ,
-                    NITF_SEEK_CUR);
-
-    // Data extension segments
-    for (size_t ii = 0; ii < numDEs; ++ii)
-    {
-        mWriter.writeInt64Field(deSubLens[ii], NITF_LDSH_SZ, '0',
-                                NITF_WRITER_FILL_LEFT);
-
-        mWriter.writeInt64Field(deDataLens[ii], NITF_LD_SZ, '0',
-                                NITF_WRITER_FILL_LEFT);
-    }
-    */
 }
 
 void SICDWriteControl::save(void* imageData,
