@@ -188,6 +188,42 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    /*!
+     * \return The size in bytes of the file header
+     */
+    size_t getNumBytes() const;
+
+private:
+    size_t getNumImages() const
+    {
+        return nitf::Field(getNativeOrThrow()->numImages);
+    }
+
+    size_t getNumGraphics() const
+    {
+        return nitf::Field(getNativeOrThrow()->numGraphics);
+    }
+
+    size_t getNumLabels() const
+    {
+        return nitf::Field(getNativeOrThrow()->numLabels);
+    }
+
+    size_t getNumTexts() const
+    {
+        return nitf::Field(getNativeOrThrow()->numTexts);
+    }
+
+    size_t getNumDataExtensions() const
+    {
+        return nitf::Field(getNativeOrThrow()->numDataExtensions);
+    }
+
+    size_t getNumReservedExtensions() const
+    {
+        return nitf::Field(getNativeOrThrow()->numReservedExtensions);
+    }
+
 private:
     nitf_Error error;
 };

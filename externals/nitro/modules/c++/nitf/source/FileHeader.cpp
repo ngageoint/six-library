@@ -22,8 +22,8 @@
 
 #include "nitf/FileHeader.hpp"
 
-using namespace nitf;
-
+namespace nitf
+{
 FileHeader::FileHeader(const FileHeader & x)
 {
     setNative(x.getNative());
@@ -307,3 +307,33 @@ void FileHeader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
+size_t FileHeader::getNumBytes() const
+{
+    size_t numBytes =
+            NITF_FHDR_SZ +
+            NITF_FVER_SZ +
+            NITF_CLEVEL_SZ +
+            NITF_STYPE_SZ +
+            NITF_OSTAID_SZ +
+            NITF_FDT_SZ +
+            NITF_FTITLE_SZ +
+            NITF_FSCLAS_SZ +
+            FileSecurity::NUM_BYTES +
+            NITF_FSCOP_SZ +
+            NITF_FSCPYS_SZ +
+            NITF_ENCRYP_SZ +
+            NITF_FBKGC_SZ +
+            NITF_ONAME_SZ +
+            NITF_OPHONE_SZ +
+            NITF_FL_SZ +
+            NITF_HL_SZ;
+
+    // Image segments
+    numBytes += NITF_NUMI_SZ +
+            getNumImages() * (NITF_LISH_SZ + NITF_LI_SZ);
+
+    Finish This (Table A-1 in 2500C)
+
+    return numBytes;
+}
+}
