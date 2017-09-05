@@ -300,14 +300,9 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = fabs((double)degrees);
+    double decimal = (double)degrees;
     decimal += ((double) minutes / 60.0);
     decimal += (seconds / 3600.0);
-
-    if (degrees < 0)
-    {
-        decimal *= -1;
-    }
 
     return decimal;
 }
@@ -368,6 +363,8 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
     if ((degreeOffset == 2 && dir == 'S') || (degreeOffset == 3 && dir == 'W'))
     {
         *degrees *= -1;
+        *minutes *= -1;
+        *seconds *= -1;
     }
 
     return NRT_SUCCESS;
