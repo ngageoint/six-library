@@ -202,6 +202,73 @@ public:
      */
     void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
+    /*!
+     * Provides the contents of all of the NITF headers as well as their offsets
+     * in the file.  Normally you would not need to call this method - the
+     * NITFWriteControl takes care of all low-level NITF details for you.
+     * However, if you are interested in using SIX just to generate the headers
+     * and file information but then perform the writing yourself, you can use
+     * this method and simply write out the raw bytes corresponding to the
+     * various NITF headers
+     *
+     * This method is currently only implemented for SICDs (it will throw for
+     * SIDDs).
+     *
+     * The NITF layout of a SICD is
+     * (lastSeg = imageSubheaderFileOffsets.size() - 1):
+     *
+     * Offset 0
+     * ========
+     * fileHeader
+     *
+     * Offset imageSubheaderFileOffsets[0]
+     * ===================================
+     * imageSubheaders[0]
+     *
+     * Offset imageSubheaderFileOffsets[0] + imageSubheaders[0].size()
+     * ===============================================================
+     * <Raw pixel data for first image segment.  Must be written in Big Endian
+     * format.>
+     *
+     * ...
+     *
+     * Offset imageSubheaderFileOffsets[lastSeg]
+     * ===================================
+     * imageSubheaders[lastSeg]
+     *
+     * Offset imageSubheaderFileOffsets[lastSeg] + imageSubheaders[lastSeg].size()
+     * ===========================================================================
+     * <Raw pixel data for last image segment.  Must be written in Big Endian
+     * format.>
+     *
+     * Offset desSubheaderFileOffset
+     * =============================
+     * desSubheaderAndData
+     *
+     * \param schemaPaths Schema paths
+     * \param[out] fileHeader Raw bytes corresponding to file header
+     * \param[out] imageSubheaders Raw bytes corresponding to each image
+     * subheader
+     * \param[out] desSubheaderAndData Raw bytes corresponding to DES subheader
+     * and data (i.e. XML string)
+     * \param[out] imageSubheaderFileOffsets Offsets in the NITF where each
+     * image subheader should be written
+     * \param[out] desSubheaderFileOffset Offset in the NITF where the DES
+     * subheader should be written
+     * \param[out] fileNumBytes The total number of bytes the NITF will be
+     *
+     * \note initialize() must be called prior to calling this method
+     * \note This method does not currently support TREs or any other content
+     * added to the NITF
+     */
+    void getFileLayout(const std::vector<std::string>& schemaPaths,
+                       std::vector<sys::byte>& fileHeader,
+                       std::vector<std::vector<sys::byte> >& imageSubheaders,
+                       std::vector<sys::byte>& desSubheaderAndData,
+                       std::vector<nitf::Off>& imageSubheaderFileOffsets,
+                       nitf::Off& desSubheaderFileOffset,
+                       nitf::Off& fileNumBytes) const;
+
 protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
