@@ -49,8 +49,10 @@ TEST_CASE(testParseZeroMinutes)
     TEST_ASSERT(fabs(decimal - -.009444) < 1e-6);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
+    (void)argc;
+    (void)argv;
     CHECK(testParseZeroDegrees);
     CHECK(testParseZeroMinutes);
     return 0;
