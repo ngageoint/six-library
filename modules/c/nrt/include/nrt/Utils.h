@@ -99,7 +99,8 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 
 /*!
  *  Convert the geographic coordinates (i.e., DMS) into decimal
- *  degrees as a double.
+ *  degrees as a double. The sign of the value is given by the largest
+ *  nonzero DMS value.
  *
  *  \param degrees geographic degrees
  *  \param minutes geographic minutes
@@ -113,6 +114,9 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
  *  The string will be of the format dddmmss[NSEW] or ddmmss[NSEW]
  *  Blank values are accepted (per NRT 2500C) and converted to 0s.
  *
+ *  The sign of the result will be given by the largest non-zero number.
+ *  All other numbers will be nonnegative.
+ *
  *  Any other string will produce an error object with code
  *  NRT_ERR_INVALID_PARAMETER.
  *
@@ -122,7 +126,7 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
  *  \param seconds [output] The seconds as an integer
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                                                  int *minutes, double *seconds,
                                                  nrt_Error * error);
 

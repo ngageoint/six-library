@@ -314,13 +314,14 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
     return decimal;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                                                  int *minutes, double *seconds,
                                                  nrt_Error * error)
 {
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
+    char* dmsCopy;
 
     char d[4];
     char m[3];
@@ -351,16 +352,18 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    nrt_Utils_replace(dms, ' ', '0');
+    dmsCopy = malloc(strlen(dms) + 1);
+    dmsCopy = strcpy(dmsCopy, dms);
+    nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
     d[degreeOffset] = 0;
-    memcpy(d, dms, degreeOffset);
+    memcpy(d, dmsCopy, degreeOffset);
 
-    memcpy(m, &dms[degreeOffset], 2);
+    memcpy(m, &dmsCopy[degreeOffset], 2);
     m[2] = 0;
 
-    memcpy(s, &dms[degreeOffset + 2], 2);
+    memcpy(s, &dmsCopy[degreeOffset + 2], 2);
     s[2] = 0;
 
     *degrees = NRT_ATO32(d);
@@ -383,6 +386,8 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
         }
         // else everything is 0, so the sign is by default correct
     }
+
+    free(dmsCopy);
 
     return NRT_SUCCESS;
 }
