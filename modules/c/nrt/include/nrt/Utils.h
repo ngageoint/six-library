@@ -33,18 +33,18 @@ NRT_CXX_GUARD
  * \param str   null-terminated string
  * \param max   the maximum # of parts to split into (0 = split all)
  */
-NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
+NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
                                          nrt_Error * error);
 
-NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(const char *str);
 
-NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(const char *str);
 
 /**
  * Returns 1 if the input string is either null, empty (strlen == 0), or
  * if every character is a whitespace char.
  */
-NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isBlank(const char *str);
 
 NRTAPI(void) nrt_Utils_trimString(char *str);
 
@@ -75,12 +75,12 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
  *  IGEOLO itself is very strict about what is allowed
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d, double *decimal,
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 
-NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n);
+NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
 /*!
  *  Convert a double representing decimal degrees into 2 integers,

@@ -23,12 +23,14 @@
 #include "nrt/nrt_config.h"
 #include "nrt/Utils.h"
 
-NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
+NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
                                          nrt_Error * error)
 {
     unsigned int count = 0;
     nrt_List *parts;
-    char *op, *cur, *end;
+    const char *cur;
+    const char* op;
+    const char* end;
     size_t strLen;
 
     parts = nrt_List_construct(error);
@@ -113,9 +115,9 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
     return parts;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str)
+NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(const char *str)
 {
-    char *sp = NULL;
+    const char *sp = NULL;
     if (!str)
         return 0;
     sp = str + strlen(str);
@@ -131,9 +133,9 @@ NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str)
     return 1;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str)
+NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(const char *str)
 {
-    char *sp = NULL;
+    const char *sp = NULL;
     if (!str)
         return 0;
     sp = str + strlen(str);
@@ -149,9 +151,9 @@ NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str)
     return 1;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str)
+NRTAPI(NRT_BOOL) nrt_Utils_isBlank(const char *str)
 {
-    char *sp = NULL;
+    const char *sp = NULL;
     if (!str)
         return 1;
     sp = str + strlen(str);
@@ -221,10 +223,11 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
     base[end - begin + 1] = '\0';
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
+    char* decimalCopy;
     const size_t len = strlen(d);
     const char sign = d[0];
     if (len != 7 && len != 8)
@@ -234,15 +237,18 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
+    decimalCopy = malloc(len + 1);
+    decimalCopy = strcpy(decimalCopy, d);
     /* Now replace all spaces */
-    nrt_Utils_replace(d, ' ', '0');
-    *decimal = atof(&(d[1]));
+    nrt_Utils_replace(decimalCopy, ' ', '0');
+    *decimal = atof(&(decimalCopy[1]));
 
     if (sign == '-')
     {
         *decimal *= -1;
     }
 
+    free(decimalCopy);
     return NRT_SUCCESS;
 }
 
@@ -271,7 +277,7 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
     return millis;
 }
 
-NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n)
+NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n)
 {
     if (n == 0)
         return 0;
@@ -306,7 +312,6 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
             *minutes *= -1;
         }
     }
-
 }
 
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,

@@ -73,6 +73,15 @@ TEST_CASE(testDecimalToDmsNegativeSeconds)
     TEST_ASSERT(fabs(seconds - -34) < 1);
 }
 
+TEST_CASE(testParseDecimal)
+{
+    const char* decimalString = "+12.345";
+    double decimal;
+    nrt_Error error;
+    nrt_Utils_parseDecimalString(decimalString, &decimal, &error);
+    TEST_ASSERT(fabs(decimal - 12.345) < 1e-6);
+}
+
 int main(int argc, char** argv)
 {
     (void)argc;
@@ -81,6 +90,7 @@ int main(int argc, char** argv)
     CHECK(testParseZeroMinutes);
     CHECK(testDecimalToDmsNegativeMinutes);
     CHECK(testDecimalToDmsNegativeSeconds);
+    CHECK(testParseDecimal);
     return 0;
 }
 
