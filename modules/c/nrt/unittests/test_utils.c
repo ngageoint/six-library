@@ -49,12 +49,38 @@ TEST_CASE(testParseZeroMinutes)
     TEST_ASSERT(fabs(decimal - -.009444) < 1e-6);
 }
 
+TEST_CASE(testDecimalToDmsNegativeMinutes)
+{
+    const double decimal = -0.2094444;
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Utils_decimalToGeographic(decimal, &degrees, &minutes, &seconds);
+    TEST_ASSERT(degrees == 0);
+    TEST_ASSERT(minutes == -12);
+    TEST_ASSERT(fabs(seconds - 34) < 1);
+}
+
+TEST_CASE(testDecimalToDmsNegativeSeconds)
+{
+    const double decimal = -0.009444;
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Utils_decimalToGeographic(decimal, &degrees, &minutes, &seconds);
+    TEST_ASSERT(degrees == 0);
+    TEST_ASSERT(minutes == 0);
+    TEST_ASSERT(fabs(seconds - -34) < 1);
+}
+
 int main(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
     CHECK(testParseZeroDegrees);
     CHECK(testParseZeroMinutes);
+    CHECK(testDecimalToDmsNegativeMinutes);
+    CHECK(testDecimalToDmsNegativeSeconds);
     return 0;
 }
 

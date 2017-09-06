@@ -83,8 +83,11 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n);
 
 /*!
- *  Convert a double representing decimal degrees into 3 integers,
- *  one for degrees, one for minutes, and one for seconds.
+ *  Convert a double representing decimal degrees into 2 integers,
+ *  one for degrees, one for minutes, and a double for seconds.
+ *
+ *  The sign of the value is given by the largest
+ *  nonzero DMS value.
  *
  *  The function returns these values through the passed in parameters.
  *  parameters may not be NULL
