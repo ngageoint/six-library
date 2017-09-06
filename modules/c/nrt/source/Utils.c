@@ -238,6 +238,12 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
         return NRT_FAILURE;
     }
     decimalCopy = malloc(len + 1);
+    if (!decimalCopy)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
+                        "Could not allocate %d bytes", len + 1);
+        return NRT_FAILURE;
+    }
     decimalCopy = strcpy(decimalCopy, d);
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
@@ -370,6 +376,12 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
 
     /* Now replace all spaces */
     dmsCopy = malloc(strlen(dms) + 1);
+    if (!dmsCopy)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
+                        "Could not allocate %d bytes.", strlen(dms) + 1);
+        return NRT_FAILURE;
+    }
     dmsCopy = strcpy(dmsCopy, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
