@@ -300,9 +300,16 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = (double)degrees;
-    decimal += ((double) minutes / 60.0);
-    decimal += (seconds / 3600.0);
+    double decimal = fabs((double)degrees);
+    decimal += fabs(((double) minutes / 60.0));
+    decimal += fabs((seconds / 3600.0));
+
+    if ((degrees < 0) ||
+        (degrees == 0 && minutes < 0) ||
+        (degrees == 0 && minutes == 0 && seconds < 0))
+    {
+        decimal *= -1;
+    }
 
     return decimal;
 }
@@ -362,9 +369,19 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
 
     if ((degreeOffset == 2 && dir == 'S') || (degreeOffset == 3 && dir == 'W'))
     {
-        *degrees *= -1;
-        *minutes *= -1;
-        *seconds *= -1;
+        if (*degrees != 0)
+        {
+            *degrees *= -1;
+        }
+        else if (*minutes != 0)
+        {
+            *minutes *= -1;
+        }
+        else if (*seconds != 0)
+        {
+            *seconds *= -1;
+        }
+        // else everything is 0, so the sign is by default correct
     }
 
     return NRT_SUCCESS;
