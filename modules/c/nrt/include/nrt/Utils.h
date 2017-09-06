@@ -70,6 +70,11 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
  *  Take in a decimal degree format string and convert it into
  *  a double.  The string will be of the format +-ddd.dd or +-dd.dd.
  *
+ *  \param d The decimal string to convert
+ *  \param decimal [output] The value of the given string
+ *  \param error Set if there is an error
+ *  \return NITF_SUCCESS or NITF_FAILURE as appropriate
+ *
  *  \todo This function can be expanded to handle arbitrary
  *  size conversions.  It is TBD whether this is desirable, since the
  *  IGEOLO itself is very strict about what is allowed
