@@ -95,7 +95,7 @@ NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
  *  All remaining values should be positive.
  *
  *  The function returns these values through the passed in parameters.
- *  parameters may not be NULL
+ *  Parameters may not be NULL
  *
  *  \param decimal An existing decimal degree
  *  \param degrees [output] The degrees as an integer
@@ -107,8 +107,8 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 
 /*!
  *  Convert the geographic coordinates (i.e., DMS) into decimal
- *  degrees as a double. The sign of the value is given by the largest
- *  nonzero DMS value.
+ *  degrees as a double. The sign of the value is given by the most significant
+ *  nonzero DMS value. All remaining values should be positive.
  *
  *  \param degrees geographic degrees
  *  \param minutes geographic minutes
