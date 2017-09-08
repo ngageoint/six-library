@@ -25,7 +25,7 @@
 
 TEST_CASE(testParseZeroDegrees)
 {
-    char* geoString = "001234S";
+    const char* geoString = "001234S";
     int degrees;
     int minutes;
     double seconds;
@@ -38,7 +38,7 @@ TEST_CASE(testParseZeroDegrees)
 
 TEST_CASE(testParseZeroMinutes)
 {
-    char* geoString = "0000034W";
+    const char* geoString = "0000034W";
     int degrees;
     int minutes;
     double seconds;

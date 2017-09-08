@@ -241,7 +241,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
-                        "Could not allocate %d bytes", len + 1);
+                        "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
     decimalCopy = strcpy(decimalCopy, d);
@@ -323,13 +323,11 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = fabs((double)degrees);
-    decimal += fabs(((double) minutes / 60.0));
-    decimal += fabs((seconds / 3600.0));
+    double decimal = fabs(degrees);
+    decimal += fabs(minutes / 60.0);
+    decimal += fabs(seconds / 3600.0);
 
-    if ((degrees < 0) ||
-        (degrees == 0 && minutes < 0) ||
-        (degrees == 0 && minutes == 0 && seconds < 0))
+    if (degrees < 0 || minutes < 0 || seconds < 0)
     {
         decimal *= -1;
     }
@@ -379,7 +377,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
-                        "Could not allocate %d bytes.", strlen(dms) + 1);
+                        "Could not allocate %zu bytes.", strlen(dms) + 1);
         return NRT_FAILURE;
     }
     dmsCopy = strcpy(dmsCopy, dms);

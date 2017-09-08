@@ -91,8 +91,8 @@ NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
  *  Convert a double representing decimal degrees into 2 integers,
  *  one for degrees, one for minutes, and a double for seconds.
  *
- *  The sign of the value is given by the largest
- *  nonzero DMS value.
+ *  The sign of the value is given by the most significant nonzero DMS value.
+ *  All remaining values should be positive.
  *
  *  The function returns these values through the passed in parameters.
  *  parameters may not be NULL
