@@ -520,6 +520,12 @@ void ComplexXMLParser10x::parseAntennaParamArrayFromXML(
 XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
                                                XMLElem parent) const
 {
+    if (radar->rcvChannels.empty())
+    {
+        throw except::Exception(Ctxt(
+                "RadarCollection.RcvChannels must have at least one element "
+                "for version 1.x"));
+    }
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
     setAttribute(rcvChanXML, "size", str::toString(numChannels));

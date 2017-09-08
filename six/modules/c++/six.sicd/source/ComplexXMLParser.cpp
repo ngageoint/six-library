@@ -834,31 +834,35 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     const RcvChannelProcessed* rcvChanProc,
     XMLElem imageFormationXML) const
 {
-    if (rcvChanProc)
-    {
-        XMLElem rcvChanXML = newElement("RcvChanProc", imageFormationXML);
-        createInt("NumChanProc",
-                  rcvChanProc->numChannelsProcessed,
-                  rcvChanXML);
-        if (!Init::isUndefined(rcvChanProc->prfScaleFactor))
-            createDouble("PRFScaleFactor",
-                         rcvChanProc->prfScaleFactor,
-                         rcvChanXML);
-
-        for (std::vector<int>::const_iterator it =
-                rcvChanProc->channelIndex.begin();
-             it != rcvChanProc->channelIndex.end(); ++it)
-        {
-            createInt("ChanIndex", *it, rcvChanXML);
-        }
-        return rcvChanXML;
-    }
-    else
+    if (!rcvChanProc)
     {
         throw except::Exception(Ctxt(FmtX(
             "[RcvChanProc] is a manditory field in ImageFormation in %s",
             version.c_str())));
     }
+    if (rcvChanProc->channelIndex.empty())
+    {
+        throw except::Exception(Ctxt(
+                "ImageFormation.RcvChanProc must have at least one ChanIndex"));
+    }
+    XMLElem rcvChanXML = newElement("RcvChanProc", imageFormationXML);
+    createInt("NumChanProc",
+              rcvChanProc->numChannelsProcessed,
+              rcvChanXML);
+    if (!Init::isUndefined(rcvChanProc->prfScaleFactor))
+    {
+        createDouble("PRFScaleFactor",
+                rcvChanProc->prfScaleFactor,
+                rcvChanXML);
+    }
+
+    for (std::vector<int>::const_iterator it =
+            rcvChanProc->channelIndex.begin();
+            it != rcvChanProc->channelIndex.end(); ++it)
+    {
+        createInt("ChanIndex", *it, rcvChanXML);
+    }
+    return rcvChanXML;
 }
 
 XMLElem ComplexXMLParser::convertDistortionToXML(
