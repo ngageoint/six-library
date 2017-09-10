@@ -48,6 +48,14 @@ struct NITFSegmentInfo
 
     //! The image segment corner points
     LatLonCorners corners;
+
+    /*!
+     * \return The end row (exclusive) of the image segment
+     */
+    size_t endRow() const
+    {
+        return firstRow + numRows;
+    }
 };
 
 }
