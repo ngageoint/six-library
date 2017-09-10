@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+#include "TestUtilities.h"
+
 #include <import/six.h>
 #include <import/io.h>
 #include <logging/Setup.h>
@@ -36,163 +38,6 @@
 
 namespace
 {
-/*!
- *  This function converts DMS corners into decimal degrees using NITRO,
- *  and then puts them into a lat-lon
- */
-inline
-six::LatLonCorners makeUpCornersFromDMS()
-{
-    int latTopDMS[3] = { 42, 17, 50 };
-    int latBottomDMS[3] = { 42, 15, 14 };
-    int lonEastDMS[3] = { -83, 42, 12 };
-    int lonWestDMS[3] = { -83, 45, 44 };
-
-    const double latTopDecimal =
-        nitf::Utils::geographicToDecimal(latTopDMS[0],
-                                         latTopDMS[1],
-                                         latTopDMS[2]);
-
-    const double latBottomDecimal =
-        nitf::Utils::geographicToDecimal(latBottomDMS[0],
-                                         latBottomDMS[1],
-                                         latBottomDMS[2]);
-
-    const double lonEastDecimal =
-        nitf::Utils::geographicToDecimal(lonEastDMS[0],
-                                         lonEastDMS[1],
-                                         lonEastDMS[2]);
-
-    const double lonWestDecimal =
-        nitf::Utils::geographicToDecimal(lonWestDMS[0],
-                                         lonWestDMS[1],
-                                         lonWestDMS[2]);
-
-    six::LatLonCorners corners;
-    corners.upperLeft = six::LatLon(latTopDecimal, lonWestDecimal);
-    corners.upperRight = six::LatLon(latTopDecimal, lonEastDecimal);
-    corners.lowerRight = six::LatLon(latBottomDecimal, lonEastDecimal);
-    corners.lowerLeft = six::LatLon(latBottomDecimal, lonWestDecimal);
-    return corners;
-}
-
-template <typename DataTypeT>
-struct GetPixelType
-{
-};
-
-template <>
-struct GetPixelType<float>
-{
-    static six::PixelType getPixelType()
-    {
-        return six::PixelType::RE32F_IM32F;
-    }
-};
-
-template <>
-struct GetPixelType<sys::Int16_T>
-{
-    static six::PixelType getPixelType()
-    {
-        return six::PixelType::RE16I_IM16I;
-    }
-};
-
-// Create dummy SICD data
-template <typename DataTypeT>
-std::auto_ptr<six::Data>
-createData(const types::RowCol<size_t>& dims)
-{
-    six::sicd::ComplexData* data(new six::sicd::ComplexData());
-    std::auto_ptr<six::Data> scopedData(data);
-    data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
-    data->setNumRows(dims.row);
-    data->setNumCols(dims.col);
-    data->setName("corename");
-    data->setSource("sensorname");
-    data->collectionInformation->classification.level = "UNCLASSIFIED";
-    data->setCreationTime(six::DateTime());
-    data->setImageCorners(makeUpCornersFromDMS());
-    data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
-    data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
-    data->geoData->scp.llh = six::LatLonAlt(42.2708, -83.7264);
-    data->geoData->scp.ecf =
-            scene::Utilities::latLonToECEF(data->geoData->scp.llh);
-    data->grid->timeCOAPoly = six::Poly2D(0, 0);
-    data->grid->timeCOAPoly[0][0] = 15605743.142846;
-    data->position->arpPoly = six::PolyXYZ(0);
-    data->position->arpPoly[0] = 0.0;
-
-    data->radarCollection->txFrequencyMin = 0.0;
-    data->radarCollection->txFrequencyMax = 0.0;
-    data->radarCollection->txPolarization = six::PolarizationType::OTHER;
-    mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
-            rcvChannel(new six::sicd::ChannelParameters());
-    rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
-    data->radarCollection->rcvChannels.push_back(rcvChannel);
-
-    data->grid->row->sign = six::FFTSign::POS;
-    data->grid->row->unitVector = 0.0;
-    data->grid->row->sampleSpacing = 0;
-    data->grid->row->impulseResponseWidth = 0;
-    data->grid->row->impulseResponseBandwidth = 0;
-    data->grid->row->kCenter = 0;
-    data->grid->row->deltaK1 = 0;
-    data->grid->row->deltaK2 = 0;
-    data->grid->col->sign = six::FFTSign::POS;
-    data->grid->col->unitVector = 0.0;
-    data->grid->col->sampleSpacing = 0;
-    data->grid->col->impulseResponseWidth = 0;
-    data->grid->col->impulseResponseBandwidth = 0;
-    data->grid->col->kCenter = 0;
-    data->grid->col->deltaK1 = 0;
-    data->grid->col->deltaK2 = 0;
-
-    data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
-    data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
-
-    data->pfa.reset(new six::sicd::PFA());
-    data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
-    data->pfa->spatialFrequencyScaleFactorPoly[0] = 42;
-    data->pfa->polarAnglePoly = six::Poly1D(0);
-    data->pfa->polarAnglePoly[0] = 42;
-
-    data->timeline->collectStart = six::DateTime();
-    data->timeline->collectDuration = 1.0;
-    data->imageFormation->txRcvPolarizationProc =
-            six::DualPolarizationType::OTHER;
-    data->imageFormation->tStartProc = 0;
-    data->imageFormation->tEndProc = 0;
-
-    data->scpcoa->scpTime = 15605743.142846;
-    data->scpcoa->slantRange = 0.0;
-    data->scpcoa->groundRange = 0.0;
-    data->scpcoa->dopplerConeAngle = 0.0;
-    data->scpcoa->grazeAngle = 0.0;
-    data->scpcoa->incidenceAngle = 0.0;
-    data->scpcoa->twistAngle = 0.0;
-    data->scpcoa->slopeAngle = 0.0;
-    data->scpcoa->azimAngle = 0.0;
-    data->scpcoa->layoverAngle = 0.0;
-    data->scpcoa->arpPos = 0.0;
-    data->scpcoa->arpVel = 0.0;
-    data->scpcoa->arpAcc = 0.0;
-
-    data->pfa->focusPlaneNormal = 0.0;
-    data->pfa->imagePlaneNormal = 0.0;
-    data->pfa->polarAngleRefTime = 0.0;
-    data->pfa->krg1 = 0;
-    data->pfa->krg2 = 0;
-    data->pfa->kaz1 = 0;
-    data->pfa->kaz2 = 0;
-
-    data->imageFormation->txFrequencyProcMin = 0;
-    data->imageFormation->txFrequencyProcMax = 0;
-
-    return scopedData;
-}
-
 // Grab an AOI out of 'orig' specified by 'offset' and 'dims'
 template <typename T>
 void subsetData(const T* orig,
@@ -211,107 +56,6 @@ void subsetData(const T* orig,
         ::memcpy(outputPtr, origPtr, dims.col * sizeof(T));
     }
 }
-
-// Read in the entire contents of a file into 'contents'
-void readFile(const std::string& pathname,
-              std::vector<sys::byte>& contents)
-{
-    io::FileInputStream inStream(pathname);
-
-    contents.resize(inStream.available());
-
-    const size_t numRead = inStream.read(&contents[0], contents.size());
-    if (numRead != contents.size())
-    {
-        throw except::Exception(Ctxt("Short read"));
-    }
-}
-
-// Note that this will work because SIX is forcing the NITF date/time to match
-// what's in the SICD XML and we're writing the same SICD XML in all our files
-class CompareFiles
-{
-public:
-    CompareFiles(const std::string& lhsPathname)
-    {
-        readFile(lhsPathname, mLHS);
-    }
-
-    bool operator()(const std::string& prefix,
-                    const std::string& rhsPathname) const
-    {
-        readFile(rhsPathname, mRHS);
-
-        if (mLHS == mRHS)
-        {
-            std::cout << prefix << " matches" << std::endl;
-            return true;
-        }
-        else if (mLHS.size() != mRHS.size())
-        {
-            std::cerr << prefix << " DOES NOT MATCH: file sizes are "
-                      << mLHS.size() << " vs. " << mRHS.size() << " bytes"
-                      << std::endl;
-        }
-        else
-        {
-            size_t ii;
-            for (ii = 0; ii < mLHS.size(); ++ii)
-            {
-                if (mLHS[ii] != mRHS[ii])
-                {
-                    break;
-                }
-            }
-
-            std::cerr << prefix << " DOES NOT MATCH at byte " << ii
-                      << std::endl;
-        }
-
-        return false;
-    }
-
-private:
-    std::vector<sys::byte> mLHS;
-    mutable std::vector<sys::byte> mRHS;
-};
-
-// Makes sure a file gets removed
-// Both makes sure we start with a clean slate each time and that there are no
-// leftover files if an exception occurs
-class EnsureFileCleanup
-{
-public:
-    EnsureFileCleanup(const std::string& pathname) :
-        mPathname(pathname)
-    {
-        removeIfExists();
-    }
-
-    ~EnsureFileCleanup()
-    {
-        try
-        {
-            removeIfExists();
-        }
-        catch (...)
-        {
-        }
-    }
-
-private:
-    void removeIfExists()
-    {
-        sys::OS os;
-        if (os.exists(mPathname))
-        {
-            os.remove(mPathname);
-        }
-    }
-
-private:
-    const std::string mPathname;
-};
 
 // Main test class
 template <typename DataTypeT>
