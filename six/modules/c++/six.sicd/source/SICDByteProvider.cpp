@@ -11,7 +11,8 @@ namespace sicd
 {
 SICDByteProvider::SICDByteProvider(
         const ComplexData& data,
-        const std::vector<std::string>& schemaPaths) :
+        const std::vector<std::string>& schemaPaths,
+        size_t maxProductSize) :
     mNumBytesPerRow(data.getNumCols() * data.getNumBytesPerPixel())
 {
     XMLControlRegistry xmlRegistry;
@@ -28,6 +29,14 @@ SICDByteProvider::SICDByteProvider(
 
     NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
+
+    if (maxProductSize != 0)
+    {
+        writer.getOptions().setParameter(
+                six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                maxProductSize);
+    }
+
     writer.initialize(container);
 
     // Now we can get the file headers and offsets we want

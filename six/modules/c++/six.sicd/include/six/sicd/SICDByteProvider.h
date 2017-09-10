@@ -52,9 +52,12 @@ public:
      *
      * \param data Representation of the complex data
      * \param schemPaths Directories or files of schema locations
+     * \param maxProductSize The max number of bytes in an image segment.
+     * By default this is set automatically for you based on NITF file rules.
      */
     SICDByteProvider(const ComplexData& data,
-                     const std::vector<std::string>& schemaPaths);
+                     const std::vector<std::string>& schemaPaths,
+                     size_t maxProductSize = 0);
 
     /*!
      * \return The total number of bytes in the NITF
