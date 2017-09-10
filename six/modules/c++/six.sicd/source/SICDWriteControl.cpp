@@ -68,6 +68,7 @@ void SICDWriteControl::writeHeaders()
                   imageSubheaders,
                   desSubheaderAndData,
                   imageSubheaderFileOffsets,
+                  mImageSegmentInfo,
                   desSubheaderFileOffset,
                   fileNumBytes);
 
@@ -120,17 +121,14 @@ void SICDWriteControl::save(void* imageData,
                       numPixelsTotal);
     }
 
-    const std::vector <NITFSegmentInfo> imageSegments
-                    = mInfos[0]->getImageSegments();
-
     const size_t globalNumCols = data->getNumCols();
     const size_t imageDataEndRow = offset.row + dims.row;
 
-    for (size_t seg = 0; seg < imageSegments.size(); ++seg)
+    for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
         // See if we're in this segment
-        const size_t segStartRow = imageSegments[seg].firstRow;
-        const size_t segEndRow = segStartRow + imageSegments[seg].numRows;
+        const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
+        const size_t segEndRow = mImageSegmentInfo[seg].endRow();
 
         const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
         const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
