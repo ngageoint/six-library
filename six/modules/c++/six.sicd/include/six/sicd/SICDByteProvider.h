@@ -39,14 +39,98 @@ namespace sicd
  * raw bytes provided back will be the entire NITF file.  This abstraction is
  * useful if separate threads, processes, or even machines have only portions of
  * the SICD pixel data and are all trying to write out a single file; in that
- * scenario, this class provides a contiguous chunk of memory corresponding to
- * the caller's AOI, including NITF headers if necessary.  The caller does not
- * need to understand anything about the NITF file layout in order to write out
- * the file.
+ * scenario, this class provides all the raw bytes corresponding to the caller's
+ * AOI, including NITF headers if necessary.  The caller does not need to
+ * understand anything about the NITF file layout in order to write out the
+ * file.  The bytes are intentionally provided back as a series of pointers
+ * rather than one contiguous block of memory in order to not perform any
+ * copies.
  */
 class SICDByteProvider
 {
 public:
+    /*!
+     * \class Buffer
+     * \brief Represents a pointer to raw bytes and its length
+     */
+    struct Buffer
+    {
+        /*!
+         * Initializes to an empty buffer
+         */
+        Buffer();
+
+        /*!
+         * Initializes to the specified pointer and size.  No copy is made and
+         * this object does not take ownership.
+         *
+         * \param data The raw bytes of data
+         * \param numBytes The number of bytes of contiguous data this
+         * represents
+         */
+        Buffer(const void* data, size_t numBytes);
+
+        const void* mData;
+        size_t mNumBytes;
+    };
+
+    /*!
+     * \class BufferList
+     * \brief Represents a sequence of buffers which appear in contiguous order
+     * in the NITF (the underlying pointers are not contiguous)
+     */
+    struct BufferList
+    {
+        //! The buffers
+        std::vector<Buffer> mBuffers;
+
+        /*!
+         * \return The total number of bytes across all the buffers
+         */
+        size_t getTotalNumBytes() const;
+
+        /*!
+         * \return Whether or not the buffer list is empty
+         */
+        bool empty() const
+        {
+            return mBuffers.empty();
+        }
+
+        /*!
+         * Clear the buffers
+         */
+        void clear()
+        {
+            mBuffers.clear();
+        }
+
+        /*!
+         * Push data onto the buffer list
+         *
+         * \param data The raw bytes
+         * \param numBytes The number of bytes of data
+         */
+        void pushBack(const void* data, size_t numBytes)
+        {
+            mBuffers.push_back(Buffer(data, numBytes));
+        }
+
+        /*!
+         * Push data onto the buffer list
+         *
+         * \tparam DataT The type of data
+         *
+         * \param data The raw bytes
+         */
+        template <typename DataT>
+        void pushBack(const std::vector<DataT>& data)
+        {
+            pushBack(data.empty() ? NULL : &data[0],
+                     data.size() * sizeof(DataT));
+        }
+    };
+
     /*!
      * Constructor
      *
@@ -69,24 +153,23 @@ public:
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back
-     * a contiguous buffer corresponding to the raw NITF bytes for this portion
-     * of the file.  If this AOI is in the middle of an image segment, the
-     * input pointer is simply returned (no copy occurs).  Otherwise, various
-     * headers (file header, image subheader(s), DES subheader and data) will
-     * be copied before, in the middle, and/or after the image data in the
-     * returned pointer.  If this method is called multiple times with AOIs that
+     * a list of contiguous buffers corresponding to the raw NITF bytes for
+     * this portion of the file.  If this AOI is in the middle of an image
+     * segment, this will be simply a buffer list of length 1 consisting of the
+     * input pointer (no copy occurs).  Otherwise, pointers to various headers
+     * (file header, image subheader(s), DES subheader and data) will
+     * be in the buffer list before, in the middle, and/or after the image
+     * data.  If this method is called multiple times with AOIs that
      * eventually consist of the entire image, and the raw bytes are written
      * out to disk in order with respect to the start pixel rows this method is
-     * called with, it will form a valid NITF.
+     * called with (or out of order but seeking to the provided file offset
+     * each time), and in the order contained in the buffer list, it will form
+     * a valid NITF.
      *
      * \note This method does not perform byte swapping on the pixel data for
      * efficiency reasons, but NITFs are written out in big endian order.  This
      * means that on a little endian system, you must byte swap the pixel data
      * prior to calling this method.
-     *
-     * \note This method is not thread-safe (due to reusing an internal buffer
-     * to avoid repeated memory allocations).  However, this method can be
-     * called any number of times in any order with respect to the start row.
      *
      * \param imageData The image data pixels to write.  The underlying type
      * will be complex short or complex float based on the complex data sent
@@ -95,19 +178,21 @@ public:
      * are in the image.  If this is a multi-segment NITF, this is still simply
      * the global pixel location.
      * \param numRows The number of rows in the provided 'imageData'
-     * \param[out] numBytes The number of bytes associated with the returned
-     * pointer (this may be more than the size of the imagery as NITF headers
-     * may be added)
-     *
-     * \return A pointer to a contiguous memory location which will include
-     * the pixel data and, if required, one or more NITF headers.  This pointer
-     * is only guaranteed to remain valid until the next call to getBytes() and
-     * must also not be used once this class goes out of scope.
+     * \param[out] fileOffset The offset in bytes in the NITF where these
+     * buffers should be written
+     * \param[out] buffers One or more pointers to raw bytes of data.  These
+     * should be written out in the order they are provided in the buffer list.
+     * The pointers point to the provided pixel data and, if required, one or
+     * more NITF headers.  No copies occur, so these buffers are only valid for
+     * the lifetime of this provider object (since this object owns the raw
+     * bytes for the NITF headers) and the lifetime of the passed-in image
+     * data.
      */
-    const void* getBytes(const void* imageData,
-                         size_t startRow,
-                         size_t numRows,
-                         size_t& numBytes) const;
+    void getBytes(const void* imageData,
+                  size_t startRow,
+                  size_t numRows,
+                  nitf::Off& fileOffset,
+                  BufferList& buffers) const;
 
 private:
     const size_t mNumBytesPerRow;
@@ -119,8 +204,6 @@ private:
     std::vector<NITFSegmentInfo> mImageSegmentInfo;
     nitf::Off mDesSubheaderFileOffset;
     nitf::Off mFileNumBytes;
-
-    mutable std::vector<sys::byte> mBuffer;
 };
 }
 }

@@ -1,4 +1,4 @@
-#include <utility>
+#include <limits>
 
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
@@ -9,6 +9,30 @@ namespace six
 {
 namespace sicd
 {
+SICDByteProvider::Buffer::Buffer() :
+    mData(NULL),
+    mNumBytes(0)
+{
+}
+
+SICDByteProvider::Buffer::Buffer(const void* data, size_t numBytes) :
+    mData(data),
+    mNumBytes(numBytes)
+{
+}
+
+size_t SICDByteProvider::BufferList::getTotalNumBytes() const
+{
+    size_t numBytes(0);
+
+    for (size_t ii = 0; ii < mBuffers.size(); ++ii)
+    {
+        numBytes += mBuffers[ii].mNumBytes;
+    }
+
+    return numBytes;
+}
+
 SICDByteProvider::SICDByteProvider(
         const ComplexData& data,
         const std::vector<std::string>& schemaPaths,
@@ -50,12 +74,14 @@ SICDByteProvider::SICDByteProvider(
                          mFileNumBytes);
 }
 
-const void* SICDByteProvider::getBytes(const void* imageData,
-                                       size_t startRow,
-                                       size_t numRows,
-                                       size_t& numBytes) const
+void SICDByteProvider::getBytes(const void* imageData,
+                                size_t startRow,
+                                size_t numRows,
+                                nitf::Off& fileOffset,
+                                BufferList& buffers) const
 {
-    std::vector<std::pair<const sys::byte*, size_t> > data;
+    fileOffset = std::numeric_limits<nitf::Off>::max();
+    buffers.clear();
 
     const size_t imageDataEndRow = startRow + numRows;
 
@@ -81,12 +107,15 @@ const void* SICDByteProvider::getBytes(const void* imageData,
                 {
                     // For the very first image segment, we're responsible for
                     // the file header too
-                    data.push_back(std::make_pair(&mFileHeader[0],
-                                                  mFileHeader.size()));
+                    fileOffset = 0;
+                    buffers.pushBack(mFileHeader);
                 }
 
-                data.push_back(std::make_pair(&mImageSubheaders[seg][0],
-                                              mImageSubheaders[seg].size()));
+                if (buffers.empty())
+                {
+                    fileOffset = mImageSubheaderFileOffsets[seg];
+                }
+                buffers.pushBack(mImageSubheaders[seg]);
             }
 
             // Figure out what offset of 'imageData' we're writing from
@@ -96,41 +125,25 @@ const void* SICDByteProvider::getBytes(const void* imageData,
                     static_cast<const sys::byte*>(imageData) +
                     startLocalRowToWrite * mNumBytesPerRow;
 
-            data.push_back(std::make_pair(imageDataPtr,
-                                          numRowsToWrite * mNumBytesPerRow));
+            if (buffers.empty())
+            {
+                const size_t rowsInSegmentSkipped =
+                        startRow - segStartRow;
+
+                fileOffset = mImageSubheaderFileOffsets[seg] +
+                        mImageSubheaders[seg].size() +
+                        rowsInSegmentSkipped * mNumBytesPerRow;
+            }
+            buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 
             if (seg == mImageSegmentInfo.size() - 1 &&
                 segEndRow == imageDataEndRow)
             {
                 // When we write out the last row of the last image segment, we
                 // tack on the DES
-                data.push_back(std::make_pair(&mDesSubheaderAndData[0],
-                                              mDesSubheaderAndData.size()));
+                buffers.pushBack(mDesSubheaderAndData);
             }
         }
-    }
-
-    if (data.size() == 1)
-    {
-        // We must not have any headers - we can simply return the input
-        // pointer
-        numBytes = numRows * mNumBytesPerRow;
-        return imageData;
-    }
-    else
-    {
-        // Need to copy these to the internal buffer
-        mBuffer.clear();
-
-        for (size_t ii = 0; ii < data.size(); ++ii)
-        {
-            mBuffer.insert(mBuffer.end(),
-                           data[ii].first,
-                           data[ii].first + data[ii].second);
-        }
-
-        numBytes = mBuffer.size();
-        return &mBuffer[0];
     }
 }
 }

@@ -112,6 +112,21 @@ private:
         }
     }
 
+    static
+    void write(nitf::Off fileOffset,
+               const six::sicd::SICDByteProvider::BufferList& buffers,
+               io::FileOutputStream& outStream)
+    {
+        outStream.seek(fileOffset, io::Seekable::START);
+
+        for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
+        {
+            outStream.write(
+                    static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                    buffers.mBuffers[ii].mNumBytes);
+        }
+    }
+
 private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
@@ -165,13 +180,13 @@ void Tester<DataTypeT>::testSingleWrite()
             mSchemaPaths,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    size_t numBytes;
-    const sys::byte* const rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
-                                      numBytes));
+    six::sicd::SICDByteProvider::BufferList buffers;
+    nitf::Off fileOffset;
+    sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
+                              fileOffset, buffers);
 
     io::FileOutputStream outStream(mTestPathname);
-    outStream.write(rawBytes, numBytes);
+    write(fileOffset, buffers, outStream);
     outStream.close();
 
     compare("Single write");
@@ -187,67 +202,63 @@ void Tester<DataTypeT>::testMultipleWrites()
             mSchemaPaths,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    // Rows [0, 5)
-    size_t numBytes;
-    size_t startRow = 0;
-    const sys::byte* rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       5,
-                                       numBytes));
+    // Rows [40, 60)
+    nitf::Off fileOffset;
+    six::sicd::SICDByteProvider::BufferList buffers;
+    size_t startRow = 40;
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              20,
+                              fileOffset,
+                              buffers);
 
     io::FileOutputStream outStream(mTestPathname);
-    outStream.write(rawBytes, numBytes);
+    write(fileOffset, buffers, outStream);
 
     // Rows [5, 25)
     startRow = 5;
-    rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       20,
-                                       numBytes));
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              20,
+                              fileOffset,
+                              buffers);
+    write(fileOffset, buffers, outStream);
 
-    outStream.write(rawBytes, numBytes);
-
-    // Rows [25, 40)
-    startRow = 25;
-    rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       15,
-                                       numBytes));
-
-    outStream.write(rawBytes, numBytes);
-
-    // Rows [40, 60)
-    startRow = 40;
-    rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       20,
-                                       numBytes));
-
-    outStream.write(rawBytes, numBytes);
-
-    // Rows [60, 100)
-    startRow = 60;
-    rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       40,
-                                       numBytes));
-
-    outStream.write(rawBytes, numBytes);
+    // Rows [0, 5)
+    startRow = 0;
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              5,
+                              fileOffset,
+                              buffers);
+    write(fileOffset, buffers, outStream);
 
     // Rows [100, 123)
     startRow = 100;
-    rawBytes = static_cast<const sys::byte*>(
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                       startRow,
-                                       23,
-                                       numBytes));
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              23,
+                              fileOffset,
+                              buffers);
+    write(fileOffset, buffers, outStream);
 
-    outStream.write(rawBytes, numBytes);
+    // Rows [25, 40)
+    startRow = 25;
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              15,
+                              fileOffset,
+                              buffers);
+    write(fileOffset, buffers, outStream);
+
+    // Rows [60, 100)
+    startRow = 60;
+    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                              startRow,
+                              40,
+                              fileOffset,
+                              buffers);
+    write(fileOffset, buffers, outStream);
 
     outStream.close();
 
@@ -267,14 +278,17 @@ void Tester<DataTypeT>::testOneWritePerRow()
     io::FileOutputStream outStream(mTestPathname);
     for (size_t row = 0; row < mDims.row; ++row)
     {
-        size_t numBytes;
-        const sys::byte* const rawBytes = static_cast<const sys::byte*>(
-                sicdByteProvider.getBytes(&mBigEndianImage[row * mDims.col],
-                                           row,
-                                           1,
-                                           numBytes));
+        // Write it backwards
+        const size_t startRow = mDims.row - 1 - row;
 
-        outStream.write(rawBytes, numBytes);
+        nitf::Off fileOffset;
+        six::sicd::SICDByteProvider::BufferList buffers;
+        sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                                  startRow,
+                                  1,
+                                  fileOffset,
+                                  buffers);
+        write(fileOffset, buffers, outStream);
     }
 
     outStream.close();
