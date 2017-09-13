@@ -127,17 +127,13 @@ void SICDWriteControl::save(void* imageData,
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
         // See if we're in this segment
-        const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
-        const size_t segEndRow = mImageSegmentInfo[seg].endRow();
-
-        const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
-        const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
-
-        if (endGlobalRowToWrite > startGlobalRowToWrite)
+        const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(offset.row, dims.row,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
         {
-            const size_t numRowsToWrite =
-                    endGlobalRowToWrite - startGlobalRowToWrite;
-
             // Figure out what offset of 'imageData' we're writing from
             const size_t startLocalRowToWrite =
                     startGlobalRowToWrite - offset.row;
@@ -147,6 +143,7 @@ void SICDWriteControl::save(void* imageData,
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment
+            const size_t segStartRow = imageSegmentInfo.firstRow;
             const size_t startRowInSegToWrite =
                     startGlobalRowToWrite - segStartRow;
             const size_t pixelOffset =
