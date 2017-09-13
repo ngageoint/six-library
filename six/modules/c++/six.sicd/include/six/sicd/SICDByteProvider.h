@@ -152,6 +152,22 @@ public:
     }
 
     /*!
+     * Given a range of rows from [startRow, startRow + numRows), provide the
+     * number of bytes that will appear in the NITF on disk (including NITF
+     * file header, image subheader(s), and DES subheader and data).  Calling
+     * this method repeatedly, eventually providing the entire range of the
+     * image, will produce the total number of bytes in the full NITF.
+     *
+     * \param startRow The global start row in pixels as to where these pixels
+     * are in the image.  If this is a multi-segment NITF, this is still simply
+     * the global pixel location.
+     * \param numRows The number of rows
+     *
+     * \return The associated number of bytes in the NITF
+     */
+    nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+
+    /*!
      * The caller provides an AOI of the pixel data.  This method provides back
      * a list of contiguous buffers corresponding to the raw NITF bytes for
      * this portion of the file.  If this AOI is in the middle of an image

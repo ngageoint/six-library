@@ -74,6 +74,54 @@ SICDByteProvider::SICDByteProvider(
                          mFileNumBytes);
 }
 
+nitf::Off SICDByteProvider::getNumBytes(size_t startRow, size_t numRows) const
+{
+    nitf::Off numBytes(0);
+
+    const size_t imageDataEndRow = startRow + numRows;
+
+    for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
+    {
+        // See if we're in this segment
+        const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(startRow, numRows,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
+        {
+            const size_t segStartRow = imageSegmentInfo.firstRow;
+
+            if (startRow <= segStartRow)
+            {
+                // We have the first row of this image segment, so we're
+                // responsible for the image subheader
+                if (seg == 0)
+                {
+                    // For the very first image segment, we're responsible for
+                    // the file header too
+                    numBytes += mFileHeader.size();
+                }
+
+                numBytes += mImageSubheaders[seg].size();
+            }
+
+            numBytes += numRowsToWrite * mNumBytesPerRow;
+
+            if (seg == mImageSegmentInfo.size() - 1 &&
+                imageSegmentInfo.endRow() == imageDataEndRow)
+            {
+                // When we write out the last row of the last image segment, we
+                // tack on the DES
+                numBytes += mDesSubheaderAndData.size();
+            }
+        }
+    }
+
+    return numBytes;
+}
+
 void SICDByteProvider::getBytes(const void* imageData,
                                 size_t startRow,
                                 size_t numRows,
@@ -88,16 +136,15 @@ void SICDByteProvider::getBytes(const void* imageData,
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
         // See if we're in this segment
-        const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
-        const size_t segEndRow = mImageSegmentInfo[seg].endRow();
+        const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
 
-        const size_t startGlobalRowToWrite = std::max(segStartRow, startRow);
-        const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
-
-        if (endGlobalRowToWrite > startGlobalRowToWrite)
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(startRow, numRows,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
         {
-            const size_t numRowsToWrite =
-                    endGlobalRowToWrite - startGlobalRowToWrite;
+            const size_t segStartRow = imageSegmentInfo.firstRow;
 
             if (startRow <= segStartRow)
             {
@@ -137,7 +184,7 @@ void SICDByteProvider::getBytes(const void* imageData,
             buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 
             if (seg == mImageSegmentInfo.size() - 1 &&
-                segEndRow == imageDataEndRow)
+                imageSegmentInfo.endRow() == imageDataEndRow)
             {
                 // When we write out the last row of the last image segment, we
                 // tack on the DES
