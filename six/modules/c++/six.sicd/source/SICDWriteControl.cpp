@@ -122,7 +122,6 @@ void SICDWriteControl::save(void* imageData,
     }
 
     const size_t globalNumCols = data->getNumCols();
-    const size_t imageDataEndRow = offset.row + dims.row;
 
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
