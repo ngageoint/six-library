@@ -113,7 +113,7 @@ private:
     }
 
     void write(nitf::Off fileOffset,
-               const six::sicd::SICDByteProvider::BufferList& buffers,
+               const six::sicd::SICDByteProvider::NITFBufferList& buffers,
                nitf::Off computedNumBytes,
                io::FileOutputStream& outStream)
     {
@@ -191,7 +191,7 @@ void Tester<DataTypeT>::testSingleWrite()
             mSchemaPaths,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    six::sicd::SICDByteProvider::BufferList buffers;
+    six::sicd::SICDByteProvider::NITFBufferList buffers;
     nitf::Off fileOffset;
     sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
                               fileOffset, buffers);
@@ -216,7 +216,7 @@ void Tester<DataTypeT>::testMultipleWrites()
 
     // Rows [40, 60)
     nitf::Off fileOffset;
-    six::sicd::SICDByteProvider::BufferList buffers;
+    six::sicd::SICDByteProvider::NITFBufferList buffers;
     size_t startRow = 40;
     size_t numRows = 20;
     sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
@@ -306,7 +306,7 @@ void Tester<DataTypeT>::testOneWritePerRow()
         const size_t startRow = mDims.row - 1 - row;
 
         nitf::Off fileOffset;
-        six::sicd::SICDByteProvider::BufferList buffers;
+        six::sicd::SICDByteProvider::NITFBufferList buffers;
         sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
                                   startRow,
                                   1,

@@ -50,15 +50,15 @@ class SICDByteProvider
 {
 public:
     /*!
-     * \class Buffer
-     * \brief Represents a pointer to raw bytes and its length
+     * \class NITFBuffer
+     * \brief Represents a pointer to raw NITF bytes and its length
      */
-    struct Buffer
+    struct NITFBuffer
     {
         /*!
          * Initializes to an empty buffer
          */
-        Buffer();
+        NITFBuffer();
 
         /*!
          * Initializes to the specified pointer and size.  No copy is made and
@@ -68,21 +68,21 @@ public:
          * \param numBytes The number of bytes of contiguous data this
          * represents
          */
-        Buffer(const void* data, size_t numBytes);
+        NITFBuffer(const void* data, size_t numBytes);
 
         const void* mData;
         size_t mNumBytes;
     };
 
     /*!
-     * \class BufferList
+     * \class NITFBufferList
      * \brief Represents a sequence of buffers which appear in contiguous order
      * in the NITF (the underlying pointers are not contiguous)
      */
-    struct BufferList
+    struct NITFBufferList
     {
         //! The buffers
-        std::vector<Buffer> mBuffers;
+        std::vector<NITFBuffer> mBuffers;
 
         /*!
          * \return The total number of bytes across all the buffers
@@ -113,7 +113,7 @@ public:
          */
         void pushBack(const void* data, size_t numBytes)
         {
-            mBuffers.push_back(Buffer(data, numBytes));
+            mBuffers.push_back(NITFBuffer(data, numBytes));
         }
 
         /*!
@@ -208,7 +208,7 @@ public:
                   size_t startRow,
                   size_t numRows,
                   nitf::Off& fileOffset,
-                  BufferList& buffers) const;
+                  NITFBufferList& buffers) const;
 
 private:
     const size_t mNumBytesPerRow;

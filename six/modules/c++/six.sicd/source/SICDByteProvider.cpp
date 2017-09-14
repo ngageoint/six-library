@@ -9,19 +9,19 @@ namespace six
 {
 namespace sicd
 {
-SICDByteProvider::Buffer::Buffer() :
+SICDByteProvider::NITFBuffer::NITFBuffer() :
     mData(NULL),
     mNumBytes(0)
 {
 }
 
-SICDByteProvider::Buffer::Buffer(const void* data, size_t numBytes) :
+SICDByteProvider::NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
     mData(data),
     mNumBytes(numBytes)
 {
 }
 
-size_t SICDByteProvider::BufferList::getTotalNumBytes() const
+size_t SICDByteProvider::NITFBufferList::getTotalNumBytes() const
 {
     size_t numBytes(0);
 
@@ -126,7 +126,7 @@ void SICDByteProvider::getBytes(const void* imageData,
                                 size_t startRow,
                                 size_t numRows,
                                 nitf::Off& fileOffset,
-                                BufferList& buffers) const
+                                NITFBufferList& buffers) const
 {
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
