@@ -151,12 +151,11 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    mContainer->addData(createData<DataTypeT>(mDims));
+    mContainer->addData(createData<DataTypeT>(mDims).release());
 
     six::NITFWriteControl writer;
     setMaxProductSize(writer);
     writer.initialize(mContainer);
-
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
