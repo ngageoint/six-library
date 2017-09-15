@@ -129,6 +129,44 @@ public:
             pushBack(data.empty() ? NULL : &data[0],
                      data.size() * sizeof(DataT));
         }
+
+        /*!
+         * Get the number of blocks of data of size 'blockSize'.  In cases
+         * where the block size is not an even multiple of the total number of
+         * bytes, the last block will be larger than the block size (rather
+         * than there being one more block which is smaller than the block
+         * size).  This is intentional in order to make this easily usable with
+         * Amazon's S3 storage with multipart uploads where there is a minimum
+         * part size (there may be multiple machines, all with their portion
+         * of the SICD, performing a multipart upload of their parts, and
+         * only the last overall part of the object can be less than the
+         * minimum part size).
+         *
+         * \param blockSize The desired block size
+         *
+         * \return The associated number of blocks
+         */
+        size_t getNumBlocks(size_t blockSize) const;
+
+        /*!
+         * Returns a pointer to contiguous memory associated with the desired
+         * block.  If this block lies entirely within a NITFBuffer, no copy
+         * is performed.  Otherwise, the scratch buffer is resized, the bytes
+         * are copied into this, and a pointer to the scratch buffer is
+         * returned.
+         *
+         * \param blockSize The desired block size.  See getNumBlocks() for a
+         * description on the behavior of the last block.
+         * \param blockIdx The 0-based block index
+         * \param[out] scratch Scratch buffer.  This will be resized and used
+         * if the underlying memory for this block is not contiguous (i.e. it
+         * spans NITFBuffers).
+         *
+         * \return A pointer to contiguous memory associated with this block
+         */
+        const void* getBlock(size_t blockSize,
+                             size_t blockIdx,
+                             std::vector<sys::byte>& scratch) const;
     };
 
     /*!

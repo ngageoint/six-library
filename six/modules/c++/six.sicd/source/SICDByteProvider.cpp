@@ -1,4 +1,5 @@
 #include <limits>
+#include <sstream>
 
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
@@ -31,6 +32,92 @@ size_t SICDByteProvider::NITFBufferList::getTotalNumBytes() const
     }
 
     return numBytes;
+}
+
+size_t SICDByteProvider::NITFBufferList::getNumBlocks(size_t blockSize) const
+{
+    if (blockSize == 0)
+    {
+        throw except::Exception(Ctxt("Block size must be positive"));
+    }
+
+    return getTotalNumBytes() / blockSize;
+}
+
+const void* SICDByteProvider::NITFBufferList::getBlock(
+        size_t blockSize,
+        size_t blockIdx,
+        std::vector<sys::byte>& scratch) const
+{
+    const size_t numBlocks(getNumBlocks(blockSize));
+    if (blockIdx >= numBlocks)
+    {
+        std::ostringstream ostr;
+        ostr << "Block index " << blockIdx << " is out of bounds - only "
+             << numBlocks << " blocks with a block size of " << blockSize;
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    const size_t startByte = blockIdx * blockSize;
+    const size_t numBytes = (blockIdx == numBlocks - 1) ?
+            getTotalNumBytes() - (numBlocks - 1) * blockSize :
+            blockSize;
+
+    size_t byteCount(0);
+    for (size_t ii = 0; ii < mBuffers.size(); ++ii)
+    {
+        const NITFBuffer& buffer(mBuffers[ii]);
+        if (byteCount + buffer.mNumBytes >= startByte)
+        {
+            // We found our first buffer
+            const size_t numBytesToSkip = startByte - byteCount;
+            const size_t numBytesLeftInBuffer =
+                    buffer.mNumBytes - numBytesToSkip;
+
+            const sys::byte* const startPtr =
+                    static_cast<const sys::byte*>(buffer.mData) +
+                    numBytesToSkip;
+            if (numBytesLeftInBuffer >= numBytes)
+            {
+                // We have contiguous memory in this buffer - we don't need to
+                // copy anything
+                return startPtr;
+            }
+            else
+            {
+                // The bytes we want span 2+ buffers - we'll use scratch space
+                // and copy in the bytes we want to that
+                scratch.resize(numBytes);
+                size_t numBytesCopied(0);
+                memcpy(&scratch[0], startPtr, numBytesLeftInBuffer);
+                numBytesCopied += numBytesLeftInBuffer;
+
+                for (size_t jj = ii + 1; jj < mBuffers.size(); ++jj)
+                {
+                    const NITFBuffer& curBuffer(mBuffers[jj]);
+                    const size_t numBytesToCopy =
+                            std::min(curBuffer.mNumBytes,
+                                     numBytes - numBytesCopied);
+
+                    memcpy(&scratch[numBytesCopied],
+                           curBuffer.mData,
+                           numBytesToCopy);
+                    numBytesCopied += numBytesToCopy;
+                    if (numBytesCopied == numBytes)
+                    {
+                        break;
+                    }
+                }
+
+                return &scratch[0];
+            }
+        }
+
+        byteCount += buffer.mNumBytes;
+    }
+
+    // Should not be possible to get here
+    return NULL;
 }
 
 SICDByteProvider::SICDByteProvider(
