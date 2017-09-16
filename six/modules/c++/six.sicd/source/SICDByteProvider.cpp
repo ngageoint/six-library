@@ -44,10 +44,9 @@ size_t SICDByteProvider::NITFBufferList::getNumBlocks(size_t blockSize) const
     return getTotalNumBytes() / blockSize;
 }
 
-const void* SICDByteProvider::NITFBufferList::getBlock(
+size_t SICDByteProvider::NITFBufferList::getNumBytesInBlock(
         size_t blockSize,
-        size_t blockIdx,
-        std::vector<sys::byte>& scratch) const
+        size_t blockIdx) const
 {
     const size_t numBlocks(getNumBlocks(blockSize));
     if (blockIdx >= numBlocks)
@@ -58,10 +57,21 @@ const void* SICDByteProvider::NITFBufferList::getBlock(
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    const size_t startByte = blockIdx * blockSize;
     const size_t numBytes = (blockIdx == numBlocks - 1) ?
             getTotalNumBytes() - (numBlocks - 1) * blockSize :
             blockSize;
+
+    return numBytes;
+}
+
+const void* SICDByteProvider::NITFBufferList::getBlock(
+        size_t blockSize,
+        size_t blockIdx,
+        std::vector<sys::byte>& scratch,
+        size_t& numBytes) const
+{
+    const size_t startByte = blockIdx * blockSize;
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
 
     size_t byteCount(0);
     for (size_t ii = 0; ii < mBuffers.size(); ++ii)

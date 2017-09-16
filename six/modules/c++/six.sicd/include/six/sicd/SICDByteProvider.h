@@ -149,6 +149,18 @@ public:
         size_t getNumBlocks(size_t blockSize) const;
 
         /*!
+         * Get the number of bytes in the specified block.  All blocks will be
+         * the same size except for the last block (see getNumBlocks() for
+         * details).
+         *
+         * \param blockSize The desired block size
+         * \param blockIdx The 0-based block index
+         *
+         * \return The number of bytes in this block
+         */
+        size_t getNumBytesInBlock(size_t blockSize, size_t blockIdx) const;
+
+        /*!
          * Returns a pointer to contiguous memory associated with the desired
          * block.  If this block lies entirely within a NITFBuffer, no copy
          * is performed.  Otherwise, the scratch buffer is resized, the bytes
@@ -161,12 +173,14 @@ public:
          * \param[out] scratch Scratch buffer.  This will be resized and used
          * if the underlying memory for this block is not contiguous (i.e. it
          * spans NITFBuffers).
+         * \param[out] numBytes The number of bytes in this block
          *
          * \return A pointer to contiguous memory associated with this block
          */
         const void* getBlock(size_t blockSize,
                              size_t blockIdx,
-                             std::vector<sys::byte>& scratch) const;
+                             std::vector<sys::byte>& scratch,
+                             size_t& numBytes) const;
     };
 
     /*!
