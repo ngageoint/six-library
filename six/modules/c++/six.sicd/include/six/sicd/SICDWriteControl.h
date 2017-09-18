@@ -115,6 +115,7 @@ private:
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;
+    std::vector<NITFSegmentInfo> mImageSegmentInfo;
     bool mHaveWrittenHeaders;
 };
 }

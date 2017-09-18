@@ -68,6 +68,7 @@ void SICDWriteControl::writeHeaders()
                   imageSubheaders,
                   desSubheaderAndData,
                   imageSubheaderFileOffsets,
+                  mImageSegmentInfo,
                   desSubheaderFileOffset,
                   fileNumBytes);
 
@@ -120,26 +121,18 @@ void SICDWriteControl::save(void* imageData,
                       numPixelsTotal);
     }
 
-    const std::vector <NITFSegmentInfo> imageSegments
-                    = mInfos[0]->getImageSegments();
-
     const size_t globalNumCols = data->getNumCols();
-    const size_t imageDataEndRow = offset.row + dims.row;
 
-    for (size_t seg = 0; seg < imageSegments.size(); ++seg)
+    for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
         // See if we're in this segment
-        const size_t segStartRow = imageSegments[seg].firstRow;
-        const size_t segEndRow = segStartRow + imageSegments[seg].numRows;
-
-        const size_t startGlobalRowToWrite = std::max(segStartRow, offset.row);
-        const size_t endGlobalRowToWrite = std::min(segEndRow, imageDataEndRow);
-
-        if (endGlobalRowToWrite > startGlobalRowToWrite)
+        const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(offset.row, dims.row,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
         {
-            const size_t numRowsToWrite =
-                    endGlobalRowToWrite - startGlobalRowToWrite;
-
             // Figure out what offset of 'imageData' we're writing from
             const size_t startLocalRowToWrite =
                     startGlobalRowToWrite - offset.row;
@@ -149,6 +142,7 @@ void SICDWriteControl::save(void* imageData,
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment
+            const size_t segStartRow = imageSegmentInfo.firstRow;
             const size_t startRowInSegToWrite =
                     startGlobalRowToWrite - segStartRow;
             const size_t pixelOffset =
