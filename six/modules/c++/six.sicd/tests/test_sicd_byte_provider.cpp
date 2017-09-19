@@ -130,15 +130,13 @@ public:
         mNormalFileCleanup(mNormalPathname),
         mDims(123, 456),
         mImage(mDims.area()),
+        mData(createData<DataTypeT>(mDims).release()),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
         mSetMaxProductSize(setMaxProductSize),
         mMaxProductSize(maxProductSize),
         mSuccess(true)
     {
-        // This can't go in the initializer list, because Solaris complains
-        mData = createData<DataTypeT>(mDims);
-
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
             mImage[ii] = std::complex<DataTypeT>(
