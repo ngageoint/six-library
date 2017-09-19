@@ -129,7 +129,9 @@ public:
         mNormalPathname("normal_write.nitf"),
         mNormalFileCleanup(mNormalPathname),
         mDims(123, 456),
-        mData(createData<DataTypeT>(mDims)),
+        // Have to release() here to prevent nasty runtime error
+        // with Solaris
+        mData(createData<DataTypeT>(mDims).release()),
         mImage(mDims.area()),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
