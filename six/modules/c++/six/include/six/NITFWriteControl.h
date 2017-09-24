@@ -249,14 +249,16 @@ public:
      * \param[out] fileHeader Raw bytes corresponding to file header
      * \param[out] imageSubheaders Raw bytes corresponding to each image
      * subheader
-     * \param[out] desSubheaderAndData Raw bytes corresponding to DES subheader
-     * and data (i.e. XML string)
+     * \param[out] desSubheaderAndData Raw bytes corresponding to DES
+     * subheader(s) and data (i.e. XML string).  If there is more than one DES
+     * in the file, this will contain the raw data for all DESs since they are
+     * contiguous in the file.
      * \param[out] imageSubheaderFileOffsets Offsets in the NITF where each
      * image subheader should be written
      * \param[out] imageSegmentInfo The starting row and number of rows for each
      * image segment
      * \param[out] desSubheaderFileOffset Offset in the NITF where the DES
-     * subheader should be written
+     * subheader and data should be written
      * \param[out] fileNumBytes The total number of bytes the NITF will be
      *
      * \note initialize() must be called prior to calling this method

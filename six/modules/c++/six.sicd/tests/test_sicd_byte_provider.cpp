@@ -28,7 +28,6 @@
 #include <stdlib.h>
 
 #include "TestUtilities.h"
-#include "TestCase.h"
 
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
@@ -37,87 +36,6 @@
 
 namespace
 {
-TEST_CASE(testGetNumBlocks)
-{
-    // 5000 total bytes
-    six::sicd::SICDByteProvider::NITFBufferList bufferList;
-    bufferList.pushBack(NULL, 1000);
-    bufferList.pushBack(NULL, 2000);
-    bufferList.pushBack(NULL, 500);
-    bufferList.pushBack(NULL, 1500);
-
-    // Evenly divides
-    TEST_ASSERT_EQ(bufferList.getNumBlocks(1000), 5);
-
-    // Doesn't evenly divide - we should just get one bigger block
-    TEST_ASSERT_EQ(bufferList.getNumBlocks(999), 5);
-}
-
-TEST_CASE(testGetBlock)
-{
-    // 100 total bytes
-    std::vector<sys::ubyte> buffer(100);
-    for (size_t ii = 0; ii < buffer.size(); ++ii)
-    {
-        buffer[ii] = static_cast<sys::ubyte>(rand() % 256);
-    }
-
-    // Break this into a few pieces
-    std::vector<sys::ubyte> buffer1(buffer.begin(), buffer.begin() + 10);
-    std::vector<sys::ubyte> buffer2(buffer.begin() + 10, buffer.begin() + 20);
-    std::vector<sys::ubyte> buffer3(buffer.begin() + 20, buffer.begin() + 35);
-    std::vector<sys::ubyte> buffer4(buffer.begin() + 35, buffer.begin() + 57);
-    std::vector<sys::ubyte> buffer5(buffer.begin() + 57, buffer.end());
-
-    // Add them all on
-    six::sicd::SICDByteProvider::NITFBufferList bufferList;
-    bufferList.pushBack(buffer1);
-    bufferList.pushBack(buffer2);
-    bufferList.pushBack(buffer3);
-    bufferList.pushBack(buffer4);
-    bufferList.pushBack(buffer5);
-
-    // No matter what the block size is, we should get back all the bytes
-    for (size_t blockSize = 1; blockSize <= 100; ++blockSize)
-    {
-        // Get the total number of bytes across all blocks
-        // This should match the total size
-        size_t numTotalBytes(0);
-        const size_t numBlocks = bufferList.getNumBlocks(blockSize);
-        for (size_t block = 0; block < numBlocks; ++block)
-        {
-            numTotalBytes += bufferList.getNumBytesInBlock(blockSize, block);
-        }
-        TEST_ASSERT_EQ(numTotalBytes, buffer.size());
-
-        // Extract all the bytes
-        std::vector<sys::ubyte> extracted(numTotalBytes);
-        sys::ubyte* ptr = &extracted[0];
-        std::vector<sys::byte> scratch;
-
-        size_t numBytesInBlock;
-        for (size_t block = 0; block < numBlocks; ++block)
-        {
-            const void* const blockPtr = bufferList.getBlock(blockSize,
-                                                             block,
-                                                             scratch,
-                                                             numBytesInBlock);
-
-            memcpy(ptr, blockPtr, numBytesInBlock);
-            ptr += numBytesInBlock;
-        }
-
-        // Bytes should all match
-        for (size_t ii = 0; ii < buffer.size(); ++ii)
-        {
-            TEST_ASSERT_EQ(extracted[ii], buffer[ii]);
-        }
-
-        TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
-                                           numBytesInBlock));
-    }
-}
-
 // Main test class
 template <typename DataTypeT>
 class Tester
@@ -198,7 +116,7 @@ private:
     }
 
     void write(nitf::Off fileOffset,
-               const six::sicd::SICDByteProvider::NITFBufferList& buffers,
+               const nitf::NITFBufferList& buffers,
                nitf::Off computedNumBytes,
                io::FileOutputStream& outStream)
     {
@@ -276,7 +194,7 @@ void Tester<DataTypeT>::testSingleWrite()
             mSchemaPaths,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    six::sicd::SICDByteProvider::NITFBufferList buffers;
+    nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
     sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
                               fileOffset, buffers);
@@ -301,7 +219,7 @@ void Tester<DataTypeT>::testMultipleWrites()
 
     // Rows [40, 60)
     nitf::Off fileOffset;
-    six::sicd::SICDByteProvider::NITFBufferList buffers;
+    nitf::NITFBufferList buffers;
     size_t startRow = 40;
     size_t numRows = 20;
     sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
@@ -391,7 +309,7 @@ void Tester<DataTypeT>::testOneWritePerRow()
         const size_t startRow = mDims.row - 1 - row;
 
         nitf::Off fileOffset;
-        six::sicd::SICDByteProvider::NITFBufferList buffers;
+        nitf::NITFBufferList buffers;
         sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
                                   startRow,
                                   1,
@@ -450,9 +368,6 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
 
 int main(int /*argc*/, char** /*argv*/)
 {
-    TEST_CHECK(testGetNumBlocks);
-    TEST_CHECK(testGetBlock);
-
     try
     {
         // TODO: Take these in optionally
