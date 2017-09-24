@@ -250,13 +250,13 @@ struct Segment
     Segment* clone() const;
 
     //! The number of lines in the segment
-    int getNumLines() const
+    size_t getNumLines() const
     {
         return (endLine - startLine + 1);
     }
 
     //! The number of samples in the segment
-    int getNumSamples() const
+    size_t getNumSamples() const
     {
         return (endSample - startSample + 1);
     }
