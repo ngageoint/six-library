@@ -89,21 +89,6 @@ public:
                              std::vector<nitf::BandInfo>& bands)
         throw(nitf::NITFException);
 
-
-    /*!
-     *  @deprecated - here for backwards compatibility
-     *  bandCount WILL get ignored
-     */
-    void setPixelInformation(std::string pvtype,
-                             nitf::Uint32 nbpp,
-                             nitf::Uint32 abpp,
-                             std::string justification,
-                             std::string irep, std::string icat,
-                             nitf::Uint32 bandCount,
-                             std::vector<nitf::BandInfo>& bands)
-        throw(nitf::NITFException);
-
-
     /*!
      *  This function allows the user to set the corner coordinates from a
      *  set of decimal values.  This function only supports CornersTypes of
@@ -364,7 +349,49 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    static
+    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock);
+
+    size_t getNumBytesOfImageData() const;
+
 private:
+    size_t getNumRows() const
+    {
+        return nitf::Field(getNativeOrThrow()->numRows);
+    }
+
+    size_t getNumCols() const
+    {
+        return nitf::Field(getNativeOrThrow()->numCols);
+    }
+
+    size_t getNumPixelsPerHorizBlock() const
+    {
+        return nitf::Field(getNativeOrThrow()->numPixelsPerHorizBlock);
+    }
+
+    size_t getNumPixelsPerVertBlock() const
+    {
+        return nitf::Field(getNativeOrThrow()->numPixelsPerVertBlock);
+    }
+
+    size_t getActualNumRows() const
+    {
+        return getActualImageDim(getNumRows(), getNumPixelsPerVertBlock());
+    }
+
+    size_t getActualNumCols() const
+    {
+        return getActualImageDim(getNumCols(), getNumPixelsPerHorizBlock());
+    }
+
+    size_t getNumImageBands() const
+    {
+        return nitf::Field(getNativeOrThrow()->numImageBands);
+    }
+
+    size_t getNumBytesPerPixel() const;
+
     nitf_Error error;
 };
 
