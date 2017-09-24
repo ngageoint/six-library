@@ -124,22 +124,6 @@ NITFImageInfo::NITFImageInfo(Data* data,
     }
 }
 
-size_t NITFImageInfo::getActualDim(size_t dim, size_t numDimsPerBlock)
-{
-    if (numDimsPerBlock == 0)
-    {
-        return dim;
-    }
-    else
-    {
-        // If we're blocking then we'll always write full blocks due to how
-        // the NITF file layout works
-        const size_t numBlocks =
-                (dim / numDimsPerBlock) + (dim % numDimsPerBlock != 0);
-        return numBlocks * numDimsPerBlock;
-    }
-}
-
 void NITFImageInfo::computeImageInfo()
 {
     // Consider possible blocking when determining the maximum number of rows

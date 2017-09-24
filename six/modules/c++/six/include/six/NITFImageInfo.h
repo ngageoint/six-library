@@ -232,7 +232,10 @@ private:
     //! This is the actual size of a dimension (row or column)
     //! taking into account the possible blocking (pixels)
     static
-    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
+    size_t getActualDim(size_t dim, size_t numDimsPerBlock)
+    {
+        return nitf::ImageSubheader::getActualImageDim(dim, numDimsPerBlock);
+    }
 
     void computeImageInfo();
 
