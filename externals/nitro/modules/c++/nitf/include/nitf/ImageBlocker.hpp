@@ -1,0 +1,93 @@
+/* =========================================================================
+ * This file is part of NITRO
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ *
+ * NITRO is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#ifndef __NITF_IMAGE_BLOCKER_HPP__
+#define __NITF_IMAGE_BLOCKER_HPP__
+
+#include <stddef.h>
+#include <vector>
+
+namespace nitf
+{
+// Only supports layouts where image segments are stacked vertically
+class ImageBlocker
+{
+public:
+    ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
+                 size_t numCols,
+                 size_t numRowsPerBlock,
+                 size_t numColsPerBlock);
+
+    // startRow must start on a block boundary (within a segment)
+    // numRows must be a multiple of block size unless it's the end of a segment
+    template <typename DataT>
+    size_t getNumBytesRequired(size_t startRow,
+                               size_t numRows) const
+    {
+        return getNumBytesRequired(startRow, numRows, sizeof(DataT));
+    }
+
+    // TODO: Finish
+    size_t getNumBytesRequired(size_t startRow,
+                               size_t numRows,
+                               size_t numBytesPerPixel) const;
+
+    // TODO: Implement
+    //       The idea is that OpT is performed on each pixel
+    // TODO: Add an overloading that doesn't take in an OpT that just does
+    //       an assignment
+    template <typename DataT, typename OpT>
+    void block(const DataT* input,
+               size_t startRow,
+               size_t numRows,
+               const OpT& op,
+               DataT* output) const;
+
+    // TODO: Want a threaded version
+
+    // TODO: Want something that tells you how you should partition the data
+    //       given that you can end up with these partial blocks at the end
+    //       of a block.
+
+
+private:
+    void findSegment(size_t startRow,
+                     size_t& segIdx,
+                     size_t& startRowWithinSegment) const;
+
+private:
+    std::vector<size_t> mStartRow;
+    const std::vector<size_t> mNumRows;
+    const size_t mTotalNumRows;
+    const size_t mNumCols;
+    const size_t mNumRowsPerBlock;
+    const size_t mNumColsPerBlock;
+
+    std::vector<size_t> mNumBlocksAcrossRows;
+    std::vector<size_t> mNumPadRowsInFinalBlock;
+
+    size_t mNumBlocksAcrossCols;
+    size_t mNumPadColsInFinalBlock;
+};
+}
+
+#endif
