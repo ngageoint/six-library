@@ -23,6 +23,7 @@
 #ifndef __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 #define __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 
+// TODO: Finish ImageBlocker which is implementing a lot of the blocking logic
 
 // - Methods that provide image data must provide rows of a multiple of the block size!
 //   This means two things though...
