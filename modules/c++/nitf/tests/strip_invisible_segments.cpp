@@ -67,7 +67,7 @@ int main(int argc, char** argv)
         //  Check argv and make sure we are happy
         if (argc != 3)
         {
-            std::cout << "Usage: %s <input-file> <output-file> \n" << argv[0]
+            std::cerr << "Usage: %s <input-file> <output-file> \n" << argv[0]
                     << std::endl;
             exit( EXIT_FAILURE);
         }
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
         // Check that we have a valid NITF
         if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
         {
-            std::cout << "Invalid NITF: " << inputPathname << std::endl;
+            std::cerr << "Invalid NITF: " << inputPathname << std::endl;
             exit( EXIT_FAILURE);
         }
 
