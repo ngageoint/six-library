@@ -53,8 +53,8 @@ void stripImages(nitf::Record& record)
                 "NODISPLY"));
     }
 
-    // Looping backwards so indicies don't get messed up after deletion
-    for (std::vector<size_t>::reverse_iterator ii = invisibleImages.rbegin();
+    // Looping backwards so indices don't get messed up after deletion
+    for (std::vector<size_t>::const_reverse_iterator ii = invisibleImages.rbegin();
             ii != invisibleImages.rend(); ++ii)
     {
         record.removeImageSegment(*ii);
