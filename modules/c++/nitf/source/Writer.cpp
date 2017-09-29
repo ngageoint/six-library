@@ -113,6 +113,74 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
     }
 }
 
+void Writer::setWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+{
+    setImageWriteHandlers(io, record);
+    setGraphicWriteHandlers(io, record);
+    setTextWriteHandlers(io, record);
+    setDEWriteHandlers(io, record);
+}
+
+void Writer::setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+{
+    nitf::List images = record.getImages();
+    const size_t numImages = record.getNumImages();
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment segment = images[ii];
+        const size_t offset = segment.getImageOffset();
+        mem::SharedPtr<nitf::WriteHandler> handler(
+                new nitf::StreamIOWriteHandler(
+                    io, offset, segment.getImageEnd() - offset));
+        setImageWriteHandler(ii, handler);
+    }
+}
+
+void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+{
+    nitf::List graphics = record.getGraphics();
+    const size_t numGraphics = record.getNumGraphics();
+    for (size_t ii = 0; ii < numGraphics; ++ii)
+    {
+       nitf::GraphicSegment segment = graphics[ii];
+       long offset = segment.getOffset();
+       mem::SharedPtr< ::nitf::WriteHandler> handler(
+           new nitf::StreamIOWriteHandler (
+               io, offset, segment.getEnd() - offset));
+       setGraphicWriteHandler(ii, handler);
+    }
+}
+
+void Writer::setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+{
+    nitf::List texts = record.getTexts();
+    const size_t numTexts = record.getNumTexts();
+    for (size_t ii = 0; ii < numTexts; ++ii)
+    {
+       nitf::TextSegment segment = texts[ii];
+       const size_t offset = segment.getOffset();
+       mem::SharedPtr< ::nitf::WriteHandler> handler(
+           new nitf::StreamIOWriteHandler (
+               io, offset, segment.getEnd() - offset));
+       setTextWriteHandler(ii, handler);
+    }
+}
+
+void Writer::setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+{
+    nitf::List dataExtensions = record.getDataExtensions();
+    const size_t numDEs = record.getNumDataExtensions();
+    for (size_t ii = 0; ii < numDEs; ++ii)
+    {
+       nitf::DESegment segment = dataExtensions[ii];
+       const size_t offset = segment.getOffset();
+       mem::SharedPtr< ::nitf::WriteHandler> handler(
+           new nitf::StreamIOWriteHandler (
+               io, offset, segment.getEnd() - offset));
+       setDEWriteHandler(ii, handler);
+    }
+}
+
 void Writer::setImageWriteHandler(int index,
                                   mem::SharedPtr<WriteHandler> writeHandler)
         throw (nitf::NITFException)
@@ -200,7 +268,7 @@ nitf::ImageWriter Writer::newImageWriter(int imageNumber,
     {
         throw nitf::NITFException(&error);
     }
-    
+
     //manage the writer
     nitf::ImageWriter writer(x);
     writer.setManaged(true);

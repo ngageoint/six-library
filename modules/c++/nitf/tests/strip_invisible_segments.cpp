@@ -40,7 +40,7 @@ void stripImages(nitf::Record& record)
     {
         nitf::ImageSegment image = *iter;
         nitf::ImageSubheader subheader = image.getSubheader();
-        std::string irep(subheader.getImageRepresentation().getRawData());
+        std::string irep = subheader.getImageRepresentation();
         str::trim(irep);
         if (irep == "NODISPLY")
         {
@@ -53,9 +53,11 @@ void stripImages(nitf::Record& record)
                 "NODISPLY"));
     }
 
-    for (int ii = invisibleImages.size() - 1; ii >= 0; --ii)
+    // Looping backwards so indicies don't get messed up after deletion
+    for (std::vector<size_t>::reverse_iterator ii = invisibleImages.rbegin();
+            ii != invisibleImages.rend(); ++ii)
     {
-        record.removeImageSegment(invisibleImages[ii]);
+        record.removeImageSegment(*ii);
     }
 }
 }
@@ -67,9 +69,9 @@ int main(int argc, char** argv)
         //  Check argv and make sure we are happy
         if (argc != 3)
         {
-            std::cerr << "Usage: %s <input-file> <output-file> \n" << argv[0]
-                    << std::endl;
-            exit( EXIT_FAILURE);
+            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+                    << " <input-file> <output-file>" << std::endl;
+            return 1;
         }
 
         const std::string inputPathname(argv[1]);
@@ -79,7 +81,7 @@ int main(int argc, char** argv)
         if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
         {
             std::cerr << "Invalid NITF: " << inputPathname << std::endl;
-            exit( EXIT_FAILURE);
+            return 1;
         }
 
         nitf::Reader reader;
@@ -91,54 +93,7 @@ int main(int argc, char** argv)
         nitf::IOHandle output(outputPathname, NITF_ACCESS_WRITEONLY,
                 NITF_CREATE);
         writer.prepare(output, record);
-
-        nitf::List images = record.getImages();
-        const size_t numImages = record.getNumImages();
-        for (size_t ii = 0; ii < numImages; ++ii)
-        {
-            nitf::ImageSegment segment = images[ii];
-            const size_t offset = segment.getImageOffset();
-            mem::SharedPtr<nitf::WriteHandler> handler(
-                    new nitf::StreamIOWriteHandler(
-                        io, offset, segment.getImageEnd() - offset));
-            writer.setImageWriteHandler(ii, handler);
-        }
-
-        nitf::List graphics = record.getGraphics();
-        const size_t numGraphics = record.getNumGraphics();
-        for (size_t ii = 0; ii < numGraphics; ++ii)
-        {
-           nitf::GraphicSegment segment = graphics[ii];
-           long offset = segment.getOffset();
-           mem::SharedPtr< ::nitf::WriteHandler> handler(
-               new nitf::StreamIOWriteHandler (
-                   io, offset, segment.getEnd() - offset));
-           writer.setGraphicWriteHandler(ii, handler);
-        }
-
-        nitf::List texts = record.getTexts();
-        const size_t numTexts = record.getNumTexts();
-        for (size_t ii = 0; ii < numTexts; ++ii)
-        {
-           nitf::TextSegment segment = texts[ii];
-           const size_t offset = segment.getOffset();
-           mem::SharedPtr< ::nitf::WriteHandler> handler(
-               new nitf::StreamIOWriteHandler (
-                   io, offset, segment.getEnd() - offset));
-           writer.setTextWriteHandler(ii, handler);
-        }
-
-        nitf::List dataExtensions = record.getDataExtensions();
-        const size_t numDEs = record.getNumDataExtensions();
-        for (size_t ii = 0; ii < numDEs; ++ii)
-        {
-           nitf::DESegment segment = dataExtensions[ii];
-           const size_t offset = segment.getOffset();
-           mem::SharedPtr< ::nitf::WriteHandler> handler(
-               new nitf::StreamIOWriteHandler (
-                   io, offset, segment.getEnd() - offset));
-           writer.setDEWriteHandler(ii, handler);
-        }
+        writer.setWriteHandlers(io, record);
         writer.write();
 
         return 0;
