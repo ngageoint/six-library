@@ -53,9 +53,13 @@ void stripImages(nitf::Record& record)
                 "NODISPLY"));
     }
 
+    // Solaris doesn't know how to get a const_reverse_iterator from a 
+    // reverse_iterator.
+    const std::vector<size_t>& constImages = invisibleImages;
+
     // Looping backwards so indices don't get messed up after deletion
-    for (std::vector<size_t>::const_reverse_iterator ii = invisibleImages.rbegin();
-            ii != invisibleImages.rend(); ++ii)
+    for (std::vector<size_t>::const_reverse_iterator ii = constImages.rbegin();
+            ii != constImages.rend(); ++ii)
     {
         record.removeImageSegment(*ii);
     }
