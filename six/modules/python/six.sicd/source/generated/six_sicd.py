@@ -1770,6 +1770,86 @@ def schema_path():
         pysix_path = os.path.dirname(sys.argv[0])
     return os.path.abspath(os.path.join(pysix_path, 'schemas'))
 
+class ProjectionPolynomialFitter(_object):
+    """Proxy of C++ scene::ProjectionPolynomialFitter class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ProjectionPolynomialFitter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ProjectionPolynomialFitter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent, size_t numPoints1D) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent) -> ProjectionPolynomialFitter
+        """
+        this = _six_sicd.new_ProjectionPolynomialFitter(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getOutputPlaneRows(self):
+        """getOutputPlaneRows(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneRows(self)
+
+
+    def getOutputPlaneCols(self):
+        """getOutputPlaneCols(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneCols(self)
+
+
+    def getSceneCoordinates(self):
+        """getSceneCoordinates(ProjectionPolynomialFitter self) -> math::linear::Matrix2D< types::RowCol< double > > const &"""
+        return _six_sicd.ProjectionPolynomialFitter_getSceneCoordinates(self)
+
+
+    def getTimeCOA(self):
+        """getTimeCOA(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getTimeCOA(self)
+
+
+    def fitOutputToSlantPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+        """
+        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
+        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitOutputToSlantPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
+
+
+    def fitSlantToOutputPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+        """
+        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None)
+        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitSlantToOutputPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow, meanResidualErrorCol)
+
+
+    def fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+        """
+        fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
+        fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
+
+
+    def fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+        """
+        fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
+        fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
+
+    __swig_destroy__ = _six_sicd.delete_ProjectionPolynomialFitter
+    __del__ = lambda self: None
+ProjectionPolynomialFitter_swigregister = _six_sicd.ProjectionPolynomialFitter_swigregister
+ProjectionPolynomialFitter_swigregister(ProjectionPolynomialFitter)
+cvar = _six_sicd.cvar
+ProjectionPolynomialFitter.DEFAULTS_POINTS_1D = _six_sicd.cvar.ProjectionPolynomialFitter_DEFAULTS_POINTS_1D
+
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class."""
 
@@ -4867,6 +4947,74 @@ def SixSicdUtilities_toXMLString(*args):
 def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
+
+class AreaPlaneUtility(_object):
+    """Proxy of C++ six::sicd::AreaPlaneUtility class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AreaPlaneUtility, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AreaPlaneUtility, name)
+    __repr__ = _swig_repr
+
+    def setAreaPlane(*args):
+        """
+        setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
+        setAreaPlane(ComplexData data, bool includeSegmentList=True)
+        setAreaPlane(ComplexData data)
+        """
+        return _six_sicd.AreaPlaneUtility_setAreaPlane(*args)
+
+    setAreaPlane = staticmethod(setAreaPlane)
+
+    def deriveAreaPlane(*args):
+        """
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane)
+        """
+        return _six_sicd.AreaPlaneUtility_deriveAreaPlane(*args)
+
+    deriveAreaPlane = staticmethod(deriveAreaPlane)
+
+    def hasAreaPlane(data):
+        """hasAreaPlane(ComplexData data) -> bool"""
+        return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
+
+    hasAreaPlane = staticmethod(hasAreaPlane)
+
+    def __init__(self):
+        """__init__(six::sicd::AreaPlaneUtility self) -> AreaPlaneUtility"""
+        this = _six_sicd.new_AreaPlaneUtility()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_AreaPlaneUtility
+    __del__ = lambda self: None
+AreaPlaneUtility_swigregister = _six_sicd.AreaPlaneUtility_swigregister
+AreaPlaneUtility_swigregister(AreaPlaneUtility)
+
+def AreaPlaneUtility_setAreaPlane(*args):
+    """
+    setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
+    setAreaPlane(ComplexData data, bool includeSegmentList=True)
+    AreaPlaneUtility_setAreaPlane(ComplexData data)
+    """
+    return _six_sicd.AreaPlaneUtility_setAreaPlane(*args)
+
+def AreaPlaneUtility_deriveAreaPlane(*args):
+    """
+    deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
+    deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
+    AreaPlaneUtility_deriveAreaPlane(ComplexData data, AreaPlane areaPlane)
+    """
+    return _six_sicd.AreaPlaneUtility_deriveAreaPlane(*args)
+
+def AreaPlaneUtility_hasAreaPlane(data):
+    """AreaPlaneUtility_hasAreaPlane(ComplexData data) -> bool"""
+    return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
+AreaPlaneUtility.DEFAULT_SAMPLE_DENSITY = _six_sicd.cvar.AreaPlaneUtility_DEFAULT_SAMPLE_DENSITY
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""

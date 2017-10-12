@@ -33,6 +33,7 @@
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/SICDWriteControl.h"
 #include <numpyutils/numpyutils.h>
 
@@ -159,6 +160,7 @@ nitf::Record _readRecord(const std::string& pathname)
 %include <nitf/Types.h>
 
 %import "math_poly.i"
+%import "types.i"
 %import "six.i"
 %import "io.i"
 %import "mem.i"
@@ -211,6 +213,8 @@ def schema_path():
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
+%import "scene/GridECEFTransform.h"
+%include "scene/ProjectionPolynomialFitter.h"
 %include "six/sicd/ComplexClassification.h"
 %include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
@@ -230,7 +234,7 @@ def schema_path():
 %include "six/sicd/ComplexData.h"
 %include "six/sicd/ComplexXMLControl.h"
 %include "six/sicd/Utilities.h"
-
+%include "six/sicd/AreaPlaneUtility.h"
 
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
