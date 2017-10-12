@@ -33,6 +33,7 @@
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/SICDWriteControl.h"
 #include <numpyutils/numpyutils.h>
 
@@ -137,6 +138,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
+%rename(_fitPolyImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+
 %import <nitf/List.hpp>
 %import <nitf/Object.hpp>
 %import <nitf/TRE.hpp>
@@ -159,6 +162,7 @@ nitf::Record _readRecord(const std::string& pathname)
 %include <nitf/Types.h>
 
 %import "math_poly.i"
+%import "types.i"
 %import "six.i"
 %import "io.i"
 %import "mem.i"
@@ -197,6 +201,8 @@ nitf::Record _readRecord(const std::string& pathname);
 import os
 import sys
 
+from coda.math_poly import Poly2D
+
 
 def schema_path():
     """Provide an absolute path to the schemas."""
@@ -211,6 +217,8 @@ def schema_path():
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
+%import "scene/GridECEFTransform.h"
+%include "scene/ProjectionPolynomialFitter.h"
 %include "six/sicd/ComplexClassification.h"
 %include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
@@ -230,7 +238,7 @@ def schema_path():
 %include "six/sicd/ComplexData.h"
 %include "six/sicd/ComplexXMLControl.h"
 %include "six/sicd/Utilities.h"
-
+%include "six/sicd/AreaPlaneUtility.h"
 
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
@@ -446,6 +454,24 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                 return data
             except ValueError:
                 return str(data)
+    %}
+}
+
+%extend scene::ProjectionPolynomialFitter
+{
+    %pythoncode
+    %{
+        def fitOutputToSlantPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toSlantRow = Poly2D()
+            toSlantCol = Poly2D()
+            self._fitPolyImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+            return (toSlantRow, toSlantCol)
+
     %}
 }
 
