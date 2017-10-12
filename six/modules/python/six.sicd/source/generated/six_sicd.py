@@ -1760,6 +1760,8 @@ def _readRecord(pathname):
 import os
 import sys
 
+from coda.math_poly import Poly2D
+
 
 def schema_path():
     """Provide an absolute path to the schemas."""
@@ -1810,13 +1812,13 @@ class ProjectionPolynomialFitter(_object):
         return _six_sicd.ProjectionPolynomialFitter_getTimeCOA(self)
 
 
-    def fitOutputToSlantPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+    def _fitPolyImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
         """
-        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
-        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
-        fitOutputToSlantPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
+        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
+        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
         """
-        return _six_sicd.ProjectionPolynomialFitter_fitOutputToSlantPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
+        return _six_sicd.ProjectionPolynomialFitter__fitPolyImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
 
 
     def fitSlantToOutputPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
@@ -1842,6 +1844,19 @@ class ProjectionPolynomialFitter(_object):
         fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
         """
         return _six_sicd.ProjectionPolynomialFitter_fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
+
+
+    def fitOutputToSlantPolynomials(
+            self, offset, inSceneCenter,
+            interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY):
+        toSlantRow = Poly2D()
+        toSlantCol = Poly2D()
+        self._fitPolyImpl(
+            offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+        return (toSlantRow, toSlantCol)
+
 
     __swig_destroy__ = _six_sicd.delete_ProjectionPolynomialFitter
     __del__ = lambda self: None

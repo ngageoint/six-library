@@ -24,6 +24,7 @@ def getSchemaPaths(pathname):
 
 def findOutputToSlantPolynomials(complexData, orderX, orderY):
     polynomialFitter = SixSicdUtilities.getPolynomialFitter(complexData)
+    print(dir(polynomialFitter))
     sampleSpacing = RowColDouble(complexData.grid.row.sampleSpacing,
                                  complexData.grid.col.sampleSpacing)
     offset = RowColSizeT(complexData.imageData.firstRow,
@@ -32,16 +33,13 @@ def findOutputToSlantPolynomials(complexData, orderX, orderY):
                             complexData.imageData.scpPixel.col)
     toSlantRow = Poly2D()
     toSlantCol = Poly2D()
-    polynomialFitter.fitOutputToSlantPolynomials(
+    return polynomialFitter.fitOutputToSlantPolynomials(
         offset,
         scpPixel,
         scpPixel,
         sampleSpacing,
         orderX,
-        orderY,
-        toSlantRow,
-        toSlantCol)
-    return toSlantRow, toSlantCol
+        orderY)
 
 
 def projectToOutput(inputBuffer, dims, toSlantRow, toSlantCol):

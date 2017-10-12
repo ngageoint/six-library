@@ -138,6 +138,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
+%rename(_fitPolyImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+
 %import <nitf/List.hpp>
 %import <nitf/Object.hpp>
 %import <nitf/TRE.hpp>
@@ -198,6 +200,8 @@ nitf::Record _readRecord(const std::string& pathname);
 %{
 import os
 import sys
+
+from coda.math_poly import Poly2D
 
 
 def schema_path():
@@ -450,6 +454,24 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                 return data
             except ValueError:
                 return str(data)
+    %}
+}
+
+%extend scene::ProjectionPolynomialFitter
+{
+    %pythoncode
+    %{
+        def fitOutputToSlantPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toSlantRow = Poly2D()
+            toSlantCol = Poly2D()
+            self._fitPolyImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+            return (toSlantRow, toSlantCol)
+
     %}
 }
 
