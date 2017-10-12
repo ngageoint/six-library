@@ -6,7 +6,6 @@ import numpy
 
 import coda.sio_lite as sio_lite
 from coda.coda_types import RowColDouble, RowColSizeT, VectorString
-from coda.math_poly import Poly2D
 import pysix.six_sicd as six_sicd
 from pysix.six_sicd import AreaPlaneUtility, SixSicdUtilities
 
@@ -31,8 +30,7 @@ def findOutputToSlantPolynomials(complexData, orderX, orderY):
                          complexData.imageData.firstCol)
     scpPixel = RowColDouble(complexData.imageData.scpPixel.row,
                             complexData.imageData.scpPixel.col)
-    toSlantRow = Poly2D()
-    toSlantCol = Poly2D()
+
     return polynomialFitter.fitOutputToSlantPolynomials(
         offset,
         scpPixel,
