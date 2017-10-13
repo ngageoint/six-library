@@ -35,11 +35,12 @@ int main(int argc, char** argv)
     try
     {
         cli::ArgumentParser parser;
-        parser.setDescription("Given a pixel in a SICD, output the lat/lon/alt");
+        parser.setDescription("Given a SICD, and a pixel in the corresponding "
+                              "output plane, display the lat/lon/alt");
         parser.addArgument("-s --schemaPath",
                            "Specify a schema or directory of schemata",
                            cli::STORE, "schema", "FILE");
-        parser.addArgument("-h --shadowsDown",
+        parser.addArgument("-r --rotateToShadowsDown",
                            "Specify whether to rotate to shadows-down",
                            cli::STORE, "shadowsDown", "SHADOWS")->setDefault(true);
         parser.addArgument("input", "Input SICD/SIDD file", cli::STORE, "input",
