@@ -146,8 +146,8 @@ TEST_CASE(testRotatePlane)
 
     plane.segmentList.resize(1);
     plane.segmentList[0].reset(new six::sicd::Segment());
-    plane.segmentList[0]->startLine = 2;
-    plane.segmentList[0]->startSample = 1;
+    plane.segmentList[0]->startLine = 1;
+    plane.segmentList[0]->startSample = 0;
     plane.segmentList[0]->endLine = 4;
     plane.segmentList[0]->endSample = 8;
 
@@ -173,9 +173,9 @@ TEST_CASE(testRotatePlane)
     TEST_ASSERT_EQ(plane.xDirection->spacing, 5);
     TEST_ASSERT_EQ(plane.yDirection->spacing, 7);
 
-    TEST_ASSERT_EQ(plane.segmentList[0]->startLine, 19);
-    TEST_ASSERT_EQ(plane.segmentList[0]->startSample, 2);
-    TEST_ASSERT_EQ(plane.segmentList[0]->endLine, 12);
+    TEST_ASSERT_EQ(plane.segmentList[0]->startLine, 0);
+    TEST_ASSERT_EQ(plane.segmentList[0]->startSample, 1);
+    TEST_ASSERT_EQ(plane.segmentList[0]->endLine, -8);
     TEST_ASSERT_EQ(plane.segmentList[0]->endSample, 4);
 
     TEST_ASSERT_EQ(originalNumLines, plane.segmentList[0]->getNumSamples());

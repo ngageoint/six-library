@@ -390,10 +390,17 @@ void AreaPlane::rotateCCW()
 
 void Segment::rotateCCW(size_t numColumns)
 {
-    const six::RowColDouble start = rotatePixel(numColumns,
-            six::RowColDouble(startLine, startSample));
-    const six::RowColDouble end = rotatePixel(numColumns,
-            six::RowColDouble(endLine, endSample));
+    /*
+     *   5   wth           --    ! is reference corner
+     * !-----             |  |   2 right, 1 down becomes
+     * | .  | 2 ht. -->   |  |   1 right, 2 up
+     * |    |             |  |
+     * ------             |. |
+     *                    |  |
+     *                    !--
+     */
+    const six::RowColDouble start(startSample * -1, startLine);
+    const six::RowColDouble end(endSample * -1, endLine);
     startLine = start.row;
     startSample = start.col;
     endLine = end.row;
