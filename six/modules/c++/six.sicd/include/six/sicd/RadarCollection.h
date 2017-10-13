@@ -252,13 +252,15 @@ struct Segment
     //! The number of lines in the segment
     int getNumLines() const
     {
-        return (endLine - startLine + 1);
+        // Rotating can make the start/end in reverse order,
+        // so need the absolute value
+        return std::abs(endLine - startLine) + 1;
     }
 
     //! The number of samples in the segment
     int getNumSamples() const
     {
-        return (endSample - startSample + 1);
+        return std::abs(endSample - startSample) + 1;
     }
 
     /*!
@@ -300,6 +302,12 @@ struct Segment
     {
         return !(*this == rhs);
     }
+
+    /*!
+     * Rotate the segment counter clockwise
+     * \param numColumns How many columns are in the plane
+     */
+    void rotateCCW(size_t numColumns);
 };
 
 /*!
@@ -381,6 +389,11 @@ struct AreaPlane
      * \return Reference to Segment
      */
     const Segment& getSegment(const std::string& segmentId) const;
+
+    /*!
+     * Rotate the plane counterclockwise, updating the fields to match
+     */
+    void rotateCCW();
 };
 
 /*!

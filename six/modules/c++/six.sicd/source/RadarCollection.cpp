@@ -22,6 +22,18 @@
 #include <six/sicd/RadarCollection.h>
 #include <six/Utilities.h>
 
+namespace
+{
+template <typename T>
+types::RowCol<T> rotatePixel(size_t origNumCols, const types::RowCol<T>& pixel)
+{
+    types::RowCol<T> rotatedPixel;
+    rotatedPixel.col = pixel.row;
+    rotatedPixel.row = origNumCols - pixel.col;
+    return rotatedPixel;
+}
+}
+
 namespace six
 {
 namespace sicd
@@ -344,6 +356,50 @@ const Segment& AreaPlane::getSegment(const std::string& segmentId) const
     }
     throw except::Exception(Ctxt("No segment with identifier " + segmentId));
 }
+
+void AreaPlane::rotateCCW()
+{
+    if (orientation == OrientationType::LEFT)
+    {
+        orientation = OrientationType::DOWN;
+    }
+    else if (orientation == OrientationType::DOWN)
+    {
+        orientation = OrientationType::RIGHT;
+    }
+    else if (orientation == OrientationType::RIGHT)
+    {
+        orientation = OrientationType::UP;
+    }
+    else if (orientation == OrientationType::UP)
+    {
+        orientation = OrientationType::LEFT;
+    }
+    referencePoint.rowCol = rotatePixel(yDirection->elements, referencePoint.rowCol);
+
+    std::swap(yDirection->elements, xDirection->elements);
+    std::swap(yDirection->spacing, xDirection->spacing);
+    std::swap(yDirection->unitVector, xDirection->unitVector);
+    xDirection->unitVector *= -1;
+
+    for (size_t ii = 0; ii < segmentList.size(); ++ii)
+    {
+        segmentList[ii]->rotateCCW(yDirection->elements);
+    }
+}
+
+void Segment::rotateCCW(size_t numColumns)
+{
+    const six::RowColDouble start = rotatePixel(numColumns,
+            six::RowColDouble(startLine, startSample));
+    const six::RowColDouble end = rotatePixel(numColumns,
+            six::RowColDouble(endLine, endSample));
+    startLine = start.row;
+    startSample = start.col;
+    endLine = end.row;
+    endSample = end.col;
+}
+
 
 Area::Area()
 {

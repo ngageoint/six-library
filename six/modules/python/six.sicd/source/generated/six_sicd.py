@@ -2958,6 +2958,11 @@ class Segment(_object):
         """__ne__(Segment self, Segment rhs) -> bool"""
         return _six_sicd.Segment___ne__(self, rhs)
 
+
+    def rotateCCW(self, numColumns):
+        """rotateCCW(Segment self, size_t numColumns)"""
+        return _six_sicd.Segment_rotateCCW(self, numColumns)
+
 Segment_swigregister = _six_sicd.Segment_swigregister
 Segment_swigregister(Segment)
 
@@ -3021,6 +3026,11 @@ class AreaPlane(_object):
     def getSegment(self, segmentId):
         """getSegment(AreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.AreaPlane_getSegment(self, segmentId)
+
+
+    def rotateCCW(self):
+        """rotateCCW(AreaPlane self)"""
+        return _six_sicd.AreaPlane_rotateCCW(self)
 
     __swig_destroy__ = _six_sicd.delete_AreaPlane
     __del__ = lambda self: None
@@ -8611,6 +8621,11 @@ class ScopedCloneableAreaPlane(_object):
         """getSegment(ScopedCloneableAreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.ScopedCloneableAreaPlane_getSegment(self, segmentId)
 
+
+    def rotateCCW(self):
+        """rotateCCW(ScopedCloneableAreaPlane self)"""
+        return _six_sicd.ScopedCloneableAreaPlane_rotateCCW(self)
+
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
 
@@ -8837,6 +8852,11 @@ class ScopedCloneableSegment(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCloneableSegment self, Segment rhs) -> bool"""
         return _six_sicd.ScopedCloneableSegment___ne__(self, rhs)
+
+
+    def rotateCCW(self, numColumns):
+        """rotateCCW(ScopedCloneableSegment self, size_t numColumns)"""
+        return _six_sicd.ScopedCloneableSegment_rotateCCW(self, numColumns)
 
 ScopedCloneableSegment_swigregister = _six_sicd.ScopedCloneableSegment_swigregister
 ScopedCloneableSegment_swigregister(ScopedCloneableSegment)
