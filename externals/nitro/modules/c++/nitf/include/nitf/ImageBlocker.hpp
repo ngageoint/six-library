@@ -24,6 +24,7 @@
 #define __NITF_IMAGE_BLOCKER_HPP__
 
 #include <stddef.h>
+#include <string.h>
 #include <vector>
 
 namespace nitf
@@ -51,15 +52,34 @@ public:
                                size_t numBytesPerPixel) const;
 
     // TODO: Implement
+    // startRow must start on a block boundary (within a segment)
+    // numRows must be a multiple of block size unless it's the end of a segment
+    void block(const void* input,
+               size_t startRow,
+               size_t numRows,
+               size_t numBytesPerPixel,
+               void* output) const;
+
+    template <typename DataT>
+    void block(const DataT* input,
+               size_t startRow,
+               size_t numRows,
+               DataT* output) const
+    {
+        block(input, startRow, numRows, sizeof(DataT), output);
+    }
+
+    // TODO: Implement
     //       The idea is that OpT is performed on each pixel
     // TODO: Add an overloading that doesn't take in an OpT that just does
     //       an assignment
+    /*
     template <typename DataT, typename OpT>
     void block(const DataT* input,
                size_t startRow,
                size_t numRows,
                const OpT& op,
-               DataT* output) const;
+               DataT* output) const;*/
 
     // TODO: Want a threaded version
 
@@ -78,6 +98,22 @@ private:
     {
         return (rowWithinSeg % mNumRowsPerBlock == 0);
     }
+
+    void findSegmentRange(size_t startRow,
+                          size_t numRows,
+                          size_t& firstSegIdx,
+                          size_t& startBlockWithinFirstSeg,
+                          size_t& lastSegIdx,
+                          size_t& lastBlockWithinLastSeg) const;
+
+    // TODO: Should this be a functor to not have to compute some of these
+    //       things each time?
+
+    void blockImpl(const sys::byte* input,
+                   size_t numValidRowsInBlock,
+                   size_t numValidColsInBlock,
+                   size_t numBytesPerPixel,
+                   sys::byte* output) const;
 
 private:
     std::vector<size_t> mStartRow;

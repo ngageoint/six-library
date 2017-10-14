@@ -22,6 +22,7 @@
 
 #include <sstream>
 #include <numeric>
+#include <limits>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -115,6 +116,56 @@ void ImageBlocker::findSegment(size_t row,
     throw except::Exception(Ctxt(ostr.str()));
 }
 
+void ImageBlocker::findSegmentRange(size_t startRow,
+                                    size_t numRows,
+                                    size_t& firstSegIdx,
+                                    size_t& startBlockWithinFirstSeg,
+                                    size_t& lastSegIdx,
+                                    size_t& lastBlockWithinLastSeg) const
+{
+    if (numRows == 0)
+    {
+        firstSegIdx = startBlockWithinFirstSeg =
+                lastSegIdx = lastBlockWithinLastSeg =
+                std::numeric_limits<size_t>::max();
+    }
+    else
+    {
+        // Figure out which segment we're starting in
+        size_t startRowWithinFirstSeg;
+        findSegment(startRow, firstSegIdx, startRowWithinFirstSeg,
+                    startBlockWithinFirstSeg);
+
+        if (!isFirstRowInBlock(startRowWithinFirstSeg))
+        {
+            std::ostringstream ostr;
+            ostr << "Start row " << startRow << " is local row "
+                 << startRowWithinFirstSeg << " within segment " << firstSegIdx
+                 << ".  The local row must be a multiple of "
+                 << mNumRowsPerBlock << ".";
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+
+        // Figure out which segment we're ending in
+        const size_t lastRow = startRow + numRows - 1;
+
+        size_t lastRowWithinLastSeg;
+        findSegment(lastRow, lastSegIdx, lastRowWithinLastSeg,
+                    lastBlockWithinLastSeg);
+
+        // Make sure we're ending on a full block
+        if (!(lastRowWithinLastSeg == mNumRows[lastSegIdx] ||
+              isFirstRowInBlock(lastRowWithinLastSeg + 1)))
+        {
+            std::ostringstream ostr;
+            ostr << "Last row " << lastRow << " is local row "
+                 << lastRowWithinLastSeg << " within segment " << lastSegIdx
+                 << ".  This must land on a full block.";
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+    }
+}
+
 size_t ImageBlocker::getNumBytesRequired(size_t startRow,
                                          size_t numRows,
                                          size_t numBytesPerPixel) const
@@ -124,42 +175,13 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
         return 0;
     }
 
-    // Figure out which segment we're starting in
+    // Find which segments we're in
     size_t firstSegIdx;
-    size_t startRowWithinFirstSeg;
     size_t startBlockWithinFirstSeg;
-    findSegment(startRow, firstSegIdx, startRowWithinFirstSeg,
-                startBlockWithinFirstSeg);
-
-    if (!isFirstRowInBlock(startRowWithinFirstSeg))
-    {
-        std::ostringstream ostr;
-        ostr << "Start row " << startRow << " is local row "
-             << startRowWithinFirstSeg << " within segment " << firstSegIdx
-             << ".  The local row must be a multiple of " << mNumRowsPerBlock
-             << ".";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-
-    // Figure out which segment we're ending in
-    const size_t lastRow = startRow + numRows - 1;
-
     size_t lastSegIdx;
-    size_t lastRowWithinLastSeg;
     size_t lastBlockWithinLastSeg;
-    findSegment(lastRow, lastSegIdx, lastRowWithinLastSeg,
-                lastBlockWithinLastSeg);
-
-    // Make sure we're ending on a full block
-    if (!(lastRowWithinLastSeg == mNumRows[lastSegIdx] ||
-          isFirstRowInBlock(lastRowWithinLastSeg + 1)))
-    {
-        std::ostringstream ostr;
-        ostr << "Last row " << lastRow << " is local row "
-             << lastRowWithinLastSeg << " within segment " << lastSegIdx
-             << ".  This must land on a full block.";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
+    findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
+                     lastSegIdx, lastBlockWithinLastSeg);
 
     // Now count up the blocks
     size_t numRowBlocks;
@@ -189,5 +211,78 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
             numBytesPerPixel;
 
     return numBytes;
+}
+
+void ImageBlocker::blockImpl(const sys::byte* input,
+                             size_t numValidRowsInBlock,
+                             size_t numValidColsInBlock,
+                             size_t numBytesPerPixel,
+                             sys::byte* output) const
+{
+    const size_t inStride = mNumCols * numBytesPerPixel;
+    const size_t outNumValidBytes = numValidColsInBlock * numBytesPerPixel;
+
+    if (numValidColsInBlock == mNumColsPerBlock)
+    {
+        for (size_t row = 0;
+             row < numValidRowsInBlock;
+             ++row, input += inStride, output += outNumValidBytes)
+        {
+            ::memcpy(output, input, outNumValidBytes);
+        }
+    }
+    else
+    {
+        // Have to deal with pad columns
+        const size_t outNumInvalidBytes =
+                (mNumColsPerBlock - numValidColsInBlock) * numBytesPerPixel;
+
+        for (size_t row = 0;
+             row < numValidRowsInBlock;
+             ++row, input += inStride)
+        {
+            ::memcpy(output, input, outNumValidBytes);
+            output += outNumValidBytes;
+
+            ::memset(output, 0, outNumInvalidBytes);
+            output += outNumInvalidBytes;
+        }
+    }
+
+    // Pad rows on the bottom of the block
+    if (numValidRowsInBlock < mNumRowsPerBlock)
+    {
+        const size_t numPadRows = mNumRowsPerBlock - numValidRowsInBlock;
+
+        ::memset(output, 0,
+                 numPadRows * mNumColsPerBlock * numBytesPerPixel);
+    }
+}
+
+void ImageBlocker::block(const void* input,
+                         size_t startRow,
+                         size_t numRows,
+                         size_t numBytesPerPixel,
+                         void* output) const
+{
+    // Find which segments we're in
+    size_t firstSegIdx;
+    size_t startBlockWithinFirstSeg;
+    size_t lastSegIdx;
+    size_t lastBlockWithinLastSeg;
+    findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
+                     lastSegIdx, lastBlockWithinLastSeg);
+
+    // TODO: Need a function to do blocking across all col blocks within a row of
+    //       blocks.
+
+/*
+    for (size_t seg = firstSegIdx; seg <= lastSegIdx; ++seg)
+    {
+
+    }*/
+
+    // Step through each row block
+
 }
 }
