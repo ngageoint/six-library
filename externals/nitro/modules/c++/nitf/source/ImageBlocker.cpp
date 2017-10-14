@@ -92,24 +92,26 @@ ImageBlocker::ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
                  mNumBlocksAcrossCols, mNumPadColsInFinalBlock);
 }
 
-void ImageBlocker::findSegment(size_t startRow,
+void ImageBlocker::findSegment(size_t row,
                                size_t& segIdx,
-                               size_t& startRowWithinSegment) const
+                               size_t& rowWithinSegment,
+                               size_t& blockWithinSegment) const
 {
     for (size_t seg = 0; seg < mStartRow.size(); ++seg)
     {
         const size_t endRowOfSeg = mStartRow[seg] + mNumRows[seg];
 
-        if (endRowOfSeg < startRow)
+        if (endRowOfSeg < row)
         {
             segIdx = seg;
-            startRowWithinSegment = startRow - mStartRow[seg];
+            rowWithinSegment = row - mStartRow[seg];
+            blockWithinSegment = rowWithinSegment / mNumRowsPerBlock;
             return;
         }
     }
 
     std::ostringstream ostr;
-    ostr << "Start row " << startRow << " is out of bounds";
+    ostr << "Row " << row << " is out of bounds";
     throw except::Exception(Ctxt(ostr.str()));
 }
 
@@ -117,23 +119,75 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
                                          size_t numRows,
                                          size_t numBytesPerPixel) const
 {
-    // Figure out which segment we're starting in
-    size_t segIdx;
-    size_t startRowWithinSeg;
-    findSegment(startRow, segIdx, startRowWithinSeg);
+    if (numRows == 0)
+    {
+        return 0;
+    }
 
-    if (startRowWithinSeg % mNumRowsPerBlock != 0)
+    // Figure out which segment we're starting in
+    size_t firstSegIdx;
+    size_t startRowWithinFirstSeg;
+    size_t startBlockWithinFirstSeg;
+    findSegment(startRow, firstSegIdx, startRowWithinFirstSeg,
+                startBlockWithinFirstSeg);
+
+    if (!isFirstRowInBlock(startRowWithinFirstSeg))
     {
         std::ostringstream ostr;
         ostr << "Start row " << startRow << " is local row "
-             << startRowWithinSeg << " within segment " << segIdx
+             << startRowWithinFirstSeg << " within segment " << firstSegIdx
              << ".  The local row must be a multiple of " << mNumRowsPerBlock
              << ".";
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    // TODO: Here need to determine the # of blocks in each segment we span
-    //       At the end we need to ensure we hit an even # of blocks with the
-    //       rows we provided
+    // Figure out which segment we're ending in
+    const size_t lastRow = startRow + numRows - 1;
+
+    size_t lastSegIdx;
+    size_t lastRowWithinLastSeg;
+    size_t lastBlockWithinLastSeg;
+    findSegment(lastRow, lastSegIdx, lastRowWithinLastSeg,
+                lastBlockWithinLastSeg);
+
+    // Make sure we're ending on a full block
+    if (!(lastRowWithinLastSeg == mNumRows[lastSegIdx] ||
+          isFirstRowInBlock(lastRowWithinLastSeg + 1)))
+    {
+        std::ostringstream ostr;
+        ostr << "Last row " << lastRow << " is local row "
+             << lastRowWithinLastSeg << " within segment " << lastSegIdx
+             << ".  This must land on a full block.";
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    // Now count up the blocks
+    size_t numRowBlocks;
+    if (lastSegIdx == firstSegIdx)
+    {
+        numRowBlocks = lastBlockWithinLastSeg - startBlockWithinFirstSeg + 1;
+    }
+    else
+    {
+        // First seg
+        numRowBlocks =
+                mNumBlocksAcrossRows[firstSegIdx] - startBlockWithinFirstSeg;
+
+        // Middle segs
+        for (size_t seg = firstSegIdx + 1; seg < lastSegIdx; ++seg)
+        {
+            numRowBlocks += mNumBlocksAcrossRows[seg];
+        }
+
+        // Last seg
+        numRowBlocks += lastBlockWithinLastSeg + 1;
+    }
+
+    const size_t numBytes =
+            numRowBlocks * mNumRowsPerBlock *
+            mNumBlocksAcrossCols * mNumColsPerBlock *
+            numBytesPerPixel;
+
+    return numBytes;
 }
 }

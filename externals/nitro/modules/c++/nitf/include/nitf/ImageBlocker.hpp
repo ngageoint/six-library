@@ -46,7 +46,6 @@ public:
         return getNumBytesRequired(startRow, numRows, sizeof(DataT));
     }
 
-    // TODO: Finish
     size_t getNumBytesRequired(size_t startRow,
                                size_t numRows,
                                size_t numBytesPerPixel) const;
@@ -70,9 +69,15 @@ public:
 
 
 private:
-    void findSegment(size_t startRow,
+    void findSegment(size_t row,
                      size_t& segIdx,
-                     size_t& startRowWithinSegment) const;
+                     size_t& rowWithinSegment,
+                     size_t& blockWithinSegment) const;
+
+    bool isFirstRowInBlock(size_t rowWithinSeg) const
+    {
+        return (rowWithinSeg % mNumRowsPerBlock == 0);
+    }
 
 private:
     std::vector<size_t> mStartRow;
