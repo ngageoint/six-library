@@ -70,7 +70,6 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schemaPath", "schema", schemaPaths);
 
-        const double col = options->get<double>("col");
         const six::RowColDouble rowCol(options->get<double>("row"),
                                        options->get<double>("col"));
 
@@ -80,14 +79,13 @@ int main(int argc, char** argv)
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 widebandData);
 
-        const bool shadowsDown(options->get<bool>("shadowsDown"));
         if (!six::sicd::AreaPlaneUtility::hasAreaPlane(*complexData))
         {
             six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
         }
 
         six::sicd::AreaPlane& plane = *complexData->radarCollection->area->plane;
-        if (shadowsDown)
+        if (options->get<bool>("shadowsDown"))
         {
             plane.rotateToShadowsDown();
         }
