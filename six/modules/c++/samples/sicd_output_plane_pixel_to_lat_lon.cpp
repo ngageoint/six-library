@@ -20,13 +20,22 @@
  *
  */
 
+/*
+ * Provide a pixel coordinate and a SICD. This program will output the
+ * latitude, longitude, and latitude of the pixel in the output plane.
+ */
+
 #include <exception>
 #include <iostream>
 
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
-#include <import/except.h>
-#include <import/six/sicd.h>
+#include <six/XMLControl.h>
+#include <six/Types.h>
+#include <six/sicd/AreaPlaneUtility.h>
+#include <six/sicd/ComplexData.h>
+#include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/Utilities.h>
 #include "utils.h"
 
 
@@ -49,12 +58,10 @@ int main(int argc, char** argv)
                            "ROW", 1, 1);
         parser.addArgument("col", "Pixel col location", cli::STORE, "col",
                            "COL", 1, 1);
-        const std::auto_ptr<cli::Results>
-            options(parser.parse(argc, (const char**) argv));
+        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
-        sys::OS os;
         const std::string sicdPathname(options->get<std::string>("input"));
-        if (!os.exists(sicdPathname))
+        if (!sys::OS().exists(sicdPathname))
         {
             std::cerr << sicdPathname << " does not exist.\n";
             return 1;
@@ -63,13 +70,10 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schemaPath", "schema", schemaPaths);
 
-        const double row = options->get<double>("row");
         const double col = options->get<double>("col");
-        const six::RowColDouble rowCol(row, col);
+        const six::RowColDouble rowCol(options->get<double>("row"),
+                                       options->get<double>("col"));
 
-        six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         std::auto_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
@@ -85,7 +89,7 @@ int main(int argc, char** argv)
         six::sicd::AreaPlane& plane = *complexData->radarCollection->area->plane;
         if (shadowsDown)
         {
-            plane.rotateCCW();
+            plane.rotateToShadowsDown();
         }
 
         const six::RowColDouble spacing(plane.xDirection->spacing,

@@ -3032,6 +3032,11 @@ class AreaPlane(_object):
         """rotateCCW(AreaPlane self)"""
         return _six_sicd.AreaPlane_rotateCCW(self)
 
+
+    def rotateToShadowsDown(self):
+        """rotateToShadowsDown(AreaPlane self)"""
+        return _six_sicd.AreaPlane_rotateToShadowsDown(self)
+
     __swig_destroy__ = _six_sicd.delete_AreaPlane
     __del__ = lambda self: None
 AreaPlane_swigregister = _six_sicd.AreaPlane_swigregister
@@ -8625,6 +8630,11 @@ class ScopedCloneableAreaPlane(_object):
     def rotateCCW(self):
         """rotateCCW(ScopedCloneableAreaPlane self)"""
         return _six_sicd.ScopedCloneableAreaPlane_rotateCCW(self)
+
+
+    def rotateToShadowsDown(self):
+        """rotateToShadowsDown(ScopedCloneableAreaPlane self)"""
+        return _six_sicd.ScopedCloneableAreaPlane_rotateToShadowsDown(self)
 
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)

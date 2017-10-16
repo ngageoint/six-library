@@ -22,6 +22,7 @@
 #ifndef __SIX_RADAR_COLLECTION_H__
 #define __SIX_RADAR_COLLECTION_H__
 
+#include <cmath>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -308,6 +309,7 @@ struct Segment
      * \param numColumns How many columns are in the plane
      */
     void rotateCCW(size_t numColumns);
+
 };
 
 /*!
@@ -394,6 +396,13 @@ struct AreaPlane
      * Rotate the plane counterclockwise, updating the fields to match
      */
     void rotateCCW();
+
+    /*!
+     * Rotate the plane until it is shadows down.
+     * If the plane's orientation type is ARBITRARY or NOT_SET (or DOWN),
+     * no rotation will occur
+     */
+    void rotateToShadowsDown();
 };
 
 /*!

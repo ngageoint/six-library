@@ -357,23 +357,45 @@ const Segment& AreaPlane::getSegment(const std::string& segmentId) const
     throw except::Exception(Ctxt("No segment with identifier " + segmentId));
 }
 
+void AreaPlane::rotateToShadowsDown()
+{
+    switch(orientation)
+    {
+    case OrientationType::RIGHT:
+        rotateCCW();
+        rotateCCW();
+        rotateCCW();
+        break;
+    case OrientationType::UP:
+        rotateCCW();
+        rotateCCW();
+        break;
+    case OrientationType::LEFT:
+        rotateCCW();
+        break;
+    default:
+        break;
+    }
+}
+
 void AreaPlane::rotateCCW()
 {
-    if (orientation == OrientationType::LEFT)
+    switch (orientation)
     {
+    case OrientationType::LEFT:
         orientation = OrientationType::DOWN;
-    }
-    else if (orientation == OrientationType::DOWN)
-    {
+        break;
+    case OrientationType::DOWN:
         orientation = OrientationType::RIGHT;
-    }
-    else if (orientation == OrientationType::RIGHT)
-    {
+        break;
+    case OrientationType::RIGHT:
         orientation = OrientationType::UP;
-    }
-    else if (orientation == OrientationType::UP)
-    {
+        break;
+    case OrientationType::UP:
         orientation = OrientationType::LEFT;
+        break;
+    default:
+        break;
     }
     referencePoint.rowCol = rotatePixel(yDirection->elements, referencePoint.rowCol);
 
