@@ -155,7 +155,8 @@ TEST_CASE(testRotatePlane)
     const int originalNumSamples = plane.segmentList[0]->getNumSamples();
 
     plane.rotateCCW();
-    TEST_ASSERT_EQ(plane.orientation, six::OrientationType::DOWN);
+    TEST_ASSERT(plane.orientation ==
+            six::OrientationType(six::OrientationType::DOWN));
     TEST_ASSERT_EQ(plane.referencePoint.rowCol.row, 8);
     TEST_ASSERT_EQ(plane.referencePoint.rowCol.col, 1);
 
