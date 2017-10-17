@@ -22,7 +22,7 @@
 
 /*
  * Provide a pixel coordinate and a SICD. This program will output the
- * latitude, longitude, and latitude of the pixel in the output plane.
+ * latitude, longitude, and altitude of the pixel in the output plane.
  */
 
 #include <exception>
