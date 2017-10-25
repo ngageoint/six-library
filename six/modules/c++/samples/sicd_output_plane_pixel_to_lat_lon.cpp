@@ -35,6 +35,7 @@
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/GeoLocator.h>
 #include <six/sicd/Utilities.h>
 #include "utils.h"
 
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
     try
     {
         cli::ArgumentParser parser;
-        parser.setDescription("Given a SICD, and a pixel in the corresponding "
+        parser.setDescription("Given a SICD and a pixel in the corresponding "
                               "output plane, display the lat/lon/alt");
         parser.addArgument("-s --schemaPath",
                            "Specify a schema or directory of schemata",
@@ -52,7 +53,7 @@ int main(int argc, char** argv)
         parser.addArgument("-r --rotateToShadowsDown",
                            "Specify whether to rotate to shadows-down",
                            cli::STORE, "shadowsDown", "SHADOWS")->setDefault(true);
-        parser.addArgument("input", "Input SICD/SIDD file", cli::STORE, "input",
+        parser.addArgument("input", "Input SICD file", cli::STORE, "input",
                            "INPUT", 1, 1);
         parser.addArgument("row", "Pixel row location", cli::STORE, "row",
                            "ROW", 1, 1);
@@ -79,28 +80,9 @@ int main(int argc, char** argv)
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 widebandData);
 
-        if (!six::sicd::AreaPlaneUtility::hasAreaPlane(*complexData))
-        {
-            six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
-        }
-
-        six::sicd::AreaPlane& plane = *complexData->radarCollection->area->plane;
-        if (options->get<bool>("shadowsDown"))
-        {
-            plane.rotateToShadowsDown();
-        }
-
-        const six::RowColDouble spacing(plane.xDirection->spacing,
-                plane.yDirection->spacing);
-        const scene::PlanarGridECEFTransform gridTransform(
-                spacing,
-                plane.getAdjustedReferencePoint(),
-                plane.xDirection->unitVector,
-                plane.yDirection->unitVector,
-                plane.referencePoint.ecef);
-        const six::Vector3 ecef = gridTransform.rowColToECEF(rowCol);
-        const scene::ECEFToLLATransform transformer;
-        const six::LatLonAlt lla = transformer.transform(ecef);
+        const six::sicd::GeoLocator locator(*complexData,
+                options->get<bool>("shadowsDown"));
+        const six::LatLonAlt lla = locator.geolocate(rowCol);
         std::cout << "Latitude: " <<  lla.getLat() << "\n"
             << "Longitude: " << lla.getLon() << "\n"
             << "Altitude: " << lla.getAlt() << "\n";

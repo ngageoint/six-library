@@ -34,6 +34,7 @@
 #include "import/six.h"
 #include "import/six/sicd.h"
 #include "six/sicd/AreaPlaneUtility.h"
+#include "six/sicd/GeoLocator.h"
 #include "six/sicd/SICDWriteControl.h"
 #include <numpyutils/numpyutils.h>
 
@@ -239,6 +240,7 @@ def schema_path():
 %include "six/sicd/ComplexXMLControl.h"
 %include "six/sicd/Utilities.h"
 %include "six/sicd/AreaPlaneUtility.h"
+%include "six/sicd/GeoLocator.h"
 
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */

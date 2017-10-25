@@ -4815,7 +4815,7 @@ class SixSicdUtilities(_object):
     def getComplexData(*args):
         """
         getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(six::NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
         """
         return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
@@ -4823,10 +4823,10 @@ class SixSicdUtilities(_object):
 
     def getWidebandData(*args):
         """
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+        getWidebandData(six::NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
+        getWidebandData(six::NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+        getWidebandData(six::NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+        getWidebandData(six::NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
         getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
         getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
         """
@@ -4924,16 +4924,16 @@ def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandDa
 def SixSicdUtilities_getComplexData(*args):
     """
     getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    SixSicdUtilities_getComplexData(six::NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
     """
     return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
 def SixSicdUtilities_getWidebandData(*args):
     """
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+    getWidebandData(six::NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
+    getWidebandData(six::NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+    getWidebandData(six::NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+    getWidebandData(six::NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
     getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
     SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
     """
@@ -5045,6 +5045,35 @@ def AreaPlaneUtility_hasAreaPlane(data):
     """AreaPlaneUtility_hasAreaPlane(ComplexData data) -> bool"""
     return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
 AreaPlaneUtility.DEFAULT_SAMPLE_DENSITY = _six_sicd.cvar.AreaPlaneUtility_DEFAULT_SAMPLE_DENSITY
+
+class GeoLocator(_object):
+    """Proxy of C++ six::sicd::GeoLocator class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoLocator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoLocator, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, complexData, shadowsDown=True):
+        """
+        __init__(six::sicd::GeoLocator self, ComplexData complexData, bool shadowsDown=True) -> GeoLocator
+        __init__(six::sicd::GeoLocator self, ComplexData complexData) -> GeoLocator
+        """
+        this = _six_sicd.new_GeoLocator(complexData, shadowsDown)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def geolocate(self, rowCol):
+        """geolocate(GeoLocator self, RowColDouble rowCol) -> LatLonAlt"""
+        return _six_sicd.GeoLocator_geolocate(self, rowCol)
+
+    __swig_destroy__ = _six_sicd.delete_GeoLocator
+    __del__ = lambda self: None
+GeoLocator_swigregister = _six_sicd.GeoLocator_swigregister
+GeoLocator_swigregister(GeoLocator)
 
 class StdAutoCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""
