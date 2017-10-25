@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 
         const six::sicd::GeoLocator locator(*complexData,
                 options->get<bool>("shadowsDown"));
-        six::LatLonAlt lla = locator.geolocate(rowCol);
+        const six::LatLonAlt lla = locator.geolocate(rowCol);
         std::cout << "Latitude: " <<  lla.getLat() << "\n"
             << "Longitude: " << lla.getLon() << "\n"
             << "Altitude: " << lla.getAlt() << "\n";
