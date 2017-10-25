@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_GEOLOCATOR_H__
-#define __SIX_GEOLOCATOR_H__
+#ifndef __SIX_SICD_GEOLOCATOR_H__
+#define __SIX_SICD_GEOLOCATOR_H__
 
 #include <scene/GridECEFTransform.h>
 #include <scene/ECEFToLLATransform.h>
@@ -41,7 +41,7 @@ public:
     /*!
      * Constructor
      * \param complexData Complex Data object for input
-     * \param shadowsDown If true, rotate output plane to shadows-down oritentation
+     * \param shadowsDown If true, rotate output plane to shadows-down orientation
      */
     GeoLocator(const ComplexData& complexData, bool shadowsDown=true);
 
