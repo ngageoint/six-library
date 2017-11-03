@@ -149,13 +149,13 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
     nitf::Off desiredPos;
     switch (whence)
     {
-    case SEEK_SET:
+    case sys::File::FROM_START:
         desiredPos = offset;
         break;
-    case SEEK_CUR:
+    case sys::File::FROM_CURRENT:
         desiredPos = bufferStart + mPosition + offset;
         break;
-    case SEEK_END:
+    case sys::File::FROM_END:
         desiredPos = mFile.length() + offset;
         break;
     default:
