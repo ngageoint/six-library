@@ -37,7 +37,8 @@ BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
     mBlocksRead(0),
     mPartialBlocks(0),
     mElapsedTime(0),
-    mFile(file, sys::File::READ_ONLY, sys::File::EXISTING)
+    mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
+    mFileLen(mFile.length())
 {
     if (mMaxBufferSize == 0)
     {
@@ -62,7 +63,8 @@ BufferedReader::BufferedReader(const std::string& file,
     mBlocksRead(0),
     mPartialBlocks(0),
     mElapsedTime(0),
-    mFile(file, sys::File::READ_ONLY, sys::File::EXISTING)
+    mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
+    mFileLen(mFile.length())
 {
     if (mMaxBufferSize == 0)
     {
@@ -80,10 +82,13 @@ BufferedReader::~BufferedReader()
 
 void BufferedReader::readNextBuffer()
 {
-    const size_t bufferSize = mFile.getCurrentOffset() +
-            (static_cast<sys::SSize_T>(mMaxBufferSize) > mFile.length()) ?
-                    mFile.length() - mFile.getCurrentOffset() :
-                    mMaxBufferSize;
+    const sys::Off_T currentOffset = mFile.getCurrentOffset();
+
+    const sys::Off_T endOffsetIfPerformMaxRead =
+            currentOffset + static_cast<sys::Off_T>(mMaxBufferSize);
+
+    const size_t bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
+            mFileLen - currentOffset : mMaxBufferSize;
 
     sys::RealTimeStopWatch sw;
     sw.start();
@@ -156,7 +161,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
         desiredPos = bufferStart + mPosition + offset;
         break;
     case sys::File::FROM_END:
-        desiredPos = mFile.length() + offset;
+        desiredPos = mFileLen + offset;
         break;
     default:
         throw except::Exception(Ctxt(
@@ -186,7 +191,7 @@ nitf::Off BufferedReader::tellImpl() const
 
 nitf::Off BufferedReader::getSizeImpl() const
 {
-    return mFile.length();
+    return mFileLen;
 }
 
 int BufferedReader::getModeImpl() const
