@@ -28,17 +28,18 @@
 namespace nitf
 {
 BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
-    mBufferSize(bufferSize),
+    mMaxBufferSize(bufferSize),
     mScopedBuffer(new char[bufferSize]),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
+    mBufferSize(0),
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
     mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING)
 {
-    if (mBufferSize == 0)
+    if (mMaxBufferSize == 0)
     {
         throw except::Exception(Ctxt(
             "BufferedReaders must have a buffer size greater than zero"));
@@ -49,20 +50,21 @@ BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
 }
 
 BufferedReader::BufferedReader(const std::string& file,
-                               char* buffer,
+                               void* buffer,
                                size_t size,
                                bool adopt) :
-    mBufferSize(size),
-    mScopedBuffer(adopt ? buffer : NULL),
-    mBuffer(buffer),
+    mMaxBufferSize(size),
+    mScopedBuffer(adopt ? static_cast<char*>(buffer) : NULL),
+    mBuffer(static_cast<char*>(buffer)),
     mPosition(0),
+    mBufferSize(0),
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
     mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING)
 {
-    if (mBufferSize == 0)
+    if (mMaxBufferSize == 0)
     {
         throw except::Exception(Ctxt(
             "BufferedReaders must have a buffer size greater than zero"));
@@ -78,10 +80,10 @@ BufferedReader::~BufferedReader()
 
 void BufferedReader::readNextBuffer()
 {
-    const sys::Size_T bufferSize = mFile.getCurrentOffset() +
-            static_cast<sys::SSize_T>(mBufferSize) > mFile.length() ?
+    const size_t bufferSize = mFile.getCurrentOffset() +
+            (static_cast<sys::SSize_T>(mMaxBufferSize) > mFile.length()) ?
                     mFile.length() - mFile.getCurrentOffset() :
-                    static_cast<sys::SSize_T>(mBufferSize);
+                    mMaxBufferSize;
 
     sys::RealTimeStopWatch sw;
     sw.start();
@@ -89,11 +91,12 @@ void BufferedReader::readNextBuffer()
     mElapsedTime += (sw.stop() / 1000.0);
 
     mPosition = 0;
+    mBufferSize = bufferSize;
     mTotalRead += bufferSize;
     mBlocksRead += 1;
-    if (mBufferSize != static_cast<size_t>(bufferSize))
+    if (mMaxBufferSize != bufferSize)
     {
-        mPartialBlocks += 1;
+        ++mPartialBlocks;
     }
 }
 
@@ -113,7 +116,7 @@ void BufferedReader::readImpl(void* buf, size_t size)
     while (amountLeftToRead)
     {
         const size_t readSize =
-                std::min<size_t>(amountLeftToRead, mBufferSize - mPosition);
+                std::min(amountLeftToRead, mBufferSize - mPosition);
 
         memcpy(bufPtr + offset, mBuffer + mPosition, readSize);
         mPosition += readSize;
@@ -140,9 +143,40 @@ bool BufferedReader::canSeekImpl() const
 
 nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
 {
-    const sys::Off_T newOffset = mFile.seekTo(offset, whence);
-    readNextBuffer();
-    return newOffset;
+    const nitf::Off bufferEnd = mFile.getCurrentOffset();
+    const nitf::Off bufferStart = bufferEnd - mBufferSize;
+
+    nitf::Off desiredPos;
+    switch (whence)
+    {
+    case SEEK_SET:
+        desiredPos = offset;
+        break;
+    case SEEK_CUR:
+        desiredPos = bufferStart + mPosition + offset;
+        break;
+    case SEEK_END:
+        desiredPos = mFile.length() + offset;
+        break;
+    default:
+        throw except::Exception(Ctxt(
+                "Invalid whence " + str::toString(whence)));
+    }
+
+    if (desiredPos >= bufferStart && desiredPos < bufferEnd)
+    {
+        // We've already read this in - we don't really need to seek in the
+        // file
+        mPosition = desiredPos - bufferStart;
+        return desiredPos;
+    }
+    else
+    {
+        // Need to do a legit read
+        const sys::Off_T newOffset = mFile.seekTo(offset, whence);
+        readNextBuffer();
+        return newOffset;
+    }
 }
 
 nitf::Off BufferedReader::tellImpl() const
@@ -165,4 +199,3 @@ void BufferedReader::closeImpl()
     mFile.close();
 }
 }
-
