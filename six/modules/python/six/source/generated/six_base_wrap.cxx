@@ -41946,6 +41946,52 @@ fail:
 }
 
 
+SWIGINTERN int Swig_var_Constants_ILOC_MAX_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_ILOC_MAX is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_ILOC_MAX_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_From_size_t(static_cast< size_t >(six::Constants::ILOC_MAX));
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN int Swig_var_Constants_GT_XML_KEY_set(PyObject *) {
   SWIG_Error(SWIG_AttributeError,"Variable Constants_GT_XML_KEY is read-only.");
   return 1;
@@ -81212,6 +81258,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"SCHEMA_PATH",Swig_var_SCHEMA_PATH_get, Swig_var_SCHEMA_PATH_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_IS_SIZE_MAX",Swig_var_Constants_IS_SIZE_MAX_get, Swig_var_Constants_IS_SIZE_MAX_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_SIZE_MAX",Swig_var_Constants_GT_SIZE_MAX_get, Swig_var_Constants_GT_SIZE_MAX_set);
+  SWIG_addvarlink(SWIG_globals(),(char *)"Constants_ILOC_MAX",Swig_var_Constants_ILOC_MAX_get, Swig_var_Constants_ILOC_MAX_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_XML_KEY",Swig_var_Constants_GT_XML_KEY_get, Swig_var_Constants_GT_XML_KEY_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_XML_TAG",Swig_var_Constants_GT_XML_TAG_get, Swig_var_Constants_GT_XML_TAG_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_DES_VERSION",Swig_var_Constants_DES_VERSION_get, Swig_var_Constants_DES_VERSION_set);
@@ -81222,7 +81269,6 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_SICD_DESSHSI",Swig_var_Constants_SICD_DESSHSI_get, Swig_var_Constants_SICD_DESSHSI_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_SIDD_DESSHSI",Swig_var_Constants_SIDD_DESSHSI_get, Swig_var_Constants_SIDD_DESSHSI_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_EXCESS_BANDWIDTH_FACTOR",Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get, Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_set);
-  SWIG_Python_SetConstant(d, "Constants_ILOC_MAX",SWIG_From_int(static_cast< int >(six::Constants::ILOC_MAX)));
   SWIG_Python_SetConstant(d, "FRAME_MODE",SWIG_From_int(static_cast< int >(six::FRAME_MODE)));
   SWIG_Python_SetConstant(d, "SCAN_MODE",SWIG_From_int(static_cast< int >(six::SCAN_MODE)));
   SWIG_Python_SetConstant(d, "CompositeSCP_ROW_COL",SWIG_From_int(static_cast< int >(six::CompositeSCP::ROW_COL)));
