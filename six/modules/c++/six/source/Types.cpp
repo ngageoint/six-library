@@ -21,6 +21,7 @@
  */
 #include "six/Init.h"
 #include "six/Types.h"
+#include <nitf/ImageSegmentComputer.h>
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
 {
@@ -40,8 +41,10 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 
 namespace six
 {
-const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;
+const sys::Uint64_T Constants::IS_SIZE_MAX =
+        nitf::ImageSegmentComputer::NUM_BYTES_MAX;
 const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
+const size_t Constants::ILOC_MAX = nitf::ImageSegmentComputer::ILOC_MAX;
 const unsigned short Constants::GT_XML_KEY = 50909;
 const char Constants::GT_XML_TAG[] = "XMLTag";
 
