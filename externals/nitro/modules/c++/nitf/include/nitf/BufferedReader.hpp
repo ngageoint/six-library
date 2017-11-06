@@ -58,7 +58,7 @@ public:
      *  \param adopt If this is true BufferedReader will own 'buffer'.
      */
     BufferedReader(const std::string& pathname,
-                   char* buffer,
+                   void* buffer,
                    size_t size,
                    bool adopt = false);
 
@@ -106,16 +106,18 @@ protected:
 private:
     void readNextBuffer();
 
-    const size_t mBufferSize;
+    const size_t mMaxBufferSize;
     const mem::ScopedArray<char> mScopedBuffer;
     char* const mBuffer;
 
     size_t mPosition;
+    size_t mBufferSize;
     size_t mTotalRead;
     size_t mBlocksRead;
     size_t mPartialBlocks;
     double mElapsedTime;
     mutable sys::File mFile;
+    const sys::Off_T mFileLen;
 };
 
 }

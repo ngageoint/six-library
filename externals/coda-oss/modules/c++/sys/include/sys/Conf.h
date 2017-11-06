@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 #ifndef __SYS_CONF_H__
 #define __SYS_CONF_H__
 
@@ -223,14 +223,53 @@ namespace sys
             {
                 innerOff = offset + j;
                 innerSwap = offset + elemSize - 1 - j;
-                
+
                 std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
             }
         }
     }
 
     /*!
-     *  Function to swap one element irrespective of size.  The inplace 
+     *  Swap bytes into output buffer.  Note that a complex pixel
+     *  is equivalent to two floats so elemSize and numElems
+     *  must be adjusted accordingly.
+     *
+     *  \param buffer to transform
+     *  \param elemSize
+     *  \param numElems
+     *  \param[out] outputBuffer buffer to write swapped elements to
+     */
+    inline void  byteSwap(const void* buffer,
+                          unsigned short elemSize,
+                          size_t numElems,
+                          void* outputBuffer)
+    {
+        const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
+        sys::byte* outputBufferPtr = static_cast<sys::byte*>(outputBuffer);
+
+        if (!numElems || !bufferPtr || !outputBufferPtr)
+        {
+            return;
+        }
+
+        const unsigned short half = elemSize >> 1;
+        size_t offset = 0;
+
+        for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
+        {
+            for (unsigned short jj = 0; jj < half; ++jj)
+            {
+                const size_t innerOff = offset + jj;
+                const size_t innerSwap = offset + elemSize - 1 - jj;
+
+                outputBufferPtr[innerOff] = bufferPtr[innerSwap];
+                outputBufferPtr[innerSwap] = bufferPtr[innerOff];
+            }
+        }
+    }
+
+    /*!
+     *  Function to swap one element irrespective of size.  The inplace
      *  buffer function should be preferred.
      *
      *  To specialize complex float, first include the complex library
@@ -253,7 +292,7 @@ namespace sys
     {
         size_t size = sizeof(T);
         T out;
-        
+
         unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
         unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
         for (int i = 0, j = size - 1; i < j; ++i, --j)
@@ -266,7 +305,7 @@ namespace sys
 
 
     /*!
-     *  Method to create a block of memory on an alignment 
+     *  Method to create a block of memory on an alignment
      *  boundary specified by the user.
      *  This typically reduces the amount of moves that the
      *  OS has to do to get the data in the form that it needs
@@ -277,7 +316,7 @@ namespace sys
      *  \throw Exception if a bad allocation occurs
      *  \return a pointer to the data (this method never returns NULL)
      */
-    inline void* alignedAlloc(size_t size, 
+    inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
 #ifdef WIN32
@@ -296,11 +335,11 @@ namespace sys
 #endif
         if (!p)
             throw except::Exception(Ctxt(
-                "Aligned allocation failure of size [" + 
+                "Aligned allocation failure of size [" +
                 str::toString(size) + "] bytes"));
         return p;
     }
-    
+
     /*!
      *  Free memory that was allocated with alignedAlloc
      *  This method behaves like free

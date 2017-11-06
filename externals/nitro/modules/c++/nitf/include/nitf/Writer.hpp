@@ -92,30 +92,65 @@ public:
             throw (nitf::NITFException);
 
     /*!
+     * Set write handlers for images, graphics, texts, and DES
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for images
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for graphics
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for texts
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for DEs
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
      * Sets the WriteHandler for the Image at the given index.
      */
-    void setImageWriteHandler(int index, 
+    void setImageWriteHandler(int index,
                               mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
-    void setGraphicWriteHandler(int index, 
+    void setGraphicWriteHandler(int index,
                                 mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
-    void setTextWriteHandler(int index, 
+    void setTextWriteHandler(int index,
                              mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
-    void setDEWriteHandler(int index, 
+    void setDEWriteHandler(int index,
                            mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
@@ -132,10 +167,10 @@ public:
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::ImageWriter newImageWriter(int imageNumber, 
+    nitf::ImageWriter newImageWriter(int imageNumber,
                                      const std::map<std::string, void*>& options)
         throw (nitf::NITFException);
-    
+
     /**
      * Returns a NEW SegmentWriter for the given index
      *
