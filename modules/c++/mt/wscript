@@ -1,7 +1,7 @@
 NAME            = 'mt'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.1'
-MODULE_DEPS     = 'sys except mem'
+MODULE_DEPS     = 'sys except mem types'
 
 options = configure = distclean = lambda p: None
 
