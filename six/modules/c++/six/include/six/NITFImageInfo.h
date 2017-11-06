@@ -155,7 +155,7 @@ public:
      * Adds a segment.  Note that the segmentation layout computed at
      * construction time will no longer hold, so this should only be used
      * when 'computeSegments' was false at construction or the segmentation
-     * layout is otherwise not being
+     * layout is otherwise not being used.
      *
      * \param info The segment info to add
      */
