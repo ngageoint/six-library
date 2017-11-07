@@ -91,6 +91,54 @@ NRTAPI(nrt_DateTime *) nrt_DateTime_fromMillis(double millis, nrt_Error * error)
     return dt;
 }
 
+NRTPRIV(NRT_BOOL) nrt_DateTime_setMonthInfoFromDayOfYear(int year,
+                                                         int dayOfYear,
+                                                         int *month,
+                                                         int *dayOfMonth)
+{
+    if (year < 1970 || year > 2037 || dayOfYear < 1 ||
+            dayOfYear > NRT_DAYS_PER_YEAR[nrtYearIndex(year)])
+    {
+        return NRT_FAILURE;
+    }
+
+    int yearIndex = nrtYearIndex(year);
+
+    /* Day falls within the first month - need a condition for this
+     * as 0 cumulative days is not included in NRT_CUMULATIVE_DAYS_PER_MONTH */
+    if (dayOfYear < 31)
+    {
+        *month = 0;
+        *dayOfMonth = dayOfYear - 1;
+    }
+    else
+    {
+        /* Find the entry in cumulative days per month where the day of the
+         * year fits. */
+        int monthIndex;
+        for (monthIndex = 0; monthIndex < 11; ++monthIndex)
+        {
+            int lastMonthDays =
+                    NRT_CUMULATIVE_DAYS_PER_MONTH[yearIndex][monthIndex];
+
+            int nextMonthDays =
+                    NRT_CUMULATIVE_DAYS_PER_MONTH[yearIndex][monthIndex + 1];
+
+            if (dayOfYear <= nextMonthDays)
+            {
+                /* Get the offset into the month */
+                *dayOfMonth = dayOfYear - lastMonthDays;
+
+                /* Offset by two as we started searching from February */
+                *month = monthIndex + 2;
+                break;
+            }
+        }
+    }
+
+    return NRT_SUCCESS;
+}
+
 NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
                                             nrt_Error* error)
 {
@@ -109,9 +157,9 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
     if (dateTime->second < 0.0 || dateTime->second >= 60.0 ||
         dateTime->minute > 59 ||
         dateTime->hour > 23 ||
+        dateTime->year < 1970 || dateTime->year > 2037 ||
         dateTime->dayOfMonth < 1 || dateTime->dayOfMonth > 31 ||
-        dateTime->month < 1 || dateTime->month > 12 ||
-        dateTime->year < 1970 || dateTime->year > 2037)
+        dateTime->month < 1 || dateTime->month > 12)
     {
         dateTime->timeInMillis = 0.0;
         dateTime->dayOfYear = dateTime->dayOfWeek = 0;
@@ -157,7 +205,6 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
 
     /* January 1, 1970 was a Thursday (5) */
     dateTime->dayOfWeek = (numDaysSinceEpoch + 5) % 7;
-
     return NRT_SUCCESS;
 }
 
@@ -201,6 +248,26 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime * dateTime, double second,
 {
     dateTime->second = second;
     return nrt_DateTime_updateMillis(dateTime, error);
+}
+
+NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
+                                           int dayOfYear,
+                                           nrt_Error * error)
+{
+    int month, dayOfMonth;
+    if (nrt_DateTime_setMonthInfoFromDayOfYear(dateTime->year,
+                                               dayOfYear,
+                                               &month,
+                                               &dayOfMonth))
+    {
+        dateTime->dayOfYear = dayOfYear;
+        dateTime->month = month;
+        dateTime->dayOfMonth = dayOfMonth;
+
+        return nrt_DateTime_updateMillis(dateTime, error);
+    }
+
+    return NRT_FAILURE;
 }
 
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
@@ -515,6 +582,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
     const char *bp;
     size_t len = 0;
     int alt_format, i, split_year = 0;
+    int isYearSet = 0;
+    int isDayOfYearSet = 0;
 
     bp = buf;
     *millis = 0.0;
@@ -686,6 +755,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 tm->tm_year = i * 100;
                 split_year = 1;
             }
+            isYearSet = 1;
             break;
 
         case 'd':              /* The day of month. */
@@ -713,6 +783,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 return NULL;
             if (tm->tm_hour == 12)
                 tm->tm_hour = 0;
+
             break;
 
         case 'j':              /* The day of year. */
@@ -720,6 +791,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             if (!(_NRT_convNum(&bp, &i, 1, 366)))
                 return NULL;
             tm->tm_yday = i - 1;
+            isDayOfYearSet = 1;
             break;
 
         case 'M':              /* The minute. */
@@ -821,13 +893,14 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             if (!(_NRT_convNum(&bp, &i, 0, 9999)))
                 return NULL;
             tm->tm_year = i - TM_YEAR_BASE;
+            isYearSet = 1;
             break;
 
         case 'y':              /* The year within 100 years of the epoch. */
             LEGAL_ALT(ALT_E | ALT_O);
             if (!(_NRT_convNum(&bp, &i, 0, 99)))
                 return NULL;
-
+            isYearSet = 1;
             if (split_year)
             {
                 tm->tm_year = ((tm->tm_year / 100) * 100) + i;
@@ -853,6 +926,26 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             return NULL;
         }
 
+    }
+
+    /* If we the day of year and year, infer the corresponding month
+     * and day of month - this will overwrite the day of month and month
+     * if either was provided */
+    if (isYearSet && isDayOfYearSet)
+    {
+        int month, dayOfMonth;
+        if (!nrt_DateTime_setMonthInfoFromDayOfYear(tm->tm_year + 1900,
+                                                    tm->tm_yday + 1,
+                                                    &month,
+                                                    &dayOfMonth))
+        {
+            return NULL;
+        }
+
+        /* setMonthInfoFromDayOfYear sets the correct 1 indexed month day -
+         * need to return it to 0 indexed */
+        tm->tm_mon = month - 1;
+        tm->tm_mday = dayOfMonth;
     }
 
     /* LINTED functional specification */

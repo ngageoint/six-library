@@ -93,13 +93,25 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime * dateTime, double second,
                                         nrt_Error * error);
 
 /*!
+ * Sets the day of year of a DateTime object and updates timeInMillis.
+ * Day of month and month will be updated to reflect the day of year.
+ *
+ * \param dateTime  the DateTime object
+ * \param dayOfYear the day of year to set dateTime->dayOfYear to
+ * \param error     the error object
+ * \return  NRT_SUCCESS or NRT_FAILURE
+ */
+NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
+                                           int dayOfYear,
+                                           nrt_Error * error);
+
+/*!
  * Sets the timeInMillis of a DateTime object and updates
  * the remaining fields to match the new timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
                                               double timeInMillis,
                                               nrt_Error * error);
-
 /*!
  * Returns a DateTime object from the string with the given format.
  */
@@ -140,6 +152,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_format(const nrt_DateTime * dateTime,
 NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                            char *outBuf, size_t maxSize,
                                            nrt_Error * error);
+
 
 NRT_CXX_ENDGUARD
 #endif
