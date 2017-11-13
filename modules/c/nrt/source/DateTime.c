@@ -157,9 +157,9 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
     if (dateTime->second < 0.0 || dateTime->second >= 60.0 ||
         dateTime->minute > 59 ||
         dateTime->hour > 23 ||
-        dateTime->year < 1970 || dateTime->year > 2037 ||
         dateTime->dayOfMonth < 1 || dateTime->dayOfMonth > 31 ||
-        dateTime->month < 1 || dateTime->month > 12)
+        dateTime->month < 1 || dateTime->month > 12 ||
+        dateTime->year < 1970 || dateTime->year > 2037)
     {
         dateTime->timeInMillis = 0.0;
         dateTime->dayOfYear = dateTime->dayOfWeek = 0;
@@ -205,6 +205,7 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
 
     /* January 1, 1970 was a Thursday (5) */
     dateTime->dayOfWeek = (numDaysSinceEpoch + 5) % 7;
+
     return NRT_SUCCESS;
 }
 

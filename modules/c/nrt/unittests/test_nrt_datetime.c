@@ -125,7 +125,7 @@ TEST_CASE(testRoundTrip)
 
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
-
+    /* printf("Date: %s\n", buf); */
     /* printDate(date); */
 
     TEST_ASSERT((nrt_DateTime_format
@@ -236,9 +236,9 @@ TEST_CASE(testMillis)
 int main(int argc, char **argv)
 {
     CHECK(testNow);
-    CHECK(testSetIdentity);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
+    CHECK(testSetIdentity);
     CHECK(testMillis);
     CHECK(testParseDayOfYearTimeStr)
     return 0;
