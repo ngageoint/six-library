@@ -106,10 +106,10 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_setMonthInfoFromDayOfYear(int year,
 
     /* Day falls within the first month - need a condition for this
      * as 0 cumulative days is not included in NRT_CUMULATIVE_DAYS_PER_MONTH */
-    if (dayOfYear < 31)
+    if (dayOfYear <= 31)
     {
-        *month = 0;
-        *dayOfMonth = dayOfYear - 1;
+        *month = 1;
+        *dayOfMonth = dayOfYear;
     }
     else
     {
@@ -745,7 +745,6 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             LEGAL_ALT(ALT_E);
             if (!(_NRT_convNum(&bp, &i, 0, 99)))
                 return NULL;
-
             if (split_year)
             {
                 tm->tm_year = (tm->tm_year % 100) + (i * 100);
@@ -942,7 +941,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
         }
 
         /* setMonthInfoFromDayOfYear sets the correct 1 indexed month -
-         * subtract 1 as the tm struct is 0 indexed */
+         * subtract 1 as the tm struct's month field is 0 indexed */
         tm->tm_mon = month - 1;
         tm->tm_mday = dayOfMonth;
     }
