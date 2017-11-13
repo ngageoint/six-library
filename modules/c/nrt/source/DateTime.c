@@ -783,7 +783,6 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 return NULL;
             if (tm->tm_hour == 12)
                 tm->tm_hour = 0;
-
             break;
 
         case 'j':              /* The day of year. */
@@ -942,8 +941,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             return NULL;
         }
 
-        /* setMonthInfoFromDayOfYear sets the correct 1 indexed month day -
-         * need to return it to 0 indexed */
+        /* setMonthInfoFromDayOfYear sets the correct 1 indexed month -
+         * subtract 1 as the tm struct is 0 indexed */
         tm->tm_mon = month - 1;
         tm->tm_mday = dayOfMonth;
     }

@@ -95,6 +95,8 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime * dateTime, double second,
 /*!
  * Sets the day of year of a DateTime object and updates timeInMillis.
  * Day of month and month will be updated to reflect the day of year.
+ * This method requires that the DateTime object's year field
+ * set to a valid year.
  *
  * \param dateTime  the DateTime object
  * \param dayOfYear the day of year to set dateTime->dayOfYear to
@@ -152,7 +154,6 @@ NRTAPI(NRT_BOOL) nrt_DateTime_format(const nrt_DateTime * dateTime,
 NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                            char *outBuf, size_t maxSize,
                                            nrt_Error * error);
-
 
 NRT_CXX_ENDGUARD
 #endif

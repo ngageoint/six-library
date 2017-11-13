@@ -86,7 +86,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
     TEST_ASSERT_EQ_INT(date->dayOfWeek, 3);
     TEST_ASSERT_EQ_INT(date->dayOfYear, 304);
 
-    /* Test with month and day of month information */
+    /* Test with correct month and day of month information */
     const char *timeStr2 = "2017-304-10-31T22:55:37.123456Z";
     nrt_DateTime *date2 = NULL;
     date2 = nrt_DateTime_fromString(timeStr2, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
@@ -126,7 +126,7 @@ TEST_CASE(testRoundTrip)
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
 
-    /*printDate(date);*/
+    /* printDate(date); */
 
     TEST_ASSERT((nrt_DateTime_format
                  (date, NRT_DATE_FORMAT_21, buf, NRT_FDT_SZ + 1, &e)));
@@ -136,7 +136,8 @@ TEST_CASE(testRoundTrip)
 
     TEST_ASSERT((nrt_DateTime_format
                  (date2, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
-    /*printDate(date2);*/
+    /* printf("Date: %s\n", buf2); */
+    /* printDate(date2); */
 
     TEST_ASSERT_EQ_STR(buf, buf2);
 
@@ -213,7 +214,6 @@ TEST_CASE(testMillis)
 
     date = nrt_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%SZ", &e);
     TEST_ASSERT(date);
-    /*printDate(date);*/
 
     TEST_ASSERT_EQ_INT((int) (1000 * (date->second - (int) date->second)), 123);
 
