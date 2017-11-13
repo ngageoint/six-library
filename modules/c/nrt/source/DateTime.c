@@ -582,8 +582,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
     const char *bp;
     size_t len = 0;
     int alt_format, i, split_year = 0;
-    int isYearSet = 0;
-    int isDayOfYearSet = 0;
+    NRT_BOOL isYearSet = 0;
+    NRT_BOOL isDayOfYearSet = 0;
 
     bp = buf;
     *millis = 0.0;
