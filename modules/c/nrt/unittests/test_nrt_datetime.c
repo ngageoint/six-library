@@ -125,11 +125,11 @@ TEST_CASE(testRoundTrip)
 
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
-    /* printf("Date: %s\n", buf); */
-    /* printDate(date); */
 
     TEST_ASSERT((nrt_DateTime_format
                  (date, NRT_DATE_FORMAT_21, buf, NRT_FDT_SZ + 1, &e)));
+    /* printf("Date: %s\n", buf); */
+    /* printDate(date); */
 
     date2 = nrt_DateTime_fromString(buf, NRT_DATE_FORMAT_21, &e);
     TEST_ASSERT(date2);
