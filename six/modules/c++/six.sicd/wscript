@@ -18,8 +18,10 @@ def build(bld):
                                   dir=bld.path.make_node('conf/schema'),
                                   install_path='${PREFIX}/conf/schema/six/'))
 
-    if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
-        lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                                      dir=bld.path.make_node('conf/schema'),
-                                      install_path=os.path.join(bld.env['install_pydir'],
-                                                                'pysix', 'schemas')))
+    if ('PYTHON' in bld.env and bld.env['PYTHON'] and
+            bld.is_defined('HAVE_PYTHON_H')):
+        bld(features='install_tgt', pattern='**/*',
+            dir=bld.path.make_node('conf/schema'),
+            name='sicd_schemas',
+            install_path=os.path.join(
+                bld.env['install_pydir'], 'pysix', 'schemas'))
