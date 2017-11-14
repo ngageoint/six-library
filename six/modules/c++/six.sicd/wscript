@@ -22,6 +22,6 @@ def build(bld):
             bld.is_defined('HAVE_PYTHON_H')):
         bld(features='install_tgt', pattern='**/*',
             dir=bld.path.make_node('conf/schema'),
-            name='sicd_schemas',
+            name='python_sicd_schemas',
             install_path=os.path.join(
                 bld.env['install_pydir'], 'pysix', 'schemas'))
