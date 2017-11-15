@@ -104,36 +104,24 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_setMonthInfoFromDayOfYear(int year,
 
     int yearIndex = nrtYearIndex(year);
 
-    /* Day falls within the first month - need a condition for this
-     * as 0 cumulative days is not included in NRT_CUMULATIVE_DAYS_PER_MONTH */
-    if (dayOfYear <= 31)
+    /* Find the entry in cumulative days per month where the day of the
+     * year fits. */
+    int monthIndex;
+    int lastMonthDays = 0;
+    for (monthIndex = 0; monthIndex < 12; ++monthIndex)
     {
-        *month = 1;
-        *dayOfMonth = dayOfYear;
-    }
-    else
-    {
-        /* Find the entry in cumulative days per month where the day of the
-         * year fits. */
-        int monthIndex;
-        for (monthIndex = 0; monthIndex < 11; ++monthIndex)
+        int nextMonthDays =
+                NRT_CUMULATIVE_DAYS_PER_MONTH[yearIndex][monthIndex];
+
+        if (dayOfYear <= nextMonthDays)
         {
-            int lastMonthDays =
-                    NRT_CUMULATIVE_DAYS_PER_MONTH[yearIndex][monthIndex];
-
-            int nextMonthDays =
-                    NRT_CUMULATIVE_DAYS_PER_MONTH[yearIndex][monthIndex + 1];
-
-            if (dayOfYear <= nextMonthDays)
-            {
-                /* Get the offset into the month */
-                *dayOfMonth = dayOfYear - lastMonthDays;
-
-                /* Offset by two as we started searching from February */
-                *month = monthIndex + 2;
-                break;
-            }
+            /* Get the offset into the month */
+            *dayOfMonth = dayOfYear - lastMonthDays;
+            *month = monthIndex + 1;
+            break;
         }
+
+        lastMonthDays = nextMonthDays;
     }
 
     return NRT_SUCCESS;
