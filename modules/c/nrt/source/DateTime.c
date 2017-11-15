@@ -583,8 +583,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
     const char *bp;
     size_t len = 0;
     int alt_format, i, split_year = 0;
-    NRT_BOOL isYearSet = 0;
-    NRT_BOOL isDayOfYearSet = 0;
+    NRT_BOOL isYearSet = NRT_FALSE;
+    NRT_BOOL isDayOfYearSet = NRT_FALSE;
 
     bp = buf;
     *millis = 0.0;
@@ -755,7 +755,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 tm->tm_year = i * 100;
                 split_year = 1;
             }
-            isYearSet = 1;
+            isYearSet = NRT_TRUE;
             break;
 
         case 'd':              /* The day of month. */
@@ -790,7 +790,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             if (!(_NRT_convNum(&bp, &i, 1, 366)))
                 return NULL;
             tm->tm_yday = i - 1;
-            isDayOfYearSet = 1;
+            isDayOfYearSet = NRT_TRUE;
             break;
 
         case 'M':              /* The minute. */
@@ -892,14 +892,14 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
             if (!(_NRT_convNum(&bp, &i, 0, 9999)))
                 return NULL;
             tm->tm_year = i - TM_YEAR_BASE;
-            isYearSet = 1;
+            isYearSet = NRT_TRUE;
             break;
 
         case 'y':              /* The year within 100 years of the epoch. */
             LEGAL_ALT(ALT_E | ALT_O);
             if (!(_NRT_convNum(&bp, &i, 0, 99)))
                 return NULL;
-            isYearSet = 1;
+            isYearSet = NRT_TRUE;
             if (split_year)
             {
                 tm->tm_year = ((tm->tm_year / 100) * 100) + i;
@@ -927,7 +927,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
 
     }
 
-    /* If we the day of year and year, infer the corresponding month
+    /* If we have the day of year and year, infer the corresponding month
      * and day of month - this will overwrite the day of month and month
      * if either was provided */
     if (isYearSet && isDayOfYearSet)
