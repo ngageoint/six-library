@@ -368,7 +368,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                        "Invalid direction: %s. Should be [NSEW]", dms);
+                        "Invalid direction: %c. Should be [NSEW]", dir);
         return NRT_FAILURE;
     }
 
