@@ -49,6 +49,20 @@ TEST_CASE(testParseZeroMinutes)
     TEST_ASSERT(fabs(decimal - -.009444) < 1e-6);
 }
 
+TEST_CASE(testParseZeroMinutesEast)
+{
+    const char* geoString = "0000034E";
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Error error;
+    nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
+            &error);
+    double decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
+    TEST_ASSERT(fabs(decimal - .009444) < 1e-6);
+
+}
+
 TEST_CASE(testDecimalToDmsNegativeMinutes)
 {
     const double decimal = -0.2094444;
@@ -58,6 +72,18 @@ TEST_CASE(testDecimalToDmsNegativeMinutes)
     nrt_Utils_decimalToGeographic(decimal, &degrees, &minutes, &seconds);
     TEST_ASSERT(degrees == 0);
     TEST_ASSERT(minutes == -12);
+    TEST_ASSERT(fabs(seconds - 34) < 1);
+}
+
+TEST_CASE(testDecimalToDmsPositiveMinutes)
+{
+    const double decimal = 0.2094444;
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Utils_decimalToGeographic(decimal, &degrees, &minutes, &seconds);
+    TEST_ASSERT(degrees == 0);
+    TEST_ASSERT(minutes == 12);
     TEST_ASSERT(fabs(seconds - 34) < 1);
 }
 
@@ -73,6 +99,18 @@ TEST_CASE(testDecimalToDmsNegativeSeconds)
     TEST_ASSERT(fabs(seconds - -34) < 1);
 }
 
+TEST_CASE(testDecimalToDmsPositiveSeconds)
+{
+    const double decimal = 0.009444;
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Utils_decimalToGeographic(decimal, &degrees, &minutes, &seconds);
+    TEST_ASSERT(degrees == 0);
+    TEST_ASSERT(minutes == 0);
+    TEST_ASSERT(fabs(seconds - 34) < 1);
+}
+
 TEST_CASE(testParseDecimal)
 {
     const char* decimalString = "+12.345";
@@ -82,15 +120,74 @@ TEST_CASE(testParseDecimal)
     TEST_ASSERT(fabs(decimal - 12.345) < 1e-6);
 }
 
+TEST_CASE(testDmsToCharArrayNegativeMinutes)
+{
+    char lonCharArray[9];
+    nrt_Utils_geographicLonToCharArray(0, -1, 13, lonCharArray);
+    TEST_ASSERT(strcmp(lonCharArray, "0000113W") == 0);
+
+    char latCharArray[8];
+    nrt_Utils_geographicLatToCharArray(0, -1, 13, latCharArray);
+    TEST_ASSERT(strcmp(latCharArray, "000113S") == 0);
+}
+
+TEST_CASE(testDmsToCharArrayPositiveMinutes)
+{
+    char lonCharArray[9];
+    nrt_Utils_geographicLonToCharArray(0, 1, 13, lonCharArray);
+    TEST_ASSERT(strcmp(lonCharArray, "0000113E") == 0);
+
+    char latCharArray[8];
+    nrt_Utils_geographicLatToCharArray(0, 1, 13, latCharArray);
+    TEST_ASSERT(strcmp(latCharArray, "000113N") == 0);
+}
+
+TEST_CASE(testDmsToCharArrayNegativeSeconds)
+{
+    char lonCharArray[9];
+    nrt_Utils_geographicLonToCharArray(0, 0, -13, lonCharArray);
+    TEST_ASSERT(strcmp(lonCharArray, "0000013W") == 0);
+
+    char latCharArray[8];
+    nrt_Utils_geographicLatToCharArray(0, 0, -13, latCharArray);
+    TEST_ASSERT(strcmp(latCharArray, "000013S") == 0);
+}
+
+TEST_CASE(testDmsToCharArrayPositiveSeconds)
+{
+    char lonCharArray[9];
+    nrt_Utils_geographicLonToCharArray(0, 0, 13, lonCharArray);
+    TEST_ASSERT(strcmp(lonCharArray, "0000013E") == 0);
+
+    char latCharArray[8];
+    nrt_Utils_geographicLatToCharArray(0, 0, 13, latCharArray);
+    TEST_ASSERT(strcmp(latCharArray, "000013N") == 0);
+}
+
+TEST_CASE(testDmsToCharArrayZero)
+{
+    char lonCharArray[9];
+    nrt_Utils_geographicLonToCharArray(0, 0, 0, lonCharArray);
+    TEST_ASSERT(strcmp(lonCharArray, "0000000E") == 0);
+}
+
 int main(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
     CHECK(testParseZeroDegrees);
     CHECK(testParseZeroMinutes);
+    CHECK(testParseZeroMinutesEast);
     CHECK(testDecimalToDmsNegativeMinutes);
+    CHECK(testDecimalToDmsPositiveMinutes);
     CHECK(testDecimalToDmsNegativeSeconds);
+    CHECK(testDecimalToDmsPositiveSeconds);
     CHECK(testParseDecimal);
+    CHECK(testDmsToCharArrayNegativeMinutes);
+    CHECK(testDmsToCharArrayPositiveMinutes);
+    CHECK(testDmsToCharArrayNegativeSeconds);
+    CHECK(testDmsToCharArrayPositiveSeconds);
+    CHECK(testDmsToCharArrayZero);
     return 0;
 }
 

@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
  */
 
 #include <mem/SharedPtr.h>
+#include <sys/Path.h>
 #include <import/nitf.hpp>
 #include <iostream>
 #include <fstream>
@@ -33,9 +34,9 @@ int main(int argc, char **argv)
     {
         if (argc != 3)
         {
-            std::cout << "Usage: " << argv[0]
+            std::cerr << "Usage: " << sys::Path::basename(argv[0])
                       << " <input-file> <output-file>\n\n";
-            exit(EXIT_FAILURE);
+            return 1;
         }
 
         //create a Reader and read in the Record
@@ -53,29 +54,26 @@ int main(int argc, char **argv)
         memWriter.prepareIO(memOutput, record);
 
         //go through and setup the pass-through writehandlers
-        nitf::List images = record.getImages();
-        for (int i = 0, num = record.getHeader().getNumImages(); i < num; ++i)
-        {
-            nitf::ImageSegment segment = images[i];
-            long offset = segment.getImageOffset();
-            mem::SharedPtr< ::nitf::WriteHandler> handler( 
-                new nitf::StreamIOWriteHandler (
-                    input, offset, segment.getImageEnd() - offset));
-            memWriter.setImageWriteHandler(i, handler);
-        }
+        memWriter.setWriteHandlers(input, record);
 
         //once everything is set, write it!
         memWriter.write();
 
         std::ofstream outfile (argv[2],std::ofstream::binary);
         outfile.write(outBuf, numOfBytes);
-        outfile.close();
-
-        input.close();
-        memOutput.close();
+        return 0;
     }
-    catch (except::Throwable & t)
+    catch (const except::Throwable& th)
     {
-        std::cout << t.getMessage() << std::endl;
+        std::cerr << th.getMessage() << std::endl;
     }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "An unknown error occured\n";
+    }
+    return 1;
 }

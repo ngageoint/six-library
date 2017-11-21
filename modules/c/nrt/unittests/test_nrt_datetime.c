@@ -24,8 +24,8 @@
 #include "Test.h"
 
 #define MAX_DATE_STRING    1024
-#define NRT_DATE_FORMAT_21  "%Y%m%d%H%M%S"
-#define NRT_FDT_SZ 14
+#define NRT_DATE_FORMAT_21  "%Y%j%m%d%H%M%S"
+#define NRT_FDT_SZ 17
 
 NRTPRIV(void) printDate(nrt_DateTime * date)
 {
@@ -71,6 +71,52 @@ TEST_CASE(testFromMillis)
     TEST_ASSERT_NULL(date2);
 }
 
+TEST_CASE(testParseDayOfYearTimeStr)
+{
+    /* Test without month and day of month information */
+    const char *timeStr = "2017-304T22:55:37.123456Z";
+    nrt_DateTime *date = NULL;
+    nrt_Error e;
+
+    date = nrt_DateTime_fromString(timeStr, "%Y-%jT%H:%M:%SZ", &e);
+    TEST_ASSERT(date);
+
+    TEST_ASSERT_EQ_INT(date->month, 10);
+    TEST_ASSERT_EQ_INT(date->dayOfMonth, 31);
+    TEST_ASSERT_EQ_INT(date->dayOfWeek, 3);
+    TEST_ASSERT_EQ_INT(date->dayOfYear, 304);
+
+    /* Test with correct month and day of month information */
+    const char *timeStr2 = "2017-304-10-31T22:55:37.123456Z";
+    nrt_DateTime *date2 = NULL;
+    date2 = nrt_DateTime_fromString(timeStr2, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
+    TEST_ASSERT(date2);
+
+    TEST_ASSERT_EQ_INT(date2->month, 10);
+    TEST_ASSERT_EQ_INT(date2->dayOfMonth, 31);
+    TEST_ASSERT_EQ_INT(date2->dayOfWeek, 3);
+    TEST_ASSERT_EQ_INT(date2->dayOfYear, 304);
+
+    /* Test with incorrect month and day of month information */
+    const char *timeStr3 = "2017-304-08-08T22:55:37.123456Z";
+    nrt_DateTime *date3 = NULL;
+    date3 = nrt_DateTime_fromString(timeStr3, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
+    TEST_ASSERT(date3);
+
+    TEST_ASSERT_EQ_INT(date3->month, 10);
+    TEST_ASSERT_EQ_INT(date3->dayOfMonth, 31);
+    TEST_ASSERT_EQ_INT(date3->dayOfWeek, 3);
+    TEST_ASSERT_EQ_INT(date3->dayOfYear, 304);
+
+    nrt_DateTime_destruct(&date);
+    nrt_DateTime_destruct(&date2);
+    nrt_DateTime_destruct(&date3);
+
+    TEST_ASSERT_NULL(date);
+    TEST_ASSERT_NULL(date2);
+    TEST_ASSERT_NULL(date3);
+}
+
 TEST_CASE(testRoundTrip)
 {
     nrt_DateTime *date = NULL, *date2 = NULL;
@@ -79,7 +125,6 @@ TEST_CASE(testRoundTrip)
 
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
-
     /* printDate(date); */
 
     TEST_ASSERT((nrt_DateTime_format
@@ -150,6 +195,12 @@ TEST_CASE(testSetIdentity)
                  (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
+    /* set day of year */
+    TEST_ASSERT(nrt_DateTime_setDayOfYear(date, date->dayOfYear, &e));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT_EQ_STR(buf, buf2);
+
     nrt_DateTime_destruct(&date);
     TEST_ASSERT_NULL(date);
 }
@@ -189,5 +240,6 @@ int main(int argc, char **argv)
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
+    CHECK(testParseDayOfYearTimeStr)
     return 0;
 }
