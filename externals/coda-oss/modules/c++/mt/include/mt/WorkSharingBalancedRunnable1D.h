@@ -161,12 +161,11 @@ void runWorkSharingBalanced1D(size_t numElements,
                               size_t numThreads,
                               const OpT& op)
 {
-    std::vector<size_t> threadPoolEndElements(numThreads);
+    std::vector<size_t> threadPoolEndElements;
     SharedAtomicCounterVec threadPoolCounters;
     if (numThreads <= 1)
     {
-        threadPoolEndElements[0] = numElements;
-
+        threadPoolEndElements.push_back(numElements);
         threadPoolCounters.push_back(
                 mem::SharedPtr<sys::AtomicCounter>(
                         new sys::AtomicCounter(0)));
@@ -186,7 +185,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         const ThreadPlanner planner(numElements, numThreads);
         std::vector<types::Range> threadPoolRange;
         while (planner.getThreadInfo(
-                threadNum, startElement, numElementsThisThread))
+                threadNum++, startElement, numElementsThisThread))
         {
             const types::Range range(startElement, numElementsThisThread);
             threadPoolRange.push_back(range);
@@ -195,8 +194,8 @@ void runWorkSharingBalanced1D(size_t numElements,
                     mem::SharedPtr<sys::AtomicCounter>(
                             new sys::AtomicCounter(startElement)));
 
-            threadPoolEndElements[threadNum++] =
-                    startElement + numElementsThisThread;
+            threadPoolEndElements.push_back(
+                    startElement + numElementsThisThread);
         }
 
         ThreadGroup threads;
@@ -237,12 +236,11 @@ void runWorkSharingBalanced1D(size_t numElements,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    std::vector<size_t> threadPoolEndElements(numThreads);
+    std::vector<size_t> threadPoolEndElements;
     SharedAtomicCounterVec threadPoolCounters;
     if (numThreads <= 1)
     {
-        threadPoolEndElements[0] = numElements;
-
+        threadPoolEndElements.push_back(numElements);
         threadPoolCounters.push_back(
                 mem::SharedPtr<sys::AtomicCounter>(
                         new sys::AtomicCounter(0)));
@@ -262,7 +260,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         const ThreadPlanner planner(numElements, numThreads);
         std::vector<types::Range> threadPoolRange;
         while (planner.getThreadInfo(
-                  threadNum, startElement, numElementsThisThread))
+                  threadNum++, startElement, numElementsThisThread))
         {
               const types::Range range(startElement, numElementsThisThread);
               threadPoolRange.push_back(range);
@@ -271,8 +269,8 @@ void runWorkSharingBalanced1D(size_t numElements,
                       mem::SharedPtr<sys::AtomicCounter>(
                               new sys::AtomicCounter(startElement)));
 
-              threadPoolEndElements[threadNum++] =
-                      startElement + numElementsThisThread;
+              threadPoolEndElements.push_back(
+                      startElement + numElementsThisThread);
         }
 
         ThreadGroup threads;
@@ -307,7 +305,7 @@ void runWorkSharingBalanced1DWithCopies(size_t numElements,
                                         const OpT& op)
 {
     const std::vector<OpT> ops(numThreads, op);
-    runWorkSharingBalanced1DWithCopies(numElements, numThreads, ops);
+    runWorkSharingBalanced1D(numElements, numThreads, ops);
 }
 }
 

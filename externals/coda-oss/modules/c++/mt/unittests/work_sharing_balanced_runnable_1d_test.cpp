@@ -63,10 +63,34 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
         }
     }
 }
+
+TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads)
+{
+    const size_t numElements = 6;
+    const size_t initValue = 0;
+    const size_t numThreads = 13;
+    for (size_t ii = 0; ii < numThreads; ++ii)
+    {
+        std::vector<size_t> workVec(numElements, initValue);
+        IncOp op(workVec);
+
+        mt::runWorkSharingBalanced1D(numElements, numThreads, op);
+
+        TEST_ASSERT_EQ(workVec.size(), numElements);
+
+        const size_t targetValue = 1;
+        for (size_t ii = 0; ii < numElements; ++ii)
+        {
+            const size_t value = workVec[ii];
+            TEST_ASSERT_EQ(value, targetValue);
+        }
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDone);
+    TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads);
     return 0;
 }

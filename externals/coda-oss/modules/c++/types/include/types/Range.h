@@ -22,6 +22,7 @@
 #ifndef __TYPES_RANGE_H__
 #define __TYPES_RANGE_H__
 
+#include <algorithm>
 #include <limits>
 
 namespace types
@@ -84,6 +85,31 @@ struct Range
     {
         return (numElements == 0 ||
                 (contains(startElement) && contains(startElement + numElements - 1)));
+    }
+
+    /*!
+     * \param startElementToTest The start element
+     * \param numElementsToTest The total number of elements to check
+     *
+     * \returns The number of shared elements
+     */
+    size_t getNumSharedElements(size_t startElementToTest,
+                                size_t numElementsToTest) const
+    {
+        const size_t endElementToTest =
+                startElementToTest + numElementsToTest;
+
+        // Ranges do not intersect
+        if(mStartElement >= endElementToTest ||
+                endElement() <= startElementToTest)
+        {
+            return 0;
+        }
+
+        const size_t startRow = std::max(mStartElement, startElementToTest);
+        const size_t endRow = std::min(endElement(), endElementToTest);
+
+        return endRow - startRow;
     }
 
     //! \return True if there are no elements in this range, false otherwise
