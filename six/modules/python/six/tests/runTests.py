@@ -131,6 +131,9 @@ def run(sourceDir):
         if not sicdTestRunner.run('test_streaming_write'):
             return False
 
+        if not sicdTestRunner.run('test_sicd_byte_provider'):
+            return False
+
         if not runCsmTests():
             return False
 

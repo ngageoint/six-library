@@ -1177,6 +1177,7 @@ void NITFWriteControl::getFileLayout(
         std::vector<std::vector<sys::byte> >& imageSubheaders,
         std::vector<sys::byte>& desSubheaderAndData,
         std::vector<nitf::Off>& imageSubheaderFileOffsets,
+        std::vector<NITFSegmentInfo>& imageSegmentInfo,
         nitf::Off& desSubheaderFileOffset,
         nitf::Off& fileNumBytes) const
 {
@@ -1309,5 +1310,7 @@ void NITFWriteControl::getFileLayout(
 
     // DES is right after that
     desSubheaderFileOffset = offset;
+
+    imageSegmentInfo = mInfos[0]->getImageSegments();
 }
 }

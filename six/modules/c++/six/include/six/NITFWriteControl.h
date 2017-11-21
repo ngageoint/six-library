@@ -253,6 +253,8 @@ public:
      * and data (i.e. XML string)
      * \param[out] imageSubheaderFileOffsets Offsets in the NITF where each
      * image subheader should be written
+     * \param[out] imageSegmentInfo The starting row and number of rows for each
+     * image segment
      * \param[out] desSubheaderFileOffset Offset in the NITF where the DES
      * subheader should be written
      * \param[out] fileNumBytes The total number of bytes the NITF will be
@@ -266,6 +268,7 @@ public:
                        std::vector<std::vector<sys::byte> >& imageSubheaders,
                        std::vector<sys::byte>& desSubheaderAndData,
                        std::vector<nitf::Off>& imageSubheaderFileOffsets,
+                       std::vector<NITFSegmentInfo>& imageSegmentInfo,
                        nitf::Off& desSubheaderFileOffset,
                        nitf::Off& fileNumBytes) const;
 
