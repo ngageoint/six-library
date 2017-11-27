@@ -96,18 +96,20 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_setMonthInfoFromDayOfYear(int year,
                                                          int *month,
                                                          int *dayOfMonth)
 {
+    int yearIndex;
+    int monthIndex;
+    int lastMonthDays = 0;
+
     if (year < 1970 || year > 2037 || dayOfYear < 1 ||
             dayOfYear > NRT_DAYS_PER_YEAR[nrtYearIndex(year)])
     {
         return NRT_FAILURE;
     }
 
-    int yearIndex = nrtYearIndex(year);
+    yearIndex = nrtYearIndex(year);
 
     /* Find the entry in cumulative days per month where the day of the
      * year fits. */
-    int monthIndex;
-    int lastMonthDays = 0;
     for (monthIndex = 0; monthIndex < 12; ++monthIndex)
     {
         int nextMonthDays =
