@@ -37,12 +37,7 @@ class GZipOutputStream: public io::OutputStream
     gzFile mFile;
 public:
     //!  Constructor requires initialization
-    GZipOutputStream(std::string file);
-
-    //!  Destructor
-    virtual ~GZipOutputStream()
-    {
-    }
+    GZipOutputStream(const std::string& file);
 
     /*!
      *  Write len (or less) bytes into the gzip stream.
@@ -51,17 +46,14 @@ public:
      *  the call returns.
      *
      */
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, size_t len);
 
     /*!
      *  Close the gzip stream.  You must call this
      *  afterward (it is not done automatically).
      */
     virtual void close();
-
 };
-
 }
 
 #endif
-

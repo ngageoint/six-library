@@ -23,6 +23,8 @@
 #include <import/str.h>
 #include "TestCase.h"
 
+namespace
+{
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
@@ -155,23 +157,50 @@ TEST_CASE(testRoundDouble)
     TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
 }
 
+TEST_CASE(testEscapeForXMLNoReplace)
+{
+    const std::string origMessage("This is a perfectly fine string");
+    std::string message(origMessage);
+    str::escapeForXML(message);
+    TEST_ASSERT_EQ(message, origMessage);
+}
+
+TEST_CASE(testEscapeForXMLKitchenSink)
+{
+    std::string message(
+            "This & that with <angles> and \"quotes\" & single 'quotes' & "
+            "why not a\nnewline & \rcarriage return at the end?");
+
+    const std::string expectedMessage(
+            "This &amp; that with &lt;angles&gt; and &quot;quotes&quot; &amp; "
+            "single &apos;quotes&apos; &amp; why not a&#10;newline &amp; "
+            "&#13;carriage return at the end?");
+
+    str::escapeForXML(message);
+    TEST_ASSERT_EQ(message, expectedMessage);
+}
+}
+
 int main(int, char**)
 {
-    TEST_CHECK( testTrim);
-    TEST_CHECK( testUpper);
-    TEST_CHECK( testLower);
-    TEST_CHECK( testReplace);
-    TEST_CHECK( testReplaceAllInfinite);
-    TEST_CHECK( testReplaceAllRecurse);
-    TEST_CHECK( testContains);
-    TEST_CHECK( testNotContains);
-    TEST_CHECK( testSplit);
-    TEST_CHECK( testIsAlpha);
-    TEST_CHECK( testIsAlphaSpace);
-    TEST_CHECK( testIsNumeric);
-    TEST_CHECK( testIsNumericSpace);
-    TEST_CHECK( testIsAlphanumeric);
-    TEST_CHECK( testIsWhitespace);
-    TEST_CHECK( testContainsOnly);
-    TEST_CHECK( testRoundDouble);
+    TEST_CHECK(testTrim);
+    TEST_CHECK(testUpper);
+    TEST_CHECK(testLower);
+    TEST_CHECK(testReplace);
+    TEST_CHECK(testReplaceAllInfinite);
+    TEST_CHECK(testReplaceAllRecurse);
+    TEST_CHECK(testContains);
+    TEST_CHECK(testNotContains);
+    TEST_CHECK(testSplit);
+    TEST_CHECK(testIsAlpha);
+    TEST_CHECK(testIsAlphaSpace);
+    TEST_CHECK(testIsNumeric);
+    TEST_CHECK(testIsNumericSpace);
+    TEST_CHECK(testIsAlphanumeric);
+    TEST_CHECK(testIsWhitespace);
+    TEST_CHECK(testContainsOnly);
+    TEST_CHECK(testRoundDouble);
+    TEST_CHECK(testEscapeForXMLNoReplace);
+    TEST_CHECK(testEscapeForXMLKitchenSink);
+    return 0;
 }

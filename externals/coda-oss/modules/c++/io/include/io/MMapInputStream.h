@@ -70,12 +70,9 @@ public:
         return mMark;
     }
 
-    virtual ssize_t read(sys::byte* b, size_t len);
-
-
-
-
 protected:
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+
     virtual void _map();
     virtual void _unmap();
     sys::OS mOs;
