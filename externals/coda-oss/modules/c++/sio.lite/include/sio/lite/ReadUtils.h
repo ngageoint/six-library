@@ -62,8 +62,7 @@ void readSIO(const std::string& pathname,
 
     const size_t numPixels(dims.row * dims.col);
     image.reset(new InputT[numPixels]);
-    reader.read(reinterpret_cast<sys::byte*>(image.get()),
-        numPixels * sizeof(InputT));
+    reader.read(image.get(), numPixels * sizeof(InputT), true);
 }
 
 /*

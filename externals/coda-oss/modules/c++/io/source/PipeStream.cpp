@@ -23,9 +23,11 @@
 
 using namespace io;
 
-sys::SSize_T io::PipeStream::read(sys::byte *cStr, sys::Size_T numBytes)
+sys::SSize_T io::PipeStream::readImpl(void* buffer, size_t numBytes)
 {
     FILE* pipe = mExecPipe.getPipe();
+
+    char* cStr = static_cast<char*>(buffer);
 
     size_t bytesLeft = numBytes;
     while (bytesLeft && !feof(pipe))

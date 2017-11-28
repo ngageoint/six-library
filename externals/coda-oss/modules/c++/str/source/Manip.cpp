@@ -20,16 +20,49 @@
  *
  */
 
-#include "str/Manip.h"
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <climits>
 #include <cstdio>
 
-void str::trim(std::string & s)
+#include <str/Manip.h>
+
+namespace
 {
-    unsigned int i;
+int transformCheck(int c, int (*transform)(int))
+{
+    // Ensure the character can be represented
+    // as an unsigned char or is 'EOF', as the
+    // behavior for all other characters is undefined
+    if ((c >= 0 && c <= UCHAR_MAX) || c == EOF)
+    {
+        return transform(c);
+    }
+    else
+    {
+        // Invalid char for transform: no-op
+        return c;
+    }
+}
+
+int tolowerCheck(int c)
+{
+    return transformCheck(c, (int(*)(int)) tolower);
+}
+
+int toupperCheck(int c)
+{
+    return transformCheck(c, (int(*)(int)) toupper);
+}
+}
+
+
+namespace str
+{
+void trim(std::string & s)
+{
+    size_t i;
     for (i = 0; i < s.length(); i++)
     {
         if (!isspace(s[i]))
@@ -47,7 +80,7 @@ void str::trim(std::string & s)
         s.erase(i + 1);
 }
 
-bool str::endsWith(const std::string & s, const std::string & match)
+bool endsWith(const std::string & s, const std::string & match)
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -57,7 +90,7 @@ bool str::endsWith(const std::string & s, const std::string & match)
     return sLen >= mLen;
 }
 
-bool str::startsWith(const std::string & s, const std::string & match)
+bool startsWith(const std::string & s, const std::string & match)
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -67,10 +100,10 @@ bool str::startsWith(const std::string & s, const std::string & match)
     return sLen >= mLen;
 }
 
-size_t str::replace(std::string& str, 
-                    const std::string& search,
-                    const std::string& replace,
-                    size_t start)
+size_t replace(std::string& str,
+               const std::string& search,
+               const std::string& replace,
+               size_t start)
 {
     size_t index = str.find(search, start);
 
@@ -87,29 +120,26 @@ size_t str::replace(std::string& str,
     return start;        
 }
 
-void str::replaceAll(std::string& string, 
-                     const std::string& search,
-                     const std::string& replace)
+void replaceAll(std::string& string,
+                const std::string& search,
+                const std::string& replace)
 {
     size_t start = 0;
     while (start < string.length())
     {
-        start = str::replace(string, 
-                             search, 
-                             replace, 
-                             start);
+        start = str::replace(string, search, replace, start);
         // skip ahead --
         // avoids inifinite loop if replace contains search 
         start += replace.length();                             
     }
 }
 
-bool str::contains(const std::string& str, const std::string& match)
+bool contains(const std::string& str, const std::string& match)
 {
     return str.find(match) != std::string::npos;
 }
 
-bool str::isAlpha(const std::string& s)
+bool isAlpha(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -120,7 +150,7 @@ bool str::isAlpha(const std::string& s)
     return !s.empty();
 }
 
-bool str::isAlphaSpace(const std::string& s)
+bool isAlphaSpace(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -131,7 +161,7 @@ bool str::isAlphaSpace(const std::string& s)
     return !s.empty();
 }
 
-bool str::isNumeric(const std::string& s)
+bool isNumeric(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -142,7 +172,7 @@ bool str::isNumeric(const std::string& s)
     return !s.empty();
 }
 
-bool str::isNumericSpace(const std::string& s)
+bool isNumericSpace(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -153,7 +183,7 @@ bool str::isNumericSpace(const std::string& s)
     return !s.empty();
 }
 
-bool str::isWhitespace(const std::string& s)
+bool isWhitespace(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -164,7 +194,7 @@ bool str::isWhitespace(const std::string& s)
     return true;
 }
 
-bool str::isAlphanumeric(const std::string& s)
+bool isAlphanumeric(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -175,7 +205,7 @@ bool str::isAlphanumeric(const std::string& s)
     return !s.empty();
 }
 
-bool str::isAsciiPrintable(const std::string& s)
+bool isAsciiPrintable(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
     for (StringIter it = s.begin(); it != s.end(); ++it)
@@ -187,7 +217,7 @@ bool str::isAsciiPrintable(const std::string& s)
     return true;
 }
 
-bool str::containsOnly(const std::string& s, const std::string& validChars)
+bool containsOnly(const std::string& s, const std::string& validChars)
 {
     typedef std::string::const_iterator StringIter;
     std::vector<bool> chars(255, false);
@@ -199,7 +229,7 @@ bool str::containsOnly(const std::string& s, const std::string& validChars)
     return true;
 }
 
-std::vector<std::string> str::split(const std::string& s,
+std::vector<std::string> split(const std::string& s,
         const std::string& splitter, size_t maxSplit)
 {
     std::vector < std::string > vec;
@@ -225,39 +255,26 @@ std::vector<std::string> str::split(const std::string& s,
     return vec;
 }
 
-static int transformCheck(int c, int (*transform)(int))
-{
-    // Ensure the character can be represented
-    // as an unsigned char or is 'EOF', as the
-    // behavior for all other characters is undefined
-    if ((c >= 0 && c <= UCHAR_MAX) || c == EOF)
-    {
-        return transform(c);
-    }
-    else
-    {
-        // Invalid char for transform: no-op
-        return c;
-    }
-}
-
-static int tolowerCheck(int c)
-{
-    return transformCheck(c, (int(*)(int)) tolower);
-}
-
-static int toupperCheck(int c)
-{
-    return transformCheck(c, (int(*)(int)) toupper);
-}
-
-void str::lower(std::string& s)
+void lower(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolowerCheck);
 }
 
-void str::upper(std::string& s)
+void upper(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) toupperCheck);
 }
 
+void escapeForXML(std::string& str)
+{
+    // & needs to be first or else it'll mess up the other characters that we
+    // replace
+    replaceAll(str, "&", "&amp;");
+    replaceAll(str, "<", "&lt;");
+    replaceAll(str, ">", "&gt;");
+    replaceAll(str, "\"", "&quot;");
+    replaceAll(str, "'", "&apos;");
+    replaceAll(str, "\n", "&#10;");
+    replaceAll(str, "\r", "&#13;");
+}
+}

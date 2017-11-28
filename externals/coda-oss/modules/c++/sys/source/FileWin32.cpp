@@ -54,11 +54,13 @@ void sys::File::create(const std::string& str,
     mPath = str;
 }
 
-void sys::File::readInto(char *buffer, Size_T size)
+void sys::File::readInto(void* buffer, size_t size)
 {
     static const size_t MAX_READ_SIZE = std::numeric_limits<DWORD>::max();
     size_t bytesRead = 0;
     size_t bytesRemaining = size;
+
+    const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
 
     while (bytesRead < size)
     {
@@ -69,7 +71,7 @@ void sys::File::readInto(char *buffer, Size_T size)
         // Read from file
         DWORD bytesThisRead = 0;
         if (!ReadFile(mHandle,
-                      buffer + bytesRead,
+                      bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
                       NULL))
@@ -89,11 +91,13 @@ void sys::File::readInto(char *buffer, Size_T size)
     }
 }
 
-void sys::File::writeFrom(const char *buffer, Size_T size)
+void sys::File::writeFrom(const void* buffer, size_t size)
 {
     static const size_t MAX_WRITE_SIZE = std::numeric_limits<DWORD>::max();
     size_t bytesRemaining = size;
     size_t bytesWritten = 0;
+
+    const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
 
     while (bytesWritten < size)
     {
@@ -104,7 +108,7 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
         // Write the data
         DWORD bytesThisWrite = 0;
         if (!WriteFile(mHandle,
-                       buffer + bytesWritten,
+                       bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
                        NULL))

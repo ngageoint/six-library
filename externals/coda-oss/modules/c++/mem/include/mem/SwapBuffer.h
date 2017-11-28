@@ -86,18 +86,34 @@ public:
         return mNumBytes; 
     }
 
-    //! Grab the currently active buffer. Users should read data
-    //  from this buffer during processing
+    //! Grab the currently active buffer.  Users should read data
+    //  from this buffer during processing.
     template<typename T>
     T* getValidBuffer()
     {
         return static_cast<T*>(mValid);
     }
 
-    //! Grab the currently inactive buffer. Users should write 
-    //  data to this buffer during processing
+    //! Grab the currently active buffer.  Users should read data
+    //  from this buffer during processing.
+    template<typename T>
+    const T* getValidBuffer() const
+    {
+        return static_cast<T*>(mValid);
+    }
+
+    //! Grab the currently inactive buffer.  Users should write
+    //  data to this buffer during processing.
     template<typename T>
     T* getScratchBuffer()
+    {
+        return static_cast<T*>(mScratch);
+    }
+
+    //! Grab the currently inactive buffer.  Users should write
+    //  data to this buffer during processing.
+    template<typename T>
+    const T* getScratchBuffer() const
     {
         return static_cast<T*>(mScratch);
     }

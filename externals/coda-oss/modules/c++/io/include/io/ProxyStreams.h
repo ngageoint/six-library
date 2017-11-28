@@ -49,11 +49,6 @@ public:
         return mProxy->available();
     }
 
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
-    {
-        return mProxy->read(b, len);
-    }
-
     virtual void setProxy(InputStream *proxy, bool ownPtr = false)
     {
         if (!mOwnPtr)
@@ -63,6 +58,11 @@ public:
     }
 
 protected:
+    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    {
+        return mProxy->read(buffer, len);
+    }
+
     std::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
@@ -86,9 +86,9 @@ public:
 
     using OutputStream::write;
 
-    virtual void write(const sys::byte* b, sys::Size_T len)
+    virtual void write(const void* buffer, size_t len)
     {
-        mProxy->write(b, len);
+        mProxy->write(buffer, len);
     }
 
     virtual void flush()
