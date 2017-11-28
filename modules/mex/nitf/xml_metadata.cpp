@@ -55,7 +55,7 @@ static void getUniqueChildrenCount(xml::lite::Element* element,
 static mxArray* createMx(xml::lite::Element* element)
 {
     // Total size is numChildren + offset
-    int offset = 0;
+    size_t offset = 0;
 
     // We will use this to store data associated with this elem
     std::map<std::string, std::string> data;
@@ -70,7 +70,7 @@ static mxArray* createMx(xml::lite::Element* element)
 
 
     // The number of unique children
-    int numChildren = childCount.size();
+    size_t numChildren = childCount.size();
     //std::cout << "Num unique elements: " << numChildren << std::endl;
 
     // This is the tag character data
@@ -100,7 +100,7 @@ static mxArray* createMx(xml::lite::Element* element)
     
     // Our number of unique fields is going to be the unique children
     // plus the data components
-    const int numberOfFields = numChildren + offset;
+    const size_t numberOfFields = numChildren + offset;
 
     // Attributes goes in data too
     char** names = new char*[numberOfFields];
@@ -176,7 +176,8 @@ static mxArray* createMx(xml::lite::Element* element)
     if (offset)
     {
 	assert( data.size() + i == numberOfFields);
-	assert( numberOfFields == mxGetNumberOfFields(structArrayPtr) );
+	assert( numberOfFields ==
+	        static_cast<size_t>(mxGetNumberOfFields(structArrayPtr)) );
 	for (std::map<std::string, std::string>::const_iterator it =
 		 data.begin(); it != data.end(); ++it)
 	{
@@ -188,9 +189,9 @@ static mxArray* createMx(xml::lite::Element* element)
 	}
     }
     
-    for (i = 0; i < numberOfFields; i++)
+    for (size_t ii = 0; ii < numberOfFields; ++ii)
     {
-	delete [] names[i];
+	delete [] names[ii];
     }
     delete [] names;
     
@@ -248,9 +249,10 @@ public:
         return (sys::Off_T)mReader.getSize();
     }
 
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
+protected:
+    virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
-        mReader.read((NITF_DATA*)b, len);
+        mReader.read(buffer, len);
         return len;
     }
 };
@@ -274,8 +276,6 @@ void mexFunction(int nlhs, mxArray *plhs[],
       
  	std::string inputFile = getString(prhs[0]);
 	
-	Document* doc = NULL;
-
 	// Must not be a NITF -- maybe its an XML file
 	// For now this is a feature of the function
 	if (nitf::Reader::getNITFVersion(inputFile) == NITF_VER_UNKNOWN)
