@@ -46,7 +46,7 @@ public:
 
     using CountingOutputStream::write;
 
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, size_t len);
 
 protected:
     std::string mFilename;

@@ -94,7 +94,7 @@ public:
     {
     }
 
-    FileReader(std::string file) : 
+    FileReader(const std::string& file) :
         StreamReader(new io::FileInputStream(file), true)
     {
     }

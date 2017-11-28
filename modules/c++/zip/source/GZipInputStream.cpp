@@ -24,12 +24,14 @@
 
 using namespace zip;
 
-GZipInputStream::GZipInputStream(std::string file)
+GZipInputStream::GZipInputStream(const std::string& file)
 {
     mFile = gzopen(file.c_str(), "rb");
     if (mFile == NULL)
-        throw except::IOException(Ctxt(FmtX("Failed to open gzip stream [%s]",
-                file.c_str())));
+    {
+        throw except::IOException(Ctxt(
+                "Failed to open gzip stream [" + file + "]"));
+    }
 }
 
 void GZipInputStream::close()
@@ -38,12 +40,12 @@ void GZipInputStream::close()
     mFile = NULL;
 }
 
-sys::SSize_T GZipInputStream::read(sys::byte* b, sys::Size_T len)
+sys::SSize_T GZipInputStream::readImpl(void* buffer, size_t len)
 {
-    int rv = gzread(mFile, b, len);
+    int rv = gzread(mFile, buffer, len);
     if (rv == -1)
     {
-        std::string err(gzerror(mFile, &rv));
+        const std::string err(gzerror(mFile, &rv));
         throw except::IOException(Ctxt(err));
     }
     else if (rv == 0)
@@ -51,4 +53,3 @@ sys::SSize_T GZipInputStream::read(sys::byte* b, sys::Size_T len)
 
     return (sys::SSize_T) rv;
 }
-

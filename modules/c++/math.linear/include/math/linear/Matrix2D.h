@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math.linear-c++ 
+ * This file is part of math.linear-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.linear-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -42,7 +42,7 @@ class Vector;
  *  \class Matrix2D
  *  \brief Flexible sized Matrix template
  *
- *  This class provides a flexible size class of arbitrary, sizable 
+ *  This class provides a flexible size class of arbitrary, sizable
  *  dimensions M and N.  Invocations are not required to know the size of these matrices
  *  at compile time.  This class is more flexible then its MatrixMxN counterpart, however
  *  the MatrixMxN should be favored wherever possible (in other words, whenever the
@@ -103,7 +103,7 @@ public:
      *  Assumes that the pointer is of correct size.
      *
      *  \code
-          double raw9[] = 
+          double raw9[] =
           {
              1, 2, 3
              4, 5, 6,
@@ -111,7 +111,7 @@ public:
           };
           Matrix2D<> A(3, 3, raw9);
      *  \endcode
-     *  
+     *
      *  \param raw A raw pointer to copy internally
      */
     Matrix2D(size_t M, size_t N, const _T* raw) :
@@ -194,7 +194,7 @@ public:
             }
         }
     }
-  
+
     /*!
      *  Assignment operator from one matrix to another
      *
@@ -268,7 +268,7 @@ public:
     /*!
      *  This operator allows you to mutate an element
      *  at A(i, j):
-     *  
+     *
      *  \code
            A(i, j) = 4.3;
      *  \endcode
@@ -311,7 +311,7 @@ public:
 
     /*!
      *  Get a constant pointer to a row
-     *  
+     *
      *  \code
           // Get second row vector
           const double* rowVector = A.row(1);
@@ -340,7 +340,7 @@ public:
     }
 
     /*!
-     *  Set the matrix row i to a copy of 
+     *  Set the matrix row i to a copy of
      *  the row vector
      *
      *  \code
@@ -348,7 +348,7 @@ public:
           double rowVec[] = { 1, 2, 3 };
           A.row(0, rowVec);
      *  \endcode
-     *  
+     *
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
@@ -360,9 +360,9 @@ public:
         }
     }
     /*!
-     *  Set the matrix row i to a copy of 
+     *  Set the matrix row i to a copy of
      *  the row vector
-     *  
+     *
      *  \code
           Matrix2D<> A(3, 3, 42.0);
           std::vector<double> rowVec(3, 1.2);
@@ -382,7 +382,7 @@ public:
 
     /*!
      *  Get back the column vector at index j
-     *  
+     *
      *  \code
           std::vector<double> colVec = A.col(0);
      *  \endcode
@@ -451,7 +451,7 @@ public:
 
     //! Get a constant ref to the underlying vector
     const _T* get() const { return mRaw; }
- 
+
     /*!
      *  Equality operator test
      *
@@ -471,7 +471,7 @@ public:
      */
     template<typename Matrix_T> inline bool operator==(const Matrix_T& mx) const
     {
-        
+
         if (rows() != mx.rows() || cols() != mx.cols())
             return false;
 
@@ -504,7 +504,7 @@ public:
      *
      *  \param mx The source matrix
      *  \return this (the copy)
-     */   
+     */
     template<typename Matrix_T> inline bool operator!=(const Matrix_T& mx) const
     {
             return !(*this == mx);
@@ -513,14 +513,14 @@ public:
     /*!
      *  The scale function allows you to scale
      *  the matrix by a scalar value in-place.
-     *  
+     *
      *  If you can afford to mutate the matrix,
      *  this will be more efficient than its
      *  multiply counterpart
      *
      *  \code
            Matrix2D<float> mx = createIdentity<float>(3);
-           mx.scale(4.2f);   
+           mx.scale(4.2f);
      *  \endcode
      *
      *
@@ -554,7 +554,7 @@ public:
     Matrix2D multiply(_T scalar) const
     {
         Matrix2D mx = *this;
-       
+
         for (size_t i = 0; i < mMN; ++i)
         {
             mx.mRaw[i] *= scalar;
@@ -707,7 +707,7 @@ public:
      *
      *  \param mx An NxN matrix whose diagonals scale the columns
      *  \return a copy matrix
-     *  
+     *
      *  \code
            C = A.multiplyDiagonal(diagonalMatrix);
      *  \endcode
@@ -742,7 +742,7 @@ public:
      *
      *  \param mx The matrix to assign (MxN)
      *  \return This
-     *     
+     *
      *  \code
            A += B;
      *  \endcode
@@ -779,7 +779,7 @@ public:
     {
         if (mx.mM != mM || mx.mN != mN)
             throw except::Exception(Ctxt("Matrices must be same size for element-wise subtract"));
-        
+
         for (size_t i = 0; i < mM; i++)
         {
             for (size_t j = 0; j < mN; j++)
@@ -970,7 +970,7 @@ public:
         }
         return perm;
     }
-    
+
      /*
      * Find the square of the L2 norm
      * Sum of squares of the vector elements
@@ -985,7 +985,7 @@ public:
         }
         return acc;
     }
-   
+
     /*!
      *  Find the L2 norm of the matrix.
      *  \return The norm
@@ -994,7 +994,7 @@ public:
     {
         return static_cast<_T>(std::sqrt(normSq()));
     }
-    
+
     /*!
      *  Scale the entire matrix inplace by the L2 norm value.
      *  \return A reference to this
@@ -1176,27 +1176,27 @@ template<typename _T>
 
     const size_t P = b.cols();
     const size_t N = lu.cols();
-    for (size_t kk = 0; kk < N; kk++) 
+    for (size_t kk = 0; kk < N; kk++)
     {
-        for (size_t ii = kk + 1; ii < N; ii++) 
+        for (size_t ii = kk + 1; ii < N; ii++)
         {
-            for (size_t jj = 0; jj < P; jj++) 
+            for (size_t jj = 0; jj < P; jj++)
             {
                 x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
         }
     }
-    for (sys::SSize_T kk = N - 1; kk >= 0; kk--) 
+    for (sys::SSize_T kk = N - 1; kk >= 0; kk--)
     {
-        for (size_t jj = 0; jj < P; jj++) 
+        for (size_t jj = 0; jj < P; jj++)
         {
             x(kk, jj) /= lu(kk, kk);
         }
 
-        for (size_t ii = 0; ii < static_cast<size_t>(kk); ii++) 
+        for (size_t ii = 0; ii < static_cast<size_t>(kk); ii++)
         {
             // This one could be _Q
-            for (size_t jj = 0; jj < P; jj++) 
+            for (size_t jj = 0; jj < P; jj++)
             {
                 x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
@@ -1215,7 +1215,7 @@ template<typename _T>
 template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
 {
     const double determinant = mx(1,1) * mx(0,0) - mx(1,0)*mx(0,1);
-    
+
     if (almostZero(determinant))
     {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
@@ -1238,7 +1238,7 @@ template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
  *  this for 3x3s
  *
  */
-template<typename _T> inline Matrix2D<_T> 
+template<typename _T> inline Matrix2D<_T>
     inverse3x3(const Matrix2D<_T>& mx)
 {
     double a = mx(0,0);
@@ -1258,7 +1258,7 @@ template<typename _T> inline Matrix2D<_T>
     double g3 = d*h - e*g;
 
     const double determinant = a*g1 - b*g2 + c*g3;
-    
+
     if (almostZero(determinant))
     {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
@@ -1269,7 +1269,7 @@ template<typename _T> inline Matrix2D<_T>
     inv(1,0) = -g2; inv(1,1) =  a*i - c*g; inv(1,2) =  c*d - a*f;
     inv(2,0) =  g3; inv(2,1) =  b*g - a*h; inv(2,2) =  a*e - b*d;
     inv.scale( 1.0 / determinant );
-    
+
     return inv;
 
 }
@@ -1280,7 +1280,7 @@ template<typename _T> inline Matrix2D<_T>
  *
  *  \param mx A matrix to invert
  *
- *  \code      
+ *  \code
          Matrix2D<> Ainv = inverseLU<double>(A);
  *  \endcode
  *
@@ -1297,7 +1297,7 @@ template<typename _T> inline
 
     std::vector<size_t> pivots(M);
     Matrix2D<_T> lu = mx.decomposeLU(pivots);
-    
+
     for (size_t i = 0; i < N; i++)
     {
         if (almostZero(lu(i, i)))
@@ -1314,7 +1314,7 @@ template<typename _T> inline
  *  cases for 2x2s and 3x3s.  Otherwise, it uses generalized
  *  LU decomposition to solve for the inverse.
  *
- *  \code      
+ *  \code
          Matrix2D<> Ainv = inverse<double>(A);
  *  \endcode
  */
@@ -1329,8 +1329,34 @@ template<typename _T> inline
     if (mx.rows() == 3)
         return inverse3x3<_T>(mx);
         // TODO Add 4x4
-    
+
     return inverseLU<_T>(mx);
+}
+
+/*!
+ * Calculate the left inverse
+ * \param mx The matrix to find the inverse of. Mx is assumed to have more rows
+ * than columns, and that the columns are linearly independent.
+ * \return Left inverse
+ * \throws if matrix is not left-invertible
+ */
+template<typename _T> inline
+    Matrix2D<_T> leftInverse(const Matrix2D<_T>& mx)
+{
+    return inverse(mx.transpose() * mx) * mx.transpose();
+}
+
+/*!
+ * Calculate the right inverse
+ * \param mx The matrix to find the inverse of. Mx is assumed to have more
+ * columns than rows, and that the rows are linearly independent.
+ * \return Right inverse
+ * \throws if matrix is not right-invertible
+ */
+template<typename _T> inline
+    Matrix2D<_T> rightInverse(const Matrix2D<_T>& mx)
+{
+    return mx.transpose() * inverse(mx * mx.transpose());
 }
 }
 }
