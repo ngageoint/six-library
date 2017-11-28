@@ -33,12 +33,12 @@ sys::Off_T io::StringStream::available()
     return (until - where);
 }
 
-void io::StringStream::write(const sys::byte *b, sys::Size_T size)
+void io::StringStream::write(const void* buffer, size_t size)
 {
-    mData.write((const char*)b, size);
+    mData.write((const char*)buffer, size);
 }
 
-sys::SSize_T io::StringStream::read(sys::byte *b, sys::Size_T len)
+sys::SSize_T io::StringStream::readImpl(void* buffer, size_t len)
 {
     sys::Off_T maxSize = available();
     if (maxSize <= 0) return io::InputStream::IS_END;
@@ -56,11 +56,10 @@ sys::SSize_T io::StringStream::read(sys::byte *b, sys::Size_T len)
     }
     len = bytesRead;
 #else
-    mData.read((char *)b, len);
+    mData.read((char *)buffer, len);
 #endif
     // Could be problem if streams are broken
     // alternately could return gcount in else
     // case above
     return len;
 }
-

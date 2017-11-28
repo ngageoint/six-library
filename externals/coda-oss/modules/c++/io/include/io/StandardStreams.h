@@ -62,11 +62,11 @@ public:
 
     /*!
      * This method defines a write to stdout.
-     * \param b   The byte array to write to the stream
+     * \param buffer The byte array to write to the stream
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, size_t len);
 
     /*!
      *  Flushes stdout
@@ -95,11 +95,11 @@ public:
 
     /*!
      * This method defines a write to stderr.
-     * \param b   The byte array to write to the stream
+     * \param buffer The byte array to write to the stream
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, sys::Size_T len);
 
     /*!
      *  Flushes stderr

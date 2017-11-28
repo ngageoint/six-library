@@ -45,7 +45,7 @@ template<typename T> int getPrecision(const std::complex<T>& type);
 template<typename T> std::string toString(const T& value)
 {
     std::ostringstream buf;
-    buf.precision(str::getPrecision(value));
+    buf.precision(getPrecision(value));
     buf << std::boolalpha << value;
     return buf.str();
 }

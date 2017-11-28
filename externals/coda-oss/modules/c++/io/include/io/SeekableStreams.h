@@ -49,7 +49,6 @@ public:
     {}
     virtual ~SeekableInputStream()
     {}
-    virtual sys::SSize_T read (sys::byte *b, sys::Size_T len) = 0;
     using InputStream::streamTo;
 };
 
@@ -61,7 +60,6 @@ public:
     {}
     virtual ~SeekableOutputStream()
     {}
-    virtual void write (const sys::byte *b, sys::Size_T len) = 0;
 };
 
 class SeekableBidirectionalStream :
@@ -72,8 +70,6 @@ public:
     {}
     virtual ~SeekableBidirectionalStream()
     {}
-    virtual sys::SSize_T read (sys::byte *b, sys::Size_T len) = 0;
-    virtual void write (const sys::byte *b, sys::Size_T len) = 0;
     using InputStream::streamTo;
 };
 

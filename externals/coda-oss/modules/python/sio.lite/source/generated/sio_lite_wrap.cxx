@@ -3726,7 +3726,7 @@ SWIGINTERN void sio_lite_FileWriter_write__SWIG_6(sio::lite::FileWriter *self,si
         const void* buffer = reinterpret_cast<const void*>(data);
         self->write(header, buffer);
     }
-SWIGINTERN sys::SSize_T sio_lite_StreamReader_read__SWIG_1(sio::lite::StreamReader *self,long long data,long long size){
+SWIGINTERN sys::SSize_T sio_lite_StreamReader_read(sio::lite::StreamReader *self,long long data,long long size){
         sys::byte* buffer = reinterpret_cast<sys::byte*>(data);
         return self->read(buffer, size);
     }
@@ -7679,86 +7679,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::StreamReader *arg1 = (sio::lite::StreamReader *) 0 ;
-  sys::byte *arg2 = (sys::byte *) 0 ;
-  size_t arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  size_t val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  sys::SSize_T result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:StreamReader_read",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__StreamReader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamReader_read" "', argument " "1"" of type '" "sio::lite::StreamReader *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::StreamReader * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "StreamReader_read" "', argument " "2"" of type '" "sys::byte *""'");
-  }
-  arg2 = reinterpret_cast< sys::byte * >(buf2);
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "StreamReader_read" "', argument " "3"" of type '" "size_t""'");
-  } 
-  arg3 = static_cast< size_t >(val3);
-  {
-    try
-    {
-      result = (arg1)->read(arg2,arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  {
-#if PY_VERSION_HEX >= 0x03000000
-    resultobj = PyLong_FromSsize_t(result);
-#else
-    resultobj = PyInt_FromSsize_t(result);
-#endif
-  }
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return resultobj;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_StreamReader_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   sio::lite::StreamReader *arg1 = (sio::lite::StreamReader *) 0 ;
   long long arg2 ;
@@ -7793,7 +7714,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   {
     try
     {
-      result = sio_lite_StreamReader_read__SWIG_1(arg1,arg2,arg3);
+      result = sio_lite_StreamReader_read(arg1,arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -7831,68 +7752,6 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_StreamReader_read(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[4] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__StreamReader, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_long_SS_long(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_StreamReader_read__SWIG_1(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__StreamReader, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_StreamReader_read__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'StreamReader_read'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    sio::lite::StreamReader::read(sys::byte *,size_t)\n"
-    "    sio::lite::StreamReader::read(long long,long long)\n");
-  return 0;
 }
 
 
@@ -7999,24 +7858,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string arg1 ;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   sio::lite::FileReader *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_FileReader",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_FileReader" "', argument " "1"" of type '" "std::string""'"); 
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileReader" "', argument " "1"" of type '" "std::string const &""'"); 
     }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileReader" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
   }
   {
     try
     {
-      result = (sio::lite::FileReader *)new sio::lite::FileReader(arg1);
+      result = (sio::lite::FileReader *)new sio::lite::FileReader((std::string const &)*arg1);
     } 
     catch (const std::exception& e)
     {
@@ -8045,8 +7907,10 @@ SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -8216,7 +8080,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileReader'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    sio::lite::FileReader::FileReader()\n"
-    "    sio::lite::FileReader::FileReader(std::string)\n"
+    "    sio::lite::FileReader::FileReader(std::string const &)\n"
     "    sio::lite::FileReader::FileReader(io::FileInputStream *,bool)\n"
     "    sio::lite::FileReader::FileReader(io::FileInputStream *)\n");
   return 0;
@@ -8488,15 +8352,12 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"StreamReader_readHeader", _wrap_StreamReader_readHeader, METH_VARARGS, (char *)"StreamReader_readHeader(StreamReader self) -> FileHeader"},
 	 { (char *)"StreamReader_available", _wrap_StreamReader_available, METH_VARARGS, (char *)"StreamReader_available(StreamReader self) -> sys::Off_T"},
-	 { (char *)"StreamReader_read", _wrap_StreamReader_read, METH_VARARGS, (char *)"\n"
-		"read(sys::byte * b, size_t size) -> sys::SSize_T\n"
-		"StreamReader_read(StreamReader self, long long data, long long size) -> sys::SSize_T\n"
-		""},
+	 { (char *)"StreamReader_read", _wrap_StreamReader_read, METH_VARARGS, (char *)"StreamReader_read(StreamReader self, long long data, long long size) -> sys::SSize_T"},
 	 { (char *)"StreamReader_swigregister", StreamReader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_FileReader", _wrap_delete_FileReader, METH_VARARGS, (char *)"delete_FileReader(FileReader self)"},
 	 { (char *)"new_FileReader", _wrap_new_FileReader, METH_VARARGS, (char *)"\n"
 		"FileReader()\n"
-		"FileReader(std::string file)\n"
+		"FileReader(std::string const & file)\n"
 		"FileReader(io::FileInputStream * arg2, bool adopt=False)\n"
 		"new_FileReader(io::FileInputStream * arg2) -> FileReader\n"
 		""},

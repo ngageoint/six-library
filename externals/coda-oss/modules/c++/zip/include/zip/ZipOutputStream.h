@@ -76,14 +76,13 @@ public:
     void write(const std::string& inputPathname,
                const std::string& zipPathname);
 
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, size_t len);
 
     virtual void close();
 
 private:
     zipFile mZip;
 };
-
 }
 
 #endif

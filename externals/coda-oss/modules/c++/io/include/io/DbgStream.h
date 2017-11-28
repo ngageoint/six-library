@@ -85,15 +85,15 @@ public:
     /*!
      * This method uses the bound OutputStream to print,
      * if the switch is on.
-     * \param b   The byte array to write to the stream
+     * \param buffer The byte array to write to the stream
      * \param len The length
      * \throw IOException
      */
-    virtual void write(const sys::byte* b, sys::Size_T len)
+    virtual void write(const void* buffer, sys::Size_T len)
     {
         if (mOn)
         {
-            mStream->write(b, len);
+            mStream->write(buffer, len);
         }
     }
 

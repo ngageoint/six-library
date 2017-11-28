@@ -43,18 +43,9 @@ void io::FileOutputStreamOS::create(const std::string& str,
     }
 }
 
-
-/*!
- * This method defines a given OutputStream. By defining,
- * this method, you can define the unique attributes of an OutputStream
- * inheriting class.
- * \param b   The byte array to write to the stream
- * \param len the length of bytes to write
- * \throw IOException
- */
-void io::FileOutputStreamOS::write(const sys::byte* b, sys::Size_T len)
+void io::FileOutputStreamOS::write(const void* buffer, size_t len)
 {
-    mFile.writeFrom((const char*)b, len);
+    mFile.writeFrom(buffer, len);
 }
 
 void io::FileOutputStreamOS::flush()
@@ -87,4 +78,3 @@ sys::Off_T io::FileOutputStreamOS::tell()
 }
 
 #endif
-
