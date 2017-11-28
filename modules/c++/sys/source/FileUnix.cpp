@@ -44,11 +44,13 @@ void sys::File::create(const std::string& str, int accessFlags,
     mPath = str;
 }
 
-void sys::File::readInto(char *buffer, Size_T size)
+void sys::File::readInto(void* buffer, Size_T size)
 {
     SSize_T bytesRead = 0;
     Size_T totalBytesRead = 0;
     int i;
+
+    sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
 
     /* make sure the user actually wants data */
     if (size == 0)
@@ -56,7 +58,7 @@ void sys::File::readInto(char *buffer, Size_T size)
 
     for (i = 1; i <= _SYS_MAX_READ_ATTEMPTS; i++)
     {
-        bytesRead = ::read(mHandle, buffer + totalBytesRead, size
+        bytesRead = ::read(mHandle, bufferPtr + totalBytesRead, size
                 - totalBytesRead);
 
         switch (bytesRead)
@@ -90,14 +92,16 @@ void sys::File::readInto(char *buffer, Size_T size)
     throw sys::SystemException(Ctxt("Unknown read state"));
 }
 
-void sys::File::writeFrom(const char *buffer, Size_T size)
+void sys::File::writeFrom(const void* buffer, size_t size)
 {
-    Size_T bytesActuallyWritten = 0;
+    size_t bytesActuallyWritten = 0;
+
+    const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
 
     do
     {
         const SSize_T bytesThisRead = ::write(mHandle,
-                                              buffer + bytesActuallyWritten,
+                                              bufferPtr + bytesActuallyWritten,
                                               size - bytesActuallyWritten);
         if (bytesThisRead == -1)
         {

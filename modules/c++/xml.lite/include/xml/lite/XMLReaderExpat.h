@@ -176,8 +176,7 @@ private:
      *  \param data The buffer
      *  \param size The buffer size
      */
-    void write(const sys::byte * data,
-               sys::Size_T size)
+    virtual void write(const void* data, size_t size)
     {
         parse(data, (int)size, false);
     }

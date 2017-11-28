@@ -100,20 +100,10 @@ public:
 
     /*!
      *  Writes the bytes in data to the stream.
-     *  \param b the data to write to the stream
+     *  \param buffer the data to write to the stream
      *  \param size the number of bytes to write to the stream
      */
-    void write(const sys::byte *b, sys::Size_T size);
-
-    /*!
-     * Read up to len bytes of data from this buffer into an array
-     * update the mark
-     * \param b   Buffer to read into
-     * \param len The length to read
-     * \throw IoException
-     * \return  The number of bytes read
-     */
-    virtual sys::SSize_T read(sys::byte *b, sys::Size_T len);
+    void write(const void* buffer, sys::Size_T size);
 
     //! Returns the internal std::stringstream
     std::stringstream& stream()
@@ -127,6 +117,17 @@ public:
         // clear eof/errors/etc.
         mData.clear();
     }
+
+protected:
+    /*!
+     * Read up to len bytes of data from this buffer into an array
+     * update the mark
+     * \param buffer Buffer to read into
+     * \param len The length to read
+     * \throw IoException
+     * \return  The number of bytes read
+     */
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
 
 private:
     std::stringstream mData;
