@@ -351,12 +351,9 @@ class StreamReader(coda.coda_io.InputStream):
         return _sio_lite.StreamReader_available(self)
 
 
-    def read(self, *args):
-        """
-        read(StreamReader self, sys::byte * b, size_t size) -> sys::SSize_T
-        read(StreamReader self, long long data, long long size) -> sys::SSize_T
-        """
-        return _sio_lite.StreamReader_read(self, *args)
+    def read(self, data, size):
+        """read(StreamReader self, long long data, long long size) -> sys::SSize_T"""
+        return _sio_lite.StreamReader_read(self, data, size)
 
 StreamReader_swigregister = _sio_lite.StreamReader_swigregister
 StreamReader_swigregister(StreamReader)
@@ -379,7 +376,7 @@ class FileReader(StreamReader, coda.coda_io.Seekable):
     def __init__(self, *args):
         """
         __init__(sio::lite::FileReader self) -> FileReader
-        __init__(sio::lite::FileReader self, std::string file) -> FileReader
+        __init__(sio::lite::FileReader self, std::string const & file) -> FileReader
         __init__(sio::lite::FileReader self, io::FileInputStream * arg2, bool adopt=False) -> FileReader
         __init__(sio::lite::FileReader self, io::FileInputStream * arg2) -> FileReader
         """
