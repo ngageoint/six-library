@@ -60,7 +60,7 @@ void sys::File::readInto(void* buffer, size_t size)
     size_t bytesRead = 0;
     size_t bytesRemaining = size;
 
-    const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
+    sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
 
     while (bytesRead < size)
     {
