@@ -25,5 +25,6 @@
 
 #include <types/RgAz.h>
 #include <types/RowCol.h>
+#include <types/Range.h>
 
 #endif

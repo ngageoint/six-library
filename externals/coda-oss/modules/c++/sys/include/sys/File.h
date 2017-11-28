@@ -178,7 +178,7 @@ public:
      *  \param buffer The buffer to put to
      *  \param size The number of bytes
      */
-    void readInto(char* buffer, Size_T size);
+    void readInto(void* buffer, size_t size);
 
     /*!
      *  Write from a buffer 'size' bytes into the 
@@ -190,8 +190,8 @@ public:
      *  \param buffer The buffer to read from
      *  \param size The number of bytes to write out
      */
-    void writeFrom(const char* buffer, 
-                   Size_T size);
+    void writeFrom(const void* buffer,
+                   size_t size);
 
     /*!
      *  Seek to the specified offset, relative to 'whence.'

@@ -109,10 +109,9 @@ public:
     std::string getDriverName() const { return "xerces"; }
 
 private:
-
-    void write(const sys::byte*, sys::Size_T)
+    virtual void write(const void*, size_t)
     {
-        throw xml::lite::XMLException(Ctxt("Im not sure how you got here!"));
+        throw xml::lite::XMLException(Ctxt("I'm not sure how you got here!"));
     }
 };
 

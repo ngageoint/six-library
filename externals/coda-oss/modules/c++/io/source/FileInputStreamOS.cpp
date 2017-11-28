@@ -43,20 +43,17 @@ sys::Off_T io::FileInputStreamOS::available()
 }
 
 
-sys::SSize_T io::FileInputStreamOS::read(sys::byte* b, sys::Size_T len)
+sys::SSize_T io::FileInputStreamOS::readImpl(void* buffer, size_t len)
 {
-    ::memset(b, 0, len);
+    ::memset(buffer, 0, len);
     sys::Off_T avail = available();
     if (!avail)
         return io::InputStream::IS_EOF;
     if (len > (sys::Size_T)avail)
         len = (sys::Size_T)avail;
 
-    mFile.readInto((char *)b, len);
-    return (sys::SSize_T)len;
-
+    mFile.readInto(buffer, len);
+    return static_cast<sys::SSize_T>(len);
 }
 
-
 #endif
-

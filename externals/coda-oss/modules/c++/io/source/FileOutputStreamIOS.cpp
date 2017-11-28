@@ -59,7 +59,8 @@ void io::FileOutputStreamIOS::open(const char *file,
     mFStream.open(file, mode);
     if (!isOpen())
     {
-        throw except::Error(Ctxt(FmtX("File could not be opened: %s", file)));
+        throw except::Error(Ctxt(
+                "File could not be opened: " + std::string(file)));
     }
 }
 
@@ -74,19 +75,9 @@ void io::FileOutputStreamIOS::close()
     }
 }
 
-/*!
- * This method defines a given OutputStream. By defining,
- * this method, you can define the unique attributes of an OutputStream
- * inheriting class.
- * \param b   The byte array to write to the stream
- * \param len the length of bytes to write
- * \throw IOException
- */
-void io::FileOutputStreamIOS::write(const sys::byte* b, sys::Size_T len)
+void io::FileOutputStreamIOS::write(const void* buffer, size_t len)
 {
-    //std::string s((const char*)b, len);
-    //EVAL(s.c_str());
-    mFStream.write((const char*)b, len);
+    mFStream.write((const char*)buffer, len);
 }
 
 

@@ -50,13 +50,6 @@ int main(int argc, char* argv[])
 
         resultSet = myConn->query("CREATE TABLE MyTable (id INT NOT NULL PRIMARY KEY, name VARCHAR(25) NOT NULL, description TEXT NOT NULL)");
 
-        char document[5];
-        document[0] = 'J';
-        document[1] = 'E';
-        document[2] = '\0';
-        document[3] = 'F';
-        document[4] = 'F';
-
         resultSet = myConn->query("SELECT TMODEL_KEY, NAME, OVERVIEW_URL FROM TMODEL");
 
         myRow = resultSet->fetchRow();

@@ -20,9 +20,38 @@
  *
  */
 
-#include "io/InputStream.h"
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <io/InputStream.h>
 
-sys::SSize_T io::InputStream::streamTo(io::OutputStream& soi, sys::SSize_T bytesToPipe)
+namespace io
+{
+sys::SSize_T InputStream::read(void* buffer,
+                               size_t len,
+                               bool verifyFullRead)
+{
+    const sys::SSize_T numBytes = readImpl(buffer, len);
+    if (verifyFullRead)
+    {
+        if (numBytes == -1)
+        {
+            std::ostringstream ostr;
+            ostr << "Tried to read " << len << " bytes but read failed";
+            throw except::IOException(Ctxt(ostr.str()));
+        }
+        else if (numBytes != static_cast<sys::SSize_T>(len))
+        {
+            std::ostringstream ostr;
+            ostr << "Tried to read " << len << " bytes but only read "
+                 << numBytes << " bytes";
+            throw except::IOException(Ctxt(ostr.str()));
+        }
+    }
+
+    return numBytes;
+}
+
+sys::SSize_T InputStream::streamTo(OutputStream& soi, sys::SSize_T bytesToPipe)
 {
 
     // In this event, we want to find the end of file,
@@ -57,7 +86,7 @@ sys::SSize_T io::InputStream::streamTo(io::OutputStream& soi, sys::SSize_T bytes
     return totalBytesTransferred;
 }
 
-sys::SSize_T io::InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPlusNullByte)
+sys::SSize_T InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPlusNullByte)
 {
     // Put a null byte at the end by default
     ::memset(cStr, 0, strLenPlusNullByte);
@@ -72,4 +101,5 @@ sys::SSize_T io::InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPl
         // Otherwise, append c;
     }
     return (sys::SSize_T)i;
+}
 }

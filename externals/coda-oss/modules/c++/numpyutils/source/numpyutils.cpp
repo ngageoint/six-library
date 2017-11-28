@@ -146,6 +146,7 @@ void createOrVerify(PyObject*& pyObject,
     {
         npy_intp odims[2] = {static_cast<npy_intp>(dims.row), static_cast<npy_intp>(dims.col)};
         pyObject = PyArray_SimpleNew(2, odims, typeNum);
+        verifyNewPyObject(pyObject);
     }
     else
     {
@@ -173,10 +174,11 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    return PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(
+    PyObject* copy = PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(
             PyArray_SimpleNewFromData(nDims, dimensions, typenum, data)),
             NPY_CORDER);
-
+    verifyNewPyObject(copy);
+    return copy;
 }
 
 PyObject* toNumpyArray(size_t numColumns, int typenum,
@@ -184,14 +186,18 @@ PyObject* toNumpyArray(size_t numColumns, int typenum,
 {
     const size_t numRows = data.size();
     PyObject* list = PyList_New(numRows);
+    verifyNewPyObject(list);
     for (size_t ii = 0; ii < numRows; ++ii)
     {
         npy_intp dimensions[] = { numColumns };
         PyObject* row =
                 PyArray_SimpleNewFromData(1, dimensions, typenum, data[ii]);
+        verifyNewPyObject(row);
         PyList_SET_ITEM(list, ii, row);
     }
-    return PyArray_FROM_O(list);
+    PyObject* newArray = PyArray_FROM_O(list);
+    verifyNewPyObject(newArray);
+    return newArray;
 }
 
 void prepareInputAndOutputArray(PyObject* pyInObject,
@@ -219,6 +225,16 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
 char* getDataBuffer(PyArrayObject* pyInObject)
 {
    return PyArray_BYTES(pyInObject);
+}
+
+void verifyNewPyObject(PyObject* object)
+{
+    if (!object)
+    {
+        PyErr_Print();
+        throw except::Exception(Ctxt("An error occurred while trying "
+                    "to create a PyObject"));
+    }
 }
 
 }

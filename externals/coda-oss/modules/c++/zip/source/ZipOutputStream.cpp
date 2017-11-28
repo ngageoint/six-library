@@ -85,10 +85,10 @@ void ZipOutputStream::write(const std::string& inputPathname,
     closeFileInZip();
 }
 
-void ZipOutputStream::write(const sys::byte* b, sys::Size_T len)
+void ZipOutputStream::write(const void* buffer, size_t len)
 {
     // Write the contents to the location
-    sys::Int32_T results = zipWriteInFileInZip(mZip, b, len);
+    const sys::Int32_T results = zipWriteInFileInZip(mZip, buffer, len);
 
     if (results != Z_OK)
          throw except::IOException(Ctxt("Failed to write file to zip location."));
