@@ -30,9 +30,10 @@ TEST_CASE(testParseZeroDegrees)
     int minutes;
     double seconds;
     nrt_Error error;
+    double decimal;
     nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
             &error);
-    double decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
+    decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
     TEST_ASSERT(fabs(decimal - -.2094444) < 1e-6);
 }
 
@@ -43,9 +44,10 @@ TEST_CASE(testParseZeroMinutes)
     int minutes;
     double seconds;
     nrt_Error error;
+    double decimal;
     nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
             &error);
-    double decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
+    decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
     TEST_ASSERT(fabs(decimal - -.009444) < 1e-6);
 }
 
@@ -56,9 +58,10 @@ TEST_CASE(testParseZeroMinutesEast)
     int minutes;
     double seconds;
     nrt_Error error;
+    double decimal;
     nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
             &error);
-    double decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
+    decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
     TEST_ASSERT(fabs(decimal - .009444) < 1e-6);
 
 }
@@ -123,10 +126,11 @@ TEST_CASE(testParseDecimal)
 TEST_CASE(testDmsToCharArrayNegativeMinutes)
 {
     char lonCharArray[9];
+    char latCharArray[8];
+
     nrt_Utils_geographicLonToCharArray(0, -1, 13, lonCharArray);
     TEST_ASSERT(strcmp(lonCharArray, "0000113W") == 0);
-
-    char latCharArray[8];
+    
     nrt_Utils_geographicLatToCharArray(0, -1, 13, latCharArray);
     TEST_ASSERT(strcmp(latCharArray, "000113S") == 0);
 }
@@ -134,10 +138,11 @@ TEST_CASE(testDmsToCharArrayNegativeMinutes)
 TEST_CASE(testDmsToCharArrayPositiveMinutes)
 {
     char lonCharArray[9];
+    char latCharArray[8];
+
     nrt_Utils_geographicLonToCharArray(0, 1, 13, lonCharArray);
     TEST_ASSERT(strcmp(lonCharArray, "0000113E") == 0);
 
-    char latCharArray[8];
     nrt_Utils_geographicLatToCharArray(0, 1, 13, latCharArray);
     TEST_ASSERT(strcmp(latCharArray, "000113N") == 0);
 }
@@ -145,10 +150,11 @@ TEST_CASE(testDmsToCharArrayPositiveMinutes)
 TEST_CASE(testDmsToCharArrayNegativeSeconds)
 {
     char lonCharArray[9];
+    char latCharArray[8];
+
     nrt_Utils_geographicLonToCharArray(0, 0, -13, lonCharArray);
     TEST_ASSERT(strcmp(lonCharArray, "0000013W") == 0);
 
-    char latCharArray[8];
     nrt_Utils_geographicLatToCharArray(0, 0, -13, latCharArray);
     TEST_ASSERT(strcmp(latCharArray, "000013S") == 0);
 }
@@ -156,11 +162,12 @@ TEST_CASE(testDmsToCharArrayNegativeSeconds)
 TEST_CASE(testDmsToCharArrayPositiveSeconds)
 {
     char lonCharArray[9];
-    nrt_Utils_geographicLonToCharArray(0, 0, 13, lonCharArray);
+    char latCharArray[8];
+
+	nrt_Utils_geographicLonToCharArray(0, 0, 13, lonCharArray);
     TEST_ASSERT(strcmp(lonCharArray, "0000013E") == 0);
 
-    char latCharArray[8];
-    nrt_Utils_geographicLatToCharArray(0, 0, 13, latCharArray);
+	nrt_Utils_geographicLatToCharArray(0, 0, 13, latCharArray);
     TEST_ASSERT(strcmp(latCharArray, "000013N") == 0);
 }
 

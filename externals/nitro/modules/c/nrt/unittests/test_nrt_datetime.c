@@ -73,11 +73,21 @@ TEST_CASE(testFromMillis)
 
 TEST_CASE(testParseDayOfYearTimeStr)
 {
-    /* Test without month and day of month information */
+    /* Test input without month and day of month information */
     const char *timeStr = "2017-304T22:55:37.123456Z";
     nrt_DateTime *date = NULL;
+
+    /* Test input with correct month and day of month information */
+    const char *timeStr2 = "2017-304-10-31T22:55:37.123456Z";
+    nrt_DateTime *date2 = NULL;
+
+    /* Test input with incorrect month and day of month information */
+    const char *timeStr3 = "2017-304-08-08T22:55:37.123456Z";
+    nrt_DateTime *date3 = NULL;
+
     nrt_Error e;
 
+    /* Test without month and day of month information */
     date = nrt_DateTime_fromString(timeStr, "%Y-%jT%H:%M:%SZ", &e);
     TEST_ASSERT(date);
 
@@ -86,9 +96,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
     TEST_ASSERT_EQ_INT(date->dayOfWeek, 3);
     TEST_ASSERT_EQ_INT(date->dayOfYear, 304);
 
-    /* Test with correct month and day of month information */
-    const char *timeStr2 = "2017-304-10-31T22:55:37.123456Z";
-    nrt_DateTime *date2 = NULL;
+    /* Test input with correct month and day of month information */
     date2 = nrt_DateTime_fromString(timeStr2, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
     TEST_ASSERT(date2);
 
@@ -97,9 +105,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
     TEST_ASSERT_EQ_INT(date2->dayOfWeek, 3);
     TEST_ASSERT_EQ_INT(date2->dayOfYear, 304);
 
-    /* Test with incorrect month and day of month information */
-    const char *timeStr3 = "2017-304-08-08T22:55:37.123456Z";
-    nrt_DateTime *date3 = NULL;
+    /* Test input with incorrect month and day of month information */
     date3 = nrt_DateTime_fromString(timeStr3, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
     TEST_ASSERT(date3);
 
