@@ -51,7 +51,6 @@ public:
                                size_t numRows,
                                size_t numBytesPerPixel) const;
 
-    // TODO: Implement
     // startRow must start on a block boundary (within a segment)
     // numRows must be a multiple of block size unless it's the end of a segment
     void block(const void* input,
@@ -106,16 +105,19 @@ private:
                           size_t& lastSegIdx,
                           size_t& lastBlockWithinLastSeg) const;
 
-    // TODO: Should this be a functor to not have to compute some of these
-    //       things each time?
-
     void blockImpl(const sys::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
                    sys::byte* output) const;
 
+    void blockAcrossRow(const sys::byte*& input,
+                        size_t numValidRowsInBlock,
+                        size_t numBytesPerPixel,
+                        sys::byte*& output) const;
+
 private:
+    // Vectors all indexed by segment
     std::vector<size_t> mStartRow;
     const std::vector<size_t> mNumRows;
     const size_t mTotalNumRows;
@@ -123,7 +125,7 @@ private:
     const size_t mNumRowsPerBlock;
     const size_t mNumColsPerBlock;
 
-    std::vector<size_t> mNumBlocksAcrossRows;
+    std::vector<size_t> mNumBlocksDownRows;
     std::vector<size_t> mNumPadRowsInFinalBlock;
 
     size_t mNumBlocksAcrossCols;
