@@ -102,7 +102,7 @@ void ImageBlocker::findSegment(size_t row,
     {
         const size_t endRowOfSeg = mStartRow[seg] + mNumRows[seg];
 
-        if (endRowOfSeg < row)
+        if (row < endRowOfSeg)
         {
             segIdx = seg;
             rowWithinSegment = row - mStartRow[seg];
@@ -272,8 +272,10 @@ void ImageBlocker::blockAcrossRow(const sys::byte*& input,
          colBlock < mNumBlocksAcrossCols;
          ++colBlock, input += inStride, output += outStride)
     {
-        const size_t numValidColsInBlock = (colBlock == lastColBlock) ?
-                mNumPadColsInFinalBlock : mNumColsPerBlock;
+        const size_t numPadColsInBlock = (colBlock == lastColBlock) ?
+                mNumPadColsInFinalBlock : 0;
+
+        const size_t numValidColsInBlock = mNumColsPerBlock - numPadColsInBlock;
 
         blockImpl(input,
                   numValidRowsInBlock,
@@ -281,6 +283,10 @@ void ImageBlocker::blockAcrossRow(const sys::byte*& input,
                   numBytesPerPixel,
                   output);
     }
+
+    // At the end of this, we've incremented the input pointer an entire row
+    // We need to increment it the remaining rows in the block
+    input += mNumCols * numBytesPerPixel * (numValidRowsInBlock - 1);
 }
 
 void ImageBlocker::block(const void* input,
@@ -316,9 +322,12 @@ void ImageBlocker::block(const void* input,
              rowBlock <= lastRowBlockOfSegment;
              ++rowBlock)
         {
-            const size_t numValidRowsInBlock =
+            const size_t numPadRowsInBlock =
                     (rowBlock == overallLastRowBlockOfSegment) ?
-                            mNumPadRowsInFinalBlock[seg] : mNumRowsPerBlock;
+                            mNumPadRowsInFinalBlock[seg] : 0;
+
+            const size_t numValidRowsInBlock =
+                    mNumRowsPerBlock - numPadRowsInBlock;
 
             // This increments both pointers
             blockAcrossRow(inputPtr,

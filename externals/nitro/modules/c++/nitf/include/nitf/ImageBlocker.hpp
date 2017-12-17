@@ -27,6 +27,8 @@
 #include <string.h>
 #include <vector>
 
+#include <sys/Conf.h>
+
 namespace nitf
 {
 // Only supports layouts where image segments are stacked vertically
