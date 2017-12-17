@@ -152,10 +152,11 @@ void ImageBlocker::findSegmentRange(size_t startRow,
         size_t lastRowWithinLastSeg;
         findSegment(lastRow, lastSegIdx, lastRowWithinLastSeg,
                     lastBlockWithinLastSeg);
+        const size_t endRowWithinLastSeg = lastRowWithinLastSeg + 1;
 
         // Make sure we're ending on a full block
-        if (!(lastRowWithinLastSeg == mNumRows[lastSegIdx] ||
-              isFirstRowInBlock(lastRowWithinLastSeg + 1)))
+        if (!(endRowWithinLastSeg == mNumRows[lastSegIdx] ||
+              isFirstRowInBlock(endRowWithinLastSeg)))
         {
             std::ostringstream ostr;
             ostr << "Last row " << lastRow << " is local row "
@@ -264,13 +265,13 @@ void ImageBlocker::blockAcrossRow(const sys::byte*& input,
                                   size_t numBytesPerPixel,
                                   sys::byte*& output) const
 {
-    const size_t inStride = mNumColsPerBlock * numBytesPerPixel;
-    const size_t outStride = mNumRowsPerBlock * inStride;
+    const size_t outStride =
+            mNumRowsPerBlock * mNumColsPerBlock * numBytesPerPixel;
     const size_t lastColBlock = mNumBlocksAcrossCols - 1;
 
     for (size_t colBlock = 0;
          colBlock < mNumBlocksAcrossCols;
-         ++colBlock, input += inStride, output += outStride)
+         ++colBlock, output += outStride)
     {
         const size_t numPadColsInBlock = (colBlock == lastColBlock) ?
                 mNumPadColsInFinalBlock : 0;
@@ -282,6 +283,8 @@ void ImageBlocker::blockAcrossRow(const sys::byte*& input,
                   numValidColsInBlock,
                   numBytesPerPixel,
                   output);
+
+        input += numValidColsInBlock * numBytesPerPixel;
     }
 
     // At the end of this, we've incremented the input pointer an entire row
