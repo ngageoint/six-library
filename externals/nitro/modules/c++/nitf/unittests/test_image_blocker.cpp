@@ -47,7 +47,7 @@ TEST_CASE(testSingleSegmentNoLeftovers)
         input[ii] = ii + 1;
     }
 
-    const nitf::ImageBlocker blocker(std::vector<size_t>(1, NUM_ROWS),
+    const nitf::ImageBlocker blocker(NUM_ROWS,
                                      NUM_COLS,
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
@@ -99,7 +99,7 @@ TEST_CASE(testSingleSegmentPadCols)
         input[ii] = ii + 1;
     }
 
-    const nitf::ImageBlocker blocker(std::vector<size_t>(1, NUM_ROWS),
+    const nitf::ImageBlocker blocker(NUM_ROWS,
                                      NUM_COLS,
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
@@ -151,7 +151,7 @@ TEST_CASE(testSingleSegmentPadRowsAndPadCols)
         input[ii] = ii + 1;
     }
 
-    const nitf::ImageBlocker blocker(std::vector<size_t>(1, NUM_ROWS),
+    const nitf::ImageBlocker blocker(NUM_ROWS,
                                      NUM_COLS,
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
