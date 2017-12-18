@@ -32,9 +32,15 @@
 namespace nitf
 {
 // Only supports layouts where image segments are stacked vertically
+// TODO: Add unit tests for multi seg, getNumBytesRequired()
 class ImageBlocker
 {
 public:
+    ImageBlocker(size_t numRows,
+                 size_t numCols,
+                 size_t numRowsPerBlock,
+                 size_t numColsPerBlock);
+
     ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
                  size_t numCols,
                  size_t numRowsPerBlock,

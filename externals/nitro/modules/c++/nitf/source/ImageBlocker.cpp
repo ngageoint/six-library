@@ -52,6 +52,31 @@ void getBlockInfo(size_t numElements,
 
 namespace nitf
 {
+ImageBlocker::ImageBlocker(size_t numRows,
+                           size_t numCols,
+                           size_t numRowsPerBlock,
+                           size_t numColsPerBlock) :
+    mStartRow(1, 0),
+    mNumRows(1, numRows),
+    mTotalNumRows(numRows),
+    mNumCols(numCols),
+    mNumRowsPerBlock(numRowsPerBlock),
+    mNumColsPerBlock(numColsPerBlock),
+    mNumBlocksDownRows(1),
+    mNumPadRowsInFinalBlock(1)
+{
+    if (numRowsPerBlock == 0 || numColsPerBlock == 0)
+    {
+        throw except::Exception(Ctxt("Dimensions per block must be positive"));
+    }
+
+    getBlockInfo(numRows, mNumRowsPerBlock,
+                 mNumBlocksDownRows[0], mNumPadRowsInFinalBlock[0]);
+
+    getBlockInfo(mNumCols, mNumColsPerBlock,
+                 mNumBlocksAcrossCols, mNumPadColsInFinalBlock);
+}
+
 ImageBlocker::ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
                            size_t numCols,
                            size_t numRowsPerBlock,
