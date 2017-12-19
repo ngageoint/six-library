@@ -130,6 +130,28 @@ const void* SICDByteProvider::NITFBufferList::getBlock(
     return NULL;
 }
 
+size_t SICDByteProvider::getNumBytesPerRow(
+        const NITFWriteControl& writer)
+{
+    const Data& data = *writer.getContainer()->getData(0);
+    return data.getNumCols() * data.getNumBytesPerPixel();
+}
+
+SICDByteProvider::SICDByteProvider(
+        const NITFWriteControl& writer,
+        const std::vector<std::string>& schemaPaths) :
+    mNumBytesPerRow(getNumBytesPerRow(writer))
+{
+    writer.getFileLayout(schemaPaths,
+                         mFileHeader,
+                         mImageSubheaders,
+                         mDesSubheaderAndData,
+                         mImageSubheaderFileOffsets,
+                         mImageSegmentInfo,
+                         mDesSubheaderFileOffset,
+                         mFileNumBytes);
+}
+
 SICDByteProvider::SICDByteProvider(
         const ComplexData& data,
         const std::vector<std::string>& schemaPaths,

@@ -197,6 +197,17 @@ public:
                      size_t maxProductSize = 0);
 
     /*!
+     * Constructor
+     * This option allows you to pass in an initialized writer,
+     * in case you need something specific in the header
+     *
+     * \param writer Initialized NITFWriteControl
+     * \param schemaPaths Directories or files of schema locations
+     */
+    SICDByteProvider(const NITFWriteControl& writer,
+                     const std::vector<std::string>& schemaPaths);
+
+    /*!
      * \return The total number of bytes in the NITF
      */
     nitf::Off getFileNumBytes() const
@@ -262,6 +273,9 @@ public:
                   size_t numRows,
                   nitf::Off& fileOffset,
                   NITFBufferList& buffers) const;
+
+private:
+    static size_t getNumBytesPerRow(const NITFWriteControl& writer);
 
 private:
     const size_t mNumBytesPerRow;
