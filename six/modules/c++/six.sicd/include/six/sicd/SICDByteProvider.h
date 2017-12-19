@@ -201,7 +201,7 @@ public:
      * This option allows you to pass in an initialized writer,
      * in case you need something specific in the header
      *
-     * \param writer Initiailized NITFWriteControl
+     * \param writer Initialized NITFWriteControl
      * \param schemaPaths Directories or files of schema locations
      */
     SICDByteProvider(const NITFWriteControl& writer,
