@@ -976,6 +976,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader* subheader,
                 NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+    implControl->ioInterface = NULL;
     implControl->markerList = NULL;
     implControl->quantTable = NULL;
     implControl->length = 0;
