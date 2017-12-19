@@ -131,7 +131,7 @@ const void* SICDByteProvider::NITFBufferList::getBlock(
 }
 
 size_t SICDByteProvider::getNumBytesPerRow(
-        const NITFWriteControl& writer) const
+        const NITFWriteControl& writer)
 {
     const Data& data = *writer.getContainer()->getData(0);
     return data.getNumCols() * data.getNumBytesPerPixel();

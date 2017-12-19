@@ -275,7 +275,7 @@ public:
                   NITFBufferList& buffers) const;
 
 private:
-    size_t getNumBytesPerRow(const NITFWriteControl& writer) const;
+    static size_t getNumBytesPerRow(const NITFWriteControl& writer);
 
 private:
     const size_t mNumBytesPerRow;
