@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <six/NITFSegmentInfo.h>
+#include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 
 namespace six
