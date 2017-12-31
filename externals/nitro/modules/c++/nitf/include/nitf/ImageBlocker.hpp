@@ -32,7 +32,6 @@
 namespace nitf
 {
 // Only supports layouts where image segments are stacked vertically
-// TODO: Add unit tests for multi seg, getNumBytesRequired()
 class ImageBlocker
 {
 public:
@@ -89,11 +88,6 @@ public:
                DataT* output) const;*/
 
     // TODO: Want a threaded version
-
-    // TODO: Want something that tells you how you should partition the data
-    //       given that you can end up with these partial blocks at the end
-    //       of a block.
-
 
 private:
     void findSegment(size_t row,

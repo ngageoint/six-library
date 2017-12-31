@@ -52,7 +52,11 @@ TEST_CASE(testSingleSegmentNoLeftovers)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output(NUM_ROWS * NUM_COLS, 99999);
+    static const size_t NUM_OUTPUT_PIXELS = NUM_ROWS * NUM_COLS;
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
@@ -104,7 +108,11 @@ TEST_CASE(testSingleSegmentPadCols)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output(NUM_ROWS * (NUM_COLS + 1), 99999);
+    static const size_t NUM_OUTPUT_PIXELS = NUM_ROWS * (NUM_COLS + 1);
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
@@ -156,7 +164,11 @@ TEST_CASE(testSingleSegmentPadRowsAndPadCols)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output((NUM_ROWS + 4) * (NUM_COLS + 1), 99999);
+    static const size_t NUM_OUTPUT_PIXELS = (NUM_ROWS + 4) * (NUM_COLS + 1);
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
@@ -216,7 +228,11 @@ TEST_CASE(testMultipleSegmentsNoLeftovers)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output(NUM_ROWS * NUM_COLS, 99999);
+    static const size_t NUM_OUTPUT_PIXELS = NUM_ROWS * NUM_COLS;
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
@@ -274,7 +290,11 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundaries)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output((NUM_ROWS + 3) * NUM_COLS, 99999);
+    static const size_t NUM_OUTPUT_PIXELS = (NUM_ROWS + 3) * NUM_COLS;
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, imageRowBase = 0;
@@ -346,7 +366,11 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output((NUM_ROWS + 3) * (NUM_COLS + 1), 99999);
+    static const size_t NUM_OUTPUT_PIXELS = (NUM_ROWS + 3) * (NUM_COLS + 1);
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(0, NUM_ROWS),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, imageRowBase = 0;
@@ -418,7 +442,12 @@ TEST_CASE(testBlockPartialImage)
                                      NUM_ROWS_PER_BLOCK,
                                      NUM_COLS_PER_BLOCK);
 
-    std::vector<size_t> output(NUM_ROWS_TO_BLOCK * NUM_COLS, 99999);
+    static const size_t NUM_OUTPUT_PIXELS = NUM_ROWS_TO_BLOCK * NUM_COLS;
+    TEST_ASSERT_EQ(blocker.getNumBytesRequired<size_t>(START_ROW,
+                                                       NUM_ROWS_TO_BLOCK),
+                   NUM_OUTPUT_PIXELS * sizeof(size_t));
+
+    std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
     blocker.block(&input[0], START_ROW, NUM_ROWS_TO_BLOCK, &output[0]);
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = BASE_VAL;
