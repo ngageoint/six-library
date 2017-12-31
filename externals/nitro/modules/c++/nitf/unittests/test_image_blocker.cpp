@@ -389,6 +389,63 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
         imageRowBase = imageRow;
     }
 }
+
+TEST_CASE(testBlockPartialImage)
+{
+    // 7 rows of blocks and 5 cols of blocks
+    static const size_t NUM_ROWS = 21;
+    static const size_t NUM_COLS = 20;
+    static const size_t NUM_ROWS_PER_BLOCK = 3;
+    static const size_t NUM_COLS_PER_BLOCK = 4;
+
+    // 1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20
+    // 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+    // ...
+    // 220 ...                                                  240
+
+    // But only do the middle three blocks - must land on block boundary
+    static const size_t START_ROW = 6;
+    static const size_t NUM_ROWS_TO_BLOCK = 9;
+    std::vector<size_t> input(NUM_ROWS_TO_BLOCK * NUM_COLS);
+    static const size_t BASE_VAL = 1 + START_ROW * NUM_COLS;
+    for (size_t ii = 0; ii < input.size(); ++ii)
+    {
+        input[ii] = ii + BASE_VAL;
+    }
+
+    const nitf::ImageBlocker blocker(NUM_ROWS,
+                                     NUM_COLS,
+                                     NUM_ROWS_PER_BLOCK,
+                                     NUM_COLS_PER_BLOCK);
+
+    std::vector<size_t> output(NUM_ROWS_TO_BLOCK * NUM_COLS, 99999);
+    blocker.block(&input[0], START_ROW, NUM_ROWS_TO_BLOCK, &output[0]);
+
+    for (size_t rowBlock = 0, idx = 0, rowOffset = BASE_VAL;
+         rowBlock < 3;
+         ++rowBlock, rowOffset += NUM_COLS * NUM_ROWS_PER_BLOCK)
+    {
+        for (size_t colBlock = 0, colOffset = 0;
+             colBlock < 5;
+             ++colBlock, colOffset += NUM_COLS_PER_BLOCK)
+        {
+            for (size_t row = 0; row < NUM_ROWS_PER_BLOCK; ++row)
+            {
+                for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
+                {
+                    std::ostringstream ostr;
+                    ostr << "Row block " << rowBlock << ", col block "
+                         << colBlock << ", row " << row << ", col " << col;
+
+                    const size_t expectedVal =
+                            rowOffset + row * NUM_COLS + colOffset + col;
+
+                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                }
+            }
+        }
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -399,6 +456,7 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testMultipleSegmentsNoLeftovers);
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundaries);
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols);
+    TEST_CHECK(testBlockPartialImage);
 
     return 0;
 }
