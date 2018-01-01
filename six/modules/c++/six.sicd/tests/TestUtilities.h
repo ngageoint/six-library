@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <sys/OS.h>
-#include <io/FileInputStream.h>
+#include <io/ReadUtils.h>
 #include <six/sicd/Utilities.h>
 
 // Template specialization to get appropriate pixel type
@@ -67,22 +67,6 @@ createData(const types::RowCol<size_t>& dims)
     return data;
 }
 
-// Read in the entire contents of a file into 'contents'
-inline
-void readFile(const std::string& pathname,
-              std::vector<sys::byte>& contents)
-{
-    io::FileInputStream inStream(pathname);
-
-    contents.resize(inStream.available());
-
-    const size_t numRead = inStream.read(&contents[0], contents.size());
-    if (numRead != contents.size())
-    {
-        throw except::Exception(Ctxt("Short read"));
-    }
-}
-
 // Note that this will work because SIX is forcing the NITF date/time to match
 // what's in the SICD XML and we're writing the same SICD XML in all our files
 class CompareFiles
@@ -90,13 +74,13 @@ class CompareFiles
 public:
     CompareFiles(const std::string& lhsPathname)
     {
-        readFile(lhsPathname, mLHS);
+        io::readFileContents(lhsPathname, mLHS);
     }
 
     bool operator()(const std::string& prefix,
                     const std::string& rhsPathname) const
     {
-        readFile(rhsPathname, mRHS);
+        io::readFileContents(rhsPathname, mRHS);
 
         if (mLHS == mRHS)
         {
