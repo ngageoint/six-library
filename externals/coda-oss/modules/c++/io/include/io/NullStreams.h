@@ -46,20 +46,6 @@ public:
         return mAvailable;
     }
 
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
-    {
-        sys::Size_T numToRead =
-                (mAvailable >= (sys::SSize_T) len ? len : (sys::Size_T) mAvailable);
-
-        mAvailable -= (sys::SSize_T) numToRead;
-
-        if (numToRead == 0)
-            throw except::IOException(Ctxt("EOF - no more data to read"));
-
-        processBytes(b, numToRead);
-        return numToRead;
-    }
-
     virtual sys::SSize_T readln(sys::byte *cStr,
                                 const sys::Size_T strLenPlusNullByte)
     {
@@ -85,10 +71,24 @@ protected:
     {
         return (sys::byte) 0;
     }
-    virtual void processBytes(sys::byte* b, sys::Size_T len) const
+    virtual void processBytes(void* buffer, sys::Size_T len) const
     {
         //override for different behavior
-        memset(b, 0, len);
+        memset(buffer, 0, len);
+    }
+
+    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    {
+        size_t numToRead =
+                (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
+
+        mAvailable -= (sys::SSize_T) numToRead;
+
+        if (numToRead == 0)
+            throw except::IOException(Ctxt("EOF - no more data to read"));
+
+        processBytes(buffer, numToRead);
+        return numToRead;
     }
 };
 
@@ -114,16 +114,14 @@ public:
     {
     }
 
-    virtual void write(const sys::byte* , sys::Size_T )
+    virtual void write(const void* , size_t )
     {
     }
 
     virtual void flush()
     {
     }
-
 };
-
 }
 
 #endif

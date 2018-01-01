@@ -77,6 +77,12 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
 
     writer.initialize(container);
 
+    initialize(writer, schemaPaths);
+}
+
+void ByteProvider::initialize(const NITFWriteControl& writer,
+                              const std::vector<std::string>& schemaPaths)
+{
     // Now we can get the file headers and offsets we want
     writer.getFileLayout(schemaPaths,
                          mFileHeader,
@@ -87,9 +93,25 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
                          mDesSubheaderFileOffset,
                          mFileNumBytes);
 
-    const size_t actualNumCols =
-            nitf::ImageSubheader::getActualImageDim(data->getNumCols(),
-                                                    numColsPerBlock);
+    // getFileLayout() is going to ensure this is one vertically stacked image
+    // and not 2+ unrelated images with different sizes, so this is a reliable
+    // way to get the # of cols and bytes/pixel
+    const six::Data* const data = writer.getContainer()->getData(0);
+
+    size_t actualNumCols;
+    const Options& options(writer.getOptions());
+    if (options.hasParameter(six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK))
+    {
+        const size_t numColsPerBlock = options.getParameter(
+                six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK);
+
+        actualNumCols = nitf::ImageSubheader::getActualImageDim(
+                data->getNumCols(), numColsPerBlock);
+    }
+    else
+    {
+        actualNumCols = data->getNumCols();
+    }
 
     mNumBytesPerRow = actualNumCols * data->getNumBytesPerPixel();
 }

@@ -44,12 +44,7 @@ class GZipInputStream: public io::InputStream
 public:
 
     //!  Constructor requires initialization
-    GZipInputStream(std::string file);
-
-    //!  Destructor
-    virtual ~GZipInputStream()
-    {
-    }
+    GZipInputStream(const std::string& file);
 
     /*!
      *  Close the gzip stream.  You must call this
@@ -57,12 +52,13 @@ public:
      */
     virtual void close();
 
+protected:
     /*!
      *  Read len bytes into the buffer from the stream.
      *  This is a little tricky since we do not know the
      *  length of the read.
      */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
 
 };
 }

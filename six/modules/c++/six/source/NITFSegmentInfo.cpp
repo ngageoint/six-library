@@ -23,6 +23,7 @@
 #include <limits>
 #include <algorithm>
 
+#include <nitf/ImageSegmentComputer.h>
 #include <six/NITFSegmentInfo.h>
 
 namespace six
@@ -32,21 +33,8 @@ bool NITFSegmentInfo::isInRange(size_t rangeStartRow,
                                 size_t& firstGlobalRowInThisSegment,
                                 size_t& numRowsInThisSegment) const
 {
-    const size_t startGlobalRow = std::max(firstRow, rangeStartRow);
-    const size_t endGlobalRow =
-            std::min(endRow(), rangeStartRow + rangeNumRows);
-
-    if (endGlobalRow > startGlobalRow)
-    {
-        firstGlobalRowInThisSegment = startGlobalRow;
-        numRowsInThisSegment = endGlobalRow - startGlobalRow;
-        return true;
-    }
-    else
-    {
-        firstGlobalRowInThisSegment = std::numeric_limits<size_t>::max();
-        numRowsInThisSegment = 0;
-        return false;
-    }
+    return nitf::ImageSegmentComputer::Segment::isInRange(
+            firstRow, endRow(), rangeStartRow, rangeNumRows,
+            firstGlobalRowInThisSegment, numRowsInThisSegment);
 }
 }

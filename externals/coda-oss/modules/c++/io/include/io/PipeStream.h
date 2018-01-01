@@ -73,12 +73,6 @@ public:
     }
 
     /*! 
-     *  \func read
-     *  \brief returns the requested size in bytes from the stream
-     */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
-
-    /*! 
      *  \func readln
      *  \brief returns one line ending in a newline or the requested size --
      *         requested size cannot be greater than the maxLength
@@ -101,8 +95,12 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END);
 
-
 protected:
+    /*!
+     *  \brief returns the requested size in bytes from the stream
+     */
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+
 
     sys::ExecPipe mExecPipe;
     mem::ScopedArray<char> mCharString;

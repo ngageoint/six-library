@@ -3001,7 +3001,6 @@ class Constants(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Constants, name)
     __repr__ = _swig_repr
-    ILOC_MAX = _six_base.Constants_ILOC_MAX
 
     def getNumBytesPerPixel(type):
         """getNumBytesPerPixel(PixelType type) -> int"""
@@ -3022,6 +3021,7 @@ Constants_swigregister = _six_base.Constants_swigregister
 Constants_swigregister(Constants)
 Constants.IS_SIZE_MAX = _six_base.cvar.Constants_IS_SIZE_MAX
 Constants.GT_SIZE_MAX = _six_base.cvar.Constants_GT_SIZE_MAX
+Constants.ILOC_MAX = _six_base.cvar.Constants_ILOC_MAX
 Constants.GT_XML_KEY = _six_base.cvar.Constants_GT_XML_KEY
 Constants.GT_XML_TAG = _six_base.cvar.Constants_GT_XML_TAG
 Constants.DES_VERSION = _six_base.cvar.Constants_DES_VERSION

@@ -25,6 +25,7 @@
 #include <six/Data.h>
 #include <six/Utilities.h>
 #include <six/NITFSegmentInfo.h>
+#include <nitf/ImageSegmentComputer.h>
 
 namespace six
 {
@@ -150,7 +151,15 @@ public:
         return mImageSegments;
     }
 
-    void addSegment(NITFSegmentInfo info)
+    /*!
+     * Adds a segment.  Note that the segmentation layout computed at
+     * construction time will no longer hold, so this should only be used
+     * when 'computeSegments' was false at construction or the segmentation
+     * layout is otherwise not being used.
+     *
+     * \param info The segment info to add
+     */
+    void addSegment(const NITFSegmentInfo& info)
     {
         mImageSegments.push_back(info);
     }
@@ -159,27 +168,28 @@ public:
     {
         return mStartIndex;
     }
+
     void setStartIndex(size_t index)
     {
         mStartIndex = index;
     }
 
-    //! Number of bytes in the product
-    sys::Uint64_T getProductSize() const
+    //! \return Number of total bytes in the image
+    sys::Uint64_T getNumBytesTotal() const
     {
-        return mProductSize;
+        return mSegmentComputer.getNumBytesTotal();
     }
 
     //! This is the total number of rows we can have in a NITF segment
     size_t getNumRowsLimit() const
     {
-        return mNumRowsLimit;
+        return mSegmentComputer.getNumRowsLimit();
     }
 
-    //! This is the total size that each product seg can be, bytes
-    sys::Uint64_T getMaxProductSize() const
+    //! \return Max number of bytes that each image segment can be
+    sys::Uint64_T getMaxNumBytesPerSegment() const
     {
-        return mMaxProductSize;
+        return mSegmentComputer.getMaxNumBytesPerSegment();
     }
 
     std::vector<nitf::BandInfo> getBandInfo() const;
@@ -229,16 +239,6 @@ public:
             const std::string& prefix = "", int index = -1);
 
 private:
-    //! This is the actual size of a dimension (row or column)
-    //! taking into account the possible blocking (pixels)
-    static
-    size_t getActualDim(size_t dim, size_t numDimsPerBlock)
-    {
-        return nitf::ImageSubheader::getActualImageDim(dim, numDimsPerBlock);
-    }
-
-    void computeImageInfo();
-
     /*!
      *  This function figures out the parameters for each segment
      *  The algorithm follows the document.  The document does not
@@ -257,64 +257,12 @@ private:
      */
     void computeSegmentCorners();
 
-    /*!
-     *  This function is called by the container to determine
-     *  what the properties of the image segments will be.
-     *
-     */
-    void compute();
-
-    /*     NITFImageInfo() : data(NULL), startIndex(0), */
-    /*         numRowsLimit(Constants::ILOC_MAX), */
-    /*             maxProductSize(Constants::IS_SIZE_MAX)  {} */
-
-    /*!
-     *  By default, we use the IS_SIZE_MAX to determine the max product
-     *  size for an image segment, and if we have to segment, we
-     *  use the ILOC_MAX to determine the segment size (if that is
-     *  smaller than the product size).  These calls give the
-     *  user access to these limits and allows them to be overridden.
-     *
-     *  This method would typically only be used during product
-     *  prototyping and testing.  It should not be used to artificially
-     *  constrain actual products.
-     *
-     *  Do not attempt to use this method unless you understand the
-     *  segmentation rules.
-     *
-     */
-    /*      void setLimits(sys::Uint64_T maxSize, */
-    /*                     size_t maxRows) */
-    /*      { */
-
-    /*          if (maxSize > Constants::IS_SIZE_MAX) */
-    /*              throw except::Exception(Ctxt("You cannot exceed the IS_SIZE_MAX")); */
-
-    /*          if (maxRows > Constants::ILOC_MAX) */
-    /*              throw except::Exception(Ctxt("You cannot exceed the ILOC_MAX")); */
-
-    /*          maxProductSize = maxSize; */
-    /*          numRowsLimit = maxRows; */
-    /*      } */
-
 private:
     Data* const mData;
 
+    const nitf::ImageSegmentComputer mSegmentComputer;
+
     size_t mStartIndex;
-
-    //! This is the total number of rows we can have in a NITF segment
-    size_t mNumRowsLimit;
-
-    size_t mNumColsPaddedForBlocking;
-
-    //! This is the block size in the row direction, pixels
-    size_t mNumRowsPerBlock;
-
-    //! This is the total size that each product seg can be
-    sys::Uint64_T mMaxProductSize;
-
-    //! Number of bytes in the product
-    sys::Uint64_T mProductSize;
 
     /*!
      *  This is a vector of segment information that is used to get

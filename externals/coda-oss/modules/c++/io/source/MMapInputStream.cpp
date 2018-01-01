@@ -70,7 +70,7 @@ long io::MMapInputStream::seek(long off)
 }
 
 
-long io::MMapInputStream::read(sys::byte* b, long len)
+sys::SSize_T io::MMapInputStream::readImpl(void* buffer, size_t len)
 {
     int size = available();
     //    std::cout << "Available: " << size << std::endl;
@@ -78,7 +78,7 @@ long io::MMapInputStream::read(sys::byte* b, long len)
 
     if (len < size)
         size = len;
-    memcpy(b, &mData[mMark], size);
+    memcpy(buffer, &mData[mMark], size);
     mMark += size;
     //    std::cout << "Used: " << size << std::endl;
     return size;

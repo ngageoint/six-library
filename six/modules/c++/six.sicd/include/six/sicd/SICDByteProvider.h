@@ -59,6 +59,17 @@ public:
     SICDByteProvider(const ComplexData& data,
                      const std::vector<std::string>& schemaPaths,
                      size_t maxProductSize = 0);
+
+    /*!
+     * Constructor
+     * This option allows you to pass in an initialized writer,
+     * in case you need something specific in the header
+     *
+     * \param writer Initialized NITFWriteControl
+     * \param schemaPaths Directories or files of schema locations
+     */
+    SICDByteProvider(const NITFWriteControl& writer,
+                     const std::vector<std::string>& schemaPaths);
 };
 }
 }

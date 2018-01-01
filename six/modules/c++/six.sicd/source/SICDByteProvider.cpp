@@ -46,5 +46,11 @@ SICDByteProvider::SICDByteProvider(
 
     initialize(container, xmlRegistry, schemaPaths, maxProductSize);
 }
+
+SICDByteProvider::SICDByteProvider(const NITFWriteControl& writer,
+                                   const std::vector<std::string>& schemaPaths)
+{
+    initialize(writer, schemaPaths);
+}
 }
 }

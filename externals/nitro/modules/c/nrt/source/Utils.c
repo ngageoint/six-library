@@ -307,7 +307,7 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
     *minutes = (int) remainder;
     *seconds = fabs(remainder - (double) *minutes) * 60.0;
 
-    if (*degrees == 0)
+    if (*degrees == 0 && decimal < 0)
     {
         if (*minutes == 0)
         {
@@ -368,7 +368,8 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                        "Invalid direction: %s. Should be [NSEW]", dms);
+                        "Invalid direction: %c. Should be [NSEW]\n"
+                        "(Full DMS field is %s)", dir, dms);
         return NRT_FAILURE;
     }
 
@@ -454,10 +455,23 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7)
 {
     char dir = 'N';
-    if (degrees < 0)
+    if (degrees <= 0)
     {
-        dir = 'S';
-        degrees *= -1;
+        if (degrees < 0)
+        {
+            dir = 'S';
+            degrees *= -1;
+        }
+        else if (minutes < 0)
+        {
+            dir = 'S';
+            minutes *= -1;
+        }
+        else if (minutes == 0 && seconds < 0)
+        {
+            dir = 'S';
+            seconds *= -1;
+        }
     }
 
     /* Round seconds. */
@@ -483,10 +497,23 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8)
 {
     char dir = 'E';
-    if (degrees < 0)
+    if (degrees <= 0)
     {
-        dir = 'W';
-        degrees *= -1;
+        if (degrees < 0)
+        {
+            dir = 'W';
+            degrees *= -1;
+        }
+        else if (minutes < 0)
+        {
+            minutes *= -1;
+            dir = 'W';
+        }
+        else if (minutes == 0 && seconds < 0)
+        {
+            seconds *= -1;
+            dir = 'W';
+        }
     }
 
     /* Round seconds. */

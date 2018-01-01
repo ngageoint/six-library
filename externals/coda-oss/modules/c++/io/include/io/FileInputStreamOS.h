@@ -154,21 +154,19 @@ public:
         mFile.close();
     }
 
+protected:
     /*!
      * Read up to len bytes of data from input stream into an array
      * 
-     * \param b   Buffer to read into
+     * \param buffer Buffer to read into
      * \param len The length to read
      * \throw except::IOException
      * \return  The number of bytes read
      * 
      */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
-
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
 };
-
-
-
 }
+
 #endif
 #endif

@@ -123,6 +123,84 @@ TEST_CASE(testBothMethodsGiveSamePlane)
     TEST_ASSERT(areaPlane.segmentList.empty());
     TEST_ASSERT_EQ(areaPlane.orientation, secondAreaPlane.orientation);
 }
+
+TEST_CASE(testRotatePlane)
+{
+    six::sicd::AreaPlane plane;
+    plane.orientation = six::OrientationType::LEFT;
+    plane.yDirection->elements = 10;
+    plane.xDirection->elements = 20;
+
+    plane.yDirection->spacing = 5;
+    plane.xDirection->spacing = 7;
+
+    plane.yDirection->unitVector[0] = 0;
+    plane.yDirection->unitVector[1] = 1;
+    plane.yDirection->unitVector[2] = 0;
+
+    plane.xDirection->unitVector[0] = 1;
+    plane.xDirection->unitVector[1] = 0;
+    plane.xDirection->unitVector[2] = 0;
+
+    plane.referencePoint.rowCol = six::RowColDouble(1, 2);
+
+    plane.segmentList.resize(1);
+    plane.segmentList[0].reset(new six::sicd::Segment());
+    plane.segmentList[0]->startLine = 1;
+    plane.segmentList[0]->startSample = 0;
+    plane.segmentList[0]->endLine = 4;
+    plane.segmentList[0]->endSample = 8;
+
+    const int originalNumLines = plane.segmentList[0]->getNumLines();
+    const int originalNumSamples = plane.segmentList[0]->getNumSamples();
+
+    plane.rotateCCW();
+    TEST_ASSERT(plane.orientation ==
+            six::OrientationType(six::OrientationType::DOWN));
+    TEST_ASSERT_EQ(plane.referencePoint.rowCol.row, 8);
+    TEST_ASSERT_EQ(plane.referencePoint.rowCol.col, 1);
+
+    TEST_ASSERT_EQ(plane.yDirection->unitVector[0], 1);
+    TEST_ASSERT_EQ(plane.yDirection->unitVector[1], 0);
+    TEST_ASSERT_EQ(plane.yDirection->unitVector[2], 0);
+
+    TEST_ASSERT_EQ(plane.xDirection->unitVector[0], 0);
+    TEST_ASSERT_EQ(plane.xDirection->unitVector[1], -1);
+    TEST_ASSERT_EQ(plane.xDirection->unitVector[2], 0);
+
+    TEST_ASSERT_EQ(plane.xDirection->elements, 10);
+    TEST_ASSERT_EQ(plane.yDirection->elements, 20);
+
+    TEST_ASSERT_EQ(plane.xDirection->spacing, 5);
+    TEST_ASSERT_EQ(plane.yDirection->spacing, 7);
+
+    TEST_ASSERT_EQ(plane.segmentList[0]->startLine, 0);
+    TEST_ASSERT_EQ(plane.segmentList[0]->startSample, 1);
+    TEST_ASSERT_EQ(plane.segmentList[0]->endLine, -8);
+    TEST_ASSERT_EQ(plane.segmentList[0]->endSample, 4);
+
+    TEST_ASSERT_EQ(originalNumLines, plane.segmentList[0]->getNumSamples());
+    TEST_ASSERT_EQ(originalNumSamples, plane.segmentList[0]->getNumLines());
+
+}
+
+
+TEST_CASE(testCanRotateFourTimes)
+{
+    six::sicd::AreaPlane plane;
+    scene::ECEFToLLATransform transformer;
+    plane.orientation = six::OrientationType::LEFT;
+    plane.yDirection->elements = 10;
+    plane.xDirection->elements = 20;
+    plane.referencePoint.rowCol = six::RowColDouble(1, 2);
+
+    std::auto_ptr<six::sicd::AreaPlane> originalPlane(plane.clone());
+    plane.rotateCCW();
+    plane.rotateCCW();
+    plane.rotateCCW();
+    plane.rotateCCW();
+    TEST_ASSERT(plane == *originalPlane);
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -131,6 +209,8 @@ int main(int /*argc*/, char** /*argv*/)
     {
         TEST_CHECK(testAreaPlane);
         TEST_CHECK(testBothMethodsGiveSamePlane);
+        TEST_CHECK(testRotatePlane);
+        TEST_CHECK(testCanRotateFourTimes);
     }
     catch (const except::Exception& ex)
     {

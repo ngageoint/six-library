@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
         if (argc > 1)
         {
-            for (size_t ii = 1; ii < argc; ++ii)
+            for (int ii = 1; ii < argc; ++ii)
             {
                 cmd += std::string(argv[ii]) + " ";
             }

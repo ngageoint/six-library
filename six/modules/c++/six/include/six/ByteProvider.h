@@ -26,6 +26,7 @@
 #include <nitf/NITFBufferList.hpp>
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
+#include <six/NITFWriteControl.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
 
@@ -137,7 +138,7 @@ protected:
      *
      * \param container Container initialized with all associated data
      * \param xmlRegistry XML registry
-     * \param schemPaths Directories or files of schema locations
+     * \param schemaPaths Directories or files of schema locations
      * \param maxProductSize The max number of bytes in an image segment.
      * \param numRowsPerBlock The number of rows per block.  Only applies for
      * SIDD.  Defaults to no blocking.
@@ -150,6 +151,18 @@ protected:
                     size_t maxProductSize,
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
+
+    /*!
+     * Initialize the byte provider.  Must be called in the constructor of
+     * inheriting classes
+     *
+     * \param writer Writer.  Must be initialized via
+     * NITFWriteControl::initialize() and have all desired product size and
+     * blocking values set.
+     * \param schemaPaths Directories or files of schema locations
+     */
+    void initialize(const NITFWriteControl& writer,
+                    const std::vector<std::string>& schemaPaths);
 
 private:
     size_t mNumBytesPerRow;

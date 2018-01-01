@@ -63,7 +63,7 @@ sys::Off_T io::ByteStream::available()
     return (diff < 0) ? 0 : diff;
 }
 
-void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
+void io::ByteStream::write(const void* buffer, sys::Size_T size)
 {
     if (mPosition < 0)
         throw except::Exception(Ctxt("Invalid write on eof"));
@@ -75,12 +75,15 @@ void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
         sys::Size_T newPos = mPosition + size;
         if (newPos >= mData.size())
             mData.resize(newPos);
-        std::copy(b, b+size, &mData[mPosition]);
+
+        const sys::ubyte* const bufferPtr =
+                static_cast<const sys::ubyte*>(buffer);
+        std::copy(bufferPtr, bufferPtr + size, &mData[mPosition]);
         mPosition = newPos;
     }
 }
 
-sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
+sys::SSize_T io::ByteStream::readImpl(void* buffer, size_t len)
 {
     if (mPosition < 0)
         throw except::Exception(Ctxt("Invalid read on eof"));
@@ -91,7 +94,7 @@ sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
     if (maxSize <  static_cast<sys::Off_T>(len)) len = maxSize;
     if (len     <= 0)                            return 0;
 
-    ::memcpy(b, &mData[mPosition], len);
+    ::memcpy(buffer, &mData[mPosition], len);
     mPosition += len;
     return len;
 }

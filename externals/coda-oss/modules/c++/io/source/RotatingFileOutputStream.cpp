@@ -87,9 +87,9 @@ void io::RotatingFileOutputStream::doRollover()
     mByteCount = 0;
 }
 
-void io::RotatingFileOutputStream::write(const sys::byte* b, sys::Size_T len)
+void io::RotatingFileOutputStream::write(const void* buffer, size_t len)
 {
     if (shouldRollover(len))
         doRollover();
-    io::CountingOutputStream::write(b, len);
+    io::CountingOutputStream::write(buffer, len);
 }

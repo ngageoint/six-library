@@ -91,128 +91,37 @@ NITFImageInfo::NITFImageInfo(Data* data,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :
     mData(data),
-    mStartIndex(0),
-    mNumRowsLimit(maxRows),
-    mNumColsPaddedForBlocking(getActualDim(data->getNumCols(), colsPerBlock)),
-    mNumRowsPerBlock(rowsPerBlock),
-    mMaxProductSize(maxSize),
-    mProductSize(static_cast<sys::Uint64_T>(mData->getNumBytesPerPixel()) *
-                 getActualDim(mData->getNumRows(), rowsPerBlock) *
-                 mNumColsPaddedForBlocking)
+    mSegmentComputer(data->getNumRows(),
+                     data->getNumCols(),
+                     data->getNumBytesPerPixel(),
+                     maxRows,
+                     maxSize,
+                     rowsPerBlock,
+                     colsPerBlock),
+    mStartIndex(0)
 {
-    if (maxRows > Constants::ILOC_MAX)
-    {
-        std::ostringstream ostr;
-        ostr << "Max rows was set to " << maxRows
-             << " but it cannot be greater than " << Constants::ILOC_MAX
-             << " per the NITF spec";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-
-    if (maxSize > Constants::IS_SIZE_MAX)
-    {
-        std::ostringstream ostr;
-        ostr << "Max image segment size was set to " << maxSize
-             << " but it cannot be greater than " << Constants::IS_SIZE_MAX
-             << " per the NITF spec";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-
     if (computeSegments)
     {
-        compute();
-    }
-}
-
-void NITFImageInfo::computeImageInfo()
-{
-    // Consider possible blocking when determining the maximum number of rows
-    const sys::Uint64_T bytesPerRow =
-            static_cast<sys::Uint64_T>(mData->getNumBytesPerPixel()) *
-            mNumColsPaddedForBlocking;
-
-    const sys::Uint64_T maxRowsUint64 =
-            static_cast<sys::Uint64_T>(mMaxProductSize) / bytesPerRow;
-    if (maxRowsUint64 > std::numeric_limits<size_t>::max())
-    {
-        // This should not be possible
-        std::ostringstream ostr;
-        ostr << "Product would require " << maxRowsUint64
-             << " rows which is too many";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-    size_t maxRows(static_cast<size_t>(maxRowsUint64));
-
-    if (maxRows == 0)
-    {
-        std::ostringstream ostr;
-        ostr << "maxProductSize [" << mMaxProductSize << "] < bytesPerRow ["
-             << bytesPerRow << "]";
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-
-    // Truncate back to a full block for the maxRows that will actually fit
-    if (mNumRowsPerBlock != 0)
-    {
-        const size_t numBlocksVert = maxRows / mNumRowsPerBlock;
-        maxRows = numBlocksVert * mNumRowsPerBlock;
-
-        if (maxRows == 0)
-        {
-            std::ostringstream ostr;
-            ostr << "With a max product size of " << mMaxProductSize
-                 << ", bytes per row of " << bytesPerRow
-                 << ", and rows per block of " << mNumRowsPerBlock
-                 << ", cannot fit an entire block into a segment";
-            throw except::Exception(Ctxt(ostr.str()));
-        }
-    }
-
-    if (mNumRowsLimit > maxRows)
-    {
-        mNumRowsLimit = maxRows;
+        computeSegmentInfo();
     }
 }
 
 void NITFImageInfo::computeSegmentInfo()
 {
-    // TODO: other conditions which should trigger segmentation:
-    //   NCOLS >= 10E8   column direction segmentation, no numColsLimit logic in place
-    //   NROWS >= 10E8   most likely would exceed maxProductSize (ncols < 100 unlikely)
-    //                   and segment to mNumRowsLimit anyway
-    if (mProductSize <= mMaxProductSize)
+    // The segment computer figured out all the row sizes and offsets for us
+    // We just need to compute the segment corners
+    const std::vector<nitf::ImageSegmentComputer::Segment>& segments =
+            mSegmentComputer.getSegments();
+
+    mImageSegments.resize(segments.size());
+    for (size_t ii = 0; ii < mImageSegments.size(); ++ii)
     {
-        mImageSegments.resize(1);
-        mImageSegments[0].numRows = mData->getNumRows();
-        mImageSegments[0].firstRow = 0;
-        mImageSegments[0].rowOffset = 0;
-        mImageSegments[0].corners = mData->getImageCorners();
-    }
+        const nitf::ImageSegmentComputer::Segment& segment(segments[ii]);
+        NITFSegmentInfo& imageSegment(mImageSegments[ii]);
 
-    else
-    {
-        // NOTE: See header for why rowOffset is always set to mNumRowsLimit
-        //       for image segments 1 and above
-        const size_t numIS = (size_t) std::ceil(mData->getNumRows()
-                / (double) mNumRowsLimit);
-
-        mImageSegments.resize(numIS);
-        mImageSegments[0].numRows = mNumRowsLimit;
-        mImageSegments[0].firstRow = 0;
-        mImageSegments[0].rowOffset = 0;
-        size_t i;
-        for (i = 1; i < numIS - 1; i++)
-        {
-            mImageSegments[i].numRows = mNumRowsLimit;
-            mImageSegments[i].firstRow = i * mNumRowsLimit;
-            mImageSegments[i].rowOffset = mNumRowsLimit;
-        }
-
-        mImageSegments[i].firstRow = i * mNumRowsLimit;
-        mImageSegments[i].rowOffset = mNumRowsLimit;
-        mImageSegments[i].numRows = mData->getNumRows() - (numIS - 1)
-                * mNumRowsLimit;
-
+        imageSegment.firstRow = segment.firstRow;
+        imageSegment.rowOffset = segment.rowOffset;
+        imageSegment.numRows = segment.numRows;
     }
 
     computeSegmentCorners();
@@ -274,13 +183,6 @@ void NITFImageInfo::computeSegmentCorners()
     // SHOULD WE JUST ASSUME THAT WHATEVER IS IN THE XML GeoData is what
     // we want?  For now, this makes sense
 }
-
-void NITFImageInfo::compute()
-{
-    computeImageInfo();
-    computeSegmentInfo();
-}
-
 
 std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo() const
 {
