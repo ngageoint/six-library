@@ -2,7 +2,7 @@
  * This file is part of six.sidd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,19 +23,59 @@
 #ifndef __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 #define __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 
-// TODO: Finish ImageBlocker which is implementing a lot of the blocking logic
-
-// - Methods that provide image data must provide rows of a multiple of the block size!
-//   This means two things though...
-//   1. The caller must know where the segmentation boundaries are in order to
-//      provide pad pixels at the bottom of the right spot.  They may have pixel
-//      data that spans image segments, and they need to put those pad pixels
-//      in there themselves.
-//   2. The logic in ByteProvider needs updating to account for this... the way
-//      it counts rows isn't quite right and will need to know about these
-//      extra pad rows.  The mNumBytesPerRow concept itself probably doesn't
-//      apply quite right anymore.  This affects getNumBytes() too.
-// - Include a test case where the blocking is set to a value > the image dimensions
+// TODO: Include a test case where the blocking is set to a value > the image dimensions
 //   According to the NITFWriteControl logic, the block will actually match the image dims
 
-#endif /* SIDDBYTEPROVIDER_H_ */
+#include <six/ByteProvider.h>
+#include <six/sidd/DerivedData.h>
+
+namespace six
+{
+namespace sidd
+{
+/*!
+ * \class SIDDByteProvider
+ * \brief Used to provide corresponding raw NITF bytes (including NITF headers)
+ * when provided with some AOI of the pixel data.  The idea is that if
+ * getBytes() is called multiple times, eventually for the entire image, the
+ * raw bytes provided back will be the entire NITF file.  This abstraction is
+ * useful if separate threads, processes, or even machines have only portions of
+ * the SIDD pixel data and are all trying to write out a single file; in that
+ * scenario, this class provides all the raw bytes corresponding to the caller's
+ * AOI, including NITF headers if necessary.  The caller does not need to
+ * understand anything about the NITF file layout in order to write out the
+ * file.  The bytes are intentionally provided back as a series of pointers
+ * rather than one contiguous block of memory in order to not perform any
+ * copies.  A single logical SIDD image which spans multiple NITF image segments
+ * is supported; unrelated SIDD images in one NITF are not yet supported.
+ */
+class SIDDByteProvider : public six::ByteProvider
+{
+public:
+    /*!
+     * Constructor
+     *
+     * \param data Representation of the derived data
+     * \param schemPaths Directories or files of schema locations
+     * \param maxProductSize The max number of bytes in an image segment.
+     * By default this is set automatically for you based on NITF file rules.
+     */
+    SIDDByteProvider(const DerivedData& data,
+                     const std::vector<std::string>& schemaPaths,
+                     size_t maxProductSize = 0);
+
+    /*!
+     * Constructor
+     * This option allows you to pass in an initialized writer,
+     * in case you need something specific in the header
+     *
+     * \param writer Initialized NITFWriteControl
+     * \param schemaPaths Directories or files of schema locations
+     */
+    SIDDByteProvider(const NITFWriteControl& writer,
+                     const std::vector<std::string>& schemaPaths);
+};
+}
+}
+
+#endif

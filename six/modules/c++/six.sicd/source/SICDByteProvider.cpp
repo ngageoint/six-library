@@ -34,8 +34,7 @@ SICDByteProvider::SICDByteProvider(
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<
-                                   six::sicd::ComplexXMLControl>());
+                           new six::XMLControlCreatorT<ComplexXMLControl>());
 
     mem::SharedPtr<Container> container(new Container(
             DataType::COMPLEX));
