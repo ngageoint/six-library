@@ -23,6 +23,7 @@
 #ifndef __SIX_BYTE_PROVIDER_H__
 #define __SIX_BYTE_PROVIDER_H__
 
+#include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
@@ -122,6 +123,12 @@ public:
                   nitf::Off& fileOffset,
                   nitf::NITFBufferList& buffers) const;
 
+    /*!
+     * \return ImageBlocker with settings in sync with how the image will be
+     * blocked in the NITF
+     */
+    std::auto_ptr<const nitf::ImageBlocker> getImageBlocker() const;
+
 protected:
     /*!
      * Constructor
@@ -165,6 +172,9 @@ protected:
                     const std::vector<std::string>& schemaPaths);
 
 private:
+    size_t mNumCols;
+    size_t mNumRowsPerBlock;
+    size_t mNumColsPerBlock;
     size_t mNumBytesPerRow;
 
     std::vector<sys::byte> mFileHeader;

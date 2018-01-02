@@ -166,6 +166,8 @@ class Tester
 {
 public:
     Tester(const std::vector<std::string>& schemaPaths,
+           size_t numRowsPerBlock,
+           size_t numColsPerBlock,
            bool setMaxProductSize,
            size_t maxProductSize = 0) :
         mNormalPathname("normal_write.nitf"),
@@ -177,6 +179,8 @@ public:
         mImage(mDims.area()),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
+        mNumRowsPerBlock(numRowsPerBlock),
+        mNumColsPerBlock(numColsPerBlock),
         mSetMaxProductSize(setMaxProductSize),
         mMaxProductSize(maxProductSize),
         mSuccess(true)
@@ -231,12 +235,27 @@ private:
         }
     }
 
-    void setMaxProductSize(six::NITFWriteControl& writer)
+    void setWriterOptions(six::NITFWriteControl& writer)
     {
         if (mSetMaxProductSize)
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    mMaxProductSize);
+        }
+
+        if (mNumRowsPerBlock != 0)
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    mNumRowsPerBlock);
+        }
+
+        if (mNumColsPerBlock != 0)
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    mNumColsPerBlock);
         }
     }
 
@@ -279,8 +298,10 @@ private:
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
-    bool mSetMaxProductSize;
-    size_t mMaxProductSize;
+    const size_t mNumRowsPerBlock;
+    const size_t mNumColsPerBlock;
+    const bool mSetMaxProductSize;
+    const size_t mMaxProductSize;
 
     bool mSuccess;
 };
@@ -299,7 +320,7 @@ void Tester<DataTypeT>::normalWrite()
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
-    setMaxProductSize(writer);
+    setWriterOptions(writer);
     writer.initialize(container);
 
     six::BufferList buffers;
@@ -317,13 +338,39 @@ void Tester<DataTypeT>::testSingleWrite()
     const six::sidd::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
+
+    std::vector<DataTypeT> blockedImage;
+    const DataTypeT* inImage;
+    if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
+    {
+        std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+                siddByteProvider.getImageBlocker();
+
+        const size_t numBlockedPixels =
+                imageBlocker->getNumBytesRequired(0, mDims.row, 1);
+        blockedImage.resize(numBlockedPixels);
+
+        imageBlocker->block(&mBigEndianImage[0],
+                            0,
+                            mDims.row,
+                            &blockedImage[0]);
+
+        inImage = &blockedImage[0];
+    }
+    else
+    {
+        inImage = &mBigEndianImage[0];
+    }
 
     nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
-    siddByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
-                              fileOffset, buffers);
+    siddByteProvider.getBytes(inImage, 0, mDims.row, fileOffset, buffers);
     const nitf::Off numBytes = siddByteProvider.getNumBytes(0, mDims.row);
+    std::cout << "With blocking of " << mNumRowsPerBlock << ", " << mNumColsPerBlock
+              << " bytes are " << numBytes << std::endl;
 
     io::FileOutputStream outStream(mTestPathname);
     write(fileOffset, buffers, numBytes, outStream);
@@ -340,6 +387,8 @@ void Tester<DataTypeT>::testMultipleWrites()
     const six::sidd::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
     // Rows [40, 60)
@@ -425,6 +474,8 @@ void Tester<DataTypeT>::testOneWritePerRow()
     six::sidd::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
     io::FileOutputStream outStream(mTestPathname);
@@ -451,6 +502,7 @@ void Tester<DataTypeT>::testOneWritePerRow()
 
 template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths,
+             bool setBlocking,
              bool setMaxProductSize,
              size_t numRowsPerSeg)
 {
@@ -464,7 +516,21 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 
-    Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
+    size_t numRowsPerBlock(0);
+    size_t numColsPerBlock(0);
+    if (setBlocking)
+    {
+        // These intentionally do not divide evenly so there will be both pad
+        // rows and cols
+        numRowsPerBlock = 7;
+        numColsPerBlock = 9;
+    }
+
+    Tester<DataTypeT> tester(schemaPaths,
+                             numRowsPerBlock,
+                             numColsPerBlock,
+                             setMaxProductSize,
+                             maxProductSize);
     tester.testSingleWrite();
     tester.testMultipleWrites();
     tester.testOneWritePerRow();
@@ -477,12 +543,26 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<sys::Uint8_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<sys::Uint8_T>(schemaPaths, false,
+                               setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<sys::Uint8_T>(schemaPaths, true,
+                               setMaxProductSize, numRowsPerSeg))
+    {
+        success = false;
+    }
+
+    if (!doTests<sys::Uint16_T>(schemaPaths, false,
+                                setMaxProductSize, numRowsPerSeg))
+    {
+        success = false;
+    }
+
+    if (!doTests<sys::Uint16_T>(schemaPaths, true,
+                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

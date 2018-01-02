@@ -30,6 +30,8 @@ namespace sidd
 SIDDByteProvider::SIDDByteProvider(
         const DerivedData& data,
         const std::vector<std::string>& schemaPaths,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock,
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
@@ -43,7 +45,8 @@ SIDDByteProvider::SIDDByteProvider(
     // To avoid memory problems, we'll just clone it
     container->addData(data.clone());
 
-    initialize(container, xmlRegistry, schemaPaths, maxProductSize);
+    initialize(container, xmlRegistry, schemaPaths,
+               maxProductSize, numRowsPerBlock, numColsPerBlock);
 }
 
 SIDDByteProvider::SIDDByteProvider(const NITFWriteControl& writer,

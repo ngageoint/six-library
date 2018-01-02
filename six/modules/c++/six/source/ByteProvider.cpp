@@ -29,6 +29,9 @@
 namespace six
 {
 ByteProvider::ByteProvider() :
+    mNumCols(0),
+    mNumRowsPerBlock(0),
+    mNumColsPerBlock(0),
     mNumBytesPerRow(0)
 {
 }
@@ -97,23 +100,31 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
     // and not 2+ unrelated images with different sizes, so this is a reliable
     // way to get the # of cols and bytes/pixel
     const six::Data* const data = writer.getContainer()->getData(0);
+    mNumCols = data->getNumCols();
 
-    size_t actualNumCols;
     const Options& options(writer.getOptions());
+
+    if (options.hasParameter(six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK))
+    {
+        mNumRowsPerBlock = options.getParameter(
+                six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK);
+    }
+
+    size_t numColsWithPad;
     if (options.hasParameter(six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK))
     {
-        const size_t numColsPerBlock = options.getParameter(
+        mNumColsPerBlock = options.getParameter(
                 six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK);
 
-        actualNumCols = nitf::ImageSubheader::getActualImageDim(
-                data->getNumCols(), numColsPerBlock);
+        numColsWithPad = nitf::ImageSubheader::getActualImageDim(
+                mNumCols, mNumColsPerBlock);
     }
     else
     {
-        actualNumCols = data->getNumCols();
+        numColsWithPad = mNumCols;
     }
 
-    mNumBytesPerRow = actualNumCols * data->getNumBytesPerPixel();
+    mNumBytesPerRow = numColsWithPad * data->getNumBytesPerPixel();
 }
 
 nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
@@ -165,15 +176,17 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
 }
 
 void ByteProvider::getBytes(const void* imageData,
-                                size_t startRow,
-                                size_t numRows,
-                                nitf::Off& fileOffset,
-                                nitf::NITFBufferList& buffers) const
+                            size_t startRow,
+                            size_t numRows,
+                            nitf::Off& fileOffset,
+                            nitf::NITFBufferList& buffers) const
 {
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
 
     const size_t imageDataEndRow = startRow + numRows;
+
+    size_t numPadRowsSoFar(0);
 
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
@@ -233,6 +246,34 @@ void ByteProvider::getBytes(const void* imageData,
                 buffers.pushBack(mDesSubheaderAndData);
             }
         }
+
+        if (mNumRowsPerBlock != 0)
+        {
+            const size_t numLeftovers =
+                    imageSegmentInfo.numRows % mNumRowsPerBlock;
+            if (numLeftovers != 0)
+            {
+                // We're going to need to tack on another full block
+                numPadRowsSoFar += mNumRowsPerBlock - numLeftovers;
+            }
+        }
     }
+}
+
+std::auto_ptr<const nitf::ImageBlocker> ByteProvider::getImageBlocker() const
+{
+    std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
+    for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
+    {
+        numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
+    }
+
+    std::auto_ptr<const nitf::ImageBlocker> blocker(new nitf::ImageBlocker(
+            numRowsPerSegment,
+            mNumCols,
+            mNumRowsPerBlock,
+            mNumColsPerBlock));
+
+    return blocker;
 }
 }

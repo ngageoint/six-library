@@ -57,11 +57,17 @@ public:
      *
      * \param data Representation of the derived data
      * \param schemPaths Directories or files of schema locations
+     * \param numRowsPerBlock The number of rows per block.  Defaults to no
+     * blocking.
+     * \param numColsPerBlock The number of columns per block.  Defaults to no
+     * blocking.
      * \param maxProductSize The max number of bytes in an image segment.
      * By default this is set automatically for you based on NITF file rules.
      */
     SIDDByteProvider(const DerivedData& data,
                      const std::vector<std::string>& schemaPaths,
+                     size_t numRowsPerBlock = 0,
+                     size_t numColsPerBlock = 0,
                      size_t maxProductSize = 0);
 
     /*!
@@ -69,7 +75,8 @@ public:
      * This option allows you to pass in an initialized writer,
      * in case you need something specific in the header
      *
-     * \param writer Initialized NITFWriteControl
+     * \param writer Initialized NITFWriteControl.  Must have all desired
+     * product size and blocking values set.
      * \param schemaPaths Directories or files of schema locations
      */
     SIDDByteProvider(const NITFWriteControl& writer,
