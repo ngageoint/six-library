@@ -331,8 +331,6 @@ void ImageBlocker::block(const void* input,
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
 
-    // TODO: Think implementation is complete but need to look closer at all this
-
     const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
     sys::byte* outputPtr = static_cast<sys::byte*>(output);
 
