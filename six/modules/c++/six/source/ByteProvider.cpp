@@ -127,6 +127,40 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
     mNumBytesPerRow = numColsWithPad * data->getNumBytesPerPixel();
 }
 
+void ByteProvider::checkBlocking(size_t seg,
+                                 size_t startGlobalRowToWrite,
+                                 size_t numRowsToWrite) const
+{
+    if (mNumRowsPerBlock != 0)
+    {
+        const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+        const size_t segStartRow = imageSegmentInfo.firstRow;
+
+        // Need to start on a block boundary
+        const size_t segStartRowToWrite =
+                startGlobalRowToWrite - segStartRow;
+        if (segStartRowToWrite % mNumRowsPerBlock != 0)
+        {
+            std::ostringstream ostr;
+            ostr << "Trying to write starting at segment " << seg
+                 << "'s row " << segStartRowToWrite
+                 << " which is not a multiple of " << mNumRowsPerBlock;
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+
+        // Need to end on a block boundary or the end of the segment
+        if (numRowsToWrite % mNumRowsPerBlock != 0 &&
+            segStartRowToWrite + numRowsToWrite < imageSegmentInfo.endRow())
+        {
+            std::ostringstream ostr;
+            ostr << "Trying to write " << numRowsToWrite
+                 << " rows starting at segment " << seg
+                 << " which is not a multiple of " << mNumRowsPerBlock;
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+    }
+}
+
 nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
 {
     nitf::Off numBytes(0);
@@ -144,6 +178,7 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                                        startGlobalRowToWrite,
                                        numRowsToWrite))
         {
+            checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
             const size_t segStartRow = imageSegmentInfo.firstRow;
 
             if (startRow <= segStartRow)
@@ -212,6 +247,7 @@ void ByteProvider::getBytes(const void* imageData,
                                        startGlobalRowToWrite,
                                        numRowsToWrite))
         {
+            checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
             const size_t segStartRow = imageSegmentInfo.firstRow;
 
             if (startRow <= segStartRow)

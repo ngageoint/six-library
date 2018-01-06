@@ -172,6 +172,11 @@ protected:
                     const std::vector<std::string>& schemaPaths);
 
 private:
+    void checkBlocking(size_t seg,
+                       size_t startGlobalRowToWrite,
+                       size_t numRowsToWrite) const;
+
+private:
     size_t mNumCols;
     size_t mNumRowsPerBlock;
     size_t mNumColsPerBlock;
