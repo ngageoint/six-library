@@ -152,7 +152,7 @@ private:
         sys::OS os;
         if (os.exists(mPathname))
         {
-            os.remove(mPathname);
+            //os.remove(mPathname);
         }
     }
 
@@ -220,6 +220,20 @@ private:
     void normalWrite();
 
 private:
+    std::string getSuffix() const
+    {
+        std::string suffix;
+        if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
+        {
+            suffix += " with blocking of rows/block=" +
+                    str::toString(mNumRowsPerBlock) +
+                    ", cols/block=" +
+                    str::toString(mNumColsPerBlock);
+        }
+
+        return suffix;
+    }
+
     void compare(const std::string& prefix)
     {
         std::string fullPrefix = prefix;
@@ -228,6 +242,7 @@ private:
             fullPrefix += " (max product size " +
                     str::toString(mMaxProductSize) + ")";
         }
+        fullPrefix += getSuffix();
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
         {
@@ -283,6 +298,36 @@ private:
                       << std::endl;
             mSuccess = false;
         }
+    }
+
+    // Blocks if necessary
+    const DataTypeT*
+    getImage(const six::sidd::SIDDByteProvider& siddByteProvider,
+             std::vector<DataTypeT>& blockedImage)
+    {
+        const DataTypeT* retImage;
+        if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
+        {
+            std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+                    siddByteProvider.getImageBlocker();
+
+            const size_t numBlockedPixels =
+                    imageBlocker->getNumBytesRequired(0, mDims.row, 1);
+            blockedImage.resize(numBlockedPixels);
+
+            imageBlocker->block(&mBigEndianImage[0],
+                                0,
+                                mDims.row,
+                                &blockedImage[0]);
+
+            retImage = &blockedImage[0];
+        }
+        else
+        {
+            retImage = &mBigEndianImage[0];
+        }
+
+        return retImage;
     }
 
 private:
@@ -342,28 +387,8 @@ void Tester<DataTypeT>::testSingleWrite()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    std::vector<DataTypeT> blockedImage;
-    const DataTypeT* inImage;
-    if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
-    {
-        std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
-                siddByteProvider.getImageBlocker();
-
-        const size_t numBlockedPixels =
-                imageBlocker->getNumBytesRequired(0, mDims.row, 1);
-        blockedImage.resize(numBlockedPixels);
-
-        imageBlocker->block(&mBigEndianImage[0],
-                            0,
-                            mDims.row,
-                            &blockedImage[0]);
-
-        inImage = &blockedImage[0];
-    }
-    else
-    {
-        inImage = &mBigEndianImage[0];
-    }
+    std::vector<DataTypeT> scratch;
+    const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
 
     nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
@@ -391,12 +416,15 @@ void Tester<DataTypeT>::testMultipleWrites()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
+    std::vector<DataTypeT> scratch;
+    const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
+
     // Rows [40, 60)
     nitf::Off fileOffset;
     nitf::NITFBufferList buffers;
     size_t startRow = 40;
     size_t numRows = 20;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,
@@ -409,7 +437,7 @@ void Tester<DataTypeT>::testMultipleWrites()
     // Rows [5, 25)
     startRow = 5;
     numRows = 20;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,
@@ -420,7 +448,7 @@ void Tester<DataTypeT>::testMultipleWrites()
     // Rows [0, 5)
     startRow = 0;
     numRows = 5;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,
@@ -431,7 +459,7 @@ void Tester<DataTypeT>::testMultipleWrites()
     // Rows [100, 123)
     startRow = 100;
     numRows = 23;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,
@@ -442,7 +470,7 @@ void Tester<DataTypeT>::testMultipleWrites()
     // Rows [25, 40)
     startRow = 25;
     numRows = 15;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,
@@ -453,7 +481,7 @@ void Tester<DataTypeT>::testMultipleWrites()
     // Rows [60, 100)
     startRow = 60;
     numRows = 40;
-    siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
                               startRow,
                               numRows,
                               fileOffset,

@@ -160,6 +160,19 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                 numBytes += mImageSubheaders[seg].size();
             }
 
+            if (mNumRowsPerBlock != 0 &&
+                imageDataEndRow >= imageSegmentInfo.endRow())
+            {
+                const size_t numLeftovers =
+                        imageSegmentInfo.numRows % mNumRowsPerBlock;
+                if (numLeftovers != 0)
+                {
+                    // We need to finish the block
+                    const size_t numPadRows = mNumRowsPerBlock - numLeftovers;
+                    numRowsToWrite += numPadRows;
+                }
+            }
+
             numBytes += numRowsToWrite * mNumBytesPerRow;
 
             if (seg == mImageSegmentInfo.size() - 1 &&
@@ -222,7 +235,7 @@ void ByteProvider::getBytes(const void* imageData,
 
             // Figure out what offset of 'imageData' we're writing from
             const size_t startLocalRowToWrite =
-                    startGlobalRowToWrite - startRow;
+                    startGlobalRowToWrite - startRow + numPadRowsSoFar;
             const sys::byte* imageDataPtr =
                     static_cast<const sys::byte*>(imageData) +
                     startLocalRowToWrite * mNumBytesPerRow;
@@ -236,6 +249,22 @@ void ByteProvider::getBytes(const void* imageData,
                         mImageSubheaders[seg].size() +
                         rowsInSegmentSkipped * mNumBytesPerRow;
             }
+
+            if (mNumRowsPerBlock != 0 &&
+                imageDataEndRow >= imageSegmentInfo.endRow())
+            {
+                const size_t numLeftovers =
+                        imageSegmentInfo.numRows % mNumRowsPerBlock;
+                if (numLeftovers != 0)
+                {
+                    // We need to finish the block
+                    // This is already accounted for in the incoming image
+                    const size_t numPadRows = mNumRowsPerBlock - numLeftovers;
+                    numRowsToWrite += numPadRows;
+                    numPadRowsSoFar += numPadRows;
+                }
+            }
+
             buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 
             if (seg == mImageSegmentInfo.size() - 1 &&
@@ -244,17 +273,6 @@ void ByteProvider::getBytes(const void* imageData,
                 // When we write out the last row of the last image segment, we
                 // tack on the DES(s)
                 buffers.pushBack(mDesSubheaderAndData);
-            }
-        }
-
-        if (mNumRowsPerBlock != 0)
-        {
-            const size_t numLeftovers =
-                    imageSegmentInfo.numRows % mNumRowsPerBlock;
-            if (numLeftovers != 0)
-            {
-                // We're going to need to tack on another full block
-                numPadRowsSoFar += mNumRowsPerBlock - numLeftovers;
             }
         }
     }
