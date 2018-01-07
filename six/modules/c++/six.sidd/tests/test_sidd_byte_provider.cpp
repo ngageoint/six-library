@@ -214,6 +214,8 @@ public:
 
     void testMultipleWrites();
 
+    void testMultipleWritesBlocked();
+
     void testOneWritePerRow();
 
 private:
@@ -495,6 +497,100 @@ void Tester<DataTypeT>::testMultipleWrites()
 }
 
 template <typename DataTypeT>
+void Tester<DataTypeT>::testMultipleWritesBlocked()
+{
+    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+    const six::sidd::SIDDByteProvider siddByteProvider(
+            *mData,
+            mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
+            mSetMaxProductSize ? mMaxProductSize : 0);
+
+    // Need to compute this per seg!!
+    can imageblocker do this?
+    //const size_t numRowsOfBlocks = mDims.row / mNumRowsPerBlock
+
+    std::vector<DataTypeT> scratch;
+    const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
+
+    // Rows [40, 60)
+    nitf::Off fileOffset;
+    nitf::NITFBufferList buffers;
+    size_t startRow = 40;
+    size_t numRows = 20;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    nitf::Off numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+
+    io::FileOutputStream outStream(mTestPathname);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    // Rows [5, 25)
+    startRow = 5;
+    numRows = 20;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    // Rows [0, 5)
+    startRow = 0;
+    numRows = 5;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    // Rows [100, 123)
+    startRow = 100;
+    numRows = 23;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    // Rows [25, 40)
+    startRow = 25;
+    numRows = 15;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    // Rows [60, 100)
+    startRow = 60;
+    numRows = 40;
+    siddByteProvider.getBytes(inImage + startRow * mDims.col,
+                              startRow,
+                              numRows,
+                              fileOffset,
+                              buffers);
+    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+    write(fileOffset, buffers, numBytes, outStream);
+
+    outStream.close();
+
+    compare("Multiple writes");
+}
+
+template <typename DataTypeT>
 void Tester<DataTypeT>::testOneWritePerRow()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
@@ -560,8 +656,16 @@ bool doTests(const std::vector<std::string>& schemaPaths,
                              setMaxProductSize,
                              maxProductSize);
     tester.testSingleWrite();
-    tester.testMultipleWrites();
-    tester.testOneWritePerRow();
+
+    if (setBlocking)
+    {
+        tester.testMultipleWrites();
+        tester.testOneWritePerRow();
+    }
+    else
+    {
+        tester.testMultipleWritesBlocked();
+    }
 
     return tester.success();
 }
