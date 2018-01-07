@@ -12,9 +12,9 @@ options = lambda x : None
 def configure(conf):
     xmlHome = Options.options.xml_home
     xmlLayer = Options.options.xml_layer
-    
+
     if xmlLayer == 'xerces' :
-        
+
         xercesUselibs = XERCES_USELIBS
         if sys.platform == 'win32':
             # Xerces requires this standard Windows library
@@ -35,15 +35,15 @@ def configure(conf):
                        mandatory=True)
             conf.undefine('HAVE_XERCESC__XMLPLATFORMUTILS__TERMINATE')
             conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
-            
+
         # build it with waf
         elif Options.options.build_xml:
             # check for the source tarball
             if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
                 conf.fatal('Missing xerces tarfile')
-            
+
             # callback function to check for all #defines used by the xerces driver
-            def xerces_callback(conf):   
+            def xerces_callback(conf):
                 conf.check_cc(header_name="inttypes.h", mandatory=False)
                 conf.check_cc(header_name="netinet/in.h", mandatory=False)
                 conf.check_cc(header_name="arpa/inet.h", mandatory=False)
@@ -70,7 +70,7 @@ def configure(conf):
                 conf.check_cc(header_name="sys/stat.h", mandatory=False)
                 conf.check_cc(header_name="sys/timeb.h", mandatory=False)
                 conf.check_cc(header_name="sys/types.h", mandatory=False)
-                
+
                 conf.check_cc(function_name='mblen', header_name="stdlib.h", mandatory=False)
                 conf.check_cc(function_name='mbrlen', header_name="stdlib.h", mandatory=False)
                 conf.check_cc(function_name='mbsrtowcs', header_name="stdlib.h", mandatory=False)
@@ -106,12 +106,12 @@ def configure(conf):
                 conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
 
                 conf.check_cc(lib="nsl", mandatory=False, uselib_store='NSL')
-                
+
                 conf.check_cc(header_name="unistd.h", mandatory=False)
                 conf.check_cc(header_name="sys/time.h", mandatory=False)
                 conf.check_cc(header_name="limits.h", mandatory=False)
                 conf.check_cc(header_name="strings.h", mandatory=False)
-                
+
                 # extra defines for config.h
                 if 'HAVE_ICONV_H=1' in conf.env['DEFINES'] :
                     conf.define('ICONV_USES_CONST_POINTER', 0)
@@ -135,7 +135,7 @@ def configure(conf):
                     conf.define('XERCES_USE_NETACCESSOR_WINSOCK', 1)
                     conf.define('XERCES_USE_TRANSCODER_WINDOWS', 1)
                     conf.define('XERCES_PATH_DELIMITER_BACKSLASH', 1)
-                    
+
                     conf.define('XERCES_S16BIT_INT', '__int16', quote=False)
                     conf.define('XERCES_S32BIT_INT', '__int32', quote=False)
                     conf.define('XERCES_S64BIT_INT', '__int32', quote=False)
@@ -154,11 +154,11 @@ def configure(conf):
                             conf.define('XERCES_SSIZE_T', '__int64', quote=False)
                         else :
                             conf.define('XERCES_SSIZE_T', '__int32', quote=False)
-                    
-                # -- please note -- we diverge from the xerces-c make 
-                # system and treat all unix platforms similarly. Solaris 
-                # was make configured to use ICU and Linux the GNUICONV, 
-                # but here we use the regular ICONV for both to avoid 
+
+                # -- please note -- we diverge from the xerces-c make
+                # system and treat all unix platforms similarly. Solaris
+                # was make configured to use ICU and Linux the GNUICONV,
+                # but here we use the regular ICONV for both to avoid
                 # having complicated checks and additional build logic.
                 else :
                     conf.define('HAVE_PTHREAD', 1)
@@ -194,7 +194,7 @@ def configure(conf):
                 conf.define('HAVE_SOCKET', 1)
                 conf.define('HAVE_STD_LIBS', 1)
                 conf.define('HAVE_STD_NAMESPACE', 1)
-                
+
                 conf.define('XERCES_AUTOCONF', 1)
                 conf.define('XERCES_PLATFORM_EXPORT', '', quote=False)
                 conf.define('XERCES_PLATFORM_IMPORT', '', quote=False)
@@ -208,25 +208,25 @@ def configure(conf):
                     conf.define('HAVE_CATCLOSE', 1)
                     conf.define('HAVE_CATGETS', 1)
                     conf.define('HAVE_CATOPEN', 1)
-                
+
             # untar and setup env
             conf.env['MAKE_XERCES'] = True
             conf.env['MAKE_XML']    = True
             conf.msg('Building local lib', xmlLayer)
             untarFile(path=conf.path, fname=SOURCE + '.tar')
-            
+
             # make config.h & config.hpp
             xercesNode = conf.path.make_node(SOURCE)
-            writeConfig(conf, xerces_callback, 'xercesConfigH', 
-                        infile='config.h.in', outfile='config.h', 
+            writeConfig(conf, xerces_callback, 'xercesConfigH',
+                        infile='config.h.in', outfile='config.h',
                         path=xercesNode, feature='handleDefs')
-            
+
             xercesNode = conf.path.make_node(join(SOURCE, 'src', 'xercesc', 'util'))
             writeConfig(conf, xerces_callback, 'xercesAutoH',
                           infile='Xerces_autoconf_config.hpp.in',
                           outfile='Xerces_autoconf_config.hpp',
                           path=xercesNode, feature='handleDefs')
-  
+
         # use an already built version that's on the system
         else :
             # if test fails then fail the configure
@@ -256,14 +256,14 @@ def build(bld):
         # we avoid building the system specific files
         # and instead build the safely cross-platform files for all unix
         # platforms. -- for more information see note above --
-        GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp', 
+        GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp',
                             'MacOSURLAccessCF.cpp', 'IconvGNUTransService.cpp',
                             'MacOSUnicodeConverter.cpp', 'MsgCatalogLoader.cpp',
                             'CurlURLInputStream.cpp', 'CurlNetAccessor.cpp',
-                            'ICUMsgLoader.cpp', 'ICUTransService.cpp', 
+                            'ICUMsgLoader.cpp', 'ICUTransService.cpp',
                             'Win32MsgLoader.cpp']
         UNIX_SPECIFIC = ['SocketNetAccessor.cpp','UnixHTTPURLInputStream.cpp',
-                         'PosixFileMgr.cpp', 'PosixMutexMgr.cpp', 
+                         'PosixFileMgr.cpp', 'PosixMutexMgr.cpp',
                          'IconvTransService.cpp']
         WIN_SPECIFIC  = ['Win32TransService.cpp', 'WinSockNetAccessor.cpp',
                          'BinHTTPURLInputStream.cpp',
@@ -292,7 +292,7 @@ def build(bld):
                 elif file.endswith('.h') or file.endswith('.hpp') or file.endswith('.c') :
                     headers.append(join(relativePath, file))
         sources = ' '.join(sources)
-        
+
         # build the library
         libType = env['LIB_TYPE'] or 'stlib'
         xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
@@ -305,12 +305,10 @@ def build(bld):
                      targets_to_add=[])
         if libType == 'stlib':
             xerces.export_defines='XERCES_STATIC_LIBRARY'
-        
+
         if env['install_libs']:
             xerces.install_path = env['install_libdir']
 
-        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
-            xerces.defs = 'lib/libxerces.def'
 
         # install header target if necessary
         if env['install_headers']:
@@ -318,12 +316,12 @@ def build(bld):
             srcNode = xercesNode.make_node('src')
 
             # add the config.h file to the install
-            bld(features='install_tgt', pattern='*.h', 
+            bld(features='install_tgt', pattern='*.h',
                 dir=xercesNode, install_path=env['install_includedir'],
                 name='XML_INCLUDE_CONFIG_H_INSTALL')
-            xerces.targets_to_add=[bld(features='install_tgt add_targets', 
+            xerces.targets_to_add=[bld(features='install_tgt add_targets',
                                              pattern='**/*.hpp xercesc/**/*.h xercesc/**/*.c',
-                                             dir=srcNode, install_path=env['install_includedir'], 
+                                             dir=srcNode, install_path=env['install_includedir'],
                                              name='XML_INCLUDE_INSTALL',
                                              targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL'])]
 
@@ -347,7 +345,7 @@ def distclean(context):
 
     # remove the untarred directories
     import shutil
-    dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)),
                   ['xerces-c-3.1.1'])
     for d in dirs:
         try:
