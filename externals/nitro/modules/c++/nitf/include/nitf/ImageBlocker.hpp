@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,22 +31,53 @@
 
 namespace nitf
 {
-// Only supports layouts where image segments are stacked vertically
+/*!
+ * \class ImageBlocker
+ * \brief Supports efficiently rearranging an image to fulfill NITF blocking
+ * conventions, including pad rows and columns (NITF spec specifies that full
+ * blocks will always be written).  Only supports layouts where image segments
+ * are stacked vertically.
+ */
 class ImageBlocker
 {
 public:
+    /*!
+     * Use when there's a single image segment
+     *
+     * \param numRows Number of rows
+     * \param numCols Number of columns
+     * \param numRowsPerBlock Number of rows per block
+     * \param numColsPerBlock Number of columns per block
+     */
     ImageBlocker(size_t numRows,
                  size_t numCols,
                  size_t numRowsPerBlock,
                  size_t numColsPerBlock);
 
+    /*!
+     * Use when there are multiple image segments
+     *
+     * \param numRowsPerSegment Number of rows in each segment
+     * \param numCols Number of columns
+     * \param numRowsPerBlock Number of rows per block
+     * \param numColsPerBlock Number of columns per block
+     */
     ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
                  size_t numCols,
                  size_t numRowsPerBlock,
                  size_t numColsPerBlock);
 
-    // startRow must start on a block boundary (within a segment)
-    // numRows must be a multiple of block size unless it's the end of a segment
+    /*!
+     * \tparam DataT Data type of image pixels
+     *
+     * \param startRow Start row.  This must start on a block boundary (within
+     * a segment).
+     * \param numRows Number of rows.  This must be a multiple of the block size
+     * unless it's at the end of a segment.
+     *
+     * \return The number of bytes required to store this AOI of the image in
+     * blocked format, including pad rows and columns
+     */
     template <typename DataT>
     size_t getNumBytesRequired(size_t startRow,
                                size_t numRows) const
@@ -54,18 +85,47 @@ public:
         return getNumBytesRequired(startRow, numRows, sizeof(DataT));
     }
 
+    /*!
+     * \param startRow Start row.  This must start on a block boundary (within
+     * a segment).
+     * \param numRows Number of rows.  This must be a multiple of the block size
+     * unless it's at the end of a segment.
+     * \param numBytesPerPixel Number of bytes per pixel of image pixels
+     *
+     * \return The number of bytes required to store this AOI of the image in
+     * blocked format, including pad rows and columns
+     */
     size_t getNumBytesRequired(size_t startRow,
                                size_t numRows,
                                size_t numBytesPerPixel) const;
 
-    // startRow must start on a block boundary (within a segment)
-    // numRows must be a multiple of block size unless it's the end of a segment
+    /*!
+     * \param input Input image of size 'numRows' x numCols (from constructor)
+     * \param startRow Start row in the global image that 'input' points to.
+     * This must start on a block boundary (within a segment).
+     * \param numRows Number of rows.  This must be a multiple of the block size
+     * unless it's at the end of a segment.
+     * \param numBytesPerPixel Number of bytes per pixel of 'input'
+     * \param[out] output Blocked representation of 'input', including pad rows
+     * and columns
+     */
     void block(const void* input,
                size_t startRow,
                size_t numRows,
                size_t numBytesPerPixel,
                void* output) const;
 
+    /*!
+     * \tparam DataT Data type of 'input' and 'output'
+     *
+     * \param input Input image of size 'numRows' x numCols (from constructor)
+     * \param startRow Start row in the global image that 'input' points to.
+     * This must start on a block boundary (within a segment).
+     * \param numRows Number of rows.  This must be a multiple of the block size
+     * unless it's at the end of a segment.
+     * \param[out] output Blocked representation of 'input', including pad rows
+     * and columns
+     */
     template <typename DataT>
     void block(const DataT* input,
                size_t startRow,
@@ -74,20 +134,6 @@ public:
     {
         block(input, startRow, numRows, sizeof(DataT), output);
     }
-
-    // TODO: Implement
-    //       The idea is that OpT is performed on each pixel
-    // TODO: Add an overloading that doesn't take in an OpT that just does
-    //       an assignment
-    /*
-    template <typename DataT, typename OpT>
-    void block(const DataT* input,
-               size_t startRow,
-               size_t numRows,
-               const OpT& op,
-               DataT* output) const;*/
-
-    // TODO: Want a threaded version
 
 private:
     void findSegment(size_t row,

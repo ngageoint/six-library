@@ -509,7 +509,7 @@ void Tester<DataTypeT>::testMultipleWritesBlocked()
             mSetMaxProductSize ? mMaxProductSize : 0);
 
     // Need to compute this per seg!!
-    can imageblocker do this?
+    //can imageblocker do this?
     //const size_t numRowsOfBlocks = mDims.row / mNumRowsPerBlock
 
     std::vector<DataTypeT> scratch;

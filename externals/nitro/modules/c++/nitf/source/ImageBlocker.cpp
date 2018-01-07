@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -330,8 +330,6 @@ void ImageBlocker::block(const void* input,
     size_t lastBlockWithinLastSeg;
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
-
-    // TODO: Think implementation is complete but need to look closer at all this
 
     const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
     sys::byte* outputPtr = static_cast<sys::byte*>(output);
