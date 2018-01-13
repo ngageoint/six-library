@@ -135,6 +135,36 @@ public:
         block(input, startRow, numRows, sizeof(DataT), output);
     }
 
+    size_t getNumColsOfBlocks() const
+    {
+        return mNumBlocksAcrossCols;
+    }
+
+    size_t getNumRowsOfBlocks(size_t seg) const
+    {
+        return mNumBlocksDownRows.at(seg);
+    }
+
+    size_t getNumPadRowsInFinalBlock(size_t seg) const
+    {
+        return mNumPadRowsInFinalBlock.at(seg);
+    }
+
+    size_t getStartRow(size_t seg) const
+    {
+        return mStartRow.at(seg);
+    }
+
+    size_t getNumRows(size_t seg) const
+    {
+        return mNumRows.at(seg);
+    }
+
+    size_t getNumSegments() const
+    {
+        return mNumBlocksDownRows.size();
+    }
+
 private:
     void findSegment(size_t row,
                      size_t& segIdx,
