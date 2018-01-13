@@ -418,8 +418,7 @@ void Tester<DataTypeT>::testMultipleWrites()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    std::vector<DataTypeT> scratch;
-    const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
+    const DataTypeT* const inImage = &mBigEndianImage[0];
 
     // Rows [40, 60)
     nitf::Off fileOffset;
@@ -640,12 +639,12 @@ bool doTests(const std::vector<std::string>& schemaPaths,
 
     if (setBlocking)
     {
-        tester.testMultipleWrites();
-        tester.testOneWritePerRow();
+        tester.testMultipleWritesBlocked();
     }
     else
     {
-        tester.testMultipleWritesBlocked();
+        tester.testMultipleWrites();
+        tester.testOneWritePerRow();
     }
 
     return tester.success();
