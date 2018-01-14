@@ -150,12 +150,15 @@ void ByteProvider::checkBlocking(size_t seg,
 
         // Need to end on a block boundary or the end of the segment
         if (numRowsToWrite % mNumRowsPerBlock != 0 &&
-            segStartRowToWrite + numRowsToWrite < imageSegmentInfo.endRow())
+            segStartRowToWrite + numRowsToWrite < imageSegmentInfo.numRows)
         {
             std::ostringstream ostr;
             ostr << "Trying to write " << numRowsToWrite
-                 << " rows starting at segment " << seg
-                 << " which is not a multiple of " << mNumRowsPerBlock;
+                 << " rows at global start row " << startGlobalRowToWrite
+                 << " starting at segment " << seg
+                 << " which is not a multiple of " << mNumRowsPerBlock
+                 << " (segment has start = " << imageSegmentInfo.firstRow
+                 << ", num = " << imageSegmentInfo.numRows << ")";
             throw except::Exception(Ctxt(ostr.str()));
         }
     }
