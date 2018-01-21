@@ -349,9 +349,22 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    /*!
+     * \param dim Number of elements (i.e. rows or columns)
+     * \param numDimsPerBlock Number of elements per block.  0 indicates no
+     * blocking.
+     *
+     * \return The actual number of elements, including padding (i.e. will be
+     * an even multiple of numDimsPerBlock)
+     */
     static
     size_t getActualImageDim(size_t dim, size_t numDimsPerBlock);
 
+    /*!
+     * \return The number of bytes the image data associated with the image
+     * subheader takes up (takes dimensions, bytes/pixel, and blocking into
+     * account)
+     */
     size_t getNumBytesOfImageData() const;
 
 private:

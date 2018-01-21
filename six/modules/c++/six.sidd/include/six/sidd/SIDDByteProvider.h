@@ -23,9 +23,6 @@
 #ifndef __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 #define __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 
-// TODO: Include a test case where the blocking is set to a value > the image dimensions
-//   According to the NITFWriteControl logic, the block will actually match the image dims
-
 #include <six/ByteProvider.h>
 #include <six/sidd/DerivedData.h>
 

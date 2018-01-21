@@ -138,36 +138,64 @@ public:
         block(input, startRow, numRows, sizeof(DataT), output);
     }
 
+    //! \return The number of columns of blocks
     size_t getNumColsOfBlocks() const
     {
         return mNumBlocksAcrossCols;
     }
 
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of rows of blocks for the specified segment.
+     */
     size_t getNumRowsOfBlocks(size_t seg) const
     {
         return mNumBlocksDownRows.at(seg);
     }
 
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of pad rows in the final block of the specified
+     * segment
+     */
     size_t getNumPadRowsInFinalBlock(size_t seg) const
     {
         return mNumPadRowsInFinalBlock.at(seg);
     }
 
+    /*!
+     * \param seg Segment
+     *
+     * \return The global start row of the specified segment
+     */
     size_t getStartRow(size_t seg) const
     {
         return mStartRow.at(seg);
     }
 
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of rows of the specified segment
+     */
     size_t getNumRows(size_t seg) const
     {
         return mNumRows.at(seg);
     }
 
+    //! \return The number of segments
     size_t getNumSegments() const
     {
         return mNumBlocksDownRows.size();
     }
 
+    /*!
+     * \return The number of rows per block for each segment.  If a segment
+     * contains more rows than numRowsPerBlock, this will be numRowsPerBlock.
+     * Otherwise it will be the number of rows in the segment.
+     */
     std::vector<size_t> getNumRowsPerBlock() const
     {
         return mNumRowsPerBlock;
