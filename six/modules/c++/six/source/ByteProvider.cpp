@@ -30,7 +30,7 @@ namespace six
 {
 ByteProvider::ByteProvider() :
     mNumCols(0),
-    mNumRowsPerBlock(0),
+    mOverallNumRowsPerBlock(0),
     mNumColsPerBlock(0),
     mNumBytesPerRow(0)
 {
@@ -106,7 +106,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
 
     if (options.hasParameter(six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK))
     {
-        mNumRowsPerBlock = options.getParameter(
+        mOverallNumRowsPerBlock = options.getParameter(
                 six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK);
     }
 
@@ -125,13 +125,22 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
     }
 
     mNumBytesPerRow = numColsWithPad * data->getNumBytesPerPixel();
+    if (mOverallNumRowsPerBlock == 0)
+    {
+        mNumRowsPerBlock.resize(mImageSegmentInfo.size());
+        std::fill(mNumRowsPerBlock.begin(), mNumRowsPerBlock.end(), 0);
+    }
+    else
+    {
+        mNumRowsPerBlock = getImageBlocker()->getNumRowsPerBlock();
+    }
 }
 
 void ByteProvider::checkBlocking(size_t seg,
                                  size_t startGlobalRowToWrite,
                                  size_t numRowsToWrite) const
 {
-    if (mNumRowsPerBlock != 0)
+    if (mOverallNumRowsPerBlock != 0)
     {
         const NITFSegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
         const size_t segStartRow = imageSegmentInfo.firstRow;
@@ -139,24 +148,25 @@ void ByteProvider::checkBlocking(size_t seg,
         // Need to start on a block boundary
         const size_t segStartRowToWrite =
                 startGlobalRowToWrite - segStartRow;
-        if (segStartRowToWrite % mNumRowsPerBlock != 0)
+        const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+        if (segStartRowToWrite % numRowsPerBlock != 0)
         {
             std::ostringstream ostr;
             ostr << "Trying to write starting at segment " << seg
                  << "'s row " << segStartRowToWrite
-                 << " which is not a multiple of " << mNumRowsPerBlock;
+                 << " which is not a multiple of " << numRowsPerBlock;
             throw except::Exception(Ctxt(ostr.str()));
         }
 
         // Need to end on a block boundary or the end of the segment
-        if (numRowsToWrite % mNumRowsPerBlock != 0 &&
+        if (numRowsToWrite % numRowsPerBlock != 0 &&
             segStartRowToWrite + numRowsToWrite < imageSegmentInfo.numRows)
         {
             std::ostringstream ostr;
             ostr << "Trying to write " << numRowsToWrite
                  << " rows at global start row " << startGlobalRowToWrite
                  << " starting at segment " << seg
-                 << " which is not a multiple of " << mNumRowsPerBlock
+                 << " which is not a multiple of " << numRowsPerBlock
                  << " (segment has start = " << imageSegmentInfo.firstRow
                  << ", num = " << imageSegmentInfo.numRows << ")";
             throw except::Exception(Ctxt(ostr.str()));
@@ -198,15 +208,16 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                 numBytes += mImageSubheaders[seg].size();
             }
 
-            if (mNumRowsPerBlock != 0 &&
+            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+            if (numRowsPerBlock != 0 &&
                 imageDataEndRow >= imageSegmentInfo.endRow())
             {
                 const size_t numLeftovers =
-                        imageSegmentInfo.numRows % mNumRowsPerBlock;
+                        imageSegmentInfo.numRows % numRowsPerBlock;
                 if (numLeftovers != 0)
                 {
                     // We need to finish the block
-                    const size_t numPadRows = mNumRowsPerBlock - numLeftovers;
+                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
                     numRowsToWrite += numPadRows;
                 }
             }
@@ -289,16 +300,17 @@ void ByteProvider::getBytes(const void* imageData,
                         rowsInSegmentSkipped * mNumBytesPerRow;
             }
 
-            if (mNumRowsPerBlock != 0 &&
+            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+            if (numRowsPerBlock != 0 &&
                 imageDataEndRow >= imageSegmentInfo.endRow())
             {
                 const size_t numLeftovers =
-                        imageSegmentInfo.numRows % mNumRowsPerBlock;
+                        imageSegmentInfo.numRows % numRowsPerBlock;
                 if (numLeftovers != 0)
                 {
                     // We need to finish the block
                     // This is already accounted for in the incoming image
-                    const size_t numPadRows = mNumRowsPerBlock - numLeftovers;
+                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
                     numRowsToWrite += numPadRows;
                     numPadRowsSoFar += numPadRows;
                 }
@@ -328,7 +340,7 @@ std::auto_ptr<const nitf::ImageBlocker> ByteProvider::getImageBlocker() const
     std::auto_ptr<const nitf::ImageBlocker> blocker(new nitf::ImageBlocker(
             numRowsPerSegment,
             mNumCols,
-            mNumRowsPerBlock,
+            mOverallNumRowsPerBlock,
             mNumColsPerBlock));
 
     return blocker;

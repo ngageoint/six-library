@@ -178,7 +178,8 @@ private:
 
 private:
     size_t mNumCols;
-    size_t mNumRowsPerBlock;
+    size_t mOverallNumRowsPerBlock;
+    std::vector<size_t> mNumRowsPerBlock;
     size_t mNumColsPerBlock;
     size_t mNumBytesPerRow;
 

@@ -152,7 +152,7 @@ private:
         sys::OS os;
         if (os.exists(mPathname))
         {
-            //os.remove(mPathname);
+            os.remove(mPathname);
         }
     }
 
@@ -396,8 +396,6 @@ void Tester<DataTypeT>::testSingleWrite()
     nitf::Off fileOffset;
     siddByteProvider.getBytes(inImage, 0, mDims.row, fileOffset, buffers);
     const nitf::Off numBytes = siddByteProvider.getNumBytes(0, mDims.row);
-    std::cout << "With blocking of " << mNumRowsPerBlock << ", " << mNumColsPerBlock
-              << " bytes are " << numBytes << std::endl;
 
     io::FileOutputStream outStream(mTestPathname);
     write(fileOffset, buffers, numBytes, outStream);
@@ -513,10 +511,6 @@ void Tester<DataTypeT>::testMultipleWritesBlocked()
     std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
             siddByteProvider.getImageBlocker();
 
-    std::vector<DataTypeT> blockData(
-            mNumRowsPerBlock * mNumColsPerBlock *
-            imageBlocker->getNumColsOfBlocks());
-
     std::vector<DataTypeT> inData(mNumRowsPerBlock * mDims.col);
 
     const size_t numSegs(imageBlocker->getNumSegments());
@@ -526,14 +520,19 @@ void Tester<DataTypeT>::testMultipleWritesBlocked()
         const size_t numBlocks = imageBlocker->getNumRowsOfBlocks(seg);
         const size_t lastBlock = numBlocks - 1;
         const size_t segStartRow = imageBlocker->getStartRow(seg);
+        const size_t numRowsPerBlock = imageBlocker->getNumRowsPerBlock()[seg];
+
+        std::vector<DataTypeT> blockData(
+                numRowsPerBlock * mNumColsPerBlock *
+                imageBlocker->getNumColsOfBlocks());
 
         for (size_t jj = 0; jj < numBlocks; ++jj)
         {
             const size_t block = lastBlock - jj;
 
-            const size_t startRow = segStartRow + block * mNumRowsPerBlock;
+            const size_t startRow = segStartRow + block * numRowsPerBlock;
 
-            size_t numRows(mNumRowsPerBlock);
+            size_t numRows(numRowsPerBlock);
             if (block == lastBlock)
             {
                 numRows -= imageBlocker->getNumPadRowsInFinalBlock(seg);
@@ -698,14 +697,12 @@ int main(int /*argc*/, char** /*argv*/)
         }
 
         // Run tests forcing various numbers of segments
+        // Blocking is set at 7 rows / block so can't go less than this
         std::vector<size_t> numRows;
         numRows.push_back(80);
         numRows.push_back(30);
         numRows.push_back(15);
         numRows.push_back(7);
-        numRows.push_back(3);
-        numRows.push_back(2);
-        numRows.push_back(1);
 
         for (size_t ii = 0; ii < numRows.size(); ++ii)
         {

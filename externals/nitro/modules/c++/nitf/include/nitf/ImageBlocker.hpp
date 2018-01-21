@@ -36,7 +36,10 @@ namespace nitf
  * \brief Supports efficiently rearranging an image to fulfill NITF blocking
  * conventions, including pad rows and columns (NITF spec specifies that full
  * blocks will always be written).  Only supports layouts where image segments
- * are stacked vertically.
+ * are stacked vertically.  Following convention of other areas of the code that
+ * write NITFs, will limit the block size to the size of the dimension (which
+ * means for multi-segment cases, there may be a different num rows / block in
+ * each segment).
  */
 class ImageBlocker
 {
@@ -165,15 +168,20 @@ public:
         return mNumBlocksDownRows.size();
     }
 
+    std::vector<size_t> getNumRowsPerBlock() const
+    {
+        return mNumRowsPerBlock;
+    }
+
 private:
     void findSegment(size_t row,
                      size_t& segIdx,
                      size_t& rowWithinSegment,
                      size_t& blockWithinSegment) const;
 
-    bool isFirstRowInBlock(size_t rowWithinSeg) const
+    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const
     {
-        return (rowWithinSeg % mNumRowsPerBlock == 0);
+        return (rowWithinSeg % mNumRowsPerBlock[seg] == 0);
     }
 
     void findSegmentRange(size_t startRow,
@@ -183,13 +191,15 @@ private:
                           size_t& lastSegIdx,
                           size_t& lastBlockWithinLastSeg) const;
 
-    void blockImpl(const sys::byte* input,
+    void blockImpl(size_t seg,
+                   const sys::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
                    sys::byte* output) const;
 
-    void blockAcrossRow(const sys::byte*& input,
+    void blockAcrossRow(size_t seg,
+                        const sys::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
                         sys::byte*& output) const;
@@ -200,7 +210,7 @@ private:
     const std::vector<size_t> mNumRows;
     const size_t mTotalNumRows;
     const size_t mNumCols;
-    const size_t mNumRowsPerBlock;
+    std::vector<size_t> mNumRowsPerBlock;
     const size_t mNumColsPerBlock;
 
     std::vector<size_t> mNumBlocksDownRows;
