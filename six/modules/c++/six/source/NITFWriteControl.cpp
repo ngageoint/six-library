@@ -1302,7 +1302,7 @@ void NITFWriteControl::getFileLayout(
     for (size_t ii = 0; ii < numDESs; ++ii)
     {
         writer.writeInt64Field(desSubheaderLengths[ii], NITF_LDSH_SZ, '0',
-                             NITF_WRITER_FILL_LEFT);
+                               NITF_WRITER_FILL_LEFT);
 
         writer.writeInt64Field(desDataLengths[ii], NITF_LD_SZ, '0',
                                NITF_WRITER_FILL_LEFT);
