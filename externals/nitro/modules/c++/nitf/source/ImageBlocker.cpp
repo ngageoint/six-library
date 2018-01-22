@@ -218,33 +218,33 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
                      lastSegIdx, lastBlockWithinLastSeg);
 
     // Now count up the blocks
-    size_t numRowBlocks;
+    size_t totalNumRows;
     if (lastSegIdx == firstSegIdx)
     {
-        numRowBlocks =
+        totalNumRows =
                 (lastBlockWithinLastSeg - startBlockWithinFirstSeg + 1) *
                 mNumRowsPerBlock[firstSegIdx];
     }
     else
     {
         // First seg
-        numRowBlocks =
+        totalNumRows =
                 (mNumBlocksDownRows[firstSegIdx] - startBlockWithinFirstSeg) *
                 mNumRowsPerBlock[firstSegIdx];
 
         // Middle segs
         for (size_t seg = firstSegIdx + 1; seg < lastSegIdx; ++seg)
         {
-            numRowBlocks += mNumBlocksDownRows[seg] * mNumRowsPerBlock[seg];
+            totalNumRows += mNumBlocksDownRows[seg] * mNumRowsPerBlock[seg];
         }
 
         // Last seg
-        numRowBlocks +=
+        totalNumRows +=
                 (lastBlockWithinLastSeg + 1) * mNumRowsPerBlock[lastSegIdx];
     }
 
     const size_t numBytes =
-            numRowBlocks *
+            totalNumRows *
             mNumBlocksAcrossCols * mNumColsPerBlock *
             numBytesPerPixel;
 
