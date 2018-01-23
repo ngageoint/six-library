@@ -59,6 +59,10 @@ public:
             NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
             throw(nitf::NITFException);
 
+    /*!
+     *  This function allows you to register your own compression handlers.  It
+     *  will override any handlers that are currently handling the identifier.
+     */
     static void registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
             NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
             throw(nitf::NITFException);
