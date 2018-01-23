@@ -507,7 +507,49 @@ NITFAPI(NITF_BOOL)
 
 }
 
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_registerCompressionHandler(
+        NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handle,
+        nitf_Error * error)
+{
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
+    const char** ident;
+    int i = 1;
+    int ok = 1;
+    if (!reg)
+    {
+        return NITF_FAILURE;
+    }
+    if ( (ident = (*init)(error)) == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    if (!ident[0] || (strcmp(ident[0], NITF_PLUGIN_COMPRESSION_KEY) != 0))
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Expected a TRE identity");
+        return NITF_FAILURE;
+    }
+
+    for (; ident[i] != NULL; ++i)
+    {
+#ifdef NITF_DEBUG_PLUGIN_REG
+        if (nitf_HashTable_exists(reg->compressionHandlers, ident[i]))
+        {
+            printf("Warning, static handler overriding [%s] hook\n", ident[i]);
+        }
+#endif
+        ok &= nitf_HashTable_insert(reg->compressionHandlers, ident[i],
+                (NITF_DATA*)handle, error);
+    }
+
+    return ok;
+}
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
