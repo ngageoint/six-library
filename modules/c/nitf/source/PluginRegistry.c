@@ -532,7 +532,7 @@ nitf_PluginRegistry_registerCompressionHandler(
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_INVALID_OBJECT,
-                         "Expected a TRE identity");
+                         "Expected a Compression identity");
         return NITF_FAILURE;
     }
 
