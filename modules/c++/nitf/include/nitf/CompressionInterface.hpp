@@ -29,10 +29,10 @@
 
 
 /*!
- *  This is a macro for quickly exposing hooks to a c++ layer 
+ *  This is a macro for quickly exposing hooks to a c++ layer
  *  Compressor object. The idea here is to setup everything in
- *  one shot. All the user has to do is create a 
- *  nitf_CompressionInterface 'open' method, and declare the 
+ *  one shot. All the user has to do is create a
+ *  nitf_CompressionInterface 'open' method, and declare the
  *  identifier for compression type.
  */
 #define NITF_CREATE_CUSTOM_COMPRESSION(_COMPRESSION_ID, \
@@ -60,7 +60,7 @@ NITFAPI(void) _COMPRESSION_ID##_cleanup(void)\
 {\
 }\
 \
-NITFAPI(void*) _COMPRESSION_ID##_construct(char* compressionType,\
+NITFAPI(void*) _COMPRESSION_ID##_construct(const char* compressionType,\
                                            nitf_Error* error)\
 {\
     if (strcmp(compressionType, #_COMPRESSION_ID) != 0)\
@@ -80,7 +80,7 @@ namespace nitf
 
 /*!
  *  \class CompressionInterface
- *  \brief Compression object controls all innerworkings 
+ *  \brief Compression object controls all innerworkings
  *         during compression, and gives a c++ api for getting
  *         things done.
  */
@@ -88,13 +88,13 @@ class CompressionInterface
 {
 public:
 
-    //! These are canned methods which turn around 
+    //! These are canned methods which turn around
     //  and call the nitf_CompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_CompressionControl* object,
                                   nitf::Uint64 offset,
                                   nitf::Uint64 dataLength,
                                   nitf::Uint64* blockMask,
-                                  nitf::Uint64* padMask, 
+                                  nitf::Uint64* padMask,
                                   nitf_Error* error);
 
     static NITF_BOOL adapterWriteBlock(nitf_CompressionControl* object,

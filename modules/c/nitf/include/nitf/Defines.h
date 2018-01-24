@@ -80,4 +80,14 @@
         extern nitf_TREHandler* _Tre##_handler(nitf_Error*);
 #endif
 
+#ifdef __cplusplus
+#define NITF_COMPRESSION_STATIC_HANDLE_REF(_Compressor) \
+        extern "C" const char** _Compressor##_init(nitf_Error*); \
+        extern "C" void* C7_construct(const char*, nitf_Error*);
+#else
+#define NITF_COMPRESSION_STATIC_HANDLE_REF(_Compressor) \
+        extern const char** _Compressor##_init(nitf_Error*); \
+        extern void* C7_construct(const char*, nitf_Error*);
+#endif
+
 #endif

@@ -20,10 +20,11 @@
  *
  */
 
-#include "nitf/ImageSubheader.hpp"
+#include <nitf/ImageIO.h>
+#include <nitf/ImageSubheader.hpp>
 
-using namespace nitf;
-
+namespace nitf
+{
 ImageSubheader::ImageSubheader(const ImageSubheader & x)
 {
     setNative(x.getNative());
@@ -70,7 +71,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::string irep, std::string icat,
                          std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
 {
-    nitf::Uint32 bandCount = bands.size();
+    const size_t bandCount = bands.size();
     nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
             sizeof(nitf_BandInfo*) * bandCount);
     if (!bandInfo)
@@ -78,7 +79,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
     }
 
-    for (nitf::Uint32 i = 0; i < bandCount; i++)
+    for (size_t i = 0; i < bandCount; i++)
     {
         bandInfo[i] = nitf_BandInfo_clone(bands[i].getNative(), &error);
         if (!bandInfo[i])
@@ -87,22 +88,9 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
-        icat.c_str(), bandCount, bandInfo, &error);
+        icat.c_str(), static_cast<nitf::Uint32>(bandCount), bandInfo, &error);
     if (!x)
         throw nitf::NITFException(&error);
-}
-
-
-void ImageSubheader::setPixelInformation(std::string pvtype,
-                         nitf::Uint32 nbpp,
-                         nitf::Uint32 abpp,
-                         std::string justification,
-                         std::string irep, std::string icat,
-                         nitf::Uint32 bandCount,
-                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
-{
-    return setPixelInformation(pvtype, nbpp, abpp, justification, irep, icat,
-            bands);
 }
 
 void ImageSubheader::setBlocking(nitf::Uint32 numRows,
@@ -456,4 +444,35 @@ void ImageSubheader::setExtendedSection(nitf::Extensions value)
     //have the library manage the "new" one
     getNativeOrThrow()->extendedSection = value.getNative();
     value.setManaged(true);
+}
+
+size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock)
+{
+    if (numDimsPerBlock == 0)
+    {
+        return dim;
+    }
+    else
+    {
+        // If we're blocking then we'll always write full blocks due to how
+        // the NITF file layout works
+        const size_t numBlocks =
+                (dim / numDimsPerBlock) + (dim % numDimsPerBlock != 0);
+        return numBlocks * numDimsPerBlock;
+    }
+}
+
+size_t ImageSubheader::getNumBytesPerPixel() const
+{
+    const size_t numBitsPerPixel =
+            nitf::Field(getNativeOrThrow()->numBitsPerPixel);
+    return NITF_NBPP_TO_BYTES(numBitsPerPixel);
+}
+
+size_t ImageSubheader::getNumBytesOfImageData() const
+{
+    const size_t numBytes = getActualNumRows() * getActualNumCols() *
+            getNumImageBands() * getNumBytesPerPixel();
+    return numBytes;
+}
 }
