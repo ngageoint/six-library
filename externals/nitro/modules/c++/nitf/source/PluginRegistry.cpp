@@ -47,6 +47,17 @@ void PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
         throw NITFException(&error);
 }
 
+void PluginRegistry::registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
+        throw(NITFException)
+{
+    nitf_Error error;
+    if (!nitf_PluginRegistry_registerCompressionHandler(init, handler, &error))
+    {
+        throw NITFException(&error);
+    }
+}
+
 nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
         const std::string& comp) throw(NITFException)
 {

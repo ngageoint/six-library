@@ -60,8 +60,8 @@ ImageBlocker::ImageBlocker(size_t numRows,
     mNumRows(1, numRows),
     mTotalNumRows(numRows),
     mNumCols(numCols),
-    mNumRowsPerBlock(numRowsPerBlock),
-    mNumColsPerBlock(numColsPerBlock),
+    mNumRowsPerBlock(1, std::min(numRows, numRowsPerBlock)),
+    mNumColsPerBlock(std::min(numCols, numColsPerBlock)),
     mNumBlocksDownRows(1),
     mNumPadRowsInFinalBlock(1)
 {
@@ -70,7 +70,7 @@ ImageBlocker::ImageBlocker(size_t numRows,
         throw except::Exception(Ctxt("Dimensions per block must be positive"));
     }
 
-    getBlockInfo(numRows, mNumRowsPerBlock,
+    getBlockInfo(numRows, mNumRowsPerBlock[0],
                  mNumBlocksDownRows[0], mNumPadRowsInFinalBlock[0]);
 
     getBlockInfo(mNumCols, mNumColsPerBlock,
@@ -87,8 +87,8 @@ ImageBlocker::ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
                                   numRowsPerSegment.end(),
                                   static_cast<size_t>(0))),
     mNumCols(numCols),
-    mNumRowsPerBlock(numRowsPerBlock),
-    mNumColsPerBlock(numColsPerBlock),
+    mNumRowsPerBlock(numRowsPerSegment.size()),
+    mNumColsPerBlock(std::min(numCols, numColsPerBlock)),
     mNumBlocksDownRows(numRowsPerSegment.size()),
     mNumPadRowsInFinalBlock(numRowsPerSegment.size())
 {
@@ -102,6 +102,14 @@ ImageBlocker::ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
         throw except::Exception(Ctxt("Dimensions per block must be positive"));
     }
 
+    // For each segment, the # of rows / block is capped at the # of rows in
+    // that block (i.e. no point in having a segment with 1 block that's bigger
+    // than the # of rows you have)
+    for (size_t seg = 0; seg < mNumRows.size(); ++seg)
+    {
+        mNumRowsPerBlock[seg] = std::min(mNumRows[seg], numRowsPerBlock);
+    }
+
     mStartRow[0] = 0;
     for (size_t seg = 1; seg < mNumRows.size(); ++seg)
     {
@@ -110,7 +118,7 @@ ImageBlocker::ImageBlocker(const std::vector<size_t>& numRowsPerSegment,
 
     for (size_t seg = 0; seg < mNumRows.size(); ++seg)
     {
-        getBlockInfo(mNumRows[seg], mNumRowsPerBlock,
+        getBlockInfo(mNumRows[seg], mNumRowsPerBlock[seg],
                      mNumBlocksDownRows[seg], mNumPadRowsInFinalBlock[seg]);
     }
 
@@ -131,7 +139,7 @@ void ImageBlocker::findSegment(size_t row,
         {
             segIdx = seg;
             rowWithinSegment = row - mStartRow[seg];
-            blockWithinSegment = rowWithinSegment / mNumRowsPerBlock;
+            blockWithinSegment = rowWithinSegment / mNumRowsPerBlock[seg];
             return;
         }
     }
@@ -161,13 +169,13 @@ void ImageBlocker::findSegmentRange(size_t startRow,
         findSegment(startRow, firstSegIdx, startRowWithinFirstSeg,
                     startBlockWithinFirstSeg);
 
-        if (!isFirstRowInBlock(startRowWithinFirstSeg))
+        if (!isFirstRowInBlock(firstSegIdx, startRowWithinFirstSeg))
         {
             std::ostringstream ostr;
             ostr << "Start row " << startRow << " is local row "
                  << startRowWithinFirstSeg << " within segment " << firstSegIdx
                  << ".  The local row must be a multiple of "
-                 << mNumRowsPerBlock << ".";
+                 << mNumRowsPerBlock[firstSegIdx] << ".";
             throw except::Exception(Ctxt(ostr.str()));
         }
 
@@ -181,7 +189,7 @@ void ImageBlocker::findSegmentRange(size_t startRow,
 
         // Make sure we're ending on a full block
         if (!(endRowWithinLastSeg == mNumRows[lastSegIdx] ||
-              isFirstRowInBlock(endRowWithinLastSeg)))
+              isFirstRowInBlock(lastSegIdx, endRowWithinLastSeg)))
         {
             std::ostringstream ostr;
             ostr << "Last row " << lastRow << " is local row "
@@ -210,36 +218,41 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
                      lastSegIdx, lastBlockWithinLastSeg);
 
     // Now count up the blocks
-    size_t numRowBlocks;
+    size_t totalNumRows;
     if (lastSegIdx == firstSegIdx)
     {
-        numRowBlocks = lastBlockWithinLastSeg - startBlockWithinFirstSeg + 1;
+        totalNumRows =
+                (lastBlockWithinLastSeg - startBlockWithinFirstSeg + 1) *
+                mNumRowsPerBlock[firstSegIdx];
     }
     else
     {
         // First seg
-        numRowBlocks =
-                mNumBlocksDownRows[firstSegIdx] - startBlockWithinFirstSeg;
+        totalNumRows =
+                (mNumBlocksDownRows[firstSegIdx] - startBlockWithinFirstSeg) *
+                mNumRowsPerBlock[firstSegIdx];
 
         // Middle segs
         for (size_t seg = firstSegIdx + 1; seg < lastSegIdx; ++seg)
         {
-            numRowBlocks += mNumBlocksDownRows[seg];
+            totalNumRows += mNumBlocksDownRows[seg] * mNumRowsPerBlock[seg];
         }
 
         // Last seg
-        numRowBlocks += lastBlockWithinLastSeg + 1;
+        totalNumRows +=
+                (lastBlockWithinLastSeg + 1) * mNumRowsPerBlock[lastSegIdx];
     }
 
     const size_t numBytes =
-            numRowBlocks * mNumRowsPerBlock *
+            totalNumRows *
             mNumBlocksAcrossCols * mNumColsPerBlock *
             numBytesPerPixel;
 
     return numBytes;
 }
 
-void ImageBlocker::blockImpl(const sys::byte* input,
+void ImageBlocker::blockImpl(size_t seg,
+                             const sys::byte* input,
                              size_t numValidRowsInBlock,
                              size_t numValidColsInBlock,
                              size_t numBytesPerPixel,
@@ -276,22 +289,24 @@ void ImageBlocker::blockImpl(const sys::byte* input,
     }
 
     // Pad rows on the bottom of the block
-    if (numValidRowsInBlock < mNumRowsPerBlock)
+    const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+    if (numValidRowsInBlock < numRowsPerBlock)
     {
-        const size_t numPadRows = mNumRowsPerBlock - numValidRowsInBlock;
+        const size_t numPadRows = numRowsPerBlock - numValidRowsInBlock;
 
         ::memset(output, 0,
                  numPadRows * mNumColsPerBlock * numBytesPerPixel);
     }
 }
 
-void ImageBlocker::blockAcrossRow(const sys::byte*& input,
+void ImageBlocker::blockAcrossRow(size_t seg,
+                                  const sys::byte*& input,
                                   size_t numValidRowsInBlock,
                                   size_t numBytesPerPixel,
                                   sys::byte*& output) const
 {
     const size_t outStride =
-            mNumRowsPerBlock * mNumColsPerBlock * numBytesPerPixel;
+            mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
     const size_t lastColBlock = mNumBlocksAcrossCols - 1;
 
     for (size_t colBlock = 0;
@@ -303,7 +318,8 @@ void ImageBlocker::blockAcrossRow(const sys::byte*& input,
 
         const size_t numValidColsInBlock = mNumColsPerBlock - numPadColsInBlock;
 
-        blockImpl(input,
+        blockImpl(seg,
+                  input,
                   numValidRowsInBlock,
                   numValidColsInBlock,
                   numBytesPerPixel,
@@ -353,10 +369,11 @@ void ImageBlocker::block(const void* input,
                             mNumPadRowsInFinalBlock[seg] : 0;
 
             const size_t numValidRowsInBlock =
-                    mNumRowsPerBlock - numPadRowsInBlock;
+                    mNumRowsPerBlock[seg] - numPadRowsInBlock;
 
             // This increments both pointers
-            blockAcrossRow(inputPtr,
+            blockAcrossRow(seg,
+                           inputPtr,
                            numValidRowsInBlock,
                            numBytesPerPixel,
                            outputPtr);
