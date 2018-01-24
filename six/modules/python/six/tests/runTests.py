@@ -140,7 +140,8 @@ def run(sourceDir):
         if not (siddTestRunner.run('test_byte_swap') and
                 siddTestRunner.run('test_geotiff') and
                 siddTestRunner.run('test_check_blocking', sampleSidd) and
-                siddTestRunner.run('test_sidd_blocking', utils.installPath())):
+                siddTestRunner.run('test_sidd_blocking', utils.installPath()) and
+                siddTestRunner.run('test_sidd_byte_provider')):
             return False
 
         if not sampleTestRunner.run('test_large_offset'):

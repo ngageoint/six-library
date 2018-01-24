@@ -46,11 +46,11 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
         // Use the grid corners
         cornersPix.push_back(RowColDouble(0.0, 0.0));
         cornersPix.push_back(RowColDouble(
-                0.0, data.getNumCols() - 1));
+                0.0, data.getNumCols() - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1, data.getNumCols() - 1));
+                data.getNumRows() - 1.0, data.getNumCols() - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1, 0.0));
+                data.getNumRows() - 1.0, 0.0));
     }
 
     return cornersPix;
@@ -221,11 +221,11 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         }
 
         std::vector<RowColDouble> imageCorners(4);
-        imageCorners[0] = RowColDouble(0, 0);
-        imageCorners[1] = RowColDouble(0, data.getNumCols() - 1);
-        imageCorners[2] = RowColDouble(data.getNumRows() - 1,
-                data.getNumCols() - 1);
-        imageCorners[3] = RowColDouble(data.getNumRows() - 1, 0);
+        imageCorners[0] = RowColDouble(0.0, 0.0);
+        imageCorners[1] = RowColDouble(0.0, data.getNumCols() - 1.0);
+        imageCorners[2] = RowColDouble(data.getNumRows() - 1.0,
+                data.getNumCols() - 1.0);
+        imageCorners[3] = RowColDouble(data.getNumRows() - 1.0, 0.0);
         LatLonAltCorners& acpCorners =
                 data.radarCollection->area->acpCorners;
 
@@ -300,9 +300,9 @@ void AreaPlaneUtility::deriveAreaPlane(const ComplexData& data,
 
         // End values are inclusive
         areaPlane.segmentList[0]->endLine =
-                areaPlane.xDirection->elements - 1;
+                static_cast<int>(areaPlane.xDirection->elements - 1);
         areaPlane.segmentList[0]->endSample =
-                areaPlane.yDirection->elements - 1;
+                static_cast<int>(areaPlane.yDirection->elements - 1);
 
         areaPlane.segmentList[0]->identifier = "AA";
     }

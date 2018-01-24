@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of six.sidd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,33 +20,36 @@
  *
  */
 
-#include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDByteProvider.h>
+#include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/SIDDByteProvider.h>
 
 namespace six
 {
-namespace sicd
+namespace sidd
 {
-SICDByteProvider::SICDByteProvider(
-        const ComplexData& data,
+SIDDByteProvider::SIDDByteProvider(
+        const DerivedData& data,
         const std::vector<std::string>& schemaPaths,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock,
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<ComplexXMLControl>());
+    xmlRegistry.addCreator(six::DataType::DERIVED,
+                           new six::XMLControlCreatorT<DerivedXMLControl>());
 
     mem::SharedPtr<Container> container(new Container(
-            DataType::COMPLEX));
+            DataType::DERIVED));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
     container->addData(data.clone());
 
-    initialize(container, xmlRegistry, schemaPaths, maxProductSize);
+    initialize(container, xmlRegistry, schemaPaths,
+               maxProductSize, numRowsPerBlock, numColsPerBlock);
 }
 
-SICDByteProvider::SICDByteProvider(const NITFWriteControl& writer,
+SIDDByteProvider::SIDDByteProvider(const NITFWriteControl& writer,
                                    const std::vector<std::string>& schemaPaths)
 {
     initialize(writer, schemaPaths);

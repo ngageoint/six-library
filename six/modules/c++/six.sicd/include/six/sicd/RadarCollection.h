@@ -251,7 +251,7 @@ struct Segment
     Segment* clone() const;
 
     //! The number of lines in the segment
-    int getNumLines() const
+    size_t getNumLines() const
     {
         // Rotating can make the start/end in reverse order,
         // so need the absolute value
@@ -259,7 +259,7 @@ struct Segment
     }
 
     //! The number of samples in the segment
-    int getNumSamples() const
+    size_t getNumSamples() const
     {
         return std::abs(endSample - startSample) + 1;
     }
