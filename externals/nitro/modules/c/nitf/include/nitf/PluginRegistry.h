@@ -119,6 +119,17 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
                                        nitf_Error* error);
 
 /*!
+ *  This function allows you to register your own compression handlers.
+ *  This function will override any handlers that are currently
+ *  handling the identifier.
+ */
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_registerCompressionHandler(
+        NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler,
+        nitf_Error* error);
+
+/*!
  *  Public function to load the registry with plugins in the given directory.
  *  This will walk the DLL path and search
  *  for plugins.  All DSOs are loaded, and queried for their purpose.
