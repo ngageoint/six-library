@@ -67,6 +67,14 @@ public:
             NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
             throw(nitf::NITFException);
 
+    /*!
+     *  This function allows you to register your own decompression handlers.  It
+     *  will override any handlers that are currently handling the identifier.
+     */
+    static void registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+            NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler)
+            throw(nitf::NITFException);
+
     static nitf_CompressionInterface* retrieveCompressionInterface(
             const std::string& comp) throw(nitf::NITFException);
 
@@ -78,6 +86,26 @@ public:
      * \return true if a TRE handler exists, false otherwise
      */
     static bool treHandlerExists(const std::string& ident);
+
+    /*!
+     * Checks if a compression handler exists for 'ident'
+     *
+     * \param ident ID of the compression
+     *
+     * \return true if a TRE handler exists, false otherwise
+     */
+    static bool compressionHandlerExists(const std::string& ident);
+
+    /*!
+     * Checks if a decompression handler exists for 'ident'
+     *
+     * \param ident ID of the decompression
+     *
+     * \return true if a decompression handler exists, false otherwise
+     */
+    static bool decompressionHandlerExists(const std::string& ident);
+
+
 
 private:
     PluginRegistry()
