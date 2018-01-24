@@ -36,7 +36,10 @@ namespace nitf
  * \brief Supports efficiently rearranging an image to fulfill NITF blocking
  * conventions, including pad rows and columns (NITF spec specifies that full
  * blocks will always be written).  Only supports layouts where image segments
- * are stacked vertically.
+ * are stacked vertically.  Following convention of other areas of the code that
+ * write NITFs, will limit the block size to the size of the dimension (which
+ * means for multi-segment cases, there may be a different num rows / block in
+ * each segment).
  */
 class ImageBlocker
 {
@@ -135,15 +138,78 @@ public:
         block(input, startRow, numRows, sizeof(DataT), output);
     }
 
+    //! \return The number of columns of blocks
+    size_t getNumColsOfBlocks() const
+    {
+        return mNumBlocksAcrossCols;
+    }
+
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of rows of blocks for the specified segment.
+     */
+    size_t getNumRowsOfBlocks(size_t seg) const
+    {
+        return mNumBlocksDownRows.at(seg);
+    }
+
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of pad rows in the final block of the specified
+     * segment
+     */
+    size_t getNumPadRowsInFinalBlock(size_t seg) const
+    {
+        return mNumPadRowsInFinalBlock.at(seg);
+    }
+
+    /*!
+     * \param seg Segment
+     *
+     * \return The global start row of the specified segment
+     */
+    size_t getStartRow(size_t seg) const
+    {
+        return mStartRow.at(seg);
+    }
+
+    /*!
+     * \param seg Segment
+     *
+     * \return The number of rows of the specified segment
+     */
+    size_t getNumRows(size_t seg) const
+    {
+        return mNumRows.at(seg);
+    }
+
+    //! \return The number of segments
+    size_t getNumSegments() const
+    {
+        return mNumBlocksDownRows.size();
+    }
+
+    /*!
+     * \return The number of rows per block for each segment.  If a segment
+     * contains more rows than numRowsPerBlock, this will be numRowsPerBlock.
+     * Otherwise it will be the number of rows in the segment.
+     */
+    std::vector<size_t> getNumRowsPerBlock() const
+    {
+        return mNumRowsPerBlock;
+    }
+
 private:
     void findSegment(size_t row,
                      size_t& segIdx,
                      size_t& rowWithinSegment,
                      size_t& blockWithinSegment) const;
 
-    bool isFirstRowInBlock(size_t rowWithinSeg) const
+    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const
     {
-        return (rowWithinSeg % mNumRowsPerBlock == 0);
+        return (rowWithinSeg % mNumRowsPerBlock[seg] == 0);
     }
 
     void findSegmentRange(size_t startRow,
@@ -153,13 +219,15 @@ private:
                           size_t& lastSegIdx,
                           size_t& lastBlockWithinLastSeg) const;
 
-    void blockImpl(const sys::byte* input,
+    void blockImpl(size_t seg,
+                   const sys::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
                    sys::byte* output) const;
 
-    void blockAcrossRow(const sys::byte*& input,
+    void blockAcrossRow(size_t seg,
+                        const sys::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
                         sys::byte*& output) const;
@@ -170,7 +238,7 @@ private:
     const std::vector<size_t> mNumRows;
     const size_t mTotalNumRows;
     const size_t mNumCols;
-    const size_t mNumRowsPerBlock;
+    std::vector<size_t> mNumRowsPerBlock;
     const size_t mNumColsPerBlock;
 
     std::vector<size_t> mNumBlocksDownRows;
