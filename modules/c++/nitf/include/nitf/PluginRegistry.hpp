@@ -92,7 +92,7 @@ public:
      *
      * \param ident ID of the compression
      *
-     * \return true if a TRE handler exists, false otherwise
+     * \return true if a compression handler exists, false otherwise
      */
     static bool compressionHandlerExists(const std::string& ident);
 
