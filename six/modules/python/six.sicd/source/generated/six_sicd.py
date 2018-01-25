@@ -1211,12 +1211,9 @@ class ImageSubheader(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSubheader
     __del__ = lambda self: None
 
-    def setPixelInformation(self, *args):
-        """
-        setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)
-        setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, nitf::Uint32 bandCount, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)
-        """
-        return _six_sicd.ImageSubheader_setPixelInformation(self, *args)
+    def setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands):
+        """setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)"""
+        return _six_sicd.ImageSubheader_setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands)
 
 
     def setCornersFromLatLons(self, type, corners):
@@ -1494,12 +1491,27 @@ class ImageSubheader(_object):
         """setExtendedSection(ImageSubheader self, Extensions value)"""
         return _six_sicd.ImageSubheader_setExtendedSection(self, value)
 
+
+    def getActualImageDim(dim, numDimsPerBlock):
+        """getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
+        return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
+
+    getActualImageDim = staticmethod(getActualImageDim)
+
+    def getNumBytesOfImageData(self):
+        """getNumBytesOfImageData(ImageSubheader self) -> size_t"""
+        return _six_sicd.ImageSubheader_getNumBytesOfImageData(self)
+
 ImageSubheader_swigregister = _six_sicd.ImageSubheader_swigregister
 ImageSubheader_swigregister(ImageSubheader)
 
 def ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
     """ImageSubheader_computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
     return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
+
+def ImageSubheader_getActualImageDim(dim, numDimsPerBlock):
+    """ImageSubheader_getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
+    return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
 
 NITF_VER_20 = _six_sicd.NITF_VER_20
 NITF_VER_21 = _six_sicd.NITF_VER_21
@@ -2920,12 +2932,12 @@ class Segment(_object):
 
 
     def getNumLines(self):
-        """getNumLines(Segment self) -> int"""
+        """getNumLines(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumLines(self)
 
 
     def getNumSamples(self):
-        """getNumSamples(Segment self) -> int"""
+        """getNumSamples(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumSamples(self)
 
     __swig_setmethods__["startLine"] = _six_sicd.Segment_startLine_set
@@ -8854,12 +8866,12 @@ class ScopedCloneableSegment(_object):
 
 
     def getNumLines(self):
-        """getNumLines(ScopedCloneableSegment self) -> int"""
+        """getNumLines(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumLines(self)
 
 
     def getNumSamples(self):
-        """getNumSamples(ScopedCloneableSegment self) -> int"""
+        """getNumSamples(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumSamples(self)
 
     __swig_setmethods__["startLine"] = _six_sicd.ScopedCloneableSegment_startLine_set
