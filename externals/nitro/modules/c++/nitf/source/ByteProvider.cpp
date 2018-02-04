@@ -20,9 +20,10 @@
  *
  */
 
+#include <string.h>
 #include <sstream>
 #include <algorithm>
-#include <string.h>
+#include <limits>
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
@@ -53,6 +54,10 @@ ByteProvider::ByteProvider() :
     mNumColsPerBlock(0),
     mNumBytesPerRow(0),
     mNumBytesPerPixel(0)
+{
+}
+
+ByteProvider::~ByteProvider()
 {
 }
 
@@ -129,9 +134,11 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
         imageSegmentsTotalNumBytes +=
                 mImageSubheaders[ii].size() + imageDataLens[ii];
 
-        const size_t numCols = subheader.getNumRows();
+        const size_t numCols = subheader.getNumCols();
+        const size_t numBands = subheader.getNumImageBands();
         const size_t numBytesPerPixel =
-                NITF_NBPP_TO_BYTES(subheader.getActualBitsPerPixel());
+                NITF_NBPP_TO_BYTES(subheader.getActualBitsPerPixel()) *
+                numBands;
         if (ii == 0)
         {
             mNumCols = numCols;
@@ -275,5 +282,198 @@ std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
             mNumColsPerBlock));
 
     return blocker;
+}
+
+void ByteProvider::checkBlocking(size_t seg,
+                                 size_t startGlobalRowToWrite,
+                                 size_t numRowsToWrite) const
+{
+    if (mOverallNumRowsPerBlock != 0)
+    {
+        const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+        const size_t segStartRow = imageSegmentInfo.firstRow;
+
+        // Need to start on a block boundary
+        const size_t segStartRowToWrite =
+                startGlobalRowToWrite - segStartRow;
+        const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+        if (segStartRowToWrite % numRowsPerBlock != 0)
+        {
+            std::ostringstream ostr;
+            ostr << "Trying to write starting at segment " << seg
+                 << "'s row " << segStartRowToWrite
+                 << " which is not a multiple of " << numRowsPerBlock;
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+
+        // Need to end on a block boundary or the end of the segment
+        if (numRowsToWrite % numRowsPerBlock != 0 &&
+            segStartRowToWrite + numRowsToWrite < imageSegmentInfo.numRows)
+        {
+            std::ostringstream ostr;
+            ostr << "Trying to write " << numRowsToWrite
+                 << " rows at global start row " << startGlobalRowToWrite
+                 << " starting at segment " << seg
+                 << " which is not a multiple of " << numRowsPerBlock
+                 << " (segment has start = " << imageSegmentInfo.firstRow
+                 << ", num = " << imageSegmentInfo.numRows << ")";
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+    }
+}
+
+nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
+{
+    nitf::Off numBytes(0);
+
+    const size_t imageDataEndRow = startRow + numRows;
+
+    for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
+    {
+        // See if we're in this segment
+        const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(startRow, numRows,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
+        {
+            checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
+            const size_t segStartRow = imageSegmentInfo.firstRow;
+
+            if (startRow <= segStartRow)
+            {
+                // We have the first row of this image segment, so we're
+                // responsible for the image subheader
+                if (seg == 0)
+                {
+                    // For the very first image segment, we're responsible for
+                    // the file header too
+                    numBytes += mFileHeader.size();
+                }
+
+                numBytes += mImageSubheaders[seg].size();
+            }
+
+            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+            if (numRowsPerBlock != 0 &&
+                imageDataEndRow >= imageSegmentInfo.endRow())
+            {
+                const size_t numLeftovers =
+                        imageSegmentInfo.numRows % numRowsPerBlock;
+                if (numLeftovers != 0)
+                {
+                    // We need to finish the block
+                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
+                    numRowsToWrite += numPadRows;
+                }
+            }
+
+            numBytes += numRowsToWrite * mNumBytesPerRow;
+
+            if (seg == mImageSegmentInfo.size() - 1 &&
+                imageSegmentInfo.endRow() == imageDataEndRow)
+            {
+                // When we write out the last row of the last image segment, we
+                // tack on the DES(s)
+                numBytes += mDesSubheaderAndData.size();
+            }
+        }
+    }
+
+    return numBytes;
+}
+
+void ByteProvider::getBytes(const void* imageData,
+                            size_t startRow,
+                            size_t numRows,
+                            nitf::Off& fileOffset,
+                            NITFBufferList& buffers) const
+{
+    fileOffset = std::numeric_limits<nitf::Off>::max();
+    buffers.clear();
+
+    const size_t imageDataEndRow = startRow + numRows;
+
+    size_t numPadRowsSoFar(0);
+
+    for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
+    {
+        // See if we're in this segment
+        const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+
+        size_t startGlobalRowToWrite;
+        size_t numRowsToWrite;
+        if (imageSegmentInfo.isInRange(startRow, numRows,
+                                       startGlobalRowToWrite,
+                                       numRowsToWrite))
+        {
+            checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
+            const size_t segStartRow = imageSegmentInfo.firstRow;
+
+            if (startRow <= segStartRow)
+            {
+                // We have the first row of this image segment, so we're
+                // responsible for the image subheader
+                if (seg == 0)
+                {
+                    // For the very first image segment, we're responsible for
+                    // the file header too
+                    fileOffset = 0;
+                    buffers.pushBack(mFileHeader);
+                }
+
+                if (buffers.empty())
+                {
+                    fileOffset = mImageSubheaderFileOffsets[seg];
+                }
+                buffers.pushBack(mImageSubheaders[seg]);
+            }
+
+            // Figure out what offset of 'imageData' we're writing from
+            const size_t startLocalRowToWrite =
+                    startGlobalRowToWrite - startRow + numPadRowsSoFar;
+            const sys::byte* imageDataPtr =
+                    static_cast<const sys::byte*>(imageData) +
+                    startLocalRowToWrite * mNumBytesPerRow;
+
+            if (buffers.empty())
+            {
+                const size_t rowsInSegmentSkipped =
+                        startRow - segStartRow;
+
+                fileOffset = mImageSubheaderFileOffsets[seg] +
+                        mImageSubheaders[seg].size() +
+                        rowsInSegmentSkipped * mNumBytesPerRow;
+            }
+
+            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+            if (numRowsPerBlock != 0 &&
+                imageDataEndRow >= imageSegmentInfo.endRow())
+            {
+                const size_t numLeftovers =
+                        imageSegmentInfo.numRows % numRowsPerBlock;
+                if (numLeftovers != 0)
+                {
+                    // We need to finish the block
+                    // This is already accounted for in the incoming image
+                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
+                    numRowsToWrite += numPadRows;
+                    numPadRowsSoFar += numPadRows;
+                }
+            }
+
+            buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
+
+            if (seg == mImageSegmentInfo.size() - 1 &&
+                imageSegmentInfo.endRow() == imageDataEndRow)
+            {
+                // When we write out the last row of the last image segment, we
+                // tack on the DES(s)
+                buffers.pushBack(mDesSubheaderAndData);
+            }
+        }
+    }
 }
 }
