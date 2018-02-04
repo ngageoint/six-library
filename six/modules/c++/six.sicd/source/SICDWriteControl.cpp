@@ -59,9 +59,9 @@ void SICDWriteControl::writeHeaders()
     mWriter.prepareIO(*mIO, mRecord);
 
     const SICDByteProvider byteProvider(*this, mSchemaPaths);
+    mImageSegmentInfo = mInfos.at(0)->getImageSegments();
 
     // Write the file header
-    std::cout << "File header size is " << byteProvider.getFileHeader().size() << std::endl;
     write(byteProvider.getFileHeader());
 
     // Write image subheaders
@@ -76,7 +76,6 @@ void SICDWriteControl::writeHeaders()
         mIO->seek(imageSubheaderFileOffsets[ii], NITF_SEEK_SET);
         write(imageSubheaders[ii]);
         mImageDataStart[ii] = mIO->tell();
-        std::cout << "Data starts at " << mImageDataStart[ii] << std::endl;
     }
 
     // Write DES subheader and data (i.e. XML)
@@ -107,7 +106,6 @@ void SICDWriteControl::save(void* imageData,
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
     const size_t numPixelsTotal = dims.area() * NUM_BANDS;
     const bool doByteSwap = shouldByteSwap();
-    std::cout << "Byte swap: " << doByteSwap << std::endl;
 
     // Byte swap if needed
     if (doByteSwap)
