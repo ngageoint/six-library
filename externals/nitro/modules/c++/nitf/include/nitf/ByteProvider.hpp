@@ -33,15 +33,30 @@
 
 namespace nitf
 {
-// For multi-segment cases, only handles vertical stacking
-// where # cols matches (checked)
-// # bytes/pixel matches (checked)
-// Handles image segments and DESs
-// Does not handle graphics or text
-
 /*!
- * Provides the contents of all of the NITF headers as well as their offsets
- * in the file.  Does not handle graphics or text segments.
+ * \class ByteProvider
+ * \brief Used to provide corresponding raw NITF bytes (including NITF headers)
+ * when provided with some AOI of the pixel data.  The idea is that if
+ * getBytes() is called multiple times, eventually for the entire image, the
+ * raw bytes provided back will be the entire NITF file.  This abstraction is
+ * useful if separate threads, processes, or even machines have only portions of
+ * the NITF pixel data and are all trying to write out a single file; in
+ * that scenario, this class provides all the raw bytes corresponding to the
+ * caller's AOI, including NITF headers if necessary.  The caller does not need
+ * to understand anything about the NITF file layout in order to write out the
+ * file.  The bytes are intentionally provided back as a series of pointers
+ * rather than one contiguous block of memory in order to minimize the number of
+ * copies.
+ *
+ * Limitations:
+ * - Graphics, labels, texts, and reserved extensions are not supported
+ * - Image segments and data extension segments are supported.
+ * - TREs are supported in the file header and/or image subheaders in either
+ * the user-defined or extended sections
+ * - Multiple image segments are supported, but only where the images are
+ * intended to be vertically stacked (so the number of columns must match and
+ * all indexing will be as if the image segments are intended to be vertically
+ * stacked in order.  ILOC and IALVL are not checked).
  *
  * The NITF layout is
  * (lastSeg = mImageSubheaderFileOffsets.size() - 1):
@@ -75,48 +90,75 @@ namespace nitf
  * desSubheaderAndData
  *
  */
-
 class ByteProvider
 {
 public:
     typedef std::pair<const void*, size_t> PtrAndLength;
 
+    /*!
+     * \param record Pre-populated NITF record.  All TREs, image subheader, and
+     * DES subheader information must be filled out.  Record won't be modified.
+     * \param desData Optional DES data (one per DES subheader).  These are
+     * pointers to the raw DES binary data itself (just data, not subheader).
+     * \param numRowsPerBlock The number of rows per block.  Defaults to no
+     * blocking.
+     * \param numColsPerBlock The number of columns per block.  Defaults to no
+     * blocking.
+     */
     ByteProvider(Record& record,
                  const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
+    /*!
+     * Destructor.  No virtual methods but this is virtual in case it's useful
+     * to inherit from this class and use it polymorphically.
+     */
     virtual ~ByteProvider();
 
-    /*!
-     * \return The total number of bytes in the NITF
-     */
+    //! \return The total number of bytes in the NITF
     nitf::Off getFileNumBytes() const
     {
         return mFileNumBytes;
     }
 
+    //! \return The raw file header bytes
     const std::vector<sys::byte>& getFileHeader() const
     {
         return mFileHeader;
     }
 
+    /*!
+     * \return The raw bytes for each image subheader.  Vector size matches the
+     * number of image segments.
+     */
     const std::vector<std::vector<sys::byte> >& getImageSubheaders() const
     {
         return mImageSubheaders;
     }
 
+    /*!
+     * \return The raw bytes for each DES (subheader immediately followed by
+     * raw DES data).  Vector size matches the number of data extension segments.
+     */
     const std::vector<sys::byte>& getDesSubheaderAndData() const
     {
         return mDesSubheaderAndData;
     }
 
+    /*!
+     * \return The file offset for each image subheader.  Vector size matches
+     * the number of image segments.
+     */
     const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const
     {
         return mImageSubheaderFileOffsets;
     }
 
+    /*!
+     * \return The file offset for the first DES subheader.
+     */
     nitf::Off getDesSubheaderFileOffset() const
     {
         return mDesSubheaderFileOffset;
@@ -193,8 +235,23 @@ public:
     std::auto_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
+    /*!
+     * Default constructor.  Expectation is that if an inheriting class uses
+     * this constructor, the inheriting class will call initialize() later in
+     * its constructor.
+     */
     ByteProvider();
 
+    /*!
+     * \param record Pre-populated NITF record.  All TREs, image subheader, and
+     * DES subheader information must be filled out.  Record won't be modified.
+     * \param desData Optional DES data (one per DES subheader).  These are
+     * pointers to the raw DES binary data itself (just data, not subheader).
+     * \param numRowsPerBlock The number of rows per block.  Defaults to no
+     * blocking.
+     * \param numColsPerBlock The number of columns per block.  Defaults to no
+     * blocking.
+     */
     void initialize(Record& record,
                     const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
@@ -210,6 +267,7 @@ private:
                        size_t numRowsToWrite) const;
 
 private:
+    // Represents the row information for a NITF image segment
     struct SegmentInfo
     {
         SegmentInfo() :
@@ -240,25 +298,20 @@ private:
     size_t mNumCols;
     size_t mOverallNumRowsPerBlock;
 
-    // Per segment
-    std::vector<size_t> mNumRowsPerBlock;
+    std::vector<size_t> mNumRowsPerBlock; // Per segment
     size_t mNumColsPerBlock;
     size_t mNumBytesPerRow;
     size_t mNumBytesPerPixel;
 
-    // Per segment
-    std::vector<SegmentInfo> mImageSegmentInfo;
+    std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
     std::vector<sys::byte> mFileHeader;
-
-    // Per segment
-    std::vector<std::vector<sys::byte> > mImageSubheaders;
+    std::vector<std::vector<sys::byte> > mImageSubheaders; // Per segment
 
     // All DES subheaders and data together contiguously
     std::vector<sys::byte> mDesSubheaderAndData;
 
-    // Per segment
-    std::vector<nitf::Off> mImageSubheaderFileOffsets;
+    std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset;
     nitf::Off mFileNumBytes;
 };

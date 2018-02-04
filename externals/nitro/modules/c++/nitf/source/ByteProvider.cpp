@@ -118,6 +118,17 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     // methods are non-const
     nitf::Record record = inRecord.clone();
 
+    // This stuff is low priority so not supported yet
+    if (record.getNumGraphics() > 0 ||
+        record.getNumLabels() > 0 ||
+        record.getNumTexts() > 0 ||
+        record.getNumReservedExtensions() > 0)
+    {
+        throw except::NotImplementedException(Ctxt(
+                "Graphics, labels, text, and reserved extensions not yet "
+                "supported"));
+    }
+
     nitf::Writer writer;
     writer.prepareIO(io, record);
 
