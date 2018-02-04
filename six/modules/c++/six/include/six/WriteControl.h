@@ -227,11 +227,17 @@ public:
         mOwnLog = log ? ownLog : true;
     }
 
-    void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
+    void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
     {
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
+    }
+
+    //! \return XML registry being used by the writer
+    const XMLControlRegistry* getXMLControlRegistry() const
+    {
+        return mXMLRegistry;
     }
 
     static
