@@ -20,6 +20,7 @@
  *
  */
 
+#include <six/sicd/SICDByteProvider.h>
 #include <six/sicd/SICDWriteControl.h>
 
 namespace six
@@ -57,36 +58,30 @@ void SICDWriteControl::writeHeaders()
 {
     mWriter.prepareIO(*mIO, mRecord);
 
-    std::vector<sys::byte> fileHeader;
-    std::vector<std::vector<sys::byte> > imageSubheaders;
-    std::vector<sys::byte> desSubheaderAndData;
-    std::vector<nitf::Off> imageSubheaderFileOffsets;
-    nitf::Off desSubheaderFileOffset;
-    nitf::Off fileNumBytes;
-    getFileLayout(mSchemaPaths,
-                  fileHeader,
-                  imageSubheaders,
-                  desSubheaderAndData,
-                  imageSubheaderFileOffsets,
-                  mImageSegmentInfo,
-                  desSubheaderFileOffset,
-                  fileNumBytes);
+    const SICDByteProvider byteProvider(*this, mSchemaPaths);
 
     // Write the file header
-    write(fileHeader);
+    std::cout << "File header size is " << byteProvider.getFileHeader().size() << std::endl;
+    write(byteProvider.getFileHeader());
 
     // Write image subheaders
+    const std::vector<std::vector<sys::byte> >& imageSubheaders =
+            byteProvider.getImageSubheaders();
+    const std::vector<nitf::Off>& imageSubheaderFileOffsets =
+            byteProvider.getImageSubheaderFileOffsets();
+
     mImageDataStart.resize(imageSubheaders.size());
     for (size_t ii = 0; ii < imageSubheaders.size(); ++ii)
     {
         mIO->seek(imageSubheaderFileOffsets[ii], NITF_SEEK_SET);
         write(imageSubheaders[ii]);
         mImageDataStart[ii] = mIO->tell();
+        std::cout << "Data starts at " << mImageDataStart[ii] << std::endl;
     }
 
     // Write DES subheader and data (i.e. XML)
-    mIO->seek(desSubheaderFileOffset, NITF_SEEK_SET);
-    write(desSubheaderAndData);
+    mIO->seek(byteProvider.getDesSubheaderFileOffset(), NITF_SEEK_SET);
+    write(byteProvider.getDesSubheaderAndData());
 }
 
 void SICDWriteControl::save(void* imageData,
@@ -112,6 +107,7 @@ void SICDWriteControl::save(void* imageData,
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
     const size_t numPixelsTotal = dims.area() * NUM_BANDS;
     const bool doByteSwap = shouldByteSwap();
+    std::cout << "Byte swap: " << doByteSwap << std::endl;
 
     // Byte swap if needed
     if (doByteSwap)
