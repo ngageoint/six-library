@@ -57,11 +57,24 @@ ByteProvider::ByteProvider() :
 {
 }
 
+ByteProvider::ByteProvider(Record& record,
+                           const std::vector<PtrAndLength>& desData,
+                           size_t numRowsPerBlock,
+                           size_t numColsPerBlock) :
+    mNumCols(0),
+    mOverallNumRowsPerBlock(0),
+    mNumColsPerBlock(0),
+    mNumBytesPerRow(0),
+    mNumBytesPerPixel(0)
+{
+    initialize(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+
 ByteProvider::~ByteProvider()
 {
 }
 
-void ByteProvider::initialize(nitf::Record& record,
+void ByteProvider::initialize(Record& record,
                               const std::vector<PtrAndLength>& desData,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)

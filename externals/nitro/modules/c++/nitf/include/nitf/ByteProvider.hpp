@@ -38,9 +38,55 @@ namespace nitf
 // # bytes/pixel matches (checked)
 // Handles image segments and DESs
 // Does not handle graphics or text
+
+/*!
+ * Provides the contents of all of the NITF headers as well as their offsets
+ * in the file.  Does not handle graphics or text segments.
+ *
+ * The NITF layout is
+ * (lastSeg = mImageSubheaderFileOffsets.size() - 1):
+ *
+ * Offset 0
+ * ========
+ * fileHeader
+ *
+ * Offset mImageSubheaderFileOffsets[0]
+ * ===================================
+ * mImageSubheaders[0]
+ *
+ * Offset mImageSubheaderFileOffsets[0] + mImageSubheaders[0].size()
+ * ===============================================================
+ * <Raw pixel data for first image segment.  Must be written in Big Endian
+ * format.>
+ *
+ * ...
+ *
+ * Offset mImageSubheaderFileOffsets[lastSeg]
+ * ===================================
+ * mImageSubheaders[lastSeg]
+ *
+ * Offset mImageSubheaderFileOffsets[lastSeg] + mImageSubheaders[lastSeg].size()
+ * ===========================================================================
+ * <Raw pixel data for last image segment.  Must be written in Big Endian
+ * format.>
+ *
+ * Offset desSubheaderFileOffset
+ * =============================
+ * desSubheaderAndData
+ *
+ */
+
 class ByteProvider
 {
 public:
+    typedef std::pair<const void*, size_t> PtrAndLength;
+
+    ByteProvider(Record& record,
+                 const std::vector<PtrAndLength>& desData =
+                            std::vector<PtrAndLength>(),
+                    size_t numRowsPerBlock = 0,
+                    size_t numColsPerBlock = 0);
+
     virtual ~ByteProvider();
 
     /*!
@@ -49,6 +95,31 @@ public:
     nitf::Off getFileNumBytes() const
     {
         return mFileNumBytes;
+    }
+
+    const std::vector<sys::byte>& getFileHeader() const
+    {
+        return mFileHeader;
+    }
+
+    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const
+    {
+        return mImageSubheaders;
+    }
+
+    const std::vector<sys::byte>& getDesSubheaderAndData() const
+    {
+        return mDesSubheaderAndData;
+    }
+
+    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const
+    {
+        return mImageSubheaderFileOffsets;
+    }
+
+    nitf::Off getDesSubheaderFileOffset() const
+    {
+        return mDesSubheaderFileOffset;
     }
 
     /*!
@@ -122,53 +193,15 @@ public:
     std::auto_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
-    typedef std::pair<const void*, size_t> PtrAndLength;
-
     ByteProvider();
 
-    void initialize(nitf::Record& record,
+    void initialize(Record& record,
                     const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
 private:
-    /*!
-     * Provides the contents of all of the NITF headers as well as their offsets
-     * in the file.  Does not handle graphics or text segments.
-     *
-     * The NITF layout is
-     * (lastSeg = mImageSubheaderFileOffsets.size() - 1):
-     *
-     * Offset 0
-     * ========
-     * fileHeader
-     *
-     * Offset mImageSubheaderFileOffsets[0]
-     * ===================================
-     * mImageSubheaders[0]
-     *
-     * Offset mImageSubheaderFileOffsets[0] + mImageSubheaders[0].size()
-     * ===============================================================
-     * <Raw pixel data for first image segment.  Must be written in Big Endian
-     * format.>
-     *
-     * ...
-     *
-     * Offset mImageSubheaderFileOffsets[lastSeg]
-     * ===================================
-     * mImageSubheaders[lastSeg]
-     *
-     * Offset mImageSubheaderFileOffsets[lastSeg] + mImageSubheaders[lastSeg].size()
-     * ===========================================================================
-     * <Raw pixel data for last image segment.  Must be written in Big Endian
-     * format.>
-     *
-     * Offset desSubheaderFileOffset
-     * =============================
-     * desSubheaderAndData
-     *
-     */
     void getFileLayout(nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
 
