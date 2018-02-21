@@ -3922,6 +3922,11 @@ nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
             img->dataLength - img->maskHeader.imageDataOffset,
             &(img->blockInfo), img->blockMask, error) )
         {
+            // On failure, the decompressor frees the decompressionControl
+            // and its members.
+            // Need to set it to NULL so future destructors don't try
+            // to destruct it again.
+            img->decompressionControl = NULL;
             nitf_BlockingInfo_destruct(&result);
             return NULL;
         }
