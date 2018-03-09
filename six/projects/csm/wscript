@@ -5,7 +5,7 @@ PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
-from waflib import Errors
+from waflib import Errors, Options
 
 DIRS = 'external'
 
@@ -20,39 +20,29 @@ def configure(conf):
 
     # Get the platform name
     # TODO: Should beef up the Linux and Solaris naming conventions
-    enableCSM = True
-    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
-    winRegex = r'win32'
-    osxRegex = r'darwin'
-    if re.match(linuxRegex, sys.platform):
-        platformName = 'linux'
-    elif re.match(solarisRegex, sys.platform):
-        platformName = 'solaris'
-    elif re.match(winRegex, sys.platform):
-        # NOTE: When there are multiple versions of VS installed, even if you
-        #       run in the VS command prompt that puts that version of VS first
-        #       on the path, to really get waf to set env['MSVC_VERSION']
-        #       properly, you may need to call out --msvc_version explicitly
-        #       at configure time (otherwise I think msvc.py picks a different
-        #       one but you end up with the one from the command prompt since
-        #       it's first on your path).
-        #       For example, if you're building with VS 2008 Express, use:
-        #       --enable-32bit "--msvc_version=msvc 9.0Exp"
-        if 'MSVC_VERSION' in conf.env:
+    enableCSM = Options.options.enable_csm
+    if enableCSM:
+        linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
+        solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+        winRegex = r'win32'
+        if re.match(linuxRegex, sys.platform):
+            platformName = 'linux'
+        elif re.match(solarisRegex, sys.platform):
+            platformName = 'solaris'
+        elif re.match(winRegex, sys.platform):
+            # NOTE: When there are multiple versions of VS installed, even if you
+            #       run in the VS command prompt that puts that version of VS first
+            #       on the path, to really get waf to set env['MSVC_VERSION']
+            #       properly, you may need to call out --msvc_version explicitly
+            #       at configure time (otherwise I think msvc.py picks a different
+            #       one but you end up with the one from the command prompt since
+            #       it's first on your path).
+            #       For example, if you're building with VS 2008 Express, use:
+            #       --enable-32bit "--msvc_version=msvc 9.0Exp"
             platformName = 'winVC' + str(conf.env['MSVC_VERSION']).replace('.', '')
         else:
-            # If we are building with gcc on Windows, some of the CSM stuff
-            # doesn't compile.  No one is going to ever need to build CSM
-            # plugins in this paradigm as MSP and GXP won't be able to use
-            # them anyhow
-            enableCSM = False
-    elif re.match(osxRegex,sys.platform):
-        platformName='darwin'
-    else:
-        raise Errors.WafError('Unsupported platform %s' % sys.platform)
+            raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-    if enableCSM:
         pluginVersion = '113'
         csmVersion = '301'
         conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
