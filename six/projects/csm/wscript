@@ -5,7 +5,7 @@ PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
-from waflib import Errors, Options
+from waflib import Errors, Options, Logs
 
 DIRS = 'external'
 
@@ -60,6 +60,8 @@ def configure(conf):
             pluginVersion = '113'
             csmVersion = '301'
             conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
+        else:
+            Logs.warn('Disabling CSM as it is not supported on this platform')
 
 def build(bld):
     if 'SIX_CSM_PLATFORM_NAME' in bld.env:
