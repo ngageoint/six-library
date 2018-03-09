@@ -5,7 +5,7 @@ PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
-from waflib import Errors, Options, Logs
+from waflib import Errors, Options
 
 DIRS = 'external'
 
@@ -25,7 +25,6 @@ def configure(conf):
         linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
         solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
         winRegex = r'win32'
-        osxRegex = r'darwin'
         if re.match(linuxRegex, sys.platform):
             platformName = 'linux'
         elif re.match(solarisRegex, sys.platform):
@@ -40,28 +39,13 @@ def configure(conf):
             #       it's first on your path).
             #       For example, if you're building with VS 2008 Express, use:
             #       --enable-32bit "--msvc_version=msvc 9.0Exp"
-            if 'MSVC_VERSION' in conf.env:
-                platformName = 'winVC' + str(conf.env['MSVC_VERSION']).replace('.', '')
-            else:
-                # If we are building with gcc on Windows, some of the CSM stuff
-                # doesn't compile.  No one is going to ever need to build CSM
-                # plugins in this paradigm as MSP and GXP won't be able to use
-                # them anyhow
-                enableCSM = False
-        elif re.match(osxRegex,sys.platform):
-            # The CSM build doesn't work on Mac... again, no one will need to build
-            # plugins there though
-            platformName='darwin'
-            enableCSM = False
+            platformName = 'winVC' + str(conf.env['MSVC_VERSION']).replace('.', '')
         else:
             raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-        if enableCSM:
-            pluginVersion = '113'
-            csmVersion = '301'
-            conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
-        else:
-            Logs.warn('Disabling CSM as it is not supported on this platform')
+        pluginVersion = '113'
+        csmVersion = '301'
+        conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
 
 def build(bld):
     if 'SIX_CSM_PLATFORM_NAME' in bld.env:
