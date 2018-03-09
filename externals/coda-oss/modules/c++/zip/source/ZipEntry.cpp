@@ -22,8 +22,6 @@
 
 #include "zip/ZipEntry.h"
 
-using namespace zip;
-
 const static char* sZipFileMadeByStr[] = {
         "MS-DOS and OS/2 (FAT / VFAT / FAT32 file systems)", "Amiga",
         "OpenVMS", "UNIX", "VM/CMS", "Atari ST", "OS/2 H.P.F.S.", "Macintosh",
@@ -31,6 +29,8 @@ const static char* sZipFileMadeByStr[] = {
         "Acorn Risc", "VFAT", "alternative MVS", "BeOS", "Tandem", "OS/400",
         "OS/X (Darwin)", NULL };
 
+namespace zip
+{
 void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
         sys::Size_T inLen)
 {
@@ -117,4 +117,4 @@ std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
     os << "uncompressed: " << ze.getUncompressedSize() << std::endl;
     return os;
 }
-
+}

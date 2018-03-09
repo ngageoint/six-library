@@ -20,21 +20,17 @@
  *
  */
 
-#include "sys/sys_config.h"
-
-#include "sys/UTCDateTime.h"
-
-#include "sys/Conf.h"
-#include "except/Exception.h"
-#include "str/Convert.h"
-#include "str/Manip.h"
-
 #include <errno.h>
 
+#include <sys/sys_config.h>
+#include <sys/UTCDateTime.h>
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <str/Convert.h>
+#include <str/Manip.h>
 
 namespace
 {
-
 // These constants and functions were taken from the NRT DateTime.c implementation
 
 const long UNIX_EPOCH_YEAR(1970); // EPOCH = Jan 1 1970 00:00:00
@@ -77,13 +73,13 @@ int getNumFullDaysInYearSoFar(int year, int month, int dayOfMonth)
     numFullDays += dayOfMonth - 1;
     return numFullDays;
 }
-
 }
 
-const char sys::UTCDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%dT%H:%M:%SZ";
+namespace sys
+{
+const char UTCDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%dT%H:%M:%SZ";
 
-
-void sys::UTCDateTime::toMillis()
+void UTCDateTime::toMillis()
 {
     if (mSecond < 0.0 || mSecond >= 60.0 ||
             mMinute < 0 || mMinute > 59 ||
@@ -130,7 +126,7 @@ void sys::UTCDateTime::toMillis()
     mDayOfWeek = (numDaysSinceEpoch + 5) % 7;
 }
 
-void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
+void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
     // Would like to use the reentrant version.  If we don't have one, cross
     // our fingers and hope the regular function actually is reentrant
@@ -154,13 +150,13 @@ void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 #endif
 }
 
-sys::UTCDateTime::UTCDateTime()
+UTCDateTime::UTCDateTime()
 {
     setNow();
     toMillis();
 }
 
-sys::UTCDateTime::UTCDateTime(int hour, int minute, double second)
+UTCDateTime::UTCDateTime(int hour, int minute, double second)
 {
     setNow();
 
@@ -171,7 +167,7 @@ sys::UTCDateTime::UTCDateTime(int hour, int minute, double second)
     toMillis();
 }
 
-sys::UTCDateTime::UTCDateTime(int year, int month, int day)
+UTCDateTime::UTCDateTime(int year, int month, int day)
 {
     setNow();
 
@@ -183,7 +179,7 @@ sys::UTCDateTime::UTCDateTime(int year, int month, int day)
     fromMillis();
 }
 
-sys::UTCDateTime::UTCDateTime(int year, int month, int day,
+UTCDateTime::UTCDateTime(int year, int month, int day,
                         int hour, int minute, double second)
 {
     setNow();
@@ -199,35 +195,35 @@ sys::UTCDateTime::UTCDateTime(int year, int month, int day,
     fromMillis();
 }
 
-sys::UTCDateTime::UTCDateTime(double timeInMillis)
+UTCDateTime::UTCDateTime(double timeInMillis)
 {
     mTimeInMillis = timeInMillis;
 
     fromMillis();
 }
 
-sys::UTCDateTime::UTCDateTime(const std::string& time,
-                              const std::string& format)
+UTCDateTime::UTCDateTime(const std::string& time, const std::string& format)
 {
     setTime(time, format);
     fromMillis();
 }
 
-std::string sys::UTCDateTime::format() const
+std::string UTCDateTime::format() const
 {
     return format(DEFAULT_DATETIME_FORMAT);
 }
 
-std::ostream& operator<<(std::ostream& os, const sys::UTCDateTime& dateTime)
+std::ostream& operator<<(std::ostream& os, const UTCDateTime& dateTime)
 {
     os << dateTime.format().c_str();
     return os;
 }
 
-std::istream& operator>>(std::istream& is, sys::UTCDateTime& dateTime)
+std::istream& operator>>(std::istream& is, UTCDateTime& dateTime)
 {
     std::string str;
     is >> str;
-    dateTime.setTime(str, sys::UTCDateTime::DEFAULT_DATETIME_FORMAT);
+    dateTime.setTime(str, UTCDateTime::DEFAULT_DATETIME_FORMAT);
     return is;
+}
 }

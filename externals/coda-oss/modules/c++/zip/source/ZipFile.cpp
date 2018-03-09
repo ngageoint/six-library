@@ -22,14 +22,14 @@
 
 #include "zip/ZipFile.h"
 
-using namespace zip;
-
 #define Z_READ_SHORT_INC(BUF, OFF) readShort(&BUF[OFF]); OFF += 2
 #define Z_READ_INT_INC(BUF, OFF) readInt(&BUF[OFF]); OFF += 4
 
+namespace zip
+{
 ZipFile::~ZipFile()
 {
-    for (unsigned int i = 0; i < mEntries.size(); ++i)
+    for (size_t i = 0; i < mEntries.size(); ++i)
     {
         // Delete ZipEntry
         delete mEntries[i];
@@ -229,16 +229,16 @@ void ZipFile::readCentralDirValues(sys::ubyte* buf, sys::SSize_T len)
     mComment = std::string((const char*) (buf + EOCD_LEN), commentLength);
 }
 
-std::ostream& operator<<(std::ostream& os, const zip::ZipFile& zf)
+std::ostream& operator<<(std::ostream& os, const ZipFile& zf)
 {
     os << "central directory length: " << zf.getCentralDirSize() << std::endl;
     os << "central directory offset: " << zf.getCentralDirOffset() << std::endl;
     os << "comment: " << zf.getComment() << std::endl;
-    for (zip::ZipFile::Iterator p = zf.begin(); p != zf.end(); ++p)
+    for (ZipFile::Iterator p = zf.begin(); p != zf.end(); ++p)
     {
         ZipEntry* entry = *p;
         os << *entry << std::endl;
     }
     return os;
 }
-
+}

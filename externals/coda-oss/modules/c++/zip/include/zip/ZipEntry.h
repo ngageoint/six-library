@@ -147,12 +147,10 @@ public:
     }
 };
 
-}
-
 /*!
  *  Output stream overload
  */
-std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze);
+std::ostream& operator<<(std::ostream& os, const ZipEntry& ze);
+}
 
 #endif
-

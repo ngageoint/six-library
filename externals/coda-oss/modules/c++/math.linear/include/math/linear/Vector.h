@@ -444,45 +444,40 @@ template<typename _T> Vector<_T>
     return v;
 }
 
-}
-}
-
 /*!
  *  Matrix-vector multiplication.  Produces
  *  a vector object.
  */
 
 template<typename _T> 
-    math::linear::Vector<_T>
-    operator*(const math::linear::Matrix2D<_T>& m, 
-              const math::linear::Vector<_T>& v)
+Vector<_T>
+operator*(const Matrix2D<_T>& m, const Vector<_T>& v)
 {
-    return math::linear::Vector<_T>(m * v.matrix());
+    return Vector<_T>(m * v.matrix());
 }
 
 /*!
  *  Reverse order template overload for scalar * Vector
  */
-template<typename _T> math::linear::Vector<_T>
-    operator*(_T scalar, const math::linear::Vector<_T>& v)
+template<typename _T> Vector<_T>
+operator*(_T scalar, const Vector<_T>& v)
 {
     return v * scalar;
 }
-
 
 /*!
  *  Pretty(?)-print vector
  */
 template<typename _T> 
-    std::ostream& operator<<(std::ostream& os,
-                             const math::linear::Vector<_T>& v)
+std::ostream& operator<<(std::ostream& os, const Vector<_T>& v)
 {
     for (size_t i = 0; i < v.size(); ++i)
     {
         os << std::setw(10) << v[i] << " ";
     }
     return os;
-    
+}
+}
 }
 
 #endif
