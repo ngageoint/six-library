@@ -475,7 +475,7 @@ typedef nitf_DecompressionControl *
 
   \return On error, FALSE is returned
 
-  On error, the error object is set
+  On error, the error object is set and the decompression object is destructed
 */
 
 typedef NITF_BOOL
