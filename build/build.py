@@ -801,6 +801,7 @@ def configureCompilerOptions(self):
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
+    osxRegex = r'darwin'
 
     cxxCompiler = self.env['COMPILER_CXX']
     ccCompiler = self.env['COMPILER_CC']
@@ -848,7 +849,8 @@ def configureCompilerOptions(self):
     elif ccCompiler == 'gcc' or ccCompiler == 'icc':
         if not re.match(winRegex, sys_platform):
             self.env.append_value('LIB_DL', 'dl')
-            self.env.append_value('LIB_NSL', 'nsl')
+            if not re.match(osxRegex, sys_platform):
+                self.env.append_value('LIB_NSL', 'nsl')
         self.env.append_value('LIB_MATH', 'm')
         self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
@@ -897,7 +899,7 @@ def configureCompilerOptions(self):
             #       Is there an equivalent to get the same functionality or
             #       is this an OS limitation?
             linkFlags = '-fPIC'
-            if not re.match(solarisRegex, sys_platform):
+            if (not re.match(osxRegex, sys_platform)) and (not re.match(solarisRegex, sys_platform)):
                 linkFlags += ' -Wl,-E'
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
@@ -1311,6 +1313,7 @@ def process_swig_linkage(tsk):
 
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     darwinRegex = r'i.86-apple-.*'
+    osxRegex = r'darwin'
 
     platform = getPlatform(default=Options.platform)
     compiler = tsk.env['COMPILER_CXX']
@@ -1338,7 +1341,7 @@ def process_swig_linkage(tsk):
         rpath_pattern = '-Rpath%s'
 
     # overrides for osx
-    if re.match(darwinRegex,platform):
+    if re.match(darwinRegex,platform) or re.match(osxRegex,platform):
         while '-bundle' in tsk.env.LINKFLAGS:
             tsk.env.LINKFLAGS.remove('-bundle')
         tsk.env.LINKFLAGS.append('-dynamiclib')
