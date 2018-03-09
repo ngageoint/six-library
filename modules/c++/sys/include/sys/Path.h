@@ -42,12 +42,11 @@ class Path
 {
 public:
     Path();
-    Path(const Path& parent, std::string child);
-    Path(std::string parent, std::string child);
-    Path(std::string pathName);
+    Path(const Path& parent, const std::string& child);
+    Path(const std::string& parent, const std::string& child);
+    Path(const std::string& pathName);
     Path& operator=(const Path& path);
     Path(const Path& path);
-    ~Path();
 
     inline operator std::string() const
     {
@@ -273,9 +272,8 @@ protected:
     OS mOS;
 };
 
-}
-
 std::ostream& operator<<(std::ostream& os, const sys::Path& path);
 std::istream& operator>>(std::istream& os, sys::Path& path);
+}
 
 #endif

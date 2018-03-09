@@ -382,23 +382,19 @@ template<size_t _Order, typename _T>
     return p*cv;
 }
 
-
-
-}
-}
-
 /*!
  *  Print our poly (y first, so the 2D version looks right)
  */
 template<size_t _Order, typename _T>
-    std::ostream& operator << (std::ostream& out,
-                               const math::poly::Fixed1D<_Order, _T>& p)
+    std::ostream& operator << (std::ostream& out, const Fixed1D<_Order, _T>& p)
 {
     for (size_t i = 0 ; i <= _Order; i++)
     {
         out << p[i] << "*y^" << i << " ";
     }
     return out;
+}
+}
 }
 
 #endif

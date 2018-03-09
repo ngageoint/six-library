@@ -27,6 +27,7 @@
 
 #include <sys/Conf.h>
 #include <sys/Runnable.h>
+#include <sys/AtomicCounter.h>
 #include <except/Exception.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
