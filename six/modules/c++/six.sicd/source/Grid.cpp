@@ -160,7 +160,7 @@ DirectionParameters::calculateWeightFunction() const
         }
         else if (windowName == "KAISER")
         {
-            weightFunction.reset(new Kaiser(weightType->parameters[0]));
+            weightFunction.reset(new Kaiser(double(weightType->parameters[0])));
         }
     }
 
