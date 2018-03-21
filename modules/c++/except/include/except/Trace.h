@@ -24,8 +24,9 @@
 #define __EXCEPT_TRACE_H__
 
 #include <list>
-#include <sstream>
-#include "except/Context.h"
+#include <ostream>
+
+#include <except/Context.h>
 
 /*!
  * \file Trace.h
@@ -105,8 +106,8 @@ private:
     //! The name of the internal stack wrapped by the Trace
     std::list<Context> mStack;
 };
-}
 
-std::ostream& operator<<(std::ostream& os, const except::Trace& t);
+std::ostream& operator<<(std::ostream& os, const Trace& t);
+}
 
 #endif

@@ -369,14 +369,12 @@ public:
 
 */
 };
-}
-}
 
 template<size_t _OrderX, size_t _OrderY, typename _T>
-math::poly::Fixed2D<_OrderX, _OrderY, _T>
-    operator * (double cv, const math::poly::Fixed2D<_OrderX, _OrderY, _T>& p)
+Fixed2D<_OrderX, _OrderY, _T>
+    operator * (double cv, const Fixed2D<_OrderX, _OrderY, _T>& p)
 {
-    math::poly::Fixed2D<_OrderX, _OrderY> copy(p);
+    Fixed2D<_OrderX, _OrderY> copy(p);
 
     for (size_t i = 0; i <= _OrderX; i++)
     {
@@ -387,7 +385,7 @@ math::poly::Fixed2D<_OrderX, _OrderY, _T>
 
 template<size_t _OtherOrderX, size_t _OtherOrderY, typename _T>
 std::ostream&
-operator << (std::ostream& out, const math::poly::Fixed2D<_OtherOrderX, _OtherOrderY, _T>& p)
+operator << (std::ostream& out, const Fixed2D<_OtherOrderX, _OtherOrderY, _T>& p)
 {
     for (size_t i = 0 ; i <= _OtherOrderX ; i++)
     {
@@ -395,4 +393,7 @@ operator << (std::ostream& out, const math::poly::Fixed2D<_OtherOrderX, _OtherOr
     }
     return out;
 }
+}
+}
+
 #endif
