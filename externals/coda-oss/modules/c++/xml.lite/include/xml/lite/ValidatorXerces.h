@@ -130,13 +130,12 @@ private:
     std::auto_ptr<xercesc::DOMLSParser> mValidator;
 
 };
-}
-}
 
 //! stream the entire log -- newline separated
-std::ostream& operator<< (
-    std::ostream& out, 
-    const xml::lite::ValidationErrorHandler& errorHandler);
+std::ostream& operator<< (std::ostream& out,
+                          const ValidationErrorHandler& errorHandler);
+}
+}
 
 #endif
 

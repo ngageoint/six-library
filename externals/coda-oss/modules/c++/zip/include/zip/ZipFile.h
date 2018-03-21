@@ -151,12 +151,10 @@ public:
 
 };
 
-}
-
 /*!
  *  Output stream overload
  */
-std::ostream& operator<<(std::ostream& os, const zip::ZipFile& zf);
+std::ostream& operator<<(std::ostream& os, const ZipFile& zf);
+}
 
 #endif
-

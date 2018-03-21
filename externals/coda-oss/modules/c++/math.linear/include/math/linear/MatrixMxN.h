@@ -1375,7 +1375,35 @@ template<> inline
 template<> inline
     MatrixMxN<3, 3, float> inverse<3, float>(const MatrixMxN<3, 3, float>& mx);
 
+/*!
+ *  Could possibly be more clever here, and template the actual matrix
+ */
+template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
+operator*(_T scalar, const MatrixMxN<_MD, _ND, _T>& m)
+{
+    return m.multiply(scalar);
+}
 
+/*!
+ *  Try to pretty print the Matrix to an ostream.
+ *  \return Reference to ostream
+ */
+template<size_t _MD, size_t _ND, typename _T>
+std::ostream& operator<<(std::ostream& os, const MatrixMxN<_MD, _ND, _T>& m)
+{
+    os << "(" << _MD << ',' << _ND << ")" << std::endl;
+
+    for (size_t i = 0; i < _MD; ++i)
+    {
+        for (size_t j = 0; j < _ND; ++j)
+        {
+            os << std::setw(10) << m(i, j) << " ";
+        }
+        os << std::endl;
+    }
+
+    return os;
+}
 }
 }
 
@@ -1497,19 +1525,7 @@ math::linear::inverse<3, float>(const math::linear::MatrixMxN<3, 3, float>& mx)
     inv.scale( 1.0f / determinant );
     
     return inv;
-
 }
-
-
-/*!
- *  Could possibly be more clever here, and template the actual matrix
- */
-template<size_t _MD, size_t _ND, typename _T> math::linear::MatrixMxN<_MD, _ND, _T>
-    operator*(_T scalar, const math::linear::MatrixMxN<_MD, _ND, _T>& m)
-{
-    return m.multiply(scalar);
-}
-
 
 /*!
  *  This method "cleans" a Matrix of unknown type.  Concrete instantiations could
@@ -1548,32 +1564,5 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix,
     }
     return mx;
 }
-
-/*!
- *  Try to pretty print the Matrix to an ostream.
- *  \return Reference to ostream
- */
-template<size_t _MD, size_t _ND, typename _T>
-    std::ostream& operator<<(std::ostream& os,
-                             const math::linear::MatrixMxN<_MD, _ND, _T>& m)
-{
-
-
-    size_t i, j;
-    os << "(" << _MD << ',' << _ND << ")" << std::endl;
-    
-    for (i = 0; i < _MD; ++i)
-    {
-        for (j = 0; j < _ND; ++j)
-        {
-            os << std::setw(10) << m(i, j) << " ";
-        }
-        os << std::endl;
-    }
-
-
-    return os;
-}
-
 
 #endif

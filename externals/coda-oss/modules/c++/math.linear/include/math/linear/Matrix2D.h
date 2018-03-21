@@ -1271,9 +1271,7 @@ template<typename _T> inline Matrix2D<_T>
     inv.scale( 1.0 / determinant );
 
     return inv;
-
 }
-
 
 /*!
  *  Generalized inverse method (currently uses LU decomposition).
@@ -1358,11 +1356,9 @@ template<typename _T> inline
 {
     return mx.transpose() * inverse(mx * mx.transpose());
 }
-}
-}
 
-template<typename _T> math::linear::Matrix2D<_T>
-    operator*(_T scalar, const math::linear::Matrix2D<_T>& m)
+template<typename _T> Matrix2D<_T>
+operator*(_T scalar, const Matrix2D<_T>& m)
 {
     return m.multiply(scalar);
 }
@@ -1372,25 +1368,21 @@ template<typename _T> math::linear::Matrix2D<_T>
  *  \return Reference to ostream
  */
 template<typename _T>
-    std::ostream& operator<<(std::ostream& os,
-                             const math::linear::Matrix2D<_T>& m)
+std::ostream& operator<<(std::ostream& os, const Matrix2D<_T>& m)
 {
-
-
-    size_t i, j;
     os << "(" << m.rows() << ',' << m.cols() << ")" << std::endl;
-    for (i = 0; i < m.rows(); ++i)
+    for (size_t i = 0; i < m.rows(); ++i)
     {
-        for (j = 0; j < m.cols(); ++j)
+        for (size_t j = 0; j < m.cols(); ++j)
         {
             os << std::setw(10) << m(i, j) << " ";
         }
         os << std::endl;
     }
 
-
     return os;
 }
-
+}
+}
 
 #endif
