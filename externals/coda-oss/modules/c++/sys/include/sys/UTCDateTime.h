@@ -23,12 +23,13 @@
 #ifndef __SYS_UTC_DATE_TIME_H__
 #define __SYS_UTC_DATE_TIME_H__
 
+#include <ostream>
+#include <istream>
+
 #include <sys/DateTime.h>
-#include <iostream>
 
 namespace sys
 {
-
 /*!
  *  Representation of a UTC date/time structure.
  */
@@ -83,12 +84,10 @@ public:
      *  2011-10-19T11:59:46Z
      */
     std::string format() const;
-
 };
 
+std::ostream& operator<<(std::ostream& os, const UTCDateTime& dateTime);
+std::istream& operator>>(std::istream& is, UTCDateTime& dateTime);
 }
 
-std::ostream& operator<<(std::ostream& os, const sys::UTCDateTime& dateTime);
-std::istream& operator>>(std::istream& is, sys::UTCDateTime& dateTime);
-
-#endif//__SYS_UTC_DATE_TIME_H__
+#endif

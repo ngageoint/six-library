@@ -25,7 +25,7 @@
 #define __EXCEPT_CONTEXT_H__
 
 #include <string>
-#include <iostream>
+#include <ostream>
 
 /*!
  * \file
@@ -58,21 +58,14 @@ public:
             int line,
             const std::string& func,
             const std::string& time,
-            const std::string& message) : mMessage(message), mTime(time), mFunc(func),
-            mFile(file), mLine(line)
-    {}
-
-    /*!
-     * Copy constructor
-     * \param c The context to copy
-     */
-    Context(const Context& c);
-
-    /*!
-     * Assignment operator
-     * \param c The context to copy
-     */
-    Context& operator=(const Context& c);
+            const std::string& message) :
+        mMessage(message),
+        mTime(time),
+        mFunc(func),
+        mFile(file),
+        mLine(line)
+    {
+    }
 
     /*!
      * Get the message describing the exception that occurred
@@ -131,8 +124,7 @@ public:
     int mLine;
 };
 
+std::ostream& operator<< (std::ostream& os, const Context& c);
 }
-
-std::ostream& operator<< (std::ostream& os, const except::Context& c);
 
 #endif
