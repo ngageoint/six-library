@@ -51,10 +51,11 @@ public:
      * Constructs a Logger with an optional name
      * \param name  (optional) Name of the logger
      */
-    Logger(std::string name = "") :
+    Logger(const std::string& name = "") :
         mName(name)
     {
     }
+
     virtual ~Logger();
 
     //! Logs a message at the specified LogLevel

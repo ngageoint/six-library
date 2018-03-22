@@ -20,29 +20,32 @@
  *
  */
 
-#include "sys/Path.h"
 #include <algorithm>
 
-sys::Path::Path()
+#include <sys/Path.h>
+
+namespace sys
+{
+Path::Path()
 {
 }
 
-sys::Path::Path(const Path& parent, std::string child)
+Path::Path(const Path& parent, const std::string& child) :
+    mPathName(joinPaths(parent.mPathName, child))
 {
-    mPathName = joinPaths(parent.mPathName, child);
 }
 
-sys::Path::Path(std::string parent, std::string child)
+Path::Path(const std::string& parent, const std::string& child) :
+    mPathName(joinPaths(parent, child))
 {
-    mPathName = joinPaths(parent, child);
 }
 
-sys::Path::Path(std::string pathName) :
+Path::Path(const std::string& pathName) :
     mPathName(pathName)
 {
 }
 
-sys::Path& sys::Path::operator=(const sys::Path& path)
+Path& Path::operator=(const Path& path)
 {
     if (this != &path)
     {
@@ -51,18 +54,14 @@ sys::Path& sys::Path::operator=(const sys::Path& path)
     return *this;
 }
 
-sys::Path::Path(const sys::Path& path)
-{
-    mPathName = path.mPathName;
-}
-
-sys::Path::~Path()
+Path::Path(const Path& path) :
+    mPathName(path.mPathName)
 {
 }
 
-std::string sys::Path::normalizePath(const std::string& path)
+std::string Path::normalizePath(const std::string& path)
 {
-    std::string osDelimStr(sys::Path::delimiter());
+    std::string osDelimStr(Path::delimiter());
     std::string delimStr = osDelimStr;
 
     //if it's not a forward slash, add it as one of the options
@@ -70,7 +69,7 @@ std::string sys::Path::normalizePath(const std::string& path)
         delimStr += "/";
 
     //get the drive parts, if any -- we will use the drive later
-    sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
+    Path::StringPair driveParts = Path::splitDrive(path);
 
     std::vector<std::string> parts = str::Tokenizer(path, delimStr);
 
@@ -117,14 +116,14 @@ std::string sys::Path::normalizePath(const std::string& path)
     return out.str();
 }
 
-std::string sys::Path::joinPaths(const std::string& path1,
+std::string Path::joinPaths(const std::string& path1,
                                  const std::string& path2)
 {
-    std::string osDelimStr(sys::Path::delimiter());
+    std::string osDelimStr(Path::delimiter());
 
     //check to see if path2 is a root path
     if (str::startsWith(path2, osDelimStr) || str::startsWith(path2, "/")
-            || !sys::Path::splitDrive(path2).first.empty())
+            || !Path::splitDrive(path2).first.empty())
         return path2;
 
     std::ostringstream out;
@@ -135,11 +134,11 @@ std::string sys::Path::joinPaths(const std::string& path1,
     return out.str();
 }
 
-std::vector<std::string> sys::Path::separate(const std::string& path)
+std::vector<std::string> Path::separate(const std::string& path)
 {
-    sys::Path workingPath = path;
+    Path workingPath = path;
     std::vector<std::string> pathList;
-    sys::Path::StringPair pair;
+    Path::StringPair pair;
     while ((pair = workingPath.split()).first != workingPath.getPath())
     {
         if (!pair.second.empty())
@@ -151,36 +150,36 @@ std::vector<std::string> sys::Path::separate(const std::string& path)
     return pathList;
 }
 
-std::string sys::Path::absolutePath(const std::string& path)
+std::string Path::absolutePath(const std::string& path)
 {
-    std::string osDelimStr(sys::Path::delimiter());
+    std::string osDelimStr(Path::delimiter());
 
-    sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
+    Path::StringPair driveParts = Path::splitDrive(path);
     if (!str::startsWith(path, osDelimStr) &&
         !str::startsWith(path, "/") &&
         driveParts.first.empty())
     {
-        return sys::Path::normalizePath(sys::Path::joinPaths(
-            sys::OS().getCurrentWorkingDirectory(), path));
+        return Path::normalizePath(Path::joinPaths(
+            OS().getCurrentWorkingDirectory(), path));
     }
     else
     {
-        return sys::Path::normalizePath(path);
+        return Path::normalizePath(path);
     }
 }
 
-bool sys::Path::isAbsolutePath(const std::string& path)
+bool Path::isAbsolutePath(const std::string& path)
 {
 #ifdef WIN32
-    return !sys::Path::splitDrive(path).first.empty();
+    return !Path::splitDrive(path).first.empty();
 #else
-    return (!path.empty() && path[0] == sys::Path::delimiter()[0]);
+    return (!path.empty() && path[0] == Path::delimiter()[0]);
 #endif
 }
 
-sys::Path::StringPair sys::Path::splitPath(const std::string& path)
+Path::StringPair Path::splitPath(const std::string& path)
 {
-    std::string delimStr(sys::Path::delimiter());
+    std::string delimStr(Path::delimiter());
 
     //if it's not a forward slash, add it as one of the options
     if (delimStr != "/")
@@ -188,11 +187,11 @@ sys::Path::StringPair sys::Path::splitPath(const std::string& path)
 
     std::string::size_type pos = path.find_last_of(delimStr);
     if (pos == std::string::npos)
-        return sys::Path::StringPair("", path);
+        return Path::StringPair("", path);
     else if (!path.empty() && pos == path.length() - 1)
     {
         // Just call ourselves again without the delimiter
-        return sys::Path::splitPath(path.substr(0, path.length() - 1));
+        return Path::splitPath(path.substr(0, path.length() - 1));
     }
 
     std::string::size_type lastRootPos = path.find_last_not_of(delimStr, pos);
@@ -202,29 +201,29 @@ sys::Path::StringPair sys::Path::splitPath(const std::string& path)
     else
         root = path.substr(0, lastRootPos + 1);
     std::string base = path.substr(path.find_first_not_of(delimStr, pos));
-    return sys::Path::StringPair(root, base);
+    return Path::StringPair(root, base);
 }
 
-sys::Path::StringPair sys::Path::splitExt(const std::string& path)
+Path::StringPair Path::splitExt(const std::string& path)
 {
     std::string::size_type pos = path.rfind(".");
     if (pos == std::string::npos)
-        return sys::Path::StringPair(path, "");
-    return sys::Path::StringPair(path.substr(0, pos), path.substr(pos));
+        return Path::StringPair(path, "");
+    return Path::StringPair(path.substr(0, pos), path.substr(pos));
 }
 
-std::string sys::Path::basename(const std::string& path, bool removeExt)
+std::string Path::basename(const std::string& path, bool removeExt)
 {
-    std::string baseWithExtension = sys::Path::splitPath(path).second;
+    std::string baseWithExtension = Path::splitPath(path).second;
     if (removeExt)
     {
-        return sys::Path::splitExt(baseWithExtension).first;
+        return Path::splitExt(baseWithExtension).first;
     }
     return baseWithExtension;
 
 }
 
-sys::Path::StringPair sys::Path::splitDrive(const std::string& path)
+Path::StringPair Path::splitDrive(const std::string& path)
 {
 #ifdef WIN32
     std::string::size_type pos = path.find(":");
@@ -233,11 +232,11 @@ sys::Path::StringPair sys::Path::splitDrive(const std::string& path)
 #endif
 
     if (pos == std::string::npos)
-        return sys::Path::StringPair("", path);
-    return sys::Path::StringPair(path.substr(0, pos + 1), path.substr(pos + 1));
+        return Path::StringPair("", path);
+    return Path::StringPair(path.substr(0, pos + 1), path.substr(pos + 1));
 }
 
-const char* sys::Path::delimiter()
+const char* Path::delimiter()
 {
 #ifdef WIN32
     return "\\";
@@ -246,7 +245,7 @@ const char* sys::Path::delimiter()
 #endif
 }
 
-const char* sys::Path::separator()
+const char* Path::separator()
 {
 #ifdef WIN32
     return ";";
@@ -255,9 +254,9 @@ const char* sys::Path::separator()
 #endif
 }
 
-std::vector<std::string> sys::Path::list(const std::string& path)
+std::vector<std::string> Path::list(const std::string& path)
 {
-    sys::OS os;
+    OS os;
     if (!os.exists(path) || !os.isDirectory(path))
     {
         std::ostringstream oss;
@@ -266,7 +265,7 @@ std::vector<std::string> sys::Path::list(const std::string& path)
         throw except::Exception(Ctxt(oss.str()));
     }
     std::vector<std::string> listing;
-    sys::Directory directory;
+    Directory directory;
     std::string p = directory.findFirstFile(path.c_str());
     while (!p.empty())
     {
@@ -276,16 +275,16 @@ std::vector<std::string> sys::Path::list(const std::string& path)
     return listing;
 }
 
-std::ostream& operator<<(std::ostream& os, const sys::Path& path)
+std::ostream& operator<<(std::ostream& os, const Path& path)
 {
     os << path.getPath().c_str();
     return os;
 }
-std::istream& operator>>(std::istream& is, sys::Path& path)
+std::istream& operator>>(std::istream& is, Path& path)
 {
     std::string str;
     is >> str;
     path.reset(str);
     return is;
 }
-
+}

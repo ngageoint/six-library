@@ -29,8 +29,10 @@
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
-using namespace xml::lite;
-
+namespace xml
+{
+namespace lite
+{
 std::ostream& operator<< (std::ostream& out, 
                           const ValidationErrorHandler& errorHandler)
 {
@@ -38,7 +40,7 @@ std::ostream& operator<< (std::ostream& out,
     return out;
 }
 
-bool xml::lite::ValidationErrorHandler::handleError(
+bool ValidationErrorHandler::handleError(
         const ValidationError& err)
 {
     std::string level;
@@ -59,10 +61,10 @@ bool xml::lite::ValidationErrorHandler::handleError(
     }
 
     // transcode the file and message
-    xml::lite::XercesLocalString message(err.getMessage());
+    XercesLocalString message(err.getMessage());
 
     // create o
-    xml::lite::ValidationInfo info (
+    ValidationInfo info (
         message.str(), level, mID, 
         (size_t)err.getLocation()->getLineNumber());
     mErrorLog.push_back(info);
@@ -123,7 +125,7 @@ ValidatorXerces::ValidatorXerces(
 
     // add a error handler we still have control over
     mErrorHandler.reset(
-            new xml::lite::ValidationErrorHandler());
+            new ValidationErrorHandler());
     config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, 
                          mErrorHandler.get());
 
@@ -168,7 +170,7 @@ bool ValidatorXerces::validate(const std::string& xml,
         xercesc::XMLPlatformUtils::fgMemoryManager);
 
     // expand to the wide character data for use with xerces
-    xml::lite::XercesLocalString xmlWide(xml);
+    XercesLocalString xmlWide(xml);
     input.setStringData(xmlWide.toXMLCh());
 
     // validate the document
@@ -183,5 +185,7 @@ bool ValidatorXerces::validate(const std::string& xml,
     mErrorHandler->setID("");
 
     return (!mErrorHandler->getErrorLog().empty());
+}
+}
 }
 #endif

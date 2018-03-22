@@ -22,14 +22,17 @@
 
 #include <except/Trace.h>
 
-std::ostream& operator<<(std::ostream& os, const except::Trace& t)
+namespace except
 {
-    const std::list<except::Context>& stack = t.getStack();
+std::ostream& operator<<(std::ostream& os, const Trace& t)
+{
+    const std::list<Context>& stack = t.getStack();
 
-    for (std::list<except::Context>::const_iterator it = stack.begin();
+    for (std::list<Context>::const_iterator it = stack.begin();
             it != stack.end(); ++it)
     {
         os << *it << std::endl;
     }
     return os;
+}
 }
