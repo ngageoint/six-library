@@ -43,7 +43,9 @@ template <class T>
 class SharedPtr : public std::shared_ptr<T>
 {
 public:
-    SharedPtr() = default;
+    SharedPtr() : std::shared_ptr<T>()
+    {
+    }
 
     using std::shared_ptr<T>::shared_ptr;
 
