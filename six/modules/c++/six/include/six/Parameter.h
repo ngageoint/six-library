@@ -60,50 +60,17 @@ public:
     {
         mValue = str::toString<T>(value);
     }
-    //!  Return a double
-    inline operator double() const
+
+    /*!
+     * \tparam T Desired (presumably numeric) type to convert to
+     *
+     * \return Value as a T type
+     */
+    template <typename T>
+    inline
+    operator T() const
     {
-        return str::toType<double>(mValue);
-    }
-    //!  Return a uchar
-    inline operator sys::Uint8_T() const
-    {
-        return str::toType<sys::Uint8_T>(mValue);
-    }
-    //!  Return a char
-    inline operator sys::Int8_T() const
-    {
-        return str::toType<sys::Uint8_T>(mValue);
-    }
-    //!  Return a ushort
-    inline operator sys::Uint16_T() const
-    {
-        return str::toType<sys::Uint16_T>(mValue);
-    }
-    //!  Return a short
-    inline operator sys::Int16_T() const
-    {
-        return str::toType<sys::Uint16_T>(mValue);
-    }
-    //!  Return a uint
-    inline operator sys::Uint32_T() const
-    {
-        return str::toType<sys::Uint32_T>(mValue);
-    }
-    //!  Return an int
-    inline operator sys::Int32_T() const
-    {
-        return str::toType<sys::Uint32_T>(mValue);
-    }
-    //!  64-bit uint
-    inline operator sys::Uint64_T() const
-    {
-        return str::toType<sys::Uint64_T>(mValue);
-    }
-    //!  64-bit int
-    inline operator sys::Int64_T() const
-    {
-        return str::toType<sys::Int64_T>(mValue);
+        return str::toType<T>(mValue);
     }
 
     //!  Get a string as a string

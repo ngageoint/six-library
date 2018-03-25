@@ -21,7 +21,7 @@ def configure(conf):
     # Get the platform name
     # TODO: Should beef up the Linux and Solaris naming conventions
     enableCSM = Options.options.enable_csm
-    if enableCSM:
+    if enableCSM and 'HAVE_CSM' in conf.env:
         linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
         solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
         winRegex = r'win32'
