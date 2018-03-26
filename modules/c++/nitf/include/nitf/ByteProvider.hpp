@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __NITF_BYTE_PROVIDER_HPP__
+#define __NITF_BYTE_PROVIDER_HPP__
 
 #include <vector>
 #include <utility>
@@ -316,3 +318,5 @@ private:
     nitf::Off mFileNumBytes;
 };
 }
+
+#endif
