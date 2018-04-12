@@ -84,7 +84,8 @@ struct Range
     bool containsAll(size_t startElement, size_t numElements) const
     {
         return (numElements == 0 ||
-                (contains(startElement) && contains(startElement + numElements - 1)));
+                (contains(startElement) &&
+                 contains(startElement + numElements - 1)));
     }
 
     /*!
@@ -100,7 +101,7 @@ struct Range
                 startElementToTest + numElementsToTest;
 
         // Ranges do not intersect
-        if(mStartElement >= endElementToTest ||
+        if (mStartElement >= endElementToTest ||
                 endElement() <= startElementToTest)
         {
             return 0;
@@ -116,6 +117,27 @@ struct Range
     bool empty() const
     {
         return (mNumElements == 0);
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     *
+     * \return True if ranges match, false otherwise
+     */
+    bool operator==(const Range& rhs) const
+    {
+        return (mStartElement == rhs.mStartElement &&
+                mNumElements == rhs.mNumElements);
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     *
+     * \return False if ranges match, true otherwise
+     */
+    bool operator!=(const Range& rhs) const
+    {
+        return !(*this == rhs);
     }
 };
 }
