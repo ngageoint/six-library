@@ -23,7 +23,6 @@ def getSchemaPaths(pathname):
 
 def findOutputToSlantPolynomials(complexData, orderX, orderY):
     polynomialFitter = SixSicdUtilities.getPolynomialFitter(complexData)
-    print(dir(polynomialFitter))
     sampleSpacing = RowColDouble(complexData.grid.row.sampleSpacing,
                                  complexData.grid.col.sampleSpacing)
     offset = RowColSizeT(complexData.imageData.firstRow,
