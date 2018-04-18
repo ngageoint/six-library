@@ -4,7 +4,7 @@
  * =========================================================================
  * This file is part of sio.lite-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sio.lite-python is free software; you can redistribute it and/or modify
@@ -17,16 +17,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
 """
 
 from coda.sio_lite import write
+from coda.sio_lite import FileHeader
 import numpy as np
 import sys
+import tempfile
 
 if __name__ == '__main__':
     if len(sys.argv) >= 3:
@@ -45,3 +47,15 @@ if __name__ == '__main__':
     trans = np.transpose(array)
     write(trans, transposedOutputPathname)
 
+    # Make sure we can write with different dtype arguments
+    tempfiles = [tempfile.mkstemp()[1] for _ in range(3)]
+    write(array, tempfiles[0], 'float32')
+    write(array, tempfiles[1], np.float32)
+    write(array, tempfiles[2], FileHeader.FLOAT)
+
+    contents = []
+    for temp in tempfiles:
+        with open(temp, 'r') as f:
+            contents.append(f.read())
+    for data in contents[1:]:
+        assert data == contents[0]
