@@ -446,9 +446,11 @@ def write(numpyArray, outputPathname, elementType = None):
 # Make sure this array is sized properly
     if len(numpyArray.shape) != 2:
         raise Exception("Only 2 dimensional images are supported")
+    if elementType is None:
+        elementType = numpyArray.dtype
 
-    if elementType == None:
-        elementType = sioTypeFromDtype(numpyArray.dtype)
+    if type(elementType) != int:
+        elementType = sioTypeFromDtype(elementType)
 
     if not numpyArray.flags['C_CONTIGUOUS']:
         numpyArray = numpy.ascontiguousarray(numpyArray)
