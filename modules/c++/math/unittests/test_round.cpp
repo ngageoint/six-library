@@ -157,6 +157,25 @@ TEST_CASE(testRoundDigits)
     double actual8 = math::round(v8, 2);
     TEST_ASSERT_ALMOST_EQ(actual8, expected8);
 }
+
+TEST_CASE(testCeilingDivide)
+{
+    size_t n0 = 0;
+    size_t d0 = 1;
+    TEST_ASSERT_EQ(math::ceilingDivide(n0, d0), 0);
+
+    size_t n1 = 4;
+    size_t d1 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n1, d1), 2);
+
+    size_t n2 = 5;
+    size_t d2 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n2, d2), 3);
+
+    size_t n3 = 1;
+    size_t d3 = 0;
+    TEST_THROWS(math::ceilingDivide(n3, d3));
+}
 }
 
 int main()
@@ -164,5 +183,6 @@ int main()
     TEST_CHECK(testFix);
     TEST_CHECK(testRound);
     TEST_CHECK(testRoundDigits);
+    TEST_CHECK(testCeilingDivide);
     return 0;
 }
