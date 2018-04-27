@@ -1,8 +1,7 @@
-import os, sys
+import sys
 from os.path import join
 from waflib import Options
-from waflib.TaskGen import feature, before, task_gen
-from build import writeConfig, getConfigFilename
+from build import writeConfig, getConfigFilename, getDriverIncludes
 
 build = distclean = lambda x: None
 
@@ -36,7 +35,7 @@ def configure(conf):
             linkType = 's' if staticLink else ''
             libType = 'gd' if debug else ''
             boostVer = Options.options.boost_version
-            libName = ['libboost_serialization', msvcVer[1], 'mt', 
+            libName = ['libboost_serialization', msvcVer[1], 'mt',
                        linkType + libType, boostVer]
             libName = '-'.join(filter(lambda x: x is not '', libName))
             incPath = boostHome
@@ -49,7 +48,7 @@ def configure(conf):
 
         # link the serialization library
         libSer = conf.check(lib=libName,
-                            uselib_store='BOOST_SERIALIZATION', 
+                            uselib_store='BOOST_SERIALIZATION',
                             header_name='boost/archive/tmpdir.hpp',
                             function_name='boost::archive::tmpdir',
                             libpath=libPath, includes=incPath,
@@ -66,11 +65,10 @@ def configure(conf):
         conf.define('HAVE_BOOST', 1 if conf.env['HAVE_BOOST'] else 0)
     writeConfig(conf, boost_callback, boost_guard)
 
-def build (bld) :
+
+def build(bld):
     # install the boost_config.h file
-    b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith(boost_guard)][0]
-    targetPath = bld.root.find_dir(join(bld.bldnode.abspath(), b[1])).path_from(bld.path)
     bld(name='boost_config', features='install_tgt',
         files=[getConfigFilename(boost_guard)],
-        dir=bld.path.make_node(targetPath),
+        dir=bld.path.make_node(getDriverIncludes(bld, boost_guard)),
         install_path=join(bld.env['install_includedir'], boost_guard))
