@@ -74,10 +74,22 @@ ByteProvider::~ByteProvider()
 {
 }
 
-void ByteProvider::initialize(Record& record,
-                              const std::vector<PtrAndLength>& desData,
-                              size_t numRowsPerBlock,
-                              size_t numColsPerBlock)
+void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
+                                          std::vector<sys::byte>& rawBytes)
+{
+    rawBytes.resize(stream.getSize());
+    if (!rawBytes.empty())
+    {
+        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+    }
+
+    stream.clear();
+}
+
+void ByteProvider::initializeImpl(Record& record,
+                                  const std::vector<PtrAndLength>& desData,
+                                  size_t numRowsPerBlock,
+                                  size_t numColsPerBlock)
 {
     // Get all the file headers and offsets
     getFileLayout(record, desData);
@@ -105,6 +117,23 @@ void ByteProvider::initialize(Record& record,
     {
         mNumRowsPerBlock = getImageBlocker()->getNumRowsPerBlock();
     }
+}
+
+void ByteProvider::initialize(Record& record,
+                              const std::vector<PtrAndLength>& desData,
+                              size_t numRowsPerBlock,
+                              size_t numColsPerBlock)
+{
+    // Set image lengths
+    const size_t numImages = record.getNumImages();
+    mImageDataLengths.resize(numImages);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment imageSegment = record.getImages()[ii];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+        mImageDataLengths[ii] = subheader.getNumBytesOfImageData();
+    }
+    initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
 void ByteProvider::getFileLayout(nitf::Record& inRecord,
@@ -139,8 +168,6 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     const size_t numImages = record.getNumImages();
     mImageSubheaders.resize(numImages);
     mImageSegmentInfo.resize(numImages);
-    std::vector<nitf::Off> imageDataLens(numImages);
-    nitf::Off imageSegmentsTotalNumBytes(0);
 
     for (size_t ii = 0; ii < numImages; ++ii)
     {
@@ -152,11 +179,6 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
                                    record.getVersion(),
                                    comratOff);
         copyFromStreamAndClear(*byteStream, mImageSubheaders[ii]);
-
-        imageDataLens[ii] = subheader.getNumBytesOfImageData();
-
-        imageSegmentsTotalNumBytes +=
-                mImageSubheaders[ii].size() + imageDataLens[ii];
 
         const size_t numCols = subheader.getNumCols();
         const size_t numBands = subheader.getNumImageBands();
@@ -193,6 +215,13 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
                 0 : mImageSegmentInfo[ii - 1].endRow();
 
         mImageSegmentInfo[ii].numRows = subheader.getNumRows();
+    }
+
+    nitf::Off imageSegmentsTotalNumBytes(0);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        imageSegmentsTotalNumBytes +=
+                mImageSubheaders[ii].size() + mImageDataLengths[ii];
     }
 
     //--------------------------------------------------------------------------
@@ -255,7 +284,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
         writer.writeInt64Field(mImageSubheaders[ii].size(), NITF_LISH_SZ, '0',
                                 NITF_WRITER_FILL_LEFT);
 
-        writer.writeInt64Field(imageDataLens[ii], NITF_LI_SZ, '0',
+        writer.writeInt64Field(mImageDataLengths[ii], NITF_LI_SZ, '0',
                                 NITF_WRITER_FILL_LEFT);
     }
 
@@ -284,7 +313,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
          mImageSubheaderFileOffsets[ii] = offset;
          offset += static_cast<nitf::Off>(mImageSubheaders[ii].size()) +
-                 imageDataLens[ii];
+                 mImageDataLengths[ii];
     }
 
     // DES is right after that
@@ -346,10 +375,138 @@ void ByteProvider::checkBlocking(size_t seg,
     }
 }
 
+size_t ByteProvider::countBytesForImageData(
+        size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
+{
+    const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
+    const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+
+    if (numRowsPerBlock != 0 &&
+        imageDataEndRow >= imageSegmentInfo.endRow())
+    {
+        const size_t numLeftovers =
+                imageSegmentInfo.numRows % numRowsPerBlock;
+        if (numLeftovers != 0)
+        {
+            // We need to finish the block
+            const size_t numPadRows = numRowsPerBlock - numLeftovers;
+            numRowsToWrite += numPadRows;
+        }
+    }
+
+    return  numRowsToWrite * mNumBytesPerRow;
+}
+
+void ByteProvider::addImageData(
+        size_t seg,
+        size_t numRowsToWrite,
+        size_t startRow,
+        size_t imageDataEndRow,
+        size_t startGlobalRowToWrite,
+        const void* imageData,
+        size_t& numPadRowsSoFar,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    const SegmentInfo& imageSegmentInfo = mImageSegmentInfo[seg];
+    const size_t segStartRow = imageSegmentInfo.firstRow;
+
+    // Figure out what offset of 'imageData' we're writing from
+    const size_t startLocalRowToWrite =
+            startGlobalRowToWrite - startRow + numPadRowsSoFar;
+    const sys::byte* imageDataPtr =
+            static_cast<const sys::byte*>(imageData) +
+            startLocalRowToWrite * mNumBytesPerRow;
+
+    if (buffers.empty())
+    {
+        const size_t rowsInSegmentSkipped =
+                startRow - segStartRow;
+
+        fileOffset = mImageSubheaderFileOffsets[seg] +
+                mImageSubheaders[seg].size() +
+                rowsInSegmentSkipped * mNumBytesPerRow;
+    }
+
+    const size_t numPadRows = countBytesForImageData(seg, numRowsToWrite,
+            imageDataEndRow) / mNumBytesPerPixel;
+    numRowsToWrite += numPadRows;
+    numPadRowsSoFar += numPadRows;
+
+    buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
+}
+
+size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
+{
+    size_t numBytes = 0;
+    if (shouldAddHeader(seg, startRow))
+    {
+        numBytes += mFileHeader.size();
+    }
+    if (shouldAddSubheader(seg, startRow))
+    {
+        numBytes += mImageSubheaders[seg].size();
+    }
+    return numBytes;
+}
+
+bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const
+{
+    return seg == 0 && startRow == 0;
+}
+
+bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const
+{
+    const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
+    return startRow <= segStartRow;
+}
+
+void ByteProvider::addHeaders(size_t seg,
+        size_t startRow,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    if (shouldAddHeader(seg, startRow))
+    {
+        fileOffset = 0;
+        buffers.pushBack(mFileHeader);
+    }
+
+    if (shouldAddSubheader(seg, startRow))
+    {
+        if (buffers.empty())
+        {
+            fileOffset = mImageSubheaderFileOffsets[seg];
+        }
+        buffers.pushBack(mImageSubheaders[seg]);
+    }
+}
+
+bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
+{
+    // When we write out the last row of the last image segment, we
+    // tack on the DES(s)
+    return (seg == mImageSegmentInfo.size() - 1 &&
+            mImageSegmentInfo[seg].endRow() == imageDataEndRow);
+}
+
+size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
+{
+    return shouldAddDES(seg, imageDataEndRow) ? mDesSubheaderAndData.size() : 0;
+}
+
+void ByteProvider::addDES(size_t seg, size_t imageDataEndRow,
+        NITFBufferList& buffers) const
+{
+    if (shouldAddDES(seg, imageDataEndRow))
+    {
+        buffers.pushBack(mDesSubheaderAndData);
+    }
+}
+
 nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
 {
     nitf::Off numBytes(0);
-
     const size_t imageDataEndRow = startRow + numRows;
 
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
@@ -364,45 +521,10 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                                        numRowsToWrite))
         {
             checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
-            const size_t segStartRow = imageSegmentInfo.firstRow;
-
-            if (startRow <= segStartRow)
-            {
-                // We have the first row of this image segment, so we're
-                // responsible for the image subheader
-                if (seg == 0)
-                {
-                    // For the very first image segment, we're responsible for
-                    // the file header too
-                    numBytes += mFileHeader.size();
-                }
-
-                numBytes += mImageSubheaders[seg].size();
-            }
-
-            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
-            if (numRowsPerBlock != 0 &&
-                imageDataEndRow >= imageSegmentInfo.endRow())
-            {
-                const size_t numLeftovers =
-                        imageSegmentInfo.numRows % numRowsPerBlock;
-                if (numLeftovers != 0)
-                {
-                    // We need to finish the block
-                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
-                    numRowsToWrite += numPadRows;
-                }
-            }
-
-            numBytes += numRowsToWrite * mNumBytesPerRow;
-
-            if (seg == mImageSegmentInfo.size() - 1 &&
-                imageSegmentInfo.endRow() == imageDataEndRow)
-            {
-                // When we write out the last row of the last image segment, we
-                // tack on the DES(s)
-                numBytes += mDesSubheaderAndData.size();
-            }
+            numBytes += countBytesForHeaders(seg, startRow);
+            numBytes += countBytesForImageData(seg, numRowsToWrite,
+                    imageDataEndRow);
+            numBytes += countBytesForDES(seg, imageDataEndRow);
         }
     }
 
@@ -419,7 +541,6 @@ void ByteProvider::getBytes(const void* imageData,
     buffers.clear();
 
     const size_t imageDataEndRow = startRow + numRows;
-
     size_t numPadRowsSoFar(0);
 
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
@@ -434,69 +555,18 @@ void ByteProvider::getBytes(const void* imageData,
                                        numRowsToWrite))
         {
             checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
-            const size_t segStartRow = imageSegmentInfo.firstRow;
+            addHeaders(seg, startRow, fileOffset, buffers);
+            addImageData(seg,
+                    numRowsToWrite,
+                    startRow,
+                    imageDataEndRow,
+                    startGlobalRowToWrite,
+                    imageData,
+                    numPadRowsSoFar,
+                    fileOffset,
+                    buffers);
 
-            if (startRow <= segStartRow)
-            {
-                // We have the first row of this image segment, so we're
-                // responsible for the image subheader
-                if (seg == 0)
-                {
-                    // For the very first image segment, we're responsible for
-                    // the file header too
-                    fileOffset = 0;
-                    buffers.pushBack(mFileHeader);
-                }
-
-                if (buffers.empty())
-                {
-                    fileOffset = mImageSubheaderFileOffsets[seg];
-                }
-                buffers.pushBack(mImageSubheaders[seg]);
-            }
-
-            // Figure out what offset of 'imageData' we're writing from
-            const size_t startLocalRowToWrite =
-                    startGlobalRowToWrite - startRow + numPadRowsSoFar;
-            const sys::byte* imageDataPtr =
-                    static_cast<const sys::byte*>(imageData) +
-                    startLocalRowToWrite * mNumBytesPerRow;
-
-            if (buffers.empty())
-            {
-                const size_t rowsInSegmentSkipped =
-                        startRow - segStartRow;
-
-                fileOffset = mImageSubheaderFileOffsets[seg] +
-                        mImageSubheaders[seg].size() +
-                        rowsInSegmentSkipped * mNumBytesPerRow;
-            }
-
-            const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
-            if (numRowsPerBlock != 0 &&
-                imageDataEndRow >= imageSegmentInfo.endRow())
-            {
-                const size_t numLeftovers =
-                        imageSegmentInfo.numRows % numRowsPerBlock;
-                if (numLeftovers != 0)
-                {
-                    // We need to finish the block
-                    // This is already accounted for in the incoming image
-                    const size_t numPadRows = numRowsPerBlock - numLeftovers;
-                    numRowsToWrite += numPadRows;
-                    numPadRowsSoFar += numPadRows;
-                }
-            }
-
-            buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
-
-            if (seg == mImageSegmentInfo.size() - 1 &&
-                imageSegmentInfo.endRow() == imageDataEndRow)
-            {
-                // When we write out the last row of the last image segment, we
-                // tack on the DES(s)
-                buffers.pushBack(mDesSubheaderAndData);
-            }
+            addDES(seg, startRow, buffers);
         }
     }
 }

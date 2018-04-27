@@ -19,38 +19,30 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __NITF_BYTE_PROVIDER_HPP__
-#define __NITF_BYTE_PROVIDER_HPP__
+
+#ifndef __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
+#define __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
 
 #include <vector>
 #include <utility>
 #include <memory>
 
 #include <sys/Conf.h>
+#include <nitf/ByteProvider.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-#include <io/ByteStream.h>
+
 
 namespace nitf
 {
 /*!
- * \class ByteProvider
+ * \class CompressedByteProvider
  * \brief Used to provide corresponding raw NITF bytes (including NITF headers)
- * when provided with some AOI of the pixel data.  The idea is that if
- * getBytes() is called multiple times, eventually for the entire image, the
- * raw bytes provided back will be the entire NITF file.  This abstraction is
- * useful if separate threads, processes, or even machines have only portions of
- * the NITF pixel data and are all trying to write out a single file; in
- * that scenario, this class provides all the raw bytes corresponding to the
- * caller's AOI, including NITF headers if necessary.  The caller does not need
- * to understand anything about the NITF file layout in order to write out the
- * file.  The bytes are intentionally provided back as a series of pointers
- * rather than one contiguous block of memory in order to minimize the number of
- * copies.
- *
+ * when provided with some AOI of the compressed pixel data. See docstring
+ * of parent class for details.
  * Limitations:
  * - Graphics, labels, texts, and reserved extensions are not supported
  * - Image segments and data extension segments are supported.
@@ -61,111 +53,40 @@ namespace nitf
  * all indexing will be as if the image segments are intended to be vertically
  * stacked in order.  ILOC and IALVL are not checked).
  *
- * The NITF layout is
- * (lastSeg = mImageSubheaderFileOffsets.size() - 1):
- *
- * Offset 0
- * ========
- * fileHeader
- *
- * Offset mImageSubheaderFileOffsets[0]
- * ===================================
- * mImageSubheaders[0]
- *
- * Offset mImageSubheaderFileOffsets[0] + mImageSubheaders[0].size()
- * ===============================================================
- * <Raw pixel data for first image segment.  Must be written in Big Endian
- * format.>
- *
- * ...
- *
- * Offset mImageSubheaderFileOffsets[lastSeg]
- * ===================================
- * mImageSubheaders[lastSeg]
- *
- * Offset mImageSubheaderFileOffsets[lastSeg] + mImageSubheaders[lastSeg].size()
- * ===========================================================================
- * <Raw pixel data for last image segment.  Must be written in Big Endian
- * format.>
- *
- * Offset desSubheaderFileOffset
- * =============================
- * desSubheaderAndData
- *
+ * The NITF layout is described in ByteProvider.hpp
  */
-class ByteProvider
+class CompressedByteProvider : public ByteProvider
 {
 public:
-    typedef std::pair<const void*, size_t> PtrAndLength;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
      * DES subheader information must be filled out.  Record won't be modified.
+     * \param bytesPerBlock A vector for each image segment. Each inner vector
+     *        contains the compressed size for each block in the segment,
+     *        in bytes.
      * \param desData Optional DES data (one per DES subheader).  These are
      * pointers to the raw DES binary data itself (just data, not subheader).
      * \param numRowsPerBlock The number of rows per block.  Defaults to no
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
+     * \param maxRowsPerSegment The maximum rows allowed in an image segment
      */
-    ByteProvider(Record& record,
-                 const std::vector<PtrAndLength>& desData =
-                            std::vector<PtrAndLength>(),
-                    size_t numRowsPerBlock = 0,
-                    size_t numColsPerBlock = 0);
+    CompressedByteProvider(Record& record,
+            const std::vector<std::vector<size_t> >& bytesPerBlock,
+            const std::vector<PtrAndLength>& desData =
+                    std::vector<PtrAndLength>(),
+            size_t numRowsPerBlock = 0,
+            size_t numColsPerBlock = 0,
+            size_t maxRowsPerSegment = 0);
 
     /*!
      * Destructor.  No virtual methods but this is virtual in case it's useful
      * to inherit from this class and use it polymorphically.
      */
-    virtual ~ByteProvider();
+    virtual ~CompressedByteProvider();
 
-    //! \return The total number of bytes in the NITF
-    nitf::Off getFileNumBytes() const
-    {
-        return mFileNumBytes;
-    }
-
-    //! \return The raw file header bytes
-    const std::vector<sys::byte>& getFileHeader() const
-    {
-        return mFileHeader;
-    }
-
-    /*!
-     * \return The raw bytes for each image subheader.  Vector size matches the
-     * number of image segments.
-     */
-    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const
-    {
-        return mImageSubheaders;
-    }
-
-    /*!
-     * \return The raw bytes for each DES (subheader immediately followed by
-     * raw DES data).  Vector size matches the number of data extension segments.
-     */
-    const std::vector<sys::byte>& getDesSubheaderAndData() const
-    {
-        return mDesSubheaderAndData;
-    }
-
-    /*!
-     * \return The file offset for each image subheader.  Vector size matches
-     * the number of image segments.
-     */
-    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const
-    {
-        return mImageSubheaderFileOffsets;
-    }
-
-    /*!
-     * \return The file offset for the first DES subheader.
-     */
-    nitf::Off getDesSubheaderFileOffset() const
-    {
-        return mDesSubheaderFileOffset;
-    }
 
     /*!
      * Given a range of rows from [startRow, startRow + numRows), provide the
@@ -231,19 +152,13 @@ public:
                           nitf::Off& fileOffset,
                           NITFBufferList& buffers) const;
 
-    /*!
-     * \return ImageBlocker with settings in sync with how the image will be
-     * blocked in the NITF
-     */
-    std::auto_ptr<const ImageBlocker> getImageBlocker() const;
-
 protected:
     /*!
      * Default constructor.  Expectation is that if an inheriting class uses
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    ByteProvider();
+    CompressedByteProvider();
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -254,111 +169,34 @@ protected:
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
+     * \param maxRowsPerSegment The maximum rows allowed in an image segment
      */
     void initialize(Record& record,
-                    const std::vector<PtrAndLength>& desData =
-                            std::vector<PtrAndLength>(),
-                    size_t numRowsPerBlock = 0,
-                    size_t numColsPerBlock = 0);
+            const std::vector<std::vector<size_t> >& bytesPerBlock,
+            const std::vector<PtrAndLength>& desData =
+                    std::vector<PtrAndLength>(),
+            size_t numRowsPerBlock = 0,
+            size_t numColsPerBlock = 0,
+            size_t maxRowsPerSegment = 0);
 
-    static void copyFromStreamAndClear(io::ByteStream& stream,
-                                       std::vector<sys::byte>& rawBytes);
+    size_t countBytesForCompressedImageData(
+            size_t seg, size_t startRow, size_t numRowsToWrite) const;
 
-    size_t countBytesForImageData(
-            size_t seg, size_t numRowsToWrite,
-            size_t imageDataEndRow) const;
-
-    void addImageData(
+    size_t addImageData(
             size_t seg,
-            size_t numRowsToWrite,
             size_t startRow,
-            size_t imageDataEndRow,
-            size_t startGlobalRowToWrite,
-            const void* imageData,
-            size_t& numPadRowsSoFar,
+            size_t numRowsToWrite,
+            const sys::byte* imageData,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
-    size_t countBytesForHeaders(size_t seg, size_t startRow) const;
-    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const;
+private:
+    types::Range findBlocksToWrite(size_t seg, size_t startRow,
+            size_t numRowsToWrite) const;
 
-    void addHeaders(size_t seg, size_t startRow,
-            nitf::Off& fileOffset,
-            NITFBufferList& buffers) const;
-
-    /*
-     * These functions assume that we've already checked
-     * we're writing in a range which includes seg
-     */
-    bool shouldAddHeader(size_t seg, size_t startRow) const;
-    bool shouldAddSubheader(size_t seg, size_t startRow) const;
-    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const;
-
-    void addDES(size_t seg, size_t imageDataEndRow,
-                NITFBufferList& buffers) const;
-
-    void getFileLayout(nitf::Record& inRecord,
-                       const std::vector<PtrAndLength>& desData);
-
-    std::vector<size_t> mImageDataLengths;
-
-    void checkBlocking(size_t seg,
-                       size_t startGlobalRowToWrite,
-                       size_t numRowsToWrite) const;
-
-    void initializeImpl(
-            Record& record,
-            const std::vector<PtrAndLength>& desData,
-            size_t numRowsPerBlock,
-            size_t numColsPerBlock);
-
-    // Represents the row information for a NITF image segment
-    struct SegmentInfo
-    {
-        SegmentInfo() :
-            firstRow(0),
-            numRows(0)
-        {
-        }
-
-        size_t endRow() const
-        {
-            return (firstRow + numRows);
-        }
-
-        bool isInRange(size_t rangeStartRow,
-                       size_t rangeNumRows,
-                       size_t& firstGlobalRowInThisSegment,
-                       size_t& numRowsInThisSegment) const
-        {
-            return ImageSegmentComputer::Segment::isInRange(
-                    firstRow, endRow(), rangeStartRow, rangeNumRows,
-                    firstGlobalRowInThisSegment, numRowsInThisSegment);
-        }
-
-        size_t firstRow;
-        size_t numRows;
-    };
-
-    size_t mNumCols;
-    size_t mOverallNumRowsPerBlock;
-
-    std::vector<size_t> mNumRowsPerBlock; // Per segment
-    size_t mNumColsPerBlock;
-    size_t mNumBytesPerRow;
-    size_t mNumBytesPerPixel;
-
-    std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
-
-    std::vector<sys::byte> mFileHeader;
-    std::vector<std::vector<sys::byte> > mImageSubheaders; // Per segment
-
-    // All DES subheaders and data together contiguously
-    std::vector<sys::byte> mDesSubheaderAndData;
-
-    std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
-    nitf::Off mDesSubheaderFileOffset;
-    nitf::Off mFileNumBytes;
+private:
+    std::vector<std::vector<size_t> > mBytesInEachBlock;
+    size_t mMaxRowsPerSegment;
 };
 }
 
