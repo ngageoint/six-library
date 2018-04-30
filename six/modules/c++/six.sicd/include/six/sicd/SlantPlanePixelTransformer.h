@@ -65,21 +65,21 @@ public:
      *  \param pixel - Slant Plane pixel with (row,col) index
      *  \return      - Returns the ground plane location in ECEF
      */
-    scene::Vector3 toECEF(const types::RowCol<int>& pixel) const;
+    scene::Vector3 toECEF(const types::RowCol<double>& pixel) const;
 
     /*!
      *  \fn toLLA
      *  \param pixel - Slant Plane pixel with (row,col) index
      *  \return      - Returns the ground plane location in LLA
      */
-    scene::LatLonAlt toLLA(const types::RowCol<int>& pixel) const;
+    scene::LatLonAlt toLLA(const types::RowCol<double>& pixel) const;
 
     /*!
      *  \fn toLatLon
      *  \param pixel - Slant Plane pixel with (row,col) index
      *  \return      - Returns the ground plane location in LatLon
      */
-    scene::LatLon toLatLon(const types::RowCol<int>& pixel) const;
+    scene::LatLon toLatLon(const types::RowCol<double>& pixel) const;
 
 private:
     const scene::SceneGeometry mGeom;
