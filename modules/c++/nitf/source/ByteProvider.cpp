@@ -104,6 +104,7 @@ void ByteProvider::initializeImpl(Record& record,
     }
     else
     {
+        mNumColsPerBlock = mNumCols;
         numColsWithPad = mNumCols;
     }
 
@@ -111,7 +112,10 @@ void ByteProvider::initializeImpl(Record& record,
     if (mOverallNumRowsPerBlock == 0)
     {
         mNumRowsPerBlock.resize(record.getNumImages());
-        std::fill(mNumRowsPerBlock.begin(), mNumRowsPerBlock.end(), 0);
+        for (size_t ii = 0; ii < mNumRowsPerBlock.size(); ++ii)
+        {
+            mNumRowsPerBlock[ii] = mImageSegmentInfo[ii].numRows;
+        }
     }
     else
     {
