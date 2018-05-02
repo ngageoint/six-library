@@ -82,13 +82,6 @@ public:
             size_t maxRowsPerSegment = 0);
 
     /*!
-     * Destructor.  No virtual methods but this is virtual in case it's useful
-     * to inherit from this class and use it polymorphically.
-     */
-    virtual ~CompressedByteProvider();
-
-
-    /*!
      * Given a range of rows from [startRow, startRow + numRows), provide the
      * number of bytes that will appear in the NITF on disk (including NITF
      * file header, image subheader(s), and DES subheader(s) and data).  Calling

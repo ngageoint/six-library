@@ -52,10 +52,6 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
             maxRowsPerSegment);
 }
 
-CompressedByteProvider::~CompressedByteProvider()
-{
-}
-
 void CompressedByteProvider::initialize(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
