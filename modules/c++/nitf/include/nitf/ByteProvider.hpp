@@ -207,9 +207,8 @@ public:
      * the NITF is blocked, the pixel data must already be in a contiguous
      * blocked memory layout, including pad pixels for partial blocks.
      *
-     * \param imageData The image data pixels to write.  The underlying type
-     * will be a single byte per pixel. Must be in big endian order and
-     * blocked if the NITF is.
+     * \param imageData The image data pixels to write. Must be in big endian
+     * order and blocked if the NITF is.
      * \param startRow The global start row in pixels as to where these pixels
      * are in the image.  If this is a multi-segment NITF, this is still simply
      * the global pixel location.

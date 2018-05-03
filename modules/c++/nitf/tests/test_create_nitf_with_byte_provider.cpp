@@ -984,9 +984,6 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
 
-static const char* RGB[] = {"R", "G", "B"};
-
-
 
 void populateFileHeader(nitf::Record& record, const std::string& title)
 {
@@ -1060,7 +1057,7 @@ void addImageSegment(nitf::Record& record,
     std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
     for (size_t ii = 0; ii < bands.size(); ++ii)
     {
-        bands[ii].init(RGB[ii],   /* The band representation, Nth band */
+        bands[ii].init("M",   /* The band representation, Nth band */
                        " ",       /* The band subcategory */
                        "N",       /* The band filter condition */
                        "   ");     /* The band standard image filter code */
