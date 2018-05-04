@@ -432,6 +432,14 @@ def nitf_PluginRegistry_registerTREHandler(init, handler, error):
     return _nitropy.nitf_PluginRegistry_registerTREHandler(init, handler, error)
 nitf_PluginRegistry_registerTREHandler = _nitropy.nitf_PluginRegistry_registerTREHandler
 
+def nitf_PluginRegistry_registerCompressionHandler(init, handler, error):
+    return _nitropy.nitf_PluginRegistry_registerCompressionHandler(init, handler, error)
+nitf_PluginRegistry_registerCompressionHandler = _nitropy.nitf_PluginRegistry_registerCompressionHandler
+
+def nitf_PluginRegistry_registerDecompressionHandler(init, handler, error):
+    return _nitropy.nitf_PluginRegistry_registerDecompressionHandler(init, handler, error)
+nitf_PluginRegistry_registerDecompressionHandler = _nitropy.nitf_PluginRegistry_registerDecompressionHandler
+
 def nitf_PluginRegistry_loadDir(dirName, error):
     return _nitropy.nitf_PluginRegistry_loadDir(dirName, error)
 nitf_PluginRegistry_loadDir = _nitropy.nitf_PluginRegistry_loadDir
@@ -443,6 +451,14 @@ nitf_PluginRegistry_loadPlugin = _nitropy.nitf_PluginRegistry_loadPlugin
 def nitf_PluginRegistry_TREHandlerExists(ident):
     return _nitropy.nitf_PluginRegistry_TREHandlerExists(ident)
 nitf_PluginRegistry_TREHandlerExists = _nitropy.nitf_PluginRegistry_TREHandlerExists
+
+def nitf_PluginRegistry_compressionHandlerExists(ident):
+    return _nitropy.nitf_PluginRegistry_compressionHandlerExists(ident)
+nitf_PluginRegistry_compressionHandlerExists = _nitropy.nitf_PluginRegistry_compressionHandlerExists
+
+def nitf_PluginRegistry_decompressionHandlerExists(ident):
+    return _nitropy.nitf_PluginRegistry_decompressionHandlerExists(ident)
+nitf_PluginRegistry_decompressionHandlerExists = _nitropy.nitf_PluginRegistry_decompressionHandlerExists
 
 def nitf_PluginRegistry_unload(reg, error):
     return _nitropy.nitf_PluginRegistry_unload(reg, error)
