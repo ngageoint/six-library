@@ -3161,6 +3161,17 @@ SWIGINTERNINLINE PyObject*
 }
 
 
+  #define SWIG_From_long   PyInt_FromLong 
+
+
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+
+
 #include <limits.h>
 #if !defined(SWIG_NO_LLONG_MAX)
 # if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
@@ -3169,6 +3180,37 @@ SWIGINTERNINLINE PyObject*
 #   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
 # endif
 #endif
+
+
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+#endif
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else {
+    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
+    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
+  }
+#endif
+}
 
 
 SWIGINTERN int
@@ -3310,9 +3352,6 @@ SWIG_AsVal_int (PyObject * obj, int *val)
   }  
   return res;
 }
-
-
-  #define SWIG_From_long   PyInt_FromLong 
 
 
 SWIGINTERN swig_type_info*
@@ -3526,45 +3565,6 @@ SWIG_AsPtr_std_string (PyObject * obj, std::string **val)
     }
   }
   return SWIG_ERROR;
-}
-
-
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value));
-}
-
-
-#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
-#  define SWIG_LONG_LONG_AVAILABLE
-#endif
-
-
-#ifdef SWIG_LONG_LONG_AVAILABLE
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
-}
-#endif
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  if (sizeof(size_t) <= sizeof(unsigned long)) {
-#endif
-    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  } else {
-    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
-    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
-  }
-#endif
 }
 
 
@@ -9293,6 +9293,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FileHeader_COMPLEX_FLOAT",SWIG_From_int(static_cast< int >(sio::lite::FileHeader::COMPLEX_FLOAT)));
   SWIG_Python_SetConstant(d, "FileHeader_N_BYTE_UNSIGNED",SWIG_From_int(static_cast< int >(sio::lite::FileHeader::N_BYTE_UNSIGNED)));
   SWIG_Python_SetConstant(d, "FileHeader_N_BYTE_SIGNED",SWIG_From_int(static_cast< int >(sio::lite::FileHeader::N_BYTE_SIGNED)));
+  SWIG_Python_SetConstant(d, "FileHeader_BASIC_HEADER_LENGTH",SWIG_From_size_t(static_cast< size_t >(sio::lite::FileHeader::BASIC_HEADER_LENGTH)));
   SWIG_Python_SetConstant(d, "AUTO",SWIG_From_int(static_cast< int >(sio::lite::AUTO)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;

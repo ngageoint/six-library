@@ -3023,9 +3023,10 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_except__ParseException swig_types[16]
 #define SWIGTYPE_p_except__SerializationException swig_types[17]
 #define SWIGTYPE_p_except__Throwable swig_types[18]
-#define SWIGTYPE_p_std__string swig_types[19]
-static swig_type_info *swig_types[21];
-static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__ostream swig_types[19]
+#define SWIGTYPE_p_std__string swig_types[20]
+static swig_type_info *swig_types[22];
+static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3294,7 +3295,7 @@ SWIGINTERNINLINE PyObject*
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_new_Context__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Context(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   int arg2 ;
@@ -3361,87 +3362,6 @@ SWIGINTERN PyObject *_wrap_new_Context__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Context__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  except::Context *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  except::Context *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_Context",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Context" "', argument " "1"" of type '" "except::Context const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Context" "', argument " "1"" of type '" "except::Context const &""'"); 
-  }
-  arg1 = reinterpret_cast< except::Context * >(argp1);
-  result = (except::Context *)new except::Context((except::Context const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_except__Context, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Context(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[6] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Context__SWIG_1(self, args);
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__string, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_std__string, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              return _wrap_new_Context__SWIG_0(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Context'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    except::Context::Context(std::string const &,int,std::string const &,std::string const &,std::string const &)\n"
-    "    except::Context::Context(except::Context const &)\n");
-  return 0;
 }
 
 
@@ -3904,6 +3824,43 @@ SWIGINTERN PyObject *Context_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   SWIG_TypeNewClientData(SWIGTYPE_p_except__Context, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap___lshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::ostream *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:__lshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "__lshift__" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  result = (std::ostream *) &except::operator <<(*arg1,(except::Context const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__ostream, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_new_Throwable__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -7325,10 +7282,7 @@ SWIGINTERN PyObject *ParseException_swigregister(PyObject *SWIGUNUSEDPARM(self),
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"new_Context", _wrap_new_Context, METH_VARARGS, (char *)"\n"
-		"Context(std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message)\n"
-		"new_Context(Context c) -> Context\n"
-		""},
+	 { (char *)"new_Context", _wrap_new_Context, METH_VARARGS, (char *)"new_Context(std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context"},
 	 { (char *)"Context_getMessage", _wrap_Context_getMessage, METH_VARARGS, (char *)"Context_getMessage(Context self) -> std::string const &"},
 	 { (char *)"Context_getTime", _wrap_Context_getTime, METH_VARARGS, (char *)"Context_getTime(Context self) -> std::string const &"},
 	 { (char *)"Context_getFunction", _wrap_Context_getFunction, METH_VARARGS, (char *)"Context_getFunction(Context self) -> std::string const &"},
@@ -7346,6 +7300,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Context_mLine_get", _wrap_Context_mLine_get, METH_VARARGS, (char *)"Context_mLine_get(Context self) -> int"},
 	 { (char *)"delete_Context", _wrap_delete_Context, METH_VARARGS, (char *)"delete_Context(Context self)"},
 	 { (char *)"Context_swigregister", Context_swigregister, METH_VARARGS, NULL},
+	 { (char *)"__lshift__", _wrap___lshift__, METH_VARARGS, (char *)"__lshift__(std::ostream & os, Context c) -> std::ostream &"},
 	 { (char *)"new_Throwable", _wrap_new_Throwable, METH_VARARGS, (char *)"\n"
 		"Throwable()\n"
 		"Throwable(std::string const & message)\n"
@@ -7617,6 +7572,7 @@ static swig_type_info _swigt__p_except__OutOfMemoryException = {"_p_except__OutO
 static swig_type_info _swigt__p_except__ParseException = {"_p_except__ParseException", "except::ParseException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__SerializationException = {"_p_except__SerializationException", "except::SerializationException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Throwable = {"_p_except__Throwable", "except::Throwable *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -7639,6 +7595,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_except__ParseException,
   &_swigt__p_except__SerializationException,
   &_swigt__p_except__Throwable,
+  &_swigt__p_std__ostream,
   &_swigt__p_std__string,
 };
 
@@ -7661,6 +7618,7 @@ static swig_cast_info _swigc__p_except__OutOfMemoryException[] = {  {&_swigt__p_
 static swig_cast_info _swigc__p_except__ParseException[] = {  {&_swigt__p_except__ParseException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__SerializationException[] = {  {&_swigt__p_except__SerializationException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Throwable[] = {  {&_swigt__p_except__Throwable, 0, 0, 0},  {&_swigt__p_except__NotImplementedException, _p_except__NotImplementedExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__KeyAlreadyExistsException, _p_except__KeyAlreadyExistsExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__NoSuchReferenceException, _p_except__NoSuchReferenceExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__NoSuchKeyException, _p_except__NoSuchKeyExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__NullPointerReferenceException, _p_except__NullPointerReferenceExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__OutOfMemoryException, _p_except__OutOfMemoryExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__IndexOutOfRangeException, _p_except__IndexOutOfRangeExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__InvalidFormatException, _p_except__InvalidFormatExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__BadCastException, _p_except__BadCastExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__ParseException, _p_except__ParseExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__SerializationException, _p_except__SerializationExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__FileNotFoundException, _p_except__FileNotFoundExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__IOException, _p_except__IOExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__InvalidArgumentException, _p_except__InvalidArgumentExceptionTo_p_except__Throwable, 0, 0},  {&_swigt__p_except__Exception, _p_except__ExceptionTo_p_except__Throwable, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -7683,6 +7641,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_except__ParseException,
   _swigc__p_except__SerializationException,
   _swigc__p_except__Throwable,
+  _swigc__p_std__ostream,
   _swigc__p_std__string,
 };
 
