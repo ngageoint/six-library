@@ -1171,6 +1171,21 @@ def writeConfig(conf, callback, guardTag, infile=None, outfile=None, path=None, 
 
     conf.setenv('')
 
+
+def getDriverIncludes(bld, driver):
+    driverIncludeDirs = [x.split('=') for x in bld.env['header_builddir']
+                         if x.startswith(driver)]
+    if not driverIncludeDirs:
+        bld.fatal('Could not find include dir for driver {}'.format(driver))
+    if len(driverIncludeDirs) != 1:
+        bld.fatal('Multiple options for include dir for driver {}'.format(
+            driver))
+
+    driverIncludeDir = driverIncludeDirs[0][1]
+    driverIncludePathname = os.path.join(bld.bldnode.abspath(),
+                                         driverIncludeDir)
+    return os.path.abspath(os.path.dirname(driverIncludePathname))
+
 def configure(self):
 
     if self.env['DETECTED_BUILD_PY']:
@@ -1630,9 +1645,14 @@ def handleDefsFile(input, output, path, defs, chmod=None, conf=None):
         v = defs[k]
         if v is None:
             v = ''
-        code = re.sub(r'#undef %s(\s*\n)' % k, r'#define %s %s\1' % (k,v), code)
-        code = re.sub(r'#define %s 0(\s*\n)' % k, r'#define %s %s\1' % (k,v), code)
-    code = re.sub(r'(#undef[^\n\/\**]*)(\/\*.+\*\/)?(\n)', r'/* \1 */\3', code)
+        code = re.sub(r'#undef %s(\s*\n)' % k,
+                      lambda x: '#define %s %s\n' % (k,v), code)
+        code = re.sub(r'#define %s 0(\s*\n)' % k,
+                      lambda x: '#define %s %s\n' % (k,v), code)
+
+    # comment out remaining #undef lines
+    code = re.sub(r'(#undef[^\n\/\**]*)(\/\*.+\*\/)?(\n)',
+                  r'/* \1 */\3', code)
     file = open(outfile, 'w')
     file.write(code)
     file.close()

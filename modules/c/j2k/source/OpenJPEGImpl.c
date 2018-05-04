@@ -153,12 +153,17 @@ OpenJPEG_createIO(nrt_IOInterface* io,
         ioControl->io = io;
         ioControl->offset = nrt_IOInterface_tell(io, error);
         if (length > 0)
+        {
             ioControl->length = length;
+        }
         else
+        {
             ioControl->length = nrt_IOInterface_getSize(io, error)
                     - ioControl->offset;
+        }
 
-        opj_stream_set_user_data(stream, ioControl);
+        opj_stream_set_user_data(stream, ioControl, NULL);
+        opj_stream_set_user_data_length(stream, ioControl->length);
         opj_stream_set_read_function(stream, implStreamRead);
         opj_stream_set_seek_function(stream, implStreamSeek);
         opj_stream_set_skip_function(stream, implStreamSkip);
@@ -184,7 +189,7 @@ J2KPRIV(OPJ_SIZE_T) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
     if (toRead <= 0 || !nrt_IOInterface_read(
                     ctrl->io, (char*)buf, toRead, &ctrl->error))
     {
-        return 0;
+        return (OPJ_SIZE_T) -1;
     }
     return toRead;
 }

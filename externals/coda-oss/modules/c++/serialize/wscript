@@ -1,4 +1,4 @@
-from os.path import join, dirname, abspath
+from build import getDriverIncludes
 
 NAME            = 'serialize'
 MAINTAINER      = 'micah.bojrab@mdaus.com'
@@ -8,14 +8,13 @@ USELIB          = 'BOOST_SERIALIZATION'
 
 options = configure = distclean = lambda p: None
 
+
 def build(bld):
 
     # there is no target associated with the boost_config (only its install).
     # we add the target directory here manually.
     globs = globals()
-    b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith('boost')][0]
-    boostInclude = dirname(abspath(join(bld.bldnode.abspath(), b[1])))
-    boostInclude = bld.root.find_dir(boostInclude).path_from(bld.path)
+    boostInclude = getDriverIncludes(bld, 'boost')
     globs['includes'] = ['include', boostInclude]
     globs['export_includes'] = ['include', boostInclude]
     bld.module(**globs)

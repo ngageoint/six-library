@@ -114,6 +114,7 @@ class FileHeader(_object):
     COMPLEX_FLOAT = _sio_lite.FileHeader_COMPLEX_FLOAT
     N_BYTE_UNSIGNED = _sio_lite.FileHeader_N_BYTE_UNSIGNED
     N_BYTE_SIGNED = _sio_lite.FileHeader_N_BYTE_SIGNED
+    BASIC_HEADER_LENGTH = _sio_lite.FileHeader_BASIC_HEADER_LENGTH
 
     def __init__(self, *args):
         """
@@ -446,9 +447,11 @@ def write(numpyArray, outputPathname, elementType = None):
 # Make sure this array is sized properly
     if len(numpyArray.shape) != 2:
         raise Exception("Only 2 dimensional images are supported")
+    if elementType is None:
+        elementType = numpyArray.dtype
 
-    if elementType == None:
-        elementType = sioTypeFromDtype(numpyArray.dtype)
+    if type(elementType) != int:
+        elementType = sioTypeFromDtype(elementType)
 
     if not numpyArray.flags['C_CONTIGUOUS']:
         numpyArray = numpy.ascontiguousarray(numpyArray)
