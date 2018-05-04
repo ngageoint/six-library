@@ -6946,6 +6946,118 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_registerCompressionHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NITF_PLUGIN_INIT_FUNCTION arg1 ;
+  NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_PluginRegistry_registerCompressionHandler",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_NITF_PLUGIN_INIT_FUNCTION,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_PluginRegistry_registerCompressionHandler" "', argument " "1"" of type '" "NITF_PLUGIN_INIT_FUNCTION""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_PluginRegistry_registerCompressionHandler" "', argument " "1"" of type '" "NITF_PLUGIN_INIT_FUNCTION""'");
+    } else {
+      NITF_PLUGIN_INIT_FUNCTION * temp = reinterpret_cast< NITF_PLUGIN_INIT_FUNCTION * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_PluginRegistry_registerCompressionHandler" "', argument " "2"" of type '" "NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_PluginRegistry_registerCompressionHandler" "', argument " "2"" of type '" "NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION""'");
+    } else {
+      NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION * temp = reinterpret_cast< NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_PluginRegistry_registerCompressionHandler" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (bool)nitf_PluginRegistry_registerCompressionHandler(arg1,arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_registerDecompressionHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NITF_PLUGIN_INIT_FUNCTION arg1 ;
+  NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_PluginRegistry_registerDecompressionHandler",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_NITF_PLUGIN_INIT_FUNCTION,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_PluginRegistry_registerDecompressionHandler" "', argument " "1"" of type '" "NITF_PLUGIN_INIT_FUNCTION""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_PluginRegistry_registerDecompressionHandler" "', argument " "1"" of type '" "NITF_PLUGIN_INIT_FUNCTION""'");
+    } else {
+      NITF_PLUGIN_INIT_FUNCTION * temp = reinterpret_cast< NITF_PLUGIN_INIT_FUNCTION * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_PluginRegistry_registerDecompressionHandler" "', argument " "2"" of type '" "NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_PluginRegistry_registerDecompressionHandler" "', argument " "2"" of type '" "NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION""'");
+    } else {
+      NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION * temp = reinterpret_cast< NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_PluginRegistry_registerDecompressionHandler" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (bool)nitf_PluginRegistry_registerDecompressionHandler(arg1,arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_loadDir(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
@@ -7030,6 +7142,56 @@ SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_TREHandlerExists(PyObject *SWIGUN
   }
   arg1 = reinterpret_cast< char * >(buf1);
   result = (bool)nitf_PluginRegistry_TREHandlerExists((char const *)arg1);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_compressionHandlerExists(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_PluginRegistry_compressionHandlerExists",&obj0)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_PluginRegistry_compressionHandlerExists" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  result = (bool)nitf_PluginRegistry_compressionHandlerExists((char const *)arg1);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_decompressionHandlerExists(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_PluginRegistry_decompressionHandlerExists",&obj0)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_PluginRegistry_decompressionHandlerExists" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  result = (bool)nitf_PluginRegistry_decompressionHandlerExists((char const *)arg1);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
   return resultobj;
@@ -32239,9 +32401,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_PluginRegistry_getInstance", _wrap_nitf_PluginRegistry_getInstance, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_load", _wrap_nitf_PluginRegistry_load, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_registerTREHandler", _wrap_nitf_PluginRegistry_registerTREHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_PluginRegistry_registerCompressionHandler", _wrap_nitf_PluginRegistry_registerCompressionHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_PluginRegistry_registerDecompressionHandler", _wrap_nitf_PluginRegistry_registerDecompressionHandler, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_loadDir", _wrap_nitf_PluginRegistry_loadDir, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_loadPlugin", _wrap_nitf_PluginRegistry_loadPlugin, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_TREHandlerExists", _wrap_nitf_PluginRegistry_TREHandlerExists, METH_VARARGS, NULL},
+	 { (char *)"nitf_PluginRegistry_compressionHandlerExists", _wrap_nitf_PluginRegistry_compressionHandlerExists, METH_VARARGS, NULL},
+	 { (char *)"nitf_PluginRegistry_decompressionHandlerExists", _wrap_nitf_PluginRegistry_decompressionHandlerExists, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_unload", _wrap_nitf_PluginRegistry_unload, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_retrieveTREHandler", _wrap_nitf_PluginRegistry_retrieveTREHandler, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_retrieveDecompConstructor", _wrap_nitf_PluginRegistry_retrieveDecompConstructor, METH_VARARGS, NULL},

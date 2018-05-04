@@ -31844,7 +31844,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
   size_t arg2 ;
-  SwigValueWrapper< mem::SharedPtr< logging::Logger > > arg3 ;
+  mem::SharedPtr< logging::Logger > arg3 ;
   void *argp1 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -31999,7 +31999,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   size_t arg2 ;
-  SwigValueWrapper< mem::SharedPtr< logging::Logger > > arg3 ;
+  mem::SharedPtr< logging::Logger > arg3 ;
   int res1 = SWIG_OLDOBJ ;
   size_t val2 ;
   int ecode2 = 0 ;

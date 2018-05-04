@@ -357,7 +357,7 @@ class Logger(Filterer):
 
     def __init__(self, *args):
         """
-        __init__(logging::Logger self, std::string name) -> Logger
+        __init__(logging::Logger self, std::string const & name) -> Logger
         __init__(logging::Logger self) -> Logger
         """
         this = _coda_logging.new_Logger(*args)

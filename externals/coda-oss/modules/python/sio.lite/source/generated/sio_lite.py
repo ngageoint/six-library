@@ -114,6 +114,7 @@ class FileHeader(_object):
     COMPLEX_FLOAT = _sio_lite.FileHeader_COMPLEX_FLOAT
     N_BYTE_UNSIGNED = _sio_lite.FileHeader_N_BYTE_UNSIGNED
     N_BYTE_SIGNED = _sio_lite.FileHeader_N_BYTE_SIGNED
+    BASIC_HEADER_LENGTH = _sio_lite.FileHeader_BASIC_HEADER_LENGTH
 
     def __init__(self, *args):
         """

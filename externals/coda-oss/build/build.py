@@ -1171,6 +1171,21 @@ def writeConfig(conf, callback, guardTag, infile=None, outfile=None, path=None, 
 
     conf.setenv('')
 
+
+def getDriverIncludes(bld, driver):
+    driverIncludeDirs = [x.split('=') for x in bld.env['header_builddir']
+                         if x.startswith(driver)]
+    if not driverIncludeDirs:
+        bld.fatal('Could not find include dir for driver {}'.format(driver))
+    if len(driverIncludeDirs) != 1:
+        bld.fatal('Multiple options for include dir for driver {}'.format(
+            driver))
+
+    driverIncludeDir = driverIncludeDirs[0][1]
+    driverIncludePathname = os.path.join(bld.bldnode.abspath(),
+                                         driverIncludeDir)
+    return os.path.abspath(os.path.dirname(driverIncludePathname))
+
 def configure(self):
 
     if self.env['DETECTED_BUILD_PY']:
