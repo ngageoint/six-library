@@ -4805,24 +4805,29 @@ SWIGINTERN PyObject *Filter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
 
 SWIGINTERN PyObject *_wrap_new_Logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string arg1 ;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   logging::Logger *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_Logger",&obj0)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'"); 
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Logger" "', argument " "1"" of type '" "std::string const &""'"); 
     }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Logger" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
   }
-  result = (logging::Logger *)new logging::Logger(arg1);
+  result = (logging::Logger *)new logging::Logger((std::string const &)*arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -4867,7 +4872,7 @@ SWIGINTERN PyObject *_wrap_new_Logger(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Logger'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    logging::Logger::Logger(std::string)\n"
+    "    logging::Logger::Logger(std::string const &)\n"
     "    logging::Logger::Logger()\n");
   return 0;
 }
@@ -7383,7 +7388,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Filter_getName", _wrap_Filter_getName, METH_VARARGS, (char *)"Filter_getName(Filter self) -> std::string"},
 	 { (char *)"Filter_swigregister", Filter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Logger", _wrap_new_Logger, METH_VARARGS, (char *)"\n"
-		"Logger(std::string name)\n"
+		"Logger(std::string const & name)\n"
 		"new_Logger() -> Logger\n"
 		""},
 	 { (char *)"delete_Logger", _wrap_delete_Logger, METH_VARARGS, (char *)"delete_Logger(Logger self)"},

@@ -104,12 +104,9 @@ class Context(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Context, name)
     __repr__ = _swig_repr
 
-    def __init__(self, *args):
-        """
-        __init__(except::Context self, std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context
-        __init__(except::Context self, Context c) -> Context
-        """
-        this = _coda_except.new_Context(*args)
+    def __init__(self, file, line, func, time, message):
+        """__init__(except::Context self, std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context"""
+        this = _coda_except.new_Context(file, line, func, time, message)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -164,6 +161,10 @@ class Context(_object):
 Context_swigregister = _coda_except.Context_swigregister
 Context_swigregister(Context)
 
+
+def __lshift__(os, c):
+    """__lshift__(std::ostream & os, Context c) -> std::ostream &"""
+    return _coda_except.__lshift__(os, c)
 class Throwable(_object):
     """Proxy of C++ except::Throwable class."""
 
