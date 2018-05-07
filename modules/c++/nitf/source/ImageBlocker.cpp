@@ -339,6 +339,11 @@ void ImageBlocker::block(const void* input,
                          size_t numBytesPerPixel,
                          void* output) const
 {
+    if (numRows == 0)
+    {
+        return;
+    }
+
     // Find which segments we're in
     size_t firstSegIdx;
     size_t startBlockWithinFirstSeg;
