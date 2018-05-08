@@ -273,7 +273,6 @@ protected:
             size_t imageDataEndRow,
             size_t startGlobalRowToWrite,
             const void* imageData,
-            size_t& numPadRowsSoFar,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
