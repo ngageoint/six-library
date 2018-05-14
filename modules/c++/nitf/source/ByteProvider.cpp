@@ -416,7 +416,7 @@ void ByteProvider::addImageData(
     const size_t segStartRow = imageSegmentInfo.firstRow;
 
     // Figure out what offset of 'imageData' we're writing from
-    size_t startLocalRowToWrite =
+    const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
     const sys::byte* imageDataPtr =
             static_cast<const sys::byte*>(imageData) +
