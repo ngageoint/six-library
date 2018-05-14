@@ -524,13 +524,6 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                                        numRowsToWrite))
         {
             checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
-            /*
-            std::cerr << "getNumBytes()\n";
-            std::cerr << "   Header: " << countBytesForHeaders(seg, startRow) << " bytes\n";
-            std::cerr << "   Image: " << countBytesForImageData(seg, numRowsToWrite,
-                    imageDataEndRow) << " bytes\n";
-            std::cerr << "   DES: " << countBytesForDES(seg, imageDataEndRow) << " bytes\n";
-            */
             numBytes += countBytesForHeaders(seg, startRow);
             numBytes += mNumBytesPerRow *
                     (numRowsToWrite +
