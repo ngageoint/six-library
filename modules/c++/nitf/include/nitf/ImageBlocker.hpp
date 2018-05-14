@@ -201,6 +201,12 @@ public:
         return mNumRowsPerBlock;
     }
 
+    /*
+     * \return The segment the block-row index falls in
+     * \throws If blockRow exceeds the total block rows in the image
+     */
+    size_t getSegmentFromGlobalBlockRow(size_t blockRow) const;
+
 private:
     void findSegment(size_t row,
                      size_t& segIdx,
