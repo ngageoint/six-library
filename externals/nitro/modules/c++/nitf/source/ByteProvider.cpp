@@ -379,11 +379,12 @@ void ByteProvider::checkBlocking(size_t seg,
     }
 }
 
-size_t ByteProvider::countBytesForImageData(
+size_t ByteProvider::countPadRows(
         size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+    size_t numPadRows = 0;
 
     if (numRowsPerBlock != 0 &&
         imageDataEndRow >= imageSegmentInfo.endRow())
@@ -393,12 +394,11 @@ size_t ByteProvider::countBytesForImageData(
         if (numLeftovers != 0)
         {
             // We need to finish the block
-            const size_t numPadRows = numRowsPerBlock - numLeftovers;
-            numRowsToWrite += numPadRows;
+            numPadRows = numRowsPerBlock - numLeftovers;
         }
     }
 
-    return  numRowsToWrite * mNumBytesPerRow;
+    return numPadRows;
 }
 
 void ByteProvider::addImageData(
@@ -432,8 +432,7 @@ void ByteProvider::addImageData(
                 rowsInSegmentSkipped * mNumBytesPerRow;
     }
 
-    const size_t numPadRows = countBytesForImageData(seg, numRowsToWrite,
-            imageDataEndRow) / mNumBytesPerPixel;
+    const size_t numPadRows = countPadRows(seg, numRowsToWrite, imageDataEndRow);
     numRowsToWrite += numPadRows;
     numPadRowsSoFar += numPadRows;
 
@@ -526,8 +525,9 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
         {
             checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
             numBytes += countBytesForHeaders(seg, startRow);
-            numBytes += countBytesForImageData(seg, numRowsToWrite,
-                    imageDataEndRow);
+            numBytes += mNumBytesPerRow *
+                    (numRowsToWrite +
+                     countPadRows(seg, numRowsToWrite, imageDataEndRow));
             numBytes += countBytesForDES(seg, imageDataEndRow);
         }
     }
@@ -570,7 +570,7 @@ void ByteProvider::getBytes(const void* imageData,
                     fileOffset,
                     buffers);
 
-            addDES(seg, startRow, buffers);
+            addDES(seg, imageDataEndRow, buffers);
         }
     }
 }

@@ -36,7 +36,7 @@ def build(bld):
                   source=j2kSources,
                   export_includes=j2kIncludes,
                   env=env.derive(), path=bld.path,
-                  use='nitf-c J2K' + j2kLayer)
+                  use='nitf-c J2K ' + j2kLayer)
 
         # install j2k lib
         if env['install_libs']:

@@ -1711,7 +1711,10 @@ def getSolarisFlags(compilerName):
 
 def gccHasCpp11():
     try:
-        output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
+        output = subprocess.check_output("g++ --help=c++",
+                                         stderr=subprocess.STDOUT,
+                                         shell=True,
+                                         universal_newlines=True)
     except subprocess.CalledProcessError:
         # If gcc is too old for --help=, then it is too old for C++11
         return False
@@ -1722,7 +1725,10 @@ def gccHasCpp11():
 
 def iccHasCpp11():
     try:
-        output = subprocess.check_output("icpc -help", stderr=subprocess.STDOUT, shell=True)
+        output = subprocess.check_output("icpc -help",
+                                         stderr=subprocess.STDOUT,
+                                         shell=True,
+                                         universal_newlines=True)
     except subprocess.CalledProcessError:
         # If icc is too old for -help, then it is too old for C++11
         return False
