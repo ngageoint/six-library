@@ -380,4 +380,23 @@ void ImageBlocker::block(const void* input,
         }
     }
 }
+
+size_t ImageBlocker::getSegmentFromGlobalBlockRow(size_t blockRow) const
+{
+    size_t startBlock = 0;
+    for (size_t seg = 0; seg < mNumBlocksDownRows.size(); ++seg)
+    {
+        const size_t nextStartBlock = startBlock + mNumBlocksDownRows[seg];
+        if (startBlock <= blockRow && blockRow < nextStartBlock)
+        {
+            return seg;
+        }
+        startBlock = nextStartBlock;
+    }
+
+    std::ostringstream message;
+    message << "Requested block row " << blockRow << ", but this image "
+        << "only has " << startBlock << " rows of blocks.";
+    throw except::Exception(Ctxt(message.str()));
+}
 }
