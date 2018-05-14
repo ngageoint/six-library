@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include <io/ReadUtils.h>
+#include <math/Round.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sidd/Utilities.h>
@@ -160,6 +161,13 @@ private:
     const std::string mPathname;
 };
 
+struct WriteData
+{
+    size_t numBlocks;
+    size_t startRow;
+    size_t numRows;
+};
+
 // Main test class
 template <typename DataTypeT>
 class Tester
@@ -214,7 +222,7 @@ public:
 
     void testMultipleWrites();
 
-    void testMultipleWritesBlocked();
+    void testMultipleWritesBlocked(size_t blocksPerWrite);
 
     void testOneWritePerRow();
 
@@ -493,8 +501,39 @@ void Tester<DataTypeT>::testMultipleWrites()
     compare("Multiple writes");
 }
 
+size_t countNumRows(const nitf::ImageBlocker& imageBlocker,
+                    size_t startBlock,
+                    size_t numBlocks,
+                    size_t& currentSegment,
+                    size_t& startBlockThisSegment,
+                    size_t& numBlocksThisSegment)
+{
+    size_t numRows = 0;
+    size_t lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+    for (size_t block = startBlock; block < startBlock + numBlocks; ++block)
+    {
+        const size_t segment = imageBlocker.getSegmentFromGlobalBlockRow(block);
+        numRows += imageBlocker.getNumRowsPerBlock()[segment];
+
+        if (segment > currentSegment)
+        {
+            startBlockThisSegment += numBlocksThisSegment;
+            currentSegment = segment;
+            numBlocksThisSegment = imageBlocker.getNumRowsOfBlocks(currentSegment);
+            lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+        }
+
+        if (block == lastBlockThisSegment)
+        {
+            numRows -= imageBlocker.getNumPadRowsInFinalBlock(segment);
+        }
+
+    }
+    return numRows;
+}
+
 template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWritesBlocked()
+void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -511,57 +550,70 @@ void Tester<DataTypeT>::testMultipleWritesBlocked()
     std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
             siddByteProvider.getImageBlocker();
 
-    std::vector<DataTypeT> inData(mNumRowsPerBlock * mDims.col);
-
     const size_t numSegs(imageBlocker->getNumSegments());
-    for (size_t ii = 0; ii < numSegs; ++ii)
+    size_t totalNumBlocks(0);
+    for (size_t seg = 0; seg < numSegs; ++seg)
     {
-        const size_t seg = numSegs - ii - 1;
-        const size_t numBlocks = imageBlocker->getNumRowsOfBlocks(seg);
-        const size_t lastBlock = numBlocks - 1;
-        const size_t segStartRow = imageBlocker->getStartRow(seg);
-        const size_t numRowsPerBlock = imageBlocker->getNumRowsPerBlock()[seg];
+        totalNumBlocks += imageBlocker->getNumRowsOfBlocks(seg);
+    }
 
-        std::vector<DataTypeT> blockData(
-                numRowsPerBlock * mNumColsPerBlock *
-                imageBlocker->getNumColsOfBlocks());
+    size_t currentSegment = 0;
+    size_t numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
+    size_t startBlockThisSeg = 0;
+    size_t startRow = 0;
 
-        for (size_t jj = 0; jj < numBlocks; ++jj)
+    // Want to write out the blocks in reverse order to make sure offsetting
+    // works. But I don't want to do the math backwards, so this will just go
+    // through and collect the data needed for each block write.
+    std::vector<WriteData> data;
+    for (size_t startBlock = 0;
+            startBlock < totalNumBlocks;
+            startBlock += blocksPerWrite)
+    {
+        WriteData writeData;
+        if (startBlock >= startBlockThisSeg + numBlocksThisSeg)
         {
-            const size_t block = lastBlock - jj;
-
-            const size_t startRow = segStartRow + block * numRowsPerBlock;
-
-            size_t numRows(numRowsPerBlock);
-            if (block == lastBlock)
-            {
-                numRows -= imageBlocker->getNumPadRowsInFinalBlock(seg);
-            }
-
-            // Block it
-            // Copy just what we need to make sure ImageBlocker::block() isn't
-            // going past where it should
-            const typename std::vector<DataTypeT>::const_iterator begin =
-                    mBigEndianImage.begin() + startRow * mDims.col;
-
-            std::copy(begin, begin + numRows * mDims.col, inData.begin());
-
-            std::fill(blockData.begin(), blockData.end(), DataTypeT(0));
-            imageBlocker->block(&inData[0],
-                                startRow,
-                                numRows,
-                                &blockData[0]);
-
-            nitf::Off fileOffset;
-            nitf::NITFBufferList buffers;
-            siddByteProvider.getBytes(&blockData[0],
-                                      startRow,
-                                      numRows,
-                                      fileOffset,
-                                      buffers);
-            const size_t numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-            write(fileOffset, buffers, numBytes, outStream);
+            ++currentSegment;
+            startBlockThisSeg += numBlocksThisSeg;
+            numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
         }
+        const size_t blocksThisWrite =
+                std::min<size_t>(blocksPerWrite, totalNumBlocks - startBlock);
+
+        const size_t numRows = countNumRows(*imageBlocker, startBlock, blocksThisWrite,
+                currentSegment, startBlockThisSeg, numBlocksThisSeg);
+
+        writeData.numBlocks = blocksThisWrite;
+        writeData.startRow = startRow;
+        writeData.numRows = numRows;
+        data.push_back(writeData);
+
+        startRow += numRows;
+    }
+
+    for (int ii = data.size() - 1; ii >= 0; --ii)
+    {
+        const size_t bytesThisWrite =
+            imageBlocker->getNumBytesRequired<DataTypeT>(
+                    data[ii].startRow, data[ii].numRows);
+
+        std::vector<DataTypeT> blockData(bytesThisWrite);
+        imageBlocker->block(&mBigEndianImage[data[ii].startRow * 456],
+                            data[ii].startRow,
+                            data[ii].numRows,
+                            &blockData[0]);
+
+        nitf::Off fileOffset;
+        nitf::NITFBufferList buffers;
+        siddByteProvider.getBytes(&blockData[0],
+                                  data[ii].startRow,
+                                  data[ii].numRows,
+                                  fileOffset,
+                                  buffers);
+        const size_t numBytes = siddByteProvider.getNumBytes(data[ii].startRow,
+                                                             data[ii].numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
     }
 
     outStream.close();
@@ -619,6 +671,7 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 
+    size_t totalNumBlocks(0);
     size_t numRowsPerBlock(0);
     size_t numColsPerBlock(0);
     if (setBlocking)
@@ -627,6 +680,8 @@ bool doTests(const std::vector<std::string>& schemaPaths,
         // rows and cols
         numRowsPerBlock = 7;
         numColsPerBlock = 9;
+        totalNumBlocks = math::ceilingDivide(123, numRowsPerBlock);
+
     }
 
     Tester<DataTypeT> tester(schemaPaths,
@@ -638,7 +693,10 @@ bool doTests(const std::vector<std::string>& schemaPaths,
 
     if (setBlocking)
     {
-        tester.testMultipleWritesBlocked();
+        for (size_t ii = 1; ii <= totalNumBlocks; ++ii)
+        {
+            tester.testMultipleWritesBlocked(ii);
+        }
     }
     else
     {
