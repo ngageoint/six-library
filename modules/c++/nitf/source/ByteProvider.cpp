@@ -379,11 +379,12 @@ void ByteProvider::checkBlocking(size_t seg,
     }
 }
 
-size_t ByteProvider::countBytesForImageData(
+size_t ByteProvider::countPadRows(
         size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
+    size_t numPadRows = 0;
 
     if (numRowsPerBlock != 0 &&
         imageDataEndRow >= imageSegmentInfo.endRow())
@@ -393,12 +394,11 @@ size_t ByteProvider::countBytesForImageData(
         if (numLeftovers != 0)
         {
             // We need to finish the block
-            const size_t numPadRows = numRowsPerBlock - numLeftovers;
-            numRowsToWrite += numPadRows;
+            numPadRows = numRowsPerBlock - numLeftovers;
         }
     }
 
-    return  numRowsToWrite * mNumBytesPerRow;
+    return numPadRows;
 }
 
 void ByteProvider::addImageData(
@@ -408,6 +408,7 @@ void ByteProvider::addImageData(
         size_t imageDataEndRow,
         size_t startGlobalRowToWrite,
         const void* imageData,
+        size_t& numPadRowsSoFar,
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
@@ -415,8 +416,8 @@ void ByteProvider::addImageData(
     const size_t segStartRow = imageSegmentInfo.firstRow;
 
     // Figure out what offset of 'imageData' we're writing from
-    // Unless we're reading across segment boundaries, this will be 0
-    const size_t startLocalRowToWrite = startGlobalRowToWrite - startRow;
+    size_t startLocalRowToWrite =
+            startGlobalRowToWrite - startRow + numPadRowsSoFar;
     const sys::byte* imageDataPtr =
             static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
@@ -431,10 +432,11 @@ void ByteProvider::addImageData(
                 rowsInSegmentSkipped * mNumBytesPerRow;
     }
 
-    const size_t bytesThisWrite = countBytesForImageData(seg, numRowsToWrite,
-            imageDataEndRow);
+    const size_t numPadRows = countPadRows(seg, numRowsToWrite, imageDataEndRow);
+    numRowsToWrite += numPadRows;
+    numPadRowsSoFar += numPadRows;
 
-    buffers.pushBack(imageDataPtr, bytesThisWrite);
+    buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 }
 
 size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
@@ -522,9 +524,17 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
                                        numRowsToWrite))
         {
             checkBlocking(seg, startGlobalRowToWrite, numRowsToWrite);
+            /*
+            std::cerr << "getNumBytes()\n";
+            std::cerr << "   Header: " << countBytesForHeaders(seg, startRow) << " bytes\n";
+            std::cerr << "   Image: " << countBytesForImageData(seg, numRowsToWrite,
+                    imageDataEndRow) << " bytes\n";
+            std::cerr << "   DES: " << countBytesForDES(seg, imageDataEndRow) << " bytes\n";
+            */
             numBytes += countBytesForHeaders(seg, startRow);
-            numBytes += countBytesForImageData(seg, numRowsToWrite,
-                    imageDataEndRow);
+            numBytes += mNumBytesPerRow *
+                    (numRowsToWrite +
+                     countPadRows(seg, numRowsToWrite, imageDataEndRow));
             numBytes += countBytesForDES(seg, imageDataEndRow);
         }
     }
@@ -542,6 +552,7 @@ void ByteProvider::getBytes(const void* imageData,
     buffers.clear();
 
     const size_t imageDataEndRow = startRow + numRows;
+    size_t numPadRowsSoFar(0);
 
     for (size_t seg = 0; seg < mImageSegmentInfo.size(); ++seg)
     {
@@ -562,6 +573,7 @@ void ByteProvider::getBytes(const void* imageData,
                     imageDataEndRow,
                     startGlobalRowToWrite,
                     imageData,
+                    numPadRowsSoFar,
                     fileOffset,
                     buffers);
 

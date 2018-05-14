@@ -262,7 +262,7 @@ protected:
     static void copyFromStreamAndClear(io::ByteStream& stream,
                                        std::vector<sys::byte>& rawBytes);
 
-    size_t countBytesForImageData(
+    size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
             size_t imageDataEndRow) const;
 
@@ -273,6 +273,7 @@ protected:
             size_t imageDataEndRow,
             size_t startGlobalRowToWrite,
             const void* imageData,
+            size_t& numPadRowsSoFar,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
