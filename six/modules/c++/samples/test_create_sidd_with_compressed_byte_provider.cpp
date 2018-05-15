@@ -33,12 +33,16 @@
 
 #include <import/cli.h>
 #include <import/nitf.hpp>
-#include "io/FileOutputStream.h"
-#include "nitf/CompressedByteProvider.hpp"
-#include "six/Types.h"
+#include <io/FileOutputStream.h>
+#include <nitf/IOHandle.hpp>
+#include <nitf/NITFBufferList.hpp>
+#include <nitf/Reader.hpp>
+#include <nitf/Record.hpp>
+#include <six/Types.h>
 #include <six/sidd/CompressedSIDDByteProvider.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/Utilities.h>
+#include <types/RowCol.h>
 #include <string>
 
 
@@ -1038,12 +1042,6 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     }
 }
 
-void testCreate(const std::string& outname,
-        bool shouldCompress = false)
-{
-    writeSIDD(outname, shouldCompress);
-}
-
 bool testRead(const std::string& pathname)
 {
     const size_t NUM_BANDS = 1;
@@ -1093,7 +1091,7 @@ int main(int argc, char **argv)
         }
         const std::string outname(options->get<std::string>("output"));
 
-        testCreate(outname, shouldCompress);
+        writeSIDD(outname, shouldCompress);
         if (testRead(outname))
         {
             return 0;
