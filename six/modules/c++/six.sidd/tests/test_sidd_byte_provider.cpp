@@ -591,31 +591,34 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
         startRow += numRows;
     }
 
-    for (int ii = data.size() - 1; ii >= 0; --ii)
+    // Solaris doesn't know how to get a const_reverse_iterator from a
+    // reverse_iterator.
+    const std::vector<WriteData>& constData = data;
+
+    for (std::vector<WriteData>::const_reverse_iterator iter = constData.rbegin();
+            iter != constData.rend(); ++iter)
     {
         const size_t bytesThisWrite =
             imageBlocker->getNumBytesRequired<DataTypeT>(
-                    data[ii].startRow, data[ii].numRows);
+                    iter->startRow, iter->numRows);
 
         std::vector<DataTypeT> blockData(bytesThisWrite);
-        imageBlocker->block(&mBigEndianImage[data[ii].startRow * 456],
-                            data[ii].startRow,
-                            data[ii].numRows,
+        imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
+                            iter->startRow,
+                            iter->numRows,
                             &blockData[0]);
 
         nitf::Off fileOffset;
         nitf::NITFBufferList buffers;
         siddByteProvider.getBytes(&blockData[0],
-                                  data[ii].startRow,
-                                  data[ii].numRows,
+                                  iter->startRow,
+                                  iter->numRows,
                                   fileOffset,
                                   buffers);
-        const size_t numBytes = siddByteProvider.getNumBytes(data[ii].startRow,
-                                                             data[ii].numRows);
+        const size_t numBytes = siddByteProvider.getNumBytes(iter->startRow,
+                                                             iter->numRows);
         write(fileOffset, buffers, numBytes, outStream);
-
     }
-
     outStream.close();
 
     compare("Multiple writes blocked");
