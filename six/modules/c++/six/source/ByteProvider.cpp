@@ -26,12 +26,14 @@
 
 namespace six
 {
-void ByteProvider::initialize(mem::SharedPtr<Container> container,
-                              const XMLControlRegistry& xmlRegistry,
-                              const std::vector<std::string>& schemaPaths,
-                              size_t maxProductSize,
-                              size_t numRowsPerBlock,
-                              size_t numColsPerBlock)
+
+void ByteProvider::populateWriter(
+        mem::SharedPtr<Container> container,
+        const XMLControlRegistry& xmlRegistry,
+        size_t maxProductSize,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock,
+        NITFWriteControl& writer)
 {
     if (container->getNumData() != 1)
     {
@@ -42,7 +44,6 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
 
     const six::Data* const data = container->getData(0);
 
-    NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
 
     if (maxProductSize != 0)
@@ -69,12 +70,14 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
     }
 
     writer.initialize(container);
-
-    initialize(writer, schemaPaths);
 }
 
-void ByteProvider::initialize(const NITFWriteControl& writer,
-                              const std::vector<std::string>& schemaPaths)
+void ByteProvider::populateInitArgs(
+        const NITFWriteControl& writer,
+        const std::vector<std::string>& schemaPaths,
+        std::vector<PtrAndLength>& desData,
+        size_t& numRowsPerBlock,
+        size_t& numColsPerBlock)
 {
     // Sanity check the container
     mem::SharedPtr<const Container> container = writer.getContainer();
@@ -112,7 +115,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
     // base class's initialize() method
     logging::NullLogger logger;
     std::vector<std::string> xmlStrings(container->getNumData());
-    std::vector<PtrAndLength> desData(xmlStrings.size());
+    desData.resize(xmlStrings.size());
     for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
     {
         std::string& xmlString(xmlStrings[ii]);
@@ -128,13 +131,41 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
     const Options& options(writer.getOptions());
     const Parameter zero(0);
 
-    const size_t numRowsPerBlock = static_cast<sys::Uint32_T>(
+    numRowsPerBlock = static_cast<sys::Uint32_T>(
             options.getParameter(NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
                                  zero));
 
-    const size_t numColsPerBlock = static_cast<sys::Uint32_T>(
+    numColsPerBlock = static_cast<sys::Uint32_T>(
             options.getParameter(NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
                                  zero));
+
+
+}
+
+void ByteProvider::initialize(mem::SharedPtr<Container> container,
+                              const XMLControlRegistry& xmlRegistry,
+                              const std::vector<std::string>& schemaPaths,
+                              size_t maxProductSize,
+                              size_t numRowsPerBlock,
+                              size_t numColsPerBlock)
+{
+    NITFWriteControl writer;
+    populateWriter(container, xmlRegistry, maxProductSize, numRowsPerBlock,
+            numColsPerBlock, writer);
+    initialize(writer, schemaPaths);
+}
+
+void ByteProvider::initialize(const NITFWriteControl& writer,
+                              const std::vector<std::string>& schemaPaths)
+{
+    std::vector<PtrAndLength> desData;
+    size_t numRowsPerBlock;
+    size_t numColsPerBlock;
+    populateInitArgs(writer,
+                     schemaPaths,
+                     desData,
+                     numRowsPerBlock,
+                     numColsPerBlock);
 
     // Do the full initialization
     nitf::Record record = writer.getRecord();
