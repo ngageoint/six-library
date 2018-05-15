@@ -30,10 +30,9 @@ namespace six
 {
 namespace sidd
 {
-    //TODO: Doxygen
 /*!
  * \class CompressedSIDDByteProvider
- * \brief Used to provide corresponding raw NITF bytes (including NITF headers)
+ * \brief Used to provide corresponding compressed NITF bytes (including NITF headers)
  * when provided with some AOI of the pixel data.  The idea is that if
  * getBytes() is called multiple times, eventually for the entire image, the
  * raw bytes provided back will be the entire NITF file.  This abstraction is
@@ -55,6 +54,9 @@ public:
      *
      * \param data Representation of the derived data
      * \param schemPaths Directories or files of schema locations
+     * \param bytesPerBlock A vector for each image segment. Each inner vector
+     *        contains the compressed size for each block in the segment,
+     *        in bytes.
      * \param numRowsPerBlock The number of rows per block.  Defaults to no
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
@@ -77,6 +79,9 @@ public:
      * \param writer Initialized NITFWriteControl.  Must have all desired
      * product size and blocking values set.
      * \param schemaPaths Directories or files of schema locations
+     * \param bytesPerBlock A vector for each image segment. Each inner vector
+     *        contains the compressed size for each block in the segment,
+     *        in bytes.
      */
     CompressedSIDDByteProvider(const NITFWriteControl& writer,
                                const std::vector<std::string>& schemaPaths,

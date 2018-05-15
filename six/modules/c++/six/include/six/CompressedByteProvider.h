@@ -51,7 +51,6 @@ namespace six
 class CompressedByteProvider : public nitf::CompressedByteProvider
 {
 protected:
-    // TODO: Doxygen
     /*!
      * Initialize the byte provider.  Must be called in the constructor of
      * inheriting classes.
@@ -59,6 +58,9 @@ protected:
      * \param container Container initialized with all associated data
      * \param xmlRegistry XML registry
      * \param schemaPaths Directories or files of schema locations
+     * \param bytesPerBlock A vector for each image segment. Each inner vector
+     *        contains the compressed size for each block in the segment,
+     *        in bytes.
      * \param maxProductSize The max number of bytes in an image segment.
      * \param numRowsPerBlock The number of rows per block.  Only applies for
      * SIDD.  Defaults to no blocking.
@@ -81,6 +83,9 @@ protected:
      * NITFWriteControl::initialize() and have all desired product size and
      * blocking values set.
      * \param schemaPaths Directories or files of schema locations
+     * \param bytesPerBlock A vector for each image segment. Each inner vector
+     *        contains the compressed size for each block in the segment,
+     *        in bytes.
      */
     void initialize(const NITFWriteControl& writer,
                     const std::vector<std::string>& schemaPaths,
