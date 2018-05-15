@@ -230,7 +230,7 @@ void CompressedByteProvider::getBytes(
                                                fileOffset,
                                                buffers);
             imageDataPtr += offset;
-            addDES(seg, startRow, buffers);
+            addDES(seg, startRow + numRows, buffers);
         }
     }
 }
