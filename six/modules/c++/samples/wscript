@@ -14,6 +14,7 @@ def build(bld):
                'test_create_sicd'                    : 'cli six.sicd sio.lite',
                'test_create_sicd_from_mem'           : 'cli six.sicd',
                'test_create_sidd_from_mem'           : 'cli six.sicd six.sidd',
+               'test_create_sidd_with_compressed_byte_provider' : 'cli six.sidd',
                'test_create_sidd_legend'             : 'cli six.sidd',
                'test_create_sidd'                    : 'cli six.sicd six.sidd sio.lite',
                'test_dump_images'                    : 'cli six.sicd six.sidd sio.lite',
