@@ -31,6 +31,7 @@ void CompressedByteProvider::initialize(
         mem::SharedPtr<Container> container,
         const XMLControlRegistry& xmlRegistry,
         const std::vector<std::string>& schemaPaths,
+        const std::vector<std::vector<size_t> >& bytesPerBlock,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
@@ -39,28 +40,34 @@ void CompressedByteProvider::initialize(
     six::ByteProvider::populateWriter(container, xmlRegistry,
             maxProductSize, numRowsPerBlock, numColsPerBlock, writer);
 
-    initialize(writer, schemaPaths);
+    initialize(writer, schemaPaths, bytesPerBlock);
 }
 
 void CompressedByteProvider::initialize(
         const NITFWriteControl& writer,
-        const std::vector<std::string>& schemaPaths)
+        const std::vector<std::string>& schemaPaths,
+        const std::vector<std::vector<size_t> >& bytesPerBlock)
+
 {
+    std::vector<std::string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;
     six::ByteProvider::populateInitArgs(
             writer,
             schemaPaths,
+            xmlStrings,
             desData,
             numRowsPerBlock,
             numColsPerBlock);
 
     // Do the full initialization
     nitf::Record record = writer.getRecord();
-    nitf::ByteProvider::initialize(record,
-                                   desData,
-                                   numRowsPerBlock,
-                                   numColsPerBlock);
+    nitf::CompressedByteProvider::initialize(
+            record,
+            bytesPerBlock,
+            desData,
+            numRowsPerBlock,
+            numColsPerBlock);
 }
 }

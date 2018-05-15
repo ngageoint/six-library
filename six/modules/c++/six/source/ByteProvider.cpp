@@ -75,6 +75,7 @@ void ByteProvider::populateWriter(
 void ByteProvider::populateInitArgs(
         const NITFWriteControl& writer,
         const std::vector<std::string>& schemaPaths,
+        std::vector<std::string>& xmlStrings,
         std::vector<PtrAndLength>& desData,
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
@@ -114,7 +115,7 @@ void ByteProvider::populateInitArgs(
     // This memory must stay around until the call to the
     // base class's initialize() method
     logging::NullLogger logger;
-    std::vector<std::string> xmlStrings(container->getNumData());
+    xmlStrings.resize(container->getNumData());
     desData.resize(xmlStrings.size());
     for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
     {
@@ -138,8 +139,6 @@ void ByteProvider::populateInitArgs(
     numColsPerBlock = static_cast<sys::Uint32_T>(
             options.getParameter(NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
                                  zero));
-
-
 }
 
 void ByteProvider::initialize(mem::SharedPtr<Container> container,
@@ -158,11 +157,15 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
 void ByteProvider::initialize(const NITFWriteControl& writer,
                               const std::vector<std::string>& schemaPaths)
 {
+    // We don't explicitly use it, but each element in desData has a pointer
+    // into this vector, so we need it to stick around
+    std::vector<std::string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;
     populateInitArgs(writer,
                      schemaPaths,
+                     xmlStrings,
                      desData,
                      numRowsPerBlock,
                      numColsPerBlock);

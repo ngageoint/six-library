@@ -51,6 +51,7 @@ namespace six
 class CompressedByteProvider : public nitf::CompressedByteProvider
 {
 protected:
+    // TODO: Doxygen
     /*!
      * Initialize the byte provider.  Must be called in the constructor of
      * inheriting classes.
@@ -67,6 +68,7 @@ protected:
     void initialize(mem::SharedPtr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
+                    const std::vector<std::vector<size_t> >& bytesPerBlock,
                     size_t maxProductSize,
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
@@ -81,7 +83,8 @@ protected:
      * \param schemaPaths Directories or files of schema locations
      */
     void initialize(const NITFWriteControl& writer,
-                    const std::vector<std::string>& schemaPaths);
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<std::vector<size_t> >& bytesPerBlock);
 };
 }
 

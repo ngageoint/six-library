@@ -61,6 +61,7 @@ public:
     static void populateInitArgs(
             const NITFWriteControl& writer,
             const std::vector<std::string>& schemaPaths,
+            std::vector<std::string>& xmlStrings,
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
