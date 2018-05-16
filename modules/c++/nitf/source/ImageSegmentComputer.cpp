@@ -186,6 +186,17 @@ void ImageSegmentComputer::computeImageInfo()
     {
         mNumRowsLimit = maxRows;
     }
+
+    // Ensure that the row limit is a multiple of block size
+    // The NITF spec requires that when blocking is used, all blocks are the
+    // same size (so when there is a "short" block, pad rows to make it a full
+    // block are used).  So, it's silly to not make the row limit a multiple of
+    // the block size - if we don't, the overall NITF will needlessly be bigger
+    // with pad rows.
+    if (mNumRowsPerBlock != 0)
+    {
+        mNumRowsLimit -= mNumRowsLimit % mNumRowsPerBlock;
+    }
 }
 
 void ImageSegmentComputer::computeSegmentInfo()
