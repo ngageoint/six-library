@@ -186,6 +186,12 @@ void ImageSegmentComputer::computeImageInfo()
     {
         mNumRowsLimit = maxRows;
     }
+
+    // Ensure that the row limit is a multiple of block size
+    if (mNumRowsPerBlock != 0)
+    {
+        mNumRowsLimit -= mNumRowsLimit % mNumRowsPerBlock;
+    }
 }
 
 void ImageSegmentComputer::computeSegmentInfo()
