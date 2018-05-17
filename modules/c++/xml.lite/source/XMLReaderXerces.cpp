@@ -21,6 +21,7 @@
  */
 
 #include "xml/lite/XMLReader.h"
+#include <mem/ScopedArray.h>
 
 #if defined(USE_XERCES)
 
@@ -39,18 +40,16 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
     {
         throw xml::lite::XMLParseException(Ctxt("No stream available"));
     }
-    sys::byte* buffer = new sys::byte[available];
-    oss.read(buffer, available);
+    mem::ScopedArray<sys::byte> buffer(new sys::byte[available]);
+    oss.read(buffer.get(), available);
 
-    // Adopt my buffer, and delete it for me
-    MemBufInputSource memBuffer((const unsigned char *)buffer,
+    // Does not take ownership
+    MemBufInputSource memBuffer((const unsigned char *)buffer.get(),
                                 available,
                                 XMLReaderXerces::MEM_BUFFER_ID(),
                                 false);
 
     mNative->parse(memBuffer);
-
-    delete [] buffer;
 }
 
 // This function creates the parser

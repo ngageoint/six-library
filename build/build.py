@@ -968,7 +968,9 @@ def configureCompilerOptions(self):
             config['cc']['optz_fastest']   = '-xO5'
             self.env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
 
-            self.env.append_value('CFLAGS', '-KPIC'.split())
+            # C99 is required for Solaris to be compatible with
+            # macros that openjpeg sets
+            self.env.append_value('CFLAGS', ['-KPIC', '-xc99=all'])
             self.env.append_value('CFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, sys_platform):
