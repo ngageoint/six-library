@@ -7,6 +7,7 @@
 %}
 
 %include "sys/Conf.h"
+%include "sys/UTCDateTime.h"
 
 %typemap(in) ssize_t {
 %#if PY_VERSION_HEX >= 0x03000000
