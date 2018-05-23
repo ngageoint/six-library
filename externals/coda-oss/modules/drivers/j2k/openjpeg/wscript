@@ -150,10 +150,10 @@ def configure(conf):
                 if sys.byteorder != 'little':
                     conf.define('OPJ_BIG_ENDIAN', ' ', quote=False)
 
-    # make opj_config_private.h
-    writeConfig(conf, opj_private_callback, 'opj_private', infile=None,
-                outfile='opj_config_private.h', path=openjpegNode,
-                feature='makeHeader')
+            # make opj_config_private.h
+            writeConfig(conf, opj_private_callback, 'opj_private', infile=None,
+                        outfile='opj_config_private.h', path=openjpegNode,
+                        feature='makeHeader')
 
 
 def build(bld):
