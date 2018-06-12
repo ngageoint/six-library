@@ -33,10 +33,13 @@ void CompressedByteProvider::initialize(
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         size_t maxProductSize,
+        double compressionLevel,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
     NITFWriteControl writer;
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_J2K_COMPRESSION, compressionLevel);
     six::ByteProvider::populateWriter(container, xmlRegistry,
             maxProductSize, numRowsPerBlock, numColsPerBlock, writer);
 

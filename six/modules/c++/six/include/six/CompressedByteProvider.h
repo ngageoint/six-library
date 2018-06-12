@@ -72,6 +72,7 @@ protected:
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock,
                     size_t maxProductSize,
+                    double compressionLevel = 1,
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
@@ -90,6 +91,10 @@ protected:
     void initialize(const NITFWriteControl& writer,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock);
+
+private:
+    void setCompression(int compressionLevel,
+                        nitf::Record& record);
 };
 }
 

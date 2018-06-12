@@ -67,6 +67,7 @@ public:
     CompressedSIDDByteProvider(const DerivedData& data,
                                const std::vector<std::string>& schemaPaths,
                                const std::vector<std::vector<size_t> >& bytesPerBlock,
+                               double compressionLevel = 1,
                                size_t numRowsPerBlock = 0,
                                size_t numColsPerBlock = 0,
                                size_t maxProductSize = 0);
