@@ -61,6 +61,7 @@ protected:
      * \param bytesPerBlock A vector for each image segment. Each inner vector
      *        contains the compressed size for each block in the segment,
      *        in bytes.
+     * \param compressionRatio Ratio used for J2K compression
      * \param maxProductSize The max number of bytes in an image segment.
      * \param numRowsPerBlock The number of rows per block.  Only applies for
      * SIDD.  Defaults to no blocking.
@@ -71,8 +72,8 @@ protected:
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock,
+                    size_t compressionRatio,
                     size_t maxProductSize,
-                    double compressionLevel = 1,
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
@@ -91,10 +92,6 @@ protected:
     void initialize(const NITFWriteControl& writer,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock);
-
-private:
-    void setCompression(int compressionLevel,
-                        nitf::Record& record);
 };
 }
 
