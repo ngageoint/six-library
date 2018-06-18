@@ -20,6 +20,7 @@
  *
  */
 
+#include <iomanip>
 #include <sstream>
 
 #include <mem/ScopedArray.h>
@@ -305,15 +306,18 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                 subheader.getImageCompression().set("C8");
 
                 //calculate comrat
-                const int comratInt = (int)((j2kCompression * nbpp * 10.0) + 0.5);
-                const bool isNumericallyLossless = (bool)mOptions.getParameter(
-                        OPT_J2K_COMPRESSION_LOSSLESS, Parameter(false));
+                const int comratInt = static_cast<int>(
+                        (j2kCompression * nbpp * 10.0) + 0.5);
+                const bool isNumericallyLossless = static_cast<bool>(
+                        mOptions.getParameter(
+                        OPT_J2K_COMPRESSION_LOSSLESS, Parameter(false)));
                 // We are assuming the image is not compressed so heavily as
                 // to be visually lossy
                 const char comratChar = isNumericallyLossless ? 'N' : 'V';
+                std::stringstream comratStream;
+                comratStream << comratChar << std::setw(3) << comratInt;
+                subheader.getCompressionRate().set(comratStream.str());
 
-                const std::string comrat = FmtX("%c%03d", comratChar, comratInt);
-                subheader.getCompressionRate().set(comrat);
             }
         }
 

@@ -33,9 +33,10 @@ size_t countCompresedBytes(
     size_t sum = 0;
     for (size_t ii = 0; ii < bytesPerBlock.size(); ++ii)
     {
-        for (size_t jj = 0; jj < bytesPerBlock[ii].size(); ++jj)
+        const std::vector<size_t>& bytesPerBlockInSegment = bytesPerBlock[ii];
+        for (size_t jj = 0; jj < bytesPerBlockInSegment.size(); ++jj)
         {
-            sum += bytesPerBlock[ii][jj];
+            sum += bytesPerBlockInSegment[jj];
         }
     }
     return sum;
@@ -53,7 +54,7 @@ void CompressedByteProvider::initialize(
         const XMLControlRegistry& xmlRegistry,
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
-        size_t compressionRatio,
+        bool isNumericallyLossless,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
@@ -66,7 +67,7 @@ void CompressedByteProvider::initialize(
             six::NITFWriteControl::OPT_J2K_COMPRESSION_BITRATE, bitrate);
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS,
-            compressionRatio == 1);
+            isNumericallyLossless);
     six::ByteProvider::populateWriter(container, xmlRegistry,
             maxProductSize, numRowsPerBlock, numColsPerBlock, writer);
 

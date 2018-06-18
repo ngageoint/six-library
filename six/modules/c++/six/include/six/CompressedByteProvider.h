@@ -61,7 +61,7 @@ protected:
      * \param bytesPerBlock A vector for each image segment. Each inner vector
      *        contains the compressed size for each block in the segment,
      *        in bytes.
-     * \param compressionRatio Ratio used for J2K compression
+     * \param isNumericallyLossless Flag whether compression was lossless
      * \param maxProductSize The max number of bytes in an image segment.
      * \param numRowsPerBlock The number of rows per block.  Only applies for
      * SIDD.  Defaults to no blocking.
@@ -72,7 +72,7 @@ protected:
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock,
-                    size_t compressionRatio,
+                    bool isNumericallyLossless,
                     size_t maxProductSize,
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
