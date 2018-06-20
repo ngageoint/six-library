@@ -31,6 +31,7 @@ CompressedSIDDByteProvider::CompressedSIDDByteProvider(
         const DerivedData& data,
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
+        bool isNumericallyLossless,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
         size_t maxProductSize)
@@ -47,7 +48,8 @@ CompressedSIDDByteProvider::CompressedSIDDByteProvider(
     container->addData(data.clone());
 
     initialize(container, xmlRegistry, schemaPaths, bytesPerBlock,
-               maxProductSize, numRowsPerBlock, numColsPerBlock);
+               isNumericallyLossless, maxProductSize,
+               numRowsPerBlock, numColsPerBlock);
 }
 
 CompressedSIDDByteProvider::CompressedSIDDByteProvider(

@@ -25,6 +25,28 @@
 #include <six/ByteProvider.h>
 #include <six/CompressedByteProvider.h>
 
+namespace
+{
+size_t countCompresedBytes(
+        const std::vector<std::vector<size_t> >& bytesPerBlock)
+{
+    size_t sum = 0;
+    for (size_t ii = 0; ii < bytesPerBlock.size(); ++ii)
+    {
+        const std::vector<size_t>& bytesPerBlockInSegment = bytesPerBlock[ii];
+        for (size_t jj = 0; jj < bytesPerBlockInSegment.size(); ++jj)
+        {
+            sum += bytesPerBlockInSegment[jj];
+        }
+    }
+    return sum;
+}
+size_t countUncompressedPixels(const six::Data& data)
+{
+    return data.getNumRows() * data.getNumCols();
+}
+}
+
 namespace six
 {
 void CompressedByteProvider::initialize(
@@ -32,11 +54,20 @@ void CompressedByteProvider::initialize(
         const XMLControlRegistry& xmlRegistry,
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
+        bool isNumericallyLossless,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
     NITFWriteControl writer;
+    const double bitrate =
+            (countCompresedBytes(bytesPerBlock) * 8 /
+             countUncompressedPixels(*container->getData(0)));
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_J2K_COMPRESSION_BITRATE, bitrate);
+    writer.getOptions().setParameter(
+            six::NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS,
+            isNumericallyLossless);
     six::ByteProvider::populateWriter(container, xmlRegistry,
             maxProductSize, numRowsPerBlock, numColsPerBlock, writer);
 

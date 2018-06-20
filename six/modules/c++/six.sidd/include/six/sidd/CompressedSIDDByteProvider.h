@@ -57,6 +57,7 @@ public:
      * \param bytesPerBlock A vector for each image segment. Each inner vector
      *        contains the compressed size for each block in the segment,
      *        in bytes.
+     * \param isNumericallyLossless Flag whether compression was lossless
      * \param numRowsPerBlock The number of rows per block.  Defaults to no
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
@@ -67,6 +68,7 @@ public:
     CompressedSIDDByteProvider(const DerivedData& data,
                                const std::vector<std::string>& schemaPaths,
                                const std::vector<std::vector<size_t> >& bytesPerBlock,
+                               bool isNumericallyLossless,
                                size_t numRowsPerBlock = 0,
                                size_t numColsPerBlock = 0,
                                size_t maxProductSize = 0);

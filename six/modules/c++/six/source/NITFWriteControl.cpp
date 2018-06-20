@@ -20,8 +20,10 @@
  *
  */
 
+#include <iomanip>
 #include <sstream>
 
+#include <math/Round.h>
 #include <mem/ScopedArray.h>
 #include <io/ByteStream.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -89,7 +91,8 @@ namespace six
 {
 const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
 const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
-const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
+const char NITFWriteControl::OPT_J2K_COMPRESSION_BITRATE[] = "J2KCompressionBitrate";
+const char NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS[] = "J2KCompressionLossless";
 const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 const size_t NITFWriteControl::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
@@ -143,7 +146,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
     {
         // J2K only available for derived data
         j2kCompression = (double)mOptions.getParameter(
-                OPT_J2K_COMPRESSION, Parameter(0));
+                OPT_J2K_COMPRESSION_BITRATE, Parameter(0));
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
         // get row blocking parameters
@@ -304,9 +307,18 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                 subheader.getImageCompression().set("C8");
 
                 //calculate comrat
-                int comratInt = (int)((j2kCompression * nbpp * 10.0) + 0.5);
-                std::string comrat = FmtX("N%03d", comratInt);
-                subheader.getCompressionRate().set(comrat);
+                const int comratInt = static_cast<int>(
+                        math::round((j2kCompression * nbpp * 10.0)));
+                const bool isNumericallyLossless = static_cast<bool>(
+                        mOptions.getParameter(
+                        OPT_J2K_COMPRESSION_LOSSLESS, Parameter(false)));
+                // We are assuming the image is not compressed so heavily as
+                // to be visually lossy
+                const char comratChar = isNumericallyLossless ? 'N' : 'V';
+                std::ostringstream comratStream;
+                comratStream << comratChar << std::setw(3) << comratInt;
+                subheader.getCompressionRate().set(comratStream.str());
+
             }
         }
 
@@ -846,7 +858,7 @@ void NITFWriteControl::save(
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)mOptions.getParameter(
-            OPT_J2K_COMPRESSION, Parameter(0));
+            OPT_J2K_COMPRESSION_BITRATE, Parameter(0));
 
     bool enableJ2K = (mContainer->getDataType() != DataType::COMPLEX) &&
             (j2kCompression <= 1.0) && j2kCompression > 0.0001;

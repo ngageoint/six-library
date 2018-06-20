@@ -60,7 +60,15 @@ public:
     //!  Keys that allow us to override the ILOC rules for tests
     static const char OPT_MAX_PRODUCT_SIZE[];
     static const char OPT_MAX_ILOC_ROWS[];
-    static const char OPT_J2K_COMPRESSION[];
+
+    // The following two options control how the `comrat` field is set
+
+    //! Bits/pixel/band for j2k compression
+    static const char OPT_J2K_COMPRESSION_BITRATE[];
+
+    //! True if numerically lossless, false for visually lossless
+    //! We assume visually lossy compression will not be used
+    static const char OPT_J2K_COMPRESSION_LOSSLESS[];
 
     //! These determine the NITF blocking
     //  They only pertain to SIDD

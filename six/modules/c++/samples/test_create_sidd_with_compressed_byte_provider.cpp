@@ -1028,7 +1028,7 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     std::auto_ptr<six::sidd::DerivedData> data = createData(
             types::RowCol<size_t>(NITRO_IMAGE.height, NITRO_IMAGE.width));
     six::sidd::CompressedSIDDByteProvider byteProvider(*data, schemaPaths,
-            bytesPerBlock);
+            bytesPerBlock, 1);
     nitf::Off fileOffset;
     nitf::NITFBufferList buffers;
     byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
