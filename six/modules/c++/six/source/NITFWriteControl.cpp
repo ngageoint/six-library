@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include <math/Round.h>
 #include <mem/ScopedArray.h>
 #include <io/ByteStream.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -307,14 +308,14 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 
                 //calculate comrat
                 const int comratInt = static_cast<int>(
-                        (j2kCompression * nbpp * 10.0) + 0.5);
+                        math::round((j2kCompression * nbpp * 10.0)));
                 const bool isNumericallyLossless = static_cast<bool>(
                         mOptions.getParameter(
                         OPT_J2K_COMPRESSION_LOSSLESS, Parameter(false)));
                 // We are assuming the image is not compressed so heavily as
                 // to be visually lossy
                 const char comratChar = isNumericallyLossless ? 'N' : 'V';
-                std::stringstream comratStream;
+                std::ostringstream comratStream;
                 comratStream << comratChar << std::setw(3) << comratInt;
                 subheader.getCompressionRate().set(comratStream.str());
 
