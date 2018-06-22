@@ -91,7 +91,7 @@ namespace six
 {
 const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
 const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
-const char NITFWriteControl::OPT_J2K_COMPRESSION_BITRATE[] = "J2KCompressionBitrate";
+const char NITFWriteControl::OPT_J2K_COMPRESSION_BYTERATE[] = "J2KCompressionByterate";
 const char NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS[] = "J2KCompressionLossless";
 const char NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFWriteControl::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
@@ -146,7 +146,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
     {
         // J2K only available for derived data
         j2kCompression = (double)mOptions.getParameter(
-                OPT_J2K_COMPRESSION_BITRATE, Parameter(0));
+                OPT_J2K_COMPRESSION_BYTERATE, Parameter(0));
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
         // get row blocking parameters
@@ -316,7 +316,8 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
                 // to be visually lossy
                 const char comratChar = isNumericallyLossless ? 'N' : 'V';
                 std::ostringstream comratStream;
-                comratStream << comratChar << std::setw(3) << comratInt;
+                comratStream << comratChar;
+                comratStream << std::setw(3) << std::setfill('0') << comratInt;
                 subheader.getCompressionRate().set(comratStream.str());
 
             }
@@ -858,7 +859,7 @@ void NITFWriteControl::save(
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)mOptions.getParameter(
-            OPT_J2K_COMPRESSION_BITRATE, Parameter(0));
+            OPT_J2K_COMPRESSION_BYTERATE, Parameter(0));
 
     bool enableJ2K = (mContainer->getDataType() != DataType::COMPLEX) &&
             (j2kCompression <= 1.0) && j2kCompression > 0.0001;
