@@ -63,8 +63,8 @@ public:
 
     // The following two options control how the `comrat` field is set
 
-    //! Bits/pixel/band for j2k compression
-    static const char OPT_J2K_COMPRESSION_BITRATE[];
+    //! Bytes/pixel/band for j2k compression
+    static const char OPT_J2K_COMPRESSION_BYTERATE[];
 
     //! True if numerically lossless, false for visually lossless
     //! We assume visually lossy compression will not be used

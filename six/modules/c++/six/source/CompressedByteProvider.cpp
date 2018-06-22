@@ -27,7 +27,7 @@
 
 namespace
 {
-size_t countCompresedBytes(
+size_t countCompressedBytes(
         const std::vector<std::vector<size_t> >& bytesPerBlock)
 {
     size_t sum = 0;
@@ -60,11 +60,11 @@ void CompressedByteProvider::initialize(
         size_t numColsPerBlock)
 {
     NITFWriteControl writer;
-    const double bitrate =
-            (countCompresedBytes(bytesPerBlock) * 8 /
-             countUncompressedPixels(*container->getData(0)));
+    const double byterate =
+            static_cast<double>(countCompressedBytes(bytesPerBlock)) /
+             countUncompressedPixels(*container->getData(0));
     writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_J2K_COMPRESSION_BITRATE, bitrate);
+            six::NITFWriteControl::OPT_J2K_COMPRESSION_BYTERATE, byterate);
     writer.getOptions().setParameter(
             six::NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS,
             isNumericallyLossless);
