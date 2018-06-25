@@ -41,6 +41,7 @@
 #include <six/Types.h>
 #include <six/sidd/CompressedSIDDByteProvider.h>
 #include <six/sidd/DerivedData.h>
+#include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
 #include <types/RowCol.h>
 #include <string>
@@ -1027,8 +1028,25 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     bytesPerBlock[0].push_back(NITRO_IMAGE.width * NITRO_IMAGE.height * NUM_BANDS);
     std::auto_ptr<six::sidd::DerivedData> data = createData(
             types::RowCol<size_t>(NITRO_IMAGE.height, NITRO_IMAGE.width));
-    six::sidd::CompressedSIDDByteProvider byteProvider(*data, schemaPaths,
-            bytesPerBlock, 1);
+
+    // The ByteProvider can do all the NITFWriteControl setup for you.
+    // However, since we're not actually giving it compressed data, it will
+    // make bad assumptions about the metadata for this test, so we need
+    // to initialize and pass the WriteControl ourselves.
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::DERIVED,
+                           new six::XMLControlCreatorT<
+                                   six::sidd::DerivedXMLControl>());
+
+    six::NITFWriteControl writer;
+    writer.setXMLControlRegistry(&xmlRegistry);
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::DERIVED));
+    container->addData(data.release());
+    writer.initialize(container);
+
+    six::sidd::CompressedSIDDByteProvider byteProvider(writer, schemaPaths,
+            bytesPerBlock);
     nitf::Off fileOffset;
     nitf::NITFBufferList buffers;
     byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
