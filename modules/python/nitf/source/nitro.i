@@ -594,13 +594,21 @@
         nitf_Uint8 **buf = NULL;
         nitf_Uint8 *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
-        int padded, rowSkip, colSkip, subimageSize;
+        int padded, rowSkip, colSkip;
+        size_t subimageSize;
         nitf_Uint32 i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        subimageSize = static_cast<size_t>(window->numRows/rowSkip) *
+                (window->numCols/colSkip) *
+                nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        if (subimageSize < window->numRows / rowSkip)
+        {
+            std::cerr << "Image is too large for this system\n";
+            goto CATCH_ERROR;
+        }
 
         dims.row = window->numBands;
         dims.col = subimageSize;
