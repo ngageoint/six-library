@@ -4181,18 +4181,20 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         nitf_Uint8 *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
         int padded, rowSkip, colSkip;
-        size_t subimageSize;
+        nitf_Uint64 subimageSize;
         nitf_Uint32 i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = static_cast<size_t>(window->numRows/rowSkip) *
+        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
                 (window->numCols/colSkip) *
                 nitf_ImageIO_pixelSize(reader->imageDeblocker);
-        if (subimageSize < window->numRows / rowSkip)
+        if (subimageSize > std::numeric_limits<size_t>::max())
         {
-            std::cerr << "Image is too large for this system\n";
+            nitf_Error_print(error, stderr,
+                             "Image is too large for this system\n");
+            PyErr_SetString(PyExc_MemoryError, "");
             goto CATCH_ERROR;
         }
 
