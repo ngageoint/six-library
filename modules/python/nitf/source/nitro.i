@@ -26,6 +26,7 @@
 #include <import/nitf.h>
 #include <numpyutils/numpyutils.h>
 #include <iostream>
+#include <limits>
 %}
 
 #define NITF_LIST_TO_PYTHON_LIST(_type) \

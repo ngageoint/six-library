@@ -3263,6 +3263,7 @@ namespace swig {
 #include <import/nitf.h>
 #include <numpyutils/numpyutils.h>
 #include <iostream>
+#include <limits>
 
 
 SWIGINTERN swig_type_info*
