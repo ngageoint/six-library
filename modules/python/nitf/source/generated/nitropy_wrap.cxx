@@ -3263,6 +3263,7 @@ namespace swig {
 #include <import/nitf.h>
 #include <numpyutils/numpyutils.h>
 #include <iostream>
+#include <limits>
 
 
 SWIGINTERN swig_type_info*
@@ -4180,13 +4181,23 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         nitf_Uint8 **buf = NULL;
         nitf_Uint8 *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
-        int padded, rowSkip, colSkip, subimageSize;
+        int padded, rowSkip, colSkip;
+        nitf_Uint64 subimageSize;
         nitf_Uint32 i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
+                (window->numCols/colSkip) *
+                nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        if (subimageSize > std::numeric_limits<size_t>::max())
+        {
+            nitf_Error_print(error, stderr,
+                             "Image is too large for this system\n");
+            PyErr_SetString(PyExc_MemoryError, "");
+            goto CATCH_ERROR;
+        }
 
         dims.row = window->numBands;
         dims.col = subimageSize;
