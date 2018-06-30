@@ -201,6 +201,18 @@ public:
         return mNumRowsPerBlock;
     }
 
+    /*!
+     * \return The number of columns per block (always the same value for all
+     * segments).  If the number of columns in the image are less than the
+     * constructed number of columns per block, this will be the number of
+     * columns in the image (i.e. no reason to bother to create blocks larger
+     * than the image).
+     */
+    size_t getNumColsPerBlock() const
+    {
+        return mNumColsPerBlock;
+    }
+
     /*
      * \return The segment the block-row index falls in
      * \throws If blockRow exceeds the total block rows in the image
