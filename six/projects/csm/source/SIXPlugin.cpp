@@ -37,8 +37,8 @@ namespace six
 namespace CSM
 {
 const char SIXPlugin::PLUGIN_NAME[] = "SIX";
-const char SIXPlugin::MANUFACTURER[] = "MDAUS";
-const char SIXPlugin::RELEASE_DATE[] = "20161223";
+const char SIXPlugin::MANUFACTURER[] = "Radiant Solutions";
+const char SIXPlugin::RELEASE_DATE[] = "20180818";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
 

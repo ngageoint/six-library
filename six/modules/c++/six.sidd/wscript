@@ -7,7 +7,7 @@ options = configure = distclean = lambda p: None
 
 def build(bld):
     modArgs = globals()
-    modArgs['SIX_VERSION'] = bld.env['SIX_VERSION']
+    modArgs['VERSION'] = bld.env['SIX_VERSION']
     bld.module(**modArgs)
 
     # install the schemas
