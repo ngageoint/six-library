@@ -544,8 +544,19 @@ template<> DualPolarizationType six::toType<DualPolarizationType>(
         return DualPolarizationType::RHC_RHC;
     else if (type == "RHC:LHC")
         return DualPolarizationType::RHC_LHC;
+    else if (type == "RHC:V")
+        return DualPolarizationType::RHC_V;
+    else if (type == "RHC:H")
+        return DualPolarizationType::RHC_H;
     else if (type == "LHC:LHC")
         return DualPolarizationType::LHC_LHC;
+    else if (type == "LHC:RHC")
+        return DualPolarizationType::LHC_RHC;
+    else if (type == "LHC:V")
+        return DualPolarizationType::LHC_V;
+    else if (type == "LHC:H")
+        return DualPolarizationType::LHC_H;
+
     else if (type == "UNKNOWN")
         return DualPolarizationType::UNKNOWN;
     else
@@ -573,8 +584,18 @@ template<> std::string six::toString(const DualPolarizationType& t)
         return "RHC:RHC";
     case DualPolarizationType::RHC_LHC:
         return "RHC:LHC";
+    case DualPolarizationType::RHC_V:
+        return "RHC:V";
+    case DualPolarizationType::RHC_H:
+        return "RHC:H";
     case DualPolarizationType::LHC_LHC:
         return "LHC:LHC";
+    case DualPolarizationType::LHC_RHC:
+        return "LHC:RHC";
+    case DualPolarizationType::LHC_V:
+        return "LHC:V";
+    case DualPolarizationType::LHC_H:
+        return "LHC:H";
     case DualPolarizationType::UNKNOWN:
         return "UNKNOWN";
     default:

@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
    elementFormDefault="qualified"
    attributeFormDefault="unqualified"
-   targetNamespace="urn:SICD:1.2.0"
+   targetNamespace="urn:SICD:1.2.1-alpha"
    xmlns="urn:SICD:1.2.1-alpha">
 
 <!-- SICD TYPES -->

@@ -1120,9 +1120,9 @@ void NITFWriteControl::addUserDefinedSubheader(
             // TODO: Update specDT once final document is posted
             specDT = "2016-04-12T00:00:00Z";
         }
-        else if (version == "1.2.1")
+        else if (version == "1.2.1-alpha")
         {
-            specVers = "1.2.1-alpha";
+            specVers = "1.2.1";
             specDT = "2018-08-21T00:00:00Z";
         }
     }
