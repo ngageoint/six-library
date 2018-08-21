@@ -53,7 +53,6 @@ struct AppliedType
     };
 
     //! Default constructor
-
     AppliedType(){ value = NOT_SET; }
 
     //! string constructor
@@ -1197,9 +1196,13 @@ struct DualPolarizationType
         H_H = 5,
         RHC_RHC = 6,
         RHC_LHC = 7,
-        LHC_RHC = 8,
-        LHC_LHC = 9,
-        UNKNOWN = 10,
+        RHC_V = 8,
+        RHC_H = 9,
+        LHC_RHC = 10,
+        LHC_LHC = 11,
+        LHC_V = 12,
+        LHC_H = 13,
+        UNKNOWN = 14,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -1223,10 +1226,18 @@ struct DualPolarizationType
             value = RHC_RHC;
         else if (s == "RHC_LHC")
             value = RHC_LHC;
+        else if (s == "RHC_V")
+            value = RHC_V;
+        else if (s == "RHC_H")
+            value = RHC_H;
         else if (s == "LHC_RHC")
             value = LHC_RHC;
         else if (s == "LHC_LHC")
             value = LHC_LHC;
+        else if (s == "LHC_V")
+            value = LHC_V;
+        else if (s == "LHC_H")
+            value = LHC_H;
         else if (s == "UNKNOWN")
             value = UNKNOWN;
         else if (s == "NOT_SET")
@@ -1262,12 +1273,24 @@ struct DualPolarizationType
             value = RHC_LHC;
             break;
         case 8:
-            value = LHC_RHC;
+            value = RHC_V;
             break;
         case 9:
-            value = LHC_LHC;
+            value = RHC_H;
             break;
         case 10:
+            value = LHC_RHC;
+            break;
+        case 11:
+            value = LHC_LHC;
+            break;
+        case 12:
+            value = LHC_V;
+            break;
+        case 13:
+            value = LHC_H;
+            break;
+        case 14:
             value = UNKNOWN;
             break;
         case six::NOT_SET_VALUE:
@@ -1301,10 +1324,18 @@ struct DualPolarizationType
         case 7:
             return std::string("RHC_LHC");
         case 8:
-            return std::string("LHC_RHC");
+            return std::string("RHC_V");
         case 9:
-            return std::string("LHC_LHC");
+            return std::string("RHC_H");
         case 10:
+            return std::string("LHC_RHC");
+        case 11:
+            return std::string("LHC_LHC");
+        case 12:
+            return std::string("LHC_V");
+        case 13:
+            return std::string("LHC_H");
+        case 14:
             return std::string("UNKNOWN");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
@@ -1335,7 +1366,7 @@ struct DualPolarizationType
     operator int() const { return value; }
     operator std::string() const { return toString(); }
 
-    static size_t size() { return 11; }
+    static size_t size() { return 15; }
 
     int value;
 
@@ -3313,7 +3344,10 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2016-04-04 16:12:32.876144
+
+// code auto-generated 2018-08-21 07:52:39.301000
+
 }
 
 #endif
+
