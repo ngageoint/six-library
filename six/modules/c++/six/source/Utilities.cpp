@@ -528,12 +528,60 @@ template<> std::string six::toString(const PolarizationType& t)
 template<> DualPolarizationType six::toType<DualPolarizationType>(
                                                                   const std::string& s)
 {
-    return DualPolarizationType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+        return DualPolarizationType::OTHER;
+    else if (type == "V:V")
+        return DualPolarizationType::V_V;
+    else if (type == "V:H")
+        return DualPolarizationType::V_H;
+    else if (type == "H:V")
+        return DualPolarizationType::H_V;
+    else if (type == "H:H")
+        return DualPolarizationType::H_H;
+    else if (type == "RHC:RHC")
+        return DualPolarizationType::RHC_RHC;
+    else if (type == "RHC:LHC")
+        return DualPolarizationType::RHC_LHC;
+    else if (type == "LHC:LHC")
+        return DualPolarizationType::LHC_LHC;
+    else if (type == "UNKNOWN")
+        return DualPolarizationType::UNKNOWN;
+    else
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported conversion to dual polarization type '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const DualPolarizationType& t)
 {
-    return t.toString();
+    switch (t)
+    {
+    case DualPolarizationType::OTHER:
+        return "OTHER";
+    case DualPolarizationType::V_V:
+        return "V:V";
+    case DualPolarizationType::V_H:
+        return "V:H";
+    case DualPolarizationType::H_V:
+        return "H:V";
+    case DualPolarizationType::H_H:
+        return "H:H";
+    case DualPolarizationType::RHC_RHC:
+        return "RHC:RHC";
+    case DualPolarizationType::RHC_LHC:
+        return "RHC:LHC";
+    case DualPolarizationType::LHC_LHC:
+        return "LHC:LHC";
+    case DualPolarizationType::UNKNOWN:
+        return "UNKNOWN";
+    default:
+        throw except::Exception(
+                                Ctxt(
+                                     "Unsupported dual polarization type to string"));
+    }
 }
 
 template<> DemodType six::toType<DemodType>(const std::string& s)
