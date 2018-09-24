@@ -26,7 +26,7 @@
 
 #include <ostream>
 
-#include <cphd03/Types.h>
+#include <cphd/Types.h>
 #include <cphd03/Data.h>
 #include <cphd03/Global.h>
 #include <cphd03/Channel.h>
@@ -55,12 +55,12 @@ struct Metadata
     {
     }
 
-    void setSampleType(SampleType sampleType)
+    void setSampleType(cphd::SampleType sampleType)
     {
         data.sampleType = sampleType;
     }
 
-    SampleType getSampleType() const
+    cphd::SampleType getSampleType() const
     {
         return data.sampleType;
     }
@@ -72,23 +72,23 @@ struct Metadata
 
     bool isFX() const
     {
-        return (getDomainType() == DomainType::FX);
+        return (getDomainType() == cphd::DomainType::FX);
     }
 
     bool isTOA() const
     {
-        return (getDomainType() == DomainType::TOA);
+        return (getDomainType() == cphd::DomainType::TOA);
     }
-    
+
     // returns "FX", "TOA", or "NOT_SET"
     std::string getDomainTypeString() const;
 
     // returns enum for FX, TOA, or NOT_SET
-    cphd03::DomainType getDomainType() const;
+    cphd::DomainType getDomainType() const;
 
     //!  CollectionInfo block.  Contains the general collection information
-    //!  CPHD can use the SICD Collection Information block directly
-    CollectionInformation collectionInformation;
+    //!  CPHD03 can use the SICD Collection Information block directly
+    cphd::CollectionInformation collectionInformation;
 
     //!  Data block. Very unfortunate name, but matches the CPHD spec.
     //!  Contains the  information

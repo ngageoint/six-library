@@ -49,7 +49,7 @@ std::string Metadata::getDomainTypeString() const
     return global.domainType.toString();
 }
 
-cphd03::DomainType Metadata::getDomainType() const
+cphd::DomainType Metadata::getDomainType() const
 {
     return global.domainType;
 }

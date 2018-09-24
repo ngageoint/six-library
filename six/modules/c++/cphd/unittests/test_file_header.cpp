@@ -40,14 +40,6 @@ static const char FILE_HEADER_CONTENT[] = "CPHD/1.0\n"
         "RELEASE_INFO := UNRESTRICTED\n"
         "\f\n";
 
-TEST_CASE(testCPHDCheck)
-{
-    io::MockSeekableInputStream cphdIdentifier("CPHD");
-    TEST_ASSERT(cphd::FileHeader::isCPHD(cphdIdentifier));
-    io::MockSeekableInputStream falseIdentifier("CXAM");
-    TEST_ASSERT(!cphd::FileHeader::isCPHD(falseIdentifier));
-}
-
 TEST_CASE(testReadVersion)
 {
     io::MockSeekableInputStream fileTypeHeader(FILE_TYPE_HEADER);
@@ -157,7 +149,6 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        TEST_CHECK(testCPHDCheck);
         TEST_CHECK(testReadVersion);
         TEST_CHECK(testCanReadHeaderWithoutBreaking);
         TEST_CHECK(testRoundTripHeader);

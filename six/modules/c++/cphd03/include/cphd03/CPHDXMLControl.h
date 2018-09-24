@@ -71,7 +71,7 @@ private:
     // TODO: These are copies from some of the six.sicd XMLParsers
     XMLElem createLatLonAltFootprint(const std::string& name,
                                      const std::string& cornerName,
-                                     const LatLonAltCorners& corners,
+                                     const cphd::LatLonAltCorners& corners,
                                      XMLElem parent = NULL) const;
 
 private:

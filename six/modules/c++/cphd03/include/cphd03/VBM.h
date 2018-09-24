@@ -28,7 +28,7 @@
 #include <sys/Conf.h>
 #include <io/SeekableStreams.h>
 #include <mem/ScopedCopyablePtr.h>
-#include <cphd03/Types.h>
+#include <cphd/Types.h>
 #include <cphd03/Data.h>
 #include <cphd03/VectorParameters.h>
 
@@ -79,7 +79,7 @@ public:
         bool srpTimeEnabled,
         bool tropoSrpEnabled,
         bool ampSFEnabled,
-        DomainType domainType);
+        cphd::DomainType domainType);
 
     /*
      *  \func Constructor
@@ -93,17 +93,17 @@ public:
         bool srpTimeEnabled,
         bool tropoSrpEnabled,
         bool ampSFEnabled,
-        DomainType domainType,
+        cphd::DomainType domainType,
         const std::vector<const void*>& data);
 
     // Retrieve the value of a VBM parameter  - request must be valid
     // invalid requests throw exceptions
     double getTxTime(size_t channel, size_t vector) const;
-    Vector3 getTxPos(size_t channel, size_t vector) const;
+    cphd::Vector3 getTxPos(size_t channel, size_t vector) const;
     double getRcvTime(size_t channel, size_t vector) const;
-    Vector3 getRcvPos(size_t channel, size_t vector) const;
+    cphd::Vector3 getRcvPos(size_t channel, size_t vector) const;
     double getSRPTime(size_t channel, size_t vector) const;
-    Vector3 getSRPPos(size_t channel, size_t vector) const;
+    cphd::Vector3 getSRPPos(size_t channel, size_t vector) const;
     double getTropoSRP(size_t channel, size_t vector) const;
     double getAmpSF(size_t channel, size_t vector) const;
     double getFx0(size_t channel, size_t vector) const;
@@ -114,11 +114,11 @@ public:
     double getTOASS(size_t channel, size_t vector) const;
 
     void setTxTime(double value, size_t channel, size_t vector);
-    void setTxPos(const Vector3& value, size_t channel, size_t vector);
+    void setTxPos(const cphd::Vector3& value, size_t channel, size_t vector);
     void setRcvTime(double value, size_t channel, size_t vector);
-    void setRcvPos(const Vector3& value, size_t channel, size_t vector);
+    void setRcvPos(const cphd::Vector3& value, size_t channel, size_t vector);
     void setSRPTime(double value, size_t channel, size_t vector);
-    void setSRPPos(const Vector3& value,size_t channel, size_t vector);
+    void setSRPPos(const cphd::Vector3& value,size_t channel, size_t vector);
     void setTropoSRP(double value, size_t channel, size_t vector);
     void setAmpSF(double value, size_t channel, size_t vector);
 
@@ -276,8 +276,8 @@ private:
     {
         VectorBasedParameters(bool srpTimeEnabled,
                               bool tropoSrpEnabled,
-                              bool ampSFEnabled, 
-                              DomainType domainType);
+                              bool ampSFEnabled,
+                              cphd::DomainType domainType);
 
         size_t getNumBytes() const;
 
@@ -293,11 +293,11 @@ private:
         }
 
         double txTime;
-        Vector3 txPos;
+        cphd::Vector3 txPos;
         double rcvTime;
-        Vector3 rcvPos;
+        cphd::Vector3 rcvPos;
         double srpTime;
-        Vector3 srpPos;
+        cphd::Vector3 srpPos;
         double tropoSrp;
         double ampSF;
         mem::ScopedCopyablePtr<FrequencyParameters> frequencyParameters;
@@ -312,7 +312,7 @@ private:
     bool mSRPTimeEnabled;
     bool mTropoSRPEnabled;
     bool mAmpSFEnabled;
-    DomainType mDomainType;
+    cphd::DomainType mDomainType;
     size_t mNumBytesPerVector;
 
     // One vector of VectorBasedParameters per channel.

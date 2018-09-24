@@ -91,7 +91,7 @@ six::Vector3 getRandomVector3()
     return vec;
 }
 
-cphd03::PolyXYZ getRandomPolyXYZ()
+cphd::PolyXYZ getRandomPolyXYZ()
 {
     six::PolyXYZ poly(3);
     for (size_t ii = 0; ii <= poly.order(); ++ii)
@@ -101,7 +101,7 @@ cphd03::PolyXYZ getRandomPolyXYZ()
     return poly;
 }
 
-cphd03::Poly1D getRandomPoly1D()
+cphd::Poly1D getRandomPoly1D()
 {
     six::Poly1D poly(3);
     for (size_t ii = 0; ii <= poly.order(); ++ii)
@@ -111,7 +111,7 @@ cphd03::Poly1D getRandomPoly1D()
     return poly;
 }
 
-cphd03::Poly2D getRandomPoly2D()
+cphd::Poly2D getRandomPoly2D()
 {
     six::Poly2D poly(3, 3);
     for (size_t ii = 0; ii <= poly.orderX(); ++ii)
@@ -155,9 +155,9 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     metadata.collectionInformation.illuminatorName = "DummyIlluminatorName";
     metadata.collectionInformation.coreName = "DummyCoreName";
     metadata.collectionInformation.collectType = getRandomInt(
-            cphd03::CollectType::MONOSTATIC, cphd03::CollectType::BISTATIC);
+            cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
     metadata.collectionInformation.radarMode = getRandomInt(
-            cphd03::RadarModeType::SPOTLIGHT, cphd03::RadarModeType::SCANSAR);
+            cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
     metadata.collectionInformation.radarModeID = "DummyRadarModeID";
     metadata.collectionInformation.setClassificationLevel("UNCLASSIFIED");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode1");
@@ -166,7 +166,7 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     metadata.collectionInformation.parameters.push_back(six::Parameter("DummyParameter2"));
 
     //! Dummy CPHD Data
-    metadata.data.sampleType = cphd03::SampleType::RE32F_IM32F;
+    metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
     metadata.data.numBytesVBP = getRandomInt(32, 64) * 8;
     metadata.data.numCPHDChannels = NUM_IMAGES;
     for (size_t ii = 0; ii < metadata.data.numCPHDChannels; ++ii)
@@ -179,9 +179,9 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     //! Global data
     //! Domain Type needs to be set by the TOA vs FX implementation
     metadata.global.phaseSGN = getRandomInt(0, 1) == 1 ?
-            cphd03::PhaseSGN::PLUS_1 : cphd03::PhaseSGN::MINUS_1;
+            cphd::PhaseSGN::PLUS_1 : cphd::PhaseSGN::MINUS_1;
     metadata.global.refFrequencyIndex = getRandomInt(0, 10);
-    metadata.global.collectStart = cphd03::DateTime(static_cast<double>(
+    metadata.global.collectStart = cphd::DateTime(static_cast<double>(
             getRandomInt(0, MAX_SIZE_T)));
     metadata.global.collectDuration = getRandomReal(0.0, MAX_DOUBLE);
     metadata.global.txTime1 = getRandomReal(0.0, MAX_DOUBLE);
@@ -243,20 +243,20 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
 
     //! Dummy SRP
     metadata.srp.srpType = getRandomInt(
-            cphd03::SRPType::FIXEDPT, cphd03::SRPType::STEPPED);
+            cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
     metadata.srp.numSRPs =
-            metadata.srp.srpType != cphd03::SRPType::STEPPED ? 5 : 0;
+            metadata.srp.srpType != cphd::SRPType::STEPPED ? 5 : 0;
     for (size_t ii = 0; ii < metadata.srp.numSRPs; ++ii)
     {
-        if (metadata.srp.srpType == cphd03::SRPType::FIXEDPT)
+        if (metadata.srp.srpType == cphd::SRPType::FIXEDPT)
         {
             metadata.srp.srpPT.push_back(getRandomVector3());
         }
-        if (metadata.srp.srpType == cphd03::SRPType::PVTPOLY)
+        if (metadata.srp.srpType == cphd::SRPType::PVTPOLY)
         {
             metadata.srp.srpPVTPoly.push_back(getRandomPolyXYZ());
         }
-        if (metadata.srp.srpType == cphd03::SRPType::PVVPOLY)
+        if (metadata.srp.srpType == cphd::SRPType::PVVPOLY)
         {
             metadata.srp.srpPVVPoly.push_back(getRandomPolyXYZ());
         }
@@ -278,7 +278,7 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
 
 void addFXParams(cphd03::Metadata& metadata)
 {
-    metadata.global.domainType = cphd03::DomainType::FX;
+    metadata.global.domainType = cphd::DomainType::FX;
 
     metadata.vectorParameters.fxParameters.reset(new cphd03::FxParameters());
     metadata.vectorParameters.fxParameters->Fx0 = getRandomInt();
@@ -289,7 +289,7 @@ void addFXParams(cphd03::Metadata& metadata)
 
 void addTOAParams(cphd03::Metadata& metadata)
 {
-    metadata.global.domainType = cphd03::DomainType::TOA;
+    metadata.global.domainType = cphd::DomainType::TOA;
 
     metadata.vectorParameters.toaParameters.reset(new cphd03::TOAParameters());
     metadata.vectorParameters.toaParameters->deltaTOA0 = getRandomInt();
@@ -347,7 +347,7 @@ void runCPHDTest(const std::string& testName,
             {
                 vbm.setAmpSF(getRandomReal(), ii, jj);
             }
-            if (metadata.global.domainType == cphd03::DomainType::FX)
+            if (metadata.global.domainType == cphd::DomainType::FX)
             {
                 vbm.setFx0(getRandomReal(), ii, jj);
                 vbm.setFxSS(getRandomReal(), ii, jj);

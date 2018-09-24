@@ -44,8 +44,6 @@ public:
     {
     }
 
-    static
-    bool isCPHD(io::SeekableInputStream& inStream);
 
     static
     std::string readVersion(io::SeekableInputStream& inStream);
@@ -63,6 +61,9 @@ public:
     }
 
 protected:
+    static
+    bool isCPHD(io::SeekableInputStream& inStream);
+
     typedef std::pair<std::string, std::string> KeyValuePair;
 
     static

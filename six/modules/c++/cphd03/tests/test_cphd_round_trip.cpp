@@ -56,7 +56,7 @@ int main(int argc, char** argv)
         cphd03::CPHDReader reader(inPathname, numThreads);
 
         cphd03::CPHDWriter writer(reader.getMetadata(), numThreads);
-        const cphd03::SampleType sampleType =
+        const cphd::SampleType sampleType =
                 reader.getMetadata().data.sampleType;
         const cphd03::VBM& vbm = reader.getVBM();
         cphd03::Wideband& wideband = reader.getWideband();
@@ -79,17 +79,17 @@ int main(int argc, char** argv)
 
             switch (sampleType)
             {
-            case cphd03::SampleType::RE08I_IM08I:
+            case cphd::SampleType::RE08I_IM08I:
                 writer.writeCPHDData<std::complex<sys::Int8_T> >(
                     reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
                     dims.area());
                 break;
-            case cphd03::SampleType::RE16I_IM16I:
+            case cphd::SampleType::RE16I_IM16I:
                 writer.writeCPHDData<std::complex<sys::Int16_T> >(
                     reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
                     dims.area());
                 break;
-            case cphd03::SampleType::RE32F_IM32F:
+            case cphd::SampleType::RE32F_IM32F:
                 writer.writeCPHDData<std::complex<float> >(
                     reinterpret_cast<const std::complex<float>* >(data.get()),
                     dims.area());

@@ -33,11 +33,11 @@ inline void setData(const sys::byte*& data,
                     double& dest)
 {
     memcpy(&dest, data, sizeof(double));
-    data += sizeof(double); 
+    data += sizeof(double);
 }
 
 inline void setData(const sys::byte*& data,
-                    cphd03::Vector3& dest)
+                    cphd::Vector3& dest)
 {
     setData(data, dest[0]);
     setData(data, dest[1]);
@@ -51,7 +51,7 @@ inline void getData(double value,
     dest += sizeof(double);
 }
 
-inline void getData(const cphd03::Vector3& value,
+inline void getData(const cphd::Vector3& value,
                     sys::ubyte*& dest)
 {
     getData(value[0], dest);
@@ -80,7 +80,7 @@ VBM::VectorBasedParameters::VectorBasedParameters(
         bool srpTimeEnabled,
         bool tropoSrpEnabled,
         bool ampSFEnabled,
-        DomainType domainType) :
+        cphd::DomainType domainType) :
     txTime(0.0),
     txPos(0.0),
     rcvTime(0.0),
@@ -89,9 +89,9 @@ VBM::VectorBasedParameters::VectorBasedParameters(
     srpPos(0.0),
     tropoSrp(tropoSrpEnabled ? 0.0 : six::Init::undefined<double>()),
     ampSF(ampSFEnabled ? 0.0 : six::Init::undefined<double>()),
-    frequencyParameters(domainType == DomainType::FX ?
+    frequencyParameters(domainType == cphd::DomainType::FX ?
             new FrequencyParameters() : NULL),
-    toaParameters(domainType == DomainType::TOA ?
+    toaParameters(domainType == cphd::DomainType::TOA ?
             new TOAParameters() : NULL)
 {
 }
@@ -264,7 +264,7 @@ VBM::VBM() :
     mSRPTimeEnabled(false),
     mTropoSRPEnabled(false),
     mAmpSFEnabled(false),
-    mDomainType(DomainType::NOT_SET),
+    mDomainType(cphd::DomainType::NOT_SET),
     mNumBytesPerVector(0)
 {
 }
@@ -273,8 +273,8 @@ VBM::VBM(const Data& data, const VectorParameters &vp) :
     mSRPTimeEnabled(vp.srpTimeOffset() > 0),
     mTropoSRPEnabled(vp.tropoSRPOffset() > 0),
     mAmpSFEnabled(vp.ampSFOffset() > 0),
-    mDomainType(vp.fxParameters.get() ? DomainType::FX :
-            vp.toaParameters.get() ? DomainType::TOA : DomainType::NOT_SET),
+    mDomainType(vp.fxParameters.get() ? cphd::DomainType::FX :
+            vp.toaParameters.get() ? cphd::DomainType::TOA : cphd::DomainType::NOT_SET),
     mNumBytesPerVector(data.getNumBytesVBP()),
     mData(data.numCPHDChannels)
 {
@@ -305,7 +305,7 @@ VBM::VBM(size_t numChannels,
          bool srpTimeEnabled,
          bool tropoSrpEnabled,
          bool ampSFEnabled,
-         DomainType domainType) :
+         cphd::DomainType domainType) :
     mSRPTimeEnabled(srpTimeEnabled),
     mTropoSRPEnabled(tropoSrpEnabled),
     mAmpSFEnabled(ampSFEnabled),
@@ -321,7 +321,7 @@ VBM::VBM(size_t numChannels,
          bool srpTimeEnabled,
          bool tropoSrpEnabled,
          bool ampSFEnabled,
-         DomainType domainType,
+         cphd::DomainType domainType,
          const std::vector<const void*>& data) :
     mSRPTimeEnabled(srpTimeEnabled),
     mTropoSRPEnabled(tropoSrpEnabled),
@@ -334,7 +334,7 @@ VBM::VBM(size_t numChannels,
     if (numChannels != data.size())
     {
         throw except::Exception(Ctxt(
-                "VBM data contains " + str::toString<size_t>(numChannels) + 
+                "VBM data contains " + str::toString<size_t>(numChannels) +
                 " channels, but data has information for " +
                 str::toString<size_t>(data.size()) + " channels."));
     }
@@ -399,7 +399,7 @@ double VBM::getTxTime(size_t channel, size_t vector) const
     return mData[channel][vector].txTime;
 }
 
-Vector3 VBM::getTxPos(size_t channel, size_t vector) const
+cphd::Vector3 VBM::getTxPos(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
     return mData[channel][vector].txPos;
@@ -411,7 +411,7 @@ double VBM::getRcvTime(size_t channel, size_t vector) const
     return mData[channel][vector].rcvTime;
 }
 
-Vector3 VBM::getRcvPos(size_t channel, size_t vector) const
+cphd::Vector3 VBM::getRcvPos(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
     return mData[channel][vector].rcvPos;
@@ -427,7 +427,7 @@ double VBM::getSRPTime(size_t channel, size_t vector) const
     return mData[channel][vector].srpTime;
 }
 
-Vector3 VBM::getSRPPos(size_t channel, size_t vector) const
+cphd::Vector3 VBM::getSRPPos(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
     return mData[channel][vector].srpPos;
@@ -456,7 +456,7 @@ double VBM::getAmpSF(size_t channel, size_t vector) const
 double VBM::getFx0(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx0."));
     }
@@ -466,7 +466,7 @@ double VBM::getFx0(size_t channel, size_t vector) const
 double VBM::getFxSS(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid FxSS."));
     }
@@ -476,7 +476,7 @@ double VBM::getFxSS(size_t channel, size_t vector) const
 double VBM::getFx1(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx1."));
     }
@@ -486,7 +486,7 @@ double VBM::getFx1(size_t channel, size_t vector) const
 double VBM::getFx2(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx2."));
     }
@@ -496,7 +496,7 @@ double VBM::getFx2(size_t channel, size_t vector) const
 double VBM::getDeltaTOA0(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::TOA)
+    if (mDomainType != cphd::DomainType::TOA)
     {
         throw except::Exception(Ctxt("Invalid DeltaTOA0."));
     }
@@ -506,7 +506,7 @@ double VBM::getDeltaTOA0(size_t channel, size_t vector) const
 double VBM::getTOASS(size_t channel, size_t vector) const
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::TOA)
+    if (mDomainType != cphd::DomainType::TOA)
     {
         throw except::Exception(Ctxt("Invalid TOA_SS."));
     }
@@ -519,7 +519,7 @@ void VBM::setTxTime(double value, size_t channel, size_t vector)
     mData[channel][vector].txTime = value;
 }
 
-void VBM::setTxPos(const Vector3& value, size_t channel, size_t vector)
+void VBM::setTxPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].txPos = value;
@@ -531,7 +531,7 @@ void VBM::setRcvTime(double value, size_t channel, size_t vector)
     mData[channel][vector].rcvTime = value;
 }
 
-void VBM::setRcvPos(const Vector3& value, size_t channel, size_t vector)
+void VBM::setRcvPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].rcvPos = value;
@@ -547,7 +547,7 @@ void VBM::setSRPTime(double value, size_t channel, size_t vector)
     mData[channel][vector].srpTime = value;
 }
 
-void VBM::setSRPPos(const Vector3& value, size_t channel, size_t vector)
+void VBM::setSRPPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].srpPos = value;
@@ -576,7 +576,7 @@ void VBM::setAmpSF(double value, size_t channel, size_t vector)
 void VBM::setFx0(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx0."));
     }
@@ -586,7 +586,7 @@ void VBM::setFx0(double value, size_t channel, size_t vector)
 void VBM::setFxSS(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid FxSS."));
     }
@@ -596,7 +596,7 @@ void VBM::setFxSS(double value, size_t channel, size_t vector)
 void VBM::setFx1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx1."));
     }
@@ -606,7 +606,7 @@ void VBM::setFx1(double value, size_t channel, size_t vector)
 void VBM::setFx2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::FX)
+    if (mDomainType != cphd::DomainType::FX)
     {
         throw except::Exception(Ctxt("Invalid Fx2."));
     }
@@ -616,7 +616,7 @@ void VBM::setFx2(double value, size_t channel, size_t vector)
 void VBM::setDeltaTOA0(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::TOA)
+    if (mDomainType != cphd::DomainType::TOA)
     {
         throw except::Exception(Ctxt("Invalid DeltaTOA0."));
     }
@@ -626,7 +626,7 @@ void VBM::setDeltaTOA0(double value, size_t channel, size_t vector)
 void VBM::setTOASS(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mDomainType != DomainType::TOA)
+    if (mDomainType != cphd::DomainType::TOA)
     {
         throw except::Exception(Ctxt("Invalid TOA_SS."));
     }
@@ -701,7 +701,7 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
                                      six::Init::undefined<sys::Off_T>();
     vp.ampSF = mAmpSFEnabled ? doubleSize :
                                six::Init::undefined<sys::Off_T>();
-    if (mDomainType == DomainType::FX)
+    if (mDomainType == cphd::DomainType::FX)
     {
         vp.toaParameters.reset();
         vp.fxParameters.reset(new FxParameters());
@@ -710,7 +710,7 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
         vp.fxParameters->Fx1 = doubleSize;
         vp.fxParameters->Fx2 = doubleSize;
     }
-    else if (mDomainType == DomainType::TOA)
+    else if (mDomainType == cphd::DomainType::TOA)
     {
         vp.fxParameters.reset();
         vp.toaParameters.reset(new cphd03::TOAParameters());

@@ -89,7 +89,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
 
             switch (reader1.getMetadata().getSampleType())
             {
-            case cphd03::SampleType::RE08I_IM08I:
+            case cphd::SampleType::RE08I_IM08I:
                 if (!compareCPHDData<std::complex<sys::Int8_T> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
@@ -99,7 +99,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
                     dataMatches = false;
                 }
                 break;
-            case cphd03::SampleType::RE16I_IM16I:
+            case cphd::SampleType::RE16I_IM16I:
                 if (!compareCPHDData<std::complex<sys::Int16_T> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
@@ -109,7 +109,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
                     dataMatches = false;
                 }
                 break;
-            case cphd03::SampleType::RE32F_IM32F:
+            case cphd::SampleType::RE32F_IM32F:
                 if (!compareCPHDData<std::complex<float> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 
         std::cout << "Reading file: " << inPathname2 << "\n";
         cphd03::CPHDReader reader2(inPathname2, numThreads);
-        
+
         if (reader1.getMetadata() != reader2.getMetadata())
         {
             std::cout << "Metadata does not match\n";

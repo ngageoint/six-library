@@ -101,7 +101,7 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
                                                  const std::string& cornerName,
-                                                 const LatLonAltCorners& corners,
+                                                 const cphd::LatLonAltCorners& corners,
                                                  XMLElem parent) const
 {
     XMLElem footprint = newElement(name, parent);
@@ -253,7 +253,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 
     switch ((int)srp.srpType)
     {
-    case cphd03::SRPType::FIXEDPT:
+    case cphd::SRPType::FIXEDPT:
         if (srp.srpPT.size() != srp.numSRPs)
         {
             throw except::Exception(Ctxt(
@@ -268,7 +268,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 
         break;
 
-    case cphd03::SRPType::PVTPOLY:
+    case cphd::SRPType::PVTPOLY:
         if (srp.srpPVTPoly.size() != srp.numSRPs)
         {
             throw except::Exception(Ctxt(
@@ -282,7 +282,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         }
         break;
 
-    case cphd03::SRPType::PVVPOLY:
+    case cphd::SRPType::PVVPOLY:
         if (srp.srpPVVPoly.size() != srp.numSRPs)
         {
             throw except::Exception(Ctxt(
@@ -296,7 +296,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         }
         break;
 
-    case cphd03::SRPType::STEPPED:
+    case cphd::SRPType::STEPPED:
         // No SRP type for this
         if (srp.numSRPs != 0)
         {
@@ -521,7 +521,7 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 
 void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
 {
-    data.sampleType = cphd03::SampleType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
+    data.sampleType = cphd::SampleType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
     parseUInt(getFirstAndOnly(dataXML, "NumCPHDChannels"), data.numCPHDChannels);
     parseUInt(getFirstAndOnly(dataXML, "NumBytesVBP"), data.numBytesVBP);
@@ -549,8 +549,8 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
 {
     XMLElem tmpElem = NULL;
 
-    global.domainType = cphd03::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    global.phaseSGN   = cphd03::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
+    global.domainType = cphd::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
+    global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
     tmpElem = getOptional(globalXML, "RefFreqIndex");
     if (tmpElem)
@@ -771,25 +771,25 @@ void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
 void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
 {
 #if ENFORCESPEC
-    srp.srpType = cphd03::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
+    srp.srpType = cphd::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
 #else
     std::string s(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
     str::upper(s);
-    srp.srpType = cphd03::SRPType(s);
+    srp.srpType = cphd::SRPType(s);
 #endif
     parseInt(getFirstAndOnly(srpXML, "NumSRPs"), srp.numSRPs);
 
     std::vector< XMLElem > tmpXMLs;
     switch ((int)srp.srpType)
     {
-    case cphd03::SRPType::FIXEDPT:
+    case cphd::SRPType::FIXEDPT:
 
         srpXML->getElementsByTagName("FIXEDPT", tmpXMLs);
         for (std::vector<XMLElem>::const_iterator it = tmpXMLs.begin();
              it != tmpXMLs.end();
              ++it)
         {
-            Vector3 srppt;
+            cphd::Vector3 srppt;
             mCommon.parseVector3D(getFirstAndOnly(*it, "SRPPT"), srppt);
             srp.srpPT.push_back(srppt);
         }
@@ -799,13 +799,13 @@ void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
         }
         break;
 
-    case cphd03::SRPType::PVTPOLY:
+    case cphd::SRPType::PVTPOLY:
         srpXML->getElementsByTagName("PVTPOLY", tmpXMLs);
         for (std::vector<XMLElem>::const_iterator it = tmpXMLs.begin();
              it != tmpXMLs.end();
              ++it)
         {
-            PolyXYZ pvtPoly;
+            cphd::PolyXYZ pvtPoly;
             mCommon.parsePolyXYZ(getFirstAndOnly(*it, "SRPPVTPoly"), pvtPoly);
             srp.srpPVTPoly.push_back(pvtPoly);
         }
@@ -815,13 +815,13 @@ void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
         }
         break;
 
-    case cphd03::SRPType::PVVPOLY:
+    case cphd::SRPType::PVVPOLY:
         srpXML->getElementsByTagName("PVVPOLY", tmpXMLs);
         for (std::vector<XMLElem>::const_iterator it = tmpXMLs.begin();
              it != tmpXMLs.end();
              ++it)
         {
-            PolyXYZ pvvPoly;
+            cphd::PolyXYZ pvvPoly;
             mCommon.parsePolyXYZ(getFirstAndOnly(*it, "SRPPVVPoly"), pvvPoly);
             srp.srpPVVPoly.push_back(pvvPoly);
         }
@@ -831,7 +831,7 @@ void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
         }
         break;
 
-    case cphd03::SRPType::STEPPED:
+    case cphd::SRPType::STEPPED:
         // No SRP type for this
         if (srp.numSRPs != 0)
         {

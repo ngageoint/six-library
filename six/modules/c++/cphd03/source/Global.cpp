@@ -28,8 +28,8 @@
 namespace cphd03
 {
 DwellTimeParameters::DwellTimeParameters() :
-    codTimePoly(six::Init::undefined<Poly2D>()),
-    dwellTimePoly(six::Init::undefined<Poly2D>())
+    codTimePoly(six::Init::undefined<cphd::Poly2D>()),
+    dwellTimePoly(six::Init::undefined<cphd::Poly2D>())
 {
 }
 
@@ -83,13 +83,13 @@ std::ostream& operator<< (std::ostream& os, const AreaPlane& d)
 }
 
 ImageArea::ImageArea() :
-    acpCorners(six::Init::undefined<LatLonAltCorners>())
+    acpCorners(six::Init::undefined<cphd::LatLonAltCorners>())
 {
 }
 
 bool ImageArea::operator==(const ImageArea& other) const
 {
-    for (size_t ii = 0; ii < LatLonAltCorners::NUM_CORNERS; ++ii)\
+    for (size_t ii = 0; ii < cphd::LatLonAltCorners::NUM_CORNERS; ++ii)\
     {
         if (!(acpCorners.getCorner(ii) == other.acpCorners.getCorner(ii)))
         {

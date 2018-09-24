@@ -28,7 +28,7 @@
 #include <vector>
 #include <stddef.h>
 
-#include <cphd03/Enums.h>
+#include <cphd/Enums.h>
 
 namespace cphd03
 {
@@ -93,7 +93,7 @@ struct Data
         return !((*this) == other);
     }
 
-    SampleType sampleType;
+    cphd::SampleType sampleType;
     size_t numCPHDChannels;
     size_t numBytesVBP;
 

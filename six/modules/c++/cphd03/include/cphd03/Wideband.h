@@ -152,7 +152,7 @@ public:
         return dims;
     }
 
-    SampleType getSampleType() const
+    cphd::SampleType getSampleType() const
     {
         return mData.sampleType;
     }

@@ -69,9 +69,9 @@ int main(int argc, char** argv)
                                          options->get<size_t>("cols"));
         const std::vector<size_t> numVectors(numChannels, dims.row);
 
-        const cphd03::DomainType domainType(
+        const cphd::DomainType domainType(
                 options->get<std::string>("domain") ==
-                        "FX" ? cphd03::DomainType::FX : cphd03::DomainType::TOA);
+                        "FX" ? cphd::DomainType::FX : cphd::DomainType::TOA);
 
         const std::string outPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));
@@ -88,10 +88,10 @@ int main(int argc, char** argv)
         }
 
         //! Must set the sample type (complex<float>)
-        metadata.data.sampleType = cphd03::SampleType::RE32F_IM32F;
+        metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
 
         //! We must have a radar mode set
-        metadata.collectionInformation.radarMode = cphd03::RadarModeType::SPOTLIGHT;
+        metadata.collectionInformation.radarMode = cphd::RadarModeType::SPOTLIGHT;
 
         //! We must have corners set
         for (size_t ii = 0; ii < six::LatLonAltCorners::NUM_CORNERS; ++ii)
@@ -107,11 +107,11 @@ int main(int argc, char** argv)
         metadata.channel.parameters.push_back(param);
 
         //! We must set SRP Type
-        metadata.srp.srpType = cphd03::SRPType::STEPPED;
+        metadata.srp.srpType = cphd::SRPType::STEPPED;
 
         //! We must set domain parameters
         metadata.global.domainType = domainType;
-        if (domainType == cphd03::DomainType::FX)
+        if (domainType == cphd::DomainType::FX)
         {
             metadata.vectorParameters.fxParameters.reset(new cphd03::FxParameters());
         }

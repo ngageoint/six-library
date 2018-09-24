@@ -112,7 +112,7 @@ public:
             default:
                 destination = mOffset + off;
         }
-        if (destination < 0 || destination > mLength)
+        if (destination < 0 || static_cast<size_t>(destination) > mLength)
         {
             throw except::Exception(Ctxt("Requested off-set out of bounds"));
         }

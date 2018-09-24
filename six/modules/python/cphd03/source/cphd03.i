@@ -50,8 +50,8 @@ using six::Vector3;
 %rename(CphdAntenna) cphd03::Antenna;
 
 
-%include "cphd03/Types.h"
-%include "cphd03/Enums.h"
+%include "cphd/Types.h"
+%include "cphd/Enums.h"
 %include "cphd03/FileHeader.h"
 %include "cphd03/Global.h"
 %include "cphd03/Channel.h"

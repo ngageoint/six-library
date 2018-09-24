@@ -28,8 +28,8 @@
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/sicd/RadarCollection.h>
-#include <cphd03/Enums.h>
-#include <cphd03/Types.h>
+#include <cphd/Enums.h>
+#include <cphd/Types.h>
 
 namespace cphd03
 {
@@ -49,8 +49,8 @@ struct DwellTimeParameters
         return !((*this) == other);
     }
 
-    Poly2D codTimePoly;
-    Poly2D dwellTimePoly;
+    cphd::Poly2D codTimePoly;
+    cphd::Poly2D dwellTimePoly;
 };
 
 std::ostream& operator<< (std::ostream& os, const DwellTimeParameters& d);
@@ -87,7 +87,7 @@ struct ImageArea
         return !((*this) == other);
     }
 
-    LatLonAltCorners acpCorners;
+    cphd::LatLonAltCorners acpCorners;
     mem::ScopedCopyablePtr<AreaPlane> plane;
 };
 
@@ -114,15 +114,15 @@ struct Global
         return !((*this) == other);
     }
 
-    DomainType domainType;
-    PhaseSGN   phaseSGN;
+    cphd::DomainType domainType;
+    cphd::PhaseSGN   phaseSGN;
 
     //! Indicates the RF freq values expressed as offsets from a ref freq
     size_t refFrequencyIndex;
 
     //! Collection date/time UTC, measured from collection start
-    DateTime collectStart;
-    
+    cphd::DateTime collectStart;
+
     //! Duration of collection period
     double collectDuration;
 

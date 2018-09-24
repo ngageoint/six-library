@@ -26,22 +26,22 @@
 
 namespace cphd03
 {
-size_t getNumBytesPerSample(cphd03::SampleType sampleType)
+size_t getNumBytesPerSample(cphd::SampleType sampleType)
 {
     switch (sampleType)
     {
-        case cphd03::SampleType::RE08I_IM08I:
+        case cphd::SampleType::RE08I_IM08I:
             return 2;
-        case cphd03::SampleType::RE16I_IM16I:
+        case cphd::SampleType::RE16I_IM16I:
             return 4;
-        case cphd03::SampleType::RE32F_IM32F:
+        case cphd::SampleType::RE32F_IM32F:
             return 8;
         default:
             return 0;
     }
 }
 
-template<> std::string toString(const CollectionInformation& ci)
+template<> std::string toString(const cphd::CollectionInformation& ci)
 {
     std::ostringstream os;
 
@@ -55,7 +55,7 @@ template<> std::string toString(const CollectionInformation& ci)
 
     os << "  coreName       : " << ci.coreName << "\n";
 
-    if (ci.collectType != CollectType::NOT_SET )
+    if (ci.collectType != cphd::CollectType::NOT_SET )
     {
         os << "  collectType    : " << ci.collectType.toString() << "\n";
     }

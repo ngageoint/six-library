@@ -82,12 +82,12 @@ public:
 
     bool isFX() const
     {
-        return (getDomainType() == DomainType::FX);
+        return (getDomainType() == cphd::DomainType::FX);
     }
 
     bool isTOA() const
     {
-        return (getDomainType() == DomainType::TOA);
+        return (getDomainType() == cphd::DomainType::TOA);
     }
 
     // returns "FX", "TOA", or "NOT_SET"
@@ -97,7 +97,7 @@ public:
     }
 
     // returns enum for FX, TOA, or NOT_SET
-    cphd03::DomainType getDomainType() const
+    cphd::DomainType getDomainType() const
     {
         return mMetadata->getDomainType();
     }

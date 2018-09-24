@@ -87,19 +87,19 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     //! Must set the sample type
     if (sizeof(writeData[0]) == 2)
     {
-        metadata.data.sampleType = cphd03::SampleType::RE08I_IM08I;
+        metadata.data.sampleType = cphd::SampleType::RE08I_IM08I;
     }
     else if (sizeof(writeData[0]) == 4)
     {
-        metadata.data.sampleType = cphd03::SampleType::RE16I_IM16I;
+        metadata.data.sampleType = cphd::SampleType::RE16I_IM16I;
     }
     else if (sizeof(writeData[0]) == 8)
     {
-        metadata.data.sampleType = cphd03::SampleType::RE32F_IM32F;
+        metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
     }
 
     //! We must have a radar mode set
-    metadata.collectionInformation.radarMode = cphd03::RadarModeType::SPOTLIGHT;
+    metadata.collectionInformation.radarMode = cphd::RadarModeType::SPOTLIGHT;
 
     //! We must have corners set
     for (size_t ii = 0; ii < six::LatLonAltCorners::NUM_CORNERS; ++ii)
@@ -115,10 +115,10 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     metadata.channel.parameters.push_back(param);
 
     //! We must set SRP Type
-    metadata.srp.srpType = cphd03::SRPType::STEPPED;
+    metadata.srp.srpType = cphd::SRPType::STEPPED;
 
     //! We must set domain parameters
-    metadata.global.domainType = cphd03::DomainType::FX;
+    metadata.global.domainType = cphd::DomainType::FX;
     metadata.vectorParameters.fxParameters.reset(new cphd03::FxParameters());
 
     cphd03::VBM vbm(numChannels,

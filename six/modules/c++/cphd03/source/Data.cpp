@@ -41,7 +41,7 @@ std::ostream& operator<< (std::ostream& os, const ArraySize& d)
 }
 
 Data::Data() :
-    sampleType(SampleType::NOT_SET),
+    sampleType(cphd::SampleType::NOT_SET),
     numCPHDChannels(six::Init::undefined<size_t>()),
     numBytesVBP(six::Init::undefined<size_t>())
 {

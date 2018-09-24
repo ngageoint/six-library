@@ -25,7 +25,7 @@
 #define __CPHD03_SRP_H__
 
 #include <iostream>
-#include <cphd03/Types.h>
+#include <cphd/Types.h>
 #include <cphd03/Utilities.h>
 #include <six/Init.h>
 
@@ -51,20 +51,20 @@ struct SRP
     }
 
     //! Type can be FIXEDPT, PVTPOLY, PVVPOLY, STEPPED
-    SRPType srpType;
+    cphd::SRPType srpType;
 
     //! Can be 1 to the number of channels
     //! Will be zero if SRPType is STEPPED ??
     size_t numSRPs;
 
     //! Conditional, when srpType is FIXEDPT
-    std::vector<Vector3> srpPT;
+    std::vector<cphd::Vector3> srpPT;
 
      //! Conditional, when srpType is PVTPOLY
-    std::vector<PolyXYZ> srpPVTPoly;
+    std::vector<cphd::PolyXYZ> srpPVTPoly;
 
     //! Conditional, when srpType is PVVPOLY
-    std::vector<PolyXYZ> srpPVVPoly;
+    std::vector<cphd::PolyXYZ> srpPVVPoly;
 };
 
 std::ostream& operator<< (std::ostream& os, const SRP& d);
