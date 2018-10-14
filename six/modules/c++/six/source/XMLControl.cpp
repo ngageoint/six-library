@@ -34,21 +34,14 @@ void validate(const xml::lite::Document* doc,
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     sys::OS os;
-    try
+    if (paths.empty() && os.isEnvSet(six::SCHEMA_PATH))
     {
-        if (paths.empty())
+        std::string envPath = os.getEnv(six::SCHEMA_PATH);
+        str::trim(envPath);
+        if (!envPath.empty())
         {
-            std::string envPath = os.getEnv(six::SCHEMA_PATH);
-            str::trim(envPath);
-            if (!envPath.empty())
-            {
-                paths.push_back(envPath);
-            }
+            paths.push_back(envPath);
         }
-    }
-    catch (const except::Exception& )
-    {
-        // do nothing here
     }
 
     // validate against any specified schemas
