@@ -373,8 +373,9 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
 
     if (strLen > field->length)
     {
-        nitf_Error_init(error, "Value for field is too long",
-                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                        "Value %s is too long for field of length %lu",
+                        str, field->length);
         return (NITF_FAILURE);
     }
 
