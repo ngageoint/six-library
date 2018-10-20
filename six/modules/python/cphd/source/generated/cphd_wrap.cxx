@@ -3065,85 +3065,86 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[55]
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[56]
 #define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[57]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[58]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[59]
-#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[60]
-#define SWIGTYPE_p_nitf_AccessFlags swig_types[61]
-#define SWIGTYPE_p_nitf_ConvType swig_types[62]
-#define SWIGTYPE_p_nitf_CornersType swig_types[63]
-#define SWIGTYPE_p_nitf_CreationFlags swig_types[64]
-#define SWIGTYPE_p_nitf_FieldType swig_types[65]
-#define SWIGTYPE_p_nitf_Int16 swig_types[66]
-#define SWIGTYPE_p_nitf_Int32 swig_types[67]
-#define SWIGTYPE_p_nitf_Int64 swig_types[68]
-#define SWIGTYPE_p_nitf_Int8 swig_types[69]
-#define SWIGTYPE_p_nitf_Off swig_types[70]
-#define SWIGTYPE_p_nitf_Uint16 swig_types[71]
-#define SWIGTYPE_p_nitf_Uint32 swig_types[72]
-#define SWIGTYPE_p_nitf_Uint64 swig_types[73]
-#define SWIGTYPE_p_nitf_Uint8 swig_types[74]
-#define SWIGTYPE_p_nitf__DateTime swig_types[75]
-#define SWIGTYPE_p_off_t swig_types[76]
-#define SWIGTYPE_p_p_PyObject swig_types[77]
-#define SWIGTYPE_p_pid_t swig_types[78]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[79]
-#define SWIGTYPE_p_scene__FrameType swig_types[80]
-#define SWIGTYPE_p_scene__LatLon swig_types[81]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[82]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[83]
-#define SWIGTYPE_p_scene__ProjectionPolynomialFitter swig_types[84]
-#define SWIGTYPE_p_six__BooleanType swig_types[85]
-#define SWIGTYPE_p_six__CollectType swig_types[86]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[87]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[88]
-#define SWIGTYPE_p_six__Data swig_types[89]
-#define SWIGTYPE_p_six__DataType swig_types[90]
-#define SWIGTYPE_p_six__FFTSign swig_types[91]
-#define SWIGTYPE_p_six__RadarModeType swig_types[92]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[93]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[94]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[95]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[96]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[97]
-#define SWIGTYPE_p_six__sicd__ComplexData swig_types[98]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[99]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[100]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[101]
-#define SWIGTYPE_p_size_t swig_types[102]
-#define SWIGTYPE_p_size_type swig_types[103]
-#define SWIGTYPE_p_ssize_t swig_types[104]
-#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[105]
-#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[106]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[107]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[108]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t swig_types[109]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t swig_types[110]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t swig_types[111]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t swig_types[112]
-#define SWIGTYPE_p_std__invalid_argument swig_types[113]
-#define SWIGTYPE_p_std__ostream swig_types[114]
-#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[115]
-#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[116]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[117]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[118]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[119]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[120]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[121]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[122]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[123]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[124]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[125]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[126]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[127]
-#define SWIGTYPE_p_uint16_t swig_types[128]
-#define SWIGTYPE_p_uint32_t swig_types[129]
-#define SWIGTYPE_p_uint64_t swig_types[130]
-#define SWIGTYPE_p_uint8_t swig_types[131]
-#define SWIGTYPE_p_unsigned_char swig_types[132]
-#define SWIGTYPE_p_value_type swig_types[133]
-#define SWIGTYPE_p_void swig_types[134]
-static swig_type_info *swig_types[136];
-static swig_module_info swig_module = {swig_types, 135, 0, 0, 0, 0};
+#define SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t swig_types[58]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[59]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[60]
+#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[61]
+#define SWIGTYPE_p_nitf_AccessFlags swig_types[62]
+#define SWIGTYPE_p_nitf_ConvType swig_types[63]
+#define SWIGTYPE_p_nitf_CornersType swig_types[64]
+#define SWIGTYPE_p_nitf_CreationFlags swig_types[65]
+#define SWIGTYPE_p_nitf_FieldType swig_types[66]
+#define SWIGTYPE_p_nitf_Int16 swig_types[67]
+#define SWIGTYPE_p_nitf_Int32 swig_types[68]
+#define SWIGTYPE_p_nitf_Int64 swig_types[69]
+#define SWIGTYPE_p_nitf_Int8 swig_types[70]
+#define SWIGTYPE_p_nitf_Off swig_types[71]
+#define SWIGTYPE_p_nitf_Uint16 swig_types[72]
+#define SWIGTYPE_p_nitf_Uint32 swig_types[73]
+#define SWIGTYPE_p_nitf_Uint64 swig_types[74]
+#define SWIGTYPE_p_nitf_Uint8 swig_types[75]
+#define SWIGTYPE_p_nitf__DateTime swig_types[76]
+#define SWIGTYPE_p_off_t swig_types[77]
+#define SWIGTYPE_p_p_PyObject swig_types[78]
+#define SWIGTYPE_p_pid_t swig_types[79]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[80]
+#define SWIGTYPE_p_scene__FrameType swig_types[81]
+#define SWIGTYPE_p_scene__LatLon swig_types[82]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[83]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[84]
+#define SWIGTYPE_p_scene__ProjectionPolynomialFitter swig_types[85]
+#define SWIGTYPE_p_six__BooleanType swig_types[86]
+#define SWIGTYPE_p_six__CollectType swig_types[87]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[88]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[89]
+#define SWIGTYPE_p_six__Data swig_types[90]
+#define SWIGTYPE_p_six__DataType swig_types[91]
+#define SWIGTYPE_p_six__FFTSign swig_types[92]
+#define SWIGTYPE_p_six__RadarModeType swig_types[93]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[94]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[95]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[96]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[97]
+#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[98]
+#define SWIGTYPE_p_six__sicd__ComplexData swig_types[99]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[100]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[101]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[102]
+#define SWIGTYPE_p_size_t swig_types[103]
+#define SWIGTYPE_p_size_type swig_types[104]
+#define SWIGTYPE_p_ssize_t swig_types[105]
+#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[106]
+#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[107]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[108]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[109]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t swig_types[110]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t swig_types[111]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t swig_types[112]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t swig_types[113]
+#define SWIGTYPE_p_std__invalid_argument swig_types[114]
+#define SWIGTYPE_p_std__ostream swig_types[115]
+#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[116]
+#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[117]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[118]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[119]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[120]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[121]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[122]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[123]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[124]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[125]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[126]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[127]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[128]
+#define SWIGTYPE_p_uint16_t swig_types[129]
+#define SWIGTYPE_p_uint32_t swig_types[130]
+#define SWIGTYPE_p_uint64_t swig_types[131]
+#define SWIGTYPE_p_uint8_t swig_types[132]
+#define SWIGTYPE_p_unsigned_char swig_types[133]
+#define SWIGTYPE_p_value_type swig_types[134]
+#define SWIGTYPE_p_void swig_types[135]
+static swig_type_info *swig_types[137];
+static swig_module_info swig_module = {swig_types, 136, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -33563,6 +33564,294 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  cphd::VBM *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  std::string *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  int res5 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:CPHDWriter_writeMetadata",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_writeMetadata" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__VBM,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  arg3 = reinterpret_cast< cphd::VBM * >(argp3);
+  {
+    std::string *ptr = (std::string *)0;
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CPHDWriter_writeMetadata" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "CPHDWriter_writeMetadata" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    arg5 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->writeMetadata(arg2,(cphd::VBM const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  cphd::VBM *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:CPHDWriter_writeMetadata",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_writeMetadata" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__VBM,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  arg3 = reinterpret_cast< cphd::VBM * >(argp3);
+  {
+    std::string *ptr = (std::string *)0;
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CPHDWriter_writeMetadata" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->writeMetadata(arg2,(cphd::VBM const &)*arg3,(std::string const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  cphd::VBM *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:CPHDWriter_writeMetadata",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_writeMetadata" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_cphd__VBM,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_writeMetadata" "', argument " "3"" of type '" "cphd::VBM const &""'"); 
+  }
+  arg3 = reinterpret_cast< cphd::VBM * >(argp3);
+  {
+    try
+    {
+      (arg1)->writeMetadata(arg2,(cphd::VBM const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[6] = {
@@ -33574,6 +33863,23 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata(PyObject *self, PyObject *ar
   argc = args ? PyObject_Length(args) : 0;
   for (ii = 0; (ii < 5) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__VBM, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_CPHDWriter_writeMetadata__SWIG_5(self, args);
+        }
+      }
+    }
   }
   if (argc == 3) {
     int _v;
@@ -33598,6 +33904,27 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata(PyObject *self, PyObject *ar
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__VBM, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_CPHDWriter_writeMetadata__SWIG_4(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -33608,6 +33935,31 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_writeMetadata(PyObject *self, PyObject *ar
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_CPHDWriter_writeMetadata__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_cphd__VBM, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              return _wrap_CPHDWriter_writeMetadata__SWIG_3(self, args);
+            }
           }
         }
       }
@@ -33644,7 +33996,10 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    cphd::CPHDWriter::writeMetadata(std::string const &,cphd::VBM const &,std::string const &,std::string const &)\n"
     "    cphd::CPHDWriter::writeMetadata(std::string const &,cphd::VBM const &,std::string const &)\n"
-    "    cphd::CPHDWriter::writeMetadata(std::string const &,cphd::VBM const &)\n");
+    "    cphd::CPHDWriter::writeMetadata(std::string const &,cphd::VBM const &)\n"
+    "    cphd::CPHDWriter::writeMetadata(mem::SharedPtr< io::OutputStream >,cphd::VBM const &,std::string const &,std::string const &)\n"
+    "    cphd::CPHDWriter::writeMetadata(mem::SharedPtr< io::OutputStream >,cphd::VBM const &,std::string const &)\n"
+    "    cphd::CPHDWriter::writeMetadata(mem::SharedPtr< io::OutputStream >,cphd::VBM const &)\n");
   return 0;
 }
 
@@ -33898,6 +34253,258 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_CPHDWriter_write__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  std::string *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:CPHDWriter_write",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_write" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CPHDWriter_write" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CPHDWriter_write" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->write(arg2,(std::string const &)*arg3,(std::string const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDWriter_write__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:CPHDWriter_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_write" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CPHDWriter_write" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->write(arg2,(std::string const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CPHDWriter_write__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::CPHDWriter *arg1 = (cphd::CPHDWriter *) 0 ;
+  SwigValueWrapper< mem::SharedPtr< io::OutputStream > > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CPHDWriter_write",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__CPHDWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CPHDWriter_write" "', argument " "1"" of type '" "cphd::CPHDWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::CPHDWriter * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CPHDWriter_write" "', argument " "2"" of type '" "mem::SharedPtr< io::OutputStream >""'");
+    } else {
+      mem::SharedPtr< io::OutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::OutputStream > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    try
+    {
+      (arg1)->write(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_CPHDWriter_write(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[5] = {
@@ -33909,6 +34516,19 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_write(PyObject *self, PyObject *args) {
   argc = args ? PyObject_Length(args) : 0;
   for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_CPHDWriter_write__SWIG_5(self, args);
+      }
+    }
   }
   if (argc == 2) {
     int _v;
@@ -33929,6 +34549,23 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_write(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_CPHDWriter_write__SWIG_4(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -33936,6 +34573,27 @@ SWIGINTERN PyObject *_wrap_CPHDWriter_write(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_CPHDWriter_write__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__CPHDWriter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__SharedPtrT_io__OutputStream_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_CPHDWriter_write__SWIG_3(self, args);
+          }
         }
       }
     }
@@ -33967,7 +34625,10 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    cphd::CPHDWriter::write(std::string const &,std::string const &,std::string const &)\n"
     "    cphd::CPHDWriter::write(std::string const &,std::string const &)\n"
-    "    cphd::CPHDWriter::write(std::string const &)\n");
+    "    cphd::CPHDWriter::write(std::string const &)\n"
+    "    cphd::CPHDWriter::write(mem::SharedPtr< io::OutputStream >,std::string const &,std::string const &)\n"
+    "    cphd::CPHDWriter::write(mem::SharedPtr< io::OutputStream >,std::string const &)\n"
+    "    cphd::CPHDWriter::write(mem::SharedPtr< io::OutputStream >)\n");
   return 0;
 }
 
@@ -53703,12 +54364,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CPHDWriter_writeMetadata", _wrap_CPHDWriter_writeMetadata, METH_VARARGS, (char *)"\n"
 		"writeMetadata(std::string const & pathname, VBM vbm, std::string const & classification, std::string const & releaseInfo)\n"
 		"writeMetadata(std::string const & pathname, VBM vbm, std::string const & classification)\n"
-		"CPHDWriter_writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm)\n"
+		"writeMetadata(std::string const & pathname, VBM vbm)\n"
+		"writeMetadata(mem::SharedPtr< io::OutputStream > outStream, VBM vbm, std::string const & classification, std::string const & releaseInfo)\n"
+		"writeMetadata(mem::SharedPtr< io::OutputStream > outStream, VBM vbm, std::string const & classification)\n"
+		"CPHDWriter_writeMetadata(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, VBM vbm)\n"
 		""},
 	 { (char *)"CPHDWriter_write", _wrap_CPHDWriter_write, METH_VARARGS, (char *)"\n"
 		"write(std::string const & pathname, std::string const & classification, std::string const & releaseInfo)\n"
 		"write(std::string const & pathname, std::string const & classification)\n"
-		"CPHDWriter_write(CPHDWriter self, std::string const & pathname)\n"
+		"write(std::string const & pathname)\n"
+		"write(mem::SharedPtr< io::OutputStream > outStream, std::string const & classification, std::string const & releaseInfo)\n"
+		"write(mem::SharedPtr< io::OutputStream > outStream, std::string const & classification)\n"
+		"CPHDWriter_write(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream)\n"
 		""},
 	 { (char *)"CPHDWriter_close", _wrap_CPHDWriter_close, METH_VARARGS, (char *)"CPHDWriter_close(CPHDWriter self)"},
 	 { (char *)"CPHDWriter_addImageImpl", _wrap_CPHDWriter_addImageImpl, METH_VARARGS, (char *)"CPHDWriter_addImageImpl(CPHDWriter self, long long image, RowColSizeT dims, long long vbm)"},
@@ -54164,6 +54831,7 @@ static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t = {"_p
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t", "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__FxParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t", "mem::ScopedCopyablePtr< cphd::FxParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t", "mem::ScopedCopyablePtr< cphd::TOAParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__SharedPtrT_io__OutputStream_t = {"_p_mem__SharedPtrT_io__OutputStream_t", "mem::SharedPtr< io::OutputStream > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__SharedPtrT_io__SeekableInputStream_t = {"_p_mem__SharedPtrT_io__SeekableInputStream_t", "mem::SharedPtr< io::SeekableInputStream > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__SharedPtrT_logging__Logger_t = {"_p_mem__SharedPtrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t = {"_p_mt__SingletonT_six__XMLControlRegistry_true_t", "six::XMLControlFactory *|mt::Singleton< six::XMLControlRegistry,true > *", 0, 0, (void*)0, 0};
@@ -54301,6 +54969,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__FxParameters_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t,
+  &_swigt__p_mem__SharedPtrT_io__OutputStream_t,
   &_swigt__p_mem__SharedPtrT_io__SeekableInputStream_t,
   &_swigt__p_mem__SharedPtrT_logging__Logger_t,
   &_swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t,
@@ -54438,6 +55107,7 @@ static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t[] = { 
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__FxParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__SharedPtrT_io__OutputStream_t[] = {  {&_swigt__p_mem__SharedPtrT_io__OutputStream_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__SharedPtrT_io__SeekableInputStream_t[] = {  {&_swigt__p_mem__SharedPtrT_io__SeekableInputStream_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__SharedPtrT_logging__Logger_t[] = {  {&_swigt__p_mem__SharedPtrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t[] = {  {&_swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -54575,6 +55245,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd__FxParameters_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t,
+  _swigc__p_mem__SharedPtrT_io__OutputStream_t,
   _swigc__p_mem__SharedPtrT_io__SeekableInputStream_t,
   _swigc__p_mem__SharedPtrT_logging__Logger_t,
   _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t,

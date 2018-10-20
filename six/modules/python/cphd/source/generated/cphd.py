@@ -1993,6 +1993,9 @@ class CPHDWriter(_object):
         writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification, std::string const & releaseInfo)
         writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification)
         writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm)
+        writeMetadata(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, VBM vbm, std::string const & classification, std::string const & releaseInfo)
+        writeMetadata(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, VBM vbm, std::string const & classification)
+        writeMetadata(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, VBM vbm)
         """
         return _cphd.CPHDWriter_writeMetadata(self, *args)
 
@@ -2002,6 +2005,9 @@ class CPHDWriter(_object):
         write(CPHDWriter self, std::string const & pathname, std::string const & classification, std::string const & releaseInfo)
         write(CPHDWriter self, std::string const & pathname, std::string const & classification)
         write(CPHDWriter self, std::string const & pathname)
+        write(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, std::string const & classification, std::string const & releaseInfo)
+        write(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream, std::string const & classification)
+        write(CPHDWriter self, mem::SharedPtr< io::OutputStream > outStream)
         """
         return _cphd.CPHDWriter_write(self, *args)
 
