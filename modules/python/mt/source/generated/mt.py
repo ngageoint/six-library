@@ -111,7 +111,7 @@ class Runnable(_object):
     __swig_destroy__ = _mt.delete_Runnable
     __del__ = lambda self: None
 
-    def run(self):
+    def run(self) -> "void":
         """run(Runnable self)"""
         return _mt.Runnable_run(self)
 
@@ -127,7 +127,7 @@ class ThreadPlanner(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ThreadPlanner, name)
     __repr__ = _swig_repr
 
-    def __init__(self, numElements, numThreads):
+    def __init__(self, numElements: 'size_t', numThreads: 'size_t'):
         """__init__(mt::ThreadPlanner self, size_t numElements, size_t numThreads) -> ThreadPlanner"""
         this = _mt.new_ThreadPlanner(numElements, numThreads)
         try:
@@ -135,17 +135,17 @@ class ThreadPlanner(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getNumElementsPerThread(self):
+    def getNumElementsPerThread(self) -> "size_t":
         """getNumElementsPerThread(ThreadPlanner self) -> size_t"""
         return _mt.ThreadPlanner_getNumElementsPerThread(self)
 
 
-    def getNumThreadsThatWillBeUsed(self):
+    def getNumThreadsThatWillBeUsed(self) -> "size_t":
         """getNumThreadsThatWillBeUsed(ThreadPlanner self) -> size_t"""
         return _mt.ThreadPlanner_getNumThreadsThatWillBeUsed(self)
 
 
-    def getThreadInfo(self, threadNum):
+    def getThreadInfo(self, threadNum: 'size_t') -> "PyObject *":
         """getThreadInfo(ThreadPlanner self, size_t threadNum) -> PyObject *"""
         return _mt.ThreadPlanner_getThreadInfo(self, threadNum)
 
@@ -173,12 +173,12 @@ class ThreadGroup(_object):
     __swig_destroy__ = _mt.delete_ThreadGroup
     __del__ = lambda self: None
 
-    def joinAll(self):
+    def joinAll(self) -> "void":
         """joinAll(ThreadGroup self)"""
         return _mt.ThreadGroup_joinAll(self)
 
 
-    def createThread(self, runnable):
+    def createThread(self, runnable: 'PyObject *') -> "void":
         """createThread(ThreadGroup self, PyObject * runnable)"""
         return _mt.ThreadGroup_createThread(self, runnable)
 

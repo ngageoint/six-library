@@ -70,6 +70,11 @@ struct ElementType<std::complex<float> >
 {
     static const size_t Type = sio::lite::FileHeader::COMPLEX_FLOAT;
 };
+template <>
+struct ElementType<std::complex<double> >
+{
+    static const size_t Type = sio::lite::FileHeader::COMPLEX_FLOAT;
+};
 }
 }
 
