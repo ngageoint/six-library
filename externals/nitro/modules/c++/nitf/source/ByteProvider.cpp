@@ -243,14 +243,14 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
 
     std::vector<size_t> desSubheaderLengths(numDESs);
     std::vector<size_t> desDataLengths(numDESs);
-
     for (size_t ii = 0; ii < numDESs; ++ii)
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
         nitf::Uint32 userSublen;
+        const size_t prevSize = byteStream->getSize();
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
-        desSubheaderLengths[ii] = byteStream->getSize();
+        desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 
         // Write data
         const PtrAndLength& curData(desData[ii]);

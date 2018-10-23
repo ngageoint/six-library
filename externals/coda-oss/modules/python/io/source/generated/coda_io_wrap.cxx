@@ -3137,6 +3137,7 @@ namespace swig {
   #include "import/sys.h"
   #include "import/io.h"
   using namespace io;
+  #define SWIG_PYTHON_STRICT_BYTE_CHAR
 
 
 SWIGINTERNINLINE PyObject*
