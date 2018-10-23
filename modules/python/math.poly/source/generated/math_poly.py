@@ -100,19 +100,19 @@ import coda.coda_except
 import coda.coda_types
 import coda.coda_sys
 
-def new_doubleArray(nelements: 'size_t') -> "double *":
+def new_doubleArray(nelements):
     """new_doubleArray(size_t nelements) -> double *"""
     return _math_poly.new_doubleArray(nelements)
 
-def delete_doubleArray(ary: 'double *') -> "void":
+def delete_doubleArray(ary):
     """delete_doubleArray(double * ary)"""
     return _math_poly.delete_doubleArray(ary)
 
-def doubleArray_getitem(ary: 'double *', index: 'size_t') -> "double":
+def doubleArray_getitem(ary, index):
     """doubleArray_getitem(double * ary, size_t index) -> double"""
     return _math_poly.doubleArray_getitem(ary, index)
 
-def doubleArray_setitem(ary: 'double *', index: 'size_t', value: 'double') -> "void":
+def doubleArray_setitem(ary, index, value):
     """doubleArray_setitem(double * ary, size_t index, double value)"""
     return _math_poly.doubleArray_setitem(ary, index, value)
 
@@ -140,37 +140,37 @@ class Poly1D(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def order(self) -> "size_t":
+    def order(self):
         """order(Poly1D self) -> size_t"""
         return _math_poly.Poly1D_order(self)
 
 
-    def size(self) -> "size_t":
+    def size(self):
         """size(Poly1D self) -> size_t"""
         return _math_poly.Poly1D_size(self)
 
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(Poly1D self) -> bool"""
         return _math_poly.Poly1D_empty(self)
 
 
-    def coeffs(self) -> "std::vector< double,std::allocator< double > > const &":
+    def coeffs(self):
         """coeffs(Poly1D self) -> std_vector_double"""
         return _math_poly.Poly1D_coeffs(self)
 
 
-    def scaleVariable(self, scale: 'double') -> "math::poly::OneD< double >":
+    def scaleVariable(self, scale):
         """scaleVariable(Poly1D self, double scale) -> Poly1D"""
         return _math_poly.Poly1D_scaleVariable(self, scale)
 
 
-    def truncateTo(self, order: 'size_t') -> "math::poly::OneD< double >":
+    def truncateTo(self, order):
         """truncateTo(Poly1D self, size_t order) -> Poly1D"""
         return _math_poly.Poly1D_truncateTo(self, order)
 
 
-    def truncateToNonZeros(self, zeroEpsilon: 'double'=0.0) -> "math::poly::OneD< double >":
+    def truncateToNonZeros(self, zeroEpsilon=0.0):
         """
         truncateToNonZeros(Poly1D self, double zeroEpsilon=0.0) -> Poly1D
         truncateToNonZeros(Poly1D self) -> Poly1D
@@ -178,7 +178,7 @@ class Poly1D(_object):
         return _math_poly.Poly1D_truncateToNonZeros(self, zeroEpsilon)
 
 
-    def transformInput(self, gx: 'Poly1D', zeroEpsilon: 'double'=0.0) -> "math::poly::OneD< double >":
+    def transformInput(self, gx, zeroEpsilon=0.0):
         """
         transformInput(Poly1D self, Poly1D gx, double zeroEpsilon=0.0) -> Poly1D
         transformInput(Poly1D self, Poly1D gx) -> Poly1D
@@ -186,32 +186,32 @@ class Poly1D(_object):
         return _math_poly.Poly1D_transformInput(self, gx, zeroEpsilon)
 
 
-    def copyFrom(self, p: 'Poly1D') -> "void":
+    def copyFrom(self, p):
         """copyFrom(Poly1D self, Poly1D p)"""
         return _math_poly.Poly1D_copyFrom(self, p)
 
 
-    def integrate(self, start: 'double', end: 'double') -> "double":
+    def integrate(self, start, end):
         """integrate(Poly1D self, double start, double end) -> double"""
         return _math_poly.Poly1D_integrate(self, start, end)
 
 
-    def derivative(self) -> "math::poly::OneD< double >":
+    def derivative(self):
         """derivative(Poly1D self) -> Poly1D"""
         return _math_poly.Poly1D_derivative(self)
 
 
-    def velocity(self, x: 'double') -> "double":
+    def velocity(self, x):
         """velocity(Poly1D self, double x) -> double"""
         return _math_poly.Poly1D_velocity(self, x)
 
 
-    def acceleration(self, x: 'double') -> "double":
+    def acceleration(self, x):
         """acceleration(Poly1D self, double x) -> double"""
         return _math_poly.Poly1D_acceleration(self, x)
 
 
-    def __imul__(self, *args) -> "math::poly::OneD< double > &":
+    def __imul__(self, *args):
         """
         __imul__(Poly1D self, double cv) -> Poly1D
         __imul__(Poly1D self, Poly1D p) -> Poly1D
@@ -219,7 +219,7 @@ class Poly1D(_object):
         return _math_poly.Poly1D___imul__(self, *args)
 
 
-    def __mul__(self, *args) -> "math::poly::OneD< double >":
+    def __mul__(self, *args):
         """
         __mul__(Poly1D self, double cv) -> Poly1D
         __mul__(Poly1D self, Poly1D p) -> Poly1D
@@ -227,22 +227,22 @@ class Poly1D(_object):
         return _math_poly.Poly1D___mul__(self, *args)
 
 
-    def __iadd__(self, p: 'Poly1D') -> "math::poly::OneD< double > &":
+    def __iadd__(self, p):
         """__iadd__(Poly1D self, Poly1D p) -> Poly1D"""
         return _math_poly.Poly1D___iadd__(self, p)
 
 
-    def __add__(self, p: 'Poly1D') -> "math::poly::OneD< double >":
+    def __add__(self, p):
         """__add__(Poly1D self, Poly1D p) -> Poly1D"""
         return _math_poly.Poly1D___add__(self, p)
 
 
-    def __isub__(self, p: 'Poly1D') -> "math::poly::OneD< double > &":
+    def __isub__(self, p):
         """__isub__(Poly1D self, Poly1D p) -> Poly1D"""
         return _math_poly.Poly1D___isub__(self, p)
 
 
-    def __sub__(self, p: 'Poly1D') -> "math::poly::OneD< double >":
+    def __sub__(self, p):
         """__sub__(Poly1D self, Poly1D p) -> Poly1D"""
         return _math_poly.Poly1D___sub__(self, p)
 
@@ -259,17 +259,17 @@ class Poly1D(_object):
 
 
 
-    def power(self, toThe: 'size_t') -> "math::poly::OneD< double >":
+    def power(self, toThe):
         """power(Poly1D self, size_t toThe) -> Poly1D"""
         return _math_poly.Poly1D_power(self, toThe)
 
 
-    def __eq__(self, p: 'Poly1D') -> "bool":
+    def __eq__(self, p):
         """__eq__(Poly1D self, Poly1D p) -> bool"""
         return _math_poly.Poly1D___eq__(self, p)
 
 
-    def __ne__(self, p: 'Poly1D') -> "bool":
+    def __ne__(self, p):
         """__ne__(Poly1D self, Poly1D p) -> bool"""
         return _math_poly.Poly1D___ne__(self, p)
 
@@ -289,27 +289,27 @@ class Poly1D(_object):
 
 
 
-    def __getitem__(self, i: 'long') -> "double":
+    def __getitem__(self, i):
         """__getitem__(Poly1D self, long i) -> double"""
         return _math_poly.Poly1D___getitem__(self, i)
 
 
-    def __setitem__(self, i: 'long', val: 'double') -> "void":
+    def __setitem__(self, i, val):
         """__setitem__(Poly1D self, long i, double val)"""
         return _math_poly.Poly1D___setitem__(self, i, val)
 
 
-    def __str__(self) -> "std::string":
+    def __str__(self):
         """__str__(Poly1D self) -> std::string"""
         return _math_poly.Poly1D___str__(self)
 
 
-    def __deepcopy__(self, memo: 'PyObject *') -> "math::poly::OneD< double >":
+    def __deepcopy__(self, memo):
         """__deepcopy__(Poly1D self, PyObject * memo) -> Poly1D"""
         return _math_poly.Poly1D___deepcopy__(self, memo)
 
 
-    def __call__(self, *args) -> "PyObject *":
+    def __call__(self, *args):
         """
         __call__(Poly1D self, double at) -> double
         __call__(Poly1D self, PyObject * input) -> PyObject *
@@ -317,7 +317,7 @@ class Poly1D(_object):
         return _math_poly.Poly1D___call__(self, *args)
 
 
-    def asArray(self) -> "PyObject *":
+    def asArray(self):
         """asArray(Poly1D self) -> PyObject *"""
         return _math_poly.Poly1D_asArray(self)
 
@@ -342,34 +342,34 @@ class Vector3Coefficients(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Vector3Coefficients, name)
     __repr__ = _swig_repr
 
-    def iterator(self) -> "swig::SwigPyIterator *":
+    def iterator(self):
         """iterator(Vector3Coefficients self) -> SwigPyIterator"""
         return _math_poly.Vector3Coefficients_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self) -> "bool":
+    def __nonzero__(self):
         """__nonzero__(Vector3Coefficients self) -> bool"""
         return _math_poly.Vector3Coefficients___nonzero__(self)
 
 
-    def __bool__(self) -> "bool":
+    def __bool__(self):
         """__bool__(Vector3Coefficients self) -> bool"""
         return _math_poly.Vector3Coefficients___bool__(self)
 
 
-    def __len__(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
+    def __len__(self):
         """__len__(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _math_poly.Vector3Coefficients___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< math::linear::VectorN< 3,double > >::difference_type', j: 'std::vector< math::linear::VectorN< 3,double > >::difference_type') -> "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *":
+    def __getslice__(self, i, j):
         """__getslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> Vector3Coefficients"""
         return _math_poly.Vector3Coefficients___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args) -> "void":
+    def __setslice__(self, *args):
         """
         __setslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)
         __setslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, Vector3Coefficients v)
@@ -377,12 +377,12 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< math::linear::VectorN< 3,double > >::difference_type', j: 'std::vector< math::linear::VectorN< 3,double > >::difference_type') -> "void":
+    def __delslice__(self, i, j):
         """__delslice__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)"""
         return _math_poly.Vector3Coefficients___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args) -> "void":
+    def __delitem__(self, *args):
         """
         __delitem__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i)
         __delitem__(Vector3Coefficients self, PySliceObject * slice)
@@ -390,7 +390,7 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
+    def __getitem__(self, *args):
         """
         __getitem__(Vector3Coefficients self, PySliceObject * slice) -> Vector3Coefficients
         __getitem__(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3
@@ -398,7 +398,7 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients___getitem__(self, *args)
 
 
-    def __setitem__(self, *args) -> "void":
+    def __setitem__(self, *args):
         """
         __setitem__(Vector3Coefficients self, PySliceObject * slice, Vector3Coefficients v)
         __setitem__(Vector3Coefficients self, PySliceObject * slice)
@@ -407,67 +407,67 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type":
+    def pop(self):
         """pop(Vector3Coefficients self) -> Vector3"""
         return _math_poly.Vector3Coefficients_pop(self)
 
 
-    def append(self, x: 'Vector3') -> "void":
+    def append(self, x):
         """append(Vector3Coefficients self, Vector3 x)"""
         return _math_poly.Vector3Coefficients_append(self, x)
 
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(Vector3Coefficients self) -> bool"""
         return _math_poly.Vector3Coefficients_empty(self)
 
 
-    def size(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
+    def size(self):
         """size(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _math_poly.Vector3Coefficients_size(self)
 
 
-    def swap(self, v: 'Vector3Coefficients') -> "void":
+    def swap(self, v):
         """swap(Vector3Coefficients self, Vector3Coefficients v)"""
         return _math_poly.Vector3Coefficients_swap(self, v)
 
 
-    def begin(self) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
+    def begin(self):
         """begin(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
         return _math_poly.Vector3Coefficients_begin(self)
 
 
-    def end(self) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
+    def end(self):
         """end(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
         return _math_poly.Vector3Coefficients_end(self)
 
 
-    def rbegin(self) -> "std::vector< math::linear::VectorN< 3,double > >::reverse_iterator":
+    def rbegin(self):
         """rbegin(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
         return _math_poly.Vector3Coefficients_rbegin(self)
 
 
-    def rend(self) -> "std::vector< math::linear::VectorN< 3,double > >::reverse_iterator":
+    def rend(self):
         """rend(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
         return _math_poly.Vector3Coefficients_rend(self)
 
 
-    def clear(self) -> "void":
+    def clear(self):
         """clear(Vector3Coefficients self)"""
         return _math_poly.Vector3Coefficients_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< math::linear::VectorN< 3,double > >::allocator_type":
+    def get_allocator(self):
         """get_allocator(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::allocator_type"""
         return _math_poly.Vector3Coefficients_get_allocator(self)
 
 
-    def pop_back(self) -> "void":
+    def pop_back(self):
         """pop_back(Vector3Coefficients self)"""
         return _math_poly.Vector3Coefficients_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
+    def erase(self, *args):
         """
         erase(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator pos) -> std::vector< math::linear::VectorN< 3,double > >::iterator
         erase(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator first, std::vector< math::linear::VectorN< 3,double > >::iterator last) -> std::vector< math::linear::VectorN< 3,double > >::iterator
@@ -488,27 +488,27 @@ class Vector3Coefficients(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x: 'Vector3') -> "void":
+    def push_back(self, x):
         """push_back(Vector3Coefficients self, Vector3 x)"""
         return _math_poly.Vector3Coefficients_push_back(self, x)
 
 
-    def front(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
+    def front(self):
         """front(Vector3Coefficients self) -> Vector3"""
         return _math_poly.Vector3Coefficients_front(self)
 
 
-    def back(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
+    def back(self):
         """back(Vector3Coefficients self) -> Vector3"""
         return _math_poly.Vector3Coefficients_back(self)
 
 
-    def assign(self, n: 'std::vector< math::linear::VectorN< 3,double > >::size_type', x: 'Vector3') -> "void":
+    def assign(self, n, x):
         """assign(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)"""
         return _math_poly.Vector3Coefficients_assign(self, n, x)
 
 
-    def resize(self, *args) -> "void":
+    def resize(self, *args):
         """
         resize(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size)
         resize(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size, Vector3 x)
@@ -516,7 +516,7 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients_resize(self, *args)
 
 
-    def insert(self, *args) -> "void":
+    def insert(self, *args):
         """
         insert(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, Vector3 x) -> std::vector< math::linear::VectorN< 3,double > >::iterator
         insert(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)
@@ -524,12 +524,12 @@ class Vector3Coefficients(_object):
         return _math_poly.Vector3Coefficients_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< math::linear::VectorN< 3,double > >::size_type') -> "void":
+    def reserve(self, n):
         """reserve(Vector3Coefficients self, std::vector< math::linear::VectorN< 3,double > >::size_type n)"""
         return _math_poly.Vector3Coefficients_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
+    def capacity(self):
         """capacity(Vector3Coefficients self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _math_poly.Vector3Coefficients_capacity(self)
 
@@ -558,7 +558,7 @@ class Poly2D(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Poly2D, name)
     __repr__ = _swig_repr
 
-    def coeffs(self) -> "std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > &":
+    def coeffs(self):
         """coeffs(Poly2D self) -> Poly1DVector"""
         return _math_poly.Poly2D_coeffs(self)
 
@@ -575,52 +575,52 @@ class Poly2D(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(Poly2D self) -> bool"""
         return _math_poly.Poly2D_empty(self)
 
 
-    def orderX(self) -> "size_t":
+    def orderX(self):
         """orderX(Poly2D self) -> size_t"""
         return _math_poly.Poly2D_orderX(self)
 
 
-    def orderY(self) -> "size_t":
+    def orderY(self):
         """orderY(Poly2D self) -> size_t"""
         return _math_poly.Poly2D_orderY(self)
 
 
-    def integrate(self, xStart: 'double', xEnd: 'double', yStart: 'double', yEnd: 'double') -> "double":
+    def integrate(self, xStart, xEnd, yStart, yEnd):
         """integrate(Poly2D self, double xStart, double xEnd, double yStart, double yEnd) -> double"""
         return _math_poly.Poly2D_integrate(self, xStart, xEnd, yStart, yEnd)
 
 
-    def set(self, i: 'size_t', p: 'Poly1D') -> "void":
+    def set(self, i, p):
         """set(Poly2D self, size_t i, Poly1D p)"""
         return _math_poly.Poly2D_set(self, i, p)
 
 
-    def flipXY(self) -> "math::poly::TwoD< double >":
+    def flipXY(self):
         """flipXY(Poly2D self) -> Poly2D"""
         return _math_poly.Poly2D_flipXY(self)
 
 
-    def derivativeY(self) -> "math::poly::TwoD< double >":
+    def derivativeY(self):
         """derivativeY(Poly2D self) -> Poly2D"""
         return _math_poly.Poly2D_derivativeY(self)
 
 
-    def derivativeX(self) -> "math::poly::TwoD< double >":
+    def derivativeX(self):
         """derivativeX(Poly2D self) -> Poly2D"""
         return _math_poly.Poly2D_derivativeX(self)
 
 
-    def derivativeXY(self) -> "math::poly::TwoD< double >":
+    def derivativeXY(self):
         """derivativeXY(Poly2D self) -> Poly2D"""
         return _math_poly.Poly2D_derivativeXY(self)
 
 
-    def scaleVariable(self, *args) -> "math::poly::TwoD< double >":
+    def scaleVariable(self, *args):
         """
         scaleVariable(Poly2D self, double scaleX, double scaleY) -> Poly2D
         scaleVariable(Poly2D self, double scale) -> Poly2D
@@ -628,12 +628,12 @@ class Poly2D(_object):
         return _math_poly.Poly2D_scaleVariable(self, *args)
 
 
-    def truncateTo(self, orderX: 'size_t', orderY: 'size_t') -> "math::poly::TwoD< double >":
+    def truncateTo(self, orderX, orderY):
         """truncateTo(Poly2D self, size_t orderX, size_t orderY) -> Poly2D"""
         return _math_poly.Poly2D_truncateTo(self, orderX, orderY)
 
 
-    def truncateToNonZeros(self, zeroEpsilon: 'double'=0.0) -> "math::poly::TwoD< double >":
+    def truncateToNonZeros(self, zeroEpsilon=0.0):
         """
         truncateToNonZeros(Poly2D self, double zeroEpsilon=0.0) -> Poly2D
         truncateToNonZeros(Poly2D self) -> Poly2D
@@ -641,7 +641,7 @@ class Poly2D(_object):
         return _math_poly.Poly2D_truncateToNonZeros(self, zeroEpsilon)
 
 
-    def transformInput(self, *args) -> "math::poly::TwoD< double >":
+    def transformInput(self, *args):
         """
         transformInput(Poly2D self, Poly2D gx, Poly2D gy, double zeroEpsilon=0.0) -> Poly2D
         transformInput(Poly2D self, Poly2D gx, Poly2D gy) -> Poly2D
@@ -651,12 +651,12 @@ class Poly2D(_object):
         return _math_poly.Poly2D_transformInput(self, *args)
 
 
-    def atY(self, y: 'double') -> "math::poly::OneD< double >":
+    def atY(self, y):
         """atY(Poly2D self, double y) -> Poly1D"""
         return _math_poly.Poly2D_atY(self, y)
 
 
-    def __imul__(self, *args) -> "math::poly::TwoD< double > &":
+    def __imul__(self, *args):
         """
         __imul__(Poly2D self, double cv) -> Poly2D
         __imul__(Poly2D self, Poly2D p) -> Poly2D
@@ -664,7 +664,7 @@ class Poly2D(_object):
         return _math_poly.Poly2D___imul__(self, *args)
 
 
-    def __mul__(self, *args) -> "math::poly::TwoD< double >":
+    def __mul__(self, *args):
         """
         __mul__(Poly2D self, double cv) -> Poly2D
         __mul__(Poly2D self, Poly2D p) -> Poly2D
@@ -672,22 +672,22 @@ class Poly2D(_object):
         return _math_poly.Poly2D___mul__(self, *args)
 
 
-    def __iadd__(self, p: 'Poly2D') -> "math::poly::TwoD< double > &":
+    def __iadd__(self, p):
         """__iadd__(Poly2D self, Poly2D p) -> Poly2D"""
         return _math_poly.Poly2D___iadd__(self, p)
 
 
-    def __add__(self, p: 'Poly2D') -> "math::poly::TwoD< double >":
+    def __add__(self, p):
         """__add__(Poly2D self, Poly2D p) -> Poly2D"""
         return _math_poly.Poly2D___add__(self, p)
 
 
-    def __isub__(self, p: 'Poly2D') -> "math::poly::TwoD< double > &":
+    def __isub__(self, p):
         """__isub__(Poly2D self, Poly2D p) -> Poly2D"""
         return _math_poly.Poly2D___isub__(self, p)
 
 
-    def __sub__(self, p: 'Poly2D') -> "math::poly::TwoD< double >":
+    def __sub__(self, p):
         """__sub__(Poly2D self, Poly2D p) -> Poly2D"""
         return _math_poly.Poly2D___sub__(self, p)
 
@@ -704,22 +704,22 @@ class Poly2D(_object):
 
 
 
-    def __eq__(self, p: 'Poly2D') -> "bool":
+    def __eq__(self, p):
         """__eq__(Poly2D self, Poly2D p) -> bool"""
         return _math_poly.Poly2D___eq__(self, p)
 
 
-    def __ne__(self, p: 'Poly2D') -> "bool":
+    def __ne__(self, p):
         """__ne__(Poly2D self, Poly2D p) -> bool"""
         return _math_poly.Poly2D___ne__(self, p)
 
 
-    def power(self, toThe: 'size_t') -> "math::poly::TwoD< double >":
+    def power(self, toThe):
         """power(Poly2D self, size_t toThe) -> Poly2D"""
         return _math_poly.Poly2D_power(self, toThe)
 
 
-    def isScalar(self) -> "bool":
+    def isScalar(self):
         """isScalar(Poly2D self) -> bool"""
         return _math_poly.Poly2D_isScalar(self)
 
@@ -738,27 +738,27 @@ class Poly2D(_object):
         return state
 
 
-    def __getitem__(self, inObj: 'PyObject *') -> "double":
+    def __getitem__(self, inObj):
         """__getitem__(Poly2D self, PyObject * inObj) -> double"""
         return _math_poly.Poly2D___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
+    def __setitem__(self, inObj, val):
         """__setitem__(Poly2D self, PyObject * inObj, double val)"""
         return _math_poly.Poly2D___setitem__(self, inObj, val)
 
 
-    def __str__(self) -> "std::string":
+    def __str__(self):
         """__str__(Poly2D self) -> std::string"""
         return _math_poly.Poly2D___str__(self)
 
 
-    def __deepcopy__(self, memo: 'PyObject *') -> "math::poly::TwoD< double >":
+    def __deepcopy__(self, memo):
         """__deepcopy__(Poly2D self, PyObject * memo) -> Poly2D"""
         return _math_poly.Poly2D___deepcopy__(self, memo)
 
 
-    def __call__(self, *args) -> "PyObject *":
+    def __call__(self, *args):
         """
         __call__(Poly2D self, double atX, double atY) -> double
         __call__(Poly2D self, PyObject * x_input, PyObject * y_input) -> PyObject *
@@ -766,7 +766,7 @@ class Poly2D(_object):
         return _math_poly.Poly2D___call__(self, *args)
 
 
-    def asArray(self) -> "PyObject *":
+    def asArray(self):
         """asArray(Poly2D self) -> PyObject *"""
         return _math_poly.Poly2D_asArray(self)
 
@@ -795,34 +795,34 @@ class Poly1DVector(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Poly1DVector, name)
     __repr__ = _swig_repr
 
-    def iterator(self) -> "swig::SwigPyIterator *":
+    def iterator(self):
         """iterator(Poly1DVector self) -> SwigPyIterator"""
         return _math_poly.Poly1DVector_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self) -> "bool":
+    def __nonzero__(self):
         """__nonzero__(Poly1DVector self) -> bool"""
         return _math_poly.Poly1DVector___nonzero__(self)
 
 
-    def __bool__(self) -> "bool":
+    def __bool__(self):
         """__bool__(Poly1DVector self) -> bool"""
         return _math_poly.Poly1DVector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< math::poly::OneD< double > >::size_type":
+    def __len__(self):
         """__len__(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::size_type"""
         return _math_poly.Poly1DVector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< math::poly::OneD< double > >::difference_type', j: 'std::vector< math::poly::OneD< double > >::difference_type') -> "std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *":
+    def __getslice__(self, i, j):
         """__getslice__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i, std::vector< math::poly::OneD< double > >::difference_type j) -> Poly1DVector"""
         return _math_poly.Poly1DVector___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args) -> "void":
+    def __setslice__(self, *args):
         """
         __setslice__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i, std::vector< math::poly::OneD< double > >::difference_type j)
         __setslice__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i, std::vector< math::poly::OneD< double > >::difference_type j, Poly1DVector v)
@@ -830,12 +830,12 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< math::poly::OneD< double > >::difference_type', j: 'std::vector< math::poly::OneD< double > >::difference_type') -> "void":
+    def __delslice__(self, i, j):
         """__delslice__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i, std::vector< math::poly::OneD< double > >::difference_type j)"""
         return _math_poly.Poly1DVector___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args) -> "void":
+    def __delitem__(self, *args):
         """
         __delitem__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i)
         __delitem__(Poly1DVector self, PySliceObject * slice)
@@ -843,7 +843,7 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< math::poly::OneD< double > >::value_type const &":
+    def __getitem__(self, *args):
         """
         __getitem__(Poly1DVector self, PySliceObject * slice) -> Poly1DVector
         __getitem__(Poly1DVector self, std::vector< math::poly::OneD< double > >::difference_type i) -> Poly1D
@@ -851,7 +851,7 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector___getitem__(self, *args)
 
 
-    def __setitem__(self, *args) -> "void":
+    def __setitem__(self, *args):
         """
         __setitem__(Poly1DVector self, PySliceObject * slice, Poly1DVector v)
         __setitem__(Poly1DVector self, PySliceObject * slice)
@@ -860,67 +860,67 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< math::poly::OneD< double > >::value_type":
+    def pop(self):
         """pop(Poly1DVector self) -> Poly1D"""
         return _math_poly.Poly1DVector_pop(self)
 
 
-    def append(self, x: 'Poly1D') -> "void":
+    def append(self, x):
         """append(Poly1DVector self, Poly1D x)"""
         return _math_poly.Poly1DVector_append(self, x)
 
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(Poly1DVector self) -> bool"""
         return _math_poly.Poly1DVector_empty(self)
 
 
-    def size(self) -> "std::vector< math::poly::OneD< double > >::size_type":
+    def size(self):
         """size(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::size_type"""
         return _math_poly.Poly1DVector_size(self)
 
 
-    def swap(self, v: 'Poly1DVector') -> "void":
+    def swap(self, v):
         """swap(Poly1DVector self, Poly1DVector v)"""
         return _math_poly.Poly1DVector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< math::poly::OneD< double > >::iterator":
+    def begin(self):
         """begin(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::iterator"""
         return _math_poly.Poly1DVector_begin(self)
 
 
-    def end(self) -> "std::vector< math::poly::OneD< double > >::iterator":
+    def end(self):
         """end(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::iterator"""
         return _math_poly.Poly1DVector_end(self)
 
 
-    def rbegin(self) -> "std::vector< math::poly::OneD< double > >::reverse_iterator":
+    def rbegin(self):
         """rbegin(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::reverse_iterator"""
         return _math_poly.Poly1DVector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< math::poly::OneD< double > >::reverse_iterator":
+    def rend(self):
         """rend(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::reverse_iterator"""
         return _math_poly.Poly1DVector_rend(self)
 
 
-    def clear(self) -> "void":
+    def clear(self):
         """clear(Poly1DVector self)"""
         return _math_poly.Poly1DVector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< math::poly::OneD< double > >::allocator_type":
+    def get_allocator(self):
         """get_allocator(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::allocator_type"""
         return _math_poly.Poly1DVector_get_allocator(self)
 
 
-    def pop_back(self) -> "void":
+    def pop_back(self):
         """pop_back(Poly1DVector self)"""
         return _math_poly.Poly1DVector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< math::poly::OneD< double > >::iterator":
+    def erase(self, *args):
         """
         erase(Poly1DVector self, std::vector< math::poly::OneD< double > >::iterator pos) -> std::vector< math::poly::OneD< double > >::iterator
         erase(Poly1DVector self, std::vector< math::poly::OneD< double > >::iterator first, std::vector< math::poly::OneD< double > >::iterator last) -> std::vector< math::poly::OneD< double > >::iterator
@@ -941,27 +941,27 @@ class Poly1DVector(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x: 'Poly1D') -> "void":
+    def push_back(self, x):
         """push_back(Poly1DVector self, Poly1D x)"""
         return _math_poly.Poly1DVector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< math::poly::OneD< double > >::value_type const &":
+    def front(self):
         """front(Poly1DVector self) -> Poly1D"""
         return _math_poly.Poly1DVector_front(self)
 
 
-    def back(self) -> "std::vector< math::poly::OneD< double > >::value_type const &":
+    def back(self):
         """back(Poly1DVector self) -> Poly1D"""
         return _math_poly.Poly1DVector_back(self)
 
 
-    def assign(self, n: 'std::vector< math::poly::OneD< double > >::size_type', x: 'Poly1D') -> "void":
+    def assign(self, n, x):
         """assign(Poly1DVector self, std::vector< math::poly::OneD< double > >::size_type n, Poly1D x)"""
         return _math_poly.Poly1DVector_assign(self, n, x)
 
 
-    def resize(self, *args) -> "void":
+    def resize(self, *args):
         """
         resize(Poly1DVector self, std::vector< math::poly::OneD< double > >::size_type new_size)
         resize(Poly1DVector self, std::vector< math::poly::OneD< double > >::size_type new_size, Poly1D x)
@@ -969,7 +969,7 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector_resize(self, *args)
 
 
-    def insert(self, *args) -> "void":
+    def insert(self, *args):
         """
         insert(Poly1DVector self, std::vector< math::poly::OneD< double > >::iterator pos, Poly1D x) -> std::vector< math::poly::OneD< double > >::iterator
         insert(Poly1DVector self, std::vector< math::poly::OneD< double > >::iterator pos, std::vector< math::poly::OneD< double > >::size_type n, Poly1D x)
@@ -977,12 +977,12 @@ class Poly1DVector(_object):
         return _math_poly.Poly1DVector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< math::poly::OneD< double > >::size_type') -> "void":
+    def reserve(self, n):
         """reserve(Poly1DVector self, std::vector< math::poly::OneD< double > >::size_type n)"""
         return _math_poly.Poly1DVector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< math::poly::OneD< double > >::size_type":
+    def capacity(self):
         """capacity(Poly1DVector self) -> std::vector< math::poly::OneD< double > >::size_type"""
         return _math_poly.Poly1DVector_capacity(self)
 
@@ -1003,7 +1003,7 @@ Poly1DVector_swigregister = _math_poly.Poly1DVector_swigregister
 Poly1DVector_swigregister(Poly1DVector)
 
 
-def fit(*args) -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+def fit(*args):
     """
     fit(size_t numObs, double const * x, double const * y, size_t order) -> Poly1D
     fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D
@@ -1014,7 +1014,7 @@ def fit(*args) -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
     """
     return _math_poly.fit(*args)
 
-def FitVectorDouble(x: 'VectorDouble', y: 'VectorDouble', order: 'size_t') -> "math::poly::OneD< double >":
+def FitVectorDouble(x, y, order):
     """FitVectorDouble(VectorDouble x, VectorDouble y, size_t order) -> Poly1D"""
     return _math_poly.FitVectorDouble(x, y, order)
 class PolyVector3(_object):
@@ -1039,57 +1039,57 @@ class PolyVector3(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def order(self) -> "size_t":
+    def order(self):
         """order(PolyVector3 self) -> size_t"""
         return _math_poly.PolyVector3_order(self)
 
 
-    def size(self) -> "size_t":
+    def size(self):
         """size(PolyVector3 self) -> size_t"""
         return _math_poly.PolyVector3_size(self)
 
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(PolyVector3 self) -> bool"""
         return _math_poly.PolyVector3_empty(self)
 
 
-    def coeffs(self) -> "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &":
+    def coeffs(self):
         """coeffs(PolyVector3 self) -> Vector3Coefficients"""
         return _math_poly.PolyVector3_coeffs(self)
 
 
-    def scaleVariable(self, scale: 'double') -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def scaleVariable(self, scale):
         """scaleVariable(PolyVector3 self, double scale) -> PolyVector3"""
         return _math_poly.PolyVector3_scaleVariable(self, scale)
 
 
-    def truncateTo(self, order: 'size_t') -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def truncateTo(self, order):
         """truncateTo(PolyVector3 self, size_t order) -> PolyVector3"""
         return _math_poly.PolyVector3_truncateTo(self, order)
 
 
-    def copyFrom(self, p: 'PolyVector3') -> "void":
+    def copyFrom(self, p):
         """copyFrom(PolyVector3 self, PolyVector3 p)"""
         return _math_poly.PolyVector3_copyFrom(self, p)
 
 
-    def derivative(self) -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def derivative(self):
         """derivative(PolyVector3 self) -> PolyVector3"""
         return _math_poly.PolyVector3_derivative(self)
 
 
-    def velocity(self, x: 'double') -> "math::linear::VectorN< 3,double >":
+    def velocity(self, x):
         """velocity(PolyVector3 self, double x) -> Vector3"""
         return _math_poly.PolyVector3_velocity(self, x)
 
 
-    def acceleration(self, x: 'double') -> "math::linear::VectorN< 3,double >":
+    def acceleration(self, x):
         """acceleration(PolyVector3 self, double x) -> Vector3"""
         return _math_poly.PolyVector3_acceleration(self, x)
 
 
-    def __imul__(self, *args) -> "math::poly::OneD< math::linear::VectorN< 3,double > > &":
+    def __imul__(self, *args):
         """
         __imul__(PolyVector3 self, double cv) -> PolyVector3
         __imul__(PolyVector3 self, PolyVector3 p) -> PolyVector3
@@ -1097,7 +1097,7 @@ class PolyVector3(_object):
         return _math_poly.PolyVector3___imul__(self, *args)
 
 
-    def __mul__(self, *args) -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def __mul__(self, *args):
         """
         __mul__(PolyVector3 self, double cv) -> PolyVector3
         __mul__(PolyVector3 self, PolyVector3 p) -> PolyVector3
@@ -1105,22 +1105,22 @@ class PolyVector3(_object):
         return _math_poly.PolyVector3___mul__(self, *args)
 
 
-    def __iadd__(self, p: 'PolyVector3') -> "math::poly::OneD< math::linear::VectorN< 3,double > > &":
+    def __iadd__(self, p):
         """__iadd__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
         return _math_poly.PolyVector3___iadd__(self, p)
 
 
-    def __add__(self, p: 'PolyVector3') -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def __add__(self, p):
         """__add__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
         return _math_poly.PolyVector3___add__(self, p)
 
 
-    def __isub__(self, p: 'PolyVector3') -> "math::poly::OneD< math::linear::VectorN< 3,double > > &":
+    def __isub__(self, p):
         """__isub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
         return _math_poly.PolyVector3___isub__(self, p)
 
 
-    def __sub__(self, p: 'PolyVector3') -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
+    def __sub__(self, p):
         """__sub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
         return _math_poly.PolyVector3___sub__(self, p)
 
@@ -1137,12 +1137,12 @@ class PolyVector3(_object):
 
 
 
-    def __eq__(self, p: 'PolyVector3') -> "bool":
+    def __eq__(self, p):
         """__eq__(PolyVector3 self, PolyVector3 p) -> bool"""
         return _math_poly.PolyVector3___eq__(self, p)
 
 
-    def __ne__(self, p: 'PolyVector3') -> "bool":
+    def __ne__(self, p):
         """__ne__(PolyVector3 self, PolyVector3 p) -> bool"""
         return _math_poly.PolyVector3___ne__(self, p)
 
@@ -1162,27 +1162,27 @@ class PolyVector3(_object):
 
 
 
-    def __getitem__(self, i: 'long') -> "Vector3":
+    def __getitem__(self, i):
         """__getitem__(PolyVector3 self, long i) -> Vector3"""
         return _math_poly.PolyVector3___getitem__(self, i)
 
 
-    def __setitem__(self, i: 'long', val: 'Vector3') -> "void":
+    def __setitem__(self, i, val):
         """__setitem__(PolyVector3 self, long i, Vector3 val)"""
         return _math_poly.PolyVector3___setitem__(self, i, val)
 
 
-    def __str__(self) -> "std::string":
+    def __str__(self):
         """__str__(PolyVector3 self) -> std::string"""
         return _math_poly.PolyVector3___str__(self)
 
 
-    def __deepcopy__(self, memo: 'PyObject *') -> "math::poly::OneD< Vector3 >":
+    def __deepcopy__(self, memo):
         """__deepcopy__(PolyVector3 self, PyObject * memo) -> PolyVector3"""
         return _math_poly.PolyVector3___deepcopy__(self, memo)
 
 
-    def __call__(self, *args) -> "PyObject *":
+    def __call__(self, *args):
         """
         __call__(PolyVector3 self, double at) -> Vector3
         __call__(PolyVector3 self, PyObject * input) -> PyObject *
@@ -1190,7 +1190,7 @@ class PolyVector3(_object):
         return _math_poly.PolyVector3___call__(self, *args)
 
 
-    def asArray(self) -> "PyObject *":
+    def asArray(self):
         """asArray(PolyVector3 self) -> PyObject *"""
         return _math_poly.PolyVector3_asArray(self)
 
@@ -1213,34 +1213,34 @@ class StdVectorDouble(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, StdVectorDouble, name)
     __repr__ = _swig_repr
 
-    def iterator(self) -> "swig::SwigPyIterator *":
+    def iterator(self):
         """iterator(StdVectorDouble self) -> SwigPyIterator"""
         return _math_poly.StdVectorDouble_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self) -> "bool":
+    def __nonzero__(self):
         """__nonzero__(StdVectorDouble self) -> bool"""
         return _math_poly.StdVectorDouble___nonzero__(self)
 
 
-    def __bool__(self) -> "bool":
+    def __bool__(self):
         """__bool__(StdVectorDouble self) -> bool"""
         return _math_poly.StdVectorDouble___bool__(self)
 
 
-    def __len__(self) -> "std::vector< double >::size_type":
+    def __len__(self):
         """__len__(StdVectorDouble self) -> std::vector< double >::size_type"""
         return _math_poly.StdVectorDouble___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< double >::difference_type', j: 'std::vector< double >::difference_type') -> "std::vector< double,std::allocator< double > > *":
+    def __getslice__(self, i, j):
         """__getslice__(StdVectorDouble self, std::vector< double >::difference_type i, std::vector< double >::difference_type j) -> std_vector_double"""
         return _math_poly.StdVectorDouble___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args) -> "void":
+    def __setslice__(self, *args):
         """
         __setslice__(StdVectorDouble self, std::vector< double >::difference_type i, std::vector< double >::difference_type j)
         __setslice__(StdVectorDouble self, std::vector< double >::difference_type i, std::vector< double >::difference_type j, std_vector_double v)
@@ -1248,12 +1248,12 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< double >::difference_type', j: 'std::vector< double >::difference_type') -> "void":
+    def __delslice__(self, i, j):
         """__delslice__(StdVectorDouble self, std::vector< double >::difference_type i, std::vector< double >::difference_type j)"""
         return _math_poly.StdVectorDouble___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args) -> "void":
+    def __delitem__(self, *args):
         """
         __delitem__(StdVectorDouble self, std::vector< double >::difference_type i)
         __delitem__(StdVectorDouble self, PySliceObject * slice)
@@ -1261,67 +1261,67 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble___delitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< double >::value_type":
+    def pop(self):
         """pop(StdVectorDouble self) -> std::vector< double >::value_type"""
         return _math_poly.StdVectorDouble_pop(self)
 
 
-    def append(self, x: 'std::vector< double >::value_type const &') -> "void":
+    def append(self, x):
         """append(StdVectorDouble self, std::vector< double >::value_type const & x)"""
         return _math_poly.StdVectorDouble_append(self, x)
 
 
-    def empty(self) -> "bool":
+    def empty(self):
         """empty(StdVectorDouble self) -> bool"""
         return _math_poly.StdVectorDouble_empty(self)
 
 
-    def size(self) -> "std::vector< double >::size_type":
+    def size(self):
         """size(StdVectorDouble self) -> std::vector< double >::size_type"""
         return _math_poly.StdVectorDouble_size(self)
 
 
-    def swap(self, v: 'std_vector_double') -> "void":
+    def swap(self, v):
         """swap(StdVectorDouble self, std_vector_double v)"""
         return _math_poly.StdVectorDouble_swap(self, v)
 
 
-    def begin(self) -> "std::vector< double >::iterator":
+    def begin(self):
         """begin(StdVectorDouble self) -> std::vector< double >::iterator"""
         return _math_poly.StdVectorDouble_begin(self)
 
 
-    def end(self) -> "std::vector< double >::iterator":
+    def end(self):
         """end(StdVectorDouble self) -> std::vector< double >::iterator"""
         return _math_poly.StdVectorDouble_end(self)
 
 
-    def rbegin(self) -> "std::vector< double >::reverse_iterator":
+    def rbegin(self):
         """rbegin(StdVectorDouble self) -> std::vector< double >::reverse_iterator"""
         return _math_poly.StdVectorDouble_rbegin(self)
 
 
-    def rend(self) -> "std::vector< double >::reverse_iterator":
+    def rend(self):
         """rend(StdVectorDouble self) -> std::vector< double >::reverse_iterator"""
         return _math_poly.StdVectorDouble_rend(self)
 
 
-    def clear(self) -> "void":
+    def clear(self):
         """clear(StdVectorDouble self)"""
         return _math_poly.StdVectorDouble_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< double >::allocator_type":
+    def get_allocator(self):
         """get_allocator(StdVectorDouble self) -> std::vector< double >::allocator_type"""
         return _math_poly.StdVectorDouble_get_allocator(self)
 
 
-    def pop_back(self) -> "void":
+    def pop_back(self):
         """pop_back(StdVectorDouble self)"""
         return _math_poly.StdVectorDouble_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< double >::iterator":
+    def erase(self, *args):
         """
         erase(StdVectorDouble self, std::vector< double >::iterator pos) -> std::vector< double >::iterator
         erase(StdVectorDouble self, std::vector< double >::iterator first, std::vector< double >::iterator last) -> std::vector< double >::iterator
@@ -1342,27 +1342,27 @@ class StdVectorDouble(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< double >::value_type const &') -> "void":
+    def push_back(self, x):
         """push_back(StdVectorDouble self, std::vector< double >::value_type const & x)"""
         return _math_poly.StdVectorDouble_push_back(self, x)
 
 
-    def front(self) -> "std::vector< double >::value_type const &":
+    def front(self):
         """front(StdVectorDouble self) -> std::vector< double >::value_type const &"""
         return _math_poly.StdVectorDouble_front(self)
 
 
-    def back(self) -> "std::vector< double >::value_type const &":
+    def back(self):
         """back(StdVectorDouble self) -> std::vector< double >::value_type const &"""
         return _math_poly.StdVectorDouble_back(self)
 
 
-    def assign(self, n: 'std::vector< double >::size_type', x: 'std::vector< double >::value_type const &') -> "void":
+    def assign(self, n, x):
         """assign(StdVectorDouble self, std::vector< double >::size_type n, std::vector< double >::value_type const & x)"""
         return _math_poly.StdVectorDouble_assign(self, n, x)
 
 
-    def resize(self, *args) -> "void":
+    def resize(self, *args):
         """
         resize(StdVectorDouble self, std::vector< double >::size_type new_size)
         resize(StdVectorDouble self, std::vector< double >::size_type new_size, std::vector< double >::value_type const & x)
@@ -1370,7 +1370,7 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble_resize(self, *args)
 
 
-    def insert(self, *args) -> "void":
+    def insert(self, *args):
         """
         insert(StdVectorDouble self, std::vector< double >::iterator pos, std::vector< double >::value_type const & x) -> std::vector< double >::iterator
         insert(StdVectorDouble self, std::vector< double >::iterator pos, std::vector< double >::size_type n, std::vector< double >::value_type const & x)
@@ -1378,12 +1378,12 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< double >::size_type') -> "void":
+    def reserve(self, n):
         """reserve(StdVectorDouble self, std::vector< double >::size_type n)"""
         return _math_poly.StdVectorDouble_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< double >::size_type":
+    def capacity(self):
         """capacity(StdVectorDouble self) -> std::vector< double >::size_type"""
         return _math_poly.StdVectorDouble_capacity(self)
 
@@ -1399,7 +1399,7 @@ class StdVectorDouble(_object):
             self.push_back(pickle.loads(elem))
 
 
-    def __getitem__(self, *args) -> "double":
+    def __getitem__(self, *args):
         """
         __getitem__(StdVectorDouble self, PySliceObject * slice) -> std_vector_double
         __getitem__(StdVectorDouble self, std::vector< double >::difference_type i) -> std::vector< double >::value_type const
@@ -1408,7 +1408,7 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble___getitem__(self, *args)
 
 
-    def __setitem__(self, *args) -> "void":
+    def __setitem__(self, *args):
         """
         __setitem__(StdVectorDouble self, PySliceObject * slice, std_vector_double v)
         __setitem__(StdVectorDouble self, PySliceObject * slice)
@@ -1418,7 +1418,7 @@ class StdVectorDouble(_object):
         return _math_poly.StdVectorDouble___setitem__(self, *args)
 
 
-    def __str__(self) -> "std::string":
+    def __str__(self):
         """__str__(StdVectorDouble self) -> std::string"""
         return _math_poly.StdVectorDouble___str__(self)
 
