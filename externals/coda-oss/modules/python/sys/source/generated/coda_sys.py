@@ -98,25 +98,25 @@ except __builtin__.Exception:
 NativeLayer_func__ = _coda_sys.NativeLayer_func__
 SYS_FUNC = _coda_sys.SYS_FUNC
 
-def isBigEndianSystem() -> "bool":
+def isBigEndianSystem():
     """isBigEndianSystem() -> bool"""
     return _coda_sys.isBigEndianSystem()
 
-def byteSwap(*args) -> "void":
+def byteSwap(*args):
     """
     byteSwap(void * buffer, unsigned short elemSize, size_t numElems)
     byteSwap(void const * buffer, unsigned short elemSize, size_t numElems, void * outputBuffer)
     """
     return _coda_sys.byteSwap(*args)
 
-def alignedAlloc(*args) -> "void *":
+def alignedAlloc(*args):
     """
     alignedAlloc(size_t size, size_t alignment)
     alignedAlloc(size_t size) -> void *
     """
     return _coda_sys.alignedAlloc(*args)
 
-def alignedFree(p: 'void *') -> "void":
+def alignedFree(p):
     """alignedFree(void * p)"""
     return _coda_sys.alignedFree(p)
 class UTCDateTime(_object):
@@ -144,7 +144,7 @@ class UTCDateTime(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def format(self, *args) -> "std::string":
+    def format(self, *args):
         """
         format(UTCDateTime self)
         format(UTCDateTime self) -> std::string
@@ -160,11 +160,11 @@ SSE_INSTRUCTION_ALIGNMENT = cvar.SSE_INSTRUCTION_ALIGNMENT
 UTCDateTime.DEFAULT_DATETIME_FORMAT = _coda_sys.cvar.UTCDateTime_DEFAULT_DATETIME_FORMAT
 
 
-def __lshift__(os: 'std::ostream &', dateTime: 'UTCDateTime') -> "std::ostream &":
+def __lshift__(os, dateTime):
     """__lshift__(std::ostream & os, UTCDateTime dateTime) -> std::ostream &"""
     return _coda_sys.__lshift__(os, dateTime)
 
-def __rshift__(arg1: 'std::istream &', dateTime: 'UTCDateTime') -> "std::istream &":
+def __rshift__(arg1, dateTime):
     """__rshift__(std::istream & arg1, UTCDateTime dateTime) -> std::istream &"""
     return _coda_sys.__rshift__(arg1, dateTime)
 # This file is compatible with both classic and new-style classes.
