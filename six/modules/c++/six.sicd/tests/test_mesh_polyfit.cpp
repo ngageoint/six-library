@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     types::RowCol<double> outputCenter(0.0, 0.0);
     bool printPolys = false;
 
-    for (size_t ii = 1; ii < argc; ++ii)
+    for (int ii = 1; ii < argc; ++ii)
     {
         std::string arg(argv[ii]);
         if (arg == "-slant-rows")
