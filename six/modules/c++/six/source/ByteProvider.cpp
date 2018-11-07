@@ -27,6 +27,17 @@
 namespace six
 {
 
+ByteProvider::ByteProvider()
+{
+}
+
+ByteProvider::ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                           const std::vector<std::string>& schemaPaths,
+                           const std::vector<PtrAndLength>& desBuffers)
+{
+    initialize(headerCreator, schemaPaths, desBuffers);
+}
+
 void ByteProvider::populateWriter(
         mem::SharedPtr<Container> container,
         const XMLControlRegistry& xmlRegistry,
@@ -49,14 +60,14 @@ void ByteProvider::populateWriter(
     if (maxProductSize != 0)
     {
         writer.getOptions().setParameter(
-                six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                 maxProductSize);
     }
 
     if (numRowsPerBlock != 0)
     {
         writer.getOptions().setParameter(
-                six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                 numRowsPerBlock);
         numRowsPerBlock = std::min(numRowsPerBlock, data->getNumRows());
     }
@@ -64,12 +75,10 @@ void ByteProvider::populateWriter(
     if (numColsPerBlock != 0)
     {
         writer.getOptions().setParameter(
-                six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                 numColsPerBlock);
         numColsPerBlock = std::min(numColsPerBlock, data->getNumCols());
     }
-
-    writer.initialize(container);
 }
 
 void ByteProvider::populateInitArgs(
@@ -81,7 +90,7 @@ void ByteProvider::populateInitArgs(
         size_t& numColsPerBlock)
 {
     // Sanity check the container
-    mem::SharedPtr<const Container> container = writer.getContainer();
+    const mem::SharedPtr<const Container> container = writer.getContainer();
 
     if (container->getNumData() == 0)
     {
@@ -133,11 +142,80 @@ void ByteProvider::populateInitArgs(
     const Parameter zero(0);
 
     numRowsPerBlock = static_cast<sys::Uint32_T>(
-            options.getParameter(NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+            options.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                                  zero));
 
     numColsPerBlock = static_cast<sys::Uint32_T>(
-            options.getParameter(NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+            options.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
+                                 zero));
+}
+
+void ByteProvider::populateInitArgs(
+        const NITFHeaderCreator& headerCreator,
+        const std::vector<std::string>& schemaPaths,
+        std::vector<std::string>& xmlStrings,
+        std::vector<PtrAndLength>& desData,
+        size_t& numRowsPerBlock,
+        size_t& numColsPerBlock)
+{
+    // Sanity check the container
+    mem::SharedPtr<const Container> container = headerCreator.getContainer();
+
+    if (container->getNumData() == 0)
+    {
+        throw except::Exception(Ctxt(
+                "Write control must be initialized first"));
+    }
+
+    // We currently do not support the case where there are 2+ unrelated SIDDs
+    // in a file (but one logical SIDD which spans multiple image segments
+    // and/or contains SICD XML is ok).  This is a limitation in how
+    // nitf::ByteProvider computes row offsets.  So, ensure this constraint is
+    // met.
+    bool haveDerived(false);
+    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    {
+        if (container->getData(ii)->getDataType() == DataType::DERIVED)
+        {
+            if (!haveDerived)
+            {
+                haveDerived = true;
+            }
+            else
+            {
+                throw except::Exception(Ctxt(
+                        "Don't currently support more than one SIDD image"));
+            }
+        }
+    }
+
+    // Create XML strings
+    // This memory must stay around until the call to the
+    // base class's initialize() method
+    logging::NullLogger logger;
+    xmlStrings.resize(container->getNumData());
+    desData.resize(xmlStrings.size());
+    for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
+    {
+        std::string& xmlString(xmlStrings[ii]);
+        xmlString = six::toValidXMLString(container->getData(ii),
+                                          schemaPaths,
+                                          &logger,
+                                          headerCreator.getXMLControlRegistry());
+        desData[ii].first = xmlString.c_str();
+        desData[ii].second = xmlString.length();
+    }
+
+    // Get blocking info
+    const Options& options(headerCreator.getOptions());
+    const Parameter zero(0);
+
+    numRowsPerBlock = static_cast<sys::Uint32_T>(
+            options.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
+                                 zero));
+
+    numColsPerBlock = static_cast<sys::Uint32_T>(
+            options.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                                  zero));
 }
 
@@ -148,7 +226,7 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)
 {
-    NITFWriteControl writer;
+    NITFWriteControl writer(container);
     populateWriter(container, xmlRegistry, maxProductSize, numRowsPerBlock,
             numColsPerBlock, writer);
     initialize(writer, schemaPaths);
@@ -156,6 +234,14 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
 
 void ByteProvider::initialize(const NITFWriteControl& writer,
                               const std::vector<std::string>& schemaPaths)
+{
+    std::vector<PtrAndLength> emptyDesBuffers;
+    initialize(writer, schemaPaths, emptyDesBuffers);
+}
+
+void ByteProvider::initialize(const NITFWriteControl& writer,
+                              const std::vector<std::string>& schemaPaths,
+                              const std::vector<PtrAndLength>& desBuffers)
 {
     // We don't explicitly use it, but each element in desData has a pointer
     // into this vector, so we need it to stick around
@@ -170,6 +256,11 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
                      numRowsPerBlock,
                      numColsPerBlock);
 
+    for (size_t ii = 0; ii < desBuffers.size(); ++ii)
+    {
+        desData.push_back(desBuffers[ii]);
+    }
+
     // Do the full initialization
     nitf::Record record = writer.getRecord();
     nitf::ByteProvider::initialize(record,
@@ -177,4 +268,35 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
                                    numRowsPerBlock,
                                    numColsPerBlock);
 }
+
+void ByteProvider::initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                              const std::vector<std::string>& schemaPaths,
+                              const std::vector<PtrAndLength>& desBuffers)
+{
+    // We don't explicitly use it, but each element in desData has a pointer
+    // into this vector, so we need it to stick around
+    std::vector<std::string> xmlStrings;
+    std::vector<PtrAndLength> desData;
+    size_t numRowsPerBlock;
+    size_t numColsPerBlock;
+    populateInitArgs(*headerCreator.get(),
+                     schemaPaths,
+                     xmlStrings,
+                     desData,
+                     numRowsPerBlock,
+                     numColsPerBlock);
+
+    for (size_t ii = 0; ii < desBuffers.size(); ++ii)
+    {
+        desData.push_back(desBuffers[ii]);
+    }
+
+    // Do the full initialization
+    nitf::Record& record = headerCreator->getRecord();
+    nitf::ByteProvider::initialize(record,
+                                   desData,
+                                   numRowsPerBlock,
+                                   numColsPerBlock);
+}
+
 }

@@ -27,6 +27,7 @@
 #include "six/Data.h"
 #include "six/Enums.h"
 #include "six/ErrorStatistics.h"
+#include "six/Mesh.h"
 #include "six/NITFImageInfo.h"
 #include "six/NITFImageInputStream.h"
 #include "six/NITFSegmentInfo.h"

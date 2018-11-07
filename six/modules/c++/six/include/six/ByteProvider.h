@@ -27,6 +27,7 @@
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
+#include <six/NITFHeaderCreator.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
 
@@ -50,6 +51,25 @@ namespace six
 class ByteProvider : public nitf::ByteProvider
 {
 public:
+
+    /*!
+     * Default constructor. Client code must call initialize() to use.
+     */
+    ByteProvider();
+
+    /*!
+     * Constructor. Calls initialize() internally to populate class
+     * \param headerCreator Class for populating and managing NITF
+     *  header information
+     * \param schemaPaths Paths to XML schemas
+     * \param desBuffers Collection of pointers to serialized Data
+     *  Extension Segment (DES) buffers and their lengths. This data
+     *  will be stored in the DES portion of the NITF
+     */
+    ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                 const std::vector<std::string>& schemaPaths,
+                 const std::vector<PtrAndLength>& desBuffers);
+
     static void populateWriter(
             mem::SharedPtr<Container> container,
             const XMLControlRegistry& xmlRegistry,
@@ -65,6 +85,27 @@ public:
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
+
+    static void populateInitArgs(
+            const NITFHeaderCreator& headerCreator,
+            const std::vector<std::string>& schemaPaths,
+            std::vector<std::string>& xmlStrings,
+            std::vector<PtrAndLength>& desData,
+            size_t& numRowsPerBlock,
+            size_t& numColsPerBlock);
+
+    /*!
+     * Initialize the ByteProvider
+     * \param headerCreator Class for populating and managing NITF
+     *  header information
+     * \param schemaPaths Paths to XML schemas
+     * \param desBuffers Collection of pointers to serialized Data
+     *  Extension Segment (DES) buffers and their lengths. This data
+     *  will be stored in the DES portion of the NITF
+     */
+    void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
 protected:
     /*!
      * Initialize the byte provider.  Must be called in the constructor of
@@ -97,6 +138,10 @@ protected:
      */
     void initialize(const NITFWriteControl& writer,
                     const std::vector<std::string>& schemaPaths);
+
+    void initialize(const NITFWriteControl& writer,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
 };
 }
 

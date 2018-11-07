@@ -59,7 +59,9 @@ public:
     virtual ~NITFHeaderCreator()
     {
         if (mLog && mOwnLog)
+        {
             delete mLog;
+        }
     }
 
     //!  Keys that allow us to override the ILOC rules for tests

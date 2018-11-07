@@ -99,9 +99,9 @@ const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
 NITFHeaderCreator::NITFHeaderCreator() : 
     mRecord(NITF_VER_21),
+    mXMLRegistry(NULL),
     mLog(NULL),
-    mOwnLog(false),
-    mXMLRegistry(NULL)
+    mOwnLog(false)
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
     // singleton PluginRegistry
@@ -110,9 +110,9 @@ NITFHeaderCreator::NITFHeaderCreator() :
 
 NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) : 
     mRecord(NITF_VER_21),
+    mXMLRegistry(NULL),
     mLog(NULL),
-    mOwnLog(false),
-    mXMLRegistry(NULL)
+    mOwnLog(false)
 {
     loadXmlDataContentHandler();
     initialize(container);
@@ -121,9 +121,9 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
                                      mem::SharedPtr<Container> container) : 
     mRecord(NITF_VER_21),
+    mXMLRegistry(NULL),
     mLog(NULL),
-    mOwnLog(false),
-    mXMLRegistry(NULL)
+    mOwnLog(false)
 {
     loadXmlDataContentHandler();
     initialize(options, container);

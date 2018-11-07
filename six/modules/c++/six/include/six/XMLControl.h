@@ -88,6 +88,16 @@ public:
     static
     std::string dataTypeToString(DataType dataType, bool appendXML = true);
 
+    /*!
+     * Split version string into multiple period-separated parts
+     * \param versionStr Version string containing (at minimum) major
+     *  and minor parts separated by '.'
+     * \param[out] Version string components <major, minor, ...>
+     */
+    static
+    void splitVersion(const std::string& versionStr,
+                      std::vector<std::string>& version);
+
 protected:
     logging::Logger *mLog;
     bool mOwnLog;
@@ -115,10 +125,6 @@ protected:
     static
     void getVersionFromURI(const xml::lite::Document* doc,
                            std::vector<std::string>& version);
-
-    static
-    void splitVersion(const std::string& versionStr,
-                      std::vector<std::string>& version);
 };
 
 }

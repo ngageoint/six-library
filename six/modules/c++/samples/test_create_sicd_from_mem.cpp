@@ -29,6 +29,7 @@
 #include <cli/ArgumentParser.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/NITFHeaderCreator.h>
 
 #include "utils.h"
 
@@ -102,7 +103,7 @@ int main(int argc, char** argv)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     options->get<size_t>("maxRows"));
         }
 
@@ -110,7 +111,7 @@ int main(int argc, char** argv)
         {
             std::cout << "Overriding NITF product size" << std::endl;
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     options->get<size_t>("maxSize"));
         }
 

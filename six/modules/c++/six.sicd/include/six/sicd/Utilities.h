@@ -30,7 +30,7 @@
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
 #include <six/sicd/ComplexData.h>
-
+#include <six/sicd/SICDMesh.h>
 #include <six/NITFReadControl.h>
 
 namespace six
@@ -78,7 +78,6 @@ public:
             const scene::ProjectionModel& projection,
             std::vector<types::RowCol<double> >& validData);
 
-
     /*
      * Given a SICD path name and a list of schema, this function reads
      * and parses the SICD in order to provide the wideband data as well
@@ -98,6 +97,32 @@ public:
                          const std::vector<std::string>& schemaPaths,
                          std::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
+
+    /*
+     * Given a SICD path name and a list of schema, this function reads
+     * and parses the SICD in order to provide the wideband data as well
+     * as the ComplexData associated with the image.
+     *
+     * \param sicdPathname SICD NITF pathname
+     * \param schemaPaths One or more files or directories containing SICD
+     * schemas
+     * \param[out] ComplexData associated with the SICD NITF
+     * \param[out] widebandData, vector containing SICD wideband data
+     * \param[out] outputRowColToSlantRow Projection polynomial
+     * \param[out] outputRowColToSlantCol Projection polynomial
+     * \param[out] noiseMesh Noise mesh
+     *
+     * \throws See six::sicd::Utilities::getComplexData and
+     *           six::sicd::Utilities::getWidebandData
+     *
+     */
+    static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData,
+                         six::Poly2D& outputRowColToSlantRow,
+                         six::Poly2D& outputRowColToSlantCol,
+                         std::auto_ptr<NoiseMesh>& noiseMesh);
 
     /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -358,6 +383,99 @@ public:
      * \return mock ComplexData object
      */
     static std::auto_ptr<ComplexData> createFakeComplexData();
+
+    /*
+     * Given a reference to a loaded NITFReadControl, this function
+     * parses the SICD's DES and returns a NoiseMesh if present.
+     * \param reader A NITFReadControl loaded with the desired SICD
+     * \return Noise Mesh associated with the SICD NITF
+     * \throws except::Exception if the provided reader is not a SICD
+     *
+     */
+    static std::auto_ptr<NoiseMesh> getNoiseMesh(NITFReadControl& reader);
+
+    /*
+     * Given a reference to a loaded NITFReadControl, this function
+     * parses the SICD's DES and returns a a vector of Mesh objects.
+     * \param reader A NITFReadControl loaded with the desired SICD
+     * \param[out] outputRowColToSlantRow Projection polynomial
+     * \param[out] outputRowColToSlantCol Projection polynomial
+     * \throws except::Exception if the provided reader is not a SICD or
+     *  projection polynomials can't be computed.
+     */
+    static void getProjectionPolys(
+        NITFReadControl& reader,
+        std::auto_ptr<ComplexData>& complexData,
+        six::Poly2D& outputRowColToSlantRow,
+        six::Poly2D& outputRowColToSlantCol);
+
+    /*!
+     * Convert a polynomial of X and Y to a polynomial of row and col.
+     * \param polyXY The polynomial of X and Y.
+     * \param outSampleSpacing The output sample spacing.
+     * \param outCenter The output center row and col.
+     * \param polyScaleFactor A scale factor value.
+     * \param polyShift An offset value.
+     * \result the polynomial of row and col.
+     */
+    static six::Poly2D transformXYPolyToRowColPoly(
+        const six::Poly2D& polyXY,
+        const types::RowCol<double>& outSampleSpacing,
+        const types::RowCol<double>& outCenter,
+        double polyScaleFactor,
+        double polyShift);
+
+    /*!
+     * Convert polynomials that compute X (Y) in the input from X and
+     * Y in the output into polynomials that compute row (col) in the
+     * input from row and col in the output.
+     * \param outputXYToInputX The polynomial that computes an input X
+     *  from an output X and Y.
+     * \param outputXYToInputY The polynomial that computes an input Y
+     *  from an output X and Y.
+     * \param inSampleSpacing The input sample spacing.
+     * \param outSampleSpacing The output sample spacing.
+     * \param inCenter The input center pixel coordinate.
+     * \param outCenter The output center pixel coordinate.
+     * \param[out] outputRowColToInputRow The polynomial that computes
+     *  an input row from an output row and col.
+     * \param[out] outputRowColToInputCol The polynomial that computes
+     *  an input col from an output row and col.
+     */
+    static void transformXYProjectionPolys(const six::Poly2D& outputXYToInputX,
+                                    const six::Poly2D& outputXYToInputY,
+                                    const types::RowCol<double>& inSampleSpacing,
+                                    const types::RowCol<double>& outSampleSpacing,
+                                    const types::RowCol<double>& inCenter,
+                                    const types::RowCol<double>& outCenter,
+                                    six::Poly2D& outputRowColToInputRow,
+                                    six::Poly2D& outputRowColToInputCol);
+
+    /*!
+     * Compute project polynomials from mesh information.
+     * \param outputMesh Output plane mesh.
+     * \param slantMesh Slant plane mesh.
+     * \param orderX X order of the resultant polynomials.
+     * \param orderY Y order of the resultant polynomials.
+     * \param[out] outputXYToSlantX Output plane (X,Y) meters from ORP
+     *  to slant plane X meters from SCP project polynomial.
+     * \param[out] outputXYToSlantY Output plane (X,Y) meters from ORP
+     *  to slant plane Y meters from SCP project polynomial.
+     * \param[out] slantXYToOutputX Slant plane (X,Y) meters from SCP
+     *  to output plane X meters from ORP project polynomial.
+     * \param[out] slantXYToOutputY Slant plane (X,Y) meters from SCP
+     *  to output plane Y meters from ORP project polynomial.
+     * \result true for successful processing.
+     */
+     static void fitXYProjectionPolys(
+            const six::sicd::PlanarCoordinateMesh& outputMesh,
+            const six::sicd::PlanarCoordinateMesh& slantMesh,
+            size_t orderX,
+            size_t orderY,
+            six::Poly2D& outputXYToSlantX,                  
+            six::Poly2D& outputXYToSlantY,                  
+            six::Poly2D& slantXYToOutputX,                  
+            six::Poly2D& slantXYToOutputY);
 };
 }
 }

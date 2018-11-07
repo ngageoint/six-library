@@ -265,21 +265,21 @@ private:
         if (mSetMaxProductSize)
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     mMaxProductSize);
         }
 
         if (mNumRowsPerBlock != 0)
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     mNumRowsPerBlock);
         }
 
         if (mNumColsPerBlock != 0)
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     mNumColsPerBlock);
         }
     }

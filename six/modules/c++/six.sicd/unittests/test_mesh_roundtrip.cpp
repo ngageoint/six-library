@@ -37,7 +37,7 @@ void populatePlanarCoordinateMeshVectors(const types::RowCol<size_t>& meshDims,
     x.clear();
     y.clear();
 
-    std::srand(std::time(nullptr));
+    std::srand(std::time(0));
     for (size_t ri = 0; ri < meshDims.row; ++ri)
     {
         for (size_t ci = 0; ci < meshDims.col; ++ci)
@@ -61,7 +61,7 @@ void populateNoiseMeshVectors(const types::RowCol<size_t>& meshDims,
     azimuthAmbiguityNoise.clear();
     combinedNoise.clear();
 
-    std::srand(std::time(nullptr));
+    std::srand(std::time(0));
     for (size_t ri = 0; ri < meshDims.row; ++ri)
     {
         for (size_t ci = 0; ci < meshDims.col; ++ci)
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
     size_t numRows = 7;
     size_t numCols = 9;
 
-    for (size_t ii = 1; ii < argc; ++ii)
+    for (int ii = 1; ii < argc; ++ii)
     {
         std::string arg(argv[ii]);
         if (arg == "-rows")

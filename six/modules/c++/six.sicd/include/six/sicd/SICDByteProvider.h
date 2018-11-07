@@ -70,6 +70,10 @@ public:
      */
     SICDByteProvider(const NITFWriteControl& writer,
                      const std::vector<std::string>& schemaPaths);
+
+    SICDByteProvider(const NITFWriteControl& writer,
+                     const std::vector<std::string>& schemaPaths,
+                     const std::vector<PtrAndLength>& desBuffers);
 };
 }
 }

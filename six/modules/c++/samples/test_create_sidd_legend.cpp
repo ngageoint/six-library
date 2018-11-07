@@ -43,6 +43,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
+#include <six/NITFHeaderCreator.h>
 #include "utils.h"
 
 namespace
@@ -204,7 +205,7 @@ int main(int argc, char** argv)
             six::NITFWriteControl writer;
 
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
             writer.setXMLControlRegistry(&xmlRegistry);
@@ -218,16 +219,16 @@ int main(int argc, char** argv)
             six::NITFWriteControl writer;
 
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
             const std::string blockSize("23");
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     blockSize);
 
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     blockSize);
 
             writer.setXMLControlRegistry(&xmlRegistry);
