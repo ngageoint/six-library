@@ -2,7 +2,7 @@
  * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <iomanip>
+#include <string>
 
 #include <sys/Conf.h>
 #include <six/Parameter.h>
@@ -79,7 +80,7 @@ public:
      * Deserializes an array of byte data to populate the Mesh
      * \param values Data to deserialize.
      */
-    virtual void deserialize(sys::byte*& values) = 0;
+    virtual void deserialize(const sys::byte*& values) = 0;
 };
 }
 #endif

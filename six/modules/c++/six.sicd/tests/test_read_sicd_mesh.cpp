@@ -20,6 +20,8 @@ int main(int argc, char** argv)
 
         const std::string sicdPathname(argv[1]);
         std::vector<std::string> schemaPaths;
+        const size_t orderX(4);
+        const size_t orderY(4);
         std::auto_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::Poly2D outputRowColToSlantRow;
@@ -29,6 +31,8 @@ int main(int argc, char** argv)
         std::cout << "Read SICD: " << sicdPathname << std::endl;
         six::sicd::Utilities::readSicd(sicdPathname,
                                        schemaPaths,
+                                       orderX,
+                                       orderY,
                                        complexData,
                                        widebandData,
                                        outputRowColToSlantRow,
@@ -166,10 +170,8 @@ int main(int argc, char** argv)
         std::cout << std::endl;
 
         // Fit a polynomial to the mesh locations and noise.
-        size_t orderX = sicdNoisePoly.orderX();
-        size_t orderY = sicdNoisePoly.orderY();
-        six::Poly2D meshNoisePoly = math::poly::fit(xMat, yMat, noiseMat,
-            orderX, orderY);
+        six::Poly2D meshNoisePoly = math::poly::fit(
+            xMat, yMat, noiseMat, sicdNoisePoly.orderX(), sicdNoisePoly.orderY());
 
         if (polyIsRelative)
         {

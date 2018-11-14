@@ -131,7 +131,9 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
 
     for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
     {
-        // Skip the first DES. By convention, this is the SICD XML
+        // Skip the first DES. The SICD specification document
+        // indicates that the first DES of the NITF 2.1 product is to
+        // be populated by the XML metadata.
         if (ii == 0)
         {
             continue;
@@ -440,6 +442,8 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
+                         size_t orderX,
+                         size_t orderY,
                          std::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
@@ -458,6 +462,8 @@ void Utilities::readSicd(const std::string& sicdPathname,
     complexData = getComplexData(reader);
     getWidebandData(reader, *complexData, widebandData);
     getProjectionPolys(reader,
+                       orderX,
+                       orderY,
                        complexData,
                        outputRowColToSlantRow,
                        outputRowColToSlantCol);
@@ -894,13 +900,15 @@ std::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
     mem::ScopedAlignedArray<sys::byte> buffer;
     getDesBuffer(
         reader, nameToDesIndex.at(SICDMeshes::NOISE_MESH_ID), buffer);
-    sys::byte* bufferData = buffer.get();
+    const sys::byte* bufferData = buffer.get();
     noiseMesh->deserialize(bufferData);
 
     return noiseMesh;
 }
 
 void Utilities::getProjectionPolys(NITFReadControl& reader,
+                                   size_t orderX,
+                                   size_t orderY,
                                    std::auto_ptr<ComplexData>& complexData,
                                    six::Poly2D& outputRowColToSlantRow,
                                    six::Poly2D& outputRowColToSlantCol)
@@ -920,7 +928,7 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
     }
 
     mem::ScopedAlignedArray<sys::byte> buffer;
-    sys::byte* bufferData;
+    const sys::byte* bufferData;
 
     // Extract the slant plane mesh buffer and deserialize
     PlanarCoordinateMesh slantMesh(SICDMeshes::SLANT_PLANE_MESH_ID);
@@ -952,8 +960,6 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         complexData->imageData->scpPixel.row,
         complexData->imageData->scpPixel.col);
 
-    size_t orderX = 4;
-    size_t orderY = 4;
     six::Poly2D outputXYToSlantX;               
     six::Poly2D outputXYToSlantY;
     six::Poly2D slantXYToOutputX;               
@@ -1002,27 +1008,27 @@ six::Poly2D Utilities::transformXYPolyToRowColPoly(
 }
 
 void Utilities::transformXYProjectionPolys(
-    const six::Poly2D& outputXYToInputX,
-    const six::Poly2D& outputXYToInputY,
-    const types::RowCol<double>& inSampleSpacing,
-    const types::RowCol<double>& outSampleSpacing,
-    const types::RowCol<double>& inCenter,
-    const types::RowCol<double>& outCenter,
-    six::Poly2D& outputRowColToInputRow,
-    six::Poly2D& outputRowColToInputCol)
+    const six::Poly2D& outputXYToSlantX,
+    const six::Poly2D& outputXYToSlantY,
+    const types::RowCol<double>& slantSampleSpacing,
+    const types::RowCol<double>& outputSampleSpacing,
+    const types::RowCol<double>& slantCenter,
+    const types::RowCol<double>& outputCenter,
+    six::Poly2D& outputRowColToSlantRow,
+    six::Poly2D& outputRowColToSlantCol)
 {
-    outputRowColToInputRow = transformXYPolyToRowColPoly(
-        outputXYToInputX,
-        outSampleSpacing,
-        outCenter,
-        -1.0 / inSampleSpacing.row,
-        inCenter.row);
-    outputRowColToInputCol = transformXYPolyToRowColPoly(
-        outputXYToInputY,
-        outSampleSpacing,
-        outCenter,
-        -1.0 / inSampleSpacing.col,
-        inCenter.col);
+    outputRowColToSlantRow = transformXYPolyToRowColPoly(
+        outputXYToSlantX,
+        outputSampleSpacing,
+        outputCenter,
+        -1.0 / slantSampleSpacing.row,
+        slantCenter.row);
+    outputRowColToSlantCol = transformXYPolyToRowColPoly(
+        outputXYToSlantY,
+        outputSampleSpacing,
+        outputCenter,
+        -1.0 / slantSampleSpacing.col,
+        slantCenter.col);
 }
 
 void Utilities::fitXYProjectionPolys(
@@ -1035,12 +1041,6 @@ void Utilities::fitXYProjectionPolys(
     six::Poly2D& slantXYToOutputX,                  
     six::Poly2D& slantXYToOutputY)              
 {
-    // Initial values.
-    outputXYToSlantX = six::Poly2D(0,0);
-    outputXYToSlantY = six::Poly2D(0,0);
-    slantXYToOutputX = six::Poly2D(0,0);
-    slantXYToOutputY = six::Poly2D(0,0);
-
     // Meshes must be the same size.
     const types::RowCol<size_t> slantMeshDims = slantMesh.getMeshDims();
     const types::RowCol<size_t> outputMeshDims = outputMesh.getMeshDims();

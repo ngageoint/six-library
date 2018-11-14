@@ -78,6 +78,21 @@ public:
             size_t numColsPerBlock,
             NITFWriteControl& writer);
 
+    /*!
+     * Compute the XML metadata, data extension segment (DES) buffers,
+     * and blocking information from a populated NITF writer
+     * \static
+     * \param writer Populated NITF writer
+     * \param schemaPaths Paths to XML schemas
+     * \param[out] xmlStrings Collection of XML metadata strings
+     *  stored in the populated writer. There is one string per Data
+     *  entry in the underlying Container object.
+     * \param[out] desData Collection of DES buffers. There will be
+     *  one entry per XML string.
+     * \param[out] numRowsPerBlock Number of image rows per NITF block
+     * \param[out] numColsPerBlock Number of image columns per NITF
+     *  block
+     */
     static void populateInitArgs(
             const NITFWriteControl& writer,
             const std::vector<std::string>& schemaPaths,
@@ -86,6 +101,21 @@ public:
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
 
+    /*!
+     * Compute the XML metadata, data extension segment (DES) buffers,
+     * and blocking information from a populated NITF header creator
+     * \static
+     * \param writer Populated NITF header creator object
+     * \param schemaPaths Paths to XML schemas
+     * \param[out] xmlStrings Collection of XML metadata strings
+     *  stored in the populated writer. There is one string per Data
+     *  entry in the underlying Container object.
+     * \param[out] desData Collection of DES buffers. There will be
+     *  one entry per XML string.
+     * \param[out] numRowsPerBlock Number of image rows per NITF block
+     * \param[out] numColsPerBlock Number of image columns per NITF
+     *  block
+     */
     static void populateInitArgs(
             const NITFHeaderCreator& headerCreator,
             const std::vector<std::string>& schemaPaths,

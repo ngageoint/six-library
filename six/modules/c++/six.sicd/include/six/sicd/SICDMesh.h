@@ -2,9 +2,9 @@
  * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -29,7 +29,10 @@ namespace six
 {
 namespace sicd
 {
-
+/*!
+ * \struct SICDMeshes
+ * \brief Struct holds the default names for SICD Mesh objects
+ */
 struct SICDMeshes
 {
     //! Type ID for SICD slant plane mesh
@@ -70,10 +73,6 @@ public:
                          const std::vector<double>& x,
                          const std::vector<double>& y);
 
-    virtual ~PlanarCoordinateMesh()
-    {
-    }
-
     //! \return The mesh name
     std::string getName() const
     {
@@ -111,7 +110,7 @@ public:
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
      */
-    virtual void deserialize(sys::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
 
 protected:
     const bool mSwapBytes;
@@ -188,9 +187,8 @@ public:
     /*!
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
-     * \param swapBytes Should byte-swapping be applied?
      */
-    virtual void deserialize(sys::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
 
 protected:
     std::vector<double> mMainBeamNoise;

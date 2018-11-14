@@ -49,13 +49,20 @@ class NITFWriteControl : public WriteControl
 {
 public:
 
-    //!  Constructor
+    //! Constructor. Must call initialize to use.
     NITFWriteControl();
 
-    //!  Constructor
+    /*!
+     * Constructor. Calls initialize.
+     * \param container The data container
+     */
     NITFWriteControl(mem::SharedPtr<Container> container);
 
-    //! Constructor.
+    /*!
+     * Constructor. Calls initialize.
+     * \param options Initialization options
+     * \param container The data container
+     */
     NITFWriteControl(const six::Options& options,
                      mem::SharedPtr<Container> container);
 
@@ -77,36 +84,52 @@ public:
         return mNITFHeaderCreator->getRecord();
     }
 
+    //! \return Collection of NITF image info pointers
     std::vector<mem::SharedPtr<NITFImageInfo> > getInfos()
     {
         return mNITFHeaderCreator->getInfos();
     }
 
+    //! \return Mutable data container
     mem::SharedPtr<Container> getContainer()
     {
         return mNITFHeaderCreator->getContainer();
     }
 
+    //! \return Const data container
     mem::SharedPtr<const Container> getContainer() const
     {
         return mNITFHeaderCreator->getContainer();
     }
 
+    //! \return Mutable NITF options
     six::Options& getOptions()
     {
         return mNITFHeaderCreator->getOptions();
     }
 
+    //! \return Const NITF options
     const six::Options& getOptions() const
     {
         return mNITFHeaderCreator->getOptions();
     }
 
+    //! \return Collection of NITF segment writers
     std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters()
     {
         return mNITFHeaderCreator->getSegmentWriters();
     }
 
+    //! \return The underlying NITF header creator object
+    const six::NITFHeaderCreator* getNITFHeaderCreator() const
+    {
+        return mNITFHeaderCreator.get();
+    }
+
+    /*!
+     * Set the internal NITF header creator
+     * \param headerCreator Populated NITF header creator
+     */
     void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
   
     virtual void initialize(const six::Options& options,

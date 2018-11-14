@@ -89,65 +89,21 @@ void ByteProvider::populateInitArgs(
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
 {
-    // Sanity check the container
-    const mem::SharedPtr<const Container> container = writer.getContainer();
-
-    if (container->getNumData() == 0)
+    const NITFHeaderCreator* headerCreator =
+        writer.getNITFHeaderCreator();
+    if (headerCreator)
     {
-        throw except::Exception(Ctxt(
-                "Write control must be initialized first"));
+        populateInitArgs(*headerCreator,
+                         schemaPaths,
+                         xmlStrings,
+                         desData,
+                         numRowsPerBlock,
+                         numColsPerBlock);
     }
-
-    // We currently do not support the case where there are 2+ unrelated SIDDs
-    // in a file (but one logical SIDD which spans multiple image segments
-    // and/or contains SICD XML is ok).  This is a limitation in how
-    // nitf::ByteProvider computes row offsets.  So, ensure this constraint is
-    // met.
-    bool haveDerived(false);
-    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    else
     {
-        if (container->getData(ii)->getDataType() == DataType::DERIVED)
-        {
-            if (!haveDerived)
-            {
-                haveDerived = true;
-            }
-            else
-            {
-                throw except::Exception(Ctxt(
-                        "Don't currently support more than one SIDD image"));
-            }
-        }
+        throw except::Exception(Ctxt("NITF writer is not populated"));
     }
-
-    // Create XML strings
-    // This memory must stay around until the call to the
-    // base class's initialize() method
-    logging::NullLogger logger;
-    xmlStrings.resize(container->getNumData());
-    desData.resize(xmlStrings.size());
-    for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
-    {
-        std::string& xmlString(xmlStrings[ii]);
-        xmlString = six::toValidXMLString(container->getData(ii),
-                                          schemaPaths,
-                                          &logger,
-                                          writer.getXMLControlRegistry());
-        desData[ii].first = xmlString.c_str();
-        desData[ii].second = xmlString.length();
-    }
-
-    // Get blocking info
-    const Options& options(writer.getOptions());
-    const Parameter zero(0);
-
-    numRowsPerBlock = static_cast<sys::Uint32_T>(
-            options.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
-                                 zero));
-
-    numColsPerBlock = static_cast<sys::Uint32_T>(
-            options.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
-                                 zero));
 }
 
 void ByteProvider::populateInitArgs(

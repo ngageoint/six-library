@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.side-c++
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,6 +26,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include <sys/Path.h>
 #include <six/sicd/SICDMesh.h>
 
 namespace
@@ -174,139 +175,157 @@ void compareNoiseMesh(
 
 int main(int argc, char** argv)
 {
-    const std::string RTNID = "[test_mesh_roundtrip] ";
-    
-    size_t numRows = 7;
-    size_t numCols = 9;
-
-    for (int ii = 1; ii < argc; ++ii)
+    try
     {
-        std::string arg(argv[ii]);
-        if (arg == "-rows")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -rows requires a value"
-                    << std::endl;
-                return 1;
-            }
+        const std::string RTNID = sys::Path::basename(argv[0]);
+    
+        size_t numRows = 7;
+        size_t numCols = 9;
 
-            ++ii;
-            numRows = std::atoi(argv[ii]);
-        }
-        else if (arg == "-cols")
+        for (int ii = 1; ii < argc; ++ii)
         {
-            if (ii == argc - 1)
+            std::string arg(argv[ii]);
+            if (arg == "-rows")
             {
-                std::cout << RTNID << "Error: -cols requires a value"
-                    << std::endl;
-                return 1;
-            }
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -rows requires a value"
+                              << std::endl;
+                    return 1;
+                }
 
-            ++ii;
-            numCols = std::atoi(argv[ii]);
+                ++ii;
+                numRows = std::atoi(argv[ii]);
+            }
+            else if (arg == "-cols")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -cols requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                numCols = std::atoi(argv[ii]);
+            }
+            else
+            {
+                std::cerr << RTNID << "Error: Unknown argument: " << 
+                    arg << std::endl;
+            }
         }
-        else
-        {
-            std::cout << RTNID << "Error: Unknown argument: " << 
-                arg << std::endl;
-        }
+
+        // Make a PlanarCoordinateMesh.
+        types::RowCol<size_t> meshDims(numRows, numCols);
+        std::vector<double> x;
+        std::vector<double> y;
+
+        populatePlanarCoordinateMeshVectors(meshDims, x, y);
+
+        std::string name = "Test plane coordinate mesh";
+        six::sicd::PlanarCoordinateMesh serializedMesh(name, meshDims, x, y);
+
+        // Serialize the mesh.
+        std::vector<sys::byte> serializedValues;
+        serializedMesh.serialize(serializedValues);
+
+        // Deserialize the mesh. 
+        x.clear();
+        y.clear();
+
+        six::sicd::PlanarCoordinateMesh deserializedMesh(name, meshDims, x, y);
+        const sys::byte* serializedValuesBuffer = &serializedValues[0];
+        deserializedMesh.deserialize(serializedValuesBuffer);
+
+        // Compare meshes.
+        size_t maxDiffRows;
+        size_t maxDiffCols;
+        double maxDiffX;
+        double maxDiffY;
+
+        comparePlanarCoordinateMesh(&serializedMesh,
+                                    &deserializedMesh,
+                                    maxDiffRows,
+                                    maxDiffCols,
+                                    maxDiffX,
+                                    maxDiffY);
+
+        std::cout << "PlanarCoordinateMesh roundtrip compare: " << std::endl;
+        std::cout << "    maxDiffRows: " << maxDiffRows << std::endl;
+        std::cout << "    maxDiffCols: " << maxDiffCols << std::endl;
+        std::cout << "    maxDiffX: " << maxDiffX << std::endl;
+        std::cout << "    maxDiffY: " << maxDiffY << std::endl;
+
+        // Make a NoiseMesh.
+        std::vector<double> mainBeamNoise;
+        std::vector<double> azimuthAmbiguityNoise;
+        std::vector<double> combinedNoise;
+        populateNoiseMeshVectors(meshDims, x, y, mainBeamNoise,
+                                 azimuthAmbiguityNoise, combinedNoise);
+
+        name = "Test noise mesh";
+        six::sicd::NoiseMesh serializedNoiseMesh(name, meshDims, x, y,
+                                                 mainBeamNoise, azimuthAmbiguityNoise, combinedNoise);
+
+        // Serialize the mesh.
+        serializedValues.clear();
+        serializedNoiseMesh.serialize(serializedValues);
+
+        // Deserialize the mesh. 
+        x.clear();
+        y.clear();
+        mainBeamNoise.clear();
+        azimuthAmbiguityNoise.clear();
+        combinedNoise.clear();
+
+        six::sicd::NoiseMesh deserializedNoiseMesh(name, meshDims, x, y,
+                                                   mainBeamNoise, azimuthAmbiguityNoise, combinedNoise);
+
+        serializedValuesBuffer = &serializedValues[0];
+        deserializedNoiseMesh.deserialize(serializedValuesBuffer);
+
+        // Compare meshes.
+        double maxDiffMainBeamNoise;
+        double maxDiffAzimuthAmbiguityNoise;
+        double maxDiffCombinedNoise;
+
+        compareNoiseMesh(&serializedNoiseMesh,
+                         &deserializedNoiseMesh,
+                         maxDiffRows,
+                         maxDiffCols,
+                         maxDiffX,
+                         maxDiffY,
+                         maxDiffMainBeamNoise,
+                         maxDiffAzimuthAmbiguityNoise,
+                         maxDiffCombinedNoise);
+
+        std::cout << "NoiseMesh roundtrip compare: " << std::endl;
+        std::cout << "    maxDiffRows: " << maxDiffRows << std::endl;
+        std::cout << "    maxDiffCols: " << maxDiffCols << std::endl;
+        std::cout << "    maxDiffX: " << maxDiffX << std::endl;
+        std::cout << "    maxDiffY: " << maxDiffY << std::endl;
+        std::cout << "    maxDiffMainBeamNoise: " << maxDiffMainBeamNoise << std::endl;
+        std::cout << "    maxDiffAzimuthAmbiguityNoise: " << 
+            maxDiffAzimuthAmbiguityNoise << std::endl;
+        std::cout << "    maxDiffCombinedNoise: " << maxDiffCombinedNoise << std::endl;
+
+        return 0;
     }
-
-    // Make a PlanarCoordinateMesh.
-    types::RowCol<size_t> meshDims(numRows, numCols);
-    std::vector<double> x;
-    std::vector<double> y;
-
-    populatePlanarCoordinateMeshVectors(meshDims, x, y);
-
-    std::string name = "Test plane coordinate mesh";
-    six::sicd::PlanarCoordinateMesh serializedMesh(name, meshDims, x, y);
-
-    // Serialize the mesh.
-    std::vector<sys::byte> serializedValues;
-    serializedMesh.serialize(serializedValues);
-
-    // Deserialize the mesh. 
-    x.clear();
-    y.clear();
-
-    six::sicd::PlanarCoordinateMesh deserializedMesh(name, meshDims, x, y);
-    sys::byte* serializedValuesBuffer = &serializedValues[0];
-    deserializedMesh.deserialize(serializedValuesBuffer);
-
-    // Compare meshes.
-    size_t maxDiffRows;
-    size_t maxDiffCols;
-    double maxDiffX;
-    double maxDiffY;
-
-    comparePlanarCoordinateMesh(&serializedMesh,
-                                &deserializedMesh,
-                                maxDiffRows,
-                                maxDiffCols,
-                                maxDiffX,
-                                maxDiffY);
-
-    std::cout << "PlanarCoordinateMesh roundtrip compare: " << std::endl;
-    std::cout << "    maxDiffRows: " << maxDiffRows << std::endl;
-    std::cout << "    maxDiffCols: " << maxDiffCols << std::endl;
-    std::cout << "    maxDiffX: " << maxDiffX << std::endl;
-    std::cout << "    maxDiffY: " << maxDiffY << std::endl;
-
-    // Make a NoiseMesh.
-    std::vector<double> mainBeamNoise;
-    std::vector<double> azimuthAmbiguityNoise;
-    std::vector<double> combinedNoise;
-    populateNoiseMeshVectors(meshDims, x, y, mainBeamNoise,
-        azimuthAmbiguityNoise, combinedNoise);
-
-    name = "Test noise mesh";
-    six::sicd::NoiseMesh serializedNoiseMesh(name, meshDims, x, y,
-        mainBeamNoise, azimuthAmbiguityNoise, combinedNoise);
-
-    // Serialize the mesh.
-    serializedValues.clear();
-    serializedNoiseMesh.serialize(serializedValues);
-
-    // Deserialize the mesh. 
-    x.clear();
-    y.clear();
-    mainBeamNoise.clear();
-    azimuthAmbiguityNoise.clear();
-    combinedNoise.clear();
-
-    six::sicd::NoiseMesh deserializedNoiseMesh(name, meshDims, x, y,
-        mainBeamNoise, azimuthAmbiguityNoise, combinedNoise);
-
-    serializedValuesBuffer = &serializedValues[0];
-    deserializedNoiseMesh.deserialize(serializedValuesBuffer);
-
-    // Compare meshes.
-    double maxDiffMainBeamNoise;
-    double maxDiffAzimuthAmbiguityNoise;
-    double maxDiffCombinedNoise;
-
-    compareNoiseMesh(&serializedNoiseMesh,
-                     &deserializedNoiseMesh,
-                     maxDiffRows,
-                     maxDiffCols,
-                     maxDiffX,
-                     maxDiffY,
-                     maxDiffMainBeamNoise,
-                     maxDiffAzimuthAmbiguityNoise,
-                     maxDiffCombinedNoise);
-
-    std::cout << "NoiseMesh roundtrip compare: " << std::endl;
-    std::cout << "    maxDiffRows: " << maxDiffRows << std::endl;
-    std::cout << "    maxDiffCols: " << maxDiffCols << std::endl;
-    std::cout << "    maxDiffX: " << maxDiffX << std::endl;
-    std::cout << "    maxDiffY: " << maxDiffY << std::endl;
-    std::cout << "    maxDiffMainBeamNoise: " << maxDiffMainBeamNoise << std::endl;
-    std::cout << "    maxDiffAzimuthAmbiguityNoise: " << 
-        maxDiffAzimuthAmbiguityNoise << std::endl;
-    std::cout << "    maxDiffCombinedNoise: " << maxDiffCombinedNoise << std::endl;
-
-    return 0;
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception" << std::endl;
+        return 1;
+    }
 }
 

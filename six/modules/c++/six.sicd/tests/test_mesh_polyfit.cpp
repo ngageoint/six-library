@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,6 +26,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include <sys/Path.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
 
@@ -56,345 +57,340 @@ void populatePlanarCoordinateMeshVectors(const types::RowCol<size_t>& meshDims,
 }
 
 int main(int argc, char** argv)
-{
-    const std::string RTNID = "[test_mesh_polyfit] ";
-    
-    double epsilon = 1e-9;
-    double xMax =  10000.0;
-    double yMax =  20000.0;
-    size_t orderX = 4;
-    size_t orderY = 4;
-    types::RowCol<size_t> slantMeshDims(7, 9);
-    types::RowCol<double> slantSampleSpacing(1.0, 1.0);
-    types::RowCol<double> slantCenter(0.0, 0.0);
-    types::RowCol<size_t> outputMeshDims(7, 9);
-    types::RowCol<double> outputSampleSpacing(1.0, 1.0);
-    types::RowCol<double> outputCenter(0.0, 0.0);
-    bool printPolys = false;
-
-    for (int ii = 1; ii < argc; ++ii)
-    {
-        std::string arg(argv[ii]);
-        if (arg == "-slant-rows")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-rows requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantMeshDims.row = std::atoi(argv[ii]);
-        }
-        else if (arg == "-slant-cols")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-cols requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantMeshDims.row = std::atoi(argv[ii]);
-        }
-        else if (arg == "-output-rows")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-rows requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputMeshDims.row = std::atoi(argv[ii]);
-        }
-        else if (arg == "-output-cols")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-cols requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputMeshDims.row = std::atoi(argv[ii]);
-        }
-        else if (arg == "-print-polys")
-        {
-            printPolys = true;
-        }
-        else if (arg == "-order-x")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -order-x requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            orderX = std::atoi(argv[ii]);
-        }
-        else if (arg == "-order-y")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -order-y requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            orderY = std::atoi(argv[ii]);
-        }
-        else if (arg == "-epsilon")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -epsilon requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            epsilon = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-x-max")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-x-max requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            xMax = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-y-max")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-y-max requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            yMax = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-sample-spacing-row")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-sample-spacing-row requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantSampleSpacing.row = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-sample-spacing-col")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-sample-spacing-col requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantSampleSpacing.col = std::atof(argv[ii]);
-        }
-        else if (arg == "-output-sample-spacing-row")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-sample-spacing-row requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputSampleSpacing.row = std::atof(argv[ii]);
-        }
-        else if (arg == "-output-sample-spacing-col")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-sample-spacing-col requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputSampleSpacing.col = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-center-row")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-center-row requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantCenter.row = std::atof(argv[ii]);
-        }
-        else if (arg == "-slant-center-col")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -slant-center-col requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            slantCenter.col = std::atof(argv[ii]);
-        }
-        else if (arg == "-output-center-row")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-center-row requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputCenter.row = std::atof(argv[ii]);
-        }
-        else if (arg == "-output-center-col")
-        {
-            if (ii == argc - 1)
-            {
-                std::cout << RTNID << "Error: -output-center-col requires a value"
-                    << std::endl;
-                return 1;
-            }
-
-            ++ii;
-            outputCenter.col = std::atof(argv[ii]);
-        }
-        else
-        {
-            std::cout << RTNID << "Error: Unknown argument: " << 
-                arg << std::endl;
-            return 1;
-        }
-    }
-
-    std::cout << "xMax: " << xMax << std::endl;
-    std::cout << "yMax: " << yMax << std::endl;
-    std::cout << "slantSampleSpacing: " << slantSampleSpacing.row << ":" <<
-        slantSampleSpacing.col << std::endl;
-    std::cout << "slantCenter: " << slantCenter.row << ":" <<
-        slantCenter.col << std::endl;
-    std::cout << "outputSampleSpacing: " << outputSampleSpacing.row << ":" <<
-        outputSampleSpacing.col << std::endl;
-    std::cout << "outputCenter: " << outputCenter.row << ":" <<
-        outputCenter.col << std::endl;
-
-    // Extent in meters.
-    double xMin = -xMax;
-    double yMin = -yMax;
-
-    // Populate the slant plane mesh.
-    std::vector<double> x;
-    std::vector<double> y;
-
-    populatePlanarCoordinateMeshVectors(slantMeshDims, xMin, xMax, yMin, yMax, x, y);
-    six::sicd::PlanarCoordinateMesh slantMesh("Slant plane coordinate mesh",
-        slantMeshDims, x, y);
-
-    // Populate the output plane mesh - make it the same as the slant mesh.
-    populatePlanarCoordinateMeshVectors(outputMeshDims, xMin, xMax, yMin, yMax, x, y);
-    six::sicd::PlanarCoordinateMesh outputMesh("Output plane coordinate mesh",
-        outputMeshDims, x, y);
-
-    six::Poly2D outputXYToSlantX;               
-    six::Poly2D outputXYToSlantY;             
-    six::Poly2D slantXYToOutputX;                 
-    six::Poly2D slantXYToOutputY;       
-
+{ 
     try
     {
+        const std::string RTNID = sys::Path::basename(argv[0]);
+    
+        double epsilon = 1e-9;
+        double xMax =  10000.0;
+        double yMax =  20000.0;
+        size_t orderX = 4;
+        size_t orderY = 4;
+        types::RowCol<size_t> slantMeshDims(7, 9);
+        types::RowCol<double> slantSampleSpacing(1.0, 1.0);
+        types::RowCol<double> slantCenter(0.0, 0.0);
+        types::RowCol<size_t> outputMeshDims(7, 9);
+        types::RowCol<double> outputSampleSpacing(1.0, 1.0);
+        types::RowCol<double> outputCenter(0.0, 0.0);
+        bool printPolys = false;
+
+        for (int ii = 1; ii < argc; ++ii)
+        {
+            std::string arg(argv[ii]);
+            if (arg == "-slant-rows")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-rows requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantMeshDims.row = std::atoi(argv[ii]);
+            }
+            else if (arg == "-slant-cols")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-cols requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantMeshDims.row = std::atoi(argv[ii]);
+            }
+            else if (arg == "-output-rows")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-rows requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputMeshDims.row = std::atoi(argv[ii]);
+            }
+            else if (arg == "-output-cols")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-cols requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputMeshDims.row = std::atoi(argv[ii]);
+            }
+            else if (arg == "-print-polys")
+            {
+                printPolys = true;
+            }
+            else if (arg == "-order-x")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -order-x requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                orderX = std::atoi(argv[ii]);
+            }
+            else if (arg == "-order-y")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -order-y requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                orderY = std::atoi(argv[ii]);
+            }
+            else if (arg == "-epsilon")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -epsilon requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                epsilon = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-x-max")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-x-max requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                xMax = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-y-max")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-y-max requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                yMax = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-sample-spacing-row")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-sample-spacing-row requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantSampleSpacing.row = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-sample-spacing-col")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-sample-spacing-col requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantSampleSpacing.col = std::atof(argv[ii]);
+            }
+            else if (arg == "-output-sample-spacing-row")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-sample-spacing-row requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputSampleSpacing.row = std::atof(argv[ii]);
+            }
+            else if (arg == "-output-sample-spacing-col")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-sample-spacing-col requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputSampleSpacing.col = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-center-row")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-center-row requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantCenter.row = std::atof(argv[ii]);
+            }
+            else if (arg == "-slant-center-col")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -slant-center-col requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                slantCenter.col = std::atof(argv[ii]);
+            }
+            else if (arg == "-output-center-row")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-center-row requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputCenter.row = std::atof(argv[ii]);
+            }
+            else if (arg == "-output-center-col")
+            {
+                if (ii == argc - 1)
+                {
+                    std::cerr << RTNID << "Error: -output-center-col requires a value"
+                              << std::endl;
+                    return 1;
+                }
+
+                ++ii;
+                outputCenter.col = std::atof(argv[ii]);
+            }
+            else
+            {
+                std::cerr << RTNID << "Error: Unknown argument: " << 
+                    arg << std::endl;
+                return 1;
+            }
+        }
+
+        std::cout << "xMax: " << xMax << std::endl;
+        std::cout << "yMax: " << yMax << std::endl;
+        std::cout << "slantSampleSpacing: " << slantSampleSpacing.row << ":" <<
+            slantSampleSpacing.col << std::endl;
+        std::cout << "slantCenter: " << slantCenter.row << ":" <<
+            slantCenter.col << std::endl;
+        std::cout << "outputSampleSpacing: " << outputSampleSpacing.row << ":" <<
+            outputSampleSpacing.col << std::endl;
+        std::cout << "outputCenter: " << outputCenter.row << ":" <<
+            outputCenter.col << std::endl;
+
+        // Extent in meters.
+        double xMin = -xMax;
+        double yMin = -yMax;
+
+        // Populate the slant plane mesh.
+        std::vector<double> x;
+        std::vector<double> y;
+
+        populatePlanarCoordinateMeshVectors(slantMeshDims, xMin, xMax, yMin, yMax, x, y);
+        six::sicd::PlanarCoordinateMesh slantMesh("Slant plane coordinate mesh",
+                                                  slantMeshDims, x, y);
+
+        // Populate the output plane mesh - make it the same as the slant mesh.
+        populatePlanarCoordinateMeshVectors(outputMeshDims, xMin, xMax, yMin, yMax, x, y);
+        six::sicd::PlanarCoordinateMesh outputMesh("Output plane coordinate mesh",
+                                                   outputMeshDims, x, y);
+
+        six::Poly2D outputXYToSlantX;               
+        six::Poly2D outputXYToSlantY;             
+        six::Poly2D slantXYToOutputX;                 
+        six::Poly2D slantXYToOutputY;       
+
         // Compute (x,y) to (x,y) projection polynomials
         six::sicd::Utilities::fitXYProjectionPolys(
-                outputMesh,
-                slantMesh,
-                orderX,
-                orderY,
-                outputXYToSlantX,                  
-                outputXYToSlantY,                  
-                slantXYToOutputX,                  
-                slantXYToOutputY);
-    }
-    catch(except::Exception& e)
-    {
-        std::cout << "Caught exception: " << e.getMessage() << std::endl;
-        return 1;
-    }
+            outputMesh,
+            slantMesh,
+            orderX,
+            orderY,
+            outputXYToSlantX,                  
+            outputXYToSlantY,                  
+            slantXYToOutputX,                  
+            slantXYToOutputY);
+    
 
-    double val = std::abs(outputXYToSlantX(0,0));
-    std::string pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantX(0,0): " << pf << " : " << val << std::endl;
+        double val = std::abs(outputXYToSlantX(0,0));
+        std::string pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantX(0,0): " << pf << " : " << val << std::endl;
 
-    val = std::abs(outputXYToSlantX[0][1]);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantX[0][1]: " << pf << " : " << val << std::endl;
+        val = std::abs(outputXYToSlantX[0][1]);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantX[0][1]: " << pf << " : " << val << std::endl;
 
-    val = std::abs(outputXYToSlantX[1][0] - 1.0);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantX[1][0] - 1.0: " << pf << " : " << val << std::endl;
+        val = std::abs(outputXYToSlantX[1][0] - 1.0);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantX[1][0] - 1.0: " << pf << " : " << val << std::endl;
 
-    val = std::abs(outputXYToSlantY(0,0));
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantY(0,0): " << pf << " : " << val << std::endl;
+        val = std::abs(outputXYToSlantY(0,0));
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantY(0,0): " << pf << " : " << val << std::endl;
 
-    val = std::abs(outputXYToSlantY[1][0]);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantY[1][0]: " << pf << " : " << val << std::endl;
+        val = std::abs(outputXYToSlantY[1][0]);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantY[1][0]: " << pf << " : " << val << std::endl;
 
-    val = std::abs(outputXYToSlantY[0][1] - 1.0);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputXYToSlantY[0][1] - 1.0: " << pf << " : " << val << std::endl;
+        val = std::abs(outputXYToSlantY[0][1] - 1.0);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputXYToSlantY[0][1] - 1.0: " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputX(0,0));
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputX(0,0): " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputX(0,0));
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputX(0,0): " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputX[0][1]);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputX[0][1]: " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputX[0][1]);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputX[0][1]: " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputX[1][0] - 1.0);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputX[1][0] - 1.0: " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputX[1][0] - 1.0);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputX[1][0] - 1.0: " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputY(0,0));
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputY(0,0): " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputY(0,0));
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputY(0,0): " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputY[1][0]);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputY[1][0]: " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputY[1][0]);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputY[1][0]: " << pf << " : " << val << std::endl;
 
-    val = std::abs(slantXYToOutputY[0][1] - 1.0);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantXYToOutputY[0][1] - 1.0: " << pf << " : " << val << std::endl;
+        val = std::abs(slantXYToOutputY[0][1] - 1.0);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantXYToOutputY[0][1] - 1.0: " << pf << " : " << val << std::endl;
 
-    // Compute the output (row, col) to slant (row, col) projection polynomials.
-    six::Poly2D outputRowColToSlantRow;
-    six::Poly2D outputRowColToSlantCol;               
-    six::sicd::Utilities::transformXYProjectionPolys(
+        // Compute the output (row, col) to slant (row, col) projection polynomials.
+        six::Poly2D outputRowColToSlantRow;
+        six::Poly2D outputRowColToSlantCol;               
+        six::sicd::Utilities::transformXYProjectionPolys(
             outputXYToSlantX,
             outputXYToSlantY,
             slantSampleSpacing,
@@ -404,22 +400,22 @@ int main(int argc, char** argv)
             outputRowColToSlantRow,
             outputRowColToSlantCol);
 
-    val = std::abs(outputRowColToSlantRow(outputCenter.row, outputCenter.col) -
-        slantCenter.row);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputRowColToSlantRow(outputCenter) - slantCenter.row: " << 
-        pf << " : " << val << std::endl;
+        val = std::abs(outputRowColToSlantRow(outputCenter.row, outputCenter.col) -
+                       slantCenter.row);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputRowColToSlantRow(outputCenter) - slantCenter.row: " << 
+            pf << " : " << val << std::endl;
 
-    val = std::abs(outputRowColToSlantCol(outputCenter.row, outputCenter.col) -
-        slantCenter.col);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "outputRowColToSlantCol(outputCenter) - slantCenter.col: " << 
-        pf << " : " << val << std::endl;
+        val = std::abs(outputRowColToSlantCol(outputCenter.row, outputCenter.col) -
+                       slantCenter.col);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "outputRowColToSlantCol(outputCenter) - slantCenter.col: " << 
+            pf << " : " << val << std::endl;
 
-    // Compute the slant (row, col) to output (row, col) projection polynomials.
-    six::Poly2D slantRowColToOutputRow;                 
-    six::Poly2D slantRowColToOutputCol;                 
-    six::sicd::Utilities::transformXYProjectionPolys(
+        // Compute the slant (row, col) to output (row, col) projection polynomials.
+        six::Poly2D slantRowColToOutputRow;                 
+        six::Poly2D slantRowColToOutputCol;                 
+        six::sicd::Utilities::transformXYProjectionPolys(
             slantXYToOutputX,
             slantXYToOutputY,
             outputSampleSpacing,
@@ -429,32 +425,48 @@ int main(int argc, char** argv)
             slantRowColToOutputRow,
             slantRowColToOutputCol);
 
-    val = std::abs(slantRowColToOutputRow(slantCenter.row, slantCenter.col) -
-        outputCenter.row);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantRowColToOutputRow(slantCenter) - outputCenter.row: " << 
-        pf << " : " << val << std::endl;
+        val = std::abs(slantRowColToOutputRow(slantCenter.row, slantCenter.col) -
+                       outputCenter.row);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantRowColToOutputRow(slantCenter) - outputCenter.row: " << 
+            pf << " : " << val << std::endl;
 
-    val = std::abs(slantRowColToOutputCol(slantCenter.row, slantCenter.col) -
-        outputCenter.col);
-    pf = val <= epsilon ? "passed" : "failed";
-    std::cout << "slantRowColToOutputCol(slantCenter) - outputCenter.col: " << 
-        pf << " : " << val << std::endl;
+        val = std::abs(slantRowColToOutputCol(slantCenter.row, slantCenter.col) -
+                       outputCenter.col);
+        pf = val <= epsilon ? "passed" : "failed";
+        std::cout << "slantRowColToOutputCol(slantCenter) - outputCenter.col: " << 
+            pf << " : " << val << std::endl;
 
-    if (printPolys)
-    {
-        std::cout << std::endl;
-        std::cout << "Polynomials:" << std::endl;
-        std::cout << "outputXYToSlantX: " << outputXYToSlantX << std::endl;
-        std::cout << "outputXYToSlantY: " << outputXYToSlantY << std::endl;
-        std::cout << "slantXYToOutputX: " << slantXYToOutputX << std::endl;
-        std::cout << "slantXYToOutputY: " << slantXYToOutputY << std::endl;
-        std::cout << "outputRowColToSlantRow: " << outputRowColToSlantRow << std::endl;
-        std::cout << "outputRowColToSlantCol: " << outputRowColToSlantCol << std::endl;
-        std::cout << "slantRowColToOutputRow: " << slantRowColToOutputRow << std::endl;
-        std::cout << "slantRowColToOutputCol: " << slantRowColToOutputCol << std::endl;
+        if (printPolys)
+        {
+            std::cout << std::endl;
+            std::cout << "Polynomials:" << std::endl;
+            std::cout << "outputXYToSlantX: " << outputXYToSlantX << std::endl;
+            std::cout << "outputXYToSlantY: " << outputXYToSlantY << std::endl;
+            std::cout << "slantXYToOutputX: " << slantXYToOutputX << std::endl;
+            std::cout << "slantXYToOutputY: " << slantXYToOutputY << std::endl;
+            std::cout << "outputRowColToSlantRow: " << outputRowColToSlantRow << std::endl;
+            std::cout << "outputRowColToSlantCol: " << outputRowColToSlantCol << std::endl;
+            std::cout << "slantRowColToOutputRow: " << slantRowColToOutputRow << std::endl;
+            std::cout << "slantRowColToOutputCol: " << slantRowColToOutputCol << std::endl;
+        }
+
+        return 0;
     }
-
-    return 0;
+    catch(except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception" << std::endl;
+        return 1;
+    }
 }
 

@@ -2,7 +2,7 @@
  * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -45,13 +45,20 @@ class NITFHeaderCreator
 {
 public:
 
-    //! Constructor.
+    //! Constructor. Must call initialize to use.
     NITFHeaderCreator();
 
-    //!  Constructor
+    /*!
+     * Constructor. Calls initialize.
+     * \param container The data container
+     */
     NITFHeaderCreator(mem::SharedPtr<Container> container);
 
-    //!  Constructor
+    /*!
+     * Constructor. Calls initialize.
+     * \param options Initialization options
+     * \param container The data container
+     */
     NITFHeaderCreator(const six::Options& options,
                       mem::SharedPtr<Container> container);
 

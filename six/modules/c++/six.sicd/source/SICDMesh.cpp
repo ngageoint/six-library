@@ -2,9 +2,9 @@
  * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -67,7 +67,7 @@ struct serializer
      * \param swapBytes Should byte-swapping be applied?
      * \param[out] val The value to deserialize into.
      */
-    static void deserializeImpl(sys::byte*& buffer, bool swapBytes, T& val)
+    static void deserializeImpl(const sys::byte*& buffer, bool swapBytes, T& val)
     {
         const size_t length = sizeof(T);
         sys::byte* data = reinterpret_cast<sys::byte*>(&val);
@@ -115,7 +115,7 @@ struct serializer<std::vector<T> >
      * \param swapBytes Should byte-swapping be applied?
      * \param[out] val The vector of values to deserialize into.
      */
-    static void deserializeImpl(sys::byte*& buffer,
+    static void deserializeImpl(const sys::byte*& buffer,
                                 bool swapBytes,
                                 std::vector<T>& val)
     {
@@ -151,7 +151,7 @@ void serialize(const T& val, bool swapBytes, std::vector<sys::byte>& buffer)
  * \param[out] Value to deserialize into.
  */
 template<typename T>
-void deserialize(sys::byte*& buffer, bool swapBytes, T& val)
+void deserialize(const sys::byte*& buffer, bool swapBytes, T& val)
 {
     serializer<T>::deserializeImpl(buffer, swapBytes, val);
 }
@@ -208,7 +208,7 @@ void PlanarCoordinateMesh::serialize(std::vector<sys::byte>& values) const
     ::serialize(mY, mSwapBytes, values);
 }
 
-void PlanarCoordinateMesh::deserialize(sys::byte*& values)
+void PlanarCoordinateMesh::deserialize(const sys::byte*& values)
 {
     ::deserialize(values, mSwapBytes, mMeshDims.row);
     ::deserialize(values, mSwapBytes, mMeshDims.col);
@@ -264,7 +264,7 @@ void NoiseMesh::serialize(std::vector<sys::byte>& values) const
     ::serialize(mCombinedNoise, mSwapBytes, values);
 }
 
-void NoiseMesh::deserialize(sys::byte*& values)
+void NoiseMesh::deserialize(const sys::byte*& values)
 {
     PlanarCoordinateMesh::deserialize(values);
 
