@@ -20,142 +20,7 @@
  *
  */
 #include <six/sicd/SICDMesh.h>
-
-namespace
-{
-
-/*!
- * \struct serializer
- * \tparam T Scalar type
- * \brief Implements serialization and deserialization for scalar
- *  types
- */
-template<typename T>
-struct serializer
-{
-    /*!
-     * Serialize a value into a byte buffer.
-     * \param val The value to serialize.
-     * \param swapBytes Should byte-swapping be applied?
-     * \param[out] values The serialized data.
-     */
-    static void serializeImpl(const T& val,
-                              bool swapBytes,
-                              std::vector<sys::byte>& buffer)
-    {
-        const size_t length = sizeof(T);
-        const sys::byte* data = reinterpret_cast<const sys::byte*>(&val);
-
-        if (swapBytes)
-        {
-            const size_t prevLength = buffer.size();
-            buffer.resize(prevLength + length);
-            sys::byteSwap(data,
-                          static_cast<unsigned short>(length),
-                          1,
-                          &buffer[prevLength]);
-        }
-        else
-        {
-            std::copy(data, data + length, std::back_inserter(buffer));
-        }
-    }
-
-    /*!
-     * Deserialize a byte stream into a value.
-     * \param values The data to deserialize.
-     * \param swapBytes Should byte-swapping be applied?
-     * \param[out] val The value to deserialize into.
-     */
-    static void deserializeImpl(const sys::byte*& buffer, bool swapBytes, T& val)
-    {
-        const size_t length = sizeof(T);
-        sys::byte* data = reinterpret_cast<sys::byte*>(&val);
-        std::copy(buffer, buffer + length, data);
-        if (swapBytes)
-        {
-            sys::byteSwap(data, static_cast<unsigned short>(length), 1);
-        }
-
-        buffer += length;
-    }
-};
-
-/*!
- * \struct serializer
- * \tparam T Scalar type
- * \brief Implements serialization and deserialization for vectors of
- *  scalar types
- */
-template<typename T>
-struct serializer<std::vector<T> >
-{
-    /*!
-     * Serialize a vector of values into a byte buffer.
-     * \param val The vector of values to serialize.
-     * \param swapBytes Should byte-swapping be applied?
-     * \param[out] values The serialized data.
-     */
-    static void serializeImpl(const std::vector<T>& val,
-                              bool swapBytes,
-                              std::vector<sys::byte>& buffer)
-    {
-        const size_t length = val.size();
-
-        ::serializer<size_t>::serializeImpl(length, swapBytes, buffer);
-        for (size_t ii = 0; ii < length; ++ii)
-        {
-            ::serializer<T>::serializeImpl(val[ii], swapBytes, buffer);
-        }
-    }
-
-    /*!
-     * Deserialize a byte stream into a value.
-     * \param values The data to deserialize.
-     * \param swapBytes Should byte-swapping be applied?
-     * \param[out] val The vector of values to deserialize into.
-     */
-    static void deserializeImpl(const sys::byte*& buffer,
-                                bool swapBytes,
-                                std::vector<T>& val)
-    {
-        const size_t currentVectorLength = val.size();
-        size_t length;
-        ::serializer<size_t>::deserializeImpl(buffer, swapBytes, length);
-        val.resize(currentVectorLength + length);
-
-        for (size_t ii = 0; ii < length; ++ii)
-        {
-            ::serializer<T>::deserializeImpl(buffer, swapBytes,
-                val[currentVectorLength + ii]);
-        }
-    }
-};
-
-/*!
- * Function interface to serialize
- * \param val Values to serialize
- * \param[out] buffer Address to serialize into
- * \param swapBytes Should the bytes be swapped?
- */
-template<typename T>
-void serialize(const T& val, bool swapBytes, std::vector<sys::byte>& buffer)
-{
-    serializer<T>::serializeImpl(val, swapBytes, buffer);
-}
-
-/*!
- * Function interface to deserialize
- * \param buffer Address to deserialize from
- * \param swapBytes Should bytes be swapped?
- * \param[out] Value to deserialize into.
- */
-template<typename T>
-void deserialize(const sys::byte*& buffer, bool swapBytes, T& val)
-{
-    serializer<T>::deserializeImpl(buffer, swapBytes, val);
-}
-}
+#include <six/Serialize.h>
 
 namespace six
 {
@@ -202,18 +67,18 @@ std::vector<Mesh::Field> PlanarCoordinateMesh::getFields() const
 
 void PlanarCoordinateMesh::serialize(std::vector<sys::byte>& values) const
 {
-    ::serialize(mMeshDims.row, mSwapBytes, values);
-    ::serialize(mMeshDims.col, mSwapBytes, values);
-    ::serialize(mX, mSwapBytes, values);
-    ::serialize(mY, mSwapBytes, values);
+    six::serialize(mMeshDims.row, mSwapBytes, values);
+    six::serialize(mMeshDims.col, mSwapBytes, values);
+    six::serialize(mX, mSwapBytes, values);
+    six::serialize(mY, mSwapBytes, values);
 }
 
 void PlanarCoordinateMesh::deserialize(const sys::byte*& values)
 {
-    ::deserialize(values, mSwapBytes, mMeshDims.row);
-    ::deserialize(values, mSwapBytes, mMeshDims.col);
-    ::deserialize(values, mSwapBytes, mX);
-    ::deserialize(values, mSwapBytes, mY);
+    six::deserialize(values, mSwapBytes, mMeshDims.row);
+    six::deserialize(values, mSwapBytes, mMeshDims.col);
+    six::deserialize(values, mSwapBytes, mX);
+    six::deserialize(values, mSwapBytes, mY);
 }
 
 std::vector<Mesh::Field> NoiseMesh::getFields() const
@@ -259,18 +124,18 @@ void NoiseMesh::serialize(std::vector<sys::byte>& values) const
 {
     PlanarCoordinateMesh::serialize(values);
 
-    ::serialize(mMainBeamNoise, mSwapBytes, values);
-    ::serialize(mAzimuthAmbiguityNoise, mSwapBytes, values);
-    ::serialize(mCombinedNoise, mSwapBytes, values);
+    six::serialize(mMainBeamNoise, mSwapBytes, values);
+    six::serialize(mAzimuthAmbiguityNoise, mSwapBytes, values);
+    six::serialize(mCombinedNoise, mSwapBytes, values);
 }
 
 void NoiseMesh::deserialize(const sys::byte*& values)
 {
     PlanarCoordinateMesh::deserialize(values);
 
-    ::deserialize(values, mSwapBytes, mMainBeamNoise);
-    ::deserialize(values, mSwapBytes, mAzimuthAmbiguityNoise);
-    ::deserialize(values, mSwapBytes, mCombinedNoise);
+    six::deserialize(values, mSwapBytes, mMainBeamNoise);
+    six::deserialize(values, mSwapBytes, mAzimuthAmbiguityNoise);
+    six::deserialize(values, mSwapBytes, mCombinedNoise);
 }
 }
 }

@@ -42,6 +42,7 @@
 #include "six/Region.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
+#include "six/Serialize.h"
 #include "six/WriteControl.h"
 #include "six/XMLControl.h"
 #include "six/XMLControlFactory.h"
