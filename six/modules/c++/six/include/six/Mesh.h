@@ -71,13 +71,31 @@ public:
     virtual std::vector<Field> getFields() const = 0;
 
     /*!
-     * Serializes the mesh to an array of byte data
+     * Serializes the mesh to an array of byte data. Method is used in
+     * conjunction with deserialize() to provide a mechanism for
+     * porting the contents of a Mesh between processes. See
+     * deserialize() for more information
      * \param[out] values The serialized data.
      */
     virtual void serialize(std::vector<sys::byte>& values) const = 0;
 
     /*!
-     * Deserializes an array of byte data to populate the Mesh
+     * Deserializes an array of byte data to populate a Mesh. This is
+     * the reverse operation of serialize(), and any implementation
+     * must be symmetric:
+     *
+     * Consider DerivedMesh inheriting from Mesh with its own member
+     * data and implementations of serialize() and deserialize(). The
+     * following code snippet demonstrates the symmetry of the
+     * operations:
+     *    DerivedMesh mesh(...); // Populated at construction
+     *    std::vector<sys::byte> serializedData;
+     *    mesh.serialize(buffer);
+     *    DerivedMesh meshCopy;  // Not populated
+     *    const sys::byte* buffer = &serializedData[0];
+     *    meshCopy.deserialize(buffer); // meshCopy == mesh
+     * Any implementation of serialize() and deserialize() must
+     * satisfy this property.
      * \param values Data to deserialize.
      */
     virtual void deserialize(const sys::byte*& values) = 0;
