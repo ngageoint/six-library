@@ -1516,6 +1516,148 @@ def ImageSubheader_getActualImageDim(dim, numDimsPerBlock):
 NITF_VER_20 = _six_sicd.NITF_VER_20
 NITF_VER_21 = _six_sicd.NITF_VER_21
 NITF_VER_UNKNOWN = _six_sicd.NITF_VER_UNKNOWN
+class SICDMeshes(_object):
+    """Proxy of C++ six::sicd::SICDMeshes class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SICDMeshes, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SICDMeshes, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::SICDMeshes self) -> SICDMeshes"""
+        this = _six_sicd.new_SICDMeshes()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_SICDMeshes
+    __del__ = lambda self: None
+SICDMeshes_swigregister = _six_sicd.SICDMeshes_swigregister
+SICDMeshes_swigregister(SICDMeshes)
+cvar = _six_sicd.cvar
+SICDMeshes.SLANT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_SLANT_PLANE_MESH_ID
+SICDMeshes.OUTPUT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_OUTPUT_PLANE_MESH_ID
+SICDMeshes.NOISE_MESH_ID = _six_sicd.cvar.SICDMeshes_NOISE_MESH_ID
+
+class PlanarCoordinateMesh(_object):
+    """Proxy of C++ six::sicd::PlanarCoordinateMesh class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PlanarCoordinateMesh, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PlanarCoordinateMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name) -> PlanarCoordinateMesh
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y) -> PlanarCoordinateMesh
+        """
+        this = _six_sicd.new_PlanarCoordinateMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getName(self):
+        """getName(PlanarCoordinateMesh self) -> std::string"""
+        return _six_sicd.PlanarCoordinateMesh_getName(self)
+
+
+    def getMeshDims(self):
+        """getMeshDims(PlanarCoordinateMesh self) -> RowColSizeT"""
+        return _six_sicd.PlanarCoordinateMesh_getMeshDims(self)
+
+
+    def getX(self):
+        """getX(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getX(self)
+
+
+    def getY(self):
+        """getY(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getY(self)
+
+
+    def getFields(self):
+        """getFields(PlanarCoordinateMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.PlanarCoordinateMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(PlanarCoordinateMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.PlanarCoordinateMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(PlanarCoordinateMesh self, sys::byte const *& values)"""
+        return _six_sicd.PlanarCoordinateMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_PlanarCoordinateMesh
+    __del__ = lambda self: None
+PlanarCoordinateMesh_swigregister = _six_sicd.PlanarCoordinateMesh_swigregister
+PlanarCoordinateMesh_swigregister(PlanarCoordinateMesh)
+
+class NoiseMesh(PlanarCoordinateMesh):
+    """Proxy of C++ six::sicd::NoiseMesh class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseMesh, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NoiseMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::NoiseMesh self, std::string const & name) -> NoiseMesh
+        __init__(six::sicd::NoiseMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, std_vector_double mainBeamNoise, std_vector_double azimuthAmbiguityNoise, std_vector_double combinedNoise) -> NoiseMesh
+        """
+        this = _six_sicd.new_NoiseMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getMainBeamNoise(self):
+        """getMainBeamNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getMainBeamNoise(self)
+
+
+    def getAzimuthAmbiguityNoise(self):
+        """getAzimuthAmbiguityNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getAzimuthAmbiguityNoise(self)
+
+
+    def getCombinedNoise(self):
+        """getCombinedNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getCombinedNoise(self)
+
+
+    def getFields(self):
+        """getFields(NoiseMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.NoiseMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(NoiseMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.NoiseMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(NoiseMesh self, sys::byte const *& values)"""
+        return _six_sicd.NoiseMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_NoiseMesh
+    __del__ = lambda self: None
+NoiseMesh_swigregister = _six_sicd.NoiseMesh_swigregister
+NoiseMesh_swigregister(NoiseMesh)
+
 import coda.math_poly
 import coda.math_linear
 import coda.coda_except
@@ -1874,7 +2016,6 @@ class ProjectionPolynomialFitter(_object):
     __del__ = lambda self: None
 ProjectionPolynomialFitter_swigregister = _six_sicd.ProjectionPolynomialFitter_swigregister
 ProjectionPolynomialFitter_swigregister(ProjectionPolynomialFitter)
-cvar = _six_sicd.cvar
 ProjectionPolynomialFitter.DEFAULTS_POINTS_1D = _six_sicd.cvar.ProjectionPolynomialFitter_DEFAULTS_POINTS_1D
 
 class ComplexClassification(pysix.six_base.Classification):
@@ -4818,9 +4959,12 @@ class SixSicdUtilities(_object):
 
     getValidDataPolygon = staticmethod(getValidDataPolygon)
 
-    def readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-        """readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
-        return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
+    def readSicd(*args):
+        """
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+        """
+        return _six_sicd.SixSicdUtilities_readSicd(*args)
 
     readSicd = staticmethod(readSicd)
 
@@ -4901,6 +5045,36 @@ class SixSicdUtilities(_object):
 
     createFakeComplexData = staticmethod(createFakeComplexData)
 
+    def getNoiseMesh(reader):
+        """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+        return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
+
+    getNoiseMesh = staticmethod(getNoiseMesh)
+
+    def getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    getProjectionPolys = staticmethod(getProjectionPolys)
+
+    def transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+        """transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+        return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+    transformXYPolyToRowColPoly = staticmethod(transformXYPolyToRowColPoly)
+
+    def transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+        """transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    transformXYProjectionPolys = staticmethod(transformXYProjectionPolys)
+
+    def fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+        """fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+        return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+    fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -4929,9 +5103,12 @@ def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
     """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
     return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
-def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-    """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
-    return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
+def SixSicdUtilities_readSicd(*args):
+    """
+    readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+    """
+    return _six_sicd.SixSicdUtilities_readSicd(*args)
 
 def SixSicdUtilities_getComplexData(*args):
     """
@@ -4989,6 +5166,26 @@ def SixSicdUtilities_toXMLString(*args):
 def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
+
+def SixSicdUtilities_getNoiseMesh(reader):
+    """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+    return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
+
+def SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+    """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+    """SixSicdUtilities_transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+    return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+    """SixSicdUtilities_transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+    """SixSicdUtilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+    return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
 
 class AreaPlaneUtility(_object):
     """Proxy of C++ six::sicd::AreaPlaneUtility class."""

@@ -161,6 +161,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %include <nitf/ImageSubheader.hpp>
 %include <nitf/System.hpp>
 %include <nitf/Types.h>
+#include <six/sicd/SICDMesh.h>
+%include <six/sicd/SICDMesh.h>
 
 %import "math_poly.i"
 %import "types.i"
@@ -171,6 +173,7 @@ nitf::Record _readRecord(const std::string& pathname)
 // This allows functions that return auto_ptrs to work properly
 %auto_ptr(six::sicd::ComplexData);
 %auto_ptr(scene::ProjectionPolynomialFitter);
+%auto_ptr(six::sicd::NoiseMesh);
 
 %typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
 %typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
@@ -476,4 +479,3 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
 
     %}
 }
-
