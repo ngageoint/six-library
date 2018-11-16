@@ -37,6 +37,7 @@ def getSampleSicdXML():
     return os.path.join(samples, random.choice(os.listdir(samples)))
 
 def runTests(testDir, testName, *args):
+    print('Running {}'.format(testName))
     argList = [utils.executableName(os.path.join(testDir, testName))]
     argList.extend(args)
     result = call(argList, stdout=subprocess.PIPE)
@@ -62,11 +63,13 @@ def runSICDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
 
     success = runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
+    success = runTests(testDir, 'test_mesh_roundtrip') and success
+    success = runTests(testDir, 'test_mesh_polyfit') and success
 
     # Need it for just this test
     os.environ['NITF_PLUGIN_PATH'] = os.environ['NITF_PLUGIN_PATH_REAL']
-    success = success and runTests(testDir, 'test_read_sicd_with_extra_des',
-            getSampleSicdXML())
+    success = runTests(testDir, 'test_read_sicd_with_extra_des',
+                       getSampleSicdXML()) and success
     del os.environ['NITF_PLUGIN_PATH']
 
     return success

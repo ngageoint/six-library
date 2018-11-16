@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of six.sicd-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -69,7 +69,7 @@ void populateNoiseMeshVectors(const types::RowCol<size_t>& meshDims,
         for (size_t ci = 0; ci < meshDims.col; ++ci)
         {
             mainBeamNoise.push_back((double) std::rand() / (double) RAND_MAX);
-            azimuthAmbiguityNoise.push_back((double) std::rand() / 
+            azimuthAmbiguityNoise.push_back((double) std::rand() /
                                             (double) RAND_MAX);
             combinedNoise.push_back((double) std::rand() / (double) RAND_MAX);
         }
@@ -101,13 +101,10 @@ bool comparePlanarCoordinateMesh(
 
     if (diffRows > 0 || diffCols > 0)
     {
-        if (verbose)
-        {
-            std::cout << "PlanarCoordinateMesh comparison failed. "
-                      << "Mesh dimensions do not agree:" << std::endl
-                      << "    diffRows: " << diffRows << std::endl
-                      << "    diffCols: " << diffCols << std::endl;
-        }
+        std::cerr << "PlanarCoordinateMesh comparison failed. "
+                  << "Mesh dimensions do not agree:" << std::endl
+                  << "    diffRows: " << diffRows << std::endl
+                  << "    diffCols: " << diffCols << std::endl;
         return false;
     }
 
@@ -151,15 +148,12 @@ bool compareNoiseMesh(
 
     if (!coordsMatch)
     {
-        if (verbose)
-        {
-            std::cout << "NoiseMesh comparison failed. "
-                      << "Coordinates do not agree:" << std::endl
-                      << "    diffRows: " << diffRows << std::endl
-                      << "    diffCols: " << diffCols << std::endl
-                      << "    maxDiffX: " << maxDiffX << std::endl
-                      << "    maxDiffY: " << maxDiffY << std::endl;
-        }
+        std::cerr << "NoiseMesh comparison failed. "
+                  << "Coordinates do not agree:" << std::endl
+                  << "    diffRows: " << diffRows << std::endl
+                  << "    diffCols: " << diffCols << std::endl
+                  << "    maxDiffX: " << maxDiffX << std::endl
+                  << "    maxDiffY: " << maxDiffY << std::endl;
         return false;
     }
 
@@ -171,19 +165,19 @@ bool compareNoiseMesh(
         maxDiffMainBeamNoise = std::max(
             maxDiffMainBeamNoise,
             std::abs(
-                meshA->getMainBeamNoise()[ii] - 
+                meshA->getMainBeamNoise()[ii] -
                 meshB->getMainBeamNoise()[ii]));
 
         maxDiffAzimuthAmbiguityNoise = std::max(
             maxDiffAzimuthAmbiguityNoise,
             std::abs(
-                meshA->getAzimuthAmbiguityNoise()[ii] - 
+                meshA->getAzimuthAmbiguityNoise()[ii] -
                 meshB->getAzimuthAmbiguityNoise()[ii]));
 
         maxDiffCombinedNoise = std::max(
             maxDiffCombinedNoise,
             std::abs(
-                meshA->getCombinedNoise()[ii] - 
+                meshA->getCombinedNoise()[ii] -
                 meshB->getCombinedNoise()[ii]));
     }
 
@@ -223,11 +217,11 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
     std::vector<sys::byte> serializedValues;
     serializedMesh.serialize(serializedValues);
 
-    // Deserialize the mesh. 
+    // Deserialize the mesh.
     x.clear();
     y.clear();
 
-    six::sicd::PlanarCoordinateMesh deserializedMesh(name);//name, meshDims, x, y);
+    six::sicd::PlanarCoordinateMesh deserializedMesh(name);
     const sys::byte* serializedValuesBuffer = &serializedValues[0];
     deserializedMesh.deserialize(serializedValuesBuffer);
 
@@ -267,7 +261,7 @@ bool roundTripNoiseMesh(const types::RowCol<size_t>& meshDims,
     std::vector<sys::byte> serializedValues;
     serializedNoiseMesh.serialize(serializedValues);
 
-    // Deserialize the mesh. 
+    // Deserialize the mesh.
     six::sicd::NoiseMesh deserializedNoiseMesh(name);
 
     const sys::byte* serializedValuesBuffer = &serializedValues[0];
@@ -304,9 +298,12 @@ int main(int argc, char** argv)
             options->get<size_t>("numCols"));
         const bool verbose = options->get<bool>("verbose");
 
-        std::cout << "numRows = " << options->get<size_t>("numRows") << std::endl;
-        std::cout << "numCols = " << options->get<size_t>("numCols") << std::endl;
-        std::cout << "MeshDims: (" << meshDims.row << "," << meshDims.col << ")" << std::endl;
+        if (verbose)
+        {
+            std::cout << "numRows = " << options->get<size_t>("numRows") << std::endl;
+            std::cout << "numCols = " << options->get<size_t>("numCols") << std::endl;
+            std::cout << "MeshDims: (" << meshDims.row << "," << meshDims.col << ")" << std::endl;
+        }
 
         bool success = true;
         success &= roundTripPlanarMesh(meshDims, verbose);

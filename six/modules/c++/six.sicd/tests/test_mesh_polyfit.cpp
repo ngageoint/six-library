@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of six.sicd-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -74,7 +74,7 @@ six::sicd::PlanarCoordinateMesh populatePlanarCoordinateMeshVectors(
 }
 
 int main(int argc, char** argv)
-{ 
+{
     try
     {
         cli::ArgumentParser parser;
@@ -159,11 +159,11 @@ int main(int argc, char** argv)
         {
             std::cout << "sceneExtent: (" << sceneExtent.row
                       << "," << sceneExtent.col << ")" << std::endl;
-            std::cout << "slantSampleSpacing: (" << slantSampleSpacing.row 
+            std::cout << "slantSampleSpacing: (" << slantSampleSpacing.row
                       << "," << slantSampleSpacing.col << ")" << std::endl;
             std::cout << "slantCenter: (" << slantCenter.row
                       << "," << slantCenter.col << ")" << std::endl;
-            std::cout << "outputSampleSpacing: (" << outputSampleSpacing.row 
+            std::cout << "outputSampleSpacing: (" << outputSampleSpacing.row
                       << "," << outputSampleSpacing.col << ")" << std::endl;
             std::cout << "outputCenter: (" << outputCenter.row
                       << "," << outputCenter.col << ")" << std::endl;
@@ -184,10 +184,10 @@ int main(int argc, char** argv)
                 sceneExtent);
 
         // Compute (x,y) to (x,y) projection polynomials
-        six::Poly2D outputXYToSlantX;               
-        six::Poly2D outputXYToSlantY;             
-        six::Poly2D slantXYToOutputX;                 
-        six::Poly2D slantXYToOutputY;       
+        six::Poly2D outputXYToSlantX;
+        six::Poly2D outputXYToSlantY;
+        six::Poly2D slantXYToOutputX;
+        six::Poly2D slantXYToOutputY;
         six::sicd::Utilities::fitXYProjectionPolys(
             outputMesh,
             slantMesh,
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 
         // Compute the output (row, col) to slant (row, col) projection polynomials.
         six::Poly2D outputRowColToSlantRow;
-        six::Poly2D outputRowColToSlantCol;               
+        six::Poly2D outputRowColToSlantCol;
         six::sicd::Utilities::transformXYProjectionPolys(
             outputXYToSlantX,
             outputXYToSlantY,
@@ -212,8 +212,8 @@ int main(int argc, char** argv)
             outputRowColToSlantCol);
 
         // Compute the slant (row, col) to output (row, col) projection polynomials.
-        six::Poly2D slantRowColToOutputRow;                 
-        six::Poly2D slantRowColToOutputCol;                 
+        six::Poly2D slantRowColToOutputRow;
+        six::Poly2D slantRowColToOutputCol;
         six::sicd::Utilities::transformXYProjectionPolys(
             slantXYToOutputX,
             slantXYToOutputY,
@@ -261,9 +261,9 @@ int main(int argc, char** argv)
                          slantRowColToOutputCol(slantCenter.row, slantCenter.col),
                          outputCenter.col, pixelTol, oss);
 
-        if (verbose)
+        if (!pass || verbose)
         {
-            std::cout << "Test results:" << std::endl << oss.str() << std::endl;
+            std::cerr << "Test results:" << std::endl << oss.str() << std::endl;
 
             std::cout << "Fitted Polynomials:" << std::endl;
             std::cout << "outputXYToSlantX:" << std::endl
