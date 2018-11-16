@@ -51,12 +51,6 @@ namespace six
 class ByteProvider : public nitf::ByteProvider
 {
 public:
-
-    /*!
-     * Default constructor. Client code must call initialize() to use.
-     */
-    ByteProvider();
-
     /*!
      * Constructor. Calls initialize() internally to populate class
      * \param headerCreator Class for populating and managing NITF
@@ -137,6 +131,12 @@ public:
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
 protected:
+    /*!
+     * Default constructor. Client code must call initialize() to
+     * use. Only accessible through classes inheriting from ByteProvider
+     */
+    ByteProvider();
+
     /*!
      * Initialize the byte provider.  Must be called in the constructor of
      * inheriting classes.
