@@ -114,8 +114,7 @@ void cropSICD(six::NITFReadControl& reader,
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(scopedData);
-    six::NITFWriteControl writer;
-    writer.initialize(container);
+    six::NITFWriteControl writer(container);
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);
 }

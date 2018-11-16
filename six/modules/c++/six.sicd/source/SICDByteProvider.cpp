@@ -51,5 +51,12 @@ SICDByteProvider::SICDByteProvider(const NITFWriteControl& writer,
 {
     initialize(writer, schemaPaths);
 }
+
+SICDByteProvider::SICDByteProvider(const NITFWriteControl& writer,
+                                   const std::vector<std::string>& schemaPaths,
+                                   const std::vector<PtrAndLength>& desBuffers)
+{
+    initialize(writer, schemaPaths, desBuffers);
+}
 }
 }

@@ -254,14 +254,14 @@ int main(int argc, char** argv)
         if (maxRows > 0)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
-            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+            writer.getOptions().setParameter(six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                                              maxRows);
 
         }
         if (maxSize > 0)
         {
             std::cout << "Overriding NITF product size" << std::endl;
-            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            writer.getOptions().setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                                              maxSize);
         }
 

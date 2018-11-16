@@ -70,6 +70,19 @@ public:
      */
     SICDByteProvider(const NITFWriteControl& writer,
                      const std::vector<std::string>& schemaPaths);
+
+    /*!
+     * Constructor
+     * This option allows you to pass in an initialized writer and
+     * additional data extension segment (DES) buffers for the NITF
+     *
+     * \param writer Initialized NITFWriteControl
+     * \param schemaPaths Directories or files of schema locations
+     * \param desBuffers Buffers of NITF DES information
+     */
+    SICDByteProvider(const NITFWriteControl& writer,
+                     const std::vector<std::string>& schemaPaths,
+                     const std::vector<PtrAndLength>& desBuffers);
 };
 }
 }

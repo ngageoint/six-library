@@ -125,7 +125,7 @@ private:
         if (mSetMaxProductSize)
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
     }
 

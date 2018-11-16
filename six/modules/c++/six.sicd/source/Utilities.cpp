@@ -19,16 +19,22 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <map>
 
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <mem/ScopedAlignedArray.h>
+#include <types/RowCol.h>
+#include <math/poly/Fit.h>
+#include <math/Utilities.h>
 #include <io/StringStream.h>
+#include <str/Manip.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
-
-#include <math/Utilities.h>
-#include <types/RowCol.h>
 
 namespace
 {
@@ -105,6 +111,65 @@ void readAndConvertSICD(six::NITFReadControl& reader,
             bufferPtr[index] = tempBuffer[index];
         }
     }
+}
+
+six::Poly2D getXYtoRowColTransform(double center,
+                                   double sampleSpacing,
+                                   bool rowTransform)
+{
+    const double coeffs[2] = {-sampleSpacing * center, sampleSpacing};
+    const size_t orderX = rowTransform ? 1 : 0;
+    const size_t orderY = rowTransform ? 0 : 1;
+    return six::Poly2D(orderX, orderY, coeffs);
+}
+
+std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
+{
+    std::map<std::string, size_t> nameToDesIndex;
+    nitf::List des = reader.getRecord().getDataExtensions();
+    nitf::ListIterator desIter = des.begin();
+
+    for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
+    {
+        // Skip the first DES. The SICD specification document
+        // indicates that the first DES of the NITF 2.1 product is to
+        // be populated by the XML metadata.
+        if (ii == 0)
+        {
+            continue;
+        }
+
+        nitf::DESegment segment =
+            static_cast<nitf::DESegment>(*desIter);
+        nitf::DESubheader subheader = segment.getSubheader();
+        std::string typeID = subheader.getTypeID().toString();
+        str::trim(typeID);
+        nameToDesIndex[typeID] = ii;
+    }
+    return nameToDesIndex;
+}
+
+void getDesBuffer(six::NITFReadControl& reader,
+                  size_t desIndex,
+                  mem::ScopedAlignedArray<sys::byte>& buffer)
+{
+    nitf::List des = reader.getRecord().getDataExtensions();
+    
+    if (desIndex >= des.getSize())
+    {
+        throw except::Exception(Ctxt("DES index out of range."));
+    }
+
+    // Pull out the DE segment and its reader
+    nitf::DESegment segment =
+        static_cast<nitf::DESegment>(des[desIndex]);
+    nitf::DESubheader subheader = segment.getSubheader();
+    nitf::SegmentReader deReader = reader.getReader().newDEReader(desIndex);
+
+    // Read the DE segment buffer
+    const size_t bufferSize = subheader.getDataLength();
+    buffer.reset(bufferSize);
+    deReader.read(buffer.get(), bufferSize);
 }
 }
 
@@ -369,6 +434,40 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     complexData = getComplexData(reader);
     getWidebandData(reader, *(complexData.get()), widebandData);
+
+    // This tells the reader that it doesn't
+    // own an XMLControlRegistry
+    reader.setXMLControlRegistry(NULL);
+}
+
+void Utilities::readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         size_t orderX,
+                         size_t orderY,
+                         std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData,
+                         six::Poly2D& outputRowColToSlantRow,
+                         six::Poly2D& outputRowColToSlantCol,
+                         std::auto_ptr<NoiseMesh>& noiseMesh)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<
+            six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(sicdPathname, schemaPaths);
+
+    complexData = getComplexData(reader);
+    getWidebandData(reader, *complexData, widebandData);
+    getProjectionPolys(reader,
+                       orderX,
+                       orderY,
+                       complexData,
+                       outputRowColToSlantRow,
+                       outputRowColToSlantCol);
+    noiseMesh = getNoiseMesh(reader);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
@@ -784,6 +883,196 @@ std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->pfa->kaz2 = 0;
     return data;
 }
+
+std::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+        getAdditionalDesMap(reader);
+
+    // Slant and output plane mesh IDs must be present in the DES
+    if (nameToDesIndex.find(SICDMeshes::NOISE_MESH_ID) == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Noise mesh information not present"));
+    }
+
+    // Extract the noise mesh
+    std::auto_ptr<NoiseMesh> noiseMesh(new NoiseMesh(SICDMeshes::NOISE_MESH_ID));
+    mem::ScopedAlignedArray<sys::byte> buffer;
+    getDesBuffer(
+        reader, nameToDesIndex.at(SICDMeshes::NOISE_MESH_ID), buffer);
+    const sys::byte* bufferData = buffer.get();
+    noiseMesh->deserialize(bufferData);
+
+    return noiseMesh;
+}
+
+void Utilities::getProjectionPolys(NITFReadControl& reader,
+                                   size_t orderX,
+                                   size_t orderY,
+                                   std::auto_ptr<ComplexData>& complexData,
+                                   six::Poly2D& outputRowColToSlantRow,
+                                   six::Poly2D& outputRowColToSlantCol)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+        getAdditionalDesMap(reader);
+
+    // Slant and output plane mesh IDs must be present in the DES
+    if (nameToDesIndex.find(SICDMeshes::SLANT_PLANE_MESH_ID) == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Slant plane mesh information not present"));
+    }
+
+    if (nameToDesIndex.find(SICDMeshes::OUTPUT_PLANE_MESH_ID) == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Output plane mesh information not present"));
+    }
+
+    // SICD metadata must have the AreaPlane populated. Otherwise, the
+    // projection mesh information is nonsense.
+    if (!AreaPlaneUtility::hasAreaPlane(*complexData))
+    {
+        throw except::Exception(Ctxt(
+            "AreaPlane information must be populated to use projection mesh"));
+    }
+
+    mem::ScopedAlignedArray<sys::byte> buffer;
+    const sys::byte* bufferData;
+
+    // Extract the slant plane mesh buffer and deserialize
+    PlanarCoordinateMesh slantMesh(SICDMeshes::SLANT_PLANE_MESH_ID);
+    getDesBuffer(
+        reader, nameToDesIndex.at(SICDMeshes::SLANT_PLANE_MESH_ID), buffer);
+    bufferData = buffer.get();
+    slantMesh.deserialize(bufferData);
+
+    // Extract the output plane mesh buffer and deserialize
+    PlanarCoordinateMesh outputMesh(SICDMeshes::OUTPUT_PLANE_MESH_ID);
+    getDesBuffer(
+        reader, nameToDesIndex.at(SICDMeshes::OUTPUT_PLANE_MESH_ID), buffer);
+    bufferData = buffer.get();
+    outputMesh.deserialize(bufferData);
+
+    const types::RowCol<double> outputSampleSpacing(
+        complexData->radarCollection->area->plane->xDirection->spacing,
+        complexData->radarCollection->area->plane->yDirection->spacing);
+
+    const types::RowCol<double> outputCenter(
+        complexData->radarCollection->area->plane->referencePoint.rowCol.row,
+        complexData->radarCollection->area->plane->referencePoint.rowCol.col);
+
+    const types::RowCol<double> slantSampleSpacing(
+        complexData->grid->row->sampleSpacing,
+        complexData->grid->col->sampleSpacing);
+
+    const types::RowCol<double> slantCenter(
+        complexData->imageData->scpPixel.row,
+        complexData->imageData->scpPixel.col);
+
+    six::Poly2D outputXYToSlantX;               
+    six::Poly2D outputXYToSlantY;
+    six::Poly2D slantXYToOutputX;               
+    six::Poly2D slantXYToOutputY;
+    fitXYProjectionPolys(outputMesh,
+                         slantMesh,
+                         orderX,
+                         orderY,
+                         outputXYToSlantX,                  
+                         outputXYToSlantY,                  
+                         slantXYToOutputX,               
+                         slantXYToOutputY);
+
+    transformXYProjectionPolys(outputXYToSlantX,
+                               outputXYToSlantY,
+                               slantSampleSpacing,
+                               outputSampleSpacing,
+                               slantCenter,
+                               outputCenter,
+                               outputRowColToSlantRow,
+                               outputRowColToSlantCol);
+}
+
+six::Poly2D Utilities::transformXYPolyToRowColPoly(
+    const six::Poly2D& polyXY,
+    const types::RowCol<double>& outSampleSpacing,
+    const types::RowCol<double>& outCenter,
+    double polyScaleFactor,
+    double polyShift)
+{
+    const six::Poly2D xToRowTransform =
+        getXYtoRowColTransform(outCenter.row, outSampleSpacing.row, true);
+
+    const six::Poly2D yToColTransform =
+        getXYtoRowColTransform(outCenter.col, outSampleSpacing.col, false);    
+
+    // Transform the output to input polynomials to 
+    // take row, column inputs
+    six::Poly2D polyRowCol = polyXY.transformInput(
+        xToRowTransform, yToColTransform);
+
+    polyRowCol *= polyScaleFactor;
+    polyRowCol[0][0] += polyShift;
+
+    return polyRowCol;
+}
+
+void Utilities::transformXYProjectionPolys(
+    const six::Poly2D& outputXYToSlantX,
+    const six::Poly2D& outputXYToSlantY,
+    const types::RowCol<double>& slantSampleSpacing,
+    const types::RowCol<double>& outputSampleSpacing,
+    const types::RowCol<double>& slantCenter,
+    const types::RowCol<double>& outputCenter,
+    six::Poly2D& outputRowColToSlantRow,
+    six::Poly2D& outputRowColToSlantCol)
+{
+    outputRowColToSlantRow = transformXYPolyToRowColPoly(
+        outputXYToSlantX,
+        outputSampleSpacing,
+        outputCenter,
+        1.0 / slantSampleSpacing.row,
+        slantCenter.row);
+    outputRowColToSlantCol = transformXYPolyToRowColPoly(
+        outputXYToSlantY,
+        outputSampleSpacing,
+        outputCenter,
+        1.0 / slantSampleSpacing.col,
+        slantCenter.col);
+}
+
+void Utilities::fitXYProjectionPolys(
+    const six::sicd::PlanarCoordinateMesh& outputMesh,
+    const six::sicd::PlanarCoordinateMesh& slantMesh,
+    size_t orderX,
+    size_t orderY,
+    six::Poly2D& outputXYToSlantX,                  
+    six::Poly2D& outputXYToSlantY,                  
+    six::Poly2D& slantXYToOutputX,                  
+    six::Poly2D& slantXYToOutputY)              
+{
+    // Meshes must be the same size.
+    const types::RowCol<size_t> slantMeshDims = slantMesh.getMeshDims();
+    const types::RowCol<size_t> outputMeshDims = outputMesh.getMeshDims();
+    if (slantMeshDims.row != outputMeshDims.row ||
+        slantMeshDims.col != outputMeshDims.col)
+    {
+        throw except::Exception(Ctxt("Mesh dimensions do not match"));
+    }
+
+    const types::RowCol<size_t>& dims = slantMeshDims;
+    math::linear::Matrix2D<double> outputX(
+        dims.row, dims.col, &outputMesh.getX()[0]);
+    math::linear::Matrix2D<double> outputY(
+        dims.row, dims.col, &outputMesh.getY()[0]);
+    math::linear::Matrix2D<double> slantX(
+        dims.row, dims.col, &slantMesh.getX()[0]);
+    math::linear::Matrix2D<double> slantY(
+        dims.row, dims.col, &slantMesh.getY()[0]);
+
+    outputXYToSlantX = math::poly::fit(outputX, outputY, slantX, orderX, orderY);
+    outputXYToSlantY = math::poly::fit(outputX, outputY, slantY, orderX, orderY);
+    slantXYToOutputX = math::poly::fit(slantX, slantY, outputX, orderX, orderY);
+    slantXYToOutputY = math::poly::fit(slantX, slantY, outputY, orderX, orderY);
+}                 
 }
 }
 

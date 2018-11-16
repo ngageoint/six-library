@@ -368,27 +368,27 @@ int main(int argc, char** argv)
         if (!maxILOC.empty())
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     maxILOC);
         }
         if (!maxSize.empty())
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     maxSize);
         }
 
         if (!rowsPerBlock.empty())
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     rowsPerBlock);
         }
 
         if (!colsPerBlock.empty())
         {
             writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     colsPerBlock);
         }
 

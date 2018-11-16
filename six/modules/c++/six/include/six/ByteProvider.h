@@ -27,6 +27,7 @@
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
+#include <six/NITFHeaderCreator.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
 
@@ -50,6 +51,19 @@ namespace six
 class ByteProvider : public nitf::ByteProvider
 {
 public:
+    /*!
+     * Constructor. Calls initialize() internally to populate class
+     * \param headerCreator Class for populating and managing NITF
+     *  header information
+     * \param schemaPaths Paths to XML schemas
+     * \param desBuffers Collection of pointers to serialized Data
+     *  Extension Segment (DES) buffers and their lengths. This data
+     *  will be stored in the DES portion of the NITF
+     */
+    ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                 const std::vector<std::string>& schemaPaths,
+                 const std::vector<PtrAndLength>& desBuffers);
+
     static void populateWriter(
             mem::SharedPtr<Container> container,
             const XMLControlRegistry& xmlRegistry,
@@ -58,6 +72,21 @@ public:
             size_t numColsPerBlock,
             NITFWriteControl& writer);
 
+    /*!
+     * Compute the XML metadata, data extension segment (DES) buffers,
+     * and blocking information from a populated NITF writer
+     * \static
+     * \param writer Populated NITF writer
+     * \param schemaPaths Paths to XML schemas
+     * \param[out] xmlStrings Collection of XML metadata strings
+     *  stored in the populated writer. There is one string per Data
+     *  entry in the underlying Container object.
+     * \param[out] desData Collection of DES buffers. There will be
+     *  one entry per XML string.
+     * \param[out] numRowsPerBlock Number of image rows per NITF block
+     * \param[out] numColsPerBlock Number of image columns per NITF
+     *  block
+     */
     static void populateInitArgs(
             const NITFWriteControl& writer,
             const std::vector<std::string>& schemaPaths,
@@ -65,7 +94,49 @@ public:
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
+
+    /*!
+     * Compute the XML metadata, data extension segment (DES) buffers,
+     * and blocking information from a populated NITF header creator
+     * \static
+     * \param writer Populated NITF header creator object
+     * \param schemaPaths Paths to XML schemas
+     * \param[out] xmlStrings Collection of XML metadata strings
+     *  stored in the populated writer. There is one string per Data
+     *  entry in the underlying Container object.
+     * \param[out] desData Collection of DES buffers. There will be
+     *  one entry per XML string.
+     * \param[out] numRowsPerBlock Number of image rows per NITF block
+     * \param[out] numColsPerBlock Number of image columns per NITF
+     *  block
+     */
+    static void populateInitArgs(
+            const NITFHeaderCreator& headerCreator,
+            const std::vector<std::string>& schemaPaths,
+            std::vector<std::string>& xmlStrings,
+            std::vector<PtrAndLength>& desData,
+            size_t& numRowsPerBlock,
+            size_t& numColsPerBlock);
+
+    /*!
+     * Initialize the ByteProvider
+     * \param headerCreator Class for populating and managing NITF
+     *  header information
+     * \param schemaPaths Paths to XML schemas
+     * \param desBuffers Collection of pointers to serialized Data
+     *  Extension Segment (DES) buffers and their lengths. This data
+     *  will be stored in the DES portion of the NITF
+     */
+    void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
 protected:
+    /*!
+     * Default constructor. Client code must call initialize() to
+     * use. Only accessible through classes inheriting from ByteProvider
+     */
+    ByteProvider();
+
     /*!
      * Initialize the byte provider.  Must be called in the constructor of
      * inheriting classes.
@@ -97,6 +168,10 @@ protected:
      */
     void initialize(const NITFWriteControl& writer,
                     const std::vector<std::string>& schemaPaths);
+
+    void initialize(const NITFWriteControl& writer,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
 };
 }
 
