@@ -948,9 +948,23 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         complexData->radarCollection->area->plane->xDirection->spacing,
         complexData->radarCollection->area->plane->yDirection->spacing);
 
+    AreaPlane areaPlane;
+    if (AreaPlaneUtility::hasAreaPlane(*complexData))
+    {
+        areaPlane = *complexData->radarCollection->area->plane;
+    }
+    else
+    {
+        AreaPlaneUtility::deriveAreaPlane(*complexData, areaPlane, true);
+    }
+    
+    // Get the segment list information for this segment ID
+    const six::sicd::Segment& segment = areaPlane.getSegment(
+        complexData->imageFormation->segmentIdentifier);
+    const size_t segNumLines = segment.getNumLines();
+    const size_t segNumSamples = segment.getNumSamples();
     const types::RowCol<double> outputCenter(
-        complexData->radarCollection->area->plane->referencePoint.rowCol.row,
-        complexData->radarCollection->area->plane->referencePoint.rowCol.col);
+        segNumLines / 2 + 1, segNumSamples / 2 + 1);
 
     const types::RowCol<double> slantSampleSpacing(
         complexData->grid->row->sampleSpacing,
@@ -1021,13 +1035,13 @@ void Utilities::transformXYProjectionPolys(
         outputXYToSlantX,
         outputSampleSpacing,
         outputCenter,
-        -1.0 / slantSampleSpacing.row,
+        1.0 / slantSampleSpacing.row,
         slantCenter.row);
     outputRowColToSlantCol = transformXYPolyToRowColPoly(
         outputXYToSlantY,
         outputSampleSpacing,
         outputCenter,
-        -1.0 / slantSampleSpacing.col,
+        1.0 / slantSampleSpacing.col,
         slantCenter.col);
 }
 
