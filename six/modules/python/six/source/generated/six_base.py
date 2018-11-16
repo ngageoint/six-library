@@ -4183,6 +4183,12 @@ class XMLControl(_object):
         return _six_base.XMLControl_dataTypeToString(dataType, appendXML)
 
     dataTypeToString = staticmethod(dataTypeToString)
+
+    def splitVersion(versionStr, version):
+        """splitVersion(std::string const & versionStr, VectorString version)"""
+        return _six_base.XMLControl_splitVersion(versionStr, version)
+
+    splitVersion = staticmethod(splitVersion)
 XMLControl_swigregister = _six_base.XMLControl_swigregister
 XMLControl_swigregister(XMLControl)
 
@@ -4192,6 +4198,10 @@ def XMLControl_dataTypeToString(dataType, appendXML=True):
     XMLControl_dataTypeToString(DataType dataType) -> std::string
     """
     return _six_base.XMLControl_dataTypeToString(dataType, appendXML)
+
+def XMLControl_splitVersion(versionStr, version):
+    """XMLControl_splitVersion(std::string const & versionStr, VectorString version)"""
+    return _six_base.XMLControl_splitVersion(versionStr, version)
 
 
 def remapZeroTo360(degree):
