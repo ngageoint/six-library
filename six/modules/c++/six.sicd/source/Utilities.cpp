@@ -956,9 +956,14 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         complexData->radarCollection->area->plane->xDirection->spacing,
         complexData->radarCollection->area->plane->yDirection->spacing);
 
+    types::RowCol<size_t> outputPlaneOffset;
+    types::RowCol<size_t> outputPlaneExtent;
+    complexData->getOutputPlaneOffsetAndExtent(
+        outputPlaneOffset, outputPlaneExtent);
+
     const types::RowCol<double> outputCenter(
-        complexData->radarCollection->area->plane->referencePoint.rowCol.row,
-        complexData->radarCollection->area->plane->referencePoint.rowCol.col);
+        0.5 * (static_cast<double>(outputPlaneExtent.row) - 1.0),
+        0.5 * (static_cast<double>(outputPlaneExtent.col) - 1.0));
 
     const types::RowCol<double> slantSampleSpacing(
         complexData->grid->row->sampleSpacing,
