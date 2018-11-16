@@ -20,6 +20,7 @@
  *
  */
 
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <memory>
@@ -39,7 +40,7 @@ void populatePlanarCoordinateMeshVectors(const types::RowCol<size_t>& meshDims,
     x.clear();
     y.clear();
 
-    std::srand(std::time(0));
+    std::srand(static_cast<unsigned long>(std::time(0)));
     for (size_t ri = 0; ri < meshDims.row; ++ri)
     {
         for (size_t ci = 0; ci < meshDims.col; ++ci)
@@ -63,7 +64,7 @@ void populateNoiseMeshVectors(const types::RowCol<size_t>& meshDims,
     azimuthAmbiguityNoise.clear();
     combinedNoise.clear();
 
-    std::srand(std::time(0));
+    std::srand(static_cast<unsigned long>(std::time(0)));
     for (size_t ri = 0; ri < meshDims.row; ++ri)
     {
         for (size_t ci = 0; ci < meshDims.col; ++ci)
@@ -94,8 +95,14 @@ bool comparePlanarCoordinateMesh(
     double& maxDiffX,
     double& maxDiffY)
 {
-    diffRows = std::abs(meshA->getMeshDims().row - meshB->getMeshDims().row);
-    diffCols = std::abs(meshA->getMeshDims().col - meshB->getMeshDims().col);
+    const types::RowCol<size_t>& meshDimsA = meshA->getMeshDims();
+    const types::RowCol<size_t>& meshDimsB = meshB->getMeshDims();
+    diffRows = meshDimsA.row > meshDimsB.row ?
+        meshDimsA.row - meshDimsB.row :
+        meshDimsB.row - meshDimsA.row;
+    diffCols = meshDimsA.col > meshDimsB.col ?
+        meshDimsA.col - meshDimsB.col :
+        meshDimsB.col - meshDimsA.col;
     maxDiffX = 0.0;
     maxDiffY = 0.0;
 
