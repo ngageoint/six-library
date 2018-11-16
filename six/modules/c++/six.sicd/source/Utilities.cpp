@@ -927,6 +927,14 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         throw except::Exception(Ctxt("Output plane mesh information not present"));
     }
 
+    // SICD metadata must have the AreaPlane populated. Otherwise, the
+    // projection mesh information is nonsense.
+    if (!AreaPlaneUtility::hasAreaPlane(*complexData))
+    {
+        throw except::Exception(Ctxt(
+            "AreaPlane information must be populated to use projection mesh"));
+    }
+
     mem::ScopedAlignedArray<sys::byte> buffer;
     const sys::byte* bufferData;
 
@@ -948,23 +956,9 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         complexData->radarCollection->area->plane->xDirection->spacing,
         complexData->radarCollection->area->plane->yDirection->spacing);
 
-    AreaPlane areaPlane;
-    if (AreaPlaneUtility::hasAreaPlane(*complexData))
-    {
-        areaPlane = *complexData->radarCollection->area->plane;
-    }
-    else
-    {
-        AreaPlaneUtility::deriveAreaPlane(*complexData, areaPlane, true);
-    }
-    
-    // Get the segment list information for this segment ID
-    const six::sicd::Segment& segment = areaPlane.getSegment(
-        complexData->imageFormation->segmentIdentifier);
-    const size_t segNumLines = segment.getNumLines();
-    const size_t segNumSamples = segment.getNumSamples();
     const types::RowCol<double> outputCenter(
-        segNumLines / 2 + 1, segNumSamples / 2 + 1);
+        complexData->radarCollection->area->plane->referencePoint.rowCol.row,
+        complexData->radarCollection->area->plane->referencePoint.rowCol.col);
 
     const types::RowCol<double> slantSampleSpacing(
         complexData->grid->row->sampleSpacing,
