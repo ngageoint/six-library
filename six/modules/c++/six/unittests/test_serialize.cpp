@@ -1,8 +1,8 @@
 /* =========================================================================
-* This file is part of six.sidd-c++
+* This file is part of six-c++
 * =========================================================================
 *
-* (C) Copyright 2004 - 2016, MDA Information Systems LLC
+* (C) Copyright 2004 - 2018, MDA Information Systems LLC
 *
 * six-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
@@ -79,12 +79,7 @@ bool testVector(size_t length, bool byteSwap)
     const sys::byte* buffer = &serializedData[0];
     std::vector<T> valCopy;
     six::deserialize<std::vector<T> >(buffer, byteSwap, valCopy);
-    bool equal = (valCopy.size() == length);
-    for (size_t ii = 0; ii < val.size(); ++ii)
-    {
-        equal &= (val[ii] == valCopy[ii]);
-    }
-    return equal;
+    return val == valCopy;
 }
 }
 

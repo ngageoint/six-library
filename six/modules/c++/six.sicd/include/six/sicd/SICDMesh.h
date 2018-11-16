@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
@@ -137,7 +137,7 @@ public:
     NoiseMesh(const std::string& name);
 
     /*!
-     * NoiseMesh constructor. Mesh data is uninitialized.
+     * NoiseMesh constructor. Mesh data is initialized.
      * \param name Name of the mesh.
      * \param meshDims The mesh dimensions.
      * \param x The x-coordinates for the mesh.

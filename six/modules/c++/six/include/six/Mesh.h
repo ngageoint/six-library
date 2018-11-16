@@ -96,7 +96,28 @@ public:
      *    meshCopy.deserialize(buffer); // meshCopy == mesh
      * Any implementation of serialize() and deserialize() must
      * satisfy this property.
-     * \param values Data to deserialize.
+     *
+     * Note that this interface expects a reference to a
+     * pointer. Calling this function will advance the pointer by a
+     * length equal to the storage size of the serialized Mesh object.
+     * The intent is to allow chaining together of
+     * serialize/deserialize calls via inheritance. For example:
+     *   LatLonMesh inherits from Mesh
+     *   - Stores grid of latitude and longitude values
+     *   - Serializes and deserializes two std::vector<double> for the
+     *     latitude and longitude values
+     *   HeightMesh inherits from LatLonMesh
+     *   - Stores height values over a (lat,lon) grid
+     *   - To serialize, it first calls LatLonMesh::serialize() then
+     *     serializes its height info to the end of the same byte
+     *     array
+     *   - To deserialize, it first calls LatLonMesh::deserialize()
+     *     then deserializes its height info. The pointer for this
+     *     buffer will have advanced to the end of the serialized
+     *     LatLonMesh
+     * \param values Data to deserialize. Pointer is incremented by
+     *  the serialized storage size of Mesh after calling this
+     *  function.
      */
     virtual void deserialize(const sys::byte*& values) = 0;
 };

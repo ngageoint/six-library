@@ -119,7 +119,7 @@ public:
     void setAbstract(const std::string& abstract);
 
     /*!
-     * Add segmet data to the record.
+     * Add segment data to the record.
      * \static
      * \param data The data buffer.
      * \param size The number of bytes in the data buffer.

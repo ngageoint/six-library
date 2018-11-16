@@ -406,7 +406,8 @@ public:
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
-     * parses the SICD's DES and returns a a vector of Mesh objects.
+     * parses the SICD's DES and returns fitted projection polynomials
+     * of the desired order.
      * \param reader A NITFReadControl loaded with the desired SICD
      * \param orderX X order of fitted polynomials.
      * \param orderY Y order of fitted polynomials.

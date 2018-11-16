@@ -69,7 +69,8 @@ struct Serializer
 
     /*!
      * Deserialize a byte array into a scalar value.
-     * \param values The data to deserialize.
+     * \param buffer The data to deserialize. Pointer is incremented
+     *  by sizeof(T) after calling this function.
      * \param swapBytes Should byte-swapping be applied?
      * \param[out] val The value to deserialize into.
      */
@@ -117,7 +118,9 @@ struct Serializer<std::vector<T> >
 
     /*!
      * Deserialize a byte array into a vector of values
-     * \param values The data to deserialize.
+     * \param buffer The data to deserialize. Pointer is incremented
+     *  by sizeof(size_t) + vector_length * sizeof(T) after calling
+     *  this function.
      * \param swapBytes Should byte-swapping be applied?
      * \param[out] val The vector of values to deserialize into.
      */
@@ -156,7 +159,9 @@ void serialize(const T& val, bool swapBytes, std::vector<sys::byte>& buffer)
  * Function interface to deserialize
  * \tparam T Data type to deserialize. Argument determines which
  *  Serializer functor's implementation to use.
- * \param buffer Address from which to begin deserialization
+ * \param buffer Address from which to begin deserialization. Pointer
+ *  is incremented by the total serialized storage size of T after
+ *  this calling this function.
  * \param swapBytes Should bytes be swapped?
  * \param[out] Value(s) to deserialize into.
  */

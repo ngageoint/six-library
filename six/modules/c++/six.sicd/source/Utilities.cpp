@@ -924,7 +924,7 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
 
     if (nameToDesIndex.find(SICDMeshes::OUTPUT_PLANE_MESH_ID) == nameToDesIndex.end())
     {
-        throw except::Exception(Ctxt("Outputplane mesh information not present"));
+        throw except::Exception(Ctxt("Output plane mesh information not present"));
     }
 
     mem::ScopedAlignedArray<sys::byte> buffer;

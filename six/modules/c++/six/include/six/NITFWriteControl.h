@@ -478,8 +478,11 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
+private:
+    //! Noncopyable
+    NITFWriteControl(const NITFWriteControl& );
+    const NITFWriteControl& operator=(const NITFWriteControl& );
 };
-
 }
 #endif
 

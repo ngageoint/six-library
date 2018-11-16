@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.side-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
@@ -29,7 +29,6 @@
 #include <import/cli.h>
 #include <sys/Path.h>
 #include <six/sicd/SICDMesh.h>
-#include "TestCase.h"
 
 namespace
 {
