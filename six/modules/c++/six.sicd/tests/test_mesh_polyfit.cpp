@@ -26,33 +26,50 @@
 #include <iostream>
 #include <iomanip>
 
+#include <import/cli.h>
 #include <sys/Path.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
 
 namespace
 {
-void populatePlanarCoordinateMeshVectors(const types::RowCol<size_t>& meshDims,
-                                         double xMin, double xMax,
-                                         double yMin, double yMax,
-                                         std::vector<double>& x,
-                                         std::vector<double>& y)
+bool evaluate(const std::string& key,
+              double value,
+              double target,
+              double tolerance,
+              std::ostringstream& report)
 {
-    x.clear();
-    y.clear();
+    const double diff = std::abs(value - target);
+    const bool success = diff <= tolerance;
+    const std::string status(success ? "PASS" : "FAIL");
+    report << key << " - " << target << " = "
+           << diff << " <= " << tolerance << ": "
+           << status << std::endl;
+    return success;
+}
 
-    double xDelta = (xMax - xMin) / ((double) (meshDims.row - 1));
-    double yDelta = (yMax - yMin) / ((double) (meshDims.col - 1));
-    double xv = xMin;
-    for (size_t ri = 0; ri < meshDims.row; ++ri, xv += xDelta)
+six::sicd::PlanarCoordinateMesh populatePlanarCoordinateMeshVectors(
+    const std::string& meshName,
+    const types::RowCol<size_t>& meshDims,
+    const types::RowCol<double>& extent)
+{
+    std::vector<double> x;
+    std::vector<double> y;
+    const types::RowCol<double> delta =
+        extent / (meshDims - 1);
+    double xv = -0.5 * extent.row;
+    for (size_t ri = 0; ri < meshDims.row; ++ri, xv += delta.row)
     {
-        double yv = yMin;
-        for (size_t ci = 0; ci < meshDims.col; ++ci, yv += yDelta)
+        double yv = -0.5 * extent.col;
+        for (size_t ci = 0; ci < meshDims.col; ++ci, yv += delta.col)
         {
             x.push_back(xv);
             y.push_back(yv);
         }
     }
+
+    return six::sicd::PlanarCoordinateMesh(
+        meshName, meshDims, x, y);
 }
 }
 
@@ -60,332 +77,126 @@ int main(int argc, char** argv)
 { 
     try
     {
-        const std::string RTNID = sys::Path::basename(argv[0]);
-    
-        double epsilon = 1e-9;
-        double xMax =  10000.0;
-        double yMax =  20000.0;
-        size_t orderX = 4;
-        size_t orderY = 4;
-        types::RowCol<size_t> slantMeshDims(7, 9);
-        types::RowCol<double> slantSampleSpacing(1.0, 1.0);
-        types::RowCol<double> slantCenter(0.0, 0.0);
-        types::RowCol<size_t> outputMeshDims(7, 9);
-        types::RowCol<double> outputSampleSpacing(1.0, 1.0);
-        types::RowCol<double> outputCenter(0.0, 0.0);
-        bool printPolys = false;
+        cli::ArgumentParser parser;
+        parser.setDescription(
+            "This program sets up slant and output plane meshes over "
+            "the same scene extent, fits projection polynomials, "
+            "and transforms the fitted polynomials to a "
+            "(row, column) coordinate system");
+        parser.addArgument(
+            "--slant-rows", "Number of rows in slant plane mesh",
+            cli::STORE, "slantMeshRows")->setDefault(7);
+        parser.addArgument(
+            "--slant-cols", "Number of columns in slant plane mesh",
+            cli::STORE, "slantMeshCols")->setDefault(9);
+        parser.addArgument(
+            "--output-rows", "Number of rows in output plane mesh",
+            cli::STORE, "outputMeshRows")->setDefault(7);
+        parser.addArgument(
+            "--output-cols", "Number of columns in output plane mesh",
+            cli::STORE, "outputMeshCols")->setDefault(9);
+        parser.addArgument(
+            "--order-x", "X-order of fitted projection polynomials",
+            cli::STORE, "orderX", "orderX", 0, 10)->setDefault(4);
+        parser.addArgument(
+            "--order-y", "Y-order of fitted projection polynomials",
+            cli::STORE, "orderY", "orderY", 0, 10)->setDefault(4);
+        parser.addArgument(
+            "--extent-x", "Scene extent in meters in row direction",
+            cli::STORE, "extentX", "extentX", 1)->setDefault(10000.0);
+        parser.addArgument(
+            "--extent-y", "Scene extent in meters in column direction",
+            cli::STORE, "extentY", "extentY", 1)->setDefault(20000.0);
+        parser.addArgument(
+            "--slant-row-ss",
+            "Slant plane image sample spacing in row direction (meters/pixel)",
+            cli::STORE, "slantRowSS", "slantRowSS", 0)->setDefault(1.0);
+        parser.addArgument(
+            "--slant-col-ss",
+            "Slant plane image sample spacing in column direction (meters/pixel)",
+            cli::STORE, "slantColSS", "slantColSS", 0)->setDefault(1.0);
+        parser.addArgument(
+            "--output-row-ss",
+            "Output plane image sample spacing in row direction (meters/pixel)",
+            cli::STORE, "outputRowSS", "outputRowSS", 0)->setDefault(1.0);
+        parser.addArgument(
+            "--output-col-ss",
+            "Output plane image sample spacing in column direction (meters/pixel)",
+            cli::STORE, "outputColSS", "outputColSS", 0)->setDefault(1.0);
+        parser.addArgument("--tol", "Floating point tolerance in diff",
+                           cli::STORE, "tol", "tol", 0)->setDefault(1.0e-9);
+        parser.addArgument("-v", "Enable verbose output",
+                           cli::STORE_TRUE, "verbose")->setDefault(false);
 
-        for (int ii = 1; ii < argc; ++ii)
+        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const double tol = options->get<double>("tol");
+        const types::RowCol<size_t> slantMeshDims(
+            options->get<size_t>("slantMeshRows"),
+            options->get<size_t>("slantMeshCols"));
+        const types::RowCol<size_t> outputMeshDims(
+            options->get<size_t>("outputMeshRows"),
+            options->get<size_t>("outputMeshCols"));
+        const types::RowCol<double> sceneExtent(
+            options->get<double>("extentX"),
+            options->get<double>("extentY"));
+        const types::RowCol<double> slantSampleSpacing(
+            options->get<double>("slantRowSS"),
+            options->get<double>("slantColSS"));
+        const types::RowCol<double> outputSampleSpacing(
+            options->get<double>("outputRowSS"),
+            options->get<double>("outputColSS"));
+        const size_t orderX = options->get<size_t>("orderX");
+        const size_t orderY = options->get<size_t>("orderY");
+        const bool verbose = options->get<bool>("verbose");
+
+        // Center pixel of the slant and output plane images
+        const types::RowCol<double> slantCenter =
+            sceneExtent / slantSampleSpacing * 0.5;
+        const types::RowCol<double> outputCenter =
+            sceneExtent / outputSampleSpacing * 0.5;
+
+        if (verbose)
         {
-            std::string arg(argv[ii]);
-            if (arg == "-slant-rows")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-rows requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantMeshDims.row = std::atoi(argv[ii]);
-            }
-            else if (arg == "-slant-cols")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-cols requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantMeshDims.row = std::atoi(argv[ii]);
-            }
-            else if (arg == "-output-rows")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-rows requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputMeshDims.row = std::atoi(argv[ii]);
-            }
-            else if (arg == "-output-cols")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-cols requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputMeshDims.row = std::atoi(argv[ii]);
-            }
-            else if (arg == "-print-polys")
-            {
-                printPolys = true;
-            }
-            else if (arg == "-order-x")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -order-x requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                orderX = std::atoi(argv[ii]);
-            }
-            else if (arg == "-order-y")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -order-y requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                orderY = std::atoi(argv[ii]);
-            }
-            else if (arg == "-epsilon")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -epsilon requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                epsilon = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-x-max")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-x-max requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                xMax = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-y-max")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-y-max requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                yMax = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-sample-spacing-row")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-sample-spacing-row requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantSampleSpacing.row = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-sample-spacing-col")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-sample-spacing-col requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantSampleSpacing.col = std::atof(argv[ii]);
-            }
-            else if (arg == "-output-sample-spacing-row")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-sample-spacing-row requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputSampleSpacing.row = std::atof(argv[ii]);
-            }
-            else if (arg == "-output-sample-spacing-col")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-sample-spacing-col requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputSampleSpacing.col = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-center-row")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-center-row requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantCenter.row = std::atof(argv[ii]);
-            }
-            else if (arg == "-slant-center-col")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -slant-center-col requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                slantCenter.col = std::atof(argv[ii]);
-            }
-            else if (arg == "-output-center-row")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-center-row requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputCenter.row = std::atof(argv[ii]);
-            }
-            else if (arg == "-output-center-col")
-            {
-                if (ii == argc - 1)
-                {
-                    std::cerr << RTNID << "Error: -output-center-col requires a value"
-                              << std::endl;
-                    return 1;
-                }
-
-                ++ii;
-                outputCenter.col = std::atof(argv[ii]);
-            }
-            else
-            {
-                std::cerr << RTNID << "Error: Unknown argument: " << 
-                    arg << std::endl;
-                return 1;
-            }
+            std::cout << "sceneExtent: (" << sceneExtent.row
+                      << "," << sceneExtent.col << ")" << std::endl;
+            std::cout << "slantSampleSpacing: (" << slantSampleSpacing.row 
+                      << "," << slantSampleSpacing.col << ")" << std::endl;
+            std::cout << "slantCenter: (" << slantCenter.row
+                      << "," << slantCenter.col << ")" << std::endl;
+            std::cout << "outputSampleSpacing: (" << outputSampleSpacing.row 
+                      << "," << outputSampleSpacing.col << ")" << std::endl;
+            std::cout << "outputCenter: (" << outputCenter.row
+                      << "," << outputCenter.col << ")" << std::endl;
         }
 
-        std::cout << "xMax: " << xMax << std::endl;
-        std::cout << "yMax: " << yMax << std::endl;
-        std::cout << "slantSampleSpacing: " << slantSampleSpacing.row << ":" <<
-            slantSampleSpacing.col << std::endl;
-        std::cout << "slantCenter: " << slantCenter.row << ":" <<
-            slantCenter.col << std::endl;
-        std::cout << "outputSampleSpacing: " << outputSampleSpacing.row << ":" <<
-            outputSampleSpacing.col << std::endl;
-        std::cout << "outputCenter: " << outputCenter.row << ":" <<
-            outputCenter.col << std::endl;
+        // Populate the slant plane mesh
+        six::sicd::PlanarCoordinateMesh slantMesh =
+            populatePlanarCoordinateMeshVectors(
+                "Slant plane coordinate mesh",
+                slantMeshDims,
+                sceneExtent);
 
-        // Extent in meters.
-        double xMin = -xMax;
-        double yMin = -yMax;
+        // Populate the output plane mesh
+        six::sicd::PlanarCoordinateMesh outputMesh =
+            populatePlanarCoordinateMeshVectors(
+                "Output plane coordinate mesh",
+                outputMeshDims,
+                sceneExtent);
 
-        // Populate the slant plane mesh.
-        std::vector<double> x;
-        std::vector<double> y;
-
-        populatePlanarCoordinateMeshVectors(slantMeshDims, xMin, xMax, yMin, yMax, x, y);
-        six::sicd::PlanarCoordinateMesh slantMesh("Slant plane coordinate mesh",
-                                                  slantMeshDims, x, y);
-
-        // Populate the output plane mesh - make it the same as the slant mesh.
-        populatePlanarCoordinateMeshVectors(outputMeshDims, xMin, xMax, yMin, yMax, x, y);
-        six::sicd::PlanarCoordinateMesh outputMesh("Output plane coordinate mesh",
-                                                   outputMeshDims, x, y);
-
+        // Compute (x,y) to (x,y) projection polynomials
         six::Poly2D outputXYToSlantX;               
         six::Poly2D outputXYToSlantY;             
         six::Poly2D slantXYToOutputX;                 
         six::Poly2D slantXYToOutputY;       
-
-        // Compute (x,y) to (x,y) projection polynomials
         six::sicd::Utilities::fitXYProjectionPolys(
             outputMesh,
             slantMesh,
             orderX,
             orderY,
-            outputXYToSlantX,                  
-            outputXYToSlantY,                  
-            slantXYToOutputX,                  
+            outputXYToSlantX,
+            outputXYToSlantY,
+            slantXYToOutputX,
             slantXYToOutputY);
-    
-
-        double val = std::abs(outputXYToSlantX(0,0));
-        std::string pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantX(0,0): " << pf << " : " << val << std::endl;
-
-        val = std::abs(outputXYToSlantX[0][1]);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantX[0][1]: " << pf << " : " << val << std::endl;
-
-        val = std::abs(outputXYToSlantX[1][0] - 1.0);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantX[1][0] - 1.0: " << pf << " : " << val << std::endl;
-
-        val = std::abs(outputXYToSlantY(0,0));
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantY(0,0): " << pf << " : " << val << std::endl;
-
-        val = std::abs(outputXYToSlantY[1][0]);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantY[1][0]: " << pf << " : " << val << std::endl;
-
-        val = std::abs(outputXYToSlantY[0][1] - 1.0);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputXYToSlantY[0][1] - 1.0: " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputX(0,0));
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputX(0,0): " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputX[0][1]);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputX[0][1]: " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputX[1][0] - 1.0);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputX[1][0] - 1.0: " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputY(0,0));
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputY(0,0): " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputY[1][0]);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputY[1][0]: " << pf << " : " << val << std::endl;
-
-        val = std::abs(slantXYToOutputY[0][1] - 1.0);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantXYToOutputY[0][1] - 1.0: " << pf << " : " << val << std::endl;
 
         // Compute the output (row, col) to slant (row, col) projection polynomials.
         six::Poly2D outputRowColToSlantRow;
@@ -400,18 +211,6 @@ int main(int argc, char** argv)
             outputRowColToSlantRow,
             outputRowColToSlantCol);
 
-        val = std::abs(outputRowColToSlantRow(outputCenter.row, outputCenter.col) -
-                       slantCenter.row);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputRowColToSlantRow(outputCenter) - slantCenter.row: " << 
-            pf << " : " << val << std::endl;
-
-        val = std::abs(outputRowColToSlantCol(outputCenter.row, outputCenter.col) -
-                       slantCenter.col);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "outputRowColToSlantCol(outputCenter) - slantCenter.col: " << 
-            pf << " : " << val << std::endl;
-
         // Compute the slant (row, col) to output (row, col) projection polynomials.
         six::Poly2D slantRowColToOutputRow;                 
         six::Poly2D slantRowColToOutputCol;                 
@@ -425,33 +224,69 @@ int main(int argc, char** argv)
             slantRowColToOutputRow,
             slantRowColToOutputCol);
 
-        val = std::abs(slantRowColToOutputRow(slantCenter.row, slantCenter.col) -
-                       outputCenter.row);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantRowColToOutputRow(slantCenter) - outputCenter.row: " << 
-            pf << " : " << val << std::endl;
+        std::ostringstream oss;
+        bool pass = true;
 
-        val = std::abs(slantRowColToOutputCol(slantCenter.row, slantCenter.col) -
-                       outputCenter.col);
-        pf = val <= epsilon ? "passed" : "failed";
-        std::cout << "slantRowColToOutputCol(slantCenter) - outputCenter.col: " << 
-            pf << " : " << val << std::endl;
+        // The scene extents are identical for the slant and output
+        // plane meshes. Verify coefficients are simply linear ramps
+        // between the two planes
+        pass &= evaluate("outputXYToSlantX[0][1]", outputXYToSlantX[0][1], 0.0, tol, oss);
+        pass &= evaluate("outputXYToSlantX[1][0]", outputXYToSlantX[1][0], 1.0, tol, oss);
+        pass &= evaluate("outputXYToSlantY[1][0]", outputXYToSlantY[1][0], 0.0, tol, oss);
+        pass &= evaluate("outputXYToSlantY[0][1]", outputXYToSlantY[0][1], 1.0, tol, oss);
+        pass &= evaluate("slantXYToOutputX[0][1]", slantXYToOutputX[0][1], 0.0, tol, oss);
+        pass &= evaluate("slantXYToOutputX[1][0]", slantXYToOutputX[1][0], 1.0, tol, oss);
+        pass &= evaluate("slantXYToOutputY[1][0]", slantXYToOutputY[1][0], 0.0, tol, oss);
+        pass &= evaluate("slantXYToOutputY[0][1]", slantXYToOutputY[0][1], 1.0, tol, oss);
 
-        if (printPolys)
+        // Verify fitted XY polynomials map (0,0) to itself
+        pass &= evaluate("outputXYToSlantX(0,0)", outputXYToSlantX(0,0), 0.0, tol, oss);
+        pass &= evaluate("outputXYToSlantY(0,0)", outputXYToSlantY(0,0), 0.0, tol, oss);
+        pass &= evaluate("slantXYToOutputX(0,0)", slantXYToOutputX(0,0), 0.0, tol, oss);
+        pass &= evaluate("slantXYToOutputY(0,0)", slantXYToOutputY(0,0), 0.0, tol, oss);
+
+        // Verify transformed (row,col) polynomials map the center
+        // pixels in the slant and output planes to each other
+        const double pixelTol = 0.5;
+        pass &= evaluate("outputRowColToSlantRow(outputCenter)",
+                         outputRowColToSlantRow(outputCenter.row, outputCenter.col),
+                         slantCenter.row, pixelTol, oss);
+        pass &= evaluate("outputRowColToSlantCol(outputCenter)",
+                         outputRowColToSlantCol(outputCenter.row, outputCenter.col),
+                         slantCenter.col, pixelTol, oss);
+        pass &= evaluate("slantRowColToOutputRow(slantCenter)",
+                         slantRowColToOutputRow(slantCenter.row, slantCenter.col),
+                         outputCenter.row, pixelTol, oss);
+        pass &= evaluate("slantRowColToOutputCol(slantCenter)",
+                         slantRowColToOutputCol(slantCenter.row, slantCenter.col),
+                         outputCenter.col, pixelTol, oss);
+
+        if (verbose)
         {
-            std::cout << std::endl;
-            std::cout << "Polynomials:" << std::endl;
-            std::cout << "outputXYToSlantX: " << outputXYToSlantX << std::endl;
-            std::cout << "outputXYToSlantY: " << outputXYToSlantY << std::endl;
-            std::cout << "slantXYToOutputX: " << slantXYToOutputX << std::endl;
-            std::cout << "slantXYToOutputY: " << slantXYToOutputY << std::endl;
-            std::cout << "outputRowColToSlantRow: " << outputRowColToSlantRow << std::endl;
-            std::cout << "outputRowColToSlantCol: " << outputRowColToSlantCol << std::endl;
-            std::cout << "slantRowColToOutputRow: " << slantRowColToOutputRow << std::endl;
-            std::cout << "slantRowColToOutputCol: " << slantRowColToOutputCol << std::endl;
+            std::cout << "Test results:" << std::endl << oss.str() << std::endl;
+
+            std::cout << "Fitted Polynomials:" << std::endl;
+            std::cout << "outputXYToSlantX:" << std::endl
+                      << outputXYToSlantX << std::endl;
+            std::cout << "outputXYToSlantY:" << std::endl
+                      << outputXYToSlantY << std::endl;
+            std::cout << "slantXYToOutputX:" << std::endl
+                      << slantXYToOutputX << std::endl;
+            std::cout << "slantXYToOutputY:" << std::endl
+                      << slantXYToOutputY << std::endl;
+
+            std::cout << "Transformed Polynomials:" << std::endl;
+            std::cout << "outputRowColToSlantRow:" << std::endl
+                      << outputRowColToSlantRow << std::endl;
+            std::cout << "outputRowColToSlantCol:" << std::endl
+                      << outputRowColToSlantCol << std::endl;
+            std::cout << "slantRowColToOutputRow:" << std::endl
+                      << slantRowColToOutputRow << std::endl;
+            std::cout << "slantRowColToOutputCol:" << std::endl
+                      << slantRowColToOutputCol << std::endl;
         }
 
-        return 0;
+        return (pass ? 0 : 1);
     }
     catch(except::Exception& e)
     {

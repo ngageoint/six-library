@@ -1,6 +1,7 @@
 NAME            = 'six.sicd'
 MAINTAINER      = 'adam.sylvester@mdaus.com'
 MODULE_DEPS     = 'scene nitf xml.lite six mem'
+TEST_DEPS       = 'cli'
 UNITTEST_DEPS   = 'cli sio.lite'
 
 import os
