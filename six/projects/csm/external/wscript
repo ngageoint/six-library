@@ -22,7 +22,7 @@ def configure(conf):
             # NOTE: This was downloaded from https://github.com/johnpdpkarp/csm on
             #       2013.07.03.  Updates that occurred after the VTS release we got
             #       from Leonard Tomko seem to still be considered CSM 3.0.1.
-            unzipper(os.path.join(conf.path.abspath(), 'csm-3.0.1_2013.07.03.zip'),
+            unzipper(os.path.join(conf.path.abspath(), 'csm-3.0.3_2018.11.21.zip'),
                      conf.path.abspath())
 
             # NOTE: Originally checked in the VTS zip file that was received from
@@ -34,11 +34,11 @@ def configure(conf):
             unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
                      conf.path.abspath())
             conf.env['HAVE_CSM'] = True
-            conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master') 
+            conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3')
 
 def build(bld):
     if 'HAVE_CSM' in bld.env:
-        csmDir = 'csm-master'
+        csmDir = 'csm-3.0.3'
         bld(features = 'cxx cshlib',
             target='CSMAPI', name='CSMAPI',
             includes='.',
@@ -61,7 +61,7 @@ def build(bld):
 
 def distclean(context):
     # remove the unzipped directory
-    dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)), 
+    dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)),
                   ['csm-master', 'vts_301_0'])
     for d in dirs:
         try:
