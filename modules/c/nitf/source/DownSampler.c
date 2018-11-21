@@ -928,6 +928,124 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
         return(1); \
     } \
 
+NITFPRIV(void) set_three_values(float pixel0, float pixel1,
+    float* maxValue, float* value0, float* value1)
+{
+    *maxValue = pixel0;
+    *value0 = pixel0;
+    *value1 = pixel1;
+}
+
+NITFPRIV(void) Select2DownSample_apply_float(
+    nitf_DownSampler * object,
+    NITF_DATA ** inputWindows,
+    NITF_DATA ** outputWindows,
+    nitf_Uint32 numBands,
+    nitf_Uint32 numWindowRows,
+    nitf_Uint32 numWindowCols,
+    nitf_Uint32 numInputCols,
+    nitf_Uint32 numCols,
+    nitf_Uint32 pixelType,
+    nitf_Uint32 pixelSize,
+    nitf_Uint32 rowsInLastWindow,
+    nitf_Uint32 colsInLastWindow)
+{
+    // We are handling this separately, not because it's a special case,
+    // but because there is a compiler but in VS2017.
+
+    nitf_Uint32 colSkip;     /* Column skip */
+    nitf_Uint32 rowSkip;     /* Row skip */
+    nitf_Uint32 colInc;      /* Column increment */
+    nitf_Uint32 rowInc;      /* Pointer increment for end of row */
+    nitf_Uint32 outRowInc;   /* Output pointer increment for end of row */ \
+    nitf_Uint32 winRowInc;   /* Row increment, current window */ \
+    nitf_Uint32 row;         /* Current row */ \
+    nitf_Uint32 column;      /* Current column */ \
+    nitf_Uint32 winRow;      /* Current row in current window */ \
+    nitf_Uint32 winCol;      /* Current column current window */ \
+    nitf_Uint32 rowWinLimit; /* Number of rows in current window */ \
+    float *outp0;             /* Pointer into output, band 0 */ \
+        float *outp1;             /* Pointer into output, band 0 */ \
+        float *currentRowPtr0;    /* Pointer to the current window row, band 0 */ \
+        float *currentRowPtr1;    /* Pointer to the current window row, band 1 */ \
+        float *currentPtr0;       /* Pointer to the current window UL \
+        corner, band 0 */ \
+        float *currentPtr1;       /* Pointer to the current window UL \
+        corner, band 1 */ \
+        float *pixel0;            /* Pointer to the current pixel, band 0 */ \
+        float *pixel1;            /* Pointer to the current pixel, band 1 */ \
+        float maxValue;          /* Current maximum test value */ \
+        float value0;             /* Max value pixel band 0 value */ \
+        float value1;             /* Max value pixel band 1 value */ \
+        \
+        colSkip = object->colSkip; \
+        rowSkip = object->rowSkip; \
+        colInc = colSkip; \
+        rowInc = numInputCols * colSkip*rowSkip; \
+        winRowInc = numInputCols - colSkip; \
+        outRowInc = numCols - numWindowCols; \
+        \
+        currentRowPtr0 = (float *)inputWindows[0]; \
+        currentRowPtr1 = (float *)inputWindows[1]; \
+        outp0 = (float *)outputWindows[0]; \
+        outp1 = (float *)outputWindows[1]; \
+        for (row = 0; row < numWindowRows; row++) \
+        { \
+            currentPtr0 = currentRowPtr0; \
+            currentPtr1 = currentRowPtr1; \
+            for (column = 0; column < numWindowCols; column++) \
+            { \
+                pixel0 = currentPtr0; \
+                pixel1 = currentPtr1; \
+                set_three_values(*pixel0, *pixel1, &maxValue, &value0, &value1);
+    if (row < (numWindowRows - 1)) \
+        rowWinLimit = rowSkip; \
+    else \
+        rowWinLimit = rowsInLastWindow; \
+        for (winRow = 0; winRow < rowWinLimit; winRow++) \
+        { \
+            if (column < (numWindowCols - 1)) \
+                for (winCol = 0; winCol < colSkip; winCol++) \
+                { \
+                    if (maxValue < *pixel0) \
+                    { \
+                        set_three_values(*pixel0, *pixel1, &maxValue, &value0, &value1);
+                    } \
+                        ++pixel0; \
+                        ++pixel1; \
+                } \
+            else \
+            { \
+                for (winCol = 0; winCol < colsInLastWindow; winCol++) \
+                { \
+                    if (maxValue < *pixel0) \
+                    { \
+                        set_three_values(*pixel0, *pixel1, &maxValue, &value0, &value1);
+                    } \
+                        ++pixel0; \
+                        ++pixel1; \
+                } \
+                    pixel0 += colSkip - colsInLastWindow; \
+                        pixel1 += colSkip - colsInLastWindow; \
+            } \
+                pixel0 += winRowInc; \
+                        pixel1 += winRowInc; \
+        } \
+            currentPtr0 += colInc; \
+                        currentPtr1 += colInc; \
+                        *(outp0++) = value0; \
+                        *(outp1++) = value1; \
+            } \
+                currentRowPtr0 += rowInc; \
+                        currentRowPtr1 += rowInc; \
+                        outp0 += outRowInc; \
+                        outp1 += outRowInc; \
+        } \
+            \
+
+} \
+
+
     NITFPRIV(NITF_BOOL) Select2DownSample_apply(nitf_DownSampler * object,
 NITF_DATA ** inputWindows,
 NITF_DATA ** outputWindows,
@@ -995,7 +1113,19 @@ nitf_Error * error)
         switch (pixelSize)
         {
             case 4:
-                SELECT_2_DOWN_SAMPLE(float)
+                Select2DownSample_apply_float(object,
+                    inputWindows,
+                    outputWindows,
+                    numBands,
+                    numWindowRows,
+                    numWindowCols,
+                    numInputCols,
+                    numCols,
+                    pixelType,
+                    pixelSize,
+                    rowsInLastWindow,
+                    colsInLastWindow);
+                return (1);
             case 8:
                 SELECT_2_DOWN_SAMPLE(double)
             default:
