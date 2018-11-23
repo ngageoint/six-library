@@ -41,7 +41,7 @@ struct Constants
     static constexpr double METERS_TO_NAUTICAL_MILES =
                                     1.0 / NAUTICAL_MILES_TO_METERS;
     static constexpr double NAUTICAL_MILES_TO_FEET =
-                                    NAUTICAL_MILES_TO_METERS * FEET_TO_METERS;
+                                    NAUTICAL_MILES_TO_METERS * METERS_TO_FEET;
 
     static constexpr double SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
     static constexpr double SPEED_OF_LIGHT_FEET_PER_SEC =

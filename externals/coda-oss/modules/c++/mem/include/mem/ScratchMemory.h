@@ -179,6 +179,7 @@ private:
     std::vector<sys::ubyte> mStorage;
     std::vector<std::string> mKeyOrder;
     std::set<std::string> mReleasedKeys;
+    std::set<std::string> mConnectedKeys;
 
     BufferView<sys::ubyte> mBuffer;
     size_t mNumBytesNeeded;

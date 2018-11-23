@@ -70,7 +70,6 @@ void ScratchMemory::release(const std::string& key)
     else
     {
         const Segment& segment = iterSeg->second;
-        mOffset = segment.offset;
 
         std::vector<std::string>::iterator keyIter = std::find(mKeyOrder.begin(),
                                                                mKeyOrder.end(),
@@ -78,9 +77,46 @@ void ScratchMemory::release(const std::string& key)
         std::vector<std::string>::iterator nextKeyIter = mKeyOrder.erase(keyIter);
         mKeyOrder.push_back(key);
 
+        const std::string nextKey = *nextKeyIter;
+
+        //  The next two if blocks handle the edge case in which there are two
+        //  segments at the same offset: one that has been released
+        //  and one that has not been released. Also, the next segment has been
+        //  previously released as well.
+        //
+        //  If the one that has not been released is released, then we need to
+        //  be careful in shifting around the following segments such that there's
+        //  no overlap.
+        if (mReleasedKeys.find(nextKey) != mReleasedKeys.end())
+        {
+            if (mConnectedKeys.find(key) != mConnectedKeys.end())
+            {
+                std::map<std::string, Segment>::const_iterator iterSegOfPrevReleased =
+                        mSegments.find(nextKey);
+                mOffset = iterSegOfPrevReleased->second.offset;
+            }
+            else
+            {
+                mOffset = segment.offset;
+            }
+        }
+        else
+        {
+            mOffset = segment.offset;
+        }
+
+        if (mConnectedKeys.find(key) != mConnectedKeys.end())
+        {
+            mConnectedKeys.insert(nextKey);
+        }
+
         bool keepGoing = true;
         std::string firstReleasedKey;
 
+        size_t endOfReleasedBlock = mOffset;
+        bool multipleReleased = false;
+
+        //  Keep going until the nextKeyIter == key, but complete that iteration
         while (keepGoing)
         {
             if (*nextKeyIter == key)
@@ -88,7 +124,7 @@ void ScratchMemory::release(const std::string& key)
                 keepGoing = false;
             }
 
-            //Get data for the segment that will be moved
+            //  Get data for the segment that will be moved
             std::map<std::string, Segment>::const_iterator mapIter =
                     mSegments.find(*nextKeyIter);
             const Segment& segmentToBeMoved = mapIter->second;
@@ -103,9 +139,21 @@ void ScratchMemory::release(const std::string& key)
 
             if (mReleasedKeys.find(keyToInsert) != mReleasedKeys.end())
             {
+                //  This if else block handles the case in which multiple
+                //  concurrent segments have been released.
                 if (firstReleasedKey.empty())
                 {
                     firstReleasedKey = keyToInsert;
+                    if (multipleReleased)
+                    {
+                        mOffset = std::max<size_t>(endOfReleasedBlock, mOffset);
+                    }
+                    multipleReleased = false;
+                }
+                else
+                {
+                    multipleReleased = true;
+                    endOfReleasedBlock = mOffset + numBuffers * (numElements + alignment - 1);
                 }
             }
             else
@@ -116,9 +164,12 @@ void ScratchMemory::release(const std::string& key)
                             mSegments.find(firstReleasedKey);
                     const Segment& segmentNew = iterSegNew->second;
                     mOffset = segmentNew.offset;
+
+                    mConnectedKeys.insert(keyToInsert);
                 }
                 firstReleasedKey.clear();
             }
+
             put<sys::ubyte>(keyToInsert, numElements, numBuffers, alignment);
 
         }
