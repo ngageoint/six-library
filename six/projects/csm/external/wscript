@@ -21,7 +21,11 @@ def configure(conf):
         else:
             # NOTE: This was downloaded from
             # https://github.com/sminster/csm/releases 2018.11.21.
-            unzipper(os.path.join(conf.path.abspath(), 'csm-3.0.3_2018.11.21.zip'),
+            if Options.options.csm_version == '3.0.3':
+                csmZipfile = 'csm-3.0.3_2018.11.21.zip'
+            else:
+                csmZipfile = 'csm-3.0.1_2013.07.03.zip'
+            unzipper(os.path.join(conf.path.abspath(), csmZipfile),
                      conf.path.abspath())
 
             # NOTE: Originally checked in the VTS zip file that was received from
@@ -33,11 +37,17 @@ def configure(conf):
             unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
                      conf.path.abspath())
             conf.env['HAVE_CSM'] = True
-            conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3')
+
+            if Options.options.csm_version == '3.0.3':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3')
+                conf.env['CSM_DIR'] = 'csm-3.0.3'
+            else:
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
+                conf.env['CSM_DIR'] = 'csm-master'
 
 def build(bld):
     if 'HAVE_CSM' in bld.env:
-        csmDir = 'csm-3.0.3'
+        csmDir = bld.env['CSM_DIR']
         bld(features = 'cxx cshlib',
             target='CSMAPI', name='CSMAPI',
             includes='.',
