@@ -4547,6 +4547,12 @@ class ScopedCopyableRadiometric(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableRadiometric___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRadiometric self) -> Radiometric"""
         return _six_base.ScopedCopyableRadiometric_get(self)
@@ -4664,6 +4670,12 @@ class ScopedCopyableErrorStatistics(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableErrorStatistics___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
         return _six_base.ScopedCopyableErrorStatistics_get(self)
@@ -4758,6 +4770,12 @@ class ScopedCopyableCorrCoefs(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableCorrCoefs___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
@@ -4902,6 +4920,12 @@ class ScopedCopyablePosVelError(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyablePosVelError___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyablePosVelError self) -> PosVelError"""
         return _six_base.ScopedCopyablePosVelError_get(self)
@@ -5021,6 +5045,12 @@ class ScopedCopyableRadarSensor(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableRadarSensor___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRadarSensor self) -> RadarSensor"""
         return _six_base.ScopedCopyableRadarSensor_get(self)
@@ -5120,6 +5150,12 @@ class ScopedCopyableTropoError(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableTropoError___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTropoError self) -> TropoError"""
         return _six_base.ScopedCopyableTropoError_get(self)
@@ -5214,6 +5250,12 @@ class ScopedCopyableIonoError(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableIonoError___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableIonoError self) -> IonoError"""
@@ -5314,6 +5356,12 @@ class ScopedCopyableCompositeSCP(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableCompositeSCP___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
         return _six_base.ScopedCopyableCompositeSCP_get(self)
@@ -5412,6 +5460,12 @@ class ScopedCopyableComponents(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableComponents___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableComponents self) -> Components"""
