@@ -3002,6 +3002,12 @@ class ScopedCopyableDwellTimeParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd.ScopedCopyableDwellTimeParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd.ScopedCopyableDwellTimeParameters_get(self)
@@ -3071,6 +3077,12 @@ class ScopedCopyableAreaPlane(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd.ScopedCopyableAreaPlane___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
@@ -3171,6 +3183,12 @@ class ScopedCopyableFxParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd.ScopedCopyableFxParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd.ScopedCopyableFxParameters_get(self)
@@ -3270,6 +3288,12 @@ class ScopedCopyableTOAParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd.ScopedCopyableTOAParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd.ScopedCopyableTOAParameters_get(self)
@@ -3360,6 +3384,12 @@ class ScopedCopyableCphdAntenna(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd.ScopedCopyableCphdAntenna___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""

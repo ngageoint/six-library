@@ -5554,6 +5554,12 @@ class ScopedCopyableImageData(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableImageData___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableImageData self) -> ImageData"""
         return _six_sicd.ScopedCopyableImageData_get(self)
@@ -5931,6 +5937,12 @@ class ScopedCopyableTimeline(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableTimeline___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTimeline self) -> Timeline"""
         return _six_sicd.ScopedCopyableTimeline_get(self)
@@ -6025,6 +6037,12 @@ class ScopedCopyablePosition(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePosition___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyablePosition self) -> Position"""
@@ -6134,6 +6152,12 @@ class ScopedCopyableRcvAPC(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRcvAPC___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableRcvAPC self) -> RcvAPC"""
@@ -6360,6 +6384,12 @@ class ScopedCopyableImageFormation(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableImageFormation___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableImageFormation self) -> ImageFormation"""
         return _six_sicd.ScopedCopyableImageFormation_get(self)
@@ -6503,6 +6533,12 @@ class ScopedCopyableSCPCOA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableSCPCOA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableSCPCOA self) -> SCPCOA"""
@@ -6673,6 +6709,12 @@ class ScopedCopyableAntenna(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableAntenna___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableAntenna self) -> Antenna"""
         return _six_sicd.ScopedCopyableAntenna_get(self)
@@ -6768,6 +6810,12 @@ class ScopedCopyableMatchInformation(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableMatchInformation___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
         return _six_sicd.ScopedCopyableMatchInformation_get(self)
@@ -6854,6 +6902,12 @@ class ScopedCopyableSlowTimeDeskew(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
@@ -6945,6 +6999,12 @@ class ScopedCopyablePFA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePFA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyablePFA self) -> PFA"""
@@ -7084,6 +7144,12 @@ class ScopedCopyableRMA(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRMA self) -> RMA"""
         return _six_sicd.ScopedCopyableRMA_get(self)
@@ -7197,6 +7263,12 @@ class ScopedCopyableRgAzComp(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRgAzComp___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableRgAzComp self) -> RgAzComp"""
@@ -7835,6 +7907,12 @@ class ScopedCopyableAntennaParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableAntennaParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableAntennaParameters self) -> AntennaParameters"""
         return _six_sicd.ScopedCopyableAntennaParameters_get(self)
@@ -7958,6 +8036,12 @@ class ScopedCopyableElectricalBoresight(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableElectricalBoresight___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableElectricalBoresight self) -> ElectricalBoresight"""
         return _six_sicd.ScopedCopyableElectricalBoresight_get(self)
@@ -8048,6 +8132,12 @@ class ScopedCopyableHalfPowerBeamwidths(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableHalfPowerBeamwidths___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableHalfPowerBeamwidths self) -> HalfPowerBeamwidths"""
@@ -8140,6 +8230,12 @@ class ScopedCopyableGainAndPhasePolys(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableGainAndPhasePolys___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableGainAndPhasePolys self) -> GainAndPhasePolys"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys_get(self)
@@ -8230,6 +8326,12 @@ class ScopedCopyableMatchType(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableMatchType___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableMatchType self) -> MatchType"""
@@ -8337,6 +8439,12 @@ class ScopedCopyableWeightType(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableWeightType___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableWeightType self) -> WeightType"""
@@ -10661,6 +10769,12 @@ class ScopedCopyableRcvChannelProcessed(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRcvChannelProcessed___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRcvChannelProcessed self) -> RcvChannelProcessed"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed_get(self)
@@ -10972,6 +11086,12 @@ class ScopedCopyablePolarizationCalibration(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePolarizationCalibration___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyablePolarizationCalibration self) -> PolarizationCalibration"""
         return _six_sicd.ScopedCopyablePolarizationCalibration_get(self)
@@ -11066,6 +11186,12 @@ class ScopedCopyableDistortion(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableDistortion___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableDistortion self) -> Distortion"""
@@ -11634,6 +11760,12 @@ class ScopedCopyableRMAT(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMAT___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRMAT self) -> RMAT"""
         return _six_sicd.ScopedCopyableRMAT_get(self)
@@ -11797,6 +11929,12 @@ class ScopedCopyableRMCR(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMCR___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRMCR self) -> RMCR"""
         return _six_sicd.ScopedCopyableRMCR_get(self)
@@ -11926,6 +12064,12 @@ class ScopedCopyableINCA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableINCA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableINCA self) -> INCA"""
@@ -12083,6 +12227,12 @@ class ScopedCopyableInterPulsePeriod(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableInterPulsePeriod___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
