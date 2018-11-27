@@ -160,15 +160,17 @@ size_t CompressedByteProvider::addImageData(
     }
 
     // Copy the image data into the buffer
-    size_t bytesWritten = 0;
-    for (size_t ii = blockRange.mStartElement;
-            ii < blockRange.mStartElement + blockRange.mNumElements;
-            ++ii)
+    // Since we have it in contiguous memory, this can be added as one buffer
+    size_t numBufferBytes(0);
+    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
+         ii < end;
+         ++ii)
     {
-        buffers.pushBack(imageData + bytesWritten, bytesPerBlock[ii]);
-        bytesWritten += bytesPerBlock[ii];
+        numBufferBytes += bytesPerBlock[ii];
     }
-    return bytesWritten;
+    buffers.pushBack(imageData, numBufferBytes);
+
+    return numBufferBytes;
 }
 
 nitf::Off CompressedByteProvider::getNumBytes(size_t startRow, size_t numRows) const
