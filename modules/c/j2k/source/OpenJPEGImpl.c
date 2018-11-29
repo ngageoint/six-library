@@ -159,18 +159,14 @@ OpenJPEG_createIO(nrt_IOInterface* io,
         else
         {
             /*
-             * nrt_IOInterface_getSize() returns the number of bytes *remaining*
-             * that could be read from this io object, not the *total* number of
-             * bytes this io object contains, so ioControl->offset doesn't need
-             * to be subtracted off here.
-             *
              * TODO: Technically we should just report the number of bytes
              *       remaining in this image segment, not in the whole NITF,
              *       though if we somehow read beyond this image segment,
              *       presumably we'd get OpenJPEG errors because the bytes
              *       we'd be reading wouldn't be J2K tiles
              */
-            ioControl->length = nrt_IOInterface_getSize(io, error);
+            ioControl->length =
+                    nrt_IOInterface_getSize(io, error) - ioControl->offset;
         }
 
         opj_stream_set_user_data(stream, ioControl, NULL);
