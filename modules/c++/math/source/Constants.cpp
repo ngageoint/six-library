@@ -34,7 +34,7 @@ const double Constants::NAUTICAL_MILES_TO_METERS = 1852.0;
 const double Constants::METERS_TO_NAUTICAL_MILES =
         1.0 / Constants::NAUTICAL_MILES_TO_METERS;
 const double Constants::NAUTICAL_MILES_TO_FEET =
-        Constants::NAUTICAL_MILES_TO_METERS * Constants::FEET_TO_METERS;
+        Constants::NAUTICAL_MILES_TO_METERS * Constants::METERS_TO_FEET;
 const double Constants::SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
 const double Constants::SPEED_OF_LIGHT_FEET_PER_SEC =
         Constants::SPEED_OF_LIGHT_METERS_PER_SEC * Constants::METERS_TO_FEET;

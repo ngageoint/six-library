@@ -106,6 +106,11 @@ public:
     {
         return !(*this == rhs);
     }
+    
+    explicit operator bool() const 
+    { 
+        return get() == NULL ? false : true; 
+    }
 
     T* get() const
     {
