@@ -251,51 +251,54 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
     return numBytes;
 }
 
-void ImageBlocker::blockImpl(size_t seg,
-                             const sys::byte* input,
-                             size_t numValidRowsInBlock,
-                             size_t numValidColsInBlock,
-                             size_t numBytesPerPixel,
-                             sys::byte* output) const
+void ImageBlocker::block(const void* input,
+                         size_t numBytesPerPixel,
+                         size_t numCols,
+                         size_t numRowsPerBlock,
+                         size_t numColsPerBlock,
+                         size_t numValidRowsInBlock,
+                         size_t numValidColsInBlock,
+                         void* output)
 {
-    const size_t inStride = mNumCols * numBytesPerPixel;
+    const size_t inStride = numCols * numBytesPerPixel;
     const size_t outNumValidBytes = numValidColsInBlock * numBytesPerPixel;
+    const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
+    sys::byte* outputPtr = static_cast<sys::byte*>(output);
 
-    if (numValidColsInBlock == mNumColsPerBlock)
+    if (numValidColsInBlock == numColsPerBlock)
     {
         for (size_t row = 0;
              row < numValidRowsInBlock;
-             ++row, input += inStride, output += outNumValidBytes)
+             ++row, inputPtr += inStride, outputPtr += outNumValidBytes)
         {
-            ::memcpy(output, input, outNumValidBytes);
+            ::memcpy(outputPtr, inputPtr, outNumValidBytes);
         }
     }
     else
     {
         // Have to deal with pad columns
         const size_t outNumInvalidBytes =
-                (mNumColsPerBlock - numValidColsInBlock) * numBytesPerPixel;
+                (numColsPerBlock - numValidColsInBlock) * numBytesPerPixel;
 
         for (size_t row = 0;
              row < numValidRowsInBlock;
-             ++row, input += inStride)
+             ++row, inputPtr += inStride)
         {
-            ::memcpy(output, input, outNumValidBytes);
-            output += outNumValidBytes;
+            ::memcpy(outputPtr, inputPtr, outNumValidBytes);
+            outputPtr += outNumValidBytes;
 
-            ::memset(output, 0, outNumInvalidBytes);
-            output += outNumInvalidBytes;
+            ::memset(outputPtr, 0, outNumInvalidBytes);
+            outputPtr += outNumInvalidBytes;
         }
     }
 
     // Pad rows on the bottom of the block
-    const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
     if (numValidRowsInBlock < numRowsPerBlock)
     {
         const size_t numPadRows = numRowsPerBlock - numValidRowsInBlock;
 
-        ::memset(output, 0,
-                 numPadRows * mNumColsPerBlock * numBytesPerPixel);
+        ::memset(outputPtr, 0,
+                 numPadRows * numColsPerBlock * numBytesPerPixel);
     }
 }
 

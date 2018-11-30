@@ -89,28 +89,52 @@ struct Range
     }
 
     /*!
+     * \param rhs Range to compare with
+     *
+     * \return True if the ranges overlap, false otherwise
+     */
+    bool overlaps(const types::Range& rhs) const
+    {
+        return (endElement() > rhs.mStartElement &&
+                mStartElement < rhs.endElement());
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     * \param[out] overlap Overlapping range (will be empty if there is no
+     * overlap)
+     *
+     * \return True if the ranges overlap, false otherwise
+     */
+    bool overlaps(const types::Range& rhs,
+                  types::Range& overlap) const
+    {
+        if (overlaps(rhs))
+        {
+            const size_t end = std::min(endElement(), rhs.endElement());
+            overlap.mStartElement = std::max(mStartElement, rhs.mStartElement);
+            overlap.mNumElements = end - overlap.mStartElement;
+            return true;
+        }
+        else
+        {
+            overlap = types::Range();
+            return false;
+        }
+    }
+
+    /*!
      * \param startElementToTest The start element
      * \param numElementsToTest The total number of elements to check
      *
-     * \returns The number of shared elements
+     * \return The number of shared elements
      */
     size_t getNumSharedElements(size_t startElementToTest,
                                 size_t numElementsToTest) const
     {
-        const size_t endElementToTest =
-                startElementToTest + numElementsToTest;
-
-        // Ranges do not intersect
-        if (mStartElement >= endElementToTest ||
-                endElement() <= startElementToTest)
-        {
-            return 0;
-        }
-
-        const size_t startRow = std::max(mStartElement, startElementToTest);
-        const size_t endRow = std::min(endElement(), endElementToTest);
-
-        return endRow - startRow;
+        types::Range overlap;
+        overlaps(types::Range(startElementToTest, numElementsToTest), overlap);
+        return overlap.mNumElements;
     }
 
     //! \return True if there are no elements in this range, false otherwise
