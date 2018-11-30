@@ -31,21 +31,6 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
-namespace
-{
-void copyFromStreamAndClear(io::ByteStream& stream,
-                            std::vector<sys::byte>& rawBytes)
-{
-    rawBytes.resize(stream.getSize());
-    if (!rawBytes.empty())
-    {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
-    }
-
-    stream.clear();
-}
-}
-
 namespace nitf
 {
 ByteProvider::ByteProvider() :
