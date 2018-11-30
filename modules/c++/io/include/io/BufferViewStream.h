@@ -50,7 +50,7 @@ public:
      * Default constructor
      * \param bufferView The BufferView to wrap in the stream
      */
-    BufferViewStream(mem::BufferView<T>& bufferView) :
+    BufferViewStream(const mem::BufferView<T>& bufferView) :
         mBufferView(bufferView),
         mPosition(0)
     {
@@ -81,6 +81,7 @@ public:
 
     using OutputStream::write;
     using InputStream::streamTo;
+    using InputStream::read;
 
     /*
      * Writes the bytes in data to the stream.
@@ -138,7 +139,7 @@ protected:
 
 
 private:
-    mem::BufferView<T>& mBufferView;
+    const mem::BufferView<T> mBufferView;
     sys::Off_T mPosition;
 };
 

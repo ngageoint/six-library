@@ -9,6 +9,7 @@ target/
 # Waf
 
 .waf-*
+waf-*
 .lock-waf*
 
 # Eclipse
