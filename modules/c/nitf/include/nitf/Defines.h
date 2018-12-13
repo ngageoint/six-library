@@ -90,4 +90,14 @@
         extern void* C7_construct(const char*, nitf_Error*);
 #endif
 
+#ifdef __cplusplus
+#define NITF_J2K_DECOMPRESSION_STATIC_HANDLE_REF(_Decompressor) \
+        extern "C" const char** _Decompressor##_init(nitf_Error*); \
+        extern "C" void* C8_construct(const char*, nitf_Error*);
+#else
+#define NITF_J2K_DECOMPRESSION_STATIC_HANDLE_REF(_Decompressor) \
+        extern const char** _Decompressor##_init(nitf_Error*); \
+        extern void* C8_construct(const char*, nitf_Error*);
+#endif
+
 #endif
