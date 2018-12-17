@@ -1318,8 +1318,12 @@ class DualPolarizationType(_object):
     OTHER = _six_base.DualPolarizationType_OTHER
     V_V = _six_base.DualPolarizationType_V_V
     V_H = _six_base.DualPolarizationType_V_H
+    V_RHC = _six_base.DualPolarizationType_V_RHC
+    V_LHC = _six_base.DualPolarizationType_V_LHC
     H_V = _six_base.DualPolarizationType_H_V
     H_H = _six_base.DualPolarizationType_H_H
+    H_RHC = _six_base.DualPolarizationType_H_RHC
+    H_LHC = _six_base.DualPolarizationType_H_LHC
     RHC_RHC = _six_base.DualPolarizationType_RHC_RHC
     RHC_LHC = _six_base.DualPolarizationType_RHC_LHC
     RHC_V = _six_base.DualPolarizationType_RHC_V

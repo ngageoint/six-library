@@ -81167,8 +81167,12 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DualPolarizationType_OTHER",SWIG_From_int(static_cast< int >(six::DualPolarizationType::OTHER)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_V_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_V)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_V_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_H)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_V_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_RHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_V_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_H_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_V)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_H_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_H)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_H_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_RHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_H_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_RHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_V)));
