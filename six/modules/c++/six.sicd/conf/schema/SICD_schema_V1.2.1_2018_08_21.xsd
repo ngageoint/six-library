@@ -287,8 +287,12 @@
       <xs:restriction base="xs:string">
          <xs:enumeration value="V:V"/>
          <xs:enumeration value="V:H"/>
+         <xs:enumeration value="V:RHC"/>
+         <xs:enumeration value="V:LHC"/>
          <xs:enumeration value="H:V"/>
          <xs:enumeration value="H:H"/>
+         <xs:enumeration value="H:RHC"/>
+         <xs:enumeration value="H:LHC"/>
          <xs:enumeration value="RHC:RHC"/>
          <xs:enumeration value="RHC:LHC"/>
          <xs:enumeration value="RHC:V"/>
