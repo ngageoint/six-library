@@ -120,11 +120,11 @@ private:
         }
     }
 
-    void setMaxProductSize(six::NITFWriteControl& writer)
+    void setMaxProductSize(six::Options& options)
     {
         if (mSetMaxProductSize)
         {
-            writer.getOptions().setParameter(
+            options.setParameter(
                     six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
     }
@@ -153,9 +153,9 @@ void Tester<DataTypeT>::normalWrite()
 {
     mContainer->addData(createData<DataTypeT>(mDims).release());
 
-    six::NITFWriteControl writer;
-    setMaxProductSize(writer);
-    writer.initialize(mContainer);
+    six::Options options;
+    setMaxProductSize(options);
+    six::NITFWriteControl writer(options, mContainer);
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
@@ -169,9 +169,10 @@ void Tester<DataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
@@ -184,9 +185,10 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     types::RowCol<size_t> offset(40, 0);
@@ -234,9 +236,11 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
+
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     // Cols [400, 456)
