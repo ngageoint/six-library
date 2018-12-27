@@ -43,9 +43,20 @@ NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   mem::SharedPtr<Container> container)
+                                   mem::SharedPtr<Container> container,
+                                   const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
+    if (xmlRegistry)
+    {
+        setXMLControlRegistry(xmlRegistry);
+    }
+}
+
+void NITFWriteControl::setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+{
+    mNITFHeaderCreator->setXMLControlRegistry(xmlRegistry);
+    WriteControl::setXMLControlRegistry(xmlRegistry);
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
@@ -127,8 +138,8 @@ void NITFWriteControl::save(const SourceList& imageData,
                             const std::vector<std::string>& schemaPaths)
 {
     const size_t bufferSize =
-            mOptions.getParameter(six::WriteControl::OPT_BUFFER_SIZE,
-                                  Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+            getOptions().getParameter(six::WriteControl::OPT_BUFFER_SIZE,
+                                      Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
 
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
@@ -141,8 +152,8 @@ bool NITFWriteControl::shouldByteSwap() const
     bool doByteSwap;
 
     const int byteSwapping =
-        (int) mOptions.getParameter(six::WriteControl::OPT_BYTE_SWAP,
-                                    Parameter((int) ByteSwapping::SWAP_AUTO));
+        (int) getOptions().getParameter(six::WriteControl::OPT_BYTE_SWAP,
+                                        Parameter((int) ByteSwapping::SWAP_AUTO));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
@@ -214,8 +225,8 @@ void NITFWriteControl::save(const BufferList& imageData,
                             const std::vector<std::string>& schemaPaths)
 {
     const size_t bufferSize =
-            mOptions.getParameter(WriteControl::OPT_BUFFER_SIZE,
-                                  Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+            getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE,
+                                      Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     save(imageData, bufferedIO, schemaPaths);
@@ -232,12 +243,12 @@ void NITFWriteControl::save(
     const bool doByteSwap = shouldByteSwap();
 
     if (getInfos().size() != imageData.size())
-        throw except::Exception(Ctxt("Require " + 
+        throw except::Exception(Ctxt("Require " +
                 str::toString(getInfos().size())
                 + " images, received " + str::toString(imageData.size())));
 
     // check to see if J2K compression is enabled
-    double j2kCompression = (double)mOptions.getParameter(
+    double j2kCompression = (double)getOptions().getParameter(
             NITFHeaderCreator::OPT_J2K_COMPRESSION_BYTERATE, Parameter(0));
 
     bool enableJ2K = (getContainer()->getDataType() != DataType::COMPLEX) &&

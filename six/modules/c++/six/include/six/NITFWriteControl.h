@@ -62,9 +62,11 @@ public:
      * Constructor. Calls initialize.
      * \param options Initialization options
      * \param container The data container
+     * \param xmlRegistry Optional XMLControlRegistry
      */
     NITFWriteControl(const six::Options& options,
-                     mem::SharedPtr<Container> container);
+                     mem::SharedPtr<Container> container,
+                     const XMLControlRegistry* xmlRegistry = NULL);
 
     //!  We are a 'NITF'
     std::string getFileType() const
@@ -77,6 +79,13 @@ public:
     {
         return mNITFHeaderCreator->getRecord();
     }
+
+    /*!
+     * Sets XMLControlRegistry. Overriding so we can pass to NITFHeaderCreator
+     * as well.
+     * \param xmlRegistry XMLControlRegistry to set
+     */
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry);
 
     // Get the record that was generated during initialization
     nitf::Record& getRecord()
@@ -131,10 +140,10 @@ public:
      * \param headerCreator Populated NITF header creator
      */
     void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
-  
+
     virtual void initialize(const six::Options& options,
                             mem::SharedPtr<Container> container);
-  
+
     virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;
@@ -478,6 +487,7 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
+
 private:
     //! Noncopyable
     NITFWriteControl(const NITFWriteControl& );

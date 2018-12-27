@@ -227,7 +227,7 @@ public:
         mOwnLog = log ? ownLog : true;
     }
 
-    void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
     {
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
