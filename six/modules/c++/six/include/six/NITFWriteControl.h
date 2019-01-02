@@ -115,10 +115,12 @@ public:
     }
 
     //! \return Mutable NITF options
+    /*
     six::Options& getOptions()
     {
         return mNITFHeaderCreator->getOptions();
     }
+    */
 
     //! \return Const NITF options
     const six::Options& getOptions() const
