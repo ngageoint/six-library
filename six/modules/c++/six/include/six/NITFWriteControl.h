@@ -62,9 +62,11 @@ public:
      * Constructor. Calls initialize.
      * \param options Initialization options
      * \param container The data container
+     * \param xmlRegistry Optional XMLControlRegistry
      */
     NITFWriteControl(const six::Options& options,
-                     mem::SharedPtr<Container> container);
+                     mem::SharedPtr<Container> container,
+                     const XMLControlRegistry* xmlRegistry = NULL);
 
     //!  We are a 'NITF'
     std::string getFileType() const
@@ -76,6 +78,16 @@ public:
     nitf::Record getRecord() const
     {
         return mNITFHeaderCreator->getRecord();
+    }
+
+    /*!
+     * Sets XMLControlRegistry. Overriding so we can pass to NITFHeaderCreator
+     * as well.
+     * \param xmlRegistry XMLControlRegistry to set
+     */
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    {
+        setXMLControlRegistryImpl(xmlRegistry);
     }
 
     // Get the record that was generated during initialization
@@ -102,12 +114,6 @@ public:
         return mNITFHeaderCreator->getContainer();
     }
 
-    //! \return Mutable NITF options
-    six::Options& getOptions()
-    {
-        return mNITFHeaderCreator->getOptions();
-    }
-
     //! \return Const NITF options
     const six::Options& getOptions() const
     {
@@ -131,10 +137,10 @@ public:
      * \param headerCreator Populated NITF header creator
      */
     void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
-  
+
     virtual void initialize(const six::Options& options,
                             mem::SharedPtr<Container> container);
-  
+
     virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;
@@ -423,6 +429,8 @@ protected:
 
     bool shouldByteSwap() const;
 
+    void setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry);
+
 private:
     /*!
      * Get the DES type identifier.
@@ -478,6 +486,7 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
+
 private:
     //! Noncopyable
     NITFWriteControl(const NITFWriteControl& );

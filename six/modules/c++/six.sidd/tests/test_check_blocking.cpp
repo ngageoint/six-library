@@ -82,14 +82,15 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     six::BufferList buffers(1);
     buffers[0] = buffer.get();
 
-    six::NITFWriteControl writer;
-    writer.getOptions().setParameter(
+    six::Options options;
+    options.setParameter(
             six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK, blockSize);
-    writer.getOptions().setParameter(
+    options.setParameter(
             six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK, blockSize);
-    writer.getOptions().setParameter(
+    options.setParameter(
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
-    writer.initialize(container);
+
+    six::NITFWriteControl writer(options, container);
     writer.save(buffers, pathname, std::vector<std::string>());
 
 }
@@ -124,14 +125,15 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     buffers[0] = firstBuffer.get();
     buffers[1] = secondBuffer.get();
 
-    six::NITFWriteControl writer;
-    writer.getOptions().setParameter(
+    six::Options options;
+    options.setParameter(
             six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK, blockSize);
-    writer.getOptions().setParameter(
+    options.setParameter(
             six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK, blockSize);
-    writer.getOptions().setParameter(
+    options.setParameter(
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
-    writer.initialize(container);
+
+    six::NITFWriteControl writer(options, container);
     writer.save(buffers, pathname, std::vector<std::string>());
 }
 

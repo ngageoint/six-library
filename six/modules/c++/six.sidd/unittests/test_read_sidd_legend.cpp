@@ -232,15 +232,12 @@ struct TestHelper
         buffers.push_back(buffer4.get());
 
         // Write it out
-        six::NITFWriteControl writer;
-
-        writer.getOptions().setParameter(
+        six::Options options;
+        options.setParameter(
                 six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                 str::toString(maxSize));
 
-        writer.setXMLControlRegistry(&mXmlRegistry);
-        writer.initialize(container);
-
+        six::NITFWriteControl writer(options, container, &mXmlRegistry);
         writer.save(buffers, mPathname);
     }
 

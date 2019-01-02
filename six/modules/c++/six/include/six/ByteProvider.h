@@ -64,13 +64,22 @@ public:
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
 
-    static void populateWriter(
+    /*!
+     * Populates the writer Options from given parameters
+     * \param container Container holding Data object
+     * \param maxProductSize Maximum size of image segment in bytes
+     * \param numRowsPerBlock Rows per block. Will be truncated if greater than
+     *        num rows in image
+     * \param numColsPerBlock Cols per block. Will be truncated if greater than
+     *        num cols in image
+     * \param[out] options Options to populate
+     */
+    static void populateOptions(
             mem::SharedPtr<Container> container,
-            const XMLControlRegistry& xmlRegistry,
             size_t maxProductSize,
             size_t numRowsPerBlock,
             size_t numColsPerBlock,
-            NITFWriteControl& writer);
+            Options& options);
 
     /*!
      * Compute the XML metadata, data extension segment (DES) buffers,

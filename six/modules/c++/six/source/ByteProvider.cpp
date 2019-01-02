@@ -38,13 +38,12 @@ ByteProvider::ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
     initialize(headerCreator, schemaPaths, desBuffers);
 }
 
-void ByteProvider::populateWriter(
+void ByteProvider::populateOptions(
         mem::SharedPtr<Container> container,
-        const XMLControlRegistry& xmlRegistry,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
-        NITFWriteControl& writer)
+        Options& options)
 {
     if (container->getNumData() != 1)
     {
@@ -55,29 +54,28 @@ void ByteProvider::populateWriter(
 
     const six::Data* const data = container->getData(0);
 
-    writer.setXMLControlRegistry(&xmlRegistry);
 
     if (maxProductSize != 0)
     {
-        writer.getOptions().setParameter(
+        options.setParameter(
                 six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                 maxProductSize);
     }
 
     if (numRowsPerBlock != 0)
     {
-        writer.getOptions().setParameter(
+        numRowsPerBlock = std::min(numRowsPerBlock, data->getNumRows());
+        options.setParameter(
                 six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                 numRowsPerBlock);
-        numRowsPerBlock = std::min(numRowsPerBlock, data->getNumRows());
     }
 
     if (numColsPerBlock != 0)
     {
-        writer.getOptions().setParameter(
+        numColsPerBlock = std::min(numColsPerBlock, data->getNumCols());
+        options.setParameter(
                 six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                 numColsPerBlock);
-        numColsPerBlock = std::min(numColsPerBlock, data->getNumCols());
     }
 }
 
@@ -182,9 +180,10 @@ void ByteProvider::initialize(mem::SharedPtr<Container> container,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)
 {
-    NITFWriteControl writer(container);
-    populateWriter(container, xmlRegistry, maxProductSize, numRowsPerBlock,
-            numColsPerBlock, writer);
+    Options options;
+    populateOptions(container, maxProductSize, numRowsPerBlock,
+            numColsPerBlock, options);
+    NITFWriteControl writer(options, container, &xmlRegistry);
     initialize(writer, schemaPaths);
 }
 
