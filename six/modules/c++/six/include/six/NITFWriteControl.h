@@ -85,7 +85,10 @@ public:
      * as well.
      * \param xmlRegistry XMLControlRegistry to set
      */
-    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry);
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    {
+        setXMLControlRegistryImpl(xmlRegistry);
+    }
 
     // Get the record that was generated during initialization
     nitf::Record& getRecord()
@@ -431,6 +434,8 @@ protected:
     }
 
     bool shouldByteSwap() const;
+
+    void setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry);
 
 private:
     /*!

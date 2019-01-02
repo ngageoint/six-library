@@ -49,14 +49,15 @@ NITFWriteControl::NITFWriteControl(const six::Options& options,
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
     if (xmlRegistry)
     {
-        setXMLControlRegistry(xmlRegistry);
+        // Indirecting through *Impl to avoid virtual function call in ctor
+        setXMLControlRegistryImpl(xmlRegistry);
     }
 }
 
-void NITFWriteControl::setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+void NITFWriteControl::setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator->setXMLControlRegistry(xmlRegistry);
-    WriteControl::setXMLControlRegistry(xmlRegistry);
+    WriteControl::setXMLControlRegistryImpl(xmlRegistry);
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
