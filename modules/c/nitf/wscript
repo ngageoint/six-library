@@ -1,10 +1,10 @@
 import os, subprocess
 from waflib import Options
 from os.path import splitext, dirname, join
+from build import writeConfig
 
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.7'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
@@ -32,10 +32,15 @@ def options(opt):
     opt.recurse(SUBDIRS)
 
 def configure(conf):
+    def nitf_callback(conf):
+        conf.define('NITF_LIB_VERSION', conf.env['VERSION'])
+    writeConfig(conf, nitf_callback, NAME)
     conf.recurse(SUBDIRS)
 
 def build(bld):
-    bld.module(**globals())
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    bld.module(**modArgs)
     bld.recurse(SUBDIRS)
 
     #run doxygen
