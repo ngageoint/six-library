@@ -24,7 +24,6 @@
 #define __NRT_DEFINES_H__
 
 /* The version of the NRT library */
-#define NRT_LIB_VERSION    "2.6"
 
 #ifdef __cplusplus
 #   define NRT_C extern "C"

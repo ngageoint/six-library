@@ -23,9 +23,6 @@
 #ifndef __NITF_DEFINES_H__
 #define __NITF_DEFINES_H__
 
-/* The version of the NITF library */
-#define NITF_LIB_VERSION    "2.7"
-
 /**
  * Macro which declares a TRE Plugin
  *

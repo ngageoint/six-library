@@ -14,7 +14,6 @@
 #endif
 
 #define SWIG_PYTHON_DIRECTOR_NO_VTABLE
-#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
 
 
 #ifdef __cplusplus
@@ -34612,9 +34611,8 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
-  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.6"));
   SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/data1/u/jmeans/nitro/modules/c/nrt/include/nrt/Defines.h"));
-  SWIG_Python_SetConstant(d, "NRT_LINE",SWIG_From_int(static_cast< int >(96)));
+  SWIG_Python_SetConstant(d, "NRT_LINE",SWIG_From_int(static_cast< int >(95)));
   SWIG_Python_SetConstant(d, "NRT_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NRT_DEFAULT_PERM",SWIG_From_int(static_cast< int >(0644)));
   SWIG_Python_SetConstant(d, "NRT_INVALID_HANDLE_VALUE",SWIG_From_int(static_cast< int >(-1)));
@@ -34630,7 +34628,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM_UPS_N",SWIG_From_int(static_cast< int >(NRT_CORNERS_UTM_UPS_N)));
   SWIG_Python_SetConstant(d, "NRT_CORNERS_GEO",SWIG_From_int(static_cast< int >(NRT_CORNERS_GEO)));
   SWIG_Python_SetConstant(d, "NRT_CORNERS_DECIMAL",SWIG_From_int(static_cast< int >(NRT_CORNERS_DECIMAL)));
-  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.7"));
   SWIG_Python_SetConstant(d, "NITF_VER_20",SWIG_From_int(static_cast< int >(NITF_VER_20)));
   SWIG_Python_SetConstant(d, "NITF_VER_21",SWIG_From_int(static_cast< int >(NITF_VER_21)));
   SWIG_Python_SetConstant(d, "NITF_VER_UNKNOWN",SWIG_From_int(static_cast< int >(NITF_VER_UNKNOWN)));
@@ -34669,6 +34666,10 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_20",SWIG_FromCharPtr("%d%H%M%SZ%b%y"));
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_21",SWIG_FromCharPtr("%Y%m%d%H%M%S"));
   SWIG_Python_SetConstant(d, "NITF_TRE_HASH_SIZE",SWIG_From_int(static_cast< int >(8)));
+  SWIG_Python_SetConstant(d, "HAVE_CLOCK_GETTIME",SWIG_From_int(static_cast< int >(1)));
+  SWIG_Python_SetConstant(d, "HAVE_SYS_TIME_H",SWIG_From_int(static_cast< int >(1)));
+  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.7"));
+  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.7"));
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_DECOMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_PLUGIN_PATH",SWIG_FromCharPtr("NITF_PLUGIN_PATH"));
