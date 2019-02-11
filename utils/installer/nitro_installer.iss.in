@@ -8,7 +8,7 @@ AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
 DefaultDirName={pf}\nitro-nitf\nitro-@VERSION@
 DefaultGroupName=NITRO
 AllowNoIcons=yes
-LicenseFile=..\..\COPYING.LESSER
+LicenseFile=..\..\LICENSE
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
@@ -55,21 +55,21 @@ Name: "samples\python"; Description: "Python"; Types: full
 
 
 [Files]
-Source: "..\..\COPYING.LESSER"; DestDir: "{app}\share\nitf\doc"; Flags: ignoreversion; Components: core;
+Source: "..\..\LICENSE"; DestDir: "{app}\share\nitf\doc"; Flags: ignoreversion; Components: core;
 Source: "@INSTALL@\lib\*-c.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
-Source: "@INSTALL@\lib\*-c.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
+;Source: "@INSTALL@\lib\*-c.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
 Source: "@INSTALL@\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: core;
 Source: "@INSTALL@\share\nitf\plugins\*.dll"; DestDir: "{app}\share\nitf\plugins"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
 ;Source: "..\..\target\external\libjpeg-plugins\*.dll"; DestDir: "{app}\share\nitf\plugins"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
 ;Source: "..\..\target\external\jasper-plugins\*.dll"; DestDir: "{app}\share\nitf\plugins"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
 ;Source: "..\..\target\external\example-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
-Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\share\nitf\samples\c"; Flags: ignoreversion recursesubdirs; Components: samples\c;
+Source: "..\..\modules\c\nitf\tests\*.c"; DestDir: "{app}\share\nitf\samples\c"; Flags: ignoreversion recursesubdirs; Components: samples\c;
 Source: "@INSTALL@\tests\nitf\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "@INSTALL@\bin\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs; Components: apps;
 Source: "@INSTALL@\bin\mex\*.mex*"; DestDir: "{app}\bin\mex"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: matlab;
-Source: "..\..\java\libs\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
+Source: "..\..\modules\java\nitf.imagej\lib\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "@INSTALL@\lib\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
-Source: "..\..\java\libs\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
+Source: "..\..\modules\java\nitf.imagej\lib\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "@INSTALL@\lib\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "@INSTALL@\lib\nitf.imageio*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "@INSTALL@\lib\nitf.imagej*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
@@ -85,13 +85,13 @@ Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c++"; Flags: 
 ;Source: "..\..\python\nitf\src\python\nitf.html"; DestDir: "{app}\share\doc\nitf\api\python"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
 
 Source: "@INSTALL@\lib\*-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
-Source: "..\..\c++\except\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\str\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\sys\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\mt\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\nitf\tests\*.cpp"; DestDir: "{app}\share\nitf\samples\c++"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\cpp;
+Source: "..\..\install\include\except\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\install\include\str\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\install\include\sys\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\install\include\mt\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\install\include\nitf\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\install\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+Source: "..\..\modules\c++\nitf\tests\*.cpp"; DestDir: "{app}\share\nitf\samples\c++"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\cpp;
 
 [Registry]
 Root: HKCU; Subkey: "Environment"; ValueType: expandsz; ValueName: "PATH"; ValueData: "{app}\lib;{olddata}"; Flags: uninsdeletekeyifempty; Components: core;
