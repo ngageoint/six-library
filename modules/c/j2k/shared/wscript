@@ -20,17 +20,32 @@ def build(bld):
         pluginList = []
         plugins = bld.path.ant_glob('*.c')
 
-        for p in plugins:
-            filename = str(p)
+        for plugin in plugins:
+            filename = str(plugin)
 
+            # We're building a single source file so don't have any includes
+            # If we don't blank out INCLUDES and EXPORT_INCLUDES, 'waf msvs' has
+            # problems complaining include directories don't exist (which is fair
+            # since they don't)
             kw = globals()
             pluginName = splitext(filename)[0]
-            kw['NAME'] = pluginName
             kw['LIBNAME'] = pluginName
-            kw['SOURCE'] = filename
+            kw['INCLUDES'] = []
+            kw['EXPORT_INCLUDES'] = []
 
+            # Build as a plugin
+            kw['NAME'] = pluginName
+            kw['SOURCE'] = filename
             bld.plugin(**kw)
             pluginList.append(pluginName)
+
+            # Build as a static library
+            if env['enable_static_tres']:
+                staticName = pluginName + '-static'
+                kw['NAME'] = staticName
+                kw['LIBNAME'] = staticName
+
+                bld.module(**kw)
 
         bld(features='add_targets', target='j2k-plugins',
             targets_to_add=pluginList)

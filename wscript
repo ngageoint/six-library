@@ -4,7 +4,7 @@ from waflib import Scripting, Options
 from waflib.Build import BuildContext
 from waflib.Tools import waf_unit_test
 
-VERSION = '2.7'
+VERSION = '2.8'
 APPNAME = 'nitro'
 top     = '.'
 out     = 'target'
@@ -30,11 +30,11 @@ def build(bld):
     bld.recurse(DIRS)
 
     dct = {'INSTALL':bld.env['PREFIX'], 'VERSION':bld.env['VERSION'], 'PLATFORM':bld.env['PLATFORM']}
-    bld(features='subst', dct=dct, source='utils/installer/nitro_installer.iss.in', 
+    bld(features='subst', dct=dct, source='utils/installer/nitro_installer.iss.in',
         target=bld.path.find_or_declare('installer/nitro_installer.iss'), name='installer')
     bld.install_files('target/installer', bld.path.ant_glob(['utils/installer/*.bmp','utils/installer/*.ico']))
     bld.add_post_fun(waf_unit_test.summary)
-	
+
 def distclean(context):
     context.recurse(DIRS)
     Scripting.distclean(context)
