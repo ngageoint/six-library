@@ -61,10 +61,26 @@ public:
      * given GriddedDisplayType.
      * This always uses a PlanarGridECEFTransform
      * \param complexData ComplexData from which to construct fitter
+     * \param numPoints1D Number of points to use in each direction of grid.
      * \return ProjectionPolynomialFitter from ComplexData
      */
     static std::auto_ptr<scene::ProjectionPolynomialFitter>
-    getPolynomialFitter(const ComplexData& complexData);
+    getPolynomialFitter(const ComplexData& complexData,
+                        size_t numPoints1D =
+                          scene::ProjectionPolynomialFitter::DEFAULT_POINTS_1D);
+
+    /*!
+     * Build ProjectionPolynomialFitter from complexData. Use the valid data
+     * polygon to constrain the grid points.
+     * \param complexData ComplexData from which to construct fitter
+     * \param numPoints1D Number of points to use in each direction of grid.
+     * \return ProjectionPolynomialFitter from ComplexData
+     */
+    static std::auto_ptr<scene::ProjectionPolynomialFitter>
+    getPolynomialFitterVDP(
+        const ComplexData& complexData,
+        size_t numPoints1D =
+            scene::ProjectionPolynomialFitter::DEFAULT_POINTS_1D);
 
     /*
      * If the SICD contains a valid data polygon, provides this.
@@ -411,6 +427,7 @@ public:
      * \param reader A NITFReadControl loaded with the desired SICD
      * \param orderX X order of fitted polynomials.
      * \param orderY Y order of fitted polynomials.
+     * \param complexData ComplexData from which to construct fitter
      * \param[out] outputRowColToSlantRow Projection polynomial taking
      *  (row, column) coordinate in the output plane image as input
      *  and returning the projected row coordinate in the slant plane
@@ -531,6 +548,38 @@ public:
             six::Poly2D& outputXYToSlantY,                  
             six::Poly2D& slantXYToOutputX,                  
             six::Poly2D& slantXYToOutputY);
+
+    /*!
+     * Project slan plane pixel locations to the output plane pixel locations.
+     * \param complexData Complex metadata.
+     * \param spPixels Slant plane pixel coordinates.
+     * \param opPixels Output plane pixel coordinates.
+     */
+    static void projectPixelsToOutputPlane(
+        const six::sicd::ComplexData& complexData,
+        const std::vector<types::RowCol<double> >& spPixels,
+        std::vector<types::RowCol<double> >& opPixels);
+
+    /*!
+     * Project slant plane valid data polygon pixel locations to output
+     * plane pixel locations.
+     * \param complexData Complex metadata.
+     * \param opPixels Output plane pixel coordinates.
+     */
+    static void projectValidDataPolygonToOutputPlane(
+        const six::sicd::ComplexData& complexData,
+        std::vector<types::RowCol<double> >& opPixels);
+
+    /*!
+     * Project output plane pixel locations to slant plane pixel locations.
+     * \param complexData Complex metadata.
+     * \param opPixels Output plane pixel coordinates.
+     * \param spPixels Slant plane pixel coordinates.
+     */
+    static void projectPixelsToSlantPlane(
+        const six::sicd::ComplexData& complexData,
+        const std::vector<types::RowCol<double> >& spPixels,
+        std::vector<types::RowCol<double> >& opPixels);
 };
 }
 }
