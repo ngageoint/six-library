@@ -486,7 +486,7 @@ size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
 void ByteProvider::addDES(size_t seg, size_t imageDataEndRow,
         NITFBufferList& buffers) const
 {
-    if (shouldAddDES(seg, imageDataEndRow))
+    if (shouldAddDES(seg, imageDataEndRow) && !mDesSubheaderAndData.empty())
     {
         buffers.pushBack(mDesSubheaderAndData);
     }
