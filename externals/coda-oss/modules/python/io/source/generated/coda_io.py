@@ -393,8 +393,6 @@ class NullInputStream(InputStream):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_io.delete_NullInputStream
-    __del__ = lambda self: None
 
     def available(self):
         """available(NullInputStream self) -> sys::Off_T"""
@@ -413,6 +411,8 @@ class NullInputStream(InputStream):
         """
         return _coda_io.NullInputStream_streamTo(self, *args)
 
+    __swig_destroy__ = _coda_io.delete_NullInputStream
+    __del__ = lambda self: None
 NullInputStream_swigregister = _coda_io.NullInputStream_swigregister
 NullInputStream_swigregister(NullInputStream)
 
@@ -436,8 +436,6 @@ class NullOutputStream(OutputStream):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_io.delete_NullOutputStream
-    __del__ = lambda self: None
 
     def writeln(self, arg2):
         """writeln(NullOutputStream self, std::string const & arg2)"""
@@ -457,8 +455,55 @@ class NullOutputStream(OutputStream):
         """flush(NullOutputStream self)"""
         return _coda_io.NullOutputStream_flush(self)
 
+    __swig_destroy__ = _coda_io.delete_NullOutputStream
+    __del__ = lambda self: None
 NullOutputStream_swigregister = _coda_io.NullOutputStream_swigregister
 NullOutputStream_swigregister(NullOutputStream)
+
+class SeekableNullOutputStream(SeekableOutputStream):
+    """Proxy of C++ io::SeekableNullOutputStream class."""
+
+    __swig_setmethods__ = {}
+    for _s in [SeekableOutputStream]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SeekableNullOutputStream, name, value)
+    __swig_getmethods__ = {}
+    for _s in [SeekableOutputStream]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, SeekableNullOutputStream, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(io::SeekableNullOutputStream self) -> SeekableNullOutputStream"""
+        this = _coda_io.new_SeekableNullOutputStream()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def write(self, arg2, numBytes):
+        """write(SeekableNullOutputStream self, void const * arg2, size_t numBytes)"""
+        return _coda_io.SeekableNullOutputStream_write(self, arg2, numBytes)
+
+
+    def flush(self):
+        """flush(SeekableNullOutputStream self)"""
+        return _coda_io.SeekableNullOutputStream_flush(self)
+
+
+    def seek(self, offset, whence):
+        """seek(SeekableNullOutputStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
+        return _coda_io.SeekableNullOutputStream_seek(self, offset, whence)
+
+
+    def tell(self):
+        """tell(SeekableNullOutputStream self) -> sys::Off_T"""
+        return _coda_io.SeekableNullOutputStream_tell(self)
+
+    __swig_destroy__ = _coda_io.delete_SeekableNullOutputStream
+    __del__ = lambda self: None
+SeekableNullOutputStream_swigregister = _coda_io.SeekableNullOutputStream_swigregister
+SeekableNullOutputStream_swigregister(SeekableNullOutputStream)
 
 class FileInputStream(SeekableInputStream):
     """Proxy of C++ io::FileInputStreamOS class."""

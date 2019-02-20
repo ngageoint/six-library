@@ -163,6 +163,32 @@ struct Range
     {
         return !(*this == rhs);
     }
+
+    /*!
+     * Comparator.  Primarily useful so that Range can be used as a key in an
+     * STL map.  Sorting first by the start element allows us to iterate
+     * through a map in order of when ranges start, which is generally speaking
+     * what we want.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if this < rhs, false otherwise
+     */
+    bool operator<(const Range& rhs) const
+    {
+        if (mStartElement < rhs.mStartElement)
+        {
+            return true;
+        }
+        else if (rhs.mStartElement < mStartElement)
+        {
+            return false;
+        }
+        else
+        {
+            return (mNumElements < rhs.mNumElements);
+        }
+    }
 };
 }
 
