@@ -31,7 +31,6 @@
 #include <str/Manip.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
-#include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
@@ -266,15 +265,15 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter>
-Utilities::getPolynomialFitter(const ComplexData& complexData,
-                               size_t numPoints1D)
+void Utilities::getModelComponents(
+    const ComplexData& complexData,
+    std::auto_ptr<scene::SceneGeometry>& geometry,
+    std::auto_ptr<scene::ProjectionModel>& projectionModel,
+    AreaPlane& areaPlane)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
-            getSceneGeometry(&complexData));
-    std::auto_ptr<scene::ProjectionModel> projectionModel(
-            getProjectionModel(&complexData, geometry.get()));
-    AreaPlane areaPlane;
+    geometry.reset(getSceneGeometry(&complexData));
+    projectionModel.reset(getProjectionModel(&complexData, geometry.get()));
+
     if (AreaPlaneUtility::hasAreaPlane(complexData))
     {
         areaPlane = *complexData.radarCollection->area->plane;
@@ -283,45 +282,18 @@ Utilities::getPolynomialFitter(const ComplexData& complexData,
     {
         AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
     }
-
-    const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
-            areaPlane.yDirection->spacing);
-    const scene::PlanarGridECEFTransform ecefTransform(
-            sampleSpacing,
-            areaPlane.referencePoint.rowCol,
-            areaPlane.xDirection->unitVector,
-            areaPlane.yDirection->unitVector,
-            areaPlane.referencePoint.ecef);
-
-    types::RowCol<size_t> offset;
-    types::RowCol<size_t> extent;
-    complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
-    return std::auto_ptr<scene::ProjectionPolynomialFitter>(
-            new scene::ProjectionPolynomialFitter(
-                *projectionModel,
-                ecefTransform,
-                offset,
-                extent,
-                numPoints1D));
 }
 
 std::auto_ptr<scene::ProjectionPolynomialFitter>
-Utilities::getPolynomialFitterVDP(const ComplexData& complexData,
-                               size_t numPoints1D)
+Utilities::getPolynomialFitter(const ComplexData& complexData,
+                               size_t numPoints1D,
+                               bool sampleWithinValidDataPolygon)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
-            getSceneGeometry(&complexData));
-    std::auto_ptr<scene::ProjectionModel> projectionModel(
-            getProjectionModel(&complexData, geometry.get()));
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
     AreaPlane areaPlane;
-    if (AreaPlaneUtility::hasAreaPlane(complexData))
-    {
-        areaPlane = *complexData.radarCollection->area->plane;
-    }
-    else
-    {
-        AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
-    }
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
 
     const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
             areaPlane.yDirection->spacing);
@@ -332,11 +304,24 @@ Utilities::getPolynomialFitterVDP(const ComplexData& complexData,
             areaPlane.yDirection->unitVector,
             areaPlane.referencePoint.ecef);
 
-    types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
-                                     areaPlane.yDirection->elements);
     types::RowCol<size_t> offset;
     types::RowCol<size_t> extent;
     complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
+
+    if (!sampleWithinValidDataPolygon)
+    {
+        return std::auto_ptr<scene::ProjectionPolynomialFitter>(
+                new scene::ProjectionPolynomialFitter(
+                    *projectionModel,
+                    ecefTransform,
+                    offset,
+                    extent,
+                    numPoints1D));
+    }
+
+    // Get the size of the output plane image.
+    types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
+                                     areaPlane.yDirection->elements);
 
     // Get the valid data polygon in the output plane.
     std::vector<types::RowCol<double> > polygon;
@@ -1134,19 +1119,11 @@ void Utilities::projectPixelsToOutputPlane(
     const std::vector<types::RowCol<double> >& spPixels,
     std::vector<types::RowCol<double> >& opPixels)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
-            Utilities::getSceneGeometry(&complexData));
-    std::auto_ptr<scene::ProjectionModel> projectionModel(
-            Utilities::getProjectionModel(&complexData, geometry.get()));
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
     AreaPlane areaPlane;
-    if (AreaPlaneUtility::hasAreaPlane(complexData))
-    {
-        areaPlane = *complexData.radarCollection->area->plane;
-    }
-    else
-    {
-        AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
-    }
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
 
     const types::RowCol<double> opSampleSpacing(areaPlane.xDirection->spacing,
                                                areaPlane.yDirection->spacing);
@@ -1166,13 +1143,13 @@ void Utilities::projectPixelsToOutputPlane(
             complexData.pixelToImagePoint(spPixels[ii]));
 
         // Convert to output plane ECEF.
-        six::Vector3 opECEF = projectionModel->imageToScene(spXY, opORPECEF,
-                                                            opZ);
+        const six::Vector3 opECEF =
+            projectionModel->imageToScene(spXY, opORPECEF, opZ);
 
         // Convert ECEF to output distance to the output plane ORP.
-        six::Vector3 diffECEF = opECEF - opORPECEF;
-        double opX = diffECEF.dot(areaPlane.xDirection->unitVector);
-        double opY = diffECEF.dot(areaPlane.yDirection->unitVector);
+        const six::Vector3 diffECEF = opECEF - opORPECEF;
+        const double opX = diffECEF.dot(areaPlane.xDirection->unitVector);
+        const double opY = diffECEF.dot(areaPlane.yDirection->unitVector);
 
         // Convert XY to pixels.
         opPixels[ii] = types::RowCol<double>(
@@ -1206,9 +1183,7 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     std::vector<types::RowCol<double> > spPixels(validData.size());
     for (size_t ii = 0; ii < validData.size(); ++ii)
     {
-        spPixels[ii] = types::RowCol<double>(
-            static_cast<double>(validData[ii].row),
-            static_cast<double>(validData[ii].col));
+        spPixels[ii] = validData[ii];
     }
 
     // Project to the output plane.
@@ -1220,19 +1195,11 @@ void Utilities::projectPixelsToSlantPlane(
     const std::vector<types::RowCol<double> >& opPixels,
     std::vector<types::RowCol<double> >& spPixels)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
-            Utilities::getSceneGeometry(&complexData));
-    std::auto_ptr<scene::ProjectionModel> projectionModel(
-            Utilities::getProjectionModel(&complexData, geometry.get()));
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
     AreaPlane areaPlane;
-    if (AreaPlaneUtility::hasAreaPlane(complexData))
-    {
-         areaPlane = *complexData.radarCollection->area->plane;
-    }
-    else
-    {
-        AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
-    }
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
 
     const types::RowCol<double> opSampleSpacing(areaPlane.xDirection->spacing,
                                                areaPlane.yDirection->spacing);

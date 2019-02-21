@@ -76,8 +76,8 @@ public:
      * with respect to a global space.  This basically translates to the
      * segment's startLine/startSample values for a multi-segment SICD).
      * \param outExtent Output extent in pixels
-     * \param polygon The output plane polygon to use to determine the grid of
-     * points.
+     * \param polygon The polygon of output plane pixel coordinate used to
+     * determine the grid of points.
      * \param numPoints1D Number of points to use in each direction when
      * sampling the grid.  Defaults to 10.
      */
@@ -318,6 +318,13 @@ public:
     }
 
 private:
+    void projectToSlantPlane(const ProjectionModel& projModel,
+                             const GridECEFTransform& gridTransform,
+                             const types::RowCol<double>& outPixelStart,
+                             const types::RowCol<double>& currentOffset,
+                             size_t row,
+                             size_t col);
+
     void getSlantPlaneSamples(
             const types::RowCol<size_t>& inPixelStart,
             const types::RowCol<double>& inSceneCenter,

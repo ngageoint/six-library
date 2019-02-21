@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,44 +26,46 @@
 #include <complex>
 
 #include <sys/Path.h>
-//#include <except/Exception.h>
-//#include <io/StandardStreams.h>
 #include <six/Utilities.h>
-//#include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
+#include <import/cli.h>
 
 int main(int argc, char** argv)
 {
     try
     {
-        // Parse the command line
+        // Set up command line arguments.
+        cli::ArgumentParser parser;
+        parser.addArgument("--vdp", "Use the valid data polygon",
+            cli::STORE_TRUE, "useVDP", "useVDP")->setDefault(false);
+        parser.addArgument("input", "SICD path", cli::STORE, "sicdPath",
+            "sicdPath")->setDefault(""); 
+
+        // Parse the command line.
+        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::string sicdPath = options->get<std::string>("sicdPath");
+        const bool useVDP = options->get<bool>("useVDP");
+        
         const std::string progname(argv[0]);
-        if (argc != 2 && argc != 3)
+        if (sicdPath.empty())
         {
             std::cerr << "Usage: " << sys::Path::basename(progname)
-                      << " <SICD pathname> [<schema dirname>]\n\n";
+                      << " <SICD pathname> [--vdp]\n\n";
             return 1;
         }
 
-        const std::string sicdPathname(argv[1]);
-
-        std::vector<std::string> schemaPaths;
-        if (argc == 3)
-        {
-            schemaPaths.push_back(argv[2]);
-        }
-        else
-        {
-            schemaPaths.push_back(six::findSchemaPath(progname));
-        }
-
+        std::vector<std::string> schemaPaths; 
         std::auto_ptr<six::sicd::ComplexData> complexData(
-            six::sicd::Utilities::getComplexData(sicdPathname, schemaPaths));
+            six::sicd::Utilities::getComplexData(sicdPath, schemaPaths));
 
+        const size_t numPoints1D =
+            scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D;
         std::auto_ptr<scene::ProjectionPolynomialFitter> polyfitter(
-            six::sicd::Utilities::getPolynomialFitterVDP(
-                *complexData).release());
+            six::sicd::Utilities::getPolynomialFitter(
+                *complexData,
+                numPoints1D,
+                useVDP));
 
         const types::RowCol<size_t> spPixelStart(0, 0);
         const types::RowCol<double> spSceneCenter(
@@ -113,5 +115,7 @@ int main(int argc, char** argv)
         std::cerr << "Caught exception: " << "Unknown exception" << std::endl;
         return 1;
     }
+
+    return 0;
 }
 

@@ -48,11 +48,11 @@ namespace scene
 const size_t ProjectionPolynomialFitter::DEFAULTS_POINTS_1D = 10;
 
 ProjectionPolynomialFitter::ProjectionPolynomialFitter(
-        const ProjectionModel& projModel,
-        const GridECEFTransform& gridTransform,
-        const types::RowCol<double>& outPixelStart,
-        const types::RowCol<size_t>& outExtent,
-        size_t numPoints1D) :
+    const ProjectionModel& projModel,
+    const GridECEFTransform& gridTransform,
+    const types::RowCol<double>& outPixelStart,
+    const types::RowCol<size_t>& outExtent,
+    size_t numPoints1D) :
     mNumPoints1D(numPoints1D),
     mOutputPlaneRows(numPoints1D, numPoints1D),
     mOutputPlaneCols(numPoints1D, numPoints1D),
@@ -82,23 +82,8 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
              jj < mNumPoints1D;
              ++jj, currentOffset.col += skip.col)
         {
-            // currentOffset refers to the spot in the global output grid, so
-            // we want to offset by outPixelStart so that we are in units of
-            // pixels in terms of our portion of this output grid
-            // That is, we want (outPixelStart.row, outPixelStart.col) to
-            // correspond to (0, 0) in our grid.
-            mOutputPlaneRows(ii, jj) = currentOffset.row - outPixelStart.row;
-            mOutputPlaneCols(ii, jj) = currentOffset.col - outPixelStart.col;
-
-            // Find ECEF location of this output plane pixel
-            const scene::Vector3 sPos =
-                    gridTransform.rowColToECEF(currentOffset);
-
-            // Call sceneToImage() to get meters from the slant plane SCP
-            double timeCOA(0.0);
-            mSceneCoordinates(ii, jj) =
-                    projModel.sceneToImage(sPos, &timeCOA);
-            mTimeCOA(ii, jj) = timeCOA;
+            projectToSlantPlane(projModel, gridTransform, currentOffset,
+                                outPixelStart, ii, jj);
         }
     }
 }
@@ -161,19 +146,16 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     }
 
     // The offset and extent are relative to the entire global output plane.
-    types::RowCol<double> boundingOffset(
+    const types::RowCol<double> boundingOffset(
         static_cast<double>(minRowI),
         static_cast<double>(minColI));
-    types::RowCol<size_t> boundingExtent(maxRowI - minRowI + 1,
-                                         maxColI - minColI + 1);
-
-    // No offset for the polygon mask.
-    types::RowCol<sys::SSize_T> pmOffset(0,0);
+    const types::RowCol<size_t> boundingExtent(maxRowI - minRowI + 1,
+                                               maxColI - minColI + 1);
 
     // Get the PolygonMas. For each row of the polygon this will determine
     // the first and last column of the row inside the convex hull of the
     // polygon sent in.
-    polygon::PolygonMask polygonMask(polygon, fullExtent, pmOffset);
+    const polygon::PolygonMask polygonMask(polygon, fullExtent);
     
     // Compute a delta in the row direction as if the entire bounding row 
     // extent will be covered by the point grid.
@@ -235,21 +217,33 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         for (size_t jj = 0; jj < numPoints1D; ++jj, currentCol += newDeltaCol)
         {
             const types::RowCol<double> currentOffset(currentRow, currentCol);
-
-            // Get the coordinate relative to the outPixelStart.
-            mOutputPlaneRows(ii, jj) = currentOffset.row - outPixelStart.row;
-            mOutputPlaneCols(ii, jj) = currentOffset.col - outPixelStart.col;
-
-            // Find ECEF of the output plane pixel.
-            const scene::Vector3 ecef =
-                gridTransform.rowColToECEF(currentOffset);
-
-            // Project ECEF coordinate into the slant plane and get meters from
-            // the slant plane scene center point.
-            double timeCOA = 0.0;
-            mSceneCoordinates(ii, jj) = projModel.sceneToImage(ecef, &timeCOA);
+            projectToSlantPlane(projModel, gridTransform, currentOffset,
+                outPixelStart, ii, jj);
         }
     }
+}
+
+void ProjectionPolynomialFitter::projectToSlantPlane(
+    const ProjectionModel& projModel,
+    const GridECEFTransform& gridTransform,
+    const types::RowCol<double>& outPixelStart,
+    const types::RowCol<double>& currentOffset,
+    size_t row,
+    size_t col)
+{
+    // Get the coordinate relative to the outPixelStart.
+    mOutputPlaneRows(row, col) = currentOffset.row - outPixelStart.row;
+    mOutputPlaneCols(row, col) = currentOffset.col - outPixelStart.col;
+
+    // Find ECEF of the output plane pixel.
+    const scene::Vector3 ecef =
+        gridTransform.rowColToECEF(currentOffset);
+
+    // Project ECEF coordinate into the slant plane and get meters from
+    // the slant plane scene center point.
+    double timeCOA(0.0);
+    mSceneCoordinates(row, col) = projModel.sceneToImage(ecef, &timeCOA);
+    mTimeCOA(row, col) = timeCOA;
 }
 
 void ProjectionPolynomialFitter::getSlantPlaneSamples(
