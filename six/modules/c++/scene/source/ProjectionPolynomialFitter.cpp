@@ -21,7 +21,7 @@
  */
 
 #include <scene/ProjectionPolynomialFitter.h>
-#include <draw/PolygonMask.h>
+#include <polygon/PolygonMask.h>
 
 namespace
 {
@@ -106,7 +106,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
 ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         const ProjectionModel& projModel,
         const GridECEFTransform& gridTransform,
-        const types::RowCol<size_t>& outExtent,
+        const types::RowCol<size_t>& fullExtent,
         const types::RowCol<double>& outPixelStart,
         const types::RowCol<size_t>& outExtent,
         const std::vector<types::RowCol<double> >& polygon,
@@ -133,8 +133,20 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         maxCol = std::max(maxCol, polygon[ii].col);
     }
 
-    minRow = std::max(0.0, minRow);
-    minCol = std::max(0.0, minCol);
+    if (minRow > static_cast<double>(fullExtent.row) ||
+        maxRow < 0 ||
+        minCol > static_cast<double>(fullExtent.col) ||
+        maxCol < 0)
+    {
+        throw except::Exception(Ctxt(
+            "Bounding rectangle is outside of output extent"));
+    }
+
+    // Only interested in pixels inside the fullExtent.
+    minRow = std::max(minRow, 0.0);
+    minCol = std::max(minCol, 0.0);
+    maxRow = std::min(maxRow, static_cast<double>(fullExtent.row) - 1);
+    maxCol = std::min(maxCol, static_cast<double>(fullExtent.col) - 1);
 
     // Get size_t extent of the set of points.
     const size_t minRowI = static_cast<size_t>(std::ceil(minRow));
@@ -161,7 +173,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     // Get the PolygonMas. For each row of the polygon this will determine
     // the first and last column of the row inside the convex hull of the
     // polygon sent in.
-    draw::PolygonMask polygonMask(polygon, fullExtent, pmOffset);
+    polygon::PolygonMask polygonMask(polygon, fullExtent, pmOffset);
     
     // Compute a delta in the row direction as if the entire bounding row 
     // extent will be covered by the point grid.
@@ -222,11 +234,11 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         double currentCol = static_cast<double>(colRange.mStartElement);
         for (size_t jj = 0; jj < numPoints1D; ++jj, currentCol += newDeltaCol)
         {
-            const type::RowCol<double> currentOffset(currentRow, currentCol);
+            const types::RowCol<double> currentOffset(currentRow, currentCol);
 
             // Get the coordinate relative to the outPixelStart.
-            mOutputPlaneRows(ii, jj) = currentOffset.row - outputPixelStart.row;
-            mOutputPlaneCols(ii, jj) = currentOffset.col - outputPixelStart.col;
+            mOutputPlaneRows(ii, jj) = currentOffset.row - outPixelStart.row;
+            mOutputPlaneCols(ii, jj) = currentOffset.col - outPixelStart.col;
 
             // Find ECEF of the output plane pixel.
             const scene::Vector3 ecef =

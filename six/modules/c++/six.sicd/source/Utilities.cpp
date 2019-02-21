@@ -1046,22 +1046,6 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
                                outputRowColToSlantCol);
 }
 
-void getProjectionPolys(
-    std::auto_ptr<ComplexData>& complexData,
-    const types::RowCol<size_t>& inPixelStart,
-    const types::RowCol<double>& inSceneCenter,
-    const types::RowCol<double>& interimSceneCenter,
-    const types::RowCol<double>& interimSampleSpacing,
-    size_t polyOrderX,
-    size_t polyOrderY,
-    six::Poly2D& outputRowColToSlantRow,
-    six::Poly2D& outputRowColToSlantCol,
-    size_t numPoints1D,
-    double* meanResidualErrorRow,
-    double* meanResidualErrorCol)
-{
-}
-
 six::Poly2D Utilities::transformXYPolyToRowColPoly(
     const six::Poly2D& polyXY,
     const types::RowCol<double>& outSampleSpacing,
@@ -1145,7 +1129,7 @@ void Utilities::fitXYProjectionPolys(
     slantXYToOutputY = math::poly::fit(slantX, slantY, outputY, orderX, orderY);
 }
 
-void projectPixelsToOutputPlane(
+void Utilities::projectPixelsToOutputPlane(
     const six::sicd::ComplexData& complexData,
     const std::vector<types::RowCol<double> >& spPixels,
     std::vector<types::RowCol<double> >& opPixels)
@@ -1182,7 +1166,8 @@ void projectPixelsToOutputPlane(
             complexData.pixelToImagePoint(spPixels[ii]));
 
         // Convert to output plane ECEF.
-        six::Vector3 opECEF = projectionModel->imageToScene(spXY, opORPEC, opZ);
+        six::Vector3 opECEF = projectionModel->imageToScene(spXY, opORPECEF,
+                                                            opZ);
 
         // Convert ECEF to output distance to the output plane ORP.
         six::Vector3 diffECEF = opECEF - opORPECEF;
@@ -1197,7 +1182,7 @@ void projectPixelsToOutputPlane(
    
 }
 
-void projectValidDataPolygonToOutputPlane(
+void Utilities::projectValidDataPolygonToOutputPlane(
     const six::sicd::ComplexData& complexData,
     std::vector<types::RowCol<double> >& opPixels)
 {
@@ -1207,9 +1192,9 @@ void projectValidDataPolygonToOutputPlane(
     {
         // Get dimensions of SICD.
         sys::SSize_T numRows =
-            static_cast<sys::SSize_T>)complexData.getNumRows());
+            static_cast<sys::SSize_T>(complexData.getNumRows());
         sys::SSize_T numCols =
-            static_cast<sys::SSize_T>)complexData.getNumCols());
+            static_cast<sys::SSize_T>(complexData.getNumCols());
 
         validData.push_back(six::RowColInt(0, 0));
         validData.push_back(six::RowColInt(0, numCols - 1));
@@ -1219,7 +1204,7 @@ void projectValidDataPolygonToOutputPlane(
 
     // Convert to double coordinates.
     std::vector<types::RowCol<double> > spPixels(validData.size());
-    for (size_t ii = 0; ii < validData.size(); ++i)
+    for (size_t ii = 0; ii < validData.size(); ++ii)
     {
         spPixels[ii] = types::RowCol<double>(
             static_cast<double>(validData[ii].row),
@@ -1230,10 +1215,10 @@ void projectValidDataPolygonToOutputPlane(
     projectPixelsToOutputPlane(complexData, spPixels, opPixels);
 }
 
-void projectPixelsToSlantPlane(
+void Utilities::projectPixelsToSlantPlane(
     const six::sicd::ComplexData& complexData,
-    const std::vector<types::RowCol<double> >& spPixels,
-    std::vector<types::RowCol<double> >& opPixels)
+    const std::vector<types::RowCol<double> >& opPixels,
+    std::vector<types::RowCol<double> >& spPixels)
 {
     std::auto_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&complexData));
@@ -1242,7 +1227,7 @@ void projectPixelsToSlantPlane(
     AreaPlane areaPlane;
     if (AreaPlaneUtility::hasAreaPlane(complexData))
     {
-        areaPlane = *complexData.radarCollection->area->plane;
+         areaPlane = *complexData.radarCollection->area->plane;
     }
     else
     {

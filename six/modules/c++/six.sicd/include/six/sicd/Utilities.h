@@ -67,7 +67,7 @@ public:
     static std::auto_ptr<scene::ProjectionPolynomialFitter>
     getPolynomialFitter(const ComplexData& complexData,
                         size_t numPoints1D =
-                          scene::ProjectionPolynomialFitter::DEFAULT_POINTS_1D);
+                         scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D);
 
     /*!
      * Build ProjectionPolynomialFitter from complexData. Use the valid data
@@ -80,7 +80,7 @@ public:
     getPolynomialFitterVDP(
         const ComplexData& complexData,
         size_t numPoints1D =
-            scene::ProjectionPolynomialFitter::DEFAULT_POINTS_1D);
+            scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D);
 
     /*
      * If the SICD contains a valid data polygon, provides this.
@@ -578,8 +578,8 @@ public:
      */
     static void projectPixelsToSlantPlane(
         const six::sicd::ComplexData& complexData,
-        const std::vector<types::RowCol<double> >& spPixels,
-        std::vector<types::RowCol<double> >& opPixels);
+        const std::vector<types::RowCol<double> >& opPixels,
+        std::vector<types::RowCol<double> >& spPixels);
 };
 }
 }
