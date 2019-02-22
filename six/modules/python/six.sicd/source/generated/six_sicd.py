@@ -1939,6 +1939,8 @@ class ProjectionPolynomialFitter(_object):
         """
         __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent, size_t numPoints1D) -> ProjectionPolynomialFitter
         __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColSizeT fullExtent, RowColDouble outPixelStart, RowColSizeT outExtent, VectorRowColDouble polygon, size_t numPoints1D) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColSizeT fullExtent, RowColDouble outPixelStart, RowColSizeT outExtent, VectorRowColDouble polygon) -> ProjectionPolynomialFitter
         """
         this = _six_sicd.new_ProjectionPolynomialFitter(*args)
         try:
@@ -4947,9 +4949,19 @@ class SixSicdUtilities(_object):
 
     getProjectionModel = staticmethod(getProjectionModel)
 
-    def getPolynomialFitter(complexData):
-        """getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >"""
-        return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
+    def getModelComponents(complexData, geometry, projectionModel, areaPlane):
+        """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+        return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+    getModelComponents = staticmethod(getModelComponents)
+
+    def getPolynomialFitter(*args):
+        """
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        """
+        return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
 
     getPolynomialFitter = staticmethod(getPolynomialFitter)
 
@@ -5075,6 +5087,24 @@ class SixSicdUtilities(_object):
 
     fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
 
+    def projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+        """projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+        return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+    projectPixelsToOutputPlane = staticmethod(projectPixelsToOutputPlane)
+
+    def projectValidDataPolygonToOutputPlane(complexData, opPixels):
+        """projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+        return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+    projectValidDataPolygonToOutputPlane = staticmethod(projectValidDataPolygonToOutputPlane)
+
+    def projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+        """projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+        return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
+
+    projectPixelsToSlantPlane = staticmethod(projectPixelsToSlantPlane)
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -5095,9 +5125,17 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
-def SixSicdUtilities_getPolynomialFitter(complexData):
-    """SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >"""
-    return _six_sicd.SixSicdUtilities_getPolynomialFitter(complexData)
+def SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane):
+    """SixSicdUtilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+    return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+def SixSicdUtilities_getPolynomialFitter(*args):
+    """
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    """
+    return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
 
 def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
     """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
@@ -5186,6 +5224,18 @@ def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlan
 def SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
     """SixSicdUtilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
     return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+def SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+    """SixSicdUtilities_projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+    return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+def SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels):
+    """SixSicdUtilities_projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+    return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+def SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+    """SixSicdUtilities_projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+    return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
 
 class AreaPlaneUtility(_object):
     """Proxy of C++ six::sicd::AreaPlaneUtility class."""
