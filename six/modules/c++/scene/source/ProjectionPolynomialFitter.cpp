@@ -82,8 +82,8 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
              jj < mNumPoints1D;
              ++jj, currentOffset.col += skip.col)
         {
-            projectToSlantPlane(projModel, gridTransform, currentOffset,
-                                outPixelStart, ii, jj);
+            projectToSlantPlane(projModel, gridTransform, outPixelStart,
+                                currentOffset, ii, jj);
         }
     }
 }
@@ -217,8 +217,8 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         for (size_t jj = 0; jj < numPoints1D; ++jj, currentCol += newDeltaCol)
         {
             const types::RowCol<double> currentOffset(currentRow, currentCol);
-            projectToSlantPlane(projModel, gridTransform, currentOffset,
-                outPixelStart, ii, jj);
+            projectToSlantPlane(projModel, gridTransform, outPixelStart,
+                currentOffset, ii, jj);
         }
     }
 }
