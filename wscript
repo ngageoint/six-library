@@ -4,7 +4,6 @@ from waflib import Scripting, Options
 from waflib.Build import BuildContext
 from waflib.Tools import waf_unit_test
 
-VERSION = '2.8'
 APPNAME = 'nitro'
 top     = '.'
 out     = 'target'
@@ -19,9 +18,7 @@ def options(opt):
     opt.recurse(DIRS)
 
 def configure(conf):
-
     conf.env['APPNAME'] = APPNAME
-    conf.env['VERSION'] = VERSION
     conf.load(TOOLS, tooldir='build')
     conf.recurse(DIRS)
 
