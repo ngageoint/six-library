@@ -17,6 +17,8 @@ def build(bld):
               install_path='${PYTHONDIR}/nitf',
               source=bld.path.make_node('source').ant_glob('**/*.py'))
 
+    bld(features='add_targets', targets_to_add='py_test_utils')
+
     # then a c extension module
     if 'SWIG' in env and env['SWIG']:
         # TODO: Update build.py's swigModule() to handle compiling C modules
