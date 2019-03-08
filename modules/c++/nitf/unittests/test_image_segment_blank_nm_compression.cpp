@@ -257,7 +257,6 @@ TEST_CASE(testBlankSegmentsValid)
          {
             nitf::ImageSegment seg(static_cast<nitf_ImageSegment *>((*imageIterator)));
             nitf::ImageSubheader subhdr     = seg.getSubheader();
-            std::string imageMode           = subhdr.getImageMode().toString();
             nitf::ImageReader imageReader   = reader.newImageReader(imgCtr);
             nitf::BlockingInfo blockingInfo = imageReader.getBlockingInfo();
             nitf_ImageReader *iReader       = static_cast<nitf_ImageReader *>(imageReader.getNativeOrThrow());
