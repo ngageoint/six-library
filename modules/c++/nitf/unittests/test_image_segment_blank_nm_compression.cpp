@@ -168,7 +168,6 @@ TEST_CASE(testBlankSegmentsValid)
     *
     * Create 3 segments for testing
     */
-   nitf_Error error;
    const nitf::Int64 numberLines     = BLOCK_LENGTH * 3;
    const nitf::Int64 numberElements  = BLOCK_LENGTH * 2;
    const nitf::Int64 bytesPerSegment = BLOCK_LENGTH * BLOCK_LENGTH * 2;
@@ -236,15 +235,6 @@ TEST_CASE(testBlankSegmentsValid)
       output_io.close();
 
       {
-         nitf_Reader *reader=NULL;           /* Reader object */
-         nitf_Record *record = NULL;         /* Record used for input and output */
-         nitf_IOHandle in;                   /* Input I/O handle */
-         nitf_ListIterator imgIter;          /* Image segment list iterator */
-         nitf_ListIterator imgEnd;           /* Image segment list iterator */
-         nitf_ImageSegment *seg = NULL;      /* Image segment object */
-         nitf_ImageSubheader *subhdr = NULL; /* Image subheader object */
-         nitf_ImageReader *iReader = NULL;   /* Image reader */
-         nitf_BlockingInfo *blkInfo = NULL;  /* Blocking information */
          nitf_Uint32 imageDataOffset=0;        /* Offset to actual image data past masks */
          nitf_Uint32 blockRecordLength=0;      /* Block mask record length */
          nitf_Uint32 padRecordLength=0;        /* Pad mask record length */
@@ -253,49 +243,35 @@ TEST_CASE(testBlankSegmentsValid)
          nitf_Uint64 *blockMask=NULL;             /* Block mask array */
          nitf_Uint64 *padMask=NULL;               /* Pad mask array */
          nitf::Int64 imgCtr = 0;
-
          /*  Image information */
-         char imageMode[NITF_IMODE_SZ + 1]; /* Image (blocking) mode */
-
-         /*  Mask structure and mask components */
-         in = nitf_IOHandle_create(tempNitf.pathname().c_str(),
-                                   NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, &error);
-         TEST_ASSERT_FALSE( (NITF_INVALID_HANDLE(in)) );
-         reader = nitf_Reader_construct(&error);
-         record = nitf_Reader_read(reader, in, &error);
-
-         /* Loop through the image segments */
-         imgIter = nitf_List_begin(record->images);
-         imgEnd = nitf_List_end(record->images);
-         while (nitf_ListIterator_notEqualTo(&imgIter, &imgEnd))
+         // char imageMode[NITF_IMODE_SZ + 1]; /* Image (blocking) mode */
+         nitf::IOHandle input_io(tempNitf.pathname(),
+                                 NITF_ACCESS_READONLY,
+                                 NITF_OPEN_EXISTING);
+         nitf::Reader reader;
+         nitf::Record record = reader.read(input_io);
+         nitf::List images   = record.getImages();
+         for (nitf::ListIterator imageIterator = images.begin();
+              imageIterator != images.end();
+              ++imageIterator)
          {
-            /*  Get information from the image subheader */
-            seg = (nitf_ImageSegment *)nitf_ListIterator_get(&imgIter);
-            TEST_ASSERT_TRUE((seg!=NULL));
-            subhdr = seg->subheader;
-
-            nitf_Field_get(subhdr->imageMode,
-                           imageMode, NITF_CONV_STRING, NITF_IMODE_SZ + 1, &error);
-            imageMode[NITF_IMODE_SZ] = 0;
-
-            /*  Get an image reader which creates the nitf_ImageIO were the masks are */
-
-            iReader = nitf_Reader_newImageReader(reader, imgCtr, NULL, &error);
-            TEST_ASSERT_TRUE( (iReader!=NULL) );
-
-            blkInfo = nitf_ImageReader_getBlockingInfo(iReader, &error);
-            TEST_ASSERT_TRUE( (blkInfo!=NULL) );
+            nitf::ImageSegment seg(static_cast<nitf_ImageSegment *>((*imageIterator)));
+            nitf::ImageSubheader subhdr     = seg.getSubheader();
+            std::string imageMode           = subhdr.getImageMode().toString();
+            nitf::ImageReader imageReader   = reader.newImageReader(imgCtr);
+            nitf::BlockingInfo blockingInfo = imageReader.getBlockingInfo();
+            nitf_ImageReader *iReader       = static_cast<nitf_ImageReader *>(imageReader.getNativeOrThrow());
             TEST_ASSERT_TRUE(nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
-                                       &imageDataOffset, &blockRecordLength,
-                                       &padRecordLength, &padPixelValueLength,
-                                       &padValue, &blockMask, &padMask) != 0);
-            nitf::Int64 nBlocksPresent = 0;
-            nitf::Int64 totalBlocks = blkInfo->numBlocksPerRow * blkInfo->numBlocksPerCol;
+                                                      &imageDataOffset, &blockRecordLength,
+                                                      &padRecordLength, &padPixelValueLength,
+                                                      &padValue, &blockMask, &padMask) != 0);
+
+            const nitf::Int64 totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
             TEST_ASSERT_GREATER(blockRecordLength, 0);
-            
-            nBlocksPresent = getNumberBlocksPresent(blockMask,
-                                                      blkInfo->numBlocksPerRow,
-                                                      blkInfo->numBlocksPerCol);
+
+            const nitf::Int64 nBlocksPresent = getNumberBlocksPresent(blockMask,
+                                                                      blockingInfo.getNumBlocksPerRow(),
+                                                                      blockingInfo.getNumBlocksPerCol());
 
             if (imgCtr == testIdx)
             {
@@ -305,15 +281,8 @@ TEST_CASE(testBlankSegmentsValid)
             {
                TEST_ASSERT_EQ(nBlocksPresent, totalBlocks);
             }
-
-            nitf_ImageReader_destruct(&iReader);
-            nrt_ListIterator_increment(&imgIter);
             ++imgCtr;
          }
-         /*    Clean-up */
-         nitf_Reader_destruct(&reader);
-         nitf_IOHandle_close(in);
-         nitf_Record_destruct(&record);
       }
    }
 }
