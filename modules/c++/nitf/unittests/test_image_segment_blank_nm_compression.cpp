@@ -37,12 +37,12 @@ std::string generateILOC(const types::RowCol<nitf::Int64> &offset)
 }
 
 nitf::ImageSubheader setImageSubHeader(
-    nitf::Record &record,
-    nitf::Int64 imageIndex,
-    const types::RowCol<nitf::Int64> &fullDims,
-    const types::RowCol<nitf::Int64> &segmentDims,
-    const types::RowCol<nitf::Int64> &segmentOffset,
-    const types::RowCol<nitf::Int64> &globalSegmentOffset,
+    nitf::Record&                     record,
+    nitf::Int64                       imageIndex,
+    const types::RowCol<nitf::Int64>& fullDims,
+    const types::RowCol<nitf::Int64>& segmentDims,
+    const types::RowCol<nitf::Int64>& segmentOffset,
+    const types::RowCol<nitf::Int64>& globalSegmentOffset,
     bool fileSeparate)
 {
    nitf::ImageSegment   imageSegment = record.newImageSegment();
@@ -103,9 +103,9 @@ nitf::ImageSubheader setImageSubHeader(
    return imgSubHdr;
 }
 
-nitf::Int64 getNumberBlocksPresent(const nitf_Uint64 *mask,
-                                   const nitf::Int64 numRows,
-                                   const nitf::Int64 numCols)
+nitf::Int64 getNumberBlocksPresent(const nitf_Uint64* mask,
+                                   const nitf::Int64  numRows,
+                                   const nitf::Int64  numCols)
 {
    nitf::Int64 numBlocksPresent = 0;
    for (nitf::Int64 row = 0, idx = 0; row < numRows; ++row)
@@ -122,9 +122,9 @@ nitf::Int64 getNumberBlocksPresent(const nitf_Uint64 *mask,
    return numBlocksPresent;
 }
 
-void createSingleBandBuffer(std::vector<nitf::Uint8> &buffer,
-                            const nitf::ImageSegmentComputer &segmentComputer,
-                            const types::RowCol<nitf::Int64> &fullDims,
+void createSingleBandBuffer(std::vector<nitf::Uint8>& buffer,
+                            const nitf::ImageSegmentComputer& segmentComputer,
+                            const types::RowCol<nitf::Int64>& fullDims,
                             const nitf::Int64 segmentIdxToMakeEmpty)
 {
    const nitf::Int64 bytes = fullDims.area();
@@ -138,9 +138,9 @@ void createSingleBandBuffer(std::vector<nitf::Uint8> &buffer,
           '\0', segmentSizeInBytes);
 }
 
-void createBuffers(std::vector<std::vector<nitf::Uint8> > &buffers,
-                   const nitf::ImageSegmentComputer &imageSegmentComputer,
-                   const types::RowCol<nitf::Int64> &fullDims)
+void createBuffers(std::vector<std::vector<nitf::Uint8> >& buffers,
+                   const nitf::ImageSegmentComputer& imageSegmentComputer,
+                   const types::RowCol<nitf::Int64>& fullDims)
 {
    const nitf::Int64 nSegments = imageSegmentComputer.getSegments().size();
    /*
@@ -239,12 +239,10 @@ TEST_CASE(testBlankSegmentsValid)
          nitf_Uint32 blockRecordLength=0;      /* Block mask record length */
          nitf_Uint32 padRecordLength=0;        /* Pad mask record length */
          nitf_Uint32 padPixelValueLength=0;    /* Pad pixel value length in bytes */
-         nitf_Uint8 *padValue = NULL;        /* Pad value */
-         nitf_Uint64 *blockMask=NULL;             /* Block mask array */
-         nitf_Uint64 *padMask=NULL;               /* Pad mask array */
+         nitf_Uint8  *padValue = NULL;         /* Pad value */
+         nitf_Uint64 *blockMask=NULL;          /* Block mask array */
+         nitf_Uint64 *padMask=NULL;            /* Pad mask array */
          nitf::Int64 imgCtr = 0;
-         /*  Image information */
-         // char imageMode[NITF_IMODE_SZ + 1]; /* Image (blocking) mode */
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,
                                  NITF_OPEN_EXISTING);
@@ -282,7 +280,6 @@ TEST_CASE(testBlankSegmentsValid)
             }
             ++imgCtr;
          }
-         input_io.close();
       }
    }
 }
