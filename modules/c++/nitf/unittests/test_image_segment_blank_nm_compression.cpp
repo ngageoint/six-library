@@ -283,6 +283,7 @@ TEST_CASE(testBlankSegmentsValid)
             }
             ++imgCtr;
          }
+         input_io.close();
       }
    }
 }
