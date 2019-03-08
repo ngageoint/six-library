@@ -26,7 +26,7 @@ extern "C"{
 }
 const nitf::Int64 BLOCK_LENGTH = 1024;
 const nitf::Int64 ILOC_MAX     = 99999;
-std::string generateILOC(const types::RowCol<nitf::Int64> &offset)
+std::string generateILOC(const types::RowCol<nitf::Int64>& offset)
 {
    std::ostringstream oss;
 
