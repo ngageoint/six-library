@@ -190,7 +190,7 @@ def build(bld):
         if env['install_headers']:
             openjpeg.features += 'add_targets'
             openjpeg.targets_to_add = [bld(features='install_tgt',
-                    includes='openjpeg.h opj_config.h opj_stdint.h opj_config_private.h',
+                    files='openjpeg.h opj_config.h opj_stdint.h opj_config_private.h'.split(),
                     dir=openjpegNode, install_path=env['install_includedir'],
                     name='J2K_INCLUDES_INSTALL')]
 

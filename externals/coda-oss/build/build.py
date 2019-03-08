@@ -653,7 +653,7 @@ class GlobDirectoryWalker:
             else:
                 # got a filename
                 fullname = join(self.directory, file)
-                if isdir(fullname):# and not os.path.islink(fullname):
+                if isdir(fullname) and not os.path.islink(fullname):
                     self.stack.append(fullname)
                 for p in self.patterns:
                     if fnmatch.fnmatch(file, p):
