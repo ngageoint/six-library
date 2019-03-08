@@ -835,6 +835,9 @@ typedef struct _nitf_ImageIOBlock_s
     /*! Current row in the image */
     nitf_Uint32 currentRow;
 
+    /*! Total blocks written to disk */
+    nitf_Int64 totalBlocksWritten;
+
     /*! Block control for cached write */
     _nitf_ImageIOBlockCacheControl blockControl;
 }
@@ -4791,6 +4794,7 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
     blockIO->padColumnCount = 0;
     blockIO->padRowCount = 0;
     blockIO->residual = residual;
+    blockIO->totalBlocksWritten = 0;
     if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
     {
         if (cntl->downSampling)
@@ -7145,12 +7149,12 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         size_t count,
                                         nitf_Error * error)
 {
-    _nitf_ImageIO *nitf;                    /* Associated image I/O object */
+    _nitf_ImageIO *nitf = ((_nitf_ImageIOControl *)(blockIO->cntl))->nitf; /* Associated image I/O object */
     _nitf_ImageIOBlockCacheControl *blockCntl; /* Associated block control */
-    nitf_Uint64 fileOffset;                 /* Offset in filw for write */
+    nitf_Uint64 fileOffset;                 /* Offset in file for write */
     _NITF_IMAGE_IO_PAD_SCAN_FUNC scanner;   /* Pad scanning function */
-
-    nitf = ((_nitf_ImageIOControl *) (blockIO->cntl))->nitf;
+    const nitf_Int64 nBlocks = nitf->nBlocksTotal;
+    const NITF_BOOL lastBlock = (blockIO->number == (nBlocks - 1));
     blockCntl = &(blockIO->blockControl);
     scanner = nitf->padScanner;
 
@@ -7166,7 +7170,6 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             return NITF_FAILURE;
         }
     }
-
     /* Overflow check*/
 
     if ((blockOffset + count) > nitf->blockSize)
@@ -7194,6 +7197,17 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             (*scanner)(blockIO, &padPresent, &dataPresent);
             if (!dataPresent)                  /* Pad only do not write */
             {
+                if (lastBlock && (blockIO->totalBlocksWritten == 0))
+                {
+                    /*
+                     * we will need to seek to the start of where the data is written.
+                     * For no data was ever written and we need the offsets to be set
+                     * to the next subimage.
+                     */
+                    /* Seek to the offset */
+                    fileOffset = nitf->pixelBase;
+                    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io, (nitf_Off)fileOffset, NITF_SEEK_SET, error))) return NITF_FAILURE;
+                }
                 /*
                  * Copy down all of the offsets since with the missing block
                  * this gives the correct offset for the following blocks. Copy
@@ -7266,7 +7280,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                 blockIO->padMask[blockIO->number] =
                     blockIO->blockMask[blockIO->number];
         }
-
+        ++blockIO->totalBlocksWritten;
         /*
          * Reset the image data offset since it may be different now
          * due to skipped blocks
