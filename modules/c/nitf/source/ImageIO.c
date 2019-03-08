@@ -7149,17 +7149,14 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         size_t count,
                                         nitf_Error * error)
 {
-    _nitf_ImageIO *nitf;                    /* Associated image I/O object */
+    _nitf_ImageIO *nitf = ((_nitf_ImageIOControl *)(blockIO->cntl))->nitf; /* Associated image I/O object */
     _nitf_ImageIOBlockCacheControl *blockCntl; /* Associated block control */
-    nitf_Uint64 fileOffset;                 /* Offset in filw for write */
+    nitf_Uint64 fileOffset;                 /* Offset in file for write */
     _NITF_IMAGE_IO_PAD_SCAN_FUNC scanner;   /* Pad scanning function */
-    nitf_Int64 nBlocks;
-    NITF_BOOL lastBlock = 0;
-    nitf = ((_nitf_ImageIOControl *)(blockIO->cntl))->nitf;
+    const nitf_Int64 nBlocks = nitf->nBlocksTotal;
+    const NITF_BOOL lastBlock = (blockIO->number == (nBlocks - 1));
     blockCntl = &(blockIO->blockControl);
     scanner = nitf->padScanner;
-    nBlocks = nitf->nBlocksTotal;
-    lastBlock = (blockIO->number == (nBlocks - 1));
 
     if (blockCntl->block == NULL)
     {
