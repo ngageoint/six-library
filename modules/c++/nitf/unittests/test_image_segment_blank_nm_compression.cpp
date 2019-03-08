@@ -284,7 +284,7 @@ TEST_CASE(testBlankSegmentsValid)
    }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
    TEST_CHECK(testBlankSegmentsValid);
 
