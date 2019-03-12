@@ -14,6 +14,7 @@
 #endif
 
 #define SWIG_PYTHON_DIRECTOR_NO_VTABLE
+#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
 
 
 #ifdef __cplusplus
@@ -34668,8 +34669,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_TRE_HASH_SIZE",SWIG_From_int(static_cast< int >(8)));
   SWIG_Python_SetConstant(d, "HAVE_CLOCK_GETTIME",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "HAVE_SYS_TIME_H",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.7"));
-  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.7"));
+  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.8"));
+  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_DECOMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_PLUGIN_PATH",SWIG_FromCharPtr("NITF_PLUGIN_PATH"));
