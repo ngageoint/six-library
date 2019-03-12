@@ -1,7 +1,10 @@
+VERSION = '2.8'
+
 def options(opt):
     opt.recurse()
 
 def configure(conf):
+    conf.env['VERSION'] = VERSION
     conf.recurse()
 
 def build(bld):
