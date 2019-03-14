@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <sys/sys_config.h>
 
 namespace mem
 {
@@ -106,10 +107,14 @@ public:
     {
         return !(*this == rhs);
     }
-    
-    explicit operator bool() const 
-    { 
-        return get() == NULL ? false : true; 
+
+    // explicit operators not supported until C++11
+#ifdef __CODA_CPP11
+    explicit
+#endif
+    operator bool() const
+    {
+        return get() == NULL ? false : true;
     }
 
     T* get() const
