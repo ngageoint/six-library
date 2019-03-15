@@ -134,17 +134,13 @@ void createSingleBandBuffer(std::vector<nitf::Uint8>& buffer,
 
    buffer.resize(bytes);
    memset(&buffer.front(), '\0', bytes);
-   for (nitf::Int32 segIdx = 0; segIdx < segments.size(); ++segIdx)
+   for (nitf::Uint32 segIdx = 0; segIdx < segments.size(); ++segIdx)
    {
       nitf::Uint8 *segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
       /* Set only the center that way we are surrounded by empty blocks */
       if (segIdx != segmentIdxToMakeEmpty)
       {
          segStart[segmentSizeInBytes/2] = 0xff;
-      }
-      else
-      {
-         memset(segStart, '\0', segmentSizeInBytes);
       }
    }
 }
