@@ -109,16 +109,13 @@ public:
     }
 
     // explicit operators not supported until C++11
-    bool toBool() const
+#ifdef __CODA_CPP11
+    explicit
+#endif
+    operator bool() const
     {
         return get() == NULL ? false : true;
     }
-#ifdef __CODA_CPP11
-    explicit operator bool() const
-    {
-        return toBool();
-    }
-#endif
 
     T* get() const
     {

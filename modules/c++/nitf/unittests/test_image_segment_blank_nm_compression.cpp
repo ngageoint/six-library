@@ -24,8 +24,8 @@ extern "C"{
                                       nitf_Uint8** padValue, nitf_Uint64** blockMask, nitf_Uint64** padMask);
                      
 }
-const nitf::Int64 BLOCK_LENGTH = 1024;
-const nitf::Int64 ILOC_MAX     = 99999;
+const nitf::Int64 BLOCK_LENGTH = 256;
+const nitf::Int64 ILOC_MAX = 99999;
 std::string generateILOC(const types::RowCol<nitf::Int64>& offset)
 {
    std::ostringstream oss;
@@ -133,9 +133,16 @@ void createSingleBandBuffer(std::vector<nitf::Uint8>& buffer,
    const nitf::Int64 segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
 
    buffer.resize(bytes);
-   memset(&buffer.front(), '0xff', bytes);
-   memset(&buffer.front() + (segmentSizeInBytes * segmentIdxToMakeEmpty),
-          '\0', segmentSizeInBytes);
+   memset(&buffer.front(), '\0', bytes);
+   for (nitf::Uint32 segIdx = 0; segIdx < segments.size(); ++segIdx)
+   {
+      nitf::Uint8 *segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
+      /* Set only the center that way we are surrounded by empty blocks */
+      if (segIdx != segmentIdxToMakeEmpty)
+      {
+         segStart[segmentSizeInBytes/2] = 0xff;
+      }
+   }
 }
 
 void createBuffers(std::vector<std::vector<nitf::Uint8> >& buffers,
@@ -168,9 +175,10 @@ TEST_CASE(testBlankSegmentsValid)
     *
     * Create 3 segments for testing
     */
-   const nitf::Int64 numberLines     = BLOCK_LENGTH * 3;
-   const nitf::Int64 numberElements  = BLOCK_LENGTH * 2;
-   const nitf::Int64 bytesPerSegment = BLOCK_LENGTH * BLOCK_LENGTH * 2;
+   const nitf::Int64 BLOCK_LENGTH_SCALED = BLOCK_LENGTH*4;
+   const nitf::Int64 numberLines = BLOCK_LENGTH_SCALED * 3;
+   const nitf::Int64 numberElements = BLOCK_LENGTH_SCALED * 2;
+   const nitf::Int64 bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
    const nitf::Int64 elementSize     = 1;
    nitf::Int64 numberOfTests         = 0;
    const types::RowCol<nitf::Int64> fullDims(numberLines, numberElements);
@@ -276,7 +284,7 @@ TEST_CASE(testBlankSegmentsValid)
             }
             else
             {
-               TEST_ASSERT_EQ(nBlocksPresent, totalBlocks);
+               TEST_ASSERT_GREATER(nBlocksPresent, 0);
             }
             ++imgCtr;
          }

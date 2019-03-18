@@ -521,8 +521,9 @@ typedef struct
     /*!< Control structure for current read */
     struct _nitf_ImageIOReadControl_s *readControl;
     _NITF_IMAGE_IO_PAD_SCAN_FUNC padScanner; /*! Scans for pad pixels in write */
-}
-_nitf_ImageIO;
+    /*! Total blocks written to disk */
+    nitf_Int64 totalBlocksWritten;
+} _nitf_ImageIO;
 
 /*!
   \brief _nitf_ImageIOControl - IO control structure
@@ -835,13 +836,10 @@ typedef struct _nitf_ImageIOBlock_s
     /*! Current row in the image */
     nitf_Uint32 currentRow;
 
-    /*! Total blocks written to disk */
-    nitf_Int64 totalBlocksWritten;
-
     /*! Block control for cached write */
     _nitf_ImageIOBlockCacheControl blockControl;
-}
-_nitf_ImageIOBlock;
+
+} _nitf_ImageIOBlock;
 
 /*!
   \brief _nitf_ImageIOWriteControl - Write control structure
@@ -3271,7 +3269,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
             return(NULL);
         }
     }
-
+    nitf->totalBlocksWritten = 0;
     return (nitf_ImageIO *) nitf;
 
 CATCH_ERROR:
@@ -3649,7 +3647,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
     nitf = ioCntl->nitf;
     numBands = ioCntl->numBandSubset;
     nBlockCols = ioCntl->nBlockIO / numBands;
-
     /* Check for row out of bounds */
 
     if (cntl->nextRow + numRows > nitf->numRows)
@@ -4794,7 +4791,6 @@ NITFPRIV(void) nitf_ImageIO_commonBlockInit(_nitf_ImageIOControl * cntl,
     blockIO->padColumnCount = 0;
     blockIO->padRowCount = 0;
     blockIO->residual = residual;
-    blockIO->totalBlocksWritten = 0;
     if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
     {
         if (cntl->downSampling)
@@ -7197,7 +7193,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             (*scanner)(blockIO, &padPresent, &dataPresent);
             if (!dataPresent)                  /* Pad only do not write */
             {
-                if (lastBlock && (blockIO->totalBlocksWritten == 0))
+                if (lastBlock && (blockIO->cntl->nitf->totalBlocksWritten == 0))
                 {
                     /*
                      * we will need to seek to the start of where the data is written.
@@ -7280,7 +7276,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                 blockIO->padMask[blockIO->number] =
                     blockIO->blockMask[blockIO->number];
         }
-        ++blockIO->totalBlocksWritten;
+        ++blockIO->cntl->nitf->totalBlocksWritten;
         /*
          * Reset the image data offset since it may be different now
          * due to skipped blocks
