@@ -932,9 +932,10 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
  * VS 15.9 hits a bug in the compiler's optimizer here.
  * If we're using VS 2017, turn off optimizations for this function
  * so we can still compile.
+ * TODO: Update upper bound once VS 2019 is released
 */
 #if defined _MSC_VER
-#if _MSC_VER >= 1910 && _MSC_VER < 1916
+#if _MSC_VER >= 1910
 #pragma optimize("", off)
 #endif
 #endif
