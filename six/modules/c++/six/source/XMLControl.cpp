@@ -47,6 +47,17 @@ void validate(const xml::lite::Document* doc,
         }
     }
 
+    // If the paths we have don't exist, throw
+    for (size_t ii = 0; ii < paths.size(); ++ii)
+    {
+        if (!os.exists(paths[ii]))
+        {
+            std::ostringstream msg;
+            msg << paths[ii] << " does not exist!";
+            throw except::Exception(Ctxt(msg.str()));
+        }
+    }
+
     // validate against any specified schemas
     if (!paths.empty())
     {
