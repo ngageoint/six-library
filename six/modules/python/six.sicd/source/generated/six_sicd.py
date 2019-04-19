@@ -1968,22 +1968,22 @@ class ProjectionPolynomialFitter(_object):
         return _six_sicd.ProjectionPolynomialFitter_getTimeCOA(self)
 
 
-    def _fitPolyImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+    def _fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
         """
-        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
-        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
-        _fitPolyImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
         """
-        return _six_sicd.ProjectionPolynomialFitter__fitPolyImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
+        return _six_sicd.ProjectionPolynomialFitter__fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
 
 
-    def fitSlantToOutputPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+    def _fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
         """
-        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
-        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None)
-        fitSlantToOutputPolynomials(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol)
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None)
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol)
         """
-        return _six_sicd.ProjectionPolynomialFitter_fitSlantToOutputPolynomials(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow, meanResidualErrorCol)
+        return _six_sicd.ProjectionPolynomialFitter__fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow, meanResidualErrorCol)
 
 
     def fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
@@ -2008,7 +2008,18 @@ class ProjectionPolynomialFitter(_object):
             polyOrderX, polyOrderY):
         toSlantRow = Poly2D()
         toSlantCol = Poly2D()
-        self._fitPolyImpl(
+        self._fitOutputToSlantImpl(
+            offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+        return (toSlantRow, toSlantCol)
+
+    def fitSlantToOutputPolynomials(
+            self, offset, inSceneCenter,
+            interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY):
+        toSlantRow = Poly2D()
+        toSlantCol = Poly2D()
+        self._fitSlantToOutputImpl(
             offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
             polyOrderX, polyOrderY, toSlantRow, toSlantCol)
         return (toSlantRow, toSlantCol)

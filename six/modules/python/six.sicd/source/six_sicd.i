@@ -139,7 +139,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
-%rename(_fitPolyImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+%rename(_fitOutputToSlantImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+%rename(_fitSlantToOutputImpl) scene::ProjectionPolynomialFitter::fitSlantToOutputPolynomials;
 
 %import <nitf/List.hpp>
 %import <nitf/Object.hpp>
@@ -472,10 +473,21 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                 polyOrderX, polyOrderY):
             toSlantRow = Poly2D()
             toSlantCol = Poly2D()
-            self._fitPolyImpl(
+            self._fitOutputToSlantImpl(
                 offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
                 polyOrderX, polyOrderY, toSlantRow, toSlantCol)
             return (toSlantRow, toSlantCol)
+
+        def fitSlantToOutputPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toOutputRow = Poly2D()
+            toOutputCol = Poly2D()
+            self._fitSlantToOutputImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+            return (toOutputRow, toOutputCol)
 
     %}
 }
