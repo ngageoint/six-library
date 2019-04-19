@@ -24,6 +24,8 @@ if __name__ == '__main__':
                                      'the output plane, and write it as an SIO')
     parser.add_argument('--schema', help='Specifiy a schema or '
                         'directory of schemata')
+    parser.add_argument('--order', type=int, default=3,
+                        help='Order of polynomials to calcualte')
     parser.add_argument('input', help='Input SICD')
     args = parser.parse_args()
 
@@ -47,10 +49,10 @@ if __name__ == '__main__':
                             complexData.imageData.scpPixel.col)
 
     toSlantRow, toSlantCol = polynomialFitter.fitOutputToSlantPolynomials(
-        offset, scpPixel, scpPixel, sampleSpacing, 9, 9)
+        offset, scpPixel, scpPixel, sampleSpacing, args.order, args.order)
 
     toOutputRow, toOutputCol = polynomialFitter.fitSlantToOutputPolynomials(
-        offset, scpPixel, scpPixel, sampleSpacing, 9, 9)
+        offset, scpPixel, scpPixel, sampleSpacing, args.order, args.order)
 
     toSlantRow = toSlantRow.flipXY()
     toSlantCol = toSlantCol.flipXY()
@@ -58,15 +60,15 @@ if __name__ == '__main__':
     toOutputRow = toOutputRow.flipXY()
     toOutputCol = toOutputCol.flipXY()
 
-    for row in range(complexData.imageData.numRows):
-        for col in range(complexData.imageData.numCols):
+    for row in range(0, complexData.imageData.numRows, 10):
+        for col in range(0, complexData.imageData.numCols, 10):
             outputRow = toOutputRow.atY(row)(col)
             outputCol = toOutputCol.atY(row)(col)
 
             slantRow = toSlantRow.atY(outputRow)(outputCol)
             slantCol = toSlantCol.atY(outputRow)(outputCol)
 
-            if abs(slantRow - row) > .5 or abs(slantCol - col) > .5:
+            if abs(slantRow - row) > 5 or abs(slantCol - col) > 5:
                 print('Round trip failed at ({}, {})'.format(row, col))
                 print('({}, {}) vs ({}, {})'.format(row, col, slantRow, slantCol))
                 sys.exit(1)
