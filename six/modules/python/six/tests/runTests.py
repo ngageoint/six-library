@@ -34,7 +34,7 @@ import runUnitTests
 import checkNITFs
 import utils
 
-from runner import CppTestRunner
+from runner import CppTestRunner, PythonTestRunner
 
 
 def runCsmTests():
@@ -121,6 +121,7 @@ def run(sourceDir):
     sicdTestRunner = CppTestRunner(sicdTestDir)
     siddTestRunner = CppTestRunner(siddTestDir)
     sampleTestRunner = CppTestRunner(sampleTestDir)
+    pySicdTestRunner = PythonTestRunner(sicdTestDir)
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
@@ -130,6 +131,9 @@ def run(sourceDir):
 
         if not sicdTestRunner.run('test_streaming_write'):
             return False
+
+        #if not pySicdTestRunner.run('test_projection_polynomials.py', sampleSicd):
+        #    return False
 
         if not sicdTestRunner.run('test_sicd_byte_provider'):
             return False

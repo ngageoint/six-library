@@ -28,6 +28,8 @@ class TestRunner(object):
         if call(commandArgs) == 0:
             print("{0} succeeded!".format(testName))
             result = True
+        else:
+            print("{0} failed!".format(testName))
         self.clean()
         return result
 
