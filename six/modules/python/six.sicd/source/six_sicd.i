@@ -482,12 +482,12 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                 self, offset, inSceneCenter,
                 interimSceneCenter, interimSampleSpacing,
                 polyOrderX, polyOrderY):
-            toSlantRow = Poly2D()
-            toSlantCol = Poly2D()
+            toOutputRow = Poly2D()
+            toOutputCol = Poly2D()
             self._fitSlantToOutputImpl(
                 offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
-                polyOrderX, polyOrderY, toSlantRow, toSlantCol)
-            return (toSlantRow, toSlantCol)
+                polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+            return (toOutputRow, toOutputCol)
 
     %}
 }
