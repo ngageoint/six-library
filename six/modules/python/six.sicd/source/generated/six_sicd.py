@@ -1907,6 +1907,14 @@ def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
 
+def crop_SICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
+    """crop_SICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
+    return _six_sicd.crop_SICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
+
+def cropMetaData(complexData, aoiOffset, aoiDims):
+    """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> ComplexData"""
+    return _six_sicd.cropMetaData(complexData, aoiOffset, aoiDims)
+
 def _readRecord(pathname):
     """_readRecord(std::string const & pathname) -> Record"""
     return _six_sicd._readRecord(pathname)
@@ -2017,12 +2025,12 @@ class ProjectionPolynomialFitter(_object):
             self, offset, inSceneCenter,
             interimSceneCenter, interimSampleSpacing,
             polyOrderX, polyOrderY):
-        toSlantRow = Poly2D()
-        toSlantCol = Poly2D()
+        toOutputRow = Poly2D()
+        toOutputCol = Poly2D()
         self._fitSlantToOutputImpl(
             offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
-            polyOrderX, polyOrderY, toSlantRow, toSlantCol)
-        return (toSlantRow, toSlantCol)
+            polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+        return (toOutputRow, toOutputCol)
 
 
     __swig_destroy__ = _six_sicd.delete_ProjectionPolynomialFitter

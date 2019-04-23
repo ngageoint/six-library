@@ -124,6 +124,28 @@ Data* readNITF(const std::string& pathname,
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
 
+
+void crop_SICD(const std::string& inPathname,
+               const std::vector<std::string>& schemaPaths,
+               const types::RowCol<size_t>& aoiOffset,
+               const types::RowCol<size_t>& aoiDims,
+               const std::string& outPathname);
+              
+void crop_SICD(const std::string& inPathname,
+               const std::vector<std::string>& schemaPaths,
+               const types::RowCol<size_t>& aoiOffset,
+               const types::RowCol<size_t>& aoiDims,
+               const std::string& outPathname)
+{
+
+  six::XMLControlFactory::getInstance().addCreator(
+          six::DataType::COMPLEX,
+	  new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+  
+  cropSICD(inPathname, schemaPaths, aoiOffset,
+	   aoiDims, outPathname);         
+}
+
 nitf::Record _readRecord(const std::string& pathname);
 
 nitf::Record _readRecord(const std::string& pathname)
@@ -198,6 +220,17 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
+
+void crop_SICD(const std::string& inPathname,
+               const std::vector<std::string>& schemaPaths,
+               const types::RowCol<size_t>& aoiOffset,
+               const types::RowCol<size_t>& aoiDims,
+               const std::string& outPathname);
+
+six::sicd::ComplexData* const cropMetaData(
+        const six::sicd::ComplexData* complexData,
+	const types::RowCol<size_t>& aoiOffset,
+	const types::RowCol<size_t>& aoiDims);
 
 nitf::Record _readRecord(const std::string& pathname);
 
