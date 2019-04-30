@@ -3,7 +3,6 @@ from javatool import java_module
 
 NAME            = 'nitf.imagej'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
-VERSION         = '2.7'
 MODULE_DEPS     = 'nitf nitf.imageio'
 CLASSPATH       = 'ij-1.42.jar'
 COMPAT          = '1.5'
@@ -11,4 +10,6 @@ COMPAT          = '1.5'
 configure = options = distclean = lambda x: None
 
 def build(bld):
-    java_module(bld, **globals())	
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    java_module(bld, **modArgs)

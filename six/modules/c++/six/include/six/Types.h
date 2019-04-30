@@ -132,12 +132,14 @@ struct Constants
     //!  This is the upper bound of a NITF segment
     static const sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
     static const sys::Uint64_T GT_SIZE_MAX;
+    static const size_t ILOC_MAX;
 
     static const unsigned short GT_XML_KEY;
     static const char GT_XML_TAG[];
 
     // DESVER is 2 byte BCS-N
     static const sys::Int32_T DES_VERSION;
+    static const char DES_VERSION_STR[];
 
     static const char DES_USER_DEFINED_SUBHEADER_TAG[];
     static const char DES_USER_DEFINED_SUBHEADER_ID[];
@@ -146,10 +148,7 @@ struct Constants
     static const char SICD_DESSHSI[];
     static const char SIDD_DESSHSI[];
 
-    enum
-    {
-        ILOC_MAX = 99999
-    };
+    static const double EXCESS_BANDWIDTH_FACTOR;
 
     /*!
      *  If we have the PixelType, we know exactly how many bytes
@@ -242,6 +241,8 @@ struct ReferencePoint
  */
 struct SCP
 {
+    SCP();
+
     Vector3 ecf;
     LatLonAlt llh;
 
@@ -295,7 +296,7 @@ struct LUT
         numEntries(lookupTable.getEntries()),
         elementSize(lookupTable.getTables())
     {
-        // NITF stores the tables consecutively. 
+        // NITF stores the tables consecutively.
         // Need to interleave them for SIX
         if (elementSize == 3)
         {
@@ -407,6 +408,7 @@ struct AmplitudeTable : public LUT
 template <typename LatLonT>
 struct Corners
 {
+    Corners();
     static const size_t NUM_CORNERS = 4;
 
     //! These can be used with getCorner() below

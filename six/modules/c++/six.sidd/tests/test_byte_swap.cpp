@@ -59,9 +59,17 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
-    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
-    derivedData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
+
+    // Set image corners
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+                getCorner(ii).setLat(0);
+        derivedData->geographicAndTarget->geographicCoverage.footprint.
+            getCorner(ii).setLon(0);
+    }
+
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resolution.row = 0;
     derivedData->exploitationFeatures->product.resolution.col = 0;
@@ -86,12 +94,13 @@ std::auto_ptr<six::sidd::DerivedData> createData()
 
 void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
 {
-    six::Container container(six::DataType::DERIVED);
-    container.addData(createData().release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
+    container->addData(createData().release());
 
-    six::NITFWriteControl writer;
-    writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
-    writer.initialize(&container);
+    six::Options options;
+    options.setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
+    six::NITFWriteControl writer(options, container);
 
     if (useStream)
     {
@@ -113,16 +122,8 @@ void read(const std::string& filename, sys::Int16_T* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
-    six::Container* const container = reader.getContainer();
-    six::Data* const inData = container->getData(0);
 
-    const size_t numRows = inData->getNumRows();
-    const size_t numCols = inData->getNumCols();
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(numRows);
-    region.setNumCols(numCols);
     region.setBuffer(reinterpret_cast<six::UByte*>(data));
     reader.interleaved(region, 0);
 }
@@ -156,7 +157,7 @@ bool run(bool useStream = false, bool byteswap = false)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {

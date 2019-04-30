@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -64,8 +64,8 @@ void writeSIOFileHeader(size_t numRows,
     }
 
     // Write out the SIO header first
-    sio::lite::FileHeader(numRows,
-                          numCols,
+    sio::lite::FileHeader(static_cast<int>(numRows),
+                          static_cast<int>(numCols),
                           elementSize,
                           elementType).to(1, outputStream);
 }
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
         // load the file
         reader->load(inputFile, schemaPaths);
 
-        six::Container* container = reader->getContainer();
+        mem::SharedPtr<six::Container> container = reader->getContainer();
         std::string base = sys::Path::basename(inputFile, true);
         size_t numImages = 0;
 

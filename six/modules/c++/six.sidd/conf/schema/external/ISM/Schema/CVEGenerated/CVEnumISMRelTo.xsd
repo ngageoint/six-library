@@ -11,14 +11,14 @@
 <!--*************************************************************-->
 <xsd:simpleType name="CVEnumISMRelToValues">
       <xsd:annotation>
-         <xsd:documentation>(U) USA followed by all currently valid ISO Trigraphs except USA in alphabetical order by Trigraph, 
+         <xsd:documentation>(U) USA followed by all currently valid ISO Trigraphs except USA in alphabetical order by Trigraph,
             followed by all currently valid CAPCO Coalition tetragraphs in alphabetical order by tetragraph.
                     PERMISSIBLE VALUES
-                    
+
                     The permissible values for this simple type are defined in the Controlled Value Enumeration:
-                    
+
                     CVEnumISMRelTo.xml
-                    
+
                 </xsd:documentation>
       </xsd:annotation>
       <xsd:restriction base="xsd:token">

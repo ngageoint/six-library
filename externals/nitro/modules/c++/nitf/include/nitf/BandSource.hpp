@@ -63,8 +63,8 @@ public:
      *  Constructor
      *  \param data  The memory buffer
      *  \param size  The size of the buffer
-     *  \param numBytesPerPixel The number of bytes per pixel
      *  \param start  The start offset
+     *  \param numBytesPerPixel The number of bytes per pixel
      *  \param pixelSkip  The amount of pixels to skip
      */
     MemorySource(const void* data, size_t size, nitf::Off start,
@@ -88,10 +88,10 @@ public:
                nitf::Off start,
                int numBytesPerPixel,
                int pixelSkip) throw (nitf::NITFException);
-    
+
     /*!
      *  Constructor
-     *  \param handle  The handle to store
+     *  \param io The handle to store
      *  \param start  The location to seek to (as the beginning)
      *  \param numBytesPerPixel The number of bytes per pixel
      *  \param pixelSkip  The number of pixels to skip each time
@@ -154,13 +154,13 @@ private:
 class CopyBlockSource: public ::nitf::DirectBlockSource
 {
 public:
-    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands) 
-        throw (::nitf::NITFException) : 
+    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
+        throw (::nitf::NITFException) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
 
     virtual ~CopyBlockSource(){}
-    
+
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,

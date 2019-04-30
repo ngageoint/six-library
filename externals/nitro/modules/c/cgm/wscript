@@ -3,14 +3,15 @@ from waflib import Options
 
 NAME            = 'cgm'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.7'
 MODULE_DEPS     = 'nitf nrt'
 LANG            = 'c'
 
 options = configure = distclean = lambda p: None
 
 def build(bld):
-    env = bld.module(**globals())
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    env = bld.module(**modArgs)
 
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
@@ -28,6 +29,6 @@ def build(bld):
     test_targets = []
     for test in tests:
         test_targets.append(os.path.splitext(str(test))[0])
-    
+
     bld(features='add_targets', target='cgm-c-tests',
         targets_to_add=test_targets)

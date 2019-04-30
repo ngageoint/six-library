@@ -1,6 +1,6 @@
-import sys, os, shutil
+import sys, os, shutil, re
 from build import unzipper
-from waflib import Options
+from waflib import Options, Logs
 
 def options(opt):
     opt.add_option('--disable-csm', action='store_false', dest='enable_csm', default=True,
@@ -8,26 +8,46 @@ def options(opt):
 
 def configure(conf):
     if Options.options.enable_csm:
-        # NOTE: This was downloaded from https://github.com/johnpdpkarp/csm on
-        #       2013.07.03.  Updates that occurred after the VTS release we got
-        #       from Leonard Tomko seem to still be considered CSM 3.0.1.
-        unzipper(os.path.join(conf.path.abspath(), 'csm-3.0.1_2013.07.03.zip'),
-                 conf.path.abspath())
+        winRegex = r'win32'
+        osxRegex = r'darwin'
+        # If we are building with gcc on Windows, some of the CSM stuff
+        # doesn't compile.  No one is going to ever need to build CSM
+        # plugins in this paradigm as MSP and GXP won't be able to use
+        # them anyhow
+        # The CSM build doesn't work on Mac... again, no one will need to build
+        # plugins there though
+        if re.match(osxRegex,sys.platform) or (re.match(winRegex, sys.platform) and 'MSVC_VERSION' not in conf.env):
+            Logs.warn('Disabling CSM as it is not supported on this platform')
+        else:
+            # NOTE: This was downloaded from
+            # https://github.com/sminster/csm/releases 2018.11.21.
+            if Options.options.csm_version == '3.0.3':
+                csmZipfile = 'csm-3.0.3_2018.11.21.zip'
+            else:
+                csmZipfile = 'csm-3.0.1_2013.07.03.zip'
+            unzipper(os.path.join(conf.path.abspath(), csmZipfile),
+                     conf.path.abspath())
 
-        # NOTE: Originally checked in the VTS zip file that was received from
-        #       Leonard Tomko that corresponded to CSM 3.0.1.  However, this
-        #       did not compile against the "latest" 3.0.1 from GitHub so
-        #       needed to make a few local mods to vts.cpp.  Since I was
-        #       re-zipping anyway, trimmed this down to just the header and
-        #       source files that were needed
-        unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
-                 conf.path.abspath())
-        conf.env['HAVE_CSM'] = True
-        conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master') 
+            # NOTE: Originally checked in the VTS zip file that was received from
+            #       Leonard Tomko that corresponded to CSM 3.0.1.  However, this
+            #       did not compile against the "latest" 3.0.1 from GitHub so
+            #       needed to make a few local mods to vts.cpp.  Since I was
+            #       re-zipping anyway, trimmed this down to just the header and
+            #       source files that were needed
+            unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
+                     conf.path.abspath())
+            conf.env['HAVE_CSM'] = True
+
+            if Options.options.csm_version == '3.0.3':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3')
+                conf.env['CSM_DIR'] = 'csm-3.0.3'
+            else:
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
+                conf.env['CSM_DIR'] = 'csm-master'
 
 def build(bld):
     if 'HAVE_CSM' in bld.env:
-        csmDir = 'csm-master'
+        csmDir = bld.env['CSM_DIR']
         bld(features = 'cxx cshlib',
             target='CSMAPI', name='CSMAPI',
             includes='.',
@@ -50,7 +70,7 @@ def build(bld):
 
 def distclean(context):
     # remove the unzipped directory
-    dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)), 
+    dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)),
                   ['csm-master', 'vts_301_0'])
     for d in dirs:
         try:

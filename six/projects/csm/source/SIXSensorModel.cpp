@@ -24,6 +24,7 @@
 #include <limits>
 
 #include "Error.h"
+#include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
 
 namespace
@@ -168,6 +169,11 @@ csm::ImageCoord SIXSensorModel::getImageStart() const
 
 int SIXSensorModel::getNumParameters() const
 {
+    // Without a covariance matrix, there are no adjustable parameters
+    if (mSensorCovariance == mSensorCovariance * 0)
+    {
+        return 0;
+    }
     return scene::AdjustableParams::NUM_PARAMS;
 }
 
@@ -1109,6 +1115,44 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
                          "Invalid index in call in function call",
                          "SIXSensorModel::getCorrelationCoefficient");
     }
+}
+
+DataType SIXSensorModel::getDataType(const csm::Des& des)
+{
+    // This should be the length of everything up to the user-defined section
+    static const size_t DES_SUBHEADER_LENGTH = 200;
+    const std::string& subheader = des.subHeader();
+    if (subheader.length() < DES_SUBHEADER_LENGTH)
+    {
+        return DataType::NOT_SET;
+    }
+
+    // Pull out DESID
+    std::string desid = subheader.substr(NITF_DE_SZ, NITF_DESTAG_SZ);
+    str::trim(desid);
+
+    // Pull out DESSHL
+    // This is the last 4 byte field in the first 200 bytes
+    const size_t desshl = six::toType<size_t>(
+            subheader.substr(DES_SUBHEADER_LENGTH - NITF_DESSHL_SZ,
+                             NITF_DESSHL_SZ));
+
+    // For newer SICDs/SIDDs, we have XML_DATA_CONTENT which contains DESSHSI
+    // which we also need to use
+    // If we've got it, grab it
+    // Otherwise, leave it as an empty string - NITFReadControl won't be using
+    // it
+    static const size_t DESSHSI_OFFSET = DES_SUBHEADER_LENGTH + 73;
+    static const size_t DESSHSI_LENGTH = 60;
+
+    std::string desshsi;
+    if (subheader.length() >= DESSHSI_OFFSET + DESSHSI_LENGTH)
+    {
+        desshsi = subheader.substr(DESSHSI_OFFSET, DESSHSI_LENGTH);
+        str::trim(desshsi);
+    }
+
+    return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
 }
 }

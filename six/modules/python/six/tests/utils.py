@@ -24,6 +24,7 @@
 
 import os
 import platform
+import shutil
 import sys
 
 from glob import glob
@@ -42,6 +43,7 @@ def findSixHome():
         currentPath = parent
 
     return currentPath
+
 
 def installPath():
     home = findSixHome()
@@ -104,6 +106,5 @@ def executableName(pathname):
         if pathname.endswith('.exe'):
             return pathname
         return pathname + '.exe'
-    if pathname.startswith('/'):
-        return pathname
-    return './' + pathname
+    return pathname
+

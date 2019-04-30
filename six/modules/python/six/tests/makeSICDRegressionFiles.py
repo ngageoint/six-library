@@ -50,7 +50,7 @@ def createNITFs(version, alg, imageType, home):
     if not checkArgs(version, alg, imageType):
         return
 
-    outputName = "sicd_{0}({1}){2}".format(version, alg, imageType)
+    outputName = "sicd_{0}({1}){2}.nitf".format(version, alg, imageType)
     print('Creating file {}.nitf'.format(outputName))
 
     cmplx = initData(includeNITF=True, version=version, alg=alg,
@@ -66,13 +66,10 @@ def run():
     imageTypes = ['RMAT', 'RMCR', 'INCA']
 
     home = utils.findSixHome()
-    for version in sicdVersions:
-        outPath = os.path.join(home, 'regression_files',
-            'six.sicd', version)
-        if not os.path.isdir(outPath):
-            os.makedirs(outPath)
-        for args in product(formationAlgs, imageTypes):
-            if args[0] != 'RMA':
-                args = (args[0], '')
-            createNITFs(version, args[0], args[1], home)
+    if not os.path.isdir(os.path.join(home, 'regression_files', 'six.sicd')):
+        os.makedirs(os.path.join(home, 'regression_files', 'six.sicd'))
+    for args in product(sicdVersions, formationAlgs, imageTypes):
+        if args[1] != 'RMA':
+            args = (args[0], args[1], '')
+        createNITFs(args[0], args[1], args[2], home)
 

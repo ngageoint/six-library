@@ -87,6 +87,29 @@ std::vector<std::string> getPathnames(const std::string& dirname)
                                    std::vector<std::string>(1, dirname),
                                    false);
 }
+
+bool runValidation(const std::auto_ptr<six::Data>& data,
+        std::auto_ptr<logging::Logger>& log)
+{
+    if (data->getDataType() == six::DataType::COMPLEX)
+    {
+        six::sicd::ComplexData* complexData =
+                reinterpret_cast<six::sicd::ComplexData*>(
+                        data.get());
+
+        if (complexData->validate(*log))
+        {
+            log->info(Ctxt("Successful: No Errors Found!"));
+            return true;
+        }
+        return false;
+    }
+    else
+    {
+        // Nothing to validate
+        return true;
+    }
+}
 }
 
 int main(int argc, char** argv)
@@ -104,7 +127,7 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
-        parser.addArgument("-s --schema", 
+        parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE, "schema", "FILE");
         parser.addArgument("input", "Input SICD/SIDD file or directory of files", cli::STORE, "input",
@@ -133,51 +156,59 @@ int main(int argc, char** argv)
 
         str::upper(level);
         str::trim(level);
-        std::auto_ptr<logging::Logger> log = 
+        std::auto_ptr<logging::Logger> log =
             logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
 
-        // this validates the DES of the input against the 
+        // this validates the DES of the input against the
         // best available schema
-        int retCode = 0;
         six::NITFReadControl reader;
         reader.setLogger(log.get());
         reader.setXMLControlRegistry(&xmlRegistry);
+        bool allValid = true;
         for (size_t ii = 0; ii < inputPathnames.size(); ++ii)
         {
             const std::string& inputPathname(inputPathnames[ii]);
             log->info(Ctxt("Reading " + inputPathname));
+            std::auto_ptr<six::Data> data;
             try
             {
                 if (nitf::Reader::getNITFVersion(inputPathname) ==
                         NITF_VER_UNKNOWN)
                 {
-                    // Assume it's just a text file containing XML
-                    six::parseDataFromFile(xmlRegistry,
-                                           inputPathname,
-                                           schemaPaths,
-                                           *log);
+                    data = six::parseDataFromFile(xmlRegistry,
+                                                  inputPathname,
+                                                  schemaPaths,
+                                                  *log);
+                    allValid = allValid && runValidation(data, log);
                 }
                 else
                 {
                     reader.load(inputPathname, schemaPaths);
+                    mem::SharedPtr<six::Container> container =
+                            reader.getContainer();
+                    for (size_t jj = 0; jj < container->getNumData(); ++jj)
+                    {
+                        data.reset(container->getData(jj)->clone());
+                        allValid = allValid && runValidation(data, log);
+                    }
                 }
-                log->info(Ctxt("Successful: No Errors Found!"));
+
             }
             catch (const six::DESValidationException& ex)
             {
                 log->error(ex);
                 log->error(Ctxt("Unsuccessful: Please contact your product "
                                "vendor with these details!"));
-                retCode = 1;
+                allValid = false;
             }
             catch (const except::Exception& ex)
             {
                 log->error(ex);
-                retCode = 1;
+                allValid = false;
             }
         }
 
-        return retCode;
+        return allValid ? 0 : 1;
     }
     catch (const std::exception& ex)
     {

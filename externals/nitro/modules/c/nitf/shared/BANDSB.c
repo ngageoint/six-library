@@ -1,3 +1,26 @@
+/* =========================================================================
+ * This file is part of NITRO
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ *
+ * NITRO is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 
 #include <import/nitf.h>
 
@@ -9,7 +32,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A,  1,  "Data Representation Unit",                           "RADIOMETRIC_QUANTITY_UNIT" },
     {NITF_BINARY, 4,  "Cube Scale Factor",                                  "SCALE_FACTOR" },
     {NITF_BINARY, 4,  "Cube Additive Factor",                               "ADDITIVE_FACTOR" },
-    {NITF_BCS_N,  7,  "Row Ground Sample Distance",                         "ROW_GSD" },    
+    {NITF_BCS_N,  7,  "Row Ground Sample Distance",                         "ROW_GSD" },
     {NITF_BCS_A,  1,  "Units of Row Ground Sample Distance",                "ROW_GSD_UNIT" },
     {NITF_BCS_N,  7,  "Column Ground Sample Distance",                      "COL_GSD" },
     {NITF_BCS_A,  1,  "Units of Column Ground Sample Distance",             "COL_GSD_UNIT" },
@@ -26,7 +49,7 @@ static nitf_TREDescription description[] = {
     {NITF_IF, 0, "& 0x40000000", "EXISTENCE_MASK" },
     {NITF_BCS_N,  7,  "Diameter of the lens",                               "DIAMETER" },
     {NITF_ENDIF, 0, NULL, NULL},
-    {NITF_IF, 0, "& 0x20000000", "EXISTENCE_MASK" },        
+    {NITF_IF, 0, "& 0x20000000", "EXISTENCE_MASK" },
     {NITF_BINARY,32,  "Field reserved for future use",                      "DATA_FLD_2" },
     {NITF_ENDIF, 0, NULL, NULL},
     {NITF_IF, 0, "& 0x01F80000", "EXISTENCE_MASK" },
@@ -172,4 +195,5 @@ NITF_DECLARE_SINGLE_PLUGIN(BANDSB, description)
 
 NITF_CXX_ENDGUARD
 
- 	  	 
+
+

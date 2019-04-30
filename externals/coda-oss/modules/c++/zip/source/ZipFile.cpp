@@ -1,13 +1,35 @@
-#include "zip/ZipFile.h"
+/* =========================================================================
+ * This file is part of zip-c++
+ * =========================================================================
+ * 
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ *
+ * zip-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-using namespace zip;
+#include "zip/ZipFile.h"
 
 #define Z_READ_SHORT_INC(BUF, OFF) readShort(&BUF[OFF]); OFF += 2
 #define Z_READ_INT_INC(BUF, OFF) readInt(&BUF[OFF]); OFF += 4
 
+namespace zip
+{
 ZipFile::~ZipFile()
 {
-    for (unsigned int i = 0; i < mEntries.size(); ++i)
+    for (size_t i = 0; i < mEntries.size(); ++i)
     {
         // Delete ZipEntry
         delete mEntries[i];
@@ -207,15 +229,16 @@ void ZipFile::readCentralDirValues(sys::ubyte* buf, sys::SSize_T len)
     mComment = std::string((const char*) (buf + EOCD_LEN), commentLength);
 }
 
-std::ostream& operator<<(std::ostream& os, const zip::ZipFile& zf)
+std::ostream& operator<<(std::ostream& os, const ZipFile& zf)
 {
     os << "central directory length: " << zf.getCentralDirSize() << std::endl;
     os << "central directory offset: " << zf.getCentralDirOffset() << std::endl;
     os << "comment: " << zf.getComment() << std::endl;
-    for (zip::ZipFile::Iterator p = zf.begin(); p != zf.end(); ++p)
+    for (ZipFile::Iterator p = zf.begin(); p != zf.end(); ++p)
     {
         ZipEntry* entry = *p;
         os << *entry << std::endl;
     }
     return os;
+}
 }

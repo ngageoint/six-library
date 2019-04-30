@@ -20,11 +20,13 @@
  *
  */
 
+#include <iostream>
+
 #include <import/unique.h>
 
 int main(int, char**)
 {
-    std::string uuid = unique::generateUUID();
+    const std::string uuid = unique::generateUUID();
     std::cout << uuid << std::endl;
     return 0;
 }

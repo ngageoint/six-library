@@ -23,8 +23,11 @@
 #ifndef __IO_NULL_STREAMS_H__
 #define __IO_NULL_STREAMS_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
+#include <algorithm>
+
+#include <io/InputStream.h>
+#include <io/OutputStream.h>
+#include <io/SeekableStreams.h>
 
 namespace io
 {
@@ -37,27 +40,9 @@ public:
     {
     }
 
-    virtual ~NullInputStream()
-    {
-    }
-
     virtual sys::Off_T available()
     {
         return mAvailable;
-    }
-
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
-    {
-        sys::Size_T numToRead =
-                (mAvailable >= (sys::SSize_T) len ? len : (sys::Size_T) mAvailable);
-
-        mAvailable -= (sys::SSize_T) numToRead;
-
-        if (numToRead == 0)
-            throw except::IOException(Ctxt("EOF - no more data to read"));
-
-        processBytes(b, numToRead);
-        return numToRead;
     }
 
     virtual sys::SSize_T readln(sys::byte *cStr,
@@ -85,10 +70,24 @@ protected:
     {
         return (sys::byte) 0;
     }
-    virtual void processBytes(sys::byte* b, sys::Size_T len) const
+    virtual void processBytes(void* buffer, sys::Size_T len) const
     {
         //override for different behavior
-        memset(b, 0, len);
+        memset(buffer, 0, len);
+    }
+
+    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    {
+        size_t numToRead =
+                (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
+
+        mAvailable -= (sys::SSize_T) numToRead;
+
+        if (numToRead == 0)
+            throw except::IOException(Ctxt("EOF - no more data to read"));
+
+        processBytes(buffer, numToRead);
+        return numToRead;
     }
 };
 
@@ -96,9 +95,6 @@ class NullOutputStream : public OutputStream
 {
 public:
     NullOutputStream()
-    {
-    }
-    virtual ~NullOutputStream()
     {
     }
 
@@ -114,16 +110,69 @@ public:
     {
     }
 
-    virtual void write(const sys::byte* , sys::Size_T )
+    virtual void write(const void* , size_t )
     {
     }
 
     virtual void flush()
     {
     }
-
 };
 
+/*!
+ * \class SeekableNullOutputStream
+ * \brief NullOutputStream that is Seekable (unfortunately, due to how the
+ * class hierarchy is set up, you can't just inherit from NullOutputStream and
+ * Seekable to get this
+ */
+class SeekableNullOutputStream : public io::SeekableOutputStream
+{
+public:
+    SeekableNullOutputStream() :
+        mOffset(0),
+        mMaxOffset(0)
+    {
+    }
+
+    virtual void write(const void*, size_t numBytes)
+    {
+        mOffset += numBytes;
+        mMaxOffset = std::max(mOffset, mMaxOffset);
+    }
+
+    virtual void flush()
+    {
+    }
+
+    virtual sys::Off_T seek(sys::Off_T offset, Whence whence)
+    {
+        switch (whence)
+        {
+        case END:
+            mOffset = mMaxOffset + offset;
+            break;
+        case START:
+            mOffset = offset;
+            break;
+        default:
+            mOffset += offset;
+            break;
+        }
+
+        mMaxOffset = std::max(mOffset, mMaxOffset);
+
+        return mOffset;
+    }
+
+    virtual sys::Off_T tell()
+    {
+        return mOffset;
+    }
+
+private:
+    sys::Off_T mOffset;
+    sys::Off_T mMaxOffset;
+};
 }
 
 #endif

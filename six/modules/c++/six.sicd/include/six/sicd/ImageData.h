@@ -22,15 +22,17 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
-#include <mem/ScopedCopyablePtr.h>
-#include <six/Types.h>
-#include <six/Init.h>
-#include <six/Parameter.h>
+#include "logging/Logger.h"
+#include "six/Types.h"
+#include "six/Init.h"
+#include "six/Parameter.h"
 
 namespace six
 {
 namespace sicd
 {
+
+class GeoData;
 /*!
  *  \struct ImageData
  *  \brief SICD ImageData parameters
@@ -62,7 +64,6 @@ struct ImageData
      *  LUT (256 entries) that the phase portion signifies.
      *
      */
-
     mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
@@ -73,7 +74,7 @@ struct ImageData
 
     //!  Global row index (assuming this is an ROI)
     size_t firstRow;
-    
+
     //!  Global col index (assuming this is an ROI)
     size_t firstCol;
 
@@ -92,6 +93,8 @@ struct ImageData
     {
         return !(*this == rhs);
     }
+
+    bool validate(const GeoData& geoData, logging::Logger& log) const;
 
 };
 }

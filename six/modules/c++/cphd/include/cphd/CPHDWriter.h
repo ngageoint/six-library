@@ -27,10 +27,12 @@
 #include <vector>
 
 #include <sys/Conf.h>
+#include <mem/SharedPtr.h>
 #include <cphd/Metadata.h>
 #include <types/RowCol.h>
-#include <io/FileOutputStream.h>
+#include <io/OutputStream.h>
 #include <cphd/VBM.h>
+#include <sys/OS.h>
 
 namespace cphd
 {
@@ -46,6 +48,11 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  However, SWIG doesn't seem to like that.
+     *  As a workaround, we pass in 0 for the default, and the ctor sets the
+     *  number of threads to the number of CPUs if this happens.
+     *
      *  \param metadata A filled out metadata struct for the file that will be
      *         written. The data.arraySize and data.numCPHDChannels will be
      *         filled in internally. All other data must be provided.
@@ -55,7 +62,7 @@ public:
      *         Default is 4 MB
      */
     CPHDWriter(const Metadata& metadata,
-               size_t numThreads = sys::OS().getNumCPUs(),
+               size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
 
     /*
@@ -97,6 +104,25 @@ public:
                        const std::string& releaseInfo = "");
 
     /*
+     *  \func writeMetadata
+     *  \brief Writes the header, metadata, and VBM into the file. This should
+     *         be used in situations where you need to write out the CPHD
+     *         data in chunks. Otherwise you should use addImage and write.
+     *         This will internally set the number of bytes per VBP.
+     *
+     *  \param outStream Output stream
+     *  \param vbm The vector based metadata to write.
+     *  \param classification The classification of the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     *  \param releaseInfo The release information for the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     */
+    void writeMetadata(mem::SharedPtr<io::OutputStream> outStream,
+                       const VBM& vbm,
+                       const std::string& classification = "",
+                       const std::string& releaseInfo = "");
+
+    /*
      *  \func writeCPHDData
      *  \brief Writes a chunk of CPHD data to disk. To create a proper
      *         CPHD file you must call writeMetadata before using this
@@ -131,11 +157,26 @@ public:
                const std::string& classification = "",
                const std::string& releaseInfo = "");
 
+    /*
+     *  \func write
+     *  \brief Writes the CPHD file to the stream. This should only be called
+     *         if you are writing using addImage.
+     *
+     *  \param outStream The output stream.
+     *  \param classification The classification of the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     *  \param releaseInfo The release information for the file. Optional
+     *         By default, CPHD will not be populated with this value.
+     */
+    void write(mem::SharedPtr<io::OutputStream> outStream,
+               const std::string& classification = "",
+               const std::string& releaseInfo = "");
+
     void close()
     {
-        if (mFile.isOpen())
+        if (mOutStream.get())
         {
-            mFile.close();
+            mOutStream->close();
         }
     }
 
@@ -154,7 +195,7 @@ private:
     class DataWriter
     {
     public:
-        DataWriter(io::FileOutputStream& stream,
+        DataWriter(mem::SharedPtr<io::OutputStream>& stream,
                    size_t numThreads);
 
         virtual ~DataWriter();
@@ -164,14 +205,14 @@ private:
                                 size_t elementSize) = 0;
 
     protected:
-        io::FileOutputStream& mStream;
+        mem::SharedPtr<io::OutputStream>& mStream;
         const size_t mNumThreads;
     };
 
     class DataWriterLittleEndian : public DataWriter
     {
     public:
-        DataWriterLittleEndian(io::FileOutputStream& stream,
+        DataWriterLittleEndian(mem::SharedPtr<io::OutputStream>& stream,
                                size_t numThreads,
                                size_t scratchSize);
 
@@ -187,7 +228,7 @@ private:
     class DataWriterBigEndian : public DataWriter
     {
     public:
-        DataWriterBigEndian(io::FileOutputStream& stream,
+        DataWriterBigEndian(mem::SharedPtr<io::OutputStream>& stream,
                             size_t numThreads);
 
         virtual void operator()(const sys::ubyte* data,
@@ -202,7 +243,7 @@ private:
     const size_t mScratchSpaceSize;
     const size_t mNumThreads;
 
-    io::FileOutputStream mFile;
+    mem::SharedPtr<io::OutputStream> mOutStream;
 
     std::vector<const sys::ubyte*> mCPHDData;
     std::vector<const sys::ubyte*> mVBMData;

@@ -47,7 +47,7 @@ SlantPlanePixelTransformer::SlantPlanePixelTransformer(
 }
 
 scene::Vector3 SlantPlanePixelTransformer::toECEF(
-    const types::RowCol<size_t>& pixel) const
+    const types::RowCol<double>& pixel) const
 {
     //! convert slant pixel to meters from scene center
     const types::RowCol<double> imagePt(mSicdData.pixelToImagePoint(pixel));
@@ -61,14 +61,14 @@ scene::Vector3 SlantPlanePixelTransformer::toECEF(
 }
 
 scene::LatLonAlt SlantPlanePixelTransformer::toLLA(
-    const types::RowCol<size_t>& pixel) const
+    const types::RowCol<double>& pixel) const
 {
     //! project then convert ECEF to LLA
     return scene::Utilities::ecefToLatLon(toECEF(pixel));
 }
 
 scene::LatLon SlantPlanePixelTransformer::toLatLon(
-    const types::RowCol<size_t>& pixel) const
+    const types::RowCol<double>& pixel) const
 {
     //! project then convert LLA to LatLon
     scene::LatLonAlt lla = toLLA(pixel);

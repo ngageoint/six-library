@@ -26,34 +26,10 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <io/TempFile.h>
 
 namespace
 {
-
-class TempFile
-{
-public:
-    TempFile();
-    ~TempFile();
-    std::string pathname() const;
-private:
-    const std::string mName;
-};
-
-TempFile::TempFile() :
-    mName(std::tmpnam(NULL))
-{
-}
-
-TempFile::~TempFile()
-{
-    std::remove(mName.c_str());
-}
-
-std::string TempFile::pathname() const
-{
-    return mName;
-}
 
 void validateArguments(int argc, char** argv)
 {
@@ -93,11 +69,12 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
@@ -126,11 +103,12 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -142,7 +120,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     writer.addAdditionalDES(segmentWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());
@@ -168,11 +146,12 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data.release()));
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -188,7 +167,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());
@@ -214,11 +193,12 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(data.release());
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment desOne = record.newDataExtensionSegment();
@@ -247,7 +227,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
-    TempFile temp;
+    io::TempFile temp;
     try
     {
         writer.save(&bandData[0], temp.pathname());

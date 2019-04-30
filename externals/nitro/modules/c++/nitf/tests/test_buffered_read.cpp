@@ -62,7 +62,7 @@ void doRead(const std::string& inFile,
         subWindow.setBandList(&bandList[0]);
 
         // Read in the image
-        const size_t numBitsPerPixel(subheader.getActualBitsPerPixel());
+        const size_t numBitsPerPixel(static_cast<nitf::Uint64>(subheader.getActualBitsPerPixel()));
         const size_t numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
 
         const size_t numBytesPerBand =

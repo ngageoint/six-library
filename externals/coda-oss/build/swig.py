@@ -154,6 +154,8 @@ def i_file(self, node):
 
     flags = self.to_list(getattr(self, 'swig_flags', []))
     tsk.env.append_value('SWIGFLAGS', flags)
+    if not '-noextranative' in flags:
+        tsk.env.append_value('SWIGFLAGS', ['-extranative'])
 
     tsk.swig_install_fun = getattr(self, 'swig_install_fun', None)
 
@@ -175,13 +177,16 @@ def check_swig_version(self, minver=None):
         minver = [int(s) for s in minver]
     result = (minver is None) or (minver[:3] <= swigver[:3])
     swigver_full = '.'.join(map(str, swigver))
+    minver_str = minver and '.'.join(map(str, minver))
     if result:
         self.env['SWIG_VERSION'] = swigver_full
-    minver_str = minver and '.'.join(map(str, minver))
+    else:
+        raise RuntimeError('Minimum SWIG verion required: %s. Version found: %s'
+                % (minver_str, swigver_full))
     if minver is None:
         self.msg('swig version', swigver_full)
     else:
-        self.msg('swig version >= %s' % (minver_str,), result, option=swigver_full)
+        self.msg('swig version %s >= %s' % (swigver_full, minver_str,), result)
     return result
 
 def options(opt):

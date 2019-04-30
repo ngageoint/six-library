@@ -26,7 +26,6 @@
 #include <memory>
 
 #include <cphd/CPHDWriter.h>
-#include <cphd/CPHDReader.h>
 #include <types/RowCol.h>
 #include <cli/ArgumentParser.h>
 
@@ -36,7 +35,7 @@ int main(int argc, char** argv)
     {
         // Parse the command line
         cli::ArgumentParser parser;
-        parser.setDescription("Round trip for a CPHD file.");
+        parser.setDescription("Create a sample CPHD file.");
         parser.addArgument("-t --threads",
                            "Specify the number of threads to use",
                            cli::STORE,
@@ -88,7 +87,7 @@ int main(int argc, char** argv)
                     cphd::ArraySize(dims.row, dims.col));
         }
 
-        //! Must set teh sample type (complex<float>)
+        //! Must set the sample type (complex<float>)
         metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
 
         //! We must have a radar mode set
@@ -101,7 +100,7 @@ int main(int argc, char** argv)
             metadata.global.imageArea.acpCorners.getCorner(ii).setLon(0.0);
             metadata.global.imageArea.acpCorners.getCorner(ii).setAlt(0.0);
         }
-        
+
         //! Add a channel parameter. This will write without this but it will
         //  not read.
         cphd::ChannelParameters param;

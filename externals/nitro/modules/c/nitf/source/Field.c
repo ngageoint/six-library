@@ -311,7 +311,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
         return (NITF_FAILURE);
     }
 
-    /*  Convert thte number to a string */
+    /*  Convert the number to a string */
 
     NITF_SNPRINTF(numberBuffer, 20, "%lld", (long long)number);
     numberLen = strlen(numberBuffer);
@@ -373,8 +373,9 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
 
     if (strLen > field->length)
     {
-        nitf_Error_init(error, "Value for field is too long",
-                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                        "Value %s is too long for field of length %lu",
+                        str, field->length);
         return (NITF_FAILURE);
     }
 
@@ -811,6 +812,12 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
     buffer[field->length] = 0;
     switch (length)
     {
+        case 1:
+        {
+            nitf_Int8 *int8 = (nitf_Int8 *) outData;
+            *int8 = (nitf_Int8) NITF_ATO32(buffer);
+        }
+        break;
         case 2:
         {
             nitf_Int16 *int16 = (nitf_Int16 *) outData;
@@ -858,6 +865,12 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
     buffer[field->length] = 0;
     switch (length)
     {
+        case 1:
+        {
+            nitf_Uint8 *int8 = (nitf_Uint8 *) outData;
+            *int8 = (nitf_Uint8) NITF_ATO32(buffer);
+        }
+        break;
         case 2:
         {
             nitf_Uint16 *int16 = (nitf_Uint16 *) outData;

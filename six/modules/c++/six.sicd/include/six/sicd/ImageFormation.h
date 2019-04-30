@@ -28,11 +28,13 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/ParameterCollection.h"
+#include "six/sicd/RadarCollection.h"
 
 namespace six
 {
 namespace sicd
 {
+
 /*!
  *  \struct RcvChannelProcessed
  *  \brief SICD RcvChanProc
@@ -62,7 +64,7 @@ struct RcvChannelProcessed
     //! Equality operator
     bool operator==(const RcvChannelProcessed& rhs) const
     {
-        return (numChannelsProcessed == rhs.numChannelsProcessed && 
+        return (numChannelsProcessed == rhs.numChannelsProcessed &&
             prfScaleFactor == rhs.prfScaleFactor && channelIndex == rhs.channelIndex);
     }
 
@@ -78,11 +80,11 @@ struct RcvChannelProcessed
  *  \brief SICD Distortion parameters
  *
  *  Distortion correction parameters.
- *  
+ *
  *  The model for H&V channels when H&V channels are aligned with
  *  true H&V directions:
  *  \verbatim
- 
+
  |         |       |        | |         | |        |
  | Ohh Ovh |       | 1   Q1 | | Shh Svh | | 1   Q4 |
  |         | = A * |        | |         | |        |
@@ -259,7 +261,7 @@ struct ImageFormation
     //!  Constructor, nothing is initialized, except required rcv channel
     ImageFormation();
 
-    /*! 
+    /*!
      *  Identifier that describes the image that was processed
      *  Must be included when a radarCollection->area->plane::segmentList
      *  is included
@@ -351,6 +353,8 @@ struct ImageFormation
     {
         return !(*this == rhs);
     }
+
+    void fillDefaultFields(const RadarCollection& radarCollection);
 };
 
 }

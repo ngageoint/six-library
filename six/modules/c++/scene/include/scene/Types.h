@@ -48,18 +48,18 @@ namespace scene
         METERS,
         INVALID_UNITS
     };
-    
+
     enum AngularUnits {
         DEGREES,
         RADIANS,
         INVALID_ANGULAR_UNITS
     };
-    
+
     enum XYZEnum
     {
         XYZ_X, XYZ_Y, XYZ_Z
     };
-    
+
     struct AngleMagnitude
     {
         AngleMagnitude(double _angle = 0, double _magnitude = 0) :
@@ -152,6 +152,11 @@ namespace scene
             return mLat == x.mLat && mLon == x.mLon;
         }
 
+        bool operator!=(const LatLon& x) const
+        {
+            return !(*this == x);
+        }
+
     protected:
         double mLat;
         double mLon;
@@ -219,7 +224,7 @@ namespace scene
 
 namespace str
 {
-template<> 
+template<>
     scene::SideOfTrack toType<scene::SideOfTrack>(const std::string& s);
 
 template<>

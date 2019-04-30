@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -166,7 +166,7 @@ nitf_ImageSource *setupBands(int nbands, int imageNum,
                                  NITF_OPEN_EXISTING, &error);
         if (NITF_INVALID_HANDLE(sourceHandle))
             goto CATCH_ERROR;
- 
+
         freeBandName(&inFile);
 
         bandSource = nitf_FileSource_construct(sourceHandle,
@@ -477,7 +477,7 @@ void writeDEData(nitf_DESegment * segment,
 
     nitf_IOHandle file;
 
-    leftToRead = (size_t)(segment->end - segment->offset); 
+    leftToRead = (size_t)(segment->end - segment->offset);
     fprintf(stderr, "XXX Data Ext write %llu %llu %llu\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);

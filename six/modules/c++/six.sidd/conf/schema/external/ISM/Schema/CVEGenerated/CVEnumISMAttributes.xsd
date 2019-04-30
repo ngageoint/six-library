@@ -13,11 +13,11 @@
       <xsd:annotation>
          <xsd:documentation>(U) All currently authorized ISM attribute names
                     PERMISSIBLE VALUES
-                    
+
                     The permissible values for this simple type are defined in the Controlled Value Enumeration:
-                    
+
                     CVEnumISMAttributes.xml
-                    
+
                 </xsd:documentation>
       </xsd:annotation>
       <xsd:restriction base="xsd:token">

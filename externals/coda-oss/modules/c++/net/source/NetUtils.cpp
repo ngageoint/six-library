@@ -28,11 +28,11 @@
 
 std::vector<std::string> net::urlSplit(std::string url)
 {
-    re::PCRE regex;
+    re::Regex regex;
     regex.compile(
                   "([A-Za-z]+)://([^/?#:]+)(?::(\\d+))?(/[^?#:]+)?(?:[?]([^&#/]+(?:[&;][^&;#/]+)*)?)?(?:[#](.*))?");
 
-    re::PCREMatch match;
+    re::RegexMatch match;
     if (regex.match(url, match))
     {
         size_t matchLen = match.size();
@@ -86,9 +86,9 @@ std::string net::urlJoin(const std::vector<std::string>& parts)
     location = parts[idx++];
     if (numParts > idx)
     {
-        re::PCRE regex;
+        re::Regex regex;
         regex.compile("\\d+");
-        re::PCREMatch match;
+        re::RegexMatch match;
         if (regex.match(parts[idx], match))
             port = str::toType<int>(parts[idx++]);
 
@@ -109,7 +109,7 @@ std::string net::urlJoin(const std::vector<std::string>& parts)
 std::string net::quote(std::string s)
 {
     std::ostringstream quoted;
-    re::PCRE regex;
+    re::Regex regex;
     regex.compile("[^&\\s]");
     for (size_t i = 0, len = s.length(); i < len; ++i)
     {

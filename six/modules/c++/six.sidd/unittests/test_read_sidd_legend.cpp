@@ -34,6 +34,7 @@
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
+#include <six/NITFHeaderCreator.h>
 
 namespace
 {
@@ -157,9 +158,10 @@ struct TestHelper
              ii < mRgbLegend.mLUT->numEntries;
              ++ii, idx += 3)
         {
-            mRgbLegend.mLUT->getTable()[idx] = ii;
-            mRgbLegend.mLUT->getTable()[idx + 1] = ii;
-            mRgbLegend.mLUT->getTable()[idx + 2] = ii;
+            const unsigned char lutValue = static_cast<unsigned char>(ii);
+            mRgbLegend.mLUT->getTable()[idx] = lutValue;
+            mRgbLegend.mLUT->getTable()[idx + 1] = lutValue;
+            mRgbLegend.mLUT->getTable()[idx + 2] = lutValue;
         }
 
         write();
@@ -184,7 +186,8 @@ struct TestHelper
 
         const size_t maxSize = numCols * 50;
 
-        six::Container container(six::DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                six::DataType::DERIVED));
 
         std::vector<six::UByte*> buffers;
 
@@ -195,7 +198,7 @@ struct TestHelper
         const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
         std::fill_n(buffer1.get(), dims1.area(), 20);
 
-        container.addData(data1);
+        container->addData(data1);
         buffers.push_back(buffer1.get());
 
         // Now a single segment with a mono legend
@@ -206,7 +209,7 @@ struct TestHelper
         std::fill_n(buffer2.get(), dims2.area(), 100);
 
         std::auto_ptr<six::Legend> monoLegend(new six::Legend(mMonoLegend));
-        container.addData(data2, monoLegend);
+        container->addData(data2, monoLegend);
         buffers.push_back(buffer2.get());
 
         // Now a multi-segment without a legend
@@ -216,7 +219,7 @@ struct TestHelper
         const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
         std::fill_n(buffer3.get(), dims3.area(), 60);
 
-        container.addData(data3);
+        container->addData(data3);
         buffers.push_back(buffer3.get());
 
         // Now a multi-segment with an RGB legend
@@ -228,19 +231,16 @@ struct TestHelper
         const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
         std::fill_n(buffer4.get(), dims4.area(), 200);
 
-        container.addData(data4, rgbLegend);
+        container->addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());
 
         // Write it out
-        six::NITFWriteControl writer;
-
-        writer.getOptions().setParameter(
-                six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+        six::Options options;
+        options.setParameter(
+                six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                 str::toString(maxSize));
 
-        writer.setXMLControlRegistry(&mXmlRegistry);
-        writer.initialize(&container);
-
+        six::NITFWriteControl writer(options, container, &mXmlRegistry);
         writer.save(buffers, mPathname);
     }
 
@@ -259,7 +259,7 @@ TEST_CASE(testRead)
     reader.setXMLControlRegistry(&testHelper.mXmlRegistry);
 
     reader.load(testHelper.mPathname);
-    const six::Container* const container = reader.getContainer();
+    const mem::SharedPtr<const six::Container> container = reader.getContainer();
 
     TEST_ASSERT_EQ(container->getNumData(), 4);
     for (size_t ii = 0; ii < container->getNumData(); ++ii)

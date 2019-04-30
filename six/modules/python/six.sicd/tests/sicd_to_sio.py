@@ -2,7 +2,7 @@ import numpy as np
 import sys
 import os
 from pysix import six_base, six_sicd
-from coda import sio_lite
+from coda import sio_lite, coda_types
 
 if __name__ == '__main__':
     if len(sys.argv) >= 3:
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         print("Usage: python " + sys.argv[0] + " <NITF path> <Schema path> [startRow numRows startCol numCols]")
         sys.exit(0)
 
-    schemaPaths = six_base.VectorString()
+    schemaPaths = coda_types.VectorString()
     schemaPaths.push_back(schemaPath)
 
     if len(sys.argv) == 7:

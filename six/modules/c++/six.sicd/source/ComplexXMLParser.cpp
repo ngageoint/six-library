@@ -24,6 +24,7 @@
 #include <six/sicd/ComplexDataBuilder.h>
 #include <six/Utilities.h>
 
+
 namespace
 {
 typedef xml::lite::Element* XMLElem;
@@ -97,7 +98,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     if (radiometricXML != NULL)
     {
         builder.addRadiometric();
-        common().parseRadiometryFromXML(radiometricXML, 
+        common().parseRadiometryFromXML(radiometricXML,
                                        sicd->radiometric.get());
     }
 
@@ -110,7 +111,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     if (errorStatisticsXML != NULL)
     {
         builder.addErrorStatistics();
-        common().parseErrorStatisticsFromXML(errorStatisticsXML, 
+        common().parseErrorStatisticsFromXML(errorStatisticsXML,
                                             sicd->errorStatistics.get());
     }
 
@@ -135,7 +136,6 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
         sicd->rgAzComp.reset(new RgAzComp());
         parseRgAzCompFromXML(rgAzCompXML, sicd->rgAzComp.get());
     }
-
     return sicd;
 }
 
@@ -189,7 +189,7 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
 XMLElem ComplexXMLParser::createFFTSign(const std::string& name, six::FFTSign sign,
                                          XMLElem parent) const
 {
-    return createInt(name, getDefaultURI(), 
+    return createInt(name, getDefaultURI(),
                      (sign == FFTSign::NEG) ? "-1" : "+1", parent);
 }
 
@@ -206,7 +206,7 @@ XMLElem ComplexXMLParser::convertCollectionInformationToXML(
         createString("IlluminatorName", si, collInfo->illuminatorName,
                      collInfoXML);
     createString("CoreName", si, collInfo->coreName, collInfoXML);
-    if (!Init::isUndefined<CollectType>(collInfo->collectType))
+    if (!Init::isUndefined(collInfo->collectType))
         createString("CollectType", si,
                      six::toString<six::CollectType>(collInfo->collectType),
                      collInfoXML);
@@ -241,7 +241,7 @@ XMLElem ComplexXMLParser::convertImageCreationToXML(
     if (!imageCreation->application.empty())
         createString("Application", si, imageCreation->application,
                      imageCreationXML);
-    if (!Init::isUndefined<DateTime>(imageCreation->dateTime))
+    if (!Init::isUndefined(imageCreation->dateTime))
         createDateTime("DateTime", si, imageCreation->dateTime,
                        imageCreationXML);
     if (!imageCreation->site.empty())
@@ -269,10 +269,10 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
             setAttribute(ampXML, "index", str::toString(i));
         }
     }
-    createInt("NumRows", imageData->numRows, imageDataXML);
-    createInt("NumCols", imageData->numCols, imageDataXML);
-    createInt("FirstRow", imageData->firstRow, imageDataXML);
-    createInt("FirstCol", imageData->firstCol, imageDataXML);
+    createInt("NumRows", static_cast<int>(imageData->numRows), imageDataXML);
+    createInt("NumCols", static_cast<int>(imageData->numCols), imageDataXML);
+    createInt("FirstRow", static_cast<int>(imageData->firstRow), imageDataXML);
+    createInt("FirstCol", static_cast<int>(imageData->firstCol), imageDataXML);
 
     common().createRowCol("FullImage", "NumRows", "NumCols", imageData->fullImage,
                  imageDataXML);
@@ -351,7 +351,7 @@ XMLElem ComplexXMLParser::convertGridToXML(
     createDouble("DeltaK1", grid->row->deltaK1, rowDirXML);
     createDouble("DeltaK2", grid->row->deltaK2, rowDirXML);
 
-    if (!Init::isUndefined<Poly2D>(grid->row->deltaKCOAPoly))
+    if (!Init::isUndefined(grid->row->deltaKCOAPoly))
     {
         common().createPoly2D("DeltaKCOAPoly", grid->row->deltaKCOAPoly, rowDirXML);
     }
@@ -386,7 +386,7 @@ XMLElem ComplexXMLParser::convertGridToXML(
     createDouble("DeltaK1", grid->col->deltaK1, colDirXML);
     createDouble("DeltaK2", grid->col->deltaK2, colDirXML);
 
-    if (!Init::isUndefined<Poly2D>(grid->col->deltaKCOAPoly))
+    if (!Init::isUndefined(grid->col->deltaKCOAPoly))
     {
         common().createPoly2D("DeltaKCOAPoly", grid->col->deltaKCOAPoly, colDirXML);
     }
@@ -431,7 +431,7 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
         {
             const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
-            setXML->attribute("index") = str::toString<int>(i + 1);
+            setXML->attribute("index") = str::toString<size_t>(i + 1);
 
             createDouble("TStart", timelineSet.tStart, setXML);
             createDouble("TEnd", timelineSet.tEnd, setXML);
@@ -450,9 +450,9 @@ XMLElem ComplexXMLParser::convertPositionToXML(
     XMLElem positionXML = newElement("Position", parent);
 
     common().createPolyXYZ("ARPPoly", position->arpPoly, positionXML);
-    if (!Init::isUndefined<PolyXYZ>(position->grpPoly))
+    if (!Init::isUndefined(position->grpPoly))
         common().createPolyXYZ("GRPPoly", position->grpPoly, positionXML);
-    if (!Init::isUndefined<PolyXYZ>(position->txAPCPoly))
+    if (!Init::isUndefined(position->txAPCPoly))
         common().createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
     if (position->rcvAPC.get() && !position->rcvAPC->rcvAPCPolys.empty())
     {
@@ -498,7 +498,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
             XMLElem txStepXML = newElement("TxStep", txSeqXML);
             setAttribute(txStepXML, "index", str::toString(ii + 1));
 
-            if (!Init::isUndefined<int>(tx->waveformIndex))
+            if (!Init::isUndefined(tx->waveformIndex))
             {
                 createInt("WFIndex", tx->waveformIndex, txStepXML);
             }
@@ -533,26 +533,26 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
             XMLElem wfpXML = newElement("WFParameters", wfXML);
             setAttribute(wfpXML, "index", str::toString(ii + 1));
 
-            if (!Init::isUndefined<double>(wf->txPulseLength))
+            if (!Init::isUndefined(wf->txPulseLength))
                 createDouble("TxPulseLength", wf->txPulseLength, wfpXML);
-            if (!Init::isUndefined<double>(wf->txRFBandwidth))
+            if (!Init::isUndefined(wf->txRFBandwidth))
                 createDouble("TxRFBandwidth", wf->txRFBandwidth, wfpXML);
-            if (!Init::isUndefined<double>(wf->txFrequencyStart))
+            if (!Init::isUndefined(wf->txFrequencyStart))
                 createDouble("TxFreqStart", wf->txFrequencyStart, wfpXML);
-            if (!Init::isUndefined<double>(wf->txFMRate))
+            if (!Init::isUndefined(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
             if (wf->rcvDemodType != DemodType::NOT_SET)
                 createString("RcvDemodType", six::toString(wf->rcvDemodType),
                              wfpXML);
-            if (!Init::isUndefined<double>(wf->rcvWindowLength))
+            if (!Init::isUndefined(wf->rcvWindowLength))
                 createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
-            if (!Init::isUndefined<double>(wf->adcSampleRate))
+            if (!Init::isUndefined(wf->adcSampleRate))
                 createDouble("ADCSampleRate", wf->adcSampleRate, wfpXML);
-            if (!Init::isUndefined<double>(wf->rcvIFBandwidth))
+            if (!Init::isUndefined(wf->rcvIFBandwidth))
                 createDouble("RcvIFBandwidth", wf->rcvIFBandwidth, wfpXML);
-            if (!Init::isUndefined<double>(wf->rcvFrequencyStart))
+            if (!Init::isUndefined(wf->rcvFrequencyStart))
                 createDouble("RcvFreqStart", wf->rcvFrequencyStart, wfpXML);
-            if (!Init::isUndefined<double>(wf->rcvFMRate))
+            if (!Init::isUndefined(wf->rcvFMRate))
                 createDouble("RcvFMRate", wf->rcvFMRate, wfpXML);
         }
 
@@ -576,7 +576,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
 
         for (size_t ii = 0; ii < LatLonAltCorners::NUM_CORNERS; ++ii)
         {
-            if (Init::isUndefined<LatLonAlt>(area->acpCorners.getCorner(ii)))
+            if (Init::isUndefined(area->acpCorners.getCorner(ii)))
             {
                 haveACPCorners = false;
                 break;
@@ -627,7 +627,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
                 }
             }
 
-            if (!Init::isUndefined<OrientationType>(plane->orientation))
+            if (!Init::isUndefined(plane->orientation))
             {
                 createString("Orientation",
                              six::toString<OrientationType>(plane->orientation),
@@ -647,8 +647,8 @@ XMLElem ComplexXMLParser::areaLineDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("LineSpacing", adp->spacing, adpXML);
-    createInt("NumLines", adp->elements, adpXML);
-    createInt("FirstLine", adp->first, adpXML);
+    createInt("NumLines", static_cast<int>(adp->elements), adpXML);
+    createInt("FirstLine", static_cast<int>(adp->first), adpXML);
     return adpXML;
 }
 
@@ -660,13 +660,13 @@ XMLElem ComplexXMLParser::areaSampleDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("SampleSpacing", adp->spacing, adpXML);
-    createInt("NumSamples", adp->elements, adpXML);
-    createInt("FirstSample", adp->first, adpXML);
+    createInt("NumSamples", static_cast<int>(adp->elements), adpXML);
+    createInt("FirstSample", static_cast<int>(adp->first), adpXML);
     return adpXML;
 }
 
 XMLElem ComplexXMLParser::convertSCPCOAToXML(
-    const SCPCOA *scpcoa, 
+    const SCPCOA *scpcoa,
     XMLElem parent) const
 {
     XMLElem scpcoaXML = newElement("SCPCOA", parent);
@@ -687,7 +687,7 @@ XMLElem ComplexXMLParser::convertSCPCOAToXML(
 }
 
 XMLElem ComplexXMLParser::convertAntennaToXML(
-    const Antenna *antenna, 
+    const Antenna *antenna,
     XMLElem parent) const
 {
     XMLElem antennaXML = newElement("Antenna", parent);
@@ -749,7 +749,7 @@ XMLElem ComplexXMLParser::convertAntennaParametersToXML(
 }
 
 XMLElem ComplexXMLParser::convertPFAToXML(
-    const PFA *pfa, 
+    const PFA *pfa,
     XMLElem parent) const
 {
     XMLElem pfaXML = newElement("PFA", parent);
@@ -781,12 +781,12 @@ void ComplexXMLParser::convertDRateSFPolyToXML(
     const INCA* inca, XMLElem incaXML) const
 {
     //! Poly2D in 0.4.1
-    common().createPoly2D("DRateSFPoly", 
+    common().createPoly2D("DRateSFPoly",
         inca->dopplerRateScaleFactorPoly, incaXML);
 }
 
 XMLElem ComplexXMLParser::convertRMCRToXML(
-    const RMCR* rmcr, 
+    const RMCR* rmcr,
     XMLElem rmaXML) const
 {
     createString("ImageType", "RMCR", rmaXML);
@@ -801,7 +801,7 @@ XMLElem ComplexXMLParser::convertRMCRToXML(
 }
 
 XMLElem ComplexXMLParser::convertINCAToXML(
-    const INCA* inca, 
+    const INCA* inca,
     XMLElem rmaXML) const
 {
     createString("ImageType", "INCA", rmaXML);
@@ -821,7 +821,7 @@ XMLElem ComplexXMLParser::convertINCAToXML(
                         incaXML);
     }
 
-    if (!Init::isUndefined<BooleanType>(inca->dopplerCentroidCOA))
+    if (!Init::isUndefined(inca->dopplerCentroidCOA))
     {
         createBooleanType("DopCentroidCOA",
                           inca->dopplerCentroidCOA,
@@ -833,7 +833,7 @@ XMLElem ComplexXMLParser::convertINCAToXML(
 
 XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     const std::string& version,
-    const RcvChannelProcessed* rcvChanProc, 
+    const RcvChannelProcessed* rcvChanProc,
     XMLElem imageFormationXML) const
 {
     if (rcvChanProc)
@@ -842,13 +842,13 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
         createInt("NumChanProc",
                   rcvChanProc->numChannelsProcessed,
                   rcvChanXML);
-        if (!Init::isUndefined<double>(rcvChanProc->prfScaleFactor))
+        if (!Init::isUndefined(rcvChanProc->prfScaleFactor))
             createDouble("PRFScaleFactor",
                          rcvChanProc->prfScaleFactor,
                          rcvChanXML);
 
         for (std::vector<int>::const_iterator it =
-                rcvChanProc->channelIndex.begin(); 
+                rcvChanProc->channelIndex.begin();
              it != rcvChanProc->channelIndex.end(); ++it)
         {
             createInt("ChanIndex", *it, rcvChanXML);
@@ -858,14 +858,14 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     else
     {
         throw except::Exception(Ctxt(FmtX(
-            "[RcvChanProc] is a manditory field in ImageFormation in %s", 
+            "[RcvChanProc] is a manditory field in ImageFormation in %s",
             version.c_str())));
     }
 }
 
 XMLElem ComplexXMLParser::convertDistortionToXML(
     const std::string& version,
-    const Distortion* distortion, 
+    const Distortion* distortion,
     XMLElem pcXML) const
 {
     if (distortion)
@@ -883,19 +883,19 @@ XMLElem ComplexXMLParser::convertDistortionToXML(
         common().createComplex("Q3", distortion->q3, distortionXML);
         common().createComplex("Q4", distortion->q4, distortionXML);
 
-        if (!Init::isUndefined<double>(distortion->gainErrorA))
+        if (!Init::isUndefined(distortion->gainErrorA))
             createDouble("GainErrorA", distortion->gainErrorA,
                             distortionXML);
-        if (!Init::isUndefined<double>(distortion->gainErrorF1))
+        if (!Init::isUndefined(distortion->gainErrorF1))
             createDouble("GainErrorF1", distortion->gainErrorF1,
                             distortionXML);
-        if (!Init::isUndefined<double>(distortion->gainErrorF2))
+        if (!Init::isUndefined(distortion->gainErrorF2))
             createDouble("GainErrorF2", distortion->gainErrorF2,
                             distortionXML);
-        if (!Init::isUndefined<double>(distortion->phaseErrorF1))
+        if (!Init::isUndefined(distortion->phaseErrorF1))
             createDouble("PhaseErrorF1", distortion->phaseErrorF1,
                             distortionXML);
-        if (!Init::isUndefined<double>(distortion->phaseErrorF2))
+        if (!Init::isUndefined(distortion->phaseErrorF2))
             createDouble("PhaseErrorF2", distortion->phaseErrorF2,
                             distortionXML);
 
@@ -910,7 +910,7 @@ XMLElem ComplexXMLParser::convertDistortionToXML(
 }
 
 XMLElem ComplexXMLParser::convertRgAzCompToXML(
-    const RgAzComp* rgAzComp, 
+    const RgAzComp* rgAzComp,
     XMLElem parent) const
 {
     XMLElem rgAzCompXML = newElement("RgAzComp", parent);
@@ -925,7 +925,7 @@ void ComplexXMLParser::parseDRateSFPolyFromXML(
     const XMLElem incaElem, INCA* inca) const
 {
     //! Poly2D in 0.4.1
-    common().parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"), 
+    common().parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
                          inca->dopplerRateScaleFactorPoly);
 }
 
@@ -1005,9 +1005,9 @@ void ComplexXMLParser::parseImageDataFromXML(
     const XMLElem imageDataXML,
     ImageData *imageData) const
 {
-    imageData->pixelType 
+    imageData->pixelType
             = six::toType<PixelType>(
-                    getFirstAndOnly(imageDataXML, 
+                    getFirstAndOnly(imageDataXML,
                                     "PixelType")->getCharacterData());
 
     XMLElem ampTableXML = getOptional(imageDataXML, "AmpTable");
@@ -1065,7 +1065,7 @@ void ComplexXMLParser::parseImageDataFromXML(
 }
 
 void ComplexXMLParser::parseGeoDataFromXML(
-    const XMLElem geoDataXML, 
+    const XMLElem geoDataXML,
     GeoData *geoData) const
 {
     common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
@@ -1315,11 +1315,11 @@ void ComplexXMLParser::parseImageFormationFromXML(
     }
 
     //! version specific TxRcvPolarization
-    parseTxRcvPolFromXML(imageFormationXML, 
+    parseTxRcvPolFromXML(imageFormationXML,
                          imageFormation->txRcvPolarizationProc);
 
     imageFormation->imageFormationAlgorithm = six::toType<ImageFormationType>(
-        getFirstAndOnly(imageFormationXML, 
+        getFirstAndOnly(imageFormationXML,
                         "ImageFormAlgo")->getCharacterData());
 
     parseDouble(getFirstAndOnly(imageFormationXML, "TStartProc"),
@@ -1336,16 +1336,16 @@ void ComplexXMLParser::parseImageFormationFromXML(
     parseDouble(getFirstAndOnly(tmpElem, "MaxProc"),
                 imageFormation->txFrequencyProcMax);
 
-    imageFormation->slowTimeBeamCompensation = 
+    imageFormation->slowTimeBeamCompensation =
         six::toType<SlowTimeBeamCompensationType>(getFirstAndOnly(
             imageFormationXML, "STBeamComp")->getCharacterData());
 
-    imageFormation->imageBeamCompensation = 
+    imageFormation->imageBeamCompensation =
         six::toType<ImageBeamCompensationType>(getFirstAndOnly(
             imageFormationXML, "ImageBeamComp")->getCharacterData());
 
     imageFormation->azimuthAutofocus = six::toType<AutofocusType>(
-        getFirstAndOnly(imageFormationXML, 
+        getFirstAndOnly(imageFormationXML,
                         "AzAutofocus")->getCharacterData());
 
     imageFormation->rangeAutofocus = six::toType<AutofocusType>(
@@ -1559,7 +1559,7 @@ void ComplexXMLParser::parseAntennaFromXML(
 }
 
 void ComplexXMLParser::parsePFAFromXML(
-    const XMLElem pfaXML, 
+    const XMLElem pfaXML,
     PFA *pfa) const
 {
     common().parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
@@ -1587,7 +1587,7 @@ void ComplexXMLParser::parsePFAFromXML(
 }
 
 void ComplexXMLParser::parseRMAFromXML(
-    const XMLElem rmaXML, 
+    const XMLElem rmaXML,
     RMA* rma) const
 {
     rma->algoType = six::toType<RMAlgoType>(
@@ -1638,7 +1638,7 @@ void ComplexXMLParser::parseINCAFromXML(
 }
 
 void ComplexXMLParser::parseRgAzCompFromXML(
-    const XMLElem rgAzCompXML, 
+    const XMLElem rgAzCompXML,
     RgAzComp* rgAzComp) const
 {
     parseDouble(getFirstAndOnly(rgAzCompXML, "AzSF"), rgAzComp->azSF);
@@ -1768,7 +1768,7 @@ void ComplexXMLParser::parseAreaFromXML(
             area->plane->referencePoint.name
                     = refPtXML->getAttributes().getValue("name");
         }
-        catch (const except::Exception &ex)
+        catch (const except::Exception& /*ex*/)
         {
         }
 

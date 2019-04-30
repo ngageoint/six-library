@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
         //fill with trash data
         for (int i = 0; i < numBands; ++i)
-            for (int j = 0; j < bufSize; ++j)
+            for (size_t j = 0; j < bufSize; ++j)
                 rawData[i][j] = base + j;
 
         std::string outputFile = argv[1];
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
         //add some test data to the header
         std::vector<sys::byte> udEntry;
         std::string uData = "ABCABCABCABC";
-        for (int i = 0; i < uData.size(); i++)
+        for (size_t i = 0; i < uData.size(); i++)
             udEntry.push_back((sys::byte)uData[i]);
         
         hdr.addUserData("junk", udEntry);
@@ -69,14 +69,17 @@ int main(int argc, char** argv)
         hdr.addUserData("int_12345", 12345);
 
         writer.write(&hdr, (const sys::byte*)rawData, numBands);
-        delete [] rawData;
+        for (int ii = 0; ii < numBands; ++ii)
+        {
+            delete[] rawData[ii];
+        }
+        delete[] rawData;
+        return 0;
     }
-    catch (Exception& e)
+    catch (const Exception& e)
     {
-        std::cout << "Caught exception: " << e.getMessage() << std::endl;
-        std::cout << "Trace:" << std::endl << e.getTrace() << std::endl;
+        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
+        std::cerr << "Trace:" << std::endl << e.getTrace() << std::endl;
     }
-    return 0;
+    return 1;
 }
-
-

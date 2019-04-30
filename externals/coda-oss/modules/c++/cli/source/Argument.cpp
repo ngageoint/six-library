@@ -63,7 +63,7 @@ cli::Argument* cli::Argument::addFlag(const std::string& flag)
 std::string cli::Argument::validateFlag(const std::string& flag) const
 {
     const static std::string idChars =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789-_";
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
     std::string firstChar(flag.substr(0, 1));
     std::string rest = flag.substr(1);
     if ((!str::isAlphanumeric(firstChar) && firstChar[0] != '_')

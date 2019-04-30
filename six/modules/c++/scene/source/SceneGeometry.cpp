@@ -22,6 +22,7 @@
 
 #include <math.h>
 
+#include <math/Utilities.h>
 #include <math/Constants.h>
 #include <scene/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
@@ -29,11 +30,6 @@
 
 namespace
 {
-inline
-double square(double val)
-{
-    return (val * val);
-}
 
 inline
 scene::Vector3 normalizedCross(const scene::Vector3& lhs,
@@ -106,7 +102,7 @@ void SceneGeometry::initialize()
 
     mYs = math::linear::cross(mZs, mXs);
 
-    
+
     // Transform mRefPosition to LLA; compute 'up'
     LatLonAlt lla = Utilities::ecefToLatLon(mPo);
 
@@ -199,8 +195,8 @@ Vector3 SceneGeometry::getOPZVector() const
 }
 
 SideOfTrack SceneGeometry::getSideOfTrack() const
-{ 
-    return (SideOfTrack)mSideOfTrack; 
+{
+    return (SideOfTrack)mSideOfTrack;
 }
 
 double SceneGeometry::getImageAngle(const Vector3& vec) const
@@ -356,7 +352,7 @@ AngleMagnitude SceneGeometry::getLayover() const
     Vector3 layoverVec = getLayoverVector();
 
     AngleMagnitude layover;
-    layover.angle = getImageAngle(layoverVec); 
+    layover.angle = getImageAngle(layoverVec);
     layover.magnitude = layoverVec.norm();
 
     return layover;
@@ -389,7 +385,7 @@ AngleMagnitude SceneGeometry::getShadow() const
     Vector3 shadowVec = getShadowVector();
 
     AngleMagnitude shadow;
-    shadow.angle = getImageAngle(shadowVec); 
+    shadow.angle = getImageAngle(shadowVec);
     shadow.magnitude = shadowVec.norm();
     return shadow;
 }
@@ -411,19 +407,19 @@ SceneGeometry::getGroundResolution(const types::RgAz<double>& res) const
     const double secTilt = 1.0 / cos(tiltAngleRad);
     const double tanTilt = tan(tiltAngleRad);
 
-    const double sinRotSq = square(sinRot);
+    const double sinRotSq = math::square(sinRot);
 
     const double kr1 = (sinRotSq * tanGraz * tanTilt - sin2Rot * secGraz)
-                 * tanGraz* tanTilt + square(cosRot * secGraz);
+                 * tanGraz* tanTilt + math::square(cosRot * secGraz);
 
-    const double kr2 = square(sinRot * secTilt);
+    const double kr2 = math::square(sinRot * secTilt);
 
     const double kc1 = (sinRotSq * secGraz - sin2Rot * tanGraz * tanTilt)
-                 * secGraz + square(cosRot * tanGraz * tanTilt);
+                 * secGraz + math::square(cosRot * tanGraz * tanTilt);
 
-    const double kc2 = square(cosRot * secTilt);
+    const double kc2 = math::square(cosRot * secTilt);
 
-    const types::RgAz<double> resSq(square(res.rg), square(res.az));
+    const types::RgAz<double> resSq(math::square(res.rg), math::square(res.az));
 
     const types::RowCol<double> groundRes(
             sqrt(kr1 * resSq.rg + kr2 * resSq.az),

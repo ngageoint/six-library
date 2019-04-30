@@ -20,6 +20,7 @@
  *
  */
 #include "scene/ECEFToLLATransform.h"
+#include <math/Utilities.h>
 
 scene::ECEFToLLATransform::ECEFToLLATransform()
  : CoordinateTransform()
@@ -100,12 +101,13 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
     double altitude;
 
     double f = model->calculateFlattening();
-    double e_squared = 1.0 - pow((1.0 - f), 2);
-    double s = pow(ecef[0], 2) + pow(ecef[1], 2);
+    double e_squared = 1.0 - math::square((1.0 - f));
+    double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
     double radius_curvature = model->getEquatorialRadius()
-                              / (sqrt(1 - (e_squared * pow(sin(latitude), 2))));
+                              / (sqrt(1 - (e_squared *
+                              math::square(sin(latitude)))));
 
     altitude = e_squared * radius_curvature * sin(latitude);
     altitude += ecef[2];
@@ -122,7 +124,7 @@ scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef) const
     double initLat;
 
     double f = model->calculateFlattening();
-    double s = pow(ecef[0], 2) + pow(ecef[1], 2);
+    double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
     if (s == 0)
@@ -157,8 +159,8 @@ scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
 
     double r = model->getEquatorialRadius();
     double f = model->calculateFlattening();
-    double e_squared = 1.0 - pow((1.0 - f), 2);
-    double s = pow(ecef[0], 2) + pow(ecef[1], 2);
+    double e_squared = 1.0 - math::square((1.0 - f));
+    double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
     double numerator;

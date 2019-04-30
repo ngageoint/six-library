@@ -22,14 +22,19 @@
 #ifndef __SIX_PFA_H__
 #define __SIX_PFA_H__
 
+#include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
 
 namespace six
 {
 namespace sicd
 {
+struct Grid;
 /*!
  *  \struct SlowTimeDeskew
  *  \brief SICD STDeskew
@@ -133,6 +138,12 @@ struct PFA
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const Position& position);
+    void fillDefaultFields(const GeoData& geoData, const Grid&,
+            const SCPCOA& scpcoa);
+
+    bool validate(const SCPCOA& scpcoa, logging::Logger& log);
 };
 
 }

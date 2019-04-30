@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIO_LITE_SIO_READER_H__
-#define __SIO_LITE_SIO_READER_H__
+#ifndef __SIO_LITE_READ_UTILS_H__
+#define __SIO_LITE_READ_UTILS_H__
 
 #include <string>
 #include <sys/Conf.h>
@@ -62,8 +62,7 @@ void readSIO(const std::string& pathname,
 
     const size_t numPixels(dims.row * dims.col);
     image.reset(new InputT[numPixels]);
-    reader.read(reinterpret_cast<sys::byte*>(image.get()),
-        numPixels * sizeof(InputT));
+    reader.read(image.get(), numPixels * sizeof(InputT), true);
 }
 
 /*

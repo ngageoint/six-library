@@ -47,6 +47,28 @@ void PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
         throw NITFException(&error);
 }
 
+void PluginRegistry::registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
+        throw(NITFException)
+{
+    nitf_Error error;
+    if (!nitf_PluginRegistry_registerCompressionHandler(init, handler, &error))
+    {
+        throw NITFException(&error);
+    }
+}
+
+void PluginRegistry::registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler)
+        throw(NITFException)
+{
+    nitf_Error error;
+    if (!nitf_PluginRegistry_registerDecompressionHandler(init, handler, &error))
+    {
+        throw NITFException(&error);
+    }
+}
+
 nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
         const std::string& comp) throw(NITFException)
 {
@@ -64,5 +86,15 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
 bool PluginRegistry::treHandlerExists(const std::string& ident)
 {
     return nitf_PluginRegistry_TREHandlerExists(ident.c_str());
+}
+
+bool PluginRegistry::compressionHandlerExists(const std::string& ident)
+{
+    return nitf_PluginRegistry_compressionHandlerExists(ident.c_str());
+}
+
+bool PluginRegistry::decompressionHandlerExists(const std::string& ident)
+{
+    return nitf_PluginRegistry_decompressionHandlerExists(ident.c_str());
 }
 }

@@ -1,5 +1,5 @@
 /* This file is part of six-c++
- * =========================================================================
+* =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
@@ -2057,12 +2057,20 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geoInfo->geographicInformationExtensions.push_back(param);
 
     geoCoverage->geographicInformation = geoInfo;
-    geographicAndTarget.geographicCoverage = geoCoverage;
-    geographicAndTarget.geographicCoverage->subRegion.push_back(geoCoverage);
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        geoCoverage->footprint.getCorner(ii).setLat(
+                geographicAndTarget.geographicCoverage->footprint.
+                getCorner(ii).getLat());
+        geoCoverage->footprint.getCorner(ii).setLon(
+                geographicAndTarget.geographicCoverage->footprint.
+                getCorner(ii).getLon());
+
+    }
+    geographicAndTarget.geographicCoverage.subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
     targetInfo->identifiers.push_back(param);
-    targetInfo->footprint.reset(new six::LatLonCorners());
     targetInfo->targetInformationExtensions.push_back(param);
     geographicAndTarget.targetInformation.push_back(targetInfo);
 
@@ -2280,7 +2288,7 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage, const std::string& version)
+        lutType, bool smallImage)
 {
     siddData.setVersion(version);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
@@ -2307,6 +2315,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
         siddData.setNumRows(IMAGE.height);
         siddData.setNumCols(IMAGE.width);
     }
+
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
@@ -2442,13 +2451,13 @@ int main(int argc, char** argv)
             if (!smallImage)
             {
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     IMAGE.width * IMAGE.height / 2);
             }
             else
             {
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, 2);
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, 2);
             }
 
         }
@@ -2485,7 +2494,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a','b', 'c', 'd'};
 
         // Create a file container
-        six::Container container(DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2501,8 +2511,8 @@ int main(int argc, char** argv)
             std::auto_ptr<six::sidd::DerivedData> siddData =
                     initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
-            container.addData(siddData->clone());
+            populateData(*siddData, lutType, smallImage);
+            container->addData(siddData->clone());
             if (!smallImage)
             {
                 buffers[ii] = reinterpret_cast<const UByte*>(IMAGE.data);
@@ -2520,10 +2530,12 @@ int main(int argc, char** argv)
         // of the data.
         //--------------------------------------------------------
         if (sicdData.get())
-            container.addData(sicdData.release());
+        {
+            container->addData(sicdData.release());
+        }
 
         // Init the container
-        writer->initialize(&container);
+        writer->initialize(container);
 
         // Save the file
         writer->save(buffers, outputName);

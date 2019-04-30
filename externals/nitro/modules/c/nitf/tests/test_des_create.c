@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,7 +26,7 @@
   This program creates a NITF file with a file header and a single DE Segment.
   The record is cloned from an input NITF with either 0 subheaders or
   n image subheaders (anything else will fail to write properly)
-  
+
   The DES data and user header fields are set and the result written out as
   a new NITF
 
@@ -373,9 +373,9 @@ int main(int argc, char *argv[])
     nitf_FileSecurity_destruct(&(des->subheader->securityGroup));
     des->subheader->securityGroup = security;
 
-    
 
-    des->subheader->subheaderFields = 
+
+    des->subheader->subheaderFields =
         nitf_TRE_construct("TEST DES", "TEST DES", &error);
     if (!des->subheader->subheaderFields)
     {
@@ -391,11 +391,11 @@ int main(int argc, char *argv[])
 /*                       &error); */
 
 
-    nitf_TRE_setField(des->subheader->subheaderFields, 
+    nitf_TRE_setField(des->subheader->subheaderFields,
                       "TEST_DES_COUNT", "16", 2, &error);
-    nitf_TRE_setField(des->subheader->subheaderFields, 
+    nitf_TRE_setField(des->subheader->subheaderFields,
                       "TEST_DES_START", "065", 3, &error);
-    nitf_TRE_setField(des->subheader->subheaderFields, 
+    nitf_TRE_setField(des->subheader->subheaderFields,
                       "TEST_DES_INCREMENT", "01", 2, &error);
 
     nitf_Field_setString(des->subheader->NITF_DE, "DE", &error);
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
                 goto CATCH_ERROR;
         }
     }
-    
+
     /*  Create the DE segment */
 
 
@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
 
     }
 
-    desData = nitf_SegmentMemorySource_construct(data, strlen(data), 
+    desData = nitf_SegmentMemorySource_construct(data, strlen(data),
                                                  0, 0, 0, &error);
     if (desData == NULL)
     {
@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
     }
 
     if (!nitf_SegmentWriter_attachSource(desWriter, desData, &error))
-    {        
+    {
         nitf_Error_print(&error, stderr, "Write setup failed ");
         goto CATCH_ERROR;
     }
@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
         nitf_IOHandle_close(in);
     if (!NITF_INVALID_HANDLE(in))
         nitf_IOHandle_close(out);
-    
+
     if (writer)
         nitf_Writer_destruct(&writer);
     if (record)

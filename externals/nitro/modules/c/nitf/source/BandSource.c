@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -423,17 +423,17 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
         &IOSource_setSize
     };
 
-    nitf_IOInterface *interface = NULL;
+    nitf_IOInterface* ioInterface = NULL;
     nitf_BandSource* bandSource = NULL;
 
-    interface = nitf_IOHandleAdapter_construct(handle, NRT_ACCESS_READONLY,
-                                               error);
-    if (interface == NULL)
+    ioInterface = nitf_IOHandleAdapter_construct(handle, NRT_ACCESS_READONLY,
+                                                 error);
+    if (ioInterface == NULL)
     {
         return NULL;
     }
 
-    bandSource = nitf_IOSource_construct(interface, start, numBytesPerPixel,
+    bandSource = nitf_IOSource_construct(ioInterface, start, numBytesPerPixel,
                                          pixelSkip, error);
     if (bandSource == NULL)
     {
@@ -461,17 +461,17 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_constructFile(const char* fname,
         &IOSource_setSize
     };
 
-    nitf_IOInterface* interface = NULL;
+    nitf_IOInterface* ioInterface = NULL;
     nitf_BandSource* bandSource = NULL;
 
-    interface = nitf_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
-                                          NRT_OPEN_EXISTING, error);
-    if (interface == NULL)
+    ioInterface = nitf_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
+                                            NRT_OPEN_EXISTING, error);
+    if (ioInterface == NULL)
     {
         return NULL;
     }
 
-    bandSource = nitf_IOSource_construct(interface, start, numBytesPerPixel,
+    bandSource = nitf_IOSource_construct(ioInterface, start, numBytesPerPixel,
                                          pixelSkip, error);
     if (bandSource == NULL)
     {

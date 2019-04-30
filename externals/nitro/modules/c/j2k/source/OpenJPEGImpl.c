@@ -21,7 +21,7 @@
  */
 
 #include "j2k/j2k_config.h"
- 
+
 #ifdef HAVE_OPENJPEG_H
 
 #include <string.h>
@@ -121,7 +121,7 @@ J2KPRIV( J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *, j2k_WriterOptions *,
 J2KPRIV(void) OpenJPEG_errorHandler(const char* msg, void* data)
 {
     nrt_Error* error = (nrt_Error*)data;
-    /* Initialize the first message, otherwise the message will be 
+    /* Initialize the first message, otherwise the message will be
        overridden up the stack */
     if(strlen(error->message) == 0)
     {
@@ -153,12 +153,24 @@ OpenJPEG_createIO(nrt_IOInterface* io,
         ioControl->io = io;
         ioControl->offset = nrt_IOInterface_tell(io, error);
         if (length > 0)
+        {
             ioControl->length = length;
+        }
         else
-            ioControl->length = nrt_IOInterface_getSize(io, error)
-                    - ioControl->offset;
+        {
+            /*
+             * TODO: Technically we should just report the number of bytes
+             *       remaining in this image segment, not in the whole NITF,
+             *       though if we somehow read beyond this image segment,
+             *       presumably we'd get OpenJPEG errors because the bytes
+             *       we'd be reading wouldn't be J2K tiles
+             */
+            ioControl->length =
+                    nrt_IOInterface_getSize(io, error) - ioControl->offset;
+        }
 
-        opj_stream_set_user_data(stream, ioControl);
+        opj_stream_set_user_data(stream, ioControl, NULL);
+        opj_stream_set_user_data_length(stream, ioControl->length);
         opj_stream_set_read_function(stream, implStreamRead);
         opj_stream_set_seek_function(stream, implStreamSeek);
         opj_stream_set_skip_function(stream, implStreamSkip);
@@ -184,7 +196,7 @@ J2KPRIV(OPJ_SIZE_T) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
     if (toRead <= 0 || !nrt_IOInterface_read(
                     ctrl->io, (char*)buf, toRead, &ctrl->error))
     {
-        return 0;
+        return (OPJ_SIZE_T) -1;
     }
     return toRead;
 }
@@ -278,7 +290,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
 
     if (!(*codec = opj_create_decompress(OPJ_CODEC_J2K)))
     {
-        nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT, 
+        nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
         goto CATCH_ERROR;
     }
@@ -292,7 +304,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
                        NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
-    
+
     opj_set_default_decoder_parameters(&impl->parameters);
 
     if (!opj_setup_decoder(*codec, &impl->parameters))
@@ -434,7 +446,10 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 
     CLEANUP:
     {
-        opj_destroy_cstr_info(&codeStreamInfo);
+        if (codeStreamInfo)
+        {
+            opj_destroy_cstr_info(&codeStreamInfo);
+        }
         OpenJPEG_cleanup(&stream, &codec, &image);
     }
     return rc;
@@ -493,8 +508,8 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     }
     else
     {
-        /* 
-           OpenJPEG defaults this to 6, but that causes the compressor 
+        /*
+           OpenJPEG defaults this to 6, but that causes the compressor
            to fail if the tile sizes are less than 2^6.  So we adjust this
            down if necessary.
         */
@@ -984,7 +999,7 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                 NRT_CTXT, NRT_ERR_UNK);
             goto CATCH_ERROR;
         }
-        
+
         /* We have a tile that is wider than it "should" be
          * Need to create smaller buffer to pass to write function
          */
@@ -994,15 +1009,15 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
             size_t destOffset = 0;
             const size_t srcStride = tileWidth * nBytes;
             const size_t destStride = thisTileWidth * nBytes;
-            
+
             newTileBuf = (nrt_Uint8*) J2K_MALLOC(thisTileSize);
             if(!newTileBuf)
             {
                 nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
                 goto CATCH_ERROR;
             }
-            
-            for(ii = 0; ii < thisTileHeight; ++ii, srcOffset += srcStride, 
+
+            for(ii = 0; ii < thisTileHeight; ++ii, srcOffset += srcStride,
                     destOffset += destStride)
                 memcpy(newTileBuf + destOffset, buf + srcOffset, destStride);
 

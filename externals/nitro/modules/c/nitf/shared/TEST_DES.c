@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -28,7 +28,7 @@
   used for test of the UserSegment object and can be used aa an example
   and starting point for the development of DES.
 
-  This example defines a "standard" DE segment which means the user 
+  This example defines a "standard" DE segment which means the user
   header can be implemented via a TRE object and there are no out of
   segment dependencies
 
@@ -84,12 +84,12 @@ NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
 {
     if (!nitf_TREUtils_createBasicHandler(&descriptionSet,
                                           &TEST_DESHandler,error))
-        return NULL; 
+        return NULL;
     return ident;
 }
 NITFAPI(void) TEST_DES_cleanup(void){}
 NITFAPI(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
-    return &TEST_DESHandler; 
+    return &TEST_DESHandler;
 }
 
 NITF_CXX_ENDGUARD

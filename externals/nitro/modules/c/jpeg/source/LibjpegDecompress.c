@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -944,7 +944,7 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
 
     /*  Well this is what I wanted to happen, although I didnt have
     the guts to ask for it in the while loop, since I have seen
-    some pretty unfortunate JPEGs in NITF files 
+    some pretty unfortunate JPEGs in NITF files
     */
     if (bytesRead != fileLength)
     {
@@ -976,7 +976,10 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader* subheader,
                 NITF_ERR_DECOMPRESSION);
         return NULL;
     }
-
+    implControl->ioInterface = NULL;
+    implControl->markerList = NULL;
+    implControl->quantTable = NULL;
+    implControl->length = 0;
     return (nitf_DecompressionControl*)implControl;
 }
 
@@ -1263,7 +1266,7 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
             nitf_ListIterator_increment(&x))
     {
         JPEGMarkerItem* item = (JPEGMarkerItem*)nitf_ListIterator_get(&x);
-        if (strcmp(item->name, "SOI") == 0 && 
+        if (strcmp(item->name, "SOI") == 0 &&
             ((j = item->block) == blockNumber))
         {
             *soi = item->off - 2;
@@ -1294,7 +1297,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 {
     /*
      *  For now, do as I say (to test that you dont break anything in
-     *  the trivial case  
+     *  the trivial case
      */
     NITF_BOOL separateBands = 0;
 
@@ -1480,6 +1483,11 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     if (implControl && implControl->markerList)
     {
         nitf_List_destruct(&implControl->markerList);
+    }
+    /* delete quant table */
+    if (implControl && implControl->quantTable)
+    {
+        free(implControl->quantTable);
     }
     if (implControl)
     {

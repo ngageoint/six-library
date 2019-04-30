@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <stdio.h>
 
 #include <import/cli.h>
@@ -243,15 +244,16 @@ std::string  initImageDataXML(unsigned int version)
 }
 
 
-std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t numParams = 5)
+std::string initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t numParams = 5)
 {
-    std::string xmlText("");
-    char  geoText[256];
+    std::string xmlText;
+    char geoText[256];
 
     // All GeoInfo blocks start the same
-    sprintf(geoText, "<GeoInfo name=\"geoinfo%lu\">", numInfos);
-    xmlText = std::string(geoText);
-
+    // TODO: Switch over to use ostringstream rather than sprintf() throughout
+    std::ostringstream ostr;
+    ostr << "<GeoInfo name=\"geoinfo" << numInfos << "\">";
+    xmlText = ostr.str();
 
     // In 1_0_0, Desc comes before GeoInfo children
     if (version == FRMT_1_0_0)
@@ -2487,7 +2489,7 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
             return false;
         }
     }
-    catch (except::Exception& ex)
+    catch (except::Exception& /*ex*/)
     {
         return false;
     }

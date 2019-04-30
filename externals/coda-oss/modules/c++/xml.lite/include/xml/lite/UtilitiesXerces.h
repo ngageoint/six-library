@@ -430,14 +430,8 @@ private:
     static sys::Mutex mMutex;
     bool mIsDestroyed;
 };
-
 }
 }
-
-//! Overloaded output operator for XercesLocalString
-std::ostream& operator<<(std::ostream& os,
-                         const xml::lite::XercesLocalString& ls);
-
 
 #endif
 

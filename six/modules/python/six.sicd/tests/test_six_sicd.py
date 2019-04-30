@@ -27,6 +27,7 @@ from pysix.six_base import *
 from coda.xml_lite import *
 from coda.coda_io import *
 from coda.coda_logging import *
+from coda.coda_types import *
 
 import os
 import sys

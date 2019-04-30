@@ -87,11 +87,11 @@ XMLElem SICommonXMLParser::createVector3D(
 XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
         const std::string& uri, const Poly1D& poly1D, XMLElem parent) const
 {
-    int order = poly1D.order();
+    size_t order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
     setAttribute(poly1DXML, "order1", six::toString(order));
 
-    for (int i = 0; i <= order; ++i)
+    for (size_t i = 0; i <= order; ++i)
     {
         XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[i],
                                        poly1DXML);
@@ -157,7 +157,7 @@ void SICommonXMLParser::parsePoly(XMLElem polyXML,
 XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
         const PolyXYZ& polyXYZ, XMLElem parent) const
 {
-    int order = polyXYZ.order();
+    size_t order = polyXYZ.order();
     XMLElem polyXML = newElement(name, getDefaultURI(), parent);
 
     XMLElem xXML = newElement("X", getSICommonURI(), polyXML);
@@ -168,7 +168,7 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     setAttribute(yXML, "order1", six::toString(order));
     setAttribute(zXML, "order1", six::toString(order));
 
-    for (int i = 0; i <= order; ++i)
+    for (size_t i = 0; i <= order; ++i)
     {
         Vector3 v3 = polyXYZ[i];
         XMLElem xCoefXML = createDouble("Coef", getSICommonURI(), v3[0], xXML);
@@ -390,8 +390,8 @@ XMLElem SICommonXMLParser::createRowCol(
         const RowColInt& value, XMLElem parent) const
 {
     XMLElem e = newElement(name, (uri.empty()) ? getDefaultURI() : uri, parent);
-    createInt(rowName, getSICommonURI(), value.row, e);
-    createInt(colName, getSICommonURI(), value.col, e);
+    createInt(rowName, getSICommonURI(), static_cast<int>(value.row), e);
+    createInt(colName, getSICommonURI(), static_cast<int>(value.col), e);
     return e;
 }
 

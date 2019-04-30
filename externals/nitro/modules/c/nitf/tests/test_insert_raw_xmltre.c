@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -43,7 +43,7 @@ nitf_TRE* createXMLTRE(const char* data, const int length)
 {
     nitf_TRE *tre;
     nitf_Error error;
-    
+
     tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW, &error);
     if (!tre)
     {
@@ -355,10 +355,10 @@ int main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
     xmlSize = nitf_IOHandle_getSize(xmlFile, &error);
-    
+
     xmlData = (char*)malloc(xmlSize);
     nitf_IOHandle_read(xmlFile, xmlData, xmlSize, &error);
-    
+
     printf("%s\n", xmlData);
     nitf_IOHandle_close(xmlFile);
 
@@ -366,7 +366,7 @@ int main(int argc, char **argv)
 
     xmltre = createXMLTRE(xmlData, xmlSize);
 
-    if (!nitf_Extensions_appendTRE(record->header->userDefinedSection, 
+    if (!nitf_Extensions_appendTRE(record->header->userDefinedSection,
 				   xmltre, &error))
     {
 	nitf_Error_print(&error, stdout, "Failed to add XMLTRE");

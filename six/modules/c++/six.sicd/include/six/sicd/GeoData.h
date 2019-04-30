@@ -23,6 +23,7 @@
 #define __SIX_GEO_DATA_H__
 
 #include <mem/ScopedCopyablePtr.h>
+#include <logging/Logger.h>
 #include <six/Types.h>
 #include <six/GeoInfo.h>
 
@@ -30,6 +31,8 @@ namespace six
 {
 namespace sicd
 {
+struct ImageData;
+
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block
@@ -87,6 +90,14 @@ public:
     {
         return !(*this == rhs);
     }
+
+    //Doesn't currently do anything
+    void fillDerivedFields(const ImageData& imageData,
+            const scene::ProjectionModel& model);
+    bool validate(logging::Logger& log) const;
+
+private:
+    static const double ECF_THRESHOLD;
 };
 }
 }

@@ -37,6 +37,7 @@ def getSampleSicdXML():
     return os.path.join(samples, random.choice(os.listdir(samples)))
 
 def runTests(testDir, testName, *args):
+    print('Running {}'.format(testName))
     argList = [utils.executableName(os.path.join(testDir, testName))]
     argList.extend(args)
     result = call(argList, stdout=subprocess.PIPE)
@@ -47,11 +48,21 @@ def runTests(testDir, testName, *args):
     print('Failed')
     return False
 
+
 def runSICDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
-    return (runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
-            and runTests(testDir, 'test_read_sicd_with_extra_des',
-            getSampleSicdXML()))
+
+    success = runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
+    success = runTests(testDir, 'test_mesh_roundtrip') and success
+    success = runTests(testDir, 'test_mesh_polyfit') and success
+
+    # Need it for just this test
+    os.environ['NITF_PLUGIN_PATH'] = os.environ['NITF_PLUGIN_PATH_REAL']
+    success = runTests(testDir, 'test_read_sicd_with_extra_des',
+                       getSampleSicdXML()) and success
+    del os.environ['NITF_PLUGIN_PATH']
+
+    return success
 
 
 def runSIDDTests():
@@ -70,13 +81,16 @@ def run():
     # Make sure plugins installed properly
     nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
 
-    if not any(plugin.startswith('PIAIMB') for plugin in os.listdir(nitfPluginPath)): 
+    if (not os.path.exists(nitfPluginPath) or
+            not any(plugin.startswith('PIAIMB') for plugin in
+                    os.listdir(nitfPluginPath))):
         print('Could not find NITF plugins. Please re-install with '
                 'the following command.')
         print('python waf install --target=PIAIMB')
         sys.exit(1)
 
     return runSICDTests() and runSIDDTests()
+
 
 if __name__ == '__main__':
     run()

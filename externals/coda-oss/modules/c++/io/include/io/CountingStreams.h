@@ -44,9 +44,13 @@ public:
 
     using ProxyOutputStream::write;
 
-    virtual void write(const sys::byte* b, sys::Size_T len)
+    /*!
+     * \param buffer The byte array to write to the stream
+     * \param len The length of the byte array to write to the stream
+     */
+    virtual void write(const void* buffer, size_t len)
     {
-        ProxyOutputStream::write(b, len);
+        ProxyOutputStream::write(buffer, len);
         mByteCount += len;
     }
 

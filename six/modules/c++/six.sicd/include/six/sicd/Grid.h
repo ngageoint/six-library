@@ -22,17 +22,28 @@
 #ifndef __SIX_GRID_H__
 #define __SIX_GRID_H__
 
+#include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+#include "six/sicd/Functor.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/sicd/CollectionInformation.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/ImageData.h"
+#include "six/sicd/RadarCollection.h"
+#include "six/sicd/RMA.h"
 
 namespace six
 {
 namespace sicd
 {
+struct PFA;
+struct RgAzComp;
+struct SCPCOA;
+
 struct WeightType
 {
     WeightType();
@@ -127,6 +138,41 @@ struct DirectionParameters
         return !(*this == rhs);
     }
 
+    bool validate(const ImageData& imageData,
+            logging::Logger& log) const;
+    bool validate(const RgAzComp& rgAzComp,
+            logging::Logger& log,
+            double offset = 0) const;
+
+    void fillDerivedFields(const ImageData& imageData);
+    void fillDerivedFields(const RgAzComp& rgAzComp, double offset = 0);
+
+private:
+    std::auto_ptr<Functor> calculateWeightFunction() const;
+
+    bool validateWeights(const Functor& weightFunction,
+            logging::Logger& log) const;
+
+    double derivedKCenter(const RgAzComp& rgAzComp,
+            double offset = 0) const;
+
+    Poly2D derivedKcoaPoly(const RgAzComp& rgAzComp,
+            double offset = 0) const;
+
+    std::vector<RowColInt>
+            calculateImageVertices(const ImageData& imageData) const;
+
+    /* Return vector contents, in order:
+    * 0) deltaK1 (min)
+    * 1) deltaK2 (max)
+    */
+    std::pair<double, double> calculateDeltaKs(
+            const ImageData& imageData) const;
+
+    static const double WGT_TOL;
+    static const size_t DEFAULT_WEIGHT_SIZE;
+    static const char BOUNDS_ERROR_MESSAGE[];
+
 };
 
 /*!
@@ -154,6 +200,80 @@ struct Grid
     {
         return !(*this == rhs);
     }
+
+    bool validate(const CollectionInformation& collectionInformation,
+            const ImageData& imageData,
+            logging::Logger& log) const;
+
+    bool validate(const RMA& rma, const Vector3& scp,
+            const PolyXYZ& arpPoly, double fc,
+            logging::Logger& log) const;
+
+    bool validate(const PFA& pfa, const RadarCollection& radarCollection,
+        double fc, logging::Logger& log) const;
+
+    bool validate(const RgAzComp& rgAzComp,
+            const GeoData& geoData,
+            const SCPCOA& scpcoa,
+            double fc,
+            logging::Logger& log) const;
+
+    void fillDerivedFields(const CollectionInformation& collectionInformation,
+                           const ImageData& imageData,
+                           const SCPCOA& scpcoa);
+    void fillDerivedFields(const RMA& rma, const Vector3& scp, const PolyXYZ& arpPoly);
+    void fillDerivedFields(const RgAzComp& rgAzComp,
+            const GeoData& geoData,
+            const SCPCOA& scpcoa,
+            double fc);
+    void fillDefaultFields(const RMA& rma, double fc);
+    void fillDefaultFields(const PFA& pfa, double fc);
+private:
+    bool validateTimeCOAPoly(
+            const CollectionInformation& collectionInformation,
+            logging::Logger& log) const;
+    bool validateFFTSigns(logging::Logger& log) const;
+    bool validate(const RMAT& rmat, const Vector3& scp,
+            double fc, logging::Logger& log) const;
+    bool validate(const RMCR& rmcr, const Vector3& scp,
+            double fc, logging::Logger& log) const;
+    bool validate(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly, double fc,
+            logging::Logger& log) const;
+    void fillDerivedFields(const RMAT& rmat, const Vector3& scp);
+    void fillDerivedFields(const RMCR& rmcr, const Vector3& scp);
+    void fillDerivedFields(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly);
+    void fillDefaultFields(const RMAT& rmat, double fc);
+    void fillDefaultFields(const RMCR& rmcr, double fc);
+    double derivedColKCenter(const RMAT& rmat, double fc) const;
+    double derivedRowKCenter(const RMAT& rmat, double fc) const;
+    double derivedRowKCenter(const RMCR& rmcr, double fc) const;
+    double derivedRowKCenter(const INCA& inca) const;
+    ComplexImageGridType defaultGridType(const RMA& rma) const;
+    ComplexImagePlaneType defaultPlaneType(const RMA& rma) const;
+
+    Vector3 derivedRowUnitVector(const RMAT& rmat, const Vector3& scp) const;
+    Vector3 derivedColUnitVector(const RMAT& rmat, const Vector3& scp) const;
+
+    Vector3 derivedRowUnitVector(const RMCR& rmcr, const Vector3& scp) const;
+    Vector3 derivedColUnitVector(const RMCR& rmcr, const Vector3& scp) const;
+
+    Vector3 derivedRowUnitVector(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly) const;
+    Vector3 derivedColUnitVector(const INCA& inca, const Vector3& scp,
+            const PolyXYZ& arpPoly) const;
+
+    Vector3 derivedRowUnitVector(const SCPCOA& scpcoa,
+            const Vector3& scp) const;
+
+    Vector3 derivedColUnitVector(const SCPCOA& scpcoa,
+        const Vector3& scp) const;
+
+    static const double UVECT_TOL;
+    static const double WF_TOL;
+    static const char WF_INCONSISTENT_STR[];
+    static const char BOUNDS_ERROR_MESSAGE[];
 };
 
 }

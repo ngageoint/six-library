@@ -950,6 +950,27 @@ void DerivedXMLParser::convertRemapToXML(const Remap& remap,
         const MonochromeDisplayRemap& mdr =
                 reinterpret_cast<const MonochromeDisplayRemap&>(remap);
         createString("RemapType", mdr.remapType, remapElem);
+    /* TODO: Where does this actually go??
+    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
+    convertGeographicCoverageToXML(
+            "GeographicCoverage",
+            &geographicAndTarget->geographicCoverage,
+            geographicAndTargetXML);
+
+    // optional to unbounded
+    for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
+            const_iterator it = geographicAndTarget->targetInformation.begin();
+            it != geographicAndTarget->targetInformation.end(); ++it)
+    {
+        TargetInformation* ti = (*it).get();
+        XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
+
+        // 1 to unbounded
+        common().addParameters("Identifier", ti->identifiers, tiXML);
+
+        // optional
+        if (ti->footprint.get())
+        */
         if (mdr.remapLUT.get())
         {
             createLUT("RemapLUT", mdr.remapLUT.get(), remapElem);
@@ -1201,33 +1222,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
         common().createLatLon(cornerName,
                              corners.getCorner(corner),
                              footprint)->getAttributes().add(node);
-    }
 
-    return footprint;
-}
-
-XMLElem DerivedXMLParser::createFootprint(const std::string& name,
-                                          const std::string& cornerName,
-                                          const LatLonAltCorners& corners,
-                                          XMLElem parent) const
-{
-    XMLElem footprint = newElement(name, getDefaultURI(), parent);
-    xml::lite::AttributeNode node;
-    node.setQName("size");
-    node.setValue(str::toString(LatLonAltCorners::NUM_CORNERS));
-
-    footprint->getAttributes().add(node);
-
-    // Write the corners out in CW order
-    // The index attribute is 1-based
-    node.setQName("index");
-
-    for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
-    {
-        node.setValue(str::toString(corner + 1));
-        common().createLatLonAlt(cornerName,
-                                corners.getCorner(corner),
-                                footprint)->getAttributes().add(node);
     }
 
     return footprint;

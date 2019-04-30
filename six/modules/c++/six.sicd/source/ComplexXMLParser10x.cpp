@@ -38,14 +38,14 @@ ComplexXMLParser10x::ComplexXMLParser10x(const std::string& version,
                                          bool ownLog) :
     ComplexXMLParser(version, false, std::auto_ptr<six::SICommonXMLParser>(
                      new six::SICommonXMLParser10x(
-                        versionToURI(version), false, 
+                        versionToURI(version), false,
                         versionToURI(version), log)),
                      log, ownLog)
 {
 }
 
 XMLElem ComplexXMLParser10x::convertGeoInfoToXML(
-    const GeoInfo *geoInfo, 
+    const GeoInfo *geoInfo,
     XMLElem parent) const
 {
     //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
@@ -72,7 +72,7 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
 
     createTxFrequency(radar, radarXML);
 
-    if (!Init::isUndefined<int>(radar->refFrequencyIndex))
+    if (!Init::isUndefined(radar->refFrequencyIndex))
     {
         createInt("RefFreqIndex", radar->refFrequencyIndex, radarXML);
     }
@@ -102,7 +102,7 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     //! a lot of the variables has been updated
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
-    convertRcvChanProcToXML("1.0", imageFormation->rcvChannelProcessed.get(), 
+    convertRcvChanProcToXML("1.0", imageFormation->rcvChannelProcessed.get(),
                             imageFormationXML);
 
     createString("TxRcvPolarizationProc",
@@ -168,7 +168,7 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
                                   distortionCorrectionApplied,
                                   pcXML), "DistortCorrectionApplied");
 
-        convertDistortionToXML("1.0", 
+        convertDistortionToXML("1.0",
             imageFormation->polarizationCalibration->distortion.get(),
             pcXML);
     }
@@ -177,7 +177,7 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
 
 
 XMLElem ComplexXMLParser10x::convertImageFormationAlgoToXML(
-    const PFA* pfa, const RMA* rma, 
+    const PFA* pfa, const RMA* rma,
     const RgAzComp* rgAzComp, XMLElem parent) const
 {
     if (pfa && !rma && !rgAzComp)
@@ -218,7 +218,7 @@ XMLElem ComplexXMLParser10x::convertSCPCOAToXML(
 
 
 XMLElem ComplexXMLParser10x::convertRMAToXML(
-    const RMA* rma, 
+    const RMA* rma,
     XMLElem parent) const
 {
     XMLElem rmaXML = newElement("RMA", parent);
@@ -249,7 +249,7 @@ XMLElem ComplexXMLParser10x::convertRMAToXML(
 
 
 XMLElem ComplexXMLParser10x::convertRMATToXML(
-    const RMAT* rmat, 
+    const RMAT* rmat,
     XMLElem rmaXML) const
 {
     createString("ImageType", "RMAT", rmaXML);
@@ -264,7 +264,7 @@ XMLElem ComplexXMLParser10x::convertRMATToXML(
 }
 
 XMLElem ComplexXMLParser10x::convertHPBWToXML(
-    const HalfPowerBeamwidths*, 
+    const HalfPowerBeamwidths*,
     XMLElem) const
 {
     //! this field was deprecated in 1.0.0
@@ -287,7 +287,7 @@ XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(
     else
     {
         throw except::Exception(Ctxt(FmtX(
-            "[Array] is a mandatory field in AntennaParams of [%s] in 1.0", 
+            "[Array] is a mandatory field in AntennaParams of [%s] in 1.0",
             name.c_str())));
     }
 }
@@ -341,7 +341,7 @@ void ComplexXMLParser10x::parseSCPCOAFromXML(
     parseDouble(getFirstAndOnly(scpcoaXML, "LayoverAng"), scpcoa->layoverAngle);
 }
 
-void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem, 
+void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,
                                            RMAT* rmat) const
 {
     common().parseVector3D(getFirstAndOnly(rmatElem, "PosRef"), rmat->refPos);
@@ -350,7 +350,7 @@ void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,
 }
 
 
-void ComplexXMLParser10x::parseRMCRFromXML(const XMLElem rmcrElem, 
+void ComplexXMLParser10x::parseRMCRFromXML(const XMLElem rmcrElem,
                                            RMCR* rmcr) const
 {
     common().parseVector3D(getFirstAndOnly(rmcrElem, "PosRef"), rmcr->refPos);
@@ -360,7 +360,7 @@ void ComplexXMLParser10x::parseRMCRFromXML(const XMLElem rmcrElem,
 
 
 void ComplexXMLParser10x::parseAntennaParamArrayFromXML(
-    const XMLElem antennaParamsXML, 
+    const XMLElem antennaParamsXML,
     six::sicd::AntennaParameters* params) const
 {
     //! this field is mandatory in 1.0.0
@@ -390,7 +390,7 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
             six::toString<DualPolarizationType>(cp->txRcvPolarization),
             cpXML);
 
-        if (!Init::isUndefined<int>(cp->rcvAPCIndex))
+        if (!Init::isUndefined(cp->rcvAPCIndex))
         {
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
         }
