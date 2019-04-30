@@ -31,36 +31,6 @@ import utils
 from runner import PythonTestRunner
 
 
-def sicdToSIO(testsDir):
-    print('Running sicd_to_sio.py')
-    scriptName = os.path.join(testsDir, 'sicd_to_sio.py')
-    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
-            'six.sicd', '1.2.0', 'sicd_1.2.0(RMA)RMAT.nitf')
-
-    schemaPath = os.path.join(utils.installPath(), 'conf',
-            'schema', 'six')
-    result = call(['python', scriptName, sampleNITF, schemaPath],
-                  stdout=subprocess.PIPE)
-    if result == 0:
-        os.remove(sampleNITF.rstrip('.nitf') + '.sio')
-        print("sicd_to_sio.py succeeded")
-        return True
-    return False
-
-
-def testCreateSICDXML(testsDir):
-    print('Running test_create_sicd_xml.py')
-    scriptName = os.path.join(testsDir, 'test_create_sicd_xml.py')
-    result = call(['python', scriptName, '-v', '1.2.0'], stdout=subprocess.PIPE)
-
-    if result == 0:
-        os.remove('test_create_sicd.xml')
-        os.remove('test_create_sicd_rt.xml')
-        print('test_create_sicd_xml.py succeeded')
-        return True
-    return False
-
-
 def createSampleCPHD():
     programPathname = os.path.join(utils.installPath(), 'tests',
             'cphd', 'test_cphd_write_simple')
@@ -77,31 +47,22 @@ def createSampleCPHD():
     return cphdPathname
 
 
-def testReadSICDXML(testsDir):
-    print('Running test_read_sicd_xml.py')
-    scriptName = os.path.join(testsDir, 'test_read_sicd_xml.py')
-    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
-            'six.sicd', 'sicd_1.2.0(RMA)RMAT.nitf')
-
-    result = call(['python', scriptName, sampleNITF])
-    if result == 0:
-        print('test_read_sicd_xml.py succeeded')
-        return True
-    return False
-
-
 def run():
     schemaPath = os.path.join(utils.installPath(), 'conf', 'schema', 'six')
-    testsDir = os.path.join(utils.findSixHome(), 'six',
-            'modules', 'python', 'six', 'tests')
 
     # SIX tests
+    testsDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'python', 'six', 'tests')
     sixRunner = PythonTestRunner(testsDir)
-    result = result and sixRunner.run('testDateTime.py');
+    result = sixRunner.run('testDateTime.py');
 
     # SICD tests
+    testsDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'python', 'six.sicd', 'tests')
+    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
+            'six.sicd', 'sicd_1.2.0(RMA)RMAT.nitf')
     sicdRunner = PythonTestRunner(testsDir)
-    result = (sicdRunner.run('test_streaming_sicd_write.py') and
+    result = (result and sicdRunner.run('test_streaming_sicd_write.py') and
         sicdRunner.run('test_read_region.py') and
         sicdRunner.run('test_read_sicd_xml.py', sampleNITF) and
         sicdRunner.run('test_six_sicd.py', sampleNITF) and

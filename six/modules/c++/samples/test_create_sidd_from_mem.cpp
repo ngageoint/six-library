@@ -2057,22 +2057,12 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geoInfo->geographicInformationExtensions.push_back(param);
 
     geoCoverage->geographicInformation = geoInfo;
-    for (size_t ii = 0; ii < 4; ++ii)
-    {
-        geoCoverage->footprint.getCorner(ii).setLat(
-                geographicAndTarget.geographicCoverage->footprint.
-                getCorner(ii).getLat());
-        geoCoverage->footprint.getCorner(ii).setLon(
-                geographicAndTarget.geographicCoverage->footprint.
-                getCorner(ii).getLon());
-
-    }
-
     geographicAndTarget.geographicCoverage = geoCoverage;
     geographicAndTarget.geographicCoverage->subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
     targetInfo->identifiers.push_back(param);
+    targetInfo->footprint.reset(new six::LatLonCorners());
     targetInfo->targetInformationExtensions.push_back(param);
     geographicAndTarget.targetInformation.push_back(targetInfo);
 
@@ -2081,6 +2071,10 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     {
         geographicAndTarget.imageCorners->getCorner(ii).setLat(ii + 1);
         geographicAndTarget.imageCorners->getCorner(ii).setLon(ii * 3);
+        geographicAndTarget.targetInformation[0]->footprint->getCorner(ii).setLat(ii + 1);
+        geographicAndTarget.targetInformation[0]->footprint->getCorner(ii).setLon(ii * 3);
+        geographicAndTarget.geographicCoverage->footprint.getCorner(ii).setLat(ii + 1);
+        geographicAndTarget.geographicCoverage->footprint.getCorner(ii).setLon(ii * 3);
     }
 
     geographicAndTarget.validData.push_back(six::LatLon(23, 34));

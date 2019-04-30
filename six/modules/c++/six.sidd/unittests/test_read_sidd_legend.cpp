@@ -130,6 +130,20 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
             new six::sidd::GeographicCoverage(
             six::RegionType::GEOGRAPHIC_INFO));
 
+    six::LatLonCorners& corners =
+        siddData->geographicAndTarget->geographicCoverage->footprint;
+    corners.getCorner(0).setLat(1);
+    corners.getCorner(0).setLon(2);
+
+    corners.getCorner(1).setLat(2);
+    corners.getCorner(1).setLon(3);
+
+    corners.getCorner(2).setLat(3);
+    corners.getCorner(2).setLon(4);
+
+    corners.getCorner(3).setLat(4);
+    corners.getCorner(3).setLon(5);
+
     return siddDataScoped;
 }
 
@@ -307,7 +321,6 @@ int main(int, char**)
     try
     {
         TEST_CHECK(testRead);
-
         return 0;
     }
     catch (const except::Exception& e)

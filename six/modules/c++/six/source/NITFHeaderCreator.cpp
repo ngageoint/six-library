@@ -97,7 +97,7 @@ const char NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
-NITFHeaderCreator::NITFHeaderCreator() : 
+NITFHeaderCreator::NITFHeaderCreator() :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -108,7 +108,7 @@ NITFHeaderCreator::NITFHeaderCreator() :
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) : 
+NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -119,7 +119,7 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     mem::SharedPtr<Container> container) : 
+                                     mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -546,6 +546,11 @@ void NITFHeaderCreator::addUserDefinedSubheader(
         {
             specVers = "1.0";
             specDT = "2011-08-01T00:00:00Z";
+        }
+        else if (version == "1.1.0")
+        {
+            specVers = "1.1";
+            specDT = "2016-07-15T00:00:00Z";
         }
     }
 

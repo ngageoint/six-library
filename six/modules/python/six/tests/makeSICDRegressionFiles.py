@@ -51,11 +51,11 @@ def createNITFs(version, alg, imageType, home):
         return
 
     outputName = "sicd_{0}({1}){2}.nitf".format(version, alg, imageType)
-    print('Creating file {}.nitf'.format(outputName))
+    print('Creating file {}'.format(outputName))
 
     cmplx = initData(includeNITF=True, version=version, alg=alg,
                      imageType=imageType)
-    outPath = os.path.join(home, 'regression_files', 'six.sicd', version)
+    outPath = os.path.join(home, 'regression_files', 'six.sicd')
 
     writeNITF(os.path.join(outPath, outputName), cmplx)
 
