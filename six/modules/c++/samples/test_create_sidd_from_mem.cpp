@@ -2067,7 +2067,9 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
                 getCorner(ii).getLon());
 
     }
-    geographicAndTarget.geographicCoverage.subRegion.push_back(geoCoverage);
+
+    geographicAndTarget.geographicCoverage = geoCoverage;
+    geographicAndTarget.geographicCoverage->subRegion.push_back(geoCoverage);
 
     mem::ScopedCopyablePtr<six::sidd::TargetInformation> targetInfo(new six::sidd::TargetInformation());
     targetInfo->identifiers.push_back(param);
@@ -2288,7 +2290,7 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage)
+        lutType, bool smallImage, const std::string& version)
 {
     siddData.setVersion(version);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
@@ -2511,7 +2513,7 @@ int main(int argc, char** argv)
             std::auto_ptr<six::sidd::DerivedData> siddData =
                     initData(lutType);
 
-            populateData(*siddData, lutType, smallImage);
+            populateData(*siddData, lutType, smallImage, version);
             container->addData(siddData->clone());
             if (!smallImage)
             {

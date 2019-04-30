@@ -78,6 +78,28 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->display->magnificationMethod =
             six::MagnificationMethod::NEAREST_NEIGHBOR;
 
+    six::Parameter param;
+    param.setName("GeoName");
+    param.setValue("GeoValue");
+    siddData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+
+    six::sidd::GeographicCoverage* geoCoverage =
+            siddData->geographicAndTarget->geographicCoverage.get();
+    geoCoverage->georegionIdentifiers.push_back(param);
+    geoCoverage->footprint.getCorner(0).setLat(10);
+    geoCoverage->footprint.getCorner(0).setLon(30);
+
+    geoCoverage->footprint.getCorner(1).setLat(11);
+    geoCoverage->footprint.getCorner(1).setLon(30);
+
+    geoCoverage->footprint.getCorner(2).setLat(11);
+    geoCoverage->footprint.getCorner(2).setLon(31);
+
+    geoCoverage->footprint.getCorner(3).setLat(10);
+    geoCoverage->footprint.getCorner(3).setLon(31);
+
     // We know this is PGD so this is safe
     six::sidd::PlaneProjection* const planeProjection =
         reinterpret_cast<six::sidd::PlaneProjection*>(
