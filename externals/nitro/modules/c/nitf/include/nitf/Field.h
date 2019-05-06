@@ -288,7 +288,6 @@ NITFAPI(void) nitf_Field_destruct(nitf_Field ** field);
 
 /*!
  *  Clone this object.  This is a deep copy operation.
- *  \todo IMPLEMENT THIS
  *  \param source The source object
  *  \param error  An error to populate upon failure
  *  \return A new object that is identical to the old

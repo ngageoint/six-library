@@ -68,8 +68,16 @@ public:
             convertDualPolarization(six::DualPolarizationType pol);
 
     static std::auto_ptr<scene::ProjectionModel>
-
     getProjectionModel(const DerivedData* data);
+
+    /*!
+     * Create a fake SIDD that's populated enough for
+     * general testing code to run without throwing exceptions
+     *
+     * \return mock DerivedData object
+     */
+    static std::auto_ptr<DerivedData> createFakeDerivedData();
+
 
     /*
     * Parses the XML in 'xmlStream' and converts it into a DerivedData object.

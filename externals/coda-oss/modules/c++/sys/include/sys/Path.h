@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -42,12 +42,11 @@ class Path
 {
 public:
     Path();
-    Path(const Path& parent, std::string child);
-    Path(std::string parent, std::string child);
-    Path(std::string pathName);
+    Path(const Path& parent, const std::string& child);
+    Path(const std::string& parent, const std::string& child);
+    Path(const std::string& pathName);
     Path& operator=(const Path& path);
     Path(const Path& path);
-    ~Path();
 
     inline operator std::string() const
     {
@@ -90,6 +89,22 @@ public:
     }
 
     /*!
+     *  Return true if path is absolute. False otherwise
+     *  \param path pathname in question
+     *  \return true if the pathname is an absolute path
+     */
+    static bool isAbsolutePath(const std::string& path);
+
+    /*!
+     *  Return true if path is absolute. False otherwise
+     *  \return true if the Path instance is an absolute path
+     */
+    inline bool isAbsolutePath() const
+    {
+        return isAbsolutePath(mPathName);
+    }
+
+    /*!
      *  Separates a path into its components, and returns a vector of
      *  them. This splits on both '/' and '\\'.
      */
@@ -102,7 +117,7 @@ public:
 
     /*!
      * Splits the path into two components: head & tail.
-     * 
+     *
      * The tail part will never contain the delim; if path ends in the delim,
      * tail will be empty. If there is no delim in path, head will be empty.
      */
@@ -115,7 +130,7 @@ public:
 
     /*!
      * Splits the path it into two components: drive & tail.
-     * 
+     *
      * For systems that do not support drive specifications, drive will always
      * be the empty string. drive + tail = path
      */
@@ -128,7 +143,7 @@ public:
 
     /*!
      * Splits the pathname into two components: root & ext.
-     * 
+     *
      * The returned pair will contain the root of the path plus the extension,
      * if one exists. You can combine the returned pair to create the original
      * path.
@@ -193,8 +208,8 @@ public:
     }
 
     /*!
-     *  Creates the directory 
-     *  \param makeParents - flag for making any non-existant parent 
+     *  Creates the directory
+     *  \param makeParents - flag for making any non-existant parent
      *                       directories
      */
     inline bool makeDirectory(bool makeParents = false) const
@@ -257,9 +272,8 @@ protected:
     OS mOS;
 };
 
-}
-
 std::ostream& operator<<(std::ostream& os, const sys::Path& path);
 std::istream& operator>>(std::istream& os, sys::Path& path);
+}
 
 #endif

@@ -281,6 +281,14 @@ public:
         return subtract(v);
     }
 
+    Like_T
+    operator-() const
+    {
+        Like_T v(*this);
+        v.mRaw = -v.mRaw;
+        return v;
+    }
+
     Like_T& operator *=(const Like_T& v)
     {
         for (size_t i = 0; i < _ND; i++)
@@ -390,7 +398,6 @@ template<size_t _ND, typename _T>
         os << std::setw(10) << v[i] << " ";
     }
     return os;
-    
 }
 } // linear
 } // math

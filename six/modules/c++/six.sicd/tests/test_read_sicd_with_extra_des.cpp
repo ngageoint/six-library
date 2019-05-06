@@ -26,34 +26,10 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <io/TempFile.h>
 
 namespace
 {
-class TempFile
-{
-public:
-    TempFile();
-    ~TempFile();
-    std::string pathname() const;
-private:
-    std::string mName;
-};
-
-TempFile::TempFile() :
-    mName(std::tmpnam(NULL))
-{
-}
-
-TempFile::~TempFile()
-{
-    std::remove(mName.c_str());
-}
-
-std::string TempFile::pathname() const
-{
-    return mName;
-}
-
 
 void validateArguments(int argc, char** argv)
 {
@@ -84,7 +60,7 @@ std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
     return bandData;
 }
 
-std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
+std::auto_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 {
     logging::Logger log;
     std::auto_ptr<six::sicd::ComplexData> data =
@@ -95,11 +71,12 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     std::vector<six::UByte> bandData(
             generateBandData(*data));
 
-    six::Container container(six::DataType::COMPLEX);
-    container.addData(dynamic_cast<six::Data*>(data.release()));
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    container->addData(data.release());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
 
     nitf::Record record = writer.getRecord();
     nitf::DESegment des = record.newDataExtensionSegment();
@@ -179,7 +156,7 @@ std::auto_ptr<TempFile> createNITFFromXML(const std::string& xmlPathname)
     shortSegmentWriter->attachSource(shortSource);
     writer.addAdditionalDES(shortSegmentWriter);
 
-    std::auto_ptr<TempFile> temp(new TempFile());
+    std::auto_ptr<io::TempFile> temp(new io::TempFile());
     writer.save(&bandData[0], temp->pathname());
     return temp;
 }
@@ -197,7 +174,7 @@ int main(int argc, char** argv)
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-        std::auto_ptr<TempFile> nitf = createNITFFromXML(xmlPathname);
+        std::auto_ptr<io::TempFile> nitf = createNITFFromXML(xmlPathname);
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
 
@@ -208,9 +185,9 @@ int main(int argc, char** argv)
                 std::vector<std::string>(),
                 log);
 
-        // reader retains ownership of these pointers
-        six::Container* const container = reader.getContainer();
-        six::Data* const readData = container->getData(0);
+        mem::SharedPtr<const six::Container> container = reader.getContainer();
+        // container retains ownership of this pointer
+        const six::Data* readData = container->getData(0);
 
         if (*readData == *originalData)
         {

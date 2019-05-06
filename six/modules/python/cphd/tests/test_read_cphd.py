@@ -2,9 +2,9 @@
 
 #
 # =========================================================================
-# This file is part of cphd-python 
+# This file is part of cphd-python
 # =========================================================================
-# 
+#
 # (C) Copyright 2004 - 2015, MDA Information Systems LLC
 #
 # cphd-python is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU Lesser General Public 
-# License along with this program; If not, 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
 # see <http://www.gnu.org/licenses/>.
 #
 
@@ -32,9 +32,9 @@ if __name__ == '__main__':
     else:
         print "Usage: " + sys.argv[0] + " <Input CPHD>"
         sys.exit(0)
-        
+
     reader = CPHDReader(inputPathname, multiprocessing.cpu_count())
-    
+
     print reader.getFileHeader()
     print reader.getMetadata()
     print reader.getVBM()

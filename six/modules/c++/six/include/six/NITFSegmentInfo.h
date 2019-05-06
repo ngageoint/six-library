@@ -22,7 +22,9 @@
 #ifndef __SIX_NITF_SEGMENT_INFO_H__
 #define __SIX_NITF_SEGMENT_INFO_H__
 
-#include "six/Types.h"
+#include <algorithm>
+
+#include <six/Types.h>
 
 namespace six
 {
@@ -48,8 +50,39 @@ struct NITFSegmentInfo
 
     //! The image segment corner points
     LatLonCorners corners;
-};
 
+    /*!
+     * \return The end row (exclusive) of the image segment
+     */
+    size_t endRow() const
+    {
+        return firstRow + numRows;
+    }
+
+    /*!
+     * Given a global pixel range of
+     * [rangeStartRow, rangeStartRow + rangeNumRows), determines if this range
+     * overlaps with this segment and, if so, what rows overlap with it
+     *
+     * \param rangeStartRow The inclusive global start row of the range of
+     * interest
+     * \param rangeNumRows The number of rows in the range of interest
+     * \param[out] firstGlobalRowInThisSegment If the range does appear in this
+     * segment, the first global row of the range that's in the segment (if the
+     * range starts prior to this segment, it'll be the first row of the
+     * segment.  If the range starts inside the segment, it'll be the first row
+     * of the range).  If the range does not appear in this segment, this is
+     * set to numeric_limits<size_t>::max().
+     * \param[out] numRowsInThisSegment The number of rows of the range which
+     * appear in this segment
+     *
+     * \return True if the range overlaps with this segment, false otherwise
+     */
+    bool isInRange(size_t rangeStartRow,
+                   size_t rangeNumRows,
+                   size_t& firstGlobalRowInThisSegment,
+                   size_t& numRowsInThisSegment) const;
+};
 }
 
 #endif

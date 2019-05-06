@@ -20,6 +20,8 @@
  *
  */
 #include "six/sicd/Position.h"
+#include "six/sicd/SCPCOA.h"
+#include <math/Utilities.h>
 
 namespace six
 {
@@ -30,6 +32,47 @@ Position::Position() :
     grpPoly(Init::undefined<PolyXYZ>()),
     txAPCPoly(Init::undefined<PolyXYZ>())
 {
+}
+
+void Position::fillDerivedFields(const SCPCOA& scpcoa)
+{
+    if (!Init::isUndefined(scpcoa.arpPos) &&
+        !Init::isUndefined(scpcoa.arpVel) &&
+        !Init::isUndefined(scpcoa.scpTime) &&
+        (Init::isUndefined(arpPoly)))
+    {
+        const Vector3 tempArpAcc = Init::isUndefined(scpcoa.arpAcc) ?
+            Vector3(0.0) : scpcoa.arpAcc;
+
+        std::vector<Vector3> coefs;
+        coefs.resize(3);
+
+        //constant
+        coefs[0] = scpcoa.arpPos -
+            scpcoa.arpVel * scpcoa.scpTime +
+            (tempArpAcc / 2) * math::square(scpcoa.scpTime);
+
+        //linear
+        coefs[1] = scpcoa.arpVel -
+            tempArpAcc * scpcoa.scpTime;
+
+        //quadratic
+        coefs[2] = tempArpAcc / 2;
+
+        arpPoly = PolyXYZ(coefs);
+    }
+}
+
+bool Position::validate(logging::Logger& log) const
+{
+    // 2.6
+    if (arpPoly.order() < 2)
+    {
+        log.error("Position.arpPoly should have at least position"
+                " and velocity terms.");
+        return false;
+    }
+    return true;
 }
 }
 }

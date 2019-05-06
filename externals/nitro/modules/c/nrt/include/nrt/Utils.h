@@ -33,18 +33,18 @@ NRT_CXX_GUARD
  * \param str   null-terminated string
  * \param max   the maximum # of parts to split into (0 = split all)
  */
-NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
+NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
                                          nrt_Error * error);
 
-NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(const char *str);
 
-NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(const char *str);
 
 /**
  * Returns 1 if the input string is either null, empty (strlen == 0), or
  * if every character is a whitespace char.
  */
-NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str);
+NRTAPI(NRT_BOOL) nrt_Utils_isBlank(const char *str);
 
 NRTAPI(void) nrt_Utils_trimString(char *str);
 
@@ -70,24 +70,32 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
  *  Take in a decimal degree format string and convert it into
  *  a double.  The string will be of the format +-ddd.dd or +-dd.dd.
  *
+ *  \param d The decimal string to convert
+ *  \param decimal [output] The value of the given string
+ *  \param error Set if there is an error
+ *  \return NITF_SUCCESS or NITF_FAILURE as appropriate
+ *
  *  \todo This function can be expanded to handle arbitrary
  *  size conversions.  It is TBD whether this is desirable, since the
  *  IGEOLO itself is very strict about what is allowed
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d, double *decimal,
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 
-NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n);
+NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
 /*!
- *  Convert a double representing decimal degrees into 3 integers,
- *  one for degrees, one for minutes, and one for seconds.
+ *  Convert a double representing decimal degrees into 2 integers,
+ *  one for degrees, one for minutes, and a double for seconds.
+ *
+ *  The sign of the value is given by the most significant nonzero DMS value.
+ *  All remaining values should be positive.
  *
  *  The function returns these values through the passed in parameters.
- *  parameters may not be NULL
+ *  Parameters may not be NULL
  *
  *  \param decimal An existing decimal degree
  *  \param degrees [output] The degrees as an integer
@@ -99,7 +107,8 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 
 /*!
  *  Convert the geographic coordinates (i.e., DMS) into decimal
- *  degrees as a double.
+ *  degrees as a double. The sign of the value is given by the most significant
+ *  nonzero DMS value. All remaining values should be positive.
  *
  *  \param degrees geographic degrees
  *  \param minutes geographic minutes
@@ -113,6 +122,9 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
  *  The string will be of the format dddmmss[NSEW] or ddmmss[NSEW]
  *  Blank values are accepted (per NRT 2500C) and converted to 0s.
  *
+ *  The sign of the result will be given by the largest non-zero number.
+ *  All other numbers will be nonnegative.
+ *
  *  Any other string will produce an error object with code
  *  NRT_ERR_INVALID_PARAMETER.
  *
@@ -122,7 +134,7 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
  *  \param seconds [output] The seconds as an integer
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                                                  int *minutes, double *seconds,
                                                  nrt_Error * error);
 
@@ -172,6 +184,42 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
  *
  */
 NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
+
+
+/*!
+ * Helper function to actually perform a byte-swap.
+ *
+ * \param value Pointer to value being swapped
+ * \param indexOne Index of first byte to be swapped
+ * \param indexTwo Index of second byte to be swapped
+ */
+/*
+ * Older versions of Visual Studio do not support `inline` for C
+ * Using `__inline` for Windows instead
+ */
+NRTPRIV(void)
+#ifdef WIN32
+__inline
+#else
+inline
+#endif
+nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+        size_t indexTwo)
+{
+    nrt_Uint8 temp;
+    temp = value[indexOne];
+    value[indexOne] = value[indexTwo];
+    value[indexTwo] = temp;
+}
+
+/*!
+ *  Byte-swap a given value of length `size` bytes in-place.
+ *  Sizes of length 2, 4, and 8 are supported.
+ *
+ *  \param value Pointer to value to be swapped
+ *  \param size The size, in bytes, of each buffer element
+ */
+NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8* value, size_t size);
 
 NRT_CXX_ENDGUARD
 #endif

@@ -23,11 +23,14 @@
 #define __SIX_NITF_READ_CONTROL_H__
 
 #include <map>
+
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
 #include "six/Adapters.h"
+#include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
+#include <nitf/IOStreamReader.hpp>
 
 namespace six
 {
@@ -59,13 +62,44 @@ public:
         reset();
     }
 
+    /*!
+     *  Read whether a file has COMPLEX or DERIVED data
+     *  \param fromFile path to file
+     *  \return datatype of file contents
+     */
     virtual DataType getDataType(const std::string& fromFile) const;
 
+    /*!
+    *  Read whether a Record has COMPLEX or DERIVED data
+    *  \param record the Record in question
+    *  \return datatype of Record contents
+    */
     static
     DataType getDataType(nitf::Record& record);
 
+    /*!
+    *  Read whether a DESegment has COMPLEX or DERIVED data
+    *  \param segment the DESegment in question
+    *  \return datatype of DESegment contents
+    */
     static
-    DataType getDataType(nitf::DESegment& record);
+    DataType getDataType(nitf::DESegment& segment);
+
+    /*!
+    *  Determine whether specific attribute outline COMPLEX or DERIVED contents
+    *  Interface to allow communication with programs that use different ways
+    *  of storing NITF data
+    *  \param desid SICD_XML, SIDD_XML, XML_DATA_CONTENT, etc.
+    *  \param subheaderLength length of subheader
+    *  \param desshsiField Specification identifier
+    *  \param treTag tag of TRE (e.g. XML_DATA_CONTENT)
+    *  \return datatype
+    */
+    static
+    DataType getDataType(const std::string& desid,
+            sys::Uint64_T subheaderLength,
+            const std::string& desshsiField,
+            const std::string& treTag="");
 
     /*!
      *  Performs (Basic) validation when a segment is being
@@ -87,10 +121,37 @@ public:
     void load(const std::string& fromFile,
               const std::vector<std::string>& schemaPaths);
 
-    void load(nitf::IOInterface& ioInterface);
-    void load(nitf::IOInterface& ioInterface,
+    /*
+     *  \func load
+     *  \brief Loads a SICD from an io::SeekableInputStream.
+     *
+     *  \param ioStream The stream to read from.
+     *  \param schemaPaths Directories or files of schema locations.
+     */
+    void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
+              const std::vector<std::string>& schemaPaths);
+
+
+    using ReadControl::interleaved;
+    /*!
+     * Read section of image data specified by region
+     *
+     * \param region Rows and columns of the image to read.  If the number
+     * of rows and/or number of columns is set to -1, this indicates to read
+     * the entirety of the image in that dimension.  In this case, this
+     * parameter will be updated with the actual number of rows and/or
+     * columns that were read.
+     * \param imageNumber Index of the image to read
+     *
+     * \return Buffer of image data.  This is simply a pointer to the buffer
+     * that is held by 'region'.  If it is NULL in the incoming region, the
+     * memory is allocated and the region's buffer is updated.  In this case
+     * it is up to the caller to delete the memory.
+     */
     virtual UByte* interleaved(Region& region, size_t imageNumber);
 
     virtual std::string getFileType() const
@@ -180,6 +241,12 @@ private:
 
         return (iCat == "LEG");
     }
+
+    // We need this for one of the load overloadings
+    // to prevent data from being deleted prematurely
+    // The issue occurs from the explicit destructor of
+    // IOControl
+    mem::SharedPtr<nitf::IOInterface> mInterface;
 };
 
 

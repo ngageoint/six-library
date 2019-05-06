@@ -92,30 +92,65 @@ public:
             throw (nitf::NITFException);
 
     /*!
+     * Set write handlers for images, graphics, texts, and DES
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for images
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for graphics
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for texts
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
+     * Set write handlers for DEs
+     * \param io The input IO handle containing the data
+     * \param record The record to write out
+     */
+    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+
+    /*!
      * Sets the WriteHandler for the Image at the given index.
      */
-    void setImageWriteHandler(int index, 
+    void setImageWriteHandler(int index,
                               mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
-    void setGraphicWriteHandler(int index, 
+    void setGraphicWriteHandler(int index,
                                 mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
-    void setTextWriteHandler(int index, 
+    void setTextWriteHandler(int index,
                              mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
-    void setDEWriteHandler(int index, 
+    void setDEWriteHandler(int index,
                            mem::SharedPtr<WriteHandler> writeHandler)
             throw (nitf::NITFException);
 
@@ -132,10 +167,10 @@ public:
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::ImageWriter newImageWriter(int imageNumber, 
+    nitf::ImageWriter newImageWriter(int imageNumber,
                                      const std::map<std::string, void*>& options)
         throw (nitf::NITFException);
-    
+
     /**
      * Returns a NEW SegmentWriter for the given index
      *
@@ -161,6 +196,65 @@ public:
 
     //! Get the warningList
     nitf::List getWarningList();
+
+    // NOTE: In general the following methods are not needed.  Only use these
+    //       if you know what you're doing and are trying to write out a NITF
+    //       piecemeal rather than through the normal Writer object interface.
+
+    /*!
+     * Writes out the file header (skips over the FL field as the total file
+     * length is not known yet).  No seeking is performed so the underlying IO
+     * object should be at the beginning of the file.
+     *
+     * \param fileLenOff Output parameter providing the offset in bytes in the
+     *     file to the file length (FL) field in the header so that you can
+     *     write it out later once the file length is known
+     * \param hdrLen Output parameter providing the total number of bytes the
+     *     file header is on disk
+     */
+    void writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen);
+
+    /*!
+     * Writes out an image subheader.  No seeking is performed so the underlying
+     * IO object should be at the appropriate spot in the file prior to this
+     * call.
+     *
+     * \param subhdr Image subheader to write out
+     * \param version NITF file version to write (you probably want NITF_VER_21)
+     * \param comratOff Output parameter containing the offset in bytes in the
+     *     file where the COMRAT field would be populated for compressed files
+     */
+    void writeImageSubheader(nitf::ImageSubheader subheader,
+                             nitf::Version version,
+                             nitf::Off& comratOff);
+
+    /*!
+     * Writes out a data extension subheader.  No seeking is performed so the
+     * underlying IO object should be at the appropriate spot in the file prior
+     * to this call.
+     *
+     * \param subhdr Data extension subheader to write out
+     * \param userSublen Output parameter containing the length in bytes of the
+     *     user subheader
+     * \param version NITF file version to write (you probably want NITF_VER_21)
+     */
+    void writeDESubheader(nitf::DESubheader subheader,
+                          nitf::Uint32& userSublen,
+                          nitf::Version version);
+
+    /*!
+     * Writes an int64 field to the writer in its current position
+     *
+     * \param field Value of the field to write out
+     * \param length Length of the field to write out
+     * \param fill Fill character to use for any remaining bytes
+     * \param fillDir Fill direction (NITF_WRITER_FILL_LEFT or
+     *     NITF_WRITER_FILL_RIGHT)
+     */
+    void writeInt64Field(nitf::Uint64 field,
+                         nitf::Uint32 length,
+                         char fill,
+                         nitf::Uint32 fillDir);
 
 private:
     nitf_Error error;

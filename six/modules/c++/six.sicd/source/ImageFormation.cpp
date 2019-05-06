@@ -20,6 +20,7 @@
  *
  */
 #include "six/sicd/ImageFormation.h"
+#include "six/sicd/RadarCollection.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -91,4 +92,22 @@ bool ImageFormation::operator==(const ImageFormation& rhs) const
         rangeAutofocus == rhs.rangeAutofocus &&
         processing == rhs.processing &&
         polarizationCalibration == rhs.polarizationCalibration);
+}
+
+void ImageFormation::fillDefaultFields(const RadarCollection& radarCollection)
+{
+    if (!Init::isUndefined(radarCollection.txFrequencyMin) &&
+        !Init::isUndefined(radarCollection.txFrequencyMax))
+    {
+        // Default: we often assume that all transmitted bandwidth was
+        // processed, if given no other information
+        if (Init::isUndefined(txFrequencyProcMin))
+        {
+            txFrequencyProcMin = radarCollection.txFrequencyMin;
+        }
+        if (Init::isUndefined(txFrequencyProcMax))
+        {
+            txFrequencyProcMax = radarCollection.txFrequencyMax;
+        }
+    }
 }

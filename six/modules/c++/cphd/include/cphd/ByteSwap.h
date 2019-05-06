@@ -43,6 +43,12 @@ void byteSwap(void* buffer,
               size_t numElements,
               size_t numThreads);
 
+void byteSwapAndPromote(const void* input,
+                        size_t elementSize,
+                        const types::RowCol<size_t>& dims,
+                        size_t numThreads,
+                        std::complex<float>* output);
+
 void byteSwapAndScale(const void* input,
                       size_t elementSize,
                       const types::RowCol<size_t>& dims,

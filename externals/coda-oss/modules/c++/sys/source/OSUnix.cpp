@@ -44,6 +44,44 @@
 #include "sys/OSUnix.h"
 #include "sys/File.h"
 
+
+namespace
+{
+std::string readLink(const std::string& pathname)
+{
+    char buffer[PATH_MAX];
+
+    // readlink does not null-terminate anything
+    memset(buffer, 0, PATH_MAX);
+
+    if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
+    {
+        throw except::Exception(Ctxt(strerror(errno)));
+    }
+
+    return std::string(buffer);
+}
+
+class CharWrapper
+{
+public:
+    CharWrapper(char* array):
+        mArray(array)
+    {
+    }
+    ~CharWrapper()
+    {
+        free(mArray);
+    }
+    inline const char* get() const
+    {
+        return mArray;
+    }
+private:
+    char* mArray;
+};
+}
+
 std::string sys::OSUnix::getPlatformName() const
 {
     struct utsname name;
@@ -78,7 +116,7 @@ void sys::OSUnix::removeFile(const std::string& pathname) const
     {
         sys::Err err;
         std::ostringstream oss;
-        oss << "Failure removing file [" <<  pathname << 
+        oss << "Failure removing file [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
         throw except::Exception(Ctxt(oss.str()));
@@ -91,14 +129,14 @@ void sys::OSUnix::removeDirectory(const std::string& pathname) const
     {
         sys::Err err;
         std::ostringstream oss;
-        oss << "Failure removing directory [" <<  pathname << 
+        oss << "Failure removing directory [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
         throw except::Exception(Ctxt(oss.str()));
     }
 }
 
-bool sys::OSUnix::move(const std::string& path, 
+bool sys::OSUnix::move(const std::string& path,
                        const std::string& newPath) const
 {
     return (::rename(path.c_str(), newPath.c_str()) == 0);
@@ -147,32 +185,35 @@ bool sys::OSUnix::changeDirectory(const std::string& path) const
     return chdir(path.c_str()) == 0 ? true : false;
 }
 
-std::string sys::OSUnix::getTempName(const std::string& path, 
+std::string sys::OSUnix::getTempName(const std::string& path,
                                      const std::string& prefix) const
 {
     std::string name;
 #if defined(_USE_MKSTEMP) || defined(__linux__) || defined(__linux) || defined(linux__)
-    char fullPath[PATH_MAX + 1];
-    strcpy(fullPath, path.c_str());
-    strcat(fullPath, "/");
-    strcat(fullPath, prefix.c_str());
-    strcat(fullPath, "XXXXXX");
-    int ret = mkstemp(fullPath);
+    std::string pathname(path);
+    pathname += "/" + prefix + "XXXXXX";
+    std::vector<char> fullPath(pathname.size() + 1);
+    strcpy(&fullPath[0], pathname.c_str());
+    int ret = mkstemp(&fullPath[0]);
     if (ret == -1) name = "";
     else
     {
-        name = fullPath;
+        name = &fullPath[0];
     }
 #else
-    char *tempname = tempnam(path.c_str(), prefix.c_str());
-    if (tempname == NULL)
+    CharWrapper tempname = tempnam(path.c_str(), prefix.c_str());
+    if (tempname.get() == NULL)
         name = "";
     else
     {
-        name = tempname;
-        free(tempname);
+        name = tempname.get();
+        sys::File (name, sys::File::WRITE_ONLY, sys::File::CREATE);
     }
 #endif
+    if (name.empty())
+    {
+        throw except::Exception(Ctxt("Unable to create a temporary file"));
+    }
     return name;
 }
 
@@ -206,7 +247,7 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
     if (envVal == NULL)
         throw sys::SystemException(
             Ctxt("Unable to get unix environment variable " + s));
-    return std::string(envVal); 
+    return std::string(envVal);
 }
 
 bool sys::OSUnix::isEnvSet(const std::string& s) const
@@ -215,7 +256,7 @@ bool sys::OSUnix::isEnvSet(const std::string& s) const
     return (envVal != NULL);
 }
 
-void sys::OSUnix::setEnv(const std::string& var, 
+void sys::OSUnix::setEnv(const std::string& var,
                          const std::string& val,
                          bool overwrite)
 {
@@ -268,7 +309,7 @@ size_t sys::OSUnix::getNumCPUs() const
 #endif
 }
 
-void sys::OSUnix::createSymlink(const std::string& origPathname, 
+void sys::OSUnix::createSymlink(const std::string& origPathname,
                                 const std::string& symlinkPathname) const
 {
     if(symlink(origPathname.c_str(), symlinkPathname.c_str()))
@@ -319,7 +360,7 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
     vm_size_t              pageSize = 0;
     vm_statistics_data_t   vmstat;
 
-    if(KERN_SUCCESS != host_statistics(machPort, HOST_VM_INFO, 
+    if(KERN_SUCCESS != host_statistics(machPort, HOST_VM_INFO,
                 (host_info_t) &vmstat, &count))
     {
         throw sys::SystemException(Ctxt("Call to host_statistics() has failed"));
@@ -331,7 +372,7 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
     }
 
     long long freeBytes = vmstat.free_count * pageSize;
-    
+
     totalPhysMem = physMem / 1024 / 1024;
     freePhysMem = freeBytes / 1024 / 1024;
 
@@ -344,6 +385,40 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
     freePhysMem = (pageSize*availNumPages/1024)/1024;
 
 #endif
+}
+
+std::string sys::OSUnix::getCurrentExecutable(
+        const std::string& argvPathname) const
+{
+    std::vector<std::string> possibleSymlinks;
+
+    // Linux
+    possibleSymlinks.push_back(sys::Path::joinPaths(
+            sys::Path::delimiter()[0] + std::string("proc"),
+            sys::Path::joinPaths("self", "exe")));
+
+    // Solaris
+    possibleSymlinks.push_back(sys::Path::joinPaths(
+            sys::Path::delimiter()[0] + std::string("proc"),
+            sys::Path::joinPaths("self",
+            sys::Path::joinPaths("path", "a.out"))));
+
+    for (size_t ii = 0; ii < possibleSymlinks.size(); ++ii)
+    {
+        const std::string pathname = possibleSymlinks[ii];
+        if (!isFile(pathname))
+        {
+            continue;
+        }
+        const std::string executableName = readLink(pathname);
+
+        if (isFile(executableName))
+        {
+            return executableName;
+        }
+    }
+
+    return AbstractOS::getCurrentExecutable(argvPathname);
 }
 
 void sys::DirectoryUnix::close()

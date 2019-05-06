@@ -29,9 +29,15 @@
 #include <complex>
 #include <utility>
 
+
 #include "import/mem.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "six/sicd/AreaPlaneUtility.h"
+#include "six/sicd/GeoLocator.h"
+#include "six/sicd/SICDWriteControl.h"
+#include <numpyutils/numpyutils.h>
+
 
 using namespace six::sicd;
 using namespace six;
@@ -65,13 +71,14 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    six::Container container(six::DataType::COMPLEX);
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-    container.addData(data.clone());
+    container->addData(data.clone());
 
     six::NITFWriteControl writer;
-    writer.initialize(&container);
+    writer.initialize(container);
     writer.setLogger(logger.get());
 
     six::BufferList buffers;
@@ -95,7 +102,7 @@ Data* readNITF(const std::string& pathname,
     reader.setLogger(&log);
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(pathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    mem::SharedPtr<six::Container> container = reader.getContainer();
 
     six::Region region;
     region.setStartRow(0);
@@ -116,25 +123,72 @@ Data* readNITF(const std::string& pathname,
     region.setBuffer(buffer.get() + offset);
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
+
+nitf::Record _readRecord(const std::string& pathname);
+
+nitf::Record _readRecord(const std::string& pathname)
+{
+    nitf::Reader reader;
+    nitf::IOHandle io(pathname);
+    return reader.read(io);
+}
+
 %}
 %ignore mem::ScopedCloneablePtr::operator!=;
 %ignore mem::ScopedCloneablePtr::operator==;
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
+%rename(_fitOutputToSlantImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+%rename(_fitSlantToOutputImpl) scene::ProjectionPolynomialFitter::fitSlantToOutputPolynomials;
+
+%import <nitf/List.hpp>
+%import <nitf/Object.hpp>
+%import <nitf/TRE.hpp>
+%import <nrt/Defines.h>
 %include <std_vector.i>
 %include <std_string.i>
 %include <std_complex.i>
 %include <std_pair.i>
 %include <std_auto_ptr.i>
+%include <nitf/ComponentInfo.hpp>
+%include <nitf/DESegment.hpp>
+%include <nitf/DESubheader.hpp>
+%include <nitf/Extensions.hpp>
+%include <nitf/Field.hpp>
+%include <nitf/FileHeader.hpp>
+%include <nitf/ImageSegment.hpp>
+%include <nitf/ImageSource.hpp>
+%include <nitf/ImageSubheader.hpp>
+%include <nitf/System.hpp>
+%include <nitf/Types.h>
+#include <six/sicd/SICDMesh.h>
+%include <six/sicd/SICDMesh.h>
 
 %import "math_poly.i"
+%import "types.i"
 %import "six.i"
 %import "io.i"
 %import "mem.i"
 
 // This allows functions that return auto_ptrs to work properly
 %auto_ptr(six::sicd::ComplexData);
+%auto_ptr(scene::ProjectionPolynomialFitter);
+%auto_ptr(six::sicd::NoiseMesh);
+
+%typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
+%typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
+%typemap(out) nitf::Off{$result = PyLong_FromLong($1);}
+%typemap(in) nitf::Off{$1 = (nitf::Off)PyLong_AsLong($input);}
+
+
+%ignore nitf::Record::getDataExtensions;
+%ignore nitf::Record::getImages;
+%ignore nitf::Record::getGraphics;
+%ignore nitf::Record::getLabels;
+%ignore nitf::Record::getTexts;
+%ignore nitf::Record::getReservedExtensions;
+%include <nitf/Record.hpp>
 
 /* wrap that function defined in the header section */
 six::sicd::ComplexData * asComplexData(six::Data* data);
@@ -145,10 +199,32 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
+nitf::Record _readRecord(const std::string& pathname);
+
+%pythoncode
+%{
+import os
+import sys
+
+from coda.math_poly import Poly2D
+
+
+def schema_path():
+    """Provide an absolute path to the schemas."""
+    try:
+        pysix_path = os.path.dirname(__file__)
+    except NameError:
+        # Must be running as __main__, so use sys.argv
+        pysix_path = os.path.dirname(sys.argv[0])
+    return os.path.abspath(os.path.join(pysix_path, 'schemas'))
+%}
+
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
 %include "six/GeoInfo.h"
+%import "scene/GridECEFTransform.h"
+%include "scene/ProjectionPolynomialFitter.h"
 %include "six/sicd/ComplexClassification.h"
 %include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
@@ -167,6 +243,8 @@ Data* readNITF(const std::string& pathname,
 %include "six/sicd/ComplexData.h"
 %include "six/sicd/ComplexXMLControl.h"
 %include "six/sicd/Utilities.h"
+%include "six/sicd/AreaPlaneUtility.h"
+%include "six/sicd/GeoLocator.h"
 
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
@@ -261,7 +339,9 @@ void getWidebandRegion(std::string sicdPathname, const std::vector<std::string>&
 
 %pythoncode %{
 import numpy as np
-from pysix.six_base import VectorString
+from coda.coda_types import VectorString
+from coda.coda_io import FileOutputStream
+from coda.xml_lite import *
 
 def read(inputPathname, schemaPaths = VectorString()):
     complexData = SixSicdUtilities.getComplexData(inputPathname, schemaPaths)
@@ -284,13 +364,125 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
 
     return widebandData, complexData
 
+def readRecord(pathname):
+    record = _readRecord(pathname)
+    attributes = dir(record)
+    for attribute in attributes:
+        if (attribute.startswith('move') or
+                attribute.startswith('remove') or
+                attribute.startswith('set') or
+                attribute.startswith('new')):
+            delattr(record.__class__, attribute)
+    return record
 
 def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
         image.__array_interface__["data"][0])
 
 def readFromNITF(pathname, schemaPaths=VectorString()):
-    pathname = pathname + ".nitf"
     return readNITF(pathname, schemaPaths)
-
 %}
+
+%include "six/sicd/SICDWriteControl.h"
+%extend six::sicd::SICDWriteControl
+{
+    void write(PyObject* data, const types::RowCol<size_t>& offset)
+    {
+        numpyutils::verifyArrayType(data, NPY_COMPLEX64);
+
+        // TODO: Force array to be contigious memory
+        //       Right now we're requiring the caller to do that
+        // TODO: If we get noncontiguous memory, maybe we want to
+        //       instead do multiple calls to save() ourselves to
+        //       avoid the memory allocation
+        $self->save(numpyutils::getBuffer<std::complex<float> >(data),
+                    offset,
+                    numpyutils::getDimensionsRC(data));
+    }
+
+    void initXMLControlRegistry(six::XMLControlRegistry& xmlRegistry)
+    {
+        xmlRegistry.addCreator(six::DataType::COMPLEX,
+                               new six::XMLControlCreatorT<
+                                       six::sicd::ComplexXMLControl>());
+        $self->setXMLControlRegistry(&xmlRegistry);
+    }
+}
+
+%extend nitf::Record
+{
+    nitf::ImageSegment getImageSegment(size_t index)
+    {
+        if (index >= $self->getNumImages())
+        {
+            throw except::Exception(Ctxt("Index out of bounds"));
+        }
+        nitf::ListIterator iter = $self->getImages().begin();
+        for (size_t ii = 0; ii < index; ++ii)
+        {
+            iter.increment();
+        }
+        nitf::ImageSegment segment = *iter;
+        return segment;
+    }
+
+    nitf::DESegment getDataExtension(size_t index)
+    {
+        if (index >= $self->getNumDataExtensions())
+        {
+            throw except::Exception(Ctxt("Index out of bounds"));
+        }
+        nitf::ListIterator iter = $self->getDataExtensions().begin();
+        for (size_t ii = 0; ii < index; ++ii)
+        {
+            iter.increment();
+        }
+        nitf::DESegment segment = *iter;
+        return segment;
+    }
+}
+
+%extend nitf::Field
+{
+    %pythoncode
+    %{
+        def parse(self):
+            data = self.getRawData()
+            try:
+                data = float(data)
+                if data - int(data) == 0:
+                    data = int(data)
+                return data
+            except ValueError:
+                return str(data)
+    %}
+}
+
+%extend scene::ProjectionPolynomialFitter
+{
+    %pythoncode
+    %{
+        def fitOutputToSlantPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toSlantRow = Poly2D()
+            toSlantCol = Poly2D()
+            self._fitOutputToSlantImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+            return (toSlantRow, toSlantCol)
+
+        def fitSlantToOutputPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toOutputRow = Poly2D()
+            toOutputCol = Poly2D()
+            self._fitSlantToOutputImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+            return (toOutputRow, toOutputCol)
+
+    %}
+}

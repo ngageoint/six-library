@@ -25,6 +25,7 @@
 #include <import/io.h>
 #include <import/mem.h>
 #include <import/six.h>
+#include <import/six/convert.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include "utils.h"
@@ -171,6 +172,10 @@ int main(int argc, char** argv)
                               "to file.");
         parser.addArgument("-r --rows", "ILOC rows limit", cli::STORE, "maxRows",
                            "ROWS");
+        parser.addArgument("--rowsPerBlock", "Max rows per block", cli::STORE,
+                           "rowsPerBlock", "ROWS_PER_BLOCK");
+        parser.addArgument("--colsPerBlock", "Max cols per block", cli::STORE,
+                           "colsPerBlock", "COLS_PER_BLOCK");
         parser.addArgument("--size", "Max image segment size", cli::STORE,
                            "maxSize", "BYTES");
         parser.addArgument("--version", "Version", cli::STORE,
@@ -186,7 +191,11 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
-        parser.addArgument("-s --schema", 
+        parser.addArgument("-p --plugin",
+                           "Specify a plugin or directory of plugins for "
+                           "converting from external vendor format to SICD",
+                           cli::STORE);
+        parser.addArgument("-s --schema",
                            "Specify a schema or directory of schemas",
                            cli::STORE);
         parser.addArgument("--retainDateTime",
@@ -221,6 +230,24 @@ int main(int argc, char** argv)
             maxILOC = options->get<std::string>("maxRows");
         }
 
+        std::string rowsPerBlock;
+        if (options->hasValue("rowsPerBlock"))
+        {
+            rowsPerBlock = options->get<std::string>("rowsPerBlock");
+        }
+
+        std::string plugin;
+        if (options->hasValue("plugin"))
+        {
+            plugin = options->get<std::string>("plugin");
+        }
+
+        std::string colsPerBlock;
+        if (options->hasValue("colsPerBlock"))
+        {
+            colsPerBlock = options->get<std::string>("colsPerBlock");
+        }
+
         std::string version;
         if (options->hasValue("version"))
         {
@@ -248,12 +275,22 @@ int main(int argc, char** argv)
         else
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
-        six::NITFReadControl reader;
-        reader.setLogger(&log);
-        reader.setXMLControlRegistry(&xmlRegistry);
+        std::auto_ptr<six::ReadControl> reader;
+        const std::string extension = sys::Path::splitExt(inputFile).second;
+        if (extension == ".nitf" || extension == ".ntf")
+        {
+            reader.reset(new six::NITFReadControl());
+        }
+        else
+        {
+            reader.reset(new six::convert::ConvertingReadControl(plugin));
+        }
 
-        reader.load(inputFile, schemaPaths);
-        six::Container* container = reader.getContainer();
+        reader->setLogger(&log);
+        reader->setXMLControlRegistry(&xmlRegistry);
+
+        reader->load(inputFile, schemaPaths);
+        mem::SharedPtr<six::Container> container(reader->getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)
@@ -308,7 +345,7 @@ int main(int argc, char** argv)
                 region.setNumRows(extent.row);
                 region.setNumCols(extent.col);
                 region.setBuffer(buffer + offset);
-                reader.interleaved(region, imageNum++);
+                reader->interleaved(region, imageNum++);
 
                 if (expandIt)
                 {
@@ -327,23 +364,36 @@ int main(int argc, char** argv)
             }
         }
 
-        six::NITFWriteControl writer;
+        six::Options writerOptions;
         if (!maxILOC.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     maxILOC);
         }
         if (!maxSize.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     maxSize);
         }
 
+        if (!rowsPerBlock.empty())
+        {
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
+                    rowsPerBlock);
+        }
+
+        if (!colsPerBlock.empty())
+        {
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
+                    colsPerBlock);
+        }
+
+        six::NITFWriteControl writer(writerOptions, container, &xmlRegistry);
         writer.setLogger(&log);
-        writer.initialize(container);
-        writer.setXMLControlRegistry(&xmlRegistry);
         writer.save(buffers.get(), outputFile, schemaPaths);
     }
     catch (const std::exception& ex)

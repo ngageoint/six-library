@@ -82,12 +82,17 @@ public:
 
     /*!
      * Read up to len bytes of data from input stream into an array
-     * \param b   Buffer to read into
+     * \param buffer Buffer to read into
      * \param len The length to read
+     * \param verifyFullRead If set to true, checks to see if 'len' bytes
+     * were read and, if not, throws.  Defaults to false.
      * \throw IOException
-     * \return  The number of bytes read, or -1 if EOF
+     * \return  The number of bytes read, or -1 if EOF.  If 'verifyFullRead'
+     * is true, this will always return 'len' bytes if it didn't throw.
      */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len) = 0;
+    sys::SSize_T read(void* buffer,
+                      size_t len,
+                      bool verifyFullRead = false);
 
     /*!
      * Read either a buffer of len size, or up until a newline,
@@ -112,6 +117,15 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END);
 
+protected:
+    /*!
+     * Read up to len bytes of data from input stream into an array
+     * \param buffer   Buffer to read into
+     * \param len The length to read
+     * \throw IOException
+     * \return  The number of bytes read, or -1 if EOF
+     */
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) = 0;
 };
 }
 

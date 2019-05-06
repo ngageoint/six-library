@@ -22,17 +22,22 @@
 #ifndef __SIX_RG_AZ_COMP_H__
 #define __SIX_RG_AZ_COMP_H__
 
+#include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
+#include "six/sicd/GeoData.h"
+#include "six/sicd/SCPCOA.h"
+#include "six/sicd/Timeline.h"
 
 namespace six
 {
 namespace sicd
 {
-
+struct Grid;
+struct Timeline;
 /*!
  *  \struct  RgAzComp
- *  \brief   Parameters included for a Range, Doppler image. 
+ *  \brief   Parameters included for a Range, Doppler image.
  *           Required parameters for ImageFormAlgo = RGAZCOMP.
  */
 struct RgAzComp
@@ -49,7 +54,7 @@ struct RgAzComp
     //  at COA
     double azSF;
 
-    //! Polynomial function that yields azimuth spatial frequency 
+    //! Polynomial function that yields azimuth spatial frequency
     //  (Kaz = Kcol) as a function of slow time (variable 1). Slow
     //  Time (sec) -> Azimuth spatial frequency (cycles/meter). Time
     //  relative to collection start.
@@ -65,6 +70,25 @@ struct RgAzComp
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields(const GeoData& geoData,
+        const Grid& grid,
+        const SCPCOA& scpcoa,
+        const Timeline& timeline);
+
+    bool validate(const GeoData& geoData,
+            const Grid& grid,
+            const SCPCOA& scpcoa,
+            const Timeline& timeline,
+            logging::Logger& log) const;
+
+private:
+    double derivedAzSf(const SCPCOA& scpcoa, const Vector3& scp) const;
+    Poly1D derivedKazPoly(const Grid& grid,
+            const SCPCOA& scpcoa,
+            const Timeline& timeline,
+            const Vector3& scp) const;
+
 };
 
 }

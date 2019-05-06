@@ -24,6 +24,9 @@
 %module nitropy
 %{
 #include <import/nitf.h>
+#include <numpyutils/numpyutils.h>
+#include <iostream>
+#include <limits>
 %}
 
 #define NITF_LIST_TO_PYTHON_LIST(_type) \
@@ -65,7 +68,7 @@
     if ($input)
     {
         nitf_DataSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp, $descriptor(nitf_DataSource *), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp, $descriptor(nitf_DataSource *), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DataSource**)&temp;
     }
 }
@@ -74,7 +77,7 @@
     if ($input)
     {
         nitf_Writer* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Writer*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Writer*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Writer**)&temp;
     }
 }
@@ -82,7 +85,7 @@
     if ($input)
     {
         nitf_ImageWriter* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageWriter*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageWriter*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageWriter**)&temp;
     }
 }
@@ -90,7 +93,7 @@
     if ($input)
     {
         nitf_ImageSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageSource*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageSource**)&temp;
     }
 }
@@ -98,7 +101,7 @@
     if ($input)
     {
         nitf_ImageReader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_ImageReader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageReader**)&temp;
     }
 }
@@ -106,7 +109,7 @@
     if ($input)
     {
         nitf_Reader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Reader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Reader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Reader**)&temp;
     }
 }
@@ -114,7 +117,7 @@
     if ($input)
     {
         nitf_DownSampler* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_DownSampler*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_DownSampler*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DownSampler**)&temp;
     }
 }
@@ -122,7 +125,7 @@
     if ($input)
     {
         nitf_Record* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_Record*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Record*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Record**)&temp;
     }
 }
@@ -131,7 +134,7 @@
     if ($input)
     {
         nitf_TREEnumerator* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_TREEnumerator**)&temp;
     }
 }
@@ -140,7 +143,7 @@
     if ($input)
     {
         nitf_SegmentReader* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_SegmentReader*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentReader**)&temp;
     }
 }
@@ -149,9 +152,28 @@
     if ($input)
     {
         nitf_SegmentSource* temp = 0;
-        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_SegmentSource*), 0 |  0 ) != -1 && temp)
+        if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentSource**)&temp;
     }
+}
+
+%typemap(in) nrt_IOHandle{
+    if ($input)
+    {
+    %#ifdef SWIGWIN
+        $1 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask($input);
+    %#else
+        $1 = (nrt_IOHandle) PyInt_AsLong($input);
+    %#endif
+    }
+}
+
+%typemap(out) nrt_IOHandle{
+    %#ifdef SWIGWIN
+        $result = PyInt_FromSize_t($1);
+    %#else
+        $result = PyInt_FromLong((long long)($1));
+    %#endif
 }
 
 /* meant for nitf_PluginRegistry_retrieveTREHandler */
@@ -178,6 +200,8 @@
 %include "nrt/IOHandle.h"
 %include "nrt/IOInterface.h"
 %include "nitf/System.h"
+%include "nrt/nrt_config.h"
+%include "nitf/nitf_config.h"
 
 
 
@@ -340,6 +364,16 @@
         return 0;
     }
 
+    void py_Field_setRawData(nitf_Field *field, char* buf, int length,  nitf_Error *error)
+    {
+        nitf_Field_setRawData(field, (NITF_DATA*)buf, length, error);
+    }
+
+    void py_TRE_setField(nitf_TRE *tre, const char* tag, char* buf, int length, nitf_Error *error)
+    {
+        nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, length, error);
+    }
+
 %}
 
 
@@ -423,8 +457,8 @@
 
     nitf_Version py_Record_getVersion(nitf_Record * record)
     {
-	    return nitf_Record_getVersion(record);
-	}
+        return nitf_Record_getVersion(record);
+    }
 %}
 
 
@@ -561,13 +595,30 @@
     {
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
         nitf_Uint8 **buf = NULL;
-        PyObject* result = NULL;
-        int padded, rowSkip, colSkip, subimageSize;
+        nitf_Uint8 *pyArrayBuffer = NULL;
+        PyObject* result = Py_None;
+        int padded, rowSkip, colSkip;
+        nitf_Uint64 subimageSize;
         nitf_Uint32 i;
+        types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
+                (window->numCols/colSkip) *
+                nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        if (subimageSize > std::numeric_limits<size_t>::max())
+        {
+            nitf_Error_print(error, stderr,
+                             "Image is too large for this system\n");
+            PyErr_SetString(PyExc_MemoryError, "");
+            goto CATCH_ERROR;
+        }
+
+        dims.row = window->numBands;
+        dims.col = subimageSize;
+
+        numpyutils::createOrVerify(result, NPY_UINT8, dims);
 
         buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
         if (!buf)
@@ -588,23 +639,26 @@
             }
         }
 
-        result = PyList_New(window->numBands);
-
-        if (!nitf_ImageReader_read(reader, window, buf, &padded, error))
+        if (!nitf_ImageReader_read(reader, window,
+               buf, &padded, error))
         {
             nitf_Error_print(error, stderr, "Read failed");
             PyErr_SetString(PyExc_RuntimeError, "");
             goto CATCH_ERROR;
         }
 
-        for (i = 0; i < window->numBands; i++)
+        // Copy to output numpy array
+        pyArrayBuffer = numpyutils::getBuffer<nitf_Uint8>(result);
+        for (i = 0; i < window->numBands; ++i)
         {
-            PyObject* buffObj = PyBuffer_FromMemory(buf[i], subimageSize * sizeof(nitf_Uint8));
-            PyList_SetItem(result, i, buffObj);
+            memcpy(pyArrayBuffer + i * subimageSize,
+                   buf[i], sizeof(nitf_Uint8) * subimageSize);
         }
 
-        //The PyList now owns the memory of the elements of buf,
-        //so only freeing buf itself.
+        for (i = 0; i < window->numBands; ++i)
+        {
+            NITF_FREE(buf[i]);
+        }
         NITF_FREE(buf);
         return result;
 
@@ -646,8 +700,13 @@
     PyObject* py_DataSource_read(nitf_DataSource* source, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!source)
         {
@@ -662,15 +721,19 @@
         }
 
         source->iface->read(source->data, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        return bufObj;
+        return pyArray;
     }
 
     PyObject* py_SegmentReader_read(nitf_SegmentReader* reader, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!buf)
         {
@@ -679,15 +742,19 @@
         }
 
         nitf_SegmentReader_read(reader, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        return bufObj;
+        return pyArray;
     }
 
     PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
     {
         void* buf = NULL;
-        PyObject* bufObj = NULL;
-        buf = NITF_MALLOC(size);
+        PyObject* pyArray = Py_None;
+        types::RowCol<size_t> dims;
+
+        dims.row = 1;
+        dims.col = size;
+        numpyutils::createOrVerify(pyArray, NPY_INT8, dims);
+        buf = numpyutils::getBuffer<void>(pyArray);
 
         if (!buf)
         {
@@ -696,8 +763,7 @@
         }
 
         nitf_IOHandle_read(handle, buf, size, error);
-        bufObj = PyBuffer_FromMemory(buf, size);
-        return bufObj;
+        return pyArray;
     }
 
 %}

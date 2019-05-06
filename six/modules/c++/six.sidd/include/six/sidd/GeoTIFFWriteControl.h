@@ -58,13 +58,12 @@ class GeoTIFFWriteControl : public WriteControl
     std::vector<Data*> mDerivedData;
 public:
     GeoTIFFWriteControl();
-    virtual ~GeoTIFFWriteControl() {}
-    
+
 
     /*!
      *  Init the GeoTIFF writer.  Throws if we are a SICD container
      */
-    virtual void initialize(Container* container);
+    virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;
 

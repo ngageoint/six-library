@@ -81,7 +81,7 @@ public:
     }
     friend bool operator!=(const Classification& lhs, const Classification& rhs)
     {
-        return lhs != rhs;
+        return !(lhs == rhs);
     }
 
 private:

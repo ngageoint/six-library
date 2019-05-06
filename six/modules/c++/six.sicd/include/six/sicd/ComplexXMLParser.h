@@ -38,7 +38,7 @@ class ComplexXMLParser : public XMLParser
 public:
     ComplexXMLParser(const std::string& version,
                      bool addClassAttributes,
-                     std::auto_ptr<SICommonXMLParser> comParser, 
+                     std::auto_ptr<SICommonXMLParser> comParser,
                      logging::Logger* log = NULL,
                      bool ownLog = false);
 
@@ -61,20 +61,20 @@ protected:
                                        const RadarCollection& radarCollection,
                                        XMLElem parent = NULL) const = 0;
 
-    virtual XMLElem convertImageFormationAlgoToXML(const PFA* pfa, const RMA* rma, 
-                                                   const RgAzComp* rgAzComp, 
+    virtual XMLElem convertImageFormationAlgoToXML(const PFA* pfa, const RMA* rma,
+                                                   const RgAzComp* rgAzComp,
                                                    XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertRMAToXML(const RMA* obj, XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, XMLElem parent = NULL) const = 0;
 
-    virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj, 
+    virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj,
                                      XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertAntennaParamArrayToXML(
         const std::string& name,
-        const GainAndPhasePolys* obj, 
+        const GainAndPhasePolys* obj,
         XMLElem parent = NULL) const = 0;
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
@@ -93,7 +93,7 @@ protected:
 
 
     virtual void parseAntennaParamArrayFromXML(
-        const XMLElem antennaParamsXML, 
+        const XMLElem antennaParamsXML,
         six::sicd::AntennaParameters* obj) const = 0;
 
 protected:
@@ -120,13 +120,13 @@ protected:
     XMLElem convertRMCRToXML(const RMCR* obj, XMLElem parent = NULL) const; //! added in 1.0.0
     XMLElem convertINCAToXML(const INCA* obj, XMLElem parent = NULL) const;
     XMLElem convertRcvChanProcToXML(const std::string& version,
-                                    const RcvChannelProcessed* obj, 
+                                    const RcvChannelProcessed* obj,
                                     XMLElem parent = NULL) const;
     XMLElem convertDistortionToXML(const std::string& version,
-                                   const Distortion* obj, 
+                                   const Distortion* obj,
                                    XMLElem parent = NULL) const;
 
-    virtual XMLElem convertSCPCOAToXML(const SCPCOA *obj, 
+    virtual XMLElem convertSCPCOAToXML(const SCPCOA *obj,
                                        XMLElem parent = NULL) const;
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;
 
@@ -164,21 +164,21 @@ protected:
 private:
     XMLElem convertCollectionInformationToXML(const CollectionInformation *obj,
                                               XMLElem parent = NULL) const;
-    XMLElem convertImageCreationToXML(const ImageCreation *obj, 
+    XMLElem convertImageCreationToXML(const ImageCreation *obj,
                                       XMLElem parent = NULL) const;
-    XMLElem convertImageDataToXML(const ImageData *obj, 
+    XMLElem convertImageDataToXML(const ImageData *obj,
                                   XMLElem parent = NULL) const;
-    XMLElem convertGeoDataToXML(const GeoData *obj, 
+    XMLElem convertGeoDataToXML(const GeoData *obj,
                                 XMLElem parent = NULL) const;
-    XMLElem convertGridToXML(const Grid *obj, 
+    XMLElem convertGridToXML(const Grid *obj,
                              XMLElem parent = NULL) const;
-    XMLElem convertTimelineToXML(const Timeline *obj, 
+    XMLElem convertTimelineToXML(const Timeline *obj,
                                  XMLElem parent = NULL) const;
-    XMLElem convertPositionToXML(const Position *obj, 
+    XMLElem convertPositionToXML(const Position *obj,
                                  XMLElem parent = NULL) const;
-    XMLElem convertAntennaToXML(const Antenna *obj, 
+    XMLElem convertAntennaToXML(const Antenna *obj,
                                 XMLElem parent = NULL) const;
-    XMLElem convertAntennaParametersToXML(const std::string& name, 
+    XMLElem convertAntennaParametersToXML(const std::string& name,
                                           AntennaParameters *ap,
                                           XMLElem parent = NULL) const;
 
@@ -189,21 +189,21 @@ private:
             const AreaDirectionParameters *obj,
             XMLElem parent = NULL) const;
 
-    void parseCollectionInformationFromXML(const XMLElem collectionInfoXML, 
+    void parseCollectionInformationFromXML(const XMLElem collectionInfoXML,
                                            CollectionInformation *obj) const;
-    void parseImageCreationFromXML(const XMLElem imageCreationXML, 
+    void parseImageCreationFromXML(const XMLElem imageCreationXML,
                                    ImageCreation *obj) const;
-    void parseImageDataFromXML(const XMLElem imageDataXML, 
+    void parseImageDataFromXML(const XMLElem imageDataXML,
                                ImageData *obj) const;
     void parseGeoDataFromXML(const XMLElem geoDataXML, GeoData *obj) const;
     void parseGridFromXML(const XMLElem gridXML, Grid *obj) const;
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
-    void parseImageFormationFromXML(const XMLElem imageFormationXML, 
+    void parseImageFormationFromXML(const XMLElem imageFormationXML,
                                     const RadarCollection& radarCollection,
                                     ImageFormation *obj) const;
     void parseAntennaFromXML(const XMLElem antennaXML, Antenna *obj) const;
-    void parseAntennaParametersFromXML(const XMLElem antennaParamsXML, 
+    void parseAntennaParametersFromXML(const XMLElem antennaParamsXML,
                                        AntennaParameters* params) const;
     void parsePFAFromXML(const XMLElem pfaXML, PFA *obj) const;
     void parseRMAFromXML(const XMLElem rmaXML, RMA *obj) const;

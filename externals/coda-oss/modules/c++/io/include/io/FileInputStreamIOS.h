@@ -121,17 +121,6 @@ public:
 
     //!  Close the file
     void close();
-    //using InputStream::read;
-    /*!
-     * Read up to len bytes of data from input stream into an array
-     * 
-     * \param b   Buffer to read into
-     * \param len The length to read
-     * \throw except::IOException
-     * \return  The number of bytes read
-     * 
-     */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
 
     /*!
      *  Access the stream directly
@@ -141,7 +130,20 @@ public:
     {
         return mFStream;
     }
+
 protected:
+    /*!
+     * Read up to len bytes of data from input stream into an array
+     *
+     * \param buffer Buffer to read into
+     * \param len The length to read
+     * \throw except::IOException
+     * \return  The number of bytes read
+     *
+     */
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+
+
     std::ifstream mFStream;
 };
 

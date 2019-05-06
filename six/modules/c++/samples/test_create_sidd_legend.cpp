@@ -43,6 +43,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
+#include <six/NITFHeaderCreator.h>
 #include "utils.h"
 
 namespace
@@ -77,6 +78,28 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->display->magnificationMethod =
             six::MagnificationMethod::NEAREST_NEIGHBOR;
 
+    six::Parameter param;
+    param.setName("GeoName");
+    param.setValue("GeoValue");
+    siddData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+
+    six::sidd::GeographicCoverage* geoCoverage =
+            siddData->geographicAndTarget->geographicCoverage.get();
+    geoCoverage->georegionIdentifiers.push_back(param);
+    geoCoverage->footprint.getCorner(0).setLat(10);
+    geoCoverage->footprint.getCorner(0).setLon(30);
+
+    geoCoverage->footprint.getCorner(1).setLat(11);
+    geoCoverage->footprint.getCorner(1).setLon(30);
+
+    geoCoverage->footprint.getCorner(2).setLat(11);
+    geoCoverage->footprint.getCorner(2).setLon(31);
+
+    geoCoverage->footprint.getCorner(3).setLat(10);
+    geoCoverage->footprint.getCorner(3).setLon(31);
+
     // We know this is PGD so this is safe
     six::sidd::PlaneProjection* const planeProjection =
         reinterpret_cast<six::sidd::PlaneProjection*>(
@@ -100,10 +123,6 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     parent->information.sensorName.clear();
     siddData->exploitationFeatures->product.resolution.row = 0;
     siddData->exploitationFeatures->product.resolution.col = 0;
-
-    siddData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd::GeographicCoverage(
-            six::RegionType::GEOGRAPHIC_INFO));
 
     return siddDataScoped;
 }
@@ -135,7 +154,8 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-        six::Container container(six::DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                six::DataType::DERIVED));
 
         std::vector<six::UByte*> buffers;
 
@@ -146,7 +166,7 @@ int main(int argc, char** argv)
         const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
         std::fill_n(buffer1.get(), dims1.area(), 20);
 
-        container.addData(data1);
+        container->addData(data1);
         buffers.push_back(buffer1.get());
 
         // Now a single segment with a mono legend
@@ -163,7 +183,7 @@ int main(int argc, char** argv)
         const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
         std::fill_n(buffer2.get(), dims2.area(), 100);
 
-        container.addData(data2, monoLegend);
+        container->addData(data2, monoLegend);
         buffers.push_back(buffer2.get());
 
         // Now a multi-segment without a legend
@@ -173,7 +193,7 @@ int main(int argc, char** argv)
         const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
         std::fill_n(buffer3.get(), dims3.area(), 60);
 
-        container.addData(data3);
+        container->addData(data3);
         buffers.push_back(buffer3.get());
 
         // Now a multi-segment with an RGB legend
@@ -190,51 +210,46 @@ int main(int argc, char** argv)
              ii < rgbLegend->mLUT->numEntries;
              ++ii, idx += 3)
         {
-            rgbLegend->mLUT->getTable()[idx] = ii;
-            rgbLegend->mLUT->getTable()[idx + 1] = ii;
-            rgbLegend->mLUT->getTable()[idx + 2] = ii;
+            unsigned char lutValue = static_cast<unsigned char>(ii);
+            rgbLegend->mLUT->getTable()[idx] = lutValue;
+            rgbLegend->mLUT->getTable()[idx + 1] = lutValue;
+            rgbLegend->mLUT->getTable()[idx + 2] = lutValue;
         }
 
         const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
         std::fill_n(buffer4.get(), dims4.area(), 200);
 
-        container.addData(data4, rgbLegend);
+        container->addData(data4, rgbLegend);
         buffers.push_back(buffer4.get());
 
         // Write it out
         {
-            six::NITFWriteControl writer;
-
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            six::Options options;
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            writer.setXMLControlRegistry(&xmlRegistry);
-            writer.initialize(&container);
-
+            six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
         }
 
         // Write it out with blocking
         {
-            six::NITFWriteControl writer;
-
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            six::Options options;
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            const std::string blockSize("1024");
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+            const std::string blockSize("23");
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     blockSize);
 
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     blockSize);
 
-            writer.setXMLControlRegistry(&xmlRegistry);
-            writer.initialize(&container);
-
+            six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_blocked.nitf");
         }
 

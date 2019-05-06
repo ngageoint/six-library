@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-   elementFormDefault="qualified" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
    attributeFormDefault="unqualified"
    targetNamespace="urn:SICD:0.4.0"
    xmlns="urn:SICD:0.4.0">
@@ -173,7 +173,7 @@
       </xs:sequence>
       <xs:attribute name="order1" type="xs:int" use="required"/>
    </xs:complexType>
-   
+
    <xs:complexType name="poly2dtype">
       <xs:sequence>
          <xs:element name="Coef" type="polycoef2dtype" minOccurs="1" maxOccurs="unbounded"/>
@@ -181,7 +181,7 @@
       <xs:attribute name="order1" type="xs:int" use="required"/>
       <xs:attribute name="order2" type="xs:int" use="required"/>
    </xs:complexType>
-   
+
    <xs:complexType name="xyzpolytype">
       <xs:sequence>
          <xs:element name="X" type="poly1dtype" maxOccurs="1"/>
@@ -315,7 +315,7 @@
 
 
 <!-- sicd blocks -->
-   
+
    <xs:complexType name="collectioninfotype">
       <xs:sequence>
          <xs:element name="CollectorName" type="stringtype" maxOccurs="1"/>
@@ -484,7 +484,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-          
+
    <xs:complexType name="gridtype">
       <xs:sequence>
          <xs:element name="ImagePlane" maxOccurs="1">

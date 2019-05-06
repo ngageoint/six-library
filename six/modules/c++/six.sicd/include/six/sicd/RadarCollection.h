@@ -22,11 +22,13 @@
 #ifndef __SIX_RADAR_COLLECTION_H__
 #define __SIX_RADAR_COLLECTION_H__
 
+#include <cmath>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -42,10 +44,10 @@ struct TxStep
 {
     //!  Constructor
     TxStep();
-    
+
     //!  Destructor
     ~TxStep() {}
-  
+
     //!  Clone this object
     TxStep* clone() const;
 
@@ -123,6 +125,13 @@ struct WaveformParameters
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
+    bool validate(int refFrequencyIndex, logging::Logger& log) const;
+private:
+    static const double WF_TOL;
+    static const double WGT_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 /*!
@@ -178,7 +187,7 @@ struct AreaDirectionParameters
 {
     //!  Constructor
     AreaDirectionParameters();
-    
+
     //!  Clone (copy) params
     AreaDirectionParameters* clone() const;
 
@@ -242,15 +251,17 @@ struct Segment
     Segment* clone() const;
 
     //! The number of lines in the segment
-    int getNumLines() const
+    size_t getNumLines() const
     {
-        return (endLine - startLine + 1);
+        // Rotating can make the start/end in reverse order,
+        // so need the absolute value
+        return std::abs(endLine - startLine) + 1;
     }
 
     //! The number of samples in the segment
-    int getNumSamples() const
+    size_t getNumSamples() const
     {
-        return (endSample - startSample + 1);
+        return std::abs(endSample - startSample) + 1;
     }
 
     /*!
@@ -273,12 +284,12 @@ struct Segment
      *  be 0-based or 1-based but does not necessarily have to be.
      */
     int endLine;
-    
+
     /*!
      *  SICD EndSample parameter.  Defines end sample in collection plane
      *  corresponding to the full image.  This is inclusive.  It will normally
      *  be 0-based or 1-based but does not necessarily have to be.
-     */    
+     */
     int endSample;
 
     /*!
@@ -292,6 +303,13 @@ struct Segment
     {
         return !(*this == rhs);
     }
+
+    /*!
+     * Rotate the segment counter clockwise
+     * \param numColumns How many columns are in the plane
+     */
+    void rotateCCW(size_t numColumns);
+
 };
 
 /*!
@@ -309,7 +327,7 @@ struct AreaPlane
      *
      */
     AreaPlane();
-    
+
     /*!
      *  Make a deep copy of xDirection, yDirection, and any existing
      *  segments
@@ -365,6 +383,26 @@ struct AreaPlane
     {
         return !(*this == rhs);
     }
+
+    /*!
+     * Find the first segment with the given identifier
+     * Throws if no segments match
+     * \param segmentId The Segment identifier
+     * \return Reference to Segment
+     */
+    const Segment& getSegment(const std::string& segmentId) const;
+
+    /*!
+     * Rotate the plane counterclockwise, updating the fields to match
+     */
+    void rotateCCW();
+
+    /*!
+     * Rotate the plane until it is shadows down.
+     * If the plane's orientation type is ARBITRARY or NOT_SET (or DOWN),
+     * no rotation will occur
+     */
+    void rotateToShadowsDown();
 };
 
 /*!
@@ -394,7 +432,7 @@ struct Area
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.
-     *  
+     *
      */
     mem::ScopedCloneablePtr<AreaPlane> plane;
 
@@ -415,7 +453,7 @@ struct Area
  *
  *  Describes the radar collection information.  The SICD RefFreqIndex,
  *  called here refFrequencyIndex for API consistency is not initialized,
- *  since it is optional.  If required for profile, it must be manually 
+ *  since it is optional.  If required for profile, it must be manually
  *  populated by the application developer.
  *
  */
@@ -476,6 +514,14 @@ struct RadarCollection
     {
         return !(*this == rhs);
     }
+
+    void fillDerivedFields();
+    bool validate(logging::Logger& log) const;
+private:
+    double waveformMin() const;
+    double waveformMax() const;
+    static const double WF_TOL;
+    static const char WF_INCONSISTENT_STR[];
 };
 
 }

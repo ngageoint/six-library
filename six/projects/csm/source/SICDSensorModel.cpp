@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SICDSensorModel::VERSION(1, 1, 1);
+const csm::Version SICDSensorModel::VERSION(1, 1, 4);
 const char SICDSensorModel::NAME[] = "SICD_SENSOR_MODEL";
 
 SICDSensorModel::SICDSensorModel(const csm::Isd& isd,
@@ -89,7 +89,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, mSchemaDirs);
 
-        six::Container* const container = reader.getContainer();
+        const mem::SharedPtr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
             container->getNumData() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)
@@ -99,12 +99,12 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                                "SICDSensorModel::initializeFromFile");
         }
 
+        // Cast it and grab a copy
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(
-                container->getData(0)));
-        container->removeData(mData.get());
+                container->getData(0)->clone()));
 
         // get xml as string for sensor model state
-        std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }
@@ -127,10 +127,8 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
-            str::trim(desId);
-
-            if (!(desId == "XML_DATA_CONTENT" || desId == "SICD_XML"))
+            DataType dataType = getDataType(desList[ii]);
+            if (dataType != DataType::COMPLEX)
             {
                 continue;
             }
@@ -325,10 +323,24 @@ SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
     const types::RowCol<double> aoiOffset(imageData.firstRow,
                                           imageData.firstCol);
 
-    const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
+    // NOTE: The CSM convention is that the upper-left corner of a pixel is
+    //       defined as 0,0, but the SICD convention is that the center of a
+    //       pixel is defined as 0,0.  Here we are going to do all our math
+    //       in the SICD convention but then we need to add on that half pixel
+    //       at the end to get it in the convention CSM expects
+    const types::RowCol<double> csmOffset(0.5, 0.5);
 
+    const types::RowCol<double> offset(
+            imageData.scpPixel.row - aoiOffset.row + csmOffset.row,
+            imageData.scpPixel.col - aoiOffset.col + csmOffset.col);
+
+    // 'pos' is a distance in meters from the SCP
+    // We want to return the position in the image plane in pixels
+    // So, first we divide by sample spacing (in meters/pixel) to get a distance
+    // in pixels from the SCP
+    // Then, we add on the SCP pixel (if we were 0 meters from the SCP, we want
+    // to return the SCP pixel location) and account for an AOI SICD as well as
+    // the CSM coordinate convention mentioned above.
     return types::RowCol<double>(
             (pos.row / mData->grid->row->sampleSpacing) + offset.row,
             (pos.col / mData->grid->col->sampleSpacing) + offset.col);
@@ -341,13 +353,26 @@ SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
     const types::RowCol<double> aoiOffset(imageData.firstRow,
                                           imageData.firstCol);
 
-    const types::RowCol<double> adjustedPos(
-            pos.line - (imageData.scpPixel.row - aoiOffset.row),
-            pos.samp - (imageData.scpPixel.col - aoiOffset.col));
+    // NOTE: The CSM convention is that the upper-left corner of a pixel is
+    //       defined as 0,0, but the SICD convention is that the center of a
+    //       pixel is defined as 0,0.  Here 'pos' comes in in the CSM convention
+    //       so we need to subtract half a pixel before we start; then we can
+    //       do all our math in the SICD convention.
+    const types::RowCol<double> csmOffset(0.5, 0.5);
+    const types::RowCol<double> sixPos(pos.line - csmOffset.row,
+                                       pos.samp - csmOffset.col);
 
+    const types::RowCol<double> pixelsFromSCP(
+            sixPos.row - (imageData.scpPixel.row - aoiOffset.row),
+            sixPos.col - (imageData.scpPixel.col - aoiOffset.col));
+
+    // 'sixPos' is a position in pixels in the image plane
+    // 'pixelsFromSCP' is a distance in pixels from the SCP
+    // Here we'll multiply by sample spacing (meters/pixel) to return a distance
+    // in meters from the SCP
     return types::RowCol<double>(
-            adjustedPos.row * mData->grid->row->sampleSpacing,
-            adjustedPos.col * mData->grid->col->sampleSpacing);
+            pixelsFromSCP.row * mData->grid->row->sampleSpacing,
+            pixelsFromSCP.col * mData->grid->col->sampleSpacing);
 }
 
 types::RowCol<double>

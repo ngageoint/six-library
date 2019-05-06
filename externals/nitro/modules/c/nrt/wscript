@@ -3,7 +3,6 @@ from waflib import Options
 
 NAME            = 'nrt'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.7'
 MODULE_DEPS     = ''
 LANG            = 'c'
 USELIB          = 'THREAD DL RT MATH'
@@ -19,11 +18,12 @@ def configure(conf):
     def nrt_callback(conf):
         conf.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False)
         conf.check_cc(header_name="sys/time.h", mandatory=False)
+        conf.define('NRT_LIB_VERSION', conf.env['VERSION'])
     writeConfig(conf, nrt_callback, NAME)
 
 def build(bld):
     env = bld.module(**globals())
-    
+
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
         bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
@@ -40,6 +40,6 @@ def build(bld):
     test_targets = []
     for test in tests:
         test_targets.append(os.path.splitext(str(test))[0])
-    
+
     bld(features='add_targets', target='nrt-unittests',
         targets_to_add=test_targets)

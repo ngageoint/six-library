@@ -43,7 +43,7 @@ int main(int argc, char** argv)
         std::vector<std::string> inputPathnames;
         std::vector<std::string> zipPathnames;
 
-        size_t index = 1;
+        int index = 1;
         while (index < argc)
         {
             if (!::strcmp(argv[index], "-i"))

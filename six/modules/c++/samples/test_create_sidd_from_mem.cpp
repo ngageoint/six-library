@@ -1,5 +1,5 @@
 /* This file is part of six-c++
- * =========================================================================
+* =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
@@ -2071,6 +2071,10 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     {
         geographicAndTarget.imageCorners->getCorner(ii).setLat(ii + 1);
         geographicAndTarget.imageCorners->getCorner(ii).setLon(ii * 3);
+        geographicAndTarget.targetInformation[0]->footprint->getCorner(ii).setLat(ii + 1);
+        geographicAndTarget.targetInformation[0]->footprint->getCorner(ii).setLon(ii * 3);
+        geographicAndTarget.geographicCoverage->footprint.getCorner(ii).setLat(ii + 1);
+        geographicAndTarget.geographicCoverage->footprint.getCorner(ii).setLon(ii * 3);
     }
 
     geographicAndTarget.validData.push_back(six::LatLon(23, 34));
@@ -2307,6 +2311,7 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
         siddData.setNumRows(IMAGE.height);
         siddData.setNumCols(IMAGE.width);
     }
+
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
@@ -2442,13 +2447,13 @@ int main(int argc, char** argv)
             if (!smallImage)
             {
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     IMAGE.width * IMAGE.height / 2);
             }
             else
             {
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, 2);
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, 2);
             }
 
         }
@@ -2485,7 +2490,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a','b', 'c', 'd'};
 
         // Create a file container
-        six::Container container(DataType::DERIVED);
+        mem::SharedPtr<six::Container> container(new six::Container(
+                DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2502,7 +2508,7 @@ int main(int argc, char** argv)
                     initData(lutType);
 
             populateData(*siddData, lutType, smallImage, version);
-            container.addData(siddData->clone());
+            container->addData(siddData->clone());
             if (!smallImage)
             {
                 buffers[ii] = reinterpret_cast<const UByte*>(IMAGE.data);
@@ -2520,10 +2526,12 @@ int main(int argc, char** argv)
         // of the data.
         //--------------------------------------------------------
         if (sicdData.get())
-            container.addData(sicdData.release());
+        {
+            container->addData(sicdData.release());
+        }
 
         // Init the container
-        writer->initialize(&container);
+        writer->initialize(container);
 
         // Save the file
         writer->save(buffers, outputName);

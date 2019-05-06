@@ -95,9 +95,8 @@ public:
     std::string format() const;
 };
 
+std::ostream& operator<<(std::ostream& os, const LocalDateTime& dateTime);
+std::istream& operator>>(std::istream& is, LocalDateTime& dateTime);
 }
 
-std::ostream& operator<<(std::ostream& os, const sys::LocalDateTime& dateTime);
-std::istream& operator>>(std::istream& is, sys::LocalDateTime& dateTime);
-
-#endif//__SYS_LOCAL_DATE_TIME_H__
+#endif

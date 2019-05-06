@@ -355,7 +355,6 @@ xml::lite::Element* createTimeSnapshot(const six::DateTime& dt)//, int seconds)
 void generateKMLForSICD(xml::lite::Element* docXML,
                         six::sicd::ComplexData* data)
 {
-
     std::vector<six::LatLonAlt> v;
     // Lets go ahead and try to add the ARP poly
 
@@ -371,7 +370,7 @@ void generateKMLForSICD(xml::lite::Element* docXML,
     six::Vector3 atTimeX;
     for (size_t i = 0; i < durationInSeconds; ++i)
     {
-        atTimeX = data->position->arpPoly(i);
+        atTimeX = data->position->arpPoly(static_cast<double>(i));
         v[1] = scene::Utilities::ecefToLatLon(atTimeX);
         xml::lite::Element* arpPolyXML = createPath(v, "arpPoly", "LineString");
         six::DateTime dt(dateTime.getTimeInMillis() + i * 1000);

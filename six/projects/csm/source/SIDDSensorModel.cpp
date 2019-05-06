@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SIDDSensorModel::VERSION(1, 1, 1);
+const csm::Version SIDDSensorModel::VERSION(1, 1, 4);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
@@ -116,7 +116,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // For multi-image SIDDs, all the SIDD DESs will appear first (in the
         // case where SICD DESs are also present), so we just have to grab out
         // the Nth Data object
-        six::Container* const container = reader.getContainer();
+        const mem::SharedPtr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
@@ -133,12 +133,11 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
                                "SIDDSensorModel::initializeFromFile");
         }
 
-        // Cast it and take ownership
-        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data));
-        container->removeData(mData.get());
+        // Cast it and grab a copy
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data->clone()));
 
         // get xml as string for sensor model state
-        std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }
@@ -165,10 +164,8 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            std::string desId = desList[ii].subHeader().substr(NITF_DE_SZ, NITF_DESTAG_SZ);
-            str::trim(desId);
-            
-            if (!(desId == "XML_DATA_CONTENT" || desId == "SIDD_XML"))
+            DataType dataType = getDataType(desList[ii]);
+            if (dataType != DataType::DERIVED)
             {
                 continue;
             }

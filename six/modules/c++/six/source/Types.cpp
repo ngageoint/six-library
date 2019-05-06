@@ -19,7 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/Init.h"
 #include "six/Types.h"
+#include <nitf/ImageSegmentComputer.h>
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
 {
@@ -39,23 +41,28 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 
 namespace six
 {
-const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;
+const sys::Uint64_T Constants::IS_SIZE_MAX =
+        nitf::ImageSegmentComputer::NUM_BYTES_MAX;
 const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
+const size_t Constants::ILOC_MAX = nitf::ImageSegmentComputer::ILOC_MAX;
 const unsigned short Constants::GT_XML_KEY = 50909;
 const char Constants::GT_XML_TAG[] = "XMLTag";
 
 // TODO  SIDD spec says to mark the DES version as "01" in the NITF but
 //       IC-ISM.xsd says the DESVersion attribute is fixed at 4
 const sys::Int32_T Constants::DES_VERSION = 4;
+const char Constants::DES_VERSION_STR[] = "01";
 
 const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";
 const sys::Uint64_T Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
 
-const char Constants::SICD_DESSHSI[] = 
+const char Constants::SICD_DESSHSI[] =
         "SICD Volume 1 Design & Implementation Description Document";
 const char Constants::SIDD_DESSHSI[] =
         "SIDD Volume 1 Design & Implementation Description Document";
+
+const double Constants::EXCESS_BANDWIDTH_FACTOR = .885892941;
 
 ImageMode getImageMode(RadarModeType radarMode)
 {
@@ -71,4 +78,30 @@ ImageMode getImageMode(RadarModeType radarMode)
         return FRAME_MODE;
     }
 }
+
+template<>
+LatLonCorners::Corners() :
+    upperLeft(Init::undefined<LatLon>()),
+    upperRight(Init::undefined<LatLon>()),
+    lowerRight(Init::undefined<LatLon>()),
+    lowerLeft(Init::undefined<LatLon>())
+{
 }
+
+template<>
+LatLonAltCorners::Corners() :
+    upperLeft(Init::undefined<LatLonAlt>()),
+    upperRight(Init::undefined<LatLonAlt>()),
+    lowerRight(Init::undefined<LatLonAlt>()),
+    lowerLeft(Init::undefined<LatLonAlt>())
+{
+}
+
+SCP::SCP() :
+   ecf(Init::undefined<Vector3>()),
+   llh(Init::undefined<LatLonAlt>())
+{
+}
+
+}
+

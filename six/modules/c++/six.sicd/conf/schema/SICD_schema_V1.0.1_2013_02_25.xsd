@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-   elementFormDefault="qualified" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
    attributeFormDefault="unqualified"
    targetNamespace="urn:SICD:1.0.1"
    xmlns="urn:SICD:1.0.1">
@@ -90,35 +90,35 @@
    </xs:simpleType>
 
    <xs:complexType name="LatLonCornerType">
-     <xs:complexContent>  
+     <xs:complexContent>
       <xs:extension base="LatLonType">
          <xs:attribute name="index" type="CornerAttrType" use="required"/>
       </xs:extension>
-     </xs:complexContent>  
+     </xs:complexContent>
    </xs:complexType>
 
    <xs:complexType name="LatLonCornerStringType">
-     <xs:complexContent>  
+     <xs:complexContent>
       <xs:extension base="LatLonType">
          <xs:attribute name="index" type="CornerStringType" use="required"/>
       </xs:extension>
-     </xs:complexContent>  
+     </xs:complexContent>
    </xs:complexType>
 
    <xs:complexType name="LatLonHAECornerRestrictType">
-     <xs:complexContent>  
+     <xs:complexContent>
       <xs:extension base="LatLonHAERestrictionType">
          <xs:attribute name="index" type="CornerAttrType" use="required"/>
       </xs:extension>
-     </xs:complexContent>  
+     </xs:complexContent>
    </xs:complexType>
 
    <xs:complexType name="LatLonHAECornerStringType">
-    <xs:complexContent>   
+    <xs:complexContent>
       <xs:extension base="LatLonHAEType">
          <xs:attribute name="index" type="CornerStringType" use="required"/>
       </xs:extension>
-     </xs:complexContent>  
+     </xs:complexContent>
    </xs:complexType>
 
    <xs:complexType name="RowColType">
@@ -136,11 +136,11 @@
    </xs:complexType>
 
    <xs:complexType name="RowColvertexType">
-    <xs:complexContent>   
+    <xs:complexContent>
       <xs:extension base="RowColType">
          <xs:attribute name="index" type="xs:int" use="required"/>
       </xs:extension>
-     </xs:complexContent>  
+     </xs:complexContent>
    </xs:complexType>
 
    <xs:complexType name="PolyCoef1DType">
@@ -166,7 +166,7 @@
       </xs:sequence>
       <xs:attribute name="order1" type="xs:int" use="required"/>
    </xs:complexType>
-   
+
    <xs:complexType name="Poly2DType">
       <xs:sequence>
          <xs:element name="Coef" type="PolyCoef2DType" maxOccurs="unbounded"/>
@@ -174,7 +174,7 @@
       <xs:attribute name="order1" type="xs:int" use="required"/>
       <xs:attribute name="order2" type="xs:int" use="required"/>
    </xs:complexType>
-   
+
    <xs:complexType name="XYZPolyType">
       <xs:sequence>
          <xs:element name="X" type="Poly1DType"/>
@@ -202,11 +202,11 @@
       <xs:sequence>
          <xs:element name="Endpoint" minOccurs="2" maxOccurs="unbounded">
             <xs:complexType>
-               <xs:complexContent>  
+               <xs:complexContent>
                   <xs:extension base="LatLonType">
                      <xs:attribute name="index" type="xs:int" use="required"/>
                   </xs:extension>
-               </xs:complexContent>  
+               </xs:complexContent>
             </xs:complexType>
          </xs:element>
       </xs:sequence>
@@ -217,11 +217,11 @@
       <xs:sequence>
          <xs:element name="Vertex" minOccurs="3" maxOccurs="unbounded">
             <xs:complexType>
-               <xs:complexContent>  
+               <xs:complexContent>
                   <xs:extension base="LatLonRestrictionType">
                      <xs:attribute name="index" type="xs:int" use="required"/>
                   </xs:extension>
-               </xs:complexContent>  
+               </xs:complexContent>
             </xs:complexType>
          </xs:element>
       </xs:sequence>
@@ -302,7 +302,7 @@
 
 
 <!-- sicd blocks -->
-   
+
    <xs:complexType name="CollectionInfoType">
       <xs:sequence>
          <xs:element name="CollectorName" type="xs:string"/>
@@ -468,7 +468,7 @@
          </xs:element>
       </xs:sequence>
    </xs:complexType>
-          
+
    <xs:complexType name="GridType">
       <xs:sequence>
          <xs:element name="ImagePlane">
@@ -835,7 +835,7 @@
                   <xs:element name="NoisePoly" type="Poly2DType"/>
                </xs:sequence>
             </xs:complexType>
-         </xs:element>        
+         </xs:element>
          <xs:element name="RCSSFPoly" type="Poly2DType" minOccurs="0"/>
          <xs:element name="SigmaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
          <xs:element name="BetaZeroSFPoly" type="Poly2DType" minOccurs="0"/>
@@ -1041,8 +1041,8 @@
             <xs:simpleType>
                <xs:restriction base="xs:string">
                   <xs:enumeration value="RMAT"/>
-                  <xs:enumeration value="RMCR"/> 
-                  <xs:enumeration value="INCA"/> 
+                  <xs:enumeration value="RMCR"/>
+                  <xs:enumeration value="INCA"/>
                </xs:restriction>
             </xs:simpleType>
          </xs:element>

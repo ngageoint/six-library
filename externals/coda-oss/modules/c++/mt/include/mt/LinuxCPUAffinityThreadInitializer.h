@@ -29,7 +29,7 @@
 
 #include <sched.h>
 #include <sys/types.h>
-#include <linux/unistd.h>
+#include <unistd.h>
 #include <sys/syscall.h>
 #define gettid() syscall(SYS_gettid)
 

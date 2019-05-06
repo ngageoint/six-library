@@ -25,82 +25,64 @@
 import os
 import subprocess
 import sys
-from subprocess import call
+import tempfile
 
 import utils
+from runner import PythonTestRunner
 
 
-def sicdToSIO(testsDir):
-    print('Running sicd_to_sio.py')
-    scriptName = os.path.join(testsDir, 'sicd_to_sio.py')
-    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
-            'six.sicd', '1.2.0', 'sicd_1.2.0(RMA)RMAT.nitf')
-
-    schemaPath = os.path.join(utils.installPath(), 'conf',
-            'schema', 'six')
-    result = call(['python', scriptName, sampleNITF, schemaPath],
-                  stdout=subprocess.PIPE)
-    if result == 0:
-        os.remove(sampleNITF.rstrip('.nitf') + '.sio')
-        print("sicd_to_sio.py succeeded")
-        return True
-    return False
-
-def testCreateSICDXML(testsDir):
-    print('Running test_create_sicd_xml.py')
-    scriptName = os.path.join(testsDir, 'test_create_sicd_xml.py')
-    result = call(['python', scriptName, '-v', '1.2.0'], stdout=subprocess.PIPE)
-
-    if result == 0:
-        os.remove('test_create_sicd.xml')
-        os.remove('test_create_sicd_rt.xml')
-        print('test_create_sicd_xml.py succeeded')
-        return True
-    return False
-
-def testSixSICD(testsDir):
-    print('Running test_six_sicd.py')
-    scriptName = os.path.join(testsDir, 'test_six_sicd.py')
-    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
-            'six.sicd', '1.2.0', 'sicd_1.2.0(RMA)RMAT.nitf')
-
-    result = call(['python', scriptName, sampleNITF],
-                  stdout = subprocess.PIPE)
-    if result == 0:
-        os.remove('from_sicd_sicd_1.2.0(RMA)RMAT.nitf.xml')
-        print('test_six_sicd.py succeeded')
-        return True
-    return False
-
-
-def testReadSICDXML(testsDir):
-    print('Running test_read_sicd_xml.py')
-    scriptName = os.path.join(testsDir, 'test_read_sicd_xml.py')
-    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
-            'six.sicd', '1.2.0', 'sicd_1.2.0(RMA)RMAT.nitf')
-
-    result = call(['python', scriptName, sampleNITF])
-    if result == 0:
-        print('test_read_sicd_xml.py succeeded')
-        return True
-    return False
-
-def testReadRegion(testsDir):
-    print('Running test_read_region.py')
-    scriptName = os.path.join(testsDir, 'test_read_region.py')
-    result = call(['python', scriptName], stdout=subprocess.PIPE)
-    if result == 0:
-        print('test_read_region succeeded')
-        return True
-    return False
+def createSampleCPHD():
+    programPathname = os.path.join(utils.installPath(), 'tests',
+            'cphd', 'test_cphd_write_simple')
+    if not os.path.exists(programPathname):
+        programPathname += '.exe'
+    if not os.path.exists(programPathname):
+        raise IOError('Unable to find ' + programPathname)
+    cphdHandle, cphdPathname = tempfile.mkstemp()
+    os.close(cphdHandle)
+    os.remove(cphdPathname)
+    success = subprocess.check_call([programPathname, cphdPathname])
+    if success != 0:
+        raise OSError('An error occured while executing ' + programPathname)
+    return cphdPathname
 
 
 def run():
+    schemaPath = os.path.join(utils.installPath(), 'conf', 'schema', 'six')
+
+    # SIX tests
+    testsDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'python', 'six', 'tests')
+    sixRunner = PythonTestRunner(testsDir)
+    result = sixRunner.run('testDateTime.py');
+
+    # SICD tests
     testsDir = os.path.join(utils.findSixHome(), 'six',
             'modules', 'python', 'six.sicd', 'tests')
+    sampleNITF = os.path.join(utils.findSixHome(), 'regression_files',
+            'six.sicd', 'sicd_1.2.0(RMA)RMAT.nitf')
+    sicdRunner = PythonTestRunner(testsDir)
+    result = (result and sicdRunner.run('test_streaming_sicd_write.py') and
+        sicdRunner.run('test_read_region.py') and
+        sicdRunner.run('test_read_sicd_xml.py', sampleNITF) and
+        sicdRunner.run('test_six_sicd.py', sampleNITF) and
+        sicdRunner.run('test_create_sicd_xml.py', '-v', '1.2.0') and
+        sicdRunner.run('sicd_to_sio.py', sampleNITF, schemaPath) and
+        sicdRunner.run('test_read_complex_data.py', sampleNITF))
 
-    result = (sicdToSIO(testsDir) and testCreateSICDXML(testsDir) and
-            testSixSICD(testsDir) and testReadSICDXML(testsDir) and
-            testReadRegion(testsDir))
+    # CPHD tests
+    cphdPathname = createSampleCPHD()
+    testsDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'python', 'cphd', 'tests')
+    cphdRunner = PythonTestRunner(testsDir)
+    result = result and cphdRunner.run('test_round_trip_cphd.py', cphdPathname,
+            'out.cphd')
+    os.remove(cphdPathname)
 
     return result
+
+
+if __name__ == '__main__':
+    if run():
+        sys.exit(0)
+    sys.exit(1)

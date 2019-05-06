@@ -41,12 +41,6 @@ public:
     {
     }
 
-    //!  Destructor
-    virtual ~GeoTIFFReadControl()
-    {
-        delete mContainer;
-    }
-
     virtual DataType getDataType(const std::string& fromFile) const;
 
     using ReadControl::load;
@@ -60,6 +54,7 @@ public:
     virtual void load(const std::string& fromFile,
                       const std::vector<std::string>& schemaPaths);
 
+    using ReadControl::interleaved;
     virtual UByte* interleaved(Region& region, size_t imageNumber);
 
     virtual std::string getFileType() const

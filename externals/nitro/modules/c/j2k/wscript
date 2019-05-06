@@ -1,50 +1,22 @@
-from os.path import join, isdir, exists
-from os import makedirs
-from waflib import Options
-from build import writeConfig
+from build import getDriverIncludes
 
-USELIB_CHECK    = 'J2K'
-APIS = ['external/openjpeg', 'external/jasper']
-sourcepath = 'external/openjpeg/openjpeg-2.0.0'
 
-def options(opt):
-    opt.add_option('--disable-j2k', action='store_false', dest='enable_j2k', default=True,
-                   help='turn off JPEG2000 support')
-    opt.add_option('--j2k-layer', action='store', dest='j2k_layer',
-                   choices=['openjpeg', 'jasper'], default='openjpeg', metavar='LIB',
-                   help='Specify the JPEG2000 library to link with')
+USELIB_CHECK = 'J2K'
+options = configure = distclean = lambda x: None
 
-    opt.recurse(APIS)
-    
-def configure(conf):
-    j2kLayer = Options.options.j2k_layer
-
-    def j2k_callback(conf):
-        if j2kLayer is 'openjpeg':
-            conf.define('HAVE_OPENJPEG_H', '', quote=False)
-            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
-        else:
-            #j2kLayer is 'jasper':
-            conf.define('HAVE_JASPER_H', '', quote=False)
-            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
-    writeConfig(conf, j2k_callback, 'j2k')
-        
-    if Options.options.enable_j2k : 
-        conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
-        conf.recurse(APIS)
 
 def build(bld):
     env = bld.get_env()
-    if 'HAVE_J2K' in env: 
-        bld.recurse(APIS + ['shared'])
-        
-        if 'MAKE_OPENJPEG' in env :
+    if 'HAVE_J2K' in env:
+        bld.recurse(['shared'])
+
+        if 'MAKE_OPENJPEG' in env:
             j2kLayer = 'openjpeg'
-        elif 'MAKE_JASPER' in env :
+        elif 'MAKE_JASPER' in env:
             j2kLayer = 'jasper'
-        else  :
+        else:
             bld.fatal('Not a supported j2k type')
-        
+
         j2kSources = ('source/Container.c',
                       'source/Component.c',
                       'source/JasPerImpl.c',
@@ -54,51 +26,39 @@ def build(bld):
                       'source/SimpleContainerImpl.c',
                       'source/Writer.c')
 
-        #build the j2k library
-        lib = bld(features='c cstlib', includes='include',
+        j2kInclude = getDriverIncludes(bld, 'j2k')
+        j2kIncludes = ['include', j2kInclude, env['OPENJPEG_INCLUDE']]
+
+        # build the j2k library
+        lib = bld(features='c cstlib',
+                  includes=j2kIncludes,
                   target='j2k-c', name='j2k-c',
                   source=j2kSources,
-                  export_includes='include',
+                  export_includes=j2kIncludes,
                   env=env.derive(), path=bld.path,
                   use='nitf-c J2K ' + j2kLayer)
-                  
+
         # install j2k lib
         if env['install_libs']:
-           lib.install_path = env['install_libdir']
-           
-        # install j2k_config.h
-        if env['install_headers']:
-            for line in env['header_builddir']:
-                split = line.split('=')
-                if split[0] == 'j2k':
-                    subdir = split[1]
+            lib.install_path = env['install_libdir']
 
-            hdrTarget = bld(features='install_tgt', 
-                            files=['j2k_config.h'],
-                            dir=bld.bldnode.make_node(subdir),
-                            install_path=join(env['install_includedir'], 'j2k'))
-            
-            lib.features += ' add_targets'
-            lib.targets_to_add = [hdrTarget]
-            
-        #j2k-only tests
-        j2k_only_tests = ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
-                          'test_j2k_create']
-        
+        # j2k-only tests
+        j2k_only_tests = ['test_j2k_header', 'test_j2k_read_tile',
+                          'test_j2k_read_region', 'test_j2k_create']
+
         for t in j2k_only_tests:
-            bld.program_helper(dir='tests', source='%s.c' % t, 
-                               use='j2k-c J2K ' + j2kLayer, 
+            bld.program_helper(dir='tests', source='%s.c' % t,
+                               use='j2k-c J2K ' + j2kLayer,
                                name=t, target=t, lang='c', env=env.derive())
 
-        #j2k/nitf tests
+        # j2k/nitf tests
         j2k_nitf_tests = ['test_j2k_nitf']
         for t in j2k_nitf_tests:
-            bld.program_helper(dir='tests', source='%s.c' % t, 
-                               use='nitf-c j2k-c J2K', uselib=j2kLayer, 
+            bld.program_helper(dir='tests', source='%s.c' % t,
+                               use='nitf-c j2k-c J2K', uselib=j2kLayer,
                                name=t, target=t, lang='c', env=env.derive())
 
         bld(features='add_targets', target='j2k-tests',
             targets_to_add=j2k_only_tests + j2k_nitf_tests)
 
-def distclean(context) :
-    context.recurse(APIS)
+

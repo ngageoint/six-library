@@ -45,7 +45,7 @@ ComplexXMLParser040::ComplexXMLParser040(const std::string& version,
 }
 
 XMLElem ComplexXMLParser040::convertRMATToXML(
-    const RMAT* rmat, 
+    const RMAT* rmat,
     XMLElem rmaXML) const
 {
     createString("ImageType", "RMAT", rmaXML);
@@ -64,7 +64,7 @@ XMLElem ComplexXMLParser040::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser040::parseRMATFromXML(const XMLElem rmatElem, 
+void ComplexXMLParser040::parseRMATFromXML(const XMLElem rmatElem,
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RMRefTime"), rmat->refTime);
@@ -82,12 +82,29 @@ void ComplexXMLParser040::convertDRateSFPolyToXML(
     const INCA* inca, XMLElem incaXML) const
 {
     //! Poly1D in 0.4.0
-    if (inca->dopplerRateScaleFactorPoly.orderX() != 0)
+    if (inca->dopplerRateScaleFactorPoly.orderX() != 0 &&
+        inca->dopplerRateScaleFactorPoly.orderY() != 0)
+    {
         throw except::Exception(Ctxt("Verify the poly is stored in 1D form"));
+    }
 
-    // set x order -> 0, y order -> oldPoly
-    common().createPoly1D("DRateSFPoly", 
-        inca->dopplerRateScaleFactorPoly[0], incaXML);
+    // Reshape the data into a Poly1D for writing
+    six::Poly1D oneDPoly;
+    if (inca->dopplerRateScaleFactorPoly.orderX() != 0)
+    {
+        oneDPoly = six::Poly1D(inca->dopplerRateScaleFactorPoly.orderX());
+        for (size_t ii = 0; ii <= oneDPoly.order(); ++ii)
+        {
+            oneDPoly[ii] = inca->dopplerRateScaleFactorPoly[ii][0];
+        }
+    }
+    else
+    {
+        oneDPoly = inca->dopplerRateScaleFactorPoly[0];
+    }
+
+    common().createPoly1D("DRateSFPoly",
+        oneDPoly, incaXML);
 }
 
 void ComplexXMLParser040::parseDRateSFPolyFromXML(
@@ -95,7 +112,7 @@ void ComplexXMLParser040::parseDRateSFPolyFromXML(
 {
     //! Poly1D in 0.4.0
     Poly1D dRateSFPoly;
-    common().parsePoly1D(getFirstAndOnly(incaElem, "DRateSFPoly"), 
+    common().parsePoly1D(getFirstAndOnly(incaElem, "DRateSFPoly"),
                          dRateSFPoly);
 
     // set x order -> 0, y order -> oldPoly

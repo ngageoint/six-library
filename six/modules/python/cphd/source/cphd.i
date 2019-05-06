@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of cphd-python 
+ * This file is part of cphd-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * cphd-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -37,15 +37,18 @@
 %import "scene.i"
 
 %{
+#include "import/types.h"
 #include "import/cphd.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
+#include "import/sys.h"
 using six::Vector3;
 %}
 %ignore cphd::CPHDXMLControl::toXML(const Metadata& metadata);
 %ignore cphd::CPHDXMLControl::fromXML(const xml::lite::Document* doc);
 %ignore cphd::CPHDXMLControl::fromXML(const std::string& xmlString);
 %rename(CphdAntenna) cphd::Antenna;
+
 
 %include "cphd/Types.h"
 %include "cphd/Enums.h"
@@ -62,6 +65,13 @@ using six::Vector3;
 
 %include "cphd/Wideband.h"
 %include "cphd/CPHDReader.h"
+%include "cphd/CPHDWriter.h"
+
+%ignore CPHDWriter::writeCPHDData;
+%ignore CPHDWriter::close;
+%ignore CPHDWriter::writeMetadata;
+%ignore CPHDWriter::addImage;
+%ignore CPHDWriter::write;
 
 %extend cphd::FileHeader
 {
@@ -114,6 +124,18 @@ using six::Vector3;
 //       send NumPy arrays to/from C++ when you allocate an
 //       array > 4 GB.  It seems like Swig should be smarter
 //       in what it auto-generates to avoid this.
+%extend cphd::CPHDWriter
+{
+    void addImageImpl(long long image,
+            const types::RowCol<size_t>& dims,
+            long long vbm)
+    {
+        $self->addImage(reinterpret_cast<std::complex<float>*>(image),
+                dims,
+                reinterpret_cast<sys::ubyte*>(vbm));
+    }
+}
+
 %extend cphd::Wideband
 {
     // We need to expose a way to read into a raw buffer
@@ -140,23 +162,48 @@ using six::Vector3;
 %pythoncode
 %{
 import numpy
-
-def toBuffer(self, channel = 0):
-    
-    numpyArray = numpy.empty(shape = ((self.getVBMsize(channel) / 8)), dtype = 'double')
-    pointer, ro = numpyArray.__array_interface__['data']
-    
-    self.getVBMdata(channel, pointer)
-    return numpyArray
-    
-VBM.toBuffer = toBuffer
-%}
-
-%pythoncode
-%{
-import numpy
 import multiprocessing
 from coda.coda_types import RowColSizeT
+
+def toBuffer(self, channel = 0):
+
+    numpyArray = numpy.empty(shape = ((self.getVBMsize(channel) / 8)), dtype = 'double')
+    pointer, ro = numpyArray.__array_interface__['data']
+
+    self.getVBMdata(channel, pointer)
+    return numpyArray
+
+VBM.toBuffer = toBuffer
+
+def write(self, pathname, data, vbm, channel):
+    '''
+    Write CPHD data to a file
+
+    Args:
+        pathname: Name of file to write to
+        data: Numpy array of complex64 wideband data of size [npulse, nsamps]
+        vbm: VBM object
+        channel: Channel of VBM to write
+
+    Throws:
+        TypeError if trying to write non-complex64 wideband data
+    '''
+    if data.dtype != numpy.dtype('complex64'):
+        raise TypeError('Python CPHDWriter only supports complex float data')
+
+    imagePointer, _ = data.__array_interface__['data']
+    vbmBuffer = vbm.toBuffer(channel)
+    vbmPointer, _ = vbmBuffer.__array_interface__['data']
+
+    dims = RowColSizeT(data.shape[0], data.shape[1])
+    self.addImageImpl(imagePointer, dims, vbmPointer)
+    self.write(pathname)
+
+def __del__(self):
+    self.close()
+
+CPHDWriter.writeCPHD = write
+CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,
@@ -165,22 +212,22 @@ def read(self,
          firstSample = 0,
          lastSample = Wideband.ALL,
          numThreads = multiprocessing.cpu_count()):
-    
+
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
     sampleType = self.getSampleType()
-    
+
     # RF32F_IM32F
     if sampleType == 1:
         dtype = 'complex64'
     else:
         raise Exception('Unknown element type')
-        
-    
+
+
     numpyArray = numpy.empty(shape = (dims.row, dims.col), dtype = dtype)
     pointer, ro = numpyArray.__array_interface__['data']
     self.readImpl(channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, pointer)
     return numpyArray
-    
+
 Wideband.read = read
 %}
 
@@ -204,3 +251,4 @@ SCOPED_COPYABLE(cphd,AreaPlane);
 SCOPED_COPYABLE(cphd,FxParameters);
 SCOPED_COPYABLE(cphd,TOAParameters);
 SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
+

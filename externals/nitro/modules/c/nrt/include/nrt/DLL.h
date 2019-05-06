@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -31,6 +31,9 @@
 #ifdef WIN32
 /*  Under windows, a dynamic shared object is a DLL  */
 #    define  NRT_DLL_EXTENSION ".dll"
+#elif defined(__APPLE__)
+/*  Under OSX, a dynamic shared object has a .dylib extension  */
+#    define  NRT_DLL_EXTENSION ".dylib"
 #else
 /*
  *  BE WARY: Under Unix, we expect a DSO to have a .so extension,

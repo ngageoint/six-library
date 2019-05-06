@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of coda_io-python 
+ * This file is part of coda_io-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * coda_io-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -30,6 +30,7 @@
   #include "import/sys.h"
   #include "import/io.h"
   using namespace io;
+  #define SWIG_PYTHON_STRICT_BYTE_CHAR
 %}
 
 %include "io/InputStream.h"

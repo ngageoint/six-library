@@ -102,13 +102,15 @@ void io::FileInputStreamIOS::close()
     mFStream.close();
 }
 
-sys::SSize_T io::FileInputStreamIOS::read(sys::byte* b, sys::Size_T len)
+sys::SSize_T io::FileInputStreamIOS::readImpl(void* buffer, size_t len)
 {
-    ::memset(b, 0, len);
+    ::memset(buffer, 0, len);
     sys::Off_T avail = available();
     if (mFStream.eof() || avail <= 0) return io::InputStream::IS_EOF;
     if (len < (sys::Size_T)avail)
         avail = len;
+
+    char* const bufferPtr = static_cast<char*>(buffer);
 
     if (avail > 0)
     {
@@ -119,10 +121,10 @@ sys::SSize_T io::FileInputStreamIOS::read(sys::byte* b, sys::Size_T len)
 
         while (bytesRead < avail && mFStream.good())
         {
-            b[bytesRead++] = mFStream.get();
+            bufferPtr[bytesRead++] = mFStream.get();
         }
 #else
-        mFStream.read((char *)b, avail);
+        mFStream.read(bufferPtr, avail);
         bytesRead = mFStream.gcount();
 #endif
         return bytesRead;

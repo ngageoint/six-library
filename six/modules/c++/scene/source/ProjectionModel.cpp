@@ -22,6 +22,7 @@
 
 #include <limits>
 
+#include <math/Utilities.h>
 #include "scene/ProjectionModel.h"
 #include "scene/ECEFToLLATransform.h"
 #include "scene/Utilities.h"
@@ -31,12 +32,6 @@ namespace
 const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
 
 const double DELTA_GP_MAX = 0.0000001;
-
-inline
-double square(double val)
-{
-    return (val * val);
-}
 
 // TODO: Should this be a static method instead?
 scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
@@ -53,6 +48,17 @@ scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
 
     return unitVector;
 }
+
+template<typename PolyType>
+PolyType verboseDerivative(const PolyType& polynomial, const std::string& name)
+{
+    if (polynomial.empty())
+    {
+        throw except::Exception(Ctxt("Unable to take derivative of " + name +
+                ". Polynomial is empty."));
+    }
+    return polynomial.derivative();
+}
 }
 
 namespace scene
@@ -67,7 +73,7 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal(slantPlaneNormal),
     mSCP(scp),
     mARPPoly(arpPoly),
-    mARPVelPoly(mARPPoly.derivative()),
+    mARPVelPoly(verboseDerivative(arpPoly, "arpPoly")),
     mTimeCOAPoly(timeCOAPoly),
     mLookDir(lookDir),
     mErrors(errors)
@@ -94,10 +100,10 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
     // Compute the ARP distance from the plane (ARP Z)
     Vector3 tmp(arpCOA - groundRefPoint);
     const double arpZ = tmp.dot(groundPlaneNormal);
-    
+
     // Compute the ARP ground plane nadir
     const Vector3 arpGround(arpCOA - groundPlaneNormal * arpZ);
-    
+
     // Compute the ground plane distance from the ARP nadir to
     // the circle of constant range.
     if (std::abs(arpZ) > std::abs(rCOA))
@@ -107,17 +113,17 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                   str::toString(rCOA)));
     }
     const double groundRange = sqrt(rCOA * rCOA - arpZ * arpZ);
-    
+
     // Compute cos and sin of the grazing angle
     const double cosGraz( groundRange / rCOA );
     const double sinGraz( arpZ / rCOA );
-    
+
     // Compute the velocity components normal to the ground
     // plane and parallel to the ground plane
     const double vz = velCOA.dot(groundPlaneNormal);
-    
+
     const double vmag = velCOA.norm();
-    
+
     if (std::abs(vz) >= std::abs(vmag))
     {
         throw except::Exception(Ctxt(
@@ -125,12 +131,12 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                   str::toString(vmag)));
     }
     const double vx = sqrt(vmag * vmag - vz * vz);
-    
+
     // Orient the x direction in the ground plane such that
     // vx > 0.  Compute unit vectors unitX and unitY
     const Vector3 unitX = (velCOA - groundPlaneNormal * vz) / vx;
     const Vector3 unitY = cross(groundPlaneNormal, unitX);
-    
+
     // Compute the cosine of the azimuth angle to the ground
     // plane point
     const double cosAzimuth =
@@ -140,10 +146,10 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
         throw except::Exception(Ctxt(
                   "No solution: cosAzimuth = " + str::toString(cosAzimuth)));
     }
-    
+
     const double sinAzimuth =
         mLookDir * sqrt(1.0 - cosAzimuth * cosAzimuth);
-    
+
     return Vector3(arpGround + unitX * groundRange * cosAzimuth +
                           unitY * groundRange * sinAzimuth);
 }
@@ -159,27 +165,27 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
     Vector3 groundRefPoint(scenePoint);
     Vector3 groundPlaneNormal(groundRefPoint);
     groundPlaneNormal.normalize();
-    
+
     // Set initial ground plane position to the scenePoint
     Vector3 groundPlanePoint(scenePoint);
-        
+
     for (size_t i = 0; i < MAX_ITER; ++i)
     {
-        
+
         // We are projecting the ground plane point to the image
-        // plane point. 
+        // plane point.
         Vector3 diff(mSCP - groundPlanePoint);
-        
+
         // Dist contains the projection difference
         double dist = diff.dot(mImagePlaneNormal) * mScaleFactor;
-        
+
         Vector3 imagePlanePoint =
             groundPlanePoint + mSlantPlaneNormal * dist;
-        
+
         // Compute the imageCoordinates for the plane point
         types::RowCol<double> imageGridPoint =
             computeImageCoordinates(imagePlanePoint);
-        
+
         // Find out if scene point is the same as the guessed output
         // of imageToScene
         diff = scenePoint - imageToScene(imageGridPoint,
@@ -187,18 +193,18 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
                                          groundPlaneNormal,
                                          delta,
                                          oTimeCOA);
-        
+
         dist = diff.norm();
-        
+
         if (dist < DELTA_GP_MAX)
             return imageGridPoint;
-        
+
         // Otherwise we are not so lucky, add to our point
         // the difference
         groundPlanePoint += diff;
-        
+
     }
-    
+
     throw except::Exception(Ctxt("Point failed to converge"));
 }
 
@@ -209,30 +215,30 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
                               const AdjustableParams& delta,
                               double *oTimeCOA) const
 {
-    
+
     // Compute the timeCOA
     const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
                                         imageGridPoint.col);
-    
+
     if (oTimeCOA != NULL)
     {
         *oTimeCOA = timeCOA;
     }
-    
+
     // Compute ARP position
     Vector3 arpCOA = mARPPoly(timeCOA);
-    
+
     // Compute ARP velocity
     Vector3 velCOA = mARPVelPoly(timeCOA);
-    
+
     double r;
     double rDot;
-    
+
     computeContour(arpCOA, velCOA, timeCOA,
                    imageGridPoint,
                    &r,
                    &rDot);
-    
+
     // Adjustable parameters are applied after computing R/Rdot contours
     // Adjustable parameters do not affect Rdot
     imageToSceneAdjustment(delta, timeCOA, r, arpCOA, velCOA);
@@ -631,9 +637,9 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     // Z-Axis Ellipsoid radius
     const double c = WGS84EllipsoidModel::POLAR_RADIUS_METERS;
     Vector3 up;
-    up[0] = 2 * scenePoint[0] / square(a);
-    up[1] = 2 * scenePoint[1] / square(b);
-    up[2] = 2 * scenePoint[2] / square(c);
+    up[0] = 2 * scenePoint[0] / math::square(a);
+    up[1] = 2 * scenePoint[1] / math::square(b);
+    up[2] = 2 * scenePoint[2] / math::square(c);
     up.normalize();
 
     normal = normal * mLookDir;
@@ -646,14 +652,14 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     // a should be semi-major axis of reference ellipsoid
     static const double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
     const double Htrop = 1 + TROPOSPHERE_SCALE_HEIGHT_METERS / a;
-    const double htrop = sqrt((square(Htrop) - 1 + square(rv)));
+    const double htrop = sqrt((math::square(Htrop) - 1 + math::square(rv)));
     const double ftrop = Htrop / htrop;
     Vector3 R = scenePoint;
     R.normalize();
     const double graze = asin(range.dot(R));
     math::linear::MatrixMxN<2, 1> bTrop;
     bTrop(0, 0) = -1.0 * ftrop;
-    bTrop(1, 0) = av * square(cos(graze)) / square(htrop);
+    bTrop(1, 0) = av * math::square(cos(graze)) / math::square(htrop);
     math::linear::MatrixMxN<2, 2> tropMat =
             bTrop * mErrors.mTropoErrorCovar * bTrop.transpose();
     math::linear::MatrixMxN<3, 3> tropMat3D(0.0);
@@ -665,12 +671,12 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     const Vector3 denominator = scenePoint - rARP;
     const double omegaA = Va / denominator.norm();
     const double Hion = 1 + IONOSPHERE_SCALE_HEIGHT_METERS / a;
-    const double hion = sqrt(square(Hion) - 1 + square(rv));
+    const double hion = sqrt(math::square(Hion) - 1 + math::square(rv));
     const double fion = Hion / hion;
     math::linear::MatrixMxN<2 ,2> bIon(0.0);
     bIon(0, 0) = -1.0 * fion;
     bIon(1, 1) = fion / omegaA;
-    bIon(1, 0) = av * square(cos(graze)) / square(hion);
+    bIon(1, 0) = av * math::square(cos(graze)) / math::square(hion);
     math::linear::MatrixMxN<2, 2> ionMat =
             bIon * mErrors.mIonoErrorCovar * bIon.transpose();
     math::linear::MatrixMxN<3, 3> ionMat3D(0.0);
@@ -798,9 +804,9 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                                     lookDir,
                                     errors),
     mPolarAnglePoly(polarAnglePoly),
-    mPolarAnglePolyPrime(mPolarAnglePoly.derivative()),
+    mPolarAnglePolyPrime(verboseDerivative(mPolarAnglePoly, "mPolarAnglePoly")),
     mKSFPoly(ksfPoly),
-    mKSFPolyPrime(mKSFPoly.derivative())
+    mKSFPolyPrime(verboseDerivative(mKSFPoly, "mKSFPoly"))
 {
 }
 
@@ -814,34 +820,34 @@ computeContour(const Vector3& arpCOA,
 {
     double thetaCOA = mPolarAnglePoly(timeCOA);
     double dThetaDt = mPolarAnglePolyPrime(timeCOA);
-    
+
     double ksf = mKSFPoly(thetaCOA);
     double dKSFDTheta = mKSFPolyPrime(thetaCOA);
-    
+
     double cosTheta = cos(thetaCOA);
     double sinTheta = sin(thetaCOA);
-    
+
     double slopeRadial =
         imageGridPoint.row * cosTheta +
         imageGridPoint.col * sinTheta;
-    
+
     double slopeCrossRadial =
         -imageGridPoint.row * sinTheta +
         imageGridPoint.col * cosTheta;
-    
+
     double dR = ksf * slopeRadial;
-    
+
     double dDrDTheta = dKSFDTheta * slopeRadial + ksf * slopeCrossRadial;
     double dRDot = dDrDTheta * dThetaDt;
-    
+
     Vector3 vec = arpCOA - mSCP;
     *r = vec.norm();
-    
+
     *rDot = velCOA.dot(vec) / *r;
-    
+
     *r += dR;
     *rDot += dRDot;
-    
+
 }
 
 
@@ -879,20 +885,20 @@ computeContour(const Vector3& /*arpCOA*/,
                double* r,
                double* rDot) const
 {
-    
+
     // Time of closest approach
     double timeCA = mTimeCAPoly(imageGridPoint.col);
-    
+
     // Time Difference
     double deltaTimeCOA = timeCOA - timeCA;
-    
+
     // Velocity at closest approach
     double velocityMagCA = mARPVelPoly(timeCA).norm();
-    
+
     double t = deltaTimeCOA * velocityMagCA;
-    
+
     double dsrf = mDSRFPoly(imageGridPoint.row, imageGridPoint.col);
-    
+
     double rangeCA = mRangeCA + imageGridPoint.row;
 
     *r = sqrt(rangeCA * rangeCA + dsrf * (t * t));
@@ -929,7 +935,7 @@ computeContour(const Vector3& arpCOA,
 {
     const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);
     *r = vec.norm();
-    
+
     *rDot = velCOA.dot(vec) / *r;
 }
 

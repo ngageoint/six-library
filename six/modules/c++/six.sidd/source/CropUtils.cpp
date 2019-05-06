@@ -91,7 +91,9 @@ public:
 
     types::RowCol<double> operator()(size_t row, size_t col) const
     {
-        return operator()(types::RowCol<double>(row, col));
+        return operator()(types::RowCol<double>(
+                static_cast<double>(row),
+                static_cast<double>(col)));
     }
 
 private:
@@ -137,7 +139,7 @@ void cropSIDD(const std::string& inPathname,
     // Make sure it's a SIDD
     six::NITFReadControl reader;
     reader.load(inPathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    mem::SharedPtr<six::Container> container(reader.getContainer());
 
     if (container->getDataType() != six::DataType::DERIVED)
     {
@@ -235,8 +237,7 @@ void cropSIDD(const std::string& inPathname,
     }
 
     // Write the AOI SIDD out
-    six::NITFWriteControl writer;
-    writer.initialize(container);
+    six::NITFWriteControl writer(container);
     writer.save(buffers.get(), outPathname, schemaPaths);
 }
 }

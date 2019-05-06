@@ -43,7 +43,7 @@ ComplexXMLParser04x::ComplexXMLParser04x(
 }
 
 XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
-    const GeoInfo *geoInfo, 
+    const GeoInfo *geoInfo,
     XMLElem parent) const
 {
     //! 0.4.x has ordering (1. GeoInfo, 2. Desc, 3. choice)
@@ -92,7 +92,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
 {
     XMLElem radarXML = newElement("RadarCollection", parent);
 
-    if (!Init::isUndefined<int>(radar->refFrequencyIndex))
+    if (!Init::isUndefined(radar->refFrequencyIndex))
     {
         createInt("RefFreqIndex", radar->refFrequencyIndex, radarXML);
     }
@@ -108,7 +108,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
                 radarXML);
     }
 
-    if (!Init::isUndefined<Poly1D>(radar->polarizationHVAnglePoly))
+    if (!Init::isUndefined(radar->polarizationHVAnglePoly))
     {
         common().createPoly1D("PolarizationHVAnglePoly",
                               radar->polarizationHVAnglePoly,
@@ -146,7 +146,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     if (!imageFormation->segmentIdentifier.empty())
         createString("SegmentIdentifier", imageFormation->segmentIdentifier,
             imageFormationXML);
-    convertRcvChanProcToXML("0.4", imageFormation->rcvChannelProcessed.get(), 
+    convertRcvChanProcToXML("0.4", imageFormation->rcvChannelProcessed.get(),
                             imageFormationXML);
 
     if (imageFormation->txRcvPolarizationProc != DualPolarizationType::NOT_SET)
@@ -205,7 +205,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
             imageFormation ->polarizationCalibration->distortionCorrectionApplied,
             pcXML), "DistortionCorrectionApplied");
 
-        convertDistortionToXML("0.4", 
+        convertDistortionToXML("0.4",
             imageFormation->polarizationCalibration->distortion.get(),
             pcXML);
     }
@@ -213,7 +213,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
 }
 
 XMLElem ComplexXMLParser04x::convertImageFormationAlgoToXML(
-    const PFA* pfa, const RMA* rma, 
+    const PFA* pfa, const RMA* rma,
     const RgAzComp* rgAzComp, XMLElem parent) const
 {
     if (rgAzComp)
@@ -241,7 +241,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationAlgoToXML(
 }
 
 XMLElem ComplexXMLParser04x::convertRMAToXML(
-    const RMA* rma, 
+    const RMA* rma,
     XMLElem parent) const
 {
     XMLElem rmaXML = newElement("RMA", parent);
@@ -273,7 +273,7 @@ XMLElem ComplexXMLParser04x::convertRMAToXML(
 
 
 XMLElem ComplexXMLParser04x::convertRMATToXML(
-    const RMAT* rmat, 
+    const RMAT* rmat,
     XMLElem rmaXML) const
 {
     createString("ImageType", "RMAT", rmaXML);
@@ -294,7 +294,7 @@ XMLElem ComplexXMLParser04x::convertRMATToXML(
 }
 
 XMLElem ComplexXMLParser04x::convertHPBWToXML(
-    const HalfPowerBeamwidths* halfPowerBeamwidths, 
+    const HalfPowerBeamwidths* halfPowerBeamwidths,
     XMLElem parent) const
 {
     if (halfPowerBeamwidths)
@@ -350,7 +350,7 @@ void ComplexXMLParser04x::parsePolarizationCalibrationFromXML(
     const XMLElem polCalXML,
     six::sicd::PolarizationCalibration* obj) const
 {
-    parseBooleanType(getFirstAndOnly(polCalXML, "HVAngleCompApplied"), 
+    parseBooleanType(getFirstAndOnly(polCalXML, "HVAngleCompApplied"),
                      obj->hvAngleCompensationApplied);
 
     parseBooleanType(getFirstAndOnly(polCalXML, "DistortionCorrectionApplied"),
@@ -370,7 +370,7 @@ void ComplexXMLParser04x::parseTxRcvPolFromXML(
     }
 }
 
-void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem, 
+void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem,
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);
@@ -386,7 +386,7 @@ void ComplexXMLParser04x::parseRMATFromXML(const XMLElem rmatElem,
     parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
 }
 
-void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem, 
+void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem,
                                            RMCR*) const
 {
     // did not exist in 0.4
@@ -394,7 +394,7 @@ void ComplexXMLParser04x::parseRMCRFromXML(const XMLElem,
 }
 
 void ComplexXMLParser04x::parseAntennaParamArrayFromXML(
-    const XMLElem antennaParamsXML, 
+    const XMLElem antennaParamsXML,
     six::sicd::AntennaParameters* params) const
 {
     //! this field is optional in 0.4
@@ -421,7 +421,7 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
         setAttribute(cpXML, "index", str::toString(ii + 1));
 
-        if (!Init::isUndefined<int>(cp->rcvAPCIndex))
+        if (!Init::isUndefined(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
 
         if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)

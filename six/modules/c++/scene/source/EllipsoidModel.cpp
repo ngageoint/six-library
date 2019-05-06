@@ -20,6 +20,7 @@
  *
  */
 #include <math/Constants.h>
+#include <math/Utilities.h>
 #include "scene/EllipsoidModel.h"
 
 namespace scene
@@ -84,7 +85,7 @@ double EllipsoidModel::calculateFlattening() const
 
 double EllipsoidModel::calculateEccentricity() const
 {
-    double ecc = 1.0 - pow(polarRadius,2)/pow(equatorialRadius,2);
+    double ecc = 1.0 - math::square(polarRadius)/math::square(equatorialRadius);
     ecc = sqrt(ecc);
     return ecc;
 }
@@ -211,5 +212,15 @@ WGS84EllipsoidModel::operator=(const EllipsoidModel & m)
     setAngularUnits(m.getAngularUnits());
 
     return *this;
+}
+
+Vector3 WGS84EllipsoidModel::getNormalVector(const Vector3& point) const
+{
+    Vector3 normalVector;
+    normalVector[0] = point[0] / math::square(equatorialRadius);
+    normalVector[1] = point[1] / math::square(equatorialRadius);
+    normalVector[2] = point[2] / math::square(polarRadius);
+
+    return normalVector.unit();
 }
 }
