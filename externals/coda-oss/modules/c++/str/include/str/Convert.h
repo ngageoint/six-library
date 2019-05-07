@@ -171,7 +171,7 @@ template<> int getPrecision(const long double& type);
  @throw BadCastException thrown if cast cannot be performed.
  */
 template<typename T>
-T generic_cast(const std::string& value) throw (except::BadCastException)
+T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
