@@ -42,7 +42,7 @@ dbi::DatabaseConnection * dbi::DatabaseClientFactory::create(const std::string& 
         const std::string& user,
         const std::string& pass,
         const std::string& host,
-        unsigned int port) throw (except::Exception)
+        unsigned int port)
 {
     dbi::DatabaseConnection * connection = NULL;
 #   if defined(USE_PGSQL)
