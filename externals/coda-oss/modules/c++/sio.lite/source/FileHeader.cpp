@@ -95,7 +95,6 @@ void sio::lite::FileHeader::getAllUserDataFields(
 }
 
 std::vector<sys::byte>& sio::lite::FileHeader::getUserData(const std::string& key)
-    throw (except::NoSuchKeyException)
 {
     if (!userData.exists(key))
         throw except::NoSuchKeyException(key);
