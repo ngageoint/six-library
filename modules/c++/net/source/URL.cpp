@@ -152,7 +152,6 @@ bool net::URLParams::contains(std::string key) const
 }
 
 net::URLParams::ParamValues& net::URLParams::get(std::string key)
-        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
@@ -161,7 +160,6 @@ net::URLParams::ParamValues& net::URLParams::get(std::string key)
 }
 
 const net::URLParams::ParamValues& net::URLParams::get(std::string key) const
-        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
@@ -169,7 +167,6 @@ const net::URLParams::ParamValues& net::URLParams::get(std::string key) const
     return it->second;
 }
 std::string net::URLParams::getFirst(std::string key) const
-        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
