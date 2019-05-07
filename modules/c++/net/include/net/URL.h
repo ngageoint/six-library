@@ -49,11 +49,11 @@ public:
     URLParams(const std::string paramString = "");
 
     bool contains(std::string key) const;
-    ParamValues& get(std::string key) throw (except::NoSuchKeyException);
-    const ParamValues& get(std::string key) const throw (except::NoSuchKeyException);
+    ParamValues& get(std::string key);
+    const ParamValues& get(std::string key) const;
     Params& get() { return mParams; }
     const Params& get() const { return mParams; }
-    std::string getFirst(std::string key) const throw (except::NoSuchKeyException);
+    std::string getFirst(std::string key) const;
     void add(std::string key, std::string value = "");
     void remove(std::string key);
 
