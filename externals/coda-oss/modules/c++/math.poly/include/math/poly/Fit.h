@@ -331,14 +331,27 @@ inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
     const math::poly::OneD<double> fit1 = fit(xObs, yObs1, order);
     const math::poly::OneD<double> fit2 = fit(xObs, yObs2, order);
 
+    // There is a non-zero chance that one or more of the resulting polynomials
+    // are of a lower order than the requested order -- this results when the
+    // highest order coefficients are identically 0.0. As a result, care must be
+    // taken when combining the coefficients to avoid running outside of the
+    // actual number of coefficients in any particular fit.
+    // Note: There is a choice to be made here if /all/ polynomials have their
+    //       orders reduced. In an ideal world, this would reduce the order
+    //       of the output poly from 'order' to the maximum of the component
+    //       orders. However, this code has been in production for awhile,
+    //       and I cannot guarantee that someone, somewhere, isn't expecting
+    //       'order'+1 coefficients and attempting to extract/modify them.
+    //       So, we'll retain the original desired order of the polynomial
+    //       and simply fill with zeros.
     math::poly::OneD< math::linear::VectorN< 3, double > > polyVector3 =
         math::poly::OneD< math::linear::VectorN< 3, double > >(order);
     for (size_t term = 0; term <= order; term++)
     {
         math::linear::VectorN< 3, double >& coeffs = polyVector3[term];
-        coeffs[0] = fit0[term];
-        coeffs[1] = fit1[term];
-        coeffs[2] = fit2[term];
+        coeffs[0] = (term <= fit0.order()) ? fit0[term] : 0.0;
+        coeffs[1] = (term <= fit1.order()) ? fit1[term] : 0.0;
+        coeffs[2] = (term <= fit2.order()) ? fit2[term] : 0.0;
     }
 
     return polyVector3;

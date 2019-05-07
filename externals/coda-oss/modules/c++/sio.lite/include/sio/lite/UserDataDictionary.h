@@ -64,7 +64,6 @@ public:
     ConstIterator end() const { return mList.end(); }
 
     virtual Value_T& operator[] (const Key_T& key)
-        throw(except::NoSuchKeyException)
     {
         typename std::map < Key_T, Value_T >::iterator it = mMap.find(key);
         if (it == mMap.end())
