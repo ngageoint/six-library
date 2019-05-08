@@ -36,6 +36,7 @@
 #include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/GeoLocator.h"
 #include "six/sicd/SICDWriteControl.h"
+#include "six/sicd/Utilities.h"
 #include <numpyutils/numpyutils.h>
 
 
@@ -123,28 +124,47 @@ Data* readNITF(const std::string& pathname,
     region.setBuffer(buffer.get() + offset);
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
+%}
+
+%ignore six::sicd::cropSICD;
+%include <std_auto_ptr.i>
+%include <std_string.i>
+%include <std_vector.i>
+%template(VectorString) std::vector<std::string>;
+%auto_ptr(six::sicd::NoiseMesh);
+%auto_ptr(scene::ProjectionPolynomialFitter);
+%auto_ptr(six::sicd::ComplexData);
+%include "six/sicd/SICDMesh.h"
+%include "six/sicd/ComplexData.h"
+%include "six/sicd/Utilities.h"
+%rename (cropSICD) cropSICDWrap;
+
+%inline %{
 
 
-void crop_SICD(const std::string& inPathname,
-               const std::vector<std::string>& schemaPaths,
-               const types::RowCol<size_t>& aoiOffset,
-               const types::RowCol<size_t>& aoiDims,
-               const std::string& outPathname);
-              
-void crop_SICD(const std::string& inPathname,
-               const std::vector<std::string>& schemaPaths,
-               const types::RowCol<size_t>& aoiOffset,
-               const types::RowCol<size_t>& aoiDims,
-               const std::string& outPathname)
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname)
 {
 
-  six::XMLControlFactory::getInstance().addCreator(
+    six::XMLControlFactory::getInstance().addCreator(
           six::DataType::COMPLEX,
 	  new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-  
-  cropSICD(inPathname, schemaPaths, aoiOffset,
-	   aoiDims, outPathname);         
+
+    cropSICD(inPathname, schemaPaths, aoiOffset,
+	   aoiDims, outPathname);
 }
+%}
+
+%{
 
 nitf::Record _readRecord(const std::string& pathname);
 
@@ -221,11 +241,13 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-void crop_SICD(const std::string& inPathname,
-               const std::vector<std::string>& schemaPaths,
-               const types::RowCol<size_t>& aoiOffset,
-               const types::RowCol<size_t>& aoiDims,
-               const std::string& outPathname);
+/*
+void cropSICD(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+              */
 
 six::sicd::ComplexData* const cropMetaData(
         const six::sicd::ComplexData* complexData,
@@ -328,6 +350,7 @@ SCOPED_CLONEABLE(six::sicd, ChannelParameters)
 %template(vectorScopedClonableSegment)             std::vector<mem::ScopedCloneablePtr<six::sicd::Segment> >;
 %template(VectorScopedCloneableChannelParameters)  std::vector<mem::ScopedCloneablePtr<six::sicd::ChannelParameters> >;
 %template(VectorInt)                               std::vector<int>;
+%template(VectorString)                            std::vector<std::string>;
 SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
