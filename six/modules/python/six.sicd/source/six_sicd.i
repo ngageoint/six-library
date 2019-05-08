@@ -241,14 +241,6 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-/*
-void cropSICD(const std::string& inPathname,
-              const std::vector<std::string>& schemaPaths,
-              const types::RowCol<size_t>& aoiOffset,
-              const types::RowCol<size_t>& aoiDims,
-              const std::string& outPathname);
-              */
-
 six::sicd::ComplexData* const cropMetaData(
         const six::sicd::ComplexData* complexData,
 	const types::RowCol<size_t>& aoiOffset,
