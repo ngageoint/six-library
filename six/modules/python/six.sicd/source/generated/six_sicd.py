@@ -202,6 +202,909 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_sicd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+class VectorString(_object):
+    """Proxy of C++ std::vector<(std::string)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorString, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorString, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorString self) -> SwigPyIterator"""
+        return _six_sicd.VectorString_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorString self) -> bool"""
+        return _six_sicd.VectorString___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorString self) -> bool"""
+        return _six_sicd.VectorString___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorString self) -> std::vector< std::string >::size_type"""
+        return _six_sicd.VectorString___len__(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j) -> VectorString"""
+        return _six_sicd.VectorString___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)
+        __setslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j, VectorString v)
+        """
+        return _six_sicd.VectorString___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::difference_type j)"""
+        return _six_sicd.VectorString___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorString self, std::vector< std::string >::difference_type i)
+        __delitem__(VectorString self, PySliceObject * slice)
+        """
+        return _six_sicd.VectorString___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorString self, PySliceObject * slice) -> VectorString
+        __getitem__(VectorString self, std::vector< std::string >::difference_type i) -> std::vector< std::string >::value_type const &
+        """
+        return _six_sicd.VectorString___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorString self, PySliceObject * slice, VectorString v)
+        __setitem__(VectorString self, PySliceObject * slice)
+        __setitem__(VectorString self, std::vector< std::string >::difference_type i, std::vector< std::string >::value_type const & x)
+        """
+        return _six_sicd.VectorString___setitem__(self, *args)
+
+
+    def pop(self):
+        """pop(VectorString self) -> std::vector< std::string >::value_type"""
+        return _six_sicd.VectorString_pop(self)
+
+
+    def append(self, x):
+        """append(VectorString self, std::vector< std::string >::value_type const & x)"""
+        return _six_sicd.VectorString_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorString self) -> bool"""
+        return _six_sicd.VectorString_empty(self)
+
+
+    def size(self):
+        """size(VectorString self) -> std::vector< std::string >::size_type"""
+        return _six_sicd.VectorString_size(self)
+
+
+    def swap(self, v):
+        """swap(VectorString self, VectorString v)"""
+        return _six_sicd.VectorString_swap(self, v)
+
+
+    def begin(self):
+        """begin(VectorString self) -> std::vector< std::string >::iterator"""
+        return _six_sicd.VectorString_begin(self)
+
+
+    def end(self):
+        """end(VectorString self) -> std::vector< std::string >::iterator"""
+        return _six_sicd.VectorString_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorString self) -> std::vector< std::string >::reverse_iterator"""
+        return _six_sicd.VectorString_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorString self) -> std::vector< std::string >::reverse_iterator"""
+        return _six_sicd.VectorString_rend(self)
+
+
+    def clear(self):
+        """clear(VectorString self)"""
+        return _six_sicd.VectorString_clear(self)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorString self) -> std::vector< std::string >::allocator_type"""
+        return _six_sicd.VectorString_get_allocator(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorString self)"""
+        return _six_sicd.VectorString_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorString self, std::vector< std::string >::iterator pos) -> std::vector< std::string >::iterator
+        erase(VectorString self, std::vector< std::string >::iterator first, std::vector< std::string >::iterator last) -> std::vector< std::string >::iterator
+        """
+        return _six_sicd.VectorString_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::string)> self) -> VectorString
+        __init__(std::vector<(std::string)> self, VectorString arg2) -> VectorString
+        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size) -> VectorString
+        __init__(std::vector<(std::string)> self, std::vector< std::string >::size_type size, std::vector< std::string >::value_type const & value) -> VectorString
+        """
+        this = _six_sicd.new_VectorString(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorString self, std::vector< std::string >::value_type const & x)"""
+        return _six_sicd.VectorString_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorString self) -> std::vector< std::string >::value_type const &"""
+        return _six_sicd.VectorString_front(self)
+
+
+    def back(self):
+        """back(VectorString self) -> std::vector< std::string >::value_type const &"""
+        return _six_sicd.VectorString_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorString self, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)"""
+        return _six_sicd.VectorString_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorString self, std::vector< std::string >::size_type new_size)
+        resize(VectorString self, std::vector< std::string >::size_type new_size, std::vector< std::string >::value_type const & x)
+        """
+        return _six_sicd.VectorString_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::value_type const & x) -> std::vector< std::string >::iterator
+        insert(VectorString self, std::vector< std::string >::iterator pos, std::vector< std::string >::size_type n, std::vector< std::string >::value_type const & x)
+        """
+        return _six_sicd.VectorString_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorString self, std::vector< std::string >::size_type n)"""
+        return _six_sicd.VectorString_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorString self) -> std::vector< std::string >::size_type"""
+        return _six_sicd.VectorString_capacity(self)
+
+    __swig_destroy__ = _six_sicd.delete_VectorString
+    __del__ = lambda self: None
+VectorString_swigregister = _six_sicd.VectorString_swigregister
+VectorString_swigregister(VectorString)
+
+class SICDMeshes(_object):
+    """Proxy of C++ six::sicd::SICDMeshes class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SICDMeshes, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SICDMeshes, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::SICDMeshes self) -> SICDMeshes"""
+        this = _six_sicd.new_SICDMeshes()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_SICDMeshes
+    __del__ = lambda self: None
+SICDMeshes_swigregister = _six_sicd.SICDMeshes_swigregister
+SICDMeshes_swigregister(SICDMeshes)
+cvar = _six_sicd.cvar
+SICDMeshes.SLANT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_SLANT_PLANE_MESH_ID
+SICDMeshes.OUTPUT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_OUTPUT_PLANE_MESH_ID
+SICDMeshes.NOISE_MESH_ID = _six_sicd.cvar.SICDMeshes_NOISE_MESH_ID
+
+class PlanarCoordinateMesh(_object):
+    """Proxy of C++ six::sicd::PlanarCoordinateMesh class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PlanarCoordinateMesh, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PlanarCoordinateMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name) -> PlanarCoordinateMesh
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y) -> PlanarCoordinateMesh
+        """
+        this = _six_sicd.new_PlanarCoordinateMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getName(self):
+        """getName(PlanarCoordinateMesh self) -> std::string"""
+        return _six_sicd.PlanarCoordinateMesh_getName(self)
+
+
+    def getMeshDims(self):
+        """getMeshDims(PlanarCoordinateMesh self) -> RowColSizeT"""
+        return _six_sicd.PlanarCoordinateMesh_getMeshDims(self)
+
+
+    def getX(self):
+        """getX(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getX(self)
+
+
+    def getY(self):
+        """getY(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getY(self)
+
+
+    def getFields(self):
+        """getFields(PlanarCoordinateMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.PlanarCoordinateMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(PlanarCoordinateMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.PlanarCoordinateMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(PlanarCoordinateMesh self, sys::byte const *& values)"""
+        return _six_sicd.PlanarCoordinateMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_PlanarCoordinateMesh
+    __del__ = lambda self: None
+PlanarCoordinateMesh_swigregister = _six_sicd.PlanarCoordinateMesh_swigregister
+PlanarCoordinateMesh_swigregister(PlanarCoordinateMesh)
+
+class NoiseMesh(PlanarCoordinateMesh):
+    """Proxy of C++ six::sicd::NoiseMesh class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseMesh, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NoiseMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::NoiseMesh self, std::string const & name) -> NoiseMesh
+        __init__(six::sicd::NoiseMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, std_vector_double mainBeamNoise, std_vector_double azimuthAmbiguityNoise, std_vector_double combinedNoise) -> NoiseMesh
+        """
+        this = _six_sicd.new_NoiseMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getMainBeamNoise(self):
+        """getMainBeamNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getMainBeamNoise(self)
+
+
+    def getAzimuthAmbiguityNoise(self):
+        """getAzimuthAmbiguityNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getAzimuthAmbiguityNoise(self)
+
+
+    def getCombinedNoise(self):
+        """getCombinedNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getCombinedNoise(self)
+
+
+    def getFields(self):
+        """getFields(NoiseMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.NoiseMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(NoiseMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.NoiseMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(NoiseMesh self, sys::byte const *& values)"""
+        return _six_sicd.NoiseMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_NoiseMesh
+    __del__ = lambda self: None
+NoiseMesh_swigregister = _six_sicd.NoiseMesh_swigregister
+NoiseMesh_swigregister(NoiseMesh)
+
+class ComplexData(_object):
+    """Proxy of C++ six::sicd::ComplexData class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexData, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ComplexData, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectionInformation"] = _six_sicd.ComplexData_collectionInformation_set
+    __swig_getmethods__["collectionInformation"] = _six_sicd.ComplexData_collectionInformation_get
+    if _newclass:
+        collectionInformation = _swig_property(_six_sicd.ComplexData_collectionInformation_get, _six_sicd.ComplexData_collectionInformation_set)
+    __swig_setmethods__["imageCreation"] = _six_sicd.ComplexData_imageCreation_set
+    __swig_getmethods__["imageCreation"] = _six_sicd.ComplexData_imageCreation_get
+    if _newclass:
+        imageCreation = _swig_property(_six_sicd.ComplexData_imageCreation_get, _six_sicd.ComplexData_imageCreation_set)
+    __swig_setmethods__["imageData"] = _six_sicd.ComplexData_imageData_set
+    __swig_getmethods__["imageData"] = _six_sicd.ComplexData_imageData_get
+    if _newclass:
+        imageData = _swig_property(_six_sicd.ComplexData_imageData_get, _six_sicd.ComplexData_imageData_set)
+    __swig_setmethods__["geoData"] = _six_sicd.ComplexData_geoData_set
+    __swig_getmethods__["geoData"] = _six_sicd.ComplexData_geoData_get
+    if _newclass:
+        geoData = _swig_property(_six_sicd.ComplexData_geoData_get, _six_sicd.ComplexData_geoData_set)
+    __swig_setmethods__["grid"] = _six_sicd.ComplexData_grid_set
+    __swig_getmethods__["grid"] = _six_sicd.ComplexData_grid_get
+    if _newclass:
+        grid = _swig_property(_six_sicd.ComplexData_grid_get, _six_sicd.ComplexData_grid_set)
+    __swig_setmethods__["timeline"] = _six_sicd.ComplexData_timeline_set
+    __swig_getmethods__["timeline"] = _six_sicd.ComplexData_timeline_get
+    if _newclass:
+        timeline = _swig_property(_six_sicd.ComplexData_timeline_get, _six_sicd.ComplexData_timeline_set)
+    __swig_setmethods__["position"] = _six_sicd.ComplexData_position_set
+    __swig_getmethods__["position"] = _six_sicd.ComplexData_position_get
+    if _newclass:
+        position = _swig_property(_six_sicd.ComplexData_position_get, _six_sicd.ComplexData_position_set)
+    __swig_setmethods__["radarCollection"] = _six_sicd.ComplexData_radarCollection_set
+    __swig_getmethods__["radarCollection"] = _six_sicd.ComplexData_radarCollection_get
+    if _newclass:
+        radarCollection = _swig_property(_six_sicd.ComplexData_radarCollection_get, _six_sicd.ComplexData_radarCollection_set)
+    __swig_setmethods__["imageFormation"] = _six_sicd.ComplexData_imageFormation_set
+    __swig_getmethods__["imageFormation"] = _six_sicd.ComplexData_imageFormation_get
+    if _newclass:
+        imageFormation = _swig_property(_six_sicd.ComplexData_imageFormation_get, _six_sicd.ComplexData_imageFormation_set)
+    __swig_setmethods__["scpcoa"] = _six_sicd.ComplexData_scpcoa_set
+    __swig_getmethods__["scpcoa"] = _six_sicd.ComplexData_scpcoa_get
+    if _newclass:
+        scpcoa = _swig_property(_six_sicd.ComplexData_scpcoa_get, _six_sicd.ComplexData_scpcoa_set)
+    __swig_setmethods__["radiometric"] = _six_sicd.ComplexData_radiometric_set
+    __swig_getmethods__["radiometric"] = _six_sicd.ComplexData_radiometric_get
+    if _newclass:
+        radiometric = _swig_property(_six_sicd.ComplexData_radiometric_get, _six_sicd.ComplexData_radiometric_set)
+    __swig_setmethods__["antenna"] = _six_sicd.ComplexData_antenna_set
+    __swig_getmethods__["antenna"] = _six_sicd.ComplexData_antenna_get
+    if _newclass:
+        antenna = _swig_property(_six_sicd.ComplexData_antenna_get, _six_sicd.ComplexData_antenna_set)
+    __swig_setmethods__["errorStatistics"] = _six_sicd.ComplexData_errorStatistics_set
+    __swig_getmethods__["errorStatistics"] = _six_sicd.ComplexData_errorStatistics_get
+    if _newclass:
+        errorStatistics = _swig_property(_six_sicd.ComplexData_errorStatistics_get, _six_sicd.ComplexData_errorStatistics_set)
+    __swig_setmethods__["matchInformation"] = _six_sicd.ComplexData_matchInformation_set
+    __swig_getmethods__["matchInformation"] = _six_sicd.ComplexData_matchInformation_get
+    if _newclass:
+        matchInformation = _swig_property(_six_sicd.ComplexData_matchInformation_get, _six_sicd.ComplexData_matchInformation_set)
+    __swig_setmethods__["pfa"] = _six_sicd.ComplexData_pfa_set
+    __swig_getmethods__["pfa"] = _six_sicd.ComplexData_pfa_get
+    if _newclass:
+        pfa = _swig_property(_six_sicd.ComplexData_pfa_get, _six_sicd.ComplexData_pfa_set)
+    __swig_setmethods__["rma"] = _six_sicd.ComplexData_rma_set
+    __swig_getmethods__["rma"] = _six_sicd.ComplexData_rma_get
+    if _newclass:
+        rma = _swig_property(_six_sicd.ComplexData_rma_get, _six_sicd.ComplexData_rma_set)
+    __swig_setmethods__["rgAzComp"] = _six_sicd.ComplexData_rgAzComp_set
+    __swig_getmethods__["rgAzComp"] = _six_sicd.ComplexData_rgAzComp_get
+    if _newclass:
+        rgAzComp = _swig_property(_six_sicd.ComplexData_rgAzComp_get, _six_sicd.ComplexData_rgAzComp_set)
+
+    def __init__(self):
+        """__init__(six::sicd::ComplexData self) -> ComplexData"""
+        this = _six_sicd.new_ComplexData()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_ComplexData
+    __del__ = lambda self: None
+
+    def getDataType(self):
+        """getDataType(ComplexData self) -> DataType"""
+        return _six_sicd.ComplexData_getDataType(self)
+
+
+    def clone(self):
+        """clone(ComplexData self) -> Data *"""
+        return _six_sicd.ComplexData_clone(self)
+
+
+    def getPixelType(self):
+        """getPixelType(ComplexData self) -> PixelType"""
+        return _six_sicd.ComplexData_getPixelType(self)
+
+
+    def setPixelType(self, pixelType):
+        """setPixelType(ComplexData self, PixelType pixelType)"""
+        return _six_sicd.ComplexData_setPixelType(self, pixelType)
+
+
+    def getNumRows(self):
+        """getNumRows(ComplexData self) -> size_t"""
+        return _six_sicd.ComplexData_getNumRows(self)
+
+
+    def setNumRows(self, numRows):
+        """setNumRows(ComplexData self, size_t numRows)"""
+        return _six_sicd.ComplexData_setNumRows(self, numRows)
+
+
+    def getNumCols(self):
+        """getNumCols(ComplexData self) -> size_t"""
+        return _six_sicd.ComplexData_getNumCols(self)
+
+
+    def setNumCols(self, numCols):
+        """setNumCols(ComplexData self, size_t numCols)"""
+        return _six_sicd.ComplexData_setNumCols(self, numCols)
+
+
+    def getImageCorners(self):
+        """getImageCorners(ComplexData self) -> LatLonCorners"""
+        return _six_sicd.ComplexData_getImageCorners(self)
+
+
+    def setImageCorners(self, imageCorners):
+        """setImageCorners(ComplexData self, LatLonCorners const & imageCorners)"""
+        return _six_sicd.ComplexData_setImageCorners(self, imageCorners)
+
+
+    def getName(self):
+        """getName(ComplexData self) -> std::string"""
+        return _six_sicd.ComplexData_getName(self)
+
+
+    def setName(self, name):
+        """setName(ComplexData self, std::string name)"""
+        return _six_sicd.ComplexData_setName(self, name)
+
+
+    def getSource(self):
+        """getSource(ComplexData self) -> std::string"""
+        return _six_sicd.ComplexData_getSource(self)
+
+
+    def setSource(self, name):
+        """setSource(ComplexData self, std::string name)"""
+        return _six_sicd.ComplexData_setSource(self, name)
+
+
+    def getCreationTime(self):
+        """getCreationTime(ComplexData self) -> DateTime"""
+        return _six_sicd.ComplexData_getCreationTime(self)
+
+
+    def setCreationTime(self, creationTime):
+        """setCreationTime(ComplexData self, DateTime creationTime)"""
+        return _six_sicd.ComplexData_setCreationTime(self, creationTime)
+
+
+    def getCollectionStartDateTime(self):
+        """getCollectionStartDateTime(ComplexData self) -> DateTime"""
+        return _six_sicd.ComplexData_getCollectionStartDateTime(self)
+
+
+    def getClassification(self, *args):
+        """
+        getClassification(ComplexData self) -> Classification const
+        getClassification(ComplexData self) -> Classification &
+        """
+        return _six_sicd.ComplexData_getClassification(self, *args)
+
+
+    def getDisplayLUT(self):
+        """getDisplayLUT(ComplexData self) -> LUT *"""
+        return _six_sicd.ComplexData_getDisplayLUT(self)
+
+
+    def getVendorID(self):
+        """getVendorID(ComplexData self) -> std::string"""
+        return _six_sicd.ComplexData_getVendorID(self)
+
+
+    def getVersion(self):
+        """getVersion(ComplexData self) -> std::string"""
+        return _six_sicd.ComplexData_getVersion(self)
+
+
+    def setVersion(self, version):
+        """setVersion(ComplexData self, std::string const & version)"""
+        return _six_sicd.ComplexData_setVersion(self, version)
+
+
+    def getOutputPlaneOffsetAndExtent(self, *args):
+        """
+        getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
+        getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane const & areaPlane, RowColSizeT offset, RowColSizeT extent)
+        """
+        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
+
+
+    def pixelToImagePoint(self, pixelLoc):
+        """pixelToImagePoint(ComplexData self, RowColDouble pixelLoc) -> RowColDouble"""
+        return _six_sicd.ComplexData_pixelToImagePoint(self, pixelLoc)
+
+
+    def getImageMode(self):
+        """getImageMode(ComplexData self) -> ImageMode"""
+        return _six_sicd.ComplexData_getImageMode(self)
+
+
+    def __eq__(self, rhs):
+        """__eq__(ComplexData self, ComplexData rhs) -> bool"""
+        return _six_sicd.ComplexData___eq__(self, rhs)
+
+
+    def validate(self, log):
+        """validate(ComplexData self, logging::Logger & log) -> bool"""
+        return _six_sicd.ComplexData_validate(self, log)
+
+
+    def fillDerivedFields(self, includeDefault=True):
+        """
+        fillDerivedFields(ComplexData self, bool includeDefault=True)
+        fillDerivedFields(ComplexData self)
+        """
+        return _six_sicd.ComplexData_fillDerivedFields(self, includeDefault)
+
+
+    def fillDefaultFields(self):
+        """fillDefaultFields(ComplexData self)"""
+        return _six_sicd.ComplexData_fillDefaultFields(self)
+
+ComplexData_swigregister = _six_sicd.ComplexData_swigregister
+ComplexData_swigregister(ComplexData)
+
+class Utilities(_object):
+    """Proxy of C++ six::sicd::Utilities class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Utilities, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Utilities, name)
+    __repr__ = _swig_repr
+
+    def getSceneGeometry(data):
+        """getSceneGeometry(ComplexData data) -> SceneGeometry"""
+        return _six_sicd.Utilities_getSceneGeometry(data)
+
+    getSceneGeometry = staticmethod(getSceneGeometry)
+
+    def getProjectionModel(data, geom):
+        """getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
+        return _six_sicd.Utilities_getProjectionModel(data, geom)
+
+    getProjectionModel = staticmethod(getProjectionModel)
+
+    def getModelComponents(complexData, geometry, projectionModel, areaPlane):
+        """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+        return _six_sicd.Utilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+    getModelComponents = staticmethod(getModelComponents)
+
+    def getPolynomialFitter(*args):
+        """
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        """
+        return _six_sicd.Utilities_getPolynomialFitter(*args)
+
+    getPolynomialFitter = staticmethod(getPolynomialFitter)
+
+    def getValidDataPolygon(sicdData, projection, validData):
+        """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
+        return _six_sicd.Utilities_getValidDataPolygon(sicdData, projection, validData)
+
+    getValidDataPolygon = staticmethod(getValidDataPolygon)
+
+    def readSicd(*args):
+        """
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+        """
+        return _six_sicd.Utilities_readSicd(*args)
+
+    readSicd = staticmethod(readSicd)
+
+    def getComplexData(*args):
+        """
+        getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        """
+        return _six_sicd.Utilities_getComplexData(*args)
+
+    getComplexData = staticmethod(getComplexData)
+
+    def getWidebandData(*args):
+        """
+        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
+        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
+        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+        """
+        return _six_sicd.Utilities_getWidebandData(*args)
+
+    getWidebandData = staticmethod(getWidebandData)
+
+    def getGroundPlaneNormal(data):
+        """getGroundPlaneNormal(ComplexData data) -> Vector3"""
+        return _six_sicd.Utilities_getGroundPlaneNormal(data)
+
+    getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
+
+    def nPoly(poly, index):
+        """nPoly(PolyXYZ poly, size_t index) -> Poly1D"""
+        return _six_sicd.Utilities_nPoly(poly, index)
+
+    nPoly = staticmethod(nPoly)
+
+    def isClockwise(vertices, isUpPositive=False):
+        """
+        isClockwise(std::vector< RowColInt,std::allocator< six::RowColInt > > const & vertices, bool isUpPositive=False) -> bool
+        isClockwise(std::vector< RowColInt,std::allocator< six::RowColInt > > const & vertices) -> bool
+        """
+        return _six_sicd.Utilities_isClockwise(vertices, isUpPositive)
+
+    isClockwise = staticmethod(isClockwise)
+
+    def parseData(xmlStream, schemaPaths, log):
+        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.Utilities_parseData(xmlStream, schemaPaths, log)
+
+    parseData = staticmethod(parseData)
+
+    def parseDataFromFile(pathname, schemaPaths, log):
+        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.Utilities_parseDataFromFile(pathname, schemaPaths, log)
+
+    parseDataFromFile = staticmethod(parseDataFromFile)
+
+    def parseDataFromString(xmlStr, schemaPaths, log):
+        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.Utilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+    parseDataFromString = staticmethod(parseDataFromString)
+
+    def toXMLString(*args):
+        """
+        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+        toXMLString(ComplexData data) -> std::string
+        """
+        return _six_sicd.Utilities_toXMLString(*args)
+
+    toXMLString = staticmethod(toXMLString)
+
+    def createFakeComplexData():
+        """createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+        return _six_sicd.Utilities_createFakeComplexData()
+
+    createFakeComplexData = staticmethod(createFakeComplexData)
+
+    def getNoiseMesh(reader):
+        """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+        return _six_sicd.Utilities_getNoiseMesh(reader)
+
+    getNoiseMesh = staticmethod(getNoiseMesh)
+
+    def getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.Utilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    getProjectionPolys = staticmethod(getProjectionPolys)
+
+    def transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+        """transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+        return _six_sicd.Utilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+    transformXYPolyToRowColPoly = staticmethod(transformXYPolyToRowColPoly)
+
+    def transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+        """transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.Utilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    transformXYProjectionPolys = staticmethod(transformXYProjectionPolys)
+
+    def fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+        """fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+        return _six_sicd.Utilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+    fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
+
+    def projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+        """projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+        return _six_sicd.Utilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+    projectPixelsToOutputPlane = staticmethod(projectPixelsToOutputPlane)
+
+    def projectValidDataPolygonToOutputPlane(complexData, opPixels):
+        """projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+        return _six_sicd.Utilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+    projectValidDataPolygonToOutputPlane = staticmethod(projectValidDataPolygonToOutputPlane)
+
+    def projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+        """projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+        return _six_sicd.Utilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
+
+    projectPixelsToSlantPlane = staticmethod(projectPixelsToSlantPlane)
+
+    def __init__(self):
+        """__init__(six::sicd::Utilities self) -> Utilities"""
+        this = _six_sicd.new_Utilities()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_Utilities
+    __del__ = lambda self: None
+Utilities_swigregister = _six_sicd.Utilities_swigregister
+Utilities_swigregister(Utilities)
+
+def Utilities_getSceneGeometry(data):
+    """Utilities_getSceneGeometry(ComplexData data) -> SceneGeometry"""
+    return _six_sicd.Utilities_getSceneGeometry(data)
+
+def Utilities_getProjectionModel(data, geom):
+    """Utilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
+    return _six_sicd.Utilities_getProjectionModel(data, geom)
+
+def Utilities_getModelComponents(complexData, geometry, projectionModel, areaPlane):
+    """Utilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+    return _six_sicd.Utilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+def Utilities_getPolynomialFitter(*args):
+    """
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    Utilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    """
+    return _six_sicd.Utilities_getPolynomialFitter(*args)
+
+def Utilities_getValidDataPolygon(sicdData, projection, validData):
+    """Utilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
+    return _six_sicd.Utilities_getValidDataPolygon(sicdData, projection, validData)
+
+def Utilities_readSicd(*args):
+    """
+    readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+    Utilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+    """
+    return _six_sicd.Utilities_readSicd(*args)
+
+def Utilities_getComplexData(*args):
+    """
+    getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
+    Utilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    """
+    return _six_sicd.Utilities_getComplexData(*args)
+
+def Utilities_getWidebandData(*args):
+    """
+    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
+    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
+    getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
+    Utilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
+    """
+    return _six_sicd.Utilities_getWidebandData(*args)
+
+def Utilities_getGroundPlaneNormal(data):
+    """Utilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
+    return _six_sicd.Utilities_getGroundPlaneNormal(data)
+
+def Utilities_nPoly(poly, index):
+    """Utilities_nPoly(PolyXYZ poly, size_t index) -> Poly1D"""
+    return _six_sicd.Utilities_nPoly(poly, index)
+
+def Utilities_isClockwise(vertices, isUpPositive=False):
+    """
+    isClockwise(std::vector< RowColInt,std::allocator< six::RowColInt > > const & vertices, bool isUpPositive=False) -> bool
+    Utilities_isClockwise(std::vector< RowColInt,std::allocator< six::RowColInt > > const & vertices) -> bool
+    """
+    return _six_sicd.Utilities_isClockwise(vertices, isUpPositive)
+
+def Utilities_parseData(xmlStream, schemaPaths, log):
+    """Utilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.Utilities_parseData(xmlStream, schemaPaths, log)
+
+def Utilities_parseDataFromFile(pathname, schemaPaths, log):
+    """Utilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.Utilities_parseDataFromFile(pathname, schemaPaths, log)
+
+def Utilities_parseDataFromString(xmlStr, schemaPaths, log):
+    """Utilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.Utilities_parseDataFromString(xmlStr, schemaPaths, log)
+
+def Utilities_toXMLString(*args):
+    """
+    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
+    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
+    Utilities_toXMLString(ComplexData data) -> std::string
+    """
+    return _six_sicd.Utilities_toXMLString(*args)
+
+def Utilities_createFakeComplexData():
+    """Utilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.Utilities_createFakeComplexData()
+
+def Utilities_getNoiseMesh(reader):
+    """Utilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+    return _six_sicd.Utilities_getNoiseMesh(reader)
+
+def Utilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+    """Utilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.Utilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def Utilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+    """Utilities_transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+    return _six_sicd.Utilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+def Utilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+    """Utilities_transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.Utilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def Utilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+    """Utilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+    return _six_sicd.Utilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+def Utilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+    """Utilities_projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+    return _six_sicd.Utilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+def Utilities_projectValidDataPolygonToOutputPlane(complexData, opPixels):
+    """Utilities_projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+    return _six_sicd.Utilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+def Utilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+    """Utilities_projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+    return _six_sicd.Utilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
+
+
+def cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
+    """cropSICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
+    return _six_sicd.cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
 class ComponentInfoDestructor(_object):
     """Proxy of C++ nitf::ComponentInfoDestructor class."""
 
@@ -1516,148 +2419,6 @@ def ImageSubheader_getActualImageDim(dim, numDimsPerBlock):
 NITF_VER_20 = _six_sicd.NITF_VER_20
 NITF_VER_21 = _six_sicd.NITF_VER_21
 NITF_VER_UNKNOWN = _six_sicd.NITF_VER_UNKNOWN
-class SICDMeshes(_object):
-    """Proxy of C++ six::sicd::SICDMeshes class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SICDMeshes, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, SICDMeshes, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::sicd::SICDMeshes self) -> SICDMeshes"""
-        this = _six_sicd.new_SICDMeshes()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_SICDMeshes
-    __del__ = lambda self: None
-SICDMeshes_swigregister = _six_sicd.SICDMeshes_swigregister
-SICDMeshes_swigregister(SICDMeshes)
-cvar = _six_sicd.cvar
-SICDMeshes.SLANT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_SLANT_PLANE_MESH_ID
-SICDMeshes.OUTPUT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_OUTPUT_PLANE_MESH_ID
-SICDMeshes.NOISE_MESH_ID = _six_sicd.cvar.SICDMeshes_NOISE_MESH_ID
-
-class PlanarCoordinateMesh(_object):
-    """Proxy of C++ six::sicd::PlanarCoordinateMesh class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, PlanarCoordinateMesh, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, PlanarCoordinateMesh, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name) -> PlanarCoordinateMesh
-        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y) -> PlanarCoordinateMesh
-        """
-        this = _six_sicd.new_PlanarCoordinateMesh(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def getName(self):
-        """getName(PlanarCoordinateMesh self) -> std::string"""
-        return _six_sicd.PlanarCoordinateMesh_getName(self)
-
-
-    def getMeshDims(self):
-        """getMeshDims(PlanarCoordinateMesh self) -> RowColSizeT"""
-        return _six_sicd.PlanarCoordinateMesh_getMeshDims(self)
-
-
-    def getX(self):
-        """getX(PlanarCoordinateMesh self) -> std_vector_double"""
-        return _six_sicd.PlanarCoordinateMesh_getX(self)
-
-
-    def getY(self):
-        """getY(PlanarCoordinateMesh self) -> std_vector_double"""
-        return _six_sicd.PlanarCoordinateMesh_getY(self)
-
-
-    def getFields(self):
-        """getFields(PlanarCoordinateMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
-        return _six_sicd.PlanarCoordinateMesh_getFields(self)
-
-
-    def serialize(self, values):
-        """serialize(PlanarCoordinateMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
-        return _six_sicd.PlanarCoordinateMesh_serialize(self, values)
-
-
-    def deserialize(self, values):
-        """deserialize(PlanarCoordinateMesh self, sys::byte const *& values)"""
-        return _six_sicd.PlanarCoordinateMesh_deserialize(self, values)
-
-    __swig_destroy__ = _six_sicd.delete_PlanarCoordinateMesh
-    __del__ = lambda self: None
-PlanarCoordinateMesh_swigregister = _six_sicd.PlanarCoordinateMesh_swigregister
-PlanarCoordinateMesh_swigregister(PlanarCoordinateMesh)
-
-class NoiseMesh(PlanarCoordinateMesh):
-    """Proxy of C++ six::sicd::NoiseMesh class."""
-
-    __swig_setmethods__ = {}
-    for _s in [PlanarCoordinateMesh]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseMesh, name, value)
-    __swig_getmethods__ = {}
-    for _s in [PlanarCoordinateMesh]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, NoiseMesh, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(six::sicd::NoiseMesh self, std::string const & name) -> NoiseMesh
-        __init__(six::sicd::NoiseMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, std_vector_double mainBeamNoise, std_vector_double azimuthAmbiguityNoise, std_vector_double combinedNoise) -> NoiseMesh
-        """
-        this = _six_sicd.new_NoiseMesh(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def getMainBeamNoise(self):
-        """getMainBeamNoise(NoiseMesh self) -> std_vector_double"""
-        return _six_sicd.NoiseMesh_getMainBeamNoise(self)
-
-
-    def getAzimuthAmbiguityNoise(self):
-        """getAzimuthAmbiguityNoise(NoiseMesh self) -> std_vector_double"""
-        return _six_sicd.NoiseMesh_getAzimuthAmbiguityNoise(self)
-
-
-    def getCombinedNoise(self):
-        """getCombinedNoise(NoiseMesh self) -> std_vector_double"""
-        return _six_sicd.NoiseMesh_getCombinedNoise(self)
-
-
-    def getFields(self):
-        """getFields(NoiseMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
-        return _six_sicd.NoiseMesh_getFields(self)
-
-
-    def serialize(self, values):
-        """serialize(NoiseMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
-        return _six_sicd.NoiseMesh_serialize(self, values)
-
-
-    def deserialize(self, values):
-        """deserialize(NoiseMesh self, sys::byte const *& values)"""
-        return _six_sicd.NoiseMesh_deserialize(self, values)
-
-    __swig_destroy__ = _six_sicd.delete_NoiseMesh
-    __del__ = lambda self: None
-NoiseMesh_swigregister = _six_sicd.NoiseMesh_swigregister
-NoiseMesh_swigregister(NoiseMesh)
-
 import coda.math_poly
 import coda.math_linear
 import coda.coda_except
@@ -1906,10 +2667,6 @@ def writeNITF(pathname, schemaPaths, data, imageAdr):
 def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
-
-def crop_SICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
-    """crop_SICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
-    return _six_sicd.crop_SICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
 
 def cropMetaData(complexData, aoiOffset, aoiDims):
     """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> ComplexData"""
@@ -4671,253 +5428,6 @@ class RgAzComp(_object):
 RgAzComp_swigregister = _six_sicd.RgAzComp_swigregister
 RgAzComp_swigregister(RgAzComp)
 
-class ComplexData(pysix.six_base.Data):
-    """Proxy of C++ six::sicd::ComplexData class."""
-
-    __swig_setmethods__ = {}
-    for _s in [pysix.six_base.Data]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexData, name, value)
-    __swig_getmethods__ = {}
-    for _s in [pysix.six_base.Data]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, ComplexData, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["collectionInformation"] = _six_sicd.ComplexData_collectionInformation_set
-    __swig_getmethods__["collectionInformation"] = _six_sicd.ComplexData_collectionInformation_get
-    if _newclass:
-        collectionInformation = _swig_property(_six_sicd.ComplexData_collectionInformation_get, _six_sicd.ComplexData_collectionInformation_set)
-    __swig_setmethods__["imageCreation"] = _six_sicd.ComplexData_imageCreation_set
-    __swig_getmethods__["imageCreation"] = _six_sicd.ComplexData_imageCreation_get
-    if _newclass:
-        imageCreation = _swig_property(_six_sicd.ComplexData_imageCreation_get, _six_sicd.ComplexData_imageCreation_set)
-    __swig_setmethods__["imageData"] = _six_sicd.ComplexData_imageData_set
-    __swig_getmethods__["imageData"] = _six_sicd.ComplexData_imageData_get
-    if _newclass:
-        imageData = _swig_property(_six_sicd.ComplexData_imageData_get, _six_sicd.ComplexData_imageData_set)
-    __swig_setmethods__["geoData"] = _six_sicd.ComplexData_geoData_set
-    __swig_getmethods__["geoData"] = _six_sicd.ComplexData_geoData_get
-    if _newclass:
-        geoData = _swig_property(_six_sicd.ComplexData_geoData_get, _six_sicd.ComplexData_geoData_set)
-    __swig_setmethods__["grid"] = _six_sicd.ComplexData_grid_set
-    __swig_getmethods__["grid"] = _six_sicd.ComplexData_grid_get
-    if _newclass:
-        grid = _swig_property(_six_sicd.ComplexData_grid_get, _six_sicd.ComplexData_grid_set)
-    __swig_setmethods__["timeline"] = _six_sicd.ComplexData_timeline_set
-    __swig_getmethods__["timeline"] = _six_sicd.ComplexData_timeline_get
-    if _newclass:
-        timeline = _swig_property(_six_sicd.ComplexData_timeline_get, _six_sicd.ComplexData_timeline_set)
-    __swig_setmethods__["position"] = _six_sicd.ComplexData_position_set
-    __swig_getmethods__["position"] = _six_sicd.ComplexData_position_get
-    if _newclass:
-        position = _swig_property(_six_sicd.ComplexData_position_get, _six_sicd.ComplexData_position_set)
-    __swig_setmethods__["radarCollection"] = _six_sicd.ComplexData_radarCollection_set
-    __swig_getmethods__["radarCollection"] = _six_sicd.ComplexData_radarCollection_get
-    if _newclass:
-        radarCollection = _swig_property(_six_sicd.ComplexData_radarCollection_get, _six_sicd.ComplexData_radarCollection_set)
-    __swig_setmethods__["imageFormation"] = _six_sicd.ComplexData_imageFormation_set
-    __swig_getmethods__["imageFormation"] = _six_sicd.ComplexData_imageFormation_get
-    if _newclass:
-        imageFormation = _swig_property(_six_sicd.ComplexData_imageFormation_get, _six_sicd.ComplexData_imageFormation_set)
-    __swig_setmethods__["scpcoa"] = _six_sicd.ComplexData_scpcoa_set
-    __swig_getmethods__["scpcoa"] = _six_sicd.ComplexData_scpcoa_get
-    if _newclass:
-        scpcoa = _swig_property(_six_sicd.ComplexData_scpcoa_get, _six_sicd.ComplexData_scpcoa_set)
-    __swig_setmethods__["radiometric"] = _six_sicd.ComplexData_radiometric_set
-    __swig_getmethods__["radiometric"] = _six_sicd.ComplexData_radiometric_get
-    if _newclass:
-        radiometric = _swig_property(_six_sicd.ComplexData_radiometric_get, _six_sicd.ComplexData_radiometric_set)
-    __swig_setmethods__["antenna"] = _six_sicd.ComplexData_antenna_set
-    __swig_getmethods__["antenna"] = _six_sicd.ComplexData_antenna_get
-    if _newclass:
-        antenna = _swig_property(_six_sicd.ComplexData_antenna_get, _six_sicd.ComplexData_antenna_set)
-    __swig_setmethods__["errorStatistics"] = _six_sicd.ComplexData_errorStatistics_set
-    __swig_getmethods__["errorStatistics"] = _six_sicd.ComplexData_errorStatistics_get
-    if _newclass:
-        errorStatistics = _swig_property(_six_sicd.ComplexData_errorStatistics_get, _six_sicd.ComplexData_errorStatistics_set)
-    __swig_setmethods__["matchInformation"] = _six_sicd.ComplexData_matchInformation_set
-    __swig_getmethods__["matchInformation"] = _six_sicd.ComplexData_matchInformation_get
-    if _newclass:
-        matchInformation = _swig_property(_six_sicd.ComplexData_matchInformation_get, _six_sicd.ComplexData_matchInformation_set)
-    __swig_setmethods__["pfa"] = _six_sicd.ComplexData_pfa_set
-    __swig_getmethods__["pfa"] = _six_sicd.ComplexData_pfa_get
-    if _newclass:
-        pfa = _swig_property(_six_sicd.ComplexData_pfa_get, _six_sicd.ComplexData_pfa_set)
-    __swig_setmethods__["rma"] = _six_sicd.ComplexData_rma_set
-    __swig_getmethods__["rma"] = _six_sicd.ComplexData_rma_get
-    if _newclass:
-        rma = _swig_property(_six_sicd.ComplexData_rma_get, _six_sicd.ComplexData_rma_set)
-    __swig_setmethods__["rgAzComp"] = _six_sicd.ComplexData_rgAzComp_set
-    __swig_getmethods__["rgAzComp"] = _six_sicd.ComplexData_rgAzComp_get
-    if _newclass:
-        rgAzComp = _swig_property(_six_sicd.ComplexData_rgAzComp_get, _six_sicd.ComplexData_rgAzComp_set)
-
-    def __init__(self):
-        """__init__(six::sicd::ComplexData self) -> ComplexData"""
-        this = _six_sicd.new_ComplexData()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_ComplexData
-    __del__ = lambda self: None
-
-    def getDataType(self):
-        """getDataType(ComplexData self) -> DataType"""
-        return _six_sicd.ComplexData_getDataType(self)
-
-
-    def clone(self):
-        """clone(ComplexData self) -> Data"""
-        return _six_sicd.ComplexData_clone(self)
-
-
-    def getPixelType(self):
-        """getPixelType(ComplexData self) -> PixelType"""
-        return _six_sicd.ComplexData_getPixelType(self)
-
-
-    def setPixelType(self, pixelType):
-        """setPixelType(ComplexData self, PixelType pixelType)"""
-        return _six_sicd.ComplexData_setPixelType(self, pixelType)
-
-
-    def getNumRows(self):
-        """getNumRows(ComplexData self) -> size_t"""
-        return _six_sicd.ComplexData_getNumRows(self)
-
-
-    def setNumRows(self, numRows):
-        """setNumRows(ComplexData self, size_t numRows)"""
-        return _six_sicd.ComplexData_setNumRows(self, numRows)
-
-
-    def getNumCols(self):
-        """getNumCols(ComplexData self) -> size_t"""
-        return _six_sicd.ComplexData_getNumCols(self)
-
-
-    def setNumCols(self, numCols):
-        """setNumCols(ComplexData self, size_t numCols)"""
-        return _six_sicd.ComplexData_setNumCols(self, numCols)
-
-
-    def getImageCorners(self):
-        """getImageCorners(ComplexData self) -> LatLonCorners"""
-        return _six_sicd.ComplexData_getImageCorners(self)
-
-
-    def setImageCorners(self, imageCorners):
-        """setImageCorners(ComplexData self, LatLonCorners imageCorners)"""
-        return _six_sicd.ComplexData_setImageCorners(self, imageCorners)
-
-
-    def getName(self):
-        """getName(ComplexData self) -> std::string"""
-        return _six_sicd.ComplexData_getName(self)
-
-
-    def setName(self, name):
-        """setName(ComplexData self, std::string name)"""
-        return _six_sicd.ComplexData_setName(self, name)
-
-
-    def getSource(self):
-        """getSource(ComplexData self) -> std::string"""
-        return _six_sicd.ComplexData_getSource(self)
-
-
-    def setSource(self, name):
-        """setSource(ComplexData self, std::string name)"""
-        return _six_sicd.ComplexData_setSource(self, name)
-
-
-    def getCreationTime(self):
-        """getCreationTime(ComplexData self) -> DateTime"""
-        return _six_sicd.ComplexData_getCreationTime(self)
-
-
-    def setCreationTime(self, creationTime):
-        """setCreationTime(ComplexData self, DateTime creationTime)"""
-        return _six_sicd.ComplexData_setCreationTime(self, creationTime)
-
-
-    def getCollectionStartDateTime(self):
-        """getCollectionStartDateTime(ComplexData self) -> DateTime"""
-        return _six_sicd.ComplexData_getCollectionStartDateTime(self)
-
-
-    def getClassification(self, *args):
-        """
-        getClassification(ComplexData self) -> Classification
-        getClassification(ComplexData self) -> Classification
-        """
-        return _six_sicd.ComplexData_getClassification(self, *args)
-
-
-    def getDisplayLUT(self):
-        """getDisplayLUT(ComplexData self) -> six::LUT *"""
-        return _six_sicd.ComplexData_getDisplayLUT(self)
-
-
-    def getVendorID(self):
-        """getVendorID(ComplexData self) -> std::string"""
-        return _six_sicd.ComplexData_getVendorID(self)
-
-
-    def getVersion(self):
-        """getVersion(ComplexData self) -> std::string"""
-        return _six_sicd.ComplexData_getVersion(self)
-
-
-    def setVersion(self, version):
-        """setVersion(ComplexData self, std::string const & version)"""
-        return _six_sicd.ComplexData_setVersion(self, version)
-
-
-    def getOutputPlaneOffsetAndExtent(self, *args):
-        """
-        getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
-        getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane areaPlane, RowColSizeT offset, RowColSizeT extent)
-        """
-        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
-
-
-    def pixelToImagePoint(self, pixelLoc):
-        """pixelToImagePoint(ComplexData self, RowColDouble pixelLoc) -> RowColDouble"""
-        return _six_sicd.ComplexData_pixelToImagePoint(self, pixelLoc)
-
-
-    def getImageMode(self):
-        """getImageMode(ComplexData self) -> six::ImageMode"""
-        return _six_sicd.ComplexData_getImageMode(self)
-
-
-    def __eq__(self, rhs):
-        """__eq__(ComplexData self, ComplexData rhs) -> bool"""
-        return _six_sicd.ComplexData___eq__(self, rhs)
-
-
-    def validate(self, log):
-        """validate(ComplexData self, logging::Logger & log) -> bool"""
-        return _six_sicd.ComplexData_validate(self, log)
-
-
-    def fillDerivedFields(self, includeDefault=True):
-        """
-        fillDerivedFields(ComplexData self, bool includeDefault=True)
-        fillDerivedFields(ComplexData self)
-        """
-        return _six_sicd.ComplexData_fillDerivedFields(self, includeDefault)
-
-
-    def fillDefaultFields(self):
-        """fillDefaultFields(ComplexData self)"""
-        return _six_sicd.ComplexData_fillDefaultFields(self)
-
-ComplexData_swigregister = _six_sicd.ComplexData_swigregister
-ComplexData_swigregister(ComplexData)
-
 class ComplexXMLControl(pysix.six_base.XMLControl):
     """Proxy of C++ six::sicd::ComplexXMLControl class."""
 
@@ -4946,315 +5456,6 @@ class ComplexXMLControl(pysix.six_base.XMLControl):
     __del__ = lambda self: None
 ComplexXMLControl_swigregister = _six_sicd.ComplexXMLControl_swigregister
 ComplexXMLControl_swigregister(ComplexXMLControl)
-
-class SixSicdUtilities(_object):
-    """Proxy of C++ six::sicd::Utilities class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SixSicdUtilities, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, SixSicdUtilities, name)
-    __repr__ = _swig_repr
-
-    def getSceneGeometry(data):
-        """getSceneGeometry(ComplexData data) -> SceneGeometry"""
-        return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
-
-    getSceneGeometry = staticmethod(getSceneGeometry)
-
-    def getProjectionModel(data, geom):
-        """getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
-        return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
-
-    getProjectionModel = staticmethod(getProjectionModel)
-
-    def getModelComponents(complexData, geometry, projectionModel, areaPlane):
-        """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
-        return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
-
-    getModelComponents = staticmethod(getModelComponents)
-
-    def getPolynomialFitter(*args):
-        """
-        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-        getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-        """
-        return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
-
-    getPolynomialFitter = staticmethod(getPolynomialFitter)
-
-    def getValidDataPolygon(sicdData, projection, validData):
-        """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
-        return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
-
-    getValidDataPolygon = staticmethod(getValidDataPolygon)
-
-    def readSicd(*args):
-        """
-        readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
-        """
-        return _six_sicd.SixSicdUtilities_readSicd(*args)
-
-    readSicd = staticmethod(readSicd)
-
-    def getComplexData(*args):
-        """
-        getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
-        """
-        return _six_sicd.SixSicdUtilities_getComplexData(*args)
-
-    getComplexData = staticmethod(getComplexData)
-
-    def getWidebandData(*args):
-        """
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-        getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
-        getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-        """
-        return _six_sicd.SixSicdUtilities_getWidebandData(*args)
-
-    getWidebandData = staticmethod(getWidebandData)
-
-    def getGroundPlaneNormal(data):
-        """getGroundPlaneNormal(ComplexData data) -> Vector3"""
-        return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
-
-    getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
-
-    def nPoly(poly, index):
-        """nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
-        return _six_sicd.SixSicdUtilities_nPoly(poly, index)
-
-    nPoly = staticmethod(nPoly)
-
-    def isClockwise(vertices, isUpPositive=False):
-        """
-        isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
-        isClockwise(VectorRowColInt vertices) -> bool
-        """
-        return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
-
-    isClockwise = staticmethod(isClockwise)
-
-    def parseData(xmlStream, schemaPaths, log):
-        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
-
-    parseData = staticmethod(parseData)
-
-    def parseDataFromFile(pathname, schemaPaths, log):
-        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
-
-    parseDataFromFile = staticmethod(parseDataFromFile)
-
-    def parseDataFromString(xmlStr, schemaPaths, log):
-        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
-
-    parseDataFromString = staticmethod(parseDataFromString)
-
-    def toXMLString(*args):
-        """
-        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
-        toXMLString(ComplexData data) -> std::string
-        """
-        return _six_sicd.SixSicdUtilities_toXMLString(*args)
-
-    toXMLString = staticmethod(toXMLString)
-
-    def createFakeComplexData():
-        """createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_createFakeComplexData()
-
-    createFakeComplexData = staticmethod(createFakeComplexData)
-
-    def getNoiseMesh(reader):
-        """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
-        return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
-
-    getNoiseMesh = staticmethod(getNoiseMesh)
-
-    def getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
-        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
-        return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
-
-    getProjectionPolys = staticmethod(getProjectionPolys)
-
-    def transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
-        """transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
-        return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
-
-    transformXYPolyToRowColPoly = staticmethod(transformXYPolyToRowColPoly)
-
-    def transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
-        """transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
-        return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
-
-    transformXYProjectionPolys = staticmethod(transformXYProjectionPolys)
-
-    def fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
-        """fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
-        return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
-
-    fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
-
-    def projectPixelsToOutputPlane(complexData, spPixels, opPixels):
-        """projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
-        return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
-
-    projectPixelsToOutputPlane = staticmethod(projectPixelsToOutputPlane)
-
-    def projectValidDataPolygonToOutputPlane(complexData, opPixels):
-        """projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
-        return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
-
-    projectValidDataPolygonToOutputPlane = staticmethod(projectValidDataPolygonToOutputPlane)
-
-    def projectPixelsToSlantPlane(complexData, opPixels, spPixels):
-        """projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
-        return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
-
-    projectPixelsToSlantPlane = staticmethod(projectPixelsToSlantPlane)
-
-    def __init__(self):
-        """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
-        this = _six_sicd.new_SixSicdUtilities()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_SixSicdUtilities
-    __del__ = lambda self: None
-SixSicdUtilities_swigregister = _six_sicd.SixSicdUtilities_swigregister
-SixSicdUtilities_swigregister(SixSicdUtilities)
-
-def SixSicdUtilities_getSceneGeometry(data):
-    """SixSicdUtilities_getSceneGeometry(ComplexData data) -> SceneGeometry"""
-    return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
-
-def SixSicdUtilities_getProjectionModel(data, geom):
-    """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
-    return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
-
-def SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane):
-    """SixSicdUtilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
-    return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
-
-def SixSicdUtilities_getPolynomialFitter(*args):
-    """
-    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-    SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-    """
-    return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
-
-def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
-    """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
-    return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
-
-def SixSicdUtilities_readSicd(*args):
-    """
-    readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
-    """
-    return _six_sicd.SixSicdUtilities_readSicd(*args)
-
-def SixSicdUtilities_getComplexData(*args):
-    """
-    getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
-    """
-    return _six_sicd.SixSicdUtilities_getComplexData(*args)
-
-def SixSicdUtilities_getWidebandData(*args):
-    """
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-    getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & buffer)
-    getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)
-    SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
-    """
-    return _six_sicd.SixSicdUtilities_getWidebandData(*args)
-
-def SixSicdUtilities_getGroundPlaneNormal(data):
-    """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
-    return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
-
-def SixSicdUtilities_nPoly(poly, index):
-    """SixSicdUtilities_nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
-    return _six_sicd.SixSicdUtilities_nPoly(poly, index)
-
-def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
-    """
-    isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
-    SixSicdUtilities_isClockwise(VectorRowColInt vertices) -> bool
-    """
-    return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
-
-def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
-    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-    return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
-
-def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
-    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-    return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
-
-def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
-    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
-    return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
-
-def SixSicdUtilities_toXMLString(*args):
-    """
-    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
-    SixSicdUtilities_toXMLString(ComplexData data) -> std::string
-    """
-    return _six_sicd.SixSicdUtilities_toXMLString(*args)
-
-def SixSicdUtilities_createFakeComplexData():
-    """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
-    return _six_sicd.SixSicdUtilities_createFakeComplexData()
-
-def SixSicdUtilities_getNoiseMesh(reader):
-    """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
-    return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
-
-def SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
-    """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
-    return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
-
-def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
-    """SixSicdUtilities_transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
-    return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
-
-def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
-    """SixSicdUtilities_transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
-    return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
-
-def SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
-    """SixSicdUtilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
-    return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
-
-def SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels):
-    """SixSicdUtilities_projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
-    return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
-
-def SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels):
-    """SixSicdUtilities_projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
-    return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
-
-def SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels):
-    """SixSicdUtilities_projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
-    return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
 
 class AreaPlaneUtility(_object):
     """Proxy of C++ six::sicd::AreaPlaneUtility class."""
