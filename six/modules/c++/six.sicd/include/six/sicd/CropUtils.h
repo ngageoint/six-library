@@ -119,13 +119,13 @@ void cropSICD(six::NITFReadControl& reader,
 
 /*
  * Given a six::Sicd::ComplexData object and a cropping region,
- * update the meta data in the same way as the functions above.
+ * update the metadata in the same way as the functions above.
  * \param complexData the input complexData object
  * \param aoiOffset Upper left corner of AOI
  * \param aoiDims Size of AOI
  *
  * \returns A cloned complex data object where the 
- * meta data has been updated to refelect croped aoi.
+ * meta data has been updated to reflect the cropped aoi.
  */
 six::sicd::ComplexData* const
 cropMetaData(const six::sicd::ComplexData* complexData,
