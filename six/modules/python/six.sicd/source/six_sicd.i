@@ -130,13 +130,6 @@ Data* readNITF(const std::string& pathname,
 %include <std_auto_ptr.i>
 %include <std_string.i>
 %include <std_vector.i>
-%template(VectorString) std::vector<std::string>;
-%auto_ptr(six::sicd::NoiseMesh);
-%auto_ptr(scene::ProjectionPolynomialFitter);
-%auto_ptr(six::sicd::ComplexData);
-%include "six/sicd/SICDMesh.h"
-%include "six/sicd/ComplexData.h"
-%include "six/sicd/Utilities.h"
 %rename (cropSICD) cropSICDWrap;
 
 %inline %{
@@ -241,10 +234,10 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-six::sicd::ComplexData* const cropMetaData(
-        const six::sicd::ComplexData* complexData,
-	const types::RowCol<size_t>& aoiOffset,
-	const types::RowCol<size_t>& aoiDims);
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+        const six::sicd::ComplexData& complexData,
+	    const types::RowCol<size_t>& aoiOffset,
+	    const types::RowCol<size_t>& aoiDims);
 
 nitf::Record _readRecord(const std::string& pathname);
 

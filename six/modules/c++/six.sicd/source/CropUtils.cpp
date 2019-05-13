@@ -140,24 +140,26 @@ namespace six
 namespace sicd
 {
 
-six::sicd::ComplexData* const cropMetaData(
-        const six::sicd::ComplexData* complexData,
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+        const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
 {
     // Build up the geometry info
     std::auto_ptr<const scene::SceneGeometry> geom(
-            six::sicd::Utilities::getSceneGeometry(complexData));
+            six::sicd::Utilities::getSceneGeometry(&complexData));
 
     std::auto_ptr<const scene::ProjectionModel> projection(
-            six::sicd::Utilities::getProjectionModel(complexData, geom.get()));
+            six::sicd::Utilities::getProjectionModel(&complexData, geom.get()));
 
-    return updateMetadata(
-            *complexData,
+    six::sicd::ComplexData* const aoiData = updateMetadata(
+            complexData,
             *geom,
             *projection,
             aoiOffset,
             aoiDims);
+
+    return std::auto_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,
