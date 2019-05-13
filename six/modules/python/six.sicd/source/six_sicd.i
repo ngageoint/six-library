@@ -150,10 +150,10 @@ void cropSICDWrap(const std::string& inPathname,
 
     six::XMLControlFactory::getInstance().addCreator(
           six::DataType::COMPLEX,
-	  new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+	      new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
     cropSICD(inPathname, schemaPaths, aoiOffset,
-	   aoiDims, outPathname);
+	         aoiDims, outPathname);
 }
 %}
 
