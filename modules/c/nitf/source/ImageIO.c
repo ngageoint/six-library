@@ -9135,6 +9135,7 @@ nitf_ImageIO_bPixelOpen(nitf_ImageSubheader * subheader,
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+    icntl->buffer = NULL;
 
     return (nitf_DecompressionControl *) icntl;
 }
