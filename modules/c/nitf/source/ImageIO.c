@@ -7169,7 +7169,6 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                              NITF_STRERROR(NITF_ERRNO));
             return NITF_FAILURE;
         }
-        memset(blockCntl->block, 0, nitf->blockSize);
     }
     /* Overflow check*/
 
