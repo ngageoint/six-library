@@ -9484,10 +9484,10 @@ nitf_ImageIO_12PixelComStart(nitf_CompressionControl *object,
 
 /* Allocate compressed block buffer */
 
-  if (!icntl->buffer)
+  if (icntl->buffer == NULL)
   {
     icntl->buffer = (nitf_Uint8 *) NITF_MALLOC(icntl->blockSizeCompressed);
-    if(icntl->buffer == NULL)
+    if (icntl->buffer == NULL)
       return(NITF_FAILURE);
   }
 
