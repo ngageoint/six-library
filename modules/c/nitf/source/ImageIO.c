@@ -5825,7 +5825,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
 NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
 {
     _nitf_ImageIOBlock *blocks;     /* Block I/Os as a linrar array */
-    nitf_Uint32 i;
+    nitf_Uint32 i, j;
     nitf_Uint32 nBlockCols;
 
     /* Actual object */
@@ -5855,12 +5855,16 @@ NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
          * They are allocated
          */
         nBlockCols = cntlActual->nBlockIO / cntlActual->numBandSubset;
-        blocks = &(cntlActual->blockIO[0][0]);
+
         for (i = 0; i < nBlockCols; ++i)
         {
-            if (blocks[i].blockControl.freeFlag)
+            for (j = 0; j < cntlActual->numBandSubset; ++j)
             {
-                NITF_FREE(blocks[i].blockControl.block);
+                blocks = &(cntlActual->blockIO[i][j]);
+                if (blocks->blockControl.freeFlag)
+                {
+                    NITF_FREE(blocks->blockControl.block);
+                }
             }
         }
 
@@ -7165,6 +7169,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                              NITF_STRERROR(NITF_ERRNO));
             return NITF_FAILURE;
         }
+        memset(blockCntl->block, 0, nitf->blockSize);
     }
     /* Overflow check*/
 
@@ -9277,6 +9282,7 @@ nitf_ImageIO_12PixelOpen(nitf_ImageSubheader * subheader,
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+    icntl->buffer = NULL;
 
     return (nitf_DecompressionControl *) icntl;
 }
@@ -9445,15 +9451,7 @@ nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
   icntl->odd = icntl->blockPixelCount & 1;
   icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*(icntl->odd);
   icntl->blockSizeUncompressed = icntl->blockPixelCount*2;
-  icntl->buffer = NITF_MALLOC(icntl->blockSizeCompressed);
-  if(icntl->buffer == NULL)
-  {
-    nitf_Error_init(error, "Error creating control object",
-                                          NITF_CTXT, NITF_ERR_COMPRESSION);
-    NITF_FREE(icntl);
-    return(NULL);
-  }
-
+  icntl->buffer = NULL;
 
   return((nitf_CompressionControl *) icntl);
 
@@ -9482,14 +9480,16 @@ nitf_ImageIO_12PixelComStart(nitf_CompressionControl *object,
   icntl->offset = offset;
   icntl->blockMask = blockMask;
   icntl->padMask = padMask;
-  icntl->buffer = NULL;
   icntl->written = 0;
 
 /* Allocate compressed block buffer */
 
-  icntl->buffer = (nitf_Uint8 *) NITF_MALLOC(icntl->blockSizeCompressed);
-  if(icntl->buffer == NULL)
-    return(NITF_FAILURE);
+  if (!icntl->buffer)
+  {
+    icntl->buffer = (nitf_Uint8 *) NITF_MALLOC(icntl->blockSizeCompressed);
+    if(icntl->buffer == NULL)
+      return(NITF_FAILURE);
+  }
 
   return(NITF_SUCCESS);
 }
@@ -9572,8 +9572,6 @@ NITF_BOOL nitf_ImageIO_12PixelComEnd
 void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
-
-  icntl = (nitf_ImageIO_12PixelComControl *) object;
 
    if(object != NULL)
    {
