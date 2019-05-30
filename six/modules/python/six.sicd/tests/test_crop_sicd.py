@@ -5,7 +5,7 @@
 # This file is part of six.sicd-python
 # =========================================================================
 #
-# (C) Copyright 2004 - 2015, MDA Information Systems LLC
+# (C) Copyright 2004 - 2019, MDA Information Systems LLC
 #
 # six.sicd-python is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,7 @@ ending  = os.path.splitext(base_name)[1]
 output_name = os.path.join('.', file_name + "_cropped" + ending)
 
 # To crop a sicd saved on disk and write it out
-# to a new sicd on disk, use crop SICD
+# to a new sicd on disk, use cropSICD
 six_sicd.cropSICD(sicd_path_name,
                   coda_types.VectorString(),
                   coda_types.RowColSizeT(0,0),
@@ -52,7 +52,6 @@ six_sicd.cropSICD(sicd_path_name,
 
 # If the sicd metadata is already in memory cropMetaData
 # can be used 
-
 data, meta_data = six_sicd.read(sicd_path_name)
 new_meta_data = six_sicd.cropMetaData(meta_data,
                                       coda_types.RowColSizeT(0,0),
