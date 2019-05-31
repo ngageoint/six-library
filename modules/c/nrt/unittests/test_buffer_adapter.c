@@ -74,6 +74,24 @@ TEST_CASE(testReadOutOfBounds)
     }
 }
 
+TEST_CASE(testWriteOutOfBounds)
+{
+    char buffer[TEST_BUF_SIZE];
+    char input[5];
+    nrt_Error error;
+    NRT_BOOL success;
+
+    memset(input, 0, sizeof(input));
+
+    nrt_IOInterface* writer = nrt_BufferAdapter_construct(
+        buffer, TEST_BUF_SIZE, 0, &error);
+
+    success = nrt_IOInterface_seek(writer, TEST_BUF_SIZE, NRT_SEEK_SET, &error);
+    TEST_ASSERT(success);
+    success = nrt_IOInterface_write(writer, input, 4, &error);
+    TEST_ASSERT(!success);
+}
+
 int main(int argc, char **argv)
 {
     (void) argc;
@@ -81,6 +99,7 @@ int main(int argc, char **argv)
     CHECK(testReadInBounds);
     CHECK(testReadPastEnd);
     CHECK(testReadOutOfBounds);
+    CHECK(testWriteOutOfBounds);
     return 0;
 }
 
