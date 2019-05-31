@@ -190,21 +190,19 @@ NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, void *buf, size_t size,
                                      nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
-    const size_t validBufferSize = control->mark >= control->size ? 0 :
-        control->size - control->mark;
 
-    if (validBufferSize < size)
+    if (size > control->size - control->mark)
     {
-        memcpy(buf, (char *)(control->buf + control->mark), validBufferSize);
-        memset((char *)buf + validBufferSize, 0, size - validBufferSize);
-        control->mark += validBufferSize;
+        nrt_Error_init(error, "Invalid size requested - EOF", NRT_CTXT,
+                       NRT_ERR_MEMORY);
+        return NRT_FAILURE;
     }
-    else
+
+    if (size > 0)
     {
-        memcpy(buf, (char *) (control->buf + control->mark), size);
+        memcpy(buf, (char *)(control->buf + control->mark), size);
         control->mark += size;
     }
-
     return NRT_SUCCESS;
 }
 
