@@ -102,5 +102,3 @@ int main(int argc, char **argv)
     CHECK(testWriteOutOfBounds);
     return 0;
 }
-
-
