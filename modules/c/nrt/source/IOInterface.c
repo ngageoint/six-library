@@ -278,7 +278,7 @@ NRTPRIV(nrt_Off) BufferAdapter_getSize(NRT_DATA * data, nrt_Error * error)
     /* Silence compiler warnings about unused variables */
     (void)error;
 
-    return (nrt_Off) control->bytesWritten;
+    return (nrt_Off) control->size;
 }
 
 NRTPRIV(int) BufferAdapter_getMode(NRT_DATA * data, nrt_Error * error)
