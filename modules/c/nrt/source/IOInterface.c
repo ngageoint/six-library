@@ -200,7 +200,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, void *buf, size_t size,
 
     if (size > 0)
     {
-        memcpy(buf, (char *)(control->buf + control->mark), size);
+        memcpy(buf, control->buf + control->mark, size);
         control->mark += size;
     }
     return NRT_SUCCESS;
@@ -220,7 +220,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const void *buf,
 
     if (size > 0)
     {
-        memcpy((char *) (control->buf + control->mark), buf, size);
+        memcpy(control->buf + control->mark, buf, size);
         control->mark += size;
         if (control->mark > control->bytesWritten)
         {
