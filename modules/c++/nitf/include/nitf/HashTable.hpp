@@ -141,11 +141,10 @@ public:
      *  Constructor
      *  \param nbuckets  The size of the hash
      */
-    HashTable(int nbuckets = 5) throw(nitf::NITFException);
+    HashTable(int nbuckets = 5);
 
     //! Clone
-    nitf::HashTable clone(NITF_DATA_ITEM_CLONE cloner)
-        throw(nitf::NITFException);
+    nitf::HashTable clone(NITF_DATA_ITEM_CLONE cloner);
 
     /*!
      *  This function controls ownership.  You may elect either
@@ -192,23 +191,20 @@ public:
      *  For each item in the hash table, do something (slow);
      *  \param fn  The function to perform
      */
-    void forEach(HashIterator& fun, NITF_DATA* userData = NULL)
-        throw(nitf::NITFException);
+    void forEach(HashIterator& fun, NITF_DATA* userData = NULL);
 
     /*!
      *  Insert this key/data pair into the hash table
      *  \param key  The key to insert under
      *  \param data  The data to insert into the second value of the pair
      */
-    void insert(const std::string& key, NITF_DATA* data)
-        throw(nitf::NITFException);
+    void insert(const std::string& key, NITF_DATA* data);
 
     /*!
      * Templated insert, allowing us to insert nitf::Objects
      */
     template <typename T>
     void insert(const std::string& key, nitf::Object<T> object)
-        throw(nitf::NITFException)
     {
         insert(key, (NITF_DATA*)object.getNative());
     }
@@ -218,12 +214,12 @@ public:
      *  \param key  The key to retrieve by
      *  \return  The key/value pair
      */
-    nitf::Pair find(const std::string& key) throw(except::NoSuchKeyException);
+    nitf::Pair find(const std::string& key);
 
-    nitf::Pair operator[] (const std::string& key) throw(except::NoSuchKeyException);
+    nitf::Pair operator[] (const std::string& key);
 
     //! Get the buckets
-    nitf::List getBucket(int i) throw(nitf::NITFException);
+    nitf::List getBucket(int i);
 
     //! Get the nbuckets
     int getNumBuckets() const;

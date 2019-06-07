@@ -55,14 +55,14 @@ public:
     GraphicSegment(nitf_GraphicSegment * x);
 
     //! Constructor
-    GraphicSegment() throw(nitf::NITFException);
+    GraphicSegment();
 
     GraphicSegment(NITF_DATA * x);
 
     GraphicSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::GraphicSegment clone() throw(nitf::NITFException);
+    nitf::GraphicSegment clone();
 
     ~GraphicSegment();
 

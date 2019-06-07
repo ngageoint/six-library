@@ -24,14 +24,13 @@
 
 using namespace nitf;
 
-SegmentWriter::SegmentWriter() throw (nitf::NITFException)
+SegmentWriter::SegmentWriter()
 {
     setNative(nitf_SegmentWriter_construct(&error));
     setManaged(false);
 }
 
 SegmentWriter::SegmentWriter(nitf::SegmentSource segmentSource)
-        throw (nitf::NITFException)
 {
     setNative(nitf_SegmentWriter_construct(&error));
     setManaged(false);
@@ -48,7 +47,6 @@ SegmentWriter::~SegmentWriter()
 }
 
 void SegmentWriter::attachSource(nitf::SegmentSource segmentSource)
-        throw (nitf::NITFException)
 {
     if (!nitf_SegmentWriter_attachSource(getNativeOrThrow(),
                                          segmentSource.getNative(), &error))

@@ -57,10 +57,10 @@ public:
     FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
-    FileSecurity() throw(nitf::NITFException);
+    FileSecurity();
 
     //! Clone
-    nitf::FileSecurity clone() throw(nitf::NITFException);
+    nitf::FileSecurity clone();
 
     ~FileSecurity();
 

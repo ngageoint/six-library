@@ -48,20 +48,18 @@ public:
 
     IOHandle(const std::string& fname,
              nitf::AccessFlags access = NITF_ACCESS_READONLY,
-             nitf::CreationFlags creation = NITF_OPEN_EXISTING)
-                 throw (nitf::NITFException);
+             nitf::CreationFlags creation = NITF_OPEN_EXISTING);
 
     IOHandle(const char* fname,
              nitf::AccessFlags access = NITF_ACCESS_READONLY,
-             nitf::CreationFlags creation = NITF_OPEN_EXISTING)
-                 throw (nitf::NITFException);
+             nitf::CreationFlags creation = NITF_OPEN_EXISTING);
 
 private:
     static
     nitf_IOInterface*
     open(const char* fname,
          nitf::AccessFlags access,
-         nitf::CreationFlags creation) throw (nitf::NITFException);
+         nitf::CreationFlags creation);
 
 };
 
