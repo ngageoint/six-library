@@ -39,7 +39,6 @@ nitf::ListNode::ListNode(nitf_ListNode * x)
 }
 
 nitf::ListNode::ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data)
-    throw(nitf::NITFException)
 {
     setNative(nitf_ListNode_construct(prev.getNative(),
         next.getNative(), data, &error));
@@ -147,14 +146,14 @@ bool nitf::List::isEmpty()
     return x ? true : false;
 }
 
-void nitf::List::pushFront(NITF_DATA* data) throw(nitf::NITFException)
+void nitf::List::pushFront(NITF_DATA* data)
 {
     NITF_BOOL x = nitf_List_pushFront(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
-void nitf::List::pushBack(NITF_DATA* data) throw(nitf::NITFException)
+void nitf::List::pushBack(NITF_DATA* data)
 {
     NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
     if (!x)
@@ -173,14 +172,14 @@ NITF_DATA* nitf::List::popBack()
     return data;
 }
 
-nitf::List::List() throw(nitf::NITFException)
+nitf::List::List()
 {
     setNative(nitf_List_construct(&error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) throw(nitf::NITFException)
+nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner)
 {
     nitf::List dolly(nitf_List_clone(getNativeOrThrow(), cloner, &error));
     dolly.setManaged(false);
@@ -201,7 +200,7 @@ nitf::ListIterator nitf::List::end()
     return nitf::ListIterator(x);
 }
 
-void nitf::List::insert(nitf::ListIterator & iter, NITF_DATA* data) throw(nitf::NITFException)
+void nitf::List::insert(nitf::ListIterator & iter, NITF_DATA* data)
 {
     NITF_BOOL x = nitf_List_insert(getNativeOrThrow(), iter.getHandle(), data, &error);
     if (!x)
@@ -229,7 +228,7 @@ size_t nitf::List::getSize()
     return (size_t)nitf_List_size(getNativeOrThrow());
 }
 
-NITF_DATA* nitf::List::operator[] (size_t index) throw(nitf::NITFException)
+NITF_DATA* nitf::List::operator[] (size_t index)
 {
     NITF_DATA* x = nitf_List_get(getNativeOrThrow(), index, &error);
     if (!x)

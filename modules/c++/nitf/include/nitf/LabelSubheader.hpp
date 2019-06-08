@@ -56,10 +56,10 @@ public:
     LabelSubheader(nitf_LabelSubheader * x);
 
     //! Default Constructor
-    LabelSubheader() throw(nitf::NITFException);
+    LabelSubheader();
 
     //! Clone
-    nitf::LabelSubheader clone() throw(nitf::NITFException);
+    nitf::LabelSubheader clone();
 
     ~LabelSubheader();
 
