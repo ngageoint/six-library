@@ -2011,7 +2011,7 @@ void DerivedXMLParser110::parseProductFromXML(
 {
     std::vector<XMLElem> productElems;
     exploitationFeaturesElem->getElementsByTagName("Product", productElems);
-    
+
     if (productElems.empty())
     {
         throw except::Exception(Ctxt(
@@ -2046,8 +2046,10 @@ void DerivedXMLParser110::parseProductFromXML(
             XMLElem polarizationElem = polarizationElems[jj];
             ProcTxRcvPolarization& polarization = product.polarization[jj];
 
-            parseEnum(polarizationElem, polarization.txPolarizationProc);
-            parseEnum(polarizationElem, polarization.rcvPolarizationProc);
+            parseEnum(getFirstAndOnly(polarizationElem, "TxPolarizationProc"),
+                      polarization.txPolarizationProc);
+            parseEnum(getFirstAndOnly(polarizationElem, "RcvPolarizationProc"),
+                      polarization.rcvPolarizationProc);
         }
 
         // optional

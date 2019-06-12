@@ -2086,7 +2086,8 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     geographicAndTarget.geoInfos.push_back(newGeoInfo);
 }
 
-void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
+void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
+                              const std::string& version)
 {
     // The first collection is corresponds to the parent image
     six::sidd::Collection& collection =
@@ -2120,7 +2121,10 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
     polarization->txPolarization = six::PolarizationType::V;
     polarization->rcvPolarization = six::PolarizationType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    polarization->processed = six::BooleanType("IS_TRUE");
+    if (version == "1.0.0")
+    {
+        polarization->processed = six::BooleanType("IS_TRUE");
+    }
     collection.information.polarization.push_back(polarization);
 
     collection.geometry.reset(new six::sidd::Geometry());
@@ -2146,6 +2150,15 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
     exFeatures.product[0].resolution.col = 0;
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
+
+    if (version == "1.1.0")
+    {
+        exFeatures.product[0].productImageNumber = 123;
+        exFeatures.product[0].ellipticity = 12.0;
+        exFeatures.product[0].polarization.resize(1);
+        exFeatures.product[0].polarization[0].txPolarizationProc = PolarizationSequenceType::SEQUENCE;
+        exFeatures.product[0].polarization[0].rcvPolarizationProc = PolarizationSequenceType::RHC;
+    }
 }
 
 void initDownstreamReprocessing(six::sidd::DownstreamReprocessing& reprocess)
@@ -2376,7 +2389,8 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures);
+    initExploitationFeatures(*siddData.exploitationFeatures, version);
+    initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);
     initErrorStatistics(*siddData.errorStatistics);
