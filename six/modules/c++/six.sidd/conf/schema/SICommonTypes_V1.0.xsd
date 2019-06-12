@@ -204,7 +204,18 @@
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
-    <xsd:simpleType name="PolarizationType">
+    <xsd:simpleType name="Polarization1Type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="V"/>
+            <xsd:enumeration value="H"/>
+            <xsd:enumeration value="RHC"/>
+            <xsd:enumeration value="LHC"/>
+            <xsd:enumeration value="OTHER"/>
+            <xsd:enumeration value="UNKNOWN"/>
+            <xsd:enumeration value="SEQUENCE"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="Polarization2Type">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="V"/>
             <xsd:enumeration value="H"/>

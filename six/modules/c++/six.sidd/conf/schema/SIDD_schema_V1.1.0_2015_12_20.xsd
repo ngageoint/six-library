@@ -586,10 +586,8 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:choice>
-                <xs:element name="DRAParameters" type="DRAParameters"/>
-                <xs:element name="DRAOverrides" type="DRAOverrides"/>
-            </xs:choice>
+            <xs:element name="DRAParameters" type="DRAParameters" minOccurs="0"/>
+            <xs:element name="DRAOverrides" type="DRAOverrides" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="DRAParameters">
@@ -1155,9 +1153,24 @@
             <xs:documentation>Metadata regarding the product.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
+            <xs:element name="ProductImageNumber" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Identifies the product image number. Product Image Number refers to the first 3 digits of the IID1 field as described in Table 2-3 of NGA.STND.0025-2_1:1, NITF File Format Description Document</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="Resolution" type="sicommon:RowColDoubleType">
                 <xs:annotation>
                     <xs:documentation>Uniformly-weighted resolution projected into the Earth Tangent Plane (ETP).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Ellipticity" type="xs:double">
+                <xs:annotation>
+                    <xs:documentation>Ellipticity of the 2D-IPR at the ORP, measured in the Earth Geodetic Tangent Plane (EGTP). Ellipticity is the ratio of the IPR ellipse's major axis to minor axis.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Polarization" type="ProcTxRcvPolarizationType" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Describes the processed transmit and receive polarizations for the product.</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="North" type="sicommon:Neg180To180Type" minOccurs="0">
@@ -1189,7 +1202,7 @@
                     </xs:complexContent>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="Product" type="ExploitationFeaturesProductType">
+            <xs:element name="Product" type="ExploitationFeaturesProductType" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Metadata regarding the product.</xs:documentation>
                 </xs:annotation>
@@ -1215,12 +1228,12 @@
     </xs:complexType>
     <xs:complexType name="TxRcvPolarizationType">
         <xs:sequence>
-            <xs:element name="TxPolarization" type="sicommon:PolarizationType">
+            <xs:element name="TxPolarization" type="sicommon:Polarization1Type">
                 <xs:annotation>
                     <xs:documentation>Polarization transmit type</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="RcvPolarization" type="sicommon:PolarizationType">
+            <xs:element name="RcvPolarization" type="sicommon:Polarization1Type">
                 <xs:annotation>
                     <xs:documentation>Receive polarization type</xs:documentation>
                 </xs:annotation>
@@ -1230,9 +1243,18 @@
                     <xs:documentation>Optional angle offset for the receive polarization defined at aperture center.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Processed" type="xs:boolean" minOccurs="0">
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProcTxRcvPolarizationType">
+        <xs:sequence>
+            <xs:element name="TxPolarizationProc" type="sicommon:Polarization1Type">
                 <xs:annotation>
-                    <xs:documentation>Optional flag to describe whether this input polarization was used in processing the product.</xs:documentation>
+                    <xs:documentation>Polarization transmit type</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RcvPolarizationProc" type="sicommon:Polarization1Type">
+                <xs:annotation>
+                    <xs:documentation>Receive polarization type</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -1301,7 +1323,7 @@
             </xs:element>
             <xs:element name="Squint" type="sicommon:Neg180To180Type" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Angle from the ground track to platform velocity vector at nadir. Left-look is negative, right-look is positive.</xs:documentation>
+                    <xs:documentation>Angle from the ground track to platform velocity vector at nadir. Left-look is positive, right-look is negative.</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="Graze" type="sicommon:ZeroTo90Type" minOccurs="0">
@@ -1384,7 +1406,11 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="J2K" type="J2KType"></xs:element>
+            <xs:element name="J2K" type="J2KType">
+                <xs:annotation>
+                    <xs:documentation>Block describing details of JPEG 2000 compression.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="J2KType">
