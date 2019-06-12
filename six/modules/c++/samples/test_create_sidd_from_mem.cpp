@@ -2298,7 +2298,7 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 }
 
 void populateData(six::sidd::DerivedData& siddData, const std::string&
-        lutType, bool smallImage, const std::string& version)
+                  lutType, bool smallImage, const std::string& version)
 {
     siddData.setVersion(version);
     size_t elementSize = lutType == "Mono" ? 2 : 3;

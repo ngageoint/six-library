@@ -624,6 +624,8 @@ def initMatchInfo(cmplx):
     param.setValue('Match val')
     matchCollect.parameters.push_back(param)
 
+    # MatchType's constructor (perhaps unintuitively) sizes this vector to one
+    # right off the bat since it's mandatory
     matchType.matchCollects[0] = matchCollect
 
     # MatchInformation's constructor (perhaps unintuitively) sizes this vector

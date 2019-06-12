@@ -36,6 +36,7 @@
 #include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/GeoLocator.h"
 #include "six/sicd/SICDWriteControl.h"
+#include "six/sicd/Utilities.h"
 #include <numpyutils/numpyutils.h>
 
 
@@ -124,6 +125,41 @@ Data* readNITF(const std::string& pathname,
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
 
+%}
+
+%ignore six::sicd::cropSICD;
+%include <std_auto_ptr.i>
+%include <std_string.i>
+%include <std_vector.i>
+%rename (cropSICD) cropSICDWrap;
+
+%inline %{
+
+
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname)
+{
+
+    six::XMLControlFactory::getInstance().addCreator(
+          six::DataType::COMPLEX,
+	      new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    cropSICD(inPathname, schemaPaths, aoiOffset,
+	         aoiDims, outPathname);
+}
+%}
+
+%{
+
 nitf::Record _readRecord(const std::string& pathname);
 
 nitf::Record _readRecord(const std::string& pathname)
@@ -198,6 +234,11 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
+
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+        const six::sicd::ComplexData& complexData,
+	    const types::RowCol<size_t>& aoiOffset,
+	    const types::RowCol<size_t>& aoiDims);
 
 nitf::Record _readRecord(const std::string& pathname);
 
@@ -293,6 +334,7 @@ SCOPED_CLONEABLE(six::sicd, ChannelParameters)
 %template(vectorScopedClonableSegment)             std::vector<mem::ScopedCloneablePtr<six::sicd::Segment> >;
 %template(VectorScopedCloneableChannelParameters)  std::vector<mem::ScopedCloneablePtr<six::sicd::ChannelParameters> >;
 %template(VectorInt)                               std::vector<int>;
+%template(VectorString)                            std::vector<std::string>;
 SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)

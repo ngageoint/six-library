@@ -36,6 +36,7 @@ void validate(const xml::lite::Document* doc,
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     sys::OS os;
+
     if (paths.empty() && os.isEnvSet(six::SCHEMA_PATH))
     {
         std::string envPath = os.getEnv(six::SCHEMA_PATH);

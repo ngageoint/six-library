@@ -48,7 +48,6 @@ def runTests(testDir, testName, *args):
     print('Failed')
     return False
 
-
 def runSICDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
 

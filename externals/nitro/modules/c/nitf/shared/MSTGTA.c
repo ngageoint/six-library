@@ -35,8 +35,8 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 1, "TGT COLL", "TGTCOLL" },
     {NITF_BCS_A, 5, "TGT CAT", "TGTCAT" },
     {NITF_BCS_A, 7, "TGT UTC", "TGTUTC" },
-    {NITF_BCS_A, 6, "TGT EVEL", "TGTEVEL" },
-    {NITF_BCS_A, 1, "TGT EVEL UNIT", "TGTEVELUNIT" },
+    {NITF_BCS_A, 6, "TGT ELEV", "TGTELEV" },
+    {NITF_BCS_A, 1, "TGT ELEV UNIT", "TGTELEVUNIT" },
     {NITF_BCS_A, 21, "TGT LOC", "TGTLOC" },
     {NITF_END, 0, NULL, NULL}
 };

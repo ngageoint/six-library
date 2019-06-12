@@ -71,6 +71,15 @@ std::auto_ptr<six::sidd::DerivedData> createData()
             getCorner(ii).setLon(0);
     }
 
+    // Set image corners
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
+                getCorner(ii).setLat(0);
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
+            getCorner(ii).setLon(0);
+    }
+
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resize(1);
     derivedData->exploitationFeatures->product[0].resolution.row = 0;

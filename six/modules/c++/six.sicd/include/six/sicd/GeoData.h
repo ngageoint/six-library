@@ -22,10 +22,14 @@
 #ifndef __SIX_GEO_DATA_H__
 #define __SIX_GEO_DATA_H__
 
-#include <mem/ScopedCopyablePtr.h>
+#include "six/Types.h"
+#include "six/Init.h"
+#include "six/GeoInfo.h"
+#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
+#include "scene/ProjectionModel.h"
+#include <mem/ScopedCloneablePtr.h>
 #include <logging/Logger.h>
-#include <six/Types.h>
-#include <six/GeoInfo.h>
 
 namespace six
 {

@@ -612,3 +612,4 @@ std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 }
 }
 }
+

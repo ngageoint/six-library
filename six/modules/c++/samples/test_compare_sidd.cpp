@@ -107,6 +107,7 @@ bool siddsMatch(const std::string& sidd1Path,
                 dynamic_cast<six::sidd::DerivedData*>(sidd1Metadata.get());
             six::sidd::DerivedData* ddata2 =
                 dynamic_cast<six::sidd::DerivedData*>(sidd2Metadata.get());
+
             if (ddata1 && ddata2)
             {
                 // Processing events
@@ -116,6 +117,7 @@ bool siddsMatch(const std::string& sidd1Path,
                     ddata1->downstreamReprocessing.get();
                 six::sidd::DownstreamReprocessing* dr2 =
                     ddata2->downstreamReprocessing.get();
+
                 size_t nEvents1 = dr1->processingEvents.size();
                 size_t nEvents2 = dr2->processingEvents.size();
                 if (nEvents1 != nEvents2) return false;
@@ -137,7 +139,6 @@ bool siddsMatch(const std::string& sidd1Path,
                 if (nCollect1 != nCollect2) return false;
                 for (size_t ii = 0; ii < nCollect1; ++ii)
                 {
-
                     ef2->collections[ii]->information.collectionDateTime =
                         ef1->collections[ii]->information.collectionDateTime;
                     ef2->collections[ii]->information.localDateTime =

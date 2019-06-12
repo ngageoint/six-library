@@ -202,6 +202,10 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_sicd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+
+def cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
+    """cropSICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
+    return _six_sicd.cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
 class ComponentInfoDestructor(_object):
     """Proxy of C++ nitf::ComponentInfoDestructor class."""
 
@@ -1906,6 +1910,10 @@ def writeNITF(pathname, schemaPaths, data, imageAdr):
 def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
+
+def cropMetaData(complexData, aoiOffset, aoiDims):
+    """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.cropMetaData(complexData, aoiOffset, aoiDims)
 
 def _readRecord(pathname):
     """_readRecord(std::string const & pathname) -> Record"""

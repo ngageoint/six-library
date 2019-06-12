@@ -70,6 +70,7 @@ public:
     static std::auto_ptr<scene::ProjectionModel>
     getProjectionModel(const DerivedData* data);
 
+
     /*!
      * Create a fake SIDD that's populated enough for
      * general testing code to run without throwing exceptions
@@ -124,20 +125,19 @@ public:
         logging::Logger& log);
 
     /*
-    * Converts 'data' back into a formatted XML string
-    *
-    * \param data Representation of SIDD data
-    * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
-    * environment variable will be used.
-    * \param logger Logger.  If NULL, no logger will be used.
-    *
-    * \return XML string representation of 'data'
-    */
-    static std::string toXMLString(
-        const DerivedData& data,
-        const std::vector<std::string>& schemaPaths =
-        std::vector<std::string>(),
-        logging::Logger* logger = NULL);
+     * Converts 'data' back into a formatted XML string
+     *
+     * \param data Representation of SIDD data
+     * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
+     *  environment variable will be used.
+     * \param logger Logger.  If NULL, no logger will be used.
+     *
+     * \return XML string representation of
+     *'data'
+     */
+    static std::string toXMLString(const DerivedData& data,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger* logger);
 };
 }
 }
