@@ -724,19 +724,47 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     // create Product
     XMLElem productElem = newElement("Product", exploitationFeaturesElem);
 
+    if (exploitationFeatures->product.size() != 1)
+    {
+        throw except::Exception(Ctxt(
+                "Expected exactly one Product for ExploitationFeatures"));
+    }
     common().createRowCol("Resolution",
-        exploitationFeatures->product.resolution,
+        exploitationFeatures->product[0].resolution,
         productElem);
     // optional
-    if (exploitationFeatures->product.north != Init::undefined<double>())
-        createDouble("North", exploitationFeatures->product.north, productElem);
+    if (exploitationFeatures->product[0].north != Init::undefined<double>())
+        createDouble("North", exploitationFeatures->product[0].north, productElem);
+    
     // optional to unbounded
-
     common().addParameters("Extension",
-        exploitationFeatures->product.extensions,
+        exploitationFeatures->product[0].extensions,
         productElem);
 
     return exploitationFeaturesElem;
+}
+
+void DerivedXMLParser100::parseProductFromXML(
+    const XMLElem exploitationFeaturesElem,
+    ExploitationFeatures* exploitationFeatures) const
+{
+    XMLElem productElem = getFirstAndOnly(exploitationFeaturesElem, "Product");
+
+    exploitationFeatures->product.resize(1);
+    Product& product = exploitationFeatures->product[0];
+    common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
+                               product.resolution);
+
+    // optional
+    XMLElem tmpElem = getOptional(productElem, "North");
+    if (tmpElem)
+    {
+        parseDouble(tmpElem, product.north);
+    }
+
+    // optional to unbounded
+    common().parseParameters(productElem, "Extension",
+                             product.extensions);
 }
 }
 }

@@ -59,6 +59,32 @@ void confirmNonNull(const SmartPtrT& ptr,
         throw except::Exception(Ctxt(msg));
     }
 }
+
+void validateDRAFields(const six::sidd::DRAType& algorithmType,
+                       bool hasDraParameters,
+                       bool hasDraOverrides)
+{
+    if (algorithmType == six::sidd::DRAType::AUTO &&
+        !hasDraParameters)
+    {
+        throw except::Exception(Ctxt(
+            "DRAParameters required for algorithmType AUTO"));
+    }
+
+    if (algorithmType != six::sidd::DRAType::AUTO && hasDraParameters)
+    {
+        throw except::Exception(Ctxt(
+            "DRAParameters invalid for algorithmType " +
+            algorithmType.toString()));
+    }
+
+    if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
+    {
+        throw except::Exception(Ctxt(
+            "DRAOverrides invalid for algorithmType " +
+            algorithmType.toString()));
+    }
+}
 }
 
 namespace six
@@ -835,33 +861,28 @@ void DerivedXMLParser110::parseDynamicRangeAdjustmentFromXML(
     parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
     parseInt(getFirstAndOnly(rangeElem, "BandStatsSource"), rangeAdjustment.bandStatsSource);
 
-    bool ok = false;
     XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
     XMLElem overrideElem = getOptional(rangeElem, "DRAOverrides");
+
+    validateDRAFields(rangeAdjustment.algorithmType,
+                      parameterElem, overrideElem);
+
     if (parameterElem)
     {
-        if (!overrideElem)
-        {
-            ok = true;
-            rangeAdjustment.draParameters.reset(new DynamicRangeAdjustment::DRAParameters());
-            parseDouble(getFirstAndOnly(parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
-            parseDouble(getFirstAndOnly(parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
-            parseDouble(getFirstAndOnly(parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
-            parseDouble(getFirstAndOnly(parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
-        }
+        rangeAdjustment.draParameters.reset(new DynamicRangeAdjustment::DRAParameters());
+        parseDouble(getFirstAndOnly(parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
+        parseDouble(getFirstAndOnly(parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
+        parseDouble(getFirstAndOnly(parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
+        parseDouble(getFirstAndOnly(parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
     }
-    else if (overrideElem)
+
+    if (overrideElem)
     {
-        ok = true;
         rangeAdjustment.draOverrides.reset(new DynamicRangeAdjustment::DRAOverrides());
         parseDouble(getFirstAndOnly(overrideElem, "Subtractor"),
             rangeAdjustment.draOverrides->subtractor);
         parseDouble(getFirstAndOnly(overrideElem, "Multiplier"),
             rangeAdjustment.draOverrides->multiplier);
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Elem should have exactly one of DRAParameters and DRAOverrides"));
     }
 }
 
@@ -1242,29 +1263,22 @@ XMLElem DerivedXMLParser110::convertInteractiveProcessingToXML(
         adjustElem);
     createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
-    ok = false;
+    validateDRAFields(adjust.algorithmType,
+                      adjust.draParameters.get(),
+                      adjust.draOverrides.get());
     if (adjust.draParameters.get())
     {
-        if (!adjust.draOverrides.get())
-        {
-            ok = true;
-            XMLElem paramElem = newElement("DRAParameters", adjustElem);
-            createDouble("Pmin", adjust.draParameters->pMin, paramElem);
-            createDouble("Pmax", adjust.draParameters->pMax, paramElem);
-            createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
-            createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
-        }
+        XMLElem paramElem = newElement("DRAParameters", adjustElem);
+        createDouble("Pmin", adjust.draParameters->pMin, paramElem);
+        createDouble("Pmax", adjust.draParameters->pMax, paramElem);
+        createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
+        createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
     }
-    else if (adjust.draOverrides.get())
+    if (adjust.draOverrides.get())
     {
-        ok = true;
         XMLElem overrideElem = newElement("DRAOverrides", adjustElem);
         createDouble("Subtractor", adjust.draOverrides->subtractor, overrideElem);
         createDouble("Multiplier", adjust.draOverrides->multiplier, overrideElem);
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Data must contain exactly one of DRAParameters and DRAOverrides"));
     }
 
     if (processing.tonalTransferCurve.get())
@@ -1611,10 +1625,11 @@ XMLElem DerivedXMLParser110::convertExploitationFeaturesToXML(
                     p->rcvPolarizationOffset,
                     polElem);
             }
-            // optional
+            // removed in 1.1
             if (!Init::isUndefined(p->processed))
             {
-                createString("Processed", six::toString(p->processed), polElem);
+                throw except::Exception(Ctxt(
+                    "Polarization.Processed is not a valid field for SIDD 1.1"));
             }
         }
 
@@ -1686,19 +1701,51 @@ XMLElem DerivedXMLParser110::convertExploitationFeaturesToXML(
     }
 
     // create Product
-    XMLElem productElem = newElement("Product", exploitationFeaturesElem);
+    if (exploitationFeatures->product.empty())
+    {
+        throw except::Exception(Ctxt(
+            "ExploitationFeatures must have at least one Product"));
+    }
 
-    common().createRowCol("Resolution",
-        exploitationFeatures->product.resolution,
-        productElem);
-    // optional
-    if (exploitationFeatures->product.north != Init::undefined<double>())
-        createDouble("North", exploitationFeatures->product.north, productElem);
-    // optional to unbounded
+    for (size_t ii = 0; ii < exploitationFeatures->product.size(); ++ii)
+    {
+        XMLElem productElem = newElement("Product", exploitationFeaturesElem);
+        const Product& product = exploitationFeatures->product[ii];
 
-    common().addParameters("Extension",
-        exploitationFeatures->product.extensions,
-        productElem);
+        createInt("ProductImageNumber", product.productImageNumber, productElem);
+
+        common().createRowCol("Resolution",
+                              product.resolution,
+                              productElem);
+
+        createDouble("Ellipticity", product.ellipticity, productElem);
+
+        if (product.polarization.empty())
+        {
+            throw except::Exception(Ctxt(
+                "Product must have at least one Polarization"));
+        }
+
+        for (size_t jj = 0; jj < product.polarization.size(); ++jj)
+        {
+            XMLElem polarizationElem = newElement("Polarization", productElem);
+            createStringFromEnum("TxPolarizationProc",
+                                 product.polarization[jj].txPolarizationProc,
+                                 polarizationElem);
+            createStringFromEnum("RcvPolarizationProc",
+                                 product.polarization[jj].rcvPolarizationProc,
+                                 polarizationElem);
+        }
+
+        // optional
+        if (product.north != Init::undefined<double>())
+            createDouble("North", product.north, productElem);
+
+        // optional to unbounded
+        common().addParameters("Extension",
+                               product.extensions,
+                               productElem);
+    }
 
     return exploitationFeaturesElem;
 }
@@ -1935,6 +1982,9 @@ void DerivedXMLParser110::parseExploitationFeaturesFromXML(
     const XMLElem exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
+    // There is a difference between 1.0 and 1.1 in that the processing field
+    // is no longer allowed in 1.1. But since schema validation should handle
+    // this, it's fine to just delegate to the common case.
     DerivedXMLParser::parseExploitationFeaturesFromXML(exploitationFeaturesElem, exploitationFeatures);
 
     std::vector<XMLElem> collectionsElem;
@@ -1952,6 +2002,64 @@ void DerivedXMLParser110::parseExploitationFeaturesFromXML(
                 parseDouble(dopplerElem, coll.geometry->dopplerConeAngle);
             }
         }
+    }
+}
+
+void DerivedXMLParser110::parseProductFromXML(
+    const XMLElem exploitationFeaturesElem,
+    ExploitationFeatures* exploitationFeatures) const
+{
+    std::vector<XMLElem> productElems;
+    exploitationFeaturesElem->getElementsByTagName("Product", productElems);
+    
+    if (productElems.empty())
+    {
+        throw except::Exception(Ctxt(
+            "ExploitationFeatures requires at least one Product"));
+    }
+
+    exploitationFeatures->product.resize(productElems.size());
+    for (size_t ii = 0; ii < productElems.size(); ++ii)
+    {
+        XMLElem productElem = productElems[ii];
+        Product& product = exploitationFeatures->product[ii];
+
+        parseInt(getFirstAndOnly(productElem, "ProductImageNumber"),
+                                 product.productImageNumber);
+
+        common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
+                                   product.resolution);
+
+        parseDouble(getFirstAndOnly(productElem, "Ellipticity"),
+                    product.ellipticity);
+
+        std::vector<XMLElem> polarizationElems;
+        productElem->getElementsByTagName("Polarization", polarizationElems);
+        if (polarizationElems.empty())
+        {
+            throw except::Exception(Ctxt(
+                "Product requires at least one polarization"));
+        }
+        product.polarization.resize(polarizationElems.size());
+        for (size_t jj = 0; jj < product.polarization.size(); ++jj)
+        {
+            XMLElem polarizationElem = polarizationElems[jj];
+            ProcTxRcvPolarization& polarization = product.polarization[jj];
+
+            parseEnum(polarizationElem, polarization.txPolarizationProc);
+            parseEnum(polarizationElem, polarization.rcvPolarizationProc);
+        }
+
+        // optional
+        XMLElem tmpElem = getOptional(productElem, "North");
+        if (tmpElem)
+        {
+            parseDouble(tmpElem, product.north);
+        }
+
+        // optional to unbounded
+        common().parseParameters(productElem, "Extension",
+                                 product.extensions);
     }
 }
 

@@ -124,8 +124,10 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     parent->information.collectionDateTime = six::DateTime();
     parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
     parent->information.sensorName.clear();
-    siddData->exploitationFeatures->product.resolution.row = 0;
-    siddData->exploitationFeatures->product.resolution.col = 0;
+
+    siddData->exploitationFeatures->product.resize(1);
+    siddData->exploitationFeatures->product[0].resolution.row = 0;
+    siddData->exploitationFeatures->product[0].resolution.col = 0;
     siddData->geographicAndTarget->geographicCoverage.reset(
             new six::sidd::GeographicCoverage(
             six::RegionType::GEOGRAPHIC_INFO));

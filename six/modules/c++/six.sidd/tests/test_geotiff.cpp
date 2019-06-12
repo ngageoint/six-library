@@ -72,8 +72,9 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     }
 
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
-    derivedData->exploitationFeatures->product.resolution.row = 0;
-    derivedData->exploitationFeatures->product.resolution.col = 0;
+    derivedData->exploitationFeatures->product.resize(1);
+    derivedData->exploitationFeatures->product[0].resolution.row = 0;
+    derivedData->exploitationFeatures->product[0].resolution.col = 0;
     derivedData->exploitationFeatures->collections.push_back(mem::ScopedCopyablePtr<six::sidd::Collection>());
     derivedData->exploitationFeatures->collections[0].reset(new six::sidd::Collection());
 

@@ -605,8 +605,9 @@ std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
     information.resolution.rg = 0;
     information.resolution.az = 0;
 
-    data->exploitationFeatures->product.resolution.row = 0;
-    data->exploitationFeatures->product.resolution.col = 0;
+    data->exploitationFeatures->product.resize(1);
+    data->exploitationFeatures->product[0].resolution.row = 0;
+    data->exploitationFeatures->product[0].resolution.col = 0;
     return data;
 }
 }

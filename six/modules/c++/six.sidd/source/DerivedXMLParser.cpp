@@ -853,20 +853,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         }
     }
 
-    XMLElem productElem = getFirstAndOnly(exploitationFeaturesElem, "Product");
-
-    common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
-        exploitationFeatures->product.resolution);
-    // optional
-    tmpElem = getOptional(productElem, "North");
-    if (tmpElem)
-    {
-        parseDouble(tmpElem, exploitationFeatures->product.north);
-    }
-
-    // optional to unbounded
-    common().parseParameters(productElem, "Extension",
-        exploitationFeatures->product.extensions);
+    parseProductFromXML(exploitationFeaturesElem, exploitationFeatures);
 }
 
 XMLElem DerivedXMLParser::convertProcessorInformationToXML(

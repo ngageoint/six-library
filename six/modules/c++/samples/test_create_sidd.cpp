@@ -333,8 +333,9 @@ int main(int argc, char** argv)
             parent->information.collectionDateTime = six::DateTime();
             parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
             parent->information.sensorName = "the sensor";
-            data->exploitationFeatures->product.resolution.row = 0;
-            data->exploitationFeatures->product.resolution.col = 0;
+            data->exploitationFeatures->product.resize(1);
+            data->exploitationFeatures->product[0].resolution.row = 0;
+            data->exploitationFeatures->product[0].resolution.col = 0;
 
             data->annotations.push_back(mem::ScopedCopyablePtr<
                     six::sidd::Annotation>(new six::sidd::Annotation));

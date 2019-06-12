@@ -60,6 +60,10 @@ protected:
         const ExploitationFeatures* exploitationFeatures,
         XMLElem parent = NULL) const;
 
+    virtual void parseProductFromXML(
+        const XMLElem exploitationFeaturesElem,
+        ExploitationFeatures* exploitationFeatures) const;
+
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const;
 

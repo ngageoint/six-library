@@ -55,7 +55,6 @@ struct ProcessingModule
      *  ProcessingModule is a repeatable structure within
      *  itself to create an algorithm as a subset of another
      *  algorithm
-     *
      */
     std::vector<mem::ScopedCopyablePtr<ProcessingModule> > processingModules;
 

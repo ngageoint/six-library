@@ -48,6 +48,10 @@ protected:
             const DerivedClassification& classification,
             XMLElem parent = NULL) const;
 
+    virtual void parseProductFromXML(
+        const XMLElem exploitationFeaturesElem,
+        ExploitationFeatures* exploitationFeatures) const;
+
     virtual void parseCompressionFromXML(const XMLElem compressionElem,
                                          Compression& compression) const;
 

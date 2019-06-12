@@ -399,7 +399,9 @@ struct DynamicRangeAdjustment
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
     size_t bandStatsSource; //! Indicates which band to use for DRA stats
 
-    // Must include exactly one of draParameters or draOverrides
+    // In SIDD 1.0, must include exactly one of draParameters or draOverrides
+    // In SIDD 1.1, include draParameters if algorithmType == AUTO,
+    //              may include draOverrides unless algorithmType == None
     mem::ScopedCopyablePtr<DRAParameters> draParameters;
     mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
     bool operator==(const DynamicRangeAdjustment& rhs) const;

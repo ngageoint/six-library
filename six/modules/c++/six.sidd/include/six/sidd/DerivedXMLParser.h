@@ -52,6 +52,10 @@ protected:
             const DerivedClassification& classification,
             XMLElem parent = NULL) const = 0;
 
+    virtual void parseProductFromXML(
+            const XMLElem exploitationFeaturesElem,
+            ExploitationFeatures* exploitationFeatures) const = 0;
+
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = NULL) const = 0;
 

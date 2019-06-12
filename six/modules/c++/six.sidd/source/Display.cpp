@@ -137,6 +137,11 @@ bool ColorManagementModule::operator==(const ColorManagementModule& rhs) const
         iccProfile == rhs.iccProfile);
 }
 
+bool ColorManagementModule::operator!=(const ColorManagementModule& rhs) const
+{
+    return !(*this == rhs);
+}
+
 bool GeometricTransform::operator==(const GeometricTransform& rhs) const
 {
     return scaling == rhs.scaling && orientation == rhs.orientation;

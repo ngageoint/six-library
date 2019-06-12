@@ -2141,10 +2141,11 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures)
     collection.phenomenology->groundTrack = 8.11;
     collection.phenomenology->extensions.push_back(param);
 
-    exFeatures.product.resolution.row = 0;
-    exFeatures.product.resolution.col = 0;
-    exFeatures.product.north = 58.332;
-    exFeatures.product.extensions.push_back(param);
+    exFeatures.product.resize(1);
+    exFeatures.product[0].resolution.row = 0;
+    exFeatures.product[0].resolution.col = 0;
+    exFeatures.product[0].north = 58.332;
+    exFeatures.product[0].extensions.push_back(param);
 }
 
 void initDownstreamReprocessing(six::sidd::DownstreamReprocessing& reprocess)
