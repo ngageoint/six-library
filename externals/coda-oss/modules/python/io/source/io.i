@@ -30,7 +30,6 @@
   #include "import/sys.h"
   #include "import/io.h"
   using namespace io;
-  #define SWIG_PYTHON_STRICT_BYTE_CHAR
 %}
 
 %include "io/InputStream.h"
@@ -57,3 +56,11 @@
 %include "io/FileInputStreamOS.h"
 %include "io/FileOutputStreamOS.h"
 
+
+%extend io::StringStream
+{
+    void writeBytes(PyObject* bytes)
+    {
+        $self->write(PyBytes_AsString(bytes), PyBytes_Size(bytes));
+    }
+}

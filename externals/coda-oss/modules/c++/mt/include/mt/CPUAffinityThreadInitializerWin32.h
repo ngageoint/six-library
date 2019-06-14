@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,25 +14,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 
-#include "mt/LinuxCPUAffinityInitializer.h"
+#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
+#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
 
-#if !defined(__APPLE_CC__)
-#if defined(__linux) || defined(__linux__)
+#if defined(WIN32)
 
-cpu_set_t mt::LinuxCPUAffinityInitializer::nextCPU()
+#include <mt/AbstractCPUAffinityThreadInitializer.h>
+
+namespace mt
 {
-    cpu_set_t affinityMask;	    
-    CPU_ZERO(&affinityMask);		    
-    CPU_SET(mNextCPU, &affinityMask);		    
-    ++mNextCPU;
-    return affinityMask;
+/*!
+ * \class CPUAffinityThreadInitializerWin32
+ * \brief Windows-specific setting of the CPU affinity of a thread
+ * \todo This is a stub implementation that doesn't do anything. Make this work.
+ */
+class CPUAffinityThreadInitializerWin32 : public AbstractCPUAffinityThreadInitializer
+{
+public:
+    virtual void initialize() {}
+};
 }
 
 #endif
