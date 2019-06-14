@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,44 +14,41 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 
-#ifndef __MT_LINUX_CPU_AFFINITY_INITIALIZER_H__
-#define __MT_LINUX_CPU_AFFINITY_INITIALIZER_H__
-
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
 
+#include <sched.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
 
-#include "mt/CPUAffinityInitializer.h"
-#include "mt/LinuxCPUAffinityThreadInitializer.h"
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <mt/CPUAffinityThreadInitializerLinux.h>
 
 namespace mt
 {
-    class LinuxCPUAffinityInitializer : public mt::CPUAffinityInitializer
+CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
+        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
+    mCPU(cpu)
+{
+}
+
+void CPUAffinityThreadInitializerLinux::initialize()
+{
+    pid_t tid = syscall(SYS_gettid);
+    if (::sched_setaffinity(tid, mCPU->getSize(), mCPU->getMask()) == -1)
     {
-	int mNextCPU;
-	cpu_set_t nextCPU();
-    public:
-	LinuxCPUAffinityInitializer(int initialOffset) : 
-	    mNextCPU(initialOffset) {}
-	
-	~LinuxCPUAffinityInitializer() {}
-	
-	LinuxCPUAffinityThreadInitializer* newThreadInitializer()
-	{
-	    return new LinuxCPUAffinityThreadInitializer(nextCPU());
-	}
-	
-    };
+	   throw except::Exception(Ctxt("Failed setting processor affinity"));
+    }
+}
 }
 
 #endif
 #endif
-#endif
-

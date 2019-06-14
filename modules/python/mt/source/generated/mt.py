@@ -163,9 +163,12 @@ class ThreadGroup(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ThreadGroup, name)
     __repr__ = _swig_repr
 
-    def __init__(self):
-        """__init__(mt::ThreadGroup self) -> ThreadGroup"""
-        this = _mt.new_ThreadGroup()
+    def __init__(self, pinToCPU=False):
+        """
+        __init__(mt::ThreadGroup self, bool pinToCPU=False) -> ThreadGroup
+        __init__(mt::ThreadGroup self) -> ThreadGroup
+        """
+        this = _mt.new_ThreadGroup(pinToCPU)
         try:
             self.this.append(this)
         except __builtin__.Exception:

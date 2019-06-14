@@ -29,6 +29,10 @@
 #include <unistd.h>
 #include <sstream>
 #include <limits.h>
+#include <vector>
+#include <set>
+#include <fstream>
+#include <errno.h>
 
 #if defined(__APPLE__)
 
@@ -43,6 +47,8 @@
 
 #include "sys/OSUnix.h"
 #include "sys/File.h"
+#include "sys/ScopedCPUAffinityUnix.h"
+#include "str/Tokenizer.h"
 
 
 namespace
@@ -80,6 +86,52 @@ public:
 private:
     char* mArray;
 };
+
+std::set<std::string> get_unique_thread_siblings()
+{
+    // Our goal is to count the number of unique entries that occur
+    // in the files /sys/devices/system/cpu/cpu*/topology/thread_siblings_list
+    const sys::Path sysCPUPath("/sys/devices/system/cpu");
+    if (!sysCPUPath.isDirectory())
+    {
+        throw except::Exception(
+                Ctxt("Expected dir /sys/devices/system/cpu does not exist"));
+    }
+
+    const std::vector<std::string> searchPaths(1, sysCPUPath.getPath());
+    const std::vector<std::string> subDirs =
+        sys::FileFinder::search(
+            sys::DirectoryOnlyPredicate(),
+            searchPaths,
+            false);
+
+    std::set<std::string> unique_ts;
+    for (std::vector<std::string>::const_iterator ii = subDirs.begin();
+         ii != subDirs.end();
+         ++ii)
+    {
+        const sys::Path tsPath(*ii, "topology/thread_siblings_list");
+        if (tsPath.exists())
+        {
+            std::ifstream tsIFS(tsPath.getPath().c_str());
+            if (!tsIFS.is_open())
+            {
+                std::ostringstream msg;
+                msg << "Unable to open thread siblings file "
+                    << tsPath.getPath();
+                throw except::Exception(Ctxt(msg.str()));
+            }
+
+            std::string tsContents;
+            tsIFS >> tsContents;
+            tsIFS.close();
+
+            unique_ts.insert(tsContents);
+        }
+    }
+
+    return unique_ts;
+}
 }
 
 std::string sys::OSUnix::getPlatformName() const
@@ -302,11 +354,67 @@ void sys::OSUnix::unsetEnv(const std::string& var)
 
 size_t sys::OSUnix::getNumCPUs() const
 {
-#ifdef _SC_NPROCESSORS_ONLN
-    return sysconf(_SC_NPROCESSORS_ONLN);
-#else
-    throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
-#endif
+    return static_cast<size_t>(ScopedCPUMaskUnix::getNumOnlineCPUs());
+}
+
+size_t sys::OSUnix::getNumCPUsAvailable() const
+{
+    const ScopedCPUAffinityUnix mask;
+    return CPU_COUNT_S(mask.getSize(), mask.getMask());
+}
+
+size_t sys::OSUnix::getNumPhysicalCPUs() const
+{
+    return get_unique_thread_siblings().size();
+}
+
+size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
+{
+    std::vector<int> physicalCPUs;
+    std::vector<int> htCPUs;
+    getAvailableCPUs(physicalCPUs, htCPUs);
+    return physicalCPUs.size();
+}
+
+void sys::OSUnix::getAvailableCPUs(std::vector<int>& physicalCPUs,
+                                   std::vector<int>& htCPUs) const
+{
+    physicalCPUs.clear();
+    htCPUs.clear();
+
+    // Obtain scheduling affinity for all CPUs (including hyperthreading)
+    const ScopedCPUAffinityUnix mask;
+
+    // Cross-reference the thread siblings with active CPUs
+    // and separate into physical CPUs and HT CPUs. At the hardware level there
+    // is no distinction as to which CPU is the physical and which is the HT.
+    // So, we'll just say that the first masked CPU ID encountered for a core
+    // is the physical CPU, and the remainder of masked CPU IDs are the HT CPUs.
+    const std::set<std::string> unique_ts(get_unique_thread_siblings());
+    std::set<std::string>::const_iterator tsStr;
+    for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
+    {
+        bool foundPhysical = false;
+        const str::Tokenizer::Tokens cpuIDs = str::Tokenizer(*tsStr, ",");
+        for (str::Tokenizer::Tokens::const_iterator cpu = cpuIDs.begin();
+             cpu != cpuIDs.end();
+             ++cpu)
+        {
+            const int cpuInt = str::toType<int>(*cpu);
+            if (CPU_ISSET_S(cpuInt, mask.getSize(), mask.getMask()))
+            {
+                if (foundPhysical)
+                {
+                    htCPUs.push_back(cpuInt);
+                }
+                else
+                {
+                    physicalCPUs.push_back(cpuInt);
+                    foundPhysical = true;
+                }
+            }
+        }
+    }
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname,
