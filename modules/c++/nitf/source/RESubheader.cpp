@@ -42,7 +42,7 @@ RESubheader::RESubheader(nitf_RESubheader * x)
     getNativeOrThrow();
 }
 
-RESubheader::RESubheader() throw(nitf::NITFException)
+RESubheader::RESubheader()
 {
     setNative(nitf_RESubheader_construct(&error));
     getNativeOrThrow();
@@ -50,7 +50,7 @@ RESubheader::RESubheader() throw(nitf::NITFException)
 }
 
 
-nitf::RESubheader RESubheader::clone() throw(nitf::NITFException)
+nitf::RESubheader RESubheader::clone()
 {
     nitf::RESubheader dolly(
         nitf_RESubheader_clone(getNativeOrThrow(), &error));

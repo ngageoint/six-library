@@ -42,7 +42,7 @@ FileHeader::FileHeader(nitf_FileHeader * x)
     getNativeOrThrow();
 }
 
-FileHeader::FileHeader() throw(nitf::NITFException)
+FileHeader::FileHeader()
 {
     setNative(nitf_FileHeader_construct(&error));
     getNativeOrThrow();
@@ -50,7 +50,7 @@ FileHeader::FileHeader() throw(nitf::NITFException)
 }
 
 
-nitf::FileHeader FileHeader::clone() throw(nitf::NITFException)
+nitf::FileHeader FileHeader::clone()
 {
     nitf::FileHeader dolly(nitf_FileHeader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -186,7 +186,6 @@ nitf::Field FileHeader::getNumReservedExtensions()
 }
 
 nitf::ComponentInfo FileHeader::getImageInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumImages();
     if (i < 0 || i >= num)
@@ -196,7 +195,6 @@ nitf::ComponentInfo FileHeader::getImageInfo(int i)
 }
 
 nitf::ComponentInfo FileHeader::getGraphicInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumGraphics();
     if (i < 0 || i >= num)
@@ -206,7 +204,6 @@ nitf::ComponentInfo FileHeader::getGraphicInfo(int i)
 }
 
 nitf::ComponentInfo FileHeader::getLabelInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumLabels();
     if (i < 0 || i >= num)
@@ -216,7 +213,6 @@ nitf::ComponentInfo FileHeader::getLabelInfo(int i)
 }
 
 nitf::ComponentInfo FileHeader::getTextInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumTexts();
     if (i < 0 || i >= num)
@@ -226,7 +222,6 @@ nitf::ComponentInfo FileHeader::getTextInfo(int i)
 }
 
 nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumDataExtensions();
     if (i < 0 || i >= num)
@@ -236,7 +231,6 @@ nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i)
 }
 
 nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i)
-    throw(except::IndexOutOfRangeException)
 {
     int num = getNumReservedExtensions();
     if (i < 0 || i >= num)

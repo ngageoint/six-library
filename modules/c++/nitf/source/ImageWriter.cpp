@@ -25,7 +25,6 @@
 using namespace nitf;
 
 ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
-        throw (nitf::NITFException)
 {
     setNative(nitf_ImageWriter_construct(subheader.getNative(), NULL, &error));
 }
@@ -40,7 +39,6 @@ ImageWriter::~ImageWriter()
 }
 
 void ImageWriter::attachSource(nitf::ImageSource imageSource)
-        throw (nitf::NITFException)
 {
     if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),
                                        imageSource.getNative(), &error))

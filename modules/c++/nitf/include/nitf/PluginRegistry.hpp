@@ -47,36 +47,33 @@ public:
      * Load plugins from the given directory
      * \param dirName  The name of the directory to load
      */
-    static void loadDir(const std::string& dirName) throw(nitf::NITFException);
+    static void loadDir(const std::string& dirName);
 
-    static void loadPlugin(const std::string& path) throw(nitf::NITFException);
+    static void loadPlugin(const std::string& path);
 
     /*!
      *  This function allows you to register your own TRE handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
     static void registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
-            NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
-            throw(nitf::NITFException);
+            NITF_PLUGIN_TRE_HANDLER_FUNCTION handler);
 
     /*!
      *  This function allows you to register your own compression handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
     static void registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
-            NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
-            throw(nitf::NITFException);
+            NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler);
 
     /*!
      *  This function allows you to register your own decompression handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
     static void registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
-            NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler)
-            throw(nitf::NITFException);
+            NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler);
 
     static nitf_CompressionInterface* retrieveCompressionInterface(
-            const std::string& comp) throw(nitf::NITFException);
+            const std::string& comp);
 
     /*!
      * Checks if a TRE handler exists for 'ident'

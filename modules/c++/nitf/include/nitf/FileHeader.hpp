@@ -61,10 +61,10 @@ public:
     FileHeader(nitf_FileHeader * x);
 
     //! Constructor
-    FileHeader() throw(nitf::NITFException);
+    FileHeader();
 
     //! Clone
-    nitf::FileHeader clone() throw(nitf::NITFException);
+    nitf::FileHeader clone();
 
     ~FileHeader();
 
@@ -141,28 +141,22 @@ public:
     nitf::Field getNumReservedExtensions();
 
     //! Get the imageInfo
-    nitf::ComponentInfo getImageInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getImageInfo(int i);
 
     //! Get the graphicInfo
-    nitf::ComponentInfo getGraphicInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getGraphicInfo(int i);
 
     //! Get the labelInfo
-    nitf::ComponentInfo getLabelInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getLabelInfo(int i);
 
     //! Get the textInfo
-    nitf::ComponentInfo getTextInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getTextInfo(int i);
 
     //! Get the dataExtensionInfo
-    nitf::ComponentInfo getDataExtensionInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getDataExtensionInfo(int i);
 
     //! Get the reservedExtensionInfo
-    nitf::ComponentInfo getReservedExtensionInfo(int i)
-        throw(except::IndexOutOfRangeException);
+    nitf::ComponentInfo getReservedExtensionInfo(int i);
 
     //! Get the userDefinedHeaderLength
     nitf::Field getUserDefinedHeaderLength();

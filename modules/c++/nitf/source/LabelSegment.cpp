@@ -42,7 +42,7 @@ LabelSegment::LabelSegment(nitf_LabelSegment * x)
     getNativeOrThrow();
 }
 
-LabelSegment::LabelSegment() throw(nitf::NITFException)
+LabelSegment::LabelSegment()
 {
     setNative(nitf_LabelSegment_construct(&error));
     getNativeOrThrow();
@@ -63,7 +63,7 @@ LabelSegment & LabelSegment::operator=(NITF_DATA * x)
 }
 
 
-nitf::LabelSegment LabelSegment::clone() throw(nitf::NITFException)
+nitf::LabelSegment LabelSegment::clone()
 {
     nitf::LabelSegment dolly(
         nitf_LabelSegment_clone(getNativeOrThrow(), &error));

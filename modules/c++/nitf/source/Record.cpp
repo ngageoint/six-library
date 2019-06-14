@@ -45,14 +45,14 @@ Record::Record(nitf_Record * x)
     getNativeOrThrow();
 }
 
-Record::Record(nitf::Version version) throw(nitf::NITFException)
+Record::Record(nitf::Version version)
 {
     setNative(nitf_Record_construct(version, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::Record Record::clone() const throw(nitf::NITFException)
+nitf::Record Record::clone() const
 {
     nitf::Record dolly(nitf_Record_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

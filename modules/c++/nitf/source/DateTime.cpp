@@ -23,7 +23,7 @@
 #include "sys/Conf.h"
 #include "nitf/DateTime.hpp"
 
-nitf::DateTime::DateTime() throw (nitf::NITFException)
+nitf::DateTime::DateTime()
 {
     nitf_Error error;
     mDateTime = nitf_DateTime_now(&error);
@@ -33,7 +33,7 @@ nitf::DateTime::DateTime() throw (nitf::NITFException)
     }
 }
 
-nitf::DateTime::DateTime(nitf_DateTime* dateTime) throw(nitf::NITFException) :
+nitf::DateTime::DateTime(nitf_DateTime* dateTime) :
     mDateTime(dateTime)
 {
     if (!dateTime)
@@ -42,7 +42,7 @@ nitf::DateTime::DateTime(nitf_DateTime* dateTime) throw(nitf::NITFException) :
     }
 }
 
-nitf::DateTime::DateTime(double timeInMillis) throw (nitf::NITFException)
+nitf::DateTime::DateTime(double timeInMillis)
 {
     nitf_Error error;
     mDateTime = nitf_DateTime_fromMillis(timeInMillis, &error);
@@ -53,7 +53,7 @@ nitf::DateTime::DateTime(double timeInMillis) throw (nitf::NITFException)
 }
 
 nitf::DateTime::DateTime(const std::string& dateString,
-        const std::string& dateFormat) throw (nitf::NITFException)
+        const std::string& dateFormat)
 {
     nitf_Error error;
     mDateTime =
@@ -122,7 +122,7 @@ nitf::DateTime & nitf::DateTime::operator=(const nitf::DateTime& rhs)
 }
 
 void nitf::DateTime::format(const std::string& format, char* outBuf,
-        size_t maxSize) const throw (nitf::NITFException)
+        size_t maxSize) const
 {
     nitf_Error error;
     if (!nitf_DateTime_format(mDateTime,
@@ -136,7 +136,7 @@ void nitf::DateTime::format(const std::string& format, char* outBuf,
 }
 
 void nitf::DateTime::format(const std::string& format,
-                            std::string &str) const throw(nitf::NITFException)
+                            std::string &str) const
 {
     str.clear();
 
@@ -147,7 +147,6 @@ void nitf::DateTime::format(const std::string& format,
 }
 
 std::string nitf::DateTime::format(const std::string& format) const
-    throw(nitf::NITFException)
 {
     std::string str;
     this->format(format, str);
