@@ -2021,6 +2021,10 @@ class CPHDWriter(_object):
         """addImageImpl(CPHDWriter self, long long image, RowColSizeT dims, long long vbm)"""
         return _cphd.CPHDWriter_addImageImpl(self, image, dims, vbm)
 
+
+    def __del__(self):
+        self.close()
+
     __swig_destroy__ = _cphd.delete_CPHDWriter
     __del__ = lambda self: None
 CPHDWriter_swigregister = _cphd.CPHDWriter_swigregister
@@ -2032,8 +2036,8 @@ import multiprocessing
 from coda.coda_types import RowColSizeT
 
 def toBuffer(self, channel = 0):
-
-    numpyArray = numpy.empty(shape = ((self.getVBMsize(channel) / 8)), dtype = 'double')
+    numpyArray = numpy.empty(shape = int((self.getVBMsize(channel) / 8)),
+                             dtype = 'double')
     pointer, ro = numpyArray.__array_interface__['data']
 
     self.getVBMdata(channel, pointer)
@@ -2065,11 +2069,8 @@ def write(self, pathname, data, vbm, channel):
     self.addImageImpl(imagePointer, dims, vbmPointer)
     self.write(pathname)
 
-def __del__(self):
-    self.close()
 
 CPHDWriter.writeCPHD = write
-CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,
