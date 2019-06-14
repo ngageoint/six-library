@@ -57,15 +57,15 @@ public:
     /*!
      *  Constructor
      */
-    ImageSource() throw(nitf::NITFException);
+    ImageSource();
 
     ~ImageSource();
 
     //! Add a band
-    void addBand(nitf::BandSource bandSource) throw(nitf::NITFException);
+    void addBand(nitf::BandSource bandSource);
 
     //! Get a band
-    nitf::BandSource getBand(int n) throw (nitf::NITFException);
+    nitf::BandSource getBand(int n);
 
 private:
     nitf_Error error;

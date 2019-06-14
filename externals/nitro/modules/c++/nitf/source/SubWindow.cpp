@@ -42,7 +42,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() throw(nitf::NITFException) : mDownSampler(NULL)
+SubWindow::SubWindow() : mDownSampler(NULL)
 {
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();
@@ -120,7 +120,6 @@ void SubWindow::setNumBands(nitf::Uint32 value)
 }
 
 void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
-    throw (nitf::NITFException)
 {
     if (getNativeOrThrow()->downsampler)
     {
@@ -136,7 +135,7 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler() throw (nitf::NITFException)
+nitf::DownSampler* SubWindow::getDownSampler()
 {
     return mDownSampler;
 }

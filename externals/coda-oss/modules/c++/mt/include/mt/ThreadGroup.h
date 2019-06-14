@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,13 +26,16 @@
 #include <vector>
 #include <memory>
 #include <exception>
-#include "sys/Runnable.h"
-#include "sys/Thread.h"
-#include "mem/SharedPtr.h"
-#include "except/Error.h"
+
+#include <except/Error.h>
+#include <sys/Runnable.h>
+#include <sys/Thread.h>
 #include <sys/Mutex.h>
+#include <mem/SharedPtr.h>
 
-
+#include "mt/mt_config.h"
+#include <mt/CPUAffinityInitializer.h>
+#include <mt/CPUAffinityThreadInitializer.h>
 
 namespace mt
 {
@@ -50,34 +53,46 @@ class ThreadGroup
 {
 public:
 
-    //! Constructor.
-    ThreadGroup();
-    
+    /*!
+     * Constructor.
+     * \param pinToCPU Optional flag specifying whether CPU pinning
+     *                 should occur, using a CPUAffinityInitializer.
+     *                 If MT_FORCE_PINNING is defined, defaults to true
+     *                 (enable affinity-based thread pinning).
+     *                 Otherwise, defaults to false (no pinning).
+     */
+#if defined(MT_FORCE_PINNING)
+    ThreadGroup(bool pinToCPU = true);
+#else
+    ThreadGroup(bool pinToCPU = false);
+#endif
+
     /*!
     *  Destructor. Attempts to join all threads.
     */
     ~ThreadGroup();
-    
+
     /*!
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable pointer to sys::Runnable
     */
     void createThread(sys::Runnable *runnable);
-    
+
     /*!
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable auto_ptr to sys::Runnable
     */
     void createThread(std::auto_ptr<sys::Runnable> runnable);
-    
+
     /*!
      * Waits for all threads to complete.
      */
     void joinAll();
 
 private:
-    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
+    std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
+    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
     sys::Mutex mMutex;
 
@@ -85,6 +100,13 @@ private:
      * Adds an exception to the mExceptions vector
      */
     void addException(const except::Exception& ex);
+
+    /*!
+     * \returns the next available thread initializer provided by
+     *          the internal CPUAffinityInitializer. If no initializer
+     *          was created, will return NULL.
+     */
+    std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -96,9 +118,22 @@ private:
     {
     public:
 
-        //! Constructor.
-        ThreadGroupRunnable(std::auto_ptr<sys::Runnable> runnable,
-                            mt::ThreadGroup& parentThreadGroup);
+        /*!
+         * Constructor.
+         * \param runnable sys::Runnable object that will be executed by
+         *                 the current thread
+         * \param parentThreadGroup ThreadGroup object that spawned
+         *                          this ThreadGroupRunnable
+         * \param threadInit Affinity-based initializer for the thread
+         *                   that controls which CPUs the runnable is allowed
+         *                   to execute on. If NULL, no affinity preferences
+         *                   will be enforced.
+         */
+        ThreadGroupRunnable(
+                std::auto_ptr<sys::Runnable> runnable,
+                mt::ThreadGroup& parentThreadGroup,
+                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                        std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
 
         /*!
          *  Call run() on the Runnable passed to createThread
@@ -108,7 +143,7 @@ private:
     private:
         std::auto_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-
+        std::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 

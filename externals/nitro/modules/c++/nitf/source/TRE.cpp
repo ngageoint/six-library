@@ -56,21 +56,21 @@ TRE & TRE::operator=(NITF_DATA * x)
     return *this;
 }
 
-TRE::TRE(const char* tag) throw(nitf::NITFException)
+TRE::TRE(const char* tag)
 {
 	setNative(nitf_TRE_construct(tag, NULL, &error));
 	getNativeOrThrow();
 	setManaged(false);
 }
 
-TRE::TRE(const char* tag, const char* id) throw(nitf::NITFException)
+TRE::TRE(const char* tag, const char* id)
 {
 	setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : NULL, &error));
 	getNativeOrThrow();
 	setManaged(false);
 }
 
-TRE::TRE(const std::string& tag) throw(nitf::NITFException)
+TRE::TRE(const std::string& tag)
 {
 	setNative(nitf_TRE_construct(tag.c_str(), NULL, &error));
 	getNativeOrThrow();
@@ -78,7 +78,6 @@ TRE::TRE(const std::string& tag) throw(nitf::NITFException)
 }
 
 TRE::TRE(const std::string& tag, const std::string& id)
-    throw(nitf::NITFException)
 {
     setNative(nitf_TRE_construct(tag.c_str(),
     		                     id.empty() ? NULL : id.c_str(),
@@ -87,7 +86,7 @@ TRE::TRE(const std::string& tag, const std::string& id)
     setManaged(false);
 }
 
-nitf::TRE TRE::clone() throw(nitf::NITFException)
+nitf::TRE TRE::clone()
 {
     nitf::TRE dolly(nitf_TRE_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -104,13 +103,12 @@ TRE::Iterator TRE::begin()
     return TRE::Iterator(iter);
 }
 
-TRE::Iterator TRE::end() throw (nitf::NITFException)
+TRE::Iterator TRE::end()
 {
     return TRE::Iterator();
 }
 
 nitf::Field TRE::getField(const std::string& key)
-    throw(except::NoSuchKeyException)
 {
     nitf_Field* field = nitf_TRE_getField(getNativeOrThrow(), key.c_str());
     if (!field)
@@ -120,7 +118,6 @@ nitf::Field TRE::getField(const std::string& key)
 }
 
 nitf::Field TRE::operator[] (const std::string& key)
-    throw(except::NoSuchKeyException)
 {
     return getField(key);
 }
