@@ -42,14 +42,14 @@ TextSubheader::TextSubheader(nitf_TextSubheader * x)
     getNativeOrThrow();
 }
 
-TextSubheader::TextSubheader() throw(nitf::NITFException)
+TextSubheader::TextSubheader()
 {
     setNative(nitf_TextSubheader_construct(&error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::TextSubheader TextSubheader::clone() throw(nitf::NITFException)
+nitf::TextSubheader TextSubheader::clone()
 {
     nitf::TextSubheader dolly(nitf_TextSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

@@ -43,7 +43,7 @@ GraphicSubheader::GraphicSubheader(nitf_GraphicSubheader * x)
     getNativeOrThrow();
 }
 
-GraphicSubheader::GraphicSubheader() throw(nitf::NITFException)
+GraphicSubheader::GraphicSubheader()
 {
     setNative(nitf_GraphicSubheader_construct(&error));
     getNativeOrThrow();
@@ -51,7 +51,7 @@ GraphicSubheader::GraphicSubheader() throw(nitf::NITFException)
 }
 
 
-nitf::GraphicSubheader GraphicSubheader::clone() throw(nitf::NITFException)
+nitf::GraphicSubheader GraphicSubheader::clone()
 {
     nitf::GraphicSubheader dolly(
         nitf_GraphicSubheader_clone(getNativeOrThrow(), &error));

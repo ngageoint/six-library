@@ -65,7 +65,7 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader() throw(nitf::NITFException);
+    Reader();
 
     ~Reader();
 
@@ -81,22 +81,21 @@ public:
      *  \param io  The IO handle
      *  \return  A Record containing the read information
      */
-    nitf::Record read(nitf::IOHandle & io) throw (nitf::NITFException);
+    nitf::Record read(nitf::IOHandle & io);
 
     /*!
      *  This is the preferred method for reading a NITF 2.1 file.
      *  \param io  The IO handle
      *  \return  A Record containing the read information
      */
-    nitf::Record readIO(nitf::IOInterface & io) throw (nitf::NITFException);
+    nitf::Record readIO(nitf::IOInterface & io);
 
     /*!
      *  Get a new image reader for the segment
      *  \param imageSegmentNumber  The image segment number
      *  \return  An ImageReader matching the imageSegmentNumber
      */
-    nitf::ImageReader newImageReader(int imageSegmentNumber)
-        throw (nitf::NITFException);
+    nitf::ImageReader newImageReader(int imageSegmentNumber);
     
     /*!
      *  Get a new image reader for the segment
@@ -105,32 +104,28 @@ public:
      *  \return  An ImageReader matching the imageSegmentNumber
      */
     nitf::ImageReader newImageReader(int imageSegmentNumber,
-                                     const std::map<std::string, void*>& options)
-        throw (nitf::NITFException);
+                                     const std::map<std::string, void*>& options);
 
     /*!
      *  Get a new DE reader for the segment
      *  \param deSegmentNumber  The DE segment number
      *  \return  A SegmentReader matching the deSegmentNumber
      */
-    nitf::SegmentReader newDEReader(int deSegmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newDEReader(int deSegmentNumber);
 
     /*!
      *  Get a new SegmentReader for the Graphic segment
      *  \param segmentNumber the segment Number
      *  \return  A SegmentReader matching the segmentNumber
      */
-    nitf::SegmentReader newGraphicReader(int segmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newGraphicReader(int segmentNumber);
 
     /*!
      *  Get a new SegmentReader for the Text segment
      *  \param segmentNumber the segment Number
      *  \return  A SegmentReader matching the segmentNumber
      */
-    nitf::SegmentReader newTextReader(int segmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newTextReader(int segmentNumber);
 
     //! Get the warningList
     nitf::List getWarningList() const;

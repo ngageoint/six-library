@@ -67,7 +67,7 @@ public:
      * \param buffer    buffer to hold data
      * \param count     amount of data to return
      */
-    void read(NITF_DATA *buffer, size_t count) throw (nitf::NITFException);
+    void read(NITF_DATA *buffer, size_t count);
 
     /*!
      * \brief seek - Seek in segment data
@@ -82,7 +82,7 @@ public:
      * \param whence    starting at (SEEK_SET, SEEK_CUR, SEEK_END)
      * \return The offset from the beginning to the current position is set.
      */
-    nitf::Off seek(nitf::Off offset, int whence) throw (nitf::NITFException);
+    nitf::Off seek(nitf::Off offset, int whence);
 
     /*!
      * \brief tell - Tell location in segment data
