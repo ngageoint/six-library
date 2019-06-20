@@ -1948,12 +1948,7 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     display.monitorCompensationApplied->gamma = 5.9;
     display.monitorCompensationApplied->xMin = 0.87;
 
-    // BandInformation
-    display.bandInformation.reset(new six::sidd::BandInformation());
-    display.bandInformation->bandDescriptors.push_back("Red");
-    display.bandInformation->bandDescriptors.push_back("Green");
-    display.bandInformation->bandDescriptors.push_back("Blue");
-    display.bandInformation->displayFlag = 0; // TODO: ??? for RGB
+    display.numBands = 3;
 
     // NonInteractiveProcessing
     display.nonInteractiveProcessing.resize(1);
@@ -2153,7 +2148,6 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
 
     if (version == "1.1.0")
     {
-        exFeatures.product[0].productImageNumber = 123;
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
         exFeatures.product[0].polarization[0].txPolarizationProc = PolarizationSequenceType::SEQUENCE;

@@ -191,9 +191,11 @@ public:
     mem::ScopedCopyablePtr<LatLonCorners> imageCorners;
 
     /*!
-     *  (Optional) indicates the full image includes both
+     *  Indicates the full image includes both
      *  valid data and some zero-filled pixels.  Vector size
      *  is the number of vertices.
+     *
+     *  Required for SIDD 1.1
      */
     std::vector<LatLon> validData;
 

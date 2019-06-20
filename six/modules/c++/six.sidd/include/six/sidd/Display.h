@@ -202,25 +202,6 @@ struct DRAHistogramOverrides
     }
 };
 
-struct BandInformation
-{
-    BandInformation();
-
-    size_t numBands;
-
-    //! (Optional)
-    std::vector<std::string> bandDescriptors;
-
-    //! (Optional) Which band to display by default
-    size_t displayFlag;
-
-    bool operator==(const BandInformation& rhs) const;
-    bool operator!=(const BandInformation& rhs) const
-    {
-        return !(*this == rhs);
-    }
-};
-
 struct BandEqualization
 {
     BandEqualizationAlgorithm algorithm;
@@ -478,8 +459,10 @@ struct Display
     // End of SIDD 1.0-only section
     // Beginning of SIDD 1.1-only section
 
+    //Required
+    size_t numBands;
     //Optional
-    mem::ScopedCopyablePtr<BandInformation> bandInformation;
+    size_t defaultBandDisplay;
 
     //Required
     std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >

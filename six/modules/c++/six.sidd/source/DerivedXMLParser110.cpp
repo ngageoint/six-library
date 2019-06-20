@@ -379,11 +379,12 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayElem,
                                               Display& display) const
 {
     //pixelType previously set
-    XMLElem bandInfoElem = getOptional(displayElem, "BandInformation");
-    if (bandInfoElem)
+    parseUInt(getFirstAndOnly(displayElem, "NumBands"),
+              display.numBands);
+    XMLElem bandDisplayElem = getOptional(displayElem, "DefaultBandDisplay");
+    if (bandDisplayElem)
     {
-        display.bandInformation.reset(new BandInformation());
-        parseBandInformationFromXML(bandInfoElem, *display.bandInformation);
+        parseUInt(bandDisplayElem, display.defaultBandDisplay);
     }
 
     std::vector<XMLElem> nonInteractiveProcessingElems;
@@ -421,31 +422,6 @@ void DerivedXMLParser110::parseDisplayFromXML(const XMLElem displayElem,
         Parameter parameter(value);
         parameter.setName(name);
         display.displayExtensions.push_back(parameter);
-    }
-}
-
-void DerivedXMLParser110::parseBandInformationFromXML(const XMLElem bandElem,
-            BandInformation& bandInformation) const
-{
-    parseInt(getFirstAndOnly(bandElem, "NumBands"), bandInformation.numBands);
-
-    std::vector<XMLElem> bandDescriptors;
-    bandElem->getElementsByTagName("BandDescriptor", bandDescriptors);
-    bandInformation.bandDescriptors = std::vector<std::string>();
-    bandInformation.bandDescriptors.resize(bandDescriptors.size());
-    for (size_t ii = 0; ii < bandDescriptors.size(); ++ii)
-    {
-        parseString(bandDescriptors[ii], bandInformation.bandDescriptors[ii]);
-    }
-
-    XMLElem displayFlagElem = getOptional(bandElem, "DisplayFlag");
-    if (displayFlagElem)
-    {
-        parseInt(displayFlagElem, bandInformation.displayFlag);
-    }
-    else
-    {
-        bandInformation.displayFlag = six::Init::undefined<size_t>();
     }
 }
 
@@ -1530,6 +1506,11 @@ XMLElem DerivedXMLParser110::convertMeasurementToXML(const Measurement* measurem
             setAttribute(vertexElem, "index", str::toString(ii + 1));
         }
     }
+    else
+    {
+        throw except::Exception(Ctxt(
+            "ValidData must have at least 3 vertices"));
+    }
     return measurementElem;
 }
 
@@ -1712,8 +1693,6 @@ XMLElem DerivedXMLParser110::convertExploitationFeaturesToXML(
         XMLElem productElem = newElement("Product", exploitationFeaturesElem);
         const Product& product = exploitationFeatures->product[ii];
 
-        createInt("ProductImageNumber", product.productImageNumber, productElem);
-
         common().createRowCol("Resolution",
                               product.resolution,
                               productElem);
@@ -1759,35 +1738,15 @@ XMLElem DerivedXMLParser110::convertDisplayToXML(
     //       in SIDD 1.0, so need to confirm it's allocated
     XMLElem displayElem = newElement("Display", parent);
 
-
     createString("PixelType", six::toString(display.pixelType), displayElem);
 
-    // BandInformation (Optional)
-    if (display.bandInformation.get() != NULL)
+    createInt("NumBands", display.numBands, displayElem);
+    if (six::Init::isDefined(display.defaultBandDisplay))
     {
-        XMLElem bandInfoElem = newElement("BandInformation", displayElem);
-        createInt("NumBands", display.bandInformation->numBands, bandInfoElem);
-
-        // BandDescriptors.size() is not necessarily equal to numBands
-        // For example, there may be 0 band descriptors
-        for (size_t ii = 0;
-                ii < display.bandInformation->bandDescriptors.size(); ++ii)
-        {
-            XMLElem bandElem = createString("BandDescriptor",
-                display.bandInformation->bandDescriptors[ii],
-                bandInfoElem);
-            setAttribute(bandElem, "band", str::toString(ii + 1));
-        }
-
-        if (six::Init::isDefined<size_t>(display.bandInformation->displayFlag))
-        {
-            createInt("DisplayFlag", display.bandInformation->displayFlag,
-                bandInfoElem);
-        }
+        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
     }
 
     // NonInteractiveProcessing
-
     for (size_t ii = 0; ii < display.nonInteractiveProcessing.size(); ++ii)
     {
         confirmNonNull(display.nonInteractiveProcessing[ii],
@@ -1844,6 +1803,10 @@ XMLElem DerivedXMLParser110::convertGeographicTargetToXML(
                                           vElem);
             setAttribute(vertexElem, "index", str::toString(ii + 1));
         }
+    }
+    else
+    {
+        throw except::Exception(Ctxt("ValidData must have at least 3 vertices"));
     }
 
     for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
@@ -1933,11 +1896,8 @@ void DerivedXMLParser110::parseGeographicTargetFromXML(
     common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
         *geographicAndTarget.imageCorners);
 
-    XMLElem dataElem = getOptional(geographicElem, "ValidData");
-    if (dataElem)
-    {
-        common().parseLatLons(dataElem, "Vertex", geographicAndTarget.validData);
-    }
+    common().parseLatLons(getFirstAndOnly(geographicElem, "ValidData"),
+                          "Vertex", geographicAndTarget.validData);
 
     std::vector<XMLElem> geoInfosElem;
     geographicElem->getElementsByTagName("GeoInfo", geoInfosElem);
@@ -1969,13 +1929,9 @@ void DerivedXMLParser110::parseMeasurementFromXML(
     common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"),
         measurement->arpPoly);
 
-    XMLElem validDataElem = getOptional(measurementElem, "ValidData");
-    if (validDataElem)
-    {
-        common().parseRowColInts(validDataElem,
-            "Vertex",
-            measurement->validData);
-    }
+    common().parseRowColInts(getFirstAndOnly(measurementElem, "ValidData"),
+                             "Vertex",
+                             measurement->validData);
 }
 
 void DerivedXMLParser110::parseExploitationFeaturesFromXML(
@@ -2023,9 +1979,6 @@ void DerivedXMLParser110::parseProductFromXML(
     {
         XMLElem productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
-
-        parseInt(getFirstAndOnly(productElem, "ProductImageNumber"),
-                                 product.productImageNumber);
 
         common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
                                    product.resolution);

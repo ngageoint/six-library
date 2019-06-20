@@ -37,12 +37,6 @@ DRAHistogramOverrides::DRAHistogramOverrides() :
 {
 }
 
-BandInformation::BandInformation() :
-    numBands(six::Init::undefined<size_t>()),
-    displayFlag(six::Init::undefined<size_t>())
-{
-}
-
 DynamicRangeAdjustment::DRAParameters::DRAParameters() :
     pMin(six::Init::undefined<double>()),
     pMax(six::Init::undefined<double>()),
@@ -109,12 +103,6 @@ bool BandEqualization::operator==(const BandEqualization& rhs) const
 {
     return (algorithm == rhs.algorithm &&
             bandLUTs == rhs.bandLUTs);
-}
-bool BandInformation::operator==(const BandInformation& rhs) const
-{
-    return (numBands == rhs.numBands &&
-            bandDescriptors == rhs.bandDescriptors &&
-            displayFlag == rhs.displayFlag);
 }
 
 bool NonInteractiveProcessing::operator==(
@@ -192,7 +180,8 @@ Display::Display() :
     magnificationMethod(MagnificationMethod::NOT_SET),
     decimationMethod(DecimationMethod::NOT_SET),
     histogramOverrides(NULL),
-    monitorCompensationApplied(NULL)
+    monitorCompensationApplied(NULL),
+    defaultBandDisplay(six::Init::undefined<size_t>())
 {
 }
 
@@ -204,7 +193,8 @@ bool Display::operator==(const Display& rhs) const
         decimationMethod == rhs.decimationMethod &&
         histogramOverrides == rhs.histogramOverrides &&
         monitorCompensationApplied == rhs.monitorCompensationApplied &&
-        bandInformation == rhs.bandInformation &&
+        numBands == rhs.numBands &&
+        defaultBandDisplay == rhs.defaultBandDisplay,
         nonInteractiveProcessing == rhs.nonInteractiveProcessing &&
         interactiveProcessing == rhs.interactiveProcessing &&
         displayExtensions == rhs.displayExtensions);

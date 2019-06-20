@@ -136,9 +136,6 @@ private:
 
     void parseDigitalElevationDataFromXML(const XMLElem elem,
                                           DigitalElevationData& ded) const;
-
-    void parseBandInformationFromXML(const XMLElem bandElem,
-         BandInformation& bandInformation) const;
     
     void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
          NonInteractiveProcessing& nonInteractiveProcessing) const;
