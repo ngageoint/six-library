@@ -2073,6 +2073,8 @@ void initGeographicAndTarget(six::sidd::GeographicAndTarget& geographicAndTarget
     }
 
     geographicAndTarget.validData.push_back(six::LatLon(23, 34));
+    geographicAndTarget.validData.push_back(six::LatLon(23, 35));
+    geographicAndTarget.validData.push_back(six::LatLon(23, 36));
 
     mem::ScopedCopyablePtr<six::GeoInfo> newGeoInfo(new six::GeoInfo());
     newGeoInfo->name = "GeoInfo";
@@ -2371,6 +2373,10 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
 
     // The constant term is a vector.  Each component is 0
     siddData.measurement->arpPoly[0] = six::Vector3(0.0);
+
+    siddData.measurement->validData.push_back(RowColInt(3, 2));
+    siddData.measurement->validData.push_back(RowColInt(3, 1));
+    siddData.measurement->validData.push_back(RowColInt(3, 0));
 
     //----------------------------------------------------
     // The basis vectors are dummied, each component is 0

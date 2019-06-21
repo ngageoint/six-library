@@ -401,7 +401,7 @@
             <xs:element name="GeometricTransform" type="GeometricTransformType">
                 <xs:annotation>
                     <xs:documentation>
-                        The geometric transform element is used to perform various geometric distortions to each band of image data. These distortions 
+                        The geometric transform element is used to perform various geometric distortions to each band of image data. These distortions
                         include image chipping, scaling, rotation, shearing, etc.
                 </xs:documentation>
                 </xs:annotation>
@@ -803,7 +803,7 @@
                     <xs:documentation>Center of aperture polynomial (units = m) based upon time into the collect.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="ValidData" type="sicommon:ValidDataType" minOccurs="1">
+            <xs:element name="ValidData" type="ValidDataType" minOccurs="1">
                 <xs:annotation>
                     <xs:documentation>
                         Indicates the full image includes both valid data and some zero filled pixels.
@@ -938,7 +938,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="ValidData" type="sicommon:PolygonType" minOccurs="1">
+            <xs:element name="ValidData" type="PolygonType" minOccurs="1">
                 <xs:annotation>
                     <xs:documentation>
                         Indicates the full image includes both valid data and some zero filled pixels.
@@ -983,12 +983,50 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="PolygonType">
+        <xs:annotation>
+            <xs:documentation>
+                Indicates the full image includes both valid data and some zero filled pixels.
+                Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="3" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Vertices indexed n = 1, 2, ..., NumVertices. NumVertices >= 3. Vertex 1 is determined by (1) minimum row index, (2) minimum column index if 2 vertices with minimum row index,
+                        1st and last vertices are connected to form the polygon.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="size" type="xs:int" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="ValidDataType">
+        <xs:annotation>
+            <xs:documentation>
+                Indicates the full image includes both valid data and some zero filled pixels.
+                Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Vertex" type="sicommon:RowColVertexType" minOccurs="3" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Vertices indexed n = 1, 2, ..., NumVertices. NumVertices >= 3. Vertex 1 is determined by (1) minimum row index, (2) minimum column index if 2 vertices with minimum row index,
+                        1st and last vertices are connected to form the polygon.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="size" type="xs:int" use="required"/>
+    </xs:complexType>
     <xs:complexType name="GeometricChipType">
         <xs:annotation>
             <xs:documentation>
-                Contains information related to downstream chipping of the product. There is only one instance, and the instance is updated with respect to the full image parameters. 
+                Contains information related to downstream chipping of the product. There is only one instance, and the instance is updated with respect to the full image parameters.
                 For example, if an image is chipped out of a smaller chip, the new chip needs to be updated to the original full image corners.
-                Since this relationship is linear, bi-linear interpolation is sufficient to determine an arbitrary chip coordinate in terms 
+                Since this relationship is linear, bi-linear interpolation is sufficient to determine an arbitrary chip coordinate in terms
                 of the original full image coordinates. Chipping is typically done using an exploitation tool, and should not be done in the initial product creation.
             </xs:documentation>
         </xs:annotation>
