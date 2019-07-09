@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -85,7 +85,6 @@ TEST_CASE(testIncompleteCondMod)
 
 TEST_CASE(testClone)
 {
-
     NITF_BOOL exists;
     nitf_TRE* dolly;            /* used for clone */
     nitf_Field* clonedField = NULL;
@@ -231,13 +230,10 @@ TEST_CASE(populateWhileIterating)
     nitf_TRE_destruct(&tre);
 }
 
-/* This test should be used to verify the TRE modifications work. */
 int main(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
-
-    nitf_Error error;
 
     CHECK(testClone);
     CHECK(testSize);
@@ -247,7 +243,5 @@ int main(int argc, char **argv)
     CHECK(iterateUnfilled);
     CHECK(populateThenIterate);
     CHECK(populateWhileIterating);
-
-    printf("Test passed\n");
     return 0;
 }
