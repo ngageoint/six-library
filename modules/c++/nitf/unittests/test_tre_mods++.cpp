@@ -70,28 +70,25 @@ TEST_CASE(basicIteration)
 {
     nitf::TRE tre("ACCPOB");
 
+    // The entire TRE is one loop, and we haven't told it
+    // how many elements there are, so there's nothing to
+    // iterate over
+    size_t numFields = 0;
+    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
-        // The entire TRE is one loop, and we haven't told it
-        // how many elements there are, so there's nothing to
-        // iterate over
-        size_t numFields = 0;
-        for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
-        {
-            ++numFields;
-        }
-        TEST_ASSERT_EQ(numFields, 1);
+        ++numFields;
     }
+    TEST_ASSERT_EQ(numFields, 1);
+
+    numFields = 0;
+    tre.setField("NUMACPO", 2);
+    tre.setField("NUMPTS[0]", 3);
+    tre.setField("NUMPTS[1]", 2);
+    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
-        tre.setField("NUMACPO", 2);
-        tre.setField("NUMPTS[0]", 3);
-        tre.setField("NUMPTS[1]", 2);
-        size_t numFields = 0;
-        for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
-        {
-            ++numFields;
-        }
-        TEST_ASSERT_EQ(numFields, 29);
+        ++numFields;
     }
+    TEST_ASSERT_EQ(numFields, 29);
 }
 
 TEST_CASE(populateWhileIterating)

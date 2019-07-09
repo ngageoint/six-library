@@ -543,7 +543,6 @@ NITFPRIV(NITF_BOOL) fillEmptyTREField(nitf_TRECursor* cursor, nitf_Pair* pair, n
         pair->data = (NITF_DATA *) field;
     }
     return NITF_SUCCESS;
-
 }
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
