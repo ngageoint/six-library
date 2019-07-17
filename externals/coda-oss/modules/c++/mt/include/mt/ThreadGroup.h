@@ -57,15 +57,11 @@ public:
      * Constructor.
      * \param pinToCPU Optional flag specifying whether CPU pinning
      *                 should occur, using a CPUAffinityInitializer.
-     *                 If MT_FORCE_PINNING is defined, defaults to true
+     *                 If MT_DEFAULT_PINNING is defined, defaults to true
      *                 (enable affinity-based thread pinning).
      *                 Otherwise, defaults to false (no pinning).
      */
-#if defined(MT_FORCE_PINNING)
-    ThreadGroup(bool pinToCPU = true);
-#else
-    ThreadGroup(bool pinToCPU = false);
-#endif
+    ThreadGroup(bool pinToCPU = getDefaultPinToCPU());
 
     /*!
     *  Destructor. Attempts to join all threads.
@@ -89,12 +85,40 @@ public:
      */
     void joinAll();
 
+    /*!
+     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
+     *
+     * \return true if CPU pinning is set, false otherwise
+     */
+    bool isPinToCPUEnabled() const;
+
+    /*!
+     * Gets the current default value for CPU pinning
+     *
+     * \return true if CPU pinning is enabled by default, false otherwise
+     */
+    static bool getDefaultPinToCPU();
+
+    /*!
+     * Sets the default value for CPU pinning
+     *
+     * \param newDefault the new default value for CPU pinning
+     */
+    static void setDefaultPinToCPU(bool newDefault);
+
 private:
     std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
     std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
     sys::Mutex mMutex;
+
+    /*!
+     * The default setting for pinToCPU, used in the ThreadGroup constructor
+     * Can't set non-const static values in the header, so set at the top of
+     * the implementation
+     */
+    static bool DEFAULT_PIN_TO_CPU;
 
     /*!
      * Adds an exception to the mExceptions vector
