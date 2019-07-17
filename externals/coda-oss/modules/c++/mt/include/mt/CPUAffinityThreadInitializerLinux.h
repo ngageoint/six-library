@@ -21,27 +21,50 @@
  */
 
 
-#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
-#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
-
-#include <mt/AbstractCPUAffinityThreadInitializer.h>
-
-#if defined(WIN32)
-#include <mt/CPUAffinityThreadInitializerWin32.h>
-namespace mt
-{
-typedef CPUAffinityThreadInitializerWin32 CPUAffinityThreadInitializer;
-}
-#endif
+#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
+#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
 
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
-#include <mt/CPUAffinityThreadInitializerLinux.h>
+
+#include <memory>
+
+#include <sys/ScopedCPUAffinityUnix.h>
+#include <mt/AbstractCPUAffinityThreadInitializer.h>
+
 namespace mt
 {
-typedef CPUAffinityThreadInitializerLinux CPUAffinityThreadInitializer;
-}
-#endif
-#endif
+/*!
+ * \class CPUAffinityThreadInitializerLinux
+ * \brief Linux-specific setting of the CPU affinity of a thread
+ */
+class CPUAffinityThreadInitializerLinux :
+        public AbstractCPUAffinityThreadInitializer
+{
+public:
 
+    /*!
+     * Constructor
+     *
+     * \param cpu A ScopedCPUMaskUnix object corresponding to the
+     *            affinity mask for the CPUs that this thread
+     *            is allowed to bind to
+     */
+    CPUAffinityThreadInitializerLinux(
+            std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+
+    /*!
+     * Attempt to bind to the affinity mask given during construction
+     *
+     * \throws if setting the thread affinity fails
+     */
+    virtual void initialize();
+
+private:
+    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+};
+}
+
+#endif
+#endif
 #endif

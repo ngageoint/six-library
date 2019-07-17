@@ -21,27 +21,42 @@
  */
 
 
-#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
-#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
-
-#include <mt/AbstractCPUAffinityThreadInitializer.h>
+#ifndef __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
+#define __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
 
 #if defined(WIN32)
+
+#include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerWin32.h>
+
 namespace mt
 {
-typedef CPUAffinityThreadInitializerWin32 CPUAffinityThreadInitializer;
-}
-#endif
-
-#if !defined(__APPLE_CC__)
-#if defined(__linux) || defined(__linux__)
-#include <mt/CPUAffinityThreadInitializerLinux.h>
-namespace mt
+/*!
+ * \class CPUAffinityInitializerWin32
+ * \brief Windows-specific class for providing thread-level affinity initializers.
+ * \todo This is a stub implementation that doesn't do anything. Make this work.
+ */
+class CPUAffinityInitializerWin32 : public AbstractCPUAffinityInitializer
 {
-typedef CPUAffinityThreadInitializerLinux CPUAffinityThreadInitializer;
+public:
+    /*!
+     * \todo Not yet implemented
+     * \returns NULL
+     */
+    std::auto_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
+    {
+        return std::auto_ptr<CPUAffinityThreadInitializerWin32>(
+                newThreadInitializerImpl());
+    }
+
+private:
+    virtual CPUAffinityThreadInitializerWin32* newThreadInitializerImpl()
+    {
+        return NULL;
+    }
+};
 }
+
 #endif
 #endif
 
-#endif

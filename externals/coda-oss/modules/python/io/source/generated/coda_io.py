@@ -368,6 +368,11 @@ class StringStream(SeekableBidirectionalStream):
         """str(StringStream self) -> std::string"""
         return _coda_io.StringStream_str(self)
 
+
+    def writeBytes(self, bytes):
+        """writeBytes(StringStream self, PyObject * bytes)"""
+        return _coda_io.StringStream_writeBytes(self, bytes)
+
     __swig_destroy__ = _coda_io.delete_StringStream
     __del__ = lambda self: None
 StringStream_swigregister = _coda_io.StringStream_swigregister
