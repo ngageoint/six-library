@@ -26,6 +26,13 @@
 
 namespace mt
 {
+#if defined(MT_DEFAULT_PINNING)
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = true;
+#else
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = false;
+#endif
+
+
 ThreadGroup::ThreadGroup(bool pinToCPU) :
     mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
@@ -152,5 +159,20 @@ void ThreadGroup::ThreadGroupRunnable::run()
         mParentThreadGroup.addException(
             except::Exception(Ctxt("Unknown ThreadGroup exception.")));
     }
+}
+
+bool ThreadGroup::isPinToCPUEnabled() const
+{
+    return mAffinityInit.get() != NULL;
+}
+
+bool ThreadGroup::getDefaultPinToCPU()
+{
+    return DEFAULT_PIN_TO_CPU;
+}
+
+void ThreadGroup::setDefaultPinToCPU(bool newDefault)
+{
+    DEFAULT_PIN_TO_CPU = newDefault;
 }
 }

@@ -7,19 +7,19 @@ TEST_DEPS       = 'cli'
 distclean = lambda p: None
 
 def options(opt):
-    opt.add_option('--force-cpu-pinning',
+    opt.add_option('--default-cpu-pinning',
                    action='store_true',
-                   dest='mt_force_cpu_pinning',
+                   dest='mt_default_cpu_pinning',
                    default=False,
-                   help='Force affinity-based CPU pinning in MT')
+                   help='Use affinity-based CPU pinning by default in MT')
 
 def configure(conf):
     from build import writeConfig
     from waflib import Options
 
     def pinning_callback(conf):
-        if Options.options.mt_force_cpu_pinning:
-            conf.define('MT_FORCE_PINNING', 1)
+        if Options.options.mt_default_cpu_pinning:
+            conf.define('MT_DEFAULT_PINNING', 1)
     writeConfig(conf, pinning_callback, NAME)
 
 def build(bld):
