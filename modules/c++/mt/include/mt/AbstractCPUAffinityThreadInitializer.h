@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -14,40 +14,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 
-#ifndef __MT_LINUX_CPU_AFFINITY_THREAD_INITIALIZER_H__
-#define __MT_LINUX_CPU_AFFINITY_THREAD_INITIALIZER_H__
-
-#if !defined(__APPLE_CC__)
-#if defined(__linux) || defined(__linux__)
-
-#include <sched.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#define gettid() syscall(SYS_gettid)
-
-#include <import/sys.h>
-#include "mt/CPUAffinityThreadInitializer.h"
+#ifndef __MT_ABSTRACT_CPU_AFFINITY_THREAD_INITIALIZER_H__
+#define __MT_ABSTRACT_CPU_AFFINITY_THREAD_INITIALIZER_H__
 
 namespace mt
 {
-    class LinuxCPUAffinityThreadInitializer : public mt::CPUAffinityThreadInitializer
-    {	
-	cpu_set_t mCPU;
-    public:
-	LinuxCPUAffinityThreadInitializer(const cpu_set_t& cpu);
-	void initialize();
-    };
-}
-    
+/*!
+ * \class AbstractCPUAffinityThreadInitializer
+ * \brief Abstract class for setting the CPU affinity of a thread
+ */
+class AbstractCPUAffinityThreadInitializer
+{
+public:
+    AbstractCPUAffinityThreadInitializer() {}
+    virtual ~AbstractCPUAffinityThreadInitializer() {}
 
-#endif
-#endif
+    /*!
+     * Set the CPU affinity of the currently running thread
+     */
+    virtual void initialize() = 0;
+};
+}
 #endif
