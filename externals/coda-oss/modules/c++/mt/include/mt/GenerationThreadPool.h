@@ -80,9 +80,10 @@ namespace mt
 	    handler->setSemaphore(&mGenerationSync);
 		
 	    if (mAffinityInit)
-		handler->setAffinityInit(mAffinityInit->newThreadInitializer());
-	    
-	    
+        {
+            handler->setAffinityInit(mAffinityInit->newThreadInitializer().release());
+        }
+
 	    return handler;
 	}
     

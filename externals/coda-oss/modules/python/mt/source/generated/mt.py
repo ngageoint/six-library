@@ -163,9 +163,12 @@ class ThreadGroup(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ThreadGroup, name)
     __repr__ = _swig_repr
 
-    def __init__(self):
-        """__init__(mt::ThreadGroup self) -> ThreadGroup"""
-        this = _mt.new_ThreadGroup()
+    def __init__(self, *args):
+        """
+        __init__(mt::ThreadGroup self, bool pinToCPU) -> ThreadGroup
+        __init__(mt::ThreadGroup self) -> ThreadGroup
+        """
+        this = _mt.new_ThreadGroup(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -178,12 +181,37 @@ class ThreadGroup(_object):
         return _mt.ThreadGroup_joinAll(self)
 
 
+    def isPinToCPUEnabled(self):
+        """isPinToCPUEnabled(ThreadGroup self) -> bool"""
+        return _mt.ThreadGroup_isPinToCPUEnabled(self)
+
+
+    def getDefaultPinToCPU():
+        """getDefaultPinToCPU() -> bool"""
+        return _mt.ThreadGroup_getDefaultPinToCPU()
+
+    getDefaultPinToCPU = staticmethod(getDefaultPinToCPU)
+
+    def setDefaultPinToCPU(newDefault):
+        """setDefaultPinToCPU(bool newDefault)"""
+        return _mt.ThreadGroup_setDefaultPinToCPU(newDefault)
+
+    setDefaultPinToCPU = staticmethod(setDefaultPinToCPU)
+
     def createThread(self, runnable):
         """createThread(ThreadGroup self, PyObject * runnable)"""
         return _mt.ThreadGroup_createThread(self, runnable)
 
 ThreadGroup_swigregister = _mt.ThreadGroup_swigregister
 ThreadGroup_swigregister(ThreadGroup)
+
+def ThreadGroup_getDefaultPinToCPU():
+    """ThreadGroup_getDefaultPinToCPU() -> bool"""
+    return _mt.ThreadGroup_getDefaultPinToCPU()
+
+def ThreadGroup_setDefaultPinToCPU(newDefault):
+    """ThreadGroup_setDefaultPinToCPU(bool newDefault)"""
+    return _mt.ThreadGroup_setDefaultPinToCPU(newDefault)
 
 # This file is compatible with both classic and new-style classes.
 

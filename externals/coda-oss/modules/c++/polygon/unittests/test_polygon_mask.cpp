@@ -160,17 +160,127 @@ TEST_CASE(testWithAllFullRanges)
 
 TEST_CASE(testWithAllEmptyRanges)
 {
+    // Test for a polygon that is fully outside of the chip,
+    // but shares rows with the chip
     std::vector<types::RowCol<double> > points;
-    points.push_back(types::RowCol<double>(2100, -100));
-    points.push_back(types::RowCol<double>(2100, 1100));
-    points.push_back(types::RowCol<double>(3100, 1100));
-    points.push_back(types::RowCol<double>(3100, -100));
+    points.push_back(types::RowCol<double>(-1000, -1100));
+    points.push_back(types::RowCol<double>(-1000, -100));
+    points.push_back(types::RowCol<double>(2000, -100));
+    points.push_back(types::RowCol<double>(2000, -1100));
 
     // Draw a mask
     const types::RowCol<size_t> dims(1000, 800);
     const polygon::PolygonMask mask(points, dims);
 
     TEST_ASSERT_EQ(mask.getMarkMode(), polygon::PolygonMask::MARK_ALL_FALSE);
+}
+
+TEST_CASE(testWithPartialCutBotomLeft)
+{
+    // Test for a polygon that is partially outside of the chip, clipping
+    // through only some rows/cols in the bottom-left.
+    // The line (1, -1) -> (6, 5) cuts diagnonally across the lower-left
+    std::vector<types::RowCol<double> > points;
+    points.push_back(types::RowCol<double>(1.0, -1.0));
+    points.push_back(types::RowCol<double>(6.0, 5.0));
+    points.push_back(types::RowCol<double>(6.0, -2.0));
+    points.push_back(types::RowCol<double>(3.0, -3.0));
+
+    // Draw a mask
+    const types::RowCol<size_t> dims(6, 7);
+    const polygon::PolygonMask mask(points, dims);
+
+    // First two rows of the image have no masked columns
+    TEST_ASSERT_TRUE(mask.getRange(0).empty());
+    TEST_ASSERT_TRUE(mask.getRange(1).empty());
+
+    // Remaining rows have non-empty column masks
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 1)
+
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 2)
+
+    TEST_ASSERT_EQ(mask.getRange(4).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(4).mNumElements, 3)
+
+    TEST_ASSERT_EQ(mask.getRange(5).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(5).mNumElements, 4)
+}
+
+TEST_CASE(testWithPartialCutTopRight)
+{
+    // Test for a polygon that is partially outside of the chip, clipping
+    // through only some rows/cols in the bottom-left.
+    // The line (-1, 0) -> (4, 7) cuts diagnonally across the top-right
+    std::vector<types::RowCol<double> > points;
+    points.push_back(types::RowCol<double>(-1.0, 0.0));
+    points.push_back(types::RowCol<double>(4.0, 7.0));
+    points.push_back(types::RowCol<double>(2.0, 9.0));
+    points.push_back(types::RowCol<double>(-1.0, 9.0));
+
+    // Draw a mask
+    const types::RowCol<size_t> dims(6, 7);
+    const polygon::PolygonMask mask(points, dims);
+
+    // First 4 rows have non-empty column masks
+    TEST_ASSERT_EQ(mask.getRange(0).mStartElement, 2)
+    TEST_ASSERT_EQ(mask.getRange(0).mNumElements, 5)
+
+    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, 3)
+    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, 4)
+
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 5)
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 2)
+
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 6)
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 1)
+
+    // Last two rows of the image have no masked columns
+    TEST_ASSERT_TRUE(mask.getRange(4).empty());
+    TEST_ASSERT_TRUE(mask.getRange(5).empty());
+}
+
+TEST_CASE(testWithNarrowPassthrough)
+{
+    // Test for a polygon that passes through the chip, leaving some rows
+    // unmasked
+    //
+    //          +--------------+
+    //     +----|____          |
+    //     |    |    ------________.
+    //     +----|____          |   |
+    //          |    ------________+
+    //          |              |
+    //          +--------------+
+    std::vector<types::RowCol<double> > points;
+    points.push_back(types::RowCol<double>(0.5, -0.1));
+    points.push_back(types::RowCol<double>(1.5, 6.1));
+    points.push_back(types::RowCol<double>(3.5, 6.1));
+    points.push_back(types::RowCol<double>(2.5, -0.1));
+
+    // Draw a mask
+    const types::RowCol<size_t> dims(6, 7);
+    const polygon::PolygonMask mask(points, dims);
+
+    // First row is empty
+    TEST_ASSERT_TRUE(mask.getRange(0).empty());
+
+    // Row 1 has columns on the left side of the chip
+    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, 3)
+
+    // Row 2 has all columns
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 0)
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 7)
+
+    // Row 3 has columns on the right side of the chip
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 3)
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 4)
+
+    // Last two rows are empty
+    TEST_ASSERT_TRUE(mask.getRange(4).empty());
+    TEST_ASSERT_TRUE(mask.getRange(5).empty());
 }
 }
 
@@ -182,5 +292,8 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testWithMask);
     TEST_CHECK(testWithAllFullRanges);
     TEST_CHECK(testWithAllEmptyRanges);
+    TEST_CHECK(testWithPartialCutBotomLeft);
+    TEST_CHECK(testWithPartialCutTopRight);
+    TEST_CHECK(testWithNarrowPassthrough);
     return 0;
 }
