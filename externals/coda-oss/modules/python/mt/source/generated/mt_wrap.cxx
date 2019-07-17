@@ -3442,6 +3442,13 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   return SWIG_OK;
 }
 
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
+
 SWIGINTERN void mt_ThreadGroup_createThread(mt::ThreadGroup *self,PyObject *runnable){
     sys::Runnable *n;
     if (SWIG_ConvertPtr(runnable, (void **) &n, SWIGTYPE_p_sys__Runnable, SWIG_POINTER_DISOWN) == -1)
@@ -4080,6 +4087,152 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ThreadGroup_isPinToCPUEnabled(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mt::ThreadGroup *arg1 = (mt::ThreadGroup *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ThreadGroup_isPinToCPUEnabled",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mt__ThreadGroup, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ThreadGroup_isPinToCPUEnabled" "', argument " "1"" of type '" "mt::ThreadGroup const *""'"); 
+  }
+  arg1 = reinterpret_cast< mt::ThreadGroup * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mt::ThreadGroup const *)arg1)->isPinToCPUEnabled();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ThreadGroup_getDefaultPinToCPU(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ThreadGroup_getDefaultPinToCPU")) SWIG_fail;
+  {
+    try
+    {
+      result = (bool)mt::ThreadGroup::getDefaultPinToCPU();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ThreadGroup_setDefaultPinToCPU(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool arg1 ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ThreadGroup_setDefaultPinToCPU",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_bool(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ThreadGroup_setDefaultPinToCPU" "', argument " "1"" of type '" "bool""'");
+  } 
+  arg1 = static_cast< bool >(val1);
+  {
+    try
+    {
+      mt::ThreadGroup::setDefaultPinToCPU(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ThreadGroup_createThread(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mt::ThreadGroup *arg1 = (mt::ThreadGroup *) 0 ;
@@ -4153,11 +4306,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ThreadPlanner", _wrap_delete_ThreadPlanner, METH_VARARGS, (char *)"delete_ThreadPlanner(ThreadPlanner self)"},
 	 { (char *)"ThreadPlanner_swigregister", ThreadPlanner_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ThreadGroup", _wrap_new_ThreadGroup, METH_VARARGS, (char *)"\n"
-		"ThreadGroup(bool pinToCPU=False)\n"
+		"ThreadGroup(bool pinToCPU)\n"
 		"new_ThreadGroup() -> ThreadGroup\n"
 		""},
 	 { (char *)"delete_ThreadGroup", _wrap_delete_ThreadGroup, METH_VARARGS, (char *)"delete_ThreadGroup(ThreadGroup self)"},
 	 { (char *)"ThreadGroup_joinAll", _wrap_ThreadGroup_joinAll, METH_VARARGS, (char *)"ThreadGroup_joinAll(ThreadGroup self)"},
+	 { (char *)"ThreadGroup_isPinToCPUEnabled", _wrap_ThreadGroup_isPinToCPUEnabled, METH_VARARGS, (char *)"ThreadGroup_isPinToCPUEnabled(ThreadGroup self) -> bool"},
+	 { (char *)"ThreadGroup_getDefaultPinToCPU", _wrap_ThreadGroup_getDefaultPinToCPU, METH_VARARGS, (char *)"ThreadGroup_getDefaultPinToCPU() -> bool"},
+	 { (char *)"ThreadGroup_setDefaultPinToCPU", _wrap_ThreadGroup_setDefaultPinToCPU, METH_VARARGS, (char *)"ThreadGroup_setDefaultPinToCPU(bool newDefault)"},
 	 { (char *)"ThreadGroup_createThread", _wrap_ThreadGroup_createThread, METH_VARARGS, (char *)"ThreadGroup_createThread(ThreadGroup self, PyObject * runnable)"},
 	 { (char *)"ThreadGroup_swigregister", ThreadGroup_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
