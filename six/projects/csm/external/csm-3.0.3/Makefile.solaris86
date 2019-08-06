@@ -1,0 +1,6 @@
+include Makefile
+
+CC=CC
+COPTS=-KPIC -xtarget=generic -xO3 -m32
+LDOPTS=-G -h $(LIBRARY)
+INSTDIR=$(PWD)/solaris86

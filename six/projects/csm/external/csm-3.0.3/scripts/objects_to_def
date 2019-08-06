@@ -1,0 +1,127 @@
+#!/bin/sh --
+eval 'exec perl -x $0 ${1+"$@"}' # [Runs `perl' from `PATH'.]
+#!perl
+##############################################################################
+#
+# FILE:              objects_to_def
+#
+# CLASSIFICATION:    Unclassified
+#
+# DESCRIPTION:       Generate a script to convert a library objects
+#                    directory (libhxxx.objects) to a dynamic link object
+#                    library definition file (libhxxx.def).
+#
+#                    Usage: objects_to_def libhxxx.objects > libhxxx.def
+#                      OR   objects_to_def -d <objects> -p <project> > <project>.def
+#
+# LIMITATIONS:       This script is only needed to generate definition 
+#                    files for the creation of Win32 dlls. Requires 'nm' from 
+#                    cygwin to work properly.
+#
+##############################################################################
+
+# ***
+# Check command line arguments
+# ***
+use File::Basename;
+$program = basename($0);
+
+$ARGV = @ARGV;
+$usage = "Usage: $program <Objects Dir>
+         NOTE: <Objects Dir> must be in the format libhxxx.def where \"xxx\" is
+               the name of the library.
+
+-OR-
+
+Usage: $program -dir <Objects Dir> -proj <Project Name>
+
+   -dir <Objects Dir>     - Directory containing the objects to convert.
+   -proj <Project Name>   - Name of the project.
+
+Synopsis:
+   Convert a library objects directory to a dynamic link object library 
+   definition file.
+";
+
+
+# ***
+# Get command line args
+# ***
+while ($#ARGV >= 0) {
+  $_ = shift;
+  if (/^-/ && !$end_of_options) {
+    if (/^--$/) { $end_of_options = 1; }
+    # These must match exactly:
+    elsif ("-debug" eq $_) { $debug = 1; }
+    # These may be abbreviated:
+    elsif (&match("-d|ir")) { die "$usage\n" unless !$dir_name && ($arg = shift); $dir_name=$arg; }
+    elsif (&match("-p|roj")) { die "$usage\n" unless !$lib_name && ($arg = shift); $lib_name=$arg; }
+    # Anything leftover:
+    else { push(@options, $_); }
+  }
+  else 
+  {
+     die "$usage\n" unless !$dir_name;
+     $dir_name = $_;
+  }
+}
+
+die "$usage\n" unless $dir_name && (@options==0);
+
+($lib_name) = $dir_name=~/lib(.+).objects/ unless $lib_name;
+
+# ***
+# Verify objects directory exists
+# ***
+-d $dir_name || die "$0: $dir_name not found \n";
+
+# ***
+# Generate DEF header
+# ***
+
+print "LIBRARY $lib_name\n\n";
+print "EXPORTS\n\n";
+
+# ***
+# Work inside object directory so expanded list of object files does not
+# include the full path on each object, which could make the "nm" command line
+# excessively long.
+# ***
+chdir $dir_name;
+
+@object_files = glob("*.o *.obj");
+
+$command = "nm -e @object_files";
+warn ">>> Running: $command\n" if $debug;
+open(NMPROC,"$command|") || die "$0:Unable to start nm process: $!\n";
+
+# List external symbols, pass through text and global data ones that are mangled (have "@" in them)
+# and C-style symbols with their leading underscore removed.
+while(<NMPROC>)
+{
+  chomp;
+  my ($addr, $symType, $symName) = split(/ /, $_);
+
+  if ($symType && $symType =~ /[TBDRC]/)
+  {
+    if ($symName && $symName =~ /@/ &&
+        !($symName =~ /^\?\?_G.*@@UAEPAXI@Z/ || $symName =~ /^\?\?_E.*@@UAEPAXI@Z/))
+    {
+      print "$symName\n";
+    }
+    elsif ($symName && $symName =~ /^_/)
+    {
+      print substr($symName, 1) . "\n";
+    }
+  }
+}
+close(NMPROC);
+
+########################################
+# Subroutine to check $_ for a possibly abbreviated option.  TEMPLATE is may
+# contain a `|', indicating all following characters are optional.  Returns
+# true on valid match.
+sub match {
+    local($required,$optional) = split(/\|/, $_[0]);
+    return /^$required/ && "$required$optional" =~ /^$_/;
+}

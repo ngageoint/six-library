@@ -1,0 +1,65 @@
+#!/bin/sh
+eval 'exec perl -x $0 ${1+"$@"}'
+    if 0;  # [Construct to start `perl' when we do not know where it is.]
+#!perl
+###############################################################################
+# FILE:              mscc
+#
+# CLASSIFICATION:    Unclassified
+#
+# DESCRIPTION:       This is a wrapper script that mutates a Unix
+#                    compile command into the MS Studio equivalent
+#
+# LIMITATIONS:       Requires Cgywin's "cygpath" application to convert paths
+#
+###############################################################################
+
+my $debug = 0;
+
+# ***
+# Convert optimization argument to mscc expected format
+# Convert paths to Windows format
+# ***
+my $compile_debug = grep(/^-g$/, @ARGV);
+
+my @compile_args = ();
+foreach (@ARGV)
+{
+  if ($compile_debug)
+  {
+    s/^\-O[0-9]/\/Od/;
+  }
+  else
+  {
+    s/^\-O/\/O/;
+  }
+
+  if (/^\-I(.+)/)
+  {
+    chomp(my $winPath = `cygpath -w "$1"`);
+    $_ = "\/I$winPath";
+  }
+  if (/^\-Fo(.+)/)
+  {
+    chomp(my $winPath = `cygpath -w "$1"`);
+    $_ = "-Fo$winPath";
+  }
+
+  if ($_ eq "-g")
+  {
+    push @compile_args, '/Yd';
+    push @compile_args, '/Z7';
+    $_ = '';
+  }
+
+  push @compile_args, $_ if ($_);
+}
+
+# Build the compile command
+$compile="cl.exe";
+
+warn ">>> compile_args are {" . join(', ', @compile_args) . "}\n" if ($debug);
+
+# Execute the compile command
+print "$compile " . join(' ', @compile_args) . "\n";
+exec $compile, @compile_args or die "Could not exec: $!\n";

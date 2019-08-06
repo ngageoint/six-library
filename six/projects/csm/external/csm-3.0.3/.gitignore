@@ -1,0 +1,11 @@
+linux/
+linux-ia64/
+linux64/
+sgi/
+solaris/
+solaris64/
+solaris_stlport/
+solaris64_stlport/
+solaris86/
+win32/
+*~
