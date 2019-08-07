@@ -31,6 +31,7 @@ namespace cphd
 {
 const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
+
 /*!
  *  \struct SampleType
  *
@@ -678,6 +679,137 @@ struct SRPType
 
     int value;
 };
+
+/*!
+ *  \struct PolarizationType
+ *
+ *  Enumeration used to represent PolarizationTypes
+ */
+struct PolarizationType
+{
+    //! The enumerations allowed
+    enum
+    {
+        X = 1,
+        Y = 2,
+        V = 3,
+        H = 4,
+        RHC = 5,
+        LHC = 6,
+        UNSPECIFIED = 7,
+        NOT_SET = cphd::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    PolarizationType() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    PolarizationType(const std::string& s)
+    {
+        if (s == "X")
+            value = X;
+        else if (s == "Y")
+            value = Y;
+        else if (s == "V")
+            value = V;
+        else if (s == "H")
+            value = H;
+        else if (s == "RHC")
+            value = RHC;
+        else if (s == "LHC")
+            value = LHC;
+        else if (s == "UNSPECIFIED")
+            value = UNSPECIFIED;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + s));
+        }
+    }
+
+    //! int constructor
+    PolarizationType(int i)
+    {
+        switch(i)
+        {
+        case 1:
+            value = X;
+            break;
+        case 2:
+            value = Y;
+            break;
+        case 3:
+            value = V;
+            break;
+        case 4:
+            value = H;
+            break;
+        case 5:
+            value = RHC;
+            break;
+        case 6:
+            value = LHC;
+            break;
+        case 7:
+            value = UNSPECIFIED;
+            break;
+        case cphd::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(i)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("X");
+        case 2:
+            return std::string("Y");
+        case 3:
+            return std::string("V");
+        case 4:
+            return std::string("H");
+        case 5:
+            return std::string("RHC");
+        case 6:
+            return std::string("LHC");
+        case 7:
+            return std::string("UNSPECIFIED");
+        case cphd::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const PolarizationType& o) const { return value == o.value; }
+    bool operator!=(const PolarizationType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    PolarizationType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const PolarizationType& o) const { return value < o.value; }
+    bool operator>(const PolarizationType& o) const { return value > o.value; }
+    bool operator<=(const PolarizationType& o) const { return value <= o.value; }
+    bool operator>=(const PolarizationType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
+
+
 }
 
 #endif

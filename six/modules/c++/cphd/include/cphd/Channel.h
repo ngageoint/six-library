@@ -25,9 +25,29 @@
 
 #include <string>
 #include <vector>
+#include <cphd/Enums.h>
 
 namespace cphd
 {
+
+struct Polarization
+{
+  bool operator==(const Polarization& other) const
+  {
+    return TxPol == other.TxPol &&
+           RcvPol == other.RcvPol;
+  }
+
+  bool operator!=(const Polarization& other) const
+  {
+    return !((*this) == other);
+  }
+
+  PolarizationType TxPol;
+  PolarizationType RcvPol;
+
+};
+
 struct ChannelParameter
 {
     bool operator==(const ChannelParameter& other) const
@@ -37,7 +57,8 @@ struct ChannelParameter
                fxFixed == other.fxFixed &&
                toaFixed == other.toaFixed &&
                srpFixed == other.srpFixed &&
-               signalNormal == other.signalNormal;
+               signalNormal == other.signalNormal &&
+               polarization == other.polarization;
     }
 
     bool operator!=(const ChannelParameter& other) const
@@ -51,6 +72,14 @@ struct ChannelParameter
     six::BooleanType toaFixed;
     six::BooleanType srpFixed;
     six::BooleanType signalNormal;
+    Polarization polarization;
+    // double FxC;
+    // double FxBW;
+    // double FxBWNoise;
+    // double TOASaved;
+
+
+
 };
 
 struct Channel

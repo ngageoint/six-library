@@ -183,7 +183,7 @@ static const char XML[] =
 "    </SceneCoordinates>\n"
 "    <Data>\n"
 "        <SignalArrayFormat>CI4</SignalArrayFormat>\n"
-"        <NumBytesPVP>23</NumBytesPVP>\n"
+"        <NumBytesPVP>24</NumBytesPVP>\n"
 "        <NumCPHDChannels>2</NumCPHDChannels>\n"
 "        <Channel>\n"
 "            <Identifier>Channel</Identifier>\n"
@@ -228,9 +228,12 @@ static const char XML[] =
 "                <RcvPol>RHC</RcvPol>\n"
 "            </Polarization>\n"
 "        </Parameters>\n"
+"        <FxC>1.3</FxC>\n"
+"        <FxBW>0.8</FxBW>\n"
 "    </Channel>\n"
 "</CPHD>";
 }
+
 
 TEST_CASE(testReadXML)
 {
@@ -249,6 +252,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(metadata->collectionID.radarMode,
                    six::RadarModeType::STRIPMAP);
     TEST_ASSERT_EQ(metadata->collectionID.radarModeID, "Mode");
+    TEST_ASSERT_EQ(metadata->collectionID.getClassificationLevel(), "U");    
     TEST_ASSERT_EQ(metadata->collectionID.releaseInfo, "Release");
     TEST_ASSERT_EQ(metadata->collectionID.countryCodes[0], "US");
     TEST_ASSERT_EQ(metadata->collectionID.countryCodes[1], "GB");
@@ -344,7 +348,7 @@ TEST_CASE(testReadXML)
     // Data
     const cphd::Data& data = metadata->data;
     TEST_ASSERT_EQ(data.signalArrayFormat, cphd::SignalArrayFormat::CI4);
-    TEST_ASSERT_EQ(data.numBytesPVP, 23);
+    TEST_ASSERT_EQ(data.numBytesPVP, 24);
     TEST_ASSERT_EQ(data.channels.size(), 2);
     TEST_ASSERT_EQ(data.channels[0].identifier, "Channel");
     TEST_ASSERT_EQ(data.channels[0].numVectors, 2);
@@ -377,9 +381,17 @@ TEST_CASE(testReadXML)
                    six::BooleanType::IS_TRUE);
     TEST_ASSERT_EQ(channel.parameters[0].signalNormal,
                    six::BooleanType::IS_FALSE);
-/*    TEST_ASSERT_EQ(channel.parameters[0].polarization.txPol,
-                   PolarizationType::X);
-*/
+
+    TEST_ASSERT_EQ(channel.parameters[0].polarization.TxPol,
+                   cphd::PolarizationType::X);
+    TEST_ASSERT_EQ(channel.parameters[0].polarization.RcvPol,
+                   cphd::PolarizationType::RHC);
+
+    // TEST_ASSERT_EQ(channel.parameters[0].FxC, 1.3);
+    // TEST_ASSERT_EQ(channel.parameters[0].FxBW, 0.8);
+    // TEST_ASSERT_EQ(channel.parameters[0].TOASaved, 2.7);
+
+
 }
 
 int main(int /*argc*/, char** /*argv*/)

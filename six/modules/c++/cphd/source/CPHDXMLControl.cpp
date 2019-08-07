@@ -410,8 +410,16 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
 {
     const XMLElem signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
     data.signalArrayFormat = SignalArrayFormat(signalXML->getCharacterData());
-    parseUInt(getFirstAndOnly(dataXML, "NumBytesPVP"), data.numBytesPVP);
 
+    size_t numBytesPVP_temp;
+    XMLElem numBytesPVPXML = getFirstAndOnly(dataXML, "NumBytesPVP");
+    parseUInt(numBytesPVPXML, numBytesPVP_temp);
+    if(numBytesPVP_temp % 8 != 0)
+        {
+            throw except::Exception(Ctxt(
+                    "Number of bytes must be multiple of 8"));
+        }
+    data.numBytesPVP = numBytesPVP_temp;
     // Channels
     std::vector<XMLElem> channelsXML;
     dataXML->getElementsByTagName("Channel", channelsXML);
@@ -460,6 +468,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
     }
 }
 
+
 void CPHDXMLControl::parseChannelParameters(
         const XMLElem paramXML, ChannelParameter& param) const
 {
@@ -473,6 +482,18 @@ void CPHDXMLControl::parseChannelParameters(
     if (signalXML)
     {
         parseBooleanType(signalXML, param.signalNormal);
+    }
+
+    // Polarization
+    std::vector<XMLElem> PolarizationXML;
+    paramXML->getElementsByTagName("Polarization", PolarizationXML);
+    for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
+    {
+        const XMLElem TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
+        param.polarization.TxPol = PolarizationType(TxPolXML->getCharacterData());
+ 
+        const XMLElem RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
+        param.polarization.RcvPol = PolarizationType(RcvPolXML->getCharacterData());
     }
 
 }
