@@ -231,6 +231,105 @@ static const char XML[] =
 "        <FxC>1.3</FxC>\n"
 "        <FxBW>0.8</FxBW>\n"
 "    </Channel>\n"
+"    <PVP>\n"
+"        <TxTime>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </TxTime>\n"
+"        <TxPos>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>3</Size>\n"
+"        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
+"        </TxPos>\n"
+"        <TxVel>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>3</Size>\n"
+"        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
+"        </TxVel>\n"
+"        <RcvTime>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </RcvTime>\n"
+"        <RcvPos>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>3</Size>\n"
+"        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
+"        </RcvPos>\n"
+"        <RcvVel>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>3</Size>\n"
+"        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
+"        </RcvVel>\n"
+"        <SRPPos>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>3</Size>\n"
+"        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
+"        </SRPPos>\n"
+"        <aFDOP>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>\"F8\"</Format>\n"
+"        </aFDOP>\n"
+"        <aFRR1>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </aFRR1>\n"
+"        <aFRR2>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </aFRR2>\n"
+"        <FX1>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </FX1>\n"
+"        <FX2>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </FX2>\n"
+"        <TOA1>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </TOA1>\n"
+"        <TOA2>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </TOA2>\n"
+"        <TDTropoSRP>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </TDTropoSRP>\n"
+"        <SC0>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </SC0>\n"
+"        <SCSS>\n"
+"        <Offset>0</Offset>\n"
+"        <Size>1</Size>\n"
+"        <Format>F8</Format>\n"
+"        </SCSS>\n"
+"        <AddedPVP>\n"
+"            <Name>newParam1</Name>\n"
+"            <Offset>0</Offset>\n"
+"            <Size>1</Size>\n"
+"            <Format>F8</Format>\n"
+"        </AddedPVP>\n"
+"        <AddedPVP>\n"
+"            <Name>newParam2</Name>\n"
+"            <Offset>0</Offset>\n"
+"            <Size>1</Size>\n"
+"            <Format>F8</Format>\n"
+"        </AddedPVP>\n"
+"    </PVP>\n"
 "</CPHD>";
 }
 
@@ -241,6 +340,7 @@ TEST_CASE(testReadXML)
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
+    std::cout<<"PARSED\n";
     const std::auto_ptr<cphd::Metadata> metadata =
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
@@ -391,6 +491,21 @@ TEST_CASE(testReadXML)
     // TEST_ASSERT_EQ(channel.parameters[0].FxBW, 0.8);
     // TEST_ASSERT_EQ(channel.parameters[0].TOASaved, 2.7);
 
+
+    //PVP
+    const cphd::Pvp& pvp = metadata->pvp;
+    TEST_ASSERT_EQ(pvp.TxTime.offset, 0);
+    TEST_ASSERT_EQ(pvp.TxTime.size, 1);
+    TEST_ASSERT_EQ(pvp.TxTime.format, "F8");
+    TEST_ASSERT_EQ(pvp.TxPos.offset, 0);
+    TEST_ASSERT_EQ(pvp.TxPos.size, 3);
+    TEST_ASSERT_EQ(pvp.TxPos.format, "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.RcvVel.offset, 0);
+    TEST_ASSERT_EQ(pvp.RcvVel.size, 3);
+    TEST_ASSERT_EQ(pvp.RcvVel.format, "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.AddedPVP.size(), 2);
+    TEST_ASSERT_EQ(pvp.AddedPVP[0].name, "newParam1");
+    TEST_ASSERT_EQ(pvp.AddedPVP[1].name, "newParam2");
 
 }
 

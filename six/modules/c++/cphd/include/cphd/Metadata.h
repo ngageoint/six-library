@@ -31,6 +31,7 @@
 #include <cphd/Data.h>
 #include <cphd/Global.h>
 #include <cphd/SceneCoordinates.h>
+#include <cphd/PVP.h>
 
 namespace cphd
 {
@@ -72,6 +73,10 @@ struct Metadata
     //! Channel block. Parameters that describe the data channels contained
     //! in the product
     Channel channel;
+
+    //! PVP block. Parameters that describe the size of position of each
+    //! vector paramter
+    Pvp pvp;
 
     //!  SRP block.  Contains the  information
     //SRP srp;

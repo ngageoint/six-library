@@ -30,6 +30,7 @@ bool Metadata::operator==(const Metadata& other) const
            global == other.global &&
            sceneCoordinates == other.sceneCoordinates &&
            data == other.data &&
-           channel == other.channel;
+           channel == other.channel &&
+           pvp == other.pvp;
 }
 }

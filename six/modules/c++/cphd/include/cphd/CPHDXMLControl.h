@@ -37,6 +37,7 @@
 #include <cphd/Data.h>
 #include <cphd/Global.h>
 #include <cphd/Metadata.h>
+#include <cphd/PVP.h>
 
 namespace cphd
 {
@@ -76,6 +77,7 @@ private:
     void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
     void fromXML(const XMLElem dataXML, Data& data);
     void fromXML(const XMLElem channelXML, Channel& channel);
+    void fromXML(const XMLElem pvpXML, Pvp& pvp);
 
     void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;
@@ -83,6 +85,8 @@ private:
     void parseIAExtent(const XMLElem extentXML, ImageAreaExtent& extent) const;
     void parseChannelParameters(const XMLElem paramXML,
                                 ChannelParameter& param) const;
+    void parsePVPType(const XMLElem paramXML, PVPType& param) const;
+    void parsePVPType(const XMLElem paramXML, APVPType& param) const;
 
 private:
     six::SICommonXMLParser10x mCommon;
