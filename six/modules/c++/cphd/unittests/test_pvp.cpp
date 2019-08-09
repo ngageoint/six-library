@@ -2,7 +2,7 @@
 * This file is part of cphd-c++
 * ==========================================================================
 *
-* (C) Copyright 2004 - 2017, MDA Information Systems LLC
+* (C) Copyright 2004 - 2019, MDA Information Systems LLC
 *
 * cphd-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
@@ -33,11 +33,11 @@
 namespace
 {
 
-TEST_CASE(testEqualityOperatorTrue)
+TEST_CASE(testSimpleEqualityOperatorTrue)
 {
 
-    cphd::Pvp pvp1;
-    cphd::Pvp pvp2;
+    cphd::Pvp pvp1, pvp2;
+
     pvp1.TxTime.size = 1;
     pvp1.TxTime.offset = 0;
     pvp1.TxTime.format = "F8";
@@ -46,20 +46,28 @@ TEST_CASE(testEqualityOperatorTrue)
     pvp2.TxTime.offset = 0;
     pvp2.TxTime.format = "F8";
 
-    if(pvp1 != pvp2)
-    {
-        std::cout<<"NOT SAME\n";
-    }
-    else
-    {
-        std::cout<<"SAME\n";
-    }
     TEST_ASSERT_TRUE((pvp1 == pvp2));
+}
 
+TEST_CASE(testAddedParamsEqualityOperatorTrue)
+{
+    cphd::Pvp pvp1, pvp2;
+
+    pvp1.AddedPVP.push_back(cphd::APVPType());
+    pvp1.AddedPVP.push_back(cphd::APVPType());
+    pvp1.AddedPVP[0].name = "AddedParam1";
+    pvp1.AddedPVP[1].name = "AddedParam2";
+
+    pvp2.AddedPVP.push_back(cphd::APVPType());
+    pvp2.AddedPVP.push_back(cphd::APVPType());
+    pvp2.AddedPVP[0].name = "AddedParam1";
+    pvp2.AddedPVP[1].name = "AddedParam2";
+
+    TEST_ASSERT_TRUE((pvp1 == pvp2));
 }
 
 
-TEST_CASE(testEqualityOperatorFalse)
+TEST_CASE(testSimpleEqualityOperatorFalse)
 {
 
     cphd::Pvp pvp1, pvp2;
@@ -75,16 +83,40 @@ TEST_CASE(testEqualityOperatorFalse)
 
 }
 
+TEST_CASE(testAddedParamsEqualityOperatorFalse)
+{
+    cphd::Pvp pvp1, pvp2, pvp3;
+
+    pvp1.AddedPVP.push_back(cphd::APVPType());
+    pvp1.AddedPVP.push_back(cphd::APVPType());
+    pvp1.AddedPVP[0].name = "AddedParam1";
+    pvp1.AddedPVP[1].name = "AddedParam2";
+
+    pvp2.AddedPVP.push_back(cphd::APVPType());
+    pvp2.AddedPVP.push_back(cphd::APVPType());
+    pvp2.AddedPVP[0].name = "AddedParam1";
+
+    pvp3.AddedPVP.push_back(cphd::APVPType());
+    pvp3.AddedPVP.push_back(cphd::APVPType());
+    pvp3.AddedPVP[0].name = "AddedParam1";
+    pvp3.AddedPVP[1].name = "AddedParam3";
+
+    TEST_ASSERT_TRUE((pvp1 != pvp2));
+    TEST_ASSERT_TRUE((pvp1 != pvp3));
+
+}
+
+
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        TEST_CHECK(testEqualityOperatorTrue);
-        TEST_CHECK(testEqualityOperatorFalse);
-        // TEST_CHECK(testCanReadHeaderWithoutBreaking);
-        // TEST_CHECK(testRoundTripHeader);
+        TEST_CHECK(testSimpleEqualityOperatorTrue);
+        TEST_CHECK(testAddedParamsEqualityOperatorTrue);
+        TEST_CHECK(testSimpleEqualityOperatorFalse);
+        TEST_CHECK(testAddedParamsEqualityOperatorFalse);
         return 0;
     }
     catch (const except::Exception& ex)
