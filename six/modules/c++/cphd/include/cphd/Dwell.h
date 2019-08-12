@@ -1,0 +1,97 @@
+/* =========================================================================
+ * This file is part of cphd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ *
+ * cphd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+#ifndef __CPHD_DWELL_H__
+#define __CPHD_DWELL_H__
+
+#include <ostream>
+#include<vector>
+
+#include <mem/ScopedCopyablePtr.h>
+#include <cphd/Enums.h>
+#include <cphd/Types.h>
+
+namespace cphd
+{
+
+struct DwellTime 
+{
+    DwellTime();
+
+    bool operator==(const DwellTime& other) const
+    {
+        return identifier == other.identifier && DwellTimePoly == other.DwellTimePoly;
+    }
+
+    bool operator!=(const DwellTime& other) const
+    {
+        return !((*this) == other);
+    }
+
+
+    std::string identifier;
+    Poly2D DwellTimePoly;
+};
+
+struct COD
+{
+    COD();
+
+    bool operator==(const COD& other) const
+    {
+        return identifier == other.identifier && CODTimePoly == other.CODTimePoly;
+    }
+
+    bool operator!=(const COD& other) const
+    {
+        return !((*this) == other);
+    }
+
+    std::string identifier;
+    Poly2D CODTimePoly;
+};
+
+struct Dwell
+{
+    Dwell();
+
+    bool operator==(const Dwell& other) const
+    {
+        return numCODTimes == other.numCODTimes && numDwellTimes == other.numDwellTimes &&
+                cod == other.cod && dtime == other.dtime;
+    }
+
+    bool operator!=(const Dwell& other) const
+    {
+        return !((*this) == other);
+    }
+
+    size_t numCODTimes;
+    size_t numDwellTimes;
+    std::vector<COD> cod;
+    std::vector<DwellTime> dtime;
+};
+
+}
+
+#endif

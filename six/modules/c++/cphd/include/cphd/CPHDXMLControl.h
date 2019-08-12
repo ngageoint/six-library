@@ -78,6 +78,7 @@ private:
     void fromXML(const XMLElem dataXML, Data& data);
     void fromXML(const XMLElem channelXML, Channel& channel);
     void fromXML(const XMLElem pvpXML, Pvp& pvp);
+    void fromXML(const XMLElem DwellXML, Dwell& dwell);
 
     void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;
@@ -87,6 +88,8 @@ private:
                                 ChannelParameter& param) const;
     void parsePVPType(const XMLElem paramXML, PVPType& param) const;
     void parsePVPType(const XMLElem paramXML, APVPType& param) const;
+    void parse2DPoly(const XMLElem Poly2DXML, size_t orderX, size_t orderY, std::vector<size_t>& coefs) const;
+
 
 private:
     six::SICommonXMLParser10x mCommon;

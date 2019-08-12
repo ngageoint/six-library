@@ -230,6 +230,7 @@ struct ImageGrid
                 return false;
             }
         }
+        return true;
     }
 
     bool operator!=(const ImageGrid& other) const

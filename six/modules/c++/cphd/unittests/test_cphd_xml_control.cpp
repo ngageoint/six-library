@@ -330,6 +330,24 @@ static const char XML[] =
 "            <Format>F8</Format>\n"
 "        </AddedPVP>\n"
 "    </PVP>\n"
+"    <Dwell>\n"
+"        <NumCODTimes>1</NumCODTimes>\n"
+"        <NumDwellTimes>1</NumDwellTimes>\n"
+"        <CODTime>\n"
+"            <Identifier>codPolynomial1</Identifier>\n"
+"            <CODTimePoly order1=\"1\" order2=\"1\">\n"
+"                <Coef exponent1=\"1\" exponent2=\"0\">5</Coef>\n"
+"                <Coef exponent1=\"0\" exponent2=\"1\">5</Coef>\n"
+"            </CODTimePoly>\n"
+"        </CODTime>\n"
+"        <DwellTime>\n"
+"            <Identifier>dwellPolynomial1</Identifier>\n"
+"            <DwellTimePoly order1=\"1\" order2=\"1\">\n"
+"                <Coef exponent1=\"1\" exponent2=\"0\">3</Coef>\n"
+"                <Coef exponent1=\"0\" exponent2=\"1\">2</Coef>\n"
+"            </DwellTimePoly>\n"
+"        </DwellTime>\n"
+"    </Dwell>\n"
 "</CPHD>";
 }
 
@@ -340,7 +358,6 @@ TEST_CASE(testReadXML)
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
-    std::cout<<"PARSED\n";
     const std::auto_ptr<cphd::Metadata> metadata =
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
@@ -506,6 +523,17 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(pvp.AddedPVP.size(), 2);
     TEST_ASSERT_EQ(pvp.AddedPVP[0].name, "newParam1");
     TEST_ASSERT_EQ(pvp.AddedPVP[1].name, "newParam2");
+
+    //Dwell
+    const cphd::Dwell& dwell = metadata->dwell;
+    TEST_ASSERT_EQ(dwell.numCODTimes, 1);
+    TEST_ASSERT_EQ(dwell.numDwellTimes, 1);
+    TEST_ASSERT_EQ(dwell.cod[0].identifier, "codPolynomial1");
+    TEST_ASSERT_EQ(dwell.dtime[0].identifier, "dwellPolynomial1");
+    TEST_ASSERT_EQ(dwell.cod[0].CODTimePoly.orderX(), 1);
+    TEST_ASSERT_EQ(dwell.cod[0].CODTimePoly.orderY(), 1);
+    TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderX(), 1);
+    TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderY(), 1);
 
 }
 

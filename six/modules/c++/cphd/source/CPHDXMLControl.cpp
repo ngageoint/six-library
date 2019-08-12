@@ -23,8 +23,13 @@
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/SICommonXMLParser.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Metadata.h>
+
+#include <mem/ScopedCopyablePtr.h>
+#include <cphd/Enums.h>
+#include <cphd/Types.h>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0 // TODO: Kill?
@@ -98,6 +103,7 @@ namespace cphd
         XMLElem dataXML           = getFirstAndOnly(root, "Data");
         XMLElem channelXML          = getFirstAndOnly(root, "Channel");
         XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
+        XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
         /*
         XMLElem srpXML              = getFirstAndOnly(root, "SRP");
         XMLElem antennaXML          = getOptional(root, "Antenna");
@@ -111,6 +117,7 @@ namespace cphd
         fromXML(dataXML, cphd->data);
         fromXML(channelXML, cphd->channel);
         fromXML(pvpXML, cphd->pvp);
+        fromXML(dwellXML, cphd->dwell);
         /*
         fromXML(srpXML, cphd03->srp);
 
@@ -609,4 +616,66 @@ namespace cphd
         }
 
     }
+
+    void CPHDXMLControl::parse2DPoly(const XMLElem Poly2DXML, size_t orderX, size_t orderY, std::vector<size_t>& coefs) const
+    {
+        parseUInt(getFirstAndOnly(Poly2DXML, "order1"), orderX);
+        parseUInt(getFirstAndOnly(Poly2DXML, "order2"), orderY);
+
+        std::vector<XMLElem> coefsXML_vec;
+        Poly2DXML->getElementsByTagName("Coef", coefsXML_vec);
+        coefs.resize(coefsXML_vec.size());
+        for(size_t ii = 0; ii < coefsXML_vec.size(); ++ii)
+        {
+            parseUInt(coefsXML_vec[ii], coefs[ii]);
+        }
+
+
+
+    }
+
+    void CPHDXMLControl::fromXML(const XMLElem DwellXML,
+                                 Dwell& dwell)
+    {
+
+        // CODTime
+        parseUInt(getFirstAndOnly(DwellXML, "NumCODTimes"), dwell.numCODTimes);
+        dwell.cod.resize(dwell.numCODTimes);
+
+        std::vector<XMLElem> CODXML_vec;
+        DwellXML->getElementsByTagName("CODTime", CODXML_vec);
+        dwell.cod.resize(dwell.numCODTimes);
+        for(size_t ii = 0; ii < CODXML_vec.size(); ++ii) 
+        {
+            // size_t order1, order2;
+            // std::vector<size_t> coefs;
+            parseString(getFirstAndOnly(CODXML_vec[ii], "Identifier"), dwell.cod[ii].identifier);
+            mCommon.parsePoly2D(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), dwell.cod[ii].CODTimePoly);
+            // parse2DPoly(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), order1, order2, coefs);
+            // dwell.cod[ii].CODTimePoly.reset(new Poly2D(order1, order2));
+            // dwell.cod[ii].CODTimePoly->set(coefs.size(), new const Poly1D(coefs));
+        }
+
+        // DwellTime
+        parseUInt(getFirstAndOnly(DwellXML, "NumDwellTimes"), dwell.numDwellTimes);
+        dwell.dtime.resize(dwell.numDwellTimes);
+
+        std::vector<XMLElem> dtimeXML_vec;
+        DwellXML->getElementsByTagName("DwellTime", dtimeXML_vec);
+        dwell.dtime.resize(dwell.numDwellTimes);
+        for(size_t ii = 0; ii < dtimeXML_vec.size(); ++ii) 
+        {
+            // size_t order1, order2;
+            // std::vector<size_t> coefs;
+            parseString(getFirstAndOnly(dtimeXML_vec[ii], "Identifier"), dwell.dtime[ii].identifier);
+            mCommon.parsePoly2D(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), dwell.dtime[ii].DwellTimePoly); 
+
+            // parse2DPoly(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), order1, order2, coefs);
+            // dwell.dtime[ii].DwellTimePoly.reset(new Poly2D(order1, order2));
+            // dwell.dtime[ii].DwellTimePoly->set(coefs.size(), Poly1D(coefs));
+        }
+
+    }
+
+
 }

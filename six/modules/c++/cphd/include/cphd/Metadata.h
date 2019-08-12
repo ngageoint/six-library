@@ -32,6 +32,7 @@
 #include <cphd/Global.h>
 #include <cphd/SceneCoordinates.h>
 #include <cphd/PVP.h>
+#include <cphd/Dwell.h>
 
 namespace cphd
 {
@@ -77,6 +78,9 @@ struct Metadata
     //! PVP block. Parameters that describe the size of position of each
     //! vector paramter
     Pvp pvp;
+
+    //Dwell block.
+    Dwell dwell;
 
     //!  SRP block.  Contains the  information
     //SRP srp;
