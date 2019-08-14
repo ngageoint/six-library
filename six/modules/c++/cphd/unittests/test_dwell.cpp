@@ -75,19 +75,42 @@ TEST_CASE(testDerivativeDwellValid)
 }
 
 
-TEST_CASE(testEqualityValid)
+TEST_CASE(testEquality)
 {
     cphd::Dwell dwell;
-}
+    cphd::DwellTime dtime1, dtime2;
 
-TEST_CASE(testEqualityDiffIdentifier)
-{
-    cphd::Dwell dwell;
-}
+    dwell.numDwellTimes = 2;
+    dwell.dtime.push_back(dtime1);
+    dwell.dtime.push_back(dtime2);
 
-TEST_CASE(testEqualityDiffObject)
-{
-    cphd::Dwell dwell;
+    cphd:: Poly2D p2D_1(2,1), p2D_2(2,1);
+
+    dwell.dtime[0].DwellTimePoly = p2D_1;
+    dwell.dtime[1].DwellTimePoly = p2D_2;
+    for (size_t i = 0; i < dwell.numDwellTimes; ++i) {
+        dwell.dtime[i].DwellTimePoly[0][0] = 1;
+        dwell.dtime[i].DwellTimePoly[0][1] = 2;
+        dwell.dtime[i].DwellTimePoly[1][0] = 3;
+        dwell.dtime[i].DwellTimePoly[1][1] = 4;
+        dwell.dtime[i].DwellTimePoly[2][0] = 5;
+    }
+
+    cphd:: Poly2D derivX(1,1);
+    derivX[0][0] = 3;
+    derivX[0][1] = 4;
+    derivX[1][0] = 10;
+
+    // Test identical polynomial vectors
+    TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.derivativeX(), derivX)
+    TEST_ASSERT_TRUE((dwell.dtime[0] == dwell.dtime[1]));
+
+    dwell.dtime[1].DwellTimePoly = dwell.dtime[1].DwellTimePoly.flipXY();
+
+    // Test different polynomial vectors
+    TEST_ASSERT_NOT_EQ(dwell.dtime[0].DwellTimePoly.derivativeX(), dwell.dtime[1].DwellTimePoly.derivativeX())
+    TEST_ASSERT_TRUE((dwell.dtime[0] != dwell.dtime[1]));
+
 }
 
 
@@ -99,9 +122,7 @@ int main(int /*argc*/, char** /*argv*/)
     {
         TEST_CHECK(testDerivativeCODValid);
         TEST_CHECK(testDerivativeDwellValid);
-        // TEST_CHECK(testEqualityValid);
-        // TEST_CHECK(testEqualityDiffIdentifier);
-        // TEST_CHECK(testEqualityDiffObject);
+        TEST_CHECK(testEquality);
 
         return 0;
     }

@@ -33,6 +33,7 @@
 #include <cphd/SceneCoordinates.h>
 #include <cphd/PVP.h>
 #include <cphd/Dwell.h>
+#include <cphd/ReferenceGeometry.h>
 
 namespace cphd
 {
@@ -81,6 +82,9 @@ struct Metadata
 
     //Dwell block.
     Dwell dwell;
+
+    //Reference Geometry block.
+    ReferenceGeometry referenceGeometry;
 
     //!  SRP block.  Contains the  information
     //SRP srp;

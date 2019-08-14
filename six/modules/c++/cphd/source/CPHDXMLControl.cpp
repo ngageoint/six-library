@@ -104,6 +104,7 @@ namespace cphd
         XMLElem channelXML          = getFirstAndOnly(root, "Channel");
         XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
         XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
+        XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
         /*
         XMLElem srpXML              = getFirstAndOnly(root, "SRP");
         XMLElem antennaXML          = getOptional(root, "Antenna");
@@ -118,6 +119,7 @@ namespace cphd
         fromXML(channelXML, cphd->channel);
         fromXML(pvpXML, cphd->pvp);
         fromXML(dwellXML, cphd->dwell);
+        fromXML(refGeoXML, cphd->referenceGeometry);
         /*
         fromXML(srpXML, cphd03->srp);
 
@@ -617,23 +619,6 @@ namespace cphd
 
     }
 
-    void CPHDXMLControl::parse2DPoly(const XMLElem Poly2DXML, size_t orderX, size_t orderY, std::vector<size_t>& coefs) const
-    {
-        parseUInt(getFirstAndOnly(Poly2DXML, "order1"), orderX);
-        parseUInt(getFirstAndOnly(Poly2DXML, "order2"), orderY);
-
-        std::vector<XMLElem> coefsXML_vec;
-        Poly2DXML->getElementsByTagName("Coef", coefsXML_vec);
-        coefs.resize(coefsXML_vec.size());
-        for(size_t ii = 0; ii < coefsXML_vec.size(); ++ii)
-        {
-            parseUInt(coefsXML_vec[ii], coefs[ii]);
-        }
-
-
-
-    }
-
     void CPHDXMLControl::fromXML(const XMLElem DwellXML,
                                  Dwell& dwell)
     {
@@ -647,13 +632,8 @@ namespace cphd
         dwell.cod.resize(dwell.numCODTimes);
         for(size_t ii = 0; ii < CODXML_vec.size(); ++ii) 
         {
-            // size_t order1, order2;
-            // std::vector<size_t> coefs;
             parseString(getFirstAndOnly(CODXML_vec[ii], "Identifier"), dwell.cod[ii].identifier);
             mCommon.parsePoly2D(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), dwell.cod[ii].CODTimePoly);
-            // parse2DPoly(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), order1, order2, coefs);
-            // dwell.cod[ii].CODTimePoly.reset(new Poly2D(order1, order2));
-            // dwell.cod[ii].CODTimePoly->set(coefs.size(), new const Poly1D(coefs));
         }
 
         // DwellTime
@@ -665,14 +645,80 @@ namespace cphd
         dwell.dtime.resize(dwell.numDwellTimes);
         for(size_t ii = 0; ii < dtimeXML_vec.size(); ++ii) 
         {
-            // size_t order1, order2;
-            // std::vector<size_t> coefs;
             parseString(getFirstAndOnly(dtimeXML_vec[ii], "Identifier"), dwell.dtime[ii].identifier);
             mCommon.parsePoly2D(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), dwell.dtime[ii].DwellTimePoly); 
+        }
+    }
 
-            // parse2DPoly(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), order1, order2, coefs);
-            // dwell.dtime[ii].DwellTimePoly.reset(new Poly2D(order1, order2));
-            // dwell.dtime[ii].DwellTimePoly->set(coefs.size(), Poly1D(coefs));
+    void CPHDXMLControl::parsePlatform(const XMLElem platXML, Bistatic::PlatformParams& plat) const
+    {
+        parseDouble(getFirstAndOnly(platXML, "Time"), plat.time);
+        parseDouble(getFirstAndOnly(platXML, "SlantRange"), plat.slantRange);
+        parseDouble(getFirstAndOnly(platXML, "GroundRange"), plat.groundRange);
+        parseDouble(getFirstAndOnly(platXML, "DopplerConeAngle"), plat.dopplerConeAngle);
+        parseDouble(getFirstAndOnly(platXML, "AzimuthAngle"), plat.azimuthAngle);
+        parseDouble(getFirstAndOnly(platXML, "GrazeAngle"), plat.grazeAngle);
+        parseDouble(getFirstAndOnly(platXML, "IncidenceAngle"), plat.incidenceAngle);
+        mCommon.parseVector3D(getFirstAndOnly(platXML, "Pos"), plat.pos);
+        mCommon.parseVector3D(getFirstAndOnly(platXML, "Vel"), plat.vel);
+        std::string side = "";
+        parseString(getFirstAndOnly(platXML, "SideOfTrack"), side);
+        plat.sideOfTrack = (side == "L" ? six::SideOfTrackType("LEFT") : six::SideOfTrackType("RIGHT"));
+
+    }
+
+    void CPHDXMLControl::parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const
+        {
+            parseDouble(getFirstAndOnly(imgTypeXML, "TwistAngle"), imgType->twistAngle);
+            parseDouble(getFirstAndOnly(imgTypeXML, "SlopeAngle"), imgType->slopeAngle);
+            parseDouble(getFirstAndOnly(imgTypeXML, "LayoverAngle"), imgType->layoverAngle);
+            parseDouble(getFirstAndOnly(imgTypeXML, "AzimuthAngle"), imgType->azimuthAngle);
+            parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
+        }
+
+    void CPHDXMLControl::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
+    {
+        XMLElem srpXML = getFirstAndOnly(refGeoXML, "SRP");
+        mCommon.parseVector3D(getFirstAndOnly(srpXML, "ECF"), refGeo.srp.ecf);
+        mCommon.parseVector3D(getFirstAndOnly(srpXML, "IAC"), refGeo.srp.iac);
+
+        parseDouble(getFirstAndOnly(refGeoXML, "ReferenceTime"), refGeo.referenceTime);
+        parseDouble(getFirstAndOnly(refGeoXML, "SRPCODTime"), refGeo.srpCODTime);
+        parseDouble(getFirstAndOnly(refGeoXML, "SRPDwellTime"), refGeo.srpDwellTime);
+
+        const XMLElem monoXML = getOptional(refGeoXML, "Monostatic");
+        const XMLElem biXML = getOptional(refGeoXML, "Bistatic");
+
+        if (monoXML && !biXML)
+        {
+            refGeo.monostatic.reset(new Monostatic());
+            parseCommon(monoXML, (ImagingType*)refGeo.monostatic.get());
+            parseDouble(getFirstAndOnly(monoXML, "SlantRange"), refGeo.monostatic->slantRange);
+            parseDouble(getFirstAndOnly(monoXML, "GroundRange"), refGeo.monostatic->groundRange);
+            parseDouble(getFirstAndOnly(monoXML, "DopplerConeAngle"), refGeo.monostatic->dopplerConeAngle);
+            parseDouble(getFirstAndOnly(monoXML, "IncidenceAngle"), refGeo.monostatic->incidenceAngle);
+            mCommon.parseVector3D(getFirstAndOnly(monoXML, "ArpPos"), refGeo.monostatic->arpPos);
+            mCommon.parseVector3D(getFirstAndOnly(monoXML, "ArpVel"), refGeo.monostatic->arpVel);
+            std::string side = "";
+            parseString(getFirstAndOnly(monoXML, "SideOfTrack"), side);
+            refGeo.monostatic->sideOfTrack = (side == "L" ? six::SideOfTrackType("LEFT") : six::SideOfTrackType("RIGHT"));
+
+        }
+        else if (!monoXML && biXML)
+        {
+            refGeo.bistatic.reset(new Bistatic());
+            parseCommon(biXML, (ImagingType*)refGeo.bistatic.get());
+            parseDouble(getFirstAndOnly(biXML, "AzimuthAngleRate"), refGeo.bistatic->azimuthAngleRate);
+            parseDouble(getFirstAndOnly(biXML, "BistaticAngle"), refGeo.bistatic->bistaticAngle);
+            parseDouble(getFirstAndOnly(biXML, "BistaticAngleRate"), refGeo.bistatic->bistaticAngleRate);
+
+            parsePlatform(getFirstAndOnly(biXML, "TxPlatform"), refGeo.bistatic->txPlatform);
+            parsePlatform(getFirstAndOnly(biXML, "RcvPlatform"), refGeo.bistatic->rcvPlatform);
+        }
+        else
+        {
+            throw except::Exception(Ctxt(
+                    "ReferenceGeometry must be exactly one of Monostatic or Bistatic element"));
         }
 
     }

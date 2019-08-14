@@ -348,6 +348,73 @@ static const char XML[] =
 "            </DwellTimePoly>\n"
 "        </DwellTime>\n"
 "    </Dwell>\n"
+"    <ReferenceGeometry>\n"
+"        <SRP>\n"
+"            <ECF>\n"
+"                <X>1.0</X>\n"
+"                <Y>2.0</Y>\n"
+"                <Z>3.5</Z>\n"
+"            </ECF>\n"
+"            <IAC>\n"
+"                <X>1.5</X>\n"
+"                <Y>2.5</Y>\n"
+"                <Z>4.0</Z>\n"
+"            </IAC>\n"
+"        </SRP>\n"
+"        <ReferenceTime>0.0</ReferenceTime>\n"
+"        <SRPCODTime>23.0</SRPCODTime>\n"
+"        <SRPDwellTime>25.0</SRPDwellTime>\n"
+"        <Bistatic>\n"
+"            <AzimuthAngle>45.0</AzimuthAngle>\n"
+"            <AzimuthAngleRate>20.0</AzimuthAngleRate>\n"
+"            <BistaticAngle>45.0</BistaticAngle>\n"
+"            <BistaticAngleRate>20.0</BistaticAngleRate>\n"
+"            <GrazeAngle>30.0</GrazeAngle>\n"
+"            <TwistAngle>30.0</TwistAngle>\n"
+"            <SlopeAngle>30.0</SlopeAngle>\n"
+"            <LayoverAngle>30.0</LayoverAngle>\n"
+"            <TxPlatform>\n"
+"                <Time>10.0</Time>\n"
+"                <Pos>\n"
+"                    <X>1.5</X>\n"
+"                    <Y>2.5</Y>\n"
+"                    <Z>4.0</Z>\n"
+"                </Pos>\n"
+"                <Vel>\n"
+"                    <X>1.5</X>\n"
+"                    <Y>2.5</Y>\n"
+"                    <Z>4.0</Z>\n"
+"                </Vel>\n"
+"                <SideOfTrack>L</SideOfTrack>\n"
+"                <SlantRange>20.0</SlantRange>\n"
+"                <GroundRange>20.0</GroundRange>\n"
+"                <DopplerConeAngle>30.0</DopplerConeAngle>\n"
+"                <GrazeAngle>30.0</GrazeAngle>\n"
+"                <IncidenceAngle>30.0</IncidenceAngle>\n"
+"                <AzimuthAngle>30.0</AzimuthAngle>\n"
+"            </TxPlatform>\n"
+"            <RcvPlatform>\n"
+"                <Time>10.0</Time>\n"
+"                <Pos>\n"
+"                    <X>1.5</X>\n"
+"                    <Y>2.5</Y>\n"
+"                    <Z>4.0</Z>\n"
+"                </Pos>\n"
+"                <Vel>\n"
+"                    <X>1.5</X>\n"
+"                    <Y>2.5</Y>\n"
+"                    <Z>4.0</Z>\n"
+"                </Vel>\n"
+"                <SideOfTrack>L</SideOfTrack>\n"
+"                <SlantRange>20.0</SlantRange>\n"
+"                <GroundRange>20.0</GroundRange>\n"
+"                <DopplerConeAngle>60.0</DopplerConeAngle>\n"
+"                <GrazeAngle>60.0</GrazeAngle>\n"
+"                <IncidenceAngle>60.0</IncidenceAngle>\n"
+"                <AzimuthAngle>60.0</AzimuthAngle>\n"
+"            </RcvPlatform>\n"
+"        </Bistatic>\n"
+"    </ReferenceGeometry>\n"
 "</CPHD>";
 }
 
@@ -534,6 +601,57 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(dwell.cod[0].CODTimePoly.orderY(), 1);
     TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderX(), 1);
     TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderY(), 1);
+
+    // ReferenceGeometry
+    const cphd::ReferenceGeometry& ref = metadata->referenceGeometry;
+    TEST_ASSERT_EQ(ref.srp.ecf[0], 1.0);
+    TEST_ASSERT_EQ(ref.srp.ecf[1], 2.0);
+    TEST_ASSERT_EQ(ref.srp.ecf[2], 3.5);
+    TEST_ASSERT_EQ(ref.srp.iac[0], 1.5);
+    TEST_ASSERT_EQ(ref.srp.iac[1], 2.5);
+    TEST_ASSERT_EQ(ref.srp.iac[2], 4.0);
+    TEST_ASSERT_EQ(ref.referenceTime, 0.0);
+    TEST_ASSERT_EQ(ref.srpCODTime, 23.0);
+    TEST_ASSERT_EQ(ref.srpDwellTime, 25.0);
+    TEST_ASSERT_EQ(ref.bistatic->azimuthAngle, 45.0);
+    TEST_ASSERT_EQ(ref.bistatic->azimuthAngleRate, 20);
+    TEST_ASSERT_EQ(ref.bistatic->bistaticAngle, 45.0);
+    TEST_ASSERT_EQ(ref.bistatic->bistaticAngleRate, 20);
+    TEST_ASSERT_EQ(ref.bistatic->grazeAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->twistAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->slopeAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->layoverAngle, 30.0);
+
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.time, 10);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.pos[0], 1.5);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.pos[1], 2.5);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.pos[2], 4.0);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.vel[0], 1.5);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.vel[1], 2.5);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.vel[2], 4.0);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.sideOfTrack.toString(), "LEFT");
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.slantRange, 20);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.groundRange, 20);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.dopplerConeAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.grazeAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.incidenceAngle, 30.0);
+    TEST_ASSERT_EQ(ref.bistatic->txPlatform.azimuthAngle, 30.0);
+
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.time, 10);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.pos[0], 1.5);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.pos[1], 2.5);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.pos[2], 4.0);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.vel[0], 1.5);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.vel[1], 2.5);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.vel[2], 4.0);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.sideOfTrack.toString(), "LEFT");
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.slantRange, 20);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.groundRange, 20);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.dopplerConeAngle, 60.0);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.grazeAngle, 60.0);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.incidenceAngle, 60.0);
+    TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.azimuthAngle, 60.0);
+
 
 }
 
