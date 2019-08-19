@@ -55,6 +55,14 @@ namespace cphd
     {
     }
 
+    CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths_in) :
+        six::XMLParser(CPHD10_URI, false, log, ownLog),
+        mCommon(CPHD10_URI, false, CPHD10_URI, log),
+        schemaPaths(schemaPaths_in)
+    {
+    }
+
+
     std::string CPHDXMLControl::getDefaultURI() const
     {
         return CPHD10_URI;
@@ -64,6 +72,77 @@ namespace cphd
     {
         return CPHD10_URI;
     }
+
+
+    void CPHDXMLControl::validate(const xml::lite::Document* doc,
+                  const std::vector<std::string>& schemaPaths,
+                  logging::Logger* log)
+    {
+        // attempt to get the schema location from the
+        // environment if nothing is specified
+        std::vector<std::string> paths(schemaPaths);
+        sys::OS os;
+        try
+        {
+            if (paths.empty())
+            {
+                std::string envPath = os.getEnv(six::SCHEMA_PATH);
+                str::trim(envPath);
+                if (!envPath.empty())
+                {
+                    paths.push_back(envPath);
+                }
+            }
+        }
+        catch (const except::Exception& )
+        {
+            // do nothing here
+        }
+
+        // validate against any specified schemas
+        if (!paths.empty())
+        {
+            xml::lite::Validator validator(paths, log, true);
+
+            std::vector<xml::lite::ValidationInfo> errors;
+
+            if (doc->getRootElement()->getUri().empty())
+            {
+                throw six::DESValidationException(Ctxt(
+                    "INVALID XML: URI is empty so document version cannot be "
+                    "determined to use for validation"));
+            }
+
+            validator.validate(doc->getRootElement(),
+                               doc->getRootElement()->getUri(),
+                               errors);
+
+            // log any error found and throw
+            if (!errors.empty())
+            {
+                for (size_t i = 0; i < errors.size(); ++i)
+                {
+                    log->critical(errors[i].toString());
+                }
+
+                //! this is a unique error thrown only in this location --
+                //  if the user wants a file written regardless of the consequences
+                //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+                //  and attempt to rewrite the file. Continuing in this manner is
+                //  highly discouraged
+                for (size_t i = 0; i < errors.size(); ++i)
+                {
+                    std::cout << errors[i].toString();
+                }
+                throw six::DESValidationException(Ctxt(
+                    "INVALID XML: Check both the XML being " \
+                    "produced and the schemas available"));
+            }
+        }
+    }
+
+
+
 
     /*
     std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
@@ -94,6 +173,11 @@ namespace cphd
     std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     {
         std::auto_ptr<Metadata> cphd(new Metadata());
+
+        if(!schemaPaths.empty()) {
+            // Validate schema
+            validate(doc, schemaPaths, log());
+        }
 
         XMLElem root = doc->getRootElement();
 
@@ -134,8 +218,90 @@ namespace cphd
         return cphd;
     }
 
+    // std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
+    //               const std::vector<std::string>& schemaPaths,
+    //               logging::Logger* log)
+    // {
+    //     // TODO: Implement and declare overload fromXML function with schema validation
+    // }
+
+    std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames)
+    {
+        std::auto_ptr<Metadata> cphd(new Metadata());
+
+        if(!schemaPaths.empty()) {
+            // Validate schema
+            validate(doc, schemaPaths, log());
+        }
+
+
+        XMLElem root = doc->getRootElement();
+
+        for(size_t i = 0; i < nodeNames.size(); ++i)
+        {
+            if(nodeNames[i] == "CollectionID") {
+                XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
+                fromXML(collectionIDXML, cphd->collectionID);
+            }
+            else if(nodeNames[i] == "Global") {
+                XMLElem globalXML   = getFirstAndOnly(root, "Global");
+                fromXML(globalXML, cphd->global);
+            }
+            else if(nodeNames[i] == "SceneCoordinates") {
+                XMLElem sceneCoordsXML   = getFirstAndOnly(root, "SceneCoordinates");
+                fromXML(sceneCoordsXML, cphd->sceneCoordinates);
+            }
+            else if(nodeNames[i] == "Data") {
+                XMLElem dataXML   = getFirstAndOnly(root, "Data");
+                fromXML(dataXML, cphd->data);
+            }
+            else if(nodeNames[i] == "Channel") {
+                XMLElem channelXML   = getFirstAndOnly(root, "Channel");
+                fromXML(channelXML, cphd->channel);
+            }
+            else if(nodeNames[i] == "PVP") {
+                XMLElem pvpXML   = getFirstAndOnly(root, "PVP");
+                fromXML(pvpXML, cphd->pvp);
+            }
+            else if(nodeNames[i] == "Dwell") {
+                XMLElem dwellXML   = getFirstAndOnly(root, "Dwell");
+                fromXML(dwellXML, cphd->dwell);
+            }
+            else if(nodeNames[i] == "ReferenceGeometry") {
+                XMLElem refGeoXML   = getFirstAndOnly(root, "ReferenceGeometry");
+                fromXML(refGeoXML, cphd->referenceGeometry);
+            }
+            else {
+                throw except::Exception(Ctxt(
+                        "Invalid node name provided"));
+            }
+
+        }
+        /*
+        XMLElem srpXML              = getFirstAndOnly(root, "SRP");
+        XMLElem antennaXML          = getOptional(root, "Antenna");
+        XMLElem vectorParametersXML = getFirstAndOnly(root, "VectorParameters");
+        */
+
+        // Parse XML for each section
+        /*
+        fromXML(srpXML, cphd03->srp);
+
+        if (antennaXML != NULL)
+        {
+            cphd03->antenna.reset(new Antenna());
+            fromXML(antennaXML, *cphd03->antenna);
+        }
+
+        fromXML(vectorParametersXML, cphd03->vectorParameters);
+        */
+        return cphd;
+    }
+
+
     void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
     {
+
         parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
                     collectionID.collectorName);
 
@@ -495,6 +661,117 @@ namespace cphd
             parseBooleanType(signalXML, param.signalNormal);
         }
 
+        parseDouble(getFirstAndOnly(paramXML, "FxC"), param.fxC);
+        parseDouble(getFirstAndOnly(paramXML, "FxBW"), param.fxBW);
+        parseDouble(getOptional(paramXML, "FxBWNoise"), param.fxBWNoise);
+        parseDouble(getFirstAndOnly(paramXML, "TOASaved"), param.toaSaved);
+
+        XMLElem toaExtendedXML = getOptional(paramXML, "TOAExtended");
+        if(toaExtendedXML)
+        {
+            parseDouble(getFirstAndOnly(toaExtendedXML, "TOAExtSaved"), param.toaExtended.toaExtSaved);
+            XMLElem lfmEclipseXML = getOptional(toaExtendedXML, "LFMEclipse");
+            if(lfmEclipseXML)
+            {
+                parseDouble(getFirstAndOnly(lfmEclipseXML, "FxEarlyLow"), param.toaExtended.lfmEclipse.fxEarlyLow);
+                parseDouble(getFirstAndOnly(lfmEclipseXML, "FxEarlyHigh"), param.toaExtended.lfmEclipse.fxEarlyHigh);
+                parseDouble(getFirstAndOnly(lfmEclipseXML, "FxLateLow"), param.toaExtended.lfmEclipse.fxLateLow);
+                parseDouble(getFirstAndOnly(lfmEclipseXML, "FxLateHigh"), param.toaExtended.lfmEclipse.fxLateHigh);
+            }
+        }
+
+        XMLElem dwellTimesXML = getFirstAndOnly(paramXML, "DwellTimes");
+        parseString(getFirstAndOnly(dwellTimesXML, "CODId"), param.dwellTimes.codId);
+        parseString(getFirstAndOnly(dwellTimesXML, "DwellId"), param.dwellTimes.dwellId);
+
+        XMLElem imageAreaXML = getOptional(paramXML, "ImageArea");
+        if(imageAreaXML)
+        {
+            parseAreaType(imageAreaXML, param.imageArea);
+        }
+
+        XMLElem antennaXML = getOptional(paramXML, "Antenna");
+        if(antennaXML)
+        {
+            parseString(getFirstAndOnly(antennaXML, "TxAPCId"), param.antenna.txAPCId);
+            parseString(getFirstAndOnly(antennaXML, "TxAPATId"), param.antenna.txAPATId);
+            parseString(getFirstAndOnly(antennaXML, "RcvAPCId"), param.antenna.rcvAPCId);
+            parseString(getFirstAndOnly(antennaXML, "RcvAPATId"), param.antenna.rcvAPATId);
+        }
+
+        XMLElem txRcvXML = getOptional(paramXML, "TxRcv");
+        if(txRcvXML)
+        {
+            std::vector<XMLElem> txWFIdXML;
+            txRcvXML->getElementsByTagName("TxWFId", txWFIdXML);
+            param.txRcv.txWFId.resize(txWFIdXML.size());
+            for(size_t ii = 0; ii < txWFIdXML.size(); ++ii)
+            {
+                parseString(txWFIdXML[ii], param.txRcv.txWFId[ii]);
+            }
+
+            std::vector<XMLElem> rcvIdXML;
+            txRcvXML->getElementsByTagName("RcvId", rcvIdXML);
+            param.txRcv.rcvId.resize(rcvIdXML.size());
+            for(size_t ii = 0; ii < rcvIdXML.size(); ++ii)
+            {
+                parseString(rcvIdXML[ii], param.txRcv.rcvId[ii]);
+            }
+        }
+
+        XMLElem tgtRefLevelXML = getOptional(paramXML, "TgtRefLevel");
+        if(tgtRefLevelXML)
+        {
+            parseDouble(getFirstAndOnly(tgtRefLevelXML, "PTRef"), param.tgtRefLevel.ptRef);
+        }
+
+        // TODO: Noise Level
+        XMLElem noiseLevelXML = getOptional(paramXML, "NoiseLevel");
+        if(noiseLevelXML)
+        {
+            parseDouble(getFirstAndOnly(noiseLevelXML, "PNRef"), param.noiseLevel.pnRef);
+            parseDouble(getFirstAndOnly(noiseLevelXML, "BNRef"), param.noiseLevel.bnRef);
+            if(!(param.noiseLevel.bnRef > 0 && param.noiseLevel.bnRef <= 1))
+            {
+                throw except::Exception(Ctxt(
+                    "Noise equivalent BW value must be > 0.0 and <= 1.0"));
+            }
+
+            XMLElem fxNoiseProfileXML = getOptional(noiseLevelXML, "FxNoiseProfile");
+            if(fxNoiseProfileXML)
+            {
+                std::vector<XMLElem> pointXMLVec;
+                fxNoiseProfileXML->getElementsByTagName("Point", pointXMLVec);
+                if(pointXMLVec.size() < 2)
+                {
+                    throw except::Exception(Ctxt(
+                        "Atleast 2 noise profile points must be provided"));
+                }
+                param.noiseLevel.fxNoiseProfile.point.resize(pointXMLVec.size());
+                double prev_point = six::Init::undefined<double>();
+                for(size_t ii = 0; ii < pointXMLVec.size(); ++ii)
+                {
+                    double fx;
+                    parseDouble(getFirstAndOnly(pointXMLVec[ii], "Fx"), fx);
+                    parseDouble(getFirstAndOnly(pointXMLVec[ii], "PN"), param.noiseLevel.fxNoiseProfile.point[ii].pn);
+
+                    if(!six::Init::isUndefined(prev_point) && fx <= prev_point)
+                    {
+                        std::cout << "prev_point: " << prev_point << std::endl;
+                        std::cout << "fx: " << fx << std::endl;
+
+                        throw except::Exception(Ctxt(
+                            "Fx values are strictly increasing"));
+                    }
+                    param.noiseLevel.fxNoiseProfile.point[ii].fx = fx;
+                    std::cout<<"fx: "<<fx<< " loaded\n";
+                    std::cout<<param.noiseLevel.fxNoiseProfile.point[ii].fx<<"\n";
+                    prev_point = fx;
+                }
+            }
+        }
+
+
         // Polarization
         std::vector<XMLElem> PolarizationXML;
         paramXML->getElementsByTagName("Polarization", PolarizationXML);
@@ -525,6 +802,18 @@ namespace cphd
         for (size_t ii = 0; ii < parametersXML.size(); ++ii)
         {
             parseChannelParameters(parametersXML[ii], channel.parameters[ii]);
+        }
+
+        XMLElem addedParametersXML = getOptional(channelXML, "AddedParameters");
+        if(addedParametersXML)
+        {
+            std::vector<XMLElem> addedParametersXMLVec;
+            addedParametersXML->getElementsByTagName("Parameter", addedParametersXMLVec);
+            channel.addedParameters.resize(addedParametersXMLVec.size());
+            for(size_t ii = 0; ii < addedParametersXMLVec.size(); ++ii)
+            {
+                parseString(addedParametersXMLVec[ii], channel.addedParameters[ii]);
+            }
         }
     }
 

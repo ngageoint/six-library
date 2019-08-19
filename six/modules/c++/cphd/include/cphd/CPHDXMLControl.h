@@ -55,9 +55,28 @@ public:
     //! Constructor
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
+    //! Constructor
+    CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths_in);
+
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
+    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames);
+
     std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+
+    //setter
+    void setSchemaPaths(std::vector<std::string>& schemaPaths_in)
+    {
+        schemaPaths = schemaPaths_in;
+    }
+
+
+//! Validate the xml and log any errors
+//  NOTE: Errors are treated as detriments to valid processing
+//        and fail accordingly
+    void validate(const xml::lite::Document* doc,
+              const std::vector<std::string>& schemaPaths,
+              logging::Logger* log);
 
     // size_t getXMLsize(const Metadata& metadata);
 
@@ -96,6 +115,7 @@ private:
 
 private:
     six::SICommonXMLParser10x mCommon;
+    std::vector<std::string> schemaPaths;
 };
 }
 
