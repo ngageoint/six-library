@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <memory>
 
 #include <cphd/CPHDXMLControl.h>
@@ -227,9 +228,48 @@ static const char XML[] =
 "                <TxPol>X</TxPol>\n"
 "                <RcvPol>RHC</RcvPol>\n"
 "            </Polarization>\n"
+"            <FxC>1.3</FxC>\n"
+"            <FxBW>0.8</FxBW>\n"
+"            <FxBWNoise>0.5</FxBWNoise>\n"
+"            <TOASaved>2.7</TOASaved>\n"
+"            <TOAExtended>\n"
+"                <TOAExtSaved>1.0</TOAExtSaved>\n"
+"                <LFMEclipse>\n"
+"                    <FxEarlyLow>1.0</FxEarlyLow>\n"
+"                    <FxEarlyHigh>2.0</FxEarlyHigh>\n"
+"                    <FxLateLow>1.0</FxLateLow>\n"
+"                    <FxLateHigh>2.0</FxLateHigh>\n"
+"                </LFMEclipse>\n"
+"            </TOAExtended>\n"
+"            <DwellTimes>\n"
+"            <CODId>CODPolynomial</CODId>\n"
+"            <DwellId>DwellPolynomial</DwellId>\n"
+"            </DwellTimes>\n"
+"            <ImageArea>\n"
+"                <X1Y1>\n"
+"                    <X>3.5</X>\n"
+"                    <Y>5.3</Y>\n"
+"                </X1Y1>\n"
+"                <X2Y2>\n"
+"                    <X>5.3</X>\n"
+"                    <Y>3.5</Y>\n"
+"                </X2Y2>\n"
+"                <Polygon size=\"3\">\n"
+"                    <Vertex index=\"1\">\n"
+"                        <X>0.1</X>\n"
+"                        <Y>0.3</Y>\n"
+"                    </Vertex>\n"
+"                    <Vertex index=\"2\">\n"
+"                        <X>0.4</X>\n"
+"                        <Y>0.2</Y>\n"
+"                    </Vertex>\n"
+"                    <Vertex index=\"3\">\n"
+"                        <X>0.5</X>\n"
+"                        <Y>0.9</Y>\n"
+"                    </Vertex>\n"
+"                </Polygon>\n"
+"            </ImageArea>\n"
 "        </Parameters>\n"
-"        <FxC>1.3</FxC>\n"
-"        <FxBW>0.8</FxBW>\n"
 "    </Channel>\n"
 "    <PVP>\n"
 "        <TxTime>\n"
@@ -571,9 +611,51 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(channel.parameters[0].polarization.RcvPol,
                    cphd::PolarizationType::RHC);
 
-    // TEST_ASSERT_EQ(channel.parameters[0].FxC, 1.3);
-    // TEST_ASSERT_EQ(channel.parameters[0].FxBW, 0.8);
-    // TEST_ASSERT_EQ(channel.parameters[0].TOASaved, 2.7);
+    TEST_ASSERT_EQ(channel.parameters[0].fxC, 1.3);
+    TEST_ASSERT_EQ(channel.parameters[0].fxBW, 0.8);
+    TEST_ASSERT_EQ(channel.parameters[0].toaSaved, 2.7);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.toaExtSaved, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxEarlyLow, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxEarlyHigh, 2.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxLateLow, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxLateHigh, 2.0);
+
+    TEST_ASSERT_EQ(channel.parameters[0].dwellTimes.codId, "CODPolynomial");
+    TEST_ASSERT_EQ(channel.parameters[0].dwellTimes.dwellId, "DwellPolynomial");
+
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.x1y1[0], 3.5);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.x1y1[1], 5.3);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.x2y2[0], 5.3);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.x2y2[1], 3.5);
+
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[0][0], 0.1);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[0][1], 0.3);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[1][0], 0.4);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[1][1], 0.2);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[2][0], 0.5);
+    TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[2][1], 0.9);
+
+    TEST_ASSERT_EQ(channel.parameters[0].antenna.txAPCId, "TxAPCId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna.txAPATId, "TxAPATId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna.rcvAPCId, "RcvAPCId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna.rcvAPATId, "RcvAPATId");
+
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv.txWFId[0], "TxWFId");
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv.rcvId[0], "rcvId");
+
+    TEST_ASSERT_EQ(channel.parameters[0].tgtRefLevel.ptRef, 12.0);
+
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.pnRef, 0.5);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.bnRef, 0.8);
+
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point.size(), 2);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[0].fx, 0.3);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[0].pn, 2.7);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[1].fx, 0.5);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[1].pn, 2.7);
+
+    TEST_ASSERT_EQ(channel.addedParameters[0], "AddedParameter1");
+    TEST_ASSERT_EQ(channel.addedParameters[1], "AddedParameter2");
 
 
     //PVP
@@ -651,15 +733,30 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.grazeAngle, 60.0);
     TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.incidenceAngle, 60.0);
     TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.azimuthAngle, 60.0);
-
-
 }
+
+// TEST_CASE_ARGS(testValidation)
+// {
+//     io::FileInputStream ifs(pathname);
+
+//     // io::MockSeekableInputStream cphdStream(content);
+//     xml::lite::MinidomParser xmlParser;
+//     xmlParser.preserveCharacterData(true);
+//     xmlParser.parse(ifs, ifs.available());
+//     const std::auto_ptr<cphd::Metadata> metadata =
+//             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
+
+//     TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
+
+// }
 
 int main(int /*argc*/, char** /*argv*/)
 {
+
     try
     {
         TEST_CHECK(testReadXML);
+        // TEST_CHECK(testValidation);
         return 0;
     }
     catch (const except::Exception& ex)
