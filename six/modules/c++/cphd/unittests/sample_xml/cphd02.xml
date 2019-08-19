@@ -1,4 +1,5 @@
-<CPHD>
+<?xml version="1.0"?>
+<CPHD xmlns="urn:CPHD:1.0.0">
     <CollectionID>
       <CollectorName>Collector</CollectorName>
       <CoreName>Core</CoreName>
@@ -118,13 +119,14 @@
               <NumLines>50</NumLines>
           </IAXExtent>
           <IAYExtent>
-              <LineSpacing>6.28</LineSpacing>
-              <FirstLine>8</FirstLine>
-              <NumLines>100</NumLines>
+              <SampleSpacing>6.28</SampleSpacing>
+              <FirstSample>8</FirstSample>
+              <NumSamples>100</NumSamples>
           </IAYExtent>
           <SegmentList>
               <NumSegments>2</NumSegments>
               <Segment>
+                <Identifier>Segment1</Identifier>
                  <StartLine>0</StartLine>
                  <StartSample>1</StartSample>
                  <EndLine>2</EndLine>
@@ -145,6 +147,7 @@
                  </SegmentPolygon>
               </Segment>
               <Segment>
+                <Identifier>Segment2</Identifier>
                  <StartLine>1</StartLine>
                  <StartSample>2</StartSample>
                  <EndLine>3</EndLine>
@@ -171,24 +174,24 @@
       <SignalArrayFormat>CI4</SignalArrayFormat>
       <NumBytesPVP>24</NumBytesPVP>
       <NumCPHDChannels>2</NumCPHDChannels>
-      <Channel>
-          <Identifier>Channel</Identifier>
-          <NumVectors>2</NumVectors>
-          <NumSamples>3</NumSamples>
-          <SignalArrayByteOffset>0</SignalArrayByteOffset>
-          <PVPArrayByteOffset>1</PVPArrayByteOffset>
-          <CompressedSignalSize>3</CompressedSignalSize>
-      </Channel>
-      <Channel>
-          <Identifier>Channel</Identifier>
-          <NumVectors>2</NumVectors>
-          <NumSamples>3</NumSamples>
-          <SignalArrayByteOffset>0</SignalArrayByteOffset>
-          <PVPArrayByteOffset>1</PVPArrayByteOffset>
-          <CompressedSignalSize>3</CompressedSignalSize>
-      </Channel>
       <SignalCompressionID>Compress</SignalCompressionID>
-      <NumSupportingArrays>1</NumSupportingArrays>
+      <Channel>
+          <Identifier>Channel</Identifier>
+          <NumVectors>2</NumVectors>
+          <NumSamples>3</NumSamples>
+          <SignalArrayByteOffset>0</SignalArrayByteOffset>
+          <PVPArrayByteOffset>1</PVPArrayByteOffset>
+          <CompressedSignalSize>3</CompressedSignalSize>
+      </Channel>
+      <Channel>
+          <Identifier>Channel</Identifier>
+          <NumVectors>2</NumVectors>
+          <NumSamples>3</NumSamples>
+          <SignalArrayByteOffset>0</SignalArrayByteOffset>
+          <PVPArrayByteOffset>1</PVPArrayByteOffset>
+          <CompressedSignalSize>3</CompressedSignalSize>
+      </Channel>
+      <NumSupportArrays>1</NumSupportArrays>
       <SupportArray>
           <Identifier>ID</Identifier>
           <NumRows>25</NumRows>
@@ -204,7 +207,7 @@
       <SRPFixedCPHD>true</SRPFixedCPHD>
       <Parameters>
           <Identifier>CPI</Identifier>
-          <RefVectorIndex>0</RefVectorIndex>
+          <RefVectorIndex>1</RefVectorIndex>
           <FXFixed>false</FXFixed>
           <TOAFixed>true</TOAFixed>
           <SRPFixed>true</SRPFixed>
@@ -254,7 +257,38 @@
                   </Vertex>
               </Polygon>
           </ImageArea>
+          <Antenna>
+            <TxAPCId>TxAPCId</TxAPCId>
+            <TxAPATId>TxAPATId</TxAPATId>
+            <RcvAPCId>RcvAPCId</RcvAPCId>
+            <RcvAPATId>RcvAPATId</RcvAPATId>
+          </Antenna>
+          <TxRcv>
+            <TxWFId>TxWFId</TxWFId>
+            <RcvId>RcvId</RcvId>
+          </TxRcv>
+          <TgtRefLevel>
+            <PTRef>12.0</PTRef>
+          </TgtRefLevel>
+          <NoiseLevel>
+            <PNRef>0.5</PNRef>
+            <BNRef>0.8</BNRef>
+            <FxNoiseProfile>
+              <Point>
+                <Fx>0.3</Fx>
+                <PN>2.7</PN>
+              </Point>
+              <Point>
+                <Fx>0.5</Fx>
+                <PN>2.7</PN>
+              </Point>
+            </FxNoiseProfile>
+          </NoiseLevel>
       </Parameters>
+      <AddedParameters>
+        <Parameter name="AddedParameter1"></Parameter>
+        <Parameter name="AddedParameter2"></Parameter>
+      </AddedParameters>
     </Channel>
     <PVP>
       <TxTime>
@@ -295,7 +329,7 @@
       <aFDOP>
       <Offset>0</Offset>
       <Size>1</Size>
-      <Format>"F8"</Format>
+      <Format>F8</Format>
       </aFDOP>
       <aFRR1>
       <Offset>0</Offset>
@@ -357,7 +391,6 @@
     </PVP>
     <Dwell>
       <NumCODTimes>1</NumCODTimes>
-      <NumDwellTimes>1</NumDwellTimes>
       <CODTime>
           <Identifier>codPolynomial1</Identifier>
           <CODTimePoly order1="1" order2="1">
@@ -365,6 +398,7 @@
               <Coef exponent1="0" exponent2="1">5</Coef>
           </CODTimePoly>
       </CODTime>
+      <NumDwellTimes>1</NumDwellTimes>
       <DwellTime>
           <Identifier>dwellPolynomial1</Identifier>
           <DwellTimePoly order1="1" order2="1">
