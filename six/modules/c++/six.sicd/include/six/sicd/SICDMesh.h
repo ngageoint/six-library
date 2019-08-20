@@ -22,6 +22,8 @@
 #ifndef __SIX_SICD_MESH_H__
 #define __SIX_SICD_MESH_H__
 
+#include <map>
+
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Mesh.h>
 
@@ -43,6 +45,9 @@ struct SICDMeshes
 
     //! Type ID for SICD noise mesh
     static const char NOISE_MESH_ID[];
+
+    //! Type ID for SICD scalar mesh
+    static const char SCALAR_MESH_ID[];
 };
 
 /*!
@@ -118,6 +123,92 @@ protected:
     types::RowCol<size_t> mMeshDims;
     std::vector<double> mX;
     std::vector<double> mY;
+};
+
+/*!
+ *  \class ScalarMesh
+ *  \brief A storage structure that associates an arbitrary number of
+ *         scalar values with an x,y coordinate pair.
+ */
+class ScalarMesh : public PlanarCoordinateMesh
+{
+public:
+    /**
+     * Constructor. Mesh data is uninitialized.
+     *
+     * \param name Name of the mesh.
+     */
+    ScalarMesh(const std::string& name);
+
+    /**
+     * Constructor. Mesh data is initialized.
+     *
+     * \param name Name of the mesh.
+     * \param meshDims The mesh dimensions.
+     * \param x The x-coordinates for the mesh.
+     * \param y The y-coordinates for the mesh.
+     * \param numScalarsPerCoord Number of scalars per x,y coordinate
+     *        i.e the size of the provided scalars map.
+     * \param scalars The scalar values for the mesh. This is a map
+     *        from the scalar name (e.g "temperature", "height" etc.)
+     *        to the associated values.
+     */
+    ScalarMesh(const std::string& name,
+               const types::RowCol<size_t>& meshDims,
+               const std::vector<double>& x,
+               const std::vector<double>& y,
+               size_t numScalarsPerCoord,
+               const std::map<std::string, std::vector<double>>& scalars);
+
+    /*!
+     * \returns The scalar values over the mesh.
+     */
+    const std::map<std::string, std::vector<double>>& getScalars() const
+    {
+        return mScalars;
+    }
+
+    /*!
+     * \returns Number of scalars at a given x,y coordinate i.e
+     *          the size of the map returned by getScalars().
+     */
+    size_t getNumScalarsPerCoord() const
+    {
+        return mNumScalarsPerCoord;
+    }
+
+    /*!
+     * Get the mesh fields and types.
+     *
+     * \return The vector of Field descriptions
+     *
+     * \note The fields of this mesh are not known until a map of
+     *       scalars has been provided. This method will throw if the mesh
+     *       is uninitialized.
+     */
+    std::vector<Mesh::Field> getFields() const override;
+
+    /*!
+     * Serializes the mesh to binary
+     *
+     * \param[out] values The serialized data.
+     */
+    void serialize(std::vector<sys::byte>& values) const override;
+
+    /*!
+     * Deserializes from binary to a mesh.
+     *
+     * \param values Data to deserialize.
+     */
+    void deserialize(const sys::byte*& values) override;
+
+private:
+    //! The number of scalars per x,y coordinate.
+    size_t mNumScalarsPerCoord;
+
+    //! Map between the scalar identifier and the values over
+    //! the mesh.
+    std::map<std::string, std::vector<double>> mScalars;
 };
 
 /*!

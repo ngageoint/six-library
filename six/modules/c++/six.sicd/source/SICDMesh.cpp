@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <numeric>
+
 #include <six/sicd/SICDMesh.h>
 #include <six/Serialize.h>
 
@@ -29,6 +31,7 @@ namespace sicd
 const char SICDMeshes::SLANT_PLANE_MESH_ID[] = "Slant_Plane_Mesh";
 const char SICDMeshes::OUTPUT_PLANE_MESH_ID[] = "Output_Plane_Mesh";
 const char SICDMeshes::NOISE_MESH_ID[] = "Noise_Mesh";
+const char SICDMeshes::SCALAR_MESH_ID[] = "Scalar Mesh";
 
 PlanarCoordinateMesh::PlanarCoordinateMesh(const std::string& name):
     mSwapBytes(!sys::isBigEndianSystem()),
@@ -79,6 +82,86 @@ void PlanarCoordinateMesh::deserialize(const sys::byte*& values)
     six::deserialize(values, mSwapBytes, mMeshDims.col);
     six::deserialize(values, mSwapBytes, mX);
     six::deserialize(values, mSwapBytes, mY);
+}
+
+ScalarMesh::ScalarMesh(const std::string& name):
+    PlanarCoordinateMesh(name),
+    mNumScalarsPerCoord(std::numeric_limits<size_t>::max())
+{
+}
+
+ScalarMesh::ScalarMesh(
+        const std::string& name,
+        const types::RowCol<size_t>& meshDims,
+        const std::vector<double>& x,
+        const std::vector<double>& y,
+        size_t numScalarsPerCoord,
+        const std::map<std::string, std::vector<double>>& scalars):
+    PlanarCoordinateMesh(name, meshDims, x, y),
+    mNumScalarsPerCoord(numScalarsPerCoord),
+    mScalars(scalars)
+{
+}
+
+std::vector<Mesh::Field> ScalarMesh::getFields() const
+{
+    std::vector<Mesh::Field> fields = PlanarCoordinateMesh::getFields();
+
+    // The fields of a scalar mesh are not known until
+    // scalar data has been provided - throw if it is
+    // uninitialized.
+    if (mScalars.empty())
+    {
+        throw except::Exception(
+                Ctxt("Requested fields of an uninitialized Scalar Mesh."));
+    }
+
+    const std::string doubleTypeStr = "double";
+    std::map<std::string, std::vector<double>>::const_iterator it =
+            mScalars.begin();
+    for (; it != mScalars.end(); ++it)
+    {
+        Field field;
+        field.name = it->first;
+        field.type = doubleTypeStr;
+        fields.push_back(field);
+    }
+
+    return fields;
+}
+
+void ScalarMesh::serialize(std::vector<sys::byte>& values) const
+{
+    PlanarCoordinateMesh::serialize(values);
+
+    six::serialize(mNumScalarsPerCoord, mSwapBytes, values);
+
+    // Serialize the map
+    std::map<std::string, std::vector<double>>::const_iterator it =
+            mScalars.begin();
+    for (; it != mScalars.end(); ++it)
+    {
+        six::serialize(it->first, mSwapBytes, values);
+        six::serialize(it->second, mSwapBytes, values);
+    }
+}
+
+void ScalarMesh::deserialize(const sys::byte*& values)
+{
+    PlanarCoordinateMesh::deserialize(values);
+
+    six::deserialize(values, mSwapBytes, mNumScalarsPerCoord);
+
+    // Deserialize the std::string --> std::vector<double> scalar
+    // data.
+    for (size_t ii = 0; ii < mNumScalarsPerCoord; ++ii)
+    {
+        std::string key;
+        six::deserialize(values, mSwapBytes, key);
+
+        std::vector<double>& scalars = mScalars[key];
+        six::deserialize(values, mSwapBytes, scalars);
+    }
 }
 
 std::vector<Mesh::Field> NoiseMesh::getFields() const

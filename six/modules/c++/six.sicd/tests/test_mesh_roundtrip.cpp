@@ -30,6 +30,7 @@
 #include <import/cli.h>
 #include <sys/Path.h>
 #include <six/sicd/SICDMesh.h>
+#include <str/Convert.h>
 
 namespace
 {
@@ -47,6 +48,39 @@ void populatePlanarCoordinateMeshVectors(const types::RowCol<size_t>& meshDims,
         {
             x.push_back((double) std::rand() / (double) RAND_MAX);
             y.push_back((double) std::rand() / (double) RAND_MAX);
+        }
+    }
+}
+
+double genRand()
+{
+    return static_cast<double>(std::rand()) /
+           static_cast<double>(RAND_MAX);
+}
+
+void populateScalarMeshVectors(const types::RowCol<size_t>& meshDims,
+                               size_t numScalarsPerCoord,
+                               std::vector<double>& x,
+                               std::vector<double>& y,
+                               std::map<std::string, std::vector<double>>& scalars)
+{
+    x.clear();
+    y.clear();
+
+    std::srand(static_cast<size_t>(std::time(0)));
+
+    for (size_t row = 0; row < meshDims.row; ++row)
+    {
+        for (size_t col = 0; col < meshDims.col; ++col)
+        {
+            x.push_back(genRand());
+            y.push_back(genRand());
+
+            for (size_t ii = 0; ii < numScalarsPerCoord; ++ii)
+            {
+                const std::string key = str::toString(ii);
+                scalars[key].push_back(genRand());
+            }
         }
     }
 }
@@ -134,6 +168,88 @@ bool comparePlanarCoordinateMesh(
 
     return (diffRows == 0 && maxDiffX == 0.0 &&
             diffCols == 0 && maxDiffY == 0.0);
+}
+
+bool compareScalarMesh(const six::sicd::ScalarMesh& scalarMeshA,
+                       const six::sicd::ScalarMesh& scalarMeshB,
+                       bool verbose)
+{
+    size_t diffRows;
+    size_t diffCols;
+    double maxDiffX;
+    double maxDiffY;
+    const bool coordsMatch = comparePlanarCoordinateMesh(
+            &scalarMeshA,
+            &scalarMeshB,
+            false,
+            diffRows,
+            diffCols,
+            maxDiffX,
+            maxDiffY);
+
+    if (!coordsMatch)
+    {
+        std::cerr << "ScalarMesh comparison failed. "
+                  << "Coordinates do not agree:" << std::endl
+                  << "    diffRows: " << diffRows << std::endl
+                  << "    diffCols: " << diffCols << std::endl
+                  << "    maxDiffX: " << maxDiffX << std::endl
+                  << "    maxDiffY: " << maxDiffY << std::endl;
+        return false;
+    }
+
+    if (scalarMeshA.getScalars().size() != scalarMeshB.getScalars().size())
+    {
+        std::cerr << "ScalarMesh comparison failed - "
+                  << " number of grid of scalars do not match"
+                  << std::endl;
+        return false;
+    }
+
+    std::map<std::string, std::vector<double>>::const_iterator it =
+            scalarMeshA.getScalars().begin();
+
+    for (; it != scalarMeshA.getScalars().end(); ++it)
+    {
+        const std::vector<double>& scalarsB =
+                scalarMeshB.getScalars().at(it->first);
+        if (it->second.size() != scalarsB.size())
+        {
+            std::cerr << "ScalarMesh comparison failed - "
+                      << " scalar grid sizes do not match" << std::endl;
+            return false;
+        }
+    }
+
+    // Compare the scalars
+    double maxDiffScalar = 0.0;
+    for (it = scalarMeshA.getScalars().begin();
+         it != scalarMeshA.getScalars().end();
+         ++it)
+    {
+        const std::vector<double>& scalarsA = it->second;
+        const std::vector<double>& scalarsB =
+                scalarMeshB.getScalars().at(it->first);
+        for (size_t ii = 0; ii < scalarsA.size(); ++ii)
+        {
+            maxDiffScalar = std::max(
+                    maxDiffScalar,
+                    std::abs(scalarsA[ii] - scalarsB[ii]));
+        }
+    }
+
+    if (verbose)
+    {
+        std::cout << "Scalar Mesh roundtrip compare: " << std::endl;
+        std::cout << "    diffRows: " << diffRows << std::endl;
+        std::cout << "    diffCols: " << diffCols << std::endl;
+        std::cout << "    maxDiffX: " << maxDiffX << std::endl;
+        std::cout << "    maxDiffY: " << maxDiffY << std::endl;
+        std::cout << "    maxDiffScalar: "
+                  << maxDiffScalar << std::endl;
+    }
+
+    return maxDiffScalar == 0.0;
 }
 
 /*! Compare Noise meshes.
@@ -247,6 +363,39 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
         maxDiffY);
 }
 
+bool roundTripScalarMesh(const types::RowCol<size_t>& meshDims,
+                         size_t numScalarsPerCoord,
+                         bool verbose)
+{
+    std::vector<double> x;
+    std::vector<double> y;
+    std::map<std::string, std::vector<double>> scalars;
+
+    populateScalarMeshVectors(meshDims, numScalarsPerCoord, x, y, scalars);
+
+    const std::string meshName = "scalar mesh";
+    six::sicd::ScalarMesh serializedScalarMesh(
+            meshName,
+            meshDims,
+            x,
+            y,
+            numScalarsPerCoord,
+            scalars);
+
+    std::vector<sys::byte> serializedValues;
+    serializedScalarMesh.serialize(serializedValues);
+
+    six::sicd::ScalarMesh deserializedScalarMesh(meshName);
+
+    const sys::byte* serializedValuesBuffer = serializedValues.data();
+    deserializedScalarMesh.deserialize(serializedValuesBuffer);
+
+    return compareScalarMesh(
+            serializedScalarMesh,
+            deserializedScalarMesh,
+            verbose);
+}
+
 bool roundTripNoiseMesh(const types::RowCol<size_t>& meshDims,
                         bool verbose)
 {
@@ -315,6 +464,8 @@ int main(int argc, char** argv)
         bool success = true;
         success &= roundTripPlanarMesh(meshDims, verbose);
         success &= roundTripNoiseMesh(meshDims, verbose);
+        success &= roundTripScalarMesh(meshDims, 1, verbose);
+        success &= roundTripScalarMesh(meshDims, 4, verbose);
 
         return (success ? 0 : 1);
     }

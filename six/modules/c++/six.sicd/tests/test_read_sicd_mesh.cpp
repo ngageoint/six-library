@@ -27,6 +27,7 @@ int main(int argc, char** argv)
         six::Poly2D outputRowColToSlantRow;
         six::Poly2D outputRowColToSlantCol;
         std::auto_ptr<six::sicd::NoiseMesh> noiseMesh;
+        std::auto_ptr<six::sicd::ScalarMesh> scalarMesh;
 
         std::cout << "Read SICD: " << sicdPathname << std::endl;
         six::sicd::Utilities::readSicd(sicdPathname,
@@ -37,7 +38,8 @@ int main(int argc, char** argv)
                                        widebandData,
                                        outputRowColToSlantRow,
                                        outputRowColToSlantCol,
-                                       noiseMesh);
+                                       noiseMesh,
+                                       scalarMesh);
 
         std::cout << "outputRowColToSlantRow: " << outputRowColToSlantRow << std::endl;
         std::cout << "outputRowColToSlantCol: " << outputRowColToSlantCol << std::endl;
@@ -265,6 +267,35 @@ int main(int argc, char** argv)
             "(dB) " << pow(10.0, meshPolyMeshRMSDb/10.0) << " (power)" << std::endl;
         std::cout << "    sicdPolyMeshPolyRMS: " << sicdPolyMeshPolyRMSDb <<
             "(dB) " << pow(10.0, sicdPolyMeshPolyRMSDb/10.0) << " (power)" << std::endl;
+
+        if (scalarMesh.get())
+        {
+            const types::RowCol<size_t> meshDims = scalarMesh->getMeshDims();
+            std::cout << "\nScalar Mesh dims: row = " << meshDims.row << ", col = "
+                      << meshDims.col << std::endl;
+
+            std::cout << "Number of grids of scalars: "
+               << scalarMesh->getNumScalarsPerCoord() << std::endl;
+
+            std::cout << "Printing scalars:" << std::endl;
+            std::map<std::string, std::vector<double>>::const_iterator it =
+                    scalarMesh->getScalars().begin();
+            for (; it != scalarMesh->getScalars().end(); ++it)
+            {
+                std::cout << "Key: " << it->first << std::endl;;
+                const std::vector<double>& scalars = it->second;
+                for (size_t row = 0; row < meshDims.row; ++row)
+                {
+                    for (size_t col = 0; col < meshDims.col; ++col)
+                    {
+                        std::cout  << scalars[row * meshDims.col + col] << " ";
+                    }
+
+                    std::cout  << "\n";
+                }
+                std::cout  << "\n";
+            }
+        }
     }   
     catch (const except::Exception& e)
     {
