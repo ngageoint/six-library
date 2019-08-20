@@ -154,7 +154,6 @@ struct Serializer<std::string>
      * \param val The std::string to serialize.
      * \param swapBytes Should byte-swapping be applied?
      * \param[out] buffer The serialized data.
-     *
      */
     static void serializeImpl(const std::string& val,
                               bool swapBytes,

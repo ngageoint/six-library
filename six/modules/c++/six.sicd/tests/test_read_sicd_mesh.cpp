@@ -275,7 +275,7 @@ int main(int argc, char** argv)
                       << meshDims.col << std::endl;
 
             std::cout << "Number of grids of scalars: "
-               << scalarMesh->getNumScalarsPerCoord() << std::endl;
+                      << scalarMesh->getNumScalarsPerCoord() << std::endl;
 
             std::cout << "Printing scalars:" << std::endl;
             std::map<std::string, std::vector<double> >::const_iterator it =

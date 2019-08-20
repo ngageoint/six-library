@@ -425,16 +425,16 @@ public:
     static std::auto_ptr<NoiseMesh> getNoiseMesh(NITFReadControl& reader);
 
     /*
-       * Given a reference to a loaded NITFReadControl, this function
-       * parses the SICD's DES and returns a ScalarMesh if present.
-       *
-       * \note If the scalar mesh is not present within the SICD,
-       *       the returned ScalarMesh will be null
-       *
-       * \param reader A NITFReadControl loaded with the desired SICD
-       *
-       * \return Scalar Mesh associated with the SICD NITF
-       */
+     * Given a reference to a loaded NITFReadControl, this function
+     * parses the SICD's DES and returns a ScalarMesh if present.
+     *
+     * \note If the scalar mesh is not present within the SICD,
+     *       the returned ScalarMesh will be null
+     *
+     * \param reader A NITFReadControl loaded with the desired SICD
+     *
+     * \return Scalar Mesh associated with the SICD NITF
+     */
     static std::auto_ptr<ScalarMesh> getScalarMesh(NITFReadControl& reader);
 
     /*
