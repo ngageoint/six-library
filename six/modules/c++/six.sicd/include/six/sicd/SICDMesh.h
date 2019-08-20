@@ -158,12 +158,12 @@ public:
                const std::vector<double>& x,
                const std::vector<double>& y,
                size_t numScalarsPerCoord,
-               const std::map<std::string, std::vector<double>>& scalars);
+               const std::map<std::string, std::vector<double> >& scalars);
 
     /*!
      * \returns The scalar values over the mesh.
      */
-    const std::map<std::string, std::vector<double>>& getScalars() const
+    const std::map<std::string, std::vector<double> >& getScalars() const
     {
         return mScalars;
     }
@@ -186,21 +186,21 @@ public:
      *       scalars has been provided. This method will throw if the mesh
      *       is uninitialized.
      */
-    std::vector<Mesh::Field> getFields() const override;
+    virtual std::vector<Mesh::Field> getFields() const;
 
     /*!
      * Serializes the mesh to binary
      *
      * \param[out] values The serialized data.
      */
-    void serialize(std::vector<sys::byte>& values) const override;
+    virtual void serialize(std::vector<sys::byte>& values) const;
 
     /*!
      * Deserializes from binary to a mesh.
      *
      * \param values Data to deserialize.
      */
-    void deserialize(const sys::byte*& values) override;
+    virtual void deserialize(const sys::byte*& values);
 
 private:
     //! The number of scalars per x,y coordinate.
@@ -208,7 +208,7 @@ private:
 
     //! Map between the scalar identifier and the values over
     //! the mesh.
-    std::map<std::string, std::vector<double>> mScalars;
+    std::map<std::string, std::vector<double> > mScalars;
 };
 
 /*!

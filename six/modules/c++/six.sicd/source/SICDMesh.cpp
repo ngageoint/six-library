@@ -96,7 +96,7 @@ ScalarMesh::ScalarMesh(
         const std::vector<double>& x,
         const std::vector<double>& y,
         size_t numScalarsPerCoord,
-        const std::map<std::string, std::vector<double>>& scalars):
+        const std::map<std::string, std::vector<double> >& scalars):
     PlanarCoordinateMesh(name, meshDims, x, y),
     mNumScalarsPerCoord(numScalarsPerCoord),
     mScalars(scalars)
@@ -117,7 +117,7 @@ std::vector<Mesh::Field> ScalarMesh::getFields() const
     }
 
     const std::string doubleTypeStr = "double";
-    std::map<std::string, std::vector<double>>::const_iterator it =
+    std::map<std::string, std::vector<double> >::const_iterator it =
             mScalars.begin();
     for (; it != mScalars.end(); ++it)
     {
@@ -137,7 +137,7 @@ void ScalarMesh::serialize(std::vector<sys::byte>& values) const
     six::serialize(mNumScalarsPerCoord, mSwapBytes, values);
 
     // Serialize the map
-    std::map<std::string, std::vector<double>>::const_iterator it =
+    std::map<std::string, std::vector<double> >::const_iterator it =
             mScalars.begin();
     for (; it != mScalars.end(); ++it)
     {

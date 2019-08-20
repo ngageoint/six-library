@@ -278,7 +278,7 @@ int main(int argc, char** argv)
                << scalarMesh->getNumScalarsPerCoord() << std::endl;
 
             std::cout << "Printing scalars:" << std::endl;
-            std::map<std::string, std::vector<double>>::const_iterator it =
+            std::map<std::string, std::vector<double> >::const_iterator it =
                     scalarMesh->getScalars().begin();
             for (; it != scalarMesh->getScalars().end(); ++it)
             {

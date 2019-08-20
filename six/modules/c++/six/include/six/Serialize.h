@@ -145,6 +145,7 @@ struct Serializer<std::vector<T> >
  * \struct Serializer
  * \brief Implements serialization and deserialization for std::strings
  */
+template <>
 struct Serializer<std::string>
 {
     /*!

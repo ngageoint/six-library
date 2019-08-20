@@ -58,11 +58,12 @@ double genRand()
            static_cast<double>(RAND_MAX);
 }
 
-void populateScalarMeshVectors(const types::RowCol<size_t>& meshDims,
-                               size_t numScalarsPerCoord,
-                               std::vector<double>& x,
-                               std::vector<double>& y,
-                               std::map<std::string, std::vector<double>>& scalars)
+void populateScalarMeshVectors(
+        const types::RowCol<size_t>& meshDims,
+        size_t numScalarsPerCoord,
+        std::vector<double>& x,
+        std::vector<double>& y,
+        std::map<std::string, std::vector<double> >& scalars)
 {
     x.clear();
     y.clear();
@@ -206,7 +207,7 @@ bool compareScalarMesh(const six::sicd::ScalarMesh& scalarMeshA,
         return false;
     }
 
-    std::map<std::string, std::vector<double>>::const_iterator it =
+    std::map<std::string, std::vector<double> >::const_iterator it =
             scalarMeshA.getScalars().begin();
 
     for (; it != scalarMeshA.getScalars().end(); ++it)
@@ -369,7 +370,7 @@ bool roundTripScalarMesh(const types::RowCol<size_t>& meshDims,
 {
     std::vector<double> x;
     std::vector<double> y;
-    std::map<std::string, std::vector<double>> scalars;
+    std::map<std::string, std::vector<double> > scalars;
 
     populateScalarMeshVectors(meshDims, numScalarsPerCoord, x, y, scalars);
 
