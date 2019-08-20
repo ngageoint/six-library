@@ -210,6 +210,7 @@ nitf::Record _readRecord(const std::string& pathname)
 %auto_ptr(six::sicd::ComplexData);
 %auto_ptr(scene::ProjectionPolynomialFitter);
 %auto_ptr(six::sicd::NoiseMesh);
+%auto_ptr(six::sicd::ScalarMesh);
 
 %typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
 %typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}

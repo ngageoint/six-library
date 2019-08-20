@@ -3111,41 +3111,42 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[101]
 #define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[102]
 #define SWIGTYPE_p_six__sicd__NoiseMesh swig_types[103]
-#define SWIGTYPE_p_size_t swig_types[104]
-#define SWIGTYPE_p_size_type swig_types[105]
-#define SWIGTYPE_p_ssize_t swig_types[106]
-#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[107]
-#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[108]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[109]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[110]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t swig_types[111]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t swig_types[112]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t swig_types[113]
-#define SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t swig_types[114]
-#define SWIGTYPE_p_std__invalid_argument swig_types[115]
-#define SWIGTYPE_p_std__ostream swig_types[116]
-#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[117]
-#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[118]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[119]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[120]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[121]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[122]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[123]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[124]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[125]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[126]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[127]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[128]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[129]
-#define SWIGTYPE_p_uint16_t swig_types[130]
-#define SWIGTYPE_p_uint32_t swig_types[131]
-#define SWIGTYPE_p_uint64_t swig_types[132]
-#define SWIGTYPE_p_uint8_t swig_types[133]
-#define SWIGTYPE_p_unsigned_char swig_types[134]
-#define SWIGTYPE_p_value_type swig_types[135]
-#define SWIGTYPE_p_void swig_types[136]
-static swig_type_info *swig_types[138];
-static swig_module_info swig_module = {swig_types, 137, 0, 0, 0, 0};
+#define SWIGTYPE_p_six__sicd__ScalarMesh swig_types[104]
+#define SWIGTYPE_p_size_t swig_types[105]
+#define SWIGTYPE_p_size_type swig_types[106]
+#define SWIGTYPE_p_ssize_t swig_types[107]
+#define SWIGTYPE_p_std__allocatorT_cphd__ArraySize_t swig_types[108]
+#define SWIGTYPE_p_std__allocatorT_cphd__ChannelParameters_t swig_types[109]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[110]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[111]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__Antenna_t swig_types[112]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__DwellTimeParameters_t swig_types[113]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__FxParameters_t swig_types[114]
+#define SWIGTYPE_p_std__auto_ptrT_cphd__TOAParameters_t swig_types[115]
+#define SWIGTYPE_p_std__invalid_argument swig_types[116]
+#define SWIGTYPE_p_std__ostream swig_types[117]
+#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[118]
+#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[119]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[120]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[121]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[122]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[123]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[124]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[125]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[126]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[127]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[128]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[129]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[130]
+#define SWIGTYPE_p_uint16_t swig_types[131]
+#define SWIGTYPE_p_uint32_t swig_types[132]
+#define SWIGTYPE_p_uint64_t swig_types[133]
+#define SWIGTYPE_p_uint8_t swig_types[134]
+#define SWIGTYPE_p_unsigned_char swig_types[135]
+#define SWIGTYPE_p_value_type swig_types[136]
+#define SWIGTYPE_p_void swig_types[137]
+static swig_type_info *swig_types[139];
+static swig_module_info swig_module = {swig_types, 138, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -55143,6 +55144,7 @@ static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd_
 static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__GainAndPhasePolys", "six::sicd::GainAndPhasePolys *|cphd::GainAndPhasePolys *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__HalfPowerBeamwidths = {"_p_six__sicd__HalfPowerBeamwidths", "six::sicd::HalfPowerBeamwidths *|cphd::HalfPowerBeamwidths *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__NoiseMesh = {"_p_six__sicd__NoiseMesh", "six::sicd::NoiseMesh *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__sicd__ScalarMesh = {"_p_six__sicd__ScalarMesh", "six::sicd::ScalarMesh *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
@@ -55282,6 +55284,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__sicd__GainAndPhasePolys,
   &_swigt__p_six__sicd__HalfPowerBeamwidths,
   &_swigt__p_six__sicd__NoiseMesh,
+  &_swigt__p_six__sicd__ScalarMesh,
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
@@ -55421,6 +55424,7 @@ static swig_cast_info _swigc__p_six__sicd__ElectricalBoresight[] = {  {&_swigt__
 static swig_cast_info _swigc__p_six__sicd__GainAndPhasePolys[] = {  {&_swigt__p_six__sicd__GainAndPhasePolys, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__HalfPowerBeamwidths[] = {  {&_swigt__p_six__sicd__HalfPowerBeamwidths, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__NoiseMesh[] = {  {&_swigt__p_six__sicd__NoiseMesh, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__sicd__ScalarMesh[] = {  {&_swigt__p_six__sicd__ScalarMesh, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -55560,6 +55564,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__sicd__GainAndPhasePolys,
   _swigc__p_six__sicd__HalfPowerBeamwidths,
   _swigc__p_six__sicd__NoiseMesh,
+  _swigc__p_six__sicd__ScalarMesh,
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_ssize_t,
