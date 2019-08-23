@@ -3,7 +3,7 @@
     <CollectionID>
       <CollectorName>Collector</CollectorName>
       <CoreName>Core</CoreName>
-      <CollectType>MONOSTATIC</CollectType>
+      <CollectType>BISTATIC</CollectType>
       <RadarMode>
           <ModeType>STRIPMAP</ModeType>
           <ModeID>Mode</ModeID>
@@ -679,64 +679,83 @@
       </RcvParameters>
     </TxRcv>
     <ErrorParameters>
-      <Monostatic>
-        <PosVelErr>
-          <Frame>ECF</Frame>
-          <P1>1.0</P1>
-          <P2>1.0</P2>
-          <P3>1.0</P3>
-          <V1>1.0</V1>
-          <V2>1.0</V2>
-          <V3>1.0</V3>
-          <CorrCoefs>
-            <P1P2>0.8</P1P2>
-            <P1P3>0.8</P1P3>
-            <P1V1>0.8</P1V1>
-            <P1V2>0.8</P1V2>
-            <P1V3>0.8</P1V3>
-            <P2P3>0.8</P2P3>
-            <P2V1>0.8</P2V1>
-            <P2V2>0.8</P2V2>
-            <P2V3>0.8</P2V3>
-            <P3V1>0.8</P3V1>
-            <P3V2>0.8</P3V2>
-            <P3V3>0.8</P3V3>
-            <V1V2>0.8</V1V2>
-            <V1V3>0.8</V1V3>
-            <V2V3>0.8</V2V3>
-          </CorrCoefs>
-          <PositionDecorr>
-            <CorrCoefZero>0.5</CorrCoefZero>
-            <DecorrRate>1.0</DecorrRate>
-          </PositionDecorr>
-        </PosVelErr>
-        <RadarSensor>
-          <RangeBias>0.5</RangeBias>
-          <ClockFreqSF>1.0</ClockFreqSF>
-          <CollectionStartTime>1.0</CollectionStartTime>
-          <RangeBiasDecorr>
-            <CorrCoefZero>0.5</CorrCoefZero>
-            <DecorrRate>1.0</DecorrRate>
-          </RangeBiasDecorr>
-        </RadarSensor>
-        <TropoError>
-          <TropoRangeVertical>5.0</TropoRangeVertical>
-          <TropoRangeSlant>5.0</TropoRangeSlant>
-          <TropoRangeDecorr>
-            <CorrCoefZero>0.5</CorrCoefZero>
-            <DecorrRate>1.0</DecorrRate>
-          </TropoRangeDecorr>
-        </TropoError>
-        <IonoError>
-          <IonoRangeVertical>5.0</IonoRangeVertical>
-          <IonoRangeRateVertical>5.0</IonoRangeRateVertical>
-          <IonoRgRgRateCC>0.5</IonoRgRgRateCC>
-          <IonoRangeVertDecorr>
-            <CorrCoefZero>0.5</CorrCoefZero>
-            <DecorrRate>1.0</DecorrRate>
-          </IonoRangeVertDecorr>
-        </IonoError>
-      </Monostatic>
+      <Bistatic>
+        <TxPlatform>
+          <PosVelErr>
+            <Frame>ECF</Frame>
+            <P1>1.0</P1>
+            <P2>1.0</P2>
+            <P3>1.0</P3>
+            <V1>1.0</V1>
+            <V2>1.0</V2>
+            <V3>1.0</V3>
+            <CorrCoefs>
+              <P1P2>0.8</P1P2>
+              <P1P3>0.8</P1P3>
+              <P1V1>0.8</P1V1>
+              <P1V2>0.8</P1V2>
+              <P1V3>0.8</P1V3>
+              <P2P3>0.8</P2P3>
+              <P2V1>0.8</P2V1>
+              <P2V2>0.8</P2V2>
+              <P2V3>0.8</P2V3>
+              <P3V1>0.8</P3V1>
+              <P3V2>0.8</P3V2>
+              <P3V3>0.8</P3V3>
+              <V1V2>0.8</V1V2>
+              <V1V3>0.8</V1V3>
+              <V2V3>0.8</V2V3>
+            </CorrCoefs>
+            <PositionDecorr>
+              <CorrCoefZero>0.5</CorrCoefZero>
+              <DecorrRate>1.0</DecorrRate>
+            </PositionDecorr>
+          </PosVelErr>
+          <RadarSensor>
+            <ClockFreqSF>1.0</ClockFreqSF>
+            <CollectionStartTime>1.0</CollectionStartTime>
+          </RadarSensor>
+        </TxPlatform>
+        <RcvPlatform>
+          <PosVelErr>
+            <Frame>ECF</Frame>
+            <P1>1.0</P1>
+            <P2>1.0</P2>
+            <P3>1.0</P3>
+            <V1>1.0</V1>
+            <V2>1.0</V2>
+            <V3>1.0</V3>
+            <CorrCoefs>
+              <P1P2>0.8</P1P2>
+              <P1P3>0.8</P1P3>
+              <P1V1>0.8</P1V1>
+              <P1V2>0.8</P1V2>
+              <P1V3>0.8</P1V3>
+              <P2P3>0.8</P2P3>
+              <P2V1>0.8</P2V1>
+              <P2V2>0.8</P2V2>
+              <P2V3>0.8</P2V3>
+              <P3V1>0.8</P3V1>
+              <P3V2>0.8</P3V2>
+              <P3V3>0.8</P3V3>
+              <V1V2>0.8</V1V2>
+              <V1V3>0.8</V1V3>
+              <V2V3>0.8</V2V3>
+            </CorrCoefs>
+            <PositionDecorr>
+              <CorrCoefZero>0.5</CorrCoefZero>
+              <DecorrRate>1.0</DecorrRate>
+            </PositionDecorr>
+          </PosVelErr>
+          <RadarSensor>
+            <ClockFreqSF>1.0</ClockFreqSF>
+            <CollectionStartTime>1.0</CollectionStartTime>
+          </RadarSensor>
+        </RcvPlatform>
+        <AddedParameters>
+          <Parameter name="Param1">Added Parameter 1</Parameter>
+        </AddedParameters>
+      </Bistatic>
     </ErrorParameters>
     <ProductInfo>
       <Profile>Profile</Profile>

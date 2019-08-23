@@ -33,8 +33,8 @@ static const char XML[] =
 "        <Timeline>\n"
 "            <CollectionStart>2013-04-10T08:52:09.0Z</CollectionStart>\n"
 "            <RcvCollectionStart>2014-04-10T08:52:09.0Z</RcvCollectionStart>\n"
-"            <TxTime1>1.3</TxTime1>\n"
-"            <TxTime2>1.5</TxTime2>\n"
+"            <txTime1>1.3</txTime1>\n"
+"            <txTime2>1.5</txTime2>\n"
 "        </Timeline>\n"
 "        <FxBand>\n"
 "            <FxMin>0.9</FxMin>\n"
@@ -272,16 +272,16 @@ static const char XML[] =
 "        </Parameters>\n"
 "    </Channel>\n"
 "    <PVP>\n"
-"        <TxTime>\n"
+"        <txTime>\n"
 "        <Offset>0</Offset>\n"
 "        <Size>1</Size>\n"
 "        <Format>F8</Format>\n"
-"        </TxTime>\n"
-"        <TxPos>\n"
+"        </txTime>\n"
+"        <txPos>\n"
 "        <Offset>0</Offset>\n"
 "        <Size>3</Size>\n"
 "        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
-"        </TxPos>\n"
+"        </txPos>\n"
 "        <TxVel>\n"
 "        <Offset>0</Offset>\n"
 "        <Size>3</Size>\n"
@@ -297,11 +297,11 @@ static const char XML[] =
 "        <Size>3</Size>\n"
 "        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
 "        </RcvPos>\n"
-"        <RcvVel>\n"
+"        <rcvVel>\n"
 "        <Offset>0</Offset>\n"
 "        <Size>3</Size>\n"
 "        <Format>X=F8;Y=F8;Z=F8;</Format>\n"
-"        </RcvVel>\n"
+"        </rcvVel>\n"
 "        <SRPPos>\n"
 "        <Offset>0</Offset>\n"
 "        <Size>3</Size>\n"
@@ -357,18 +357,18 @@ static const char XML[] =
 "        <Size>1</Size>\n"
 "        <Format>F8</Format>\n"
 "        </SCSS>\n"
-"        <AddedPVP>\n"
+"        <addedPVP>\n"
 "            <Name>newParam1</Name>\n"
 "            <Offset>0</Offset>\n"
 "            <Size>1</Size>\n"
 "            <Format>F8</Format>\n"
-"        </AddedPVP>\n"
-"        <AddedPVP>\n"
+"        </addedPVP>\n"
+"        <addedPVP>\n"
 "            <Name>newParam2</Name>\n"
 "            <Offset>0</Offset>\n"
 "            <Size>1</Size>\n"
 "            <Format>F8</Format>\n"
-"        </AddedPVP>\n"
+"        </addedPVP>\n"
 "    </PVP>\n"
 "    <Dwell>\n"
 "        <NumCODTimes>1</NumCODTimes>\n"
@@ -660,18 +660,18 @@ TEST_CASE(testReadXML)
 
     //PVP
     const cphd::Pvp& pvp = metadata->pvp;
-    TEST_ASSERT_EQ(pvp.TxTime.offset, 0);
-    TEST_ASSERT_EQ(pvp.TxTime.size, 1);
-    TEST_ASSERT_EQ(pvp.TxTime.format, "F8");
-    TEST_ASSERT_EQ(pvp.TxPos.offset, 0);
-    TEST_ASSERT_EQ(pvp.TxPos.size, 3);
-    TEST_ASSERT_EQ(pvp.TxPos.format, "X=F8;Y=F8;Z=F8;");
-    TEST_ASSERT_EQ(pvp.RcvVel.offset, 0);
-    TEST_ASSERT_EQ(pvp.RcvVel.size, 3);
-    TEST_ASSERT_EQ(pvp.RcvVel.format, "X=F8;Y=F8;Z=F8;");
-    TEST_ASSERT_EQ(pvp.AddedPVP.size(), 2);
-    TEST_ASSERT_EQ(pvp.AddedPVP[0].name, "newParam1");
-    TEST_ASSERT_EQ(pvp.AddedPVP[1].name, "newParam2");
+    TEST_ASSERT_EQ(pvp.txTime.offset, 0);
+    TEST_ASSERT_EQ(pvp.txTime.size, 1);
+    TEST_ASSERT_EQ(pvp.txTime.format, "F8");
+    TEST_ASSERT_EQ(pvp.txPos.offset, 0);
+    TEST_ASSERT_EQ(pvp.txPos.size, 3);
+    TEST_ASSERT_EQ(pvp.txPos.format, "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.rcvVel.offset, 0);
+    TEST_ASSERT_EQ(pvp.rcvVel.size, 3);
+    TEST_ASSERT_EQ(pvp.rcvVel.format, "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.addedPVP.size(), 2);
+    TEST_ASSERT_EQ(pvp.addedPVP[0].name, "newParam1");
+    TEST_ASSERT_EQ(pvp.addedPVP[1].name, "newParam2");
 
     //Dwell
     const cphd::Dwell& dwell = metadata->dwell;
@@ -679,10 +679,10 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(dwell.numDwellTimes, 1);
     TEST_ASSERT_EQ(dwell.cod[0].identifier, "codPolynomial1");
     TEST_ASSERT_EQ(dwell.dtime[0].identifier, "dwellPolynomial1");
-    TEST_ASSERT_EQ(dwell.cod[0].CODTimePoly.orderX(), 1);
-    TEST_ASSERT_EQ(dwell.cod[0].CODTimePoly.orderY(), 1);
-    TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderX(), 1);
-    TEST_ASSERT_EQ(dwell.dtime[0].DwellTimePoly.orderY(), 1);
+    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderX(), 1);
+    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderY(), 1);
+    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderX(), 1);
+    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderY(), 1);
 
     // ReferenceGeometry
     const cphd::ReferenceGeometry& ref = metadata->referenceGeometry;
@@ -735,20 +735,6 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.bistatic->rcvPlatform.azimuthAngle, 60.0);
 }
 
-// TEST_CASE_ARGS(testValidation)
-// {
-//     io::FileInputStream ifs(pathname);
-
-//     // io::MockSeekableInputStream cphdStream(content);
-//     xml::lite::MinidomParser xmlParser;
-//     xmlParser.preserveCharacterData(true);
-//     xmlParser.parse(ifs, ifs.available());
-//     const std::auto_ptr<cphd::Metadata> metadata =
-//             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
-
-//     TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
-
-// }
 
 int main(int /*argc*/, char** /*argv*/)
 {

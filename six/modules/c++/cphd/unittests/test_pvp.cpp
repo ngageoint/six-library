@@ -38,13 +38,13 @@ TEST_CASE(testSimpleEqualityOperatorTrue)
 
     cphd::Pvp pvp1, pvp2;
 
-    pvp1.TxTime.size = 1;
-    pvp1.TxTime.offset = 0;
-    pvp1.TxTime.format = "F8";
+    pvp1.txTime.size = 1;
+    pvp1.txTime.offset = 0;
+    pvp1.txTime.format = "F8";
 
-    pvp2.TxTime.size = 1;
-    pvp2.TxTime.offset = 0;
-    pvp2.TxTime.format = "F8";
+    pvp2.txTime.size = 1;
+    pvp2.txTime.offset = 0;
+    pvp2.txTime.format = "F8";
 
     TEST_ASSERT_TRUE((pvp1 == pvp2));
 }
@@ -53,15 +53,15 @@ TEST_CASE(testAddedParamsEqualityOperatorTrue)
 {
     cphd::Pvp pvp1, pvp2;
 
-    pvp1.AddedPVP.push_back(cphd::APVPType());
-    pvp1.AddedPVP.push_back(cphd::APVPType());
-    pvp1.AddedPVP[0].name = "AddedParam1";
-    pvp1.AddedPVP[1].name = "AddedParam2";
+    pvp1.addedPVP.push_back(cphd::APVPType());
+    pvp1.addedPVP.push_back(cphd::APVPType());
+    pvp1.addedPVP[0].name = "AddedParam1";
+    pvp1.addedPVP[1].name = "AddedParam2";
 
-    pvp2.AddedPVP.push_back(cphd::APVPType());
-    pvp2.AddedPVP.push_back(cphd::APVPType());
-    pvp2.AddedPVP[0].name = "AddedParam1";
-    pvp2.AddedPVP[1].name = "AddedParam2";
+    pvp2.addedPVP.push_back(cphd::APVPType());
+    pvp2.addedPVP.push_back(cphd::APVPType());
+    pvp2.addedPVP[0].name = "AddedParam1";
+    pvp2.addedPVP[1].name = "AddedParam2";
 
     TEST_ASSERT_TRUE((pvp1 == pvp2));
 }
@@ -71,13 +71,13 @@ TEST_CASE(testSimpleEqualityOperatorFalse)
 {
 
     cphd::Pvp pvp1, pvp2;
-    pvp1.FXN1.size = 1;
-    pvp1.FXN1.offset = 0;
-    pvp1.FXN1.format = "F8";
+    pvp1.fxN1.size = 1;
+    pvp1.fxN1.offset = 0;
+    pvp1.fxN1.format = "F8";
 
-    pvp2.TxTime.size = 1;
-    pvp2.TxTime.offset = 0;
-    pvp2.TxTime.format = "F8";
+    pvp2.txTime.size = 1;
+    pvp2.txTime.offset = 0;
+    pvp2.txTime.format = "F8";
 
     TEST_ASSERT_TRUE((pvp1 != pvp2));
 
@@ -87,19 +87,19 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
 {
     cphd::Pvp pvp1, pvp2, pvp3;
 
-    pvp1.AddedPVP.push_back(cphd::APVPType());
-    pvp1.AddedPVP.push_back(cphd::APVPType());
-    pvp1.AddedPVP[0].name = "AddedParam1";
-    pvp1.AddedPVP[1].name = "AddedParam2";
+    pvp1.addedPVP.push_back(cphd::APVPType());
+    pvp1.addedPVP.push_back(cphd::APVPType());
+    pvp1.addedPVP[0].name = "AddedParam1";
+    pvp1.addedPVP[1].name = "AddedParam2";
 
-    pvp2.AddedPVP.push_back(cphd::APVPType());
-    pvp2.AddedPVP.push_back(cphd::APVPType());
-    pvp2.AddedPVP[0].name = "AddedParam1";
+    pvp2.addedPVP.push_back(cphd::APVPType());
+    pvp2.addedPVP.push_back(cphd::APVPType());
+    pvp2.addedPVP[0].name = "AddedParam1";
 
-    pvp3.AddedPVP.push_back(cphd::APVPType());
-    pvp3.AddedPVP.push_back(cphd::APVPType());
-    pvp3.AddedPVP[0].name = "AddedParam1";
-    pvp3.AddedPVP[1].name = "AddedParam3";
+    pvp3.addedPVP.push_back(cphd::APVPType());
+    pvp3.addedPVP.push_back(cphd::APVPType());
+    pvp3.addedPVP[0].name = "AddedParam1";
+    pvp3.addedPVP[1].name = "AddedParam3";
 
     TEST_ASSERT_TRUE((pvp1 != pvp2));
     TEST_ASSERT_TRUE((pvp1 != pvp3));
