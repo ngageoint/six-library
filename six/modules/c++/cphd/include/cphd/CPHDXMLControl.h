@@ -56,18 +56,25 @@ public:
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
     //! Constructor
-    CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths_in);
+    CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths);
 
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
+    //! (Testing) Parses specifc XML blocks specified by nodeNames vector
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames);
 
     std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
     //setter
-    void setSchemaPaths(std::vector<std::string>& schemaPaths_in)
+    void setSchemaPaths(std::vector<std::string> schemaPaths)
     {
-        schemaPaths = schemaPaths_in;
+        mSchemaPaths = schemaPaths;
+    }
+
+    //getter
+    std::vector<std::string>& getSchemaPaths()
+    {
+        return mSchemaPaths;
     }
 
 
@@ -100,6 +107,13 @@ private:
     void fromXML(const XMLElem pvpXML, Pvp& pvp);
     void fromXML(const XMLElem DwellXML, Dwell& dwell);
     void fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo);
+    void fromXML(const XMLElem supportArrayXML, SupportArray& supportArray);
+    void fromXML(const XMLElem antennaXML, Antenna& antenna);
+    void fromXML(const XMLElem txRcvXML, TxRcv& txRcv);
+    void fromXML(const XMLElem errParamXML, ErrorParameters& errParam);
+    void fromXML(const XMLElem productInfoXML, ProductInfo& productInfo);
+    void fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo);
+    void fromXML(const XMLElem matchInfoXML, MatchInfo& matchInfo);
 
     void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;
@@ -109,13 +123,17 @@ private:
                                 ChannelParameter& param) const;
     void parsePVPType(const XMLElem paramXML, PVPType& param) const;
     void parsePVPType(const XMLElem paramXML, APVPType& param) const;
-    void parsePlatform(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
+    void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
     void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
-
+    void parseDecorr(const XMLElem decorrXML, Decorr& decorr) const;
+    void parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVelErr) const;
+    void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
+    void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param, bool additionalFlag) const;
+    void parseTxRcvParameter(const XMLElem paramXML, ParameterType& param) const;
 
 private:
     six::SICommonXMLParser10x mCommon;
-    std::vector<std::string> schemaPaths;
+    std::vector<std::string> mSchemaPaths;
 };
 }
 
