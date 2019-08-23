@@ -143,6 +143,7 @@ private:
     std::string mClassification;
 };
 
+std::ostream& operator<< (std::ostream& os, const CollectionID& c);
 }
 #endif
 

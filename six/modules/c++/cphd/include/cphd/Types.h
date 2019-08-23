@@ -64,6 +64,8 @@ typedef six::DataType DataType;
 typedef six::BooleanType BooleanType;
 
 typedef six::CollectionInformation CollectionInformation;
+
 }
+
 
 #endif

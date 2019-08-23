@@ -213,7 +213,7 @@ struct ErrorParameters
                     radarSensor == other.radarSensor &&
                     tropoError == other.tropoError &&
                     ionoError == other.ionoError &&
-                    addedParameters == other.addedParameters;
+                    parameter == other.parameter;
         }
 
         bool operator!=(const Monostatic& other) const
@@ -225,7 +225,7 @@ struct ErrorParameters
         RadarSensor radarSensor;
         TropoError tropoError;
         IonoError ionoError;
-        std::vector<std::string> addedParameters;
+        six::ParameterCollection parameter;
     };
 
 
@@ -277,7 +277,8 @@ struct ErrorParameters
         bool operator==(const Bistatic& other) const
         {
             return txPlatform == other.txPlatform &&
-                    rcvPlatform == other.rcvPlatform;
+                    rcvPlatform == other.rcvPlatform &&
+                    parameter == other.parameter;
         }
 
         bool operator!=(const Bistatic& other) const
@@ -287,7 +288,7 @@ struct ErrorParameters
 
         Platform txPlatform;
         Platform rcvPlatform;
-        std::vector<std::string> addedParameters;
+        six::ParameterCollection parameter;
     };
 
     bool operator==(const ErrorParameters& other) const

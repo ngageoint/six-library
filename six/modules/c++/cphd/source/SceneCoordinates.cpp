@@ -104,11 +104,11 @@ std::ostream& operator<< (std::ostream& os, const SceneCoordinates& d)
 
     if (d.extendedArea.get())
     {
-        os << "  ExtendedArea      : " << *d.extendedArea << "\n";
+        os << "  ExtendedArea     : " << *d.extendedArea << "\n";
     }
     if (d.imageGrid.get())
     {
-        os << "  ImageGrid         : " << *d.imageGrid << "\n";
+        os << "  ImageGrid        : " << *d.imageGrid << "\n";
     }
     return os;
 }

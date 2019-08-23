@@ -35,25 +35,27 @@
 namespace cphd
 {
 
-struct MatchCollections
+struct MatchCollection
 {
 
-    MatchCollections();
+    MatchCollection();
 
-    bool operator==(const MatchCollections& other) const
+    bool operator==(const MatchCollection& other) const
     {
-        return coreName == other.coreName && matchIndex == other.matchIndex &&
+        return coreName == other.coreName && index == other.index &&
+                matchIndex == other.matchIndex &&
                 parameter == other.parameter;
     }
 
-    bool operator!=(const MatchCollections& other) const
+    bool operator!=(const MatchCollection& other) const
     {
         return !((*this) == other);
     }
 
     std::string coreName;
+    size_t index;
     size_t matchIndex;
-    std::vector <std::string> parameter;
+    six::ParameterCollection parameter;
 };
 
 struct MatchType
@@ -63,9 +65,10 @@ struct MatchType
 
     bool operator==(const MatchType& other) const
     {
-        return typeId == other.typeId && currentIndex == other.currentIndex &&
+        return typeID == other.typeID && index == other.index &&
+                currentIndex == other.currentIndex &&
                 numMatchCollections == other.numMatchCollections &&
-                matchCollections == other.matchCollections;
+                matchCollection == other.matchCollection;
     }
 
     bool operator!=(const MatchType& other) const
@@ -73,10 +76,11 @@ struct MatchType
         return !((*this) == other);
     }
 
-    std::string typeId;
+    std::string typeID;
+    size_t index;
     size_t currentIndex;
     size_t numMatchCollections;
-    std::vector<MatchCollections> matchCollections;
+    std::vector<MatchCollection> matchCollection;
 };
 
 
@@ -88,7 +92,7 @@ struct MatchInfo
 
     bool operator==(const MatchInfo& other) const
     {
-        return numMatchType == other.numMatchType &&
+        return numMatchTypes == other.numMatchTypes &&
                 matchType == other.matchType;
     }
 
@@ -97,14 +101,12 @@ struct MatchInfo
         return !((*this) == other);
     }
 
-    size_t numMatchType;
+    size_t numMatchTypes;
     std::vector<MatchType> matchType;
 };
 
-std::ostream& operator<< (std::ostream& os, const MatchCollections& m);
-
+std::ostream& operator<< (std::ostream& os, const MatchCollection& m);
 std::ostream& operator<< (std::ostream& os, const MatchType& m);
-
 std::ostream& operator<< (std::ostream& os, const MatchInfo& m);
 }
 

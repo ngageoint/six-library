@@ -76,4 +76,97 @@ ReferenceGeometry::ReferenceGeometry() :
     srpDwellTime(six::Init::undefined<double>())
 {}
 
+
+std::ostream& operator<< (std::ostream& os, const SRP& s)
+{
+    os << "SRP:: \n"
+        << "  ECF              : " << s.ecf << "\n"
+        << "  IAC              : " << s.iac << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const ImagingType& i)
+{
+    os << "  AzimuthAngle     : " << i.azimuthAngle << "\n"
+        << "  GrazeAngle       : " << i.grazeAngle << "\n"
+        << "  TwistAngle       : " << i.twistAngle << "\n"
+        << "  SlopeAngle       : " << i.slopeAngle << "\n"
+        << "  layoverAngle     : " << i.layoverAngle << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Monostatic& m)
+{
+    os << "Monostatic:: \n"
+        << (ImagingType)m << "\n"
+        << "  SideOfTrack      : " << m.sideOfTrack.toString() << "\n"
+        << "  SlantRange       : " << m.slantRange << "\n"
+        << "  GroundRange      : " << m.groundRange << "\n"
+        << "  DopplerConeAngle : " << m.dopplerConeAngle << "\n"
+        << "  IncidenceAngle   : " << m.incidenceAngle << "\n"
+        << "  ArpPos:: \n"
+        << "    X              : " << m.arpPos[0] << "\n"
+        << "    Y              : " << m.arpPos[1] << "\n"
+        << "    Z              : " << m.arpPos[2] << "\n"
+        << "  ArpVel:: \n"
+        << "    X              : " << m.arpVel[0] << "\n"
+        << "    Y              : " << m.arpVel[1] << "\n"
+        << "    Z              : " << m.arpVel[2] << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Bistatic::PlatformParams& p)
+{
+    os << "    SideOfTrack    : " << p.sideOfTrack.toString() << "\n"
+        << "    Time:          : " << p.time << "\n"
+        << "    AzimuthAngle   : " << p.azimuthAngle << "\n"
+        << "    GrazeAngle     : " << p.grazeAngle << "\n"
+        << "    IncidenceAngle : " << p.incidenceAngle << "\n"
+        << "    DopplerConeAngle : " << p.dopplerConeAngle << "\n"
+        << "    GroundRange    : " << p.groundRange << "\n"
+        << "    SlantRange     : " << p.slantRange << "\n"
+        << "    Pos:: \n"
+        << "      X            : " << p.pos[0] << "\n"
+        << "      Y            : " << p.pos[1] << "\n"
+        << "      Z            : " << p.pos[2] << "\n"
+        << "    Vel:: \n"
+        << "      X            : " << p.vel[0] << "\n"
+        << "      Y            : " << p.vel[1] << "\n"
+        << "      Z            : " << p.vel[2] << "\n";
+
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Bistatic& b)
+{
+    os << "Bistatic:: \n"
+        << (ImagingType)b << "\n"
+        << "  AzimuthAngleRate : " << b.azimuthAngleRate << "\n"
+        << "  BistaticAngle    : " << b.bistaticAngle << "\n"
+        << "  BistaticAngleRate : " << b.bistaticAngleRate << "\n"
+        << "  TxPlatform:: \n"
+        << b.txPlatform << "\n"
+        << b.rcvPlatform << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const ReferenceGeometry& r)
+{
+    os << "Reference Geometry:: \n"
+        << "  ReferenceTime    : " << r.referenceTime << "\n"
+        << "  SRPCODTime       : " << r.srpCODTime << "\n"
+        << "  SRPDwellTime     : " << r.srpDwellTime << "\n"
+        << r.srp;
+
+    if (r.monostatic.get())
+    {
+        os << *r.monostatic << "\n";
+    }
+    else if (r.bistatic.get())
+    {
+        os << *r.bistatic << "\n";
+    }
+    return os;
+}
+
 }

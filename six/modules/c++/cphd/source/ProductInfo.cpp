@@ -37,4 +37,31 @@ ProductInfo::CreationInfo::CreationInfo():
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const ProductInfo& p)
+{
+    os << "Product Information      : \n"
+        << "  Profile                : " << p.profile << "\n";
+    for (size_t i = 0; i < p.creationInfo.size(); ++i)
+    {
+        os << "  Creation Information   : " << "\n"
+            << "    Application          : " << p.creationInfo[i].application << "\n"
+            << "    DateTime             : " << p.creationInfo[i].dateTime.getMonth() << "/"
+                << p.creationInfo[i].dateTime.getDayOfMonth() << "/"
+                << p.creationInfo[i].dateTime.getYear() << "\n"
+            << "    Site                 : " << p.creationInfo[i].site << "\n";
+        for (size_t j = 0; j < p.creationInfo[i].parameter.size(); ++j)
+        {
+            os << "    Parameter name       : " 
+                    << p.creationInfo[i].parameter[j].getName() << "\n"
+                << "    Parameter value      : " << p.creationInfo[i].parameter[j].str() << "\n";
+        }
+    }
+    for (size_t i = 0; i < p.parameter.size(); ++i)
+    {
+        os << "  Parameter name       : " << p.parameter[i].getName() << "\n"
+            << "  Parameter value      : " << p.parameter[i].str() << "\n";
+    }
+    return os;
+}
+
 }

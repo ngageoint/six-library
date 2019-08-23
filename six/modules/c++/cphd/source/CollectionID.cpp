@@ -39,4 +39,27 @@ CollectionID* CollectionID::clone() const
 {
     return new CollectionID(*this);
 }
+
+std::ostream& operator<< (std::ostream& os, const CollectionID& c)
+{
+    os << "CollectionID:: \n"
+        << "  CollectorName    : " << c.collectorName << "\n"
+        << "  IlluminatorName  : " << c.illuminatorName << "\n"
+        << "  CoreName         : " << c.coreName << "\n"
+        << "  CollectType      : " << c.collectType << "\n"
+        << "  RadarMode        : " << c.radarMode << "\n"
+        << "  RadarModeID      : " << c.radarMode << "\n"
+        << "  ReleaseInfo      : " << c.releaseInfo << "\n";
+    for (size_t i = 0; i < c.countryCodes.size(); ++i)
+    {
+        os << "  CountryCodes     : " << c.countryCodes[i] << "\n";
+    }
+    for (size_t i = 0; i < c.parameters.size(); ++i)
+    {
+        os << "  Parameter name   : " << c.parameters[i].getName() << "\n"
+            << "  Parameter value  : " << c.parameters[i].str() << "\n";
+    }
+    return os;
+}
+
 }

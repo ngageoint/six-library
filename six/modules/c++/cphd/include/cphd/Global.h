@@ -50,8 +50,8 @@ struct Timeline
         return !((*this) == other);
     }
 
-    cphd::DateTime collectionStart;
-    cphd::DateTime rcvCollectionStart;
+    DateTime collectionStart;
+    DateTime rcvCollectionStart;
     double txTime1;
     double txTime2;
 };

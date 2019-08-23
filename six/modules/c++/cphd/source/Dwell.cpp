@@ -28,16 +28,51 @@ namespace cphd
 
 DwellTime::DwellTime() :
     identifier(six::Init::undefined<std::string>()),
-    DwellTimePoly(six::Init::undefined<Poly2D>())
+    dwellTimePoly(six::Init::undefined<Poly2D>())
 {}
 
 COD::COD() :
     identifier(six::Init::undefined<std::string>()),
-    CODTimePoly(six::Init::undefined<Poly2D>())
+    codTimePoly(six::Init::undefined<Poly2D>())
 {}
 
 Dwell::Dwell() :
     numCODTimes(six::Init::undefined<size_t>()),
     numDwellTimes(six::Init::undefined<size_t>())
 {}
+
+
+std::ostream& operator<< (std::ostream& os, const DwellTime& d)
+{
+    os << "  DwellTime:: \n"
+        << "    Identifier     : " << d.identifier << "\n"
+        << "    DwellTimePoly  : " << d.dwellTimePoly << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const COD& c)
+{
+    os << "  COD:: \n"
+        << "    Identifier     : " << c.identifier << "\n"
+        << "    CODTimePoly    : " << c.codTimePoly << "\n";
+    return os;
+}
+
+
+std::ostream& operator<< (std::ostream& os, const Dwell& d)
+{
+    os << "Dwell:: \n"
+        << "  NumCODTimes      : " << d.numCODTimes << "\n"
+        << "  NumDwellTimes    : " << d.numDwellTimes << "\n";
+    for (size_t i = 0; i < d.cod.size(); ++i)
+    {
+        os << d.cod[i] << "\n";
+    }
+    for (size_t i = 0; i < d.dtime.size(); ++i)
+    {
+        os << d.dtime[i] << "\n";
+    }
+    return os;
+}
+
 }

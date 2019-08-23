@@ -62,16 +62,17 @@ struct PVPType
     std::string format;
 };
 
-struct APVPType
+struct APVPType : PVPType
 {
     APVPType();
 
     bool operator==(const APVPType& other) const
     {
-        return size == other.size && 
-        offset == other.offset &&
-        name == other.name &&
-        format == other.format;
+        if ( (PVPType)(*this) != (PVPType)other )
+        {
+            return false;
+        }
+        return name == other.name;
     }
 
     bool operator!=(const APVPType& other) const
@@ -79,10 +80,7 @@ struct APVPType
         return !((*this) == other);
     }
 
-    size_t size;
-    size_t offset;
     std::string name;
-    std::string format;
 };
 
 
@@ -96,70 +94,70 @@ struct Pvp
      * Transmit time for the center of the transmitted pulse relative to the
      * transmit platform Collection Start Time (sec).
      */
-    PVPType TxTime;
+    PVPType txTime;
 
     /*!
      * Transmit APC position at time txc(v) in Earth Centered Fixed
      * (ECF) coordinates (meters). Components in X, Y, Z order.
      * 3 8-byte floats required.
      */
-    PVPType TxPos;
+    PVPType txPos;
 
     /*!
      * Transmit APC velocity at time txc(v) in ECF coordinates
      * (meters/sec).
      * 3 8-byte floats required.
      */
-    PVPType TxVel;
+    PVPType txVel;
 
     /*!
-     * Receive time for the center of the echo from the SRP relative to the
+     * Receive time for the center of the echo from the srp relative to the
      * transmit platform Collection Start Time (sec). Time is the Time of
-     * Arrival (TOA) of the received echo from the SRP for the signal
+     * Arrival (toa) of the received echo from the srp for the signal
      * transmitted at txc(v).
      */
-    PVPType RcvTime;
+    PVPType rcvTime;
 
 
     /*!
-     * Receive APC position at time trc(v)SRP in ECF coordinates
+     * Receive APC position at time trc(v)srp in ECF coordinates
      * (meters).
      * 3 8-byte floats required.
      */
-    PVPType RcvPos;
+    PVPType rcvPos;
 
     /*!
-     * Receive APC velocity at time trc(v)SRP in ECF coordinates
+     * Receive APC velocity at time trc(v)srp in ECF coordinates
      * (meters/sec).
      * 3 8-byte floats required
      */
-    PVPType RcvVel;
+    PVPType rcvVel;
 
     /*!
-     * Stabilization Reference Point (SRP) position in ECF coordinates
+     * Stabilization Reference Point (srp) position in ECF coordinates
      * (meters).
      * 3 8-byte floats required.
      */
-    PVPType SRPPos;
+    PVPType srpPos;
 
     /*!
-     * (Optional) Amplitude Scale Factor to be applied to all samples of the signal
+     * (Optional) Amplitude scale Factor to be applied to all samples of the signal
      * vector. For signal vector v, each sample value is multiplied by
      * Amp_SF(v) to yield the proper sample values for the vector. 
      */
-    PVPType AmpSF;
+    PVPType ampSF;
 
     /*!
      * The DOPPLER shift micro parameter. Parameter accounts for the
      * time dilation/Doppler shift for the echoes from all targets with the
-     * same time dilation/Doppler shift as the SRP echo.
+     * same time dilation/Doppler shift as the srp echo.
      */
     PVPType aFDOP;
 
     /*!
      * First order phase micro parameter (i.e. linear phase). Accounts for
      * linear phase vs. FX frequency for targets with time
-     * dilation/Doppler shift different than the echo from the SRP.
+     * dilation/Doppler shift different than the echo from the srp.
      * Provides precise linear phase prediction for Linear FM waveforms.
      */
     PVPType aFRR1;
@@ -167,7 +165,7 @@ struct Pvp
     /*!
      * Second order phase micro parameter (i.e. quadratic phase).
      * Accounts for quadratic phase vs. FX frequency for targets with
-     * time dilation/Doppler shift different than the echo from the SRP.
+     * time dilation/Doppler shift different than the echo from the srp.
      * Provides precise quadratic phase prediction for Linear FM
      * waveforms. 
      */
@@ -179,7 +177,7 @@ struct Pvp
      * Saved transmit band is from fx_1(v) < fx < fx_2(v)
      * For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
      */
-    PVPType FX1;
+    PVPType fx1;
 
     /*!
      * The FX domain frequency limits of the transmitted waveform
@@ -187,7 +185,7 @@ struct Pvp
      * Saved transmit band is from fx_1(v) < fx < fx_2(v)
      * For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
      */
-    PVPType FX2;
+    PVPType fx2;
 
     /*!
      * The FX domain frequency limits for out-of-band noise signal for
@@ -196,7 +194,7 @@ struct Pvp
      * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      * When included in a product, fx_N1 & fx_N2 are both included.
     */
-    PVPType FXN1;
+    PVPType fxN1;
 
     /*!
      * The FX domain frequency limits for out-of-band noise signal for
@@ -205,33 +203,33 @@ struct Pvp
      * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      * When included in a product, fx_N1 & fx_N2 are both included.
     */
-    PVPType FXN2;
+    PVPType fxN2;
 
     /*!
-     * The  change in TOA limits for the full resolution echoes retained in the
+     * The  change in toa limits for the full resolution echoes retained in the
      * signal vector (sec). Full resolution echoes are formed with
      * FX_BW(v) saved bandwidth.
-     * Full resolution TOA limits: TOA_1 < TOA < TOA_2
+     * Full resolution toa limits: toa_1 < toa < toa_2
      */
-    PVPType TOA1;
+    PVPType toa1;
 
     /*!
-     * The  change in TOA limits for the full resolution echoes retained in the
+     * The  change in toa limits for the full resolution echoes retained in the
      * signal vector (sec). Full resolution echoes are formed with
      * FX_BW(v) saved bandwidth.
-     * Full resolution TOA limits: TOA_1 < TOA < TOA_2
+     * Full resolution toa limits: toa_1 < toa < toa_2
      */
-    PVPType TOA2;
+    PVPType toa2;
 
 
-    PVPType TOAE1;
-    PVPType TOAE2;
-    PVPType TDTropoSRP;
-    PVPType TDIonoSRP;
-    PVPType SC0;
-    PVPType SCSS;
-    PVPType SIGNAL;
-    std::vector<APVPType> AddedPVP;
+    PVPType toaE1;
+    PVPType toaE2;
+    PVPType tdTropoSRP;
+    PVPType tdIonoSRP;
+    PVPType sc0;
+    PVPType scSS;
+    PVPType signal;
+    std::vector<APVPType> addedPVP;
 
 
     //!  Destructor
@@ -240,39 +238,19 @@ struct Pvp
 
     bool operator==(const Pvp& other) const
     {
-        if( !(TxTime == other.TxTime && TxPos == other.TxPos &&
-                TxVel == other.TxVel && RcvTime == other.RcvTime &&
-                RcvPos == other.RcvPos && RcvVel == other.RcvVel &&
-                SRPPos == other.SRPPos && aFDOP == other.aFDOP &&
+        return txTime == other.txTime && txPos == other.txPos &&
+                txVel == other.txVel && rcvTime == other.rcvTime &&
+                rcvPos == other.rcvPos && rcvVel == other.rcvVel &&
+                srpPos == other.srpPos && aFDOP == other.aFDOP &&
                 aFRR1 == other.aFRR1 && aFRR2 == other.aFRR2 &&
-                FX1 == other.FX1 && FX2 == other.FX2 &&
-                TOA1 == other.TOA1 && TOA2 == other.TOA2 &&
-                TDTropoSRP == other.TDTropoSRP && SC0 == other.SC0 &&
-                SCSS == other.SCSS &&
-                AmpSF == other.AmpSF && FXN1 == other. FXN1 &&
-                FXN2 == other.FXN2 && TOAE1 == other.TOAE1 &&
-                TOAE2 == other.TOAE2 && TDIonoSRP == other.TDIonoSRP &&
-                SIGNAL == other.SIGNAL ))
-        {
-            return false;
-        }
-
-        // Checking Added per vec parameters
-
-        if( AddedPVP.size() != other.AddedPVP.size())
-        {
-            return false;
-        }
-
-        for (size_t i = 0; i < AddedPVP.size(); ++i)
-        {
-            if(AddedPVP[i] !=  other.AddedPVP[i] )
-            {
-                return false;
-            }
-        }
-
-        return true;
+                fx1 == other.fx1 && fx2 == other.fx2 &&
+                toa1 == other.toa1 && toa2 == other.toa2 &&
+                tdTropoSRP == other.tdTropoSRP && sc0 == other.sc0 &&
+                scSS == other.scSS &&
+                ampSF == other.ampSF && fxN1 == other. fxN1 &&
+                fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
+                toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
+                signal == other.signal && addedPVP == other.addedPVP;
     }
 
     bool operator!=(const Pvp& other) const
@@ -280,8 +258,9 @@ struct Pvp
         return !((*this) == other);
     }
 };
-
-// std::ostream& operator<< (std::ostream& os, const Pvp& pvp);
+std::ostream& operator<< (std::ostream& os, const PVPType& p);
+std::ostream& operator<< (std::ostream& os, const APVPType& a);
+std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
 #endif
 

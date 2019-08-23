@@ -50,7 +50,7 @@ struct ProductInfo
         std::string application;
         DateTime dateTime;
         std::string site;
-        std::vector<std::string> parameter;
+        six::ParameterCollection parameter;
     };
 
     ProductInfo();
@@ -70,9 +70,8 @@ struct ProductInfo
 
     std::string profile;
     std::vector<CreationInfo> creationInfo;
-    std::vector<std::string> parameter;
+    six::ParameterCollection parameter;
 };
-
 
 
 std::ostream& operator<< (std::ostream& os, const ProductInfo& p);

@@ -198,6 +198,12 @@ struct ReferenceGeometry
     mem::ScopedCopyablePtr<Bistatic> bistatic;
 };
 
+std::ostream& operator<< (std::ostream& os, const SRP& s);
+std::ostream& operator<< (std::ostream& os, const ImagingType& i);
+std::ostream& operator<< (std::ostream& os, const Monostatic& m);
+std::ostream& operator<< (std::ostream& os, const Bistatic::PlatformParams& p);
+std::ostream& operator<< (std::ostream& os, const Bistatic& b);
+std::ostream& operator<< (std::ostream& os, const ReferenceGeometry& r);
 }
 
 #endif

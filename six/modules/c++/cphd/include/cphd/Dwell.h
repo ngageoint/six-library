@@ -40,7 +40,7 @@ struct DwellTime
 
     bool operator==(const DwellTime& other) const
     {
-        return identifier == other.identifier && DwellTimePoly == other.DwellTimePoly;
+        return identifier == other.identifier && dwellTimePoly == other.dwellTimePoly;
     }
 
     bool operator!=(const DwellTime& other) const
@@ -50,7 +50,7 @@ struct DwellTime
 
 
     std::string identifier;
-    Poly2D DwellTimePoly;
+    Poly2D dwellTimePoly;
 };
 
 struct COD
@@ -59,7 +59,7 @@ struct COD
 
     bool operator==(const COD& other) const
     {
-        return identifier == other.identifier && CODTimePoly == other.CODTimePoly;
+        return identifier == other.identifier && codTimePoly == other.codTimePoly;
     }
 
     bool operator!=(const COD& other) const
@@ -68,7 +68,7 @@ struct COD
     }
 
     std::string identifier;
-    Poly2D CODTimePoly;
+    Poly2D codTimePoly;
 };
 
 struct Dwell
@@ -92,6 +92,9 @@ struct Dwell
     std::vector<DwellTime> dtime;
 };
 
+std::ostream& operator<< (std::ostream& os, const DwellTime& d);
+std::ostream& operator<< (std::ostream& os, const COD& c);
+std::ostream& operator<< (std::ostream& os, const Dwell& d);
 }
 
 #endif

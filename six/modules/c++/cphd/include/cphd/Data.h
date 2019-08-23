@@ -32,33 +32,37 @@
 
 namespace cphd
 {
-struct SupportArray
-{
-    SupportArray();
-
-    bool operator==(const SupportArray& other) const
-    {
-        return identifier == other.identifier &&
-               numRows == other.numRows &&
-               numCols == other.numCols &&
-               bytesPerElement == other.bytesPerElement &&
-               arrayByteOffset == other.arrayByteOffset;
-    }
-
-    bool operator!=(const SupportArray& other) const
-    {
-        return !((*this) == other);
-    }
-
-    std::string identifier;
-    size_t numRows;
-    size_t numCols;
-    size_t bytesPerElement;
-    size_t arrayByteOffset;
-};
 
 struct Data
 {
+    // There's another SupportArray type in the Metadata,
+    // so hiding this inside Data
+    struct SupportArray
+    {
+        SupportArray();
+
+        bool operator==(const SupportArray& other) const
+        {
+            return identifier == other.identifier &&
+                   numRows == other.numRows &&
+                   numCols == other.numCols &&
+                   bytesPerElement == other.bytesPerElement &&
+                   arrayByteOffset == other.arrayByteOffset;
+        }
+
+        bool operator!=(const SupportArray& other) const
+        {
+            return !((*this) == other);
+        }
+
+        std::string identifier;
+        size_t numRows;
+        size_t numCols;
+        size_t bytesPerElement;
+        size_t arrayByteOffset;
+    };
+
+
     // There's another Channel type in the Metadata,
     // so hiding this inside Data
     struct Channel
@@ -137,7 +141,8 @@ struct Data
     std::string signalCompressionID;
     std::vector<SupportArray> supportArrays;
 };
-
+std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s);
+std::ostream& operator<< (std::ostream& os, const Data::Channel& c);
 std::ostream& operator<< (std::ostream& os, const Data& d);
 }
 

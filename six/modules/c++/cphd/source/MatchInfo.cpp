@@ -26,34 +26,35 @@
 namespace cphd
 {
 MatchInfo::MatchInfo():
-    numMatchType(six::Init::undefined<size_t>())
+    numMatchTypes(six::Init::undefined<size_t>())
 {
 }
 
 MatchType::MatchType():
-    typeId(six::Init::undefined<std::string>()),
+    typeID(six::Init::undefined<std::string>()),
     currentIndex(six::Init::undefined<size_t>()),
     numMatchCollections(six::Init::undefined<size_t>())
 {
 }
 
-MatchCollections::MatchCollections():
+MatchCollection::MatchCollection():
     coreName(six::Init::undefined<std::string>()),
     matchIndex(six::Init::undefined<size_t>())
 {
 }
 
-std::ostream& operator<< (std::ostream& os, const MatchCollections& m)
+std::ostream& operator<< (std::ostream& os, const MatchCollection& m)
 {
     os << "MatchCollections::\n"
-        << "  coreName      : " << m.coreName << "\n";
+        << "  coreName             : " << m.coreName << "\n";
     if(!six::Init::isUndefined(m.matchIndex))
     {
-        os << "  matchIndex    : " << m.matchIndex << "\n";
+        os << "  matchIndex        : " << m.matchIndex << "\n";
     }
     for (size_t i = 0; i < m.parameter.size(); ++i)
     {
-        os << "  parameter     :" << m.parameter[i] << "\n";
+        os << "  parameter name    :" << m.parameter[i].getName() << "\n";
+        os << "  parameter value   :" << m.parameter[i].str() << "\n";
     }
     return os;
 }
@@ -61,16 +62,16 @@ std::ostream& operator<< (std::ostream& os, const MatchCollections& m)
 std::ostream& operator<< (std::ostream& os, const MatchType& m)
 {
     os << "MatchType::\n"
-        << "  typeId      : " << m.typeId << "\n";
+        << "  typeID      : " << m.typeID << "\n";
     if(!six::Init::isUndefined(m.currentIndex))
     {
         os << "  currentIndex    : " << m.currentIndex << "\n";
     }
-    os << "  numMatchCollections    : " << m.numMatchCollections << "\n";
+    os << "  numMatchCollection    : " << m.numMatchCollections << "\n";
 
-    for (size_t i = 0; i < m.matchCollections.size(); ++i)
+    for (size_t i = 0; i < m.matchCollection.size(); ++i)
     {
-        os << "  matchCollections     :" << m.matchCollections[i] << "\n";
+        os << "  matchCollections     :" << m.matchCollection[i] << "\n";
     }
     return os;
 }
@@ -79,7 +80,7 @@ std::ostream& operator<< (std::ostream& os, const MatchType& m)
 std::ostream& operator<< (std::ostream& os, const MatchInfo& m)
 {
     os << "MatchInfo::\n"
-       << "  numMatchType       : " << m.numMatchType << "\n";
+       << "  numMatchTypes       : " << m.numMatchTypes << "\n";
     for (size_t i = 0; i < m.matchType.size(); ++i)
     {
         os << "  matchType     :" << m.matchType[i] << "\n";

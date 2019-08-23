@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __CPHD_GEOINFO_H__
-#define __CPHD_GEOINFO_H__
+#ifndef __CPHD_GEO_INFO_H__
+#define __CPHD_GEO_INFO_H__
 
 #include <ostream>
 #include <vector>
@@ -34,8 +34,73 @@
 
 namespace cphd
 {
+
+struct LatLonIndexType : LatLon
+{
+public:
+
+    bool operator==(const LatLonIndexType& other) const
+    {
+        return index == other.index && mLat == other.mLat &&
+                mLon == other.mLon;
+    }
+
+    bool operator!=(const LatLonIndexType& other) const
+    {
+        return !((*this) == other);
+    }
+
+    size_t index;
+};
+
+struct LineType
+{
+    LineType();
+
+    bool operator==(const LineType& other) const
+    {
+        return numEndpoints == other.numEndpoints && 
+                endpoint == other.endpoint;
+    }
+
+    bool operator!=(const LineType& other) const
+    {
+        return !((*this) == other);
+    }
+
+
+    size_t numEndpoints;
+    std::vector<LatLonIndexType> endpoint;
+
+};
+
+struct PolygonType
+{
+    PolygonType();
+
+    bool operator==(const PolygonType& other) const
+    {
+        return numVertices == other.numVertices && 
+                vertex == other.vertex;
+    }
+
+    bool operator!=(const PolygonType& other) const
+    {
+        return !((*this) == other);
+    }
+
+
+    size_t numVertices;
+    std::vector<LatLonIndexType> vertex;
+};
+
+
 struct GeoInfo
 {
+    GeoInfo();
+
+    GeoInfo(std::string);
+
     bool operator==(const GeoInfo& other) const
     {
         return desc == other.desc && point == other.point &&
@@ -48,11 +113,24 @@ struct GeoInfo
         return !((*this) == other);
     }
 
-    std::vector<std::string> desc;
+    inline std::string getName() const
+    {
+        return mName;
+    }
+
+    inline void setName(const std::string name)
+    {
+        mName = name;
+    }
+
+    six::ParameterCollection desc;
     std::vector<LatLon> point;
-    std::vector<LatLon> line;
-    std::vector<LatLon> polygon;
+    std::vector<LineType> line;
+    std::vector<PolygonType> polygon;
     std::vector<GeoInfo> geoInfo;
+
+private:
+    std::string mName;
 };
 
 std::ostream& operator<< (std::ostream& os, const GeoInfo& g);

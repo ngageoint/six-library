@@ -39,12 +39,52 @@ Data::Channel::Channel() :
 {
 }
 
-SupportArray::SupportArray() :
+Data::SupportArray::SupportArray() :
     numRows(0),
     numCols(0),
     bytesPerElement(0),
     arrayByteOffset(0)
 {
 }
+std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
+{
+    os << "  SupportArray:: \n"
+        << "    Identifier     : " << s.identifier << "\n"
+        << "    NumRows        : " << s.numRows << "\n"
+        << "    NumCols        : " << s.numCols << "\n"
+        << "    BytesPerElement : " << s.bytesPerElement << "\n"
+        << "    ArrayByteOffset : " << s.arrayByteOffset << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Data::Channel& c)
+{
+    os << "  Channel:: \n"
+        << "    Identifier     : " << c.identifier << "\n"
+        << "    NumVectors     : " << c.numVectors << "\n"
+        << "    NumSamples     : " << c.numSamples << "\n"
+        << "    SignalArrayByteOffset : " << c.signalArrayByteOffset << "\n"
+        << "    PVPArrayByteOffset : " << c.pvpArrayByteOffset << "\n"
+        << "    CompressedSignalSize : " << c.compressedSignalSize << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Data& d)
+{
+    os << "Data:: \n"
+        << "  SignalArrayFormat : " << d.signalArrayFormat << "\n"
+        << "  NumBytesPVP      : " << d.numBytesPVP << "\n";
+    for (size_t i = 0; i < d.channels.size(); ++i)
+    {
+        os << d.channels[i] << "\n";
+    }
+    os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
+    for (size_t i = 0; i < d.supportArrays.size(); ++i)
+    {
+        os << d.supportArrays[i] << "\n";
+    }
+    return os;
+}
+
 
 }

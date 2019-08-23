@@ -114,22 +114,7 @@ struct DwellTimes
     std::string dwellId;
 };
 
-struct TxRcv
-{
-    bool operator==(const TxRcv& other) const
-    {
-        return txWFId == other.txWFId &&
-                rcvId == other.rcvId;
-    }
 
-    bool operator!=(const TxRcv& other) const
-    {
-        return !((*this) == other);
-    }
-
-    std::vector<std::string> txWFId;
-    std::vector<std::string> rcvId;
-};
 
 struct TgtRefLevel
 {
@@ -206,8 +191,25 @@ struct NoiseLevel
 
 struct ChannelParameter
 {
+    //Hiding TxRcv struct here because of name conflict
+    struct TxRcv
+    {
+        bool operator==(const TxRcv& other) const
+        {
+            return txWFId == other.txWFId &&
+                    rcvId == other.rcvId;
+        }
 
-    // Hiding struct here because of naming clash
+        bool operator!=(const TxRcv& other) const
+        {
+            return !((*this) == other);
+        }
+
+        std::vector<std::string> txWFId;
+        std::vector<std::string> rcvId;
+    };
+
+    // Hiding Antenna struct here because of naming clash
     struct Antenna
     {
         Antenna();
@@ -266,7 +268,7 @@ struct ChannelParameter
     double toaSaved;
     TOAExtended toaExtended;
     DwellTimes dwellTimes;
-    cphd::AreaType imageArea;
+    AreaType imageArea;
     Antenna antenna;
     TxRcv txRcv;
     TgtRefLevel tgtRefLevel;
