@@ -55,6 +55,7 @@ TEST_CASE(TestPolygonInvalid)
     vertex2[0] = 5;
     vertex2[1] = 5;
 
+    channel.parameters.resize(1);
     channel.parameters[0].imageArea.x1y1[0] = 0;
     channel.parameters[0].imageArea.x1y1[1] = 0;
     channel.parameters[0].imageArea.x2y2[0] = 10;
@@ -70,15 +71,15 @@ TEST_CASE(TxRcvMultIds)
 {
     cphd::Channel channel;
     channel.parameters.resize(2);
-    channel.parameters[0].txRcv.txWFId.push_back("TransmitWaveformParam1");
-    channel.parameters[0].txRcv.txWFId.push_back("TransmitWaveformParam2");
-    channel.parameters[0].txRcv.txWFId.push_back("TransmitWaveformParam3");
+    channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam1");
+    channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam2");
+    channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam3");
 
-    channel.parameters[0].txRcv.rcvId.push_back("ReceiverWaveformParam1");
-    channel.parameters[0].txRcv.rcvId.push_back("ReceiverWaveformParam2");
+    channel.parameters[0].txRcv->rcvId.push_back("ReceiverWaveformParam1");
+    channel.parameters[0].txRcv->rcvId.push_back("ReceiverWaveformParam2");
 
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv.txWFId.size(), 3);
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv.rcvId.size(), 2);
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId.size(), 3);
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId.size(), 2);
 }
 
 

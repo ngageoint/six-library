@@ -71,9 +71,9 @@ TEST_CASE(testSimpleEqualityOperatorFalse)
 {
 
     cphd::Pvp pvp1, pvp2;
-    pvp1.fxN1.size = 1;
-    pvp1.fxN1.offset = 0;
-    pvp1.fxN1.format = "F8";
+    pvp1.fxN1->size = 1;
+    pvp1.fxN1->offset = 0;
+    pvp1.fxN1->format = "F8";
 
     pvp2.txTime.size = 1;
     pvp2.txTime.offset = 0;

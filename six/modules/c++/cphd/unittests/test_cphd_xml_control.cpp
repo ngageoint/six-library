@@ -553,9 +553,9 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(scene.imageGrid->xExtent.lineSpacing, 3.14);
     TEST_ASSERT_EQ(scene.imageGrid->xExtent.firstLine, 4);
     TEST_ASSERT_EQ(scene.imageGrid->xExtent.numLines, 50);
-    TEST_ASSERT_EQ(scene.imageGrid->yExtent.lineSpacing, 6.28);
-    TEST_ASSERT_EQ(scene.imageGrid->yExtent.firstLine, 8);
-    TEST_ASSERT_EQ(scene.imageGrid->yExtent.numLines, 100);
+    TEST_ASSERT_EQ(scene.imageGrid->yExtent.sampleSpacing, 6.28);
+    TEST_ASSERT_EQ(scene.imageGrid->yExtent.firstSample, 8);
+    TEST_ASSERT_EQ(scene.imageGrid->yExtent.numSamples, 100);
     TEST_ASSERT_EQ(scene.imageGrid->segments.size(), 2);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].startLine, 0);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].startSample, 1);
@@ -606,19 +606,19 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(channel.parameters[0].signalNormal,
                    six::BooleanType::IS_FALSE);
 
-    TEST_ASSERT_EQ(channel.parameters[0].polarization.TxPol,
+    TEST_ASSERT_EQ(channel.parameters[0].polarization.txPol,
                    cphd::PolarizationType::X);
-    TEST_ASSERT_EQ(channel.parameters[0].polarization.RcvPol,
+    TEST_ASSERT_EQ(channel.parameters[0].polarization.rcvPol,
                    cphd::PolarizationType::RHC);
 
     TEST_ASSERT_EQ(channel.parameters[0].fxC, 1.3);
     TEST_ASSERT_EQ(channel.parameters[0].fxBW, 0.8);
     TEST_ASSERT_EQ(channel.parameters[0].toaSaved, 2.7);
-    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.toaExtSaved, 1.0);
-    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxEarlyLow, 1.0);
-    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxEarlyHigh, 2.0);
-    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxLateLow, 1.0);
-    TEST_ASSERT_EQ(channel.parameters[0].toaExtended.lfmEclipse.fxLateHigh, 2.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended->toaExtSaved, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended->lfmEclipse->fxEarlyLow, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended->lfmEclipse->fxEarlyHigh, 2.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended->lfmEclipse->fxLateLow, 1.0);
+    TEST_ASSERT_EQ(channel.parameters[0].toaExtended->lfmEclipse->fxLateHigh, 2.0);
 
     TEST_ASSERT_EQ(channel.parameters[0].dwellTimes.codId, "CODPolynomial");
     TEST_ASSERT_EQ(channel.parameters[0].dwellTimes.dwellId, "DwellPolynomial");
@@ -635,27 +635,27 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[2][0], 0.5);
     TEST_ASSERT_EQ(channel.parameters[0].imageArea.polygon[2][1], 0.9);
 
-    TEST_ASSERT_EQ(channel.parameters[0].antenna.txAPCId, "TxAPCId");
-    TEST_ASSERT_EQ(channel.parameters[0].antenna.txAPATId, "TxAPATId");
-    TEST_ASSERT_EQ(channel.parameters[0].antenna.rcvAPCId, "RcvAPCId");
-    TEST_ASSERT_EQ(channel.parameters[0].antenna.rcvAPATId, "RcvAPATId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna->txAPCId, "TxAPCId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna->txAPATId, "TxAPATId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna->rcvAPCId, "RcvAPCId");
+    TEST_ASSERT_EQ(channel.parameters[0].antenna->rcvAPATId, "RcvAPATId");
 
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv.txWFId[0], "TxWFId");
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv.rcvId[0], "rcvId");
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId[0], "TxWFId");
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId[0], "rcvId");
 
-    TEST_ASSERT_EQ(channel.parameters[0].tgtRefLevel.ptRef, 12.0);
+    TEST_ASSERT_EQ(channel.parameters[0].tgtRefLevel->ptRef, 12.0);
 
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.pnRef, 0.5);
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.bnRef, 0.8);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->pnRef, 0.5);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->bnRef, 0.8);
 
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point.size(), 2);
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[0].fx, 0.3);
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[0].pn, 2.7);
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[1].fx, 0.5);
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel.fxNoiseProfile.point[1].pn, 2.7);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point.size(), 2);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[0].fx, 0.3);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[0].pn, 2.7);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[1].fx, 0.5);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[1].pn, 2.7);
 
-    TEST_ASSERT_EQ(channel.addedParameters[0], "AddedParameter1");
-    TEST_ASSERT_EQ(channel.addedParameters[1], "AddedParameter2");
+    TEST_ASSERT_EQ(channel.addedParameters[0].str(), "AddedParameter1");
+    TEST_ASSERT_EQ(channel.addedParameters[1].str(), "AddedParameter2");
 
 
     //PVP

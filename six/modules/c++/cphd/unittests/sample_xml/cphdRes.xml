@@ -573,8 +573,8 @@
             <Identifier>APAT</Identifier>
             <FreqZero>2.300000000000000E00</FreqZero>
             <GainZero>2.300000000000000E00</GainZero>
-            <EBFreqShift>1</EBFreqShift>
-            <MLFreqDilation>0</MLFreqDilation>
+            <EBFreqShift>true</EBFreqShift>
+            <MLFreqDilation>false</MLFreqDilation>
             <GainBSPoly order1="1">
                 <Coef exponent1="0">1.000000000000000E00</Coef>
                 <Coef exponent1="1">2.000000000000000E00</Coef>

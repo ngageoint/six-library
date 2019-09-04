@@ -40,8 +40,8 @@ TEST_CASE_ARGUMENTS(testOptional)
 {
     // Get pathname from cmd line
     std::string pathname = "/data1/u/vyadav/six-library/six/modules/c++/cphd/unittests/sample_xml/cphd02.xml";
-    // std::string schema = "/data1/u/vyadav/six-library/six/modules/c++/cphd/conf/schema/CPHD_schema_V1.0.0_2017_10_20.xsd";
-    std::string schema = "";
+    std::string schema = "/data1/u/vyadav/six-library/six/modules/c++/cphd/conf/schema/CPHD_schema_V1.0.0_2017_10_20.xsd";
+    // std::string schema = "";
 
     xml::lite::MinidomParser xmlParser;
     parseXMLFile(xmlParser, pathname);
@@ -70,7 +70,7 @@ TEST_CASE_ARGUMENTS(testOptional)
     const std::auto_ptr<cphd::Metadata> metadata =
             xmlControl.fromXML(xmlParser.getDocument(), nodeNames);
 
-    const cphd::SupportArray& supportArray = metadata->supportArray;
+    const cphd::SupportArray& supportArray = *(metadata->supportArray);
     TEST_ASSERT_EQ(supportArray.iazArray.size(), 2);
     TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), 1);
     TEST_ASSERT_EQ(supportArray.iazArray[0].elementFormat, "IAZ=F4;");
@@ -109,7 +109,7 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[0].str(), "Additional parameter");
     TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[1].str(), "Additional parameter");
 
-    const cphd::Antenna& antenna = metadata->antenna;
+    const cphd::Antenna& antenna = *(metadata->antenna);
     TEST_ASSERT_EQ(antenna.numACFs, 2);
     TEST_ASSERT_EQ(antenna.numAPCs, 1);
     TEST_ASSERT_EQ(antenna.numAntPats, 1);
@@ -191,7 +191,7 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[1].arrayId, "Parameter1");
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[1].elementId, "Parameter2");
 
-    const cphd::TxRcv& txRcv = metadata->txRcv;
+    const cphd::TxRcv& txRcv = *(metadata->txRcv);
     TEST_ASSERT_EQ(txRcv.numTxWFs, 1);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].identifier, "TxWFParam");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].pulseLength, 3.0);
@@ -220,30 +220,30 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization.toString(), "LHC");
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
-    const cphd::ErrorParameters& errorParams = metadata->errorParameters;
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.frame.toString(), "ECF");
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.p1, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.p2, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.corrCoefs.p1p2, 0.8);
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.corrCoefs.v2v3, 0.8);
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.positionDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.posVelErr.positionDecorr.decorrRate, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.radarSensor.rangeBias, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.radarSensor.clockFreqSF, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.radarSensor.collectionStartTime, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.radarSensor.rangeBiasDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.radarSensor.rangeBiasDecorr.decorrRate, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.tropoError.tropoRangeVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.tropoError.tropoRangeSlant, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.tropoError.tropoRangeDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.tropoError.tropoRangeDecorr.decorrRate, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.ionoError.ionoRangeVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.ionoError.ionoRangeRateVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic.ionoError.ionoRgRgRateCC, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.ionoError.ionoRangeVertDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic.ionoError.ionoRangeVertDecorr.decorrRate, 1.0);
+    const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame.toString(), "ECF");
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->v2v3, 0.8);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr->corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBias, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.clockFreqSF, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.collectionStartTime, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeVertical, 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeSlant, 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr->corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertical, 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeRateVertical, 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRgRgRateCC, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr->corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr->decorrRate, 1.0);
 
-    const cphd::ProductInfo& productInfo = metadata->productInfo;
+    const cphd::ProductInfo& productInfo = *(metadata->productInfo);
     TEST_ASSERT_EQ(productInfo.profile, "Profile");
     TEST_ASSERT_EQ(productInfo.creationInfo[0].application, "Application");
     TEST_ASSERT_EQ(productInfo.creationInfo[0].dateTime.getYear(), 2014);
@@ -300,7 +300,7 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].getLat(), 1.0);
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].getLon(), 1.0);
 
-    const cphd::MatchInfo& matchInfo = metadata->matchInfo;
+    const cphd::MatchInfo& matchInfo = *(metadata->matchInfo);
     TEST_ASSERT_EQ(matchInfo.numMatchTypes, 2);
     TEST_ASSERT_EQ(matchInfo.matchType[0].index, 1);
     TEST_ASSERT_EQ(matchInfo.matchType[0].typeID, "STEREO");

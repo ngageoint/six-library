@@ -31,6 +31,8 @@ Global::Global()
 }
 
 Timeline::Timeline() :
+    collectionStart(six::Init::undefined<DateTime>()),
+    rcvCollectionStart(six::Init::undefined<DateTime>()),
     txTime1(0.0),
     txTime2(0.0)
 {
@@ -75,7 +77,6 @@ std::ostream& operator<< (std::ostream& os, const Global& d)
     {
         os << " ionoParameters    : " << *d.ionoParameters << "\n";
     }
-
     return os;
 }
 

@@ -58,6 +58,9 @@ public:
     //! Constructor
     CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths);
 
+    // To string
+    std::string toXMLString(const Metadata& metadata);
+
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
     //! (Testing) Parses specifc XML blocks specified by nodeNames vector
@@ -99,6 +102,25 @@ private:
     //! Returns the URI to use with SI Common types
     std::string getSICommonURI() const;
 
+    // Write to XML object
+    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    XMLElem toXML(const CollectionID& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Global& obj, XMLElem parent = NULL);
+    XMLElem toXML(const SceneCoordinates& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Data& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Channel& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Pvp& obj, XMLElem parent = NULL);
+    XMLElem toXML(const SupportArray& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Dwell& obj, XMLElem parent = NULL);
+    XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Antenna& obj, XMLElem parent = NULL);
+    XMLElem toXML(const TxRcv& obj, XMLElem parent = NULL);
+    XMLElem toXML(const ErrorParameters& obj, XMLElem parent = NULL);
+    XMLElem toXML(const ProductInfo& obj, XMLElem parent = NULL);
+    XMLElem toXML(const GeoInfo& obj, XMLElem parent = NULL);
+    XMLElem toXML(const MatchInfo& obj, XMLElem parent = NULL);
+
+    // Read from XML object
     void fromXML(const XMLElem collectionIDXML, CollectionID& collectionID);
     void fromXML(const XMLElem globalXML, Global& global);
     void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
@@ -115,10 +137,35 @@ private:
     void fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo);
     void fromXML(const XMLElem matchInfoXML, MatchInfo& matchInfo);
 
+
+    // Create helper functions
+    void createParameterCollection(const std::string& name, 
+                                            six::ParameterCollection& ParameterCollection,
+                                            XMLElem parent) const;
+    XMLElem createVector2D(const std::string& name,
+                                Vector2 p,
+                                XMLElem parent) const;
+    XMLElem createLatLonFootprint(const std::string& name,
+                                         const std::string& cornerName,
+                                         const cphd::LatLonCorners& corners,
+                                         XMLElem parent) const;
+    XMLElem createPVPType(const std::string& name,
+                                PVPType p,
+                                XMLElem parent) const;
+    XMLElem createAPVPType(const std::string& name,
+                                                APVPType p,
+                                                XMLElem parent) const;
+
+    XMLElem createErrorParamPlatform(const std::string& name,
+                                ErrorParameters::Bistatic::Platform p,
+                                XMLElem parent) const;
+
+    // Parse helper functions
     void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;
     void parseLineSample(const XMLElem lsXML, LineSample& ls) const;
-    void parseIAExtent(const XMLElem extentXML, ImageAreaExtent& extent) const;
+    void parseIAExtent(const XMLElem extentXML, ImageAreaXExtent& extent) const;
+    void parseIAExtent(const XMLElem extentXML, ImageAreaYExtent& extent) const;
     void parseChannelParameters(const XMLElem paramXML,
                                 ChannelParameter& param) const;
     void parsePVPType(const XMLElem paramXML, PVPType& param) const;
