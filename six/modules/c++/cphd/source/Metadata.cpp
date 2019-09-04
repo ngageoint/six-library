@@ -31,6 +31,39 @@ bool Metadata::operator==(const Metadata& other) const
            sceneCoordinates == other.sceneCoordinates &&
            data == other.data &&
            channel == other.channel &&
-           pvp == other.pvp;
+           pvp == other.pvp &&
+           dwell == other.dwell &&
+           referenceGeometry == other.referenceGeometry &&
+           *(supportArray) == *(other.supportArray) &&
+           *(antenna) == *(other.antenna) &&
+           *(txRcv) == *(other.txRcv) &&
+           *(errorParameters) == *(other.errorParameters) &&
+           *(productInfo) == *(other.productInfo) &&
+           geoInfo == other.geoInfo &&
+           *(matchInfo) == *(other.matchInfo);
+}
+
+std::ostream& operator<< (std::ostream& os, const Metadata& d)
+{
+    os << "Metadata:: \n"
+        << d.collectionID << "\n"
+        << d.global << "\n"
+        << d.sceneCoordinates << "\n"
+        << d.data << "\n"
+        << d.channel << "\n"
+        << d.pvp << "\n"
+        << d.dwell << "\n"
+        << d.referenceGeometry << "\n"
+        << *(d.supportArray) << "\n"
+        << *(d.antenna) << "\n"
+        << *(d.txRcv) << "\n"
+        << *(d.errorParameters) << "\n"
+        << *(d.productInfo) << "\n";
+    for (size_t i = 0; i < d.geoInfo.size(); ++i)
+    {
+        os << d.geoInfo[i] << "\n";
+    }
+    os << *(d.matchInfo) << "\n";
+    return os;
 }
 }

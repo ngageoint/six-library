@@ -29,7 +29,8 @@ namespace cphd
 SRP::SRP() :
     ecf(six::Init::undefined<Vector3>()),
     iac(six::Init::undefined<Vector3>())
-{}
+{
+}
 
 ImagingType::ImagingType() :
     azimuthAngle(six::Init::undefined<double>()),
@@ -37,7 +38,8 @@ ImagingType::ImagingType() :
     twistAngle(six::Init::undefined<double>()),
     slopeAngle(six::Init::undefined<double>()),
     layoverAngle(six::Init::undefined<double>())
-{}
+{
+}
 
 Monostatic::Monostatic() :
     sideOfTrack(six::Init::undefined<six::SideOfTrackType>()),
@@ -47,14 +49,15 @@ Monostatic::Monostatic() :
     incidenceAngle(six::Init::undefined<double>()),
     arpPos(six::Init::undefined<Vector3>()),
     arpVel(six::Init::undefined<Vector3>())
-
-{}
+{
+}
 
 Bistatic::Bistatic() :
     azimuthAngleRate(six::Init::undefined<double>()),
     bistaticAngle(six::Init::undefined<double>()),
     bistaticAngleRate(six::Init::undefined<double>())
-{}
+{
+}
 
 Bistatic::PlatformParams::PlatformParams() :
     sideOfTrack(six::Init::undefined<six::SideOfTrackType>()),
@@ -67,15 +70,15 @@ Bistatic::PlatformParams::PlatformParams() :
     slantRange(six::Init::undefined<double>()),
     pos(six::Init::undefined<Vector3>()),
     vel(six::Init::undefined<Vector3>())
-
-{}
+{
+}
 
 ReferenceGeometry::ReferenceGeometry() :
     referenceTime(six::Init::undefined<double>()),
     srpCODTime(six::Init::undefined<double>()),
     srpDwellTime(six::Init::undefined<double>())
-{}
-
+{
+}
 
 std::ostream& operator<< (std::ostream& os, const SRP& s)
 {
@@ -168,5 +171,4 @@ std::ostream& operator<< (std::ostream& os, const ReferenceGeometry& r)
     }
     return os;
 }
-
 }

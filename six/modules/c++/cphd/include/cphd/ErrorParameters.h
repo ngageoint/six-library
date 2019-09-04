@@ -37,9 +37,11 @@
 namespace cphd
 {
 
+/*
+ * Error Decorrelation function
+ */
 struct Decorr
 {
-
     Decorr();
 
     bool operator==(const Decorr& other) const
@@ -57,9 +59,14 @@ struct Decorr
     double decorrRate;
 };
 
-
+/*
+ * Position and velocity error statistics for the sensory platform
+ */
 struct PosVelErr
 {
+    /*
+     * Correlation coefficient parameters
+     */
     struct CorrCoefs
     {
         CorrCoefs();
@@ -98,7 +105,6 @@ struct PosVelErr
         double v2v3;
     };
 
-
     PosVelErr();
 
     bool operator==(const PosVelErr& other) const
@@ -122,22 +128,22 @@ struct PosVelErr
     double v1;
     double v2;
     double v3;
-    CorrCoefs corrCoefs;
-    Decorr positionDecorr;
-
+    mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
+    mem::ScopedCopyablePtr<Decorr> positionDecorr;
 };
 
-
-
+/*
+ * Parameters that describe the statistics of errors
+ * in measured or estimated parameters that describe
+ * the collection
+ * See section 9
+ */
 struct ErrorParameters
 {
-
     struct Monostatic
     {
-
         struct RadarSensor
         {
-
             RadarSensor();
 
             bool operator==(const RadarSensor& other) const
@@ -153,16 +159,14 @@ struct ErrorParameters
                 return !((*this) == other);
             }
 
-
             double rangeBias;
             double clockFreqSF;
             double collectionStartTime;
-            Decorr rangeBiasDecorr;
+            mem::ScopedCopyablePtr<Decorr> rangeBiasDecorr;
         };
 
         struct TropoError
         {
-
             TropoError();
 
             bool operator==(const TropoError& other) const
@@ -179,12 +183,11 @@ struct ErrorParameters
 
             double tropoRangeVertical;
             double tropoRangeSlant;
-            Decorr tropoRangeDecorr;
+            mem::ScopedCopyablePtr<Decorr> tropoRangeDecorr;
         };
 
         struct IonoError
         {
-
             IonoError();
 
             bool operator==(const IonoError& other) const
@@ -203,9 +206,8 @@ struct ErrorParameters
             double ionoRangeVertical;
             double ionoRangeRateVertical;
             double ionoRgRgRateCC;
-            Decorr ionoRangeVertDecorr;
+            mem::ScopedCopyablePtr<Decorr> ionoRangeVertDecorr;
         };
-
 
         bool operator==(const Monostatic& other) const
         {
@@ -223,19 +225,16 @@ struct ErrorParameters
 
         PosVelErr posVelErr;
         RadarSensor radarSensor;
-        TropoError tropoError;
-        IonoError ionoError;
+        mem::ScopedCopyablePtr<TropoError> tropoError;
+        mem::ScopedCopyablePtr<IonoError> ionoError;
         six::ParameterCollection parameter;
     };
 
 
     struct Bistatic
     {
-
-
         struct RadarSensor
         {
-
             RadarSensor();
 
             bool operator==(const RadarSensor& other) const
@@ -249,14 +248,12 @@ struct ErrorParameters
                 return !((*this) == other);
             }
 
-
             double clockFreqSF;
             double collectionStartTime;
         };
 
         struct Platform
         {
-
             bool operator==(const Platform& other) const
             {
                 return posVelErr == other.posVelErr &&
@@ -268,11 +265,9 @@ struct ErrorParameters
                 return !((*this) == other);
             }
 
-
             PosVelErr posVelErr;
             RadarSensor radarSensor;
         };
-
 
         bool operator==(const Bistatic& other) const
         {
@@ -302,11 +297,13 @@ struct ErrorParameters
         return !((*this) == other);
     }
 
-    Monostatic monostatic;
-    Bistatic bistatic;
-
+    mem::ScopedCopyablePtr<Monostatic> monostatic;
+    mem::ScopedCopyablePtr<Bistatic> bistatic;
 };
 
+std::ostream& operator<< (std::ostream& os, const Decorr& d);
+std::ostream& operator<< (std::ostream& os, const PosVelErr::CorrCoefs& c);
+std::ostream& operator<< (std::ostream& os, const PosVelErr& p);
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e);
 }
 

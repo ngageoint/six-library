@@ -34,7 +34,6 @@
 
 namespace cphd
 {
-
 struct ParameterType
 {
     ParameterType();
@@ -56,7 +55,6 @@ struct ParameterType
     double freqCenter;
     double lfmRate; // Allowed lfmRate != 0
     PolarizationType polarization;
-
 };
 
 struct TxWFParameters : public ParameterType

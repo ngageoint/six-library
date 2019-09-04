@@ -65,15 +65,23 @@ ImageGrid::ImageGrid()
 }
 
 LineSample::LineSample() :
+    index(six::Init::undefined<size_t>()),
     line(0.0),
     sample(0.0)
 {
 }
 
-ImageAreaExtent::ImageAreaExtent() :
+ImageAreaXExtent::ImageAreaXExtent() :
     lineSpacing(0.0),
     firstLine(0),
     numLines(0)
+{
+}
+
+ImageAreaYExtent::ImageAreaYExtent() :
+    sampleSpacing(0.0),
+    firstSample(0),
+    numSamples(0)
 {
 }
 
@@ -81,7 +89,9 @@ Segment::Segment() :
     startLine(0),
     startSample(0),
     endLine(0),
-    endSample(0)
+    endSample(0),
+    identifier(six::Init::undefined<std::string>()),
+    size(six::Init::undefined<size_t>())
 {
 }
 
@@ -183,18 +193,29 @@ std::ostream& operator<< (std::ostream& os, const ImageGrid& d)
 std::ostream& operator<< (std::ostream& os, const LineSample& d)
 {
     os << "LineSample::\n"
+       << "  Index           : " << d.index << "\n"
        << "  Line            : " << d.line << "\n"
        << "  Sample          : " << d.sample << "\n";
 
     return os;
 }
 
-std::ostream& operator<< (std::ostream& os, const ImageAreaExtent& d)
+std::ostream& operator<< (std::ostream& os, const ImageAreaXExtent& d)
 {
-    os << "ImageAreaExtent::\n"
+    os << "ImageAreaXExtent::\n"
        << "  lineSpacing     : " << d.lineSpacing << "\n"
        << "  firstLine       : " << d.firstLine<< "\n"
        << "  numLines        : " << d.numLines << "\n";
+
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const ImageAreaYExtent& d)
+{
+    os << "ImageAreaYExtent::\n"
+       << "  SampleSpacing   : " << d.sampleSpacing << "\n"
+       << "  FirstSample     : " << d.firstSample<< "\n"
+       << "  NumSamples      : " << d.numSamples << "\n";
 
     return os;
 }

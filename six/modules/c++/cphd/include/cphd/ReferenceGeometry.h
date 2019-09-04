@@ -32,6 +32,11 @@
 
 namespace cphd
 {
+
+/*!
+ * The SRP position for the reference vector of the
+ * reference channel
+ */
 struct SRP
 {
     SRP();
@@ -77,6 +82,9 @@ struct ImagingType
     double layoverAngle;
 };
 
+/*!
+ * (Conditional) Collection Type Monostatic
+ */
 struct Monostatic : virtual public ImagingType
 {
     Monostatic();
@@ -108,10 +116,16 @@ struct Monostatic : virtual public ImagingType
     Vector3 arpVel;
 };
 
+/*!
+ * (Conditional) Collection Type Bistatic
+ */
 struct Bistatic : public ImagingType
 {
     struct PlatformParams
     {
+        /*!
+         * Describes Transmit and Recieve Platform parameters
+         */
         PlatformParams();
 
         bool operator==(const PlatformParams& other) const
@@ -166,11 +180,15 @@ struct Bistatic : public ImagingType
     double azimuthAngleRate;
     double bistaticAngle;
     double bistaticAngleRate;
-    PlatformParams txPlatform;  // Transition Platform
+    PlatformParams txPlatform;  // Transmit Platform
     PlatformParams rcvPlatform;  // Receive Platform
 
 };
 
+/*!
+ * Parameters that describe the collection geometry
+ * See section 6.5
+ */
 struct ReferenceGeometry
 {
     ReferenceGeometry();

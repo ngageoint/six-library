@@ -135,6 +135,4 @@ std::ostream& operator<< (std::ostream& os, const Antenna& a)
     }
     return os;
 }
-
-
 }

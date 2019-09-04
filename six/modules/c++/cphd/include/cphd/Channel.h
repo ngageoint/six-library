@@ -33,12 +33,15 @@
 namespace cphd
 {
 
+/*
+ * Polarization of the signals that formed the signal array.
+ */
 struct Polarization
 {
   bool operator==(const Polarization& other) const
   {
-    return TxPol == other.TxPol &&
-           RcvPol == other.RcvPol;
+    return txPol == other.txPol &&
+           rcvPol == other.rcvPol;
   }
 
   bool operator!=(const Polarization& other) const
@@ -46,11 +49,13 @@ struct Polarization
     return !((*this) == other);
   }
 
-  PolarizationType TxPol;
-  PolarizationType RcvPol;
-
+  PolarizationType txPol;
+  PolarizationType rcvPol;
 };
 
+/*
+ * (Optional) TOA extended swath information
+ */
 struct TOAExtended
 {
     struct LFMEclipse
@@ -90,11 +95,13 @@ struct TOAExtended
     }
 
     double toaExtSaved;
-    LFMEclipse lfmEclipse;
-
+    mem::ScopedCopyablePtr<LFMEclipse> lfmEclipse;
 };
 
-
+/*
+ * COD Time & Dwell Time polynomials over the image area
+ * See section 6.3 and section 7.2.6
+ */
 struct DwellTimes
 {
     DwellTimes();
@@ -114,8 +121,11 @@ struct DwellTimes
     std::string dwellId;
 };
 
-
-
+/*
+ * (Optional) Signal level for an ideal point scatter
+ * located at the SRP for reference signal vector (v_CH_REF)
+ * See section 4.6 and section 7.2.9
+ */
 struct TgtRefLevel
 {
     TgtRefLevel();
@@ -152,6 +162,9 @@ struct Point
     double pn;
 };
 
+/*
+ * (Optional) Power level for thermal noise (PN) vs FX freq values
+ */
 struct FxNoiseProfile 
 {
     bool operator==(const FxNoiseProfile& other) const
@@ -167,7 +180,9 @@ struct FxNoiseProfile
     std::vector<Point> point;
 };
 
-
+/*
+ * (Optional) Thermal noise level for the reference signal vector
+ */
 struct NoiseLevel
 {
     NoiseLevel();
@@ -186,12 +201,15 @@ struct NoiseLevel
 
     double pnRef;
     double bnRef;
-    FxNoiseProfile fxNoiseProfile;
+    mem::ScopedCopyablePtr<FxNoiseProfile> fxNoiseProfile;
 };
 
+/* Parameter Set that describes a CPHD data
+channel. Channels referenced by their unique
+Channel ID (Ch_ID). See Section 7.2. */
 struct ChannelParameter
 {
-    //Hiding TxRcv struct here because of name conflict
+    // Hiding TxRcv struct here because of name conflict //
     struct TxRcv
     {
         bool operator==(const TxRcv& other) const
@@ -209,7 +227,7 @@ struct ChannelParameter
         std::vector<std::string> rcvId;
     };
 
-    // Hiding Antenna struct here because of naming clash
+    // Hiding Antenna struct here because of naming clash //
     struct Antenna
     {
         Antenna();
@@ -226,7 +244,6 @@ struct ChannelParameter
         {
             return !((*this) == other);
         }
-
 
         std::string txAPCId;
         std::string txAPATId;
@@ -266,15 +283,20 @@ struct ChannelParameter
     double fxBW;
     double fxBWNoise;
     double toaSaved;
-    TOAExtended toaExtended;
     DwellTimes dwellTimes;
     AreaType imageArea;
-    Antenna antenna;
-    TxRcv txRcv;
-    TgtRefLevel tgtRefLevel;
-    NoiseLevel noiseLevel;
+    mem::ScopedCopyablePtr<TOAExtended> toaExtended;
+    mem::ScopedCopyablePtr<Antenna> antenna;
+    mem::ScopedCopyablePtr<TxRcv> txRcv;
+    mem::ScopedCopyablePtr<TgtRefLevel> tgtRefLevel;
+    mem::ScopedCopyablePtr<NoiseLevel> noiseLevel;
 };
 
+/*
+ * Parameters that describe the data channels 
+ * contained in the product.
+ * See section 7.
+ */
 struct Channel
 {
     Channel();
@@ -299,8 +321,18 @@ struct Channel
     six::BooleanType toaFixedCphd;
     six::BooleanType srpFixedCphd;
     std::vector<ChannelParameter> parameters;
-    std::vector<std::string> addedParameters;
+    six::ParameterCollection addedParameters;
 };
+
+std::ostream& operator<< (std::ostream& os, const Polarization& p);
+std::ostream& operator<< (std::ostream& os, const TOAExtended& t);
+std::ostream& operator<< (std::ostream& os, const DwellTimes& d);
+std::ostream& operator<< (std::ostream& os, const TgtRefLevel& t);
+std::ostream& operator<< (std::ostream& os, const Point& p);
+std::ostream& operator<< (std::ostream& os, const FxNoiseProfile& f);
+std::ostream& operator<< (std::ostream& os, const NoiseLevel& n);
+std::ostream& operator<< (std::ostream& os, const ChannelParameter& c);
+std::ostream& operator<< (std::ostream& os, const Channel& c);
 }
 
 #endif

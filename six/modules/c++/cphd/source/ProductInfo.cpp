@@ -58,10 +58,9 @@ std::ostream& operator<< (std::ostream& os, const ProductInfo& p)
     }
     for (size_t i = 0; i < p.parameter.size(); ++i)
     {
-        os << "  Parameter name       : " << p.parameter[i].getName() << "\n"
-            << "  Parameter value      : " << p.parameter[i].str() << "\n";
+        os << "  Parameter name   : " << p.parameter[i].getName() << "\n"
+            << "  Parameter value  : " << p.parameter[i].str() << "\n";
     }
     return os;
 }
-
 }

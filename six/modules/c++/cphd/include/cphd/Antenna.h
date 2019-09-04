@@ -32,9 +32,14 @@
 #include <cphd/Types.h>
 
 
+
 namespace cphd
 {
 
+/*!
+ * Unit vectors that describe the orientation of an 
+ * Antenna Coordinate Frame as a function of time.
+ */
 struct AntCoordFrame
 {
     AntCoordFrame();
@@ -54,9 +59,11 @@ struct AntCoordFrame
     std::string identifier;
     PolyXYZ xAxisPoly;
     PolyXYZ yAxisPoly;
-
 };
 
+/*
+ * Parameters that describe each Antenna Phase Center.
+ */
 struct AntPhaseCenter
 {
     AntPhaseCenter();
@@ -75,11 +82,18 @@ struct AntPhaseCenter
     std::string identifier;
     std::string acfId;
     Vector3 apcXYZ;
-
 };
 
+/*
+ * Parameter set that defines each Antenna Pattern
+ * as a function of time.
+ */
 struct AntPattern
 {
+    /*
+     * The Electrical Boresight steering direction versus
+     * time. Defines array pattern pointing direction.
+     */
     struct EB
     {
         bool operator==(const EB& other) const
@@ -112,7 +126,11 @@ struct AntPattern
         Poly2D phasePoly;
     };
 
-
+    /*
+     * Parameters that identify 2-D sampled Grain & Phase patterns at
+     * a single frequency value.
+     * See table 11-7
+     */
     struct GainPhaseArray
     {
         bool operator==(const GainPhaseArray& other) const
@@ -159,10 +177,13 @@ struct AntPattern
     ArrayElement array;
     ArrayElement element;
     std::vector<GainPhaseArray> gainPhaseArray;
-
 };
 
-
+/*!
+ * (Optional) Parameters that describe the transmit and
+ * receive antennas used to collect the signal array.
+ * See section 8.2
+ */
 struct Antenna
 {
     Antenna();
@@ -179,14 +200,14 @@ struct Antenna
         return !((*this) == other);
     }
 
-    double numACFs;
-    double numAPCs;
-    double numAntPats;
+    double numACFs; /*! NumACFs >= 1*/
+    double numAPCs; /*! NumAPCs >= 1*/
+    double numAntPats; /*! NumAntPats >= 1*/
     std::vector<AntCoordFrame> antCoordFrame;
     std::vector<AntPhaseCenter> antPhaseCenter;
     std::vector<AntPattern> antPattern;
-
 };
+
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
 std::ostream& operator<< (std::ostream& os, const AntPattern::EB& e);

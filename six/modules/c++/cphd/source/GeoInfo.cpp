@@ -31,7 +31,6 @@ LineType::LineType() :
 {
 }
 
-
 PolygonType::PolygonType() :
     numVertices(six::Init::undefined<size_t>())
 {
@@ -92,9 +91,7 @@ std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
         os << "  geoInfo  : " << g.geoInfo[i] << "\n";
     }
     return os;
-
 }
-
 }
 
 

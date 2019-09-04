@@ -44,4 +44,55 @@ AdditionalSupportArray::AdditionalSupportArray() :
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
+{
+    if (!six::Init::isUndefined(s.getIdentifier()))
+    {
+        os << "    Identifier     : " << s.getIdentifier() << "\n";
+    }
+    os << "    Element Format : " << s.elementFormat << "\n"
+        << "    X0             : " << s.x0 << "\n"
+        << "    Y0             : " << s.y0 << "\n"
+        << "    xSS            : " << s.xSS << "\n"
+        << "    ySS            : " << s.ySS << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
+{
+    os << "    Identifier     : " << a.identifier << "\n"
+        << (SupportArrayParameter)a
+        << "    XUnits         : " << a.xUnits << "\n"
+        << "    YUnits         : " << a.yUnits << "\n"
+        << "    ZUnits         : " << a.zUnits << "\n";
+    for (size_t i = 0; i < a.parameter.size(); ++i)
+    {
+        os << "    Parameter Name : " << a.parameter[i].getName() << "\n"
+            << "    Parameter Value : " << a.parameter[i].str() << "\n";
+    }
+    return os;
+}
+
+
+std::ostream& operator<< (std::ostream& os, const SupportArray& s)
+{
+    os << "SupportArray:: \n";
+    for (size_t i = 0; i < s.iazArray.size(); ++i)
+    {
+        os << "  IAZ Array:: \n"
+            << s.iazArray[i];
+    }
+    for (size_t i = 0; i < s.antGainPhase.size(); ++i)
+    {
+        os << "  Ant Gain Phase:: \n"
+            << s.antGainPhase[i];
+    }
+    for (size_t i = 0; i < s.addedSupportArray.size(); ++i)
+    {
+        os << "  Added Support Array:: \n"
+            << s.addedSupportArray[i];
+    }
+    return os;
+}
+
 }

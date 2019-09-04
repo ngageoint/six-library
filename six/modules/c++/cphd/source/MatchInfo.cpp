@@ -32,6 +32,7 @@ MatchInfo::MatchInfo():
 
 MatchType::MatchType():
     typeID(six::Init::undefined<std::string>()),
+    index(six::Init::undefined<size_t>()),
     currentIndex(six::Init::undefined<size_t>()),
     numMatchCollections(six::Init::undefined<size_t>())
 {
@@ -39,6 +40,7 @@ MatchType::MatchType():
 
 MatchCollection::MatchCollection():
     coreName(six::Init::undefined<std::string>()),
+    index(six::Init::undefined<size_t>()),
     matchIndex(six::Init::undefined<size_t>())
 {
 }
@@ -76,7 +78,6 @@ std::ostream& operator<< (std::ostream& os, const MatchType& m)
     return os;
 }
 
-
 std::ostream& operator<< (std::ostream& os, const MatchInfo& m)
 {
     os << "MatchInfo::\n"
@@ -87,6 +88,4 @@ std::ostream& operator<< (std::ostream& os, const MatchInfo& m)
     }
     return os;
 }
-
-
 }

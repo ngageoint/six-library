@@ -25,6 +25,7 @@
 
 namespace cphd
 {
+
 Data::Data() :
     numBytesPVP(0)
 {
@@ -46,6 +47,7 @@ Data::SupportArray::SupportArray() :
     arrayByteOffset(0)
 {
 }
+
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
 {
     os << "  SupportArray:: \n"

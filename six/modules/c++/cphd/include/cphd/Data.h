@@ -33,12 +33,23 @@
 namespace cphd
 {
 
+/*
+ * Parameter that describes binary data components
+ * contained in the product.
+ * See section 2.3 through 2.6
+ */
 struct Data
 {
     // There's another SupportArray type in the Metadata,
     // so hiding this inside Data
     struct SupportArray
     {
+        /*
+         * (Optional) SUpport Array size parameters. 
+         * Branch repeated for each binary support array
+         * Support array referenced by its unique 
+         * support array identifier SA_ID
+         */
         SupportArray();
 
         bool operator==(const SupportArray& other) const
@@ -63,6 +74,11 @@ struct Data
     };
 
 
+    /*
+     * Paramters that define the Channel signal array and
+     * PVP array size and location.
+     * See section 2.4 and 2.5
+     */
     // There's another Channel type in the Metadata,
     // so hiding this inside Data
     struct Channel
@@ -96,38 +112,10 @@ struct Data
 
     bool operator==(const Data& other) const
     {
-        if (!(signalArrayFormat == other.signalArrayFormat &&
+        return signalArrayFormat == other.signalArrayFormat &&
                numBytesPVP == other.numBytesPVP &&
-               signalCompressionID == other.signalCompressionID))
-        {
-            return false;
-        }
-
-        if (channels.size() != other.channels.size())
-        {
-            return false;
-        }
-        for (size_t ii = 0; ii < channels.size(); ++ii)
-        {
-            if (channels[ii] != other.channels[ii])
-            {
-                return false;
-            }
-        }
-
-        if (supportArrays.size() != other.supportArrays.size())
-        {
-            return false;
-        }
-        for (size_t ii = 0; ii < supportArrays.size(); ++ii)
-        {
-            if (supportArrays[ii] != other.supportArrays[ii])
-            {
-                return false;
-            }
-        }
-
-        return true;
+               signalCompressionID == other.signalCompressionID &&
+               channels == other.channels && supportArrays == other.supportArrays;
     }
 
     bool operator!=(const Data& other) const
@@ -141,6 +129,7 @@ struct Data
     std::string signalCompressionID;
     std::vector<SupportArray> supportArrays;
 };
+
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s);
 std::ostream& operator<< (std::ostream& os, const Data::Channel& c);
 std::ostream& operator<< (std::ostream& os, const Data& d);

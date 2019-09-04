@@ -35,9 +35,11 @@
 namespace cphd
 {
 
+/*
+ * Block containing information about match collection mc
+ */
 struct MatchCollection
 {
-
     MatchCollection();
 
     bool operator==(const MatchCollection& other) const
@@ -58,9 +60,11 @@ struct MatchCollection
     six::ParameterCollection parameter;
 };
 
+/*
+ * Block containing information about match type mt
+ */
 struct MatchType
 {
-
     MatchType();
 
     bool operator==(const MatchType& other) const
@@ -83,11 +87,13 @@ struct MatchType
     std::vector<MatchCollection> matchCollection;
 };
 
-
-
+/*
+ * (Optional) Information about other collections that are matched 
+ * to the collection from which this CPHD product was generated
+ * See section 5.2.3
+ */
 struct MatchInfo
 {
-
     MatchInfo();
 
     bool operator==(const MatchInfo& other) const

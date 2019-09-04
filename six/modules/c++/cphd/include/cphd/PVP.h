@@ -26,21 +26,13 @@
 #include <vector>
 #include <stddef.h>
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
 
 namespace cphd
 {
-/*!
- *  \struct CollectionID
- *  \brief CollectionID parameter
- *
- *  Collection ID used by CPHD, representing the tag
- *  <CollectionID>. This block contains general information about
- *  the collection.
- */
 struct PVPType
 {
     PVPType();
@@ -83,12 +75,15 @@ struct APVPType : PVPType
     std::string name;
 };
 
-
+/*
+ * 
+ */
 struct Pvp
 {
     //!  Constructor
     Pvp()
-    {}
+    {
+    }
 
     /*!
      * Transmit time for the center of the transmitted pulse relative to the
@@ -145,7 +140,7 @@ struct Pvp
      * vector. For signal vector v, each sample value is multiplied by
      * Amp_SF(v) to yield the proper sample values for the vector. 
      */
-    PVPType ampSF;
+    mem::ScopedCopyablePtr<PVPType> ampSF;
 
     /*!
      * The DOPPLER shift micro parameter. Parameter accounts for the
@@ -188,22 +183,22 @@ struct Pvp
     PVPType fx2;
 
     /*!
-     * The FX domain frequency limits for out-of-band noise signal for
+     * (Optional) The FX domain frequency limits for out-of-band noise signal for
      * frequencies below fx_1(v) and above fx_2(v). May ONLY be
      * included for Domain_Type = FX.
      * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      * When included in a product, fx_N1 & fx_N2 are both included.
     */
-    PVPType fxN1;
+    mem::ScopedCopyablePtr<PVPType> fxN1;
 
     /*!
-     * The FX domain frequency limits for out-of-band noise signal for
+     * (Optional) The FX domain frequency limits for out-of-band noise signal for
      * frequencies below fx_1(v) and above fx_2(v). May ONLY be
      * included for Domain_Type = FX.
      * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      * When included in a product, fx_N1 & fx_N2 are both included.
     */
-    PVPType fxN2;
+    mem::ScopedCopyablePtr<PVPType> fxN2;
 
     /*!
      * The  change in toa limits for the full resolution echoes retained in the
@@ -221,20 +216,50 @@ struct Pvp
      */
     PVPType toa2;
 
+    /*!
+     * (Optional) The TOA limits for all echoes retained in the signal vector (sec).
+     */
+    mem::ScopedCopyablePtr<PVPType> toaE1;
 
-    PVPType toaE1;
-    PVPType toaE2;
+    /*!
+     * (Optional) The TOA limits for all echoes retained in the signal vector (sec).
+     */
+    mem::ScopedCopyablePtr<PVPType> toaE2;
+
+    /*!
+     * Two-way time delay due to the troposphere (sec) that was added
+     * when computing the propagation time for the SRP
+     */
     PVPType tdTropoSRP;
-    PVPType tdIonoSRP;
+
+    /*
+     * (Optional) Two-way time delay due to the ionosphere (sec) that was added
+     * when computing the propagation time for the SRP 
+     */
+    mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
+
+    /*
+     * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
+     * sample s = 0 (Hz).
+     */
     PVPType sc0;
-    PVPType scSS;
-    PVPType signal;
+
+    /*
+     * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
+     * signal coordinate sample spacing (Hz).
+     */
+    PVPType scss;
+
+    /*
+     * (Optional) Integer parameter that may be included to indicate the signal
+     * content for some vectors is known or is likely to be distorted.
+     */
+    mem::ScopedCopyablePtr<PVPType> signal;
+
+    /*
+     * (Optional) User defined PV parameters
+     */
     std::vector<APVPType> addedPVP;
-
-
-    //!  Destructor
-    virtual ~Pvp()
-    {}
 
     bool operator==(const Pvp& other) const
     {
@@ -246,7 +271,7 @@ struct Pvp
                 fx1 == other.fx1 && fx2 == other.fx2 &&
                 toa1 == other.toa1 && toa2 == other.toa2 &&
                 tdTropoSRP == other.tdTropoSRP && sc0 == other.sc0 &&
-                scSS == other.scSS &&
+                scss == other.scss &&
                 ampSF == other.ampSF && fxN1 == other. fxN1 &&
                 fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                 toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&

@@ -33,9 +33,16 @@
 
 namespace cphd
 {
+/*
+ * (Optional) Parameters that provide general information about the
+ * CPHD product and/or the derived products that may be created from it
+ */
 struct ProductInfo
 {
-
+    /*
+     * (Optional) Parameters that provide general information about
+     * the CPHD product generation
+     */
     struct CreationInfo
     {
         CreationInfo();
@@ -72,7 +79,6 @@ struct ProductInfo
     std::vector<CreationInfo> creationInfo;
     six::ParameterCollection parameter;
 };
-
 
 std::ostream& operator<< (std::ostream& os, const ProductInfo& p);
 }

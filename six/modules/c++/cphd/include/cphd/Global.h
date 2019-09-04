@@ -33,6 +33,10 @@
 
 namespace cphd
 {
+/*
+ * Parameters that describe the collection times for
+ * the data contained in the product
+ */
 struct Timeline
 {
     Timeline();
@@ -56,6 +60,10 @@ struct Timeline
     double txTime2;
 };
 
+/*
+ * Parameters that describe the FX frequency limits
+ * for the signal array(s) contained in the product
+ */
 struct FxBand
 {
     FxBand();
@@ -75,6 +83,10 @@ struct FxBand
     double fxMax;
 };
 
+/*
+ * Parameters that describe the TOA swath limits
+ * for the signal array(s) contained in the product
+ */
 struct TOASwath
 {
     TOASwath();
@@ -94,6 +106,10 @@ struct TOASwath
     double toaMax;
 };
 
+/*
+ * (Optional) Parameters that compute the propogation
+ * delay due to the troposphere
+ */
 struct TropoParameters
 {
     TropoParameters();
@@ -112,6 +128,10 @@ struct TropoParameters
     RefHeight refHeight;
 };
 
+/*
+ * (Optional) Parameters that compute the propogation
+ * delay due to the ionosphere
+ */
 struct IonoParameters
 {
     IonoParameters();
@@ -130,7 +150,10 @@ struct IonoParameters
     double f2Height;
 };
 
-
+/*
+ * Global parameters that apply to metadata components
+ * and CPHD signal arrays
+ */
 struct Global
 {
     Global();

@@ -80,7 +80,7 @@ struct AdditionalSupportArray : SupportArrayParameter
 
     bool operator==(const AdditionalSupportArray& other) const
     {
-        return this->identifier == other.identifier &&
+        return identifier == other.identifier &&
                 elementFormat == other.elementFormat &&
                 x0 == other.x0 && y0 == other.y0 &&
                 xSS == other.xSS && ySS == other.ySS &&
@@ -101,6 +101,11 @@ struct AdditionalSupportArray : SupportArrayParameter
 
 };
 
+/*
+ * (Optional) Parameters that describe the binary support
+ * array(s) content and grid coordinates.
+ * See section 2.3
+ */
 struct SupportArray
 {
     bool operator==(const SupportArray& other) const

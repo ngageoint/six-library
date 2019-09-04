@@ -34,11 +34,11 @@
 
 namespace cphd
 {
-
+/*
+ * Extension of LatLon Type that stores an index attribute
+ */
 struct LatLonIndexType : LatLon
 {
-public:
-
     bool operator==(const LatLonIndexType& other) const
     {
         return index == other.index && mLat == other.mLat &&
@@ -53,6 +53,10 @@ public:
     size_t index;
 };
 
+/*
+ * Used to specify a linear feature with connected line segments
+ * Requires NumEndpoints >= 2
+ */
 struct LineType
 {
     LineType();
@@ -68,12 +72,15 @@ struct LineType
         return !((*this) == other);
     }
 
-
     size_t numEndpoints;
     std::vector<LatLonIndexType> endpoint;
 
 };
 
+/*
+ * Used to specify an area with a polygon
+ * Requires NumVertices >= 3
+ */
 struct PolygonType
 {
     PolygonType();
@@ -89,17 +96,21 @@ struct PolygonType
         return !((*this) == other);
     }
 
-
     size_t numVertices;
     std::vector<LatLonIndexType> vertex;
 };
 
-
+/*
+ * Parameter block that describes a geographic feature.
+ * GeoInfo branch may be repeated.
+ * See section 5.2.2
+ */
 struct GeoInfo
 {
     GeoInfo();
 
-    GeoInfo(std::string);
+    // Custom constructor
+    GeoInfo(std::string name);
 
     bool operator==(const GeoInfo& other) const
     {
@@ -130,6 +141,7 @@ struct GeoInfo
     std::vector<GeoInfo> geoInfo;
 
 private:
+    //Geographic feature name attribute
     std::string mName;
 };
 

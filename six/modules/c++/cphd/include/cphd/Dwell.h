@@ -34,6 +34,9 @@
 namespace cphd
 {
 
+/*
+ * Dwell Time Polynomial
+ */
 struct DwellTime 
 {
     DwellTime();
@@ -48,11 +51,13 @@ struct DwellTime
         return !((*this) == other);
     }
 
-
     std::string identifier;
     Poly2D dwellTimePoly;
 };
 
+/*
+ * Center of Dwell Time Polynomial
+ */
 struct COD
 {
     COD();
@@ -71,6 +76,11 @@ struct COD
     Poly2D codTimePoly;
 };
 
+/*
+ * Parameters that specify the dwell time supported by the signal arrays
+ * contained in the CPHD product
+ * See section 7.3
+ */
 struct Dwell
 {
     Dwell();

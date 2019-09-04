@@ -25,6 +25,7 @@
 #define __CPHD_SCENE_COORDINATES_H__
 
 #include <ostream>
+#include <vector>
 
 #include <mem/ScopedCopyablePtr.h>
 #include <cphd/Enums.h>
@@ -131,30 +132,30 @@ struct LineSample
 
     bool operator==(const LineSample& other) const
     {
-        return line == other.line && sample == other.sample;
+        return index == other.index && line == other.line && sample == other.sample;
     }
 
     bool operator!=(const LineSample& other) const
     {
         return !((*this) == other);
     }
-
+    size_t index;
     double line;
     double sample;
 };
 
-struct ImageAreaExtent
+struct ImageAreaXExtent
 {
-    ImageAreaExtent();
+    ImageAreaXExtent();
 
-    bool operator==(const ImageAreaExtent& other) const
+    bool operator==(const ImageAreaXExtent& other) const
     {
         return lineSpacing == other.lineSpacing &&
                firstLine == other.firstLine &&
                numLines == other.numLines;
     }
 
-    bool operator!=(const ImageAreaExtent& other) const
+    bool operator!=(const ImageAreaXExtent& other) const
     {
         return !((*this) == other);
     }
@@ -164,33 +165,38 @@ struct ImageAreaExtent
     size_t numLines;
 };
 
+struct ImageAreaYExtent
+{
+    ImageAreaYExtent();
+
+    bool operator==(const ImageAreaYExtent& other) const
+    {
+        return sampleSpacing == other.sampleSpacing &&
+               firstSample == other.firstSample &&
+               numSamples == other.numSamples;
+    }
+
+    bool operator!=(const ImageAreaYExtent& other) const
+    {
+        return !((*this) == other);
+    }
+
+    double sampleSpacing;
+    int firstSample;
+    size_t numSamples;
+};
+
 struct Segment
 {
     Segment();
+
     bool operator==(const Segment& other) const
     {
-        if (!(startLine == other.startLine &&
+        return startLine == other.startLine &&
                startSample == other.startSample &&
                endLine == other.endLine &&
-               endSample == other.endSample))
-        {
-            return false;
-        }
-
-        if (polygon.size() != other.polygon.size())
-        {
-            return false;
-        }
-
-        for (size_t ii = 0; ii < polygon.size(); ++ii)
-        {
-            if (polygon[ii] != other.polygon[ii])
-            {
-                return false;
-            }
-        }
-
-        return true;
+               endSample == other.endSample &&
+               polygon == other.polygon;
     }
 
     bool operator!=(const Segment& other) const
@@ -202,6 +208,8 @@ struct Segment
     int startSample;
     int endLine;
     int endSample;
+    std::string identifier;
+    size_t size;
     std::vector<LineSample> polygon;
 };
 
@@ -211,26 +219,11 @@ struct ImageGrid
 
     bool operator==(const ImageGrid& other) const
     {
-        if (segments.size() != other.segments.size())
-        {
-            return false;
-        }
-        if (!(identifier == other.identifier &&
+        return identifier == other.identifier &&
               iarpLocation == other.iarpLocation &&
               xExtent == other.xExtent &&
-              yExtent == other.yExtent))
-        {
-            return false;
-        }
-
-        for (size_t ii = 0; ii < segments.size(); ++ii)
-        {
-            if (segments[ii] != other.segments[ii])
-            {
-                return false;
-            }
-        }
-        return true;
+              yExtent == other.yExtent && 
+              segments == other.segments;
     }
 
     bool operator!=(const ImageGrid& other) const
@@ -240,8 +233,8 @@ struct ImageGrid
 
     std::string identifier;
     LineSample iarpLocation;
-    ImageAreaExtent xExtent;
-    ImageAreaExtent yExtent;
+    ImageAreaXExtent xExtent;
+    ImageAreaYExtent yExtent;
     std::vector<Segment> segments;
 };
 
@@ -282,7 +275,8 @@ std::ostream& operator<< (std::ostream& os, const HAE& d);
 std::ostream& operator<< (std::ostream& os, const AreaType& d);
 std::ostream& operator<< (std::ostream& os, const ImageGrid& d);
 std::ostream& operator<< (std::ostream& os, const LineSample& d);
-std::ostream& operator<< (std::ostream& os, const ImageAreaExtent& d);
+std::ostream& operator<< (std::ostream& os, const ImageAreaXExtent& d);
+std::ostream& operator<< (std::ostream& os, const ImageAreaYExtent& d);
 std::ostream& operator<< (std::ostream& os, const Segment& d);
 }
 
