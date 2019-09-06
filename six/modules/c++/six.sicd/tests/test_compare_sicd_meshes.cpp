@@ -298,7 +298,6 @@ int main(int argc, char** argv)
 
         if (baselineScalarMesh.get() && testScalarMesh.get())
         {
-
             std::cout << "Comparing Scalar Meshes..." << std::endl;
             if (!compareScalarMeshes(baselineSicdPathname,
                                      *baselineScalarMesh,
