@@ -73,6 +73,7 @@ bool compareMeshData(const std::string& baselineSicdPathname,
         std::cerr << "Failure - Dimensions (row = " << dims.row << ", col = "
                   << dims.col << ") do not match num elements in mesh ("
                   << baselineData.size() << " elements)." << std::endl;
+
         return false;
     }
 
@@ -88,6 +89,7 @@ bool compareMeshData(const std::string& baselineSicdPathname,
                           << baselineSicdPathname << " value = "
                           << baselineData[idx] << ", " << testSicdPathname
                           << " value = " << testData[idx] << std::endl;
+
                 return false;
             }
         }
@@ -102,6 +104,30 @@ bool comparePlanarCoordinateMeshes(
         const std::string& testSicdPathname,
         const six::sicd::PlanarCoordinateMesh& testMesh)
 {
+    std::cout << "Comparing X coordinates..." << std::endl;
+    bool success = compareMeshData(
+            baselineSicdPathname,
+            baselineMesh.getX(),
+            testSicdPathname,
+            testMesh.getX(),
+            testMesh.getMeshDims());
+
+    std::cout << "Comparing Y coordinates..." << std::endl;
+    success &= compareMeshData(
+            baselineSicdPathname,
+            baselineMesh.getY(),
+            testSicdPathname,
+            testMesh.getY(),
+            testMesh.getMeshDims());
+
+    return success;
+}
+
+bool compareNoiseMeshes(const std::string& baselineSicdPathname,
+                        const six::sicd::NoiseMesh& baselineMesh,
+                        const std::string& testSicdPathname,
+                        const six::sicd::NoiseMesh& testMesh)
+{
     if (!compareMeshDims(baselineSicdPathname,
                          baselineMesh,
                          testSicdPathname,
@@ -110,74 +136,37 @@ bool comparePlanarCoordinateMeshes(
         return false;
     }
 
-    std::cout << "Comparing X coordinates..." << std::endl;
-    if (!compareMeshData(baselineSicdPathname,
-                         baselineMesh.getX(),
-                         testSicdPathname,
-                         testMesh.getX(),
-                         testMesh.getMeshDims()))
-    {
-        return false;
-    }
-
-    std::cout << "Comparing Y coordinates..." << std::endl;
-    if (!compareMeshData(baselineSicdPathname,
-                         baselineMesh.getY(),
-                         testSicdPathname,
-                         testMesh.getY(),
-                         testMesh.getMeshDims()))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-bool compareNoiseMeshes(const std::string& baselineSicdPathname,
-                        const six::sicd::NoiseMesh& baselineMesh,
-                        const std::string& testSicdPathname,
-                        const six::sicd::NoiseMesh& testMesh)
-{
-
-    if (!comparePlanarCoordinateMeshes(baselineSicdPathname,
-                                       baselineMesh,
-                                       testSicdPathname,
-                                       testMesh))
-    {
-        return false;
-    }
+    bool success = comparePlanarCoordinateMeshes(
+            baselineSicdPathname,
+            baselineMesh,
+            testSicdPathname,
+            testMesh);
 
     std::cout << "Comparing azimuth ambiguity noise data..." << std::endl;
-    if (!compareMeshData(baselineSicdPathname,
-                         baselineMesh.getAzimuthAmbiguityNoise(),
-                         testSicdPathname,
-                         testMesh.getAzimuthAmbiguityNoise(),
-                         testMesh.getMeshDims()))
-    {
-        return false;
-    }
+    success &= compareMeshData(
+            baselineSicdPathname,
+            baselineMesh.getAzimuthAmbiguityNoise(),
+            testSicdPathname,
+            testMesh.getAzimuthAmbiguityNoise(),
+            testMesh.getMeshDims());
 
     std::cout << "Comparing combined noise data..." << std::endl;
-    if (!compareMeshData(baselineSicdPathname,
-                         baselineMesh.getCombinedNoise(),
-                         testSicdPathname,
-                         testMesh.getCombinedNoise(),
-                         testMesh.getMeshDims()))
-    {
-        return false;
-    }
+    success &= compareMeshData(
+            baselineSicdPathname,
+            baselineMesh.getCombinedNoise(),
+            testSicdPathname,
+            testMesh.getCombinedNoise(),
+            testMesh.getMeshDims());
 
     std::cout << "Comparing main beam noise data..." << std::endl;
-    if (!compareMeshData(baselineSicdPathname,
-                         baselineMesh.getMainBeamNoise(),
-                         testSicdPathname,
-                         testMesh.getMainBeamNoise(),
-                         testMesh.getMeshDims()))
-    {
-        return false;
-    }
+    success &= compareMeshData(
+            baselineSicdPathname,
+            baselineMesh.getMainBeamNoise(),
+            testSicdPathname,
+            testMesh.getMainBeamNoise(),
+            testMesh.getMeshDims());
 
-    return true;
+    return success;
 }
 
 bool compareScalarMeshes(const std::string& baselineSicdPathname,
@@ -185,13 +174,19 @@ bool compareScalarMeshes(const std::string& baselineSicdPathname,
                          const std::string& testSicdPathname,
                          const six::sicd::ScalarMesh& testMesh)
 {
-    if (!comparePlanarCoordinateMeshes(baselineSicdPathname,
-                                       baselineMesh,
-                                       testSicdPathname,
-                                       testMesh))
+    if (!compareMeshDims(baselineSicdPathname,
+                         baselineMesh,
+                         testSicdPathname,
+                         testMesh))
     {
         return false;
     }
+
+    bool success = comparePlanarCoordinateMeshes(
+            baselineSicdPathname,
+            baselineMesh,
+            testSicdPathname,
+            testMesh);
 
     const ScalarDataMap& baselineScalars = baselineMesh.getScalars();
     const ScalarDataMap& testScalars = baselineMesh.getScalars();
@@ -202,43 +197,41 @@ bool compareScalarMeshes(const std::string& baselineSicdPathname,
                   << baselineScalars.size() << " meshes, " << testSicdPathname
                   << " has " << testScalars.size() << " meshes" << std::endl;
 
-        return false;
+        success = false;
     }
 
     ScalarDataMap::const_iterator it = baselineScalars.begin();
     for (; it != baselineScalars.end(); ++it)
     {
         std::cout << "Comparing " << it->first << " meshes." << std::endl;
-
         ScalarDataMap::const_iterator testIt = testScalars.find(it->first);
         if (testIt == testScalars.end())
         {
             std::cerr << "Failure - Mesh not found in " << testSicdPathname
                       << std::endl;
-            return false;
+            success = false;
+            continue;
         }
 
         const std::vector<double>& baselineScalarData = it->second;
         const std::vector<double>& testScalarData = testIt->second;
-        if (!compareMeshData(baselineSicdPathname,
-                             baselineScalarData,
-                             testSicdPathname,
-                             testScalarData,
-                             testMesh.getMeshDims()))
-        {
-            return false;
-        }
+        success &= compareMeshData(
+                baselineSicdPathname,
+                baselineScalarData,
+                testSicdPathname,
+                testScalarData,
+                testMesh.getMeshDims());
     }
 
-    return true;
+    return success;
 }
 
 void readMeshes(const std::string& sicdPathname,
                 std::auto_ptr<six::sicd::NoiseMesh>& noiseMesh,
                 std::auto_ptr<six::sicd::ScalarMesh>& scalarMesh)
 {
-    const size_t orderX = 4;
-    const size_t orderY = 4;
+    const size_t orderX = 3;
+    const size_t orderY = 3;
 
     std::auto_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > widebandData;
@@ -270,7 +263,7 @@ std::auto_ptr<cli::Results> parseCommandLine(int argc, char** argv)
                        cli::STORE,
                        "baselineSicdPathname",
                        "SICD",
-                       1 ,
+                       1,
                        1);
 
     parser.addArgument("testSicdPathname",
@@ -278,7 +271,7 @@ std::auto_ptr<cli::Results> parseCommandLine(int argc, char** argv)
                        cli::STORE,
                        "testSicdPathname",
                        "SICD",
-                       1 ,
+                       1,
                        1);
 
     return std::auto_ptr<cli::Results>(parser.parse(argc, argv));
@@ -341,23 +334,19 @@ int main(int argc, char** argv)
 
         std::cout << "Success - mesh data matches." << std::endl;
         return 0;
-
     }
     catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
-        return 1;
     }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
-        return 1;
     }
     catch (...)
     {
         std::cerr << "Unknown exception" << std::endl;
-        return 1;
     }
 
-    return 0;
+    return 1;
 }
