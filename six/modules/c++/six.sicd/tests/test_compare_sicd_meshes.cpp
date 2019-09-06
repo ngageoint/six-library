@@ -136,7 +136,7 @@ bool compareNoiseMeshes(const std::string& baselineSicdPathname,
         return false;
     }
 
-    std::cout << "Comparing combined noise mesh data..." << std::endl;
+    std::cout << "Comparing combined noise data..." << std::endl;
     if (!compareMeshData(baselineSicdPathname,
                          baselineMesh.getCombinedNoise(),
                          testSicdPathname,
@@ -240,7 +240,6 @@ void readMeshes(const std::string& sicdPathname,
 std::auto_ptr<cli::Results> parseCommandLine(int argc, char** argv)
 {
     cli::ArgumentParser parser;
-
     parser.setDescription("Reads the full meshes from two SICDs and compares"
                           " them, failing if any of the fields"
                           " differ, succeeding if all fields match.");
@@ -270,7 +269,6 @@ int main(int argc, char** argv)
     try
     {
         std::auto_ptr<cli::Results> options = parseCommandLine(argc, argv);
-
         const std::string baselineSicdPathname =
                 options->get<std::string>("baselineSicdPathname");
 
