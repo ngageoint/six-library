@@ -77,6 +77,7 @@ bool compareMeshData(const std::string& baselineSicdPathname,
         return false;
     }
 
+    bool success = true;
     for (size_t row = 0; row < dims.row; ++row)
     {
         for (size_t col = 0; col < dims.col; ++col)
@@ -90,12 +91,12 @@ bool compareMeshData(const std::string& baselineSicdPathname,
                           << baselineData[idx] << ", " << testSicdPathname
                           << " value = " << testData[idx] << std::endl;
 
-                return false;
+                success = false;
             }
         }
     }
 
-    return true;
+    return success;
 }
 
 bool comparePlanarCoordinateMeshes(
@@ -302,24 +303,20 @@ int main(int argc, char** argv)
                    testScalarMesh);
 
         std::cout << "Comparing Noise Meshes..." << std::endl;
-        if (!compareNoiseMeshes(baselineSicdPathname,
-                                *baselineNoiseMesh,
-                                testSicdPathname,
-                                *testNoiseMesh))
-        {
-            return 1;
-        }
+        bool success = compareNoiseMeshes(
+                baselineSicdPathname,
+                *baselineNoiseMesh,
+                testSicdPathname,
+                *testNoiseMesh);
 
         if (baselineScalarMesh.get() && testScalarMesh.get())
         {
             std::cout << "Comparing Scalar Meshes..." << std::endl;
-            if (!compareScalarMeshes(baselineSicdPathname,
-                                     *baselineScalarMesh,
-                                     testSicdPathname,
-                                     *testScalarMesh))
-            {
-                return 1;
-            }
+            success &= compareScalarMeshes(
+                    baselineSicdPathname,
+                    *baselineScalarMesh,
+                    testSicdPathname,
+                    *testScalarMesh);
         }
         else if (baselineScalarMesh.get() || testScalarMesh.get())
         {
@@ -329,6 +326,11 @@ int main(int argc, char** argv)
 
             std::cerr << "Failure - scalar mesh not found in "
                       << missingScalarMeshPathname << std::endl;
+            success = false;
+        }
+
+        if (!success)
+        {
             return 1;
         }
 
