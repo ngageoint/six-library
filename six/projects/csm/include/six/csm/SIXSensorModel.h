@@ -361,14 +361,6 @@ public: // GeometricModel methods
 
 public: // RasterGM methods
     /**
-    * Returns the starting coordinate for the imaging operation.
-    * In case you have a chipped image, this will return the pixel
-    * offset to the chip.
-    * \return starting coordinate for the imaging operation
-    */
-   virtual csm::ImageCoord getImageStart() const = 0;
-
-    /**
      * Converts groundPt in ground space (ECEF) to returned ImageCoord in image
      * space.
      *

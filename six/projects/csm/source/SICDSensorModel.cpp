@@ -383,6 +383,13 @@ csm::ImageVector SICDSensorModel::getImageSize() const
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
 }
 
+/*
+ * CSM works with full image coordinates.  So when working with
+ * a chipped image, the start would be the offset from the full
+ * top-left to the chip.
+ *
+ * See discussion https://github.com/ngageoint/six-library/issues/279
+ */
 csm::ImageCoord SICDSensorModel::getImageStart() const
 {
     return csm::ImageCoord(mData->imageData->firstRow,
