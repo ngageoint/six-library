@@ -127,29 +127,23 @@ private:
 
         for (size_t ii = 0; ii < offsets.size(); ++ii)
         {
-            six::RowColDouble convertedImagePoint =
+            const six::RowColDouble convertedImagePoint =
                     groundToImage(*model, scp, offsets[ii]);
-            convertedImagePoint.row += mComplexData->imageData->firstRow;
-            convertedImagePoint.col += mComplexData->imageData->firstCol;
 
-            six::RowColDouble doubleImagePoint(
+            const six::RowColDouble doubleImagePoint(
                     static_cast<double>(scpPixel.row),
                     static_cast<double>(scpPixel.col));
 
-            six::RowColDouble imagePointDifference = absoluteDifference(
+            const six::RowColDouble imagePointDifference = absoluteDifference(
                     convertedImagePoint, doubleImagePoint);
             imageDifferences[ii] = std::max(imagePointDifference.row,
                     imagePointDifference.col);
 
-            six::RowColInt adjustedScpPixel(
-                    scpPixel.row - mComplexData->imageData->firstRow,
-                    scpPixel.col - mComplexData->imageData->firstCol);
-
-            scene::Vector3 convertedGroundPoint =
-                    imageToGround(*model, adjustedScpPixel, height,
+            const scene::Vector3 convertedGroundPoint =
+                    imageToGround(*model, scpPixel, height,
                     offsets[ii]);
 
-            scene::Vector3 groundPointDifference = absoluteDifference(
+            const scene::Vector3 groundPointDifference = absoluteDifference(
                     convertedGroundPoint, scp.ecf);
             groundDifferences[ii] = std::max(groundPointDifference[0],
                     std::max(groundPointDifference[1],
@@ -253,7 +247,6 @@ int main(int argc, char** argv)
 
         Test test(sicdPathname, confDir, plugin);
         const bool testPassed = test.testFileISD() && test.testNitfISD();
-
         return testPassed ? 0 : 1;
     }
 

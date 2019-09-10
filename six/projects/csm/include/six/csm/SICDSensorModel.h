@@ -148,6 +148,14 @@ public: // GeometricModel methods
 
 public: // RasterGM methods
     /**
+    * Returns the starting coordinate for the imaging operation.
+    * In case you have a chipped image, this will return the pixel
+    * offset to the chip.
+    * \return starting coordinate for the imaging operation
+    */
+   virtual csm::ImageCoord getImageStart() const;
+
+    /**
      * Returns the number of lines and samples in full image space pixels for
      * the imaging operation.
      *
@@ -159,24 +167,8 @@ protected:
     virtual six::DateTime getReferenceDateAndTimeImpl() const;
 
 private:
-    /**
-     * Transforms the given l, s values from units of meters with the origin
-     * at the center of the image to pixels from upper left.
-     *
-     * \param[in] l     Line position in terms of meters from the image center
-     * \param[in] s     Sample position in terms of meters from the image center
-     * \return A types::RowCol<double> containing the distance in pixels from the upper left of the image
-     */
     virtual types::RowCol<double> toPixel(const types::RowCol<double>& pos) const;
 
-    /**
-     * Transforms the given l, s values from units of pixels from upper left
-     * to meters with the origin at the center of the image.
-     *
-     * \param[in] l     Line position in terms of pixels from upper left
-     * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A types::RowCol<double> containing the distance in meters from the center of the image
-     */
     virtual types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
 
     void replaceModelStateImpl(const std::string& sensorModelState);
