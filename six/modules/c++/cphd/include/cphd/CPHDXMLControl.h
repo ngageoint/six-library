@@ -168,8 +168,8 @@ private:
     void parseIAExtent(const XMLElem extentXML, ImageAreaYExtent& extent) const;
     void parseChannelParameters(const XMLElem paramXML,
                                 ChannelParameter& param) const;
-    void parsePVPType(const XMLElem paramXML, PVPType& param) const;
-    void parsePVPType(const XMLElem paramXML, APVPType& param) const;
+    void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
+    void parsePVPType(Pvp& p, const XMLElem paramXML, size_t idx) const;
     void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
     void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
     void parseDecorr(const XMLElem decorrXML, Decorr& decorr) const;

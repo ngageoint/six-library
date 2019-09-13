@@ -100,6 +100,11 @@ struct Data
             return !((*this) == other);
         }
 
+        size_t getNumVectors() const
+        {
+            return numVectors;
+        }
+
         std::string identifier;
         size_t numVectors;
         size_t numSamples;
@@ -121,6 +126,16 @@ struct Data
     bool operator!=(const Data& other) const
     {
         return !((*this) == other);
+    }
+
+    size_t getNumChannels()
+    {
+        return channels.size();
+    }
+
+    size_t getNumBytesPVP()
+    {
+        return numBytesPVP;
     }
 
     SignalArrayFormat signalArrayFormat;

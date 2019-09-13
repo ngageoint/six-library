@@ -27,28 +27,129 @@ namespace cphd
 {
 
 PVPType::PVPType() :
-    size(0),
-    offset(six::Init::undefined<size_t>()),
-    format(six::Init::undefined<std::string>())
+    mSize(0),
+    mOffset(six::Init::undefined<size_t>()),
+    mFormat(six::Init::undefined<std::string>())
 {
 }
 
 APVPType::APVPType() :
-    name(six::Init::undefined<std::string>())
+    mName(six::Init::undefined<std::string>())
 {
+}
+
+Pvp::Pvp()
+{
+}
+
+
+Pvp::Pvp(size_t numAdditionalParams) :
+    addedPVP(numAdditionalParams)
+{
+}
+
+void Pvp::validate(size_t size, size_t offset)
+{
+    //Check if size of array is sufficient for write
+    if (offset + size > mParamLocations.size())
+    {
+        mParamLocations.resize(offset+size);
+    }
+
+    //Check if any blocks will be overwritten
+    for (size_t ii = 0; ii < size; ++ii)
+    {
+        if(mParamLocations[offset + ii] == true)
+        {
+            throw except::Exception(Ctxt(
+                                    "This byte block is occupied"));
+        }
+    }
+
+    // Mark each block as written
+    for (size_t ii = 0; ii < size; ++ii)
+    {
+        mParamLocations[offset + ii] = true;
+    }
+}
+
+void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format)
+{
+    validate(size, offset);
+    param.setData(size, offset, format);
+}
+
+// Assumes addedPVP is already correct size
+void Pvp::setData(size_t size, size_t offset, std::string format, std::string name, size_t idx)
+{
+    validate(size, offset);
+    if (idx >= addedPVP.size())
+    {
+        throw except::Exception(Ctxt(
+                                "Additional Parameter specified does not exist"));
+    }
+    addedPVP[idx].setData(size, offset, format);
+    addedPVP[idx].setName(name);
+}
+
+void Pvp::setNumAddedParameters(size_t size)
+{
+    addedPVP.resize(size);
+}
+
+size_t Pvp::getReqSetSize() const
+{
+    size_t res = txTime.getSize() + txPos.getSize() + txVel.getSize() +
+            rcvTime.getSize() + rcvPos.getSize() + rcvVel.getSize() + srpPos.getSize() +
+            aFDOP.getSize() + aFRR1.getSize() + aFRR2.getSize() + fx1.getSize() +
+            fx2.getSize() + toa1.getSize() + toa2.getSize() + tdTropoSRP.getSize() +
+            sc0.getSize() + scss.getSize();
+    if(ampSF.get())
+    {
+        res += ampSF->getSize();
+    }
+    if(fxN1.get())
+    {
+        res += fxN1->getSize();
+    }
+    if(fxN2.get())
+    {
+        res += fxN2->getSize();
+    }
+    if(toaE1.get())
+    {
+        res += toaE1->getSize();
+    }
+    if(toaE2.get())
+    {
+        res += toaE2->getSize();
+    }
+    if(tdIonoSRP.get())
+    {
+        res += tdIonoSRP->getSize();
+    }
+    if(signal.get())
+    {
+        res += signal->getSize();
+    }
+    for (size_t i = 0; i < addedPVP.size(); ++i)
+    {
+        res += addedPVP[i].getSize();
+    }
+    return res * 8; // Num Bytes
 }
 
 std::ostream& operator<< (std::ostream& os, const PVPType& p)
 {
-    os << "    Size           : " << p.size << "\n"
-        << "    Offset         : " << p.offset << "\n"
-        << "    Format         : " << p.format << "\n";
+    os << "    Size           : " << p.getSize() << "\n"
+        << "    Offset         : " << p.getOffset() << "\n"
+        << "    Format         : " << p.getFormat() << "\n";
     return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const APVPType& a)
 {
-    os << "    Name           : " << a.name << "\n"
+    os << "    Name           : " << a.getName() << "\n"
         << (PVPType)a;
 
     return os;
@@ -89,3 +190,5 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     return os;
 }
 }
+
+

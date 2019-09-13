@@ -409,9 +409,9 @@ XMLElem CPHDXMLControl::createPVPType(const std::string& name,
                             XMLElem parent) const
 {
     XMLElem pvpXML = newElement(name, parent);
-    createInt("Offset", p.offset, pvpXML);
-    createInt("Size", p.size, pvpXML);
-    createString("Format", p.format, pvpXML);
+    createInt("Offset", p.getOffset(), pvpXML);
+    createInt("Size", p.getSize(), pvpXML);
+    createString("Format", p.getFormat(), pvpXML);
     return pvpXML;
 }
 
@@ -420,10 +420,10 @@ XMLElem CPHDXMLControl::createAPVPType(const std::string& name,
                                 XMLElem parent) const
 {
     XMLElem apvpXML = newElement(name, parent);
-    createString("Name", p.name, apvpXML);
-    createInt("Offset", p.offset, apvpXML);
-    createInt("Size", p.size, apvpXML);
-    createString("Format", p.format, apvpXML);
+    createString("Name", p.getName(), apvpXML);
+    createInt("Offset", p.getOffset(), apvpXML);
+    createInt("Size", p.getSize(), apvpXML);
+    createString("Format", p.getFormat(), apvpXML);
     return apvpXML;
 }
 
@@ -1678,72 +1678,70 @@ void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
 void CPHDXMLControl::fromXML(const XMLElem pvpXML, Pvp& pvp)
 {
     std::vector<XMLElem> pvpTypeXML;
-    parsePVPType(getFirstAndOnly(pvpXML, "TxTime"), pvp.txTime);
-    parsePVPType(getFirstAndOnly(pvpXML, "TxPos"), pvp.txPos);
-    parsePVPType(getFirstAndOnly(pvpXML, "TxVel"), pvp.txVel);
-    parsePVPType(getFirstAndOnly(pvpXML, "RcvTime"), pvp.rcvTime);
-    parsePVPType(getFirstAndOnly(pvpXML, "RcvPos"), pvp.rcvPos);
-    parsePVPType(getFirstAndOnly(pvpXML, "RcvVel"), pvp.rcvVel);
-    parsePVPType(getFirstAndOnly(pvpXML, "SRPPos"), pvp.srpPos);
-    parsePVPType(getFirstAndOnly(pvpXML, "aFDOP"), pvp.aFDOP);
-    parsePVPType(getFirstAndOnly(pvpXML, "aFRR1"), pvp.aFRR1);
-    parsePVPType(getFirstAndOnly(pvpXML, "aFRR2"), pvp.aFRR2);
-    parsePVPType(getFirstAndOnly(pvpXML, "FX1"), pvp.fx1);
-    parsePVPType(getFirstAndOnly(pvpXML, "FX2"), pvp.fx2);
-
-    parsePVPType(getFirstAndOnly(pvpXML, "TOA1"), pvp.toa1);
-    parsePVPType(getFirstAndOnly(pvpXML, "TOA2"), pvp.toa2);
-    parsePVPType(getFirstAndOnly(pvpXML, "TDTropoSRP"), pvp.tdTropoSRP);
-    parsePVPType(getFirstAndOnly(pvpXML, "SC0"), pvp.sc0);
-    parsePVPType(getFirstAndOnly(pvpXML, "SCSS"), pvp.scss);
-
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxTime"), pvp.txTime);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxPos"), pvp.txPos);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxVel"), pvp.txVel);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "RcvTime"), pvp.rcvTime);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "RcvPos"), pvp.rcvPos);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "RcvVel"), pvp.rcvVel);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "SRPPos"), pvp.srpPos);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "aFDOP"), pvp.aFDOP);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "aFRR1"), pvp.aFRR1);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "aFRR2"), pvp.aFRR2);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "FX1"), pvp.fx1);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "FX2"), pvp.fx2);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TOA1"), pvp.toa1);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TOA2"), pvp.toa2);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "TDTropoSRP"), pvp.tdTropoSRP);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "SC0"), pvp.sc0);
+    parsePVPType(pvp, getFirstAndOnly(pvpXML, "SCSS"), pvp.scss);
     const XMLElem AmpSFXML = getOptional(pvpXML, "AmpSF");
     if (AmpSFXML)
     {
         pvp.ampSF.reset(new PVPType());
-        parsePVPType(AmpSFXML, *(pvp.ampSF));
+        parsePVPType(pvp, AmpSFXML, *(pvp.ampSF));
     }
 
     const XMLElem FXN1XML = getOptional(pvpXML, "FXN1");
     if (FXN1XML)
     {
         pvp.fxN1.reset(new PVPType());
-        parsePVPType(FXN1XML, *(pvp.fxN1));
+        parsePVPType(pvp, FXN1XML, *(pvp.fxN1));
     }
 
     const XMLElem FXN2XML = getOptional(pvpXML, "FXN2");
     if (FXN2XML)
     {
         pvp.fxN2.reset(new PVPType());
-        parsePVPType(FXN2XML, *(pvp.fxN2));
+        parsePVPType(pvp, FXN2XML, *(pvp.fxN2));
     }
 
     const XMLElem TOAE1XML = getOptional(pvpXML, "TOAE1");
     if (TOAE1XML)
     {
         pvp.toaE1.reset(new PVPType());
-        parsePVPType(TOAE1XML, *(pvp.toaE1));
+        parsePVPType(pvp, TOAE1XML, *(pvp.toaE1));
     }
 
     const XMLElem TOAE2XML = getOptional(pvpXML, "TOAE2");
     if (TOAE2XML)
     {
         pvp.toaE2.reset(new PVPType());
-        parsePVPType(TOAE2XML, *(pvp.toaE2));
+        parsePVPType(pvp, TOAE2XML, *(pvp.toaE2));
     }
 
     const XMLElem TDIonoSRPXML = getOptional(pvpXML, "TDIonoSRP");
     if (TDIonoSRPXML)
     {
         pvp.tdIonoSRP.reset(new PVPType());
-        parsePVPType(TDIonoSRPXML, *(pvp.tdIonoSRP));
+        parsePVPType(pvp, TDIonoSRPXML, *(pvp.tdIonoSRP));
     }
 
     const XMLElem SIGNALXML = getOptional(pvpXML, "SIGNAL");
     if (SIGNALXML)
     {
         pvp.signal.reset(new PVPType());
-        parsePVPType(SIGNALXML, *(pvp.signal));
+        parsePVPType(pvp, SIGNALXML, *(pvp.signal));
     }
 
     std::vector<XMLElem> addedParamsXML;
@@ -1752,10 +1750,10 @@ void CPHDXMLControl::fromXML(const XMLElem pvpXML, Pvp& pvp)
     {
         return;
     }
-    pvp.addedPVP.resize(addedParamsXML.size());
+    pvp.setNumAddedParameters(addedParamsXML.size());
     for (size_t ii = 0; ii < addedParamsXML.size(); ++ii)
     {
-        parsePVPType(addedParamsXML[ii], pvp.addedPVP[ii]);
+        parsePVPType(pvp, addedParamsXML[ii], ii);
     }
 
 }
@@ -2432,19 +2430,28 @@ void CPHDXMLControl::parseChannelParameters(
 
 }
 
-void CPHDXMLControl::parsePVPType(const XMLElem paramXML, PVPType& param) const
+void CPHDXMLControl::parsePVPType(Pvp& pvp, const XMLElem paramXML, PVPType& param) const
 {
-    parseUInt(getFirstAndOnly(paramXML, "Offset"), param.offset);
-    parseUInt(getFirstAndOnly(paramXML, "Size"), param.size);
-    parseString(getFirstAndOnly(paramXML, "Format"), param.format);
+    size_t size;
+    size_t offset;
+    std::string format;
+    parseUInt(getFirstAndOnly(paramXML, "Size"), size);
+    parseUInt(getFirstAndOnly(paramXML, "Offset"), offset);
+    parseString(getFirstAndOnly(paramXML, "Format"), format);
+    pvp.setData(param, size, offset, format);
 }
 
-void CPHDXMLControl::parsePVPType(const XMLElem paramXML, APVPType& param) const
+void CPHDXMLControl::parsePVPType(Pvp& pvp, const XMLElem paramXML, size_t idx) const
 {
-    parseString(getFirstAndOnly(paramXML, "Name"), param.name);
-    parseUInt(getFirstAndOnly(paramXML, "Offset"), param.offset);
-    parseUInt(getFirstAndOnly(paramXML, "Size"), param.size);
-    parseString(getFirstAndOnly(paramXML, "Format"), param.format);
+    std::string name;
+    size_t size;
+    size_t offset;
+    std::string format;
+    parseString(getFirstAndOnly(paramXML, "Name"), name);
+    parseUInt(getFirstAndOnly(paramXML, "Size"), size);
+    parseUInt(getFirstAndOnly(paramXML, "Offset"), offset);
+    parseString(getFirstAndOnly(paramXML, "Format"), format);
+    pvp.setData(size, offset, format, name, idx);
 }
 
 void CPHDXMLControl::parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const
@@ -2466,11 +2473,11 @@ void CPHDXMLControl::parsePlatformParams(const XMLElem platXML, Bistatic::Platfo
 
 void CPHDXMLControl::parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const
 {
-        parseDouble(getFirstAndOnly(imgTypeXML, "TwistAngle"), imgType->twistAngle);
-        parseDouble(getFirstAndOnly(imgTypeXML, "SlopeAngle"), imgType->slopeAngle);
-        parseDouble(getFirstAndOnly(imgTypeXML, "LayoverAngle"), imgType->layoverAngle);
-        parseDouble(getFirstAndOnly(imgTypeXML, "AzimuthAngle"), imgType->azimuthAngle);
-        parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
+    parseDouble(getFirstAndOnly(imgTypeXML, "TwistAngle"), imgType->twistAngle);
+    parseDouble(getFirstAndOnly(imgTypeXML, "SlopeAngle"), imgType->slopeAngle);
+    parseDouble(getFirstAndOnly(imgTypeXML, "LayoverAngle"), imgType->layoverAngle);
+    parseDouble(getFirstAndOnly(imgTypeXML, "AzimuthAngle"), imgType->azimuthAngle);
+    parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
 }
 
 void CPHDXMLControl::parseDecorr(const XMLElem decorrXML, Decorr& decorr) const

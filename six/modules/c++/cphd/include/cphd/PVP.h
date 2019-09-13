@@ -25,7 +25,7 @@
 #include <ostream>
 #include <vector>
 #include <stddef.h>
-
+#include <map>
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
@@ -39,9 +39,9 @@ struct PVPType
 
     bool operator==(const PVPType& other) const
     {
-        return size == other.size && 
-        offset == other.offset &&
-        format == other.format;
+        return mSize == other.getSize() && 
+        mOffset == other.getOffset() &&
+        mFormat == other.getFormat();
     }
 
     bool operator!=(const PVPType& other) const
@@ -49,9 +49,32 @@ struct PVPType
         return !((*this) == other);
     }
 
-    size_t size;
-    size_t offset;
-    std::string format;
+    void setData(size_t size_in, size_t offset_in, std::string format_in)
+    {
+        mSize = size_in;
+        mOffset = offset_in;
+        mFormat = format_in;
+    }
+
+    size_t getSize() const
+    {
+        return mSize;
+    }
+
+    size_t getOffset() const
+    {
+        return mOffset;
+    }
+
+    std::string getFormat() const
+    {
+        return mFormat;
+    }
+
+protected:
+    size_t mSize;
+    size_t mOffset;
+    std::string mFormat;
 };
 
 struct APVPType : PVPType
@@ -64,7 +87,7 @@ struct APVPType : PVPType
         {
             return false;
         }
-        return name == other.name;
+        return mName == other.mName;
     }
 
     bool operator!=(const APVPType& other) const
@@ -72,7 +95,18 @@ struct APVPType : PVPType
         return !((*this) == other);
     }
 
-    std::string name;
+    void setName(std::string name)
+    {
+        mName = name;
+    }
+
+    std::string getName() const
+    {
+        return mName;
+    }
+
+private:
+    std::string mName;
 };
 
 /*
@@ -80,10 +114,6 @@ struct APVPType : PVPType
  */
 struct Pvp
 {
-    //!  Constructor
-    Pvp()
-    {
-    }
 
     /*!
      * Transmit time for the center of the transmitted pulse relative to the
@@ -261,6 +291,13 @@ struct Pvp
      */
     std::vector<APVPType> addedPVP;
 
+    //! Default Constructor
+    Pvp();
+
+    //! Constructor initializes addedPVP size
+    Pvp(size_t numAdditionalParams);
+
+
     bool operator==(const Pvp& other) const
     {
         return txTime == other.txTime && txPos == other.txPos &&
@@ -282,6 +319,20 @@ struct Pvp
     {
         return !((*this) == other);
     }
+
+    size_t getReqSetSize() const;
+
+    void validate(size_t size, size_t offset);
+
+    void setData(PVPType& param, size_t size, size_t offset, std::string format);
+
+    void setData(size_t size, size_t offset, std::string format, std::string name, size_t idx);
+
+    void setNumAddedParameters(size_t size);
+
+private:
+    std::vector<six::BooleanType> mParamLocations;
+
 };
 std::ostream& operator<< (std::ostream& os, const PVPType& p);
 std::ostream& operator<< (std::ostream& os, const APVPType& a);
