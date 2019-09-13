@@ -33,8 +33,8 @@ static const char XML[] =
 "        <Timeline>\n"
 "            <CollectionStart>2013-04-10T08:52:09.0Z</CollectionStart>\n"
 "            <RcvCollectionStart>2014-04-10T08:52:09.0Z</RcvCollectionStart>\n"
-"            <txTime1>1.3</txTime1>\n"
-"            <txTime2>1.5</txTime2>\n"
+"            <TxTime1>1.3</TxTime1>\n"
+"            <TxTime2>1.5</TxTime2>\n"
 "        </Timeline>\n"
 "        <FxBand>\n"
 "            <FxMin>0.9</FxMin>\n"
@@ -133,13 +133,14 @@ static const char XML[] =
 "                <NumLines>50</NumLines>\n"
 "            </IAXExtent>\n"
 "            <IAYExtent>\n"
-"                <LineSpacing>6.28</LineSpacing>\n"
-"                <FirstLine>8</FirstLine>\n"
-"                <NumLines>100</NumLines>\n"
+"                <SampleSpacing>6.28</SampleSpacing>\n"
+"                <FirstSample>8</FirstSample>\n"
+"                <NumSamples>100</NumSamples>\n"
 "            </IAYExtent>\n"
 "            <SegmentList>\n"
 "                <NumSegments>2</NumSegments>\n"
 "                <Segment>\n"
+"                   <Identifier>Segment</Identifier>\n"
 "                   <StartLine>0</StartLine>\n"
 "                   <StartSample>1</StartSample>\n"
 "                   <EndLine>2</EndLine>\n"
@@ -160,6 +161,7 @@ static const char XML[] =
 "                   </SegmentPolygon>\n"
 "                </Segment>\n"
 "                <Segment>\n"
+"                   <Identifier>Segment</Identifier>\n"
 "                   <StartLine>1</StartLine>\n"
 "                   <StartSample>2</StartSample>\n"
 "                   <EndLine>3</EndLine>\n"
@@ -660,18 +662,18 @@ TEST_CASE(testReadXML)
 
     //PVP
     const cphd::Pvp& pvp = metadata->pvp;
-    TEST_ASSERT_EQ(pvp.txTime.offset, 0);
-    TEST_ASSERT_EQ(pvp.txTime.size, 1);
-    TEST_ASSERT_EQ(pvp.txTime.format, "F8");
-    TEST_ASSERT_EQ(pvp.txPos.offset, 0);
-    TEST_ASSERT_EQ(pvp.txPos.size, 3);
-    TEST_ASSERT_EQ(pvp.txPos.format, "X=F8;Y=F8;Z=F8;");
-    TEST_ASSERT_EQ(pvp.rcvVel.offset, 0);
-    TEST_ASSERT_EQ(pvp.rcvVel.size, 3);
-    TEST_ASSERT_EQ(pvp.rcvVel.format, "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.txTime.getOffset(), 0);
+    TEST_ASSERT_EQ(pvp.txTime.getSize(), 1);
+    TEST_ASSERT_EQ(pvp.txTime.getFormat(), "F8");
+    TEST_ASSERT_EQ(pvp.txPos.getOffset(), 0);
+    TEST_ASSERT_EQ(pvp.txPos.getSize(), 3);
+    TEST_ASSERT_EQ(pvp.txPos.getFormat(), "X=F8;Y=F8;Z=F8;");
+    TEST_ASSERT_EQ(pvp.rcvVel.getOffset(), 0);
+    TEST_ASSERT_EQ(pvp.rcvVel.getSize(), 3);
+    TEST_ASSERT_EQ(pvp.rcvVel.getFormat(), "X=F8;Y=F8;Z=F8;");
     TEST_ASSERT_EQ(pvp.addedPVP.size(), 2);
-    TEST_ASSERT_EQ(pvp.addedPVP[0].name, "newParam1");
-    TEST_ASSERT_EQ(pvp.addedPVP[1].name, "newParam2");
+    TEST_ASSERT_EQ(pvp.addedPVP[0].getName(), "newParam1");
+    TEST_ASSERT_EQ(pvp.addedPVP[1].getName(), "newParam2");
 
     //Dwell
     const cphd::Dwell& dwell = metadata->dwell;

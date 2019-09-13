@@ -35,7 +35,6 @@ void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
     xmlParser.parse(ifs, ifs.available());
 }
 
-
 TEST_CASE_ARGUMENTS(testRoundTrip)
 {
     // Get pathname from cmd line

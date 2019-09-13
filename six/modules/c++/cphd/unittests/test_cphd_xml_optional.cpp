@@ -119,7 +119,7 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[0][0], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[1][0], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[2][0], 3);
-    TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[3][0], 0);
+    TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[3][0], 4);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[0][1], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[1][1], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[2][1], 3);

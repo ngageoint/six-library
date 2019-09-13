@@ -296,94 +296,94 @@
             <Format>F8</Format>
         </TxTime>
         <TxPos>
-            <Offset>0</Offset>
+            <Offset>1</Offset>
             <Size>3</Size>
             <Format>X=F8;Y=F8;Z=F8;</Format>
         </TxPos>
         <TxVel>
-            <Offset>0</Offset>
+            <Offset>4</Offset>
             <Size>3</Size>
             <Format>X=F8;Y=F8;Z=F8;</Format>
         </TxVel>
         <RcvTime>
-            <Offset>0</Offset>
+            <Offset>7</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </RcvTime>
         <RcvPos>
-            <Offset>0</Offset>
+            <Offset>8</Offset>
             <Size>3</Size>
             <Format>X=F8;Y=F8;Z=F8;</Format>
         </RcvPos>
         <RcvVel>
-            <Offset>0</Offset>
+            <Offset>11</Offset>
             <Size>3</Size>
             <Format>X=F8;Y=F8;Z=F8;</Format>
         </RcvVel>
         <SRPPos>
-            <Offset>0</Offset>
+            <Offset>14</Offset>
             <Size>3</Size>
             <Format>X=F8;Y=F8;Z=F8;</Format>
         </SRPPos>
         <aFDOP>
-            <Offset>0</Offset>
+            <Offset>17</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </aFDOP>
         <aFRR1>
-            <Offset>0</Offset>
+            <Offset>18</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </aFRR1>
         <aFRR2>
-            <Offset>0</Offset>
+            <Offset>19</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </aFRR2>
         <FX1>
-            <Offset>0</Offset>
+            <Offset>20</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </FX1>
         <FX2>
-            <Offset>0</Offset>
+            <Offset>21</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </FX2>
         <TOA1>
-            <Offset>0</Offset>
+            <Offset>22</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </TOA1>
         <TOA2>
-            <Offset>0</Offset>
+            <Offset>23</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </TOA2>
         <TDTropoSRP>
-            <Offset>0</Offset>
+            <Offset>24</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </TDTropoSRP>
         <SC0>
-            <Offset>0</Offset>
+            <Offset>25</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </SC0>
         <SCSS>
-            <Offset>0</Offset>
+            <Offset>26</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </SCSS>
         <AddedPVP>
             <Name>newParam1</Name>
-            <Offset>0</Offset>
+            <Offset>27</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </AddedPVP>
         <AddedPVP>
             <Name>newParam2</Name>
-            <Offset>0</Offset>
+            <Offset>28</Offset>
             <Size>1</Size>
             <Format>F8</Format>
         </AddedPVP>
@@ -509,9 +509,9 @@
                 </Y>
                 <Z order1="3">
                     <Coef exponent1="0">1.000000000000000E00</Coef>
-                    <Coef exponent1="1">2.000000000000000E00</Coef>
+                    <Coef exponent1="1">0.000000000000000E00</Coef>
                     <Coef exponent1="2">3.000000000000000E00</Coef>
-                    <Coef exponent1="3">4.000000000000000E00</Coef>
+                    <Coef exponent1="3">0.000000000000000E00</Coef>
                 </Z>
             </XAxisPoly>
             <YAxisPoly>
