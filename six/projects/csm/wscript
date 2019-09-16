@@ -1,6 +1,7 @@
 MAINTAINER         = 'adam.sylvester@mdaus.com'
 MODULE_DEPS        = 'six.sicd six.sidd'
 PLUGIN             = 'CSM'
+PLUGIN_VERSION     = '115'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
@@ -45,7 +46,7 @@ def configure(conf):
         else:
             raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-        pluginVersion = '114'
+        pluginVersion = '115'
         if Options.options.csm_version == '3.0.3':
             csmVersion = '303'
         else:
