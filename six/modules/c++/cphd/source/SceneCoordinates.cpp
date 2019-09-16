@@ -54,10 +54,12 @@ HAE::HAE() :
 {
 }
 
-AreaType::AreaType():
-    x1y1(six::Init::undefined<Vector2>()),
-    x2y2(six::Init::undefined<Vector2>())
+AreaType::AreaType()
 {
+    x1y1[0] = 0;
+    x1y1[1] = 0;
+    x2y2[0] = 0;
+    x2y2[1] = 0;
 }
 
 ImageGrid::ImageGrid()
@@ -65,7 +67,6 @@ ImageGrid::ImageGrid()
 }
 
 LineSample::LineSample() :
-    index(six::Init::undefined<size_t>()),
     line(0.0),
     sample(0.0)
 {
@@ -99,8 +100,8 @@ std::ostream& operator<< (std::ostream& os, const SceneCoordinates& d)
 {
     os << "SceneCoordinates::\n"
        << "  EarthModel       : " << d.earthModel.toString() << "\n"
-       << "  IARP             : " << d.iarp << "\n"
-       << "  ReferenceSurface : " << d.referenceSurface << "\n"
+       << "  " << d.iarp << "\n"
+       << "  " << d.referenceSurface << "\n"
        << "  AreaType        : " << d.imageArea << "\n"
        << "  ImageAreaCornerPoints: ";
     for (size_t ii = 0; ii < 3; ++ii)
@@ -114,20 +115,19 @@ std::ostream& operator<< (std::ostream& os, const SceneCoordinates& d)
 
     if (d.extendedArea.get())
     {
-        os << "  ExtendedArea     : " << *d.extendedArea << "\n";
+        os << "  ExtendedArea:: \n" << *d.extendedArea << "\n";
     }
     if (d.imageGrid.get())
     {
-        os << "  ImageGrid        : " << *d.imageGrid << "\n";
+        os << "  ImageGrid:: \n" << *d.imageGrid << "\n";
     }
     return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const IARP& d)
 {
-    os << "IARP::\n"
-       << "  ECF              : " << d.ecf
-       << "  LLH              : " << d.llh.getLat() << ", "
+    os << "  ECF              : " << d.ecf
+        << "  LLH              : " << d.llh.getLat() << ", "
                                   << d.llh.getLon() << ", "
                                   << d.llh.getAlt() << "\n";
     return os;
@@ -185,16 +185,14 @@ std::ostream& operator<< (std::ostream& os, const ImageGrid& d)
     {
         os << "  Identifier      : " << d.identifier << "\n";
     }
-    os << "  IARPLocation    : " << d.iarpLocation<< "\n";
+    os << "  IARPLocation  \n" << d.iarpLocation<< "\n";
 
     return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const LineSample& d)
 {
-    os << "LineSample::\n"
-       << "  Index           : " << d.index << "\n"
-       << "  Line            : " << d.line << "\n"
+    os << "  Line            : " << d.line << "\n"
        << "  Sample          : " << d.sample << "\n";
 
     return os;

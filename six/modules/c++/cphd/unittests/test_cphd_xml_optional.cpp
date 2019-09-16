@@ -10,23 +10,6 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-#  define TEST_CASE_ARGUMENTS(X) void X(std::string testName, int argc, char** argv)
-#  define TEST_CHECK_ARGUMENTS(X) try{ X(std::string(#X),argc,argv); std::cerr << #X << ": PASSED" << std::endl; } catch(except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); }
-
-std::string getPathname(int argc, char** argv)
-{
-    // Parse the command line
-    if (argc != 2)
-    {
-        throw except::Exception(Ctxt(
-                    "Invalid number of cmd line args"));
-    }
-    else
-    {
-        return argv[1];
-    }
-}
-
 void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
 {
     // Parse XML file
@@ -35,8 +18,7 @@ void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
     xmlParser.parse(ifs, ifs.available());
 }
 
-
-TEST_CASE_ARGUMENTS(testOptional)
+TEST_CASE(testOptional)
 {
     // Get pathname from cmd line
     std::string pathname = "/data1/u/vyadav/six-library/six/modules/c++/cphd/unittests/sample_xml/cphd02.xml";
@@ -318,16 +300,13 @@ TEST_CASE_ARGUMENTS(testOptional)
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].coreName, "CollectionName");
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].matchIndex, 1);
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].parameter[0].getName(), "param1");
-
-
-
 }
 
-int main(int argc, char** argv)
+int main()
 {
     try
     {
-        TEST_CHECK_ARGUMENTS(testOptional);
+        TEST_CHECK(testOptional);
         return 0;
     }
     catch (const except::Exception& ex)

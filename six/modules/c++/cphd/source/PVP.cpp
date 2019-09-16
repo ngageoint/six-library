@@ -209,35 +209,56 @@ std::ostream& operator<< (std::ostream& os, const APVPType& a)
 
 std::ostream& operator<< (std::ostream& os, const Pvp& p)
 {
-    os << "PVP:: \n"
-        << "  TxTime           : " << p.txTime << "\n"
-        << "  TxPos            : " << p.txPos  << "\n"
-        << "  TxVel            : " << p.txVel  << "\n"
-        << "  RcvTime          : " << p.rcvTime << "\n"
-        << "  RcvPos           : " << p.rcvPos << "\n"
-        << "  RcvVel           : " << p.rcvVel << "\n"
-        << "  SRPPos           : " << p.srpPos << "\n"
-        << "  AmpSF            : " << *(p.ampSF) << "\n"
-        << "  aFDOP            : " << p.aFDOP << "\n"
-        << "  aFRR1            : " << p.aFRR1 << "\n"
-        << "  aFRR2            : " << p.aFRR2 << "\n"
-        << "  FX1              : " << p.fx1 << "\n"
-        << "  FX2              : " << p.fx2 << "\n"
-        << "  FXN1             : " << *(p.fxN1) << "\n"
-        << "  FXN2             : " << *(p.fxN2) << "\n"
-        << "  TOA1             : " << p.toa1 << "\n"
-        << "  TOA2             : " << p.toa2 << "\n"
-        << "  TOAE1            : " << *(p.toaE1) << "\n"
-        << "  TOAE2            : " << *(p.toaE2) << "\n"
-        << "  TDTropoSRP       : " << p.tdTropoSRP << "\n"
-        << "  TDIonoSRP        : " << *(p.tdIonoSRP) << "\n"
-        << "  SC0              : " << p.sc0 << "\n"
-        << "  SCSS              : " << p.scss << "\n"
-        << "  SIGNAL              : " << *(p.signal) << "\n";
-    for (size_t i = 0; i < p.addedPVP.size(); ++i)
+    os << "  TxTime         : " << p.txTime << "\n"
+        << "  TxPos         : " << p.txPos << "\n"
+        << "  TxVel         : " << p.txVel << "\n"
+        << "  RcvTime       : " << p.rcvTime << "\n"
+        << "  RcvPos        : " << p.rcvPos << "\n"
+        << "  RcvVel        : " << p.rcvVel << "\n"
+        << "  SRPPos        : " << p.srpPos << "\n"
+        << "  aFDOP         : " << p.aFDOP << "\n"
+        << "  aFRR1         : " << p.aFRR1 << "\n"
+        << "  aFRR2         : " << p.aFRR2 << "\n"
+        << "  Fx1           : " << p.fx1 << "\n"
+        << "  Fx2           : " << p.fx2 << "\n"
+        << "  TOA1          : " << p.toa1 << "\n"
+        << "  TOA2          : " << p.toa2 << "\n"
+        << "  TdTropoSRP    : " << p.tdTropoSRP << "\n"
+        << "  SC0           : " << p.sc0 << "\n"
+        << "  SCSS          : " << p.scss << "\n";
+
+    if (p.ampSF.get())
     {
-        os << "  AddedPVP:: \n"
-            << p.addedPVP[i] << "\n";
+        os << "  AmpSF         : " << *p.ampSF << "\n";
+    }
+    if (p.fxN1.get())
+    {
+        os << "  FxN1          : " << *p.fxN1 << "\n";
+    }
+    if (p.fxN2.get())
+    {
+        os << "  FxN2          : " << *p.fxN2 << "\n";
+    }
+    if (p.toaE1.get())
+    {
+        os << "  TOAE1         : " << *p.toaE1 << "\n";
+    }
+    if (p.toaE2.get())
+    {
+        os << "  TOAE2         : " << *p.toaE2 << "\n";
+    }
+    if (p.tdIonoSRP.get())
+    {
+        os << "  TdIonoSRP     : " << *p.tdIonoSRP << "\n";
+    }
+    if (p.signal.get())
+    {
+        os << "  SIGNAL     : " << *p.signal << "\n";
+    }
+
+    for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
+    {
+        os << "  Additional Parameter : " << p.addedPVP[ii] << "\n";
     }
     return os;
 }

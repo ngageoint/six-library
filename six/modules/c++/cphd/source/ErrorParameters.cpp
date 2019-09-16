@@ -125,10 +125,16 @@ std::ostream& operator<< (std::ostream& os, const PosVelErr& p)
         << "      P3             : " << p.p3 << "\n"
         << "      V1             : " << p.v1 << "\n"
         << "      V2             : " << p.v2 << "\n"
-        << "      V3             : " << p.v3 << "\n"
-        << *(p.corrCoefs) << "\n"
-        << "      PostionDecorr:: \n"
-        << *(p.positionDecorr);
+        << "      V3             : " << p.v3 << "\n";
+    if(p.corrCoefs.get())
+    {
+        os << *(p.corrCoefs) << "\n";
+    }
+    os << "      PostionDecorr:: \n";
+    if(p.positionDecorr.get())
+    {
+        os << *(p.positionDecorr);
+    }
     return os;
 }
 
@@ -143,19 +149,34 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             << "    RangeBias        : " << e.monostatic->radarSensor.rangeBias << "\n"
             << "    ClockFreqSF      : " << e.monostatic->radarSensor.clockFreqSF << "\n"
             << "    CollectionStartTime : " << e.monostatic->radarSensor.collectionStartTime << "\n"
-            << "    RangeBiasDecorr:: \n"
-            << *(e.monostatic->radarSensor.rangeBiasDecorr) << "\n"
-            << "    TropoError:: \n"
-            << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n"
-            << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n"
-            << "    TropoRangeDecorr:: \n"
-            << *(e.monostatic->tropoError->tropoRangeDecorr) << "\n"
-            << "    IonoError:: \n"
-            << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n"
-            << "    IonoRangeRateVertical : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n"
-            << "    IonoRgRgRateCC   : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n"
-            << "    IonoRangeVertDecorr:: \n"
-            << *(e.monostatic->ionoError->ionoRangeVertDecorr) << "\n";
+            << "    RangeBiasDecorr:: \n";
+        if (e.monostatic->radarSensor.rangeBiasDecorr.get())
+        {
+            os << *(e.monostatic->radarSensor.rangeBiasDecorr) << "\n";
+        }
+        if (e.monostatic->tropoError.get())
+        {
+            os << "    TropoError:: \n"
+                << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n"
+                << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n"
+                << "    TropoRangeDecorr:: \n";
+            if (e.monostatic->tropoError->tropoRangeDecorr.get())
+            {
+                os << *(e.monostatic->tropoError->tropoRangeDecorr) << "\n";
+            }
+        }
+        if (e.monostatic->ionoError.get())
+        {
+            os << "    IonoError:: \n"
+                << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n"
+                << "    IonoRangeRateVertical : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n"
+                << "    IonoRgRgRateCC   : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n"
+                << "    IonoRangeVertDecorr:: \n";
+            if (e.monostatic->ionoError->ionoRangeVertDecorr.get())
+            {
+                os << *(e.monostatic->ionoError->ionoRangeVertDecorr) << "\n";
+            }
+        }
         for (size_t i = 0; i < e.monostatic->parameter.size(); ++i)
         {
             os << "    Parameter Name   : " << e.monostatic->parameter[i].getName() << "\n"

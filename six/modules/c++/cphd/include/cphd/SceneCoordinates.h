@@ -132,16 +132,29 @@ struct LineSample
 
     bool operator==(const LineSample& other) const
     {
-        return index == other.index && line == other.line && sample == other.sample;
+        return line == other.line && sample == other.sample;
     }
 
     bool operator!=(const LineSample& other) const
     {
         return !((*this) == other);
     }
-    size_t index;
+
+    size_t getIndex()
+    {
+        return mIndex;
+    }
+
+    void setIndex(size_t idx)
+    {
+        mIndex = idx;
+    }
+
     double line;
     double sample;
+
+private:
+    size_t mIndex;
 };
 
 struct ImageAreaXExtent

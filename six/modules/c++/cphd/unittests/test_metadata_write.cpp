@@ -8,24 +8,10 @@
 #include <cphd/SceneCoordinates.h>
 #include <io/MockSeekableInputStream.h>
 #include <xml/lite/MinidomParser.h>
+
 #include "TestCase.h"
 
-#  define TEST_CASE_ARGUMENTS(X) void X(std::string testName, int argc, char** argv)
-#  define TEST_CHECK_ARGUMENTS(X) try{ X(std::string(#X),argc,argv); std::cerr << #X << ": PASSED" << std::endl; } catch(except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); }
-
-std::string getPathname(int argc, char** argv)
-{
-    // Parse the command line
-    if (argc != 2)
-    {
-        throw except::Exception(Ctxt(
-                    "Invalid number of cmd line args"));
-    }
-    else
-    {
-        return argv[1];
-    }
-}
+static const std::string FILE_NAME("temp.cphd");
 
 void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
 {
@@ -35,12 +21,10 @@ void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
     xmlParser.parse(ifs, ifs.available());
 }
 
-TEST_CASE_ARGUMENTS(testRoundTrip)
+TEST_CASE(testWrite)
 {
     // Get pathname from cmd line
     std::string pathname = "/data1/u/vyadav/six-library/six/modules/c++/cphd/unittests/sample_xml/cphd02.xml";
-    std::string pathnameOut = "/data1/u/vyadav/six-library/six/modules/c++/cphd/unittests/sample_xml/cphdRes.xml";
-
     std::string schema = "/data1/u/vyadav/six-library/six/modules/c++/cphd/conf/schema/CPHD_schema_V1.0.0_2017_10_20.xsd";
     // std::string schema = "";
 
@@ -55,45 +39,37 @@ TEST_CASE_ARGUMENTS(testRoundTrip)
         xmlControl.setSchemaPaths(schemaPaths);
     }
 
-    // Select specific nodes to be populated
-    std::vector<std::string> nodeNames;
-    nodeNames.push_back("CollectionID");
-    nodeNames.push_back("Global");
-    nodeNames.push_back("SceneCoordinates");
-    nodeNames.push_back("Data");
-    nodeNames.push_back("Channel");
-    nodeNames.push_back("PVP");
-    nodeNames.push_back("SupportArray");
-    nodeNames.push_back("Dwell");
-    nodeNames.push_back("ReferenceGeometry");
-    nodeNames.push_back("Antenna");
-    nodeNames.push_back("TxRcv");
-    nodeNames.push_back("ErrorParameters");
-    nodeNames.push_back("ProductInfo");
-    nodeNames.push_back("GeoInfo");
-    nodeNames.push_back("MatchInfo");
-
     // Populate metadata object from XML Document
     const std::auto_ptr<cphd::Metadata> metadata =
-            xmlControl.fromXML(xmlParser.getDocument(), nodeNames);
-
+            xmlControl.fromXML(xmlParser.getDocument());
 
     const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
-    std::cout << xmlMetadata << std::endl;
-    io::FileOutputStream ofs(pathnameOut);
+    io::FileOutputStream ofs(FILE_NAME);
     // FileHeader header;
     // // set header size, final step before write
     // header.set(xmlMetadata.size(), vbmSize, cphd03Size);
     // mFile.write(header.toString().c_str(), header.size());
     ofs.write(xmlMetadata.c_str(), xmlMetadata.size());
 
+    xml::lite::MinidomParser xmlParser2;
+    parseXMLFile(xmlParser2, FILE_NAME);
+
+    cphd::CPHDXMLControl xmlControl2;
+    xmlControl2.setSchemaPaths(schemaPaths);
+
+    // Populate metadata object from XML Document
+    const std::auto_ptr<cphd::Metadata> metadata2 =
+            xmlControl2.fromXML(xmlParser2.getDocument());
+
+    TEST_ASSERT_EQ(*metadata, *metadata2);
 }
 
-int main(int argc, char** argv)
+int main()
 {
     try
     {
-        TEST_CHECK_ARGUMENTS(testRoundTrip);
+        TEST_CHECK(testWrite);
+        sys::OS().remove(FILE_NAME);
         return 0;
     }
     catch (const except::Exception& ex)
@@ -108,6 +84,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "Unknown exception\n";
     }
+    sys::OS().remove(FILE_NAME);
     return 1;
 
 }

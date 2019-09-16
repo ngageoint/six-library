@@ -48,8 +48,7 @@ struct PVPArray
 
     /*
      * Struct Template Specialization for getAddedPVP function
-     * because function Template specialization is not allowed
-     * in pre C++11
+     * mimics function template specialization
      */
     template<typename T>
     struct AddedPVP

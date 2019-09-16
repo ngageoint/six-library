@@ -143,7 +143,6 @@ void CPHDXMLControl::validate(const xml::lite::Document* doc,
     }
 }
 
-
 std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
     std::auto_ptr<xml::lite::Document> doc(toXML(metadata));
@@ -153,320 +152,9 @@ std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
     return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
 }
 
-
-// TODO: Base
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
-{
-    io::StringStream stringStream;
-    stringStream.write(xmlString.c_str(), xmlString.size());
-    xml::lite::MinidomParser parser;
-    parser.parse(stringStream);
-    return fromXML(parser.getDocument());
-}
-
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
-{
-    std::auto_ptr<Metadata> cphd(new Metadata());
-
-    if(!getSchemaPaths().empty()) {
-        // Validate schema
-        validate(doc, getSchemaPaths(), log());
-    }
-
-    XMLElem root = doc->getRootElement();
-
-    XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
-    XMLElem globalXML         = getFirstAndOnly(root, "Global");
-    XMLElem sceneCoordsXML    = getFirstAndOnly(root, "SceneCoordinates");
-    XMLElem dataXML           = getFirstAndOnly(root, "Data");
-    XMLElem channelXML          = getFirstAndOnly(root, "Channel");
-    XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
-    XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
-    XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
-    XMLElem supportArrayXML   = getOptional(root, "SupportArray");
-    XMLElem antennaXML        = getOptional(root, "Antenna");
-    XMLElem txRcvXML          = getOptional(root, "TxRcv");
-    XMLElem errParamXML       = getOptional(root, "ErrorParameter");
-    XMLElem productInfoXML    = getOptional(root, "ProductInfo");
-    XMLElem matchInfoXML      = getOptional(root, "MatchInfo");
-
-    std::vector<XMLElem> geoInfoXMLVec;
-    root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
-    cphd->geoInfo.resize(geoInfoXMLVec.size());
-
-    /*
-    XMLElem srpXML              = getFirstAndOnly(root, "SRP");
-    XMLElem antennaXML          = getOptional(root, "Antenna");
-    XMLElem vectorParametersXML = getFirstAndOnly(root, "VectorParameters");
-    */
-
-    // Parse XML for each section
-    fromXML(collectionIDXML, cphd->collectionID);
-    fromXML(globalXML, cphd->global);
-    fromXML(sceneCoordsXML, cphd->sceneCoordinates);
-    fromXML(dataXML, cphd->data);
-    fromXML(channelXML, cphd->channel);
-    fromXML(pvpXML, cphd->pvp);
-    fromXML(dwellXML, cphd->dwell);
-    fromXML(refGeoXML, cphd->referenceGeometry);
-
-    if(supportArrayXML)
-    {
-        cphd->supportArray.reset(new SupportArray());
-        fromXML(supportArrayXML, *(cphd->supportArray));
-    }
-    if(antennaXML)
-    {
-        cphd->antenna.reset(new Antenna());
-        fromXML(antennaXML, *(cphd->antenna));
-    }
-    if(txRcvXML)
-    {
-        cphd->txRcv.reset(new TxRcv());
-        fromXML(txRcvXML, *(cphd->txRcv));
-    }
-    if(errParamXML)
-    {
-        cphd->errorParameters.reset(new ErrorParameters());
-        fromXML(errParamXML, *(cphd->errorParameters));
-    }
-    if(productInfoXML)
-    {
-        cphd->productInfo.reset(new ProductInfo());
-        fromXML(productInfoXML, *(cphd->productInfo));
-    }
-    if(matchInfoXML)
-    {
-        cphd->matchInfo.reset(new MatchInfo());
-        fromXML(matchInfoXML, *(cphd->matchInfo));
-    }
-
-    for (size_t i = 0; i < geoInfoXMLVec.size(); ++i)
-    {
-        fromXML(geoInfoXMLVec[i], cphd->geoInfo[i]);
-    }
-
-    /*
-    fromXML(srpXML, cphd03->srp);
-
-    if (antennaXML != NULL)
-    {
-        cphd03->antenna.reset(new Antenna());
-        fromXML(antennaXML, *cphd03->antenna);
-    }
-
-    fromXML(vectorParametersXML, cphd03->vectorParameters);
-    */
-    return cphd;
-}
-
-
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames)
-{
-    std::auto_ptr<Metadata> cphd(new Metadata());
-    if(!getSchemaPaths().empty()) {
-        // Validate schema
-        validate(doc, getSchemaPaths(), log());
-    }
-
-    XMLElem root = doc->getRootElement();
-
-    for(size_t i = 0; i < nodeNames.size(); ++i)
-    {
-        if(nodeNames[i] == "CollectionID") {
-            XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
-            fromXML(collectionIDXML, cphd->collectionID);
-        }
-        else if(nodeNames[i] == "Global") {
-            XMLElem globalXML   = getFirstAndOnly(root, "Global");
-            fromXML(globalXML, cphd->global);
-        }
-        else if(nodeNames[i] == "SceneCoordinates") {
-            XMLElem sceneCoordsXML   = getFirstAndOnly(root, "SceneCoordinates");
-            fromXML(sceneCoordsXML, cphd->sceneCoordinates);
-        }
-        else if(nodeNames[i] == "Data") {
-            XMLElem dataXML   = getFirstAndOnly(root, "Data");
-            fromXML(dataXML, cphd->data);
-        }
-        else if(nodeNames[i] == "Channel") {
-            XMLElem channelXML   = getFirstAndOnly(root, "Channel");
-            fromXML(channelXML, cphd->channel);
-        }
-        else if(nodeNames[i] == "PVP") {
-            XMLElem pvpXML   = getFirstAndOnly(root, "PVP");
-            fromXML(pvpXML, cphd->pvp);
-        }
-        else if(nodeNames[i] == "Dwell") {
-            XMLElem dwellXML   = getFirstAndOnly(root, "Dwell");
-            fromXML(dwellXML, cphd->dwell);
-        }
-        else if(nodeNames[i] == "ReferenceGeometry") {
-            XMLElem refGeoXML   = getFirstAndOnly(root, "ReferenceGeometry");
-            fromXML(refGeoXML, cphd->referenceGeometry);
-        }
-        else if(nodeNames[i] == "SupportArray") {
-            XMLElem supportArrayXML   = getFirstAndOnly(root, "SupportArray");
-            cphd->supportArray.reset(new SupportArray());
-            fromXML(supportArrayXML, *(cphd->supportArray));
-        }
-        else if(nodeNames[i] == "Antenna") {
-            XMLElem antennaXML   = getFirstAndOnly(root, "Antenna");
-            cphd->antenna.reset(new Antenna());
-            fromXML(antennaXML, *(cphd->antenna));
-        }
-        else if(nodeNames[i] == "TxRcv") {
-            XMLElem txRcvXML   = getFirstAndOnly(root, "TxRcv");
-            cphd->txRcv.reset(new TxRcv());
-            fromXML(txRcvXML, *(cphd->txRcv));
-        }
-        else if(nodeNames[i] == "ErrorParameters") {
-            XMLElem errParamXML   = getFirstAndOnly(root, "ErrorParameters");
-            cphd->errorParameters.reset(new ErrorParameters());
-            fromXML(errParamXML, *(cphd->errorParameters));
-        }
-        else if(nodeNames[i] == "ProductInfo") {
-            XMLElem productInfoXML   = getFirstAndOnly(root, "ProductInfo");
-            cphd->productInfo.reset(new ProductInfo());
-            fromXML(productInfoXML, *(cphd->productInfo));
-        }
-        else if(nodeNames[i] == "GeoInfo") {
-            std::vector<XMLElem> geoInfoXMLVec;
-            root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
-            cphd->geoInfo.resize(geoInfoXMLVec.size());
-            for(size_t j = 0; j < geoInfoXMLVec.size(); ++j)
-            {
-                fromXML(geoInfoXMLVec[j], cphd->geoInfo[j]);
-            }
-        }
-        else if(nodeNames[i] == "MatchInfo") {
-            XMLElem matchInfoXML   = getFirstAndOnly(root, "MatchInfo");
-            cphd->matchInfo.reset(new MatchInfo());
-            fromXML(matchInfoXML, *(cphd->matchInfo));
-        }
-        else {
-            throw except::Exception(Ctxt(
-                    "Invalid node name provided"));
-        }
-    }
-
-    return cphd;
-}
-
-
-
-
 /*
  * TO XML
-*/
-void CPHDXMLControl::createParameterCollection(const std::string& name, six::ParameterCollection& parameterCollection,
-                                        XMLElem parent) const
-{
-    for (size_t i = 0; i < parameterCollection.size(); ++i)
-    {
-        XMLElem elem = createString(name, parameterCollection[i].str(), parent);
-        setAttribute(elem, "name", parameterCollection[i].getName());
-    }
-}
-
-XMLElem CPHDXMLControl::createVector2D(
-        const std::string& name,
-        Vector2 p,
-        XMLElem parent) const
-{
-    XMLElem e = newElement(name, getDefaultURI(), parent);
-    createDouble("X", getSICommonURI(), p[0], e);
-    createDouble("Y", getSICommonURI(), p[1], e);
-    return e;
-}
-
-XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
-                                                 const std::string& cornerName,
-                                                 const cphd::LatLonCorners& corners,
-                                                 XMLElem parent) const
-{
-    XMLElem footprint = newElement(name, parent);
-
-    // Write the corners in CW order
-    XMLElem vertex =
-        mCommon.createLatLon(cornerName, corners.upperLeft, footprint);
-    setAttribute(vertex, "index", "1");
-
-    vertex = mCommon.createLatLon(cornerName, corners.upperRight, footprint);
-    setAttribute(vertex, "index", "2");
-
-    vertex = mCommon.createLatLon(cornerName, corners.lowerRight, footprint);
-    setAttribute(vertex, "index", "3");
-
-    vertex = mCommon.createLatLon(cornerName, corners.lowerLeft, footprint);
-    setAttribute(vertex, "index", "4");
-
-    return footprint;
-}
-
-XMLElem CPHDXMLControl::createPVPType(const std::string& name,
-                            PVPType p,
-                            XMLElem parent) const
-{
-    XMLElem pvpXML = newElement(name, parent);
-    createInt("Offset", p.getOffset(), pvpXML);
-    createInt("Size", p.getSize(), pvpXML);
-    createString("Format", p.getFormat(), pvpXML);
-    return pvpXML;
-}
-
-XMLElem CPHDXMLControl::createAPVPType(const std::string& name,
-                                APVPType p,
-                                XMLElem parent) const
-{
-    XMLElem apvpXML = newElement(name, parent);
-    createString("Name", p.getName(), apvpXML);
-    createInt("Offset", p.getOffset(), apvpXML);
-    createInt("Size", p.getSize(), apvpXML);
-    createString("Format", p.getFormat(), apvpXML);
-    return apvpXML;
-}
-
-XMLElem CPHDXMLControl::createErrorParamPlatform(const std::string& name,
-                            ErrorParameters::Bistatic::Platform p,
-                            XMLElem parent) const
-{
-    XMLElem posVelErrXML = newElement("PosVelErr", parent);
-    createString("Frame", p.posVelErr.frame.toString(), posVelErrXML);
-    createDouble("P1", p.posVelErr.p1, posVelErrXML);
-    createDouble("P2", p.posVelErr.p2, posVelErrXML);
-    createDouble("P3", p.posVelErr.p3, posVelErrXML);
-    createDouble("V1", p.posVelErr.v1, posVelErrXML);
-    createDouble("V2", p.posVelErr.v2, posVelErrXML);
-    createDouble("V3", p.posVelErr.v3, posVelErrXML);
-    XMLElem corrCoefsXML = newElement("CorrCoefs", posVelErrXML);
-    if(p.posVelErr.corrCoefs.get())
-    {
-        createDouble("P1P2", p.posVelErr.corrCoefs->p1p2, corrCoefsXML);
-        createDouble("P1P3", p.posVelErr.corrCoefs->p1p3, corrCoefsXML);
-        createDouble("P1V1", p.posVelErr.corrCoefs->p1v1, corrCoefsXML);
-        createDouble("P1V2", p.posVelErr.corrCoefs->p1v2, corrCoefsXML);
-        createDouble("P1V3", p.posVelErr.corrCoefs->p1v3, corrCoefsXML);
-        createDouble("P2P3", p.posVelErr.corrCoefs->p2p3, corrCoefsXML);
-        createDouble("P2V1", p.posVelErr.corrCoefs->p2v1, corrCoefsXML);
-        createDouble("P2V2", p.posVelErr.corrCoefs->p2v2, corrCoefsXML);
-        createDouble("P2V3", p.posVelErr.corrCoefs->p2v3, corrCoefsXML);
-        createDouble("P3V1", p.posVelErr.corrCoefs->p3v1, corrCoefsXML);
-        createDouble("P3V2", p.posVelErr.corrCoefs->p3v2, corrCoefsXML);
-        createDouble("P3V3", p.posVelErr.corrCoefs->p3v3, corrCoefsXML);
-        createDouble("V1V2", p.posVelErr.corrCoefs->v1v2, corrCoefsXML);
-        createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
-        createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
-    }
-    if(p.posVelErr.positionDecorr.get())
-    {
-        XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-        createDouble("CorrCoefZero", p.posVelErr.positionDecorr->corrCoefZero, positionDecorrXML);
-        createDouble("DecorrRate", p.posVelErr.positionDecorr->decorrRate, positionDecorrXML);
-    }
-    return posVelErrXML;
-}
-
+ */
 std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
     std::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
@@ -474,7 +162,6 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
 
-    // Fill in the rest...
     toXML(metadata.collectionID, root);
     toXML(metadata.global, root);
     toXML(metadata.sceneCoordinates, root);
@@ -614,7 +301,8 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
     }
     else
     {
-        //TODO: Throw
+        throw except::Exception(Ctxt(
+                                "Reference Surface must be one of two types"));
     }
 
     XMLElem imageAreaXML = newElement("ImageArea", sceneCoordsXML);
@@ -689,7 +377,7 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
             for (size_t j = 0; j < sceneCoords.imageGrid->segments[i].polygon.size(); ++j)
             {
                 XMLElem svXML = newElement("SV", polygonXML);
-                setAttribute(svXML, "index", six::toString(sceneCoords.imageGrid->segments[i].polygon[j].index));
+                setAttribute(svXML, "index", six::toString(sceneCoords.imageGrid->segments[i].polygon[j].getIndex()));
                 createDouble("Line", sceneCoords.imageGrid->segments[i].polygon[j].line, svXML);
                 createDouble("Sample", sceneCoords.imageGrid->segments[i].polygon[j].sample, svXML);
             }
@@ -1346,6 +1034,185 @@ XMLElem CPHDXMLControl::toXML(const MatchInfo& matchInfo, XMLElem parent)
  * FROM XML
  */
 
+// TODO: Base
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+{
+    io::StringStream stringStream;
+    stringStream.write(xmlString.c_str(), xmlString.size());
+    xml::lite::MinidomParser parser;
+    parser.parse(stringStream);
+    return fromXML(parser.getDocument());
+}
+
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+{
+    std::auto_ptr<Metadata> cphd(new Metadata());
+
+    if(!getSchemaPaths().empty()) {
+        // Validate schema
+        validate(doc, getSchemaPaths(), log());
+    }
+
+    XMLElem root = doc->getRootElement();
+
+    XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
+    XMLElem globalXML         = getFirstAndOnly(root, "Global");
+    XMLElem sceneCoordsXML    = getFirstAndOnly(root, "SceneCoordinates");
+    XMLElem dataXML           = getFirstAndOnly(root, "Data");
+    XMLElem channelXML          = getFirstAndOnly(root, "Channel");
+    XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
+    XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
+    XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
+    XMLElem supportArrayXML   = getOptional(root, "SupportArray");
+    XMLElem antennaXML        = getOptional(root, "Antenna");
+    XMLElem txRcvXML          = getOptional(root, "TxRcv");
+    XMLElem errParamXML       = getOptional(root, "ErrorParameter");
+    XMLElem productInfoXML    = getOptional(root, "ProductInfo");
+    XMLElem matchInfoXML      = getOptional(root, "MatchInfo");
+
+    std::vector<XMLElem> geoInfoXMLVec;
+    root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
+    cphd->geoInfo.resize(geoInfoXMLVec.size());
+
+    // Parse XML for each section
+    fromXML(collectionIDXML, cphd->collectionID);
+    fromXML(globalXML, cphd->global);
+    fromXML(sceneCoordsXML, cphd->sceneCoordinates);
+    fromXML(dataXML, cphd->data);
+    fromXML(channelXML, cphd->channel);
+    fromXML(pvpXML, cphd->pvp);
+    fromXML(dwellXML, cphd->dwell);
+    fromXML(refGeoXML, cphd->referenceGeometry);
+
+    if(supportArrayXML)
+    {
+        cphd->supportArray.reset(new SupportArray());
+        fromXML(supportArrayXML, *(cphd->supportArray));
+    }
+    if(antennaXML)
+    {
+        cphd->antenna.reset(new Antenna());
+        fromXML(antennaXML, *(cphd->antenna));
+    }
+    if(txRcvXML)
+    {
+        cphd->txRcv.reset(new TxRcv());
+        fromXML(txRcvXML, *(cphd->txRcv));
+    }
+    if(errParamXML)
+    {
+        cphd->errorParameters.reset(new ErrorParameters());
+        fromXML(errParamXML, *(cphd->errorParameters));
+    }
+    if(productInfoXML)
+    {
+        cphd->productInfo.reset(new ProductInfo());
+        fromXML(productInfoXML, *(cphd->productInfo));
+    }
+    if(matchInfoXML)
+    {
+        cphd->matchInfo.reset(new MatchInfo());
+        fromXML(matchInfoXML, *(cphd->matchInfo));
+    }
+
+    for (size_t i = 0; i < geoInfoXMLVec.size(); ++i)
+    {
+        fromXML(geoInfoXMLVec[i], cphd->geoInfo[i]);
+    }
+
+    return cphd;
+}
+
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames)
+{
+    std::auto_ptr<Metadata> cphd(new Metadata());
+    if(!getSchemaPaths().empty()) {
+        // Validate schema
+        validate(doc, getSchemaPaths(), log());
+    }
+
+    XMLElem root = doc->getRootElement();
+
+    for(size_t i = 0; i < nodeNames.size(); ++i)
+    {
+        if(nodeNames[i] == "CollectionID") {
+            XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
+            fromXML(collectionIDXML, cphd->collectionID);
+        }
+        else if(nodeNames[i] == "Global") {
+            XMLElem globalXML   = getFirstAndOnly(root, "Global");
+            fromXML(globalXML, cphd->global);
+        }
+        else if(nodeNames[i] == "SceneCoordinates") {
+            XMLElem sceneCoordsXML   = getFirstAndOnly(root, "SceneCoordinates");
+            fromXML(sceneCoordsXML, cphd->sceneCoordinates);
+        }
+        else if(nodeNames[i] == "Data") {
+            XMLElem dataXML   = getFirstAndOnly(root, "Data");
+            fromXML(dataXML, cphd->data);
+        }
+        else if(nodeNames[i] == "Channel") {
+            XMLElem channelXML   = getFirstAndOnly(root, "Channel");
+            fromXML(channelXML, cphd->channel);
+        }
+        else if(nodeNames[i] == "PVP") {
+            XMLElem pvpXML   = getFirstAndOnly(root, "PVP");
+            fromXML(pvpXML, cphd->pvp);
+        }
+        else if(nodeNames[i] == "Dwell") {
+            XMLElem dwellXML   = getFirstAndOnly(root, "Dwell");
+            fromXML(dwellXML, cphd->dwell);
+        }
+        else if(nodeNames[i] == "ReferenceGeometry") {
+            XMLElem refGeoXML   = getFirstAndOnly(root, "ReferenceGeometry");
+            fromXML(refGeoXML, cphd->referenceGeometry);
+        }
+        else if(nodeNames[i] == "SupportArray") {
+            XMLElem supportArrayXML   = getFirstAndOnly(root, "SupportArray");
+            cphd->supportArray.reset(new SupportArray());
+            fromXML(supportArrayXML, *(cphd->supportArray));
+        }
+        else if(nodeNames[i] == "Antenna") {
+            XMLElem antennaXML   = getFirstAndOnly(root, "Antenna");
+            cphd->antenna.reset(new Antenna());
+            fromXML(antennaXML, *(cphd->antenna));
+        }
+        else if(nodeNames[i] == "TxRcv") {
+            XMLElem txRcvXML   = getFirstAndOnly(root, "TxRcv");
+            cphd->txRcv.reset(new TxRcv());
+            fromXML(txRcvXML, *(cphd->txRcv));
+        }
+        else if(nodeNames[i] == "ErrorParameters") {
+            XMLElem errParamXML   = getFirstAndOnly(root, "ErrorParameters");
+            cphd->errorParameters.reset(new ErrorParameters());
+            fromXML(errParamXML, *(cphd->errorParameters));
+        }
+        else if(nodeNames[i] == "ProductInfo") {
+            XMLElem productInfoXML   = getFirstAndOnly(root, "ProductInfo");
+            cphd->productInfo.reset(new ProductInfo());
+            fromXML(productInfoXML, *(cphd->productInfo));
+        }
+        else if(nodeNames[i] == "GeoInfo") {
+            std::vector<XMLElem> geoInfoXMLVec;
+            root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
+            cphd->geoInfo.resize(geoInfoXMLVec.size());
+            for(size_t j = 0; j < geoInfoXMLVec.size(); ++j)
+            {
+                fromXML(geoInfoXMLVec[j], cphd->geoInfo[j]);
+            }
+        }
+        else if(nodeNames[i] == "MatchInfo") {
+            XMLElem matchInfoXML   = getFirstAndOnly(root, "MatchInfo");
+            cphd->matchInfo.reset(new MatchInfo());
+            fromXML(matchInfoXML, *(cphd->matchInfo));
+        }
+        else {
+            throw except::Exception(Ctxt(
+                    "Invalid node name provided"));
+        }
+    }
+    return cphd;
+}
 
 void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
 {
@@ -1579,7 +1446,9 @@ void CPHDXMLControl::fromXML(const XMLElem sceneCoordsXML,
                     vertices.resize(polyVertices.size());
                     for (size_t jj = 0; jj < polyVertices.size(); ++jj)
                     {
-                        sscanf(polyVertices[jj]->attribute("index").c_str(), "%zu", &vertices[jj].index);
+                        size_t tempIdx;
+                        sscanf(polyVertices[jj]->attribute("index").c_str(), "%zu", &tempIdx);
+                        vertices[jj].setIndex(tempIdx);
                         parseLineSample(polyVertices[jj], vertices[jj]);
                     }
                 }
@@ -2230,6 +2099,121 @@ void CPHDXMLControl::fromXML(const XMLElem matchInfoXML, MatchInfo& matchInfo)
     }
 }
 
+/*
+ * Creation helper functions
+*/
+void CPHDXMLControl::createParameterCollection(const std::string& name, six::ParameterCollection& parameterCollection,
+                                        XMLElem parent) const
+{
+    for (size_t i = 0; i < parameterCollection.size(); ++i)
+    {
+        XMLElem elem = createString(name, parameterCollection[i].str(), parent);
+        setAttribute(elem, "name", parameterCollection[i].getName());
+    }
+}
+
+XMLElem CPHDXMLControl::createVector2D(
+        const std::string& name,
+        Vector2 p,
+        XMLElem parent) const
+{
+    XMLElem e = newElement(name, getDefaultURI(), parent);
+    createDouble("X", getSICommonURI(), p[0], e);
+    createDouble("Y", getSICommonURI(), p[1], e);
+    return e;
+}
+
+XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
+                                                 const std::string& cornerName,
+                                                 const cphd::LatLonCorners& corners,
+                                                 XMLElem parent) const
+{
+    XMLElem footprint = newElement(name, parent);
+
+    // Write the corners in CW order
+    XMLElem vertex =
+        mCommon.createLatLon(cornerName, corners.upperLeft, footprint);
+    setAttribute(vertex, "index", "1");
+
+    vertex = mCommon.createLatLon(cornerName, corners.upperRight, footprint);
+    setAttribute(vertex, "index", "2");
+
+    vertex = mCommon.createLatLon(cornerName, corners.lowerRight, footprint);
+    setAttribute(vertex, "index", "3");
+
+    vertex = mCommon.createLatLon(cornerName, corners.lowerLeft, footprint);
+    setAttribute(vertex, "index", "4");
+
+    return footprint;
+}
+
+XMLElem CPHDXMLControl::createPVPType(const std::string& name,
+                            PVPType p,
+                            XMLElem parent) const
+{
+    XMLElem pvpXML = newElement(name, parent);
+    createInt("Offset", p.getOffset(), pvpXML);
+    createInt("Size", p.getSize(), pvpXML);
+    createString("Format", p.getFormat(), pvpXML);
+    return pvpXML;
+}
+
+XMLElem CPHDXMLControl::createAPVPType(const std::string& name,
+                                APVPType p,
+                                XMLElem parent) const
+{
+    XMLElem apvpXML = newElement(name, parent);
+    createString("Name", p.getName(), apvpXML);
+    createInt("Offset", p.getOffset(), apvpXML);
+    createInt("Size", p.getSize(), apvpXML);
+    createString("Format", p.getFormat(), apvpXML);
+    return apvpXML;
+}
+
+XMLElem CPHDXMLControl::createErrorParamPlatform(const std::string& name,
+                            ErrorParameters::Bistatic::Platform p,
+                            XMLElem parent) const
+{
+    XMLElem posVelErrXML = newElement("PosVelErr", parent);
+    createString("Frame", p.posVelErr.frame.toString(), posVelErrXML);
+    createDouble("P1", p.posVelErr.p1, posVelErrXML);
+    createDouble("P2", p.posVelErr.p2, posVelErrXML);
+    createDouble("P3", p.posVelErr.p3, posVelErrXML);
+    createDouble("V1", p.posVelErr.v1, posVelErrXML);
+    createDouble("V2", p.posVelErr.v2, posVelErrXML);
+    createDouble("V3", p.posVelErr.v3, posVelErrXML);
+    XMLElem corrCoefsXML = newElement("CorrCoefs", posVelErrXML);
+    if(p.posVelErr.corrCoefs.get())
+    {
+        createDouble("P1P2", p.posVelErr.corrCoefs->p1p2, corrCoefsXML);
+        createDouble("P1P3", p.posVelErr.corrCoefs->p1p3, corrCoefsXML);
+        createDouble("P1V1", p.posVelErr.corrCoefs->p1v1, corrCoefsXML);
+        createDouble("P1V2", p.posVelErr.corrCoefs->p1v2, corrCoefsXML);
+        createDouble("P1V3", p.posVelErr.corrCoefs->p1v3, corrCoefsXML);
+        createDouble("P2P3", p.posVelErr.corrCoefs->p2p3, corrCoefsXML);
+        createDouble("P2V1", p.posVelErr.corrCoefs->p2v1, corrCoefsXML);
+        createDouble("P2V2", p.posVelErr.corrCoefs->p2v2, corrCoefsXML);
+        createDouble("P2V3", p.posVelErr.corrCoefs->p2v3, corrCoefsXML);
+        createDouble("P3V1", p.posVelErr.corrCoefs->p3v1, corrCoefsXML);
+        createDouble("P3V2", p.posVelErr.corrCoefs->p3v2, corrCoefsXML);
+        createDouble("P3V3", p.posVelErr.corrCoefs->p3v3, corrCoefsXML);
+        createDouble("V1V2", p.posVelErr.corrCoefs->v1v2, corrCoefsXML);
+        createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
+        createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
+    }
+    if(p.posVelErr.positionDecorr.get())
+    {
+        XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
+        createDouble("CorrCoefZero", p.posVelErr.positionDecorr->corrCoefZero, positionDecorrXML);
+        createDouble("DecorrRate", p.posVelErr.positionDecorr->decorrRate, positionDecorrXML);
+    }
+    return posVelErrXML;
+}
+
+
+/*
+ * Parser helper functions
+ */
 void CPHDXMLControl::parseVector2D(const XMLElem vecXML, Vector2& vec) const
 {
     parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
@@ -2372,7 +2356,6 @@ void CPHDXMLControl::parseChannelParameters(
         parseDouble(getFirstAndOnly(tgtRefLevelXML, "PTRef"), param.tgtRefLevel->ptRef);
     }
 
-    // TODO: Noise Level
     XMLElem noiseLevelXML = getOptional(paramXML, "NoiseLevel");
     if(noiseLevelXML)
     {

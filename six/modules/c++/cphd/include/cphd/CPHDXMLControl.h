@@ -42,6 +42,8 @@
 
 namespace cphd
 {
+//TODO: Seperate From XML and To XML files?
+
 /*!
  *  This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM).

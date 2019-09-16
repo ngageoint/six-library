@@ -149,8 +149,11 @@ std::ostream& operator<< (std::ostream& os, const NoiseLevel& n)
 {
     os << "      NoiseLevel:: \n"
         << "      PnRef        : " << n.pnRef << "\n"
-        << "      BnRef        : " << n.bnRef << "\n"
-        << *(n.fxNoiseProfile) << "\n";
+        << "      BnRef        : " << n.bnRef << "\n";
+    if(n.fxNoiseProfile.get())
+    {
+        os << *(n.fxNoiseProfile) << "\n";
+    }
     return os;
 }
 
@@ -168,9 +171,12 @@ std::ostream& operator<< (std::ostream& os, const ChannelParameter& c)
         << "      FxC          : " << c.fxC << "\n"
         << "      FxBW         : " << c.fxBW << "\n"
         << "      FxBWNoise    : " << c.fxBWNoise << "\n"
-        << "      TOASaved     : " << c.toaSaved << "\n"
-        << *(c.toaExtended) << "\n"
-        << c.dwellTimes << "\n"
+        << "      TOASaved     : " << c.toaSaved << "\n";
+    if (c.toaExtended.get())
+    {
+        os << *(c.toaExtended) << "\n";
+    }
+    os << c.dwellTimes << "\n"
         << c.imageArea << "\n"
         << "      Antenna:: \n"
         << "      TxAPCId      : " << c.antenna->txAPCId << "\n"
@@ -186,8 +192,14 @@ std::ostream& operator<< (std::ostream& os, const ChannelParameter& c)
     {
         os << "      RcvId       : " << c.txRcv->rcvId[i] << "\n";
     }
-    os << *(c.tgtRefLevel) << "\n"
-        << *(c.noiseLevel) << "\n";
+    if (c.tgtRefLevel.get())
+    {
+        os << *(c.tgtRefLevel) << "\n";
+    }
+    if (c.noiseLevel.get())
+    {
+        os << *(c.noiseLevel) << "\n";
+    }
     return os;
 }
 

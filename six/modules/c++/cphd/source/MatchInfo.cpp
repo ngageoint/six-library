@@ -73,7 +73,7 @@ std::ostream& operator<< (std::ostream& os, const MatchType& m)
 
     for (size_t i = 0; i < m.matchCollection.size(); ++i)
     {
-        os << "  matchCollections     :" << m.matchCollection[i] << "\n";
+        os << "  " << m.matchCollection[i] << "\n";
     }
     return os;
 }
@@ -84,7 +84,7 @@ std::ostream& operator<< (std::ostream& os, const MatchInfo& m)
        << "  numMatchTypes       : " << m.numMatchTypes << "\n";
     for (size_t i = 0; i < m.matchType.size(); ++i)
     {
-        os << "  matchType     :" << m.matchType[i] << "\n";
+        os << "  " << m.matchType[i] << "\n";
     }
     return os;
 }

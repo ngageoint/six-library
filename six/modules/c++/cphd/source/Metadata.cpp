@@ -34,13 +34,13 @@ bool Metadata::operator==(const Metadata& other) const
            pvp == other.pvp &&
            dwell == other.dwell &&
            referenceGeometry == other.referenceGeometry &&
-           *(supportArray) == *(other.supportArray) &&
-           *(antenna) == *(other.antenna) &&
-           *(txRcv) == *(other.txRcv) &&
-           *(errorParameters) == *(other.errorParameters) &&
-           *(productInfo) == *(other.productInfo) &&
+           supportArray == other.supportArray &&
+           antenna == other.antenna &&
+           txRcv == other.txRcv &&
+           errorParameters == other.errorParameters &&
+           productInfo == other.productInfo &&
            geoInfo == other.geoInfo &&
-           *(matchInfo) == *(other.matchInfo);
+           matchInfo == other.matchInfo;
 }
 
 std::ostream& operator<< (std::ostream& os, const Metadata& d)
@@ -53,17 +53,35 @@ std::ostream& operator<< (std::ostream& os, const Metadata& d)
         << d.channel << "\n"
         << d.pvp << "\n"
         << d.dwell << "\n"
-        << d.referenceGeometry << "\n"
-        << *(d.supportArray) << "\n"
-        << *(d.antenna) << "\n"
-        << *(d.txRcv) << "\n"
-        << *(d.errorParameters) << "\n"
-        << *(d.productInfo) << "\n";
+        << d.referenceGeometry << "\n";
+    if (d.supportArray.get())
+    {
+        os << *(d.supportArray) << "\n";
+    }
+    if (d.antenna.get())
+    {
+        os << *(d.antenna) << "\n";
+    }
+    if (d.txRcv.get())
+    {
+        os << *(d.txRcv) << "\n";
+    }
+    if (d.errorParameters.get())
+    {
+        os << *(d.errorParameters) << "\n";
+    }
+    if (d.productInfo.get())
+    {
+        os << *(d.productInfo) << "\n";
+    }
     for (size_t i = 0; i < d.geoInfo.size(); ++i)
     {
         os << d.geoInfo[i] << "\n";
     }
-    os << *(d.matchInfo) << "\n";
+    if (d.matchInfo.get())
+    {
+        os << *(d.matchInfo) << "\n";
+    }
     return os;
 }
 }

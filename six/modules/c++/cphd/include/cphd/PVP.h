@@ -25,12 +25,10 @@
 #include <ostream>
 #include <vector>
 #include <stddef.h>
-#include <map>
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
-#include <typeinfo>
 
 namespace cphd
 {
@@ -111,7 +109,7 @@ private:
 };
 
 /*
- * 
+ * The PVP XML metadata
  */
 struct Pvp
 {
@@ -323,12 +321,6 @@ struct Pvp
 
     size_t getReqSetSize() const;
 
-    void validate(size_t size, size_t offset);
-
-    bool isFormatStr(std::string format);
-
-    void validateFormat(std::string format);
-
     void setData(PVPType& param, size_t size, size_t offset, std::string format);
 
     void setData(size_t size, size_t offset, std::string format, std::string name, size_t idx);
@@ -336,6 +328,22 @@ struct Pvp
     void setNumAddedParameters(size_t size);
 
 private:
+    /*
+     * Validate parameter size and offset when setting parameter
+     */
+    void validate(size_t size, size_t offset);
+
+    /*
+     * Validate format string
+     */
+    void validateFormat(std::string format);
+
+    //! Helper validation function format validation
+    bool isFormatStr(std::string format);
+
+    /*
+     * Marks filled bytes
+     */
     std::vector<six::BooleanType> mParamLocations;
 
 };

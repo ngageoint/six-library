@@ -71,6 +71,7 @@ TEST_CASE(TxRcvMultIds)
 {
     cphd::Channel channel;
     channel.parameters.resize(2);
+    channel.parameters[0].txRcv.reset(new cphd::ChannelParameter::TxRcv());
     channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam1");
     channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam2");
     channel.parameters[0].txRcv->txWFId.push_back("TransmitWaveformParam3");
