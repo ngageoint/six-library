@@ -1,5 +1,4 @@
 MAINTAINER         = 'adam.sylvester@mdaus.com'
-VERSION            = '1.1.2'
 MODULE_DEPS        = 'six.sicd six.sidd'
 PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
