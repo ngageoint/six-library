@@ -310,7 +310,8 @@ TEST_CASE(testPvpThrow)
     pvp.setData(1, 30, "F8", "Param1", 0);
     pvp.setData(1, 31, "F8", "Param2", 1);
     TEST_EXCEPTION(pvp.setData(1, 30, "F8", "Param1", 3));
-
+    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;YF8;", "Param1", 3));
+    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;Y=F8;Z=", "Param1", 3));
 
     for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -380,8 +381,6 @@ TEST_CASE(testPvpThrow)
             TEST_EXCEPTION(pvpArray3.getAddedPVP<double>(channel, vector, 0));
         }
     }
-
-
 }
 
 TEST_CASE(testPvpEquality)

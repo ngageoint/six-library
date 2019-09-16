@@ -12,7 +12,7 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General Public License for more detailformat.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not,
@@ -76,7 +76,7 @@ void Pvp::validate(size_t size, size_t offset)
  * Validate user input format
  * Returns if valid, throws if not
  */
-void Pvp::validateFormat(std::string format)
+void Pvp::validateFormat(std::string& format)
 {
     if (format == "F4" || format == "F8")
     {
@@ -105,7 +105,53 @@ void Pvp::validateFormat(std::string format)
     {
         return;
     }
+    else if (isMultipleParam(format))
+    {
+        return;
+    }
     throw except::Exception(Ctxt("Invalid format provided"));
+}
+
+bool Pvp::isMultipleParam(std::string& format)
+{
+    std::string eqDelimiter = "=";
+    std::string colDelimiter = ";";
+    size_t idx = 0;
+    while (format.find(colDelimiter, idx) != std::string::npos)
+    {
+        size_t pos = format.find(colDelimiter, idx);
+        if(format.find(eqDelimiter, idx) == std::string::npos || format.find(eqDelimiter, idx) > pos)
+        {
+            return false;
+        }
+
+        size_t eqPos = format.find(eqDelimiter, idx);
+        std::string name = format.substr(idx, eqPos-idx);
+
+        //! Update the current idx
+        if (eqPos + 1 >= format.size())
+        {
+            return false;
+        }
+        idx = ++eqPos;
+        std::string format_string = format.substr(idx, pos-idx);
+        try
+        {
+            validateFormat(format_string);
+        }
+        catch(std::exception& e)
+        {
+            return false;
+        }
+
+        //! Update the current idx
+        if (pos + 1 >= format.size())
+        {
+            return true;
+        }
+        idx = ++pos;
+    }
+    return false;
 }
 
 bool Pvp::isFormatStr(std::string format)
@@ -128,6 +174,7 @@ bool Pvp::isFormatStr(std::string format)
 void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format)
 {
     validate(size, offset);
+    validateFormat(format);
     param.setData(size, offset, format);
 }
 
@@ -140,6 +187,7 @@ void Pvp::setData(size_t size, size_t offset, std::string format, std::string na
         throw except::Exception(Ctxt(
                                 "Additional Parameter specified does not exist"));
     }
+    validateFormat(format);
     addedPVP[idx].setData(size, offset, format);
     addedPVP[idx].setName(name);
 }

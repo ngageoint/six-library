@@ -336,7 +336,9 @@ private:
     /*
      * Validate format string
      */
-    void validateFormat(std::string format);
+    void validateFormat(std::string& format);
+
+    bool isMultipleParam(std::string& format);
 
     //! Helper validation function format validation
     bool isFormatStr(std::string format);
