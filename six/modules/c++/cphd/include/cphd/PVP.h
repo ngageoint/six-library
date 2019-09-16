@@ -30,6 +30,7 @@
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
+#include <typeinfo>
 
 namespace cphd
 {
@@ -323,6 +324,10 @@ struct Pvp
     size_t getReqSetSize() const;
 
     void validate(size_t size, size_t offset);
+
+    bool isFormatStr(std::string format);
+
+    void validateFormat(std::string format);
 
     void setData(PVPType& param, size_t size, size_t offset, std::string format);
 

@@ -19,13 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#include <complex>
+#include <sys/Conf.h>
 #include <cphd/PVP.h>
 #include <six/Init.h>
 
 namespace cphd
 {
-
 PVPType::PVPType() :
     mSize(0),
     mOffset(six::Init::undefined<size_t>()),
@@ -41,7 +41,6 @@ APVPType::APVPType() :
 Pvp::Pvp()
 {
 }
-
 
 Pvp::Pvp(size_t numAdditionalParams) :
     addedPVP(numAdditionalParams)
@@ -71,6 +70,59 @@ void Pvp::validate(size_t size, size_t offset)
     {
         mParamLocations[offset + ii] = true;
     }
+}
+
+/*
+ * Validate user input format
+ * Returns if valid, throws if not
+ */
+void Pvp::validateFormat(std::string format)
+{
+    if (format == "F4" || format == "F8")
+    {
+        return;
+    }
+    else if (format == "U1" || format == "U2" || format == "U4" ||
+                format == "U8")
+    {
+        return;
+    }
+    else if (format == "I1" || format == "I2" || format == "I4" ||
+                format == "I8")
+    {
+        return;
+    }
+    else if (format == "CI2" || format == "CI4" || format == "CI8" ||
+                format == "CI16")
+    {
+        return;
+    }
+    else if (format == "CF8" || format == "CF16")
+    {
+        return;
+    }
+    else if (isFormatStr(format)) // Else if Check for string type S[1-9][0-9]
+    {
+        return;
+    }
+    throw except::Exception(Ctxt("Invalid format provided"));
+}
+
+bool Pvp::isFormatStr(std::string format)
+{
+    const char* ptr = format.c_str();
+    if(format.size() <= 3)
+    {
+        if (*ptr == 'S')
+        {
+            ++ptr;
+            if(std::isdigit(*ptr) && std::isdigit(*(ptr+1)))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format)

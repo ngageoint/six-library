@@ -41,7 +41,7 @@ namespace cphd
 {
 
 /*
- * 
+ * PVP Block (Actual data)
  */
 struct PVPArray
 {
@@ -143,6 +143,10 @@ struct PVPArray
         mem::ScopedCopyablePtr<double> signal;
 
         std::vector<cphd::Parameter> addedPVP;
+
+    private:
+        friend std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p);
+
     };
 
     PVPArray() :
@@ -165,6 +169,11 @@ struct PVPArray
                     size_t numChannels,
                     std::vector<size_t> numVectors,
                     size_t numAddedParams=0.0);
+
+    // Helper string parsing function for validation
+    bool isFormatStr(std::string format);
+
+    void verifyChannelVector(size_t channel, size_t vector) const;
 
     /*
      * Getters
@@ -206,50 +215,6 @@ struct PVPArray
                 "Parameter was not set"));
     }
 
-    // Helper string parsing function for validation
-    bool isFormatStr(std::string format);
-
-    // Validate user input format
-    template<typename T> void validateFormat(T val, std::string format)
-    {
-        // Check <string,type_info> map?
-        if (format == "F4" || format == "F8")
-        {
-            if (typeid(double) == typeid(val))
-            {
-                return;
-            }
-        }
-        else if (format == "U1" || format == "U2" || format == "U4" ||
-                    format == "U8")
-        {
-            return;
-        }
-        else if (format == "I1" || format == "I2" || format == "I4" ||
-                    format == "I8")
-        {
-            return;
-        }
-        else if (format == "CI2" || format == "CI4" || format == "CI8" ||
-                    format == "CI16")
-        {
-            return;
-        }
-        else if (format == "CF8" || format == "CF16")
-        {
-            return;
-        }
-        else if (isFormatStr(format)) // Else if Check for string type S[1-9][0-9]
-        {
-            if (typeid(std::string) == typeid(val))
-            {
-                return;
-            }
-        }
-        throw std::bad_typeid();
-    }
-
-
     /*
      * Setters
      */
@@ -277,7 +242,7 @@ struct PVPArray
     void setTOAE2(Pvp& p, double value, size_t channel, size_t set);
     void setTdIonoSRP(Pvp& p, double value, size_t channel, size_t set);
     void setSignal(Pvp& p, double value, size_t channel, size_t set);
-    // void setAddedPVP(Pvp& p, double value, size_t channel, size_t set, size_t idx);
+
     template<typename T> void setAddedPVP(Pvp& p, T value, size_t channel, size_t set, size_t idx)
     {
         verifyChannelVector(channel, set);
@@ -285,7 +250,6 @@ struct PVPArray
         {
             if(idx < mData[channel][set].addedPVP.size())
             {
-                validateFormat(value, p.addedPVP[idx].getFormat());
                 mData[channel][set].addedPVP[idx].setValue(value);
                 return;
             }
@@ -317,14 +281,10 @@ struct PVPArray
     void getPVPdata(Pvp& p, size_t channel,
                     void* data) const;
 
-    void getData(sys::ubyte* data) const;
-
     std::vector<std::vector<PVPSet> >& getData()
     {
         return mData;
     }
-
-    void verifyChannelVector(size_t channel, size_t vector) const;
 
     size_t getPVPsize(size_t channel) const;
 
@@ -360,14 +320,11 @@ struct PVPArray
         return !((*this) == other);
     }
 
-
 private:
     std::vector<std::vector<PVPSet> > mData; // The PVP Array [Num Channles][Num Parameters]
     size_t mNumBytesPerVector;
-
+    friend std::ostream& operator<< (std::ostream& os, const PVPArray& p);
 };
-std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p);
-std::ostream& operator<< (std::ostream& os, const PVPArray& p);
 }
 #endif
 

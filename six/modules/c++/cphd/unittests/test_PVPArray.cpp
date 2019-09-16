@@ -142,7 +142,6 @@ void setVectorParameters(const std::string& testName,
     const double scss = getRandom();
     pvpArray.setSCSS(scss, channel, vector);
     pvpArray2.setSCSS(scss, channel, vector);
-
 }
 
 void testVectorParameters(const std::string& testName,
@@ -254,7 +253,7 @@ TEST_CASE(testPvpOptional)
     pvp.setData(*pvp.fxN2, 1, 29, "F8");
     pvp.setData(1, 30, "F8", "Param1", 0);
     pvp.setData(1, 31, "S10", "Param2", 1);
-    pvp.setData(1, 32, "CI8", "Param3", 2);
+    pvp.setData(1, 32, "CI16", "Param3", 2);
 
     for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -286,7 +285,6 @@ TEST_CASE(testPvpOptional)
             TEST_ASSERT_EQ(addedParam1, pvpArray.getAddedPVP<double>(channel, vector, 0));
             TEST_ASSERT_EQ(addedParam2, pvpArray.getAddedPVP<std::string>(channel, vector, 1));
             TEST_ASSERT_EQ(addedParam3, pvpArray.getAddedPVP<std::complex<int> >(channel, vector, 2));
-
         }
     }
 }
@@ -450,11 +448,8 @@ TEST_CASE(testPvpEquality)
             pvpArray2.setAddedPVP(pvp2, addedParam2, channel, vector, 1);
         }
     }
-
-    TEST_ASSERT_TRUE(pvpArray1 == pvpArray2);
-
+    TEST_ASSERT_EQ(pvpArray1, pvpArray2);
 }
-
 }
 
 int main(int , char** )
@@ -464,7 +459,6 @@ int main(int , char** )
     TEST_CHECK(testPvpOptional);
     TEST_CHECK(testPvpThrow);
     TEST_CHECK(testPvpEquality);
-    // TEST_CHECK(testDataConstructor);
     return 0;
 }
 
