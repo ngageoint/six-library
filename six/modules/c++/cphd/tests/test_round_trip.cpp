@@ -2,10 +2,10 @@
 #include <fstream>
 #include <memory>
 
-#include <io/MockSeekableInputStream.h>
 #include <xml/lite/MinidomParser.h>
 #include <cli/ArgumentParser.h>
-
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Global.h>
 #include <cphd/Metadata.h>

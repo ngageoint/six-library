@@ -21,7 +21,7 @@
 */
 
 #include <cphd/FileHeader.h>
-#include <io/MockSeekableInputStream.h>
+#include <io/ByteStream.h>
 #include "TestCase.h"
 
 namespace
@@ -42,14 +42,15 @@ static const char FILE_HEADER_CONTENT[] = "CPHD/1.0\n"
 
 TEST_CASE(testReadVersion)
 {
-    io::MockSeekableInputStream fileTypeHeader(FILE_TYPE_HEADER);
+    io::ByteStream fileTypeHeader;
+    fileTypeHeader.write(FILE_TYPE_HEADER, strlen(FILE_TYPE_HEADER));
     TEST_ASSERT_EQ(cphd::FileHeader::readVersion(fileTypeHeader), "1.0");
 }
 
 TEST_CASE(testCanReadHeaderWithoutBreaking)
 {
-    io::MockSeekableInputStream fileHeaderContentWithSupport(
-            FILE_HEADER_CONTENT);
+    io::ByteStream fileHeaderContentWithSupport;
+    fileHeaderContentWithSupport.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
     cphd::FileHeader headerWithSupport;
     headerWithSupport.read(fileHeaderContentWithSupport);
     TEST_ASSERT_EQ(headerWithSupport.getXMLBlockSize(), 3);
@@ -63,7 +64,8 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
     TEST_ASSERT_EQ(headerWithSupport.getClassification(), "UNCLASSIFIED");
     TEST_ASSERT_EQ(headerWithSupport.getReleaseInfo(), "UNRESTRICTED");
 
-    io::MockSeekableInputStream fileHeaderContentWithoutSupport("CPHD/1.0\n"
+    io::ByteStream fileHeaderContentWithoutSupport;
+    std::string fileHeaderTxtNoSupport = "CPHD/1.0\n"
             "XML_BLOCK_SIZE := 3\n"
             "XML_BLOCK_BYTE_OFFSET := 10\n"
             "PVP_BLOCK_SIZE := 5\n"
@@ -72,7 +74,9 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "SIGNAL_BLOCK_BYTE_OFFSET := 20\n"
             "CLASSIFICATION := UNCLASSIFIED\n"
             "RELEASE_INFO := UNRESTRICTED\n"
-            "\f\n");
+            "\f\n";
+    fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport.c_str(), 
+                                            fileHeaderTxtNoSupport.size());
     cphd::FileHeader headerWithoutSupport;
     headerWithoutSupport.read(fileHeaderContentWithoutSupport);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockSize(), 3);
@@ -86,8 +90,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
     TEST_ASSERT_EQ(headerWithoutSupport.getClassification(), "UNCLASSIFIED");
     TEST_ASSERT_EQ(headerWithoutSupport.getReleaseInfo(), "UNRESTRICTED");
 
-    io::MockSeekableInputStream fileHeaderContentWithoutClassification(
-            "CPHD/1.0\n"
+    std::string fileHeaderTxtNoClass = "CPHD/1.0\n"
             "XML_BLOCK_SIZE := 3\n"
             "XML_BLOCK_BYTE_OFFSET := 10\n"
             "PVP_BLOCK_SIZE := 5\n"
@@ -95,11 +98,13 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "SIGNAL_BLOCK_SIZE := 6\n"
             "SIGNAL_BLOCK_BYTE_OFFSET := 20\n"
             "RELEASE_INFO := UNRESTRICTED\n"
-            "\f\n");
+            "\f\n";
+    io::ByteStream fileHeaderContentWithoutClassification;
+    fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass.c_str(), 
+                                                    fileHeaderTxtNoClass.size());
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithoutClassification));
 
-    io::MockSeekableInputStream fileHeaderContentWithInvalidValue(
-            "CPHD/1.0\n"
+    std::string fileHeaderTxtInvalid = "CPHD/1.0\n"
             "XML_BLOCK_SIZE := foo\n"
             "XML_BLOCK_BYTE_OFFSET := 10\n"
             "PVP_BLOCK_SIZE := 5\n"
@@ -108,17 +113,23 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "SIGNAL_BLOCK_BYTE_OFFSET := 20\n"
             "CLASSIFICATION := UNCLASSIFIED\n"
             "RELEASE_INFO := UNRESTRICTED\n"
-            "\f\n");
+            "\f\n";
+    io::ByteStream fileHeaderContentWithInvalidValue;
+    fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid.c_str(), 
+                                                fileHeaderTxtInvalid.size());
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithInvalidValue));
 }
 
 TEST_CASE(testRoundTripHeader)
 {
-    io::MockSeekableInputStream headerContent(FILE_HEADER_CONTENT);
+    io::ByteStream headerContent;
+    headerContent.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
     cphd::FileHeader header;
     header.read(headerContent);
     std::string outString = header.toString();
-    io::MockSeekableInputStream roundTrippedContent(outString);
+
+    io::ByteStream roundTrippedContent;
+    roundTrippedContent.write(outString.c_str(), outString.size());
     cphd::FileHeader roundTrippedHeader;
     roundTrippedHeader.read(roundTrippedContent);
 

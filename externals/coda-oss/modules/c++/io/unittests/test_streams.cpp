@@ -21,11 +21,6 @@
  */
 
 #include <import/io.h>
-#include <io/MockSeekableInputStream.h>
-<<<<<<< Updated upstream
-#include <io/TempFile.h>
-=======
->>>>>>> Stashed changes
 #include "TestCase.h"
 
 TEST_CASE(testStringStream)
@@ -112,63 +107,6 @@ TEST_CASE(testCountingOutputStream)
     io::CountingOutputStream counter(&stream);
     counter.write("test1");
     TEST_ASSERT_EQ(counter.getCount(), 5);
-}
-
-TEST_CASE(testMockSeekableInputStream)
-{
-    const std::string input("test");
-    io::TempFile file;
-    io::FileOutputStream filestream(file.pathname());
-    filestream.write("test", 4);
-    filestream.close();
-
-    io::MockSeekableInputStream stream(input);
-    io::FileInputStream fileInputStream(file.pathname());
-    TEST_ASSERT_EQ(stream.available(), input.size());
-    TEST_ASSERT_EQ(stream.tell(), 0);
-
-    TEST_ASSERT_EQ(fileInputStream.available(), stream.available());
-    TEST_ASSERT_EQ(fileInputStream.tell(), stream.tell());
-
-    size_t distance = stream.seek(-1, io::Seekable::END);
-    TEST_ASSERT_EQ(distance, 3);
-    TEST_ASSERT_EQ(fileInputStream.seek(-1, io::Seekable::END), 3);
-    TEST_ASSERT_EQ(stream.available(), 1);
-    TEST_ASSERT_EQ(stream.tell(), 3);
-    TEST_ASSERT_EQ(fileInputStream.available(), 1);
-    TEST_ASSERT_EQ(fileInputStream.tell(), 3);
-
-    distance = stream.seek(2, io::Seekable::START);
-    TEST_ASSERT_EQ(distance, 2)
-    TEST_ASSERT_EQ(stream.available(), 2);
-    TEST_ASSERT_EQ(stream.tell(), 2);
-    TEST_ASSERT_EQ(fileInputStream.seek(2, io::Seekable::START), 2);
-    TEST_ASSERT_EQ(fileInputStream.available(), 2);
-    TEST_ASSERT_EQ(fileInputStream.tell(), 2);
-
-    distance = stream.seek(2, io::Seekable::CURRENT);
-    TEST_ASSERT_EQ(distance, 4);
-    TEST_ASSERT_EQ(stream.available(), 0);
-    TEST_ASSERT_EQ(stream.tell(), 4);
-    TEST_ASSERT_EQ(fileInputStream.seek(2, io::Seekable::CURRENT), 4);
-    TEST_ASSERT_EQ(fileInputStream.available(), 0);
-    TEST_ASSERT_EQ(fileInputStream.tell(), 4);
-
-    TEST_THROWS(stream.seek(-1, io::Seekable::START));
-    TEST_THROWS(stream.seek(5, io::Seekable::START));
-    TEST_THROWS(stream.seek(1, io::Seekable::END));
-    TEST_THROWS(stream.seek(5, io::Seekable::END));
-
-    mem::ScopedArray<sys::byte> buffer(new sys::byte[4]);
-    stream.seek(0, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.read(buffer.get(), 5), 4);
-    stream.seek(3, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.read(buffer.get(), 2), 1);
-    stream.seek(2, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.read(buffer.get(), 2), 2);
-    TEST_ASSERT_EQ(buffer[0], 's');
-    TEST_ASSERT_EQ(buffer[1], 't');
-    TEST_ASSERT_EQ(stream.tell(), 4);
 }
 
 void cleanupFiles(std::string base)
@@ -277,7 +215,6 @@ int main(int, char**)
     TEST_CHECK(testByteStream);
     TEST_CHECK(testProxyOutputStream);
     TEST_CHECK(testCountingOutputStream);
-    TEST_CHECK(testMockSeekableInputStream);
     TEST_CHECK(testRotate);
     TEST_CHECK(testNeverRotate);
     TEST_CHECK(testRotateReset);
