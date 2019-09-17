@@ -6,7 +6,7 @@
 #include <cphd/Global.h>
 #include <cphd/Metadata.h>
 #include <cphd/SceneCoordinates.h>
-#include <io/MockSeekableInputStream.h>
+#include <io/FileInputStream.h>
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 

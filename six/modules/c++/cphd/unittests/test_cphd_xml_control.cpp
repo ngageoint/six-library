@@ -6,7 +6,7 @@
 #include <cphd/Global.h>
 #include <cphd/Metadata.h>
 #include <cphd/SceneCoordinates.h>
-#include <io/MockSeekableInputStream.h>
+#include <io/StringStream.h>
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
@@ -460,10 +460,11 @@ static const char XML[] =
 "</CPHD>";
 }
 
-
 TEST_CASE(testReadXML)
 {
-    io::MockSeekableInputStream cphdStream(XML);
+    io::StringStream cphdStream;
+    cphdStream.write(XML, strlen(XML));
+
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
