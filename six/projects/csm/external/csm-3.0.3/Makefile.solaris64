@@ -1,6 +1,0 @@
-include Makefile
-
-CC=CC-12-p1
-COPTS=-KPIC -xarch=sparcvis2 -xO3 -m64
-LDOPTS=-G -h $(SONAME)
-INSTDIR=$(PWD)/solaris64

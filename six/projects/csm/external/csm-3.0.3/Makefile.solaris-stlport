@@ -1,6 +1,0 @@
-include Makefile
-
-CC=CC-12-p1
-COPTS=-KPIC -xtarget=ultra3 -xarch=sparcvis2 -xO3 -m32 -library=stlport4,Crun
-LDOPTS=-G -h $(SONAME)
-INSTDIR=$(PWD)/solaris_stlport
