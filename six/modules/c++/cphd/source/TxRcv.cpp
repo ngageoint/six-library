@@ -48,9 +48,7 @@ RcvParameters::RcvParameters() :
 {
 }
 
-TxRcv::TxRcv() :
-    numTxWFs(six::Init::undefined<size_t>()),
-    numRcvs(six::Init::undefined<size_t>())
+TxRcv::TxRcv()
 {
 }
 
@@ -87,15 +85,15 @@ std::ostream& operator<< (std::ostream& os, const RcvParameters& r)
 std::ostream& operator<< (std::ostream& os, const TxRcv& t)
 {
     os << "TxRcv:: \n"
-        << "  NumTxWFs         : " << t.numTxWFs << "\n"
-        << "  NumRcvs          : " << t.numRcvs << "\n";
-    for (size_t i = 0; i < t.txWFParameters.size(); ++i)
+        << "  NumTxWFs         : " << t.txWFParameters.size() << "\n"
+        << "  NumRcvs          : " << t.rcvParameters.size() << "\n";
+    for (size_t ii = 0; ii < t.txWFParameters.size(); ++ii)
     {
-        os << t.txWFParameters[i] << "\n";
+        os << t.txWFParameters[ii] << "\n";
     }
-    for (size_t i = 0; i < t.rcvParameters.size(); ++i)
+    for (size_t ii = 0; ii < t.rcvParameters.size(); ++ii)
     {
-        os << t.rcvParameters[i] << "\n";
+        os << t.rcvParameters[ii] << "\n";
     }
     return os;
 }

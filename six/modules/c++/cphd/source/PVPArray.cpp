@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of cphd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
- * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -88,60 +88,60 @@ PVPArray::PVPSet::PVPSet() :
 {
 }
 
-void PVPArray::PVPSet::setData(Pvp& p, const sys::byte* data)
+void PVPArray::PVPSet::write(Pvp& p, const sys::byte* input)
 {
-    ::setData(data + p.txPos.getOffset()*8, txTime);
-    ::setData(data + p.txPos.getOffset()*8, txPos);
-    ::setData(data + p.txVel.getOffset()*8, txVel);
-    ::setData(data + p.rcvTime.getOffset()*8, rcvTime);
-    ::setData(data + p.rcvPos.getOffset()*8, rcvPos);
-    ::setData(data + p.rcvVel.getOffset()*8, rcvVel);
-    ::setData(data + p.srpPos.getOffset()*8, srpPos);
-    ::setData(data + p.aFDOP.getOffset()*8, aFDOP);
-    ::setData(data + p.aFRR1.getOffset()*8, aFRR1);
-    ::setData(data + p.aFRR2.getOffset()*8, aFRR2);
-    ::setData(data + p.fx1.getOffset()*8, fx1);
-    ::setData(data + p.fx2.getOffset()*8, fx2);
-    ::setData(data + p.toa1.getOffset()*8, toa1);
-    ::setData(data + p.toa2.getOffset()*8, toa2);
-    ::setData(data + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
-    ::setData(data + p.sc0.getOffset()*8, sc0);
-    ::setData(data + p.scss.getOffset()*8, scss);
+    ::setData(input + p.txPos.getOffset()*8, txTime);
+    ::setData(input + p.txPos.getOffset()*8, txPos);
+    ::setData(input + p.txVel.getOffset()*8, txVel);
+    ::setData(input + p.rcvTime.getOffset()*8, rcvTime);
+    ::setData(input + p.rcvPos.getOffset()*8, rcvPos);
+    ::setData(input + p.rcvVel.getOffset()*8, rcvVel);
+    ::setData(input + p.srpPos.getOffset()*8, srpPos);
+    ::setData(input + p.aFDOP.getOffset()*8, aFDOP);
+    ::setData(input + p.aFRR1.getOffset()*8, aFRR1);
+    ::setData(input + p.aFRR2.getOffset()*8, aFRR2);
+    ::setData(input + p.fx1.getOffset()*8, fx1);
+    ::setData(input + p.fx2.getOffset()*8, fx2);
+    ::setData(input + p.toa1.getOffset()*8, toa1);
+    ::setData(input + p.toa2.getOffset()*8, toa2);
+    ::setData(input + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
+    ::setData(input + p.sc0.getOffset()*8, sc0);
+    ::setData(input + p.scss.getOffset()*8, scss);
 
     if (p.ampSF.get())
     {
         ampSF.reset(new double());
-        ::setData(data + p.ampSF->getOffset()*8, *ampSF);
+        ::setData(input + p.ampSF->getOffset()*8, *ampSF);
     }
     if (p.fxN1.get())
     {
         fxN1.reset(new double());
-        ::setData(data + p.fxN1->getOffset()*8, *fxN1);
+        ::setData(input + p.fxN1->getOffset()*8, *fxN1);
     }
     if (p.fxN2.get())
     {
         fxN2.reset(new double());
-        ::setData(data + p.fxN2->getOffset()*8, *fxN2);
+        ::setData(input + p.fxN2->getOffset()*8, *fxN2);
     }
     if (p.toaE1.get())
     {
         toaE1.reset(new double());
-        ::setData(data + p.toaE1->getOffset()*8, *toaE1);
+        ::setData(input + p.toaE1->getOffset()*8, *toaE1);
     }
     if (p.toaE2.get())
     {
         toaE2.reset(new double());
-        ::setData(data + p.toaE2->getOffset()*8, *toaE2);
+        ::setData(input + p.toaE2->getOffset()*8, *toaE2);
     }
     if (p.tdIonoSRP.get())
     {
         tdIonoSRP.reset(new double());
-        ::setData(data + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
+        ::setData(input + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
     }
     if (p.signal.get())
     {
         signal.reset(new double());
-        ::setData(data + p.signal->getOffset()*8, *signal);
+        ::setData(input + p.signal->getOffset()*8, *signal);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
@@ -152,58 +152,58 @@ void PVPArray::PVPSet::setData(Pvp& p, const sys::byte* data)
     {
         std::string val;
         val.resize(p.addedPVP.size());
-        ::setData(data + p.addedPVP[ii].getOffset()*8, val[0]);
+        ::setData(input + p.addedPVP[ii].getOffset()*8, val[0]);
         addedPVP[ii].setValue(val);
     }
 }
 
-void PVPArray::PVPSet::getData(Pvp& p, sys::ubyte* data) const
+void PVPArray::PVPSet::read(Pvp& p, sys::ubyte* dest) const
 {
-    ::getData(data + p.txPos.getOffset()*8, txTime);
-    ::getData(data + p.txPos.getOffset()*8, txPos);
-    ::getData(data + p.txVel.getOffset()*8, txVel);
-    ::getData(data + p.rcvTime.getOffset()*8, rcvTime);
-    ::getData(data + p.rcvPos.getOffset()*8, rcvPos);
-    ::getData(data + p.rcvVel.getOffset()*8, rcvVel);
-    ::getData(data + p.srpPos.getOffset()*8, srpPos);
-    ::getData(data + p.aFDOP.getOffset()*8, aFDOP);
-    ::getData(data + p.aFRR1.getOffset()*8, aFRR1);
-    ::getData(data + p.aFRR2.getOffset()*8, aFRR2);
-    ::getData(data + p.fx1.getOffset()*8, fx1);
-    ::getData(data + p.fx2.getOffset()*8, fx2);
-    ::getData(data + p.toa1.getOffset()*8, toa1);
-    ::getData(data + p.toa2.getOffset()*8, toa2);
-    ::getData(data + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
-    ::getData(data + p.sc0.getOffset()*8, sc0);
-    ::getData(data + p.scss.getOffset()*8, scss);
+    ::getData(dest + p.txPos.getOffset()*8, txTime);
+    ::getData(dest + p.txPos.getOffset()*8, txPos);
+    ::getData(dest + p.txVel.getOffset()*8, txVel);
+    ::getData(dest + p.rcvTime.getOffset()*8, rcvTime);
+    ::getData(dest + p.rcvPos.getOffset()*8, rcvPos);
+    ::getData(dest + p.rcvVel.getOffset()*8, rcvVel);
+    ::getData(dest + p.srpPos.getOffset()*8, srpPos);
+    ::getData(dest + p.aFDOP.getOffset()*8, aFDOP);
+    ::getData(dest + p.aFRR1.getOffset()*8, aFRR1);
+    ::getData(dest + p.aFRR2.getOffset()*8, aFRR2);
+    ::getData(dest + p.fx1.getOffset()*8, fx1);
+    ::getData(dest + p.fx2.getOffset()*8, fx2);
+    ::getData(dest + p.toa1.getOffset()*8, toa1);
+    ::getData(dest + p.toa2.getOffset()*8, toa2);
+    ::getData(dest + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
+    ::getData(dest + p.sc0.getOffset()*8, sc0);
+    ::getData(dest + p.scss.getOffset()*8, scss);
 
     if (ampSF.get())
     {
-        ::getData(data + p.ampSF->getOffset()*8, *ampSF);
+        ::getData(dest + p.ampSF->getOffset()*8, *ampSF);
     }
     if (fxN1.get())
     {
-        ::getData(data + p.fxN1->getOffset()*8, *fxN1);
+        ::getData(dest + p.fxN1->getOffset()*8, *fxN1);
     }
     if (fxN2.get())
     {
-        ::getData(data + p.fxN2->getOffset()*8, *fxN2);
+        ::getData(dest + p.fxN2->getOffset()*8, *fxN2);
     }
     if (toaE1.get())
     {
-        ::getData(data + p.toaE1->getOffset()*8, *toaE1);
+        ::getData(dest + p.toaE1->getOffset()*8, *toaE1);
     }
     if (toaE2.get())
     {
-        ::getData(data + p.toaE2->getOffset()*8, *toaE2);
+        ::getData(dest + p.toaE2->getOffset()*8, *toaE2);
     }
     if (tdIonoSRP.get())
     {
-        ::getData(data + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
+        ::getData(dest + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
     }
     if (signal.get())
     {
-        ::getData(data + p.signal->getOffset()*8, *signal);
+        ::getData(dest + p.signal->getOffset()*8, *signal);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
@@ -212,7 +212,7 @@ void PVPArray::PVPSet::getData(Pvp& p, sys::ubyte* data) const
     }
     for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
     {
-        ::getData(data + p.addedPVP[ii].getOffset()*8, addedPVP[ii]);
+        ::getData(dest + p.addedPVP[ii].getOffset()*8, addedPVP[ii].str());
     }
 }
 
@@ -301,7 +301,7 @@ void PVPArray::getPVPdata(Pvp& p, size_t channel,
          ii < mData[channel].size();
          ++ii, ptr += numBytes)
     {
-        mData[channel][ii].getData(p, ptr);
+        mData[channel][ii].read(p, ptr);
     }
 }
 
@@ -333,17 +333,17 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
     // Seek to start of PVPArray
     size_t totalBytesRead(0);
     inStream.seek(startPVP, io::Seekable::START);
-    std::vector<sys::ubyte> data;
+    std::vector<sys::ubyte> readBuf;
     const size_t numBytesPerVector = getNumBytesPVP();
 
     // Read the data for each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        data.resize(getPVPsize(ii));
-        if (!data.empty())
+        readBuf.resize(getPVPsize(ii));
+        if (!readBuf.empty())
         {
-            sys::byte* const buf = reinterpret_cast<sys::byte*>(&data[0]);
-            sys::SSize_T bytesThisRead = inStream.read(buf, data.size());
+            sys::byte* const buf = reinterpret_cast<sys::byte*>(&readBuf[0]);
+            sys::SSize_T bytesThisRead = inStream.read(buf, readBuf.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;
@@ -358,14 +358,14 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
             {
                 byteSwap(buf,
                          sizeof(double),
-                         data.size() / sizeof(double),
+                         readBuf.size() / sizeof(double),
                          numThreads);
             }
 
             sys::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
-                mData[ii][jj].setData(p, ptr);
+                mData[ii][jj].write(p, ptr);
             }
         }
     }

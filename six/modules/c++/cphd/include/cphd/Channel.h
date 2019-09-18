@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, Maxar technologies LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -281,7 +281,7 @@ struct ChannelParameter
     Polarization polarization;
     double fxC;
     double fxBW;
-    double fxBWNoise;
+    double fxBWNoise; // Optional
     double toaSaved;
     DwellTimes dwellTimes;
     AreaType imageArea;

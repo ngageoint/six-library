@@ -26,13 +26,11 @@
 namespace cphd
 {
 
-LineType::LineType() :
-    numEndpoints(six::Init::undefined<size_t>())
+LineType::LineType()
 {
 }
 
-PolygonType::PolygonType() :
-    numVertices(six::Init::undefined<size_t>())
+PolygonType::PolygonType()
 {
 }
 
@@ -53,42 +51,42 @@ std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
     {
         os << "  name         : " << g.getName() << "\n";
     }
-    for (size_t i = 0; i < g.desc.size(); ++i)
+    for (size_t ii = 0; ii < g.desc.size(); ++ii)
     {
-        os << "  desc name    : " << g.desc[i].getName() << "\n";
-        os << "  desc value   : " << g.desc[i].str() << "\n";
+        os << "  desc name    : " << g.desc[ii].getName() << "\n";
+        os << "  desc value   : " << g.desc[ii].str() << "\n";
     }
-    for (size_t i = 0; i < g.point.size(); ++i)
+    for (size_t ii = 0; ii < g.point.size(); ++ii)
     {
         os << "  point::\n"
-            << "    lat    : " << g.point[i].getLat() << "\n"
-            << "    lon    : " << g.point[i].getLon() << "\n";
+            << "    lat    : " << g.point[ii].getLat() << "\n"
+            << "    lon    : " << g.point[ii].getLon() << "\n";
     }
-    for (size_t i = 0; i < g.line.size(); ++i)
+    for (size_t ii = 0; ii < g.line.size(); ++ii)
     {
         os << "  line::\n"
-            << "  Size    : " << g.line[i].numEndpoints << "\n";
-            for (size_t j = 0; j < g.line[i].endpoint.size(); ++j)
+            << "  Size    : " << g.line[ii].endpoint.size() << "\n";
+            for (size_t jj = 0; jj < g.line[ii].endpoint.size(); ++jj)
             {
-                os << "    Endpoint index   :" << g.line[i].endpoint[j].index << "\n"
-                    << "      lat    : " << g.line[i].endpoint[j].getLat() << "\n"
-                    << "      lon    : " << g.line[i].endpoint[j].getLon() << "\n";
+                os << "    Endpoint index   :" << g.line[ii].endpoint[jj].index << "\n"
+                    << "      lat    : " << g.line[ii].endpoint[jj].getLat() << "\n"
+                    << "      lon    : " << g.line[ii].endpoint[jj].getLon() << "\n";
             }
     }
-    for (size_t i = 0; i < g.polygon.size(); ++i)
+    for (size_t ii = 0; ii < g.polygon.size(); ++ii)
     {
         os << "  polygon::\n"
-            << "  Size    : " << g.polygon[i].numVertices << "\n";
-            for (size_t j = 0; j < g.polygon[i].vertex.size(); ++j)
+            << "  Size    : " << g.polygon[ii].vertex.size() << "\n";
+            for (size_t jj = 0; jj < g.polygon[ii].vertex.size(); ++jj)
             {
-                os << "    Vertex index   :" << g.polygon[i].vertex[j].index << "\n"
-                    << "      lat    : " << g.polygon[i].vertex[j].getLat() << "\n"
-                    << "      lon    : " << g.polygon[i].vertex[j].getLon() << "\n";
+                os << "    Vertex index   :" << g.polygon[ii].vertex[jj].index << "\n"
+                    << "      lat    : " << g.polygon[ii].vertex[jj].getLat() << "\n"
+                    << "      lon    : " << g.polygon[ii].vertex[jj].getLon() << "\n";
             }
     }
-    for (size_t i = 0; i < g.geoInfo.size(); ++i)
+    for (size_t ii = 0; ii < g.geoInfo.size(); ++ii)
     {
-        os << "  geoInfo  : " << g.geoInfo[i] << "\n";
+        os << "  geoInfo  : " << g.geoInfo[ii] << "\n";
     }
     return os;
 }

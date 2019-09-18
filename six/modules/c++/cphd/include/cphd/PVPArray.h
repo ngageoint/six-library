@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of cphd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
- * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -34,7 +34,7 @@
 #include <cphd/Data.h>
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
-#include <cphd/Parameter.h>
+#include <cphd/ComplexParameter.h>
 #include <cphd/ByteSwap.h>
 
 namespace cphd
@@ -53,7 +53,7 @@ struct PVPArray
     template<typename T>
     struct AddedPVP
     {
-        T getAddedPVP(cphd::Parameter& val, size_t channel, size_t set, size_t idx)
+        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, size_t idx)
         {
             return static_cast<T>(val);
         }
@@ -62,7 +62,7 @@ struct PVPArray
     template<typename T>
     struct AddedPVP<std::complex<T> >
     {
-        std::complex<T> getAddedPVP(cphd::Parameter& val, size_t channel, size_t set, size_t idx)
+        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, size_t idx)
         {
             return val.getComplex<T>();
         }
@@ -72,9 +72,9 @@ struct PVPArray
     {
         PVPSet();
 
-        void setData(Pvp& p, const sys::byte* data);
+        void write(Pvp&, const sys::byte*);
 
-        void getData(Pvp& p, sys::ubyte* data) const;
+        void read(Pvp&, sys::ubyte*) const;
 
         bool operator==(const PVPSet& other) const
         {
@@ -141,7 +141,7 @@ struct PVPArray
         mem::ScopedCopyablePtr<double> tdIonoSRP;
         mem::ScopedCopyablePtr<double> signal;
 
-        std::vector<cphd::Parameter> addedPVP;
+        std::vector<ComplexParameter> addedPVP;
 
     private:
         friend std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p);

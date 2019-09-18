@@ -50,14 +50,14 @@ std::ostream& operator<< (std::ostream& os, const CollectionID& c)
         << "  RadarMode        : " << c.radarMode << "\n"
         << "  RadarModeID      : " << c.radarMode << "\n"
         << "  ReleaseInfo      : " << c.releaseInfo << "\n";
-    for (size_t i = 0; i < c.countryCodes.size(); ++i)
+    for (size_t ii = 0; ii < c.countryCodes.size(); ++ii)
     {
-        os << "  CountryCodes     : " << c.countryCodes[i] << "\n";
+        os << "  CountryCodes     : " << c.countryCodes[ii] << "\n";
     }
-    for (size_t i = 0; i < c.parameters.size(); ++i)
+    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.parameters[i].getName() << "\n"
-            << "  Parameter value  : " << c.parameters[i].str() << "\n";
+        os << "  Parameter name   : " << c.parameters[ii].getName() << "\n"
+            << "  Parameter value  : " << c.parameters[ii].str() << "\n";
     }
     return os;
 }

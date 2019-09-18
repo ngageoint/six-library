@@ -25,7 +25,7 @@
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
 #include <cphd03/FileHeader.h>
-#include <cphd03/ByteSwap.h>
+#include <cphd/ByteSwap.h>
 
 namespace cphd03
 {
@@ -67,7 +67,7 @@ void CPHDWriter::DataWriterLittleEndian::operator()(
                data + dataProcessed,
                dataToProcess);
 
-        byteSwap(mScratch.get(),
+        cphd::byteSwap(mScratch.get(),
                  elementSize,
                  dataToProcess / elementSize,
                  mNumThreads);

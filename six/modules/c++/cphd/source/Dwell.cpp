@@ -38,9 +38,7 @@ COD::COD() :
 {
 }
 
-Dwell::Dwell() :
-    numCODTimes(six::Init::undefined<size_t>()),
-    numDwellTimes(six::Init::undefined<size_t>())
+Dwell::Dwell()
 {
 }
 
@@ -63,15 +61,15 @@ std::ostream& operator<< (std::ostream& os, const COD& c)
 std::ostream& operator<< (std::ostream& os, const Dwell& d)
 {
     os << "Dwell:: \n"
-        << "  NumCODTimes      : " << d.numCODTimes << "\n"
-        << "  NumDwellTimes    : " << d.numDwellTimes << "\n";
-    for (size_t i = 0; i < d.cod.size(); ++i)
+        << "  NumCODTimes      : " << d.cod.size() << "\n"
+        << "  NumDwellTimes    : " << d.dtime.size() << "\n";
+    for (size_t ii = 0; ii < d.cod.size(); ++ii)
     {
-        os << d.cod[i] << "\n";
+        os << d.cod[ii] << "\n";
     }
-    for (size_t i = 0; i < d.dtime.size(); ++i)
+    for (size_t ii = 0; ii < d.dtime.size(); ++ii)
     {
-        os << d.dtime[i] << "\n";
+        os << d.dtime[ii] << "\n";
     }
     return os;
 }

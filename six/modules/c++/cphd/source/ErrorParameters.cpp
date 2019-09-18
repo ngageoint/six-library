@@ -177,10 +177,10 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
                 os << *(e.monostatic->ionoError->ionoRangeVertDecorr) << "\n";
             }
         }
-        for (size_t i = 0; i < e.monostatic->parameter.size(); ++i)
+        for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)
         {
-            os << "    Parameter Name   : " << e.monostatic->parameter[i].getName() << "\n"
-                << "    Parameter Value  : " << e.monostatic->parameter[i].str() << "\n";
+            os << "    Parameter Name   : " << e.monostatic->parameter[ii].getName() << "\n"
+                << "    Parameter Value  : " << e.monostatic->parameter[ii].str() << "\n";
         }
     }
     else if (e.bistatic.get())
@@ -197,10 +197,10 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             << "    RadarSensor:: \n"
             << "    ClockFreqSF      : " << e.bistatic->rcvPlatform.radarSensor.clockFreqSF << "\n"
             << "    CollectionStartTime : " << e.bistatic->rcvPlatform.radarSensor.collectionStartTime << "\n";
-        for (size_t i = 0; i < e.bistatic->parameter.size(); ++i)
+        for (size_t ii = 0; ii < e.bistatic->parameter.size(); ++ii)
         {
-            os << "    Parameter Name   : " << e.bistatic->parameter[i].getName() << "\n"
-                << "    Parameter Value  : " << e.bistatic->parameter[i].str() << "\n";
+            os << "    Parameter Name   : " << e.bistatic->parameter[ii].getName() << "\n"
+                << "    Parameter Value  : " << e.bistatic->parameter[ii].str() << "\n";
         }
     }
     else

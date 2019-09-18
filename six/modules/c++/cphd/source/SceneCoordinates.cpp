@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -91,8 +91,7 @@ Segment::Segment() :
     startSample(0),
     endLine(0),
     endSample(0),
-    identifier(six::Init::undefined<std::string>()),
-    size(six::Init::undefined<size_t>())
+    identifier(six::Init::undefined<std::string>())
 {
 }
 

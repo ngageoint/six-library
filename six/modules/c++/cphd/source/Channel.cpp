@@ -138,9 +138,9 @@ std::ostream& operator<< (std::ostream& os, const Point& p)
 std::ostream& operator<< (std::ostream& os, const FxNoiseProfile& f)
 {
     os << "        FxNoiseProfile:: \n";
-    for (size_t i = 0; i < f.point.size(); ++i)
+    for (size_t ii = 0; ii < f.point.size(); ++ii)
     {
-        os << "        Point        : " << f.point[i] << "\n";
+        os << "        Point        : " << f.point[ii] << "\n";
     }
     return os;
 }
@@ -184,13 +184,13 @@ std::ostream& operator<< (std::ostream& os, const ChannelParameter& c)
         << "      RcvAPCId     : " << c.antenna->rcvAPCId << "\n"
         << "      RcvAPATId    : " << c.antenna->rcvAPATId << "\n"
         << "      TxRcv:: \n";
-    for (size_t i = 0; i < c.txRcv->txWFId.size(); ++i)
+    for (size_t ii = 0; ii < c.txRcv->txWFId.size(); ++ii)
     {
-        os << "      TxWFId       : " << c.txRcv->txWFId[i] << "\n";
+        os << "      TxWFId       : " << c.txRcv->txWFId[ii] << "\n";
     }
-    for (size_t i = 0; i < c.txRcv->rcvId.size(); ++i)
+    for (size_t ii = 0; ii < c.txRcv->rcvId.size(); ++ii)
     {
-        os << "      RcvId       : " << c.txRcv->rcvId[i] << "\n";
+        os << "      RcvId       : " << c.txRcv->rcvId[ii] << "\n";
     }
     if (c.tgtRefLevel.get())
     {
@@ -211,14 +211,14 @@ std::ostream& operator<< (std::ostream& os, const Channel& c)
         << "  TOAFixedCphd     : " << c.toaFixedCphd << "\n"
         << "  SRPFixedCphd     : " << c.srpFixedCphd << "\n"
         << "  Parameters:: \n";
-    for (size_t i = 0; i < c.parameters.size(); ++i)
+    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
     {
-        os << c.parameters[i] << "\n";
+        os << c.parameters[ii] << "\n";
     }
-    for (size_t i = 0; i < c.addedParameters.size(); ++i)
+    for (size_t ii = 0; ii < c.addedParameters.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.addedParameters[i].getName() << "\n";
-        os << "  Parameter value   : " << c.addedParameters[i].str() << "\n";
+        os << "  Parameter name   : " << c.addedParameters[ii].getName() << "\n";
+        os << "  Parameter value   : " << c.addedParameters[ii].str() << "\n";
     }
     return os;
 }

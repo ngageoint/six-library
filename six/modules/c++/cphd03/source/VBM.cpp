@@ -24,7 +24,7 @@
 #include <string.h>
 
 #include <six/Init.h>
-#include <cphd03/ByteSwap.h>
+#include <cphd/ByteSwap.h>
 #include <cphd03/VBM.h>
 
 namespace
@@ -770,7 +770,7 @@ sys::Off_T VBM::load(io::SeekableInputStream& inStream,
             // necessary
             if (swapToLittleEndian)
             {
-                byteSwap(buf,
+                cphd::byteSwap(buf,
                          sizeof(double),
                          data.size() / sizeof(double),
                          numThreads);

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -66,27 +66,24 @@ public:
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
     //! (Testing) Parses specifc XML blocks specified by nodeNames vector
-    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc, std::vector<std::string>& nodeNames);
+    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc, const std::vector<std::string>& nodeNames);
 
     std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
-    //setter
-    void setSchemaPaths(std::vector<std::string> schemaPaths)
-    {
-        mSchemaPaths = schemaPaths;
-    }
+    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+
 
     //getter
-    std::vector<std::string>& getSchemaPaths()
+    const std::vector<std::string>& getSchemaPaths()
     {
         return mSchemaPaths;
     }
 
 
-//! Validate the xml and log any errors
-//  NOTE: Errors are treated as detriments to valid processing
-//        and fail accordingly
-    void validate(const xml::lite::Document* doc,
+    //! Validate the xml and log any errors
+    //  NOTE: Errors are treated as detriments to valid processing
+    //        and fail accordingly
+    static void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log);
 
@@ -105,7 +102,6 @@ private:
     std::string getSICommonURI() const;
 
     // Write to XML object
-    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
     XMLElem toXML(const CollectionID& obj, XMLElem parent = NULL);
     XMLElem toXML(const Global& obj, XMLElem parent = NULL);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent = NULL);
@@ -142,25 +138,25 @@ private:
 
     // Create helper functions
     void createParameterCollection(const std::string& name, 
-                                            six::ParameterCollection& ParameterCollection,
-                                            XMLElem parent) const;
+                                   six::ParameterCollection& ParameterCollection,
+                                   XMLElem parent) const;
     XMLElem createVector2D(const std::string& name,
-                                Vector2 p,
-                                XMLElem parent) const;
+                           Vector2 p,
+                           XMLElem parent) const;
     XMLElem createLatLonFootprint(const std::string& name,
-                                         const std::string& cornerName,
-                                         const cphd::LatLonCorners& corners,
-                                         XMLElem parent) const;
+                                  const std::string& cornerName,
+                                  const cphd::LatLonCorners& corners,
+                                  XMLElem parent) const;
     XMLElem createPVPType(const std::string& name,
-                                PVPType p,
-                                XMLElem parent) const;
+                          PVPType p,
+                          XMLElem parent) const;
     XMLElem createAPVPType(const std::string& name,
-                                                APVPType p,
-                                                XMLElem parent) const;
+                           APVPType p,
+                           XMLElem parent) const;
 
     XMLElem createErrorParamPlatform(const std::string& name,
-                                ErrorParameters::Bistatic::Platform p,
-                                XMLElem parent) const;
+                                     ErrorParameters::Bistatic::Platform p,
+                                     XMLElem parent) const;
 
     // Parse helper functions
     void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
@@ -177,7 +173,8 @@ private:
     void parseDecorr(const XMLElem decorrXML, Decorr& decorr) const;
     void parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVelErr) const;
     void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
-    void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param, bool additionalFlag) const;
+    void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,
+                                    bool additionalFlag) const;
     void parseTxRcvParameter(const XMLElem paramXML, ParameterType& param) const;
 
 private:

@@ -1,24 +1,25 @@
-/* ==========================================================================
-* This file is part of cphd-c++
-* ==========================================================================
-*
-* (C) Copyright 2004 - 2019, MDA Information Systems LLC
-*
-* cphd-c++ is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this program; If not,
-* see <http://www.gnu.org/licenses/>.
-*
-*/
+/* =========================================================================
+ * This file is part of cphd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ *
+ * cphd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <iostream>
 #include <memory>
 
@@ -38,8 +39,10 @@ TEST_CASE(testDerivativeCODValid)
 {
     cphd::Dwell dwell;
     cphd::COD cod1;
-    dwell.numCODTimes = 1;
-    dwell.cod.push_back(cod1);
+    size_t numCODTimes = 1;
+    dwell.cod.resize(numCODTimes);
+    dwell.cod[0] = cod1;
+
     cphd::Poly2D p2D(1, 1);
     dwell.cod[0].codTimePoly = p2D;
     dwell.cod[0].codTimePoly[0][0] = 1;
@@ -58,8 +61,10 @@ TEST_CASE(testDerivativeDwellValid)
 {
     cphd::Dwell dwell;
     cphd::DwellTime dtime1;
-    dwell.numDwellTimes = 1;
-    dwell.dtime.push_back(dtime1);
+    size_t numDwellTimes = 1;
+    dwell.dtime.resize(numDwellTimes);
+    dwell.dtime[0] = dtime1;
+
     cphd::Poly2D p2D(1, 1);
     dwell.dtime[0].dwellTimePoly = p2D;
     dwell.dtime[0].dwellTimePoly[0][0] = 1;
@@ -80,15 +85,16 @@ TEST_CASE(testEquality)
     cphd::Dwell dwell;
     cphd::DwellTime dtime1, dtime2;
 
-    dwell.numDwellTimes = 2;
-    dwell.dtime.push_back(dtime1);
-    dwell.dtime.push_back(dtime2);
+    size_t numDwellTimes = 2;
+    dwell.dtime.resize(numDwellTimes);
+    dwell.dtime[0] = dtime1;
+    dwell.dtime[1] = dtime2;
 
     cphd:: Poly2D p2D_1(2,1), p2D_2(2,1);
 
     dwell.dtime[0].dwellTimePoly = p2D_1;
     dwell.dtime[1].dwellTimePoly = p2D_2;
-    for (size_t i = 0; i < dwell.numDwellTimes; ++i) {
+    for (size_t i = 0; i < dwell.dtime.size(); ++i) {
         dwell.dtime[i].dwellTimePoly[0][0] = 1;
         dwell.dtime[i].dwellTimePoly[0][1] = 2;
         dwell.dtime[i].dwellTimePoly[1][0] = 3;
@@ -102,13 +108,13 @@ TEST_CASE(testEquality)
     derivX[1][0] = 10;
 
     // Test identical polynomial vectors
-    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), derivX)
+    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), derivX);
     TEST_ASSERT_TRUE((dwell.dtime[0] == dwell.dtime[1]));
 
     dwell.dtime[1].dwellTimePoly = dwell.dtime[1].dwellTimePoly.flipXY();
 
     // Test different polynomial vectors
-    TEST_ASSERT_NOT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), dwell.dtime[1].dwellTimePoly.derivativeX())
+    TEST_ASSERT_NOT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), dwell.dtime[1].dwellTimePoly.derivativeX());
     TEST_ASSERT_TRUE((dwell.dtime[0] != dwell.dtime[1]));
 
 }

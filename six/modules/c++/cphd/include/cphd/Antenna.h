@@ -30,8 +30,7 @@
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-
-
+#include <six/sicd/Antenna.h>
 
 namespace cphd
 {
@@ -91,42 +90,6 @@ struct AntPhaseCenter
 struct AntPattern
 {
     /*
-     * The Electrical Boresight steering direction versus
-     * time. Defines array pattern pointing direction.
-     */
-    struct EB
-    {
-        bool operator==(const EB& other) const
-        {
-            return dcXPoly == other.dcXPoly && dcYPoly == other.dcYPoly;
-        }
-
-        bool operator!=(const EB& other) const
-        {
-            return !((*this) == other);
-        }
-
-        Poly1D dcXPoly;
-        Poly1D dcYPoly;
-    };
-
-    struct ArrayElement
-    {
-        bool operator==(const ArrayElement& other) const
-        {
-            return gainPoly == other.gainPoly && phasePoly == other.phasePoly;
-        }
-
-        bool operator!=(const ArrayElement& other) const
-        {
-            return !((*this) == other);
-        }
-
-        Poly2D gainPoly;
-        Poly2D phasePoly;
-    };
-
-    /*
      * Parameters that identify 2-D sampled Grain & Phase patterns at
      * a single frequency value.
      * See table 11-7
@@ -173,9 +136,9 @@ struct AntPattern
     six::BooleanType ebFreqShift;
     six::BooleanType mlFreqDilation;
     Poly1D gainBSPoly;
-    EB eb;
-    ArrayElement array;
-    ArrayElement element;
+    six::sicd::ElectricalBoresight eb;
+    six::sicd::GainAndPhasePolys array;
+    six::sicd::GainAndPhasePolys element;
     std::vector<GainPhaseArray> gainPhaseArray;
 };
 
@@ -190,9 +153,9 @@ struct Antenna
 
     bool operator==(const Antenna& other) const
     {
-        return numACFs == other.numACFs &&
-                numAPCs == other.numAPCs &&
-                numAntPats == other.numAntPats;
+        return antCoordFrame == other.antCoordFrame &&
+                antPhaseCenter == other.antPhaseCenter &&
+                antPattern == other.antPattern;
     }
 
     bool operator!=(const Antenna& other) const
@@ -200,9 +163,6 @@ struct Antenna
         return !((*this) == other);
     }
 
-    double numACFs; /*! NumACFs >= 1*/
-    double numAPCs; /*! NumAPCs >= 1*/
-    double numAntPats; /*! NumAntPats >= 1*/
     std::vector<AntCoordFrame> antCoordFrame;
     std::vector<AntPhaseCenter> antPhaseCenter;
     std::vector<AntPattern> antPattern;
@@ -210,8 +170,6 @@ struct Antenna
 
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
-std::ostream& operator<< (std::ostream& os, const AntPattern::EB& e);
-std::ostream& operator<< (std::ostream& os, const AntPattern::ArrayElement& a);
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g);
 std::ostream& operator<< (std::ostream& os, const AntPattern& a);
 std::ostream& operator<< (std::ostream& os, const Antenna& a);

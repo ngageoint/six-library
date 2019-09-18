@@ -1,3 +1,25 @@
+/* =========================================================================
+ * This file is part of cphd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ *
+ * cphd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <iostream>
 #include <fstream>
 #include <memory>
@@ -678,8 +700,8 @@ TEST_CASE(testReadXML)
 
     //Dwell
     const cphd::Dwell& dwell = metadata->dwell;
-    TEST_ASSERT_EQ(dwell.numCODTimes, 1);
-    TEST_ASSERT_EQ(dwell.numDwellTimes, 1);
+    TEST_ASSERT_EQ(dwell.cod.size(), 1);
+    TEST_ASSERT_EQ(dwell.dtime.size(), 1);
     TEST_ASSERT_EQ(dwell.cod[0].identifier, "codPolynomial1");
     TEST_ASSERT_EQ(dwell.dtime[0].identifier, "dwellPolynomial1");
     TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderX(), 1);

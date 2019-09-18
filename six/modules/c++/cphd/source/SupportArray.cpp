@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -65,10 +65,10 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
         << "    XUnits         : " << a.xUnits << "\n"
         << "    YUnits         : " << a.yUnits << "\n"
         << "    ZUnits         : " << a.zUnits << "\n";
-    for (size_t i = 0; i < a.parameter.size(); ++i)
+    for (size_t ii = 0; ii < a.parameter.size(); ++ii)
     {
-        os << "    Parameter Name : " << a.parameter[i].getName() << "\n"
-            << "    Parameter Value : " << a.parameter[i].str() << "\n";
+        os << "    Parameter Name : " << a.parameter[ii].getName() << "\n"
+            << "    Parameter Value : " << a.parameter[ii].str() << "\n";
     }
     return os;
 }
@@ -77,20 +77,20 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
 std::ostream& operator<< (std::ostream& os, const SupportArray& s)
 {
     os << "SupportArray:: \n";
-    for (size_t i = 0; i < s.iazArray.size(); ++i)
+    for (size_t ii = 0; ii < s.iazArray.size(); ++ii)
     {
         os << "  IAZ Array:: \n"
-            << s.iazArray[i];
+            << s.iazArray[ii];
     }
-    for (size_t i = 0; i < s.antGainPhase.size(); ++i)
+    for (size_t ii = 0; ii < s.antGainPhase.size(); ++ii)
     {
         os << "  Ant Gain Phase:: \n"
-            << s.antGainPhase[i];
+            << s.antGainPhase[ii];
     }
-    for (size_t i = 0; i < s.addedSupportArray.size(); ++i)
+    for (size_t ii = 0; ii < s.addedSupportArray.size(); ++ii)
     {
         os << "  Added Support Array:: \n"
-            << s.addedSupportArray[i];
+            << s.addedSupportArray[ii];
     }
     return os;
 }

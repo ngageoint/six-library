@@ -28,7 +28,7 @@
 #include <mt/ThreadPlanner.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
-#include <cphd03/ByteSwap.h>
+#include <cphd/ByteSwap.h>
 #include <cphd03/Utilities.h>
 #include <cphd03/Wideband.h>
 
@@ -415,7 +415,7 @@ void Wideband::read(size_t channel,
     // Element size is half mElementSize because it's complex
     if (!sys::isBigEndianSystem() && mElementSize > 2)
     {
-        byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+        cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
     }
 }
 
@@ -515,7 +515,7 @@ void Wideband::read(size_t channel,
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
             // Need to endian swap and then scale
-            byteSwapAndScale(scratch.data, mElementSize, dims,
+            cphd::byteSwapAndScale(scratch.data, mElementSize, dims,
                              &vectorScaleFactors[0], numThreads, data.data);
         }
         else
@@ -534,7 +534,7 @@ void Wideband::read(size_t channel,
 
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
+            cphd::byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
                     data.data);
         }
         else
@@ -552,7 +552,7 @@ void Wideband::read(size_t channel,
         // Element size is half mElementSize because it's complex
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+            cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
         }
     }
 }

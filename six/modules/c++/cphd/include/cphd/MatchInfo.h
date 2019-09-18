@@ -71,7 +71,6 @@ struct MatchType
     {
         return typeID == other.typeID && index == other.index &&
                 currentIndex == other.currentIndex &&
-                numMatchCollections == other.numMatchCollections &&
                 matchCollection == other.matchCollection;
     }
 
@@ -83,7 +82,6 @@ struct MatchType
     std::string typeID;
     size_t index;
     size_t currentIndex;
-    size_t numMatchCollections;
     std::vector<MatchCollection> matchCollection;
 };
 
@@ -98,8 +96,7 @@ struct MatchInfo
 
     bool operator==(const MatchInfo& other) const
     {
-        return numMatchTypes == other.numMatchTypes &&
-                matchType == other.matchType;
+        return matchType == other.matchType;
     }
 
     bool operator!=(const MatchInfo& other) const
@@ -107,7 +104,6 @@ struct MatchInfo
         return !((*this) == other);
     }
 
-    size_t numMatchTypes;
     std::vector<MatchType> matchType;
 };
 

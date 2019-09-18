@@ -25,16 +25,14 @@
 
 namespace cphd
 {
-MatchInfo::MatchInfo():
-    numMatchTypes(six::Init::undefined<size_t>())
+MatchInfo::MatchInfo()
 {
 }
 
 MatchType::MatchType():
     typeID(six::Init::undefined<std::string>()),
     index(six::Init::undefined<size_t>()),
-    currentIndex(six::Init::undefined<size_t>()),
-    numMatchCollections(six::Init::undefined<size_t>())
+    currentIndex(six::Init::undefined<size_t>())
 {
 }
 
@@ -53,10 +51,10 @@ std::ostream& operator<< (std::ostream& os, const MatchCollection& m)
     {
         os << "  matchIndex        : " << m.matchIndex << "\n";
     }
-    for (size_t i = 0; i < m.parameter.size(); ++i)
+    for (size_t ii = 0; ii < m.parameter.size(); ++ii)
     {
-        os << "  parameter name    :" << m.parameter[i].getName() << "\n";
-        os << "  parameter value   :" << m.parameter[i].str() << "\n";
+        os << "  parameter name    :" << m.parameter[ii].getName() << "\n";
+        os << "  parameter value   :" << m.parameter[ii].str() << "\n";
     }
     return os;
 }
@@ -69,11 +67,11 @@ std::ostream& operator<< (std::ostream& os, const MatchType& m)
     {
         os << "  currentIndex    : " << m.currentIndex << "\n";
     }
-    os << "  numMatchCollection    : " << m.numMatchCollections << "\n";
+    os << "  numMatchCollection    : " << m.matchCollection.size() << "\n";
 
-    for (size_t i = 0; i < m.matchCollection.size(); ++i)
+    for (size_t ii = 0; ii < m.matchCollection.size(); ++ii)
     {
-        os << "  " << m.matchCollection[i] << "\n";
+        os << "  " << m.matchCollection[ii] << "\n";
     }
     return os;
 }
@@ -81,10 +79,10 @@ std::ostream& operator<< (std::ostream& os, const MatchType& m)
 std::ostream& operator<< (std::ostream& os, const MatchInfo& m)
 {
     os << "MatchInfo::\n"
-       << "  numMatchTypes       : " << m.numMatchTypes << "\n";
-    for (size_t i = 0; i < m.matchType.size(); ++i)
+       << "  numMatchTypes       : " << m.matchType.size() << "\n";
+    for (size_t ii = 0; ii < m.matchType.size(); ++ii)
     {
-        os << "  " << m.matchType[i] << "\n";
+        os << "  " << m.matchType[ii] << "\n";
     }
     return os;
 }

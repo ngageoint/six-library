@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -76,14 +76,14 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
     os << "Data:: \n"
         << "  SignalArrayFormat : " << d.signalArrayFormat << "\n"
         << "  NumBytesPVP      : " << d.numBytesPVP << "\n";
-    for (size_t i = 0; i < d.channels.size(); ++i)
+    for (size_t ii = 0; ii < d.channels.size(); ++ii)
     {
-        os << d.channels[i] << "\n";
+        os << d.channels[ii] << "\n";
     }
     os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
-    for (size_t i = 0; i < d.supportArrays.size(); ++i)
+    for (size_t ii = 0; ii < d.supportArrays.size(); ++ii)
     {
-        os << d.supportArrays[i] << "\n";
+        os << d.supportArrays[ii] << "\n";
     }
     return os;
 }

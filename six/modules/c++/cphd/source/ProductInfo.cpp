@@ -41,25 +41,25 @@ std::ostream& operator<< (std::ostream& os, const ProductInfo& p)
 {
     os << "Product Information      : \n"
         << "  Profile                : " << p.profile << "\n";
-    for (size_t i = 0; i < p.creationInfo.size(); ++i)
+    for (size_t ii = 0; ii < p.creationInfo.size(); ++ii)
     {
         os << "  Creation Information   : " << "\n"
-            << "    Application          : " << p.creationInfo[i].application << "\n"
-            << "    DateTime             : " << p.creationInfo[i].dateTime.getMonth() << "/"
-                << p.creationInfo[i].dateTime.getDayOfMonth() << "/"
-                << p.creationInfo[i].dateTime.getYear() << "\n"
-            << "    Site                 : " << p.creationInfo[i].site << "\n";
-        for (size_t j = 0; j < p.creationInfo[i].parameter.size(); ++j)
+            << "    Application          : " << p.creationInfo[ii].application << "\n"
+            << "    DateTime             : " << p.creationInfo[ii].dateTime.getMonth() << "/"
+                << p.creationInfo[ii].dateTime.getDayOfMonth() << "/"
+                << p.creationInfo[ii].dateTime.getYear() << "\n"
+            << "    Site                 : " << p.creationInfo[ii].site << "\n";
+        for (size_t jj = 0; jj < p.creationInfo[ii].parameter.size(); ++jj)
         {
             os << "    Parameter name       : " 
-                    << p.creationInfo[i].parameter[j].getName() << "\n"
-                << "    Parameter value      : " << p.creationInfo[i].parameter[j].str() << "\n";
+                    << p.creationInfo[ii].parameter[jj].getName() << "\n"
+                << "    Parameter value      : " << p.creationInfo[ii].parameter[jj].str() << "\n";
         }
     }
-    for (size_t i = 0; i < p.parameter.size(); ++i)
+    for (size_t ii = 0; ii < p.parameter.size(); ++ii)
     {
-        os << "  Parameter name   : " << p.parameter[i].getName() << "\n"
-            << "  Parameter value  : " << p.parameter[i].str() << "\n";
+        os << "  Parameter name   : " << p.parameter[ii].getName() << "\n"
+            << "  Parameter value  : " << p.parameter[ii].str() << "\n";
     }
     return os;
 }

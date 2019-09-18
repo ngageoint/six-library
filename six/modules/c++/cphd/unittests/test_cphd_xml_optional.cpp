@@ -1,6 +1,30 @@
+/* =========================================================================
+ * This file is part of cphd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ *
+ * cphd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <logging/NullLogger.h>
+
 
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Global.h>
@@ -29,13 +53,14 @@ TEST_CASE(testOptional)
     parseXMLFile(xmlParser, pathname);
 
 
-    cphd::CPHDXMLControl xmlControl;
     std::vector<std::string> schemaPaths;
     if (schema.length())
     {
         schemaPaths.push_back(schema);
-        xmlControl.setSchemaPaths(schemaPaths);
     }
+
+    //CPHDXMLControl object with no logger
+    cphd::CPHDXMLControl xmlControl(new logging::NullLogger(), true, schemaPaths);
 
     // Select specific nodes to be populated
     std::vector<std::string> nodeNames;
@@ -92,9 +117,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[1].str(), "Additional parameter");
 
     const cphd::Antenna& antenna = *(metadata->antenna);
-    TEST_ASSERT_EQ(antenna.numACFs, 2);
-    TEST_ASSERT_EQ(antenna.numAPCs, 1);
-    TEST_ASSERT_EQ(antenna.numAntPats, 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame.size(), 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].identifier, "ACF1");
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.order(), 3);
@@ -137,7 +159,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[1], 5.0);
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[2], 5.0);
 
-    TEST_ASSERT_EQ(antenna.antPhaseCenter.size(), 1);
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].identifier, "APC");
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].acfId, "ACF1");
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[0], 5.0);
@@ -153,11 +174,11 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.order(), 1);
     TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.coeffs()[0], 1.0);
     TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.coeffs()[1], 2.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcXPoly.order(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcXPoly.coeffs()[0], 5.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcYPoly.order(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcYPoly.coeffs()[0], 0.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcYPoly.coeffs()[1], 5.0);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcxPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcxPoly.coeffs()[0], 5.0);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.coeffs()[0], 0.0);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.coeffs()[1], 5.0);
     TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderX(), 1);
     TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderY(), 1);
     TEST_ASSERT_EQ(antenna.antPattern[0].array.phasePoly.orderX(), 1);
@@ -174,7 +195,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[1].elementId, "Parameter2");
 
     const cphd::TxRcv& txRcv = *(metadata->txRcv);
-    TEST_ASSERT_EQ(txRcv.numTxWFs, 1);
+    TEST_ASSERT_EQ(txRcv.txWFParameters.size(), 1);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].identifier, "TxWFParam");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].pulseLength, 3.0);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].rfBandwidth, 2.3);
@@ -183,7 +204,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization.toString(), "LHC");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].power, 5.0);
 
-    TEST_ASSERT_EQ(txRcv.numRcvs, 2);
+    TEST_ASSERT_EQ(txRcv.rcvParameters.size(), 2);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].identifier, "RcvParam1");
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].windowLength, 3.0);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].sampleRate, 2.3);
@@ -239,7 +260,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].desc[0].getName(), "Airport ID");
     TEST_ASSERT_EQ(geoInfo[0].desc[0].str(), "51");
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].getName(), "Perimeter");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].numVertices, 4);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex.size(), 4);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].index, 1);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].getLat(), 0.0);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].getLon(), 0.0);
@@ -256,7 +277,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].getName(), "Runway");
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].desc[0].getName(), "ID");
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].desc[0].str(), "04/22");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].numEndpoints, 2);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint.size(), 2);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].index, 1);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].getLat(), 0.02);
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].getLon(), 0.03);
@@ -271,7 +292,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].point[0].getLon(), 0.4);
 
     TEST_ASSERT_EQ(geoInfo[1].getName(), "Farm");
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].numVertices, 5);
+    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex.size(), 5);
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].index, 1);
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].getLat(), 1.0);
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].getLon(), 1.0);
@@ -283,11 +304,11 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].getLon(), 1.0);
 
     const cphd::MatchInfo& matchInfo = *(metadata->matchInfo);
-    TEST_ASSERT_EQ(matchInfo.numMatchTypes, 2);
+    TEST_ASSERT_EQ(matchInfo.matchType.size(), 2);
     TEST_ASSERT_EQ(matchInfo.matchType[0].index, 1);
     TEST_ASSERT_EQ(matchInfo.matchType[0].typeID, "STEREO");
     TEST_ASSERT_EQ(matchInfo.matchType[0].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].numMatchCollections, 1);
+    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection.size(), 1);
     TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].index, 1);
     TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].coreName, "CollectionName");
     TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].matchIndex, 1);
@@ -295,7 +316,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(matchInfo.matchType[1].index, 2);
     TEST_ASSERT_EQ(matchInfo.matchType[1].typeID, "COHERENT");
     TEST_ASSERT_EQ(matchInfo.matchType[1].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].numMatchCollections, 1);
+    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection.size(), 1);
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].index, 2);
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].coreName, "CollectionName");
     TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].matchIndex, 1);

@@ -63,8 +63,7 @@ struct LineType
 
     bool operator==(const LineType& other) const
     {
-        return numEndpoints == other.numEndpoints && 
-                endpoint == other.endpoint;
+        return endpoint == other.endpoint;
     }
 
     bool operator!=(const LineType& other) const
@@ -72,7 +71,6 @@ struct LineType
         return !((*this) == other);
     }
 
-    size_t numEndpoints;
     std::vector<LatLonIndexType> endpoint;
 
 };
@@ -87,8 +85,7 @@ struct PolygonType
 
     bool operator==(const PolygonType& other) const
     {
-        return numVertices == other.numVertices && 
-                vertex == other.vertex;
+        return vertex == other.vertex;
     }
 
     bool operator!=(const PolygonType& other) const
@@ -96,7 +93,6 @@ struct PolygonType
         return !((*this) == other);
     }
 
-    size_t numVertices;
     std::vector<LatLonIndexType> vertex;
 };
 

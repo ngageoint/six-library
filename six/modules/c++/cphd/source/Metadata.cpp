@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -74,9 +74,9 @@ std::ostream& operator<< (std::ostream& os, const Metadata& d)
     {
         os << *(d.productInfo) << "\n";
     }
-    for (size_t i = 0; i < d.geoInfo.size(); ++i)
+    for (size_t ii = 0; ii < d.geoInfo.size(); ++ii)
     {
-        os << d.geoInfo[i] << "\n";
+        os << d.geoInfo[ii] << "\n";
     }
     if (d.matchInfo.get())
     {

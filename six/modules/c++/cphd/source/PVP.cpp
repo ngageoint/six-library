@@ -232,9 +232,9 @@ size_t Pvp::getReqSetSize() const
     {
         res += signal->getSize();
     }
-    for (size_t i = 0; i < addedPVP.size(); ++i)
+    for (size_t ii = 0; ii < addedPVP.size(); ++ii)
     {
-        res += addedPVP[i].getSize();
+        res += addedPVP[ii].getSize();
     }
     return res * 8; // Num Bytes
 }

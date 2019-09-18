@@ -107,9 +107,7 @@ struct TxRcv
 
     bool operator==(const TxRcv& other) const
     {
-        return numTxWFs == other.numTxWFs &&
-                numRcvs == other.numRcvs &&
-                txWFParameters == other.txWFParameters &&
+        return txWFParameters == other.txWFParameters &&
                 rcvParameters == other.rcvParameters;
     }
 
@@ -118,8 +116,6 @@ struct TxRcv
         return !((*this) == other);
     }
 
-    size_t numTxWFs;
-    size_t numRcvs;
     std::vector<TxWFParameters> txWFParameters;
     std::vector<RcvParameters> rcvParameters;
 };

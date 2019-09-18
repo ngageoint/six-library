@@ -46,10 +46,7 @@ AntPattern::AntPattern():
 {
 }
 
-Antenna::Antenna() :
-    numACFs(six::Init::undefined<double>()),
-    numAPCs(six::Init::undefined<double>()),
-    numAntPats(six::Init::undefined<double>())
+Antenna::Antenna()
 {
 }
 
@@ -71,21 +68,6 @@ std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a)
     return os;
 }
 
-std::ostream& operator<< (std::ostream& os, const AntPattern::EB& e)
-{
-    os << "    EB:: \n"
-        << "      DCXPoly      : " << e.dcXPoly << "\n"
-        << "      DCYPoly      : " << e.dcYPoly << "\n";
-    return os;
-}
-
-std::ostream& operator<< (std::ostream& os, const AntPattern::ArrayElement& a)
-{
-    os << "      GainPoly     : " << a.gainPoly << "\n"
-        << "      PhasePoly    : " << a.phasePoly << "\n";
-    return os;
-}
-
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g)
 {
     os << "    GainPhaseArray:: \n"
@@ -101,17 +83,17 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
         << "    Identifier     : " << a.identifier << "\n"
         << "    FreqZero       : " << a.freqZero << "\n"
         << "    GainZero       : " << a.gainZero << "\n"
-        << "    EBFreqShift    : " << a.ebFreqShift << "\n"
-        << "    MLFreqDilation : " << a.mlFreqDilation << "\n"
+        << "    EBFreqShift    : " << a.ebFreqShift.toString() << "\n"
+        << "    MLFreqDilation : " << a.mlFreqDilation.toString() << "\n"
         << "    GainBSPoly     : " << a.gainBSPoly << "\n"
         << a.eb << "\n"
         << "    Array:: \n"
         << a.array << "\n"
         << "    Element:: \n"
         << a.element << "\n";
-    for (size_t i = 0; i < a.gainPhaseArray.size(); ++i)
+    for (size_t ii = 0; ii < a.gainPhaseArray.size(); ++ii)
     {
-        os << a.gainPhaseArray[i] << "\n";
+        os << a.gainPhaseArray[ii] << "\n";
     }
     return os;
 }
@@ -119,19 +101,20 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
 std::ostream& operator<< (std::ostream& os, const Antenna& a)
 {
     os << "Antenna:: \n"
-        << "  NumACFs          : " << a.numACFs << "\n"
-        << "  NumAPCs          : " << a.numAPCs << "\n";
-    for (size_t i = 0; i < a.antCoordFrame.size(); ++i)
+        << "  NumACFs          : " << a.antCoordFrame.size() << "\n"
+        << "  NumAPCs          : " << a.antPhaseCenter.size() << "\n"
+        << "  NumAntPats          : " << a.antPattern.size() << "\n";
+    for (size_t ii = 0; ii < a.antCoordFrame.size(); ++ii)
     {
-        os << a.antCoordFrame[i] << "\n";
+        os << a.antCoordFrame[ii] << "\n";
     }
-    for (size_t i = 0; i < a.antPhaseCenter.size(); ++i)
+    for (size_t ii = 0; ii < a.antPhaseCenter.size(); ++ii)
     {
-        os << a.antPhaseCenter[i] << "\n";
+        os << a.antPhaseCenter[ii] << "\n";
     }
-    for (size_t i = 0; i < a.antPattern.size(); ++i)
+    for (size_t ii = 0; ii < a.antPattern.size(); ++ii)
     {
-        os << a.antPattern[i] << "\n";
+        os << a.antPattern[ii] << "\n";
     }
     return os;
 }

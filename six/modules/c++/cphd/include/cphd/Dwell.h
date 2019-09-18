@@ -87,8 +87,7 @@ struct Dwell
 
     bool operator==(const Dwell& other) const
     {
-        return numCODTimes == other.numCODTimes && numDwellTimes == other.numDwellTimes &&
-                cod == other.cod && dtime == other.dtime;
+        return cod == other.cod && dtime == other.dtime;
     }
 
     bool operator!=(const Dwell& other) const
@@ -96,8 +95,6 @@ struct Dwell
         return !((*this) == other);
     }
 
-    size_t numCODTimes;
-    size_t numDwellTimes;
     std::vector<COD> cod;
     std::vector<DwellTime> dtime;
 };

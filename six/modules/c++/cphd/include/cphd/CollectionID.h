@@ -22,11 +22,11 @@
 #ifndef __CPHD_COLLECTION_ID_H__
 #define __CPHD_COLLECTION_ID_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
-
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
+#include <six/CollectionInformation.h>
 namespace cphd
 {
 /*!
@@ -37,66 +37,8 @@ namespace cphd
  *  <CollectionID>. This block contains general information about
  *  the collection.
  */
-struct CollectionID
+struct CollectionID : public six::CollectionInformation
 {
-
-    /*!
-     *  Radar platform identifier.  For bistatic
-     *  collections, list the Receive platform
-     */
-    std::string collectorName;
-
-    /*!
-     *  (Optional) Radar platform identifier that provided
-     *  the illumination.  For bistatic collections, list the
-     *  transmit platform.
-     */
-    std::string illuminatorName;
-
-    /*!
-     *  Collection & imaging data set identifier.  Uniquely identifies
-     *  imaging collections per profile
-     *
-     */
-    std::string coreName;
-
-    /*!
-     *  (Optional) Collection type identifier.  Monotstatic collections include
-     *  single platform collections with unique transmit and receive apertures
-     *  Allowed values are "MONOSTATIC" and "BISTATIC"
-     *
-     */
-    six::CollectType collectType;
-
-    /*!
-     *  Radar Mode, must be SPOTLIGHT, STRIPMAP, or
-     *  DYNAMIC_STRIPMAP
-     *
-     */
-    six::RadarModeType radarMode;
-
-    /*!
-     *  (Optional) RadarMode ModeID.  Value dependent on profile
-     */
-    std::string radarModeID;
-
-    /*!
-     * Contains product release information.
-     * Default value is UNRESTRICTED
-     */
-    std::string releaseInfo;
-
-    /*!
-     *  (Optional)
-     *  List of country codes for region covered by the image
-     *
-     */
-    std::vector<std::string> countryCodes;
-
-    /*!
-     *  (Optional) Additional parameters
-     */
-    six::ParameterCollection parameters;
 
     //!  Constructor
     CollectionID();
@@ -105,6 +47,12 @@ struct CollectionID
     virtual ~CollectionID()
     {
     }
+
+    /*!
+     * Contains product release information.
+     * Default value is UNRESTRICTED
+     */
+    std::string releaseInfo;
 
     //! Deep copy
     CollectionID* clone() const;

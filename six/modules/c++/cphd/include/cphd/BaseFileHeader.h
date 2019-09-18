@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2017, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,6 @@ public:
     virtual ~BaseFileHeader()
     {
     }
-
 
     static
     std::string readVersion(io::SeekableInputStream& inStream);
@@ -86,4 +85,3 @@ protected:
 }
 
 #endif
-
