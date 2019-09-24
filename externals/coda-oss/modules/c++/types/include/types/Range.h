@@ -124,6 +124,28 @@ struct Range
     }
 
     /*!
+     * Determine if a given range touches our range. Touching ranges do not
+     * overlap, but can be placed next to one another (irrespective of order)
+     * with no missing values in between.
+     *
+     * If either of the ranges is empty, touching is defined as always false.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if the ranges touch, false otherwise
+     */
+    bool touches(const types::Range& rhs) const
+    {
+        if (empty() || rhs.empty())
+        {
+            return false;
+        }
+
+        return (mStartElement == rhs.endElement()) ||
+               (rhs.mStartElement == endElement());
+    }
+
+    /*!
      * \param startElementToTest The start element
      * \param numElementsToTest The total number of elements to check
      *

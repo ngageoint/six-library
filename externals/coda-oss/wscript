@@ -18,6 +18,7 @@ def options(opt):
     opt.recurse(DIRS)
 
 def configure(conf):
+    conf.options.swigver = '3.0.12'
     conf.load(TOOLS, tooldir='./build/')
     conf.recurse(DIRS)
 

@@ -195,9 +195,16 @@ def options(opt):
     opt.add_option('--disable-swig', action='store_false', dest='swig',
                    help='Disable swig')
     opt.add_option('--swig-version', action='store', dest='swigver',
-                   default=None, help='Specify the minimum swig version')
+                   default='3.0.0', help='Specify the minimum swig version')
     opt.add_option('--require-swig', action='store_true', dest='require_swig',
                    help='Require swig (configure option)', default=False)
+    opt.add_option('--python-version-agnostic', action='store_true',
+                   dest='pyver_agnostic',
+                   help='The default behavior for generated Python code is to '
+                   'enable Python 3-specific features if the detected Python '
+                   'is version 3.  Pass this flag to force the generated code '
+                   'to work with either version of Python in all cases.')
+
 
 def configure(conf):
     if Options.options.swig:
@@ -209,3 +216,4 @@ def configure(conf):
         conf.check_swig_version(minver=swigver)
         conf.env.SWIGPATH_ST = '-I%s'
         conf.env.SWIGDEFINES_ST = '-D%s'
+        conf.env['PYTHON_AGNOSTIC'] = Options.options.pyver_agnostic

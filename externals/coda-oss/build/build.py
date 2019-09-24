@@ -276,15 +276,21 @@ class CPPContext(Context.Context):
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
-        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
-        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
-            tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
-                    str(test) not in listify(modArgs.get('test_filter', ''))]
-            for test in tests:
-                bld(features='install_tgt',
-                        files=[test], dir=pythonTestNode,
-                        name=test, target=test,
-                        install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
+        # Create install target for python tests
+        if not Options.options.libs_only:
+            for testDirname in ['tests', 'unittests']:
+                pythonTestNode = path.parent.parent.make_node('python').\
+                        make_node(str(path)).make_node(testDirname)
+                if os.path.exists(pythonTestNode.abspath()):
+                    tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
+                             str(test) not in listify(modArgs.get('test_filter', ''))]
+                    for test in tests:
+                        installPath = '${PREFIX}/%s/%s' % (testDirname, modArgs['name'])
+                        bld(features='install_tgt',
+                            files=[test], dir=pythonTestNode,
+                            name=test, target=test,
+                            install_path=installPath)
 
 
         testNode = path.make_node('unittests')
@@ -545,7 +551,7 @@ class CPPContext(Context.Context):
                 # actually check it in so other developers can still use the Python
                 # bindings even if they don't have Swig
                 flags = '-python -c++'
-                if sys.version_info[0] >= 3:
+                if sys.version_info[0] >= 3 and not env['PYTHON_AGNOSTIC']:
                     flags += ' -py3'
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
                     source = swigSource,
@@ -643,7 +649,7 @@ class GlobDirectoryWalker:
             except IndexError:
                 # pop next directory from stack
                 if len(self.stack) == 0:
-                    raise StopIteration
+                    return
                 self.directory = self.stack.pop()
                 if isdir(self.directory):
                     self.files = os.listdir(self.directory)
@@ -1192,6 +1198,9 @@ def configure(self):
 
     if self.env['DETECTED_BUILD_PY']:
         return
+
+    if sys.version_info < (2, 7, 0):
+        self.fatal('build.py requires at least Python 2.7')
 
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
