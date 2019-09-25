@@ -139,7 +139,6 @@ struct Data
                signalCompressionID == other.signalCompressionID &&
                channels == other.channels && supportArrays == other.supportArrays;
     }
-
     bool operator!=(const Data& other) const
     {
         return !((*this) == other);
@@ -163,6 +162,15 @@ struct Data
         throw except::Exception(Ctxt(
                 "Invalid channel number provided"));
     }
+    size_t getCompressedSignalSize(size_t channel) const
+    {
+        if (channel < channels.size())
+        {
+            return channels[channel].getCompressedSignalSize();
+        }
+        throw except::Exception(Ctxt(
+                "Invalid channel number provided"));
+    }
     size_t getNumChannels() const
     {
         return channels.size();
@@ -179,6 +187,8 @@ struct Data
     {
         return signalArrayFormat;
     }
+
+    bool isCompressed() const;
 
     SignalArrayFormat signalArrayFormat;
     size_t numBytesPVP;

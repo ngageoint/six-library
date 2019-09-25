@@ -81,6 +81,7 @@ public:
 
     // Return offset from start of CPHD file for a vector and sample for a channel
     // first channel is 0!
+    // This is specifically for compressed data
     // 0-based vector in channel
     // 0-based sample in channel
     sys::Off_T getFileOffset(size_t channel) const;
@@ -169,6 +170,8 @@ public:
     }
 
 private:
+    // Initialize mOffsets for each array 
+    // both for uncompressed and compressed data
     void initialize();
 
     void checkReadInputs(size_t channel,

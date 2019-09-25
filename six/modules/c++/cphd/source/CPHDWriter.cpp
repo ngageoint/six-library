@@ -212,6 +212,15 @@ void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
     (*mDataWriter)(data, size * 2, mElementSize / 2);
 }
 
+void CPHDWriter::writeCompressedCPHDDataImpl(const sys::ubyte* data,
+                                   size_t size, size_t channel)
+{
+    //! We have to pass in the data as though it was 1 signal array sized
+    // element of ubytes
+    (*mDataWriter)(data, 1, mMetadata.data.getCompressedSignalSize(channel));
+}
+
+
 void CPHDWriter::writeMetadata(const std::string& pathname,
                                const PVPArray& pvpArray,
                                const std::string& classification,
@@ -234,7 +243,6 @@ void CPHDWriter::writeMetadata(const std::string& pathname,
     }
 
     writeMetadata(totalPVPSize, totalCPHDSize, classification, releaseInfo);
-    // writeMetadata(0, totalCPHDSize, classification, releaseInfo);
 
     std::vector<sys::ubyte> pvpData;
     for (size_t ii = 0; ii < numChannels; ++ii)
@@ -253,12 +261,18 @@ void CPHDWriter::writeMetadata(const std::string& pathname,
 
 template <typename T>
 void CPHDWriter::writeCPHDData(const T* data,
-                               size_t numElements)
+                               size_t numElements,
+                               size_t channel)
 {
     if (mElementSize != sizeof(T))
     {
         throw except::Exception(Ctxt(
                 "Incorrect buffer data type used for metadata!"));
+    }
+    if (mMetadata.data.isCompressed())
+    {
+        throw except::Exception(Ctxt(
+                "Metadata indicates data is compressed. Cannot write uncompressed data"));
     }
     writeCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), numElements);
 }
@@ -266,54 +280,32 @@ void CPHDWriter::writeCPHDData(const T* data,
 template
 void CPHDWriter::writeCPHDData<std::complex<sys::Int8_T> >(
         const std::complex<sys::Int8_T>* data,
-        size_t numElements);
+        size_t numElements,
+        size_t channel);
 
 template
 void CPHDWriter::writeCPHDData<std::complex<sys::Int16_T> >(
         const std::complex<sys::Int16_T>* data,
-        size_t numElements);
+        size_t numElements,
+        size_t channel);
 
 template
 void CPHDWriter::writeCPHDData<std::complex<float> >(
         const std::complex<float>* data,
-        size_t numElements);
+        size_t numElements,
+        size_t channel);
 
-
-template <typename T>
-void CPHDWriter::writeCPHDData(const T* data,
-                               std::string pathname,
-                               size_t numElements)
+void CPHDWriter::writeCompressedCPHDData(const sys::ubyte* data,
+                               size_t numElements,
+                               size_t channel)
 {
-    mFile.create(pathname);
-    if (mElementSize != sizeof(T))
+    if (!mMetadata.data.isCompressed())
     {
         throw except::Exception(Ctxt(
-                "Incorrect buffer data type used for metadata!"));
+                "Metadata indicates data is not compressed. Cannot write compressed data"));
     }
-    writeCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), numElements);
-    mFile.close();
-
+    writeCompressedCPHDDataImpl(data, numElements, channel);
 }
-
-template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* data,
-        std::string pathname,
-        size_t numElements);
-
-template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* data,
-        std::string pathname,
-        size_t numElements);
-
-template
-void CPHDWriter::writeCPHDData<std::complex<float> >(
-        const std::complex<float>* data,
-        std::string pathname,
-        size_t numElements);
-
-
 
 void CPHDWriter::write(const std::string& pathname,
                        const std::string& classification,
@@ -322,7 +314,6 @@ void CPHDWriter::write(const std::string& pathname,
     mFile.create(pathname);
 
     writeMetadata(mPVPSize, mCPHDSize, classification, releaseInfo);
-    // writeMetadata(0, mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mPVPData.size(); ++ii)
     {

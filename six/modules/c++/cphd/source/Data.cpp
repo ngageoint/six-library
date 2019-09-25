@@ -30,6 +30,15 @@ Data::Data() :
 {
 }
 
+bool Data::isCompressed() const
+{
+    if (six::Init::isUndefined<std::string>(signalCompressionID))
+    {
+        return false;
+    }
+    return true;
+}
+
 Data::Channel::Channel() :
     numVectors(0),
     numSamples(0),

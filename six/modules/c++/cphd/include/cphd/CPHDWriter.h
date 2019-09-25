@@ -120,13 +120,12 @@ public:
      */
     template <typename T>
     void writeCPHDData(const T* data,
-                       size_t numElements);
+                       size_t numElements,
+                       size_t channel = 0);
 
-    template <typename T>
-    void writeCPHDData(const T* data,
-                        std::string pathname,
-                       size_t numElements);
-
+    void writeCompressedCPHDData(const sys::ubyte* data,
+                       size_t numElements,
+                       size_t channel = 0);
     /*
      *  \func write
      *  \brief Writes the CPHD file to disk. This should only be called
@@ -161,6 +160,9 @@ private:
 
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
+
+    void writeCompressedCPHDDataImpl(const sys::ubyte* data,
+                           size_t size, size_t channel);
 
     class DataWriter
     {

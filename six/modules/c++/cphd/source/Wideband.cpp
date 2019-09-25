@@ -245,7 +245,6 @@ size_t getNumBytesPerSample(cphd::SignalArrayFormat signalArrayFormat)
     }
 }
 
-
 const size_t Wideband::ALL = std::numeric_limits<size_t>::max();
 
 Wideband::Wideband(const std::string& pathname,
@@ -279,9 +278,9 @@ Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
 void Wideband::initialize()
 {
     mOffsets[0] = mWBOffset;
-    // No Signal Array Compression
-    if (six::Init::isUndefined(mData.getCompressionID()))
+    if (!mData.isCompressed())
     {
+        // No Signal Array Compression
         for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
         {
             const sys::Off_T offset =
@@ -292,12 +291,14 @@ void Wideband::initialize()
             mOffsets[ii] = mOffsets[ii - 1] + offset;
         }
     }
-    // Signal Array is Compressed
     else
     {
+        // Signal Array is Compressed
         for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
         {
-            mOffsets[ii] = mOffsets[0] + mData.channels[ii].getSignalArrayByteOffset();
+            // TODO: To trust or not to trust signalArrayByteOffset,
+            //       that is the question.
+            mOffsets[ii] = mOffsets[ii - 1] + mData.getCompressedSignalSize(ii);
         }
     }
 }
@@ -443,7 +444,7 @@ void Wideband::readImpl(size_t channel,
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
     // Life is easy - can do a single seek and read
     mInStream->seek(inOffset, io::FileInputStream::START);
-    mInStream->read(dataPtr, mData.channels[channel].getCompressedSignalSize());
+    mInStream->read(dataPtr, mData.getCompressedSignalSize(channel));
 }
 
 void Wideband::read(size_t channel,
@@ -487,7 +488,7 @@ void Wideband::read(size_t channel,
     // Sanity checks
     checkChannelInput(channel);
 
-    const size_t minSize = mData.channels[channel].getCompressedSignalSize();
+    const size_t minSize = mData.getCompressedSignalSize(channel);
     if (data.size < minSize)
     {
         std::ostringstream ostr;
@@ -500,6 +501,13 @@ void Wideband::read(size_t channel,
     readImpl(channel, data.data);
 
     // Can't change endianness of compressed data right?
+    if (!sys::isBigEndianSystem())
+    {
+        // Each thread only reads 1 or more element?
+        // So only 1 thread can be used at max
+        cphd::byteSwap(data.data, minSize, 1, 1);
+    }
+
 }
 
 void Wideband::read(size_t channel,
@@ -525,9 +533,7 @@ void Wideband::read(size_t channel,
                     mem::ScopedArray<sys::ubyte>& data)
 {
     // Sanity checks
-    checkChannelInput(channel); // TODO: Implement
-
-    const size_t bufSize = mData.channels[channel].getCompressedSignalSize();
+    const size_t bufSize = mData.getCompressedSignalSize(channel);
     data.reset(new sys::ubyte[bufSize]);
 
     read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
