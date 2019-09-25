@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_MATCH_INFO_H__
 #define __CPHD_MATCH_INFO_H__
 

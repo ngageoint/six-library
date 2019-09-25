@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/ErrorParameters.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Init.h>

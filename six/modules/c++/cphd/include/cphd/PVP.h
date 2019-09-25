@@ -18,8 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */
-#ifndef __CPHD_PVP_H__
+ */#ifndef __CPHD_PVP_H__
 #define __CPHD_PVP_H__
 
 #include <ostream>
@@ -34,6 +33,8 @@ namespace cphd
 {
 struct PVPType
 {
+    static const size_t WORD_BYTE_SIZE;
+
     PVPType();
 
     bool operator==(const PVPType& other) const
@@ -48,11 +49,11 @@ struct PVPType
         return !((*this) == other);
     }
 
-    void setData(size_t size_in, size_t offset_in, std::string format_in)
+    void setData(size_t size, size_t offset, std::string format)
     {
-        mSize = size_in;
-        mOffset = offset_in;
-        mFormat = format_in;
+        mSize = size;
+        mOffset = offset;
+        mFormat = format;
     }
 
     size_t getSize() const
@@ -64,6 +65,12 @@ struct PVPType
     {
         return mOffset;
     }
+
+    size_t getByteOffset() const
+    {
+        return mOffset*WORD_BYTE_SIZE;
+    }
+
 
     std::string getFormat() const
     {

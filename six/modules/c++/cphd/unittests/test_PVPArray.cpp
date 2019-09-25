@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <complex>
 
 #include <cphd/PVP.h>

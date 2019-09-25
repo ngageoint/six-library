@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <mem/ScopedArray.h>
 #include <io/SeekableStreams.h>
 #include <str/Manip.h>

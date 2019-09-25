@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <iostream>
 #include <fstream>
 #include <memory>
@@ -68,10 +67,7 @@ TEST_CASE(testWrite)
 
     const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
     io::FileOutputStream ofs(FILE_NAME);
-    // FileHeader header;
-    // // set header size, final step before write
-    // header.set(xmlMetadata.size(), vbmSize, cphd03Size);
-    // mFile.write(header.toString().c_str(), header.size());
+
     ofs.write(xmlMetadata.c_str(), xmlMetadata.size());
 
     xml::lite::MinidomParser xmlParser2;
@@ -110,10 +106,6 @@ TEST_CASE(testWriteNotEqual)
 
     const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
     io::FileOutputStream ofs(FILE_NAME);
-    // FileHeader header;
-    // // set header size, final step before write
-    // header.set(xmlMetadata.size(), vbmSize, cphd03Size);
-    // mFile.write(header.toString().c_str(), header.size());
     ofs.write(xmlMetadata.c_str(), xmlMetadata.size());
 
     xml::lite::MinidomParser xmlParser2;

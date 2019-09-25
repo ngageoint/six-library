@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2019, Maxar technologies LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_CHANNEL_H__
 #define __CPHD_CHANNEL_H__
 
@@ -38,19 +37,19 @@ namespace cphd
  */
 struct Polarization
 {
-  bool operator==(const Polarization& other) const
-  {
+    //! Equality operator
+    bool operator==(const Polarization& other) const
+    {
     return txPol == other.txPol &&
            rcvPol == other.rcvPol;
-  }
-
-  bool operator!=(const Polarization& other) const
-  {
+    }
+    bool operator!=(const Polarization& other) const
+    {
     return !((*this) == other);
-  }
+    }
 
-  PolarizationType txPol;
-  PolarizationType rcvPol;
+    PolarizationType txPol;
+    PolarizationType rcvPol;
 };
 
 /*

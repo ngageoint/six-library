@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_DWELL_H__
 #define __CPHD_DWELL_H__
 

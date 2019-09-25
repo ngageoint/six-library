@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_ANTENNA_H__
 #define __CPHD_ANTENNA_H__
 

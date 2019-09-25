@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_SUPPORT_ARRAY_H__
 #define __CPHD_SUPPORT_ARRAY_H__
 

@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>

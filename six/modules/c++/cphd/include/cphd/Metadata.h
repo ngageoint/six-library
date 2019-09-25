@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_METADATA_H__
 #define __CPHD_METADATA_H__
 

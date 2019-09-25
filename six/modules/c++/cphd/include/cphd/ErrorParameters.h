@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_ERROR_PARAMETERS_H__
 #define __CPHD_ERROR_PARAMETERS_H__
 

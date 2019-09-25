@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of cphd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2019, MDA Information Systems LLC
@@ -18,8 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */
-#ifndef __CPHD_COMPLEX_PARAMETER_H__
+ */#ifndef __CPHD_COMPLEX_PARAMETER_H__
 #define __CPHD_COMPLEX_PARAMETER_H__
 
 #include <complex>

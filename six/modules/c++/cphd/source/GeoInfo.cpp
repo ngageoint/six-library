@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/GeoInfo.h>
 #include <six/Init.h>
 

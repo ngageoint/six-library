@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_GLOBAL_H__
 #define __CPHD_GLOBAL_H__
 
@@ -172,6 +171,11 @@ struct Global
     bool operator !=(const Global& other) const
     {
         return !((*this) == other);
+    }
+
+    DomainType getDomainType() const
+    {
+        return domainType;
     }
 
     DomainType domainType;

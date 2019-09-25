@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <cphd/FileHeader.h>
 #include <io/ByteStream.h>
 #include "TestCase.h"

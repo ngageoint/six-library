@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_ENUMS_H__
 #define __CPHD_ENUMS_H__
 

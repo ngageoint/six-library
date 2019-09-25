@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_REFERENCE_GEOMETRY_H__
 #define __CPHD_REFERENCE_GEOMETRY_H__
 

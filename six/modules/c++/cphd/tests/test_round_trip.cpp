@@ -24,62 +24,60 @@
 #include <fstream>
 #include <memory>
 #include <logging/NullLogger.h>
-#include <xml/lite/MinidomParser.h>
 #include <cli/ArgumentParser.h>
+#include <io/TempFile.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
-#include <cphd/CPHDXMLControl.h>
-#include <cphd/Global.h>
-#include <cphd/Metadata.h>
-#include <cphd/SceneCoordinates.h>
+#include <cphd/CPHDReader.h>
+#include <cphd/CPHDWriter.h>
 
-
-std::string getPathname(int argc, char** argv)
+void testRoundTrip(std::string inPathname, std::string outPathname, size_t numThreads, std::vector<std::string>& schemaPathname)
 {
-    // Parse the command line
-    if (argc != 2)
-    {
-        throw except::Exception(Ctxt(
-                    "Invalid number of cmd line args"));
-    }
-    else
-    {
-        return argv[1];
-    }
-}
+    //! Open the CPHD file
+    std::cout << "Reading file: " << inPathname << "\n";
+    cphd::CPHDReader reader(inPathname, numThreads, schemaPathname);
 
-void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
-{
-    // Parse XML file
-    std::cout << "Reading file: " << pathname << "\n";
-    io::FileInputStream ifs(pathname);
-    xmlParser.preserveCharacterData(true);
-    xmlParser.parse(ifs, ifs.available());
-}
+    cphd::CPHDWriter writer(reader.getMetadata(), numThreads);
+    const cphd::SignalArrayFormat signalFormat =
+            reader.getMetadata().data.getSignalFormat();
+    const cphd::PVPArray& pvpArray = reader.getPVPArray();
+    cphd::Wideband& wideband = reader.getWideband();
 
-void testRoundTrip(std::string pathname, std::string outPathname, std::string schemaPathname)
-{
-    xml::lite::MinidomParser xmlParser;
-    parseXMLFile(xmlParser, pathname);
-
-
-    std::vector<std::string> schemaPaths;
-    schemaPaths.push_back(schemaPathname);
-    cphd::CPHDXMLControl xmlControl(new logging::NullLogger(), true, schemaPaths);
-
-    // Populate metadata object from XML Document
-    const std::auto_ptr<cphd::Metadata> metadata =
-            xmlControl.fromXML(xmlParser.getDocument());
-
-    const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
-    std::cout << xmlMetadata << std::endl;
-    io::FileOutputStream ofs(outPathname);
-    // FileHeader header;
-    // // set header size, final step before write
-    // header.set(xmlMetadata.size(), vbmSize, cphd03Size);
-    // mFile.write(header.toString().c_str(), header.size());
     std::cout << "Writing file: " << outPathname << "\n";
-    ofs.write(xmlMetadata.c_str(), xmlMetadata.size());
+    writer.writeMetadata(outPathname, pvpArray);
+
+    for (size_t channel = 0;
+         channel < reader.getNumChannels();
+         ++channel)
+    {
+        const types::RowCol<size_t> dims(reader.getNumVectors(channel),
+                                         reader.getNumSamples(channel));
+        mem::ScopedArray<sys::ubyte> data;
+
+        wideband.read(channel,
+                      0, cphd::Wideband::ALL,
+                      0, cphd::Wideband::ALL,
+                      numThreads, data);
+
+        switch (signalFormat)
+        {
+        case cphd::SignalArrayFormat::CI2:
+            writer.writeCPHDData<std::complex<sys::Int8_T> >(
+                reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
+                dims.area());
+            break;
+        case cphd::SignalArrayFormat::CI4:
+            writer.writeCPHDData<std::complex<sys::Int16_T> >(
+                reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
+                dims.area());
+            break;
+        case cphd::SignalArrayFormat::CF8:
+            writer.writeCPHDData<std::complex<float> >(
+                reinterpret_cast<const std::complex<float>* >(data.get()),
+                dims.area());
+            break;
+        }
+    }
 }
 
 int main(int argc, char** argv)
@@ -106,7 +104,9 @@ int main(int argc, char** argv)
         const std::string schemaPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));
 
-        testRoundTrip(inPathname, outPathname, schemaPathname);
+        std::vector<std::string> schemas;
+        schemas.push_back(schemaPathname);
+        testRoundTrip(inPathname, outPathname, numThreads, schemas);
         return 0;
     }
     catch (const except::Exception& ex)

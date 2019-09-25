@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <six/Enums.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
@@ -28,7 +27,8 @@
 namespace cphd
 {
 SceneCoordinates::SceneCoordinates() :
-    earthModel(EarthModelType::WGS_84)
+    earthModel(EarthModelType::WGS_84),
+    imageAreaCorners(six::Init::undefined<LatLonCorners>())
 {
 }
 

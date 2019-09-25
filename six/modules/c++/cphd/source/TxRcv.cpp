@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/TxRcv.h>
 #include <six/Init.h>
 

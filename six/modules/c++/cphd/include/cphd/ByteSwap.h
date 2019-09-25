@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_BYTE_SWAP_H__
 #define __CPHD_BYTE_SWAP_H__
 

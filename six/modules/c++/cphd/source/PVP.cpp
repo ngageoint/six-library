@@ -12,20 +12,21 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more detailformat.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */
-#include <complex>
+ */#include <complex>
 #include <sys/Conf.h>
 #include <cphd/PVP.h>
 #include <six/Init.h>
 
 namespace cphd
 {
+const size_t PVPType::WORD_BYTE_SIZE = 8;
+
 PVPType::PVPType() :
     mSize(0),
     mOffset(six::Init::undefined<size_t>()),
@@ -58,7 +59,7 @@ void Pvp::validate(size_t size, size_t offset)
     //Check if any blocks will be overwritten
     for (size_t ii = 0; ii < size; ++ii)
     {
-        if(mParamLocations[offset + ii] == true)
+        if(mParamLocations.at(offset + ii) == true)
         {
             throw except::Exception(Ctxt(
                                     "This byte block is occupied"));
@@ -68,7 +69,7 @@ void Pvp::validate(size_t size, size_t offset)
     // Mark each block as written
     for (size_t ii = 0; ii < size; ++ii)
     {
-        mParamLocations[offset + ii] = true;
+        mParamLocations.at(offset + ii) = true;
     }
 }
 

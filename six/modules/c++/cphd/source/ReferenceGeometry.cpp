@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/ReferenceGeometry.h>
 #include <six/Init.h>
 
@@ -33,50 +32,50 @@ SRP::SRP() :
 }
 
 ImagingType::ImagingType() :
-    azimuthAngle(six::Init::undefined<double>()),
-    grazeAngle(six::Init::undefined<double>()),
-    twistAngle(six::Init::undefined<double>()),
-    slopeAngle(six::Init::undefined<double>()),
-    layoverAngle(six::Init::undefined<double>())
+    azimuthAngle(0),
+    grazeAngle(0),
+    twistAngle(0),
+    slopeAngle(0),
+    layoverAngle(0)
 {
 }
 
 Monostatic::Monostatic() :
     sideOfTrack(six::Init::undefined<six::SideOfTrackType>()),
-    slantRange(six::Init::undefined<double>()),
-    groundRange(six::Init::undefined<double>()),
-    dopplerConeAngle(six::Init::undefined<double>()),
-    incidenceAngle(six::Init::undefined<double>()),
+    slantRange(0),
+    groundRange(0),
+    dopplerConeAngle(0),
+    incidenceAngle(0),
     arpPos(six::Init::undefined<Vector3>()),
     arpVel(six::Init::undefined<Vector3>())
 {
 }
 
 Bistatic::Bistatic() :
-    azimuthAngleRate(six::Init::undefined<double>()),
-    bistaticAngle(six::Init::undefined<double>()),
-    bistaticAngleRate(six::Init::undefined<double>())
+    azimuthAngleRate(0),
+    bistaticAngle(0),
+    bistaticAngleRate(0)
 {
 }
 
 Bistatic::PlatformParams::PlatformParams() :
     sideOfTrack(six::Init::undefined<six::SideOfTrackType>()),
-    time(six::Init::undefined<double>()),
-    azimuthAngle(six::Init::undefined<double>()),
-    grazeAngle(six::Init::undefined<double>()),
-    incidenceAngle(six::Init::undefined<double>()),
-    dopplerConeAngle(six::Init::undefined<double>()),
-    groundRange(six::Init::undefined<double>()),
-    slantRange(six::Init::undefined<double>()),
+    time(0),
+    azimuthAngle(0),
+    grazeAngle(0),
+    incidenceAngle(0),
+    dopplerConeAngle(0),
+    groundRange(0),
+    slantRange(0),
     pos(six::Init::undefined<Vector3>()),
     vel(six::Init::undefined<Vector3>())
 {
 }
 
 ReferenceGeometry::ReferenceGeometry() :
-    referenceTime(six::Init::undefined<double>()),
-    srpCODTime(six::Init::undefined<double>()),
-    srpDwellTime(six::Init::undefined<double>())
+    referenceTime(0),
+    srpCODTime(0),
+    srpDwellTime(0)
 {
 }
 
