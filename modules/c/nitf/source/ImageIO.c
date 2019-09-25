@@ -7102,19 +7102,17 @@ NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
                                         size_t count,
                                         nitf_Error * error)
 {
-    size_t bytes;               /* Amount of current read */
     char *bufp;                 /* pointer into the buffer */
-    /* Seek to the offset */
-    bytes = count;
     bufp = (char *) buffer;
 
+    /* Seek to the offset */
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
                                                (nitf_Off) fileOffset,
                                                NITF_SEEK_SET, error)))
     {
         return NITF_FAILURE;
     }
-    if (!nitf_IOInterface_read(io, bufp, bytes, error))
+    if (!nitf_IOInterface_read(io, bufp, count, error))
     {
         return NITF_FAILURE;
     }
