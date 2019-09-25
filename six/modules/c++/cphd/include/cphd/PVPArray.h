@@ -18,8 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */
-#ifndef __CPHD_PVP_ARRAY_H__
+ */#ifndef __CPHD_PVP_ARRAY_H__
 #define __CPHD_PVP_ARRAY_H__
 
 #include <ostream>
@@ -72,9 +71,13 @@ struct PVPArray
     {
         PVPSet();
 
-        void write(Pvp&, const sys::byte*);
+        void addToAddedPVPByteSize(size_t size);
 
-        void read(Pvp&, sys::ubyte*) const;
+        size_t getNumBytes() const;
+
+        void write(const Pvp&, const sys::byte*);
+
+        void read(const Pvp&, sys::ubyte*) const;
 
         bool operator==(const PVPSet& other) const
         {
@@ -144,6 +147,7 @@ struct PVPArray
         std::vector<ComplexParameter> addedPVP;
 
     private:
+        size_t mAddedPVPByteSize;
         friend std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p);
 
     };
@@ -250,6 +254,7 @@ struct PVPArray
             if(idx < mData[channel][set].addedPVP.size())
             {
                 mData[channel][set].addedPVP[idx].setValue(value);
+                mData[channel][set].addToAddedPVPByteSize(sizeof(T));
                 return;
             }
             throw except::Exception(Ctxt(
@@ -267,7 +272,7 @@ struct PVPArray
      *  \param [Output]data Will be filled with PVP data. This will
      *         be resized and zeroed internally.
      */
-    void getPVPdata(Pvp& p, size_t channel,
+    void getPVPdata(const Pvp& p, size_t channel,
                     std::vector<sys::ubyte>& data) const;
 
     /*
@@ -277,15 +282,13 @@ struct PVPArray
      *  \param channel 0 based index
      *  \param [Output]data A preallocated buffer for the data.
      */
-    void getPVPdata(Pvp& p, size_t channel,
+    void getPVPdata(const Pvp& p, size_t channel,
                     void* data) const;
 
     std::vector<std::vector<PVPSet> >& getData()
     {
         return mData;
     }
-
-    size_t getPVPsize(size_t channel) const;
 
     /*
      *  \func getNumBytesVBP
@@ -294,10 +297,18 @@ struct PVPArray
      *         the case where a CPHD file had a larger number allocated than
      *         actually used.
      */
-    size_t getNumBytesPVP() const
+    size_t getNumBytesPVPSet() const
     {
-        return mNumBytesPerVector;
+        return mData[0][0].getNumBytes();
     }
+
+    /*
+     *  \func getPVPsize
+     *  \brief Returns the number of bytes in a PVP channel.
+     *
+     *  \param channel 0 based index
+     */
+    size_t getPVPsize(size_t channel) const;
 
     // Read in the entire PVP Array, return number of bytes read or -1 if error
     // startPVP = cphd header keyword "PVP_BYTE_OFFSET"
@@ -306,7 +317,7 @@ struct PVPArray
                     sys::Off_T startPVP,
                     sys::Off_T sizePVP,
                     size_t numThreads,
-                    Pvp& p);
+                    const Pvp& p);
 
     bool operator==(const PVPArray& other)
     {

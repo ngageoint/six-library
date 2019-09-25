@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
 

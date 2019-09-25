@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_DATA_H__
 #define __CPHD_DATA_H__
 
@@ -85,6 +84,12 @@ struct Data
     {
         Channel();
 
+        Channel(size_t vectors, size_t samples);
+
+        Channel(size_t vectors, size_t samples,
+                size_t signalByteOffset, size_t pvpByteOffset,
+                size_t compressedSize);
+
         bool operator==(const Channel& other) const
         {
             return identifier == other.identifier &&
@@ -103,6 +108,18 @@ struct Data
         size_t getNumVectors() const
         {
             return numVectors;
+        }
+        size_t getNumSamples() const
+        {
+            return numSamples;
+        }
+        size_t getSignalArrayByteOffset() const
+        {
+            return signalArrayByteOffset;
+        }
+        size_t getCompressedSignalSize() const
+        {
+            return compressedSignalSize;
         }
 
         std::string identifier;
@@ -128,14 +145,39 @@ struct Data
         return !((*this) == other);
     }
 
-    size_t getNumChannels()
+    size_t getNumVectors(size_t channel) const
+    {
+        if (channel < channels.size())
+        {
+            return channels[channel].getNumVectors();
+        }
+        throw except::Exception(Ctxt(
+                "Invalid channel number provided"));
+    }
+    size_t getNumSamples(size_t channel) const
+    {
+        if (channel < channels.size())
+        {
+            return channels[channel].getNumSamples();
+        }
+        throw except::Exception(Ctxt(
+                "Invalid channel number provided"));
+    }
+    size_t getNumChannels() const
     {
         return channels.size();
     }
-
-    size_t getNumBytesPVP()
+    size_t getNumBytesPVPSet() const
     {
         return numBytesPVP;
+    }
+    std::string getCompressionID() const
+    {
+        return signalCompressionID;
+    }
+    SignalArrayFormat getSignalFormat() const
+    {
+        return signalArrayFormat;
     }
 
     SignalArrayFormat signalArrayFormat;

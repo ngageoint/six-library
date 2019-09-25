@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_FILE_HEADER_H__
 #define __CPHD_FILE_HEADER_H__
 

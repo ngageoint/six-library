@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
@@ -227,13 +226,16 @@ XMLElem CPHDXMLControl::toXML(const CollectionID& collectionID, XMLElem parent)
 
     createString("Classification", collectionID.getClassificationLevel(), collectionXML);
     createString("ReleaseInfo", collectionID.releaseInfo, collectionXML);
-    std::string countryCodes = "";
-    for (size_t ii = 0; ii < collectionID.countryCodes.size() - 1; ++ii)
+    if (!collectionID.countryCodes.empty())
     {
-        countryCodes += collectionID.countryCodes[ii] + ",";
+        std::string countryCodes = "";
+        for (size_t ii = 0; ii < collectionID.countryCodes.size() - 1; ++ii)
+        {
+            countryCodes += collectionID.countryCodes[ii] + ",";
+        }
+        countryCodes += collectionID.countryCodes.back();
+        createString("CountryCode", countryCodes, collectionXML);
     }
-    countryCodes += collectionID.countryCodes.back();
-    createString("CountryCode", countryCodes, collectionXML);
     mCommon.addParameters("Parameter", getDefaultURI(), collectionID.parameters, collectionXML);
     return collectionXML;
 }
@@ -339,9 +341,9 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
     }
 
     // ImageGrid
-    XMLElem imageGridXML = newElement("ImageGrid", sceneCoordsXML);
     if(sceneCoords.imageGrid.get())
     {
+        XMLElem imageGridXML = newElement("ImageGrid", sceneCoordsXML);
         if(!six::Init::isUndefined(sceneCoords.imageGrid->identifier))
         {
             createString("Identifier", sceneCoords.imageGrid->identifier, imageGridXML);
@@ -1216,29 +1218,22 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc, 
 
 void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
 {
-
     parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
                 collectionID.collectorName);
-
     XMLElem element = getOptional(collectionIDXML, "IlluminatorName");
     if (element)
         parseString(element, collectionID.illuminatorName);
-
     element = getOptional(collectionIDXML, "CoreName");
     if (element)
         parseString(element, collectionID.coreName);
-
     element = getOptional(collectionIDXML, "CollectType");
     if (element)
         collectionID.collectType
                 = six::toType<six::CollectType>(element->getCharacterData());
-
     XMLElem radarModeXML = getFirstAndOnly(collectionIDXML, "RadarMode");
-
     collectionID.radarMode
             = six::toType<six::RadarModeType>(getFirstAndOnly(radarModeXML,
                                               "ModeType")->getCharacterData());
-
     element = getOptional(radarModeXML, "ModeID");
     if (element)
         parseString(element, collectionID.radarModeID);
@@ -1469,14 +1464,14 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
     const XMLElem signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
     data.signalArrayFormat = SignalArrayFormat(signalXML->getCharacterData());
 
-    size_t numBytesPVP_temp;
+    size_t numBytesPVP_temp = 0;
     XMLElem numBytesPVPXML = getFirstAndOnly(dataXML, "NumBytesPVP");
     parseUInt(numBytesPVPXML, numBytesPVP_temp);
     if(numBytesPVP_temp % 8 != 0)
-        {
-            throw except::Exception(Ctxt(
-                    "Number of bytes must be multiple of 8"));
-        }
+    {
+        throw except::Exception(Ctxt(
+                "Number of bytes must be multiple of 8"));
+    }
     data.numBytesPVP = numBytesPVP_temp;
     // Channels
     std::vector<XMLElem> channelsXML;
@@ -1494,18 +1489,18 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
                   data.channels[ii].signalArrayByteOffset);
         parseUInt(getFirstAndOnly(channelsXML[ii], "PVPArrayByteOffset"),
                   data.channels[ii].pvpArrayByteOffset);
-        const XMLElem compressionSizeXML = getOptional(channelsXML[ii],
-                                                       "CompressedSignalSize");
-        if (compressionSizeXML)
+        XMLElem compressionXML = getOptional(channelsXML[ii], "CompressedSignalSize");
+        if (compressionXML)
         {
-            // Optional
-            parseUInt(compressionSizeXML,
-                      data.channels[ii].compressedSignalSize);
+            parseUInt(compressionXML, data.channels[ii].compressedSignalSize);
         }
     }
-
-    parseString(getFirstAndOnly(dataXML, "SignalCompressionID"),
-                data.signalCompressionID);
+    XMLElem compressionXML = getOptional(dataXML, "SignalCompressionID");
+    if (compressionXML)
+    {
+        parseString(compressionXML,
+                    data.signalCompressionID);
+    }
 
     // Support Arrays
     std::vector<XMLElem> supportsXML;
@@ -1669,14 +1664,12 @@ void CPHDXMLControl::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
     XMLElem srpXML = getFirstAndOnly(refGeoXML, "SRP");
     mCommon.parseVector3D(getFirstAndOnly(srpXML, "ECF"), refGeo.srp.ecf);
     mCommon.parseVector3D(getFirstAndOnly(srpXML, "IAC"), refGeo.srp.iac);
-
     parseDouble(getFirstAndOnly(refGeoXML, "ReferenceTime"), refGeo.referenceTime);
     parseDouble(getFirstAndOnly(refGeoXML, "SRPCODTime"), refGeo.srpCODTime);
     parseDouble(getFirstAndOnly(refGeoXML, "SRPDwellTime"), refGeo.srpDwellTime);
 
     const XMLElem monoXML = getOptional(refGeoXML, "Monostatic");
     const XMLElem biXML = getOptional(refGeoXML, "Bistatic");
-
     if (monoXML && !biXML)
     {
         refGeo.monostatic.reset(new Monostatic());
@@ -1706,9 +1699,8 @@ void CPHDXMLControl::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
     else
     {
         throw except::Exception(Ctxt(
-                "ReferenceGeometry must be exactly one of Monostatic or Bistatic element"));
+                "One of the two types Mono or Bi must be provided"));
     }
-
 }
 
 void CPHDXMLControl::fromXML(const XMLElem supportArrayXML, SupportArray& supportArray)
@@ -2351,7 +2343,11 @@ void CPHDXMLControl::parseChannelParameters(
 
     parseDouble(getFirstAndOnly(paramXML, "FxC"), param.fxC);
     parseDouble(getFirstAndOnly(paramXML, "FxBW"), param.fxBW);
-    parseDouble(getOptional(paramXML, "FxBWNoise"), param.fxBWNoise);
+    XMLElem FxBWNoiseXML = getOptional(paramXML, "FxBWNoise");
+    if (FxBWNoiseXML)
+    {
+        parseDouble(FxBWNoiseXML, param.fxBWNoise);
+    }
     parseDouble(getFirstAndOnly(paramXML, "TOASaved"), param.toaSaved);
 
     XMLElem toaExtendedXML = getOptional(paramXML, "TOAExtended");

@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/Data.h>
 #include <six/Init.h>
 
@@ -27,7 +26,7 @@ namespace cphd
 {
 
 Data::Data() :
-    numBytesPVP(0)
+    numBytesPVP(six::Init::undefined<size_t>())
 {
 }
 
@@ -39,6 +38,27 @@ Data::Channel::Channel() :
     compressedSignalSize(six::Init::undefined<size_t>())
 {
 }
+
+Data::Channel::Channel(size_t vectors, size_t samples) :
+    numVectors(vectors),
+    numSamples(samples),
+    signalArrayByteOffset(0),
+    pvpArrayByteOffset(0),
+    compressedSignalSize(six::Init::undefined<size_t>())
+{
+}
+
+Data::Channel::Channel(size_t vectors, size_t samples,
+        size_t signalByteOffset, size_t pvpByteOffset,
+        size_t compressedSize) :
+    numVectors(vectors),
+    numSamples(samples),
+    signalArrayByteOffset(signalByteOffset),
+    pvpArrayByteOffset(pvpByteOffset),
+    compressedSignalSize(compressedSize)
+{
+}
+
 
 Data::SupportArray::SupportArray() :
     numRows(0),

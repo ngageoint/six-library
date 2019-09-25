@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <ostream>
 #include <vector>
 #include <stddef.h>
@@ -44,8 +43,8 @@ inline void setData(const sys::byte* data,
                     cphd::Vector3& dest)
 {
     setData(data, dest[0]);
-    setData(data, dest[1]);
-    setData(data, dest[2]);
+    setData(data + sizeof(double), dest[1]);
+    setData(data + 2*sizeof(double), dest[2]);
 }
 
 // Get data from data struct and put into data block
@@ -59,9 +58,10 @@ inline void getData(sys::ubyte* dest,
                     const cphd::Vector3& value)
 {
     getData(dest, value[0]);
-    getData(dest, value[1]);
-    getData(dest, value[2]);
+    getData(dest + sizeof(double), value[1]);
+    getData(dest + 2*sizeof(double), value[2]);
 }
+
 }
 
 namespace cphd
@@ -84,64 +84,108 @@ PVPArray::PVPSet::PVPSet() :
     toa2(six::Init::undefined<double>()),
     tdTropoSRP(six::Init::undefined<double>()),
     sc0(six::Init::undefined<double>()),
-    scss(six::Init::undefined<double>())
+    scss(six::Init::undefined<double>()),
+    mAddedPVPByteSize(0)
 {
 }
 
-void PVPArray::PVPSet::write(Pvp& p, const sys::byte* input)
+void PVPArray::PVPSet::addToAddedPVPByteSize(size_t size)
 {
-    ::setData(input + p.txPos.getOffset()*8, txTime);
-    ::setData(input + p.txPos.getOffset()*8, txPos);
-    ::setData(input + p.txVel.getOffset()*8, txVel);
-    ::setData(input + p.rcvTime.getOffset()*8, rcvTime);
-    ::setData(input + p.rcvPos.getOffset()*8, rcvPos);
-    ::setData(input + p.rcvVel.getOffset()*8, rcvVel);
-    ::setData(input + p.srpPos.getOffset()*8, srpPos);
-    ::setData(input + p.aFDOP.getOffset()*8, aFDOP);
-    ::setData(input + p.aFRR1.getOffset()*8, aFRR1);
-    ::setData(input + p.aFRR2.getOffset()*8, aFRR2);
-    ::setData(input + p.fx1.getOffset()*8, fx1);
-    ::setData(input + p.fx2.getOffset()*8, fx2);
-    ::setData(input + p.toa1.getOffset()*8, toa1);
-    ::setData(input + p.toa2.getOffset()*8, toa2);
-    ::setData(input + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
-    ::setData(input + p.sc0.getOffset()*8, sc0);
-    ::setData(input + p.scss.getOffset()*8, scss);
+    mAddedPVPByteSize += size;
+}
+
+
+size_t PVPArray::PVPSet::getNumBytes() const
+{
+    size_t ret = 12 * sizeof(double) + 5 * 3 * sizeof(double);
+    if (ampSF.get())
+    {
+        ret += sizeof(ampSF.get());
+    }
+    if (fxN1.get())
+    {
+        ret += sizeof(fxN1.get());
+    }
+    if (fxN2.get())
+    {
+        ret += sizeof(fxN2.get());
+    }
+    if (toaE1.get())
+    {
+        ret += sizeof(toaE1.get());
+    }
+    if (toaE2.get())
+    {
+        ret += sizeof(toaE2.get());
+    }
+    if (tdIonoSRP.get())
+    {
+        ret += sizeof(tdIonoSRP.get());
+    }
+    if (signal.get())
+    {
+        ret += sizeof(signal.get());
+    }
+
+    ret += mAddedPVPByteSize;
+    return ret;
+}
+
+
+void PVPArray::PVPSet::write(const Pvp& p, const sys::byte* input)
+{
+    ::setData(input + p.txTime.getByteOffset(), txTime);
+    ::setData(input + p.txPos.getByteOffset(), txPos);
+    ::setData(input + p.txVel.getByteOffset(), txVel);
+    ::setData(input + p.rcvTime.getByteOffset(), rcvTime);
+    ::setData(input + p.rcvPos.getByteOffset(), rcvPos);
+    ::setData(input + p.rcvVel.getByteOffset(), rcvVel);
+    ::setData(input + p.srpPos.getByteOffset(), srpPos);
+    ::setData(input + p.aFDOP.getByteOffset(), aFDOP);
+    ::setData(input + p.aFRR1.getByteOffset(), aFRR1);
+    ::setData(input + p.aFRR2.getByteOffset(), aFRR2);
+    ::setData(input + p.fx1.getByteOffset(), fx1);
+    ::setData(input + p.fx2.getByteOffset(), fx2);
+    ::setData(input + p.toa1.getByteOffset(), toa1);
+    ::setData(input + p.toa2.getByteOffset(), toa2);
+    ::setData(input + p.tdTropoSRP.getByteOffset(), tdTropoSRP);
+    ::setData(input + p.sc0.getByteOffset(), sc0);
+    ::setData(input + p.scss.getByteOffset(), scss);
 
     if (p.ampSF.get())
     {
         ampSF.reset(new double());
-        ::setData(input + p.ampSF->getOffset()*8, *ampSF);
+        ::setData(input + p.ampSF->getByteOffset(), *ampSF);
     }
     if (p.fxN1.get())
     {
         fxN1.reset(new double());
-        ::setData(input + p.fxN1->getOffset()*8, *fxN1);
+        ::setData(input + p.fxN1->getByteOffset(), *fxN1);
     }
     if (p.fxN2.get())
     {
         fxN2.reset(new double());
-        ::setData(input + p.fxN2->getOffset()*8, *fxN2);
+        ::setData(input + p.fxN2->getByteOffset(), *fxN2);
     }
     if (p.toaE1.get())
     {
         toaE1.reset(new double());
-        ::setData(input + p.toaE1->getOffset()*8, *toaE1);
+        ::setData(input + p.toaE1->getByteOffset(), *toaE1);
     }
     if (p.toaE2.get())
     {
         toaE2.reset(new double());
-        ::setData(input + p.toaE2->getOffset()*8, *toaE2);
+        ::setData(input + p.toaE2->getByteOffset(), *toaE2);
     }
     if (p.tdIonoSRP.get())
     {
         tdIonoSRP.reset(new double());
-        ::setData(input + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
+        ::setData(input + p.tdIonoSRP->getByteOffset(), *tdIonoSRP);
     }
     if (p.signal.get())
     {
         signal.reset(new double());
-        ::setData(input + p.signal->getOffset()*8, *signal);
+        ::setData(input + p.signal->getByteOffset(), *signal);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
@@ -150,60 +194,62 @@ void PVPArray::PVPSet::write(Pvp& p, const sys::byte* input)
     }
     for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
     {
-        std::string val;
-        val.resize(p.addedPVP.size());
-        ::setData(input + p.addedPVP[ii].getOffset()*8, val[0]);
+        // std::string val;
+        // val.resize(p.addedPVP[ii].getSize());
+        // ::setData(input + p.addedPVP[ii].getByteOffset(), val.c_str());
+        std::string val(input + p.addedPVP[ii].getByteOffset(),
+                        input + p.addedPVP[ii].getByteOffset() + p.addedPVP[ii].getSize());
         addedPVP[ii].setValue(val);
     }
 }
 
-void PVPArray::PVPSet::read(Pvp& p, sys::ubyte* dest) const
+void PVPArray::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 {
-    ::getData(dest + p.txPos.getOffset()*8, txTime);
-    ::getData(dest + p.txPos.getOffset()*8, txPos);
-    ::getData(dest + p.txVel.getOffset()*8, txVel);
-    ::getData(dest + p.rcvTime.getOffset()*8, rcvTime);
-    ::getData(dest + p.rcvPos.getOffset()*8, rcvPos);
-    ::getData(dest + p.rcvVel.getOffset()*8, rcvVel);
-    ::getData(dest + p.srpPos.getOffset()*8, srpPos);
-    ::getData(dest + p.aFDOP.getOffset()*8, aFDOP);
-    ::getData(dest + p.aFRR1.getOffset()*8, aFRR1);
-    ::getData(dest + p.aFRR2.getOffset()*8, aFRR2);
-    ::getData(dest + p.fx1.getOffset()*8, fx1);
-    ::getData(dest + p.fx2.getOffset()*8, fx2);
-    ::getData(dest + p.toa1.getOffset()*8, toa1);
-    ::getData(dest + p.toa2.getOffset()*8, toa2);
-    ::getData(dest + p.tdTropoSRP.getOffset()*8, tdTropoSRP);
-    ::getData(dest + p.sc0.getOffset()*8, sc0);
-    ::getData(dest + p.scss.getOffset()*8, scss);
+    ::getData(dest + p.txTime.getByteOffset(), txTime);
+    ::getData(dest + p.txPos.getByteOffset(), txPos);
+    ::getData(dest + p.txVel.getByteOffset(), txVel);
+    ::getData(dest + p.rcvTime.getByteOffset(), rcvTime);
+    ::getData(dest + p.rcvPos.getByteOffset(), rcvPos);
+    ::getData(dest + p.rcvVel.getByteOffset(), rcvVel);
+    ::getData(dest + p.srpPos.getByteOffset(), srpPos);
+    ::getData(dest + p.aFDOP.getByteOffset(), aFDOP);
+    ::getData(dest + p.aFRR1.getByteOffset(), aFRR1);
+    ::getData(dest + p.aFRR2.getByteOffset(), aFRR2);
+    ::getData(dest + p.fx1.getByteOffset(), fx1);
+    ::getData(dest + p.fx2.getByteOffset(), fx2);
+    ::getData(dest + p.toa1.getByteOffset(), toa1);
+    ::getData(dest + p.toa2.getByteOffset(), toa2);
+    ::getData(dest + p.tdTropoSRP.getByteOffset(), tdTropoSRP);
+    ::getData(dest + p.sc0.getByteOffset(), sc0);
+    ::getData(dest + p.scss.getByteOffset(), scss);
 
     if (ampSF.get())
     {
-        ::getData(dest + p.ampSF->getOffset()*8, *ampSF);
+        ::getData(dest + p.ampSF->getByteOffset(), *ampSF);
     }
     if (fxN1.get())
     {
-        ::getData(dest + p.fxN1->getOffset()*8, *fxN1);
+        ::getData(dest + p.fxN1->getByteOffset(), *fxN1);
     }
     if (fxN2.get())
     {
-        ::getData(dest + p.fxN2->getOffset()*8, *fxN2);
+        ::getData(dest + p.fxN2->getByteOffset(), *fxN2);
     }
     if (toaE1.get())
     {
-        ::getData(dest + p.toaE1->getOffset()*8, *toaE1);
+        ::getData(dest + p.toaE1->getByteOffset(), *toaE1);
     }
     if (toaE2.get())
     {
-        ::getData(dest + p.toaE2->getOffset()*8, *toaE2);
+        ::getData(dest + p.toaE2->getByteOffset(), *toaE2);
     }
     if (tdIonoSRP.get())
     {
-        ::getData(dest + p.tdIonoSRP->getOffset()*8, *tdIonoSRP);
+        ::getData(dest + p.tdIonoSRP->getByteOffset(), *tdIonoSRP);
     }
     if (signal.get())
     {
-        ::getData(dest + p.signal->getOffset()*8, *signal);
+        ::getData(dest + p.signal->getByteOffset(), *signal);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
@@ -212,7 +258,7 @@ void PVPArray::PVPSet::read(Pvp& p, sys::ubyte* dest) const
     }
     for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
     {
-        ::getData(dest + p.addedPVP[ii].getOffset()*8, addedPVP[ii].str());
+        ::getData(dest + p.addedPVP[ii].getByteOffset(), addedPVP[ii].str().c_str());
     }
 }
 
@@ -221,25 +267,34 @@ void PVPArray::PVPSet::read(Pvp& p, sys::ubyte* dest) const
  */
 PVPArray::PVPArray(Data& d, Pvp& p)
 {
-    mNumBytesPerVector = d.getNumBytesPVP();
+    mNumBytesPerVector = d.numBytesPVP;
+
     mData.resize(d.getNumChannels());
     for (size_t ii = 0; ii < d.getNumChannels(); ++ii)
     {
-        mData[ii].resize(d.channels[ii].getNumVectors());
+        mData[ii].resize(d.getNumVectors(ii));
         for (size_t jj = 0; jj < mData[ii].size(); ++jj)
         {
+
             mData[ii][jj].addedPVP.resize(p.addedPVP.size());
         }
     }
+    size_t calculateBytesPerVector = getNumBytesPVPSet();
+    if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
+        calculateBytesPerVector > mNumBytesPerVector)
+    {
+        mNumBytesPerVector = calculateBytesPerVector;
+    }
+
 }
 
 /*
  * Initialize PVP Array with custom parameters
  */
 PVPArray::PVPArray(size_t numBytesPerVector,
-                    size_t numChannels,
-                    std::vector<size_t> numVectors,
-                    size_t numAddedParams) :
+                   size_t numChannels,
+                   std::vector<size_t> numVectors,
+                   size_t numAddedParams) :
     mNumBytesPerVector(numBytesPerVector)
 {
     mData.resize(numChannels);
@@ -276,11 +331,11 @@ void PVPArray::verifyChannelVector(size_t channel, size_t vector) const
 size_t PVPArray::getPVPsize(size_t channel) const
 {
     verifyChannelVector(channel, 0);
-    return getNumBytesPVP() * mData[channel].size();
+    return getNumBytesPVPSet() * mData[channel].size();
 }
 
 
-void PVPArray::getPVPdata(Pvp& p, size_t channel,
+void PVPArray::getPVPdata(const Pvp& p, size_t channel,
                          std::vector<sys::ubyte>& data) const
 {
     verifyChannelVector(channel, 0);
@@ -290,11 +345,11 @@ void PVPArray::getPVPdata(Pvp& p, size_t channel,
     getPVPdata(p, channel, &data[0]);
 }
 
-void PVPArray::getPVPdata(Pvp& p, size_t channel,
+void PVPArray::getPVPdata(const Pvp& p, size_t channel,
                      void* data) const
 {
     verifyChannelVector(channel, 0);
-    const size_t numBytes = getNumBytesPVP();
+    const size_t numBytes = getNumBytesPVPSet();
     sys::ubyte* ptr = static_cast<sys::ubyte*>(data);
 
     for (size_t ii = 0;
@@ -309,7 +364,7 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
                      sys::Off_T startPVP,
                      sys::Off_T sizePVP,
                      size_t numThreads,
-                     Pvp& p)
+                     const Pvp& p)
 {
     // Allocate the buffers
     size_t numBytesIn(0);
@@ -334,7 +389,7 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
     size_t totalBytesRead(0);
     inStream.seek(startPVP, io::Seekable::START);
     std::vector<sys::ubyte> readBuf;
-    const size_t numBytesPerVector = getNumBytesPVP();
+    const size_t numBytesPerVector = getNumBytesPVPSet();
 
     // Read the data for each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
@@ -347,7 +402,7 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;
-                oss << "EOF reached during VBM read for channel " << (ii);
+                oss << "EOF reached during PVP read for channel " << (ii);
                 throw except::Exception(Ctxt(oss.str()));
             }
             totalBytesRead += bytesThisRead;
