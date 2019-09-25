@@ -54,14 +54,9 @@ NITFPRIV(DirectBlockSourceImpl *) toDirectBlockSource(NITF_DATA * data,
 }
 
 
-/*
- *     DirectBlockSource_read - Read data function for row source
- */
-
-/* Instance data */
-/* Output buffer */
-NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off size,    /* Amount to read */
-                                           nitf_Error * error)  /* For error returns */
+NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
+                                           nitf_Off size,
+                                           nitf_Error * error)
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     const void* block;
