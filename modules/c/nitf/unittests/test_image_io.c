@@ -94,7 +94,7 @@ TestState* constructTestSubheader(TestSpec* spec)
             "R",
             spec->imageRepresentation,
             "VIS",
-            1,        // numBands
+            spec->numBands,
             state->band,
             &error);
     nitf_ImageSubheader_setCompression(subheader, "NC", "", &error);
@@ -278,10 +278,11 @@ TEST_CASE(testPBlockTwoBands)
     };
     nitf_Error error;
     TestSpec pTypeTests[] = {
+        
         {
             "P",
             "INT",
-            8 * NUM_BANDS,
+            8,
             "NODISPLY",
             pixels,
             sizeof(pixels),
@@ -290,7 +291,7 @@ TEST_CASE(testPBlockTwoBands)
             0, 2,
             4, 4,
 
-            "AaAaAaAaBbBbBbBb"
+            "AAAABBBBaaaabbbb"
         }
         /*
         {
@@ -310,34 +311,35 @@ TEST_CASE(testPBlockTwoBands)
             "CCCCCCCCCCCCCCCC"\
             "DDDDDDDDDDDDDDDD"
         },
+        
         {
             "P",
             "INT",
             8,
-            "MONO",
+            "NODISPLY",
             pixels,
             sizeof(pixels),
-            1,
+            NUM_BANDS,
 
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
-            "EEEEEEEEEEEEEEEE"\
-            "FFFFFFFFFFFFFFFF"\
-            "GGGGGGGGGGGGGGGG"\
-            "HHHHHHHHHHHHHHHH"\
-            "IIIIIIIIIIIIIIII"\
-            "JJJJJJJJJJJJJJJJ"\
-            "KKKKKKKKKKKKKKKK"\
-            "LLLLLLLLLLLLLLLL"\
-            "MMMMMMMMMMMMMMMM"\
-            "NNNNNNNNNNNNNNNN"\
-            "OOOOOOOOOOOOOOOO"\
-            "PPPPPPPPPPPPPPPP"
+            "AaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAa"\
+            "BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb"\
+            "CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc"\
+            "DdDdDdDdDdDdDdDdDdDdDdDdDdDdDdDd"\
+            "EeEeEeEeEeEeEeEeEeEeEeEeEeEeEeEe"\
+            "FfFfFfFfFfFfFfFfFfFfFfFfFfFfFfFf"\
+            "GgGgGgGgGgGgGgGgGgGgGgGgGgGgGgGg"\
+            "HhHhHhHhHhHhHhHhHhHhHhHhHhHhHhHh"\
+            "IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIi"\
+            "JjJjJjJjJjJjJjJjJjJjJjJjJjJjJjJj"\
+            "KkKkKkKkKkKkKkKkKkKkKkKkKkKkKkKk"\
+            "LlLlLlLlLlLlLlLlLlLlLlLlLlLlLlLl"\
+            "MmMmMmMmMmMmMmMmMmMmMmMmMmMmMmMm"\
+            "NnNnNnNnNnNnNnNnNnNnNnNnNnNnNnNn"\
+            "OoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOo"\
+            "PpPpPpPpPpPpPpPpPpPpPpPpPpPpPpPp"
         }
         */
     };
@@ -350,12 +352,18 @@ TEST_CASE(testPBlockTwoBands)
         TestState* test = constructTestSubheader(spec);
 
         int padded;
-        nitf_Uint8* user = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user);
+        nitf_Uint8* user[2];
+        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
+        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
+        TEST_ASSERT(user[0]);
+        TEST_ASSERT(user[1])
         nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
                           &user, &padded, &error);
 
-        TEST_ASSERT(strcmp((char *)user, spec->expectedRead) == 0);
+        char *catUser = malloc(strlen(spec->expectedRead) + 1);
+        strcpy(catUser, user[0]);
+        strcat(catUser, user[1]);
+        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
         free(user);
         freeTestState(test);
     }

@@ -6747,7 +6747,7 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
     nitf_Uint32 col;           /* Block column index */
     nitf_Uint32 row;           /* Current row in sub-window */
     nitf_Uint32 band;          /* Current band in sub-window */
-    _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
+    _nitf_ImageIOBlock *blockIO; /* The current block IO structure */
 
     nitf = cntl->nitf;
     numRows = cntl->numRows;
@@ -6762,17 +6762,27 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
             {
                 blockIO = &(cntl->blockIO[col][band]);
                 if (blockIO->doIO)
+                {
                     if (!(*(nitf->vtbl.reader)) (blockIO, io, error))
+                    {
                         return NITF_FAILURE;
+                    }
+                }
 
                 if (nitf->vtbl.unpack != NULL)
+                {
                     (*(nitf->vtbl.unpack)) (blockIO, error);
+                }
 
                 if (nitf->vtbl.unformat != NULL)
+                {
                     (*(nitf->vtbl.unformat)) (blockIO->user.buffer +
-                                              blockIO->user.offset.mark,
-                                              blockIO->pixelCountDR,
-                                              nitf->pixel.shift);
+                        blockIO->user.offset.mark,
+                        blockIO->pixelCountDR,
+                        nitf->pixel.shift);
+                }
+
+
                 /*
                  * You have to check for last row and not call
                  * nitf_ImageIO_nextRow because if the last row is the
@@ -6782,17 +6792,24 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                  * the non-existant next block.
                  */
                 if (row != numRows - 1)
+                {
                     nitf_ImageIO_nextRow(blockIO, 0);
+                }
 
                 if (blockIO->rowsUntil == 0)
+                {
                     /*
                      * See documentation of nitf_ImageIOBlock  for an
                      * explaination of the - 1
                      */
                     blockIO->rowsUntil = nitf->numRowsPerBlock - 1;
+                }
                 else
+                {
                     blockIO->rowsUntil -= 1;
+                }
             }
+            
         }
     }
 
