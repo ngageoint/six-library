@@ -78,13 +78,20 @@ TestState* constructTestSubheader(TestSpec* spec)
                                     spec->imageMode,
                                     &error);
 
-    state->band = malloc(sizeof(nitf_BandInfo));
-    state->band[0] = nitf_BandInfo_construct(&error);
+    state->band = malloc(sizeof(nitf_BandInfo) * spec->numBands);
     assert(state->band);
-    if (!nitf_BandInfo_init(state->band[0],
-                            "M", " ", "N", "   ", 0, 0, NULL, &error))
+
+    size_t band;
+    for (band = 0; band < spec->numBands; ++band)
     {
-        exit(1);
+        state->band[band] = nitf_BandInfo_construct(&error);
+        assert(state->band[band]);
+
+        if (!nitf_BandInfo_init(state->band[band],
+                                "M", " ", "N", "   ", 0, 0, NULL, &error))
+        {
+            exit(1);
+        }
     }
 
     nitf_ImageSubheader_setPixelInformation(
@@ -121,7 +128,6 @@ TestState* constructTestSubheader(TestSpec* spec)
     state->subwindow = subwindow;
     state->numBands = spec->numBands;
     state->bandList = malloc(state->numBands * sizeof(nitf_Uint32));
-    size_t band;
     for (band = 0; band < state->numBands; ++band)
     {
         state->bandList[band] = band;
@@ -278,7 +284,7 @@ TEST_CASE(testPBlockTwoBands)
     };
     nitf_Error error;
     TestSpec pTypeTests[] = {
-        
+
         {
             "P",
             "INT",
@@ -292,16 +298,15 @@ TEST_CASE(testPBlockTwoBands)
             4, 4,
 
             "AAAABBBBaaaabbbb"
-        }
-        /*
+        },
         {
             "P",
             "INT",
             8,
-            "MONO",
+            "NODISPLY",
             pixels,
             sizeof(pixels),
-            1,
+            NUM_BANDS,
 
             0, 4,
             0, NUM_COLS,
@@ -309,9 +314,12 @@ TEST_CASE(testPBlockTwoBands)
             "AAAAAAAAAAAAAAAA"\
             "BBBBBBBBBBBBBBBB"\
             "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"
+            "DDDDDDDDDDDDDDDD"\
+            "aaaaaaaaaaaaaaaa"\
+            "bbbbbbbbbbbbbbbb"\
+            "cccccccccccccccc"\
+            "dddddddddddddddd"
         },
-        
         {
             "P",
             "INT",
@@ -324,24 +332,40 @@ TEST_CASE(testPBlockTwoBands)
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "AaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAa"\
-            "BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb"\
-            "CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc"\
-            "DdDdDdDdDdDdDdDdDdDdDdDdDdDdDdDd"\
-            "EeEeEeEeEeEeEeEeEeEeEeEeEeEeEeEe"\
-            "FfFfFfFfFfFfFfFfFfFfFfFfFfFfFfFf"\
-            "GgGgGgGgGgGgGgGgGgGgGgGgGgGgGgGg"\
-            "HhHhHhHhHhHhHhHhHhHhHhHhHhHhHhHh"\
-            "IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIi"\
-            "JjJjJjJjJjJjJjJjJjJjJjJjJjJjJjJj"\
-            "KkKkKkKkKkKkKkKkKkKkKkKkKkKkKkKk"\
-            "LlLlLlLlLlLlLlLlLlLlLlLlLlLlLlLl"\
-            "MmMmMmMmMmMmMmMmMmMmMmMmMmMmMmMm"\
-            "NnNnNnNnNnNnNnNnNnNnNnNnNnNnNnNn"\
-            "OoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOo"\
-            "PpPpPpPpPpPpPpPpPpPpPpPpPpPpPpPp"
+            "AAAAAAAAAAAAAAAA"\
+            "BBBBBBBBBBBBBBBB"\
+            "CCCCCCCCCCCCCCCC"\
+            "DDDDDDDDDDDDDDDD"\
+            "EEEEEEEEEEEEEEEE"\
+            "FFFFFFFFFFFFFFFF"\
+            "GGGGGGGGGGGGGGGG"\
+            "HHHHHHHHHHHHHHHH"\
+            "IIIIIIIIIIIIIIII"\
+            "JJJJJJJJJJJJJJJJ"\
+            "KKKKKKKKKKKKKKKK"\
+            "LLLLLLLLLLLLLLLL"\
+            "MMMMMMMMMMMMMMMM"\
+            "NNNNNNNNNNNNNNNN"\
+            "OOOOOOOOOOOOOOOO"\
+            "PPPPPPPPPPPPPPPP"\
+            "aaaaaaaaaaaaaaaa"\
+            "bbbbbbbbbbbbbbbb"\
+            "cccccccccccccccc"\
+            "dddddddddddddddd"\
+            "eeeeeeeeeeeeeeee"\
+            "ffffffffffffffff"\
+            "gggggggggggggggg"\
+            "hhhhhhhhhhhhhhhh"\
+            "iiiiiiiiiiiiiiii"\
+            "jjjjjjjjjjjjjjjj"\
+            "kkkkkkkkkkkkkkkk"\
+            "llllllllllllllll"\
+            "mmmmmmmmmmmmmmmm"\
+            "nnnnnnnnnnnnnnnn"\
+            "oooooooooooooooo"\
+            "pppppppppppppppp"
+
         }
-        */
     };
 
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
@@ -358,13 +382,155 @@ TEST_CASE(testPBlockTwoBands)
         TEST_ASSERT(user[0]);
         TEST_ASSERT(user[1])
         nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                          &user, &padded, &error);
+                          user, &padded, &error);
 
         char *catUser = malloc(strlen(spec->expectedRead) + 1);
         strcpy(catUser, user[0]);
         strcat(catUser, user[1]);
         TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
-        free(user);
+        free(user[0]);
+        free(user[1]);
+        free(catUser);
+        freeTestState(test);
+    }
+}
+
+TEST_CASE(testPBlockOffsetBand)
+{
+    static const size_t NUM_BANDS = 2;
+    char pixels[] =
+    {
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+    };
+    nitf_Error error;
+    TestSpec pTypeTests[] = {
+
+        {
+            "P",
+            "INT",
+            8,
+            "NODISPLY",
+            pixels,
+            sizeof(pixels),
+            NUM_BANDS,
+
+            0, 2,
+            4, 4,
+
+            "aaaabbbb"
+        }
+        /*
+        {
+            "P",
+            "INT",
+            8,
+            "NODISPLY",
+            pixels,
+            sizeof(pixels),
+            NUM_BANDS,
+
+            0, 4,
+            0, NUM_COLS,
+
+            "AAAAAAAAAAAAAAAA"\
+            "BBBBBBBBBBBBBBBB"\
+            "CCCCCCCCCCCCCCCC"\
+            "DDDDDDDDDDDDDDDD"\
+            "aaaaaaaaaaaaaaaa"\
+            "bbbbbbbbbbbbbbbb"\
+            "cccccccccccccccc"\
+            "dddddddddddddddd"
+        },
+        {
+            "P",
+            "INT",
+            8,
+            "NODISPLY",
+            pixels,
+            sizeof(pixels),
+            NUM_BANDS,
+
+            0, NUM_ROWS,
+            0, NUM_COLS,
+
+            "AAAAAAAAAAAAAAAA"\
+            "BBBBBBBBBBBBBBBB"\
+            "CCCCCCCCCCCCCCCC"\
+            "DDDDDDDDDDDDDDDD"\
+            "EEEEEEEEEEEEEEEE"\
+            "FFFFFFFFFFFFFFFF"\
+            "GGGGGGGGGGGGGGGG"\
+            "HHHHHHHHHHHHHHHH"\
+            "IIIIIIIIIIIIIIII"\
+            "JJJJJJJJJJJJJJJJ"\
+            "KKKKKKKKKKKKKKKK"\
+            "LLLLLLLLLLLLLLLL"\
+            "MMMMMMMMMMMMMMMM"\
+            "NNNNNNNNNNNNNNNN"\
+            "OOOOOOOOOOOOOOOO"\
+            "PPPPPPPPPPPPPPPP"\
+            "aaaaaaaaaaaaaaaa"\
+            "bbbbbbbbbbbbbbbb"\
+            "cccccccccccccccc"\
+            "dddddddddddddddd"\
+            "eeeeeeeeeeeeeeee"\
+            "ffffffffffffffff"\
+            "gggggggggggggggg"\
+            "hhhhhhhhhhhhhhhh"\
+            "iiiiiiiiiiiiiiii"\
+            "jjjjjjjjjjjjjjjj"\
+            "kkkkkkkkkkkkkkkk"\
+            "llllllllllllllll"\
+            "mmmmmmmmmmmmmmmm"\
+            "nnnnnnnnnnnnnnnn"\
+            "oooooooooooooooo"\
+            "pppppppppppppppp"
+        }
+        */
+    };
+
+    const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
+    size_t testIndex;
+    for (testIndex = 0; testIndex < numTests; ++testIndex)
+    {
+        TestSpec* spec = &pTypeTests[testIndex];
+        TestState* test = constructTestSubheader(spec);
+
+        /* Adjust subwindow to only read second band */
+        test->subwindow->numBands = 1;
+        test->subwindow->bandList = &test->bandList[1];
+
+        int padded;
+        nitf_Uint8* user[2];
+        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
+        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
+        TEST_ASSERT(user[0]);
+        TEST_ASSERT(user[1])
+        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
+                          user, &padded, &error);
+
+        char *catUser = malloc(strlen(spec->expectedRead) + 1);
+        strcpy(catUser, user[0]);
+        strcat(catUser, user[1]);
+        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
+        free(user[0]);
+        free(user[1]);
+        free(catUser);
         freeTestState(test);
     }
 }
@@ -374,5 +540,6 @@ int main(int argc, char** argv)
     (void) argv;
     CHECK(testPBlockOneBand);
     CHECK(testPBlockTwoBands);
+    CHECK(testPBlockOffsetBand);
     return 0;
 }
