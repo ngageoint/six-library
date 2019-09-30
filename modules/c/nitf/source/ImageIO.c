@@ -6769,10 +6769,12 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                     }
                 }
 
+                blockIO->rwBuffer.offset.mark += cntl->bandSubset[0];
                 if (nitf->vtbl.unpack != NULL)
                 {
                     (*(nitf->vtbl.unpack)) (blockIO, error);
                 }
+                blockIO->rwBuffer.offset.mark -= cntl->bandSubset[0];
 
                 if (nitf->vtbl.unformat != NULL)
                 {
