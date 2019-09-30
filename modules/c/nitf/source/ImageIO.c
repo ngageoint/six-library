@@ -5568,7 +5568,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * in the read case and is set to 0 in the write case.
              *
              * For reading, the first read for a given row segment reads
-             * all of the bands for that segment. The initial offset of 0
+             * all of the requested bands for that segment. The initial offset
              * for the first band is the correct buffer offset for the read.
              * The pixel size times band offset then correctly line-up the
              * start buffer for the unpack operations.
@@ -5582,8 +5582,8 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
             if (cntl->reading)
             {
-                blockIO->rwBuffer.offset.mark = bytes * band;
-                blockIO->rwBuffer.offset.orig = bytes * band;
+                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->bandSubset[0]);
+                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
             }
             else
             {
@@ -6769,12 +6769,10 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                     }
                 }
 
-                blockIO->rwBuffer.offset.mark += cntl->bandSubset[0];
                 if (nitf->vtbl.unpack != NULL)
                 {
                     (*(nitf->vtbl.unpack)) (blockIO, error);
                 }
-                blockIO->rwBuffer.offset.mark -= cntl->bandSubset[0];
 
                 if (nitf->vtbl.unformat != NULL)
                 {
@@ -6783,7 +6781,6 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                         blockIO->pixelCountDR,
                         nitf->pixel.shift);
                 }
-
 
                 /*
                  * You have to check for last row and not call
@@ -8527,12 +8524,16 @@ void nitf_ImageIO_unpack_P_1(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
+    const size_t firstBand = blockIO->cntl->bandSubset[0];
+    const size_t bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src = (nitf_Uint8 *) (blockIO->rwBuffer.buffer
-                          + blockIO->rwBuffer.offset.mark);
+                          + blockIO->rwBuffer.offset.mark
+                          + bandOffset);
     dst = (nitf_Uint8 *) (blockIO->unpacked.buffer
                           + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
@@ -8555,6 +8556,9 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
+    const size_t firstBand = blockIO->cntl->bandSubset[0];
+    const size_t bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8562,7 +8566,8 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     src = (nitf_Uint16 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint16 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark);
+                           + blockIO->unpacked.offset.mark
+                           + bandOffset);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8583,6 +8588,9 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
+    const size_t firstBand = blockIO->cntl->bandSubset[0];
+    const size_t bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8590,7 +8598,8 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     src = (nitf_Uint32 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint32 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark);
+                           + blockIO->unpacked.offset.mark
+                           + bandOffset);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8611,6 +8620,9 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
+    const size_t firstBand = blockIO->cntl->bandSubset[0];
+    const size_t bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8618,7 +8630,8 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     src = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint64 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark);
+                           + blockIO->unpacked.offset.mark
+                           + bandOffset);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8641,6 +8654,9 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
+    const size_t firstBand = blockIO->cntl->bandSubset[0];
+    const size_t bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8648,7 +8664,8 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     src1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                             + blockIO->rwBuffer.offset.mark);
     dst1 = (nitf_Uint64 *) (blockIO->unpacked.buffer
-                            + blockIO->unpacked.offset.mark);
+                            + blockIO->unpacked.offset.mark
+                            + bandOffset);
     src2 = src1 + 1;
     dst2 = dst1 + 1;
     count = blockIO->pixelCountFR;

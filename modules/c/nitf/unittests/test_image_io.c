@@ -433,8 +433,8 @@ TEST_CASE(testPBlockOffsetBand)
             4, 4,
 
             "aaaabbbb"
-        }
-        /*
+        },
+        
         {
             "P",
             "INT",
@@ -447,15 +447,12 @@ TEST_CASE(testPBlockOffsetBand)
             0, 4,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
             "aaaaaaaaaaaaaaaa"\
             "bbbbbbbbbbbbbbbb"\
             "cccccccccccccccc"\
             "dddddddddddddddd"
         },
+        
         {
             "P",
             "INT",
@@ -468,22 +465,6 @@ TEST_CASE(testPBlockOffsetBand)
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
-            "EEEEEEEEEEEEEEEE"\
-            "FFFFFFFFFFFFFFFF"\
-            "GGGGGGGGGGGGGGGG"\
-            "HHHHHHHHHHHHHHHH"\
-            "IIIIIIIIIIIIIIII"\
-            "JJJJJJJJJJJJJJJJ"\
-            "KKKKKKKKKKKKKKKK"\
-            "LLLLLLLLLLLLLLLL"\
-            "MMMMMMMMMMMMMMMM"\
-            "NNNNNNNNNNNNNNNN"\
-            "OOOOOOOOOOOOOOOO"\
-            "PPPPPPPPPPPPPPPP"\
             "aaaaaaaaaaaaaaaa"\
             "bbbbbbbbbbbbbbbb"\
             "cccccccccccccccc"\
@@ -501,7 +482,6 @@ TEST_CASE(testPBlockOffsetBand)
             "oooooooooooooooo"\
             "pppppppppppppppp"
         }
-        */
     };
 
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
