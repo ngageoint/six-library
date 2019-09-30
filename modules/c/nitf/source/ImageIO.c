@@ -588,6 +588,9 @@ typedef struct _nitf_ImageIOControl_s
     /*! Number of bands to read/write */
     nitf_Uint32 numBandSubset;
 
+    /*! Least element of bandSubset */
+    nitf_Uint32 firstBand;
+
     /*! Base user buffer, one pointer per band */
     nitf_Uint8 **userBase;
 
@@ -5582,8 +5585,12 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
             if (cntl->reading)
             {
-                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->bandSubset[0]);
-                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
+                /* In all cases, we are reading all bands for the block.
+                 * If we're only requesting e.g. bands 2..n, need to adjust
+                 * the starting point so that band 2 maps to position 0.
+                 */
+                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->firstBand);
+                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->firstBand);
             }
             else
             {
@@ -5750,6 +5757,16 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     cntl->numBandSubset = subWindow->numBands;
     cntl->userBase = user;
     cntl->reading = reading;
+
+    /* Get the minimum band number */
+    cntl->firstBand = cntl->bandSubset[0];
+    for (size_t bandIdx = 1; bandIdx < cntl->numBandSubset; ++bandIdx)
+    {
+        if (cntl->firstBand > cntl->bandSubset[bandIdx])
+        {
+            cntl->firstBand = cntl->bandSubset[bandIdx];
+        }
+    }
 
     /*
      * If writing, create masks and check for masked compression type
@@ -8524,9 +8541,9 @@ void nitf_ImageIO_unpack_P_1(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
-    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
-    const size_t firstBand = blockIO->cntl->bandSubset[0];
-    const size_t bandOffset = firstBand * bytes;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->firstBand;
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8556,9 +8573,9 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
-    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
-    const size_t firstBand = blockIO->cntl->bandSubset[0];
-    const size_t bandOffset = firstBand * bytes;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->firstBand;
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8579,7 +8596,6 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     return;
 }
 
-
 void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
                              nitf_Error * error)
 {
@@ -8588,9 +8604,9 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
-    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
-    const size_t firstBand = blockIO->cntl->bandSubset[0];
-    const size_t bandOffset = firstBand * bytes;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->firstBand;
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8620,9 +8636,9 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
-    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
-    const size_t firstBand = blockIO->cntl->bandSubset[0];
-    const size_t bandOffset = firstBand * bytes;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->firstBand;
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
@@ -8654,9 +8670,9 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
-    const size_t bytes = blockIO->cntl->nitf->pixel.bytes;
-    const size_t firstBand = blockIO->cntl->bandSubset[0];
-    const size_t bandOffset = firstBand * bytes;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->firstBand;
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
