@@ -655,7 +655,7 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
     }
 }
 
-TEST_CASE(testPBlockBandsThreeAndOne)
+TEST_CASE(testInvalidReadOrderFailsGracefully)
 {
     static const size_t NUM_BANDS = 3;
     char pixels[] =
@@ -678,123 +678,35 @@ TEST_CASE(testPBlockBandsThreeAndOne)
         "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
     };
     nitf_Error error;
-    TestSpec pTypeTests[] = {
+    TestSpec spec =
+    {
+        "P",
+        "INT",
+        8,
+        "NODISPLY",
+        pixels,
+        sizeof(pixels),
+        NUM_BANDS,
 
-        {
-            "P",
-            "INT",
-            8,
-            "NODISPLY",
-            pixels,
-            sizeof(pixels),
-            NUM_BANDS,
+        0, 2,
+        4, 4,
 
-            0, 2,
-            4, 4,
-
-            "11112222AAAABBBB"
-        },
-
-        {
-            "P",
-            "INT",
-            8,
-            "NODISPLY",
-            pixels,
-            sizeof(pixels),
-            NUM_BANDS,
-
-            0, 4,
-            0, NUM_COLS,
-
-            "1111111111111111"
-            "2222222222222222"
-            "3333333333333333"
-            "4444444444444444"
-            "AAAAAAAAAAAAAAAA"
-            "BBBBBBBBBBBBBBBB"
-            "CCCCCCCCCCCCCCCC"
-            "DDDDDDDDDDDDDDDD"
-        },
-
-        {
-            "P",
-            "INT",
-            8,
-            "NODISPLY",
-            pixels,
-            sizeof(pixels),
-            NUM_BANDS,
-
-            0, NUM_ROWS,
-            0, NUM_COLS,
-
-            "1111111111111111"
-            "2222222222222222"
-            "3333333333333333"
-            "4444444444444444"
-            "5555555555555555"
-            "6666666666666666"
-            "7777777777777777"
-            "8888888888888888"
-            "9999999999999999"
-            "0000000000000000"
-            "!!!!!!!!!!!!!!!!"
-            "@@@@@@@@@@@@@@@@"
-            "################"
-            "$$$$$$$$$$$$$$$$"
-            "%%%%%%%%%%%%%%%%"
-            "^^^^^^^^^^^^^^^^"
-            "AAAAAAAAAAAAAAAA"
-            "BBBBBBBBBBBBBBBB"
-            "CCCCCCCCCCCCCCCC"
-            "DDDDDDDDDDDDDDDD"
-            "EEEEEEEEEEEEEEEE"
-            "FFFFFFFFFFFFFFFF"
-            "GGGGGGGGGGGGGGGG"
-            "HHHHHHHHHHHHHHHH"
-            "IIIIIIIIIIIIIIII"
-            "JJJJJJJJJJJJJJJJ"
-            "KKKKKKKKKKKKKKKK"
-            "LLLLLLLLLLLLLLLL"
-            "MMMMMMMMMMMMMMMM"
-            "NNNNNNNNNNNNNNNN"
-            "OOOOOOOOOOOOOOOO"
-            "PPPPPPPPPPPPPPPP"
-        }
+        "11112222AAAABBBB"
     };
 
-    const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
-    size_t testIndex;
-    for (testIndex = 0; testIndex < numTests; ++testIndex)
-    {
-        TestSpec* spec = &pTypeTests[testIndex];
-        TestState* test = constructTestSubheader(spec);
+    TestState* test = constructTestSubheader(&spec);
 
-        /* Adjust subwindow to only read from second band */
-        test->subwindow->numBands = 2;
-        test->subwindow->bandList = &test->bandList[1];
-        test->subwindow->bandList[0] = 2;
-        test->subwindow->bandList[1] = 0;
+    /* Adjust subwindow to only read from second band */
+    test->subwindow->numBands = 2;
+    test->subwindow->bandList = &test->bandList[1];
+    test->subwindow->bandList[0] = 2;
+    test->subwindow->bandList[1] = 0;
 
-        int padded;
-        nitf_Uint8* user[2];
-        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user[0]);
-        TEST_ASSERT(user[1])
-            nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                user, &padded, &error);
-
-        char *catUser = malloc(strlen(spec->expectedRead) + 1);
-        strcpy(catUser, user[0]);
-        strcat(catUser, user[1]);
-        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
-        free(user[0]);
-        free(user[1]);
-        free(catUser);
-        freeTestState(test);
-    }
+    int padded;
+    nitf_Uint8* user[2] = { 0, 0 };
+    TEST_ASSERT(!nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
+                user, &padded, &error));
+    freeTestState(test);
 }
 
 int main(int argc, char** argv)
@@ -805,6 +717,6 @@ int main(int argc, char** argv)
     CHECK(testPBlockTwoBands);
     CHECK(testPBlockOffsetBand);
     CHECK(testPBlockThreeBandsWithOffset);
-    CHECK(testPBlockBandsThreeAndOne);
+    CHECK(testInvalidReadOrderFailsGracefully);
     return 0;
 }
