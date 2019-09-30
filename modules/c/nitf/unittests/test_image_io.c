@@ -436,7 +436,7 @@ TEST_CASE(testPBlockOffsetBand)
 
             "aaaabbbb"
         },
-        
+
         {
             "P",
             "INT",
@@ -454,7 +454,7 @@ TEST_CASE(testPBlockOffsetBand)
             "cccccccccccccccc"
             "dddddddddddddddd"
         },
-        
+
         {
             "P",
             "INT",

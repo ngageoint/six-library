@@ -6825,7 +6825,7 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                     blockIO->rowsUntil -= 1;
                 }
             }
-            
+
         }
     }
 
