@@ -185,7 +185,8 @@ int main(int argc, char **argv)
     }
     catch (except::Throwable & t)
     {
-        std::cout << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "ERROR!: " << t.toString() << std::endl;
+        return 1;
     }
 }
 

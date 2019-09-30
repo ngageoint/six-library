@@ -5,6 +5,7 @@
 # Build artifacts
 target/
 *.pyc
+*.swp
 
 # Drivers
 modules/c/j2k/external/openjpeg/openjpeg-2.0.0/
