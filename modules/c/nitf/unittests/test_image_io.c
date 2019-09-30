@@ -178,7 +178,8 @@ TEST_CASE(testPBlockOneBand)
         "MMMMNNNNOOOOPPPP"
     };
     nitf_Error error;
-    TestSpec pTypeTests[] = {
+    TestSpec pTypeTests[] =
+    {
         {
             "P",
             "INT",
@@ -205,9 +206,9 @@ TEST_CASE(testPBlockOneBand)
             0, 4,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
+            "AAAAAAAAAAAAAAAA"
+            "BBBBBBBBBBBBBBBB"
+            "CCCCCCCCCCCCCCCC"
             "DDDDDDDDDDDDDDDD"
         },
         {
@@ -222,21 +223,21 @@ TEST_CASE(testPBlockOneBand)
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
-            "EEEEEEEEEEEEEEEE"\
-            "FFFFFFFFFFFFFFFF"\
-            "GGGGGGGGGGGGGGGG"\
-            "HHHHHHHHHHHHHHHH"\
-            "IIIIIIIIIIIIIIII"\
-            "JJJJJJJJJJJJJJJJ"\
-            "KKKKKKKKKKKKKKKK"\
-            "LLLLLLLLLLLLLLLL"\
-            "MMMMMMMMMMMMMMMM"\
-            "NNNNNNNNNNNNNNNN"\
-            "OOOOOOOOOOOOOOOO"\
+            "AAAAAAAAAAAAAAAA"
+            "BBBBBBBBBBBBBBBB"
+            "CCCCCCCCCCCCCCCC"
+            "DDDDDDDDDDDDDDDD"
+            "EEEEEEEEEEEEEEEE"
+            "FFFFFFFFFFFFFFFF"
+            "GGGGGGGGGGGGGGGG"
+            "HHHHHHHHHHHHHHHH"
+            "IIIIIIIIIIIIIIII"
+            "JJJJJJJJJJJJJJJJ"
+            "KKKKKKKKKKKKKKKK"
+            "LLLLLLLLLLLLLLLL"
+            "MMMMMMMMMMMMMMMM"
+            "NNNNNNNNNNNNNNNN"
+            "OOOOOOOOOOOOOOOO"
             "PPPPPPPPPPPPPPPP"
         }
     };
@@ -283,7 +284,8 @@ TEST_CASE(testPBlockTwoBands)
         "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
     };
     nitf_Error error;
-    TestSpec pTypeTests[] = {
+    TestSpec pTypeTests[] =
+    {
 
         {
             "P",
@@ -311,13 +313,13 @@ TEST_CASE(testPBlockTwoBands)
             0, 4,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
-            "aaaaaaaaaaaaaaaa"\
-            "bbbbbbbbbbbbbbbb"\
-            "cccccccccccccccc"\
+            "AAAAAAAAAAAAAAAA"
+            "BBBBBBBBBBBBBBBB"
+            "CCCCCCCCCCCCCCCC"
+            "DDDDDDDDDDDDDDDD"
+            "aaaaaaaaaaaaaaaa"
+            "bbbbbbbbbbbbbbbb"
+            "cccccccccccccccc"
             "dddddddddddddddd"
         },
         {
@@ -332,39 +334,38 @@ TEST_CASE(testPBlockTwoBands)
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "AAAAAAAAAAAAAAAA"\
-            "BBBBBBBBBBBBBBBB"\
-            "CCCCCCCCCCCCCCCC"\
-            "DDDDDDDDDDDDDDDD"\
-            "EEEEEEEEEEEEEEEE"\
-            "FFFFFFFFFFFFFFFF"\
-            "GGGGGGGGGGGGGGGG"\
-            "HHHHHHHHHHHHHHHH"\
-            "IIIIIIIIIIIIIIII"\
-            "JJJJJJJJJJJJJJJJ"\
-            "KKKKKKKKKKKKKKKK"\
-            "LLLLLLLLLLLLLLLL"\
-            "MMMMMMMMMMMMMMMM"\
-            "NNNNNNNNNNNNNNNN"\
-            "OOOOOOOOOOOOOOOO"\
-            "PPPPPPPPPPPPPPPP"\
-            "aaaaaaaaaaaaaaaa"\
-            "bbbbbbbbbbbbbbbb"\
-            "cccccccccccccccc"\
-            "dddddddddddddddd"\
-            "eeeeeeeeeeeeeeee"\
-            "ffffffffffffffff"\
-            "gggggggggggggggg"\
-            "hhhhhhhhhhhhhhhh"\
-            "iiiiiiiiiiiiiiii"\
-            "jjjjjjjjjjjjjjjj"\
-            "kkkkkkkkkkkkkkkk"\
-            "llllllllllllllll"\
-            "mmmmmmmmmmmmmmmm"\
-            "nnnnnnnnnnnnnnnn"\
-            "oooooooooooooooo"\
+            "AAAAAAAAAAAAAAAA"
+            "BBBBBBBBBBBBBBBB"
+            "CCCCCCCCCCCCCCCC"
+            "DDDDDDDDDDDDDDDD"
+            "EEEEEEEEEEEEEEEE"
+            "FFFFFFFFFFFFFFFF"
+            "GGGGGGGGGGGGGGGG"
+            "HHHHHHHHHHHHHHHH"
+            "IIIIIIIIIIIIIIII"
+            "JJJJJJJJJJJJJJJJ"
+            "KKKKKKKKKKKKKKKK"
+            "LLLLLLLLLLLLLLLL"
+            "MMMMMMMMMMMMMMMM"
+            "NNNNNNNNNNNNNNNN"
+            "OOOOOOOOOOOOOOOO"
+            "PPPPPPPPPPPPPPPP"
+            "aaaaaaaaaaaaaaaa"
+            "bbbbbbbbbbbbbbbb"
+            "cccccccccccccccc"
+            "dddddddddddddddd"
+            "eeeeeeeeeeeeeeee"
+            "ffffffffffffffff"
+            "gggggggggggggggg"
+            "hhhhhhhhhhhhhhhh"
+            "iiiiiiiiiiiiiiii"
+            "jjjjjjjjjjjjjjjj"
+            "kkkkkkkkkkkkkkkk"
+            "llllllllllllllll"
+            "mmmmmmmmmmmmmmmm"
+            "nnnnnnnnnnnnnnnn"
+            "oooooooooooooooo"
             "pppppppppppppppp"
-
         }
     };
 
@@ -418,7 +419,8 @@ TEST_CASE(testPBlockOffsetBand)
         "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
     };
     nitf_Error error;
-    TestSpec pTypeTests[] = {
+    TestSpec pTypeTests[] =
+    {
 
         {
             "P",
@@ -447,9 +449,9 @@ TEST_CASE(testPBlockOffsetBand)
             0, 4,
             0, NUM_COLS,
 
-            "aaaaaaaaaaaaaaaa"\
-            "bbbbbbbbbbbbbbbb"\
-            "cccccccccccccccc"\
+            "aaaaaaaaaaaaaaaa"
+            "bbbbbbbbbbbbbbbb"
+            "cccccccccccccccc"
             "dddddddddddddddd"
         },
         
@@ -465,21 +467,21 @@ TEST_CASE(testPBlockOffsetBand)
             0, NUM_ROWS,
             0, NUM_COLS,
 
-            "aaaaaaaaaaaaaaaa"\
-            "bbbbbbbbbbbbbbbb"\
-            "cccccccccccccccc"\
-            "dddddddddddddddd"\
-            "eeeeeeeeeeeeeeee"\
-            "ffffffffffffffff"\
-            "gggggggggggggggg"\
-            "hhhhhhhhhhhhhhhh"\
-            "iiiiiiiiiiiiiiii"\
-            "jjjjjjjjjjjjjjjj"\
-            "kkkkkkkkkkkkkkkk"\
-            "llllllllllllllll"\
-            "mmmmmmmmmmmmmmmm"\
-            "nnnnnnnnnnnnnnnn"\
-            "oooooooooooooooo"\
+            "aaaaaaaaaaaaaaaa"
+            "bbbbbbbbbbbbbbbb"
+            "cccccccccccccccc"
+            "dddddddddddddddd"
+            "eeeeeeeeeeeeeeee"
+            "ffffffffffffffff"
+            "gggggggggggggggg"
+            "hhhhhhhhhhhhhhhh"
+            "iiiiiiiiiiiiiiii"
+            "jjjjjjjjjjjjjjjj"
+            "kkkkkkkkkkkkkkkk"
+            "llllllllllllllll"
+            "mmmmmmmmmmmmmmmm"
+            "nnnnnnnnnnnnnnnn"
+            "oooooooooooooooo"
             "pppppppppppppppp"
         }
     };
@@ -538,8 +540,8 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
         "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
     };
     nitf_Error error;
-    TestSpec pTypeTests[] = {
-
+    TestSpec pTypeTests[] =
+    {
         {
             "P",
             "INT",
@@ -677,6 +679,7 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
         "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
         "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
     };
+
     nitf_Error error;
     TestSpec spec =
     {
@@ -691,12 +694,11 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
         0, 2,
         4, 4,
 
-        "11112222AAAABBBB"
+        ""
     };
 
     TestState* test = constructTestSubheader(&spec);
 
-    /* Adjust subwindow to only read from second band */
     test->subwindow->numBands = 2;
     test->subwindow->bandList = &test->bandList[1];
     test->subwindow->bandList[0] = 2;
