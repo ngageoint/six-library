@@ -5669,6 +5669,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
+    nitf_Uint32 bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));
@@ -5760,7 +5761,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
 
     /* Get the minimum band number */
     cntl->firstBand = cntl->bandSubset[0];
-    for (size_t bandIdx = 1; bandIdx < cntl->numBandSubset; ++bandIdx)
+    for (bandIdx = 1; bandIdx < cntl->numBandSubset; ++bandIdx)
     {
         if (cntl->firstBand > cntl->bandSubset[bandIdx])
         {
