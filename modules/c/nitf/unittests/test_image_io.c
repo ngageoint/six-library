@@ -27,9 +27,7 @@ typedef struct TestSpec
 {
     // Image spec
     const char* imageMode;
-    const char* pixelValueType;
     nitf_Uint32 bitsPerPixel;
-    const char* imageRepresentation;
     char* pixels;
     nitf_Uint64 imageSize;
     size_t numBands;
@@ -96,10 +94,10 @@ TestState* constructTestSubheader(TestSpec* spec)
 
     nitf_ImageSubheader_setPixelInformation(
             subheader,
-            spec->pixelValueType,
+            "INT",
             spec->bitsPerPixel, spec->bitsPerPixel,
             "R",
-            spec->imageRepresentation,
+            "MONO",
             "VIS",
             spec->numBands,
             state->band,
@@ -148,6 +146,135 @@ void freeTestState(TestState* state)
     free(state);
 }
 
+void freeBands(nitf_Uint8** bands, size_t numBands)
+{
+    size_t bandIndex;
+    for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
+    {
+        if (bands[bandIndex] != NULL)
+        {
+            free(bands[bandIndex]);
+        }
+    }
+    free(bands);
+}
+
+static nitf_Uint8** allocateBands(size_t numBands, size_t bytesPerBand)
+{
+    size_t bandIndex;
+    int success = 1;
+
+    nitf_Uint8** bands = (nitf_Uint8**)calloc(numBands, sizeof(nitf_Uint8 *));
+    if (bands == NULL)
+    {
+        return NULL;
+    }
+
+    for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
+    {
+        bands[bandIndex] = (nitf_Uint8*)calloc(sizeof(nitf_Uint8), bytesPerBand + 1);
+        if (bands[bandIndex] == NULL)
+        {
+            success = 0;
+        }
+    }
+
+    /* Free memory if we failed */
+    if (success == 0)
+    {
+        freeBands(bands, numBands);
+        bands = NULL;
+    }
+
+    return bands;
+}
+
+static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
+{
+    NITF_BOOL result = NITF_SUCCESS;
+
+    const nitf_Uint32 numBands = test->subwindow->numBands;
+    const nitf_Uint32 bandSize = strlen(spec->expectedRead) / numBands;
+    nitf_Uint8** bands = allocateBands(numBands, bandSize);
+    if (bands == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    nitf_Error error;
+    int padded;
+    nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
+                      bands, &padded, &error);
+
+    char* joinedBands = NULL;
+    joinedBands = malloc(strlen(spec->expectedRead) + 1);
+    if (joinedBands)
+    {
+        strcpy(joinedBands, bands[0]);
+        nitf_Uint32 bandIdx;
+        for (bandIdx = 1; bandIdx < numBands; ++bandIdx)
+        {
+            strcat(joinedBands, bands[bandIdx]);
+        }
+        if (strcmp((char *)joinedBands, spec->expectedRead) != 0)
+        {
+            result = NITF_FAILURE;
+        }
+        free(joinedBands);
+    }
+
+    if (bands != NULL)
+    {
+        freeBands(bands, numBands);
+    }
+
+    return result;
+}
+
+static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
+{
+    NITF_BOOL result = NITF_SUCCESS;
+    nitf_Error error;
+    const nitf_Uint32 numBands = test->subwindow->numBands;
+    nitf_IOInterface* writeIO = NULL;
+
+    const nitf_Uint32 bandSize = strlen(spec->expectedRead) / numBands;
+    nitf_Uint8** bands = allocateBands(numBands, bandSize);
+    if (bands == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    int padded;
+    nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
+                      bands, &padded, &error);
+
+    const nitf_Uint32 bufferSize = strlen(pixels);
+    char* buf = (char*)calloc(bufferSize + 1, sizeof(char));
+    writeIO = nrt_BufferAdapter_construct(buf, bufferSize, 1, &error);
+
+    if (writeIO != NULL)
+    {
+        nitf_ImageIO_writeSequential(test->imageIO, writeIO, &error);
+        nitf_ImageIO_writeRows(test->imageIO, writeIO, NUM_ROWS, bands, &error);
+        nitf_ImageIO_writeDone(test->imageIO, writeIO, &error);
+
+        if (strcmp(buf, pixels) != 0)
+        {
+            result = NITF_FAILURE;
+        }
+
+        nitf_IOInterface_destruct(&writeIO);
+    }
+
+    if (bands != NULL)
+    {
+        freeBands(bands, numBands);
+    }
+
+    return result;
+}
+
 TEST_CASE(testPBlockOneBand)
 {
     /* For image mode P, the pixels are stored one block
@@ -182,9 +309,7 @@ TEST_CASE(testPBlockOneBand)
     {
         {
             "P",
-            "INT",
             8,
-            "MONO",
             pixels,
             sizeof(pixels),
             1,
@@ -196,9 +321,7 @@ TEST_CASE(testPBlockOneBand)
         },
         {
             "P",
-            "INT",
             8,
-            "MONO",
             pixels,
             sizeof(pixels),
             1,
@@ -213,9 +336,7 @@ TEST_CASE(testPBlockOneBand)
         },
         {
             "P",
-            "INT",
             8,
-            "MONO",
             pixels,
             sizeof(pixels),
             1,
@@ -249,14 +370,7 @@ TEST_CASE(testPBlockOneBand)
         TestSpec* spec = &pTypeTests[testIndex];
         TestState* test = constructTestSubheader(spec);
 
-        int padded;
-        nitf_Uint8* user = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user);
-        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                          &user, &padded, &error);
-
-        TEST_ASSERT(strcmp((char *)user, spec->expectedRead) == 0);
-        free(user);
+        TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
 }
@@ -289,9 +403,7 @@ TEST_CASE(testPBlockTwoBands)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -303,9 +415,7 @@ TEST_CASE(testPBlockTwoBands)
         },
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -324,9 +434,7 @@ TEST_CASE(testPBlockTwoBands)
         },
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -376,24 +484,85 @@ TEST_CASE(testPBlockTwoBands)
         TestSpec* spec = &pTypeTests[testIndex];
         TestState* test = constructTestSubheader(spec);
 
-        int padded;
-        nitf_Uint8* user[2];
-        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user[0]);
-        TEST_ASSERT(user[1])
-        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                          user, &padded, &error);
-
-        char *catUser = malloc(strlen(spec->expectedRead) + 1);
-        strcpy(catUser, user[0]);
-        strcat(catUser, user[1]);
-        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
-        free(user[0]);
-        free(user[1]);
-        free(catUser);
+        TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
+}
+
+
+TEST_CASE(testTwoBandRoundTrip)
+{
+    static const size_t NUM_BANDS = 2;
+    char pixels[] =
+    {
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
+    };
+
+    TestSpec spec =
+    {
+        "P",
+        8,
+        pixels,
+        sizeof(pixels),
+        NUM_BANDS,
+
+        0, NUM_ROWS,
+        0, NUM_COLS,
+
+        "AAAAAAAAAAAAAAAA"
+        "BBBBBBBBBBBBBBBB"
+        "CCCCCCCCCCCCCCCC"
+        "DDDDDDDDDDDDDDDD"
+        "EEEEEEEEEEEEEEEE"
+        "FFFFFFFFFFFFFFFF"
+        "GGGGGGGGGGGGGGGG"
+        "HHHHHHHHHHHHHHHH"
+        "IIIIIIIIIIIIIIII"
+        "JJJJJJJJJJJJJJJJ"
+        "KKKKKKKKKKKKKKKK"
+        "LLLLLLLLLLLLLLLL"
+        "MMMMMMMMMMMMMMMM"
+        "NNNNNNNNNNNNNNNN"
+        "OOOOOOOOOOOOOOOO"
+        "PPPPPPPPPPPPPPPP"
+        "aaaaaaaaaaaaaaaa"
+        "bbbbbbbbbbbbbbbb"
+        "cccccccccccccccc"
+        "dddddddddddddddd"
+        "eeeeeeeeeeeeeeee"
+        "ffffffffffffffff"
+        "gggggggggggggggg"
+        "hhhhhhhhhhhhhhhh"
+        "iiiiiiiiiiiiiiii"
+        "jjjjjjjjjjjjjjjj"
+        "kkkkkkkkkkkkkkkk"
+        "llllllllllllllll"
+        "mmmmmmmmmmmmmmmm"
+        "nnnnnnnnnnnnnnnn"
+        "oooooooooooooooo"
+        "pppppppppppppppp"
+    };
+
+    TestState* test = constructTestSubheader(&spec);
+    TestSpec* pSpec = &spec;
+
+    TEST_ASSERT(roundTripTest(pSpec, test, pixels));
+    freeTestState(test);
 }
 
 TEST_CASE(testPBlockOffsetBand)
@@ -424,9 +593,7 @@ TEST_CASE(testPBlockOffsetBand)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -439,9 +606,7 @@ TEST_CASE(testPBlockOffsetBand)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -457,9 +622,7 @@ TEST_CASE(testPBlockOffsetBand)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -497,25 +660,11 @@ TEST_CASE(testPBlockOffsetBand)
         test->subwindow->numBands = 1;
         test->subwindow->bandList = &test->bandList[1];
 
-        int padded;
-        nitf_Uint8* user[2];
-        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user[0]);
-        TEST_ASSERT(user[1])
-        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                          user, &padded, &error);
-
-        char *catUser = malloc(strlen(spec->expectedRead) + 1);
-        strcpy(catUser, user[0]);
-        strcat(catUser, user[1]);
-        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
-        free(user[0]);
-        free(user[1]);
-        free(catUser);
+        TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
 }
+
 
 TEST_CASE(testPBlockThreeBandsWithOffset)
 {
@@ -544,9 +693,7 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
     {
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -559,9 +706,7 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -581,9 +726,7 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
 
         {
             "P",
-            "INT",
             8,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -633,26 +776,10 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
         TestSpec* spec = &pTypeTests[testIndex];
         TestState* test = constructTestSubheader(spec);
 
-        /* Adjust subwindow to only read from second band */
         test->subwindow->numBands = 2;
         test->subwindow->bandList = &test->bandList[1];
 
-        int padded;
-        nitf_Uint8* user[2];
-        user[0] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        user[1] = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user[0]);
-        TEST_ASSERT(user[1])
-        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                user, &padded, &error);
-
-        char *catUser = malloc(strlen(spec->expectedRead) + 1);
-        strcpy(catUser, user[0]);
-        strcat(catUser, user[1]);
-        TEST_ASSERT(strcmp((char *)catUser, spec->expectedRead) == 0);
-        free(user[0]);
-        free(user[1]);
-        free(catUser);
+        TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
 }
@@ -684,9 +811,7 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
     TestSpec spec =
     {
         "P",
-        "INT",
         8,
-        "NODISPLY",
         pixels,
         sizeof(pixels),
         NUM_BANDS,
@@ -738,9 +863,7 @@ TEST_CASE(testPBlock4BytePixels)
     {
         {
             "P",
-            "INT",
             16,
-            "NODISPLY",
             pixels,
             sizeof(pixels),
             NUM_BANDS,
@@ -778,14 +901,7 @@ TEST_CASE(testPBlock4BytePixels)
         test->subwindow->numBands = 1;
         test->subwindow->bandList = &test->bandList[1];
 
-        int padded;
-        nitf_Uint8* user = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
-        TEST_ASSERT(user);
-        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
-                &user, &padded, &error);
-
-        TEST_ASSERT(strcmp((char *)user, spec->expectedRead) == 0);
-        free(user);
+        TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
 }
@@ -800,5 +916,6 @@ int main(int argc, char** argv)
     CHECK(testPBlockThreeBandsWithOffset);
     CHECK(testInvalidReadOrderFailsGracefully);
     CHECK(testPBlock4BytePixels);
+    CHECK(testTwoBandRoundTrip);
     return 0;
 }
