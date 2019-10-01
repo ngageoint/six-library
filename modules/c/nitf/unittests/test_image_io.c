@@ -711,6 +711,85 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
     freeTestState(test);
 }
 
+TEST_CASE(testPBlock4BytePixels)
+{
+    static const size_t NUM_BANDS = 2;
+    char pixels[] =
+    {
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
+    };
+    nitf_Error error;
+    TestSpec pTypeTests[] =
+    {
+        {
+            "P",
+            "INT",
+            16,
+            "NODISPLY",
+            pixels,
+            sizeof(pixels),
+            NUM_BANDS,
+
+            0, NUM_ROWS,
+            0, NUM_COLS,
+
+            "aAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaA"
+            "bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB"
+            "cCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcC"
+            "dDdDdDdDdDdDdDdDdDdDdDdDdDdDdDdD"
+            "eEeEeEeEeEeEeEeEeEeEeEeEeEeEeEeE"
+            "fFfFfFfFfFfFfFfFfFfFfFfFfFfFfFfF"
+            "gGgGgGgGgGgGgGgGgGgGgGgGgGgGgGgG"
+            "hHhHhHhHhHhHhHhHhHhHhHhHhHhHhHhH"
+            "iIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI"
+            "jJjJjJjJjJjJjJjJjJjJjJjJjJjJjJjJ"
+            "kKkKkKkKkKkKkKkKkKkKkKkKkKkKkKkK"
+            "lLlLlLlLlLlLlLlLlLlLlLlLlLlLlLlL"
+            "mMmMmMmMmMmMmMmMmMmMmMmMmMmMmMmM"
+            "nNnNnNnNnNnNnNnNnNnNnNnNnNnNnNnN"
+            "oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO"
+            "pPpPpPpPpPpPpPpPpPpPpPpPpPpPpPpP"
+        }
+    };
+
+    const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
+    size_t testIndex;
+    for (testIndex = 0; testIndex < numTests; ++testIndex)
+    {
+        TestSpec* spec = &pTypeTests[testIndex];
+        TestState* test = constructTestSubheader(spec);
+
+        /* Adjust subwindow to only read second band */
+        test->subwindow->numBands = 1;
+        test->subwindow->bandList = &test->bandList[1];
+
+        int padded;
+        nitf_Uint8* user = (nitf_Uint8*)calloc(1, strlen(spec->expectedRead) + 1);
+        TEST_ASSERT(user);
+        nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
+                &user, &padded, &error);
+
+        TEST_ASSERT(strcmp((char *)user, spec->expectedRead) == 0);
+        free(user);
+        freeTestState(test);
+    }
+}
+
 int main(int argc, char** argv)
 {
     (void) argc;
@@ -720,5 +799,6 @@ int main(int argc, char** argv)
     CHECK(testPBlockOffsetBand);
     CHECK(testPBlockThreeBandsWithOffset);
     CHECK(testInvalidReadOrderFailsGracefully);
+    CHECK(testPBlock4BytePixels);
     return 0;
 }
