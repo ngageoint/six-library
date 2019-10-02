@@ -8581,10 +8581,10 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     (void)error;
 
     src = (nitf_Uint16 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
-    dst = (nitf_Uint16 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark
+                           + blockIO->rwBuffer.offset.mark
                            + bandOffset);
+    dst = (nitf_Uint16 *) (blockIO->unpacked.buffer
+                           + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8612,10 +8612,10 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     (void)error;
 
     src = (nitf_Uint32 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
-    dst = (nitf_Uint32 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark
+                           + blockIO->rwBuffer.offset.mark
                            + bandOffset);
+    dst = (nitf_Uint32 *) (blockIO->unpacked.buffer
+                           + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8644,10 +8644,10 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     (void)error;
 
     src = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
-    dst = (nitf_Uint64 *) (blockIO->unpacked.buffer
-                           + blockIO->unpacked.offset.mark
+                           + blockIO->rwBuffer.offset.mark
                            + bandOffset);
+    dst = (nitf_Uint64 *) (blockIO->unpacked.buffer
+                           + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
     skip = blockIO->cntl->nitf->numBands;
 
@@ -8678,10 +8678,10 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     (void)error;
 
     src1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
-                            + blockIO->rwBuffer.offset.mark);
-    dst1 = (nitf_Uint64 *) (blockIO->unpacked.buffer
-                            + blockIO->unpacked.offset.mark
+                            + blockIO->rwBuffer.offset.mark
                             + bandOffset);
+    dst1 = (nitf_Uint64 *) (blockIO->unpacked.buffer
+                            + blockIO->unpacked.offset.mark);
     src2 = src1 + 1;
     dst2 = dst1 + 1;
     count = blockIO->pixelCountFR;
