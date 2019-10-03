@@ -345,7 +345,7 @@ class CPPContext(Context.Context):
         plugin (via the plugin kwarg).
         """
         bld = self
-        env = self._getEnv(modArgs)
+        env = self._getEnv(modArgs).derive()
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -376,7 +376,7 @@ class CPPContext(Context.Context):
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
-                use=uselib_local, uselib=uselib, env=env.derive(),
+                use=uselib_local, uselib=uselib, env=env,
                 defines=defines, path=path, targets_to_add=targetsToAdd,
                 install_path=join(env['install_sharedir'], plugin, 'plugins'))
 
