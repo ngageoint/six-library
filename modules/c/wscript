@@ -5,10 +5,7 @@ def configure(conf):
     conf.recurse()
 
 def build(bld):
-    if bld.env['LIB_TYPE'] == 'shlib':
-        bld.recurse('nrt nitf j2k jpeg')
-    else:
-        bld.recurse()
+    bld.recurse()
 
 def distclean(context):
     context.recurse()
