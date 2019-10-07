@@ -57,9 +57,9 @@ def build(bld):
         # j2k/nitf tests
         j2k_nitf_tests = ['test_j2k_nitf']
         for t in j2k_nitf_tests:
-             bld.program_helper(dir='tests', source='%s.c' % t,
-                                use='nrt-c nitf-c j2k-c ' + j2kLayer,
-                                name=t, target=t, lang='c', env=env.derive())
+            bld.program_helper(dir='tests', source='%s.c' % t,
+                               use='nrt-c nitf-c j2k-c ' + j2kLayer,
+                               name=t, target=t, lang='c', env=env.derive())
 
         bld(features='add_targets', target='j2k-tests',
             targets_to_add=j2k_only_tests + j2k_nitf_tests)
