@@ -196,7 +196,7 @@ def configure(conf):
                 conf.define('HAVE_STD_NAMESPACE', 1)
 
                 conf.define('XERCES_AUTOCONF', 1)
-                conf.define('XERCES_PLATFORM_EXPORT', '', quote=False)
+                conf.define('XERCES_PLATFORM_EXPORT', conf.env['declspec_decoration'], quote=False)
                 conf.define('XERCES_PLATFORM_IMPORT', '', quote=False)
                 conf.define('XERCES_HAS_CPP_NAMESPACE', 1)
                 conf.define('XERCES_STD_NAMESPACE', 1)
@@ -295,7 +295,9 @@ def build(bld):
 
         # build the library
         libType = env['LIB_TYPE'] or 'stlib'
-        xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
+        xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H', 'XERCES_BUILDING_LIBRARY']
+        if libType == 'shlib':
+            xercesDefines.append('DLL_EXPORT')
         xerces = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                      source=sources,
                      includes=['.', 'src'], export_includes=['src'],

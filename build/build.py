@@ -1298,6 +1298,11 @@ def configure(self):
     env['PLATFORM'] = sys_platform
 
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
+    env['declspec_decoration'] = ''
+    env['windows_dll'] = False
+    if Options.options.shared_libs and env['COMPILER_CXX'] == 'msvc':
+        env['declspec_decoration'] = '__declspec(dllexport)'
+        env['windows_dll'] = True
 
     env['install_headers'] = Options.options.install_headers
     env['install_libs'] = Options.options.install_libs
