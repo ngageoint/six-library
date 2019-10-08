@@ -30,7 +30,7 @@ typedef struct TestSpec
     nitf_Uint32 bitsPerPixel;
     char* pixels;
     nitf_Uint64 imageSize;
-    size_t numBands;
+    nitf_Uint32 numBands;
 
     // Read request
     nitf_Uint32 startRow;
@@ -50,15 +50,15 @@ typedef struct TestState
     nitf_ImageIO* imageIO;
     nitf_IOInterface* interface;
     nitf_SubWindow* subwindow;
-    size_t numBands;
+    nitf_Uint32 numBands;
     nitf_Uint32* bandList;
     nitf_BandInfo** band;
 } TestState;
 
-const nitf_Uint32 NUM_ROWS = 16;
-const nitf_Uint32 NUM_COLS = 16;
-const nitf_Uint32 ROWS_PER_BLOCK = 4;
-const nitf_Uint32 COLS_PER_BLOCK = 4;
+#define NUM_ROWS 16
+#define NUM_COLS 16
+#define ROWS_PER_BLOCK 4
+#define COLS_PER_BLOCK 4
 
 TestState* constructTestSubheader(TestSpec* spec)
 {
@@ -79,7 +79,7 @@ TestState* constructTestSubheader(TestSpec* spec)
     state->band = malloc(sizeof(nitf_BandInfo) * spec->numBands);
     assert(state->band);
 
-    size_t band;
+    nitf_Uint32 band;
     for (band = 0; band < spec->numBands; ++band)
     {
         state->band[band] = nitf_BandInfo_construct(&error);
@@ -194,7 +194,7 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     NITF_BOOL result = NITF_SUCCESS;
 
     const nitf_Uint32 numBands = test->subwindow->numBands;
-    const nitf_Uint32 bandSize = strlen(spec->expectedRead) / numBands;
+    const size_t bandSize = strlen(spec->expectedRead) / numBands;
     nitf_Uint8** bands = allocateBands(numBands, bandSize);
     if (bands == NULL)
     {
@@ -210,11 +210,11 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     joinedBands = malloc(strlen(spec->expectedRead) + 1);
     if (joinedBands)
     {
-        strcpy(joinedBands, bands[0]);
+        strcpy(joinedBands, (const char*) bands[0]);
         nitf_Uint32 bandIdx;
         for (bandIdx = 1; bandIdx < numBands; ++bandIdx)
         {
-            strcat(joinedBands, bands[bandIdx]);
+            strcat(joinedBands, (const char*) bands[bandIdx]);
         }
         if (strcmp((char *)joinedBands, spec->expectedRead) != 0)
         {
@@ -238,7 +238,7 @@ static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
     const nitf_Uint32 numBands = test->subwindow->numBands;
     nitf_IOInterface* writeIO = NULL;
 
-    const nitf_Uint32 bandSize = strlen(spec->expectedRead) / numBands;
+    const size_t bandSize = strlen(spec->expectedRead) / numBands;
     nitf_Uint8** bands = allocateBands(numBands, bandSize);
     if (bands == NULL)
     {
@@ -249,7 +249,7 @@ static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
     nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
                       bands, &padded, &error);
 
-    const nitf_Uint32 bufferSize = strlen(pixels);
+    const size_t bufferSize = strlen(pixels);
     char* buf = (char*)calloc(bufferSize + 1, sizeof(char));
     writeIO = nrt_BufferAdapter_construct(buf, bufferSize, 1, &error);
 
@@ -285,26 +285,25 @@ TEST_CASE(testPBlockOneBand)
      * blocks and taking the first row of that.
      * In this case, "AAAAAAAAAAAAAAAA"
      */
-    char pixels[] =
-    {
-        "AAAABBBBCCCCDDDD"
-        "AAAABBBBCCCCDDDD"
-        "AAAABBBBCCCCDDDD"
-        "AAAABBBBCCCCDDDD"
-        "EEEEFFFFGGGGHHHH"
-        "EEEEFFFFGGGGHHHH"
-        "EEEEFFFFGGGGHHHH"
-        "EEEEFFFFGGGGHHHH"
-        "IIIIJJJJKKKKLLLL"
-        "IIIIJJJJKKKKLLLL"
-        "IIIIJJJJKKKKLLLL"
-        "IIIIJJJJKKKKLLLL"
+#define NUM_BANDS 1
+#define pixels \
+        "AAAABBBBCCCCDDDD" \
+        "AAAABBBBCCCCDDDD" \
+        "AAAABBBBCCCCDDDD" \
+        "AAAABBBBCCCCDDDD" \
+        "EEEEFFFFGGGGHHHH" \
+        "EEEEFFFFGGGGHHHH" \
+        "EEEEFFFFGGGGHHHH" \
+        "EEEEFFFFGGGGHHHH" \
+        "IIIIJJJJKKKKLLLL" \
+        "IIIIJJJJKKKKLLLL" \
+        "IIIIJJJJKKKKLLLL" \
+        "IIIIJJJJKKKKLLLL" \
+        "MMMMNNNNOOOOPPPP" \
+        "MMMMNNNNOOOOPPPP" \
+        "MMMMNNNNOOOOPPPP" \
         "MMMMNNNNOOOOPPPP"
-        "MMMMNNNNOOOOPPPP"
-        "MMMMNNNNOOOOPPPP"
-        "MMMMNNNNOOOOPPPP"
-    };
-    nitf_Error error;
+
     TestSpec pTypeTests[] =
     {
         {
@@ -312,7 +311,7 @@ TEST_CASE(testPBlockOneBand)
             8,
             pixels,
             sizeof(pixels),
-            1,
+            NUM_BANDS,
 
             0, 2,
             4, 4,
@@ -324,7 +323,7 @@ TEST_CASE(testPBlockOneBand)
             8,
             pixels,
             sizeof(pixels),
-            1,
+            NUM_BANDS,
 
             0, 4,
             0, NUM_COLS,
@@ -339,7 +338,7 @@ TEST_CASE(testPBlockOneBand)
             8,
             pixels,
             sizeof(pixels),
-            1,
+            NUM_BANDS,
 
             0, NUM_ROWS,
             0, NUM_COLS,
@@ -363,6 +362,9 @@ TEST_CASE(testPBlockOneBand)
         }
     };
 
+#undef NUM_BANDS
+#undef pixels
+
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
     size_t testIndex;
     for (testIndex = 0; testIndex < numTests; ++testIndex)
@@ -377,27 +379,25 @@ TEST_CASE(testPBlockOneBand)
 
 TEST_CASE(testPBlockTwoBands)
 {
-    static const size_t NUM_BANDS = 2;
-    char pixels[] =
-    {
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+#define NUM_BANDS 2
+#define pixels \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"\
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"\
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"\
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"\
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"\
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"\
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"\
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"\
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"\
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"\
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"\
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"\
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"\
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"\
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"\
         "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-    };
-    nitf_Error error;
+
     TestSpec pTypeTests[] =
     {
 
@@ -487,31 +487,31 @@ TEST_CASE(testPBlockTwoBands)
         TEST_ASSERT(doReadTest(spec, test));
         freeTestState(test);
     }
+#undef NUM_BANDS
+#undef pixels
 }
 
 
 TEST_CASE(testTwoBandRoundTrip)
 {
-    static const size_t NUM_BANDS = 2;
-    char pixels[] =
-    {
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+#define NUM_BANDS 2
+#define pixels \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
         "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-    };
 
     TestSpec spec =
     {
@@ -562,32 +562,32 @@ TEST_CASE(testTwoBandRoundTrip)
     TestSpec* pSpec = &spec;
 
     TEST_ASSERT(roundTripTest(pSpec, test, pixels));
+
+#undef NUM_BANDS
+#undef pixels
     freeTestState(test);
 }
 
 TEST_CASE(testPBlockOffsetBand)
 {
-    static const size_t NUM_BANDS = 2;
-    char pixels[] =
-    {
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
-        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl"
+#define NUM_BANDS 2
+#define pixels \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "AaAaAaAaBbBbBbBbCcCcCcCcDdDdDdDd" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "EeEeEeEeFfFfFfFfGgGgGgGgHhHhHhHh" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "IiIiIiIiJjJjJjJjKkKkKkKkLlLlLlLl" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
+        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp" \
         "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-        "MmMmMmMmNnNnNnNnOoOoOoOoPpPpPpPp"
-    };
-    nitf_Error error;
     TestSpec pTypeTests[] =
     {
 
@@ -648,6 +648,8 @@ TEST_CASE(testPBlockOffsetBand)
             "pppppppppppppppp"
         }
     };
+#undef NUM_BANDS
+#undef pixels
 
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
     size_t testIndex;
@@ -668,27 +670,25 @@ TEST_CASE(testPBlockOffsetBand)
 
 TEST_CASE(testPBlockThreeBandsWithOffset)
 {
-    static const size_t NUM_BANDS = 3;
-    char pixels[] =
-    {
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
+#define NUM_BANDS 3
+#define pixels \
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4" \
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4" \
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4" \
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4" \
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8" \
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8" \
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8" \
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8" \
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@" \
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@" \
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@" \
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@" \
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^" \
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^" \
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^" \
         "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-    };
-    nitf_Error error;
+
     TestSpec pTypeTests[] =
     {
         {
@@ -768,6 +768,8 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
             "^^^^^^^^^^^^^^^^"
         }
     };
+#undef NUM_BANDS
+#undef pixels
 
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
     size_t testIndex;
@@ -786,26 +788,24 @@ TEST_CASE(testPBlockThreeBandsWithOffset)
 
 TEST_CASE(testInvalidReadOrderFailsGracefully)
 {
-    static const size_t NUM_BANDS = 3;
-    char pixels[] =
-    {
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"
-    };
+#define NUM_BANDS 3
+#define pixels \
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"\
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"\
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"\
+        "Aa1Aa1Aa1Aa1Bb2Bb2Bb2Bb2Cc3Cc3Cc3Cc3Dd4Dd4Dd4Dd4"\
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"\
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"\
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"\
+        "Ee5Ee5Ee5Ee5Ff6Ff6Ff6Ff6Gg7Gg7Gg7Gg7Hh8Hh8Hh8Hh8"\
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"\
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"\
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"\
+        "Ii9Ii9Ii9Ii9Jj0Jj0Jj0Jj0Kk!Kk!Kk!Kk!Ll@Ll@Ll@Ll@"\
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"\
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"\
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"\
+        "Mm#Mm#Mm#Mm#Nn$Nn$Nn$Nn$Oo%Oo%Oo%Oo%Pp^Pp^Pp^Pp^"\
 
     nitf_Error error;
     TestSpec spec =
@@ -821,6 +821,8 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
 
         ""
     };
+#undef NUM_BANDS
+#undef pixels
 
     TestState* test = constructTestSubheader(&spec);
 
@@ -838,27 +840,25 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
 
 TEST_CASE(testPBlock4BytePixels)
 {
-    static const size_t NUM_BANDS = 2;
-    char pixels[] =
-    {
-        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
-        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
-        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
-        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"
-        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
-        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
-        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
-        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"
-        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
-        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
-        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
-        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"
-        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
-        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
-        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
-        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"
-    };
-    nitf_Error error;
+#define NUM_BANDS 2
+#define pixels \
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"\
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"\
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"\
+        "**Aa**Aa**Aa**Aa**Bb**Bb**Bb**Bb**Cc**Cc**Cc**Cc**Dd**Dd**Dd**Dd"\
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"\
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"\
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"\
+        "**Ee**Ee**Ee**Ee**Ff**Ff**Ff**Ff**Gg**Gg**Gg**Gg**Hh**Hh**Hh**Hh"\
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"\
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"\
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"\
+        "**Ii**Ii**Ii**Ii**Jj**Jj**Jj**Jj**Kk**Kk**Kk**Kk**Ll**Ll**Ll**Ll"\
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"\
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"\
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"\
+        "**Mm**Mm**Mm**Mm**Nn**Nn**Nn**Nn**Oo**Oo**Oo**Oo**Pp**Pp**Pp**Pp"\
+
     TestSpec pTypeTests[] =
     {
         {
@@ -890,6 +890,8 @@ TEST_CASE(testPBlock4BytePixels)
         }
     };
 
+#undef NUM_BANDS
+#undef pixels
     const size_t numTests = sizeof(pTypeTests) / sizeof(pTypeTests[0]);
     size_t testIndex;
     for (testIndex = 0; testIndex < numTests; ++testIndex)
