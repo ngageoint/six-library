@@ -35,9 +35,14 @@
 #include <cphd/Wideband.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
-#include <cphd/PVPArray.h>
+#include <cphd/PVPBlock.h>
 #include <cphd/ReferenceGeometry.h>
 #include <TestCase.h>
+
+/*!
+ * Tests write and read of Signal Block with compressed data
+ * Fails if values don't match
+ */
 
 namespace
 {
@@ -58,33 +63,15 @@ cphd::Vector3 getRandomVector3()
     return ret;
 }
 
-template<typename T>
-std::vector<std::complex<T> > generateData(size_t length)
+std::vector<sys::ubyte> generateCompressedData(size_t length)
 {
-    std::vector<std::complex<T> > data(length);
+    std::vector<sys::ubyte> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        float real = static_cast<T>(rand() / 100);
-        float imag = static_cast<T>(rand() / 100);
-        data[ii] = std::complex<T>(real, imag);
+        data[ii] = rand() % 16;
     }
     return data;
-}
-
-std::vector<double> generateScaleFactors(size_t length, bool scale)
-{
-    std::vector<double> scaleFactors(length, 1);
-
-    if (scale)
-    {
-        for (size_t ii = 0; ii < scaleFactors.size(); ++ii)
-        {
-            scaleFactors[ii] *= 2;
-        }
-    }
-
-    return scaleFactors;
 }
 
 void setPVPXML(cphd::Pvp& pvp)
@@ -110,58 +97,58 @@ void setPVPXML(cphd::Pvp& pvp)
 
 void setVectorParameters(size_t channel,
                           size_t vector,
-                          cphd::PVPArray& pvpArray)
+                          cphd::PVPBlock& pvpBlock)
 {
     const double txTime = getRandom();
-    pvpArray.setTxTime(txTime, channel, vector);
+    pvpBlock.setTxTime(txTime, channel, vector);
 
     const cphd::Vector3 txPos = getRandomVector3();
-    pvpArray.setTxPos(txPos, channel, vector);
+    pvpBlock.setTxPos(txPos, channel, vector);
 
     const cphd::Vector3 txVel = getRandomVector3();
-    pvpArray.setTxVel(txVel, channel, vector);
+    pvpBlock.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
-    pvpArray.setRcvTime(rcvTime, channel, vector);
+    pvpBlock.setRcvTime(rcvTime, channel, vector);
 
     const cphd::Vector3 rcvPos = getRandomVector3();
-    pvpArray.setRcvPos(rcvPos, channel, vector);
+    pvpBlock.setRcvPos(rcvPos, channel, vector);
 
     const cphd::Vector3 rcvVel = getRandomVector3();
-    pvpArray.setRcvVel(rcvVel, channel, vector);
+    pvpBlock.setRcvVel(rcvVel, channel, vector);
 
     const cphd::Vector3 srpPos = getRandomVector3();
-    pvpArray.setSRPPos(srpPos, channel, vector);
+    pvpBlock.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
-    pvpArray.setaFDOP(aFDOP, channel, vector);
+    pvpBlock.setaFDOP(aFDOP, channel, vector);
 
     const double aFRR1 = getRandom();
-    pvpArray.setaFRR1(aFRR1, channel, vector);
+    pvpBlock.setaFRR1(aFRR1, channel, vector);
 
     const double aFRR2 = getRandom();
-    pvpArray.setaFRR2(aFRR2, channel, vector);
+    pvpBlock.setaFRR2(aFRR2, channel, vector);
 
     const double fx1 = getRandom();
-    pvpArray.setFx1(fx1, channel, vector);
+    pvpBlock.setFx1(fx1, channel, vector);
 
     const double fx2 = getRandom();
-    pvpArray.setFx2(fx2, channel, vector);
+    pvpBlock.setFx2(fx2, channel, vector);
 
     const double toa1 = getRandom();
-    pvpArray.setTOA1(toa1, channel, vector);
+    pvpBlock.setTOA1(toa1, channel, vector);
 
     const double toa2 = getRandom();
-    pvpArray.setTOA2(toa2, channel, vector);
+    pvpBlock.setTOA2(toa2, channel, vector);
 
     const double tdTropoSRP = getRandom();
-    pvpArray.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
 
     const double sc0 = getRandom();
-    pvpArray.setSC0(sc0, channel, vector);
+    pvpBlock.setSC0(sc0, channel, vector);
 
     const double scss = getRandom();
-    pvpArray.setSCSS(scss, channel, vector);
+    pvpBlock.setSCSS(scss, channel, vector);
 }
 
 void setUpMetadata(cphd::Metadata& metadata)
@@ -191,9 +178,8 @@ void setUpMetadata(cphd::Metadata& metadata)
     metadata.referenceGeometry.monostatic->arpVel = getRandomVector3();
 }
 
-template<typename T>
 void setUpData(const types::RowCol<size_t> dims,
-               const std::vector<std::complex<T> >& writeData,
+               const std::vector<sys::ubyte>& writeData,
                cphd::Metadata& metadata)
 {
     const size_t numChannels = 1;
@@ -204,30 +190,22 @@ void setUpData(const types::RowCol<size_t> dims,
         metadata.data.channels.push_back(
                 cphd::Data::Channel(dims.row, dims.col));
     }
+    //! Must set the sample type (the type doesnt matter for compressed data)
+    metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CF8;
 
-    //! Must set the sample type
-    if (sizeof(writeData[0]) == 2)
+    metadata.data.signalCompressionID = "Huffman";
+    for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+        metadata.data.channels[ii].compressedSignalSize = dims.area();
     }
-    else if (sizeof(writeData[0]) == 4)
-    {
-        metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI4;
-    }
-    else if (sizeof(writeData[0]) == 8)
-    {
-        metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CF8;
-    }
-
     setUpMetadata(metadata);
 }
 
-template<typename T>
-void writeCPHD(const std::string& outPathname, size_t numThreads,
+void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
-        const std::vector<std::complex<T> >& writeData,
+        const std::vector<sys::ubyte>& writeData,
         cphd::Metadata& metadata,
-        cphd::PVPArray& pvpArray)
+        cphd::PVPBlock& pvpBlock)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -236,59 +214,46 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     {
         for (size_t jj = 0; jj < numVectors[ii]; ++jj)
         {
-            setVectorParameters(ii, jj, pvpArray);
+            setVectorParameters(ii, jj, pvpBlock);
         }
     }
 
     cphd::CPHDWriter writer(metadata, numThreads);
 
-    writer.writeMetadata(outPathname, pvpArray, "Unclassified", "Release");
+    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+
+    writer.writePVPData(pvpBlock);
 
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(&writeData[0],dims.area()*2);
+        writer.writeCompressedCPHDData(&writeData[0],1,ii);
     }
 }
 
-std::vector<std::complex<float> > checkData(const std::string& pathname,
+std::vector<sys::ubyte> checkCompressedData(const std::string& pathname,
         size_t numThreads,
-        const std::vector<double>& scaleFactors,
         const types::RowCol<size_t>& dims,
         mem::SharedPtr<io::SeekableInputStream> inStream)
 {
 
     cphd::CPHDReader reader(inStream, numThreads);
     cphd::Wideband& wideband = reader.getWideband();
-    std::vector<std::complex<float> > readData(dims.area());
+    std::vector<sys::ubyte> readData(dims.area());
 
-    size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    mem::ScopedArray<sys::ubyte> scratchData(new sys::ubyte[sizeInBytes]);
-    mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
-    mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
-
-    wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
-            scaleFactors, numThreads, scratch, data);
-
+    mem::BufferView<sys::ubyte> data(&readData[0], readData.size());
+    for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
+    {
+        wideband.read(ii, data);
+    }
     return readData;
 }
 
-
-template<typename T>
-bool compareVectors(const std::vector<std::complex<float> >& readData,
-                    const std::vector<std::complex<T> >& writeData,
-                    const std::vector<double>& scaleFactors,
-                    bool scale)
+bool compareVectors(const std::vector<sys::ubyte>& readData,
+                    const std::vector<sys::ubyte>& writeData)
 {
-    size_t pointsPerScale = readData.size() / scaleFactors.size();
     for (size_t ii = 0; ii < readData.size(); ++ii)
     {
-        std::complex<float> val(writeData[ii].real(), writeData[ii].imag());
-        if (scale)
-        {
-            val *= scaleFactors[ii / pointsPerScale];
-        }
-
-        if (val != readData[ii])
+        if (writeData[ii] != readData[ii])
         {
             std::cerr << "Value mismatch at index " << ii << std::endl;
             return false;
@@ -297,80 +262,31 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
     return true;
 }
 
-template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+bool runTest(const std::vector<sys::ubyte>& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<double> scaleFactors =
-            generateScaleFactors(dims.row, scale);
     mem::SharedPtr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
     setUpData(dims, writeData, meta);
     setPVPXML(meta.pvp);
-    cphd::PVPArray pvpArray(meta.data,
+    cphd::PVPBlock pvpBlock(meta.data,
                             meta.pvp);
 
-    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpArray);
-    const std::vector<std::complex<float> > readData =
-            checkData(tempfile.pathname(), numThreads, scaleFactors,
+    writeCompressedCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
+    const std::vector<sys::ubyte> readData =
+            checkCompressedData(tempfile.pathname(), numThreads,
             dims, inStream);
-    return compareVectors(readData, writeData, scaleFactors, scale);
+    return compareVectors(readData, writeData);
 }
 
-TEST_CASE(testUnscaledInt8)
+TEST_CASE(testCompressed)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
-    const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
-}
-
-TEST_CASE(testScaledInt8)
-{
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
-    const bool scale = true;
-    TEST_ASSERT(runTest(scale, writeData))
-}
-
-TEST_CASE(testUnscaledInt16)
-{
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
-    const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
-}
-
-TEST_CASE(testScaledInt16)
-{
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
-    const bool scale = true;
-    TEST_ASSERT(runTest(scale, writeData))
-}
-
-TEST_CASE(testUnscaledFloat)
-{
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<float> > writeData =
-            generateData<float>(dims.area());
-    const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
-}
-
-TEST_CASE(testScaledFloat)
-{
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<float> > writeData =
-            generateData<float>(dims.area());
-    const bool scale = true;
-    TEST_ASSERT(runTest(scale, writeData))
+    const std::vector<sys::ubyte> writeData =
+            generateCompressedData(dims.area());
+    TEST_ASSERT(runTest(writeData));
 }
 }
 
@@ -378,12 +294,7 @@ int main(int argc, char** argv)
 {
     try
     {
-        TEST_CHECK(testUnscaledInt8);
-        TEST_CHECK(testScaledInt8);
-        TEST_CHECK(testUnscaledInt16);
-        TEST_CHECK(testScaledInt16);
-        TEST_CHECK(testUnscaledFloat);
-        TEST_CHECK(testScaledFloat);
+        TEST_CHECK(testCompressed);
         return 0;
     }
     catch (const std::exception& ex)

@@ -57,10 +57,18 @@ struct Polarization
  */
 struct TOAExtended
 {
+    /*
+     * (Optional) Parameters that describe the FX domain signal
+     * content for partially eclipsed echoes when the
+     * collection is performed with a Linear FM
+     * waveform.
+     */
     struct LFMEclipse
     {
+        //! Constructor
         LFMEclipse();
 
+        //! Equality operator
         bool operator==(const LFMEclipse& other) const
         {
             return fxEarlyLow == other.fxEarlyLow &&
@@ -68,32 +76,48 @@ struct TOAExtended
                     fxLateLow == other.fxLateLow &&
                     fxLateHigh == other.fxLateHigh;
         }
-
         bool operator!=(const LFMEclipse& other) const
         {
             return !((*this) == other);
         }
 
+        //! FX domain minimum frequency value for an echo
+        //! TOA = TOAE1 < TOA1
         double fxEarlyLow;
+
+        //! FX domain maximum frequency value for an echo
+        //! TOA = TOAE1 < TOA1
         double fxEarlyHigh;
+
+        //! FX domain minimum frequency value for an echo
+        //!  TOA = TOAE2 > TOA2
         double fxLateLow;
+
+        //! FX domain maximum frequency value for an echo
+        //! TOA = TOAE2 > TOA2
         double fxLateHigh;
     };
 
+    //! Constructor
     TOAExtended();
 
+    //! Equality operator
     bool operator==(const TOAExtended& other) const
     {
         return toaExtSaved == other.toaExtSaved &&
                 lfmEclipse == other.lfmEclipse;
     }
-
     bool operator!=(const TOAExtended& other) const
     {
         return !((*this) == other);
     }
 
+    //! TOA extended swath saved that includes both
+    //! full and partially eclipsed echoes.
     double toaExtSaved;
+
+    //! Parameters that describe the FX domain signal
+    //! content
     mem::ScopedCopyablePtr<LFMEclipse> lfmEclipse;
 };
 
@@ -103,20 +127,27 @@ struct TOAExtended
  */
 struct DwellTimes
 {
+    //! COD Time & Dwell Time polynomials over the
+    //! image area
     DwellTimes();
 
+    // Equality operator
     bool operator==(const DwellTimes& other) const
     {
         return codId == other.codId &&
                 dwellId == other.dwellId;
     }
-
     bool operator!=(const DwellTimes& other) const
     {
         return !((*this) == other);
     }
 
+    //! Identifier of the center of Dwell Time polynomial
+    //! that maps reference surface position to COD time
     std::string codId;
+
+    //! Identifier of the dwell Time polynomial that
+    //! maps reference surface position to dwell time
     std::string dwellId;
 };
 
@@ -127,37 +158,47 @@ struct DwellTimes
  */
 struct TgtRefLevel
 {
+    // Constructor
     TgtRefLevel();
 
+    // Equality operators
     bool operator==(const TgtRefLevel& other) const
     {
         return ptRef == other.ptRef;
     }
-
     bool operator!=(const TgtRefLevel& other) const
     {
         return !((*this) == other);
     }
 
+    //! Target power level for a 1.0 square meter ideal
+    //! point scatterer located at the SRP.
     double ptRef;
 };
 
+/*
+ * Points that describe the noise profile
+ */
 struct Point
 {
+    //! Constructor
     Point();
 
+    //! Equality operators
     bool operator==(const Point& other) const
     {
         return fx == other.fx &&
                 pn == other.pn;
     }
-
     bool operator!=(const Point& other) const
     {
         return !((*this) == other);
     }
 
+    //! Frequency value of this noise profile point
     double fx;
+
+    //! Power level of this noise profile point
     double pn;
 };
 
@@ -166,16 +207,17 @@ struct Point
  */
 struct FxNoiseProfile 
 {
+    //! Equality operators
     bool operator==(const FxNoiseProfile& other) const
     {
         return point == other.point;
     }
-
     bool operator!=(const FxNoiseProfile& other) const
     {
         return !((*this) == other);
     }
 
+    //! Points that describe the noise profile
     std::vector<Point> point;
 };
 
@@ -184,22 +226,30 @@ struct FxNoiseProfile
  */
 struct NoiseLevel
 {
+    //! Thermal noise level for the reference signal
+    //! vector (v_CH_REF).
     NoiseLevel();
 
+    //! Equality operators
     bool operator==(const NoiseLevel& other) const
     {
         return pnRef == other.pnRef &&
                 bnRef == other.bnRef &&
                 fxNoiseProfile == other.fxNoiseProfile;
     }
-
     bool operator!=(const NoiseLevel& other) const
     {
         return !((*this) == other);
     }
 
+    //! Noise power level for thermal noise.
     double pnRef;
+
+    //! Noise Equivalent BW for noise signal.
     double bnRef;
+
+    //! (Optional) FX Domain Noise Level Profile. Power level for
+    //! thermal noise (PN) vs. FX frequency values 
     mem::ScopedCopyablePtr<FxNoiseProfile> fxNoiseProfile;
 };
 
@@ -208,29 +258,45 @@ channel. Channels referenced by their unique
 Channel ID (Ch_ID). See Section 7.2. */
 struct ChannelParameter
 {
-    // Hiding TxRcv struct here because of name conflict //
+    /*
+     * (Optional) Parameters to identify the Transmit and Receive
+     * parameter sets used to collect the signal array
+     */
+    // Hiding TxRcv struct here because of name conflict
     struct TxRcv
     {
+        //! Equality operators
         bool operator==(const TxRcv& other) const
         {
             return txWFId == other.txWFId &&
                     rcvId == other.rcvId;
         }
-
         bool operator!=(const TxRcv& other) const
         {
             return !((*this) == other);
         }
 
+        //! Identifier of the Transmit Waveform parameter
+        //! set(s) that were used
         std::vector<std::string> txWFId;
+
+        //! Identifier of the Receive Parameter set(s) that
+        //! were used.
         std::vector<std::string> rcvId;
     };
 
-    // Hiding Antenna struct here because of naming clash //
+    /*
+     * (Optional) Antenna Phase Center and Antenna Pattern
+     * identifiers for the antenna(s) used to collect and
+     * form the signal array data.
+     */
+    // Hiding Antenna struct here because of naming clash
     struct Antenna
     {
+        // Constructor
         Antenna();
 
+        // Equality operators
         bool operator==(const Antenna& other) const
         {
             return txAPCId == other.txAPCId &&
@@ -238,15 +304,27 @@ struct ChannelParameter
                     rcvAPCId == other.rcvAPCId &&
                     rcvAPATId == other.rcvAPATId;
         }
-
         bool operator!=(const Antenna& other) const
         {
             return !((*this) == other);
         }
 
+        //! Identifier of Transmit APC to be used to compute
+        //! the transmit antenna pattern as a function of time
+        //! for the channel (APC_ID).
         std::string txAPCId;
+
+        //! Identifier of Transmit Antenna pattern used to
+        //! form the channel signal array (APAT_ID)
         std::string txAPATId;
+
+        //! Identifier of Receive APC to be used to compute
+        //! the receive antenna pattern as a function of time
+        //! for the channel (APC_ID)
         std::string rcvAPCId;
+
+        //! Identifier of Receive Antenna pattern used to
+        //! form the channel (APAT_ID).
         std::string rcvAPATId;
     };
 
@@ -271,23 +349,82 @@ struct ChannelParameter
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this CPHD data
+    //! channel (Ch_ID).
     std::string identifier;
+
+    //! Index of the reference vector (v_CH_REF) for
+    //! the channel.
     size_t refVectorIndex;
+
+    //! Flag to indicate when a constant FX band is
+    //! saved for all signal vectors of the channel.
     six::BooleanType fxFixed;
+
+    //! Flag to indicate when a constant TOA swath is
+    //! saved for all signal vectors of the channel.
     six::BooleanType toaFixed;
+
+    //! Flag to indicate when a constant SRP position is
+    //! used all signal vectors of the channel.
     six::BooleanType srpFixed;
+
+    //! (Optional) Flag to indicate when all signal array
+    //! vectors are normal
     six::BooleanType signalNormal;
+
+    //! Polarization(s) of the signals that formed the
+    //! signal array
     Polarization polarization;
+
+    //! FX center frequency value for saved bandwidth
+    //! for the channel. Computed from all vectors of
+    //! the signal array
     double fxC;
+
+    //! FX band spanned for the saved bandwidth for the
+    //! channel. Computed from all vectors of the signal
+    //! array
     double fxBW;
+
+    //! (Optional) FX signal bandwidth saved that includes noise
+    //! signal below or above the retained echo signal
+    //! bandwidth. Included when fx_N1 < fx_1 or fx_2
+    //! < fx_N2 for any vector
     double fxBWNoise; // Optional
+
+    //! TOA swath saved for the full resolution echoes
+    //! for the channel. Computed from all vectors in the
+    //! signal array.
     double toaSaved;
+
+    //! COD Time & Dwell Time polynomials over the
+    //! image area
     DwellTimes dwellTimes;
+
+    //! (Optional) Image Area for the CPHD channel defined 
+    //! by a rectangle aligned with (IAX, IAY). May be
+    //! reduced by the optional polygon
     AreaType imageArea;
+
+    //! (Optional) TOA extended swath information.
     mem::ScopedCopyablePtr<TOAExtended> toaExtended;
+
+    //! (Optional) Antenna Phase Center and Antenna Pattern
+    //! identifiers for the antenna(s) used to collect and
+    //! form the signal array data.
     mem::ScopedCopyablePtr<Antenna> antenna;
+
+    //! (Optional) Parameters to identify the Transmit and Receive
+    //! parameter sets used to collect the signal array
     mem::ScopedCopyablePtr<TxRcv> txRcv;
+
+    //! (Optional) Signal level for an ideal point scatterer located at
+    //! the SRP for reference signal vector (v_CH_REF)
     mem::ScopedCopyablePtr<TgtRefLevel> tgtRefLevel;
+
+    //! (Optional) Thermal noise level for the reference signal
+    //! vector (v_CH_REF)
     mem::ScopedCopyablePtr<NoiseLevel> noiseLevel;
 };
 
@@ -315,14 +452,33 @@ struct Channel
         return !((*this) == other);
     }
 
+    //! Channel ID (Ch_ID) for the Reference Channel
+    //! in the product
     std::string refChId;
+
+    //! Flag to indicate when a constant FX band is
+    //! saved for all signal vectors of all channels
     six::BooleanType fxFixedCphd;
+
+    //! Flag to indicate when a constant TOA swath is
+    //! saved for all signal vectors of all channels
     six::BooleanType toaFixedCphd;
+
+    //! Flag to indicate when a constant SRP position is
+    //! used all signal vectors of all channels
     six::BooleanType srpFixedCphd;
+
+    //! Parameter Set that describes a CPHD data
+    //! channel. Channels referenced by their unique
+    //! Channel ID (Ch_ID).
     std::vector<ChannelParameter> parameters;
+
+    //! (Optional) Block for including additional parameters that
+    //! describe the channels and/or signal arrays.
     six::ParameterCollection addedParameters;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const Polarization& p);
 std::ostream& operator<< (std::ostream& os, const TOAExtended& t);
 std::ostream& operator<< (std::ostream& os, const DwellTimes& d);

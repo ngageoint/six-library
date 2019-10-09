@@ -19,7 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <map>
 #include <cphd/SupportArray.h>
+#include <cphd/Utilities.h>
 #include <six/Init.h>
 
 namespace cphd
@@ -35,12 +37,51 @@ SupportArrayParameter::SupportArrayParameter() :
 {
 }
 
+SupportArrayParameter::SupportArrayParameter(std::string format,
+                                             size_t id,
+                                             double x0_in,
+                                             double y0_in,
+                                             double xSS_in,
+                                             double ySS_in) :
+    elementFormat(format),
+    x0(x0_in),
+    y0(y0_in),
+    xSS(xSS_in),
+    ySS(ySS_in),
+    identifier(id)
+{
+    initializeParams();
+}
+
+void SupportArrayParameter::initializeParams()
+{
+    validateFormat(elementFormat);
+}
+
 AdditionalSupportArray::AdditionalSupportArray() :
     identifier(six::Init::undefined<std::string>()),
     xUnits(six::Init::undefined<std::string>()),
     yUnits(six::Init::undefined<std::string>()),
     zUnits(six::Init::undefined<std::string>())
 {
+}
+
+AdditionalSupportArray::AdditionalSupportArray(
+        std::string format, std::string id,
+        double x0_in, double y0_in, double xSS_in, double ySS_in,
+        std::string xUnits_in, std::string yUnits_in,
+        std::string zUnits_in) :
+    identifier(id),
+    xUnits(xUnits_in),
+    yUnits(yUnits_in),
+    zUnits(zUnits_in)
+{
+    elementFormat = format;
+    x0 = x0_in;
+    y0 = y0_in;
+    xSS = xSS_in;
+    ySS = ySS_in;
+    initializeParams();
 }
 
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
@@ -59,8 +100,7 @@ std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
 
 std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
 {
-    os << "    Identifier     : " << a.identifier << "\n"
-        << (SupportArrayParameter)a
+    os << (SupportArrayParameter)a
         << "    XUnits         : " << a.xUnits << "\n"
         << "    YUnits         : " << a.yUnits << "\n"
         << "    ZUnits         : " << a.zUnits << "\n";
@@ -86,10 +126,13 @@ std::ostream& operator<< (std::ostream& os, const SupportArray& s)
         os << "  Ant Gain Phase:: \n"
             << s.antGainPhase[ii];
     }
-    for (size_t ii = 0; ii < s.addedSupportArray.size(); ++ii)
+
+    std::map<std::string, AdditionalSupportArray>::const_iterator it;
+    for (it = s.addedSupportArray.begin(); it != s.addedSupportArray.end(); ++it)
     {
         os << "  Added Support Array:: \n"
-            << s.addedSupportArray[ii];
+            << "    " << it->first << ": \n"
+            << it->second;
     }
     return os;
 }

@@ -190,13 +190,27 @@
             <PVPArrayByteOffset>1</PVPArrayByteOffset>
             <CompressedSignalSize>3</CompressedSignalSize>
         </Channel>
-        <NumSupportArrays>1</NumSupportArrays>
+        <NumSupportArrays>3</NumSupportArrays>
         <SupportArray>
-            <Identifier>ID</Identifier>
-            <NumRows>25</NumRows>
-            <NumCols>70</NumCols>
+            <Identifier>1.0</Identifier>
+            <NumRows>3</NumRows>
+            <NumCols>4</NumCols>
+            <BytesPerElement>8</BytesPerElement>
+            <ArrayByteOffset>0</ArrayByteOffset>
+        </SupportArray>
+        <SupportArray>
+            <Identifier>2.0</Identifier>
+            <NumRows>3</NumRows>
+            <NumCols>4</NumCols>
             <BytesPerElement>4</BytesPerElement>
-            <ArrayByteOffset>3</ArrayByteOffset>
+            <ArrayByteOffset>96</ArrayByteOffset>
+        </SupportArray>
+        <SupportArray>
+            <Identifier>AddedSupportArray</Identifier>
+            <NumRows>3</NumRows>
+            <NumCols>4</NumCols>
+            <BytesPerElement>4</BytesPerElement>
+            <ArrayByteOffset>144</ArrayByteOffset>
         </SupportArray>
     </Data>
     <Channel>
@@ -391,14 +405,6 @@
     <SupportArray>
         <IAZArray>
             <Identifier>1</Identifier>
-            <ElementFormat>IAZ=F4;</ElementFormat>
-            <X0>0.000000000000000E00</X0>
-            <Y0>0.000000000000000E00</Y0>
-            <XSS>5.000000000000000E00</XSS>
-            <YSS>5.000000000000000E00</YSS>
-        </IAZArray>
-        <IAZArray>
-            <Identifier>2</Identifier>
             <ElementFormat>IAZ=F4;</ElementFormat>
             <X0>0.000000000000000E00</X0>
             <Y0>0.000000000000000E00</Y0>

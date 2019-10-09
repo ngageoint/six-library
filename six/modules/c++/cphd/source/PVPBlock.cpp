@@ -27,8 +27,9 @@
 #include <six/Init.h>
 #include <sys/Conf.h>
 #include <cphd/Types.h>
-#include <cphd/PVPArray.h>
+#include <cphd/PVPBlock.h>
 #include <cphd/Metadata.h>
+#include <cphd/Utilities.h>
 
 namespace
 {
@@ -67,7 +68,7 @@ inline void getData(sys::ubyte* dest,
 namespace cphd
 {
 
-PVPArray::PVPSet::PVPSet() :
+PVPBlock::PVPSet::PVPSet() :
     txTime(six::Init::undefined<double>()),
     txPos(six::Init::undefined<Vector3>()),
     txVel(six::Init::undefined<Vector3>()),
@@ -89,13 +90,13 @@ PVPArray::PVPSet::PVPSet() :
 {
 }
 
-void PVPArray::PVPSet::addToAddedPVPByteSize(size_t size)
+void PVPBlock::PVPSet::addToAddedPVPByteSize(size_t size)
 {
     mAddedPVPByteSize += size;
 }
 
 
-size_t PVPArray::PVPSet::getNumBytes() const
+size_t PVPBlock::PVPSet::getNumBytes() const
 {
     size_t ret = 12 * sizeof(double) + 5 * 3 * sizeof(double);
     if (ampSF.get())
@@ -132,7 +133,7 @@ size_t PVPArray::PVPSet::getNumBytes() const
 }
 
 
-void PVPArray::PVPSet::write(const Pvp& p, const sys::byte* input)
+void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
 {
     ::setData(input + p.txTime.getByteOffset(), txTime);
     ::setData(input + p.txPos.getByteOffset(), txPos);
@@ -194,16 +195,13 @@ void PVPArray::PVPSet::write(const Pvp& p, const sys::byte* input)
     }
     for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
     {
-        // std::string val;
-        // val.resize(p.addedPVP[ii].getSize());
-        // ::setData(input + p.addedPVP[ii].getByteOffset(), val.c_str());
         std::string val(input + p.addedPVP[ii].getByteOffset(),
                         input + p.addedPVP[ii].getByteOffset() + p.addedPVP[ii].getSize());
         addedPVP[ii].setValue(val);
     }
 }
 
-void PVPArray::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
+void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 {
     ::getData(dest + p.txTime.getByteOffset(), txTime);
     ::getData(dest + p.txPos.getByteOffset(), txPos);
@@ -265,7 +263,7 @@ void PVPArray::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 /*
  * Initialize PVP Array with a data object
  */
-PVPArray::PVPArray(Data& d, Pvp& p)
+PVPBlock::PVPBlock(Data& d, Pvp& p)
 {
     mNumBytesPerVector = d.numBytesPVP;
 
@@ -291,7 +289,7 @@ PVPArray::PVPArray(Data& d, Pvp& p)
 /*
  * Initialize PVP Array with custom parameters
  */
-PVPArray::PVPArray(size_t numBytesPerVector,
+PVPBlock::PVPBlock(size_t numBytesPerVector,
                    size_t numChannels,
                    std::vector<size_t> numVectors,
                    size_t numAddedParams) :
@@ -314,7 +312,7 @@ PVPArray::PVPArray(size_t numBytesPerVector,
     }
 }
 
-void PVPArray::verifyChannelVector(size_t channel, size_t vector) const
+void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
 {
     if (channel >= mData.size())
     {
@@ -328,14 +326,14 @@ void PVPArray::verifyChannelVector(size_t channel, size_t vector) const
     }
 }
 
-size_t PVPArray::getPVPsize(size_t channel) const
+size_t PVPBlock::getPVPsize(size_t channel) const
 {
     verifyChannelVector(channel, 0);
     return getNumBytesPVPSet() * mData[channel].size();
 }
 
 
-void PVPArray::getPVPdata(const Pvp& p, size_t channel,
+void PVPBlock::getPVPdata(const Pvp& p, size_t channel,
                          std::vector<sys::ubyte>& data) const
 {
     verifyChannelVector(channel, 0);
@@ -345,7 +343,7 @@ void PVPArray::getPVPdata(const Pvp& p, size_t channel,
     getPVPdata(p, channel, &data[0]);
 }
 
-void PVPArray::getPVPdata(const Pvp& p, size_t channel,
+void PVPBlock::getPVPdata(const Pvp& p, size_t channel,
                      void* data) const
 {
     verifyChannelVector(channel, 0);
@@ -360,7 +358,7 @@ void PVPArray::getPVPdata(const Pvp& p, size_t channel,
     }
 }
 
-sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
+sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
                      sys::Off_T startPVP,
                      sys::Off_T sizePVP,
                      size_t numThreads,
@@ -369,7 +367,7 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
     // Allocate the buffers
     size_t numBytesIn(0);
 
-    // Compute the PVPArray size per channel (channels aren't necessarily the same size)
+    // Compute the PVPBlock size per channel (channels aren't necessarily the same size)
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
         numBytesIn += getPVPsize(ii);
@@ -378,14 +376,14 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
     if (numBytesIn != static_cast<size_t>(sizePVP))
     {
         std::ostringstream oss;
-        oss << "PVPArray::load: calculated PVP size(" << numBytesIn
+        oss << "PVPBlock::load: calculated PVP size(" << numBytesIn
             << ") != header PVP_DATA_SIZE(" << sizePVP << ")";
         throw except::Exception(Ctxt(oss.str()));
     }
 
     const bool swapToLittleEndian = !(sys::isBigEndianSystem());
 
-    // Seek to start of PVPArray
+    // Seek to start of PVPBlock
     size_t totalBytesRead(0);
     inStream.seek(startPVP, io::Seekable::START);
     std::vector<sys::ubyte> readBuf;
@@ -428,127 +426,109 @@ sys::Off_T PVPArray::load(io::SeekableInputStream& inStream,
     return totalBytesRead;
 }
 
-bool PVPArray::isFormatStr(std::string format)
-{
-    const char* ptr = format.c_str();
-    if(format.size() <= 3)
-    {
-        if (*ptr == 'S')
-        {
-            ++ptr;
-            if(std::isdigit(*ptr) && std::isdigit(*(ptr+1)))
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-
-double PVPArray::getTxTime(size_t channel, size_t set)
+double PVPBlock::getTxTime(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txTime;
 }
 
-Vector3 PVPArray::getTxPos(size_t channel, size_t set)
+Vector3 PVPBlock::getTxPos(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txPos;
 }
 
-Vector3 PVPArray::getTxVel(size_t channel, size_t set)
+Vector3 PVPBlock::getTxVel(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txVel;
 }
 
-double PVPArray::getRcvTime(size_t channel, size_t set)
+double PVPBlock::getRcvTime(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvTime;
 }
 
-Vector3 PVPArray::getRcvPos(size_t channel, size_t set)
+Vector3 PVPBlock::getRcvPos(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvPos;
 }
 
-Vector3 PVPArray::getRcvVel(size_t channel, size_t set)
+Vector3 PVPBlock::getRcvVel(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvVel;
 }
 
-Vector3 PVPArray::getSRPPos(size_t channel, size_t set)
+Vector3 PVPBlock::getSRPPos(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].srpPos;
 }
 
-double PVPArray::getaFDOP(size_t channel, size_t set)
+double PVPBlock::getaFDOP(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFDOP;
 }
 
-double PVPArray::getaFRR1(size_t channel, size_t set)
+double PVPBlock::getaFRR1(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFRR1;
 }
 
-double PVPArray::getaFRR2(size_t channel, size_t set)
+double PVPBlock::getaFRR2(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFRR2;
 }
 
-double PVPArray::getFx1(size_t channel, size_t set)
+double PVPBlock::getFx1(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].fx1;
 }
 
-double PVPArray::getFx2(size_t channel, size_t set)
+double PVPBlock::getFx2(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].fx2;
 }
 
-double PVPArray::getTOA1(size_t channel, size_t set)
+double PVPBlock::getTOA1(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].toa1;
 }
 
-double PVPArray::getTOA2(size_t channel, size_t set)
+double PVPBlock::getTOA2(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].toa2;
 }
 
-double PVPArray::getTdTropoSRP(size_t channel, size_t set)
+double PVPBlock::getTdTropoSRP(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].tdTropoSRP;
 }
 
-double PVPArray::getSC0(size_t channel, size_t set)
+double PVPBlock::getSC0(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].sc0;
 }
 
-double PVPArray::getSCSS(size_t channel, size_t set)
+double PVPBlock::getSCSS(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].scss;
 }
 
-double PVPArray::getAmpSF(size_t channel, size_t set)
+double PVPBlock::getAmpSF(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].ampSF.get())
@@ -559,7 +539,7 @@ double PVPArray::getAmpSF(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPArray::getFxN1(size_t channel, size_t set)
+double PVPBlock::getFxN1(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].fxN1.get())
@@ -570,7 +550,7 @@ double PVPArray::getFxN1(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPArray::getFxN2(size_t channel, size_t set)
+double PVPBlock::getFxN2(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].fxN2.get())
@@ -581,7 +561,7 @@ double PVPArray::getFxN2(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPArray::getTOAE1(size_t channel, size_t set)
+double PVPBlock::getTOAE1(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].toaE1.get())
@@ -592,7 +572,7 @@ double PVPArray::getTOAE1(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPArray::getTOAE2(size_t channel, size_t set)
+double PVPBlock::getTOAE2(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].toaE2.get())
@@ -603,7 +583,7 @@ double PVPArray::getTOAE2(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPArray::getTdIonoSRP(size_t channel, size_t set)
+double PVPBlock::getTdIonoSRP(size_t channel, size_t set)
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].tdIonoSRP.get())
@@ -614,109 +594,109 @@ double PVPArray::getTdIonoSRP(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-void PVPArray::setTxTime(double value, size_t channel, size_t vector)
+void PVPBlock::setTxTime(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].txTime = value;
 }
 
-void PVPArray::setTxPos(const cphd::Vector3& value, size_t channel, size_t vector)
+void PVPBlock::setTxPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].txPos = value;
 }
 
-void PVPArray::setTxVel(const cphd::Vector3& value, size_t channel, size_t vector)
+void PVPBlock::setTxVel(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].txVel = value;
 }
 
-void PVPArray::setRcvTime(double value, size_t channel, size_t vector)
+void PVPBlock::setRcvTime(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].rcvTime = value;
 }
 
-void PVPArray::setRcvPos(const cphd::Vector3& value, size_t channel, size_t vector)
+void PVPBlock::setRcvPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].rcvPos = value;
 }
 
-void PVPArray::setRcvVel(const cphd::Vector3& value, size_t channel, size_t vector)
+void PVPBlock::setRcvVel(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].rcvVel = value;
 }
 
-void PVPArray::setSRPPos(const cphd::Vector3& value, size_t channel, size_t vector)
+void PVPBlock::setSRPPos(const cphd::Vector3& value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].srpPos = value;
 }
 
-void PVPArray::setaFDOP(double value, size_t channel, size_t vector)
+void PVPBlock::setaFDOP(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].aFDOP = value;
 }
 
-void PVPArray::setaFRR1(double value, size_t channel, size_t vector)
+void PVPBlock::setaFRR1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].aFRR1 = value;
 }
 
-void PVPArray::setaFRR2(double value, size_t channel, size_t vector)
+void PVPBlock::setaFRR2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].aFRR2 = value;
 }
 
-void PVPArray::setFx1(double value, size_t channel, size_t vector)
+void PVPBlock::setFx1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].fx1 = value;
 }
 
-void PVPArray::setFx2(double value, size_t channel, size_t vector)
+void PVPBlock::setFx2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].fx2 = value;
 }
 
-void PVPArray::setTOA1(double value, size_t channel, size_t vector)
+void PVPBlock::setTOA1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].toa1 = value;
 }
 
-void PVPArray::setTOA2(double value, size_t channel, size_t vector)
+void PVPBlock::setTOA2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].toa2 = value;
 }
 
-void PVPArray::setTdTropoSRP(double value, size_t channel, size_t vector)
+void PVPBlock::setTdTropoSRP(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].tdTropoSRP = value;
 }
 
-void PVPArray::setSC0(double value, size_t channel, size_t vector)
+void PVPBlock::setSC0(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].sc0 = value;
 }
 
-void PVPArray::setSCSS(double value, size_t channel, size_t vector)
+void PVPBlock::setSCSS(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     mData[channel][vector].scss = value;
 }
 
-void PVPArray::setAmpSF(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setAmpSF(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.ampSF.get())
@@ -728,7 +708,7 @@ void PVPArray::setAmpSF(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPArray::setFxN1(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setFxN1(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.fxN1.get())
@@ -741,7 +721,7 @@ void PVPArray::setFxN1(Pvp& p, double value, size_t channel, size_t vector)
 
 }
 
-void PVPArray::setFxN2(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setFxN2(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.fxN2.get())
@@ -753,7 +733,7 @@ void PVPArray::setFxN2(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPArray::setTOAE1(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTOAE1(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.toaE1.get())
@@ -765,7 +745,7 @@ void PVPArray::setTOAE1(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPArray::setTOAE2(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTOAE2(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.toaE2.get())
@@ -777,7 +757,7 @@ void PVPArray::setTOAE2(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPArray::setTdIonoSRP(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTdIonoSRP(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.tdIonoSRP.get())
@@ -789,7 +769,7 @@ void PVPArray::setTdIonoSRP(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPArray::setSignal(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setSignal(Pvp& p, double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (p.signal.get())
@@ -801,7 +781,7 @@ void PVPArray::setSignal(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p)
+std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
 {
     os << "  TxTime         : " << p.txTime << "\n"
         << "  TxPos         : " << p.txPos << "\n"
@@ -858,9 +838,9 @@ std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p)
 }
 
 
-std::ostream& operator<< (std::ostream& os, const PVPArray& p)
+std::ostream& operator<< (std::ostream& os, const PVPBlock& p)
 {
-    os << "PVPArray:: \n";
+    os << "PVPBlock:: \n";
 
     if (p.mData.empty())
     {

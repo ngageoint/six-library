@@ -27,8 +27,9 @@
 #include <sys/Conf.h>
 #include <cphd/Metadata.h>
 #include <cphd/FileHeader.h>
-#include <cphd/PVPArray.h>
+#include <cphd/PVPBlock.h>
 #include <cphd/Wideband.h>
+#include <cphd/SupportBlock.h>
 
 namespace cphd
 {
@@ -125,9 +126,9 @@ public:
         return *mMetadata;
     }
 
-    const PVPArray& getPVPArray() const
+    const PVPBlock& getPVPBlock() const
     {
-        return *mPVPArray;
+        return *mPVPBlock;
     }
 
     Wideband& getWideband()
@@ -135,18 +136,23 @@ public:
         return *mWideband;
     }
 
+    SupportBlock& getSupportBlock()
+    {
+        return *mSupportBlock;
+    }
+
 private:
     // Keep info about the CPHD collection
     FileHeader mFileHeader;
     std::auto_ptr<Metadata> mMetadata;
-    std::auto_ptr<PVPArray> mPVPArray;
+    std::auto_ptr<SupportBlock> mSupportBlock;
+    std::auto_ptr<PVPBlock> mPVPBlock;
     std::auto_ptr<Wideband> mWideband;
 
     void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                     size_t numThreads,
                     mem::SharedPtr<logging::Logger> logger,
                     std::vector<std::string> schemaPaths);
-
 };
 }
 

@@ -605,12 +605,16 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(data.channels[0].pvpArrayByteOffset, 1);
     TEST_ASSERT_EQ(data.channels[0].compressedSignalSize, 3);
     TEST_ASSERT_EQ(data.signalCompressionID, "Compress");
-    TEST_ASSERT_EQ(data.supportArrays.size(), 1);
-    TEST_ASSERT_EQ(data.supportArrays[0].identifier, "ID");
-    TEST_ASSERT_EQ(data.supportArrays[0].numRows, 25);
-    TEST_ASSERT_EQ(data.supportArrays[0].numCols, 70);
-    TEST_ASSERT_EQ(data.supportArrays[0].bytesPerElement, 4);
-    TEST_ASSERT_EQ(data.supportArrays[0].arrayByteOffset, 3);
+    TEST_ASSERT_EQ(data.supportArrayMap.size(), 1);
+    const std::string identifier = "ID";
+    TEST_ASSERT_EQ(data.sa_IDMap.count(identifier), 1);
+    const size_t offset = data.sa_IDMap.find(identifier)->second;
+    TEST_ASSERT_EQ(data.supportArrayMap.count(offset), 1);
+    // const cphd::Data::SupportArray& support = data.supportArrays[identifier];
+    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numRows, 25);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numCols, 70);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.bytesPerElement, 4);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.arrayByteOffset, 3);
 
     // Channel
     const cphd::Channel& channel = metadata->channel;

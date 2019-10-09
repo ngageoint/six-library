@@ -18,7 +18,9 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */#ifndef __CPHD_PVP_H__
+ */
+
+#ifndef __CPHD_PVP_H__
 #define __CPHD_PVP_H__
 
 #include <ostream>
@@ -31,6 +33,13 @@
 
 namespace cphd
 {
+
+/*!
+ * Specifies a defined Per Vector Parameter. 
+ * Size and Offset specify the size and placement of
+ * the binary parameter in the set of Per Vector 
+ * parameters provided for each vector.
+ */
 struct PVPType
 {
     static const size_t WORD_BYTE_SIZE;
@@ -83,6 +92,10 @@ protected:
     std::string mFormat;
 };
 
+/*!
+ * Same as above but also stores unique name
+ * for additional parameters
+ */
 struct APVPType : PVPType
 {
     APVPType();
@@ -115,8 +128,10 @@ private:
     std::string mName;
 };
 
-/*
- * The PVP XML metadata
+/*!
+ * Structure used to specify the Per Vector
+ * parameters provided for each channel of a given
+ * product.
  */
 struct Pvp
 {
@@ -268,25 +283,25 @@ struct Pvp
      */
     PVPType tdTropoSRP;
 
-    /*
+    /*!
      * (Optional) Two-way time delay due to the ionosphere (sec) that was added
      * when computing the propagation time for the SRP 
      */
     mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
 
-    /*
+    /*!
      * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
      * sample s = 0 (Hz).
      */
     PVPType sc0;
 
-    /*
+    /*!
      * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
      * signal coordinate sample spacing (Hz).
      */
     PVPType scss;
 
-    /*
+    /*!
      * (Optional) Integer parameter that may be included to indicate the signal
      * content for some vectors is known or is likely to be distorted.
      */
@@ -303,7 +318,7 @@ struct Pvp
     //! Constructor initializes addedPVP size
     Pvp(size_t numAdditionalParams);
 
-
+    //! Equality operators
     bool operator==(const Pvp& other) const
     {
         return txTime == other.txTime && txPos == other.txPos &&
@@ -320,18 +335,21 @@ struct Pvp
                 toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
                 signal == other.signal && addedPVP == other.addedPVP;
     }
-
     bool operator!=(const Pvp& other) const
     {
         return !((*this) == other);
     }
 
+    //! Get size of pvp set
     size_t getReqSetSize() const;
 
+    //! Set a PVP param
     void setData(PVPType& param, size_t size, size_t offset, std::string format);
 
+    //! Set an additional PVP param
     void setData(size_t size, size_t offset, std::string format, std::string name, size_t idx);
 
+    //! Set the number of added params
     void setNumAddedParameters(size_t size);
 
 private:
@@ -341,21 +359,13 @@ private:
     void validate(size_t size, size_t offset);
 
     /*
-     * Validate format string
-     */
-    void validateFormat(std::string& format);
-
-    bool isMultipleParam(std::string& format);
-
-    //! Helper validation function format validation
-    bool isFormatStr(std::string format);
-
-    /*
      * Marks filled bytes
      */
     std::vector<six::BooleanType> mParamLocations;
 
 };
+
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const PVPType& p);
 std::ostream& operator<< (std::ostream& os, const APVPType& a);
 std::ostream& operator<< (std::ostream& os, const Pvp& p);

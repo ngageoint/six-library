@@ -457,8 +457,8 @@ void Wideband::read(size_t channel,
 {
     // Sanity checks
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                    dims);
+    checkReadInputs(channel, firstVector, lastVector,
+                    firstSample, lastSample, dims);
 
     const size_t numPixels(dims.row * dims.col);
     const size_t minSize = numPixels * mElementSize;

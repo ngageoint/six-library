@@ -18,8 +18,10 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */#ifndef __CPHD_PVP_ARRAY_H__
-#define __CPHD_PVP_ARRAY_H__
+ */
+
+#ifndef __CPHD_PVP_BLOCK_H__
+#define __CPHD_PVP_BLOCK_H__
 
 #include <ostream>
 #include <vector>
@@ -27,7 +29,6 @@
 #include <stddef.h>
 #include <typeinfo>
 #include <map>
-
 #include <sys/Conf.h>
 #include <cphd/Types.h>
 #include <cphd/Data.h>
@@ -42,7 +43,7 @@ namespace cphd
 /*
  * PVP Block (Actual data)
  */
-struct PVPArray
+struct PVPBlock
 {
 
     /*
@@ -148,11 +149,11 @@ struct PVPArray
 
     private:
         size_t mAddedPVPByteSize;
-        friend std::ostream& operator<< (std::ostream& os, const PVPArray::PVPSet& p);
+        friend std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p);
 
     };
 
-    PVPArray() :
+    PVPBlock() :
         mNumBytesPerVector(0)
     {
     }
@@ -166,15 +167,12 @@ struct PVPArray
      *         This will also be used to store off the number of bytes
      *         per vector regardless of the optional values.
     */
-    PVPArray(Data& d, Pvp& p);
+    PVPBlock(Data& d, Pvp& p);
 
-    PVPArray(size_t numBytesPerVector,
+    PVPBlock(size_t numBytesPerVector,
                     size_t numChannels,
                     std::vector<size_t> numVectors,
                     size_t numAddedParams=0.0);
-
-    // Helper string parsing function for validation
-    bool isFormatStr(std::string format);
 
     void verifyChannelVector(size_t channel, size_t vector) const;
 
@@ -292,7 +290,7 @@ struct PVPArray
 
     /*
      *  \func getNumBytesVBP
-     *  \brief Returns the number of bytes of each vector in the PVPArray.
+     *  \brief Returns the number of bytes of each vector in the PVPBlock.
      *         This does not necessarily match the number of bytes used in
      *         the case where a CPHD file had a larger number allocated than
      *         actually used.
@@ -319,21 +317,21 @@ struct PVPArray
                     size_t numThreads,
                     const Pvp& p);
 
-    bool operator==(const PVPArray& other)
+    bool operator==(const PVPBlock& other)
     {
         return mData == other.mData &&
                 mNumBytesPerVector == other.mNumBytesPerVector;
     }
 
-    bool operator!=(const PVPArray& other)
+    bool operator!=(const PVPBlock& other)
     {
         return !((*this) == other);
     }
 
 private:
-    std::vector<std::vector<PVPSet> > mData; // The PVP Array [Num Channles][Num Parameters]
+    std::vector<std::vector<PVPSet> > mData; // The PVP Block [Num Channles][Num Parameters]
     size_t mNumBytesPerVector;
-    friend std::ostream& operator<< (std::ostream& os, const PVPArray& p);
+    friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };
 }
 #endif

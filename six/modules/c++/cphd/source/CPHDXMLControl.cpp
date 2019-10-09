@@ -412,15 +412,16 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
             createInt("CompressedSignalSize", data.channels[ii].compressedSignalSize, channelXML);
         }
     }
-    createInt("NumSupportArrays", data.supportArrays.size(), dataXML);
-    for (size_t ii = 0; ii < data.supportArrays.size(); ++ii)
+    createInt("NumSupportArrays", data.supportArrayMap.size(), dataXML);
+    std::map<sys::Off_T,Data::SupportArray>::const_iterator it;
+    for (it = data.supportArrayMap.begin(); it != data.supportArrayMap.end(); ++it)
     {
         XMLElem supportArrayXML = newElement("SupportArray", dataXML);
-        createString("Identifier", data.supportArrays[ii].identifier, supportArrayXML);
-        createInt("NumRows", data.supportArrays[ii].numRows, supportArrayXML);
-        createInt("NumCols", data.supportArrays[ii].numCols, supportArrayXML);
-        createInt("BytesPerElement", data.supportArrays[ii].bytesPerElement, supportArrayXML);
-        createInt("ArrayByteOffset", data.supportArrays[ii].arrayByteOffset, supportArrayXML);
+        createString("Identifier", it->second.identifier, supportArrayXML);
+        createInt("NumRows", it->second.numRows, supportArrayXML);
+        createInt("NumCols", it->second.numCols, supportArrayXML);
+        createInt("BytesPerElement", it->second.bytesPerElement, supportArrayXML);
+        createInt("ArrayByteOffset", it->second.arrayByteOffset, supportArrayXML);
     }
     return dataXML;
 }
@@ -623,19 +624,20 @@ XMLElem CPHDXMLControl::toXML(const SupportArray& supports, XMLElem parent)
     }
     if (!supports.addedSupportArray.empty())
     {
-        for (size_t ii = 0; ii < supports.addedSupportArray.size(); ++ii)
+        std::map<std::string, AdditionalSupportArray>::const_iterator it;
+        for (it = supports.addedSupportArray.begin(); it != supports.addedSupportArray.end(); ++it)
         {
             XMLElem addedSupportArrayXML = newElement("AddedSupportArray", supportsXML);
-            createString("Identifier", supports.addedSupportArray[ii].identifier, addedSupportArrayXML);
-            createString("ElementFormat", supports.addedSupportArray[ii].elementFormat, addedSupportArrayXML);
-            createDouble("X0", supports.addedSupportArray[ii].x0, addedSupportArrayXML);
-            createDouble("Y0", supports.addedSupportArray[ii].y0, addedSupportArrayXML);
-            createDouble("XSS", supports.addedSupportArray[ii].xSS, addedSupportArrayXML);
-            createDouble("YSS", supports.addedSupportArray[ii].ySS, addedSupportArrayXML);
-            createString("XUnits", supports.addedSupportArray[ii].xUnits, addedSupportArrayXML);
-            createString("YUnits", supports.addedSupportArray[ii].yUnits, addedSupportArrayXML);
-            createString("ZUnits", supports.addedSupportArray[ii].zUnits, addedSupportArrayXML);
-            mCommon.addParameters("Parameter", getDefaultURI(), supports.addedSupportArray[ii].parameter, addedSupportArrayXML);
+            createString("Identifier", it->first, addedSupportArrayXML);
+            createString("ElementFormat", it->second.elementFormat, addedSupportArrayXML);
+            createDouble("X0", it->second.x0, addedSupportArrayXML);
+            createDouble("Y0", it->second.y0, addedSupportArrayXML);
+            createDouble("XSS", it->second.xSS, addedSupportArrayXML);
+            createDouble("YSS", it->second.ySS, addedSupportArrayXML);
+            createString("XUnits", it->second.xUnits, addedSupportArrayXML);
+            createString("YUnits", it->second.yUnits, addedSupportArrayXML);
+            createString("ZUnits", it->second.zUnits, addedSupportArrayXML);
+            mCommon.addParameters("Parameter", getDefaultURI(), it->second.parameter, addedSupportArrayXML);
         }
     }
     return supportsXML;
@@ -1314,7 +1316,7 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
 
     // IonoParameters
     const XMLElem ionoXML = getOptional(globalXML, "IonoParameters");
-    if (tropoXML)
+    if (ionoXML)
     {
         // Optional
         global.ionoParameters.reset(new IonoParameters());
@@ -1505,19 +1507,19 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
     // Support Arrays
     std::vector<XMLElem> supportsXML;
     dataXML->getElementsByTagName("SupportArray", supportsXML);
-    data.supportArrays.resize(supportsXML.size());
     for (size_t ii = 0; ii < supportsXML.size(); ++ii)
     {
-        parseString(getFirstAndOnly(supportsXML[ii], "Identifier"),
-                                    data.supportArrays[ii].identifier);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "NumRows"),
-                                  data.supportArrays[ii].numRows);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "NumCols"),
-                                  data.supportArrays[ii].numCols);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "BytesPerElement"),
-                                  data.supportArrays[ii].bytesPerElement);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "ArrayByteOffset"),
-                                  data.supportArrays[ii].arrayByteOffset);
+        std::string id;
+        size_t offset;
+        size_t numRows;
+        size_t numCols;
+        size_t numBytes;
+        parseString(getFirstAndOnly(supportsXML[ii], "Identifier"), id);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "ArrayByteOffset"),offset);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "NumRows"),numRows);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "NumCols"),numCols);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "BytesPerElement"),numBytes);
+        data.setSupportArray(id, numRows, numCols, numBytes, offset);
     }
 }
 
@@ -1723,15 +1725,23 @@ void CPHDXMLControl::fromXML(const XMLElem supportArrayXML, SupportArray& suppor
 
     std::vector<XMLElem> addedSupportArrayXMLVec;
     supportArrayXML->getElementsByTagName("AddedSupportArray", addedSupportArrayXMLVec);
-    supportArray.addedSupportArray.resize(addedSupportArrayXMLVec.size());
     for (size_t ii = 0; ii < addedSupportArrayXMLVec.size(); ++ii)
     {
-        parseSupportArrayParameter(addedSupportArrayXMLVec[ii], supportArray.addedSupportArray[ii], true);
-        parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "Identifier"), supportArray.addedSupportArray[ii].identifier);
-        parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "XUnits"), supportArray.addedSupportArray[ii].xUnits);
-        parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "YUnits"), supportArray.addedSupportArray[ii].yUnits);
-        parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "ZUnits"), supportArray.addedSupportArray[ii].zUnits);
-        mCommon.parseParameters(addedSupportArrayXMLVec[ii], "Parameter", supportArray.addedSupportArray[ii].parameter);
+        std::string id;
+        parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "Identifier"), id);
+        if (supportArray.addedSupportArray.count(id) == 0)
+        {
+            parseSupportArrayParameter(addedSupportArrayXMLVec[ii], supportArray.addedSupportArray[id], true);
+            parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "XUnits"), supportArray.addedSupportArray[id].xUnits);
+            parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "YUnits"), supportArray.addedSupportArray[id].yUnits);
+            parseString(getFirstAndOnly(addedSupportArrayXMLVec[ii], "ZUnits"), supportArray.addedSupportArray[id].zUnits);
+            mCommon.parseParameters(addedSupportArrayXMLVec[ii], "Parameter", supportArray.addedSupportArray[id].parameter);
+        }
+        else
+        {
+            throw except::Exception(Ctxt(
+                    "Support array identifier for support array is not unique: " + id));
+        }
     }
 }
 

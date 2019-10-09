@@ -92,13 +92,17 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
         mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument());
     }
 
-    // Load the PVPArray into memory
-    mPVPArray.reset(new PVPArray(mMetadata->data, mMetadata->pvp));
-    mPVPArray->load(*inStream,
-               mFileHeader.getPvpBlockByteOffset(),
-               mFileHeader.getPvpBlockSize(),
-               numThreads,
-               mMetadata->pvp);
+    mSupportBlock.reset(new SupportBlock(inStream, mMetadata->data,
+                        mFileHeader.getSupportBlockByteOffset(),
+                        mFileHeader.getSupportBlockSize()));
+
+    // Load the PVPBlock into memory
+    mPVPBlock.reset(new PVPBlock(mMetadata->data, mMetadata->pvp));
+    mPVPBlock->load(*inStream,
+                    mFileHeader.getPvpBlockByteOffset(),
+                    mFileHeader.getPvpBlockSize(),
+                    numThreads,
+                    mMetadata->pvp);
 
     // Setup for wideband reading
     mWideband.reset(new Wideband(inStream, mMetadata->data,

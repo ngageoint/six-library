@@ -25,22 +25,28 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
-#include <cphd/Wideband.h>
-#include <cphd/Metadata.h>
-#include <cphd/PVP.h>
-#include <cphd/PVPArray.h>
-#include <cphd/CPHDWriter.h>
-#include <cphd/CPHDReader.h>
-#include <cphd/ReferenceGeometry.h>
+#include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
+#include <cphd/CPHDWriter.h>
+#include <cphd/CPHDReader.h>
+#include <cphd/Wideband.h>
+#include <cphd/Metadata.h>
+#include <cphd/PVP.h>
+#include <cphd/PVPBlock.h>
+#include <cphd/ReferenceGeometry.h>
 #include <TestCase.h>
+
+/*!
+ * Tests write and read of Signal Block
+ * Fails if values don't match
+ */
 
 namespace
 {
+std::vector<std::string> schemas(1);
 
 double getRandom()
 {
@@ -74,6 +80,7 @@ std::vector<std::complex<T> > generateData(size_t length)
 std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
+
     if (scale)
     {
         for (size_t ii = 0; ii < scaleFactors.size(); ++ii)
@@ -81,6 +88,7 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
             scaleFactors[ii] *= 2;
         }
     }
+
     return scaleFactors;
 }
 
@@ -107,64 +115,91 @@ void setPVPXML(cphd::Pvp& pvp)
 
 void setVectorParameters(size_t channel,
                           size_t vector,
-                          cphd::PVPArray& pvpArray)
+                          cphd::PVPBlock& pvpBlock)
 {
     const double txTime = getRandom();
-    pvpArray.setTxTime(txTime, channel, vector);
+    pvpBlock.setTxTime(txTime, channel, vector);
 
     const cphd::Vector3 txPos = getRandomVector3();
-    pvpArray.setTxPos(txPos, channel, vector);
+    pvpBlock.setTxPos(txPos, channel, vector);
 
     const cphd::Vector3 txVel = getRandomVector3();
-    pvpArray.setTxVel(txVel, channel, vector);
+    pvpBlock.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
-    pvpArray.setRcvTime(rcvTime, channel, vector);
+    pvpBlock.setRcvTime(rcvTime, channel, vector);
 
     const cphd::Vector3 rcvPos = getRandomVector3();
-    pvpArray.setRcvPos(rcvPos, channel, vector);
+    pvpBlock.setRcvPos(rcvPos, channel, vector);
 
     const cphd::Vector3 rcvVel = getRandomVector3();
-    pvpArray.setRcvVel(rcvVel, channel, vector);
+    pvpBlock.setRcvVel(rcvVel, channel, vector);
 
     const cphd::Vector3 srpPos = getRandomVector3();
-    pvpArray.setSRPPos(srpPos, channel, vector);
+    pvpBlock.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
-    pvpArray.setaFDOP(aFDOP, channel, vector);
+    pvpBlock.setaFDOP(aFDOP, channel, vector);
 
     const double aFRR1 = getRandom();
-    pvpArray.setaFRR1(aFRR1, channel, vector);
+    pvpBlock.setaFRR1(aFRR1, channel, vector);
 
     const double aFRR2 = getRandom();
-    pvpArray.setaFRR2(aFRR2, channel, vector);
+    pvpBlock.setaFRR2(aFRR2, channel, vector);
 
     const double fx1 = getRandom();
-    pvpArray.setFx1(fx1, channel, vector);
+    pvpBlock.setFx1(fx1, channel, vector);
 
     const double fx2 = getRandom();
-    pvpArray.setFx2(fx2, channel, vector);
+    pvpBlock.setFx2(fx2, channel, vector);
 
     const double toa1 = getRandom();
-    pvpArray.setTOA1(toa1, channel, vector);
+    pvpBlock.setTOA1(toa1, channel, vector);
 
     const double toa2 = getRandom();
-    pvpArray.setTOA2(toa2, channel, vector);
+    pvpBlock.setTOA2(toa2, channel, vector);
 
     const double tdTropoSRP = getRandom();
-    pvpArray.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
 
     const double sc0 = getRandom();
-    pvpArray.setSC0(sc0, channel, vector);
+    pvpBlock.setSC0(sc0, channel, vector);
 
     const double scss = getRandom();
-    pvpArray.setSCSS(scss, channel, vector);
+    pvpBlock.setSCSS(scss, channel, vector);
+}
+
+void setUpMetadata(cphd::Metadata& metadata)
+{
+    //! We must have a collectType set
+    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    //! We must have a radar mode set
+    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
+    metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
+    metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
+    metadata.sceneCoordinates.referenceSurface.planar->uIax = getRandomVector3();
+    metadata.sceneCoordinates.referenceSurface.planar->uIay = getRandomVector3();
+    //! We must have corners set
+    for (size_t ii = 0; ii < six::Corners<double>::NUM_CORNERS; ++ii)
+    {
+        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLat(0.0);
+        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLon(0.0);
+    }
+    metadata.channel.fxFixedCphd = true;
+    metadata.channel.toaFixedCphd = false;
+    metadata.channel.srpFixedCphd = false;
+    metadata.referenceGeometry.srp.ecf = getRandomVector3();
+    metadata.referenceGeometry.srp.iac = getRandomVector3();
+    metadata.referenceGeometry.monostatic.reset(new cphd::Monostatic());
+    metadata.referenceGeometry.monostatic->arpPos = getRandomVector3();
+    metadata.referenceGeometry.monostatic->arpVel = getRandomVector3();
 }
 
 template<typename T>
-void setUpMetaData(const types::RowCol<size_t> dims,
-                   const std::vector<std::complex<T> >& writeData,
-                   cphd::Metadata& metadata)
+void setUpData(const types::RowCol<size_t> dims,
+               const std::vector<std::complex<T> >& writeData,
+               cphd::Metadata& metadata)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -189,39 +224,15 @@ void setUpMetaData(const types::RowCol<size_t> dims,
         metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CF8;
     }
 
-    //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
-    //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
-    metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
-    metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
-    metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
-    metadata.sceneCoordinates.referenceSurface.planar->uIax = getRandomVector3();
-    metadata.sceneCoordinates.referenceSurface.planar->uIay = getRandomVector3();
-    //! We must have corners set
-    for (size_t ii = 0; ii < six::Corners<double>::NUM_CORNERS; ++ii)
-    {
-        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLat(0.0);
-        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLon(0.0);
-    }
-    metadata.channel.fxFixedCphd = true;
-    metadata.channel.toaFixedCphd = false;
-    metadata.channel.srpFixedCphd = false;
-    metadata.referenceGeometry.srp.ecf = getRandomVector3();
-    metadata.referenceGeometry.srp.iac = getRandomVector3();
-
-    metadata.referenceGeometry.monostatic.reset(new cphd::Monostatic());
-    metadata.referenceGeometry.monostatic->arpPos = getRandomVector3();
-    metadata.referenceGeometry.monostatic->arpVel = getRandomVector3();
+    setUpMetadata(metadata);
 }
 
 template<typename T>
 void writeCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
         const std::vector<std::complex<T> >& writeData,
-        io::FileOutputStream& mStream,
         cphd::Metadata& metadata,
-        cphd::PVPArray& pvpArray)
+        cphd::PVPBlock& pvpBlock)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -230,33 +241,64 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     {
         for (size_t jj = 0; jj < numVectors[ii]; ++jj)
         {
-            setVectorParameters(ii, jj, pvpArray);
+            setVectorParameters(ii, jj, pvpBlock);
         }
     }
 
     cphd::CPHDWriter writer(metadata, numThreads);
-    writer.writeMetadata(outPathname, pvpArray, "Unclassified", "Release");
+
+    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+
+    writer.writePVPData(pvpBlock);
+
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         writer.writeCPHDData(&writeData[0],dims.area()*2);
     }
 }
 
-bool checkData(size_t numThreads,
-               mem::SharedPtr<io::SeekableInputStream> inStream,
-               cphd::Metadata& metadata,
-               cphd::PVPArray& pvpArray)
+std::vector<std::complex<float> > checkData(const std::string& pathname,
+        size_t numThreads,
+        const std::vector<double>& scaleFactors,
+        const types::RowCol<size_t>& dims,
+        mem::SharedPtr<io::SeekableInputStream> inStream)
 {
     cphd::CPHDReader reader(inStream, numThreads);
     cphd::Wideband& wideband = reader.getWideband();
+    std::vector<std::complex<float> > readData(dims.area());
 
-    if (metadata.pvp != reader.getMetadata().pvp)
+    size_t sizeInBytes = readData.size() * sizeof(readData[0]);
+    mem::ScopedArray<sys::ubyte> scratchData(new sys::ubyte[sizeInBytes]);
+    mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
+    mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
+
+    wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
+                  scaleFactors, numThreads, scratch, data);
+
+    return readData;
+}
+
+
+template<typename T>
+bool compareVectors(const std::vector<std::complex<float> >& readData,
+                    const std::vector<std::complex<T> >& writeData,
+                    const std::vector<double>& scaleFactors,
+                    bool scale)
+{
+    size_t pointsPerScale = readData.size() / scaleFactors.size();
+    for (size_t ii = 0; ii < readData.size(); ++ii)
     {
-        return false;
-    }
-    if (pvpArray != reader.getPVPArray())
-    {
-        return false;
+        std::complex<float> val(writeData[ii].real(), writeData[ii].imag());
+        if (scale)
+        {
+            val *= scaleFactors[ii / pointsPerScale];
+        }
+
+        if (val != readData[ii])
+        {
+            std::cerr << "Value mismatch at index " << ii << std::endl;
+            return false;
+        }
     }
     return true;
 }
@@ -269,26 +311,71 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
     const types::RowCol<size_t> dims(128, 256);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
-    io::FileOutputStream outStream;
     mem::SharedPtr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
-
-    setUpMetaData(dims, writeData, meta);
+    setUpData(dims, writeData, meta);
     setPVPXML(meta.pvp);
-
-    cphd::PVPArray pvpArray(meta.data,
+    cphd::PVPBlock PVPBlock(meta.data,
                             meta.pvp);
 
-    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, outStream, meta, pvpArray);
-    return checkData(numThreads, inStream, meta, pvpArray);
+    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, PVPBlock);
+    const std::vector<std::complex<float> > readData =
+            checkData(tempfile.pathname(), numThreads,
+                      scaleFactors, dims, inStream);
+    return compareVectors(readData, writeData, scaleFactors, scale);
 }
 
-TEST_CASE(testPVPBlock)
+TEST_CASE(testUnscaledInt8)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<sys::Int8_T> > writeData =
+            generateData<sys::Int8_T>(dims.area());
+    const bool scale = false;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testScaledInt8)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<sys::Int8_T> > writeData =
+            generateData<sys::Int8_T>(dims.area());
+    const bool scale = true;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 256);
     const std::vector<std::complex<sys::Int16_T> > writeData =
             generateData<sys::Int16_T>(dims.area());
     const bool scale = false;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testScaledInt16)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateData<sys::Int16_T>(dims.area());
+    const bool scale = true;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testUnscaledFloat)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<float> > writeData =
+            generateData<float>(dims.area());
+    const bool scale = false;
+    TEST_ASSERT(runTest(scale, writeData))
+}
+
+TEST_CASE(testScaledFloat)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<float> > writeData =
+            generateData<float>(dims.area());
+    const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData))
 }
 }
@@ -297,7 +384,12 @@ int main(int argc, char** argv)
 {
     try
     {
-        TEST_CHECK(testPVPBlock);
+        TEST_CHECK(testUnscaledInt8);
+        TEST_CHECK(testScaledInt8);
+        TEST_CHECK(testUnscaledInt16);
+        TEST_CHECK(testScaledInt16);
+        TEST_CHECK(testUnscaledFloat);
+        TEST_CHECK(testScaledFloat);
         return 0;
     }
     catch (const std::exception& ex)

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef __CPHD_CPHD_WRITER_H__
 #define __CPHD_CPHD_WRITER_H__
 
@@ -31,7 +32,7 @@
 #include <sys/Conf.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
-#include <cphd/PVPArray.h>
+#include <cphd/PVPBlock.h>
 
 namespace cphd
 {
@@ -85,7 +86,7 @@ public:
 
     /*
      *  \func writeMetadata
-     *  \brief Writes the header, metadata, and VBM into the file. This should
+     *  \brief Writes the header, and metadata into the file. This should
      *         be used in situations where you need to write out the CPHD
      *         data in chunks. Otherwise you should use addImage and write.
      *         This will internally set the number of bytes per VBP.
@@ -98,9 +99,36 @@ public:
      *         By default, CPHD will not be populated with this value.
      */
     void writeMetadata(const std::string& pathname,
-                       const PVPArray& pvpArray,
+                       const PVPBlock& PVPBlock,
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
+
+    /*
+     *  \func writeSupportData
+     *  \brief (Optional) Writes the specified support Array to the file
+     * 
+     *  \param data A pointer to the start of the support array that
+     *        will be written to file
+     *  \param id The unique identifier of the support array
+     */
+    template <typename T>
+    void writeSupportData(const T* data,
+                      std::string id)
+    {
+        // TODO: treat multiple params as seperate params or one byte string?
+        writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data), 
+                             mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
+                             mMetadata.data.getSupportArrayById(id).bytesPerElement);
+    }
+
+    /*
+     *  \func writePVPData
+     *  \brief Writes the PVP to the file
+     * 
+     *  \param PVPBlock A populated PVPBlock object that will be written
+     *         to the file as a block of data
+     */
+    void writePVPData(const PVPBlock& PVPBlock);
 
     /*
      *  \func writeCPHDData
@@ -123,9 +151,13 @@ public:
                        size_t numElements,
                        size_t channel = 0);
 
+    /*
+     * Same as write CPHDData but for compressed CPHD
+     */
     void writeCompressedCPHDData(const sys::ubyte* data,
                        size_t numElements,
                        size_t channel = 0);
+
     /*
      *  \func write
      *  \brief Writes the CPHD file to disk. This should only be called
@@ -152,10 +184,11 @@ public:
 private:
     void writeMetadata(size_t pvpSize,
                        size_t cphdSize,
+                       size_t supportSize = 0, // Optional
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
-    void writePVPData(const sys::ubyte* pvpArray,
+    void writePVPData(const sys::ubyte* PVPBlock,
                       size_t index);
 
     void writeCPHDDataImpl(const sys::ubyte* data,
@@ -163,6 +196,9 @@ private:
 
     void writeCompressedCPHDDataImpl(const sys::ubyte* data,
                            size_t size, size_t channel);
+
+    void writeSupportDataImpl(const sys::ubyte* data,
+                              size_t numElements, size_t elementSize);
 
     class DataWriter
     {
@@ -219,6 +255,7 @@ private:
 
     std::vector<const sys::ubyte*> mCPHDData;
     std::vector<const sys::ubyte*> mPVPData;
+    std::vector<std::pair<std::string, const sys::ubyte*> > mSupportData;
 
     size_t mCPHDSize;
     size_t mPVPSize;

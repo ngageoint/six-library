@@ -38,19 +38,23 @@ namespace cphd
  */
 struct DwellTime 
 {
+    //! Constructor
     DwellTime();
 
+    //! Equality operators
     bool operator==(const DwellTime& other) const
     {
         return identifier == other.identifier && dwellTimePoly == other.dwellTimePoly;
     }
-
     bool operator!=(const DwellTime& other) const
     {
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this Dwell Time polynomial (Dwell_ID)
     std::string identifier;
+
+    //! Polynomial that yields Dwell Time as a function of IAX and IAY
     Poly2D dwellTimePoly;
 };
 
@@ -59,19 +63,23 @@ struct DwellTime
  */
 struct COD
 {
+    //! Constructor
     COD();
 
+    //! Equality operators
     bool operator==(const COD& other) const
     {
         return identifier == other.identifier && codTimePoly == other.codTimePoly;
     }
-
     bool operator!=(const COD& other) const
     {
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this COD Time polynomial (COD_ID)
     std::string identifier;
+
+    //! Polynomial that yields COD Time as a function of IAX and IAY
     Poly2D codTimePoly;
 };
 
@@ -82,19 +90,23 @@ struct COD
  */
 struct Dwell
 {
+    // Constructor
     Dwell();
 
+    // Equality operator
     bool operator==(const Dwell& other) const
     {
         return cod == other.cod && dtime == other.dtime;
     }
-
     bool operator!=(const Dwell& other) const
     {
         return !((*this) == other);
     }
 
+    //! Center of Dwell (COD) Time Polynomial
     std::vector<COD> cod;
+
+    //! Dwell Time Polynomial
     std::vector<DwellTime> dtime;
 };
 

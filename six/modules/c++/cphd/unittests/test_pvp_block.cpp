@@ -22,7 +22,7 @@
 #include <complex>
 
 #include <cphd/PVP.h>
-#include <cphd/PVPArray.h>
+#include <cphd/PVPBlock.h>
 
 #include "TestCase.h"
 
@@ -72,156 +72,156 @@ void setPVPXML(const std::string& testName,
 void setVectorParameters(const std::string& testName,
                           size_t channel,
                           size_t vector,
-                          cphd::PVPArray& pvpArray,
-                          cphd::PVPArray& pvpArray2)
+                          cphd::PVPBlock& pvpBlock,
+                          cphd::PVPBlock& pvpBlock2)
 {
     const double txTime = getRandom();
-    pvpArray.setTxTime(txTime, channel, vector);
-    pvpArray2.setTxTime(txTime, channel, vector);
+    pvpBlock.setTxTime(txTime, channel, vector);
+    pvpBlock2.setTxTime(txTime, channel, vector);
 
     const cphd::Vector3 txPos = getRandomVector3();
-    pvpArray.setTxPos(txPos, channel, vector);
-    pvpArray2.setTxPos(txPos, channel, vector);
+    pvpBlock.setTxPos(txPos, channel, vector);
+    pvpBlock2.setTxPos(txPos, channel, vector);
 
     const cphd::Vector3 txVel = getRandomVector3();
-    pvpArray.setTxVel(txVel, channel, vector);
-    pvpArray2.setTxVel(txVel, channel, vector);
+    pvpBlock.setTxVel(txVel, channel, vector);
+    pvpBlock2.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
-    pvpArray.setRcvTime(rcvTime, channel, vector);
-    pvpArray2.setRcvTime(rcvTime, channel, vector);
+    pvpBlock.setRcvTime(rcvTime, channel, vector);
+    pvpBlock2.setRcvTime(rcvTime, channel, vector);
 
     const cphd::Vector3 rcvPos = getRandomVector3();
-    pvpArray.setRcvPos(rcvPos, channel, vector);
-    pvpArray2.setRcvPos(rcvPos, channel, vector);
+    pvpBlock.setRcvPos(rcvPos, channel, vector);
+    pvpBlock2.setRcvPos(rcvPos, channel, vector);
 
     const cphd::Vector3 rcvVel = getRandomVector3();
-    pvpArray.setRcvVel(rcvVel, channel, vector);
-    pvpArray2.setRcvVel(rcvVel, channel, vector);
+    pvpBlock.setRcvVel(rcvVel, channel, vector);
+    pvpBlock2.setRcvVel(rcvVel, channel, vector);
 
     const cphd::Vector3 srpPos = getRandomVector3();
-    pvpArray.setSRPPos(srpPos, channel, vector);
-    pvpArray2.setSRPPos(srpPos, channel, vector);
+    pvpBlock.setSRPPos(srpPos, channel, vector);
+    pvpBlock2.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
-    pvpArray.setaFDOP(aFDOP, channel, vector);
-    pvpArray2.setaFDOP(aFDOP, channel, vector);
+    pvpBlock.setaFDOP(aFDOP, channel, vector);
+    pvpBlock2.setaFDOP(aFDOP, channel, vector);
 
     const double aFRR1 = getRandom();
-    pvpArray.setaFRR1(aFRR1, channel, vector);
-    pvpArray2.setaFRR1(aFRR1, channel, vector);
+    pvpBlock.setaFRR1(aFRR1, channel, vector);
+    pvpBlock2.setaFRR1(aFRR1, channel, vector);
 
     const double aFRR2 = getRandom();
-    pvpArray.setaFRR2(aFRR2, channel, vector);
-    pvpArray2.setaFRR2(aFRR2, channel, vector);
+    pvpBlock.setaFRR2(aFRR2, channel, vector);
+    pvpBlock2.setaFRR2(aFRR2, channel, vector);
 
     const double fx1 = getRandom();
-    pvpArray.setFx1(fx1, channel, vector);
-    pvpArray2.setFx1(fx1, channel, vector);
+    pvpBlock.setFx1(fx1, channel, vector);
+    pvpBlock2.setFx1(fx1, channel, vector);
 
     const double fx2 = getRandom();
-    pvpArray.setFx2(fx2, channel, vector);
-    pvpArray2.setFx2(fx2, channel, vector);
+    pvpBlock.setFx2(fx2, channel, vector);
+    pvpBlock2.setFx2(fx2, channel, vector);
 
     const double toa1 = getRandom();
-    pvpArray.setTOA1(toa1, channel, vector);
-    pvpArray2.setTOA1(toa1, channel, vector);
+    pvpBlock.setTOA1(toa1, channel, vector);
+    pvpBlock2.setTOA1(toa1, channel, vector);
 
     const double toa2 = getRandom();
-    pvpArray.setTOA2(toa2, channel, vector);
-    pvpArray2.setTOA2(toa2, channel, vector);
+    pvpBlock.setTOA2(toa2, channel, vector);
+    pvpBlock2.setTOA2(toa2, channel, vector);
 
     const double tdTropoSRP = getRandom();
-    pvpArray.setTdTropoSRP(tdTropoSRP, channel, vector);
-    pvpArray2.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock2.setTdTropoSRP(tdTropoSRP, channel, vector);
 
     const double sc0 = getRandom();
-    pvpArray.setSC0(sc0, channel, vector);
-    pvpArray2.setSC0(sc0, channel, vector);
+    pvpBlock.setSC0(sc0, channel, vector);
+    pvpBlock2.setSC0(sc0, channel, vector);
 
     const double scss = getRandom();
-    pvpArray.setSCSS(scss, channel, vector);
-    pvpArray2.setSCSS(scss, channel, vector);
+    pvpBlock.setSCSS(scss, channel, vector);
+    pvpBlock2.setSCSS(scss, channel, vector);
 }
 
 void testVectorParameters(const std::string& testName,
                           size_t channel,
                           size_t vector,
-                          cphd::PVPArray& pvpArray)
+                          cphd::PVPBlock& pvpBlock)
 {
     const double txTime = getRandom();
-    pvpArray.setTxTime(txTime, channel, vector);
+    pvpBlock.setTxTime(txTime, channel, vector);
 
     const cphd::Vector3 txPos = getRandomVector3();
-    pvpArray.setTxPos(txPos, channel, vector);
+    pvpBlock.setTxPos(txPos, channel, vector);
 
     const cphd::Vector3 txVel = getRandomVector3();
-    pvpArray.setTxVel(txVel, channel, vector);
+    pvpBlock.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
-    pvpArray.setRcvTime(rcvTime, channel, vector);
+    pvpBlock.setRcvTime(rcvTime, channel, vector);
 
     const cphd::Vector3 rcvPos = getRandomVector3();
-    pvpArray.setRcvPos(rcvPos, channel, vector);
+    pvpBlock.setRcvPos(rcvPos, channel, vector);
 
     const cphd::Vector3 rcvVel = getRandomVector3();
-    pvpArray.setRcvVel(rcvVel, channel, vector);
+    pvpBlock.setRcvVel(rcvVel, channel, vector);
 
     const cphd::Vector3 srpPos = getRandomVector3();
-    pvpArray.setSRPPos(srpPos, channel, vector);
+    pvpBlock.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
-    pvpArray.setaFDOP(aFDOP, channel, vector);
+    pvpBlock.setaFDOP(aFDOP, channel, vector);
 
     const double aFRR1 = getRandom();
-    pvpArray.setaFRR1(aFRR1, channel, vector);
+    pvpBlock.setaFRR1(aFRR1, channel, vector);
 
     const double aFRR2 = getRandom();
-    pvpArray.setaFRR2(aFRR2, channel, vector);
+    pvpBlock.setaFRR2(aFRR2, channel, vector);
 
     const double fx1 = getRandom();
-    pvpArray.setFx1(fx1, channel, vector);
+    pvpBlock.setFx1(fx1, channel, vector);
 
     const double fx2 = getRandom();
-    pvpArray.setFx2(fx2, channel, vector);
+    pvpBlock.setFx2(fx2, channel, vector);
 
     const double toa1 = getRandom();
-    pvpArray.setTOA1(toa1, channel, vector);
+    pvpBlock.setTOA1(toa1, channel, vector);
 
     const double toa2 = getRandom();
-    pvpArray.setTOA2(toa2, channel, vector);
+    pvpBlock.setTOA2(toa2, channel, vector);
 
     const double tdTropoSRP = getRandom();
-    pvpArray.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
 
     const double sc0 = getRandom();
-    pvpArray.setSC0(sc0, channel, vector);
+    pvpBlock.setSC0(sc0, channel, vector);
 
     const double scss = getRandom();
-    pvpArray.setSCSS(scss, channel, vector);
+    pvpBlock.setSCSS(scss, channel, vector);
 
-    TEST_ASSERT_EQ(txTime, pvpArray.getTxTime(channel, vector));
-    TEST_ASSERT_EQ(txPos, pvpArray.getTxPos(channel, vector));
-    TEST_ASSERT_EQ(txVel, pvpArray.getTxVel(channel, vector));
-    TEST_ASSERT_EQ(rcvTime, pvpArray.getRcvTime(channel, vector));
-    TEST_ASSERT_EQ(rcvPos, pvpArray.getRcvPos(channel, vector));
-    TEST_ASSERT_EQ(rcvVel, pvpArray.getRcvVel(channel, vector));
-    TEST_ASSERT_EQ(srpPos, pvpArray.getSRPPos(channel, vector));
-    TEST_ASSERT_EQ(aFDOP, pvpArray.getaFDOP(channel, vector));
-    TEST_ASSERT_EQ(aFRR1, pvpArray.getaFRR1(channel, vector));
-    TEST_ASSERT_EQ(aFRR2, pvpArray.getaFRR2(channel, vector));
-    TEST_ASSERT_EQ(fx1, pvpArray.getFx1(channel, vector));
-    TEST_ASSERT_EQ(fx2, pvpArray.getFx2(channel, vector));
-    TEST_ASSERT_EQ(toa1, pvpArray.getTOA1(channel, vector));
-    TEST_ASSERT_EQ(toa2, pvpArray.getTOA2(channel, vector));
-    TEST_ASSERT_EQ(tdTropoSRP, pvpArray.getTdTropoSRP(channel, vector));
-    TEST_ASSERT_EQ(sc0, pvpArray.getSC0(channel, vector));
-    TEST_ASSERT_EQ(scss, pvpArray.getSCSS(channel, vector));
+    TEST_ASSERT_EQ(txTime, pvpBlock.getTxTime(channel, vector));
+    TEST_ASSERT_EQ(txPos, pvpBlock.getTxPos(channel, vector));
+    TEST_ASSERT_EQ(txVel, pvpBlock.getTxVel(channel, vector));
+    TEST_ASSERT_EQ(rcvTime, pvpBlock.getRcvTime(channel, vector));
+    TEST_ASSERT_EQ(rcvPos, pvpBlock.getRcvPos(channel, vector));
+    TEST_ASSERT_EQ(rcvVel, pvpBlock.getRcvVel(channel, vector));
+    TEST_ASSERT_EQ(srpPos, pvpBlock.getSRPPos(channel, vector));
+    TEST_ASSERT_EQ(aFDOP, pvpBlock.getaFDOP(channel, vector));
+    TEST_ASSERT_EQ(aFRR1, pvpBlock.getaFRR1(channel, vector));
+    TEST_ASSERT_EQ(aFRR2, pvpBlock.getaFRR2(channel, vector));
+    TEST_ASSERT_EQ(fx1, pvpBlock.getFx1(channel, vector));
+    TEST_ASSERT_EQ(fx2, pvpBlock.getFx2(channel, vector));
+    TEST_ASSERT_EQ(toa1, pvpBlock.getTOA1(channel, vector));
+    TEST_ASSERT_EQ(toa2, pvpBlock.getTOA2(channel, vector));
+    TEST_ASSERT_EQ(tdTropoSRP, pvpBlock.getTdTropoSRP(channel, vector));
+    TEST_ASSERT_EQ(sc0, pvpBlock.getSC0(channel, vector));
+    TEST_ASSERT_EQ(scss, pvpBlock.getSCSS(channel, vector));
 }
 
 TEST_CASE(testPvpRequired)
 {
-    cphd::PVPArray pvpArray(216,
+    cphd::PVPBlock pvpBlock(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS));
     cphd::Pvp pvp;
@@ -231,7 +231,7 @@ TEST_CASE(testPvpRequired)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, pvpArray);
+            testVectorParameters(testName, channel, vector, pvpBlock);
         }
     }
 }
@@ -239,7 +239,7 @@ TEST_CASE(testPvpRequired)
 TEST_CASE(testPvpOptional)
 {
     size_t numAddedParams = 3;
-    cphd::PVPArray pvpArray(2,
+    cphd::PVPBlock pvpBlock(2,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             numAddedParams);
@@ -259,32 +259,32 @@ TEST_CASE(testPvpOptional)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, pvpArray);
+            testVectorParameters(testName, channel, vector, pvpBlock);
 
             const double ampSF = getRandom();
-            pvpArray.setAmpSF(pvp, ampSF, channel, vector);
+            pvpBlock.setAmpSF(pvp, ampSF, channel, vector);
 
             const double fxN1 = getRandom();
-            pvpArray.setFxN1(pvp, fxN1, channel, vector);
+            pvpBlock.setFxN1(pvp, fxN1, channel, vector);
 
             const double fxN2 = getRandom();
-            pvpArray.setFxN2(pvp, fxN2, channel, vector);
+            pvpBlock.setFxN2(pvp, fxN2, channel, vector);
 
             const double addedParam1 = getRandom();
-            pvpArray.setAddedPVP(pvp, addedParam1, channel, vector, 0);
+            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
 
             const std::string addedParam2 = "Param1";
-            pvpArray.setAddedPVP(pvp, addedParam2, channel, vector, 1);
+            pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, 1);
 
             const std::complex<int> addedParam3(3,4);
-            pvpArray.setAddedPVP(pvp, addedParam3, channel, vector, 2);
+            pvpBlock.setAddedPVP(pvp, addedParam3, channel, vector, 2);
 
-            TEST_ASSERT_EQ(ampSF, pvpArray.getAmpSF(channel, vector));
-            TEST_ASSERT_EQ(fxN1, pvpArray.getFxN1(channel, vector));
-            TEST_ASSERT_EQ(fxN2, pvpArray.getFxN2(channel, vector));
-            TEST_ASSERT_EQ(addedParam1, pvpArray.getAddedPVP<double>(channel, vector, 0));
-            TEST_ASSERT_EQ(addedParam2, pvpArray.getAddedPVP<std::string>(channel, vector, 1));
-            TEST_ASSERT_EQ(addedParam3, pvpArray.getAddedPVP<std::complex<int> >(channel, vector, 2));
+            TEST_ASSERT_EQ(ampSF, pvpBlock.getAmpSF(channel, vector));
+            TEST_ASSERT_EQ(fxN1, pvpBlock.getFxN1(channel, vector));
+            TEST_ASSERT_EQ(fxN2, pvpBlock.getFxN2(channel, vector));
+            TEST_ASSERT_EQ(addedParam1, pvpBlock.getAddedPVP<double>(channel, vector, 0));
+            TEST_ASSERT_EQ(addedParam2, pvpBlock.getAddedPVP<std::string>(channel, vector, 1));
+            TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<std::complex<int> >(channel, vector, 2));
         }
     }
 }
@@ -292,7 +292,7 @@ TEST_CASE(testPvpOptional)
 TEST_CASE(testPvpThrow)
 {
     size_t numAddedParams = 2;
-    cphd::PVPArray pvpArray(216, // NumBytes not validated yet
+    cphd::PVPBlock pvpBlock(216, // NumBytes not validated yet
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             numAddedParams);
@@ -317,33 +317,33 @@ TEST_CASE(testPvpThrow)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, pvpArray);
+            testVectorParameters(testName, channel, vector, pvpBlock);
 
             const double ampSF = getRandom();
-            pvpArray.setAmpSF(pvp, ampSF, channel, vector);
+            pvpBlock.setAmpSF(pvp, ampSF, channel, vector);
 
             const double fxN1 = getRandom();
-            pvpArray.setFxN1(pvp, fxN1, channel, vector);
+            pvpBlock.setFxN1(pvp, fxN1, channel, vector);
 
             const double toaE1 = getRandom();
-            pvpArray.setTOAE1(pvp, toaE1, channel, vector);
-            TEST_ASSERT_EQ(toaE1, pvpArray.getTOAE1(channel, vector));
+            pvpBlock.setTOAE1(pvp, toaE1, channel, vector);
+            TEST_ASSERT_EQ(toaE1, pvpBlock.getTOAE1(channel, vector));
 
             const double addedParam1 = getRandom();
-            pvpArray.setAddedPVP(pvp, addedParam1, channel, vector, 0);
+            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
 
             const double addedParam2 = getRandom();
-            TEST_EXCEPTION(pvpArray.setAddedPVP(pvp, addedParam2, channel, vector, 2));
-            TEST_EXCEPTION(pvpArray.getAddedPVP<double>(channel, vector, 3));
-            pvpArray.setAddedPVP(pvp, addedParam1, channel, vector, 0);
+            TEST_EXCEPTION(pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, 2));
+            TEST_EXCEPTION(pvpBlock.getAddedPVP<double>(channel, vector, 3));
+            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
 
             const double fxN2 = getRandom();
-            TEST_EXCEPTION(pvpArray.setFxN2(pvp, fxN2, channel, vector));
-            TEST_EXCEPTION(pvpArray.getFxN2(channel, vector));
+            TEST_EXCEPTION(pvpBlock.setFxN2(pvp, fxN2, channel, vector));
+            TEST_EXCEPTION(pvpBlock.getFxN2(channel, vector));
         }
     }
 
-    cphd::PVPArray pvpArray2(216,
+    cphd::PVPBlock pvpBlock2(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS));
     cphd::Pvp pvp2(numAddedParams);
@@ -354,15 +354,15 @@ TEST_CASE(testPvpThrow)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, pvpArray2);
+            testVectorParameters(testName, channel, vector, pvpBlock2);
 
             const double addedParam1 = getRandom();
-            TEST_EXCEPTION(pvpArray2.setAddedPVP(pvp2, addedParam1, channel, vector, 0));
-            TEST_EXCEPTION(pvpArray2.getAddedPVP<double>(channel, vector, 0));
+            TEST_EXCEPTION(pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, 0));
+            TEST_EXCEPTION(pvpBlock2.getAddedPVP<double>(channel, vector, 0));
         }
     }
 
-    cphd::PVPArray pvpArray3(216,
+    cphd::PVPBlock pvpBlock3(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS),
                             numAddedParams);
@@ -374,11 +374,11 @@ TEST_CASE(testPvpThrow)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, pvpArray3);
+            testVectorParameters(testName, channel, vector, pvpBlock3);
 
             const double addedParam1 = getRandom();
-            TEST_EXCEPTION(pvpArray3.setAddedPVP(pvp3, addedParam1, channel, vector, 0));
-            TEST_EXCEPTION(pvpArray3.getAddedPVP<double>(channel, vector, 0));
+            TEST_EXCEPTION(pvpBlock3.setAddedPVP(pvp3, addedParam1, channel, vector, 0));
+            TEST_EXCEPTION(pvpBlock3.getAddedPVP<double>(channel, vector, 0));
         }
     }
 }
@@ -386,16 +386,16 @@ TEST_CASE(testPvpThrow)
 TEST_CASE(testPvpEquality)
 {
     size_t numAddedParams = 2;
-    cphd::PVPArray pvpArray1(216,
+    cphd::PVPBlock pvpBlock1(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             numAddedParams);
-    cphd::PVPArray pvpArray2(216,
+    cphd::PVPBlock pvpBlock2(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             numAddedParams);
 
-    TEST_ASSERT_TRUE(pvpArray1 == pvpArray2);
+    TEST_ASSERT_TRUE(pvpBlock1 == pvpBlock2);
 
     cphd::Pvp pvp1(numAddedParams);
     setPVPXML(testName, pvp1);
@@ -425,29 +425,29 @@ TEST_CASE(testPvpEquality)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            setVectorParameters(testName, channel, vector, pvpArray1, pvpArray2);
+            setVectorParameters(testName, channel, vector, pvpBlock1, pvpBlock2);
             const double ampSF = getRandom();
-            pvpArray1.setAmpSF(pvp1, ampSF, channel, vector);
-            pvpArray2.setAmpSF(pvp2, ampSF, channel, vector);
+            pvpBlock1.setAmpSF(pvp1, ampSF, channel, vector);
+            pvpBlock2.setAmpSF(pvp2, ampSF, channel, vector);
 
             const double fxN1 = getRandom();
-            pvpArray1.setFxN1(pvp1, fxN1, channel, vector);
-            pvpArray2.setFxN1(pvp2, fxN1, channel, vector);
+            pvpBlock1.setFxN1(pvp1, fxN1, channel, vector);
+            pvpBlock2.setFxN1(pvp2, fxN1, channel, vector);
 
             const double fxN2 = getRandom();
-            pvpArray1.setFxN2(pvp1, fxN2, channel, vector);
-            pvpArray2.setFxN2(pvp2, fxN2, channel, vector);
+            pvpBlock1.setFxN2(pvp1, fxN2, channel, vector);
+            pvpBlock2.setFxN2(pvp2, fxN2, channel, vector);
 
             const double addedParam1 = 5.0;
-            pvpArray1.setAddedPVP(pvp1, addedParam1, channel, vector, 0);
-            pvpArray2.setAddedPVP(pvp2, addedParam1, channel, vector, 0);
+            pvpBlock1.setAddedPVP(pvp1, addedParam1, channel, vector, 0);
+            pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, 0);
 
             const std::complex<int> addedParam2(3,4);
-            pvpArray1.setAddedPVP(pvp1, addedParam2, channel, vector, 1);
-            pvpArray2.setAddedPVP(pvp2, addedParam2, channel, vector, 1);
+            pvpBlock1.setAddedPVP(pvp1, addedParam2, channel, vector, 1);
+            pvpBlock2.setAddedPVP(pvp2, addedParam2, channel, vector, 1);
         }
     }
-    TEST_ASSERT_EQ(pvpArray1, pvpArray2);
+    TEST_ASSERT_EQ(pvpBlock1, pvpBlock2);
 }
 }
 

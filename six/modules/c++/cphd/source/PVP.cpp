@@ -18,10 +18,13 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */#include <complex>
+ */
+
+#include <complex>
 #include <sys/Conf.h>
-#include <cphd/PVP.h>
 #include <six/Init.h>
+#include <cphd/PVP.h>
+#include <cphd/Utilities.h>
 
 namespace cphd
 {
@@ -77,100 +80,99 @@ void Pvp::validate(size_t size, size_t offset)
  * Validate user input format
  * Returns if valid, throws if not
  */
-void Pvp::validateFormat(std::string& format)
-{
-    if (format == "F4" || format == "F8")
-    {
-        return;
-    }
-    else if (format == "U1" || format == "U2" || format == "U4" ||
-                format == "U8")
-    {
-        return;
-    }
-    else if (format == "I1" || format == "I2" || format == "I4" ||
-                format == "I8")
-    {
-        return;
-    }
-    else if (format == "CI2" || format == "CI4" || format == "CI8" ||
-                format == "CI16")
-    {
-        return;
-    }
-    else if (format == "CF8" || format == "CF16")
-    {
-        return;
-    }
-    else if (isFormatStr(format)) // Else if Check for string type S[1-9][0-9]
-    {
-        return;
-    }
-    else if (isMultipleParam(format))
-    {
-        return;
-    }
-    throw except::Exception(Ctxt("Invalid format provided"));
-}
+// void Pvp::validateFormat(std::s);
+// {
+//     if (format == "F4" || format == "F8")
+//     {
+//         return;
+//     }
+//     else if (format == "U1" || format == "U2" || format == "U4" ||
+//                 format == "U8")
+//     {
+//         return;
+//     }
+//     else if (format == "I1" || format == "I2" || format == "I4" ||
+//                 format == "I8")
+//     {
+//         return;
+//     }
+//     else if (format == "CI2" || format == "CI4" || format == "CI8" ||
+//                 format == "CI16")
+//     {
+//         return;
+//     }
+//     else if (format == "CF8" || format == "CF16")
+//     {
+//         return;
+//     }
+//     else if (isFormatStr(format)) // Else if Check for string type S[1-9][0-9]
+//     {
+//         return;
+//     }
+//     else if (isMultipleParam(format))
+//     {
+//         return;
+//     }
+//     throw except::Exception(Ctxt("Invalid format provided"));
+// }
 
-bool Pvp::isMultipleParam(std::string& format)
-{
-    std::string eqDelimiter = "=";
-    std::string colDelimiter = ";";
-    size_t idx = 0;
-    while (format.find(colDelimiter, idx) != std::string::npos)
-    {
-        size_t pos = format.find(colDelimiter, idx);
-        if(format.find(eqDelimiter, idx) == std::string::npos || format.find(eqDelimiter, idx) > pos)
-        {
-            return false;
-        }
+// bool Pvp::isMultipleParam(std::string& format)
+// {
+//     std::string eqDelimiter = "=";
+//     std::string colDelimiter = ";";
+//     size_t idx = 0;
+//     while (format.find(colDelimiter, idx) != std::string::npos)
+//     {
+//         size_t pos = format.find(colDelimiter, idx);
+//         if(format.find(eqDelimiter, idx) == std::string::npos || format.find(eqDelimiter, idx) > pos)
+//         {
+//             return false;
+//         }
 
-        size_t eqPos = format.find(eqDelimiter, idx);
-        std::string name = format.substr(idx, eqPos-idx);
+//         size_t eqPos = format.find(eqDelimiter, idx);
+//         std::string name = format.substr(idx, eqPos-idx);
 
-        //! Update the current idx
-        if (eqPos + 1 >= format.size())
-        {
-            return false;
-        }
-        idx = ++eqPos;
-        std::string format_string = format.substr(idx, pos-idx);
-        try
-        {
-            validateFormat(format_string);
-        }
-        catch(std::exception& e)
-        {
-            return false;
-        }
+//         //! Update the current idx
+//         if (eqPos + 1 >= format.size())
+//         {
+//             return false;
+//         }
+//         idx = ++eqPos;
+//         std::string format_string = format.substr(idx, pos-idx);
+//         try
+//         {
+//             validateFormat(format);       }
+//         catch(std::exception& e)
+//         {
+//             return false;
+//         }
 
-        //! Update the current idx
-        if (pos + 1 >= format.size())
-        {
-            return true;
-        }
-        idx = ++pos;
-    }
-    return false;
-}
+//         //! Update the current idx
+//         if (pos + 1 >= format.size())
+//         {
+//             return true;
+//         }
+//         idx = ++pos;
+//     }
+//     return false;
+// }
 
-bool Pvp::isFormatStr(std::string format)
-{
-    const char* ptr = format.c_str();
-    if(format.size() <= 3)
-    {
-        if (*ptr == 'S')
-        {
-            ++ptr;
-            if(std::isdigit(*ptr) && std::isdigit(*(ptr+1)))
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+// bool Pvp::isFormatStr(std::string format)
+// {
+//     const char* ptr = format.c_str();
+//     if(format.size() <= 3)
+//     {
+//         if (*ptr == 'S')
+//         {
+//             ++ptr;
+//             if(std::isdigit(*ptr) && std::isdigit(*(ptr+1)))
+//             {
+//                 return true;
+//             }
+//         }
+//     }
+//     return false;
+// }
 
 void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format)
 {

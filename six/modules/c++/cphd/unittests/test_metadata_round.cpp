@@ -33,6 +33,11 @@
 
 #include "TestCase.h"
 
+/*!
+ * Tests write and read of metadata
+ * Fails if values don't match
+ */
+
 static const std::string FILE_NAME("temp.cphd");
 
 void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
@@ -120,7 +125,6 @@ TEST_CASE(testWriteNotEqual)
 
     TEST_ASSERT_NOT_EQ(*metadata, *metadata2);
 }
-
 
 int main()
 {

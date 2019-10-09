@@ -56,7 +56,6 @@ void CPHDWriter::DataWriterLittleEndian::operator()(
 {
     size_t dataProcessed = 0;
     const size_t dataSize = numElements * elementSize;
-
     while (dataProcessed < dataSize)
     {
         const size_t dataToProcess =
@@ -164,6 +163,7 @@ void CPHDWriter::addImage<std::complex<float> >(
 
 void CPHDWriter::writeMetadata(size_t pvpSize,
                                size_t cphdSize,
+                               size_t supportSize,
                                const std::string& classification,
                                const std::string& releaseInfo)
 {
@@ -180,7 +180,7 @@ void CPHDWriter::writeMetadata(size_t pvpSize,
     }
 
     // set header size, final step before write
-    header.set(xmlMetadata.size(), 0, pvpSize, cphdSize);
+    header.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
     mFile.write(header.toString().c_str(), header.size());
     mFile.write("\f\n", 2);
     mFile.write(xmlMetadata.c_str(), xmlMetadata.size());
@@ -194,14 +194,14 @@ void CPHDWriter::writeMetadata(size_t pvpSize,
     // }
 }
 
-void CPHDWriter::writePVPData(const sys::ubyte* pvpArray,
+void CPHDWriter::writePVPData(const sys::ubyte* PVPBlock,
                               size_t channel)
 {
     const size_t size = (mMetadata.data.getNumVectors(channel) *
             mMetadata.data.getNumBytesPVPSet()) / 8;
 
     //! The vector based parameters are always 64 bit
-    (*mDataWriter)(pvpArray, size, 8);
+    (*mDataWriter)(PVPBlock, size, 8);
 }
 
 void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
@@ -220,34 +220,52 @@ void CPHDWriter::writeCompressedCPHDDataImpl(const sys::ubyte* data,
     (*mDataWriter)(data, 1, mMetadata.data.getCompressedSignalSize(channel));
 }
 
+void CPHDWriter::writeSupportDataImpl(const sys::ubyte* data,
+                          size_t numElements, size_t elementSize)
+{
+    (*mDataWriter)(data, numElements, elementSize);
+}
+
+
 
 void CPHDWriter::writeMetadata(const std::string& pathname,
-                               const PVPArray& pvpArray,
+                               const PVPBlock& PVPBlock,
                                const std::string& classification,
                                const std::string& releaseInfo)
 {
-    // Update the number of bytes per VBP
-    mMetadata.data.numBytesPVP = pvpArray.getNumBytesPVPSet();
+    // Update the number of bytes per PVP
+    mMetadata.data.numBytesPVP = PVPBlock.getNumBytesPVPSet();
 
     mFile.create(pathname);
 
     const size_t numChannels = mMetadata.data.getNumChannels();
+    size_t totalSupportSize = 0;
     size_t totalPVPSize = 0;
     size_t totalCPHDSize = 0;
 
+    std::map<std::string, sys::Off_T>::const_iterator it;
+    for (it = mMetadata.data.sa_IDMap.begin(); it != mMetadata.data.sa_IDMap.end(); ++it)
+    {
+        totalSupportSize += mMetadata.data.getSupportArrayById(it->first).getSize();
+    }
+
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        totalPVPSize += pvpArray.getPVPsize(ii);
+        totalPVPSize += PVPBlock.getPVPsize(ii);
         totalCPHDSize += mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii) * mElementSize;
     }
 
-    writeMetadata(totalPVPSize, totalCPHDSize, classification, releaseInfo);
+    writeMetadata(totalPVPSize, totalCPHDSize, totalSupportSize, classification, releaseInfo);
+}
 
+void CPHDWriter::writePVPData(const PVPBlock& PVPBlock)
+{
+    const size_t numChannels = mMetadata.data.getNumChannels();
     std::vector<sys::ubyte> pvpData;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        pvpArray.getPVPdata(mMetadata.pvp, ii, pvpData);
+        PVPBlock.getPVPdata(mMetadata.pvp, ii, pvpData);
         if (!pvpData.empty())
         {
             writePVPData(&pvpData[0], ii);
@@ -313,7 +331,15 @@ void CPHDWriter::write(const std::string& pathname,
 {
     mFile.create(pathname);
 
-    writeMetadata(mPVPSize, mCPHDSize, classification, releaseInfo);
+    size_t totalSupportSize = 0;
+    std::map<std::string, sys::Off_T>::const_iterator it;
+    for (it = mMetadata.data.sa_IDMap.begin(); it != mMetadata.data.sa_IDMap.end(); ++it)
+    {
+        totalSupportSize += mMetadata.data.getSupportArrayById(it->first).getSize();
+    }
+
+
+    writeMetadata(mPVPSize, totalSupportSize ,mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mPVPData.size(); ++ii)
     {
@@ -325,6 +351,16 @@ void CPHDWriter::write(const std::string& pathname,
         const size_t cphdDataSize = mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii);
         writeCPHDDataImpl(mCPHDData[ii], cphdDataSize);
+    }
+
+    if (mSupportData.size() == mMetadata.data.getNumSupportArrays())
+    {
+        std::map<std::string, std::vector<const sys::ubyte*> >::const_iterator it;
+        for (size_t ii = 0; ii < mSupportData.size(); ++ii)
+        {
+            writeSupportDataImpl(mSupportData[ii].second, mMetadata.data.getSupportArrayById(mSupportData[ii].first).getSize(),
+                                 mMetadata.data.getSupportArrayById(mSupportData[ii].first).bytesPerElement);
+        }
     }
 
     mFile.close();

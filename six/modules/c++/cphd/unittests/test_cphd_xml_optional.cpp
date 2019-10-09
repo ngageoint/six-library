@@ -100,20 +100,20 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].ySS, 5.0);
 
     TEST_ASSERT_EQ(supportArray.addedSupportArray.size(), 1);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].identifier, "AddedSupportArray");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].elementFormat, "F4");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].x0, 0.0);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].y0, 0.0);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].xSS, 5.0);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].ySS, 5.0);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].xUnits, "XUnits");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].yUnits, "YUnits");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].zUnits, "ZUnits");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter.size(), 2);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[0].getName(), "Parameter1");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[1].getName(), "Parameter2");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[0].str(), "Additional parameter");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray[0].parameter[1].str(), "Additional parameter");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.count("AddedSupportArray"), 1);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.elementFormat, "F4");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.x0, 0.0);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.y0, 0.0);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.xSS, 5.0);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.ySS, 5.0);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.xUnits, "XUnits");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.yUnits, "YUnits");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.zUnits, "ZUnits");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter.size(), 2);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[0].getName(), "Parameter1");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[1].getName(), "Parameter2");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[0].str(), "Additional parameter");
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[1].str(), "Additional parameter");
 
     const cphd::Antenna& antenna = *(metadata->antenna);
     TEST_ASSERT_EQ(antenna.antCoordFrame.size(), 2);

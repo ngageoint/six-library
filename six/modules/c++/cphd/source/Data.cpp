@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <map>
 #include <cphd/Data.h>
 #include <six/Init.h>
 
@@ -26,7 +27,7 @@ namespace cphd
 {
 
 Data::Data() :
-    numBytesPVP(six::Init::undefined<size_t>())
+    numBytesPVP(0)
 {
 }
 
@@ -68,8 +69,8 @@ Data::Channel::Channel(size_t vectors, size_t samples,
 {
 }
 
-
 Data::SupportArray::SupportArray() :
+    identifier(six::Init::undefined<std::string>()),
     numRows(0),
     numCols(0),
     bytesPerElement(0),
@@ -77,10 +78,68 @@ Data::SupportArray::SupportArray() :
 {
 }
 
+Data::SupportArray::SupportArray(std::string id, size_t rows, size_t cols,
+                   size_t numBytes, size_t offset) :
+    identifier(id),
+    numRows(rows),
+    numCols(cols),
+    bytesPerElement(numBytes),
+    arrayByteOffset(offset)
+{
+}
+
+// offset <= supportArray < offset+size
+void Data::setSupportArray(std::string id, size_t numRows,
+                           size_t numCols, size_t numBytes,
+                           sys::Off_T offset)
+{
+    if (sa_IDMap.count(id) || supportArrayMap.count(offset))
+    {
+        std::ostringstream ostr;
+        ostr << "Identifier " << id << " is not unique";
+        throw except::Exception(ostr.str());
+    }
+
+    // Add to ordered
+    supportArrayMap.insert(std::pair<sys::Off_T,Data::SupportArray>(offset,Data::SupportArray(id, numRows, numCols, numBytes, offset)));
+
+    if (supportArrayMap.find(offset) != supportArrayMap.begin())
+    {
+        if (offset < (--supportArrayMap.find(offset))->first  + (--supportArrayMap.find(offset))->second.getSize())
+        {
+            std::ostringstream ostr;
+            ostr << "Invalid size or offset of support array given for id: " << id;
+            throw except::Exception(ostr.str());
+        }
+    }
+    if (supportArrayMap.upper_bound(offset) != supportArrayMap.end())
+    {
+        if (offset + (numRows * numCols * numBytes) > supportArrayMap.upper_bound(offset)->first)
+        {
+            std::ostringstream ostr;
+            ostr << "Invalid size or offset of support array given for id: " << id;
+            throw except::Exception(ostr.str());
+        }
+    }
+    sa_IDMap.insert(std::pair<std::string,sys::Off_T>(id,offset));
+}
+
+size_t Data::getAllSupportSize() const
+{
+    size_t size = 0;
+    std::map<std::string,sys::Off_T>::const_iterator it;
+    for (it = sa_IDMap.begin(); it != sa_IDMap.end(); ++it)
+    {
+        size += getSupportArrayById(it->first).getSize();
+    }
+    return size;
+}
+
+
+
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
 {
-    os << "  SupportArray:: \n"
-        << "    Identifier     : " << s.identifier << "\n"
+    os << "    Identifier        : " << s.identifier << "\n"
         << "    NumRows        : " << s.numRows << "\n"
         << "    NumCols        : " << s.numCols << "\n"
         << "    BytesPerElement : " << s.bytesPerElement << "\n"
@@ -110,9 +169,11 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
         os << d.channels[ii] << "\n";
     }
     os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
-    for (size_t ii = 0; ii < d.supportArrays.size(); ++ii)
+    std::map<std::string, sys::Off_T>::const_iterator it;
+    for (it = d.sa_IDMap.begin(); it != d.sa_IDMap.end(); ++it)
     {
-        os << d.supportArrays[ii] << "\n";
+        os << "  SupportArrays:: \n"
+            << d.getSupportArrayById(it->first) << "\n";
     }
     return os;
 }
