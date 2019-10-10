@@ -44,41 +44,65 @@ struct ProductInfo
      */
     struct CreationInfo
     {
+        //! Default constructor
         CreationInfo();
 
+        //! Equality operators
         bool operator==(const CreationInfo& other) const
         {
             return application == other.application &&
                     dateTime == other.dateTime && site == other.site &&
                     parameter == other.parameter;
         }
+        bool operator!=(const CreationInfo& other) const
+        {
+            return !((*this) == other);
+        }
 
+        //! (Optional) Name and version of the applications that created
+        //! the CPHD product
         std::string application;
+
+        //! Date and time the CPHD product was created (UTC).
         DateTime dateTime;
+
+        //! (Optional) Name of the site where the product was created
         std::string site;
+
+        //! (Optional) Text field that can be used for program specific
+        //! name and value
         six::ParameterCollection parameter;
     };
 
+    //! Default constructor
     ProductInfo();
 
+    //! Equality operators
     bool operator==(const ProductInfo& other) const
     {
         return profile == other.profile &&
                 creationInfo == other.creationInfo &&
                 parameter == other.parameter;
-
     }
-
     bool operator!=(const ProductInfo& other) const
     {
         return !((*this) == other);
     }
 
+    //! (Optional) Identifies what profile was used to create this
+    //! CPHD product
     std::string profile;
+
+    //! (Optional) Parameters that provide general information
+    //! about the CPHD product generation.
     std::vector<CreationInfo> creationInfo;
+
+    //! (Optional) Text field that can be used for program specific
+    //! parameter name & value
     six::ParameterCollection parameter;
 };
 
+//! Ostream operator
 std::ostream& operator<< (std::ostream& os, const ProductInfo& p);
 }
 

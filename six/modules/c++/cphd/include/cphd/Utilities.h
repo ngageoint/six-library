@@ -31,6 +31,9 @@
 namespace cphd
 {
 
+/*
+ * Sturct to store multiple param type formats
+ */
 struct FormatType
 {
     FormatType()

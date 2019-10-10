@@ -40,22 +40,31 @@ namespace cphd
  */
 struct AntCoordFrame
 {
+    //! Constructor
     AntCoordFrame();
 
+    //! Equality operators
     bool operator==(const AntCoordFrame& other) const
     {
         return identifier == other.identifier &&
                 xAxisPoly == other.xAxisPoly &&
                 yAxisPoly == other.yAxisPoly;
     }
-
     bool operator!=(const AntCoordFrame& other) const
     {
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this ACF
+    //! (ACF_ID)
     std::string identifier;
+
+    //!Antenna coordinate frame X-Axis unit vector in
+    //! ECF coordinates as a function time (sec).
     PolyXYZ xAxisPoly;
+
+    //!Antenna coordinate frame Y-Axis unit vector in
+    //! ECF coordinates as a function time (sec).
     PolyXYZ yAxisPoly;
 };
 
@@ -64,21 +73,30 @@ struct AntCoordFrame
  */
 struct AntPhaseCenter
 {
+    //! Constructor
     AntPhaseCenter();
 
+    //! Equality operators
     bool operator==(const AntPhaseCenter& other) const
     {
         return identifier == other.identifier &&
                 acfId == other.acfId && apcXYZ == other.apcXYZ;
     }
-
     bool operator!=(const AntPhaseCenter& other) const
     {
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this APC
+    //! (APC_ID).
     std::string identifier;
+
+    //! Identifier of Antenna Coordinate Frame used for
+    //! computing the antenna gain and phase patterns
     std::string acfId;
+
+    //! The APC location in the ACF XYZ coordinate
+    //! frame
     Vector3 apcXYZ;
 };
 
@@ -89,30 +107,40 @@ struct AntPhaseCenter
 struct AntPattern
 {
     /*
-     * Parameters that identify 2-D sampled Grain & Phase patterns at
+     * (Optional) Parameters that identify 2-D sampled Grain & Phase patterns at
      * a single frequency value.
      * See table 11-7
      */
     struct GainPhaseArray
     {
+        //! Equality operators
         bool operator==(const GainPhaseArray& other) const
         {
             return freq == other.freq && arrayId == other.arrayId &&
                     elementId == other.elementId;
         }
-
         bool operator!=(const GainPhaseArray& other) const
         {
             return !((*this) == other);
         }
 
+        //! Frequency value for which the sampled Array &
+        //! Element pattern(s) are provided.
         double freq;
+
+        //! Support Array identifier of the sampled
+        //! Gain/Phase of the Array at RefFrequency
         std::string arrayId;
+
+        //! (Optional) Support Array identifier of the sampled
+        //! Gain/Phase of the Element at RefFrequency
         std::string elementId;
     };
 
+    //! Default constructor
     AntPattern();
 
+    //! Equality operators
     bool operator==(const AntPattern& other) const
     {
         return freqZero == other.freqZero && gainZero == other.gainZero &&
@@ -122,22 +150,52 @@ struct AntPattern
                 array == other.array && element == other.element &&
                 gainPhaseArray == other.gainPhaseArray;
     }
-
     bool operator!=(const AntPattern& other) const
     {
         return !((*this) == other);
     }
 
-    // Unique ID value for each set of AntPattern parameter set
+    //! String that uniquely identifies this Antenna
+    //! Pattern (APAT_ID).
     std::string identifier;
+
+    //! The reference frequency (f_0) value for which
+    //! the Electrical Boresight and array pattern
+    //! polynomials are computed.
     double freqZero;
+
+    //! (Optional) The reference antenna gain (G_0) at zero steering
+    //! angle at the reference frequency (f_0)
     double gainZero;
+
+    //! (Optional) Parameter to indicate the EB steering direction
+    //! shifts with frequency.
     six::BooleanType ebFreqShift;
+
+    //! (Optional) Parameter to indicate the mainlobe width varies
+    //! with frequency.
     six::BooleanType mlFreqDilation;
+
+    //! (Optional) Gain polynomial (dB) vs. frequency for the array
+    //! pattern at boresight. Gain relative to gain at f_0.
+    //! Poly1D gainBSPoly;
     Poly1D gainBSPoly;
+
+    //! The Electrical Boresight steering direction versus
+    //! time. Defines array pattern pointing direction
     six::sicd::ElectricalBoresight eb;
+
+    //! Array Pattern polynomials that describe the
+    //! mainlobe gain and phase patterns. Patterns
+    //! defined at f = f_0
     six::sicd::GainAndPhasePolys array;
+
+    //! Element Pattern polynomials that describe the
+    //! gain and phase patterns
     six::sicd::GainAndPhasePolys element;
+
+    //! Parameters that identify 2-D sampled Gain &
+    //! Phase patterns at single frequency value.
     std::vector<GainPhaseArray> gainPhaseArray;
 };
 
@@ -148,25 +206,38 @@ struct AntPattern
  */
 struct Antenna
 {
+    //! Default constructor
     Antenna();
 
+    //! Equality operators
     bool operator==(const Antenna& other) const
     {
         return antCoordFrame == other.antCoordFrame &&
                 antPhaseCenter == other.antPhaseCenter &&
                 antPattern == other.antPattern;
     }
-
     bool operator!=(const Antenna& other) const
     {
         return !((*this) == other);
     }
 
+    //! Unit vectors that describe the orientation of an
+    //! Antenna Coordinate Frame (ACF) as function of
+    //! time.
     std::vector<AntCoordFrame> antCoordFrame;
+
+    //! Parameters that describe each Antenna Phase
+    //! Center (APC). Parameter set repeated for each
+    //! APC
     std::vector<AntPhaseCenter> antPhaseCenter;
+
+    //! Parameter set that defines each Antenna Pattern
+    //! as function time. Parameters set repeated for
+    //! each Antenna Pattern
     std::vector<AntPattern> antPattern;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g);

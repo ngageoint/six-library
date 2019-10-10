@@ -33,6 +33,10 @@
 
 namespace cphd
 {
+
+/*!
+ * Base parameter class for both TxWF and Rcv type parameters
+ */
 struct ParameterType
 {
     ParameterType();
@@ -50,37 +54,60 @@ struct ParameterType
         return !((*this) == other);
     }
 
+    //! String that uniquely identifies this Transmit Waveform
     std::string identifier;
+
+    //! Center frequency of the transmitted waveform
     double freqCenter;
-    double lfmRate; // Allowed lfmRate != 0
+
+    //! (Optional) Chirp rate of transmitted pulse if LFM
+    // Allowed lfmRate != 0
+    double lfmRate;
+
+    //! Transmit polarization
     PolarizationType polarization;
 };
 
+/*!
+ * Parameters that describe a Transmit Waveform
+ */
 struct TxWFParameters : public ParameterType
 {
+    //! Default constructors
     TxWFParameters();
 
+    //! Equality operators
     bool operator==(const TxWFParameters& other) const
     {
         return pulseLength == other.pulseLength &&
                 rfBandwidth == other.rfBandwidth &&
                 power == other.power;
     }
-
     bool operator!=(const TxWFParameters& other) const
     {
         return !((*this) == other);
     }
 
+    //! Length of transmitted pulse
     double pulseLength;
+
+    //! Bandwidth if transmitted pulse
     double rfBandwidth;
+
+    //! Peak transmitted power at the interface to the
+    //! antenna
     double power;
 };
 
+/*
+ * Parameters that describe a Receive configuration
+ */
 struct RcvParameters : public ParameterType
 {
+    //! Default constructor
     RcvParameters();
 
+    //! Equality operators
     bool operator==(const RcvParameters& other) const
     {
         return windowLength == other.windowLength &&
@@ -88,37 +115,56 @@ struct RcvParameters : public ParameterType
                 ifFilterBW == other.ifFilterBW &&
                 pathGain == other.pathGain;
     }
-
     bool operator!=(const RcvParameters& other) const
     {
         return !((*this) == other);
     }
 
+    //! Length of the receive window
     double windowLength;
+
+    //! Rate at which the signal in the receive window
+    //! is sampled
     double sampleRate;
+
+    //! Bandwidth of the anti-aliasing filter prior to
+    //! sampling
     double ifFilterBW;
+
+    //! Receiver gain from the antenna interface to the
+    //! ADC.
     double pathGain;
 };
 
+/*!
+ * (Optional) Parameters that describe the transmitted
+ * waveform(s) and receiver configurations used in
+ * the collection
+ */
 struct TxRcv
 {
+    //! Default constructor
     TxRcv();
 
+    //! Equality operators
     bool operator==(const TxRcv& other) const
     {
         return txWFParameters == other.txWFParameters &&
                 rcvParameters == other.rcvParameters;
     }
-
     bool operator!=(const TxRcv& other) const
     {
         return !((*this) == other);
     }
 
+    //! Parameters that describe a Transmit Waveform
     std::vector<TxWFParameters> txWFParameters;
+
+    //! Parameters that describe a Receive configuration
     std::vector<RcvParameters> rcvParameters;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const ParameterType& p);
 std::ostream& operator<< (std::ostream& os, const TxWFParameters& t);
 std::ostream& operator<< (std::ostream& os, const RcvParameters& r);

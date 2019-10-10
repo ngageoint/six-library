@@ -145,7 +145,6 @@ std::vector<FormatType> parseMultipleParams(std::string format)
             "Incorrect format \n"));
 }
 
-
 std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(std::string format)
 {
     std::vector<FormatType> params = parseMultipleParams(format);

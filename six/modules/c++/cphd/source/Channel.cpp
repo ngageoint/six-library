@@ -91,7 +91,6 @@ Channel::Channel() :
 {
 }
 
-
 std::ostream& operator<< (std::ostream& os, const Polarization& p)
 {
     os << "      TxPol        : " << p.txPol << "\n"

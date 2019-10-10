@@ -39,23 +39,33 @@ namespace cphd
  */
 struct MatchCollection
 {
+    //! Default constructor
     MatchCollection();
 
+    //! Equality operators
     bool operator==(const MatchCollection& other) const
     {
         return coreName == other.coreName && index == other.index &&
                 matchIndex == other.matchIndex &&
                 parameter == other.parameter;
     }
-
     bool operator!=(const MatchCollection& other) const
     {
         return !((*this) == other);
     }
 
+    //! Text string that uniquely identifies the matching collection
     std::string coreName;
+
+    //! Attribute index mc
     size_t index;
+
+    //! (Optional) Collection sequence index for the match
+    //! collection
     size_t matchIndex;
+
+    //! (Optional) Relevant match parameter. Attribute name identifies
+    //! the parameter
     six::ParameterCollection parameter;
 };
 
@@ -64,23 +74,33 @@ struct MatchCollection
  */
 struct MatchType
 {
+    //! Default constructor
     MatchType();
 
+    //! Equality operator
     bool operator==(const MatchType& other) const
     {
         return typeID == other.typeID && index == other.index &&
                 currentIndex == other.currentIndex &&
                 matchCollection == other.matchCollection;
     }
-
     bool operator!=(const MatchType& other) const
     {
         return !((*this) == other);
     }
 
+    //! Text string identifying the match type
     std::string typeID;
+
+    //! Attribute index = mt
     size_t index;
+
+    //! (Optional) Collection sequence index for the collection from
+    //! which this CPHD product was generated.
     size_t currentIndex;
+
+    //! (Optional) Number of matched collections for this match
+    //! type. 
     std::vector<MatchCollection> matchCollection;
 };
 

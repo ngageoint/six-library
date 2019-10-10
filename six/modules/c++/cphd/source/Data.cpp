@@ -105,7 +105,7 @@ void Data::setSupportArray(std::string id, size_t numRows,
 
     if (supportArrayMap.find(offset) != supportArrayMap.begin())
     {
-        if (offset < (--supportArrayMap.find(offset))->first  + (--supportArrayMap.find(offset))->second.getSize())
+        if (offset < (sys::Off_T)((--supportArrayMap.find(offset))->first  + (--supportArrayMap.find(offset))->second.getSize()))
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
@@ -114,7 +114,7 @@ void Data::setSupportArray(std::string id, size_t numRows,
     }
     if (supportArrayMap.upper_bound(offset) != supportArrayMap.end())
     {
-        if (offset + (numRows * numCols * numBytes) > supportArrayMap.upper_bound(offset)->first)
+        if ((sys::Off_T)(offset + (numRows * numCols * numBytes)) > supportArrayMap.upper_bound(offset)->first)
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
@@ -134,8 +134,6 @@ size_t Data::getAllSupportSize() const
     }
     return size;
 }
-
-
 
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
 {
@@ -177,6 +175,4 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
     }
     return os;
 }
-
-
 }
