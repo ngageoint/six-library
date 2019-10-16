@@ -32,7 +32,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
-
+#include <str/Convert.h>
 /*!
  * Reads in CPHD file from InputFile
  * Writes out CPHD file to OutputFile
@@ -42,18 +42,11 @@
 void testRoundTrip(std::string inPathname, std::string outPathname, size_t numThreads, std::vector<std::string>& schemaPathname)
 {
     //! Open the CPHD file
-    std::cout << "Reading file: " << inPathname << "\n";
     cphd::CPHDReader reader(inPathname, numThreads, schemaPathname);
-
+    std::cout << "Succesfully finished reading from CPHD: " << inPathname << "\n";
     const cphd::FileHeader& header = reader.getFileHeader();
-    std::cout << "FileHeader: \n";
-    std::cout << header.getClassification() << std::endl;
-    std::cout << header.getXMLBlockByteOffset() << std::endl;
-    std::cout << header.getXMLBlockSize() << std::endl;
 
     const cphd::Metadata& metadata = reader.getMetadata();
-    std::cout << "Metadata values: \n";
-    std::cout << metadata.collectionID.collectorName << "\n";
 
     cphd::CPHDWriter writer(reader.getMetadata(), numThreads);
     const cphd::SignalArrayFormat signalFormat =
@@ -61,8 +54,9 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
     const cphd::PVPBlock& pvpBlock = reader.getPVPBlock();
     cphd::Wideband& wideband = reader.getWideband();
 
-    std::cout << "Writing file: " << outPathname << "\n";
-    writer.writeMetadata(outPathname, pvpBlock);
+    writer.writeMetadata(outPathname, pvpBlock,
+                         metadata.collectionID.getClassificationLevel(),
+                         metadata.collectionID.releaseInfo);
 
     // SupportBlock
     cphd::SupportBlock& supportBlock = reader.getSupportBlock();
@@ -70,7 +64,7 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
     supportBlock.readAll(numThreads, readPtr);
 
     size_t idx = 0;
-    std::map<std::string,sys::Off_T>::const_iterator it;
+    auto it = metadata.data.sa_IDMap.begin();
     for (it = metadata.data.sa_IDMap.begin(), idx = 0; 
          it != metadata.data.sa_IDMap.end(); 
          ++it, idx = reader.getMetadata().data.getSupportArrayById(it->first).getSize())
@@ -112,7 +106,9 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
             break;
         }
     }
+    std::cout << "Succesfully finished writing to CPHD: " << outPathname << "\n";
 }
+
 
 int main(int argc, char** argv)
 {
@@ -130,20 +126,19 @@ int main(int argc, char** argv)
                            "CPHD", 1, 1);
         parser.addArgument("output", "Output pathname", cli::STORE, "output",
                            "CPHD", 1, 1);
-        // parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
-        //                    "XSD", 1, 1);
+        parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
+                           "XSD", 1, 1);
         const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string>("input"));
         const std::string outPathname(options->get<std::string>("output"));
-        // const std::string schemaPathname(options->get<std::string>("schema"));
+        const std::string schemaPathname(options->get<std::string>("schema"));
         const size_t numThreads(options->get<size_t>("threads"));
 
         std::vector<std::string> schemas;
-        // if (!schemaPathname.empty())
-        // {
-        //     std::cout << schemaPathname << "\n";
-        //     schemas.push_back(schemaPathname);
-        // }
+        if (!schemaPathname.empty())
+        {
+            schemas.push_back(schemaPathname);
+        }
         testRoundTrip(inPathname, outPathname, numThreads, schemas);
         return 0;
     }
