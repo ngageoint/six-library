@@ -8,7 +8,10 @@ def configure(conf):
     conf.recurse()
 
 def build(bld):
-    bld.recurse()
+    if bld.env['LIB_TYPE'] == 'shlib':
+        bld.recurse('drivers c')
+    else:
+        bld.recurse()
 
 def distclean(context):
     context.recurse()

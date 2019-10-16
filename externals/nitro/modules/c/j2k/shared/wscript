@@ -15,7 +15,7 @@ configure = options = distclean = lambda p: None
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant]
-    
+
     if 'HAVE_J2K' in env:
         pluginList = []
         plugins = bld.path.ant_glob('*.c')

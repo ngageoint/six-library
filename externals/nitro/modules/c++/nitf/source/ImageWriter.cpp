@@ -56,7 +56,10 @@ void ImageWriter::setWriteCaching(int enable)
 
 void ImageWriter::setDirectBlockWrite(int enable)
 {
-    nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(), enable);
+    if (!nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(), enable, &error))
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 
 void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
