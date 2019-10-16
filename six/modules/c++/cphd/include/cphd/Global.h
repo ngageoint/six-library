@@ -27,19 +27,22 @@
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/sicd/RadarCollection.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
 namespace cphd
 {
-/*
+/*!
  * Parameters that describe the collection times for
  * the data contained in the product
  */
 struct Timeline
 {
+    // Constructor
     Timeline();
 
+    // Equality operators
     bool operator==(const Timeline& other) const
     {
         return collectionStart == other.collectionStart &&
@@ -47,15 +50,24 @@ struct Timeline
             txTime1 == other.txTime1 &&
             txTime2 == other.txTime2;
     }
-
     bool operator!=(const Timeline& other) const
     {
         return !((*this) == other);
     }
 
+    //! Collection Start date and time (UTC)
     DateTime collectionStart;
-    DateTime rcvCollectionStart;
+
+    //! (Optional) Receive only platform collection date 
+    //! and start time.
+    DateTime rcvCollectionStart; // Optional
+
+    //! Earliest TxTime value for any signal vector in the
+    //! product
     double txTime1;
+
+    //! Latest TxTime value for any signal vector in the
+    //! product
     double txTime2;
 };
 
@@ -65,20 +77,26 @@ struct Timeline
  */
 struct FxBand
 {
+    // Constructor
     FxBand();
 
+    // Equality operators
     bool operator==(const FxBand& other) const
     {
         return fxMin == other.fxMin &&
             fxMax == other.fxMax;
     }
-
     bool operator!=(const FxBand& other) const
     {
         return !((*this) == other);
     }
 
+    //! Minimum fx_1 value for any signal vector in the
+    //! product.
     double fxMin;
+
+    //! Maximum fx_2 value for any signal vector in the
+    //! product
     double fxMax;
 };
 
@@ -88,20 +106,26 @@ struct FxBand
  */
 struct TOASwath
 {
+    // Constructor
     TOASwath();
 
+    // Equality operators
     bool operator==(const TOASwath& other) const
     {
         return toaMin == other.toaMin &&
             toaMax == other.toaMax;
     }
-
     bool operator!=(const TOASwath& other) const
     {
         return !((*this) == other);
     }
 
+    //! Minimum TOA_1 value for any signal vector in
+    //! the product
     double toaMin;
+
+    //! Maximum TOA_2 value for any signal vector
+    //! in the product
     double toaMax;
 };
 
@@ -111,19 +135,25 @@ struct TOASwath
  */
 struct TropoParameters
 {
+    //! Constructor
     TropoParameters();
 
+    //! Equality operators
     bool operator==(const TropoParameters& other) const
     {
         return n0 == other.n0 && refHeight == other.refHeight;
     }
-
     bool operator!=(const TropoParameters& other) const
     {
         return !((*this) == other);
     }
 
+    //! Refractivity value of the troposphere for the
+    //! imaged scene used to form the product
+    //! (dimensionless).
     double n0;
+
+    //! Reference Height for the N0 value.
     RefHeight refHeight;
 };
 
@@ -133,20 +163,24 @@ struct TropoParameters
  */
 struct IonoParameters
 {
+    //! Constructor
     IonoParameters();
 
+    //! Equality operators
     bool operator==(const IonoParameters& other) const
     {
         return tecv == other.tecv && f2Height == other.f2Height;
     }
-
     bool operator!=(const IonoParameters& other) const
     {
         return !((*this) == other);
     }
 
+    //! Total Electron Content (TEC)
     double tecv;
-    double f2Height;
+
+    //! (Optional) The F2 height of the ionosphere.
+    double f2Height; // Optional
 };
 
 /*
@@ -155,38 +189,52 @@ struct IonoParameters
  */
 struct Global
 {
+    //! Default constructor
     Global();
 
-    bool operator==(const Global& other) const
-    {
-        return domainType == other.domainType &&
-               sgn == other.sgn &&
-               timeline == other.timeline &&
-               fxBand == other.fxBand &&
-               toaSwath == other.toaSwath &&
-               tropoParameters == other.tropoParameters &&
-               ionoParameters == other.ionoParameters;
-    }
-
+    //! Equality operators
+    bool operator==(const Global& other) const;
     bool operator !=(const Global& other) const
     {
         return !((*this) == other);
     }
 
+    //! Getter
     DomainType getDomainType() const
     {
         return domainType;
     }
 
+    //! Indicates the domain represented by the sample
+    //! dimension of the CPHD signal array(s)
     DomainType domainType;
+
+    //! Phase SGN applied to compute target signal
+    //! phase as a function of target delta TOA
     PhaseSGN sgn;
+
+    //! Parameters that describe the collection times for
+    //! the data contained in the product
     Timeline timeline;
+
+    //! Parameters that describe the FX frequency limits
+    //! for the signal array(s) contained in the product. 
     FxBand fxBand;
+
+    //! Parameters that describe the TOA swath limits
+    //! for the signal array(s) contained in the product
     TOASwath toaSwath;
+
+    //! (Optional) Parameters used to compute the propagation
+    //! delay due to the troposphere.
     mem::ScopedCopyablePtr<TropoParameters> tropoParameters;
+
+    //! (Optional) Parameters used to compute propagation effects
+    //! due to the ionosphere
     mem::ScopedCopyablePtr<IonoParameters> ionoParameters;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const Global& d);
 std::ostream& operator<< (std::ostream& os, const Timeline& d);
 std::ostream& operator<< (std::ostream& os, const FxBand& d);

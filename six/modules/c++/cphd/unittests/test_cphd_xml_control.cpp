@@ -698,8 +698,8 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(pvp.rcvVel.getSize(), 3);
     TEST_ASSERT_EQ(pvp.rcvVel.getFormat(), "X=F8;Y=F8;Z=F8;");
     TEST_ASSERT_EQ(pvp.addedPVP.size(), 2);
-    TEST_ASSERT_EQ(pvp.addedPVP[0].getName(), "newParam1");
-    TEST_ASSERT_EQ(pvp.addedPVP[1].getName(), "newParam2");
+    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam1")->second.getName(), "newParam1");
+    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam2")->second.getName(), "newParam2");
 
     //Dwell
     const cphd::Dwell& dwell = metadata->dwell;

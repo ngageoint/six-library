@@ -77,22 +77,16 @@ TEST_CASE(testOptional)
             xmlControl.fromXML(xmlParser.getDocument(), nodeNames);
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);
-    TEST_ASSERT_EQ(supportArray.iazArray.size(), 2);
+    TEST_ASSERT_EQ(supportArray.iazArray.size(), 1);
     TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), 1);
     TEST_ASSERT_EQ(supportArray.iazArray[0].elementFormat, "IAZ=F4;");
     TEST_ASSERT_EQ(supportArray.iazArray[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].y0, 0.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].xSS, 5.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].ySS, 5.0);
-    TEST_ASSERT_EQ(supportArray.iazArray[1].getIdentifier(), 2);
-    TEST_ASSERT_EQ(supportArray.iazArray[1].elementFormat, "IAZ=F4;");
-    TEST_ASSERT_EQ(supportArray.iazArray[1].x0, 0.0);
-    TEST_ASSERT_EQ(supportArray.iazArray[1].y0, 0.0);
-    TEST_ASSERT_EQ(supportArray.iazArray[1].xSS, 5.0);
-    TEST_ASSERT_EQ(supportArray.iazArray[1].ySS, 5.0);
 
     TEST_ASSERT_EQ(supportArray.antGainPhase.size(), 1);
-    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), 1);
+    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), 2);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].elementFormat, "Gain=F4;Phase=F4;");
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].y0, 0.0);

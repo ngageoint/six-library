@@ -197,7 +197,6 @@ private:
     void readImpl(size_t channel,
                   void* data);
 
-
     static
     bool allOnes(const std::vector<double>& vectorScaleFactors);
 

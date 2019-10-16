@@ -37,12 +37,13 @@ SupportArrayParameter::SupportArrayParameter() :
 {
 }
 
-SupportArrayParameter::SupportArrayParameter(std::string format,
-                                             size_t id,
-                                             double x0_in,
-                                             double y0_in,
-                                             double xSS_in,
-                                             double ySS_in) :
+SupportArrayParameter::SupportArrayParameter(
+        std::string format,
+        size_t id,
+        double x0_in,
+        double y0_in,
+        double xSS_in,
+        double ySS_in) :
     elementFormat(format),
     x0(x0_in),
     y0(y0_in),
@@ -83,6 +84,42 @@ AdditionalSupportArray::AdditionalSupportArray(
     ySS = ySS_in;
     initializeParams();
 }
+
+SupportArrayParameter SupportArray::getIAZSupportArray(const std::string key) const
+{
+    size_t keyNum = str::toType<size_t>(key);
+    if (iazArray.size() <= keyNum)
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found " << (key);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+    return iazArray[keyNum];
+}
+
+SupportArrayParameter SupportArray::getAGPSupportArray(const std::string key) const
+{
+    size_t keyNum = str::toType<size_t>(key);
+    if (antGainPhase.size() <= keyNum)
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found " << (key);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+    return antGainPhase[keyNum];
+}
+
+AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string key) const
+{
+    if (addedSupportArray.count(key) == 0 || addedSupportArray.count(key) > 1)
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found " << (key);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+    return addedSupportArray.find(key)->second;
+}
+
 
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
 {

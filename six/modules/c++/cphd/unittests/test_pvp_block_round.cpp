@@ -58,7 +58,7 @@ cphd::Vector3 getRandomVector3()
 }
 
 template<typename T>
-std::vector<std::complex<T> > generateData(size_t length)
+std::vector<std::complex<T> > generateComplexData(size_t length)
 {
     std::vector<std::complex<T> > data(length);
     srand(0);
@@ -71,17 +71,17 @@ std::vector<std::complex<T> > generateData(size_t length)
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+template<typename T>
+std::vector<T> generateData(size_t length)
 {
-    std::vector<double> scaleFactors(length, 1);
-    if (scale)
+    std::vector<T> data(length);
+    srand(0);
+    for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        for (size_t ii = 0; ii < scaleFactors.size(); ++ii)
-        {
-            scaleFactors[ii] *= 2;
-        }
+        T real = static_cast<T>(rand() / 16);
+        data[ii] = real;
     }
-    return scaleFactors;
+    return data;
 }
 
 void setPVPXML(cphd::Pvp& pvp)
@@ -107,58 +107,111 @@ void setPVPXML(cphd::Pvp& pvp)
 
 void setVectorParameters(size_t channel,
                           size_t vector,
-                          cphd::PVPBlock& PVPBlock)
+                          cphd::PVPBlock& pvpBlock)
 {
     const double txTime = getRandom();
-    PVPBlock.setTxTime(txTime, channel, vector);
+    pvpBlock.setTxTime(txTime, channel, vector);
 
     const cphd::Vector3 txPos = getRandomVector3();
-    PVPBlock.setTxPos(txPos, channel, vector);
+    pvpBlock.setTxPos(txPos, channel, vector);
 
     const cphd::Vector3 txVel = getRandomVector3();
-    PVPBlock.setTxVel(txVel, channel, vector);
+    pvpBlock.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
-    PVPBlock.setRcvTime(rcvTime, channel, vector);
+    pvpBlock.setRcvTime(rcvTime, channel, vector);
 
     const cphd::Vector3 rcvPos = getRandomVector3();
-    PVPBlock.setRcvPos(rcvPos, channel, vector);
+    pvpBlock.setRcvPos(rcvPos, channel, vector);
 
     const cphd::Vector3 rcvVel = getRandomVector3();
-    PVPBlock.setRcvVel(rcvVel, channel, vector);
+    pvpBlock.setRcvVel(rcvVel, channel, vector);
 
     const cphd::Vector3 srpPos = getRandomVector3();
-    PVPBlock.setSRPPos(srpPos, channel, vector);
+    pvpBlock.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
-    PVPBlock.setaFDOP(aFDOP, channel, vector);
+    pvpBlock.setaFDOP(aFDOP, channel, vector);
 
     const double aFRR1 = getRandom();
-    PVPBlock.setaFRR1(aFRR1, channel, vector);
+    pvpBlock.setaFRR1(aFRR1, channel, vector);
 
     const double aFRR2 = getRandom();
-    PVPBlock.setaFRR2(aFRR2, channel, vector);
+    pvpBlock.setaFRR2(aFRR2, channel, vector);
 
     const double fx1 = getRandom();
-    PVPBlock.setFx1(fx1, channel, vector);
+    pvpBlock.setFx1(fx1, channel, vector);
 
     const double fx2 = getRandom();
-    PVPBlock.setFx2(fx2, channel, vector);
+    pvpBlock.setFx2(fx2, channel, vector);
 
     const double toa1 = getRandom();
-    PVPBlock.setTOA1(toa1, channel, vector);
+    pvpBlock.setTOA1(toa1, channel, vector);
 
     const double toa2 = getRandom();
-    PVPBlock.setTOA2(toa2, channel, vector);
+    pvpBlock.setTOA2(toa2, channel, vector);
 
     const double tdTropoSRP = getRandom();
-    PVPBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
+    pvpBlock.setTdTropoSRP(tdTropoSRP, channel, vector);
 
     const double sc0 = getRandom();
-    PVPBlock.setSC0(sc0, channel, vector);
+    pvpBlock.setSC0(sc0, channel, vector);
 
     const double scss = getRandom();
-    PVPBlock.setSCSS(scss, channel, vector);
+    pvpBlock.setSCSS(scss, channel, vector);
+}
+
+void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock, cphd::Pvp& pvp, bool isAmpSF, bool isFxN1,
+                 bool isFxN2, bool isTOAE1, bool isTOAE2, bool isSignal, 
+                 std::vector<std::string> addedParams)
+{
+    const size_t numChannels = 1;
+    const std::vector<size_t> numVectors(numChannels, dims.row);
+
+    for (size_t ii = 0; ii < numChannels; ++ii)
+    {
+        for (size_t jj = 0; jj < numVectors[ii]; ++jj)
+        {
+            setVectorParameters(ii, jj, pvpBlock);
+
+            if (isAmpSF)
+            {
+                const double ampSF = getRandom();
+                pvpBlock.setAmpSF(pvp, ampSF, ii, jj);
+            }
+            if (isFxN1)
+            {
+                const double fxN1 = getRandom();
+                pvpBlock.setFxN1(pvp, fxN1, ii, jj);
+            }
+            if (isFxN2)
+            {
+                const double fxN2 = getRandom();
+                pvpBlock.setFxN2(pvp, fxN2, ii, jj);
+            }
+            if (isTOAE1)
+            {
+                const double toaE1 = getRandom();
+                pvpBlock.setTOAE1(pvp, toaE1, ii, jj);
+            }
+            if (isTOAE2)
+            {
+                const double toaE2 = getRandom();
+                pvpBlock.setTOAE2(pvp, toaE2, ii, jj);
+            }
+            if (isSignal)
+            {
+                const double signal = getRandom();
+                pvpBlock.setTOAE2(pvp, signal, ii, jj);
+            }
+
+            for (size_t idx = 0; idx < addedParams.size(); ++idx)
+            {
+                const double val = getRandom();
+                pvpBlock.setAddedPVP(pvp, val, ii, jj, addedParams[idx]);
+            }
+        }
+    }
 }
 
 template<typename T>
@@ -221,22 +274,13 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
         const std::vector<std::complex<T> >& writeData,
         io::FileOutputStream& mStream,
         cphd::Metadata& metadata,
-        cphd::PVPBlock& PVPBlock)
+        cphd::PVPBlock& pvpBlock)
 {
     const size_t numChannels = 1;
-    const std::vector<size_t> numVectors(numChannels, dims.row);
-
-    for (size_t ii = 0; ii < numChannels; ++ii)
-    {
-        for (size_t jj = 0; jj < numVectors[ii]; ++jj)
-        {
-            setVectorParameters(ii, jj, PVPBlock);
-        }
-    }
 
     cphd::CPHDWriter writer(metadata, numThreads);
-    writer.writeMetadata(outPathname, PVPBlock, "Unclassified", "Release");
-    writer.writePVPData(PVPBlock);
+    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+    writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         writer.writeCPHDData(&writeData[0],dims.area()*2);
@@ -246,7 +290,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
 bool checkData(size_t numThreads,
                mem::SharedPtr<io::SeekableInputStream> inStream,
                cphd::Metadata& metadata,
-               cphd::PVPBlock& PVPBlock)
+               cphd::PVPBlock& pvpBlock)
 {
     cphd::CPHDReader reader(inStream, numThreads);
     cphd::Wideband& wideband = reader.getWideband();
@@ -255,7 +299,7 @@ bool checkData(size_t numThreads,
     {
         return false;
     }
-    if (PVPBlock != reader.getPVPBlock())
+    if (pvpBlock != reader.getPVPBlock())
     {
         return false;
     }
@@ -263,34 +307,79 @@ bool checkData(size_t numThreads,
 }
 
 template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+bool runTest(bool scale, const std::vector<std::complex<T> >& writeData,
+             cphd::Metadata& meta, cphd::PVPBlock& pvpBlock,
+             const types::RowCol<size_t> dims)
 {
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
-    const types::RowCol<size_t> dims(128, 256);
-    const std::vector<double> scaleFactors =
-            generateScaleFactors(dims.row, scale);
     io::FileOutputStream outStream;
     mem::SharedPtr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
-    cphd::Metadata meta = cphd::Metadata();
 
-    setUpMetaData(dims, writeData, meta);
-    setPVPXML(meta.pvp);
-
-    cphd::PVPBlock PVPBlock(meta.data,
-                            meta.pvp);
-
-    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, outStream, meta, PVPBlock);
-    return checkData(numThreads, inStream, meta, PVPBlock);
+    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, outStream, meta, pvpBlock);
+    return checkData(numThreads, inStream, meta, pvpBlock);
 }
 
-TEST_CASE(testPVPBlock)
+TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
     const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
+            generateComplexData<sys::Int16_T>(dims.area());
     const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
+    cphd::Metadata meta = cphd::Metadata();
+    setUpMetaData(dims, writeData, meta);
+    setPVPXML(meta.pvp);
+    cphd::PVPBlock pvpBlock(meta.data,
+                            meta.pvp);
+    std::vector<std::string> addedParams;
+    setPVPBlock(dims, pvpBlock, meta.pvp, false, false, false,
+                false, false, false, addedParams);
+
+    TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
+}
+
+TEST_CASE(testPVPBlockOptional)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateComplexData<sys::Int16_T>(dims.area());
+    const bool scale = false;
+    cphd::Metadata meta = cphd::Metadata();
+    setUpMetaData(dims, writeData, meta);
+    setPVPXML(meta.pvp);
+    meta.pvp.fxN1.reset(new cphd::PVPType());
+    meta.pvp.setData(*(meta.pvp.fxN1), 1, 27, "F8");
+    meta.pvp.fxN2.reset(new cphd::PVPType());
+    meta.pvp.setData(*(meta.pvp.fxN2), 1, 28, "F8");
+    cphd::PVPBlock pvpBlock(meta.data,
+                            meta.pvp);
+    std::vector<std::string> addedParams;
+    setPVPBlock(dims, pvpBlock, meta.pvp, false, true, true,
+                false, false, false, addedParams);
+
+    TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
+}
+
+TEST_CASE(testPVPBlockAdditional)
+{
+    const types::RowCol<size_t> dims(128, 256);
+    const std::vector<std::complex<sys::Int16_T> > writeData =
+            generateComplexData<sys::Int16_T>(dims.area());
+    const bool scale = false;
+    cphd::Metadata meta = cphd::Metadata();
+    setUpMetaData(dims, writeData, meta);
+    setPVPXML(meta.pvp);
+    meta.pvp.setData(1, 27, "F8", "param1");
+    meta.pvp.setData(1, 28, "F8", "param2");
+    cphd::PVPBlock pvpBlock(meta.data,
+                            meta.pvp);
+    std::vector<std::string> addedParams;
+    addedParams.push_back("param1");
+    addedParams.push_back("param2");
+    setPVPBlock(dims, pvpBlock, meta.pvp, false, false, false,
+                false, false, false, addedParams);
+
+    TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
 }
 }
 
@@ -298,7 +387,9 @@ int main(int argc, char** argv)
 {
     try
     {
-        TEST_CHECK(testPVPBlock);
+        TEST_CHECK(testPVPBlockSimple);
+        TEST_CHECK(testPVPBlockOptional);
+        TEST_CHECK(testPVPBlockAdditional);
         return 0;
     }
     catch (const std::exception& ex)

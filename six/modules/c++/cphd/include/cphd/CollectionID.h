@@ -56,6 +56,7 @@ struct CollectionID : public six::CollectionInformation
     //! Deep copy
     CollectionID* clone() const;
 
+    //! Equality operators
     bool operator==(const CollectionID& other) const
     {
         return collectorName == other.collectorName &&
@@ -67,17 +68,18 @@ struct CollectionID : public six::CollectionInformation
                releaseInfo == other.releaseInfo &&
                getClassificationLevel() == other.getClassificationLevel();
     }
-
     bool operator!=(const CollectionID& other) const
     {
         return !((*this) == other);
     }
 
+    //! Get classification level
     inline virtual std::string getClassificationLevel() const
     {
         return mClassification;
     }
 
+    //! Set classification level
     inline virtual void setClassificationLevel(const std::string& classification)
     {
         mClassification = classification;
@@ -90,6 +92,7 @@ private:
     std::string mClassification;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const CollectionID& c);
 }
 #endif

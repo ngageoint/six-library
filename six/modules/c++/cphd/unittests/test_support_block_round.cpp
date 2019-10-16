@@ -42,11 +42,9 @@
 
 namespace
 {
-std::vector<std::string> schemas(1);
-
 size_t NUM_SUPPORT = 3;
-size_t NUM_ROWS = 128;
-size_t NUM_COLS = 256;
+size_t NUM_ROWS = 3;
+size_t NUM_COLS = 4;
 
 double getRandom()
 {
@@ -75,11 +73,12 @@ std::vector<T> generateSupportData(size_t length)
     return data;
 }
 
+template <typename T>
 void setSupport(cphd::Data& d)
 {
-    d.setSupportArray("1.0", NUM_ROWS, NUM_COLS, sizeof(double), 0);
-    d.setSupportArray("2.0", NUM_ROWS, NUM_COLS, sizeof(double), NUM_ROWS*NUM_COLS*sizeof(double));
-    d.setSupportArray("AddedSupport", NUM_ROWS, NUM_COLS, sizeof(double), 2*NUM_ROWS*NUM_COLS*sizeof(double));
+    d.setSupportArray("1.0", NUM_ROWS, NUM_COLS, sizeof(T), 0);
+    d.setSupportArray("2.0", NUM_ROWS, NUM_COLS, sizeof(T), NUM_ROWS*NUM_COLS*sizeof(T));
+    d.setSupportArray("AddedSupport", NUM_ROWS, NUM_COLS, sizeof(T), 2*NUM_ROWS*NUM_COLS*sizeof(T));
 }
 
 void setPVPXML(cphd::Pvp& pvp)
@@ -227,13 +226,11 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
     writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
 
     size_t idx = 0;
-    std::map<std::string,sys::Off_T>::const_iterator it;
-    for (it = metadata.data.sa_IDMap.begin(); it != metadata.data.sa_IDMap.end(); ++it, idx += NUM_ROWS*NUM_COLS)
+    for (auto it = metadata.data.sa_IDMap.begin(); it != metadata.data.sa_IDMap.end(); ++it, idx += NUM_ROWS*NUM_COLS)
     {
         writer.writeSupportData(&writeData[idx], it->first);
     }
     writer.writePVPData(pvpBlock);
-
 }
 
 std::vector<sys::ubyte> checkSupportData(const std::string& pathname,
@@ -268,30 +265,7 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
         if (*ptr != readData[ii])
         {
             std::cerr << "Value mismatch at index " << ii << std::endl;
-            return false;
-        }
-    }
-    return true;
-}
-
-template<typename T>
-bool compareVectors(const sys::ubyte* readData,
-                    const T* writeData,
-                    size_t readDataSize,
-                    size_t writeDataSize)
-{
-    if (writeDataSize * sizeof(T) != readDataSize)
-    {
-        std::cerr << "Size mismatch. Writedata size: "<< writeDataSize * sizeof(T)
-                  << "ReadData size: " << readDataSize << "\n";
-        return false;
-    }
-    const sys::ubyte* ptr = reinterpret_cast<const sys::ubyte*>(writeData);
-    for (size_t ii = 0; ii < readDataSize; ++ii, ++ptr, ++readData)
-    {
-        if (*ptr != *readData)
-        {
-            std::cerr << "Value mismatch at index " << ii << std::endl;
+            std::cerr << "readData: " << readData[ii] << " " << "writeData: " << *ptr << "\n";
             return false;
         }
     }
@@ -306,7 +280,7 @@ bool runTest(const std::vector<T>& writeData)
     mem::SharedPtr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
     setUpData(meta);
-    setSupport(meta.data);
+    setSupport<T>(meta.data);
     setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.data,
                             meta.pvp);
@@ -316,23 +290,29 @@ bool runTest(const std::vector<T>& writeData)
     return compareVectors(readData, &writeData[0], writeData.size());
 }
 
-TEST_CASE(testSimpleSupports)
+TEST_CASE(testSupportsInt)
+{
+    const types::RowCol<size_t> dims(NUM_ROWS, NUM_COLS);
+    const std::vector<int> writeData =
+            generateSupportData<int>(NUM_SUPPORT*dims.area());
+    TEST_ASSERT_TRUE(runTest(writeData));
+}
+
+TEST_CASE(testSupportsDouble)
 {
     const types::RowCol<size_t> dims(NUM_ROWS, NUM_COLS);
     const std::vector<double> writeData =
             generateSupportData<double>(NUM_SUPPORT*dims.area());
-    TEST_ASSERT(runTest(writeData));
+    TEST_ASSERT_TRUE(runTest(writeData));
 }
-
-
-
 }
 
 int main(int argc, char** argv)
 {
     try
     {
-        TEST_CHECK(testSimpleSupports);
+        TEST_CHECK(testSupportsInt);
+        TEST_CHECK(testSupportsDouble);
         return 0;
     }
     catch (const std::exception& ex)

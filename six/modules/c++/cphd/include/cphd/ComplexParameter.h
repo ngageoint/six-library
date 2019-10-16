@@ -18,7 +18,9 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */#ifndef __CPHD_COMPLEX_PARAMETER_H__
+ */
+
+#ifndef __CPHD_COMPLEX_PARAMETER_H__
 #define __CPHD_COMPLEX_PARAMETER_H__
 
 #include <complex>
@@ -49,42 +51,46 @@ public:
     {
     }
 
+    //! Copy constructor
     ComplexParameter(const ComplexParameter & other)
     {
         mName = other.mName;
         mValue = other.mValue;
     }
 
+    //! Custom constructor
     template<typename T>
     ComplexParameter(std::complex<T> value)
     {
         mValue = str::toString<std::complex<T> >(value.real(), value.imag());
     }
 
+    //! Get complex parameter
     template<typename T> inline std::complex<T> getComplex() const
     {
         return str::toType<std::complex<T> >(mValue);
     }
 
+    //! Using setValue function
     using six::Parameter::setValue;
 
+    //! Overload templated setValue function
     template<typename T>
     void setValue(std::complex<T> value)
     {
         mValue = str::toString<std::complex<T> >(value);
     }
 
+    //! Equality operators
     bool operator==(const ComplexParameter& o) const
     {
         return mName == o.mName && mValue == o.mValue;
     }
-
     bool operator!=(const ComplexParameter& o) const
     {
         return !((*this) == o);
     }
 };
-
 }
 
 #endif

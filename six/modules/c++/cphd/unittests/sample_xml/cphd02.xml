@@ -412,7 +412,7 @@
             <YSS>5.000000000000000E00</YSS>
         </IAZArray>
         <AntGainPhase>
-            <Identifier>1</Identifier>
+            <Identifier>2</Identifier>
             <ElementFormat>Gain=F4;Phase=F4;</ElementFormat>
             <X0>0.000000000000000E00</X0>
             <Y0>0.000000000000000E00</Y0>

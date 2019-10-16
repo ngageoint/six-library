@@ -70,6 +70,11 @@ struct PVPType
         return mSize;
     }
 
+    size_t getByteSize() const
+    {
+        return mSize * WORD_BYTE_SIZE;
+    }
+
     size_t getOffset() const
     {
         return mOffset;
@@ -77,7 +82,7 @@ struct PVPType
 
     size_t getByteOffset() const
     {
-        return mOffset*WORD_BYTE_SIZE;
+        return mOffset * WORD_BYTE_SIZE;
     }
 
 
@@ -310,13 +315,13 @@ struct Pvp
     /*
      * (Optional) User defined PV parameters
      */
-    std::vector<APVPType> addedPVP;
+    std::map<std::string,APVPType> addedPVP;
 
     //! Default Constructor
     Pvp();
 
-    //! Constructor initializes addedPVP size
-    Pvp(size_t numAdditionalParams);
+    // //! Constructor initializes addedPVP size
+    // Pvp(size_t numAdditionalParams);
 
     //! Equality operators
     bool operator==(const Pvp& other) const
@@ -340,17 +345,20 @@ struct Pvp
         return !((*this) == other);
     }
 
-    //! Get size of pvp set
+    //! Get size of pvp set in blocks
     size_t getReqSetSize() const;
+
+    //! Get size of pvp set in blocks
+    size_t getAdditionalParamsSize() const;
 
     //! Set a PVP param
     void setData(PVPType& param, size_t size, size_t offset, std::string format);
 
     //! Set an additional PVP param
-    void setData(size_t size, size_t offset, std::string format, std::string name, size_t idx);
+    void setData(size_t size, size_t offset, std::string format, std::string name);
 
-    //! Set the number of added params
-    void setNumAddedParameters(size_t size);
+    // //! Set the number of added params
+    // void setNumAddedParameters(size_t size);
 
 private:
     /*

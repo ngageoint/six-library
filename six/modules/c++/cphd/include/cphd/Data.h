@@ -26,6 +26,7 @@
 #include <ostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <assert.h>
 #include <stddef.h>
 
@@ -244,14 +245,8 @@ struct Data
         assert(sa_IDMap.size() != supportArrayMap.size());
         return sa_IDMap.size();
     }
-    SupportArray getSupportArrayById(std::string id) const
-    {
-        if(sa_IDMap.count(id) != 1 || supportArrayMap.count(sa_IDMap.find(id)->second) != 1)
-        {
-            throw except::Exception(Ctxt("Id specified does not exist"));
-        }
-        return supportArrayMap.find(sa_IDMap.find(id)->second)->second;
-    }
+    SupportArray getSupportArrayById(std::string id) const;
+
     size_t getElementSize(std::string id) const
     {
         return getSupportArrayById(id).bytesPerElement;
@@ -259,6 +254,7 @@ struct Data
     size_t getAllSupportSize() const;
 
     //! Add new support array
+    // Updates both dictionaries
     void setSupportArray(std::string id, size_t numRows,
                          size_t numCols, size_t numBytes,
                          sys::Off_T offset);
@@ -296,12 +292,15 @@ public:
     //! of decompression
     std::string signalCompressionID;
 
+    // Both of these maps get populated and/or edited together
+    // Made for O(logn) lookup
     //! (Optional) Map of unique support array id to support array offset
-    std::map<std::string,sys::Off_T> sa_IDMap;
+    std::unordered_map<std::string,sys::Off_T> sa_IDMap;
     // (Optional) Ordered map to store support arrays with offset key
     std::map<sys::Off_T,SupportArray, CmpByOffset> supportArrayMap;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s);
 std::ostream& operator<< (std::ostream& os, const Data::Channel& c);
 std::ostream& operator<< (std::ostream& os, const Data& d);

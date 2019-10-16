@@ -70,6 +70,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                             std::vector<std::string> schemaPaths)
 {
     mFileHeader.read(*inStream);
+
     // Read in the XML string
     const int xmlSize = static_cast<int>(mFileHeader.getXMLBlockSize());
     inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);

@@ -55,6 +55,12 @@ template <typename T> inline void getData(sys::ubyte* dest,
     memcpy(dest, &value, sizeof(T));
 }
 
+template <typename T> inline void getData(sys::ubyte* dest,
+                    T* value, size_t size)
+{
+    memcpy(dest, value, size);
+}
+
 inline void getData(sys::ubyte* dest,
                     const cphd::Vector3& value)
 {
@@ -62,7 +68,6 @@ inline void getData(sys::ubyte* dest,
     getData(dest + sizeof(double), value[1]);
     getData(dest + 2*sizeof(double), value[2]);
 }
-
 }
 
 namespace cphd
@@ -85,53 +90,9 @@ PVPBlock::PVPSet::PVPSet() :
     toa2(six::Init::undefined<double>()),
     tdTropoSRP(six::Init::undefined<double>()),
     sc0(six::Init::undefined<double>()),
-    scss(six::Init::undefined<double>()),
-    mAddedPVPByteSize(0)
+    scss(six::Init::undefined<double>())
 {
 }
-
-void PVPBlock::PVPSet::addToAddedPVPByteSize(size_t size)
-{
-    mAddedPVPByteSize += size;
-}
-
-
-size_t PVPBlock::PVPSet::getNumBytes() const
-{
-    size_t ret = 12 * sizeof(double) + 5 * 3 * sizeof(double);
-    if (ampSF.get())
-    {
-        ret += sizeof(ampSF.get());
-    }
-    if (fxN1.get())
-    {
-        ret += sizeof(fxN1.get());
-    }
-    if (fxN2.get())
-    {
-        ret += sizeof(fxN2.get());
-    }
-    if (toaE1.get())
-    {
-        ret += sizeof(toaE1.get());
-    }
-    if (toaE2.get())
-    {
-        ret += sizeof(toaE2.get());
-    }
-    if (tdIonoSRP.get())
-    {
-        ret += sizeof(tdIonoSRP.get());
-    }
-    if (signal.get())
-    {
-        ret += sizeof(signal.get());
-    }
-
-    ret += mAddedPVPByteSize;
-    return ret;
-}
-
 
 void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
 {
@@ -188,16 +149,54 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         signal.reset(new double());
         ::setData(input + p.signal->getByteOffset(), *signal);
     }
-    if (addedPVP.size() != p.addedPVP.size())
+    std::map<std::string, APVPType>::const_iterator it;
+    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        throw except::Exception(Ctxt(
-            "Incorrect number of additional parameters instantiated"));
-    }
-    for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
-    {
-        std::string val(input + p.addedPVP[ii].getByteOffset(),
-                        input + p.addedPVP[ii].getByteOffset() + p.addedPVP[ii].getSize());
-        addedPVP[ii].setValue(val);
+        if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
+        {
+            double val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "U1" || it->second.getFormat() == "U2" ||
+                 it->second.getFormat() == "U4" || it->second.getFormat() == "U8")
+        {
+            unsigned int val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "I1" || it->second.getFormat() == "I2" ||
+                 it->second.getFormat() == "I4" || it->second.getFormat() == "I8")
+        {
+            int val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CI2" || it->second.getFormat() == "CI4" ||
+                 it->second.getFormat() == "CI8" || it->second.getFormat() == "CI16")
+        {
+            std::complex<int> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CF8" || it->second.getFormat() == "CF16")
+        {
+            std::complex<double> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else
+        {
+            std::string val;
+            val.assign(input + it->second.getByteOffset(), it->second.getByteSize());
+            addedPVP[it->first] = ComplexParameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
     }
 }
 
@@ -254,9 +253,36 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
         throw except::Exception(Ctxt(
             "Incorrect number of additional parameters instantiated"));
     }
-    for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
+    std::map<std::string, APVPType>::const_iterator it;
+    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        ::getData(dest + p.addedPVP[ii].getByteOffset(), addedPVP[ii].str().c_str());
+        if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<double>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "U1" || it->second.getFormat() == "U2" ||
+                 it->second.getFormat() == "U4" || it->second.getFormat() == "U8")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<unsigned int>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "I1" || it->second.getFormat() == "I2" ||
+                 it->second.getFormat() == "I4" || it->second.getFormat() == "I8")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<int>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "CI2" || it->second.getFormat() == "CI4" ||
+                 it->second.getFormat() == "CI8" || it->second.getFormat() == "CI16")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int>());
+        }
+        else if (it->second.getFormat() == "CF8" || it->second.getFormat() == "CF16")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<double>());
+        }
+        else
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.str().c_str(), it->second.getByteSize());
+        }
     }
 }
 
@@ -265,17 +291,12 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
  */
 PVPBlock::PVPBlock(Data& d, Pvp& p)
 {
-    mNumBytesPerVector = d.numBytesPVP;
-
+    mNumBytesPerVector = p.getReqSetSize()*sizeof(double);
+    // mNumAdditionalBytesPerVector = p.getAdditionalParamsSize()*sizeof(double);
     mData.resize(d.getNumChannels());
     for (size_t ii = 0; ii < d.getNumChannels(); ++ii)
     {
         mData[ii].resize(d.getNumVectors(ii));
-        for (size_t jj = 0; jj < mData[ii].size(); ++jj)
-        {
-
-            mData[ii][jj].addedPVP.resize(p.addedPVP.size());
-        }
     }
     size_t calculateBytesPerVector = getNumBytesPVPSet();
     if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
@@ -291,9 +312,9 @@ PVPBlock::PVPBlock(Data& d, Pvp& p)
  */
 PVPBlock::PVPBlock(size_t numBytesPerVector,
                    size_t numChannels,
-                   std::vector<size_t> numVectors,
-                   size_t numAddedParams) :
-    mNumBytesPerVector(numBytesPerVector)
+                   std::vector<size_t> numVectors) :
+    mNumBytesPerVector(numBytesPerVector),
+    mNumAdditionalBytesPerVector(0)
 {
     mData.resize(numChannels);
     if(numChannels != numVectors.size())
@@ -304,13 +325,17 @@ PVPBlock::PVPBlock(size_t numBytesPerVector,
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         mData[ii].resize(numVectors[ii]);
-        for (size_t jj = 0; jj < mData[ii].size(); ++jj)
-        {
-            mData[ii][jj].addedPVP.resize(numAddedParams);
-        }
-
     }
 }
+
+size_t PVPBlock::getNumBytesPVPSet() const
+{
+    // return mData[0][0].getNumBytes();
+    return mNumBytesPerVector;
+
+}
+
+
 
 void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
 {
@@ -830,9 +855,10 @@ std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
         os << "  SIGNAL     : " << *p.signal << "\n";
     }
 
-    for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
+    std::map<std::string, ComplexParameter>::const_iterator it;
+    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        os << "  Additional Parameter : " << p.addedPVP[ii].str() << "\n";
+        os << "  Additional Parameter : " << it->second.str() << "\n";
     }
     return os;
 }

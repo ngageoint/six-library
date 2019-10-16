@@ -25,22 +25,21 @@
 
 #include <ostream>
 
-#include <cphd/CollectionID.h>
-#include <cphd/Channel.h>
-#include <cphd/Data.h>
-#include <cphd/Global.h>
-#include <cphd/SceneCoordinates.h>
-#include <cphd/PVP.h>
-#include <cphd/Dwell.h>
-#include <cphd/ReferenceGeometry.h>
-
-#include <cphd/SupportArray.h>
 #include <cphd/Antenna.h>
-#include <cphd/TxRcv.h>
+#include <cphd/Channel.h>
+#include <cphd/CollectionID.h>
+#include <cphd/Data.h>
+#include <cphd/Dwell.h>
 #include <cphd/ErrorParameters.h>
-#include <cphd/ProductInfo.h>
-#include <cphd/MatchInfo.h>
 #include <cphd/GeoInfo.h>
+#include <cphd/Global.h>
+#include <cphd/MatchInfo.h>
+#include <cphd/SceneCoordinates.h>
+#include <cphd/ProductInfo.h>
+#include <cphd/PVP.h>
+#include <cphd/ReferenceGeometry.h>
+#include <cphd/SupportArray.h>
+#include <cphd/TxRcv.h>
 
 namespace cphd
 {

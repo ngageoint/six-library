@@ -31,6 +31,7 @@
 #include <xml/lite/Document.h>
 #include <six/XMLParser.h>
 #include <six/SICommonXMLParser10x.h>
+
 #include <cphd/CollectionID.h>
 #include <cphd/SceneCoordinates.h>
 #include <cphd/Data.h>
@@ -71,13 +72,11 @@ public:
 
     std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
 
-
     //getter
     const std::vector<std::string>& getSchemaPaths()
     {
         return mSchemaPaths;
     }
-
 
     //! Validate the xml and log any errors
     //  NOTE: Errors are treated as detriments to valid processing
@@ -166,7 +165,7 @@ private:
     void parseChannelParameters(const XMLElem paramXML,
                                 ChannelParameter& param) const;
     void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
-    void parsePVPType(Pvp& p, const XMLElem paramXML, size_t idx) const;
+    void parsePVPType(Pvp& p, const XMLElem paramXML) const;
     void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
     void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
     void parseDecorr(const XMLElem decorrXML, Decorr& decorr) const;

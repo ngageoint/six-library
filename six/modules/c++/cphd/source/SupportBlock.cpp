@@ -37,9 +37,9 @@ const std::string SupportBlock::ALL = six::Init::undefined<std::string>();
 
 
 SupportBlock::SupportBlock(const std::string& pathname,
-                   const cphd::Data& data,
-                   sys::Off_T startSupport,
-                   sys::Off_T sizeSupport) :
+                           const cphd::Data& data,
+                           sys::Off_T startSupport,
+                           sys::Off_T sizeSupport) :
     mInStream(new io::FileInputStream(pathname)),
     mData(data),
     mSupportOffset(startSupport),
@@ -49,9 +49,9 @@ SupportBlock::SupportBlock(const std::string& pathname,
 }
 
 SupportBlock::SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
-                   const cphd::Data& data,
-                   sys::Off_T startSupport,
-                   sys::Off_T sizeSupport) :
+                           const cphd::Data& data,
+                           sys::Off_T startSupport,
+                           sys::Off_T sizeSupport) :
     mInStream(inStream),
     mData(data),
     mSupportOffset(startSupport),
@@ -64,8 +64,7 @@ void SupportBlock::initialize()
 {
     // Trusting data has the right offsets 
     mOffsets = mData.sa_IDMap;
-    std::map<std::string,sys::Off_T>::const_iterator it;
-    for (it = mOffsets.begin(); it != mOffsets.end(); ++it)
+    for (auto it = mOffsets.begin(); it != mOffsets.end(); ++it)
     {
         mOffsets.find(it->first)->second += mSupportOffset;
     }
@@ -88,7 +87,6 @@ void SupportBlock::readImpl(std::string id,
     sys::Off_T inOffset = getFileOffset(id);
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
-    // Life is easy - can do a single seek and read
     mInStream->seek(inOffset, io::FileInputStream::START);
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
@@ -122,11 +120,10 @@ void SupportBlock::read(std::string id,
 }
 
 void SupportBlock::readAll(size_t numThreads,
-             mem::ScopedArray<sys::ubyte>& data)
+                           mem::ScopedArray<sys::ubyte>& data)
 {
     data.reset(new sys::ubyte[mSupportSize]);
-    std::map<std::string,sys::Off_T>::const_iterator it;
-    for (it = mData.sa_IDMap.begin(); it != mData.sa_IDMap.end(); ++it)
+    for (auto it = mData.sa_IDMap.begin(); it != mData.sa_IDMap.end(); ++it)
     {
         const size_t bufSize = mData.getSupportArrayById(it->first).getSize();
         read(it->first, numThreads, mem::BufferView<sys::ubyte>(&data[it->second], bufSize));
@@ -157,8 +154,7 @@ std::ostream& operator<< (std::ostream& os, const SupportBlock& d)
     }
     else
     {
-        std::map<std::string,sys::Off_T>::const_iterator it;
-        for (it = d.mOffsets.begin(); it != d.mOffsets.end(); ++it)
+        for (auto it = d.mOffsets.begin(); it != d.mOffsets.end(); ++it)
         {
             os << "[" << it->first << "] mOffsets: " << it->second << "\n";
         }

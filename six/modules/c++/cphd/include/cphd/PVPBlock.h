@@ -34,8 +34,8 @@
 #include <cphd/Data.h>
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
-#include <cphd/ComplexParameter.h>
 #include <cphd/ByteSwap.h>
+#include <cphd/ComplexParameter.h>
 
 namespace cphd
 {
@@ -53,7 +53,7 @@ struct PVPBlock
     template<typename T>
     struct AddedPVP
     {
-        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, size_t idx)
+        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, std::string name)
         {
             return static_cast<T>(val);
         }
@@ -62,7 +62,7 @@ struct PVPBlock
     template<typename T>
     struct AddedPVP<std::complex<T> >
     {
-        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, size_t idx)
+        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, std::string name)
         {
             return val.getComplex<T>();
         }
@@ -71,10 +71,6 @@ struct PVPBlock
     struct PVPSet
     {
         PVPSet();
-
-        void addToAddedPVPByteSize(size_t size);
-
-        size_t getNumBytes() const;
 
         void write(const Pvp&, const sys::byte*);
 
@@ -102,9 +98,10 @@ struct PVPBlock
                 {
                     return false;
                 }
-                for (size_t ii = 0; ii < addedPVP.size(); ++ii)
+                std::map<std::string,ComplexParameter>::const_iterator it;
+                for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
                 {
-                    if(addedPVP[ii].str() != other.addedPVP[ii].str())
+                    if(it->second.str() != other.addedPVP.find(it->first)->second.str())
                     {
                         return false;
                     }
@@ -145,16 +142,16 @@ struct PVPBlock
         mem::ScopedCopyablePtr<double> tdIonoSRP;
         mem::ScopedCopyablePtr<double> signal;
 
-        std::vector<ComplexParameter> addedPVP;
+        std::map<std::string,ComplexParameter> addedPVP;
 
     private:
-        size_t mAddedPVPByteSize;
         friend std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p);
 
     };
 
     PVPBlock() :
-        mNumBytesPerVector(0)
+        mNumBytesPerVector(0),
+        mNumAdditionalBytesPerVector(0)
     {
     }
 
@@ -171,8 +168,7 @@ struct PVPBlock
 
     PVPBlock(size_t numBytesPerVector,
                     size_t numChannels,
-                    std::vector<size_t> numVectors,
-                    size_t numAddedParams=0.0);
+                    std::vector<size_t> numVectors);
 
     void verifyChannelVector(size_t channel, size_t vector) const;
 
@@ -204,13 +200,13 @@ struct PVPBlock
     double getTdIonoSRP(size_t channel, size_t set);
     double getSignal(size_t channel, size_t set);
 
-    template<typename T> T getAddedPVP(size_t channel, size_t set, size_t idx)
+    template<typename T> T getAddedPVP(size_t channel, size_t set, std::string name)
     {
         verifyChannelVector(channel, set);
-        if(idx < mData[channel][set].addedPVP.size())
+        if(mData[channel][set].addedPVP.count(name) == 1)
         {
             AddedPVP<T> aP;
-            return aP.getAddedPVP(mData[channel][set].addedPVP[idx], channel, set, idx);
+            return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second, channel, set, name);
         }
         throw except::Exception(Ctxt(
                 "Parameter was not set"));
@@ -244,19 +240,20 @@ struct PVPBlock
     void setTdIonoSRP(Pvp& p, double value, size_t channel, size_t set);
     void setSignal(Pvp& p, double value, size_t channel, size_t set);
 
-    template<typename T> void setAddedPVP(Pvp& p, T value, size_t channel, size_t set, size_t idx)
+    template<typename T> void setAddedPVP(Pvp& p, T value, size_t channel, size_t set, std::string name)
     {
         verifyChannelVector(channel, set);
-        if(idx < p.addedPVP.size())
+        if(p.addedPVP.count(name) != 0)
         {
-            if(idx < mData[channel][set].addedPVP.size())
+            if(mData[channel][set].addedPVP.count(name) == 0)
             {
-                mData[channel][set].addedPVP[idx].setValue(value);
-                mData[channel][set].addToAddedPVPByteSize(sizeof(T));
+                mData[channel][set].addedPVP[name] = ComplexParameter();
+                mData[channel][set].addedPVP.find(name)->second.setValue(value);
+                // mData[channel][set].addToAddedPVPByteSize(sizeof(T));
                 return;
             }
             throw except::Exception(Ctxt(
-                                "Additional parameter requested does not exist"));
+                                "Additional parameter requested already exists"));
         }
         throw except::Exception(Ctxt(
                                 "Parameter was not specified in XML"));
@@ -295,10 +292,7 @@ struct PVPBlock
      *         the case where a CPHD file had a larger number allocated than
      *         actually used.
      */
-    size_t getNumBytesPVPSet() const
-    {
-        return mData[0][0].getNumBytes();
-    }
+    size_t getNumBytesPVPSet() const;
 
     /*
      *  \func getPVPsize
@@ -317,13 +311,13 @@ struct PVPBlock
                     size_t numThreads,
                     const Pvp& p);
 
-    bool operator==(const PVPBlock& other)
+    bool operator==(const PVPBlock& other) const
     {
         return mData == other.mData &&
-                mNumBytesPerVector == other.mNumBytesPerVector;
+               mNumBytesPerVector == other.mNumBytesPerVector;
     }
 
-    bool operator!=(const PVPBlock& other)
+    bool operator!=(const PVPBlock& other) const
     {
         return !((*this) == other);
     }
@@ -331,6 +325,7 @@ struct PVPBlock
 private:
     std::vector<std::vector<PVPSet> > mData; // The PVP Block [Num Channles][Num Parameters]
     size_t mNumBytesPerVector;
+    size_t mNumAdditionalBytesPerVector;
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };
 }

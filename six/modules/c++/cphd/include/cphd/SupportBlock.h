@@ -25,6 +25,7 @@
 #include <iostream>
 #include <string>
 #include <complex>
+#include <unordered_map>
 
 #include <sys/Conf.h>
 #include <io/SeekableStreams.h>
@@ -57,9 +58,9 @@ public:
      * \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
     SupportBlock(const std::string& pathname,
-             const cphd::Data& data,
-             sys::Off_T startSupport,
-             sys::Off_T sizeSupport);
+                 const cphd::Data& data,
+                 sys::Off_T startSupport,
+                 sys::Off_T sizeSupport);
 
     /*
      * \param inStream Input stream to an already opened CPHD file
@@ -68,9 +69,9 @@ public:
      * \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
     SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
-             const cphd::Data& data,
-             sys::Off_T startSupport,
-             sys::Off_T sizeSupport);
+                 const cphd::Data& data,
+                 sys::Off_T startSupport,
+                 sys::Off_T sizeSupport);
 
     /* 
      * Return offset from start of CPHD file for a support array with 
@@ -122,7 +123,7 @@ private:
     cphd::Data mData;
     const sys::Off_T mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock
-    std::map<std::string,sys::Off_T> mOffsets; // Offset to start of each support array
+    std::unordered_map<std::string,sys::Off_T> mOffsets; // Offset to start of each support array
 
     friend std::ostream& operator<< (std::ostream& os, const SupportBlock& d);
 };

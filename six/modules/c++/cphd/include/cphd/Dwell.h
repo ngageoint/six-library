@@ -110,6 +110,7 @@ struct Dwell
     std::vector<DwellTime> dtime;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const DwellTime& d);
 std::ostream& operator<< (std::ostream& os, const COD& c);
 std::ostream& operator<< (std::ostream& os, const Dwell& d);

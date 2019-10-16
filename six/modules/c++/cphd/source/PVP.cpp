@@ -46,11 +46,6 @@ Pvp::Pvp()
 {
 }
 
-Pvp::Pvp(size_t numAdditionalParams) :
-    addedPVP(numAdditionalParams)
-{
-}
-
 void Pvp::validate(size_t size, size_t offset)
 {
     //Check if size of array is sufficient for write
@@ -84,24 +79,38 @@ void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format
 }
 
 // Assumes addedPVP is already correct size
-void Pvp::setData(size_t size, size_t offset, std::string format, std::string name, size_t idx)
+void Pvp::setData(size_t size, size_t offset, std::string format, std::string name)
 {
     validate(size, offset);
-    if (idx >= addedPVP.size())
-    {
-        throw except::Exception(Ctxt(
-                                "Additional Parameter specified does not exist"));
-    }
     validateFormat(format);
-    addedPVP[idx].setData(size, offset, format);
-    addedPVP[idx].setName(name);
+    if (addedPVP.count(name) == 0)
+    {
+        addedPVP[name] = APVPType();
+        addedPVP.find(name)->second.setData(size, offset, format);
+        addedPVP.find(name)->second.setName(name);
+        return;
+    }
+    throw except::Exception(Ctxt(
+            "Additional parameter name is not unique"));
 }
 
-void Pvp::setNumAddedParameters(size_t size)
+// void Pvp::setNumAddedParameters(size_t size)
+// {
+//     addedPVP.resize(size);
+// }
+
+size_t Pvp::getAdditionalParamsSize() const
 {
-    addedPVP.resize(size);
+    size_t res = 0;
+    std::map<std::string,APVPType>::const_iterator it;
+    for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
+    {
+        res += it->second.getSize();
+    }
+    return res;
 }
 
+// Returns num blocks (not bytes)
 size_t Pvp::getReqSetSize() const
 {
     size_t res = txTime.getSize() + txPos.getSize() + txVel.getSize() +
@@ -137,11 +146,12 @@ size_t Pvp::getReqSetSize() const
     {
         res += signal->getSize();
     }
-    for (size_t ii = 0; ii < addedPVP.size(); ++ii)
+    std::map<std::string, APVPType>::const_iterator it;
+    for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
-        res += addedPVP[ii].getSize();
+        res += it->second.getSize();
     }
-    return res * 8; // Num Bytes
+    return res; // Num Bytes
 }
 
 std::ostream& operator<< (std::ostream& os, const PVPType& p)
@@ -206,12 +216,13 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     }
     if (p.signal.get())
     {
-        os << "  SIGNAL     : " << *p.signal << "\n";
+        os << "  SIGNAL        : " << *p.signal << "\n";
     }
 
-    for (size_t ii = 0; ii < p.addedPVP.size(); ++ii)
+    std::map<std::string, APVPType>::const_iterator it;
+    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        os << "  Additional Parameter : " << p.addedPVP[ii] << "\n";
+        os << "  Additional Parameter : " << it->second << "\n";
     }
     return os;
 }

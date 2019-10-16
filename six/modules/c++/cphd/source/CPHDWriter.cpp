@@ -147,23 +147,23 @@ template
 void CPHDWriter::addImage<std::complex<sys::Int8_T> >(
         const std::complex<sys::Int8_T>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const sys::ubyte* pvpData);
 
 template
 void CPHDWriter::addImage<std::complex<sys::Int16_T> >(
         const std::complex<sys::Int16_T>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const sys::ubyte* pvpData);
 
 template
 void CPHDWriter::addImage<std::complex<float> >(
         const std::complex<float>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const sys::ubyte* pvpData);
 
-void CPHDWriter::writeMetadata(size_t pvpSize,
+void CPHDWriter::writeMetadata(size_t supportSize,
+                               size_t pvpSize,
                                size_t cphdSize,
-                               size_t supportSize,
                                const std::string& classification,
                                const std::string& releaseInfo)
 {
@@ -243,8 +243,7 @@ void CPHDWriter::writeMetadata(const std::string& pathname,
     size_t totalPVPSize = 0;
     size_t totalCPHDSize = 0;
 
-    std::map<std::string, sys::Off_T>::const_iterator it;
-    for (it = mMetadata.data.sa_IDMap.begin(); it != mMetadata.data.sa_IDMap.end(); ++it)
+    for (auto it = mMetadata.data.sa_IDMap.begin(); it != mMetadata.data.sa_IDMap.end(); ++it)
     {
         totalSupportSize += mMetadata.data.getSupportArrayById(it->first).getSize();
     }
@@ -256,7 +255,7 @@ void CPHDWriter::writeMetadata(const std::string& pathname,
                 mMetadata.data.getNumSamples(ii) * mElementSize;
     }
 
-    writeMetadata(totalPVPSize, totalCPHDSize, totalSupportSize, classification, releaseInfo);
+    writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize, classification, releaseInfo);
 }
 
 void CPHDWriter::writePVPData(const PVPBlock& PVPBlock)
@@ -331,15 +330,8 @@ void CPHDWriter::write(const std::string& pathname,
 {
     mFile.create(pathname);
 
-    size_t totalSupportSize = 0;
-    std::map<std::string, sys::Off_T>::const_iterator it;
-    for (it = mMetadata.data.sa_IDMap.begin(); it != mMetadata.data.sa_IDMap.end(); ++it)
-    {
-        totalSupportSize += mMetadata.data.getSupportArrayById(it->first).getSize();
-    }
-
-
-    writeMetadata(mPVPSize, totalSupportSize ,mCPHDSize, classification, releaseInfo);
+    // Assumes no optional supportData
+    writeMetadata(0, mPVPSize, mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mPVPData.size(); ++ii)
     {
@@ -351,16 +343,6 @@ void CPHDWriter::write(const std::string& pathname,
         const size_t cphdDataSize = mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii);
         writeCPHDDataImpl(mCPHDData[ii], cphdDataSize);
-    }
-
-    if (mSupportData.size() == mMetadata.data.getNumSupportArrays())
-    {
-        std::map<std::string, std::vector<const sys::ubyte*> >::const_iterator it;
-        for (size_t ii = 0; ii < mSupportData.size(); ++ii)
-        {
-            writeSupportDataImpl(mSupportData[ii].second, mMetadata.data.getSupportArrayById(mSupportData[ii].first).getSize(),
-                                 mMetadata.data.getSupportArrayById(mSupportData[ii].first).bytesPerElement);
-        }
     }
 
     mFile.close();

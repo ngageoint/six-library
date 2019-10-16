@@ -27,9 +27,10 @@
 #include <vector>
 #include <stddef.h>
 
+#include <six/sicd/Antenna.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-#include <six/sicd/Antenna.h>
 
 namespace cphd
 {
@@ -113,6 +114,9 @@ struct AntPattern
      */
     struct GainPhaseArray
     {
+        //! Constructor
+        GainPhaseArray();
+
         //! Equality operators
         bool operator==(const GainPhaseArray& other) const
         {

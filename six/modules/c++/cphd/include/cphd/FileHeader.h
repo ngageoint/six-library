@@ -26,8 +26,8 @@
 #include <ostream>
 #include <utility>
 
-#include <cphd/BaseFileHeader.h>
 #include <io/SeekableStreams.h>
+#include <cphd/BaseFileHeader.h>
 
 namespace cphd
 {
@@ -139,12 +139,10 @@ public:
 
     // Pad bytes don't include the Section terminator
     // TODO: How is this used?
-    /*
-    sys::Off_T getPadBytes() const
-    {
-        return (getVBMoffset() - (getXMLoffset() + getXMLsize() + 2));
-    }
-    */
+    // sys::Off_T getPadBytes() const
+    // {
+    //     return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
+    // }
 
     // Optional elements
     void setSupportBlockSize(sys::Off_T size)

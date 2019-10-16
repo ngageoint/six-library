@@ -56,9 +56,21 @@ TropoParameters::TropoParameters() :
 
 IonoParameters::IonoParameters() :
     tecv(0.0),
-    f2Height(0.0)
+    f2Height(six::Init::undefined<size_t>())
 {
 }
+
+bool Global::operator==(const Global& other) const
+{
+    return domainType == other.domainType &&
+           sgn == other.sgn &&
+           timeline == other.timeline &&
+           fxBand == other.fxBand &&
+           toaSwath == other.toaSwath &&
+           tropoParameters == other.tropoParameters &&
+           ionoParameters == other.ionoParameters;
+}
+
 
 std::ostream& operator<< (std::ostream& os, const Global& d)
 {

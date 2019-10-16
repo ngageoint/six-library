@@ -163,42 +163,13 @@ struct SupportArray
     }
 
     //! Get IAZ support array by unique id
-    SupportArrayParameter getIAZSupportArray(const std::string key) const
-    {
-        size_t keyNum = str::toType<size_t>(key);
-        if (iazArray.size() <= keyNum)
-        {
-            std::ostringstream oss;
-            oss << "SA_ID was not found " << (key);
-            throw except::Exception(Ctxt(oss.str()));
-        }
-        return iazArray[keyNum];
-    }
+    SupportArrayParameter getIAZSupportArray(const std::string key) const;
 
     //! Get AGP support array by unique id
-    SupportArrayParameter getAGPSupportArray(const std::string key) const
-    {
-        size_t keyNum = str::toType<size_t>(key);
-        if (antGainPhase.size() <= keyNum)
-        {
-            std::ostringstream oss;
-            oss << "SA_ID was not found " << (key);
-            throw except::Exception(Ctxt(oss.str()));
-        }
-        return antGainPhase[keyNum];
-    }
+    SupportArrayParameter getAGPSupportArray(const std::string key) const;
 
     //! Get AGP support array by unique id
-    AdditionalSupportArray getAddedSupportArray(const std::string key) const
-    {
-        if (addedSupportArray.count(key) == 0 || addedSupportArray.count(key) > 1)
-        {
-            std::ostringstream oss;
-            oss << "SA_ID was not found " << (key);
-            throw except::Exception(Ctxt(oss.str()));
-        }
-        return addedSupportArray.find(key)->second;
-    }
+    AdditionalSupportArray getAddedSupportArray(const std::string key) const;
 
     //! Vector of IAZ type arrays
     std::vector<SupportArrayParameter> iazArray;

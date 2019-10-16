@@ -48,7 +48,10 @@ struct Polarization
     return !((*this) == other);
     }
 
+    //! Transmitted signal polarization for the channel
     PolarizationType txPol;
+
+    //! Receive polarization for the channel.
     PolarizationType rcvPol;
 };
 
@@ -82,19 +85,19 @@ struct TOAExtended
         }
 
         //! FX domain minimum frequency value for an echo
-        //! TOA = TOAE1 < TOA1
+        //! delta TOA = delta TOAE1 < delta TOA1
         double fxEarlyLow;
 
         //! FX domain maximum frequency value for an echo
-        //! TOA = TOAE1 < TOA1
+        //! delta TOA = delta TOAE1 < delta TOA1
         double fxEarlyHigh;
 
         //! FX domain minimum frequency value for an echo
-        //!  TOA = TOAE2 > TOA2
+        //!  delta TOA = delta TOAE2 > delta TOA2
         double fxLateLow;
 
         //! FX domain maximum frequency value for an echo
-        //! TOA = TOAE2 > TOA2
+        //! delta TOA = delta TOAE2 > delta TOA2
         double fxLateHigh;
     };
 
@@ -328,8 +331,10 @@ struct ChannelParameter
         std::string rcvAPATId;
     };
 
+    //! Default constructor
     ChannelParameter();
 
+    //! Equality operators
     bool operator==(const ChannelParameter& other) const
     {
         return identifier == other.identifier &&
@@ -343,7 +348,6 @@ struct ChannelParameter
                 antenna == other.antenna && txRcv == other.txRcv && tgtRefLevel == other.tgtRefLevel &&
                 noiseLevel == other.noiseLevel;
     }
-
     bool operator!=(const ChannelParameter& other) const
     {
         return !((*this) == other);
@@ -435,8 +439,10 @@ struct ChannelParameter
  */
 struct Channel
 {
+    //! Constructor
     Channel();
 
+    //! Equality operators
     bool operator==(const Channel& other) const
     {
         return refChId == other.refChId &&
@@ -446,7 +452,6 @@ struct Channel
                parameters == other.parameters &&
                addedParameters == other.addedParameters;
     }
-
     bool operator!=(const Channel& other) const
     {
         return !((*this) == other);

@@ -238,12 +238,10 @@ TEST_CASE(testPvpRequired)
 
 TEST_CASE(testPvpOptional)
 {
-    size_t numAddedParams = 3;
     cphd::PVPBlock pvpBlock(2,
                             NUM_CHANNELS,
-                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
-                            numAddedParams);
-    cphd::Pvp pvp(numAddedParams);
+                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS));
+    cphd::Pvp pvp;
     setPVPXML(testName, pvp);
     pvp.ampSF.reset(new cphd::PVPType());
     pvp.setData(*pvp.ampSF, 1, 28, "F8");
@@ -251,9 +249,9 @@ TEST_CASE(testPvpOptional)
     pvp.setData(*pvp.fxN1, 1, 27, "F8");
     pvp.fxN2.reset(new cphd::PVPType());
     pvp.setData(*pvp.fxN2, 1, 29, "F8");
-    pvp.setData(1, 30, "F8", "Param1", 0);
-    pvp.setData(1, 31, "S10", "Param2", 1);
-    pvp.setData(1, 32, "CI16", "Param3", 2);
+    pvp.setData(1, 30, "F8", "Param1");
+    pvp.setData(1, 31, "S10", "Param2");
+    pvp.setData(1, 32, "CI16", "Param3");
 
     for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -263,40 +261,33 @@ TEST_CASE(testPvpOptional)
 
             const double ampSF = getRandom();
             pvpBlock.setAmpSF(pvp, ampSF, channel, vector);
-
             const double fxN1 = getRandom();
             pvpBlock.setFxN1(pvp, fxN1, channel, vector);
-
             const double fxN2 = getRandom();
             pvpBlock.setFxN2(pvp, fxN2, channel, vector);
-
             const double addedParam1 = getRandom();
-            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
-
+            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, "Param1");
             const std::string addedParam2 = "Param1";
-            pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, 1);
-
+            pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, "Param2");
             const std::complex<int> addedParam3(3,4);
-            pvpBlock.setAddedPVP(pvp, addedParam3, channel, vector, 2);
+            pvpBlock.setAddedPVP(pvp, addedParam3, channel, vector, "Param3");
 
             TEST_ASSERT_EQ(ampSF, pvpBlock.getAmpSF(channel, vector));
             TEST_ASSERT_EQ(fxN1, pvpBlock.getFxN1(channel, vector));
             TEST_ASSERT_EQ(fxN2, pvpBlock.getFxN2(channel, vector));
-            TEST_ASSERT_EQ(addedParam1, pvpBlock.getAddedPVP<double>(channel, vector, 0));
-            TEST_ASSERT_EQ(addedParam2, pvpBlock.getAddedPVP<std::string>(channel, vector, 1));
-            TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<std::complex<int> >(channel, vector, 2));
+            TEST_ASSERT_EQ(addedParam1, pvpBlock.getAddedPVP<double>(channel, vector, "Param1"));
+            TEST_ASSERT_EQ(addedParam2, pvpBlock.getAddedPVP<std::string>(channel, vector, "Param2"));
+            TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<std::complex<int> >(channel, vector, "Param3"));
         }
     }
 }
 
 TEST_CASE(testPvpThrow)
 {
-    size_t numAddedParams = 2;
     cphd::PVPBlock pvpBlock(216, // NumBytes not validated yet
                             NUM_CHANNELS,
-                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
-                            numAddedParams);
-    cphd::Pvp pvp(numAddedParams);
+                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS));
+    cphd::Pvp pvp;
     setPVPXML(testName, pvp);
     pvp.ampSF.reset(new cphd::PVPType());
     pvp.setData(*pvp.ampSF, 1, 29, "F8");
@@ -307,11 +298,11 @@ TEST_CASE(testPvpThrow)
     TEST_EXCEPTION(pvp.setData(*pvp.toaE1, 3, 27, "F8")); // Overwrite block
     pvp.setData(*pvp.toaE1, 1, 27, "F8");
 
-    pvp.setData(1, 30, "F8", "Param1", 0);
-    pvp.setData(1, 31, "F8", "Param2", 1);
-    TEST_EXCEPTION(pvp.setData(1, 30, "F8", "Param1", 3));
-    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;YF8;", "Param1", 3));
-    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;Y=F8;Z=", "Param1", 3));
+    pvp.setData(1, 30, "F8", "Param1");
+    pvp.setData(1, 31, "F8", "Param2");
+    TEST_EXCEPTION(pvp.setData(1, 30, "F8", "Param1")); //Rewriting to existing memory block
+    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;YF8;", "Param1")); //
+    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;Y=F8;Z=", "Param1"));
 
     for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -327,15 +318,16 @@ TEST_CASE(testPvpThrow)
 
             const double toaE1 = getRandom();
             pvpBlock.setTOAE1(pvp, toaE1, channel, vector);
+
             TEST_ASSERT_EQ(toaE1, pvpBlock.getTOAE1(channel, vector));
 
             const double addedParam1 = getRandom();
-            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
+            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, "Param1");
 
             const double addedParam2 = getRandom();
-            TEST_EXCEPTION(pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, 2));
-            TEST_EXCEPTION(pvpBlock.getAddedPVP<double>(channel, vector, 3));
-            pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, 0);
+            TEST_EXCEPTION(pvpBlock.setAddedPVP(pvp, addedParam2, channel, vector, "Param3"));
+            TEST_EXCEPTION(pvpBlock.getAddedPVP<double>(channel, vector, "Param3"));
+            // pvpBlock.setAddedPVP(pvp, addedParam1, channel, vector, "Param1");
 
             const double fxN2 = getRandom();
             TEST_EXCEPTION(pvpBlock.setFxN2(pvp, fxN2, channel, vector));
@@ -346,9 +338,9 @@ TEST_CASE(testPvpThrow)
     cphd::PVPBlock pvpBlock2(216,
                             NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS));
-    cphd::Pvp pvp2(numAddedParams);
+    cphd::Pvp pvp2;
     setPVPXML(testName, pvp2);
-    pvp2.setData(1, 27, "F8", "Param1", 0);
+    pvp2.setData(1, 27, "F8", "Param1");
 
         for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -357,18 +349,17 @@ TEST_CASE(testPvpThrow)
             testVectorParameters(testName, channel, vector, pvpBlock2);
 
             const double addedParam1 = getRandom();
-            TEST_EXCEPTION(pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, 0));
-            TEST_EXCEPTION(pvpBlock2.getAddedPVP<double>(channel, vector, 0));
+            pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, "Param1");
+            pvpBlock2.getAddedPVP<double>(channel, vector, "Param1");
         }
     }
 
     cphd::PVPBlock pvpBlock3(216,
                             NUM_CHANNELS,
-                            std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS),
-                            numAddedParams);
+                            std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS));
     cphd::Pvp pvp3;
     setPVPXML(testName, pvp3);
-    TEST_EXCEPTION(pvp3.setData(1, 27, "F8", "Param1", 0));
+    pvp3.setData(1, 27, "F8", "Param1");
 
         for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
     {
@@ -377,27 +368,24 @@ TEST_CASE(testPvpThrow)
             testVectorParameters(testName, channel, vector, pvpBlock3);
 
             const double addedParam1 = getRandom();
-            TEST_EXCEPTION(pvpBlock3.setAddedPVP(pvp3, addedParam1, channel, vector, 0));
-            TEST_EXCEPTION(pvpBlock3.getAddedPVP<double>(channel, vector, 0));
+            pvpBlock3.setAddedPVP(pvp3, addedParam1, channel, vector, "Param1");
+            pvpBlock3.getAddedPVP<double>(channel, vector, "Param1");
         }
     }
 }
 
 TEST_CASE(testPvpEquality)
 {
-    size_t numAddedParams = 2;
     cphd::PVPBlock pvpBlock1(216,
                             NUM_CHANNELS,
-                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
-                            numAddedParams);
+                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS));
     cphd::PVPBlock pvpBlock2(216,
                             NUM_CHANNELS,
-                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
-                            numAddedParams);
+                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS));
 
     TEST_ASSERT_TRUE(pvpBlock1 == pvpBlock2);
 
-    cphd::Pvp pvp1(numAddedParams);
+    cphd::Pvp pvp1;
     setPVPXML(testName, pvp1);
     pvp1.ampSF.reset(new cphd::PVPType());
     pvp1.setData(*pvp1.ampSF, 1, 28, "F8");
@@ -405,10 +393,10 @@ TEST_CASE(testPvpEquality)
     pvp1.setData(*pvp1.fxN1, 1, 27, "F8");
     pvp1.fxN2.reset(new cphd::PVPType());
     pvp1.setData(*pvp1.fxN2, 1, 29, "F8");
-    pvp1.setData(1, 30, "F8", "Param1", 0);
-    pvp1.setData(1, 31, "CI8", "Param1", 1);
+    pvp1.setData(1, 30, "F8", "Param1");
+    pvp1.setData(1, 31, "CI8", "Param2");
 
-    cphd::Pvp pvp2(numAddedParams);
+    cphd::Pvp pvp2;
     setPVPXML(testName, pvp2);
     pvp2.ampSF.reset(new cphd::PVPType());
     pvp2.setData(*pvp2.ampSF, 1, 28, "F8");
@@ -416,8 +404,8 @@ TEST_CASE(testPvpEquality)
     pvp2.setData(*pvp2.fxN1, 1, 27, "F8");
     pvp2.fxN2.reset(new cphd::PVPType());
     pvp2.setData(*pvp2.fxN2, 1, 29, "F8");
-    pvp2.setData(1, 30, "F8", "Param1", 0);
-    pvp2.setData(1, 31, "CI8", "Param1", 1);
+    pvp2.setData(1, 30, "F8", "Param1");
+    pvp2.setData(1, 31, "CI8", "Param2");
 
     TEST_ASSERT_EQ(pvp1, pvp2);
 
@@ -438,13 +426,13 @@ TEST_CASE(testPvpEquality)
             pvpBlock1.setFxN2(pvp1, fxN2, channel, vector);
             pvpBlock2.setFxN2(pvp2, fxN2, channel, vector);
 
-            const double addedParam1 = 5.0;
-            pvpBlock1.setAddedPVP(pvp1, addedParam1, channel, vector, 0);
-            pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, 0);
+            const double addedParam1 = getRandom();
+            pvpBlock1.setAddedPVP(pvp1, addedParam1, channel, vector, "Param1");
+            pvpBlock2.setAddedPVP(pvp2, addedParam1, channel, vector, "Param1");
 
             const std::complex<int> addedParam2(3,4);
-            pvpBlock1.setAddedPVP(pvp1, addedParam2, channel, vector, 1);
-            pvpBlock2.setAddedPVP(pvp2, addedParam2, channel, vector, 1);
+            pvpBlock1.setAddedPVP(pvp1, addedParam2, channel, vector, "Param2");
+            pvpBlock2.setAddedPVP(pvp2, addedParam2, channel, vector, "Param2");
         }
     }
     TEST_ASSERT_EQ(pvpBlock1, pvpBlock2);

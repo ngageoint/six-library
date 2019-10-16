@@ -27,7 +27,7 @@ namespace cphd
 {
 
 Data::Data() :
-    numBytesPVP(0)
+    numBytesPVP(six::Init::undefined<size_t>())
 {
 }
 
@@ -88,6 +88,16 @@ Data::SupportArray::SupportArray(std::string id, size_t rows, size_t cols,
 {
 }
 
+Data::SupportArray Data::getSupportArrayById(std::string id) const
+{
+    if(sa_IDMap.count(id) != 1 || supportArrayMap.count(sa_IDMap.find(id)->second) != 1)
+    {
+        throw except::Exception(Ctxt("Id specified does not exist"));
+    }
+    return supportArrayMap.find(sa_IDMap.find(id)->second)->second;
+}
+
+
 // offset <= supportArray < offset+size
 void Data::setSupportArray(std::string id, size_t numRows,
                            size_t numCols, size_t numBytes,
@@ -127,8 +137,7 @@ void Data::setSupportArray(std::string id, size_t numRows,
 size_t Data::getAllSupportSize() const
 {
     size_t size = 0;
-    std::map<std::string,sys::Off_T>::const_iterator it;
-    for (it = sa_IDMap.begin(); it != sa_IDMap.end(); ++it)
+    for (auto it = sa_IDMap.begin(); it != sa_IDMap.end(); ++it)
     {
         size += getSupportArrayById(it->first).getSize();
     }
@@ -167,8 +176,7 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
         os << d.channels[ii] << "\n";
     }
     os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
-    std::map<std::string, sys::Off_T>::const_iterator it;
-    for (it = d.sa_IDMap.begin(); it != d.sa_IDMap.end(); ++it)
+    for (auto it = d.sa_IDMap.begin(); it != d.sa_IDMap.end(); ++it)
     {
         os << "  SupportArrays:: \n"
             << d.getSupportArrayById(it->first) << "\n";

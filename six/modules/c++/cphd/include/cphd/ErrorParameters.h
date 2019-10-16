@@ -27,11 +27,10 @@
 #include <vector>
 #include <stddef.h>
 
-#include <cphd/Enums.h>
-#include <cphd/Types.h>
-
 #include <scene/FrameType.h>
 
+#include <cphd/Enums.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {

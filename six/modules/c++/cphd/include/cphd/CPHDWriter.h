@@ -29,6 +29,7 @@
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+
 #include <sys/Conf.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
@@ -76,13 +77,13 @@ public:
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
      *  \param dims The dimensions of the image.
-     *  \param vbmData The vector based metadata. This should have data
-     *         equal to: dims.row * metadata.data.getNumBytesVBM.
+     *  \param pvpData The vector based metadata. This should have data
+     *         equal to: dims.row * metadata.data.getNumBytesPVP.
      */
     template <typename T>
     void addImage(const T* image,
                   const types::RowCol<size_t>& dims,
-                  const sys::ubyte* PVPData);
+                  const sys::ubyte* pvpData);
 
     /*
      *  \func writeMetadata
@@ -113,7 +114,7 @@ public:
      */
     template <typename T>
     void writeSupportData(const T* data,
-                      std::string id)
+                          std::string id)
     {
         // TODO: treat multiple params as seperate params or one byte string?
         writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data), 
@@ -182,9 +183,9 @@ public:
     }
 
 private:
-    void writeMetadata(size_t pvpSize,
+    void writeMetadata(size_t supportSize, // Optional
+                       size_t pvpSize,
                        size_t cphdSize,
-                       size_t supportSize = 0, // Optional
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
@@ -255,7 +256,6 @@ private:
 
     std::vector<const sys::ubyte*> mCPHDData;
     std::vector<const sys::ubyte*> mPVPData;
-    std::vector<std::pair<std::string, const sys::ubyte*> > mSupportData;
 
     size_t mCPHDSize;
     size_t mPVPSize;

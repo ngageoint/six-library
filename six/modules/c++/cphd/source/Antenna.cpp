@@ -45,6 +45,13 @@ AntPattern::AntPattern():
 {
 }
 
+AntPattern::GainPhaseArray::GainPhaseArray() :
+    freq(six::Init::undefined<double>()),
+    arrayId(six::Init::undefined<std::string>()),
+    elementId(six::Init::undefined<std::string>())
+{
+}
+
 Antenna::Antenna()
 {
 }
