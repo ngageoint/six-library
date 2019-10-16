@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of str-c++ 
+ * This file is part of str-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * str-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -77,13 +77,13 @@ unsigned long long str::strtoull(const char *str, char **endptr, int base)
 
 template<> int str::getPrecision(const float& )
 {
-    return std::numeric_limits<float>::digits10 + 1;
+    return std::numeric_limits<float>::max_digits10;
 }
 template<> int str::getPrecision(const double& )
 {
-    return std::numeric_limits<double>::digits10 + 1;
+    return std::numeric_limits<double>::max_digits10;
 }
 template<> int str::getPrecision(const long double& )
 {
-    return std::numeric_limits<long double>::digits10 + 1;
+    return std::numeric_limits<long double>::max_digits10;
 }

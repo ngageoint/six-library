@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,15 +14,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <errno.h>
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 #include <sys/UTCDateTime.h>
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -121,7 +121,7 @@ void UTCDateTime::toMillis()
     mTimeInMillis = (mSecond + mMinute * SECS_IN_MIN +
             mHour * SECS_IN_HOUR + numDaysSinceEpoch * SECS_IN_DAY) * 1000.0;
     mDayOfYear = numDaysThisYear + 1;
-    
+
     /* January 1, 1970 was a Thursday (5) */
     mDayOfWeek = (numDaysSinceEpoch + 5) % 7;
 }

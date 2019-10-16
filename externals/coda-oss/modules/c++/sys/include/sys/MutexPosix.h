@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,7 +24,7 @@
 #ifndef __SYS_MUTEX_POSIX_H__
 #define __SYS_MUTEX_POSIX_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #if defined(HAVE_PTHREAD_H)
 
@@ -55,17 +55,17 @@ public:
      *  Lock the mutex.
      */
     virtual void lock();
-    
+
     /*!
      *  Unlock the mutex.
      */
     virtual void unlock();
-    
+
     /*!
      *  Returns the native type.
      */
     pthread_mutex_t& getNative();
-    
+
     /*!
      *  Return the type name.  This function is essentially free,
      *  because it is static RTTI.
@@ -74,7 +74,7 @@ public:
     {
         return typeid(mNative).name();
     }
-    
+
 private:
     pthread_mutex_t mNative;
 };
@@ -82,4 +82,3 @@ private:
 
 #endif
 #endif
-
