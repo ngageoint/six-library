@@ -66,21 +66,34 @@ def configure(conf):
                        msg='Checking for library minizip',
                        mandatory=False)
 
+
+def writeDefsFile(pathname, *exports):
+    with open(pathname, 'w') as f:
+        f.write('EXPORTS\n')
+        for export in exports:
+            f.write('\t{0}\n'.format(export))
+
+
+def useDefsFile(environment, defsFilePathname):
+    environment.append_value('LINKFLAGS', '/def:{0}'.format(defsFilePathname))
+
+
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
 
     driversNode = bld.path
+    buildDirname = os.path.join(bld.path.abspath(), ZLIB_VERSION)
 
     if 'MAKE_ZIP' in env:
         fname = ZLIB_VERSION
 
         driverNode = driversNode.make_node(fname)
-
         defs = env['DEFINES']
-        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
-            defs += ['ZLIB_DLL']
 
+        zlibEnv = env.derive()
+        if zlibEnv['windows_dll']:
+            useDefsFile(zlibEnv, os.path.join(buildDirname, 'win32', 'zlib.def'))
         zlib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                    includes=['.'],
                    export_includes='.',
@@ -89,7 +102,7 @@ def build(bld):
                           'compress.c uncompr.c gzclose.c gzlib.c gzread.c gzwrite.c',
                    path=driverNode,
                    defines=defs,
-                   env=env.derive(),
+                   env=zlibEnv,
                    name='ZIP',
                    targets_to_add=[])
 
@@ -101,6 +114,35 @@ def build(bld):
         # and a check for that header doesn't appear in the code, so I don't
         # think this is needed.  Note that here I am building just enough to
         # get compression to work, not decompression.
+
+        minizipEnv = env.derive()
+        if minizipEnv['windows_dll']:
+            minizipDefsPathname = os.path.join(buildDirname,
+                                               'contrib',
+                                               'minizip',
+                                               'minizip.def')
+            if not os.path.isfile(minizipDefsPathname):
+                writeDefsFile(minizipDefsPathname,
+                              'zipOpen',
+                              'zipOpen64',
+                              'zipOpen2',
+                              'zipOpen2_64',
+                              'zipOpenNewFileInZip',
+                              'zipOpenNewFileInZip64',
+                              'zipOpenNewFileInZip2',
+                              'zipOpenNewFileInZip2_64',
+                              'zipOpenNewFileInZip3',
+                              'zipOpenNewFileInZip3_64',
+                              'zipOpenNewFileInZip4',
+                              'zipOpenNewFileInZip4_64',
+                              'zipWriteInFileInZip',
+                              'zipCloseFileInZip',
+                              'zipCloseFileInZipRaw',
+                              'zipCloseFileInZipRaw64',
+                              'zipClose',
+                              'zipRemoveExtraInfoBlock')
+            useDefsFile(minizipEnv, minizipDefsPathname)
+
         minizipDir = os.path.join('contrib', 'minizip')
         minizipIncludes = ['.', minizipDir]
         minizip = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
@@ -110,6 +152,7 @@ def build(bld):
                       source=[os.path.join(minizipDir, 'ioapi.c'),
                               os.path.join(minizipDir, 'zip.c')],
                       path=driverNode,
+                      env=minizipEnv,
                       lib='z',
                       libpath=os.path.join(os.getcwd(), env['install_libdir']),
                       name='MINIZIP',
@@ -161,4 +204,3 @@ def distclean(context):
             if os.path.exists(d):
                 shutil.rmtree(d, ignore_errors=True)
         except:{}
-

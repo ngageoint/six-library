@@ -23,7 +23,7 @@
 #ifndef __SYS_SCOPED_CPU_AFFINITY_UNIX_H__
 #define __SYS_SCOPED_CPU_AFFINITY_UNIX_H__
 
-#include "sys/sys_config.h"
+#include <config/coda_oss_config.h>
 
 #if !defined(WIN32)
 

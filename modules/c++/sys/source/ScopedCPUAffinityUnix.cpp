@@ -20,7 +20,7 @@
  *
  */
 
-#include "sys/sys_config.h"
+#include "config/coda_oss_config.h"
 
 #if !defined(WIN32)
 

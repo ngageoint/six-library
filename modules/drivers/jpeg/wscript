@@ -36,13 +36,30 @@ def options(opt):
 
 from build import writeConfig
 
-def configure(conf):    
+
+def toggleSharedBuild(conf, driverNode):
+    decoration = conf.env['declspec_decoration']
+
+    jmorecfg = os.path.join(driverNode.relpath(), 'jmorecfg.h')
+    with open(jmorecfg, 'r') as f:
+        contents = f.readlines()
+    with open(jmorecfg, 'w') as f:
+        for line in contents:
+            if line.startswith('#define EXTERN(type)'):
+                f.write('#define EXTERN(type) extern {0} type\n'.format(decoration))
+            elif line.startswith('#define GLOBAL(type)'):
+                f.write('#define GLOBAL(type) {0} type\n'.format(decoration))
+            else:
+                f.write(line)
+
+
+def configure(conf):
     if Options.options.enable_jpeg:
 
         jpegHome = Options.options.jpeg_home
         if jpegHome:
-            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
-                       uselib_store='JPEG', 
+            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg',
+                       uselib_store='JPEG',
                        header_name='jpeglib.h', fragment=frag,
                        libpath=join(jpegHome, 'lib'),
                        includes=join(jpegHome, 'include'),
@@ -54,34 +71,36 @@ def configure(conf):
             # Build is off by default when tarfile not found, fail if forced on
             if not os.path.exists(join(conf.path.abspath(), tarfile)):
                 conf.fatal('Missing libjpeg tarfile')
-            
+
             # callback function to check for all #defines used by the jpeg driver
             def jpeg_callback(conf):
                 # These are needed by jmorecfg.h.  We could just set these defines
                 # rather than bothering with the conf check.
                 conf.define('HAVE_PROTOTYPES', 1)
                 conf.check_cc(fragment='int main(){unsigned short; return 0;}',
-                    define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short', 
+                    define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short',
                     mandatory=False)
                 conf.check_cc(fragment='int main(){unsigned char i; return 0;}',
-                    define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char', 
+                    define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char',
                     mandatory=False)
                 conf.check_cc(header_name="stddef.h", mandatory=False)
                 conf.check_cc(header_name="stdlib.h", mandatory=False)
                 conf.check_cc(header_name="locale.h", mandatory=False)
-                
+
             conf.env['MAKE_JPEG'] = True
             conf.msg('Building local lib', 'jpeg (libjpeg)')
-            
+
             untarFile(path=conf.path, fname=tarfile)
-            
+
             # make jconfig.h
             driverNode = conf.path.make_node(sourcepath)
             writeConfig(conf, jpeg_callback, 'jpeg', infile='jconfig.cfg',
                         outfile='jconfig.h', path=driverNode, feature='handleDefs')
-            
+
+            toggleSharedBuild(conf, driverNode)
+
         else:
-            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
+            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg',
                        uselib_store='JPEG',
                        header_name='jpeglib.h', fragment=frag,
                        msg='Checking for library libjpeg',
@@ -93,28 +112,28 @@ def configure(conf):
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
-        
+
     driversNode = bld.path
     sourceFiles = []
     driverNode = driversNode.make_node(sourcepath)
-    
+
     if 'MAKE_JPEG' in env:
-        sources = ('cdjpeg.c',   'jaricom.c',  'jcapimin.c', 'jcapistd.c', 
-                   'jcarith.c',  'jccoefct.c', 'jccolor.c',  'jcdctmgr.c', 
-                   'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c', 
-                   'jcmaster.c', 'jcomapi.c',  'jcparam.c',  'jcprepct.c', 
-                   'jcsample.c', 'jctrans.c',  'jdapimin.c', 'jdapistd.c', 
-                   'jdarith.c',  'jdatadst.c', 'jdatasrc.c', 'jdcoefct.c', 
-                   'jdcolor.c',  'jddctmgr.c', 'jdhuff.c',   'jdinput.c',  
-                   'jdmainct.c', 'jdmarker.c', 'jdmaster.c', 'jdmerge.c',  
-                   'jdpostct.c', 'jdsample.c', 'jdtrans.c',  'jerror.c',   
-                   'jfdctflt.c', 'jfdctfst.c', 'jfdctint.c', 'jidctflt.c', 
-                   'jidctfst.c', 'jidctint.c', 'jmemmgr.c',  'jmemnobs.c', 
-                   'jquant1.c',  'jquant2.c',  'jutils.c',   'rdbmp.c',    
-                   'rdcolmap.c', 'rdgif.c',    'rdppm.c',    'rdrle.c',    
-                   'rdswitch.c', 'rdtarga.c',  'transupp.c', 'wrbmp.c',    
+        sources = ('cdjpeg.c',   'jaricom.c',  'jcapimin.c', 'jcapistd.c',
+                   'jcarith.c',  'jccoefct.c', 'jccolor.c',  'jcdctmgr.c',
+                   'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c',
+                   'jcmaster.c', 'jcomapi.c',  'jcparam.c',  'jcprepct.c',
+                   'jcsample.c', 'jctrans.c',  'jdapimin.c', 'jdapistd.c',
+                   'jdarith.c',  'jdatadst.c', 'jdatasrc.c', 'jdcoefct.c',
+                   'jdcolor.c',  'jddctmgr.c', 'jdhuff.c',   'jdinput.c',
+                   'jdmainct.c', 'jdmarker.c', 'jdmaster.c', 'jdmerge.c',
+                   'jdpostct.c', 'jdsample.c', 'jdtrans.c',  'jerror.c',
+                   'jfdctflt.c', 'jfdctfst.c', 'jfdctint.c', 'jidctflt.c',
+                   'jidctfst.c', 'jidctint.c', 'jmemmgr.c',  'jmemnobs.c',
+                   'jquant1.c',  'jquant2.c',  'jutils.c',   'rdbmp.c',
+                   'rdcolmap.c', 'rdgif.c',    'rdppm.c',    'rdrle.c',
+                   'rdswitch.c', 'rdtarga.c',  'transupp.c', 'wrbmp.c',
                    'wrgif.c',    'wrppm.c',    'wrrle.c',    'wrtarga.c')
-        
+
         jpeglib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                       includes=['.'],
                       export_includes=['.'],
@@ -126,16 +145,16 @@ def build(bld):
                       env=env.derive(),
                       name='JPEG',
                       targets_to_add=[])
-        
+
         if env['install_libs']:
             jpeglib.install_path = env['install_libdir']
-        
+
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
-                dir=driverNode, pattern=('jpeglib.h', 'jconfig.h', 'jmorecfg.h'), 
+                dir=driverNode, pattern=('jpeglib.h', 'jconfig.h', 'jmorecfg.h'),
                 name='JPEG_HEADERS_INSTALL')
             jpeglib.targets_to_add += ['JPEG_HEADERS_INSTALL']
-                
+
         if env['install_source']:
             sourceFiles.append(tarfile)
             jpeglib.targets_to_add += ['JPEG_SOURCE_INSTALL']
@@ -150,7 +169,7 @@ def build(bld):
 def distclean(context):
     # remove the untarred directories
     import shutil
-    dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)),
                   [sourcepath])
     for d in dirs:
         try:
