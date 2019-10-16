@@ -23,7 +23,7 @@
 #ifndef __SYS_ATOMIC_COUNTER_H__
 #define __SYS_ATOMIC_COUNTER_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 #include <sys/AtomicCounterX86.h>
