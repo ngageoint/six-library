@@ -1,5 +1,5 @@
 import os
-from build import CPPOptionsContext
+from build import CPPOptionsContext, enableWafUnitTests
 from waflib import Scripting, Options, Context
 
 VERSION = '3.0-dev'
@@ -24,6 +24,7 @@ def configure(conf):
 
 def build(bld):
     bld.recurse(DIRS)
+    enableWafUnitTests(bld)
 
 def distclean(ctxt):
     ctxt.recurse(DIRS)

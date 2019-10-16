@@ -23,7 +23,7 @@
 #ifndef __SYS_CONF_H__
 #define __SYS_CONF_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 #include <str/Convert.h>
 
 #if defined (__APPLE_CC__)
