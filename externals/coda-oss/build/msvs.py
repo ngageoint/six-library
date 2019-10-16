@@ -670,7 +670,7 @@ class vsnode_target(vsnode_project):
 		for x in include_dirs:
 			if isinstance(x, str):
 				x = tg.path.find_node(x)
-			if x:
+			if x and os.path.isdir(x.abspath()):
 				lst = [y for y in x.ant_glob(HEADERS_GLOB, flat=False)]
 				include_files.extend(lst)
 
