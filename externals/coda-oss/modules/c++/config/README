@@ -1,0 +1,9 @@
+This module represents the "configure" step for the entire C++ set of libraries.
+It exists independently to ensure it can always build first with no
+circular dependencies. Its sole responsibility is to generate "coda_oss_config.h"
+
+Key defines in "coda_oss_config.h":
+  - CODA_EXPORT:  Expands to __declspec(dllexport) when building
+                  shared libraries on Windows
+
+  - __CODA_CPP11: Defined if the library is compiled with C++11 support
