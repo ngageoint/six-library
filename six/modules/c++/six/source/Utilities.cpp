@@ -126,7 +126,7 @@ template<> std::string six::toString<double>(const double& value)
     }
 
    std::ostringstream os;
-   os << std::uppercase << std::scientific << std::setprecision(15) << value;
+   os << std::uppercase << std::scientific << std::setprecision(17) << value;
    std::string strValue = os.str();
 
    // remove any + in scientific notation to meet SICD XML standard
