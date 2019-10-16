@@ -20,7 +20,7 @@
  *
  */
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 #include <nitf/Field.hpp>
 #include "TestCase.h"
 
