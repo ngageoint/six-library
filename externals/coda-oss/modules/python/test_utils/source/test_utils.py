@@ -49,7 +49,11 @@ def runUnitTests(projectName, installDirName='install'):
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
             testPathname = os.path.join(unitTestDir, childDir, test)
             print(testPathname)
-            if call([executableName(testPathname)]) != 0:
+            if testPathname.endswith('.py'):
+                command = ['python', testPathname]
+            else:
+                command = [executableName(testPathname)]
+            if call(command) != 0:
                 success = False
 
     return success

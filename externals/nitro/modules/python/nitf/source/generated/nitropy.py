@@ -1620,8 +1620,8 @@ def nitf_ImageWriter_setWriteCaching(iWriter, enable):
     return _nitropy.nitf_ImageWriter_setWriteCaching(iWriter, enable)
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
 
-def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable):
-    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable)
+def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error):
+    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error)
 nitf_ImageWriter_setDirectBlockWrite = _nitropy.nitf_ImageWriter_setDirectBlockWrite
 
 def nitf_ImageWriter_setPadPixel(imageWriter, value, length, error):
