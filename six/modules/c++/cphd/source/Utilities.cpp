@@ -26,7 +26,24 @@
 
 namespace cphd
 {
-void validateFormat(std::string format)
+
+// Return bytes/sample, either 2, 4, or 8 (or 0 if not initialized)
+size_t getNumBytesPerSample(const SignalArrayFormat& signalArrayFormat)
+{
+    switch (signalArrayFormat)
+    {
+        case SignalArrayFormat::CI2:
+            return 2;
+        case SignalArrayFormat::CI4:
+            return 4;
+        case SignalArrayFormat::CF8:
+            return 8;
+        default:
+            return 0;
+    }
+}
+
+void validateFormat(const std::string& format)
 {
     if (format == "F4" || format == "F8")
     {
@@ -51,7 +68,8 @@ void validateFormat(std::string format)
     {
         return;
     }
-    else if (!six::Init::isUndefined<size_t>(isFormatStr(format))) // Else if Check for string type S[1-9][0-9]
+    // Else if Check for string type S[1-9][0-9]
+    else if (!six::Init::isUndefined<size_t>(isFormatStr(format)))
     {
         return;
     }
@@ -62,7 +80,7 @@ void validateFormat(std::string format)
     throw except::Exception(Ctxt("Invalid format provided"));
 }
 
-size_t getFormatSize(std::string format)
+size_t getFormatSize(const std::string& format)
 {
     if (format == "U1" || format == "I1")
     {
@@ -88,14 +106,15 @@ size_t getFormatSize(std::string format)
     {
         return 16;
     }
-    else if (!six::Init::isUndefined<size_t>(isFormatStr(format))) // Else if Check for string type S[1-9][0-9]
+     // Else if Check for string type S[1-9][0-9]
+    else if (!six::Init::isUndefined<size_t>(isFormatStr(format)))
     {
         return isFormatStr(format);
     }
     throw except::Exception(Ctxt("Invalid format provided"));
 }
 
-bool isMultipleParam(std::string format)
+bool isMultipleParam(const std::string& format)
 {
     std::string eqDelimiter = "=";
     std::string colDelimiter = ";";
@@ -105,8 +124,8 @@ bool isMultipleParam(std::string format)
         size_t pos = format.find(colDelimiter, idx);
         try
         {
-            FormatType keyVal = keyValueFinder(format, idx, pos);
-            validateFormat(keyVal.getVal());
+            std::pair<std::string,std::string> keyVal = keyValueFinder(format, idx, pos);
+            validateFormat(keyVal.second);
         }
         catch(std::exception& e)
         {
@@ -122,16 +141,16 @@ bool isMultipleParam(std::string format)
     return false;
 }
 
-std::vector<FormatType> parseMultipleParams(std::string format)
+std::vector<std::pair<std::string,std::string> > parseMultipleParams(const std::string& format)
 {
-    std::vector<FormatType> keyValPairs;
+    std::vector<std::pair<std::string,std::string> > keyValPairs;
     std::string colDelimiter = ";";
     size_t idx = 0;
     while (format.find(colDelimiter, idx) != std::string::npos)
     {
         size_t pos = format.find(colDelimiter, idx);
-        FormatType keyVal = keyValueFinder(format, idx, pos);
-        validateFormat(keyVal.getVal());
+        std::pair<std::string,std::string>  keyVal = keyValueFinder(format, idx, pos);
+        validateFormat(keyVal.second);
         keyValPairs.push_back(keyVal);
 
         //! Update the current idx
@@ -145,27 +164,27 @@ std::vector<FormatType> parseMultipleParams(std::string format)
             "Incorrect format \n"));
 }
 
-std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(std::string format)
+std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(const std::string& format)
 {
-    std::vector<FormatType> params = parseMultipleParams(format);
+    std::vector<std::pair<std::string,std::string> > params = parseMultipleParams(format);
     std::vector<std::pair<std::string,size_t> > paramVec(params.size());
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
         paramVec[ii] =
-            std::pair<std::string, size_t>(params[ii].getKey(), getFormatSize(params[ii].getVal()));
+            std::pair<std::string, size_t>(params[ii].first, getFormatSize(params[ii].second));
     }
     return paramVec;
 }
 
-std::map<std::string, size_t> getMultipleParams(std::string format)
+std::map<std::string, size_t> getMultipleParams(const std::string& format)
 {
     std::map<std::string, size_t> paramMap;
-    std::vector<FormatType> params = parseMultipleParams(format);
+    std::vector<std::pair<std::string,std::string> > params = parseMultipleParams(format);
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
-        if (paramMap.count(params[ii].getKey()) == 0)
+        if (paramMap.count(params[ii].first) == 0)
         {
-            paramMap[params[ii].getKey()] = getFormatSize(params[ii].getVal());
+            paramMap[params[ii].second] = getFormatSize(params[ii].second);
         }
         else
         {
@@ -176,7 +195,7 @@ std::map<std::string, size_t> getMultipleParams(std::string format)
     return paramMap;
 }
 
-FormatType keyValueFinder(std::string format, size_t startPos, size_t endPos)
+std::pair<std::string,std::string>  keyValueFinder(const std::string& format, size_t startPos, size_t endPos)
 {
     const std::string eqDelimiter = "=";
     size_t eqPos = format.find(eqDelimiter, startPos);
@@ -194,10 +213,10 @@ FormatType keyValueFinder(std::string format, size_t startPos, size_t endPos)
     }
     eqPos += 1;
     std::string val = format.substr(eqPos, endPos-eqPos);
-    return FormatType(key, val);
+    return std::pair<std::string,std::string> (key, val);
 }
 
-size_t isFormatStr(std::string format)
+size_t isFormatStr(const std::string& format)
 {
     const char* ptr = format.c_str();
     if(format.size() <= 3 && *ptr == 'S')

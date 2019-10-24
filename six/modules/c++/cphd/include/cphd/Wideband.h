@@ -25,19 +25,19 @@
 #include <string>
 #include <complex>
 
-#include <sys/Conf.h>
 #include <cphd/Data.h>
-#include <mem/ScopedArray.h>
-#include <mem/SharedPtr.h>
+#include <cphd/Utilities.h>
+
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
+#include <mem/ScopedArray.h>
+#include <mem/SharedPtr.h>
 #include <types/RowCol.h>
+#include <sys/Conf.h>
+
 
 namespace cphd
 {
-
-// Return bytes/sample, either 2, 4, or 8 (or 0 if not initialized)
-size_t getNumBytesPerSample(cphd::SignalArrayFormat signalArrayFormat);
 
 //  This class contains information about the Wideband CPHD data.
 //  It contains the cphd::Data structure (for channel and vector sizes).

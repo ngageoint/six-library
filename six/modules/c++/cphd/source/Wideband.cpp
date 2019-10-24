@@ -229,21 +229,6 @@ void scale(const void* input,
 
 namespace cphd
 {
-// Return bytes/sample, either 2, 4, or 8 (or 0 if not initialized)
-size_t getNumBytesPerSample(cphd::SignalArrayFormat signalArrayFormat)
-{
-    switch (signalArrayFormat)
-    {
-        case cphd::SignalArrayFormat::CI2:
-            return 2;
-        case cphd::SignalArrayFormat::CI4:
-            return 4;
-        case cphd::SignalArrayFormat::CF8:
-            return 8;
-        default:
-            return 0;
-    }
-}
 
 const size_t Wideband::ALL = std::numeric_limits<size_t>::max();
 

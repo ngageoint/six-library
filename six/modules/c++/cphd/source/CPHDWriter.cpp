@@ -20,11 +20,12 @@
  *
  */
 #include <except/Exception.h>
+#include <cphd/ByteSwap.h>
+#include <cphd/FileHeader.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
-#include <cphd/FileHeader.h>
 #include <cphd/Wideband.h>
-#include <cphd/ByteSwap.h>
+#include <cphd/Utilities.h>
 
 namespace cphd
 {
