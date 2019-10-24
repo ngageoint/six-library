@@ -75,7 +75,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "CLASSIFICATION := UNCLASSIFIED\n"
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
-    fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport.c_str(), 
+    fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport.c_str(),
                                             fileHeaderTxtNoSupport.size());
     cphd::FileHeader headerWithoutSupport;
     headerWithoutSupport.read(fileHeaderContentWithoutSupport);
@@ -100,7 +100,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     io::ByteStream fileHeaderContentWithoutClassification;
-    fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass.c_str(), 
+    fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass.c_str(),
                                                     fileHeaderTxtNoClass.size());
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithoutClassification));
 
@@ -115,7 +115,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     io::ByteStream fileHeaderContentWithInvalidValue;
-    fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid.c_str(), 
+    fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid.c_str(),
                                                 fileHeaderTxtInvalid.size());
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithInvalidValue));
 }

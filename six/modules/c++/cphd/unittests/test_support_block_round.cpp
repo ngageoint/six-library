@@ -162,6 +162,8 @@ void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
     metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
     metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
@@ -223,10 +225,10 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
     }
 
     cphd::CPHDWriter writer(metadata, numThreads);
-    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+    writer.writeMetadata(outPathname, pvpBlock);
 
     size_t idx = 0;
-    for (auto it = metadata.data.sa_IDMap.begin(); it != metadata.data.sa_IDMap.end(); ++it, idx += NUM_ROWS*NUM_COLS)
+    for (auto it = metadata.data.supportOffsetMap.begin(); it != metadata.data.supportOffsetMap.end(); ++it, idx += NUM_ROWS*NUM_COLS)
     {
         writer.writeSupportData(&writeData[idx], it->first);
     }
@@ -239,7 +241,7 @@ std::vector<sys::ubyte> checkSupportData(const std::string& pathname,
         mem::SharedPtr<io::SeekableInputStream> inStream)
 {
     cphd::CPHDReader reader(inStream, numThreads);
-    cphd::SupportBlock& supportBlock = reader.getSupportBlock();
+    const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
     mem::ScopedArray<sys::ubyte> readPtr;
     supportBlock.readAll(numThreads, readPtr);

@@ -289,10 +289,10 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 /*
  * Initialize PVP Array with a data object
  */
-PVPBlock::PVPBlock(Data& d, Pvp& p)
+PVPBlock::PVPBlock(const Data& d, const Pvp& p)
 {
-    mNumBytesPerVector = p.getReqSetSize()*sizeof(double);
-    // mNumAdditionalBytesPerVector = p.getAdditionalParamsSize()*sizeof(double);
+    mPvp = p;
+    mNumBytesPerVector = mPvp.getReqSetSize()*sizeof(double);
     mData.resize(d.getNumChannels());
     for (size_t ii = 0; ii < d.getNumChannels(); ++ii)
     {
@@ -312,9 +312,10 @@ PVPBlock::PVPBlock(Data& d, Pvp& p)
  */
 PVPBlock::PVPBlock(size_t numBytesPerVector,
                    size_t numChannels,
-                   std::vector<size_t> numVectors) :
+                   const std::vector<size_t>& numVectors,
+                   const Pvp& p) :
     mNumBytesPerVector(numBytesPerVector),
-    mNumAdditionalBytesPerVector(0)
+    mPvp(p)
 {
     mData.resize(numChannels);
     if(numChannels != numVectors.size())
@@ -326,6 +327,13 @@ PVPBlock::PVPBlock(size_t numBytesPerVector,
     {
         mData[ii].resize(numVectors[ii]);
     }
+    size_t calculateBytesPerVector = getNumBytesPVPSet();
+    if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
+        calculateBytesPerVector > mNumBytesPerVector)
+    {
+        mNumBytesPerVector = calculateBytesPerVector;
+    }
+
 }
 
 size_t PVPBlock::getNumBytesPVPSet() const
@@ -358,18 +366,18 @@ size_t PVPBlock::getPVPsize(size_t channel) const
 }
 
 
-void PVPBlock::getPVPdata(const Pvp& p, size_t channel,
-                         std::vector<sys::ubyte>& data) const
+void PVPBlock::getPVPdata(size_t channel,
+                          std::vector<sys::ubyte>& data) const
 {
     verifyChannelVector(channel, 0);
     data.resize(getPVPsize(channel));
     std::fill(data.begin(), data.end(), 0);
 
-    getPVPdata(p, channel, &data[0]);
+    getPVPdata(channel, &data[0]);
 }
 
-void PVPBlock::getPVPdata(const Pvp& p, size_t channel,
-                     void* data) const
+void PVPBlock::getPVPdata(size_t channel,
+                          void* data) const
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesPVPSet();
@@ -379,15 +387,14 @@ void PVPBlock::getPVPdata(const Pvp& p, size_t channel,
          ii < mData[channel].size();
          ++ii, ptr += numBytes)
     {
-        mData[channel][ii].read(p, ptr);
+        mData[channel][ii].read(mPvp, ptr);
     }
 }
 
 sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
                      sys::Off_T startPVP,
                      sys::Off_T sizePVP,
-                     size_t numThreads,
-                     const Pvp& p)
+                     size_t numThreads)
 {
     // Allocate the buffers
     size_t numBytesIn(0);
@@ -443,7 +450,7 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
             sys::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
-                mData[ii][jj].write(p, ptr);
+                mData[ii][jj].write(mPvp, ptr);
             }
         }
     }
@@ -721,10 +728,10 @@ void PVPBlock::setSCSS(double value, size_t channel, size_t vector)
     mData[channel][vector].scss = value;
 }
 
-void PVPBlock::setAmpSF(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setAmpSF(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.ampSF.get())
+    if (mPvp.ampSF.get())
     {
         mData[channel][vector].ampSF.reset(new double(value));
         return;
@@ -733,10 +740,10 @@ void PVPBlock::setAmpSF(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setFxN1(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setFxN1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.fxN1.get())
+    if (mPvp.fxN1.get())
     {
         mData[channel][vector].fxN1.reset(new double(value));
         return;
@@ -746,10 +753,10 @@ void PVPBlock::setFxN1(Pvp& p, double value, size_t channel, size_t vector)
 
 }
 
-void PVPBlock::setFxN2(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setFxN2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.fxN2.get())
+    if (mPvp.fxN2.get())
     {
         mData[channel][vector].fxN2.reset(new double(value));
         return;
@@ -758,10 +765,10 @@ void PVPBlock::setFxN2(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setTOAE1(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTOAE1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.toaE1.get())
+    if (mPvp.toaE1.get())
     {
         mData[channel][vector].toaE1.reset(new double(value));
         return;
@@ -770,10 +777,10 @@ void PVPBlock::setTOAE1(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setTOAE2(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTOAE2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.toaE2.get())
+    if (mPvp.toaE2.get())
     {
         mData[channel][vector].toaE2.reset(new double(value));
         return;
@@ -782,10 +789,10 @@ void PVPBlock::setTOAE2(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setTdIonoSRP(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setTdIonoSRP(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.tdIonoSRP.get())
+    if (mPvp.tdIonoSRP.get())
     {
         mData[channel][vector].tdIonoSRP.reset(new double(value));
         return;
@@ -794,10 +801,10 @@ void PVPBlock::setTdIonoSRP(Pvp& p, double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setSignal(Pvp& p, double value, size_t channel, size_t vector)
+void PVPBlock::setSignal(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (p.signal.get())
+    if (mPvp.signal.get())
     {
         mData[channel][vector].signal.reset(new double(value));
         return;

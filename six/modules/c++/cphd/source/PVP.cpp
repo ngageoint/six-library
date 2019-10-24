@@ -71,7 +71,7 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
-void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format)
+void Pvp::setData(PVPType& param, size_t size, size_t offset, const std::string& format)
 {
     validate(size, offset);
     validateFormat(format);
@@ -79,7 +79,7 @@ void Pvp::setData(PVPType& param, size_t size, size_t offset, std::string format
 }
 
 // Assumes addedPVP is already correct size
-void Pvp::setData(size_t size, size_t offset, std::string format, std::string name)
+void Pvp::setData(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
     validate(size, offset);
     validateFormat(format);
@@ -172,51 +172,51 @@ std::ostream& operator<< (std::ostream& os, const APVPType& a)
 
 std::ostream& operator<< (std::ostream& os, const Pvp& p)
 {
-    os << "  TxTime         : " << p.txTime << "\n"
-        << "  TxPos         : " << p.txPos << "\n"
-        << "  TxVel         : " << p.txVel << "\n"
-        << "  RcvTime       : " << p.rcvTime << "\n"
-        << "  RcvPos        : " << p.rcvPos << "\n"
-        << "  RcvVel        : " << p.rcvVel << "\n"
-        << "  SRPPos        : " << p.srpPos << "\n"
-        << "  aFDOP         : " << p.aFDOP << "\n"
-        << "  aFRR1         : " << p.aFRR1 << "\n"
-        << "  aFRR2         : " << p.aFRR2 << "\n"
-        << "  Fx1           : " << p.fx1 << "\n"
-        << "  Fx2           : " << p.fx2 << "\n"
-        << "  TOA1          : " << p.toa1 << "\n"
-        << "  TOA2          : " << p.toa2 << "\n"
-        << "  TdTropoSRP    : " << p.tdTropoSRP << "\n"
-        << "  SC0           : " << p.sc0 << "\n"
-        << "  SCSS          : " << p.scss << "\n";
+    os << "  TxTime         : \n" << p.txTime << "\n"
+        << "  TxPos         : \n" << p.txPos << "\n"
+        << "  TxVel         : \n" << p.txVel << "\n"
+        << "  RcvTime       : \n" << p.rcvTime << "\n"
+        << "  RcvPos        : \n" << p.rcvPos << "\n"
+        << "  RcvVel        : \n" << p.rcvVel << "\n"
+        << "  SRPPos        : \n" << p.srpPos << "\n"
+        << "  aFDOP         : \n" << p.aFDOP << "\n"
+        << "  aFRR1         : \n" << p.aFRR1 << "\n"
+        << "  aFRR2         : \n" << p.aFRR2 << "\n"
+        << "  Fx1           : \n" << p.fx1 << "\n"
+        << "  Fx2           : \n" << p.fx2 << "\n"
+        << "  TOA1          : \n" << p.toa1 << "\n"
+        << "  TOA2          : \n" << p.toa2 << "\n"
+        << "  TdTropoSRP    : \n" << p.tdTropoSRP << "\n"
+        << "  SC0           : \n" << p.sc0 << "\n"
+        << "  SCSS          : \n" << p.scss << "\n";
 
     if (p.ampSF.get())
     {
-        os << "  AmpSF         : " << *p.ampSF << "\n";
+        os << "  AmpSF         : \n" << *p.ampSF << "\n";
     }
     if (p.fxN1.get())
     {
-        os << "  FxN1          : " << *p.fxN1 << "\n";
+        os << "  FxN1          : \n" << *p.fxN1 << "\n";
     }
     if (p.fxN2.get())
     {
-        os << "  FxN2          : " << *p.fxN2 << "\n";
+        os << "  FxN2          : \n" << *p.fxN2 << "\n";
     }
     if (p.toaE1.get())
     {
-        os << "  TOAE1         : " << *p.toaE1 << "\n";
+        os << "  TOAE1         : \n" << *p.toaE1 << "\n";
     }
     if (p.toaE2.get())
     {
-        os << "  TOAE2         : " << *p.toaE2 << "\n";
+        os << "  TOAE2         : \n" << *p.toaE2 << "\n";
     }
     if (p.tdIonoSRP.get())
     {
-        os << "  TdIonoSRP     : " << *p.tdIonoSRP << "\n";
+        os << "  TdIonoSRP     : \n" << *p.tdIonoSRP << "\n";
     }
     if (p.signal.get())
     {
-        os << "  SIGNAL        : " << *p.signal << "\n";
+        os << "  SIGNAL        : \n" << *p.signal << "\n";
     }
 
     std::map<std::string, APVPType>::const_iterator it;

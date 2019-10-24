@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of cphd-c++
+ * This file is part of sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, MDA Information Systems LLC
  *
- * cphd-c++ is free software; you can redistribute it and/or modify
+ * sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,7 +20,7 @@
  *
  */
 
-PiedPiper::PiedPiper(double dtof)
+ PiedPiper::PiedPiper(double dtof)
 {
     dtof_coef = dtof;
 }

@@ -52,7 +52,7 @@ public:
     }
 
     //! Copy constructor
-    ComplexParameter(const ComplexParameter & other)
+    ComplexParameter(const ComplexParameter& other)
     {
         mName = other.mName;
         mValue = other.mValue;

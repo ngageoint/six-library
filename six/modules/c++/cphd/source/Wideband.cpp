@@ -399,7 +399,7 @@ void Wideband::readImpl(size_t channel,
                         size_t lastVector,
                         size_t firstSample,
                         size_t lastSample,
-                        void* data)
+                        void* data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
@@ -435,7 +435,7 @@ void Wideband::readImpl(size_t channel,
 }
 
 void Wideband::readImpl(size_t channel,
-                        void* data)
+                        void* data) const
 {
     // Compute the byte offset into this channel's wideband in the CPHD file
     // First to the start of the first pulse we're going to read
@@ -453,7 +453,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const mem::BufferView<sys::ubyte>& data)
+                    const mem::BufferView<sys::ubyte>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -483,7 +483,7 @@ void Wideband::read(size_t channel,
 }
 
 void Wideband::read(size_t channel,
-                    const mem::BufferView<sys::ubyte>& data)
+                    const mem::BufferView<sys::ubyte>& data) const
 {
     // Sanity checks
     checkChannelInput(channel);
@@ -516,7 +516,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    mem::ScopedArray<sys::ubyte>& data)
+                    mem::ScopedArray<sys::ubyte>& data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
@@ -530,7 +530,7 @@ void Wideband::read(size_t channel,
 }
 
 void Wideband::read(size_t channel,
-                    mem::ScopedArray<sys::ubyte>& data)
+                    mem::ScopedArray<sys::ubyte>& data) const
 {
     // Sanity checks
     const size_t bufSize = mData.getCompressedSignalSize(channel);
@@ -560,7 +560,7 @@ void Wideband::read(size_t channel,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
                     const mem::BufferView<sys::ubyte>& scratch,
-                    const mem::BufferView<std::complex<float> >& data)
+                    const mem::BufferView<std::complex<float> >& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;

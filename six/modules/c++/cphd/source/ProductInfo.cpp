@@ -50,7 +50,7 @@ std::ostream& operator<< (std::ostream& os, const ProductInfo& p)
             << "    Site                 : " << p.creationInfo[ii].site << "\n";
         for (size_t jj = 0; jj < p.creationInfo[ii].parameter.size(); ++jj)
         {
-            os << "    Parameter name       : " 
+            os << "    Parameter name       : "
                     << p.creationInfo[ii].parameter[jj].getName() << "\n"
                 << "    Parameter value      : " << p.creationInfo[ii].parameter[jj].str() << "\n";
         }

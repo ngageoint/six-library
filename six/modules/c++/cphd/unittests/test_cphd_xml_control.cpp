@@ -500,7 +500,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(metadata->collectionID.radarMode,
                    six::RadarModeType::STRIPMAP);
     TEST_ASSERT_EQ(metadata->collectionID.radarModeID, "Mode");
-    TEST_ASSERT_EQ(metadata->collectionID.getClassificationLevel(), "U");    
+    TEST_ASSERT_EQ(metadata->collectionID.getClassificationLevel(), "U");
     TEST_ASSERT_EQ(metadata->collectionID.releaseInfo, "Release");
     TEST_ASSERT_EQ(metadata->collectionID.countryCodes[0], "US");
     TEST_ASSERT_EQ(metadata->collectionID.countryCodes[1], "GB");
@@ -607,10 +607,9 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(data.signalCompressionID, "Compress");
     TEST_ASSERT_EQ(data.supportArrayMap.size(), 1);
     const std::string identifier = "ID";
-    TEST_ASSERT_EQ(data.sa_IDMap.count(identifier), 1);
-    const size_t offset = data.sa_IDMap.find(identifier)->second;
+    TEST_ASSERT_EQ(data.supportOffsetMap.count(identifier), 1);
+    const size_t offset = data.supportOffsetMap.find(identifier)->second;
     TEST_ASSERT_EQ(data.supportArrayMap.count(offset), 1);
-    // const cphd::Data::SupportArray& support = data.supportArrays[identifier];
     TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numRows, 25);
     TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numCols, 70);
     TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.bytesPerElement, 4);

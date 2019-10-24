@@ -62,15 +62,15 @@ SupportBlock::SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
 
 void SupportBlock::initialize()
 {
-    // Trusting data has the right offsets 
-    mOffsets = mData.sa_IDMap;
+    // Trusting data has the right offsets
+    mOffsets = mData.supportOffsetMap;
     for (auto it = mOffsets.begin(); it != mOffsets.end(); ++it)
     {
-        mOffsets.find(it->first)->second += mSupportOffset;
+        it->second += mSupportOffset;
     }
 }
 
-sys::Off_T SupportBlock::getFileOffset(std::string id) const
+sys::Off_T SupportBlock::getFileOffset(const std::string& id) const
 {
     if (mOffsets.count(id) != 1)
     {
@@ -79,22 +79,22 @@ sys::Off_T SupportBlock::getFileOffset(std::string id) const
     return mOffsets.find(id)->second;
 }
 
-void SupportBlock::readImpl(std::string id,
-                            void* data)
+void SupportBlock::readImpl(const std::string& id,
+                            void* data) const
 {
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
     sys::Off_T inOffset = getFileOffset(id);
 
-    sys::byte* dataPtr = static_cast<sys::byte*>(data);
+    sys::byte* dataPtr = reinterpret_cast<sys::byte*>(data);
     mInStream->seek(inOffset, io::FileInputStream::START);
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
 }
 
-void SupportBlock::read(std::string id,
+void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        const mem::BufferView<sys::ubyte>& data)
+                        const mem::BufferView<sys::ubyte>& data) const
 {
     const size_t minSize = mData.getSupportArrayById(id).getSize();
 
@@ -113,29 +113,27 @@ void SupportBlock::read(std::string id,
     if (!sys::isBigEndianSystem() && mData.getElementSize(id) > 1)
     {
         cphd::byteSwap(data.data, mData.getElementSize(id),
-                       mData.getSupportArrayById(id).numRows * 
+                       mData.getSupportArrayById(id).numRows *
                        mData.getSupportArrayById(id).numCols,
                        numThreads);
     }
 }
 
 void SupportBlock::readAll(size_t numThreads,
-                           mem::ScopedArray<sys::ubyte>& data)
+                           mem::ScopedArray<sys::ubyte>& data) const
 {
     data.reset(new sys::ubyte[mSupportSize]);
-    for (auto it = mData.sa_IDMap.begin(); it != mData.sa_IDMap.end(); ++it)
+    for (auto it = mData.supportOffsetMap.begin(); it != mData.supportOffsetMap.end(); ++it)
     {
         const size_t bufSize = mData.getSupportArrayById(it->first).getSize();
         read(it->first, numThreads, mem::BufferView<sys::ubyte>(&data[it->second], bufSize));
     }
 }
 
-void SupportBlock::read(std::string id,
+void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        mem::ScopedArray<sys::ubyte>& data)
+                        mem::ScopedArray<sys::ubyte>& data) const
 {
-    // Sanity checks
-    types::RowCol<size_t> dims;
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
     data.reset(new sys::ubyte[bufSize]);
     read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));

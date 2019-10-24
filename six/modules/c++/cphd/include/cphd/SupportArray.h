@@ -45,7 +45,13 @@ struct SupportArrayParameter
     SupportArrayParameter();
 
     //! Custom constructor
-    SupportArrayParameter(std::string, size_t, double, double, double, double);
+    SupportArrayParameter(
+        std::string format,
+        size_t id,
+        double x0_in,
+        double y0_in,
+        double xSS_in,
+        double ySS_in);
 
     //! Equality operator
     bool operator==(const SupportArrayParameter& other) const
@@ -84,7 +90,7 @@ struct SupportArrayParameter
     //! Row coordinate (X) sample spacing
     double xSS;
 
-    //! Column coordinate (Y) sample spacing. 
+    //! Column coordinate (Y) sample spacing.
     double ySS;
 
 protected:
@@ -105,10 +111,11 @@ struct AdditionalSupportArray : SupportArrayParameter
     AdditionalSupportArray();
 
     //! Custom constructor
-    AdditionalSupportArray(std::string, std::string,
-                           double, double, double, double,
-                           std::string, std::string,
-                           std::string);
+    AdditionalSupportArray(
+        std::string format, std::string id,
+        double x0_in, double y0_in, double xSS_in, double ySS_in,
+        std::string xUnits_in, std::string yUnits_in,
+        std::string zUnits_in);
 
     //! Equality operator
     bool operator==(const AdditionalSupportArray& other) const

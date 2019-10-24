@@ -18,7 +18,9 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
- */#ifndef __CPHD_COLLECTION_ID_H__
+ */
+
+#ifndef __CPHD_COLLECTION_ID_H__
 #define __CPHD_COLLECTION_ID_H__
 
 #include <six/Types.h>

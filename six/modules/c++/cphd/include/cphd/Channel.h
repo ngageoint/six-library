@@ -208,7 +208,7 @@ struct Point
 /*
  * (Optional) Power level for thermal noise (PN) vs FX freq values
  */
-struct FxNoiseProfile 
+struct FxNoiseProfile
 {
     //! Equality operators
     bool operator==(const FxNoiseProfile& other) const
@@ -252,7 +252,7 @@ struct NoiseLevel
     double bnRef;
 
     //! (Optional) FX Domain Noise Level Profile. Power level for
-    //! thermal noise (PN) vs. FX frequency values 
+    //! thermal noise (PN) vs. FX frequency values
     mem::ScopedCopyablePtr<FxNoiseProfile> fxNoiseProfile;
 };
 
@@ -406,7 +406,7 @@ struct ChannelParameter
     //! image area
     DwellTimes dwellTimes;
 
-    //! (Optional) Image Area for the CPHD channel defined 
+    //! (Optional) Image Area for the CPHD channel defined
     //! by a rectangle aligned with (IAX, IAY). May be
     //! reduced by the optional polygon
     AreaType imageArea;
@@ -433,7 +433,7 @@ struct ChannelParameter
 };
 
 /*
- * Parameters that describe the data channels 
+ * Parameters that describe the data channels
  * contained in the product.
  * See section 7.
  */

@@ -46,7 +46,6 @@ TEST_CASE(testOptional)
     // Get pathname from cmd line
     std::string pathname = "/data1/u/vyadav/six-library/six/modules/c++/cphd/unittests/sample_xml/cphd02.xml";
     std::string schema = "/data1/u/vyadav/six-library/six/modules/c++/cphd/conf/schema/CPHD_schema_V1.0.0_2017_10_20.xsd";
-    // std::string schema = "";
 
     xml::lite::MinidomParser xmlParser;
     parseXMLFile(xmlParser, pathname);
@@ -74,7 +73,7 @@ TEST_CASE(testOptional)
 
     // Populate metadata object from XML Document
     const std::auto_ptr<cphd::Metadata> metadata =
-            xmlControl.fromXML(xmlParser.getDocument(), nodeNames);
+            xmlControl.fromXML(xmlParser.getDocument());
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);
     TEST_ASSERT_EQ(supportArray.iazArray.size(), 1);
@@ -222,8 +221,8 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->v2v3, 0.8);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr->corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr.corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr.decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBias, 0.5);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.clockFreqSF, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.collectionStartTime, 1.0);
@@ -231,13 +230,13 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeSlant, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr->corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeRateVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRgRgRateCC, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr->corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr->decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, 1.0);
 
     const cphd::ProductInfo& productInfo = *(metadata->productInfo);
     TEST_ASSERT_EQ(productInfo.profile, "Profile");
@@ -249,71 +248,58 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(productInfo.parameter[0].getName(), "Param1");
 
     std::vector<cphd::GeoInfo> geoInfo = metadata->geoInfo;
-    TEST_ASSERT_EQ(geoInfo[0].getName(), "Airport");
+    TEST_ASSERT_EQ(geoInfo[0].name, "Airport");
     TEST_ASSERT_EQ(geoInfo[0].desc[0].getName(), "Airport ID");
     TEST_ASSERT_EQ(geoInfo[0].desc[0].str(), "51");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].getName(), "Perimeter");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex.size(), 4);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].index, 1);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].getLat(), 0.0);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[0].getLon(), 0.0);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[1].index, 2);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[1].getLat(), 0.1);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[1].getLon(), 0.0);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[2].index, 3);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[2].getLat(), 0.1);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[2].getLon(), 0.1);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[3].index, 4);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[3].getLat(), 0.0);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[0].polygon[0].vertex[3].getLon(), 0.0);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->name, "Perimeter");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon.size(), 4);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[0].getLat(), 0.0);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[0].getLon(), 0.0);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[1].getLat(), 0.1);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[1].getLon(), 0.0);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[2].getLat(), 0.1);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[2].getLon(), 0.1);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[3].getLat(), 0.0);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[3].getLon(), 0.0);
 
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].getName(), "Runway");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].desc[0].getName(), "ID");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].desc[0].str(), "04/22");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint.size(), 2);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].index, 1);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].getLat(), 0.02);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[0].getLon(), 0.03);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[1].index, 2);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[1].getLat(), 0.08);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[1].line[0].endpoint[1].getLon(), 0.08);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->name, "Runway");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->desc[0].getName(), "ID");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->desc[0].str(), "04/22");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon.size(), 2);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[0].getLat(), 0.02);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[0].getLon(), 0.03);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[1].getLat(), 0.08);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[1].getLon(), 0.08);
 
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].getName(), "Control Tower");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].desc[0].getName(), "ID");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].desc[0].str(), "Main");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].point[0].getLat(), 0.6);
-    TEST_ASSERT_EQ(geoInfo[0].geoInfo[3].point[0].getLon(), 0.4);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->name, "Control Tower");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->desc[0].getName(), "ID");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->desc[0].str(), "Main");
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->geometryLatLon[0].getLat(), 0.6);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->geometryLatLon[0].getLon(), 0.4);
 
-    TEST_ASSERT_EQ(geoInfo[1].getName(), "Farm");
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex.size(), 5);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].index, 1);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].getLat(), 1.0);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[0].getLon(), 1.0);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[1].index, 2);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[1].getLat(), 1.1);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[1].getLon(), 1.0);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].index, 5);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].getLat(), 1.0);
-    TEST_ASSERT_EQ(geoInfo[1].polygon[0].vertex[4].getLon(), 1.0);
+    TEST_ASSERT_EQ(geoInfo[1].name, "Farm");
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon.size(), 5);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[0].getLat(), 1.0);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[0].getLon(), 1.0);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[1].getLat(), 1.1);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[1].getLon(), 1.0);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[4].getLat(), 1.0);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[4].getLon(), 1.0);
 
-    const cphd::MatchInfo& matchInfo = *(metadata->matchInfo);
-    TEST_ASSERT_EQ(matchInfo.matchType.size(), 2);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].index, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].typeID, "STEREO");
-    TEST_ASSERT_EQ(matchInfo.matchType[0].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection.size(), 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].index, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].coreName, "CollectionName");
-    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].matchIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[0].matchCollection[0].parameter[0].getName(), "param1");
-    TEST_ASSERT_EQ(matchInfo.matchType[1].index, 2);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].typeID, "COHERENT");
-    TEST_ASSERT_EQ(matchInfo.matchType[1].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection.size(), 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].index, 2);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].coreName, "CollectionName");
-    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].matchIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.matchType[1].matchCollection[0].parameter[0].getName(), "param1");
+    const cphd::MatchInformation& matchInfo = *(metadata->matchInfo);
+    TEST_ASSERT_EQ(matchInfo.types.size(), 2);
+    TEST_ASSERT_EQ(matchInfo.types[0]->typeID, "STEREO");
+    TEST_ASSERT_EQ(matchInfo.types[0]->currentIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].coreName, "CollectionName");
+    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].matchIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].parameters[0].getName(), "param1");
+    TEST_ASSERT_EQ(matchInfo.types[1]->typeID, "COHERENT");
+    TEST_ASSERT_EQ(matchInfo.types[1]->currentIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].coreName, "CollectionName");
+    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].matchIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].parameters[0].getName(), "param1");
 }
 
 int main()

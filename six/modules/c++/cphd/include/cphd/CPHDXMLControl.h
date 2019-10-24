@@ -31,7 +31,6 @@
 #include <xml/lite/Document.h>
 #include <six/XMLParser.h>
 #include <six/SICommonXMLParser10x.h>
-
 #include <cphd/CollectionID.h>
 #include <cphd/SceneCoordinates.h>
 #include <cphd/Data.h>
@@ -39,6 +38,7 @@
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
 #include <cphd/ReferenceGeometry.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
@@ -58,21 +58,22 @@ public:
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
     //! Constructor
-    CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths);
+    CPHDXMLControl(logging::Logger* log, bool ownLog, const std::vector<std::string>& schemaPaths);
 
-    // To string
-    std::string toXMLString(const Metadata& metadata);
+    //! Metadata to XML string
+    std::string toXMLString(const Metadata& metadata, bool prettyPrint = false);
 
-    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
-
-    //! (Testing) Parses specifc XML blocks specified by nodeNames vector
-    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc, const std::vector<std::string>& nodeNames);
-
-    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
-
+    //! Metadata to XML document object
     std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
 
-    //getter
+    //! XML string to metadata
+    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+
+    //! XML document object to metadata
+    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+
+
+    //! Get schema paths
     const std::vector<std::string>& getSchemaPaths()
     {
         return mSchemaPaths;
@@ -84,8 +85,6 @@ public:
     static void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log);
-
-    // size_t getXMLsize(const Metadata& metadata);
 
 private:
     typedef xml::lite::Element* XMLElem;
@@ -100,21 +99,21 @@ private:
     std::string getSICommonURI() const;
 
     // Write to XML object
-    XMLElem toXML(const CollectionID& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Global& obj, XMLElem parent = NULL);
-    XMLElem toXML(const SceneCoordinates& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Data& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Channel& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Pvp& obj, XMLElem parent = NULL);
-    XMLElem toXML(const SupportArray& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Dwell& obj, XMLElem parent = NULL);
-    XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Antenna& obj, XMLElem parent = NULL);
-    XMLElem toXML(const TxRcv& obj, XMLElem parent = NULL);
-    XMLElem toXML(const ErrorParameters& obj, XMLElem parent = NULL);
-    XMLElem toXML(const ProductInfo& obj, XMLElem parent = NULL);
-    XMLElem toXML(const GeoInfo& obj, XMLElem parent = NULL);
-    XMLElem toXML(const MatchInfo& obj, XMLElem parent = NULL);
+    XMLElem toXML(const CollectionID& obj, XMLElem parent);
+    XMLElem toXML(const Global& obj, XMLElem parent);
+    XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
+    XMLElem toXML(const Data& obj, XMLElem parent);
+    XMLElem toXML(const Channel& obj, XMLElem parent);
+    XMLElem toXML(const Pvp& obj, XMLElem parent);
+    XMLElem toXML(const SupportArray& obj, XMLElem parent);
+    XMLElem toXML(const Dwell& obj, XMLElem parent);
+    XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
+    XMLElem toXML(const Antenna& obj, XMLElem parent);
+    XMLElem toXML(const TxRcv& obj, XMLElem parent);
+    XMLElem toXML(const ErrorParameters& obj, XMLElem parent);
+    XMLElem toXML(const ProductInfo& obj, XMLElem parent);
+    XMLElem toXML(const GeoInfo& obj, XMLElem parent);
+    XMLElem toXML(const MatchInformation& obj, XMLElem parent);
 
     // Read from XML object
     void fromXML(const XMLElem collectionIDXML, CollectionID& collectionID);
@@ -131,29 +130,29 @@ private:
     void fromXML(const XMLElem errParamXML, ErrorParameters& errParam);
     void fromXML(const XMLElem productInfoXML, ProductInfo& productInfo);
     void fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo);
-    void fromXML(const XMLElem matchInfoXML, MatchInfo& matchInfo);
+    void fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo);
 
 
     // Create helper functions
-    void createParameterCollection(const std::string& name, 
-                                   six::ParameterCollection& ParameterCollection,
+    void createParameterCollection(const std::string& name,
+                                   const six::ParameterCollection& ParameterCollection,
                                    XMLElem parent) const;
     XMLElem createVector2D(const std::string& name,
-                           Vector2 p,
+                           const Vector2& p,
                            XMLElem parent) const;
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
                                   const cphd::LatLonCorners& corners,
                                   XMLElem parent) const;
     XMLElem createPVPType(const std::string& name,
-                          PVPType p,
+                          const PVPType& p,
                           XMLElem parent) const;
     XMLElem createAPVPType(const std::string& name,
-                           APVPType p,
+                           const APVPType& p,
                            XMLElem parent) const;
 
     XMLElem createErrorParamPlatform(const std::string& name,
-                                     ErrorParameters::Bistatic::Platform p,
+                                     const ErrorParameters::Bistatic::Platform p,
                                      XMLElem parent) const;
 
     // Parse helper functions
@@ -168,8 +167,7 @@ private:
     void parsePVPType(Pvp& p, const XMLElem paramXML) const;
     void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
     void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
-    void parseDecorr(const XMLElem decorrXML, Decorr& decorr) const;
-    void parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVelErr) const;
+    void parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const;
     void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
     void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;

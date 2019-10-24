@@ -34,22 +34,7 @@ namespace cphd
 {
 CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
                        size_t numThreads,
-                       mem::SharedPtr<logging::Logger> logger)
-{
-    initialize(inStream, numThreads, logger, std::vector<std::string>());
-}
-
-CPHDReader::CPHDReader(const std::string& fromFile,
-                       size_t numThreads,
-                       mem::SharedPtr<logging::Logger> logger)
-{
-    initialize(mem::SharedPtr<io::SeekableInputStream>(
-        new io::FileInputStream(fromFile)), numThreads, logger,std::vector<std::string>());
-}
-
-CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
-                       size_t numThreads,
-                       std::vector<std::string>& schemaPaths,
+                       const std::vector<std::string>& schemaPaths,
                        mem::SharedPtr<logging::Logger> logger)
 {
     initialize(inStream, numThreads, logger, schemaPaths);
@@ -57,7 +42,7 @@ CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
 
 CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
-                       std::vector<std::string>& schemaPaths,
+                       const std::vector<std::string>& schemaPaths,
                        mem::SharedPtr<logging::Logger> logger)
 {
     initialize(mem::SharedPtr<io::SeekableInputStream>(
@@ -67,17 +52,16 @@ CPHDReader::CPHDReader(const std::string& fromFile,
 void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                             size_t numThreads,
                             mem::SharedPtr<logging::Logger> logger,
-                            std::vector<std::string> schemaPaths)
+                            const std::vector<std::string>& schemaPaths)
 {
     mFileHeader.read(*inStream);
 
     // Read in the XML string
-    const int xmlSize = static_cast<int>(mFileHeader.getXMLBlockSize());
     inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
-    xmlParser.parse(*inStream, xmlSize);
+    xmlParser.parse(*inStream, mFileHeader.getXMLBlockSize());
 
     if (logger.get() == NULL)
     {
@@ -102,8 +86,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
     mPVPBlock->load(*inStream,
                     mFileHeader.getPvpBlockByteOffset(),
                     mFileHeader.getPvpBlockSize(),
-                    numThreads,
-                    mMetadata->pvp);
+                    numThreads);
 
     // Setup for wideband reading
     mWideband.reset(new Wideband(inStream, mMetadata->data,

@@ -19,22 +19,3 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <memory>
-#include <iostream>
-
-class PiedPiper
-{
-public:
-    PiedPiper()
-    {
-    }
-
-    PiedPiper(dtof_coef);
-
-private:
-    double dtof_coef;
-    int mPPCValue;
-};
-}
-
-#endif

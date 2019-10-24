@@ -73,12 +73,12 @@ public:
                  sys::Off_T startSupport,
                  sys::Off_T sizeSupport);
 
-    /* 
-     * Return offset from start of CPHD file for a support array with 
+    /*
+     * Return offset from start of CPHD file for a support array with
      * specified id
      * \param id unique id of support array
      */
-    sys::Off_T getFileOffset(std::string id) const;
+    sys::Off_T getFileOffset(const std::string& id) const;
 
     /*
      * Read the specified support array
@@ -91,27 +91,27 @@ public:
      * been allocated to a sufficient size
      * (numRows * numCols * bytesPerElement)
      */
-    void read(std::string id,
+    void read(const std::string& id,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& data);
+              const mem::BufferView<sys::ubyte>& data) const;
 
-    // Same as above for compressed Signal Array 
-    void read(std::string id,
+    // Same as above for compressed Signal Array
+    void read(const std::string& id,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data);
+              mem::ScopedArray<sys::ubyte>& data) const;
 
     void readAll(size_t numThreads,
-                 mem::ScopedArray<sys::ubyte>& data);
+                 mem::ScopedArray<sys::ubyte>& data) const;
 
 private:
-    // Initialize mOffsets for each array 
+    // Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
 
     // Performs the read for support array
     // No allocation, endian swapping, or scaling
-    void readImpl(std::string id,
-                  void* data);
+    void readImpl(const std::string& id,
+                  void* data) const;
 
 private:
     // Noncopyable

@@ -19,20 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <set>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
+#include <mem/ScopedCopyablePtr.h>
+#include <str/Convert.h>
 #include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
 #include <cphd/CPHDXMLControl.h>
-#include <cphd/Metadata.h>
-
-#include <mem/ScopedCopyablePtr.h>
 #include <cphd/Enums.h>
+#include <cphd/Metadata.h>
 #include <cphd/Types.h>
 
-#include <str/Convert.h>
 
-#include <set>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0 // TODO: Kill?
@@ -58,7 +57,8 @@ CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
 {
 }
 
-CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog, std::vector<std::string>& schemaPaths) :
+CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog,
+                               const std::vector<std::string>& schemaPaths) :
     six::XMLParser(CPHD10_URI, false, log, ownLog),
     mCommon(CPHD10_URI, false, CPHD10_URI, log),
     mSchemaPaths(schemaPaths)
@@ -77,8 +77,8 @@ std::string CPHDXMLControl::getSICommonURI() const
 
 
 void CPHDXMLControl::validate(const xml::lite::Document* doc,
-              const std::vector<std::string>& schemaPaths,
-              logging::Logger* log)
+                              const std::vector<std::string>& schemaPaths,
+                              logging::Logger* log)
 {
     // attempt to get the schema location from the
     // environment if nothing is specified
@@ -143,12 +143,18 @@ void CPHDXMLControl::validate(const xml::lite::Document* doc,
     }
 }
 
-std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
+std::string CPHDXMLControl::toXMLString(const Metadata& metadata, bool prettyPrint)
 {
     std::auto_ptr<xml::lite::Document> doc(toXML(metadata));
     io::StringStream ss;
-    // doc->getRootElement()->prettyPrint(ss);
-    doc->getRootElement()->print(ss);
+    if (prettyPrint)
+    {
+        doc->getRootElement()->prettyPrint(ss);
+    }
+    else
+    {
+        doc->getRootElement()->print(ss);
+    }
     return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
 }
 
@@ -685,7 +691,7 @@ XMLElem CPHDXMLControl::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
     createDouble("ReferenceTime", refGeo.referenceTime, refGeoXML);
     createDouble("SRPCODTime", refGeo.srpCODTime, refGeoXML);
     createDouble("SRPDwellTime", refGeo.srpDwellTime, refGeoXML);
-    
+
     if (refGeo.monostatic.get())
     {
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
@@ -884,11 +890,11 @@ XMLElem CPHDXMLControl::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("V1V3", errParams.monostatic->posVelErr.corrCoefs->v1v3, corrCoefsXML);
             createDouble("V2V3", errParams.monostatic->posVelErr.corrCoefs->v2v3, corrCoefsXML);
         }
-        if(errParams.monostatic->posVelErr.positionDecorr.get())
+        if(!six::Init::isUndefined(errParams.monostatic->posVelErr.positionDecorr))
         {
             XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.positionDecorr->corrCoefZero, positionDecorrXML);
-            createDouble("DecorrRate", errParams.monostatic->posVelErr.positionDecorr->decorrRate, positionDecorrXML);
+            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
+            createDouble("DecorrRate", errParams.monostatic->posVelErr.positionDecorr.decorrRate, positionDecorrXML);
         }
         // RadarSensor
         XMLElem radarXML = newElement("RadarSensor", monoXML);
@@ -919,11 +925,11 @@ XMLElem CPHDXMLControl::toXML(const ErrorParameters& errParams, XMLElem parent)
             {
                 createDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
             }
-            if (errParams.monostatic->tropoError->tropoRangeDecorr.get())
+            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeDecorr))
             {
                 XMLElem tropoDecorrXML = newElement("TropoRangeDecorr", tropoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->tropoError->tropoRangeDecorr->corrCoefZero, tropoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->tropoError->tropoRangeDecorr->decorrRate, tropoDecorrXML);
+                createDouble("CorrCoefZero", errParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, tropoDecorrXML);
+                createDouble("DecorrRate", errParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, tropoDecorrXML);
             }
         }
         if (errParams.monostatic->ionoError.get())
@@ -938,11 +944,11 @@ XMLElem CPHDXMLControl::toXML(const ErrorParameters& errParams, XMLElem parent)
             {
                 createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
             }
-            if (errParams.monostatic->ionoError->ionoRangeVertDecorr.get())
+            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRangeVertDecorr))
             {
                 XMLElem ionoDecorrXML = newElement("IonoRangeVertDecorr", ionoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->ionoError->ionoRangeVertDecorr->corrCoefZero, ionoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->ionoError->ionoRangeVertDecorr->decorrRate, ionoDecorrXML);
+                createDouble("CorrCoefZero", errParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, ionoDecorrXML);
+                createDouble("DecorrRate", errParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, ionoDecorrXML);
             }
         }
         if (errParams.monostatic->parameter.size() > 0)
@@ -1010,67 +1016,67 @@ XMLElem CPHDXMLControl::toXML(const ProductInfo& productInfo, XMLElem parent)
 XMLElem CPHDXMLControl::toXML(const GeoInfo& geoInfo, XMLElem parent)
 {
     XMLElem geoInfoXML = newElement("GeoInfo", parent);
-    setAttribute(geoInfoXML, "name", geoInfo.getName());
 
-    mCommon.addParameters("Desc", getDefaultURI(), geoInfo.desc, geoInfoXML);
-    for(size_t ii = 0; ii < geoInfo.point.size(); ++ii)
+    mCommon.addParameters("Desc", geoInfo.desc, geoInfoXML);
+
+    const size_t numLatLons = geoInfo.geometryLatLon.size();
+    if (numLatLons == 1)
     {
-        mCommon.createLatLon("Point", geoInfo.point[ii], geoInfoXML);
+        mCommon.createLatLon("Point", geoInfo.geometryLatLon[0], geoInfoXML);
     }
-    for(size_t ii = 0; ii < geoInfo.line.size(); ++ii)
+    else if (numLatLons >= 2)
     {
-        XMLElem lineXML = newElement("Line", geoInfoXML);
-        setAttribute(lineXML, "size", six::toString(geoInfo.line[ii].endpoint.size()));
-        for (size_t jj = 0; jj < geoInfo.line[ii].endpoint.size(); ++jj)
+        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
+                                         geoInfoXML);
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+
+        for (size_t ii = 0; ii < numLatLons; ++ii)
         {
-            XMLElem endptXML = mCommon.createLatLon("Endpoint", static_cast<LatLon>(geoInfo.line[ii].endpoint[jj]), lineXML);
-            setAttribute(endptXML, "index", six::toString(jj+1));
+            XMLElem v = mCommon.createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
+                         geoInfo.geometryLatLon[ii], linePolyXML);
+            setAttribute(v, "index", str::toString(ii + 1));
         }
     }
-    for(size_t ii = 0; ii < geoInfo.polygon.size(); ++ii)
+
+    if (!geoInfo.name.empty())
+        setAttribute(geoInfoXML, "name", geoInfo.name);
+
+    for (size_t ii = 0; ii < geoInfo.geoInfos.size(); ++ii)
     {
-        XMLElem polygonXML = newElement("Polygon", geoInfoXML);
-        setAttribute(polygonXML, "size", six::toString(geoInfo.polygon[ii].vertex.size()));
-        for (size_t jj = 0; jj < geoInfo.polygon[ii].vertex.size(); ++jj)
-        {
-            XMLElem vertexXML = mCommon.createLatLon("Vertex", static_cast<LatLon>(geoInfo.polygon[ii].vertex[jj]), polygonXML);
-            setAttribute(vertexXML, "index", six::toString(jj+1));
-        }
+        toXML(*geoInfo.geoInfos[ii], geoInfoXML);
     }
-    for(size_t ii = 0; ii < geoInfo.geoInfo.size(); ++ii)
-    {
-        toXML(geoInfo.geoInfo[ii], geoInfoXML);
-    }
+
     return geoInfoXML;
 }
 
-XMLElem CPHDXMLControl::toXML(const MatchInfo& matchInfo, XMLElem parent)
+XMLElem CPHDXMLControl::toXML(const MatchInformation& matchInfo, XMLElem parent)
 {
-    XMLElem matchInfoXML = newElement("MatchInfo", parent);
-    createInt("NumMatchTypes", matchInfo.matchType.size(), matchInfoXML);
-    for (size_t ii = 0; ii < matchInfo.matchType.size(); ++ii)
-    {
-        XMLElem matchTypeXML = newElement("MatchType", matchInfoXML);
-        setAttribute(matchTypeXML, "index", six::toString(matchInfo.matchType[ii].index));
-        createString("TypeID", matchInfo.matchType[ii].typeID, matchTypeXML);
-        if (!six::Init::isUndefined(matchInfo.matchType[ii].currentIndex))
-        {
-            createInt("CurrentIndex", matchInfo.matchType[ii].currentIndex, matchTypeXML);
-        }
-        createInt("NumMatchCollections", matchInfo.matchType[ii].matchCollection.size(), matchTypeXML);
-        for(size_t jj = 0; jj < matchInfo.matchType[ii].matchCollection.size(); ++jj)
-        {
-            XMLElem matchCollectionXML = newElement("MatchCollection", matchTypeXML);
-            setAttribute(matchCollectionXML, "index", six::toString(matchInfo.matchType[ii].matchCollection[jj].index));
-            createString("CoreName", matchInfo.matchType[ii].matchCollection[jj].coreName, matchCollectionXML);
-            if(!six::Init::isUndefined(matchInfo.matchType[ii].matchCollection[jj].matchIndex))
-            {
-                createInt("MatchIndex", matchInfo.matchType[ii].matchCollection[jj].matchIndex, matchCollectionXML);
-            }
-            mCommon.addParameters("Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter, matchCollectionXML);
-        }
-    }
-    return matchInfoXML;
+    return mCommon.convertMatchInformationToXML(&matchInfo, parent);
+    // XMLElem matchInfoXML = newElement("MatchInfo", parent);
+    // createInt("NumMatchTypes", matchInfo.matchType.size(), matchInfoXML);
+    // for (size_t ii = 0; ii < matchInfo.matchType.size(); ++ii)
+    // {
+    //     XMLElem matchTypeXML = newElement("MatchType", matchInfoXML);
+    //     setAttribute(matchTypeXML, "index", six::toString(matchInfo.matchType[ii].index));
+    //     createString("TypeID", matchInfo.matchType[ii].typeID, matchTypeXML);
+    //     if (!six::Init::isUndefined(matchInfo.matchType[ii].currentIndex))
+    //     {
+    //         createInt("CurrentIndex", matchInfo.matchType[ii].currentIndex, matchTypeXML);
+    //     }
+    //     createInt("NumMatchCollections", matchInfo.matchType[ii].matchCollection.size(), matchTypeXML);
+    //     for(size_t jj = 0; jj < matchInfo.matchType[ii].matchCollection.size(); ++jj)
+    //     {
+    //         XMLElem matchCollectionXML = newElement("MatchCollection", matchTypeXML);
+    //         setAttribute(matchCollectionXML, "index", six::toString(matchInfo.matchType[ii].matchCollection[jj].index));
+    //         createString("CoreName", matchInfo.matchType[ii].matchCollection[jj].coreName, matchCollectionXML);
+    //         if(!six::Init::isUndefined(matchInfo.matchType[ii].matchCollection[jj].matchIndex))
+    //         {
+    //             createInt("MatchIndex", matchInfo.matchType[ii].matchCollection[jj].matchIndex, matchCollectionXML);
+    //         }
+    //         mCommon.addParameters("Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter, matchCollectionXML);
+    //     }
+    // }
+    // return matchInfoXML;
 }
 
 /*
@@ -1109,7 +1115,7 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     XMLElem supportArrayXML   = getOptional(root, "SupportArray");
     XMLElem antennaXML        = getOptional(root, "Antenna");
     XMLElem txRcvXML          = getOptional(root, "TxRcv");
-    XMLElem errParamXML       = getOptional(root, "ErrorParameter");
+    XMLElem errParamXML       = getOptional(root, "ErrorParameters");
     XMLElem productInfoXML    = getOptional(root, "ProductInfo");
     XMLElem matchInfoXML      = getOptional(root, "MatchInfo");
 
@@ -1126,7 +1132,6 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     fromXML(pvpXML, cphd->pvp);
     fromXML(dwellXML, cphd->dwell);
     fromXML(refGeoXML, cphd->referenceGeometry);
-
     if(supportArrayXML)
     {
         cphd->supportArray.reset(new SupportArray());
@@ -1154,106 +1159,14 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     }
     if(matchInfoXML)
     {
-        cphd->matchInfo.reset(new MatchInfo());
+        cphd->matchInfo.reset(new MatchInformation());
         fromXML(matchInfoXML, *(cphd->matchInfo));
     }
-
     for (size_t ii = 0; ii < geoInfoXMLVec.size(); ++ii)
     {
         fromXML(geoInfoXMLVec[ii], cphd->geoInfo[ii]);
     }
 
-    return cphd;
-}
-
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc, const std::vector<std::string>& nodeNames)
-{
-    std::auto_ptr<Metadata> cphd(new Metadata());
-    if(!getSchemaPaths().empty()) {
-        // Validate schema
-        validate(doc, getSchemaPaths(), log());
-    }
-
-    XMLElem root = doc->getRootElement();
-
-    for(size_t ii = 0; ii < nodeNames.size(); ++ii)
-    {
-        if(nodeNames[ii] == "CollectionID") {
-            XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
-            fromXML(collectionIDXML, cphd->collectionID);
-        }
-        else if(nodeNames[ii] == "Global") {
-            XMLElem globalXML   = getFirstAndOnly(root, "Global");
-            fromXML(globalXML, cphd->global);
-        }
-        else if(nodeNames[ii] == "SceneCoordinates") {
-            XMLElem sceneCoordsXML   = getFirstAndOnly(root, "SceneCoordinates");
-            fromXML(sceneCoordsXML, cphd->sceneCoordinates);
-        }
-        else if(nodeNames[ii] == "Data") {
-            XMLElem dataXML   = getFirstAndOnly(root, "Data");
-            fromXML(dataXML, cphd->data);
-        }
-        else if(nodeNames[ii] == "Channel") {
-            XMLElem channelXML   = getFirstAndOnly(root, "Channel");
-            fromXML(channelXML, cphd->channel);
-        }
-        else if(nodeNames[ii] == "PVP") {
-            XMLElem pvpXML   = getFirstAndOnly(root, "PVP");
-            fromXML(pvpXML, cphd->pvp);
-        }
-        else if(nodeNames[ii] == "Dwell") {
-            XMLElem dwellXML   = getFirstAndOnly(root, "Dwell");
-            fromXML(dwellXML, cphd->dwell);
-        }
-        else if(nodeNames[ii] == "ReferenceGeometry") {
-            XMLElem refGeoXML   = getFirstAndOnly(root, "ReferenceGeometry");
-            fromXML(refGeoXML, cphd->referenceGeometry);
-        }
-        else if(nodeNames[ii] == "SupportArray") {
-            XMLElem supportArrayXML   = getFirstAndOnly(root, "SupportArray");
-            cphd->supportArray.reset(new SupportArray());
-            fromXML(supportArrayXML, *(cphd->supportArray));
-        }
-        else if(nodeNames[ii] == "Antenna") {
-            XMLElem antennaXML   = getFirstAndOnly(root, "Antenna");
-            cphd->antenna.reset(new Antenna());
-            fromXML(antennaXML, *(cphd->antenna));
-        }
-        else if(nodeNames[ii] == "TxRcv") {
-            XMLElem txRcvXML   = getFirstAndOnly(root, "TxRcv");
-            cphd->txRcv.reset(new TxRcv());
-            fromXML(txRcvXML, *(cphd->txRcv));
-        }
-        else if(nodeNames[ii] == "ErrorParameters") {
-            XMLElem errParamXML   = getFirstAndOnly(root, "ErrorParameters");
-            cphd->errorParameters.reset(new ErrorParameters());
-            fromXML(errParamXML, *(cphd->errorParameters));
-        }
-        else if(nodeNames[ii] == "ProductInfo") {
-            XMLElem productInfoXML   = getFirstAndOnly(root, "ProductInfo");
-            cphd->productInfo.reset(new ProductInfo());
-            fromXML(productInfoXML, *(cphd->productInfo));
-        }
-        else if(nodeNames[ii] == "GeoInfo") {
-            std::vector<XMLElem> geoInfoXMLVec;
-            root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
-            cphd->geoInfo.resize(geoInfoXMLVec.size());
-            for(size_t jj = 0; jj < geoInfoXMLVec.size(); ++jj)
-            {
-                fromXML(geoInfoXMLVec[jj], cphd->geoInfo[jj]);
-            }
-        }
-        else if(nodeNames[ii] == "MatchInfo") {
-            XMLElem matchInfoXML   = getFirstAndOnly(root, "MatchInfo");
-            cphd->matchInfo.reset(new MatchInfo());
-            fromXML(matchInfoXML, *(cphd->matchInfo));
-        }
-        else {
-            throw except::Exception(Ctxt(
-                    "Invalid node name provided"));
-        }
-    }
     return cphd;
 }
 
@@ -1514,6 +1427,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
                 "Number of bytes must be multiple of 8"));
     }
     data.numBytesPVP = numBytesPVP_temp;
+
     // Channels
     std::vector<XMLElem> channelsXML;
     dataXML->getElementsByTagName("Channel", channelsXML);
@@ -1678,7 +1592,7 @@ void CPHDXMLControl::fromXML(const XMLElem DwellXML,
 
     std::vector<XMLElem> CODXML_vec;
     DwellXML->getElementsByTagName("CODTime", CODXML_vec);
-    for(size_t ii = 0; ii < CODXML_vec.size(); ++ii) 
+    for(size_t ii = 0; ii < CODXML_vec.size(); ++ii)
     {
         parseString(getFirstAndOnly(CODXML_vec[ii], "Identifier"), dwell.cod[ii].identifier);
         mCommon.parsePoly2D(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), dwell.cod[ii].codTimePoly);
@@ -1691,10 +1605,10 @@ void CPHDXMLControl::fromXML(const XMLElem DwellXML,
 
     std::vector<XMLElem> dtimeXML_vec;
     DwellXML->getElementsByTagName("DwellTime", dtimeXML_vec);
-    for(size_t ii = 0; ii < dtimeXML_vec.size(); ++ii) 
+    for(size_t ii = 0; ii < dtimeXML_vec.size(); ++ii)
     {
         parseString(getFirstAndOnly(dtimeXML_vec[ii], "Identifier"), dwell.dtime[ii].identifier);
-        mCommon.parsePoly2D(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), dwell.dtime[ii].dwellTimePoly); 
+        mCommon.parsePoly2D(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), dwell.dtime[ii].dwellTimePoly);
     }
 }
 
@@ -1967,14 +1881,14 @@ void CPHDXMLControl::fromXML(const XMLElem errParamXML, ErrorParameters& errPara
         XMLElem rangeBiasDecorrXML = getOptional(radarSensorXML, "RangeBiasDecorr");
         if(rangeBiasDecorrXML)
         {
-            errParam.monostatic->radarSensor.rangeBiasDecorr.reset(new Decorr());
-            parseDecorr(rangeBiasDecorrXML, *(errParam.monostatic->radarSensor.rangeBiasDecorr));
+            errParam.monostatic->radarSensor.rangeBiasDecorr.reset(new six::DecorrType());
+            mCommon.parseDecorrType(rangeBiasDecorrXML, *(errParam.monostatic->radarSensor.rangeBiasDecorr));
         }
 
         XMLElem tropoErrorXML = getFirstAndOnly(monostaticXML, "TropoError");
         if(tropoErrorXML)
         {
-            errParam.monostatic->tropoError.reset(new ErrorParameters::Monostatic::TropoError());
+            errParam.monostatic->tropoError.reset(new six::TropoError());
             XMLElem verticalXML = getOptional(tropoErrorXML, "TropoRangeVertical");
             if(verticalXML)
             {
@@ -1988,15 +1902,14 @@ void CPHDXMLControl::fromXML(const XMLElem errParamXML, ErrorParameters& errPara
             XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
             if(decorrXML)
             {
-                errParam.monostatic->tropoError->tropoRangeDecorr.reset(new Decorr());
-                parseDecorr(decorrXML, *(errParam.monostatic->tropoError->tropoRangeDecorr));
+                mCommon.parseDecorrType(decorrXML, errParam.monostatic->tropoError->tropoRangeDecorr);
             }
         }
 
         XMLElem ionoErrorXML = getFirstAndOnly(monostaticXML, "IonoError");
         if(ionoErrorXML)
         {
-            errParam.monostatic->ionoError.reset(new ErrorParameters::Monostatic::IonoError());
+            errParam.monostatic->ionoError.reset(new six::IonoError());
             parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), errParam.monostatic->ionoError->ionoRangeVertical);
 
             XMLElem rateVerticalXML = getOptional(ionoErrorXML, "IonoRangeRateVertical");
@@ -2012,8 +1925,7 @@ void CPHDXMLControl::fromXML(const XMLElem errParamXML, ErrorParameters& errPara
             XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
             if(decorrXML)
             {
-                errParam.monostatic->ionoError->ionoRangeVertDecorr.reset(new Decorr());
-                parseDecorr(decorrXML, *(errParam.monostatic->ionoError->ionoRangeVertDecorr));
+                mCommon.parseDecorrType(decorrXML, errParam.monostatic->ionoError->ionoRangeVertDecorr);
             }
         }
         mCommon.parseParameters(monostaticXML, "Parameter", errParam.monostatic->parameter);
@@ -2044,7 +1956,7 @@ void CPHDXMLControl::fromXML(const XMLElem productInfoXML, ProductInfo& productI
     std::vector<XMLElem> creationInfoXML;
     productInfoXML->getElementsByTagName("CreationInfo", creationInfoXML);
     productInfo.creationInfo.resize(creationInfoXML.size());
-    
+
     for (size_t ii = 0; ii < creationInfoXML.size(); ++ii)
     {
         XMLElem applicationXML = getOptional(creationInfoXML[ii], "Application");
@@ -2068,143 +1980,102 @@ void CPHDXMLControl::fromXML(const XMLElem productInfoXML, ProductInfo& productI
 
 void CPHDXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo)
 {
+    std::vector < XMLElem > geoInfosXML;
+    geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
+    geoInfo.name = geoInfoXML->getAttributes().getValue("name");
 
-    geoInfo.setName(geoInfoXML->attribute("name"));
-
+    //optional
     mCommon.parseParameters(geoInfoXML, "Desc", geoInfo.desc);
 
-    std::vector<XMLElem> pointXML;
-    geoInfoXML->getElementsByTagName("Point", pointXML);
-    geoInfo.point.resize(pointXML.size());
-    for (size_t ii = 0; ii < pointXML.size(); ++ii)
+    XMLElem tmpElem = getOptional(geoInfoXML, "Point");
+    if (tmpElem)
     {
-        mCommon.parseLatLon(pointXML[ii], geoInfo.point[ii]);
+        LatLon ll;
+        mCommon.parseLatLon(tmpElem, ll);
+        geoInfo.geometryLatLon.push_back(ll);
+    }
+    else
+    {
+        std::string pointName = "Endpoint";
+        tmpElem = getOptional(geoInfoXML, "Line");
+        if (!tmpElem)
+        {
+            pointName = "Vertex";
+            tmpElem = getOptional(geoInfoXML, "Polygon");
+        }
+        if (tmpElem)
+        {
+            mCommon.parseLatLons(tmpElem, pointName, geoInfo.geometryLatLon);
+        }
     }
 
-    //! Parse Line
-    std::vector<XMLElem> lineXML;
-    geoInfoXML->getElementsByTagName("Line", lineXML);
-    geoInfo.line.resize(lineXML.size());
-    for (size_t ii = 0; ii < lineXML.size(); ++ii)
+    //optional
+    size_t idx(geoInfo.geoInfos.size());
+    geoInfo.geoInfos.resize(idx + geoInfosXML.size());
+
+    for (auto it = geoInfosXML.begin(); it
+            != geoInfosXML.end(); ++it, ++idx)
     {
-        size_t numEndpoints = 0;
-        sscanf(lineXML[ii]->attribute("size").c_str(), "%zu", &numEndpoints);
-        geoInfo.line[ii].endpoint.resize(numEndpoints);
-
-        std::vector<XMLElem> endpointXMLVec;
-        lineXML[ii]->getElementsByTagName("Endpoint", endpointXMLVec);
-        if (geoInfo.line[ii].endpoint.size() != endpointXMLVec.size())
-        {
-            throw except::Exception(Ctxt(
-                    "Incorrect number of lines provided"));
-        }
-        if (endpointXMLVec.size() != 0 && endpointXMLVec.size() < 2)
-        {
-            throw except::Exception(Ctxt(
-                    "Line must contain atleast 2 vertices"));
-        }
-        for (size_t jj = 0; jj < endpointXMLVec.size(); ++jj)
-        {
-            sscanf(endpointXMLVec[jj]->attribute("index").c_str(), "%zu", &geoInfo.line[ii].endpoint[jj].index);
-            mCommon.parseLatLon(endpointXMLVec[jj], geoInfo.line[ii].endpoint[jj]);
-        }
-
-    }
-
-    //! Parse polygon
-    std::vector<XMLElem> polygonXML;
-    geoInfoXML->getElementsByTagName("Polygon", polygonXML);
-    geoInfo.polygon.resize(polygonXML.size());
-    for (size_t ii = 0; ii < polygonXML.size(); ++ii)
-    {
-        size_t numVertices = 0;
-        sscanf(polygonXML[ii]->attribute("size").c_str(), "%zu", &numVertices);
-        geoInfo.polygon[ii].vertex.resize(numVertices);
-
-        std::vector<XMLElem> vertexXMLVec;
-        polygonXML[ii]->getElementsByTagName("Vertex", vertexXMLVec);
-        if (geoInfo.polygon[ii].vertex.size() != vertexXMLVec.size())
-        {
-            throw except::Exception(Ctxt(
-                    "Incorrect number of lines provided"));
-        }
-        if(vertexXMLVec.size() != 0 && vertexXMLVec.size() < 3)
-        {
-            throw except::Exception(Ctxt(
-                    "Polygon must contain atleast 3 vertices"));
-        }
-        for (size_t jj = 0; jj < vertexXMLVec.size(); ++jj)
-        {
-            sscanf(vertexXMLVec[jj]->attribute("index").c_str(), "%zu", &geoInfo.polygon[ii].vertex[jj].index);
-            mCommon.parseLatLon(vertexXMLVec[jj], geoInfo.polygon[ii].vertex[jj]);
-        }
-
-    }
-
-    //! Parse new geoInfos
-    std::vector<XMLElem> addedGeoInfoXML;
-    geoInfoXML->getElementsByTagName("GeoInfo", addedGeoInfoXML);
-    geoInfo.geoInfo.resize(addedGeoInfoXML.size());
-    for (size_t ii = 0; ii < addedGeoInfoXML.size(); ++ii)
-    {
-        // Recurses until base case: addedGeoInfoXML is empty
-        fromXML(addedGeoInfoXML[ii], geoInfo.geoInfo[ii]);
-        geoInfo.geoInfo[ii].setName(addedGeoInfoXML[ii]->attribute("name"));
+        geoInfo.geoInfos[idx].reset(new GeoInfo());
+        fromXML(*it, *geoInfo.geoInfos[idx]);
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem matchInfoXML, MatchInfo& matchInfo)
+void CPHDXMLControl::fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo)
 {
-    size_t numMatchTypes = 0;
-    parseUInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes") , numMatchTypes);
-    matchInfo.matchType.resize(numMatchTypes);
+    mCommon.parseMatchInformationFromXML(matchInfoXML, &matchInfo);
+    // size_t numMatchTypes = 0;
+    // parseUInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes") , numMatchTypes);
+    // matchInfo.matchType.resize(numMatchTypes);
 
-    std::vector<XMLElem> matchTypeXML;
-    matchInfoXML->getElementsByTagName("MatchType", matchTypeXML);
-    if (matchInfo.matchType.size() != matchTypeXML.size())
-    {
-        throw except::Exception(Ctxt(
-                "Incorrect number of Match types provided"));
-    }
-    for (size_t ii = 0; ii < matchTypeXML.size(); ++ii)
-    {
-        sscanf(matchTypeXML[ii]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].index);
-        parseString(getFirstAndOnly(matchTypeXML[ii], "TypeID"), matchInfo.matchType[ii].typeID);
-        XMLElem currentIndexXML = getOptional(matchTypeXML[ii], "CurrentIndex");
-        if (currentIndexXML)
-        {
-            parseUInt(currentIndexXML, matchInfo.matchType[ii].currentIndex);
-        }
-        size_t numMatchCollections = 0;
-        parseUInt(getFirstAndOnly(matchTypeXML[ii], "NumMatchCollections"), numMatchCollections);
-        matchInfo.matchType[ii].matchCollection.resize(numMatchCollections);
+    // std::vector<XMLElem> matchTypeXML;
+    // matchInfoXML->getElementsByTagName("MatchType", matchTypeXML);
+    // if (matchInfo.matchType.size() != matchTypeXML.size())
+    // {
+    //     throw except::Exception(Ctxt(
+    //             "Incorrect number of Match types provided"));
+    // }
+    // for (size_t ii = 0; ii < matchTypeXML.size(); ++ii)
+    // {
+    //     sscanf(matchTypeXML[ii]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].index);
+    //     parseString(getFirstAndOnly(matchTypeXML[ii], "TypeID"), matchInfo.matchType[ii].typeID);
+    //     XMLElem currentIndexXML = getOptional(matchTypeXML[ii], "CurrentIndex");
+    //     if (currentIndexXML)
+    //     {
+    //         parseUInt(currentIndexXML, matchInfo.matchType[ii].currentIndex);
+    //     }
+    //     size_t numMatchCollections = 0;
+    //     parseUInt(getFirstAndOnly(matchTypeXML[ii], "NumMatchCollections"), numMatchCollections);
+    //     matchInfo.matchType[ii].matchCollection.resize(numMatchCollections);
 
-        std::vector<XMLElem> matchCollectionXMLVec;
-        matchTypeXML[ii]->getElementsByTagName("MatchCollection", matchCollectionXMLVec);
-        if (matchInfo.matchType[ii].matchCollection.size() != matchCollectionXMLVec.size())
-        {
-            throw except::Exception(Ctxt(
-                    "Incorrect number of match collections provided"));
-        }
-        for (size_t jj = 0; jj < matchCollectionXMLVec.size(); ++jj)
-        {
-            sscanf(matchCollectionXMLVec[jj]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].matchCollection[jj].index);
-            parseString(getFirstAndOnly(matchCollectionXMLVec[jj], "CoreName"), matchInfo.matchType[ii].matchCollection[jj].coreName);
-            XMLElem matchIndexXML = getOptional(matchCollectionXMLVec[jj], "MatchIndex");
-            if (matchIndexXML)
-            {
-                parseUInt(matchIndexXML, matchInfo.matchType[ii].matchCollection[jj].matchIndex);
-            }
-            mCommon.parseParameters(matchCollectionXMLVec[jj], "Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter);
-        }
-    }
+    //     std::vector<XMLElem> matchCollectionXMLVec;
+    //     matchTypeXML[ii]->getElementsByTagName("MatchCollection", matchCollectionXMLVec);
+    //     if (matchInfo.matchType[ii].matchCollection.size() != matchCollectionXMLVec.size())
+    //     {
+    //         throw except::Exception(Ctxt(
+    //                 "Incorrect number of match collections provided"));
+    //     }
+    //     for (size_t jj = 0; jj < matchCollectionXMLVec.size(); ++jj)
+    //     {
+    //         sscanf(matchCollectionXMLVec[jj]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].matchCollection[jj].index);
+    //         parseString(getFirstAndOnly(matchCollectionXMLVec[jj], "CoreName"), matchInfo.matchType[ii].matchCollection[jj].coreName);
+    //         XMLElem matchIndexXML = getOptional(matchCollectionXMLVec[jj], "MatchIndex");
+    //         if (matchIndexXML)
+    //         {
+    //             parseUInt(matchIndexXML, matchInfo.matchType[ii].matchCollection[jj].matchIndex);
+    //         }
+    //         mCommon.parseParameters(matchCollectionXMLVec[jj], "Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter);
+    //     }
+    // }
 }
 
 /*
  * Creation helper functions
 */
-void CPHDXMLControl::createParameterCollection(const std::string& name, six::ParameterCollection& parameterCollection,
-                                        XMLElem parent) const
+void CPHDXMLControl::createParameterCollection(
+        const std::string& name,
+        const six::ParameterCollection& parameterCollection,
+        XMLElem parent) const
 {
     for (size_t ii = 0; ii < parameterCollection.size(); ++ii)
     {
@@ -2215,7 +2086,7 @@ void CPHDXMLControl::createParameterCollection(const std::string& name, six::Par
 
 XMLElem CPHDXMLControl::createVector2D(
         const std::string& name,
-        Vector2 p,
+        const Vector2& p,
         XMLElem parent) const
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
@@ -2225,9 +2096,9 @@ XMLElem CPHDXMLControl::createVector2D(
 }
 
 XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
-                                                 const std::string& cornerName,
-                                                 const cphd::LatLonCorners& corners,
-                                                 XMLElem parent) const
+                                              const std::string& cornerName,
+                                              const cphd::LatLonCorners& corners,
+                                              XMLElem parent) const
 {
     XMLElem footprint = newElement(name, parent);
 
@@ -2249,8 +2120,8 @@ XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
 }
 
 XMLElem CPHDXMLControl::createPVPType(const std::string& name,
-                            PVPType p,
-                            XMLElem parent) const
+                                      const PVPType& p,
+                                      XMLElem parent) const
 {
     XMLElem pvpXML = newElement(name, parent);
     createInt("Offset", p.getOffset(), pvpXML);
@@ -2260,8 +2131,8 @@ XMLElem CPHDXMLControl::createPVPType(const std::string& name,
 }
 
 XMLElem CPHDXMLControl::createAPVPType(const std::string& name,
-                                APVPType p,
-                                XMLElem parent) const
+                                       const APVPType& p,
+                                       XMLElem parent) const
 {
     XMLElem apvpXML = newElement(name, parent);
     createString("Name", p.getName(), apvpXML);
@@ -2271,9 +2142,10 @@ XMLElem CPHDXMLControl::createAPVPType(const std::string& name,
     return apvpXML;
 }
 
-XMLElem CPHDXMLControl::createErrorParamPlatform(const std::string& name,
-                            ErrorParameters::Bistatic::Platform p,
-                            XMLElem parent) const
+XMLElem CPHDXMLControl::createErrorParamPlatform(
+        const std::string& name,
+        const ErrorParameters::Bistatic::Platform p,
+        XMLElem parent) const
 {
     XMLElem posVelErrXML = newElement("PosVelErr", parent);
     createString("Frame", p.posVelErr.frame.toString(), posVelErrXML);
@@ -2302,11 +2174,11 @@ XMLElem CPHDXMLControl::createErrorParamPlatform(const std::string& name,
         createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
         createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
     }
-    if(p.posVelErr.positionDecorr.get())
+    if(!six::Init::isUndefined(p.posVelErr.positionDecorr))
     {
         XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-        createDouble("CorrCoefZero", p.posVelErr.positionDecorr->corrCoefZero, positionDecorrXML);
-        createDouble("DecorrRate", p.posVelErr.positionDecorr->decorrRate, positionDecorrXML);
+        createDouble("CorrCoefZero", p.posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
+        createDouble("DecorrRate", p.posVelErr.positionDecorr.decorrRate, positionDecorrXML);
     }
     return posVelErrXML;
 }
@@ -2511,7 +2383,7 @@ void CPHDXMLControl::parseChannelParameters(
     {
         const XMLElem TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
         param.polarization.txPol = PolarizationType(TxPolXML->getCharacterData());
- 
+
         const XMLElem RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
         param.polarization.rcvPol = PolarizationType(RcvPolXML->getCharacterData());
     }
@@ -2568,14 +2440,7 @@ void CPHDXMLControl::parseCommon(const XMLElem imgTypeXML, ImagingType* imgType)
     parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
 }
 
-void CPHDXMLControl::parseDecorr(const XMLElem decorrXML, Decorr& decorr) const
-{
-    parseDouble(getFirstAndOnly(decorrXML, "CorrCoefZero"), decorr.corrCoefZero);
-    parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"), decorr.decorrRate);
-}
-
-
-void CPHDXMLControl::parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVelErr) const
+void CPHDXMLControl::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const
 {
     std::string frameStr;
     parseString(getFirstAndOnly(posVelErrXML, "Frame"), frameStr);
@@ -2591,7 +2456,7 @@ void CPHDXMLControl::parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVe
 
     if(corrCoefsXML)
     {
-        posVelErr.corrCoefs.reset(new PosVelErr::CorrCoefs());
+        posVelErr.corrCoefs.reset(new six::CorrCoefs());
         parseDouble(getFirstAndOnly(corrCoefsXML, "P1P2"), posVelErr.corrCoefs->p1p2);
         parseDouble(getFirstAndOnly(corrCoefsXML, "P1P3"), posVelErr.corrCoefs->p1p3);
         parseDouble(getFirstAndOnly(corrCoefsXML, "P1V1"), posVelErr.corrCoefs->p1v1);
@@ -2613,8 +2478,8 @@ void CPHDXMLControl::parsePosVelErr(const XMLElem posVelErrXML, PosVelErr& posVe
 
     if(posDecorrXML)
     {
-        posVelErr.positionDecorr.reset(new Decorr());
-        parseDecorr(posDecorrXML, *(posVelErr.positionDecorr));
+        // posVelErr.positionDecorr.reset(new six::DecorrType());
+        mCommon.parseDecorrType(posDecorrXML, posVelErr.positionDecorr);
     }
 }
 

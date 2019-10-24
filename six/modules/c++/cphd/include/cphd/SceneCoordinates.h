@@ -140,12 +140,12 @@ struct ReferenceSurface
         return !((*this) == other);
     }
 
-    //! (Conditional) The reference surface is a plane that 
+    //! (Conditional) The reference surface is a plane that
     //! contains the IARP
     mem::ScopedCopyablePtr<Planar> planar;
 
     //! (Conditional) The reference surface is the surface
-    //! of constant HAE = IARP_HAE. 
+    //! of constant HAE = IARP_HAE.
     mem::ScopedCopyablePtr<HAE> hae;
 };
 
@@ -163,7 +163,8 @@ struct AreaType
     bool operator==(const AreaType& other) const
     {
         return x1y1 == other.x1y1 &&
-               x2y2 == other.x2y2;
+               x2y2 == other.x2y2 &&
+               polygon == other.polygon;
     }
     bool operator!=(const AreaType& other) const
     {
@@ -299,7 +300,8 @@ struct Segment
     //! Equality operator
     bool operator==(const Segment& other) const
     {
-        return startLine == other.startLine &&
+        return identifier == other.identifier &&
+               startLine == other.startLine &&
                startSample == other.startSample &&
                endLine == other.endLine &&
                endSample == other.endSample &&
@@ -331,7 +333,7 @@ struct Segment
     std::vector<LineSample> polygon;
 };
 
-/*! 
+/*!
  * (Optional) Parameters that describe a geo-referenced image
  * grid for image data products that may be formed
  * from the CPHD signal array(s).
@@ -346,7 +348,7 @@ struct ImageGrid
         return identifier == other.identifier &&
               iarpLocation == other.iarpLocation &&
               xExtent == other.xExtent &&
-              yExtent == other.yExtent && 
+              yExtent == other.yExtent &&
               segments == other.segments;
     }
     bool operator!=(const ImageGrid& other) const
@@ -417,7 +419,7 @@ struct SceneCoordinates
     //! bound the full resolution image area
     LatLonCorners imageAreaCorners;
 
-    //! (Optional) Extended Area is defined by a rectangle 
+    //! (Optional) Extended Area is defined by a rectangle
     //! aligned with Image Area coordinates (IAX, IAY)
     mem::ScopedCopyablePtr<AreaType> extendedArea;
 

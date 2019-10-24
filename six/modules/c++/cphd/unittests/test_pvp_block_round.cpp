@@ -161,9 +161,11 @@ void setVectorParameters(size_t channel,
     pvpBlock.setSCSS(scss, channel, vector);
 }
 
-void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock, cphd::Pvp& pvp, bool isAmpSF, bool isFxN1,
-                 bool isFxN2, bool isTOAE1, bool isTOAE2, bool isSignal, 
-                 std::vector<std::string> addedParams)
+void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock,
+                 bool isAmpSF, bool isFxN1,
+                 bool isFxN2, bool isTOAE1,
+                 bool isTOAE2, bool isSignal,
+                 const std::vector<std::string>& addedParams)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -177,38 +179,38 @@ void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock, cph
             if (isAmpSF)
             {
                 const double ampSF = getRandom();
-                pvpBlock.setAmpSF(pvp, ampSF, ii, jj);
+                pvpBlock.setAmpSF(ampSF, ii, jj);
             }
             if (isFxN1)
             {
                 const double fxN1 = getRandom();
-                pvpBlock.setFxN1(pvp, fxN1, ii, jj);
+                pvpBlock.setFxN1(fxN1, ii, jj);
             }
             if (isFxN2)
             {
                 const double fxN2 = getRandom();
-                pvpBlock.setFxN2(pvp, fxN2, ii, jj);
+                pvpBlock.setFxN2(fxN2, ii, jj);
             }
             if (isTOAE1)
             {
                 const double toaE1 = getRandom();
-                pvpBlock.setTOAE1(pvp, toaE1, ii, jj);
+                pvpBlock.setTOAE1(toaE1, ii, jj);
             }
             if (isTOAE2)
             {
                 const double toaE2 = getRandom();
-                pvpBlock.setTOAE2(pvp, toaE2, ii, jj);
+                pvpBlock.setTOAE2(toaE2, ii, jj);
             }
             if (isSignal)
             {
                 const double signal = getRandom();
-                pvpBlock.setTOAE2(pvp, signal, ii, jj);
+                pvpBlock.setTOAE2(signal, ii, jj);
             }
 
             for (size_t idx = 0; idx < addedParams.size(); ++idx)
             {
                 const double val = getRandom();
-                pvpBlock.setAddedPVP(pvp, val, ii, jj, addedParams[idx]);
+                pvpBlock.setAddedPVP(val, ii, jj, addedParams[idx]);
             }
         }
     }
@@ -244,6 +246,8 @@ void setUpMetaData(const types::RowCol<size_t> dims,
 
     //! We must have a collectType set
     metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
     metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
@@ -279,7 +283,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     const size_t numChannels = 1;
 
     cphd::CPHDWriter writer(metadata, numThreads);
-    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+    writer.writeMetadata(outPathname, pvpBlock);
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
@@ -293,7 +297,7 @@ bool checkData(size_t numThreads,
                cphd::PVPBlock& pvpBlock)
 {
     cphd::CPHDReader reader(inStream, numThreads);
-    cphd::Wideband& wideband = reader.getWideband();
+    const cphd::Wideband& wideband = reader.getWideband();
 
     if (metadata.pvp != reader.getMetadata().pvp)
     {
@@ -332,7 +336,7 @@ TEST_CASE(testPVPBlockSimple)
     cphd::PVPBlock pvpBlock(meta.data,
                             meta.pvp);
     std::vector<std::string> addedParams;
-    setPVPBlock(dims, pvpBlock, meta.pvp, false, false, false,
+    setPVPBlock(dims, pvpBlock, false, false, false,
                 false, false, false, addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
@@ -354,7 +358,7 @@ TEST_CASE(testPVPBlockOptional)
     cphd::PVPBlock pvpBlock(meta.data,
                             meta.pvp);
     std::vector<std::string> addedParams;
-    setPVPBlock(dims, pvpBlock, meta.pvp, false, true, true,
+    setPVPBlock(dims, pvpBlock, false, true, true,
                 false, false, false, addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
@@ -376,7 +380,7 @@ TEST_CASE(testPVPBlockAdditional)
     std::vector<std::string> addedParams;
     addedParams.push_back("param1");
     addedParams.push_back("param2");
-    setPVPBlock(dims, pvpBlock, meta.pvp, false, false, false,
+    setPVPBlock(dims, pvpBlock, false, false, false,
                 false, false, false, addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));

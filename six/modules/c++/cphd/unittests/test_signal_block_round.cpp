@@ -173,6 +173,8 @@ void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
     metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
     metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
@@ -247,7 +249,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
 
     cphd::CPHDWriter writer(metadata, numThreads);
 
-    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+    writer.writeMetadata(outPathname, pvpBlock);
 
     writer.writePVPData(pvpBlock);
 
@@ -264,7 +266,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
         mem::SharedPtr<io::SeekableInputStream> inStream)
 {
     cphd::CPHDReader reader(inStream, numThreads);
-    cphd::Wideband& wideband = reader.getWideband();
+    const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);

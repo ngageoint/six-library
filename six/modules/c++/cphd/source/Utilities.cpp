@@ -151,7 +151,7 @@ std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(std::string fo
     std::vector<std::pair<std::string,size_t> > paramVec(params.size());
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
-        paramVec[ii] = 
+        paramVec[ii] =
             std::pair<std::string, size_t>(params[ii].getKey(), getFormatSize(params[ii].getVal()));
     }
     return paramVec;
@@ -226,4 +226,73 @@ size_t isFormatStr(std::string format)
     }
     return six::Init::undefined<size_t>();
 }
+
+std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
+{
+    os << "GeoInfo:: \n"
+        << "  Name             : " << g.name << "\n";
+    for (size_t ii = 0; ii < g.desc.size(); ++ii)
+    {
+        os << "  Description      : " << g.desc[ii].getName() << ": " << g.desc[ii].str() << "\n";
+    }
+    if (g.geometryLatLon.size() == 1)
+    {
+        os << "  Point            : " << g.geometryLatLon[0].getLat() << ", " << g.geometryLatLon[0].getLon() << "\n";
+    }
+    else if (g.geometryLatLon.size() == 2)
+    {
+        os << "  Line             : " << "\n";
+        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
+        {
+            os << "  Endpoint         : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
+        }
+    }
+    else if (g.geometryLatLon.size() > 2)
+    {
+        os << "  Polygon          : " << "\n";
+        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
+        {
+            os << "  Vertex           : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
+        }
+    }
+
+    for (size_t ii = 0; ii < g.geoInfos.size(); ++ii)
+    {
+        os << *g.geoInfos[ii] << "\n";
+    }
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const MatchInformation& m)
+{
+    os << "MatchInformation:: \n"
+        << "  Types:: \n";
+    for (size_t ii = 0; ii < m.types.size(); ++ii)
+    {
+        os << "  TypeID           : " << m.types[ii]->typeID << "\n";
+        if (!six::Init::isUndefined(m.types[ii]->currentIndex))
+        {
+            os << "  CurrentIndex     : " << m.types[ii]->currentIndex << "\n";
+        }
+        os << " NumMatchCollections : " << m.types[ii]->matchCollects.size() << "\n";
+
+        for (size_t jj = 0; jj < m.types[ii]->matchCollects.size(); ++jj)
+        {
+            os << "  MatchCollect     : \n"
+                << "    CoreName       : " << m.types[ii]->matchCollects[jj].coreName << "\n";
+            if (!six::Init::isUndefined(m.types[ii]->matchCollects[jj].matchIndex))
+            {
+                os << "    MatchIndex     : " << m.types[ii]->matchCollects[jj].matchIndex << "\n";
+            }
+            for (size_t kk = 0; kk < m.types[ii]->matchCollects[jj].parameters.size(); ++kk)
+            {
+                os << "    Parameter      : "
+                    << m.types[ii]->matchCollects[jj].parameters[kk].getName()
+                    << ": " << m.types[ii]->matchCollects[jj].parameters[kk].str() << "\n";
+            }
+        }
+    }
+    return os;
+}
+
 }

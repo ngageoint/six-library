@@ -28,6 +28,8 @@
 #include <vector>
 #include <map>
 
+#include <cphd/Types.h>
+
 namespace cphd
 {
 
@@ -118,5 +120,8 @@ size_t isFormatStr(std::string format);
  */
 FormatType keyValueFinder(std::string format, size_t startPos, size_t endPos);
 
+
+std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
+std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
 }
 #endif

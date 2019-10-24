@@ -36,7 +36,7 @@ namespace cphd
 {
 
 /*!
- * Unit vectors that describe the orientation of an 
+ * Unit vectors that describe the orientation of an
  * Antenna Coordinate Frame as a function of time.
  */
 struct AntCoordFrame
@@ -147,7 +147,8 @@ struct AntPattern
     //! Equality operators
     bool operator==(const AntPattern& other) const
     {
-        return freqZero == other.freqZero && gainZero == other.gainZero &&
+        return  identifier == other.identifier &&
+                freqZero == other.freqZero && gainZero == other.gainZero &&
                 ebFreqShift == other.ebFreqShift &&
                 mlFreqDilation == other.mlFreqDilation &&
                 gainBSPoly == other.gainBSPoly && eb == other.eb &&

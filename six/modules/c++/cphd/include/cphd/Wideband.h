@@ -109,11 +109,11 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& data);
+              const mem::BufferView<sys::ubyte>& data) const;
 
     // Same as above for compressed Signal Array
     void read(size_t channel,
-              const mem::BufferView<sys::ubyte>& data);
+              const mem::BufferView<sys::ubyte>& data) const;
 
     // Same as above but allocates the memory
     void read(size_t channel,
@@ -122,11 +122,11 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data);
+              mem::ScopedArray<sys::ubyte>& data) const;
 
-    // Same as above for compressed Signal Array 
+    // Same as above for compressed Signal Array
     void read(size_t channel,
-              mem::ScopedArray<sys::ubyte>& data);
+              mem::ScopedArray<sys::ubyte>& data) const;
 
     // Same as above but also applies a per-vector scale factor
     void read(size_t channel,
@@ -137,7 +137,7 @@ public:
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
-              const mem::BufferView<std::complex<float> >& data);
+              const mem::BufferView<std::complex<float> >& data) const;
 
     // Same as above but for a raw pointer
     // The pointer needs to be preallocated. Use getBufferDims for this.
@@ -170,7 +170,7 @@ public:
     }
 
 private:
-    // Initialize mOffsets for each array 
+    // Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
 
@@ -190,12 +190,12 @@ private:
                   size_t lastVector,
                   size_t firstSample,
                   size_t lastSample,
-                  void* data);
+                  void* data) const;
 
     // Just performs the read fo compressed data
     // No allocation, endian swapping, or scaling
     void readImpl(size_t channel,
-                  void* data);
+                  void* data) const;
 
     static
     bool allOnes(const std::vector<double>& vectorScaleFactors);

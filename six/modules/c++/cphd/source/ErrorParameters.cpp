@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <cphd/ErrorParameters.h>
+
 #include <mem/ScopedCopyablePtr.h>
+#include <cphd/ErrorParameters.h>
 #include <six/Init.h>
 
 namespace cphd
@@ -32,148 +33,105 @@ ErrorParameters::Monostatic::RadarSensor::RadarSensor() :
 {
 }
 
-ErrorParameters::Monostatic::TropoError::TropoError() :
-    tropoRangeVertical(six::Init::undefined<double>()),
-    tropoRangeSlant(six::Init::undefined<double>())
-{
-}
-
-ErrorParameters::Monostatic::IonoError::IonoError() :
-    ionoRangeVertical(six::Init::undefined<double>()),
-    ionoRangeRateVertical(six::Init::undefined<double>()),
-    ionoRgRgRateCC(six::Init::undefined<double>())
-{
-}
-
 ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
     clockFreqSF(six::Init::undefined<double>()),
     collectionStartTime(six::Init::undefined<double>())
 {
 }
 
-PosVelErr::PosVelErr() :
-    frame(six::Init::undefined<scene::FrameType>()),
-    p1(six::Init::undefined<double>()),
-    p2(six::Init::undefined<double>()),
-    p3(six::Init::undefined<double>()),
-    v1(six::Init::undefined<double>()),
-    v2(six::Init::undefined<double>()),
-    v3(six::Init::undefined<double>())
+std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
-}
-
-PosVelErr::CorrCoefs::CorrCoefs() :
-    p1p2(six::Init::undefined<double>()),
-    p1p3(six::Init::undefined<double>()),
-    p1v1(six::Init::undefined<double>()),
-    p1v2(six::Init::undefined<double>()),
-    p1v3(six::Init::undefined<double>()),
-    p2p3(six::Init::undefined<double>()),
-    p2v1(six::Init::undefined<double>()),
-    p2v2(six::Init::undefined<double>()),
-    p2v3(six::Init::undefined<double>()),
-    p3v1(six::Init::undefined<double>()),
-    p3v2(six::Init::undefined<double>()),
-    p3v3(six::Init::undefined<double>()),
-    v1v2(six::Init::undefined<double>()),
-    v1v3(six::Init::undefined<double>()),
-    v2v3(six::Init::undefined<double>())
-{
-}
-
-Decorr::Decorr() :
-    corrCoefZero(six::Init::undefined<double>()),
-    decorrRate(six::Init::undefined<double>())
-{
-}
-
-std::ostream& operator<< (std::ostream& os, const Decorr& d)
-{
-    os << "      CorrCoefZero   : " << d.corrCoefZero << "\n"
-        << "      DecorrRate    : " << d.decorrRate << "\n";
-    return os;
-}
-
-std::ostream& operator<< (std::ostream& os, const PosVelErr::CorrCoefs& c)
-{
-    os << "      CorrCoefs:: \n"
-        << "      P1P2         : " << c.p1p2 << "\n"
-        << "      P1P3         : " << c.p1p3 << "\n"
-        << "      P1V1         : " << c.p1v1 << "\n"
-        << "      P1V2         : " << c.p1v2 << "\n"
-        << "      P1V3         : " << c.p1v3 << "\n"
-        << "      P2P3         : " << c.p2p3 << "\n"
-        << "      P2V1         : " << c.p2v1 << "\n"
-        << "      P2V2         : " << c.p2v2 << "\n"
-        << "      P2V3         : " << c.p2v3 << "\n"
-        << "      P3V1         : " << c.p3v1 << "\n"
-        << "      P3V2         : " << c.p3v2 << "\n"
-        << "      P3V3         : " << c.p3v3 << "\n"
-        << "      V1V2         : " << c.v1v2 << "\n"
-        << "      V1V3         : " << c.v1v3 << "\n"
-        << "      V2V3         : " << c.v2v3 << "\n";
-    return os;
-}
-
-std::ostream& operator<< (std::ostream& os, const PosVelErr& p)
-{
-    os << "    PosVelErr:: \n"
-        << "      Frame          : " << p.frame.toString() << "\n"
-        << "      P1             : " << p.p1 << "\n"
-        << "      P2             : " << p.p2 << "\n"
-        << "      P3             : " << p.p3 << "\n"
-        << "      V1             : " << p.v1 << "\n"
-        << "      V2             : " << p.v2 << "\n"
-        << "      V3             : " << p.v3 << "\n";
-    if(p.corrCoefs.get())
-    {
-        os << *(p.corrCoefs) << "\n";
-    }
-    os << "      PostionDecorr:: \n";
-    if(p.positionDecorr.get())
-    {
-        os << *(p.positionDecorr);
-    }
+    os << "    PosVelError:: \n"
+        << "    Frame          : " << p.frame.toString() << "\n"
+        << "    P1             : " << p.p1 << "\n"
+        << "    P2             : " << p.p2 << "\n"
+        << "    P3             : " << p.p3 << "\n"
+        << "    V1             : " << p.v1 << "\n"
+        << "    V2             : " << p.v2 << "\n"
+        << "    V3             : " << p.v3 << "\n";
+        if (p.corrCoefs.get())
+        {
+            os << "    CorrCoefs:: \n"
+                << "    p1p2          : " << p.corrCoefs->p1p2 << "\n"
+                << "    p1p3          : " << p.corrCoefs->p1p3 << "\n"
+                << "    p1v1          : " << p.corrCoefs->p1v1 << "\n"
+                << "    p1v2          : " << p.corrCoefs->p1v2 << "\n"
+                << "    p1v3          : " << p.corrCoefs->p1v3 << "\n"
+                << "    p2p3          : " << p.corrCoefs->p2p3 << "\n"
+                << "    p2v1          : " << p.corrCoefs->p2v1 << "\n"
+                << "    p2v2          : " << p.corrCoefs->p2v2 << "\n"
+                << "    p2v3          : " << p.corrCoefs->p2v3 << "\n"
+                << "    p3v1          : " << p.corrCoefs->p3v1 << "\n"
+                << "    p3v2          : " << p.corrCoefs->p3v2 << "\n"
+                << "    p3v3          : " << p.corrCoefs->p3v3 << "\n"
+                << "    v1v2          : " << p.corrCoefs->v1v2 << "\n"
+                << "    v1v3          : " << p.corrCoefs->v1v3 << "\n"
+                << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
+        }
+        os << "    Decorr:: \n"
+            << "    CorrCoefZero   : " << p.positionDecorr.corrCoefZero << "\n"
+            << "    DecorrRate     : " << p.positionDecorr.decorrRate << "\n";
     return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
 {
-    os << "ErrorParameters:: \n";
+    os << "Error Parameters:: \n";
     if (e.monostatic.get())
     {
         os << "  Monostatic:: \n"
             << e.monostatic->posVelErr << "\n"
             << "    RadarSensor:: \n"
-            << "    RangeBias        : " << e.monostatic->radarSensor.rangeBias << "\n"
-            << "    ClockFreqSF      : " << e.monostatic->radarSensor.clockFreqSF << "\n"
-            << "    CollectionStartTime : " << e.monostatic->radarSensor.collectionStartTime << "\n"
-            << "    RangeBiasDecorr:: \n";
+            << "    RangeBias        : " << e.monostatic->radarSensor.rangeBias << "\n";
+        if (!six::Init::isUndefined(e.monostatic->radarSensor.clockFreqSF))
+        {
+            os << "    ClockFreqSF      : " << e.monostatic->radarSensor.clockFreqSF << "\n";
+        }
+        if (!six::Init::isUndefined(e.monostatic->radarSensor.collectionStartTime))
+        {
+            os << "    CollectionStartTime : " << e.monostatic->radarSensor.collectionStartTime << "\n";
+        }
         if (e.monostatic->radarSensor.rangeBiasDecorr.get())
         {
-            os << *(e.monostatic->radarSensor.rangeBiasDecorr) << "\n";
+            os << "    RangeBiasDecorr:: \n"
+                << "    CorrCoefZero   : " << e.monostatic->radarSensor.rangeBiasDecorr->corrCoefZero << "\n"
+                << "    DecorrRate     : " << e.monostatic->radarSensor.rangeBiasDecorr->decorrRate << "\n";
         }
         if (e.monostatic->tropoError.get())
         {
-            os << "    TropoError:: \n"
-                << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n"
-                << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n"
-                << "    TropoRangeDecorr:: \n";
-            if (e.monostatic->tropoError->tropoRangeDecorr.get())
+            os << "    TropoError:: \n";
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
             {
-                os << *(e.monostatic->tropoError->tropoRangeDecorr) << "\n";
+                os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
+            }
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
+            {
+                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
+            }
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeDecorr))
+            {
+            os << "    TropoRangeDecorr:: \n"
+                << "      CorrCoefZero  : " << e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->tropoError->tropoRangeDecorr.decorrRate << "\n";
             }
         }
         if (e.monostatic->ionoError.get())
         {
-            os << "    IonoError:: \n"
-                << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n"
-                << "    IonoRangeRateVertical : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n"
-                << "    IonoRgRgRateCC   : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n"
-                << "    IonoRangeVertDecorr:: \n";
-            if (e.monostatic->ionoError->ionoRangeVertDecorr.get())
+            os << "    IonoError:: \n";
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertical))
             {
-                os << *(e.monostatic->ionoError->ionoRangeVertDecorr) << "\n";
+                os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
+            }
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeRateVertical))
+            {
+                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
+            }
+            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertDecorr))
+            {
+            os << "    IonoRangeDecorr:: \n"
+                << "      CorrCoefZero  : " << e.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->ionoError->ionoRangeVertDecorr.decorrRate << "\n";
             }
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)

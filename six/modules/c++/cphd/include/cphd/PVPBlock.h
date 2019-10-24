@@ -46,28 +46,6 @@ namespace cphd
 struct PVPBlock
 {
 
-    /*
-     * Struct Template Specialization for getAddedPVP function
-     * mimics function template specialization
-     */
-    template<typename T>
-    struct AddedPVP
-    {
-        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, std::string name)
-        {
-            return static_cast<T>(val);
-        }
-    };
-
-    template<typename T>
-    struct AddedPVP<std::complex<T> >
-    {
-        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, std::string name)
-        {
-            return val.getComplex<T>();
-        }
-    };
-
     struct PVPSet
     {
         PVPSet();
@@ -150,8 +128,7 @@ struct PVPBlock
     };
 
     PVPBlock() :
-        mNumBytesPerVector(0),
-        mNumAdditionalBytesPerVector(0)
+        mNumBytesPerVector(0)
     {
     }
 
@@ -164,11 +141,12 @@ struct PVPBlock
      *         This will also be used to store off the number of bytes
      *         per vector regardless of the optional values.
     */
-    PVPBlock(Data& d, Pvp& p);
+    PVPBlock(const Data& d, const Pvp& p);
 
     PVPBlock(size_t numBytesPerVector,
-                    size_t numChannels,
-                    std::vector<size_t> numVectors);
+             size_t numChannels,
+             const std::vector<size_t>& numVectors,
+             const Pvp& p);
 
     void verifyChannelVector(size_t channel, size_t vector) const;
 
@@ -200,7 +178,7 @@ struct PVPBlock
     double getTdIonoSRP(size_t channel, size_t set);
     double getSignal(size_t channel, size_t set);
 
-    template<typename T> T getAddedPVP(size_t channel, size_t set, std::string name)
+    template<typename T> T getAddedPVP(size_t channel, size_t set, const std::string& name)
     {
         verifyChannelVector(channel, set);
         if(mData[channel][set].addedPVP.count(name) == 1)
@@ -232,24 +210,23 @@ struct PVPBlock
     void setTdTropoSRP(double value, size_t channel, size_t set);
     void setSC0(double value, size_t channel, size_t set);
     void setSCSS(double value, size_t channel, size_t set);
-    void setAmpSF(Pvp& p, double value, size_t channel, size_t set);
-    void setFxN1(Pvp& p, double value, size_t channel, size_t set);
-    void setFxN2(Pvp& p, double value, size_t channel, size_t set);
-    void setTOAE1(Pvp& p, double value, size_t channel, size_t set);
-    void setTOAE2(Pvp& p, double value, size_t channel, size_t set);
-    void setTdIonoSRP(Pvp& p, double value, size_t channel, size_t set);
-    void setSignal(Pvp& p, double value, size_t channel, size_t set);
+    void setAmpSF(double value, size_t channel, size_t set);
+    void setFxN1(double value, size_t channel, size_t set);
+    void setFxN2(double value, size_t channel, size_t set);
+    void setTOAE1(double value, size_t channel, size_t set);
+    void setTOAE2(double value, size_t channel, size_t set);
+    void setTdIonoSRP(double value, size_t channel, size_t set);
+    void setSignal(double value, size_t channel, size_t set);
 
-    template<typename T> void setAddedPVP(Pvp& p, T value, size_t channel, size_t set, std::string name)
+    template<typename T> void setAddedPVP(T value, size_t channel, size_t set, const std::string& name)
     {
         verifyChannelVector(channel, set);
-        if(p.addedPVP.count(name) != 0)
+        if(mPvp.addedPVP.count(name) != 0)
         {
             if(mData[channel][set].addedPVP.count(name) == 0)
             {
                 mData[channel][set].addedPVP[name] = ComplexParameter();
                 mData[channel][set].addedPVP.find(name)->second.setValue(value);
-                // mData[channel][set].addToAddedPVPByteSize(sizeof(T));
                 return;
             }
             throw except::Exception(Ctxt(
@@ -267,7 +244,7 @@ struct PVPBlock
      *  \param [Output]data Will be filled with PVP data. This will
      *         be resized and zeroed internally.
      */
-    void getPVPdata(const Pvp& p, size_t channel,
+    void getPVPdata(size_t channel,
                     std::vector<sys::ubyte>& data) const;
 
     /*
@@ -277,13 +254,8 @@ struct PVPBlock
      *  \param channel 0 based index
      *  \param [Output]data A preallocated buffer for the data.
      */
-    void getPVPdata(const Pvp& p, size_t channel,
+    void getPVPdata(size_t channel,
                     void* data) const;
-
-    std::vector<std::vector<PVPSet> >& getData()
-    {
-        return mData;
-    }
 
     /*
      *  \func getNumBytesVBP
@@ -308,8 +280,7 @@ struct PVPBlock
     sys::Off_T load(io::SeekableInputStream& inStream,
                     sys::Off_T startPVP,
                     sys::Off_T sizePVP,
-                    size_t numThreads,
-                    const Pvp& p);
+                    size_t numThreads);
 
     bool operator==(const PVPBlock& other) const
     {
@@ -323,9 +294,32 @@ struct PVPBlock
     }
 
 private:
+
+    /*
+     * Struct Template Specialization for getAddedPVP function
+     * mimics function template specialization
+     */
+    template<typename T>
+    struct AddedPVP
+    {
+        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, const std::string& name)
+        {
+            return static_cast<T>(val);
+        }
+    };
+
+    template<typename T>
+    struct AddedPVP<std::complex<T> >
+    {
+        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, const std::string& name)
+        {
+            return val.getComplex<T>();
+        }
+    };
+
     std::vector<std::vector<PVPSet> > mData; // The PVP Block [Num Channles][Num Parameters]
     size_t mNumBytesPerVector;
-    size_t mNumAdditionalBytesPerVector;
+    Pvp mPvp;
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };
 }

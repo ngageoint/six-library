@@ -42,11 +42,11 @@ public:
     {
     }
 
-    virtual void read(io::SeekableInputStream& inStream);
+    void read(io::SeekableInputStream& inStream) override;
 
     // Convert header info to string (for writing to file)
     // Does not include section terminator string
-    virtual std::string toString() const;
+    std::string toString() const override;
 
     // Set the file header to its final state
     // Compute the offsets of the sections that depend on the file header size

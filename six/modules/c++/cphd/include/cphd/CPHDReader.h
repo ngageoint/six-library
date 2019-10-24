@@ -41,23 +41,15 @@ public:
     // Provides access to wideband but doesn't read it
     CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
                size_t numThreads,
+               const std::vector<std::string>& schemaPaths =
+                       std::vector<std::string>(),
                mem::SharedPtr<logging::Logger> logger =
                        mem::SharedPtr<logging::Logger>());
 
     CPHDReader(const std::string& fromFile,
                size_t numThreads,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
-
-    CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
-               size_t numThreads,
-               std::vector<std::string>& schemaPaths,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
-
-    CPHDReader(const std::string& fromFile,
-               size_t numThreads,
-               std::vector<std::string>& schemaPaths,
+               const std::vector<std::string>& schemaPaths =
+                       std::vector<std::string>(),
                mem::SharedPtr<logging::Logger> logger =
                        mem::SharedPtr<logging::Logger>());
 
@@ -67,12 +59,12 @@ public:
         return mMetadata->data.getNumChannels();
     }
     // 0-based channel number
-    size_t getNumVectors(size_t channel) const
+    size_t getNumVectors(const size_t channel) const
     {
         return mMetadata->data.getNumVectors(channel);
     }
     // 0-based channel number
-    size_t getNumSamples(size_t channel) const
+    size_t getNumSamples(const size_t channel) const
     {
         return mMetadata->data.getNumSamples(channel);
     }
@@ -85,7 +77,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
+    sys::Off_T getFileOffset(const size_t channel, const size_t vector, const size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }
@@ -124,11 +116,11 @@ public:
     {
         return *mPVPBlock;
     }
-    Wideband& getWideband()
+    const Wideband& getWideband() const
     {
         return *mWideband;
     }
-    SupportBlock& getSupportBlock()
+    const SupportBlock& getSupportBlock() const
     {
         return *mSupportBlock;
     }
@@ -144,7 +136,7 @@ private:
     void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                     size_t numThreads,
                     mem::SharedPtr<logging::Logger> logger,
-                    std::vector<std::string> schemaPaths);
+                    const std::vector<std::string>& schemaPaths);
 };
 }
 

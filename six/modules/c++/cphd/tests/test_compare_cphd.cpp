@@ -69,8 +69,8 @@ bool compareWideband(cphd::CPHDReader& reader1,
 {
     bool dataMatches = true;
 
-    cphd::Wideband& wideband1 = reader1.getWideband();
-    cphd::Wideband& wideband2 = reader2.getWideband();
+    const cphd::Wideband& wideband1 = reader1.getWideband();
+    const cphd::Wideband& wideband2 = reader2.getWideband();
 
     mem::ScopedArray<sys::ubyte> cphdData1;
     mem::ScopedArray<sys::ubyte> cphdData2;

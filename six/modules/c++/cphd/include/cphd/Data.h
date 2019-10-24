@@ -47,9 +47,9 @@ struct Data
     // so hiding this inside Data
 
     /*
-     * Support Array size parameters. 
+     * Support Array size parameters.
      * Branch repeated for each binary support array
-     * Support array referenced by its unique 
+     * Support array referenced by its unique
      * support array identifier SA_ID
      */
     struct SupportArray
@@ -59,7 +59,8 @@ struct Data
         SupportArray();
 
         //! Custom constructor
-        SupportArray(std::string, size_t, size_t, size_t, size_t);
+        SupportArray(const std::string& id, size_t rows, size_t cols,
+                size_t numBytes, size_t offset);
 
         //! Equality Operators
         bool operator==(const SupportArray& other) const
@@ -174,7 +175,7 @@ struct Data
         size_t pvpArrayByteOffset;
 
         //! (Optional) Size (in bytes) of the compressed signal array
-        //! byte sequence for the data channel. 
+        //! byte sequence for the data channel.
         size_t compressedSignalSize; // Optional
     };
 
@@ -187,9 +188,9 @@ struct Data
         return signalArrayFormat == other.signalArrayFormat &&
                numBytesPVP == other.numBytesPVP &&
                signalCompressionID == other.signalCompressionID &&
-               channels == other.channels && 
+               channels == other.channels &&
                supportArrayMap == other.supportArrayMap &&
-               sa_IDMap == other.sa_IDMap;
+               supportOffsetMap == other.supportOffsetMap;
     }
     bool operator!=(const Data& other) const
     {
@@ -242,12 +243,12 @@ struct Data
     }
     size_t getNumSupportArrays() const
     {
-        assert(sa_IDMap.size() != supportArrayMap.size());
-        return sa_IDMap.size();
+        assert(supportOffsetMap.size() != supportArrayMap.size());
+        return supportOffsetMap.size();
     }
-    SupportArray getSupportArrayById(std::string id) const;
+    SupportArray getSupportArrayById(const std::string& id) const;
 
-    size_t getElementSize(std::string id) const
+    size_t getElementSize(const std::string& id) const
     {
         return getSupportArrayById(id).bytesPerElement;
     }
@@ -255,7 +256,7 @@ struct Data
 
     //! Add new support array
     // Updates both dictionaries
-    void setSupportArray(std::string id, size_t numRows,
+    void setSupportArray(const std::string& id, size_t numRows,
                          size_t numCols, size_t numBytes,
                          sys::Off_T offset);
 
@@ -295,7 +296,7 @@ public:
     // Both of these maps get populated and/or edited together
     // Made for O(logn) lookup
     //! (Optional) Map of unique support array id to support array offset
-    std::unordered_map<std::string,sys::Off_T> sa_IDMap;
+    std::unordered_map<std::string,sys::Off_T> supportOffsetMap;
     // (Optional) Ordered map to store support arrays with offset key
     std::map<sys::Off_T,SupportArray, CmpByOffset> supportArrayMap;
 };

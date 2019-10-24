@@ -35,9 +35,9 @@ namespace cphd
 {
 
 /*!
- * Specifies a defined Per Vector Parameter. 
+ * Specifies a defined Per Vector Parameter.
  * Size and Offset specify the size and placement of
- * the binary parameter in the set of Per Vector 
+ * the binary parameter in the set of Per Vector
  * parameters provided for each vector.
  */
 struct PVPType
@@ -48,7 +48,7 @@ struct PVPType
 
     bool operator==(const PVPType& other) const
     {
-        return mSize == other.getSize() && 
+        return mSize == other.getSize() &&
         mOffset == other.getOffset() &&
         mFormat == other.getFormat();
     }
@@ -58,7 +58,7 @@ struct PVPType
         return !((*this) == other);
     }
 
-    void setData(size_t size, size_t offset, std::string format)
+    void setData(size_t size, size_t offset, const std::string& format)
     {
         mSize = size;
         mOffset = offset;
@@ -119,7 +119,7 @@ struct APVPType : PVPType
         return !((*this) == other);
     }
 
-    void setName(std::string name)
+    void setName(const std::string& name)
     {
         mName = name;
     }
@@ -194,7 +194,7 @@ struct Pvp
     /*!
      * (Optional) Amplitude scale Factor to be applied to all samples of the signal
      * vector. For signal vector v, each sample value is multiplied by
-     * Amp_SF(v) to yield the proper sample values for the vector. 
+     * Amp_SF(v) to yield the proper sample values for the vector.
      */
     mem::ScopedCopyablePtr<PVPType> ampSF;
 
@@ -218,7 +218,7 @@ struct Pvp
      * Accounts for quadratic phase vs. FX frequency for targets with
      * time dilation/Doppler shift different than the echo from the srp.
      * Provides precise quadratic phase prediction for Linear FM
-     * waveforms. 
+     * waveforms.
      */
     PVPType aFRR2;
 
@@ -260,7 +260,7 @@ struct Pvp
      * The  change in toa limits for the full resolution echoes retained in the
      * signal vector (sec). Full resolution echoes are formed with
      * FX_BW(v) saved bandwidth.
-     * Full resolution toa limits: toa_1 < toa < toa_2
+     * Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
      */
     PVPType toa1;
 
@@ -268,7 +268,7 @@ struct Pvp
      * The  change in toa limits for the full resolution echoes retained in the
      * signal vector (sec). Full resolution echoes are formed with
      * FX_BW(v) saved bandwidth.
-     * Full resolution toa limits: toa_1 < toa < toa_2
+     * Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
      */
     PVPType toa2;
 
@@ -290,7 +290,7 @@ struct Pvp
 
     /*!
      * (Optional) Two-way time delay due to the ionosphere (sec) that was added
-     * when computing the propagation time for the SRP 
+     * when computing the propagation time for the SRP
      */
     mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
 
@@ -352,10 +352,10 @@ struct Pvp
     size_t getAdditionalParamsSize() const;
 
     //! Set a PVP param
-    void setData(PVPType& param, size_t size, size_t offset, std::string format);
+    void setData(PVPType& param, size_t size, size_t offset, const std::string& format);
 
     //! Set an additional PVP param
-    void setData(size_t size, size_t offset, std::string format, std::string name);
+    void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
 
     // //! Set the number of added params
     // void setNumAddedParameters(size_t size);

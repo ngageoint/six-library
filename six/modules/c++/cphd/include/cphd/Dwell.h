@@ -36,7 +36,7 @@ namespace cphd
 /*
  * Dwell Time Polynomial
  */
-struct DwellTime 
+struct DwellTime
 {
     //! Constructor
     DwellTime();

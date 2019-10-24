@@ -100,24 +100,22 @@ public:
      *         By default, CPHD will not be populated with this value.
      */
     void writeMetadata(const std::string& pathname,
-                       const PVPBlock& PVPBlock,
-                       const std::string& classification = "",
-                       const std::string& releaseInfo = "");
+                       const PVPBlock& PVPBlock);
 
     /*
      *  \func writeSupportData
      *  \brief (Optional) Writes the specified support Array to the file
-     * 
+     *
      *  \param data A pointer to the start of the support array that
      *        will be written to file
      *  \param id The unique identifier of the support array
      */
     template <typename T>
     void writeSupportData(const T* data,
-                          std::string id)
+                          const std::string& id)
     {
         // TODO: treat multiple params as seperate params or one byte string?
-        writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data), 
+        writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data),
                              mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
                              mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
@@ -125,7 +123,7 @@ public:
     /*
      *  \func writePVPData
      *  \brief Writes the PVP to the file
-     * 
+     *
      *  \param PVPBlock A populated PVPBlock object that will be written
      *         to the file as a block of data
      */
@@ -150,14 +148,14 @@ public:
     template <typename T>
     void writeCPHDData(const T* data,
                        size_t numElements,
-                       size_t channel = 0);
+                       size_t channel = 1);
 
     /*
      * Same as write CPHDData but for compressed CPHD
      */
-    void writeCompressedCPHDData(const sys::ubyte* data,
-                       size_t numElements,
-                       size_t channel = 0);
+    // void writeCompressedCPHDData(const sys::ubyte* data,
+    //                    size_t numElements,
+    //                    size_t channel);
 
     /*
      *  \func write
@@ -170,9 +168,7 @@ public:
      *  \param releaseInfo The release information for the file. Optional
      *         By default, CPHD will not be populated with this value.
      */
-    void write(const std::string& pathname,
-               const std::string& classification = "",
-               const std::string& releaseInfo = "");
+    void write(const std::string& pathname);
 
     void close()
     {
@@ -185,9 +181,7 @@ public:
 private:
     void writeMetadata(size_t supportSize, // Optional
                        size_t pvpSize,
-                       size_t cphdSize,
-                       const std::string& classification = "",
-                       const std::string& releaseInfo = "");
+                       size_t cphdSize);
 
     void writePVPData(const sys::ubyte* PVPBlock,
                       size_t index);
@@ -196,7 +190,7 @@ private:
                            size_t size);
 
     void writeCompressedCPHDDataImpl(const sys::ubyte* data,
-                           size_t size, size_t channel);
+                                     size_t channel);
 
     void writeSupportDataImpl(const sys::ubyte* data,
                               size_t numElements, size_t elementSize);

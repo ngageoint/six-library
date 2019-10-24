@@ -58,7 +58,7 @@ struct Timeline
     //! Collection Start date and time (UTC)
     DateTime collectionStart;
 
-    //! (Optional) Receive only platform collection date 
+    //! (Optional) Receive only platform collection date
     //! and start time.
     DateTime rcvCollectionStart; // Optional
 
@@ -120,11 +120,11 @@ struct TOASwath
         return !((*this) == other);
     }
 
-    //! Minimum TOA_1 value for any signal vector in
+    //! Minimum DTOA_1 value for any signal vector in
     //! the product
     double toaMin;
 
-    //! Maximum TOA_2 value for any signal vector
+    //! Maximum DTOA_2 value for any signal vector
     //! in the product
     double toaMax;
 };
@@ -218,7 +218,7 @@ struct Global
     Timeline timeline;
 
     //! Parameters that describe the FX frequency limits
-    //! for the signal array(s) contained in the product. 
+    //! for the signal array(s) contained in the product.
     FxBand fxBand;
 
     //! Parameters that describe the TOA swath limits

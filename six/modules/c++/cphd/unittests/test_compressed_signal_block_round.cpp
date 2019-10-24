@@ -155,6 +155,8 @@ void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
     metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
     metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
@@ -220,13 +222,13 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
 
     cphd::CPHDWriter writer(metadata, numThreads);
 
-    writer.writeMetadata(outPathname, pvpBlock, "Unclassified", "Release");
+    writer.writeMetadata(outPathname, pvpBlock);
 
     writer.writePVPData(pvpBlock);
 
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCompressedCPHDData(&writeData[0],1,ii);
+        writer.writeCPHDData(&writeData[0],1,ii);
     }
 }
 
@@ -237,7 +239,7 @@ std::vector<sys::ubyte> checkCompressedData(const std::string& pathname,
 {
 
     cphd::CPHDReader reader(inStream, numThreads);
-    cphd::Wideband& wideband = reader.getWideband();
+    const cphd::Wideband& wideband = reader.getWideband();
     std::vector<sys::ubyte> readData(dims.area());
 
     mem::BufferView<sys::ubyte> data(&readData[0], readData.size());

@@ -33,6 +33,7 @@
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
 #include <str/Convert.h>
+
 /*!
  * Reads in CPHD file from InputFile
  * Writes out CPHD file to OutputFile
@@ -52,21 +53,19 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
     const cphd::SignalArrayFormat signalFormat =
             reader.getMetadata().data.getSignalFormat();
     const cphd::PVPBlock& pvpBlock = reader.getPVPBlock();
-    cphd::Wideband& wideband = reader.getWideband();
+    const cphd::Wideband& wideband = reader.getWideband();
 
-    writer.writeMetadata(outPathname, pvpBlock,
-                         metadata.collectionID.getClassificationLevel(),
-                         metadata.collectionID.releaseInfo);
+    writer.writeMetadata(outPathname, pvpBlock);
 
     // SupportBlock
-    cphd::SupportBlock& supportBlock = reader.getSupportBlock();
+    const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
     mem::ScopedArray<sys::ubyte> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
     size_t idx = 0;
-    auto it = metadata.data.sa_IDMap.begin();
-    for (it = metadata.data.sa_IDMap.begin(), idx = 0; 
-         it != metadata.data.sa_IDMap.end(); 
+    auto it = metadata.data.supportOffsetMap.begin();
+    for (it = metadata.data.supportOffsetMap.begin(), idx = 0;
+         it != metadata.data.supportOffsetMap.end();
          ++it, idx = reader.getMetadata().data.getSupportArrayById(it->first).getSize())
     {
         writer.writeSupportData(readPtr.get() + idx, it->first);
@@ -92,17 +91,17 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
         case cphd::SignalArrayFormat::CI2:
             writer.writeCPHDData<std::complex<sys::Int8_T> >(
                 reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
-                dims.area());
+                dims.area(), channel);
             break;
         case cphd::SignalArrayFormat::CI4:
             writer.writeCPHDData<std::complex<sys::Int16_T> >(
                 reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
-                dims.area());
+                dims.area(), channel);
             break;
         case cphd::SignalArrayFormat::CF8:
             writer.writeCPHDData<std::complex<float> >(
                 reinterpret_cast<const std::complex<float>* >(data.get()),
-                dims.area());
+                dims.area(), channel);
             break;
         }
     }

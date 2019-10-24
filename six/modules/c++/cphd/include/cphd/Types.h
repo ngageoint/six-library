@@ -25,6 +25,8 @@
 #include <six/Types.h>
 #include <six/Enums.h>
 #include <six/CollectionInformation.h>
+#include <six/MatchInformation.h>
+#include <six/sicd/GeoData.h>
 
 namespace cphd
 {
@@ -64,6 +66,9 @@ typedef six::BooleanType BooleanType;
 
 typedef six::CollectionInformation CollectionInformation;
 
+typedef six::sicd::GeoInfo GeoInfo;
+
+typedef six::MatchInformation MatchInformation;
 }
 
 

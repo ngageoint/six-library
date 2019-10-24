@@ -88,8 +88,6 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
     TEST_ASSERT_TRUE((pvp1 != pvp2));
     TEST_ASSERT_TRUE((pvp1 != pvp3));
 }
-
-
 }
 
 int main(int /*argc*/, char** /*argv*/)

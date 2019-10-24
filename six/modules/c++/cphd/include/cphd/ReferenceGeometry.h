@@ -61,7 +61,7 @@ struct SRP
 };
 
 /*!
- * Base class for both Monostatic and 
+ * Base class for both Monostatic and
  * Bistatic imaging types
  */
 struct ImagingType
@@ -74,7 +74,7 @@ struct ImagingType
     {
         return azimuthAngle == other.azimuthAngle &&
                 grazeAngle == other.grazeAngle &&
-                twistAngle == other.twistAngle && 
+                twistAngle == other.twistAngle &&
                 slopeAngle == other.slopeAngle &&
                 layoverAngle == other.layoverAngle;
     }
@@ -203,7 +203,7 @@ struct Bistatic : public ImagingType
         //! Angle from north to the line from the SCP to the
         //! Pos Nadir in the ETP
         double azimuthAngle;
-        
+
         //! Grazing angle between the RefPt LOS and Earth
         //! Tangent Plane (ETP
         double grazeAngle;
@@ -211,7 +211,7 @@ struct Bistatic : public ImagingType
         //! Incidence angle between the RefPt LOS and ETP
         //! normal
         double incidenceAngle;
-        
+
         //! Doppler Cone Angle between VXmt and line of
         //! sight to the ARP
         double dopplerConeAngle;
@@ -289,7 +289,7 @@ struct ReferenceGeometry
     {
         return referenceTime == other.referenceTime &&
                 srpCODTime == other.srpCODTime &&
-                srpDwellTime == other.srpDwellTime && 
+                srpDwellTime == other.srpDwellTime &&
                 srp == other.srp &&
                 monostatic == other.monostatic &&
                 bistatic == other.bistatic;

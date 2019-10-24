@@ -78,7 +78,7 @@ Data::SupportArray::SupportArray() :
 {
 }
 
-Data::SupportArray::SupportArray(std::string id, size_t rows, size_t cols,
+Data::SupportArray::SupportArray(const std::string& id, size_t rows, size_t cols,
                    size_t numBytes, size_t offset) :
     identifier(id),
     numRows(rows),
@@ -88,22 +88,22 @@ Data::SupportArray::SupportArray(std::string id, size_t rows, size_t cols,
 {
 }
 
-Data::SupportArray Data::getSupportArrayById(std::string id) const
+Data::SupportArray Data::getSupportArrayById(const std::string& id) const
 {
-    if(sa_IDMap.count(id) != 1 || supportArrayMap.count(sa_IDMap.find(id)->second) != 1)
+    if(supportOffsetMap.count(id) != 1 || supportArrayMap.count(supportOffsetMap.find(id)->second) != 1)
     {
         throw except::Exception(Ctxt("Id specified does not exist"));
     }
-    return supportArrayMap.find(sa_IDMap.find(id)->second)->second;
+    return supportArrayMap.find(supportOffsetMap.find(id)->second)->second;
 }
 
 
 // offset <= supportArray < offset+size
-void Data::setSupportArray(std::string id, size_t numRows,
+void Data::setSupportArray(const std::string& id, size_t numRows,
                            size_t numCols, size_t numBytes,
                            sys::Off_T offset)
 {
-    if (sa_IDMap.count(id) || supportArrayMap.count(offset))
+    if (supportOffsetMap.count(id) || supportArrayMap.count(offset))
     {
         std::ostringstream ostr;
         ostr << "Identifier " << id << " is not unique";
@@ -131,13 +131,13 @@ void Data::setSupportArray(std::string id, size_t numRows,
             throw except::Exception(ostr.str());
         }
     }
-    sa_IDMap.insert(std::pair<std::string,sys::Off_T>(id,offset));
+    supportOffsetMap.insert(std::pair<std::string,sys::Off_T>(id,offset));
 }
 
 size_t Data::getAllSupportSize() const
 {
     size_t size = 0;
-    for (auto it = sa_IDMap.begin(); it != sa_IDMap.end(); ++it)
+    for (auto it = supportOffsetMap.begin(); it != supportOffsetMap.end(); ++it)
     {
         size += getSupportArrayById(it->first).getSize();
     }
@@ -176,7 +176,7 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
         os << d.channels[ii] << "\n";
     }
     os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
-    for (auto it = d.sa_IDMap.begin(); it != d.sa_IDMap.end(); ++it)
+    for (auto it = d.supportOffsetMap.begin(); it != d.supportOffsetMap.end(); ++it)
     {
         os << "  SupportArrays:: \n"
             << d.getSupportArrayById(it->first) << "\n";
