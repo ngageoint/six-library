@@ -95,11 +95,12 @@ public:
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
 
-    // Same as above for compressed Signal Array
+    // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
 
+    //! Reads all the support Arrays into data
     void readAll(size_t numThreads,
                  mem::ScopedArray<sys::ubyte>& data) const;
 
@@ -107,11 +108,6 @@ private:
     // Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
-
-    // Performs the read for support array
-    // No allocation, endian swapping, or scaling
-    void readImpl(const std::string& id,
-                  void* data) const;
 
 private:
     // Noncopyable

@@ -44,20 +44,22 @@ struct PVPType
 {
     static const size_t WORD_BYTE_SIZE;
 
+    //! Default constructor
     PVPType();
 
+    //! Equality operators
     bool operator==(const PVPType& other) const
     {
         return mSize == other.getSize() &&
         mOffset == other.getOffset() &&
         mFormat == other.getFormat();
     }
-
     bool operator!=(const PVPType& other) const
     {
         return !((*this) == other);
     }
 
+    //! Set PVPType data
     void setData(size_t size, size_t offset, const std::string& format)
     {
         mSize = size;
@@ -65,27 +67,31 @@ struct PVPType
         mFormat = format;
     }
 
+    //! Get size
     size_t getSize() const
     {
         return mSize;
     }
 
+    //! Get size in bytes
     size_t getByteSize() const
     {
         return mSize * WORD_BYTE_SIZE;
     }
 
+    //! Get offset
     size_t getOffset() const
     {
         return mOffset;
     }
 
+    //! Get offset in bytes
     size_t getByteOffset() const
     {
         return mOffset * WORD_BYTE_SIZE;
     }
 
-
+    //! Get format
     std::string getFormat() const
     {
         return mFormat;
@@ -103,8 +109,10 @@ protected:
  */
 struct APVPType : PVPType
 {
+    //! Constructor
     APVPType();
 
+    //! Equality operators
     bool operator==(const APVPType& other) const
     {
         if ( (PVPType)(*this) != (PVPType)other )
@@ -113,17 +121,18 @@ struct APVPType : PVPType
         }
         return mName == other.mName;
     }
-
     bool operator!=(const APVPType& other) const
     {
         return !((*this) == other);
     }
 
+    //! Set name of additional type
     void setName(const std::string& name)
     {
         mName = name;
     }
 
+    //! Get name of additional type
     std::string getName() const
     {
         return mName;
@@ -140,7 +149,6 @@ private:
  */
 struct Pvp
 {
-
     /*!
      * Transmit time for the center of the transmitted pulse relative to the
      * transmit platform Collection Start Time (sec).

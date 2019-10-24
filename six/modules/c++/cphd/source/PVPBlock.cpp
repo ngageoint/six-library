@@ -333,12 +333,10 @@ PVPBlock::PVPBlock(size_t numBytesPerVector,
     {
         mNumBytesPerVector = calculateBytesPerVector;
     }
-
 }
 
 size_t PVPBlock::getNumBytesPVPSet() const
 {
-    // return mData[0][0].getNumBytes();
     return mNumBytesPerVector;
 
 }

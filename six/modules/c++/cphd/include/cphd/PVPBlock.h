@@ -40,20 +40,26 @@
 namespace cphd
 {
 
-/*
+/*!
  * PVP Block (Actual data)
  */
 struct PVPBlock
 {
-
+    /*!
+     * Stores set of parameters
+     */
     struct PVPSet
     {
+        //! Default constructor
         PVPSet();
 
-        void write(const Pvp&, const sys::byte*);
+        //! Set parameters from input
+        void write(const Pvp& p, const sys::byte* input);
 
-        void read(const Pvp&, sys::ubyte*) const;
+        //! Get parameters into output
+        void read(const Pvp& p, sys::ubyte* output) const;
 
+        //! Equality operators
         bool operator==(const PVPSet& other) const
         {
             if(!(txTime == other.txTime && txPos == other.txPos &&
@@ -76,8 +82,7 @@ struct PVPBlock
                 {
                     return false;
                 }
-                std::map<std::string,ComplexParameter>::const_iterator it;
-                for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
+                for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
                 {
                     if(it->second.str() != other.addedPVP.find(it->first)->second.str())
                     {
@@ -86,13 +91,12 @@ struct PVPBlock
                 }
                 return true;
         }
-
         bool operator!=(const PVPSet& other) const
         {
             return !((*this) == other);
         }
 
-        //Required Params
+        //! Required Parameters
         double txTime;
         Vector3 txPos;
         Vector3 txVel;
@@ -111,7 +115,7 @@ struct PVPBlock
         double sc0;
         double scss;
 
-        //Optional
+        //! (Optional) Parameters
         mem::ScopedCopyablePtr<double> ampSF;
         mem::ScopedCopyablePtr<double> fxN1;
         mem::ScopedCopyablePtr<double> fxN2;
@@ -120,13 +124,16 @@ struct PVPBlock
         mem::ScopedCopyablePtr<double> tdIonoSRP;
         mem::ScopedCopyablePtr<double> signal;
 
+        //! (Optional) Additional parameters
         std::map<std::string,ComplexParameter> addedPVP;
 
     private:
         friend std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p);
-
     };
 
+    /*
+     * Constructor
+     */
     PVPBlock() :
         mNumBytesPerVector(0)
     {
@@ -143,11 +150,16 @@ struct PVPBlock
     */
     PVPBlock(const Data& d, const Pvp& p);
 
+    /*!
+     * Custom constructor
+     * Set mData object size and Pvp
+     */
     PVPBlock(size_t numBytesPerVector,
              size_t numChannels,
              const std::vector<size_t>& numVectors,
              const Pvp& p);
 
+    //! Verify channel and vector
     void verifyChannelVector(size_t channel, size_t vector) const;
 
     /*
@@ -317,7 +329,8 @@ private:
         }
     };
 
-    std::vector<std::vector<PVPSet> > mData; // The PVP Block [Num Channles][Num Parameters]
+    // The PVP Block [Num Channles][Num Parameters]
+    std::vector<std::vector<PVPSet> > mData;
     size_t mNumBytesPerVector;
     Pvp mPvp;
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);

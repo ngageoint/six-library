@@ -76,13 +76,13 @@ struct CollectionID : public six::CollectionInformation
     }
 
     //! Get classification level
-    inline virtual std::string getClassificationLevel() const
+    std::string getClassificationLevel() const override
     {
         return mClassification;
     }
 
     //! Set classification level
-    inline virtual void setClassificationLevel(const std::string& classification)
+    void setClassificationLevel(const std::string& classification) override
     {
         mClassification = classification;
     }

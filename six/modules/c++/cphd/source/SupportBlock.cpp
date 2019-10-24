@@ -79,19 +79,6 @@ sys::Off_T SupportBlock::getFileOffset(const std::string& id) const
     return mOffsets.find(id)->second;
 }
 
-void SupportBlock::readImpl(const std::string& id,
-                            void* data) const
-{
-    // Compute the byte offset into this SupportArray in the CPHD file
-    // First to the start of the first support array we're going to read
-    sys::Off_T inOffset = getFileOffset(id);
-
-    sys::byte* dataPtr = reinterpret_cast<sys::byte*>(data);
-    mInStream->seek(inOffset, io::FileInputStream::START);
-    size_t size = mData.getSupportArrayById(id).getSize();
-    mInStream->read(dataPtr, size);
-}
-
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
                         const mem::BufferView<sys::ubyte>& data) const
@@ -107,7 +94,13 @@ void SupportBlock::read(const std::string& id,
     }
 
     // Perform the read
-    readImpl(id, data.data);
+    // Compute the byte offset into this SupportArray in the CPHD file
+    // First to the start of the first support array we're going to read
+    sys::Off_T inOffset = getFileOffset(id);
+    sys::byte* dataPtr = reinterpret_cast<sys::byte*>(data.data);
+    mInStream->seek(inOffset, io::FileInputStream::START);
+    size_t size = mData.getSupportArrayById(id).getSize();
+    mInStream->read(dataPtr, size);
 
     // Can't change endianness of compressed data right?
     if (!sys::isBigEndianSystem() && mData.getElementSize(id) > 1)
