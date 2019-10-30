@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <cphd/ProductInfo.h>
 #include <six/Init.h>
 

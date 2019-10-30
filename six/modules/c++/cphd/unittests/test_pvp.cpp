@@ -32,10 +32,8 @@
 
 namespace
 {
-
 TEST_CASE(testSimpleEqualityOperatorTrue)
 {
-
     cphd::Pvp pvp1, pvp2;
 
     pvp1.txTime.setData(1, 0, "F8");
@@ -47,11 +45,10 @@ TEST_CASE(testSimpleEqualityOperatorTrue)
 TEST_CASE(testAddedParamsEqualityOperatorTrue)
 {
     cphd::Pvp pvp1;
-    cphd::Pvp pvp2;
-
     pvp1.setData(1, 0, "F8", "AddedParam1");
     pvp1.setData(1, 1, "F8", "AddedParam2");
 
+    cphd::Pvp pvp2;
     pvp2.setData(1, 0, "F8", "AddedParam1");
     pvp2.setData(1, 1, "F8", "AddedParam2");
 
@@ -61,10 +58,11 @@ TEST_CASE(testAddedParamsEqualityOperatorTrue)
 
 TEST_CASE(testSimpleEqualityOperatorFalse)
 {
-
-    cphd::Pvp pvp1, pvp2;
+    cphd::Pvp pvp1;
     pvp1.fxN1.reset(new cphd::PVPType());
     pvp1.fxN1->setData(1, 0, "F8");
+
+    cphd::Pvp pvp2;
     pvp2.txTime.setData(1, 0, "F8");
 
     TEST_ASSERT_TRUE((pvp1 != pvp2));
@@ -74,14 +72,13 @@ TEST_CASE(testSimpleEqualityOperatorFalse)
 TEST_CASE(testAddedParamsEqualityOperatorFalse)
 {
     cphd::Pvp pvp1;
-    cphd::Pvp pvp2;
-    cphd::Pvp pvp3;
-
     pvp1.setData(1, 0, "F8", "AddedParam1");
     pvp1.setData(1, 1, "F8", "AddedParam2");
 
+    cphd::Pvp pvp2;
     pvp2.setData(1, 0, "F8", "AddedParam1");
 
+    cphd::Pvp pvp3;
     pvp3.setData(1, 0, "F8", "AddedParam1");
     pvp3.setData(1, 1, "F8", "AddedParam3");
 
@@ -114,4 +111,3 @@ int main(int /*argc*/, char** /*argv*/)
     }
     return 1;
 }
-

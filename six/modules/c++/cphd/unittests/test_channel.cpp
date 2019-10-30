@@ -21,7 +21,6 @@
  */
 #include <memory>
 
-
 #include <xml/lite/MinidomParser.h>
 #include <six/Init.h>
 #include <cphd/Enums.h>
@@ -33,7 +32,6 @@
 
 namespace
 {
-
 TEST_CASE(EmptyChannel)
 {
     cphd::Channel channel1, channel2;
@@ -41,9 +39,7 @@ TEST_CASE(EmptyChannel)
     channel2.parameters.resize(3);
     TEST_ASSERT_TRUE((channel1.parameters == channel2.parameters));
     TEST_ASSERT_TRUE((channel1 == channel2));
-
 }
-
 
 TEST_CASE(TestPolygonInvalid)
 {
@@ -82,8 +78,6 @@ TEST_CASE(TxRcvMultIds)
     TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId.size(), 3);
     TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId.size(), 2);
 }
-
-
 }
 
 int main(int /*argc*/, char** /*argv*/)

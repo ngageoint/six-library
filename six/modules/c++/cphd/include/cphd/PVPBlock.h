@@ -35,7 +35,7 @@
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
 #include <cphd/ByteSwap.h>
-#include <cphd/ComplexParameter.h>
+#include <six/Parameter.h>
 
 namespace cphd
 {
@@ -125,7 +125,7 @@ struct PVPBlock
         mem::ScopedCopyablePtr<double> signal;
 
         //! (Optional) Additional parameters
-        std::map<std::string,ComplexParameter> addedPVP;
+        std::map<std::string,six::Parameter> addedPVP;
 
     private:
         friend std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p);
@@ -237,7 +237,7 @@ struct PVPBlock
         {
             if(mData[channel][set].addedPVP.count(name) == 0)
             {
-                mData[channel][set].addedPVP[name] = ComplexParameter();
+                mData[channel][set].addedPVP[name] = six::Parameter();
                 mData[channel][set].addedPVP.find(name)->second.setValue(value);
                 return;
             }
@@ -314,7 +314,7 @@ private:
     template<typename T>
     struct AddedPVP
     {
-        T getAddedPVP(ComplexParameter& val, size_t channel, size_t set, const std::string& name)
+        T getAddedPVP(six::Parameter& val, size_t channel, size_t set, const std::string& name)
         {
             return static_cast<T>(val);
         }
@@ -323,7 +323,7 @@ private:
     template<typename T>
     struct AddedPVP<std::complex<T> >
     {
-        std::complex<T> getAddedPVP(ComplexParameter& val, size_t channel, size_t set, const std::string& name)
+        std::complex<T> getAddedPVP(six::Parameter& val, size_t channel, size_t set, const std::string& name)
         {
             return val.getComplex<T>();
         }

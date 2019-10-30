@@ -94,11 +94,6 @@ void Pvp::setData(size_t size, size_t offset, const std::string& format, const s
             "Additional parameter name is not unique"));
 }
 
-// void Pvp::setNumAddedParameters(size_t size)
-// {
-//     addedPVP.resize(size);
-// }
-
 size_t Pvp::getAdditionalParamsSize() const
 {
     size_t res = 0;

@@ -226,6 +226,7 @@ struct LineSample
     double sample;
 
 private:
+    // Stores index of LineSample
     size_t mIndex;
 };
 

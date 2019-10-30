@@ -30,10 +30,8 @@
 
 #include "TestCase.h"
 
-
 namespace
 {
-
 TEST_CASE(testEquality)
 {
     cphd::ReferenceGeometry refGeo;
@@ -58,12 +56,8 @@ TEST_CASE(testEquality)
     refGeoOther.monostatic->sideOfTrack = six::SideOfTrackType("LEFT");
     refGeoOther.monostatic->slantRange = 20.0;
 
-
     TEST_ASSERT_NOT_EQ(refGeo, refGeoOther);
 }
-
-
-
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -88,4 +82,3 @@ int main(int /*argc*/, char** /*argv*/)
     }
     return 1;
 }
-

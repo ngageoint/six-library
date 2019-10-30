@@ -138,11 +138,14 @@ public:
     }
 
     // Pad bytes don't include the Section terminator
-    // TODO: How is this used?
-    // sys::Off_T getPadBytes() const
-    // {
-    //     return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
-    // }
+    sys::Off_T getPvpPadBytes() const
+    {
+        if (mSupportBlockSize != 0)
+        {
+            return (getPvpBlockByteOffset() - (getSupportBlockByteOffset() + getSupportBlockSize()));
+        }
+        return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
+    }
 
     // Optional elements
     void setSupportBlockSize(sys::Off_T size)

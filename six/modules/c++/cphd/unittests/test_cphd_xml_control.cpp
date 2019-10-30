@@ -893,21 +893,21 @@ TEST_CASE(testReadXML)
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     // CollectionID
-    TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
-    TEST_ASSERT_EQ(metadata->collectionID.coreName, "Core");
-    TEST_ASSERT_EQ(metadata->collectionID.collectType,
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.collectorName, "Collector");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.coreName, "Core");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.collectType,
                    six::CollectType::MONOSTATIC);
-    TEST_ASSERT_EQ(metadata->collectionID.radarMode,
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.radarMode,
                    six::RadarModeType::STRIPMAP);
-    TEST_ASSERT_EQ(metadata->collectionID.radarModeID, "Mode");
-    TEST_ASSERT_EQ(metadata->collectionID.getClassificationLevel(), "U");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.radarModeID, "Mode");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.getClassificationLevel(), "U");
     TEST_ASSERT_EQ(metadata->collectionID.releaseInfo, "Release");
-    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[0], "US");
-    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[1], "GB");
-    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[2], "AZ");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[0], "US");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[1], "GB");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[2], "AZ");
 
-    TEST_ASSERT_EQ(metadata->collectionID.parameters[0].getName(), "param1");
-    TEST_ASSERT_EQ(metadata->collectionID.parameters[0].str(), "val");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.parameters[0].getName(), "param1");
+    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.parameters[0].str(), "val");
 
     // Global
     const cphd::Global& global = metadata->global;
@@ -1007,13 +1007,11 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(data.signalCompressionID, "Compress");
     TEST_ASSERT_EQ(data.supportArrayMap.size(), 3);
     const std::string identifier = "1.0";
-    TEST_ASSERT_EQ(data.supportOffsetMap.count(identifier), 1);
-    const size_t offset = data.supportOffsetMap.find(identifier)->second;
-    TEST_ASSERT_EQ(data.supportArrayMap.count(offset), 1);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numRows, 3);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.numCols, 4);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.bytesPerElement, 8);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(offset)->second.arrayByteOffset, 0);
+    TEST_ASSERT_EQ(data.supportArrayMap.count(identifier), 1);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numRows, 3);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numCols, 4);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.bytesPerElement, 8);
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.arrayByteOffset, 0);
 
     // Channel
     const cphd::Channel& channel = metadata->channel;
@@ -1141,10 +1139,8 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
 }
 
-
 int main(int /*argc*/, char** /*argv*/)
 {
-
     try
     {
         TEST_CHECK(testReadXML);
@@ -1164,5 +1160,4 @@ int main(int /*argc*/, char** /*argv*/)
         std::cerr << "Unknown exception\n";
     }
     return 1;
-
 }

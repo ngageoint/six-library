@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <ostream>
 #include <vector>
 #include <stddef.h>
@@ -156,7 +157,7 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         {
             double val;
             ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "U1" || it->second.getFormat() == "U2" ||
@@ -164,7 +165,7 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         {
             unsigned int val;
             ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "I1" || it->second.getFormat() == "I2" ||
@@ -172,7 +173,7 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         {
             int val;
             ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CI2" || it->second.getFormat() == "CI4" ||
@@ -180,21 +181,21 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         {
             std::complex<int> val;
             ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CF8" || it->second.getFormat() == "CF16")
         {
             std::complex<double> val;
             ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else
         {
             std::string val;
             val.assign(input + it->second.getByteOffset(), it->second.getByteSize());
-            addedPVP[it->first] = ComplexParameter();
+            addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
     }
@@ -338,10 +339,7 @@ PVPBlock::PVPBlock(size_t numBytesPerVector,
 size_t PVPBlock::getNumBytesPVPSet() const
 {
     return mNumBytesPerVector;
-
 }
-
-
 
 void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
 {
@@ -362,7 +360,6 @@ size_t PVPBlock::getPVPsize(size_t channel) const
     verifyChannelVector(channel, 0);
     return getNumBytesPVPSet() * mData[channel].size();
 }
-
 
 void PVPBlock::getPVPdata(size_t channel,
                           std::vector<sys::ubyte>& data) const
@@ -452,7 +449,6 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
             }
         }
     }
-
     return totalBytesRead;
 }
 
@@ -860,7 +856,7 @@ std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
         os << "  SIGNAL     : " << *p.signal << "\n";
     }
 
-    std::map<std::string, ComplexParameter>::const_iterator it;
+    std::map<std::string, six::Parameter>::const_iterator it;
     for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         os << "  Additional Parameter : " << it->second.str() << "\n";

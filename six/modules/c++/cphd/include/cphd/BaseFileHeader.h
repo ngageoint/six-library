@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef __CPHD_BASE_FILE_HEADER_H__
 #define __CPHD_BASE_FILE_HEADER_H__
 
@@ -33,42 +34,87 @@ namespace cphd
 class BaseFileHeader
 {
 public:
+    //! Type of file is CPHD
     static const char FILE_TYPE[];
+    //! Key value pair delimiter ":="
     static const char KVP_DELIMITER[];
+    //! Line delimiter "\n"
     static const char LINE_TERMINATOR;
+    //! Section delimiter "\f"
     static const char SECTION_TERMINATOR;
+    //! Max header size 10MB
     static const size_t MAX_HEADER_SIZE;
 
     virtual ~BaseFileHeader()
     {
     }
 
+    /*
+     * Given a Seekable input stream of a CPHD file, reads the version
+     * of the CPHD
+     *
+     * \param inStream Input Stream of CPHD file
+     *
+     * \return std::string Verision string
+     *
+     * \throws except::Exception if file is not CPHD
+     */
     static
     std::string readVersion(io::SeekableInputStream& inStream);
 
+    /*
+     * Given a Seekable input stream of a CPHD file, reads
+     * header information
+     *
+     * \param inStream Input Stream of CPHD file
+     *
+     * \throws except::Exception if expected header entry is not found
+     * \throws except::Exception if any header info is missing or empty
+     */
     virtual void read(io::SeekableInputStream& inStream) = 0;
 
-    // Convert header info to string (for writing to file)
+    /*
+     * Convert header info to string (for writing to file)
+     */
     // Does not include section terminator string
     virtual std::string toString() const = 0;
 
-    // Returns header file size in bytes, not including the section terminator
+    /*
+     * Counts size of header string (not including section terminator)
+     *
+     * \return size_t Size of header
+     */
     size_t size() const
     {
         return toString().size();
     }
 
 protected:
+    /*
+     * Return true if file version is a CPHD,
+     * false otherwise
+     */
     static
     bool isCPHD(io::SeekableInputStream& inStream);
 
+    /*
+     * Typedef of header key value pairs
+     */
     typedef std::pair<std::string, std::string> KeyValuePair;
 
+    /*
+     * Split header into key value pairs at specified delimiter
+     */
     static
     void tokenize(const std::string& in,
                   const std::string& delimiter,
                   KeyValuePair& kvPair);
 
+    /*
+     * Split header into key value pairs at specified delimiter
+     *
+     * \return KeyValuePair Returns typedef KeyValuePair type
+     */
     static
     KeyValuePair tokenize(const std::string& in, const std::string& delimiter)
     {
@@ -77,6 +123,9 @@ protected:
         return kvPair;
     }
 
+    /*
+     * Block read header
+     */
     void blockReadHeader(io::SeekableInputStream& inStream,
                          size_t blockSize,
                          std::string& headerBlock);

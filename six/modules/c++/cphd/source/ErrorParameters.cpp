@@ -162,8 +162,8 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
     }
     else
     {
-            throw except::Exception(Ctxt(
-                    "One of either monostatic or bistatic is required"));
+        throw except::Exception(Ctxt(
+                "One of either monostatic or bistatic is required"));
     }
     return os;
 }

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <limits>
 #include <sstream>
 
@@ -281,8 +282,6 @@ void Wideband::initialize()
         // Signal Array is Compressed
         for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
         {
-            // TODO: To trust or not to trust signalArrayByteOffset,
-            //       that is the question.
             mOffsets[ii] = mOffsets[ii - 1] + mData.getCompressedSignalSize(ii);
         }
     }
@@ -427,7 +426,6 @@ void Wideband::readImpl(size_t channel,
     sys::Off_T inOffset = getFileOffset(channel);
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
-    // Life is easy - can do a single seek and read
     mInStream->seek(inOffset, io::FileInputStream::START);
     mInStream->read(dataPtr, mData.getCompressedSignalSize(channel));
 }
@@ -485,7 +483,6 @@ void Wideband::read(size_t channel,
     // Perform the read
     readImpl(channel, data.data);
 
-    // Can't change endianness of compressed data right?
     if (!sys::isBigEndianSystem())
     {
         // Each thread only reads 1 or more element?
@@ -514,10 +511,31 @@ void Wideband::read(size_t channel,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
+void Wideband::readAll(size_t firstVector,
+                    size_t lastVector,
+                    size_t firstSample,
+                    size_t lastSample,
+                    size_t numThreads,
+                    mem::ScopedArray<sys::ubyte>& data) const
+{
+    data.reset(new sys::ubyte[mWBSize]);
+    size_t idx = 0;
+    for (size_t channel = 0; channel < mData.getNumChannels(); ++channel)
+    {
+        types::RowCol<size_t> dims;
+        checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
+                        dims);
+
+        const size_t bufSize = dims.row * dims.col * mElementSize;
+        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads,
+             mem::BufferView<sys::ubyte>(&data[idx], bufSize));
+        idx += bufSize;
+    }
+}
+
 void Wideband::read(size_t channel,
                     mem::ScopedArray<sys::ubyte>& data) const
 {
-    // Sanity checks
     const size_t bufSize = mData.getCompressedSignalSize(channel);
     data.reset(new sys::ubyte[bufSize]);
 
@@ -589,9 +607,6 @@ void Wideband::read(size_t channel,
                  << scratch.size;
             throw except::Exception(Ctxt(ostr.str()));
         }
-
-        // TODO: If we wanted to get fancy here, we could do this in blocks so
-        //       that we wouldn't need as big of a scratch buffer
 
         // Perform the read into the scratch buffer
         readImpl(channel, firstVector, lastVector, firstSample, lastSample,

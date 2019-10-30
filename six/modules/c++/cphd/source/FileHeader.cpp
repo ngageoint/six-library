@@ -195,27 +195,44 @@ size_t FileHeader::set()
         initialHeaderSize = size();
 
         // Add the header section terminator, not part of the header size
-        setXMLBlockByteOffset(initialHeaderSize + 2);
+        sys::Off_T xmlOffset = initialHeaderSize + 2;
+        setXMLBlockByteOffset(xmlOffset);
+
 
         if (mSupportBlockSize > 0)
         {
             // Add two for the XML section terminator
-            setSupportBlockByteOffset(getXMLBlockByteOffset() +
-                    getXMLBlockSize() + 2);
-            setPvpBlockByteOffset(getSupportBlockByteOffset() +
-                    getSupportBlockSize());
+            sys::Off_T supportOff = getXMLBlockByteOffset() + getXMLBlockSize() + 2;
+            setSupportBlockByteOffset(supportOff);
+
+            // Calculate pvp offset based on support position and size
+            sys::Off_T pvpOff = getSupportBlockByteOffset() +
+                    getSupportBlockSize();
+            // Add padding (pvp are doubles)
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
+            if (pvpRemainder != 0)
+            {
+                pvpOff += sizeof(double) - pvpRemainder;
+            }
+            setPvpBlockByteOffset(pvpOff);
         }
         else
         {
-            setPvpBlockByteOffset(getXMLBlockByteOffset() +
-                    getXMLBlockSize() + 2);
+            // Add two for the XML section terminator
+            sys::Off_T pvpOff = getXMLBlockByteOffset() +
+                    getXMLBlockSize() + 2;
+            // Add padding (pvp are doubles)
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
+            if (pvpRemainder != 0)
+            {
+                pvpOff += sizeof(double) - pvpRemainder;
+            }
+            setPvpBlockByteOffset(pvpOff);
         }
 
+        // Position to the CPHD, no padding needed, as PVP entries are all
+        // doubles
         setSignalBlockByteOffset(getPvpBlockByteOffset() + getPvpBlockSize());
-
-        // TODO: We're doing this too straightforwardly for the first pass
-        // Implement the padding thing, and test thoroughly
-        // If applicable
 
     } while (size() != initialHeaderSize);
 

@@ -49,7 +49,6 @@ struct ErrorParameters
      */
     struct Monostatic
     {
-
          /*
          * Position and velocity error statistics for the
          * sensor platform

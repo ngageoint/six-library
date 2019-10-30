@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <six/Enums.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
@@ -228,7 +229,6 @@ std::ostream& operator<< (std::ostream& os, const Segment& d)
     {
         os << "  Polygon[" << ii << "]: " << d.polygon[ii] << "\n";
     }
-
     return os;
 }
 }

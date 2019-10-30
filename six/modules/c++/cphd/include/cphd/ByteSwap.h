@@ -42,12 +42,44 @@ void byteSwap(void* buffer,
               size_t numElements,
               size_t numThreads);
 
+/*
+ * Threaded byte-swapping and promote input to complex<floats>
+ * Valid input types:
+ *    sys::Int8_T
+ *    sys::Int16_T
+ *    sys::float
+ *
+ * \param input Input to swap and promote
+ * \param elementSize Size of each element in 'input'
+ * \param dims Number of rows and cols of elements in 'input'
+ * \param numThreads Number of threads to use for byte-swapping
+ * \param output Pointer to output array of complex<float>
+ *
+ * \throws If elementSize is not one of (2,4 or 8)
+ */
 void byteSwapAndPromote(const void* input,
                         size_t elementSize,
                         const types::RowCol<size_t>& dims,
                         size_t numThreads,
                         std::complex<float>* output);
 
+/*
+ * Threaded byte-swapping and promote input to complex<floats>
+ * Valid input types:
+ *    sys::Int8_T
+ *    sys::Int16_T
+ *    sys::float
+ *
+ * \param input Input to swap, promote and scale
+ * \param elementSize Size of each element in 'input'
+ * \param dims Number of rows and cols of elements in 'input'
+ * \param scaleFactors pointer to num rows size array of doubles
+ *        to scale the input
+ * \param numThreads Number of threads to use for byte-swapping
+ * \param output Pointer to output array of scaled complex<float>
+ *
+ * \throws If elementSize is not one of (2,4 or 8)
+ */
 void byteSwapAndScale(const void* input,
                       size_t elementSize,
                       const types::RowCol<size_t>& dims,

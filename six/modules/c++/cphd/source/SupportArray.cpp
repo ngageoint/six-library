@@ -19,10 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <map>
+
+#include <unordered_map>
+#include <six/Init.h>
 #include <cphd/SupportArray.h>
 #include <cphd/Utilities.h>
-#include <six/Init.h>
 
 namespace cphd
 {
@@ -120,7 +121,6 @@ AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string key)
     return addedSupportArray.find(key)->second;
 }
 
-
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
 {
     if (!six::Init::isUndefined(s.getIdentifier()))
@@ -149,7 +149,6 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
     return os;
 }
 
-
 std::ostream& operator<< (std::ostream& os, const SupportArray& s)
 {
     os << "SupportArray:: \n";
@@ -163,9 +162,7 @@ std::ostream& operator<< (std::ostream& os, const SupportArray& s)
         os << "  Ant Gain Phase:: \n"
             << s.antGainPhase[ii];
     }
-
-    std::map<std::string, AdditionalSupportArray>::const_iterator it;
-    for (it = s.addedSupportArray.begin(); it != s.addedSupportArray.end(); ++it)
+    for (auto it = s.addedSupportArray.begin(); it != s.addedSupportArray.end(); ++it)
     {
         os << "  Added Support Array:: \n"
             << "    " << it->first << ": \n"

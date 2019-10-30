@@ -40,12 +40,12 @@ struct Polarization
     //! Equality operator
     bool operator==(const Polarization& other) const
     {
-    return txPol == other.txPol &&
-           rcvPol == other.rcvPol;
+        return txPol == other.txPol &&
+               rcvPol == other.rcvPol;
     }
     bool operator!=(const Polarization& other) const
     {
-    return !((*this) == other);
+        return !((*this) == other);
     }
 
     //! Transmitted signal polarization for the channel

@@ -313,5 +313,4 @@ std::ostream& operator<< (std::ostream& os, const MatchInformation& m)
     }
     return os;
 }
-
 }

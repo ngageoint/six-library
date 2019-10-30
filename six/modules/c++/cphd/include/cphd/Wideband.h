@@ -157,6 +157,41 @@ public:
              lastSample, numThreads, buffer);
     }
 
+    /*
+     * Read all channel, vector(s), and sample(s)
+     * Performs endian swapping if necessary
+     *
+     * \param channel 0-based channel
+     * \param firstVector 0-based first vector to read (inclusive)
+     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     * read all vectors
+     * \param firstSample 0-based first sample to read (inclusive)
+     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     * read all samples
+     * \param numThreads Number of threads to use for endian swapping if
+     * necessary
+     * \param data Will contain the read in data.  Throws if buffer has not
+     * been allocated to a sufficient size
+     * (numChannels * numVectors * numSamples * elementSize)
+     */
+    void readAll(size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              size_t numThreads,
+              mem::ScopedArray<sys::ubyte>& data) const;
+
+    /*
+     * \brief Gets the dimensions of the wideband block to be read
+     *
+     * \param channel 0-based channel
+     * \param firstVector 0-based first vector to read (inclusive)
+     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     * read all vectors
+     * \param firstSample 0-based first sample to read (inclusive)
+     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     * read all samples
+     */
     types::RowCol<size_t> getBufferDims(size_t channel,
                                         size_t firstVector,
                                         size_t lastVector,

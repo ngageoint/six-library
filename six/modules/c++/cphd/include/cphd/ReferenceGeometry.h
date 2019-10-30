@@ -112,7 +112,7 @@ struct ImagingType
 /*!
  * (Conditional) Collection Type Monostatic
  */
-struct Monostatic : virtual public ImagingType
+struct Monostatic : public ImagingType
 {
     //! Constructor
     Monostatic();

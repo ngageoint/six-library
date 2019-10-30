@@ -25,7 +25,7 @@
 
 #include <ostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <stddef.h>
 
 #include <cphd/Enums.h>
@@ -185,7 +185,7 @@ struct SupportArray
     std::vector<SupportArrayParameter> antGainPhase;
 
     //! Map of additonally defined support arrays
-    std::map<std::string, AdditionalSupportArray> addedSupportArray;
+    std::unordered_map<std::string, AdditionalSupportArray> addedSupportArray;
 };
 
 // Ostream operators

@@ -24,8 +24,6 @@
 #include <str/Manip.h>
 #include <cphd/BaseFileHeader.h>
 
-//TODO:: Update all copyright stuff!
-
 namespace cphd
 {
 const char BaseFileHeader::FILE_TYPE[] = "CPHD";

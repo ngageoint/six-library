@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <cphd/TxRcv.h>
 #include <six/Init.h>
 
@@ -96,5 +97,4 @@ std::ostream& operator<< (std::ostream& os, const TxRcv& t)
     }
     return os;
 }
-
 }
