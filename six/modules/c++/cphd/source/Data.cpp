@@ -90,54 +90,65 @@ Data::SupportArray::SupportArray(const std::string& id, size_t rows, size_t cols
 
 Data::SupportArray Data::getSupportArrayById(const std::string& id) const
 {
-    if(supportOffsetMap.count(id) != 1 || supportArrayMap.count(supportOffsetMap.find(id)->second) != 1)
+    if(supportArrayMap.count(id) != 1)
     {
-        throw except::Exception(Ctxt("Id specified does not exist"));
+        std::ostringstream ostr;
+        ostr << "ID: " << id << " is not a valid identifier";
+        throw except::Exception(ostr.str());
     }
-    return supportArrayMap.find(supportOffsetMap.find(id)->second)->second;
+    return supportArrayMap.find(id)->second;
 }
 
-
-// offset <= supportArray < offset+size
 void Data::setSupportArray(const std::string& id, size_t numRows,
                            size_t numCols, size_t numBytes,
                            sys::Off_T offset)
 {
-    if (supportOffsetMap.count(id) || supportArrayMap.count(offset))
+    if (supportArrayMap.count(id))
     {
         std::ostringstream ostr;
         ostr << "Identifier " << id << " is not unique";
         throw except::Exception(ostr.str());
     }
 
-    // Add to ordered
-    supportArrayMap.insert(std::pair<sys::Off_T,Data::SupportArray>(offset,Data::SupportArray(id, numRows, numCols, numBytes, offset)));
+    if (mOffsetMap.count(offset))
+    {
+        std::ostringstream ostr;
+        ostr << "Offset " << offset << " is not unique";
+        throw except::Exception(ostr.str());
+    }
 
-    if (supportArrayMap.find(offset) != supportArrayMap.begin())
+    // Add to ordered map
+    mOffsetMap.insert(std::pair<sys::Off_T,size_t>(offset,numBytes));
+
+    // Validate offset and size
+    if (mOffsetMap.find(offset) != mOffsetMap.begin())
     {
-        if (offset < (sys::Off_T)((--supportArrayMap.find(offset))->first  + (--supportArrayMap.find(offset))->second.getSize()))
+        if (offset < (sys::Off_T)((--mOffsetMap.find(offset))->first + (--mOffsetMap.find(offset))->second))
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
             throw except::Exception(ostr.str());
         }
     }
-    if (supportArrayMap.upper_bound(offset) != supportArrayMap.end())
+    if (mOffsetMap.upper_bound(offset) != mOffsetMap.end())
     {
-        if ((sys::Off_T)(offset + (numRows * numCols * numBytes)) > supportArrayMap.upper_bound(offset)->first)
+        if ((sys::Off_T)(offset + (numRows * numCols * numBytes)) > mOffsetMap.upper_bound(offset)->first)
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
             throw except::Exception(ostr.str());
         }
     }
-    supportOffsetMap.insert(std::pair<std::string,sys::Off_T>(id,offset));
+
+    // Add to supportArrayMap after validation
+    std::pair<std::string,Data::SupportArray> entry(id,Data::SupportArray(id, numRows, numCols, numBytes, offset));
+    supportArrayMap.insert(entry);
 }
 
 size_t Data::getAllSupportSize() const
 {
     size_t size = 0;
-    for (auto it = supportOffsetMap.begin(); it != supportOffsetMap.end(); ++it)
+    for (auto it = supportArrayMap.begin(); it != supportArrayMap.end(); ++it)
     {
         size += getSupportArrayById(it->first).getSize();
     }
@@ -176,7 +187,7 @@ std::ostream& operator<< (std::ostream& os, const Data& d)
         os << d.channels[ii] << "\n";
     }
     os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
-    for (auto it = d.supportOffsetMap.begin(); it != d.supportOffsetMap.end(); ++it)
+    for (auto it = d.supportArrayMap.begin(); it != d.supportArrayMap.end(); ++it)
     {
         os << "  SupportArrays:: \n"
             << d.getSupportArrayById(it->first) << "\n";

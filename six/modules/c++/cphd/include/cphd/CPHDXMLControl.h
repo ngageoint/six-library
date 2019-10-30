@@ -42,8 +42,6 @@
 
 namespace cphd
 {
-//TODO: Seperate From XML and To XML files?
-
 /*!
  *  This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM).
@@ -55,29 +53,29 @@ public:
     CPHDXMLControl();
 
     //! Constructor
+    //! (Optional) Provide schemas for validation if available
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
-    //! Constructor
-    CPHDXMLControl(logging::Logger* log, bool ownLog, const std::vector<std::string>& schemaPaths);
-
     //! Metadata to XML string
-    std::string toXMLString(const Metadata& metadata, bool prettyPrint = false);
+    std::string toXMLString(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+            bool prettyPrint = false);
 
     //! Metadata to XML document object
-    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    std::auto_ptr<xml::lite::Document> toXML(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     //! XML string to metadata
-    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+    std::auto_ptr<Metadata> fromXML(
+            const std::string& xmlString,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     //! XML document object to metadata
-    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
-
-
-    //! Get schema paths
-    const std::vector<std::string>& getSchemaPaths()
-    {
-        return mSchemaPaths;
-    }
+    std::auto_ptr<Metadata> fromXML(
+            const xml::lite::Document* doc,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     //! Validate the xml and log any errors
     //  NOTE: Errors are treated as detriments to valid processing
@@ -175,7 +173,6 @@ private:
 
 private:
     six::SICommonXMLParser10x mCommon;
-    std::vector<std::string> mSchemaPaths;
 };
 }
 

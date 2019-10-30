@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <cstdio>
 #include <stdlib.h>
 #include <iostream>
@@ -43,7 +44,6 @@
  * Tests write and read of Signal Block with compressed data
  * Fails if values don't match
  */
-
 namespace
 {
 std::vector<std::string> schemas(1);
@@ -154,11 +154,11 @@ void setVectorParameters(size_t channel,
 void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
-    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.collectInfo.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.collectInfo.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.collectionID.collectInfo.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
@@ -220,7 +220,7 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
         }
     }
 
-    cphd::CPHDWriter writer(metadata, numThreads);
+    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
 
     writer.writeMetadata(outPathname, pvpBlock);
 
@@ -288,7 +288,7 @@ TEST_CASE(testCompressed)
     const types::RowCol<size_t> dims(128, 256);
     const std::vector<sys::ubyte> writeData =
             generateCompressedData(dims.area());
-    TEST_ASSERT(runTest(writeData));
+    TEST_ASSERT_TRUE(runTest(writeData));
 }
 }
 

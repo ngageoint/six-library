@@ -32,9 +32,7 @@
 #include <cphd/Types.h>
 
 
-
-// CPHD Spec is not enforced
-#define ENFORCESPEC 0 // TODO: Kill?
+#define ENFORCESPEC 0
 
 namespace
 {
@@ -54,14 +52,6 @@ CPHDXMLControl::CPHDXMLControl() :
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
     six::XMLParser(CPHD10_URI, false, log, ownLog),
     mCommon(CPHD10_URI, false, CPHD10_URI, log)
-{
-}
-
-CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog,
-                               const std::vector<std::string>& schemaPaths) :
-    six::XMLParser(CPHD10_URI, false, log, ownLog),
-    mCommon(CPHD10_URI, false, CPHD10_URI, log),
-    mSchemaPaths(schemaPaths)
 {
 }
 
@@ -143,25 +133,25 @@ void CPHDXMLControl::validate(const xml::lite::Document* doc,
     }
 }
 
-std::string CPHDXMLControl::toXMLString(const Metadata& metadata, bool prettyPrint)
+std::string CPHDXMLControl::toXMLString(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths,
+        bool prettyPrint)
 {
-    std::auto_ptr<xml::lite::Document> doc(toXML(metadata));
+    std::auto_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
     io::StringStream ss;
-    if (prettyPrint)
-    {
-        doc->getRootElement()->prettyPrint(ss);
-    }
-    else
-    {
-        doc->getRootElement()->print(ss);
-    }
+    (prettyPrint) ?
+            doc->getRootElement()->prettyPrint(ss) :
+            doc->getRootElement()->print(ss);
     return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
 }
 
 /*
  * TO XML
  */
-std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths)
 {
     std::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
@@ -207,6 +197,11 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
+    // Validate generated doc
+    if(!schemaPaths.empty()) {
+        // Validate schema
+        validate(doc.get(), schemaPaths, log());
+    }
     return doc;
 }
 
@@ -214,35 +209,35 @@ XMLElem CPHDXMLControl::toXML(const CollectionID& collectionID, XMLElem parent)
 {
     XMLElem collectionXML = newElement("CollectionID", parent);
 
-    createString("CollectorName", collectionID.collectorName, collectionXML);
-    if(!six::Init::isUndefined(collectionID.illuminatorName))
+    createString("CollectorName", collectionID.collectInfo.collectorName, collectionXML);
+    if(!six::Init::isUndefined(collectionID.collectInfo.illuminatorName))
     {
-        createString("IlluminatorName", collectionID.illuminatorName, collectionXML);
+        createString("IlluminatorName", collectionID.collectInfo.illuminatorName, collectionXML);
     }
-    createString("CoreName", collectionID.coreName, collectionXML);
-    createString("CollectType", collectionID.collectType, collectionXML);
+    createString("CoreName", collectionID.collectInfo.coreName, collectionXML);
+    createString("CollectType", collectionID.collectInfo.collectType, collectionXML);
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
-    createString("ModeType", collectionID.radarMode.toString(), radarModeXML);
-    if(!six::Init::isUndefined(collectionID.radarModeID))
+    createString("ModeType", collectionID.collectInfo.radarMode.toString(), radarModeXML);
+    if(!six::Init::isUndefined(collectionID.collectInfo.radarModeID))
     {
-        createString("ModeID", collectionID.radarModeID, radarModeXML);
+        createString("ModeID", collectionID.collectInfo.radarModeID, radarModeXML);
     }
 
-    createString("Classification", collectionID.getClassificationLevel(), collectionXML);
+    createString("Classification", collectionID.collectInfo.getClassificationLevel(), collectionXML);
     createString("ReleaseInfo", collectionID.releaseInfo, collectionXML);
-    if (!collectionID.countryCodes.empty())
+    if (!collectionID.collectInfo.countryCodes.empty())
     {
         std::string countryCodes = "";
-        for (size_t ii = 0; ii < collectionID.countryCodes.size() - 1; ++ii)
+        for (size_t ii = 0; ii < collectionID.collectInfo.countryCodes.size() - 1; ++ii)
         {
-            countryCodes += collectionID.countryCodes[ii] + ",";
+            countryCodes += collectionID.collectInfo.countryCodes[ii] + ",";
         }
-        countryCodes += collectionID.countryCodes.back();
+        countryCodes += collectionID.collectInfo.countryCodes.back();
         createString("CountryCode", countryCodes, collectionXML);
     }
-    mCommon.addParameters("Parameter", getDefaultURI(), collectionID.parameters, collectionXML);
+    mCommon.addParameters("Parameter", getDefaultURI(), collectionID.collectInfo.parameters, collectionXML);
     return collectionXML;
 }
 
@@ -1052,54 +1047,31 @@ XMLElem CPHDXMLControl::toXML(const GeoInfo& geoInfo, XMLElem parent)
 XMLElem CPHDXMLControl::toXML(const MatchInformation& matchInfo, XMLElem parent)
 {
     return mCommon.convertMatchInformationToXML(&matchInfo, parent);
-    // XMLElem matchInfoXML = newElement("MatchInfo", parent);
-    // createInt("NumMatchTypes", matchInfo.matchType.size(), matchInfoXML);
-    // for (size_t ii = 0; ii < matchInfo.matchType.size(); ++ii)
-    // {
-    //     XMLElem matchTypeXML = newElement("MatchType", matchInfoXML);
-    //     setAttribute(matchTypeXML, "index", six::toString(matchInfo.matchType[ii].index));
-    //     createString("TypeID", matchInfo.matchType[ii].typeID, matchTypeXML);
-    //     if (!six::Init::isUndefined(matchInfo.matchType[ii].currentIndex))
-    //     {
-    //         createInt("CurrentIndex", matchInfo.matchType[ii].currentIndex, matchTypeXML);
-    //     }
-    //     createInt("NumMatchCollections", matchInfo.matchType[ii].matchCollection.size(), matchTypeXML);
-    //     for(size_t jj = 0; jj < matchInfo.matchType[ii].matchCollection.size(); ++jj)
-    //     {
-    //         XMLElem matchCollectionXML = newElement("MatchCollection", matchTypeXML);
-    //         setAttribute(matchCollectionXML, "index", six::toString(matchInfo.matchType[ii].matchCollection[jj].index));
-    //         createString("CoreName", matchInfo.matchType[ii].matchCollection[jj].coreName, matchCollectionXML);
-    //         if(!six::Init::isUndefined(matchInfo.matchType[ii].matchCollection[jj].matchIndex))
-    //         {
-    //             createInt("MatchIndex", matchInfo.matchType[ii].matchCollection[jj].matchIndex, matchCollectionXML);
-    //         }
-    //         mCommon.addParameters("Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter, matchCollectionXML);
-    //     }
-    // }
-    // return matchInfoXML;
 }
 
 /*
  * FROM XML
  */
-
-// TODO: Base
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
+        const std::string& xmlString,
+        const std::vector<std::string>& schemaPaths)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString.c_str(), xmlString.size());
     xml::lite::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument());
+    return fromXML(parser.getDocument(), schemaPaths);
 }
 
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
+        const xml::lite::Document* doc,
+        const std::vector<std::string>& schemaPaths)
 {
     std::auto_ptr<Metadata> cphd(new Metadata());
 
-    if(!getSchemaPaths().empty()) {
+    if(!schemaPaths.empty()) {
         // Validate schema
-        validate(doc, getSchemaPaths(), log());
+        validate(doc, schemaPaths, log());
     }
 
     XMLElem root = doc->getRootElement();
@@ -1108,7 +1080,7 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     XMLElem globalXML         = getFirstAndOnly(root, "Global");
     XMLElem sceneCoordsXML    = getFirstAndOnly(root, "SceneCoordinates");
     XMLElem dataXML           = getFirstAndOnly(root, "Data");
-    XMLElem channelXML          = getFirstAndOnly(root, "Channel");
+    XMLElem channelXML        = getFirstAndOnly(root, "Channel");
     XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
     XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
     XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
@@ -1173,29 +1145,29 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
 {
     parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
-                collectionID.collectorName);
+                collectionID.collectInfo.collectorName);
     XMLElem element = getOptional(collectionIDXML, "IlluminatorName");
     if (element)
-        parseString(element, collectionID.illuminatorName);
+        parseString(element, collectionID.collectInfo.illuminatorName);
     element = getOptional(collectionIDXML, "CoreName");
     if (element)
-        parseString(element, collectionID.coreName);
+        parseString(element, collectionID.collectInfo.coreName);
     element = getOptional(collectionIDXML, "CollectType");
     if (element)
-        collectionID.collectType
+        collectionID.collectInfo.collectType
                 = six::toType<six::CollectType>(element->getCharacterData());
     XMLElem radarModeXML = getFirstAndOnly(collectionIDXML, "RadarMode");
-    collectionID.radarMode
+    collectionID.collectInfo.radarMode
             = six::toType<six::RadarModeType>(getFirstAndOnly(radarModeXML,
                                               "ModeType")->getCharacterData());
     element = getOptional(radarModeXML, "ModeID");
     if (element)
-        parseString(element, collectionID.radarModeID);
+        parseString(element, collectionID.collectInfo.radarModeID);
 
     std::string classification;
     parseString(getFirstAndOnly(collectionIDXML, "Classification"),
                 classification);
-    collectionID.setClassificationLevel(classification);
+    collectionID.collectInfo.setClassificationLevel(classification);
 
     element = getFirstAndOnly(collectionIDXML, "ReleaseInfo");
     parseString(element, collectionID.releaseInfo);
@@ -1207,15 +1179,15 @@ void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collec
     {
         std::string countryCodeStr;
         parseString(element, countryCodeStr);
-        collectionID.countryCodes = str::split(countryCodeStr, ",");
-        for (size_t ii = 0; ii < collectionID.countryCodes.size(); ++ii)
+        collectionID.collectInfo.countryCodes = str::split(countryCodeStr, ",");
+        for (size_t ii = 0; ii < collectionID.collectInfo.countryCodes.size(); ++ii)
         {
-            str::trim(collectionID.countryCodes[ii]);
+            str::trim(collectionID.collectInfo.countryCodes[ii]);
         }
     }
 
     //optional
-    mCommon.parseParameters(collectionIDXML, "Parameter", collectionID.parameters);
+    mCommon.parseParameters(collectionIDXML, "Parameter", collectionID.collectInfo.parameters);
 }
 
 void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
@@ -1468,10 +1440,10 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
         size_t numCols;
         size_t numBytes;
         parseString(getFirstAndOnly(supportsXML[ii], "Identifier"), id);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "ArrayByteOffset"),offset);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "NumRows"),numRows);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "NumCols"),numCols);
-        parseUInt(getFirstAndOnly(supportsXML[ii], "BytesPerElement"),numBytes);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "ArrayByteOffset"), offset);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "NumRows"), numRows);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "NumCols"), numCols);
+        parseUInt(getFirstAndOnly(supportsXML[ii], "BytesPerElement"), numBytes);
         data.setSupportArray(id, numRows, numCols, numBytes, offset);
     }
 }
@@ -1708,7 +1680,8 @@ void CPHDXMLControl::fromXML(const XMLElem antennaXML, Antenna& antenna)
     antenna.antPhaseCenter.resize(numAPCs);
     parseUInt(getFirstAndOnly(antennaXML, "NumAntPats"), numAntPats);
     antenna.antPattern.resize(numAntPats);
-    //! Parse AntCoordFrame
+
+    // Parse AntCoordFrame
     std::vector<XMLElem> antCoordFrameXMLVec;
     antennaXML->getElementsByTagName("AntCoordFrame", antCoordFrameXMLVec);
     if(antenna.antCoordFrame.size() != antCoordFrameXMLVec.size())
@@ -1723,7 +1696,7 @@ void CPHDXMLControl::fromXML(const XMLElem antennaXML, Antenna& antenna)
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "YAxisPoly"), antenna.antCoordFrame[ii].yAxisPoly);
     }
 
-    //! Parse AntPhaseCenter
+    // Parse AntPhaseCenter
     std::vector<XMLElem> antPhaseCenterXMLVec;
     antennaXML->getElementsByTagName("AntPhaseCenter", antPhaseCenterXMLVec);
     if(antenna.antPhaseCenter.size() != antPhaseCenterXMLVec.size())
@@ -2024,49 +1997,6 @@ void CPHDXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo)
 void CPHDXMLControl::fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo)
 {
     mCommon.parseMatchInformationFromXML(matchInfoXML, &matchInfo);
-    // size_t numMatchTypes = 0;
-    // parseUInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes") , numMatchTypes);
-    // matchInfo.matchType.resize(numMatchTypes);
-
-    // std::vector<XMLElem> matchTypeXML;
-    // matchInfoXML->getElementsByTagName("MatchType", matchTypeXML);
-    // if (matchInfo.matchType.size() != matchTypeXML.size())
-    // {
-    //     throw except::Exception(Ctxt(
-    //             "Incorrect number of Match types provided"));
-    // }
-    // for (size_t ii = 0; ii < matchTypeXML.size(); ++ii)
-    // {
-    //     sscanf(matchTypeXML[ii]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].index);
-    //     parseString(getFirstAndOnly(matchTypeXML[ii], "TypeID"), matchInfo.matchType[ii].typeID);
-    //     XMLElem currentIndexXML = getOptional(matchTypeXML[ii], "CurrentIndex");
-    //     if (currentIndexXML)
-    //     {
-    //         parseUInt(currentIndexXML, matchInfo.matchType[ii].currentIndex);
-    //     }
-    //     size_t numMatchCollections = 0;
-    //     parseUInt(getFirstAndOnly(matchTypeXML[ii], "NumMatchCollections"), numMatchCollections);
-    //     matchInfo.matchType[ii].matchCollection.resize(numMatchCollections);
-
-    //     std::vector<XMLElem> matchCollectionXMLVec;
-    //     matchTypeXML[ii]->getElementsByTagName("MatchCollection", matchCollectionXMLVec);
-    //     if (matchInfo.matchType[ii].matchCollection.size() != matchCollectionXMLVec.size())
-    //     {
-    //         throw except::Exception(Ctxt(
-    //                 "Incorrect number of match collections provided"));
-    //     }
-    //     for (size_t jj = 0; jj < matchCollectionXMLVec.size(); ++jj)
-    //     {
-    //         sscanf(matchCollectionXMLVec[jj]->attribute("index").c_str(), "%zu", &matchInfo.matchType[ii].matchCollection[jj].index);
-    //         parseString(getFirstAndOnly(matchCollectionXMLVec[jj], "CoreName"), matchInfo.matchType[ii].matchCollection[jj].coreName);
-    //         XMLElem matchIndexXML = getOptional(matchCollectionXMLVec[jj], "MatchIndex");
-    //         if (matchIndexXML)
-    //         {
-    //             parseUInt(matchIndexXML, matchInfo.matchType[ii].matchCollection[jj].matchIndex);
-    //         }
-    //         mCommon.parseParameters(matchCollectionXMLVec[jj], "Parameter", matchInfo.matchType[ii].matchCollection[jj].parameter);
-    //     }
-    // }
 }
 
 /*
@@ -2483,7 +2413,6 @@ void CPHDXMLControl::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError
     }
 }
 
-
 void CPHDXMLControl::parsePlatform(XMLElem platXML, ErrorParameters::Bistatic::Platform& plat) const
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
@@ -2522,5 +2451,4 @@ void CPHDXMLControl::parseTxRcvParameter(const XMLElem paramXML, ParameterType& 
     }
     param.polarization = PolarizationType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
-
 }

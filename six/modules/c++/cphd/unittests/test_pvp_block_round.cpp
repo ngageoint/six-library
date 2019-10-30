@@ -41,7 +41,6 @@
 
 namespace
 {
-
 double getRandom()
 {
     const double r = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
@@ -245,11 +244,11 @@ void setUpMetaData(const types::RowCol<size_t> dims,
     }
 
     //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
-    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.collectInfo.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.collectInfo.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.collectionID.collectInfo.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
@@ -282,7 +281,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
 {
     const size_t numChannels = 1;
 
-    cphd::CPHDWriter writer(metadata, numThreads);
+    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
     writer.writeMetadata(outPathname, pvpBlock);
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
@@ -412,4 +411,3 @@ int main(int argc, char** argv)
         return 1;
     }
 }
-

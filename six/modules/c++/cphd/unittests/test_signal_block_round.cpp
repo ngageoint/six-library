@@ -80,7 +80,6 @@ std::vector<std::complex<T> > generateData(size_t length)
 std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
-
     if (scale)
     {
         for (size_t ii = 0; ii < scaleFactors.size(); ++ii)
@@ -88,7 +87,6 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
             scaleFactors[ii] *= 2;
         }
     }
-
     return scaleFactors;
 }
 
@@ -172,11 +170,11 @@ void setVectorParameters(size_t channel,
 void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
-    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.collectInfo.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.collectInfo.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.collectionID.collectInfo.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
@@ -225,7 +223,6 @@ void setUpData(const types::RowCol<size_t> dims,
     {
         metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CF8;
     }
-
     setUpMetadata(metadata);
 }
 
@@ -247,12 +244,9 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
         }
     }
 
-    cphd::CPHDWriter writer(metadata, numThreads);
-
+    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
     writer.writeMetadata(outPathname, pvpBlock);
-
     writer.writePVPData(pvpBlock);
-
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         writer.writeCPHDData(&writeData[0],dims.area()*2);
@@ -279,7 +273,6 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
 
     return readData;
 }
-
 
 template<typename T>
 bool compareVectors(const std::vector<std::complex<float> >& readData,

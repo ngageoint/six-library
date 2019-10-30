@@ -59,12 +59,12 @@ public:
         return mMetadata->data.getNumChannels();
     }
     // 0-based channel number
-    size_t getNumVectors(const size_t channel) const
+    size_t getNumVectors(size_t channel) const
     {
         return mMetadata->data.getNumVectors(channel);
     }
     // 0-based channel number
-    size_t getNumSamples(const size_t channel) const
+    size_t getNumSamples(size_t channel) const
     {
         return mMetadata->data.getNumSamples(channel);
     }
@@ -77,7 +77,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    sys::Off_T getFileOffset(const size_t channel, const size_t vector, const size_t sample) const
+    sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }

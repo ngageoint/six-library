@@ -68,14 +68,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
         logger.reset(new logging::NullLogger());
     }
 
-    if (!schemaPaths.empty())
-    {
-        mMetadata = CPHDXMLControl(logger.get(), false, schemaPaths).fromXML(xmlParser.getDocument());
-    }
-    else
-    {
-        mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument());
-    }
+    mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument(), schemaPaths);
 
     mSupportBlock.reset(new SupportBlock(inStream, mMetadata->data,
                         mFileHeader.getSupportBlockByteOffset(),

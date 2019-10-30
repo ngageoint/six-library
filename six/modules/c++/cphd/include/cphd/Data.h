@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <stddef.h>
 
+#include <six/Init.h>
 #include <sys/Conf.h>
 #include <cphd/Enums.h>
 
@@ -59,6 +60,7 @@ struct Data
         SupportArray();
 
         //! Custom constructor
+        //! Initalizes a support array with necessary params
         SupportArray(const std::string& id, size_t rows, size_t cols,
                 size_t numBytes, size_t offset);
 
@@ -118,9 +120,10 @@ struct Data
         Channel(size_t vectors, size_t samples);
 
         //! Custom constructor
+        //!
         Channel(size_t vectors, size_t samples,
                 size_t signalByteOffset, size_t pvpByteOffset,
-                size_t compressedSize);
+                size_t compressedSize = six::Init::undefined<size_t>());
 
         //! Equality operators
         bool operator==(const Channel& other) const
@@ -190,7 +193,7 @@ struct Data
                signalCompressionID == other.signalCompressionID &&
                channels == other.channels &&
                supportArrayMap == other.supportArrayMap &&
-               supportOffsetMap == other.supportOffsetMap;
+               mOffsetMap == other.mOffsetMap;
     }
     bool operator!=(const Data& other) const
     {
@@ -204,8 +207,11 @@ struct Data
         {
             return channels[channel].getNumVectors();
         }
-        throw except::Exception(Ctxt(
-                "Invalid channel number provided"));
+        std::ostringstream ostr;
+        ostr << "Channel provided is " << channel << "\n"
+                << "while only " << channels.size()
+                << " channels exist \n";
+        throw except::Exception(ostr.str());
     }
     size_t getNumSamples(size_t channel) const
     {
@@ -213,8 +219,11 @@ struct Data
         {
             return channels[channel].getNumSamples();
         }
-        throw except::Exception(Ctxt(
-                "Invalid channel number provided"));
+        std::ostringstream ostr;
+        ostr << "Channel provided is " << channel << "\n"
+                << "while only " << channels.size()
+                << " channels exist \n";
+        throw except::Exception(ostr.str());
     }
     size_t getCompressedSignalSize(size_t channel) const
     {
@@ -222,8 +231,11 @@ struct Data
         {
             return channels[channel].getCompressedSignalSize();
         }
-        throw except::Exception(Ctxt(
-                "Invalid channel number provided"));
+        std::ostringstream ostr;
+        ostr << "Channel provided is " << channel << "\n"
+                << "while only " << channels.size()
+                << " channels exist \n";
+        throw except::Exception(ostr.str());
     }
     size_t getNumChannels() const
     {
@@ -243,35 +255,26 @@ struct Data
     }
     size_t getNumSupportArrays() const
     {
-        assert(supportOffsetMap.size() != supportArrayMap.size());
-        return supportOffsetMap.size();
+        return supportArrayMap.size();
     }
+    //! Get specific support array by identifier
     SupportArray getSupportArrayById(const std::string& id) const;
 
+    //! Get size of support array element
     size_t getElementSize(const std::string& id) const
     {
         return getSupportArrayById(id).bytesPerElement;
     }
     size_t getAllSupportSize() const;
 
-    //! Add new support array
-    // Updates both dictionaries
+    //! Create and add new support array
+    //! Validates, and add new support array to supportArrayMap
     void setSupportArray(const std::string& id, size_t numRows,
                          size_t numCols, size_t numBytes,
                          sys::Off_T offset);
 
     //! Checks if wideband data is compressed
     bool isCompressed() const;
-
-private:
-    // Custom comparator
-    struct CmpByOffset
-    {
-        bool operator()(const sys::Off_T& lhs, const sys::Off_T& rhs) const
-        {
-            return lhs < rhs;
-        }
-    };
 
 public:
     //! Signal Array sample binary format of the CPHD
@@ -296,9 +299,30 @@ public:
     // Both of these maps get populated and/or edited together
     // Made for O(logn) lookup
     //! (Optional) Map of unique support array id to support array offset
-    std::unordered_map<std::string,sys::Off_T> supportOffsetMap;
+    // std::unordered_map<std::string,sys::Off_T> supportOffsetMap;
     // (Optional) Ordered map to store support arrays with offset key
-    std::map<sys::Off_T,SupportArray, CmpByOffset> supportArrayMap;
+    // std::map<sys::Off_T,SupportArray, CmpByOffset> supportArrayMap;
+
+    // (Optional) Unordered map key: unique identifier string,
+    // value: supportArray object
+    std::unordered_map<std::string, SupportArray> supportArrayMap;
+
+private:
+    // Custom comparator
+    struct CmpByOffset
+    {
+        // Overload operator ()
+        // Returns true if offset lhs is less than other offset
+        bool operator()(const sys::Off_T& lhs, const sys::Off_T& rhs) const
+        {
+            return lhs < rhs;
+        }
+    };
+
+    // Book keeping map for efficient validation
+    // Support Array Map with:
+    // key: offset, value: array size
+    std::map<sys::Off_T, size_t, CmpByOffset> mOffsetMap;
 };
 
 //! Ostream operators
