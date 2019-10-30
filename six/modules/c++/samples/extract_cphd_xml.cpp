@@ -28,10 +28,9 @@
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
-#include <cphd/Metadata.h>
 
 /*!
- *  This extracts raw XML from a CPHD file using CPHD module
+ *  This extracts raw XML from a CPHD file using the CPHD module
  */
 int main(int argc, char** argv)
 {
@@ -45,7 +44,7 @@ int main(int argc, char** argv)
                            cli::STORE_TRUE, "console")->setDefault(false);
         parser.addArgument("-b --basename", "Use a basename for product names",
                            cli::STORE, "basename")->setDefault("");
-        parser.addArgument("file", "Input cphd file", cli::STORE, "file",
+        parser.addArgument("cphd", "Input cphd file", cli::STORE, "cphd",
                            "", 1, 1, true);
         parser.addArgument("schema", "Input CPHD schema", cli::STORE, "schema",
                            "", 1, 1, false)->setDefault("");
@@ -57,17 +56,17 @@ int main(int argc, char** argv)
         const bool prettyPrint = options->get<bool>("prettyPrint");
         std::string basename = options->get<std::string>("basename");
         const bool toConsole = options->get<bool>("console");
-        const std::string inputFile = options->get<std::string> ("file");
+        const std::string inputFile = options->get<std::string> ("cphd");
         const std::string schemaFile = options->get<std::string> ("schema");
 
-        //! Check for conflicting input
+        // Check for conflicting input
         if (!basename.empty() && toConsole)
         {
             throw except::Exception(Ctxt("User cannot specify the --basename "
                                          "option while using --console"));
         }
 
-        //! Fill out basename if not user specified
+        // Fill out basename if not user specified
         if (basename.empty())
         {
             basename = sys::Path::basename(inputFile, true);
@@ -76,11 +75,11 @@ int main(int argc, char** argv)
 
         std::vector<std::string> schemaPathnames;
         schemaPathnames.push_back(schemaFile);
-        // Reads in CPHD and verifies XML using schema
-        cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs(), schemaPathnames);
 
+        // Reads in CPHD and verifies XML using schema
+        cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs());
         cphd::CPHDXMLControl xmlControl;
-        std::string xml = xmlControl.toXMLString(reader.getMetadata(), prettyPrint);
+        std::string xml = xmlControl.toXMLString(reader.getMetadata(), schemaPathnames, prettyPrint);
 
         std::auto_ptr<io::OutputStream> os;
         if (toConsole)

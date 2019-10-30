@@ -29,8 +29,10 @@
 import sys
 import os
 import getopt
+from datetime import datetime
 
 
+# Returns list of copyright lines from file in path
 def read_copyright_txt(path):
     data = []
     if not os.path.isfile(path):
@@ -42,12 +44,16 @@ def read_copyright_txt(path):
     return data
 
 
+# Assumes fixed format copyright
+# Updates copyright text with year
 def update_copyright_year(crTxt, year):
     crTxt[4] = (" * (C) Copyright 2004 - " + str(year)
                 + ", MDA Information Systems LLC\n")
     return crTxt
 
 
+# Assumes fixed format copyright
+# Updates copyright text with module name
 def update_copyright_module(crTxt, module):
     crTxt[1] = (" * This file is part of " + str(module) + "\n")
     crTxt[6] = (" * " + str(module)
@@ -61,24 +67,26 @@ def fix_file(path, crTxt, year, module):
     if not os.path.isfile(path):
         print("Failed to write as path is not a file: " + str(path))
         return
-
+    # Read file to be written
     with open(path, 'r') as f:
         data = f.readlines()
 
+    # If no copyright provided, assume copyright exists in file
     if len(crTxt) == 0:
         print("No Copyright text provided, assuming copyright exists in file")
         crTxt = data[0:22]  # Assumes copyright is 22 lines (for c++)
 
-    if not len(year) == 0:
-        crTxt = update_copyright_year(crTxt, year)
+    # Update year with default current year, or custom in copyright
+    crTxt = update_copyright_year(crTxt, year)
 
+    # If module specified, update module in copyright
     if not len(module) == 0:
         crTxt = update_copyright_module(crTxt, module)
 
-    # If there is no copyright in the file
-    if not any(char in data[0] for char in ['/', '/*', '//']):
+    # If file is empty or there is no copyright in the file
+    if len(data) == 0 or not any(char in data[0] for char in ['/', '/*', '//']):
         # Append new copyright text
-        data = crTxt + "\n" + data
+        data = crTxt + ["\n"] + data
     # If old copyright already exists in file
     else:
         # Rewrite new copyright text
@@ -93,13 +101,9 @@ def fix_file(path, crTxt, year, module):
 
 # Fix copyright in all files in directory
 def fix_dir(path, crTxt, year, module):
-    if(not os.path.isdir(path)):
+    if not os.path.isdir(path):
         print("Failed due to invalid path: " + str(path))
         sys.exit(2)
-
-    if len(crTxt) == 0:
-        print("No text was changed")
-        return
 
     for file in os.listdir(path):
         fix_file(os.path.join(path, file), crTxt, year, module)
@@ -116,8 +120,9 @@ if __name__ == '__main__':
     unixOptions = "hc:y:m:d:f:"
     gnuOptions = ["help", "cr", "year", "module", "dir", "file"]
 
+    # Default values
     copyrightTxt = []
-    year = ""
+    year = str(datetime.now().year)
     module = ""
     try:
         arguments, values = getopt.getopt(argList, unixOptions, gnuOptions)
