@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <limits>
 #include <sstream>
 
@@ -34,7 +35,6 @@
 namespace cphd
 {
 const std::string SupportBlock::ALL = six::Init::undefined<std::string>();
-
 
 SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
@@ -63,10 +63,9 @@ SupportBlock::SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
 void SupportBlock::initialize()
 {
     // Trusting data has the right offsets
-    mOffsets = mData.supportOffsetMap;
-    for (auto it = mOffsets.begin(); it != mOffsets.end(); ++it)
+    for (auto it = mData.supportArrayMap.begin(); it != mData.supportArrayMap.end(); ++it)
     {
-        it->second += mSupportOffset;
+        mOffsets[it->first] = mSupportOffset + it->second.arrayByteOffset;
     }
 }
 
@@ -74,7 +73,7 @@ sys::Off_T SupportBlock::getFileOffset(const std::string& id) const
 {
     if (mOffsets.count(id) != 1)
     {
-        throw(except::Exception(Ctxt("Invalid support array identifier number")));
+        throw except::Exception(Ctxt("Invalid support array identifier number"));
     }
     return mOffsets.find(id)->second;
 }
@@ -92,7 +91,6 @@ void SupportBlock::read(const std::string& id,
              << data.size;
         throw except::Exception(Ctxt(ostr.str()));
     }
-
     // Perform the read
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
@@ -102,7 +100,6 @@ void SupportBlock::read(const std::string& id,
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
 
-    // Can't change endianness of compressed data right?
     if (!sys::isBigEndianSystem() && mData.getElementSize(id) > 1)
     {
         cphd::byteSwap(data.data, mData.getElementSize(id),
@@ -116,10 +113,10 @@ void SupportBlock::readAll(size_t numThreads,
                            mem::ScopedArray<sys::ubyte>& data) const
 {
     data.reset(new sys::ubyte[mSupportSize]);
-    for (auto it = mData.supportOffsetMap.begin(); it != mData.supportOffsetMap.end(); ++it)
+    for (auto it = mData.supportArrayMap.begin(); it != mData.supportArrayMap.end(); ++it)
     {
-        const size_t bufSize = mData.getSupportArrayById(it->first).getSize();
-        read(it->first, numThreads, mem::BufferView<sys::ubyte>(&data[it->second], bufSize));
+        const size_t bufSize = it->second.getSize();
+        read(it->first, numThreads, mem::BufferView<sys::ubyte>(&data[it->second.arrayByteOffset], bufSize));
     }
 }
 

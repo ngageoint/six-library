@@ -37,7 +37,6 @@
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
-#include <cphd/ComplexParameter.h>
 
 namespace cphd
 {

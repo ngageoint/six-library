@@ -39,71 +39,61 @@
  * Writes out CPHD file to OutputFile
  * Files should match
  */
-
-void testRoundTrip(std::string inPathname, std::string outPathname, size_t numThreads, std::vector<std::string>& schemaPathname)
+void testRoundTrip(std::string inPathname, std::string outPathname, size_t numThreads, std::vector<std::string>& schemaPathnames)
 {
     //! Open the CPHD file
-    cphd::CPHDReader reader(inPathname, numThreads, schemaPathname);
+    cphd::CPHDReader reader(inPathname, numThreads, schemaPathnames);
     std::cout << "Succesfully finished reading from CPHD: " << inPathname << "\n";
+
+    // Read fileheader
     const cphd::FileHeader& header = reader.getFileHeader();
 
+    // Read metadata
     const cphd::Metadata& metadata = reader.getMetadata();
 
-    cphd::CPHDWriter writer(reader.getMetadata(), numThreads);
-    const cphd::SignalArrayFormat signalFormat =
-            reader.getMetadata().data.getSignalFormat();
-    const cphd::PVPBlock& pvpBlock = reader.getPVPBlock();
-    const cphd::Wideband& wideband = reader.getWideband();
-
-    writer.writeMetadata(outPathname, pvpBlock);
-
-    // SupportBlock
+    // Read SupportBlock
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
     mem::ScopedArray<sys::ubyte> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
-    size_t idx = 0;
-    auto it = metadata.data.supportOffsetMap.begin();
-    for (it = metadata.data.supportOffsetMap.begin(), idx = 0;
-         it != metadata.data.supportOffsetMap.end();
-         ++it, idx = reader.getMetadata().data.getSupportArrayById(it->first).getSize())
+    // Read PVPBlock
+    const cphd::PVPBlock& pvpBlock = reader.getPVPBlock();
+
+    // Read Wideband
+    const cphd::Wideband& wideband = reader.getWideband();
+    mem::ScopedArray<sys::ubyte> data;
+    wideband.readAll(0, cphd::Wideband::ALL,
+                  0, cphd::Wideband::ALL,
+                  numThreads, data);
+
+    const cphd::SignalArrayFormat signalFormat =
+            metadata.data.getSignalFormat();
+
+    // Write full CPHD
+    cphd::CPHDWriter writer(reader.getMetadata(), schemaPathnames, numThreads);
+    switch (signalFormat)
     {
-        writer.writeSupportData(readPtr.get() + idx, it->first);
-    }
-
-    writer.writePVPData(pvpBlock);
-
-    for (size_t channel = 0;
-         channel < reader.getNumChannels();
-         ++channel)
-    {
-        const types::RowCol<size_t> dims(reader.getNumVectors(channel),
-                                         reader.getNumSamples(channel));
-        mem::ScopedArray<sys::ubyte> data;
-
-        wideband.read(channel,
-                      0, cphd::Wideband::ALL,
-                      0, cphd::Wideband::ALL,
-                      numThreads, data);
-
-        switch (signalFormat)
-        {
-        case cphd::SignalArrayFormat::CI2:
-            writer.writeCPHDData<std::complex<sys::Int8_T> >(
+    case cphd::SignalArrayFormat::CI2:
+        writer.write(
+                outPathname,
+                pvpBlock,
                 reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
-                dims.area(), channel);
-            break;
-        case cphd::SignalArrayFormat::CI4:
-            writer.writeCPHDData<std::complex<sys::Int16_T> >(
+                readPtr.get());
+        break;
+    case cphd::SignalArrayFormat::CI4:
+        writer.write(
+                outPathname,
+                pvpBlock,
                 reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
-                dims.area(), channel);
-            break;
-        case cphd::SignalArrayFormat::CF8:
-            writer.writeCPHDData<std::complex<float> >(
+                readPtr.get());
+        break;
+    case cphd::SignalArrayFormat::CF8:
+        writer.write(
+                outPathname,
+                pvpBlock,
                 reinterpret_cast<const std::complex<float>* >(data.get()),
-                dims.area(), channel);
-            break;
-        }
+                readPtr.get());
+        break;
     }
     std::cout << "Succesfully finished writing to CPHD: " << outPathname << "\n";
 }

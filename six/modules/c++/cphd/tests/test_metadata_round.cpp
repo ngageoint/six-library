@@ -41,7 +41,6 @@
  * Tests write and read of metadata
  * Fails if values don't match
  */
-
 void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
 {
     // Parse XML file
@@ -56,9 +55,9 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
     // Read in first XML file
     xml::lite::MinidomParser xmlParser;
     parseXMLFile(xmlParser, inPathname);
-    cphd::CPHDXMLControl xmlControl(new logging::NullLogger(), true, schemas);
+    cphd::CPHDXMLControl xmlControl(new logging::NullLogger(), true);
     const std::auto_ptr<cphd::Metadata> metadata =
-            xmlControl.fromXML(xmlParser.getDocument());
+            xmlControl.fromXML(xmlParser.getDocument(), schemas);
 
     const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
 
@@ -70,11 +69,11 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
     xml::lite::MinidomParser xmlParser2;
     parseXMLFile(xmlParser2, outPathname);
 
-    cphd::CPHDXMLControl xmlControl2(new logging::NullLogger(), true, schemas);
+    cphd::CPHDXMLControl xmlControl2(new logging::NullLogger(), true);
 
     // Populate metadata object from XML Document
     const std::auto_ptr<cphd::Metadata> metadata2 =
-            xmlControl2.fromXML(xmlParser2.getDocument());
+            xmlControl2.fromXML(xmlParser2.getDocument(), schemas);
 
     // Check if both metadata are equal
     return (*metadata == *metadata2);

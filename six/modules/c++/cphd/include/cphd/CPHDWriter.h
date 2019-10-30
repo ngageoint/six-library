@@ -31,6 +31,7 @@
 #include <sys/OS.h>
 
 #include <sys/Conf.h>
+#include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
@@ -62,49 +63,50 @@ public:
      *         that may be used if byte swapping is necessary.
      *         Default is 4 MB
      */
-    CPHDWriter(const Metadata& metadata,
-               size_t numThreads = 0,
-               size_t scratchSpaceSize = 4 * 1024 * 1024);
+    CPHDWriter(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+            size_t numThreads = 0,
+            size_t scratchSpaceSize = 4 * 1024 * 1024);
 
     /*
-     *  \func addImage
-     *  \brief Pushes a new image to the file for writing. This only works with
-     *         valid CPHDWriter data types:
+     *  \func write
+     *  \brief Writes the complete CPHD into the file.
+     *         This only works with valid CPHDWriter data types:
+     *              std:: ubyte* (for compressed data)
      *              std::complex<float>
      *              std::complex<sys::Int16_T>
      *              std::complex<sys::Int8_T>
      *
-     *  \param image The image to be added. This should be sized to match the
-     *         dims parameter.
-     *  \param dims The dimensions of the image.
-     *  \param pvpData The vector based metadata. This should have data
-     *         equal to: dims.row * metadata.data.getNumBytesPVP.
+     *  \param pathname The desired pathname of the file.
+     *  \param pvpBlock The vector based metadata to write.
+     *  \param widebandData .The wideband data to write to disk
+     *  \param pvpBlock The vector based metadata to write.
      */
-    template <typename T>
-    void addImage(const T* image,
-                  const types::RowCol<size_t>& dims,
-                  const sys::ubyte* pvpData);
+    template<typename T>
+    void write(
+            const std::string& pathname,
+            const PVPBlock& pvpBlock,
+            const T* widebandData,
+            const sys::ubyte* supportData = nullptr);
 
     /*
      *  \func writeMetadata
      *  \brief Writes the header, and metadata into the file. This should
      *         be used in situations where you need to write out the CPHD
-     *         data in chunks. Otherwise you should use addImage and write.
-     *         This will internally set the number of bytes per VBP.
+     *         data in chunks.
      *
      *  \param pathname The desired pathname of the file.
-     *  \param vbm The vector based metadata to write.
-     *  \param classification The classification of the file. Optional
-     *         By default, CPHD will not be populated with this value.
-     *  \param releaseInfo The release information for the file. Optional
-     *         By default, CPHD will not be populated with this value.
+     *  \param pvpBlock The vector based metadata to write.
      */
-    void writeMetadata(const std::string& pathname,
-                       const PVPBlock& PVPBlock);
+    void writeMetadata(
+            const std::string& pathname,
+            const PVPBlock& pvpBlock);
 
     /*
      *  \func writeSupportData
      *  \brief (Optional) Writes the specified support Array to the file
+     *         Does not include padding.
      *
      *  \param data A pointer to the start of the support array that
      *        will be written to file
@@ -114,11 +116,34 @@ public:
     void writeSupportData(const T* data,
                           const std::string& id)
     {
-        // TODO: treat multiple params as seperate params or one byte string?
         writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data),
                              mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
                              mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
+
+    /*
+     *  \func writeSupportData
+     *  \brief (Optional) Writes all of the support Arrays to the file
+     *         Includes padding
+     *
+     *  \param data A pointer to the start of the support array data block
+     */
+    template <typename T>
+    void writeSupportData(const T* data)
+    {
+        const sys::ubyte* dataPtr = reinterpret_cast<const sys::ubyte*>(data);
+        for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
+        {
+            // Move inputstream head to offset of particular support array
+            mFile.seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::FileOutputStream::START);
+            writeSupportDataImpl(dataPtr + it->second.arrayByteOffset,
+                                 it->second.numRows * it->second.numCols,
+                                 it->second.bytesPerElement);
+        }
+        // Move inputstream head to the end of the support block after all supports have been written
+        mFile.seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::FileOutputStream::START);
+    }
+
 
     /*
      *  \func writePVPData
@@ -132,10 +157,10 @@ public:
     /*
      *  \func writeCPHDData
      *  \brief Writes a chunk of CPHD data to disk. To create a proper
-     *         CPHD file you must call writeMetadata before using this
-     *         method. If you do not need to write the data in chunks,
-     *         you may instead use addImage and write. This only works with
+     *         CPHD file you must call writeMetadata and writePVPData before
+     *         using this method. This only works with
      *         valid CPHDWriter data types:
+     *              std:: ubyte* (for compressed data)
      *              std::complex<float>
      *              std::complex<sys::Int16_T>
      *              std::complex<sys::Int8_T>
@@ -151,25 +176,8 @@ public:
                        size_t channel = 1);
 
     /*
-     * Same as write CPHDData but for compressed CPHD
+     * Closes the FileInputStream if open
      */
-    // void writeCompressedCPHDData(const sys::ubyte* data,
-    //                    size_t numElements,
-    //                    size_t channel);
-
-    /*
-     *  \func write
-     *  \brief Writes the CPHD file to disk. This should only be called
-     *         if you are writing using addImage.
-     *
-     *  \param pathname The desired pathname of the file.
-     *  \param classification The classification of the file. Optional
-     *         By default, CPHD will not be populated with this value.
-     *  \param releaseInfo The release information for the file. Optional
-     *         By default, CPHD will not be populated with this value.
-     */
-    void write(const std::string& pathname);
-
     void close()
     {
         if (mFile.isOpen())
@@ -179,9 +187,10 @@ public:
     }
 
 private:
-    void writeMetadata(size_t supportSize, // Optional
-                       size_t pvpSize,
-                       size_t cphdSize);
+    void writeMetadata(
+        size_t supportSize, // Optional
+        size_t pvpSize,
+        size_t cphdSize);
 
     void writePVPData(const sys::ubyte* PVPBlock,
                       size_t index);
@@ -242,17 +251,13 @@ private:
     std::auto_ptr<DataWriter> mDataWriter;
 
     Metadata mMetadata;
+    FileHeader mHeader;
     const size_t mElementSize;
     const size_t mScratchSpaceSize;
     const size_t mNumThreads;
+    std::vector<std::string> mSchemaPaths;
 
     io::FileOutputStream mFile;
-
-    std::vector<const sys::ubyte*> mCPHDData;
-    std::vector<const sys::ubyte*> mPVPData;
-
-    size_t mCPHDSize;
-    size_t mPVPSize;
 };
 }
 

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <cstdio>
 #include <stdlib.h>
 #include <iostream>
@@ -161,11 +162,11 @@ void setVectorParameters(size_t channel,
 void setUpMetadata(cphd::Metadata& metadata)
 {
     //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
-    metadata.collectionID.setClassificationLevel("Unclassified");
+    metadata.collectionID.collectInfo.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.collectInfo.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.collectionID.collectInfo.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
@@ -202,6 +203,7 @@ void setUpData(cphd::Metadata& metadata)
     metadata.data.signalCompressionID = "Huffman";
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
+        // Required but doesn't matter
         metadata.data.channels[ii].compressedSignalSize = 128*256;
     }
     setUpMetadata(metadata);
@@ -214,6 +216,7 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
         cphd::PVPBlock& pvpBlock)
 {
     const size_t numChannels = 1;
+    // Required but doesn't matter
     const std::vector<size_t> numVectors(numChannels, 128);
 
     for (size_t ii = 0; ii < numChannels; ++ii)
@@ -223,19 +226,14 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
             setVectorParameters(ii, jj, pvpBlock);
         }
     }
-
-    cphd::CPHDWriter writer(metadata, numThreads);
+    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
     writer.writeMetadata(outPathname, pvpBlock);
-
-    size_t idx = 0;
-    for (auto it = metadata.data.supportOffsetMap.begin(); it != metadata.data.supportOffsetMap.end(); ++it, idx += NUM_ROWS*NUM_COLS)
-    {
-        writer.writeSupportData(&writeData[idx], it->first);
-    }
+    writer.writeSupportData(&writeData[0]);
     writer.writePVPData(pvpBlock);
 }
 
-std::vector<sys::ubyte> checkSupportData(const std::string& pathname,
+std::vector<sys::ubyte> checkSupportData(
+        const std::string& pathname,
         size_t size,
         size_t numThreads,
         mem::SharedPtr<io::SeekableInputStream> inStream)
@@ -289,6 +287,7 @@ bool runTest(const std::vector<T>& writeData)
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
     const std::vector<sys::ubyte> readData =
             checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads, inStream);
+
     return compareVectors(readData, &writeData[0], writeData.size());
 }
 

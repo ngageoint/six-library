@@ -52,13 +52,28 @@ bool compareCPHDData(const sys::ubyte* data1,
     {
         if (castData1[ii] != castData2[ii])
         {
-            std::cout << "Data at channel " << channel
+            std::cout << "Wideband data at channel " << channel
                       << " has differing data starting at"
                       << " index " << ii << "\n";
             return false;
         }
     }
+    return true;
+}
 
+bool compareSupportData(const mem::ScopedArray<sys::ubyte>& data1,
+                     const mem::ScopedArray<sys::ubyte>& data2,
+                     size_t size)
+{
+    for (size_t ii = 0; ii < size; ++ii)
+    {
+        if (data1[ii] != data2[ii])
+        {
+            std::cout <<  "Support data has differing data starting at"
+                      << " index " << ii << "\n";
+            return false;
+        }
+    }
     return true;
 }
 
@@ -146,8 +161,6 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
     cphd::CPHDReader reader1(pathname1, numThreads, schemaPathname);
     cphd::CPHDReader reader2(pathname2, numThreads, schemaPathname);
 
-    // Check headers
-    // std::cout << "Header of output fil"
     // Check metadata
     if (reader1.getMetadata() != reader2.getMetadata())
     {
@@ -162,12 +175,16 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
         return false;
     }
 
-    // // Check support block
-    // if (readerInput.getSupportBlock() != readerResult.getSupportBlock())
-    // {
-    //     std::cout << "SupportBlock does not match \n";
-    //     return false;
-    // }
+    // Check support block
+    mem::ScopedArray<sys::ubyte> readPtr1;
+    reader1.getSupportBlock().readAll(numThreads, readPtr1);
+    mem::ScopedArray<sys::ubyte> readPtr2;
+    reader2.getSupportBlock().readAll(numThreads, readPtr2);
+    if (!compareSupportData(readPtr1, readPtr2, reader1.getMetadata().data.getAllSupportSize()))
+    {
+        std::cout << "SupportBlock does not match \n";
+        return false;
+    }
 
     // // Check wideband
     const size_t channelsToProcess = std::min(
@@ -200,8 +217,6 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
         std::cout << "Data has differing sample type\n";
         return false;
     }
-
-
     return true;
 }
 
@@ -252,5 +267,4 @@ int main(int argc, char** argv)
         std::cerr << "Unknown exception\n";
     }
     return 1;
-
 }
