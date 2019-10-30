@@ -26,39 +26,30 @@ namespace cphd
 {
 CollectionID::CollectionID()
 {
-    collectorName = six::Init::undefined<std::string>();
-    collectType = six::Init::undefined<six::CollectType>();
-    illuminatorName = six::Init::undefined<std::string>();
-    coreName = six::Init::undefined<std::string>();
-    radarMode = six::Init::undefined<six::RadarModeType>();
-    radarModeID = six::Init::undefined<std::string>();
     releaseInfo = six::Init::undefined<std::string>();
-    mClassification = six::Init::undefined<std::string>();
-}
-
-CollectionID* CollectionID::clone() const
-{
-    return new CollectionID(*this);
 }
 
 std::ostream& operator<< (std::ostream& os, const CollectionID& c)
 {
     os << "CollectionID:: \n"
-        << "  CollectorName    : " << c.collectorName << "\n"
-        << "  IlluminatorName  : " << c.illuminatorName << "\n"
-        << "  CoreName         : " << c.coreName << "\n"
-        << "  CollectType      : " << c.collectType << "\n"
-        << "  RadarMode        : " << c.radarMode << "\n"
-        << "  RadarModeID      : " << c.radarMode << "\n"
-        << "  ReleaseInfo      : " << c.releaseInfo << "\n";
-    for (size_t ii = 0; ii < c.countryCodes.size(); ++ii)
+        << "  CollectorName    : " << c.collectInfo.collectorName << "\n";
+    if (!six::Init::isUndefined(c.collectInfo.illuminatorName))
     {
-        os << "  CountryCodes     : " << c.countryCodes[ii] << "\n";
+        os << "  IlluminatorName  : " << c.collectInfo.illuminatorName << "\n";
     }
-    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
+    os << "  CoreName         : " << c.collectInfo.coreName << "\n"
+        << "  CollectType      : " << c.collectInfo.collectType << "\n"
+        << "  RadarMode        : " << c.collectInfo.radarMode << "\n"
+        << "  RadarModeID      : " << c.collectInfo.radarMode << "\n"
+        << "  ReleaseInfo      : " << c.releaseInfo << "\n";
+    for (size_t ii = 0; ii < c.collectInfo.countryCodes.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.parameters[ii].getName() << "\n"
-            << "  Parameter value  : " << c.parameters[ii].str() << "\n";
+        os << "  CountryCodes     : " << c.collectInfo.countryCodes[ii] << "\n";
+    }
+    for (size_t ii = 0; ii < c.collectInfo.parameters.size(); ++ii)
+    {
+        os << "  Parameter name   : " << c.collectInfo.parameters[ii].getName() << "\n"
+            << "  Parameter value  : " << c.collectInfo.parameters[ii].str() << "\n";
     }
     return os;
 }

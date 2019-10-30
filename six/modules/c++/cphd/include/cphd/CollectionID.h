@@ -25,8 +25,6 @@
 
 #include <six/Types.h>
 #include <six/Init.h>
-#include <six/Parameter.h>
-#include <six/ParameterCollection.h>
 #include <six/CollectionInformation.h>
 namespace cphd
 {
@@ -38,7 +36,7 @@ namespace cphd
  *  <CollectionID>. This block contains general information about
  *  the collection.
  */
-struct CollectionID : public six::CollectionInformation
+struct CollectionID
 {
 
     //!  Constructor
@@ -49,49 +47,29 @@ struct CollectionID : public six::CollectionInformation
     {
     }
 
-    /*!
-     * Contains product release information.
-     * Default value is UNRESTRICTED
-     */
-    std::string releaseInfo;
-
-    //! Deep copy
-    CollectionID* clone() const;
-
     //! Equality operators
     bool operator==(const CollectionID& other) const
     {
-        return collectorName == other.collectorName &&
-               collectType == other.collectType &&
-               illuminatorName == other.illuminatorName &&
-               coreName == other.coreName &&
-               radarMode == other.radarMode &&
-               radarModeID == other.radarModeID &&
-               releaseInfo == other.releaseInfo &&
-               getClassificationLevel() == other.getClassificationLevel();
+        return collectInfo == other.collectInfo &&
+               releaseInfo == other.releaseInfo;
     }
     bool operator!=(const CollectionID& other) const
     {
         return !((*this) == other);
     }
 
-    //! Get classification level
-    std::string getClassificationLevel() const override
-    {
-        return mClassification;
-    }
-
-    //! Set classification level
-    void setClassificationLevel(const std::string& classification) override
-    {
-        mClassification = classification;
-    }
-
-private:
     /*!
-     *  Classification level
+     * Contains product release information.
+     * Default value is UNRESTRICTED
      */
-    std::string mClassification;
+    std::string releaseInfo;
+
+    /*
+     * Contains all other collectionID metadata
+     * From six/CollectionInformation
+     */
+    six::CollectionInformation collectInfo;
+
 };
 
 //! Ostream operators

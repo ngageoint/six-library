@@ -60,6 +60,13 @@ public:
     {
         mValue = str::toString<T>(value);
     }
+
+    template<typename T>
+    Parameter(std::complex<T> value)
+    {
+        mValue = str::toString<std::complex<T> >(mValue);
+    }
+
     //!  Return a double
     inline operator double() const
     {
@@ -116,6 +123,14 @@ public:
     {
         return mName;
     }
+
+    //! Get complex parameter
+    template<typename T>
+    inline std::complex<T> getComplex() const
+    {
+        return str::toType<std::complex<T> >(mValue);
+    }
+
     //!  Set the parameters' name
     void setName(std::string name)
     {
@@ -127,6 +142,13 @@ public:
     void setValue(T value)
     {
         mValue = str::toString<T>(value);
+    }
+
+    //! Overload templated setValue function
+    template<typename T>
+    void setValue(const std::complex<T>& value)
+    {
+        mValue = str::toString<std::complex<T> >(value);
     }
 
     //!  Get back const char*
