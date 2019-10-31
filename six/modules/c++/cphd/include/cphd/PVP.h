@@ -328,9 +328,6 @@ struct Pvp
     //! Default Constructor
     Pvp();
 
-    // //! Constructor initializes addedPVP size
-    // Pvp(size_t numAdditionalParams);
-
     //! Equality operators
     bool operator==(const Pvp& other) const
     {
@@ -365,9 +362,6 @@ struct Pvp
     //! Set an additional PVP param
     void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
 
-    // //! Set the number of added params
-    // void setNumAddedParameters(size_t size);
-
 private:
     /*
      * Validate parameter size and offset when setting parameter
@@ -378,7 +372,6 @@ private:
      * Marks filled bytes
      */
     std::vector<six::BooleanType> mParamLocations;
-
 };
 
 //! Ostream operators
