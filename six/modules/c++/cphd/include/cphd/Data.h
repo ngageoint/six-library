@@ -38,6 +38,7 @@ namespace cphd
 {
 
 /*
+ * \struct Data
  * Parameter that describes binary data components
  * contained in the product.
  * See section 2.3 through 2.6
@@ -46,7 +47,6 @@ struct Data
 {
     // There's another SupportArray type in the Metadata,
     // so hiding this inside Data
-
     /*
      * Support Array size parameters.
      * Branch repeated for each binary support array
@@ -296,15 +296,8 @@ public:
     //! of decompression
     std::string signalCompressionID;
 
-    // Both of these maps get populated and/or edited together
-    // Made for O(logn) lookup
-    //! (Optional) Map of unique support array id to support array offset
-    // std::unordered_map<std::string,sys::Off_T> supportOffsetMap;
-    // (Optional) Ordered map to store support arrays with offset key
-    // std::map<sys::Off_T,SupportArray, CmpByOffset> supportArrayMap;
-
-    // (Optional) Unordered map key: unique identifier string,
-    // value: supportArray object
+    //! (Optional) Unordered map key: unique identifier string,
+    //! value: supportArray object
     std::unordered_map<std::string, SupportArray> supportArrayMap;
 
 private:
