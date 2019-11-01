@@ -37,35 +37,33 @@ namespace cphd
 {
 
 /*
- * \struct ErrorParameters
+ *  \struct ErrorParameters
  *
- * \brief (Optional) Parameters that describe the statistics of errors
- * in measured or estimated parameters that describe
- * the collection
- * See section 9
+ *  \brief Error paramaters
+ *
+ *  (Optional) Parameters that describe the statistics of errors
+ *  in measured or estimated parameters that describe
+ *  the collection
+ *  See section 9
  */
 struct ErrorParameters
 {
     /*
-     * \struct Monostatic
+     *  \struct Monostatic
      *
-     * \brief (Conditional) Parameters for CollectType = "MONOSTATIC"
+     *  \brief (Conditional) Parameters for CollectType = "MONOSTATIC"
      */
     struct Monostatic
     {
          /*
-         * \struct RadarSensor
+         *  \struct RadarSensor
          *
-         * \brief Position and velocity error statistics for the
-         *  sensor platform
+         *  \brief Position and velocity error statistics for the
+         *   sensor platform
          */
         struct RadarSensor
         {
-            /*
-             * \func RadarSensor
-             *
-             * \brief Default constructor
-             */
+            //! Constructor
             RadarSensor();
 
             //! Equality operators
@@ -127,24 +125,20 @@ struct ErrorParameters
     };
 
     /*
-     * \struct Bistatic
+     *  \struct Bistatic
      *
-     * \brief (Conditional) Parameters for CollectType = "BISTATIC"
+     *  \brief (Conditional) Parameters for CollectType = "BISTATIC"
      */
     struct Bistatic
     {
         /*
-         * \struct RadarSensor
+         *  \struct RadarSensor
          *
-         * \brief Error statistics for the Transmit platform
+         *  \brief Error statistics for the Transmit platform
          */
         struct RadarSensor
         {
-            /*
-             * \func RadarSensor
-             *
-             * \brief Default constructor
-             */
+            //! Constructor
             RadarSensor();
 
             //! Equality operators
@@ -167,9 +161,9 @@ struct ErrorParameters
         };
 
         /*
-         * \struct Platform
+         *  \struct Platform
          *
-         * \brief Error statisitcs of platforms
+         *  \brief Error statisitcs of platforms
          */
         struct Platform
         {

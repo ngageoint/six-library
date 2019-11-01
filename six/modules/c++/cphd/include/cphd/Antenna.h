@@ -36,9 +36,10 @@ namespace cphd
 {
 /*
  *  \struct AntCoordFrame
- *  \brief Unit vectors that describe the orientation of an
- *         Antenna Coordinate Frame as a function of time.
+ *  \brief CPHD Antenna Coordinate Frame parameter
  *
+ *  Unit vectors that describe the orientation of an
+ *  Antenna Coordinate Frame as a function of time.
  *  AntCoordFrame used by CPHD, representing the tag
  *  <AntCoordFrame>.
  */
@@ -110,9 +111,10 @@ struct AntPhaseCenter
 
 /*
  *  \struct AntPattern
- *  \brief Parameter set that defines each Antenna Pattern
- *         as a function of time.
+ *  \brief CPHD Antenna Pattern parameter
  *
+ *  Parameter set that defines each Antenna Pattern
+ *  as a function of time.
  *  AntPattern used by CPHD, representing the tag
  *  <AntPattern>.
  */
@@ -120,10 +122,11 @@ struct AntPattern
 {
     /*
      *  \struct GainPhaseArray
-     *  \brief (Optional) Parameters that identify 2-D sampled Grain & Phase patterns at
-     * a single frequency value.
+     *  \brief Gain Phase Array parameter
      *
-     *  GainPhaseArray used by AntPattern
+     *  (Optional) Parameters that identify 2-D sampled Grain & Phase patterns at
+     *  a single frequency value.
+     *
      */
     struct GainPhaseArray
     {
@@ -219,11 +222,11 @@ struct AntPattern
 
 /*
  *  \struct Antenna
- *  \brief (Optional) Parameters that describe the transmit and
+ *  \brief (Optional) Antenna parameters
+ *
+ *  Parameters that describe the transmit and
  *  receive antennas used to collect the signal array.
  *  See section 8.2
- *
- *  Antenna used by AntPattern
  */
 struct Antenna
 {

@@ -33,9 +33,9 @@ namespace cphd
 {
 
 /*
- * \struct Polarization
+ *  \struct Polarization
  *
- * \brief Polarization of the signals that formed the signal array.
+ *  \brief Polarization of the signals that formed the signal array.
  */
 struct Polarization
 {
@@ -58,19 +58,21 @@ struct Polarization
 };
 
 /*
- * \struct TOAExtended
+ *  \struct TOAExtended
  *
- * \brief (Optional) TOA extended swath information
+ *  \brief (Optional) TOA extended swath information
  */
 struct TOAExtended
 {
     /*
-     * \struct LFMEclipse
+     *  \struct LFMEclipse
      *
-     * \brief (Optional) Parameters that describe the FX domain signal
-     * content for partially eclipsed echoes when the
-     * collection is performed with a Linear FM
-     * waveform.
+     *  \brief LFMEclipse parameters
+     *
+     *  (Optional) Parameters that describe the FX domain signal
+     *  content for partially eclipsed echoes when the
+     *  collection is performed with a Linear FM
+     *  waveform.
      */
     struct LFMEclipse
     {
@@ -131,10 +133,11 @@ struct TOAExtended
 };
 
 /*
- * \struct DwellTimes
+ *  \struct DwellTimes
  *
- * \brief COD Time & Dwell Time polynomials over the image area
- * See section 6.3 and section 7.2.6
+ *  \brief COD Time & Dwell Time polynomials
+ *
+ *  See section 6.3 and section 7.2.6
  */
 struct DwellTimes
 {
@@ -163,11 +166,11 @@ struct DwellTimes
 };
 
 /*
- * \struct TgtRefLevel
+ *  \struct TgtRefLevel
  *
- * \brief (Optional) Signal level for an ideal point scatter
- * located at the SRP for reference signal vector (v_CH_REF)
- * See section 4.6 and section 7.2.9
+ *  (Optional) Signal level for an ideal point scatter
+ *  located at the SRP for reference signal vector (v_CH_REF)
+ *  See section 4.6 and section 7.2.9
  */
 struct TgtRefLevel
 {
@@ -190,9 +193,9 @@ struct TgtRefLevel
 };
 
 /*
- * \struct Point
+ *  \struct Point
  *
- * \brief Points that describe the noise profile
+ *  \brief Points that describe the noise profile
  */
 struct Point
 {
@@ -218,9 +221,9 @@ struct Point
 };
 
 /*
- * \struct FxNoiseProfile
+ *  \struct FxNoiseProfile
  *
- * \brief (Optional) Power level for thermal noise (PN) vs FX freq values
+ *  \brief (Optional) Power level for thermal noise (PN) vs FX freq values
  */
 struct FxNoiseProfile
 {
@@ -239,9 +242,9 @@ struct FxNoiseProfile
 };
 
 /*
- * \struct NoiseLevel
+ *  \struct NoiseLevel
  *
- * \brief (Optional) Thermal noise level for the reference signal vector
+ *  \brief (Optional) Thermal noise level for the reference signal vector
  */
 struct NoiseLevel
 {
@@ -273,19 +276,23 @@ struct NoiseLevel
 };
 
 /*
- * \sturct ChannelParameter
+ *  \sturct ChannelParameter
  *
- * \brief Parameter Set that describes a CPHD data
- * channel. Channels referenced by their unique
- * Channel ID (Ch_ID). See Section 7.2.
+ *  \brief Channel parameters
+ *
+ *  Parameter Set that describes a CPHD data
+ *  channel. Channels referenced by their unique
+ *  Channel ID (Ch_ID). See Section 7.2.
 */
 struct ChannelParameter
 {
     /*
-     * \struct TxRcv
+     *  \struct TxRcv
      *
-     * \brief (Optional) Parameters to identify the Transmit and Receive
-     * parameter sets used to collect the signal array
+     *  \brief Transmit Receive parameters
+     *
+     *  (Optional) Parameters to identify the Transmit and Receive
+     *  parameter sets used to collect the signal array
      */
     // Hiding TxRcv struct here because of name conflict
     struct TxRcv
@@ -311,11 +318,13 @@ struct ChannelParameter
     };
 
     /*
-     * \struct Antenna
+     *  \struct Antenna
      *
-     * \brief (Optional) Antenna Phase Center and Antenna Pattern
-     * identifiers for the antenna(s) used to collect and
-     * form the signal array data.
+     *  \brief Channel antenna parameters
+     *
+     *  (Optional) Antenna Phase Center and Antenna Pattern
+     *  identifiers for the antenna(s) used to collect and
+     *  form the signal array data.
      */
     // Hiding Antenna struct here because of naming clash
     struct Antenna
@@ -457,11 +466,13 @@ struct ChannelParameter
 };
 
 /*
- * \struct Channel
+ *  \struct Channel
  *
- * \brief Parameters that describe the data channels
- * contained in the product.
- * See section 7.
+ *  \brief Channel parameters
+ *
+ *  Parameters that describe the data channels
+ *  contained in the product.
+ *  See section 7.
  */
 struct Channel
 {

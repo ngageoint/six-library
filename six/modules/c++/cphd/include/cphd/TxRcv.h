@@ -35,17 +35,13 @@ namespace cphd
 {
 
 /*!
- * \struct ParameterType
+ *  \struct ParameterType
  *
- * \brief Base parameter class for both TxWF and Rcv type parameters
+ *  \brief Base parameter class for both TxWF and Rcv type parameters
  */
 struct ParameterType
 {
-    /*!
-     * \func ParameterType
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ParameterType();
 
     //! Equality operators
@@ -77,17 +73,13 @@ struct ParameterType
 };
 
 /*!
- * \struct TxWFParameters
+ *  \struct TxWFParameters
  *
- * \brief Parameters that describe a Transmit Waveform
+ *  \brief Parameters that describe a Transmit Waveform
  */
 struct TxWFParameters : public ParameterType
 {
-    /*
-     * \func TxWFParameters
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     TxWFParameters();
 
     //! Equality operators
@@ -114,17 +106,13 @@ struct TxWFParameters : public ParameterType
 };
 
 /*
- * \struct RcvParameters
+ *  \struct RcvParameters
  *
- * \brief Parameters that describe a Receive configuration
+ *  \brief Parameters that describe a Receive configuration
  */
 struct RcvParameters : public ParameterType
 {
-    /*
-     * \func RcvParameters
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     RcvParameters();
 
     //! Equality operators
@@ -157,19 +145,15 @@ struct RcvParameters : public ParameterType
 };
 
 /*!
- * \struct TxRcv
+ *  \struct TxRcv
  *
- * (Optional) Parameters that describe the transmitted
- * waveform(s) and receiver configurations used in
- * the collection
+ *  (Optional) Parameters that describe the transmitted
+ *  waveform(s) and receiver configurations used in
+ *  the collection
  */
 struct TxRcv
 {
-    /*
-     * \func TxRcv
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     TxRcv();
 
     //! Equality operators

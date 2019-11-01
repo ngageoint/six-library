@@ -36,22 +36,22 @@ namespace cphd
 {
 
 /*!
- * \struct PVPType
+ *  \struct PVPType
  *
- * \brief Specifies a defined Per Vector Parameter.
+ *  \brief Specifies a defined Per Vector Parameter.
  *
- * Size and Offset specify the size and placement of
- * the binary parameter in the set of Per Vector
- * parameters provided for each vector.
+ *  Size and Offset specify the size and placement of
+ *  the binary parameter in the set of Per Vector
+ *  parameters provided for each vector.
  */
 struct PVPType
 {
     static const size_t WORD_BYTE_SIZE;
 
     /*!
-     * \func PVPType
+     *  \func PVPType
      *
-     * \brief Default constructor
+     *  \brief Default constructor
      */
     PVPType();
 
@@ -68,14 +68,14 @@ struct PVPType
     }
 
     /*!
-     * \func setData
+     *  \func setData
      *
-     * \brief set PVPType data
+     *  \brief set PVPType data
      *
-     * \param size Size of the expected parameter
-     * \param offset Offset of the expected parameter
-     * \param format Format of the expected parameter
-     *  See spec table 10.2 page 120 for allowed binary formats
+     *  \param size Size of the expected parameter
+     *  \param offset Offset of the expected parameter
+     *  \param format Format of the expected parameter
+     *   See spec table 10.2 page 120 for allowed binary formats
      */
     //! Set PVPType data
     void setData(size_t size, size_t offset, const std::string& format)
@@ -116,24 +116,25 @@ struct PVPType
     }
 
 protected:
+    //! Size of parameter
     size_t mSize;
+    //! Offset of parameter
     size_t mOffset;
+    //! Format of parameter
     std::string mFormat;
 };
 
 /*!
- * \struct APVPType
+ *  \struct APVPType
  *
- * \brief Specifies additional (or custom) per vector parameters
+ *  \brief Additional per vector parameter
+ *
+ *  Specifies additional (or custom) per vector parameters
  *  Inherits from PVPType
  */
 struct APVPType : PVPType
 {
-    /*!
-     * \func APVPType
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     APVPType();
 
     //! Equality operators
@@ -151,11 +152,11 @@ struct APVPType : PVPType
     }
 
     /*
-     * \func setName
+     *  \func setName
      *
-     * \brief Set the name of the additional parameter
+     *  \brief Set the name of the additional parameter
      *
-     * \param name A unique name for the parameter
+     *  \param name A unique name for the parameter
      */
     void setName(const std::string& name)
     {
@@ -163,11 +164,11 @@ struct APVPType : PVPType
     }
 
     /*
-     * \func getName
+     *  \func getName
      *
-     * \brief Get the name of the additional parameter
+     *  \brief Get the name of the additional parameter
      *
-     * \return std::string Returns name of the parameter
+     *  \return std::string Returns name of the parameter
      */
     std::string getName() const
     {
@@ -180,187 +181,187 @@ private:
 };
 
 /*!
- * \struct Pvp
+ *  \struct Pvp
  *
- * \brief Structure used to specify the Per Vector
- * parameters provided for each channel of a given
- * product.
+ *  \brief Structure used to specify the Per Vector
+ *  parameters provided for each channel of a given
+ *  product.
  */
 struct Pvp
 {
     /*!
-     * Transmit time for the center of the transmitted pulse relative to the
-     * transmit platform Collection Start Time (sec).
+     *  Transmit time for the center of the transmitted pulse relative to the
+     *  transmit platform Collection Start Time (sec).
      */
     PVPType txTime;
 
     /*!
-     * Transmit APC position at time txc(v) in Earth Centered Fixed
-     * (ECF) coordinates (meters). Components in X, Y, Z order.
-     * 3 8-byte floats required.
+     *  Transmit APC position at time txc(v) in Earth Centered Fixed
+     *  (ECF) coordinates (meters). Components in X, Y, Z order.
+     *  3 8-byte floats required.
      */
     PVPType txPos;
 
     /*!
-     * Transmit APC velocity at time txc(v) in ECF coordinates
-     * (meters/sec).
-     * 3 8-byte floats required.
+     *  Transmit APC velocity at time txc(v) in ECF coordinates
+     *  (meters/sec).
+     *  3 8-byte floats required.
      */
     PVPType txVel;
 
     /*!
-     * Receive time for the center of the echo from the srp relative to the
-     * transmit platform Collection Start Time (sec). Time is the Time of
-     * Arrival (toa) of the received echo from the srp for the signal
-     * transmitted at txc(v).
+     *  Receive time for the center of the echo from the srp relative to the
+     *  transmit platform Collection Start Time (sec). Time is the Time of
+     *  Arrival (toa) of the received echo from the srp for the signal
+     *  transmitted at txc(v).
      */
     PVPType rcvTime;
 
 
     /*!
-     * Receive APC position at time trc(v)srp in ECF coordinates
-     * (meters).
-     * 3 8-byte floats required.
+     *  Receive APC position at time trc(v)srp in ECF coordinates
+     *  (meters).
+     *  3 8-byte floats required.
      */
     PVPType rcvPos;
 
     /*!
-     * Receive APC velocity at time trc(v)srp in ECF coordinates
-     * (meters/sec).
-     * 3 8-byte floats required
+     *  Receive APC velocity at time trc(v)srp in ECF coordinates
+     *  (meters/sec).
+     *  3 8-byte floats required
      */
     PVPType rcvVel;
 
     /*!
-     * Stabilization Reference Point (srp) position in ECF coordinates
-     * (meters).
-     * 3 8-byte floats required.
+     *  Stabilization Reference Point (srp) position in ECF coordinates
+     *  (meters).
+     *  3 8-byte floats required.
      */
     PVPType srpPos;
 
     /*!
-     * (Optional) Amplitude scale Factor to be applied to all samples of the signal
-     * vector. For signal vector v, each sample value is multiplied by
-     * Amp_SF(v) to yield the proper sample values for the vector.
+     *  (Optional) Amplitude scale Factor to be applied to all samples of the signal
+     *  vector. For signal vector v, each sample value is multiplied by
+     *  Amp_SF(v) to yield the proper sample values for the vector.
      */
     mem::ScopedCopyablePtr<PVPType> ampSF;
 
     /*!
-     * The DOPPLER shift micro parameter. Parameter accounts for the
-     * time dilation/Doppler shift for the echoes from all targets with the
-     * same time dilation/Doppler shift as the srp echo.
+     *  The DOPPLER shift micro parameter. Parameter accounts for the
+     *  time dilation/Doppler shift for the echoes from all targets with the
+     *  same time dilation/Doppler shift as the srp echo.
      */
     PVPType aFDOP;
 
     /*!
-     * First order phase micro parameter (i.e. linear phase). Accounts for
-     * linear phase vs. FX frequency for targets with time
-     * dilation/Doppler shift different than the echo from the srp.
-     * Provides precise linear phase prediction for Linear FM waveforms.
+     *  First order phase micro parameter (i.e. linear phase). Accounts for
+     *  linear phase vs. FX frequency for targets with time
+     *  dilation/Doppler shift different than the echo from the srp.
+     *  Provides precise linear phase prediction for Linear FM waveforms.
      */
     PVPType aFRR1;
 
     /*!
-     * Second order phase micro parameter (i.e. quadratic phase).
-     * Accounts for quadratic phase vs. FX frequency for targets with
-     * time dilation/Doppler shift different than the echo from the srp.
-     * Provides precise quadratic phase prediction for Linear FM
-     * waveforms.
+     *  Second order phase micro parameter (i.e. quadratic phase).
+     *  Accounts for quadratic phase vs. FX frequency for targets with
+     *  time dilation/Doppler shift different than the echo from the srp.
+     *  Provides precise quadratic phase prediction for Linear FM
+     *  waveforms.
      */
     PVPType aFRR2;
 
     /*!
-     * The FX domain frequency limits of the transmitted waveform
-     * retained in the signal vector (Hz).
-     * Saved transmit band is from fx_1(v) < fx < fx_2(v)
-     * For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
+     *  The FX domain frequency limits of the transmitted waveform
+     *  retained in the signal vector (Hz).
+     *  Saved transmit band is from fx_1(v) < fx < fx_2(v)
+     *  For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
      */
     PVPType fx1;
 
     /*!
-     * The FX domain frequency limits of the transmitted waveform
-     * retained in the signal vector (Hz).
-     * Saved transmit band is from fx_1(v) < fx < fx_2(v)
-     * For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
+     *  The FX domain frequency limits of the transmitted waveform
+     *  retained in the signal vector (Hz).
+     *  Saved transmit band is from fx_1(v) < fx < fx_2(v)
+     *  For the vector: FX_BW(v) = fx_2(v) – fx_1(v)
      */
     PVPType fx2;
 
     /*!
-     * (Optional) The FX domain frequency limits for out-of-band noise signal for
-     * frequencies below fx_1(v) and above fx_2(v). May ONLY be
-     * included for Domain_Type = FX.
-     * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
-     * When included in a product, fx_N1 & fx_N2 are both included.
+     *  (Optional) The FX domain frequency limits for out-of-band noise signal for
+     *  frequencies below fx_1(v) and above fx_2(v). May ONLY be
+     *  included for Domain_Type = FX.
+     *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
+     *  When included in a product, fx_N1 & fx_N2 are both included.
     */
     mem::ScopedCopyablePtr<PVPType> fxN1;
 
     /*!
-     * (Optional) The FX domain frequency limits for out-of-band noise signal for
-     * frequencies below fx_1(v) and above fx_2(v). May ONLY be
-     * included for Domain_Type = FX.
-     * For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
-     * When included in a product, fx_N1 & fx_N2 are both included.
+     *  (Optional) The FX domain frequency limits for out-of-band noise signal for
+     *  frequencies below fx_1(v) and above fx_2(v). May ONLY be
+     *  included for Domain_Type = FX.
+     *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
+     *  When included in a product, fx_N1 & fx_N2 are both included.
     */
     mem::ScopedCopyablePtr<PVPType> fxN2;
 
     /*!
-     * The  change in toa limits for the full resolution echoes retained in the
-     * signal vector (sec). Full resolution echoes are formed with
-     * FX_BW(v) saved bandwidth.
-     * Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
+     *  The  change in toa limits for the full resolution echoes retained in the
+     *  signal vector (sec). Full resolution echoes are formed with
+     *  FX_BW(v) saved bandwidth.
+     *  Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
      */
     PVPType toa1;
 
     /*!
-     * The  change in toa limits for the full resolution echoes retained in the
-     * signal vector (sec). Full resolution echoes are formed with
-     * FX_BW(v) saved bandwidth.
-     * Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
+     *  The  change in toa limits for the full resolution echoes retained in the
+     *  signal vector (sec). Full resolution echoes are formed with
+     *  FX_BW(v) saved bandwidth.
+     *  Full resolution toa limits: Dtoa_1 < Dtoa < Dtoa_2
      */
     PVPType toa2;
 
     /*!
-     * (Optional) The TOA limits for all echoes retained in the signal vector (sec).
+     *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
     mem::ScopedCopyablePtr<PVPType> toaE1;
 
     /*!
-     * (Optional) The TOA limits for all echoes retained in the signal vector (sec).
+     *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
     mem::ScopedCopyablePtr<PVPType> toaE2;
 
     /*!
-     * Two-way time delay due to the troposphere (sec) that was added
-     * when computing the propagation time for the SRP
+     *  Two-way time delay due to the troposphere (sec) that was added
+     *  when computing the propagation time for the SRP
      */
     PVPType tdTropoSRP;
 
     /*!
-     * (Optional) Two-way time delay due to the ionosphere (sec) that was added
-     * when computing the propagation time for the SRP
+     *  (Optional) Two-way time delay due to the ionosphere (sec) that was added
+     *  when computing the propagation time for the SRP
      */
     mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
 
     /*!
-     * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
-     * sample s = 0 (Hz).
+     *  FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
+     *  sample s = 0 (Hz).
      */
     PVPType sc0;
 
     /*!
-     * FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
-     * signal coordinate sample spacing (Hz).
+     *  FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
+     *  signal coordinate sample spacing (Hz).
      */
     PVPType scss;
 
     /*!
-     * (Optional) Integer parameter that may be included to indicate the signal
-     * content for some vectors is known or is likely to be distorted.
+     *  (Optional) Integer parameter that may be included to indicate the signal
+     *  content for some vectors is known or is likely to be distorted.
      */
     mem::ScopedCopyablePtr<PVPType> signal;
 
     /*
-     * (Optional) User defined PV parameters
+     *  (Optional) User defined PV parameters
      */
     std::unordered_map<std::string,APVPType> addedPVP;
 
@@ -396,44 +397,44 @@ struct Pvp
     size_t getAdditionalParamsSize() const;
 
     /*
-     * \func setData
+     *  \func setData
      *
-     * \brief Validate and set the metadata of the specified parameter
+     *  \brief Validate and set the metadata of the specified parameter
      *
-     * \param param The PVPType parameter that should be set
-     * \param size The size of the parameter to be expected for the param
-     * \param offset The offset of the parameter to be expected for the param
-     * \param format The string format of the parameter to be expected for the param
+     *  \param param The PVPType parameter that should be set
+     *  \param size The size of the parameter to be expected for the param
+     *  \param offset The offset of the parameter to be expected for the param
+     *  \param format The string format of the parameter to be expected for the param
      *
-     * \throws except::Exception If param offset or size overlaps another parameter, or
-     *  if format is invalid
+     *  \throws except::Exception If param offset or size overlaps another parameter, or
+     *   if format is invalid
      */
     void setData(PVPType& param, size_t size, size_t offset, const std::string& format);
 
     /*
-     * \func setData
+     *  \func setData
      *
-     * \brief Validate and set the metadata of an additional parameter identified by name
+     *  \brief Validate and set the metadata of an additional parameter identified by name
      *
-     * \param size The size of the parameter to be expected for the param
-     * \param offset The offset of the parameter to be expected for the param
-     * \param format The string format of the parameter to be expected for the param
-     * \param name The unique identifier of the additional parameter that should be set
+     *  \param size The size of the parameter to be expected for the param
+     *  \param offset The offset of the parameter to be expected for the param
+     *  \param format The string format of the parameter to be expected for the param
+     *  \param name The unique identifier of the additional parameter that should be set
      *
-     * \throws except::Exception If param offset or size overlaps another parameter,
-     *  if format is invalid or if name is not unique
+     *  \throws except::Exception If param offset or size overlaps another parameter,
+     *   if format is invalid or if name is not unique
      */
     //! Set an additional PVP param
     void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
 
 private:
     /*
-     * Validate parameter size and offset when setting parameter
+     *  Validate parameter size and offset when setting parameter
      */
     void validate(size_t size, size_t offset);
 
     /*
-     * Marks filled bytes
+     *  Marks filled bytes
      */
     std::vector<six::BooleanType> mParamLocations;
 };

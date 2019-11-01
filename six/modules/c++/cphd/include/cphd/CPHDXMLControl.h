@@ -43,9 +43,9 @@
 namespace cphd
 {
 /*!
- * \class CPHDXMLControl
+ *  \class CPHDXMLControl
  *
- * \brief This class converts a Metadata object into a CPHD XML
+ *  \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM).
  *  Inherits from CPHDXMLControl
  */
@@ -53,25 +53,25 @@ class CPHDXMLControl : public six::XMLParser
 {
 public:
     /*!
-     * \func CPHDXMLControl
+     *  \func CPHDXMLControl
      *
-     * \brief Default constructor
+     *  \brief Default constructor
      */
     CPHDXMLControl();
 
     /*!
-     * \func CPHDXMLControl
+     *  \func CPHDXMLControl
      *
-     * \brief Constructor with custom log option
+     *  \brief Constructor with custom log option
      */
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
     /*!
-     * \func toXMLString
+     *  \func toXMLString
      *
-     * \brief Convert XML to string
+     *  \brief Convert XML to string
      *  Calls toXML
-     * \return std::string XML String
+     *  \return std::string XML String
      */
     std::string toXMLString(
             const Metadata& metadata,
@@ -79,57 +79,60 @@ public:
             bool prettyPrint = false);
 
     /*!
-     * \func toXML
+     *  \func toXML
      *
-     * \brief Convert XML to document object
+     *  \brief Convert XML to document object
      *
-     * \param metadata Valid CPHD metadata object
-     * \param schemaPaths XML Schema for validation
-     * \return pointer to xml Document object
+     *  \param metadata Valid CPHD metadata object
+     *  \param schemaPaths XML Schema for validation
+     *  \return pointer to xml Document object
      */
     std::auto_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     /*!
-     * \func fromXML
+     *  \func fromXML
      *
-     * \brief Convert document to XML object
+     *  \brief Convert document to XML object
      *
-     * \param string Valid cphd XML string
-     * \param schemaPaths XML Schema for validation
-     * \return pointer to metadata object
+     *  \param string Valid cphd XML string
+     *  \param schemaPaths XML Schema for validation
+     *
+     *  \return pointer to metadata object
      */
     std::auto_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     /*!
-     * \func fromXML
+     *  \func fromXML
      *
-     * \brief Convert document to XML object
+     *  \brief Convert document to XML object
      *
-     * \param doc XML document object of CPHD
-     * \param schemaPaths XML Schema for validation
-     * \return pointer to metadata object
+     *  \param doc XML document object of CPHD
+     *  \param schemaPaths XML Schema for validation
+     *
+     *  \return pointer to metadata object
      */
     std::auto_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
     /*!
-     * \func validate
+     *  \func validate
      *
-     * \brief Validate the xml and log any errors
-     * \param doc XML document object of CPHD
-     * \param schemaPaths XML Schema for validation
+     *  \brief Validate the xml and log any errors
+     *
+     *  \param doc XML document object of CPHD
+     *  \param schemaPaths XML Schema for validation
      */
     static void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log);
 
 private:
-    typedef xml::lite::Element* XMLElem;
+    typedef xml::lite::Element*  XMLElem;
 
 private:
     static const char CPHD10_URI[];
@@ -204,7 +207,7 @@ private:
     void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
     void parsePVPType(Pvp& p, const XMLElem paramXML) const;
     void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
-    void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
+    void parseCommon(const XMLElem imgTypeXML, ImagingType*  imgType) const;
     void parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const;
     void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
     void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,

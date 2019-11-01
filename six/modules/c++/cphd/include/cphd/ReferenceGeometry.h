@@ -33,18 +33,14 @@ namespace cphd
 {
 
 /*!
- * \struct SRP
+ *  \struct SRP
  *
- * \brief The SRP position for the reference vector of the
- * reference channel
+ *  \brief The SRP position for the reference vector of the
+ *  reference channel
  */
 struct SRP
 {
-    /*!
-    * \func SRP
-    *
-    * \brief Default constructor
-    */
+    //! Constructor
     SRP();
 
     //! Equality operator
@@ -67,18 +63,14 @@ struct SRP
 };
 
 /*!
- * \struct ImagingType
+ *  \struct ImagingType
  *
- * \brief Base class for both Monostatic and
- *  Bistatic imaging types
+ *  \brief Base class for both Monostatic and
+ *   Bistatic imaging types
  */
 struct ImagingType
 {
-    /*!
-    * \func ImagingType
-    *
-    * \brief Default constructor
-    */
+    //! Constructor
     ImagingType();
 
     //! Equality operators
@@ -122,20 +114,16 @@ struct ImagingType
 };
 
 /*!
- * \struct Monostatic
+ *  \struct Monostatic
  *
- * \brief (Conditional) Collection Type Monostatic metadata.
+ *  \brief (Conditional) Collection Type Monostatic metadata.
  *
- *  Single radar platform that is both the transmitter
- *  and the receiver
+ *   Single radar platform that is both the transmitter
+ *   and the receiver
  */
 struct Monostatic : public ImagingType
 {
-    /*!
-     * \func Monostatic
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Monostatic();
 
     //! Equality operators
@@ -185,27 +173,23 @@ struct Monostatic : public ImagingType
 };
 
 /*!
- * \struct Bistatic
+ *  \struct Bistatic
  *
- * \brief (Conditional) Collection Type Bistatic metadata.
+ *  \brief (Conditional) Collection Type Bistatic metadata.
  *
- * Pair of radar platforms, with a seperate transmitter
- * and a passive receiver.
+ *  Pair of radar platforms, with a seperate transmitter
+ *  and a passive receiver.
  */
 struct Bistatic : public ImagingType
 {
     /*!
-     * \struct PlatformParams
+     *  \struct PlatformParams
      *
-     * \brief Describe transmit and recieve platform parameters
+     *  \brief Describe transmit and recieve platform parameters
      */
     struct PlatformParams
     {
-        /*!
-         * \func PlatformParams
-         *
-         * \brief Default constructor
-         */
+        //! Constructor
         PlatformParams();
 
         //! Equality operator
@@ -265,11 +249,7 @@ struct Bistatic : public ImagingType
         Vector3 vel;
     };
 
-    /*
-     * \func Bistatic
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Bistatic();
 
     //! Equality operator
@@ -312,18 +292,14 @@ struct Bistatic : public ImagingType
 };
 
 /*!
- * \struct ReferenceGeometry
+ *  \struct ReferenceGeometry
  *
- * \brief Parameters that describe the collection geometry
- *        See section 6.5
+ *  \brief Parameters that describe the collection geometry
+ *         See section 6.5
  */
 struct ReferenceGeometry
 {
-    /*!
-     * \func ReferenceGeometry
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ReferenceGeometry();
 
     //! Equality operator

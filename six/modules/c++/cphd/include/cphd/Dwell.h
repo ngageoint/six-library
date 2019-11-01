@@ -34,16 +34,16 @@ namespace cphd
 {
 
 /*
- * \struct DwellTime
+ *  \struct DwellTime
  *
- * Dwell Time Polynomial
+ *  \brief Dwell Time Polynomial
  */
 struct DwellTime
 {
     /*
-     * \func DwellTime
+     *  \func DwellTime
      *
-     * \brief Default constructor
+     *  \brief Default constructor
      */
     DwellTime();
 
@@ -65,16 +65,16 @@ struct DwellTime
 };
 
 /*
- * \struct COD
+ *  \struct COD
  *
- * \brief Center of Dwell Time Polynomial
+ *  \brief Center of Dwell Time Polynomial
  */
 struct COD
 {
     /*
-     * \func COD
+     *  \func COD
      *
-     * \brief Constructor
+     *  \brief Constructor
      */
     COD();
 
@@ -96,21 +96,17 @@ struct COD
 };
 
 /*
- * \struct Dwell
+ *  \struct Dwell
  *
- * \brief Parameters that specify the dwell time supported by the signal arrays
- * contained in the CPHD product
- * See section 7.3
+ *  \brief Dwell Time parameters
+ *
+ *  Parameters that specify the dwell time supported by the signal arrays
+ *  contained in the CPHD product
+ *  See section 7.3
  */
 struct Dwell
 {
-    /*
-     * \func Dwell
-     *
-     * \brief Parameters that specify the dwell time supported by the signal arrays
-     * contained in the CPHD product
-     * See section 7.3
-     */
+    //! Constructor
     Dwell();
 
     // Equality operator

@@ -34,18 +34,14 @@
 namespace cphd
 {
 /*
- * \struct Timeline
+ *  \struct Timeline
  *
- * \brief Parameters that describe the collection times for
- *  the data contained in the product
+ *  \brief Parameters that describe the collection times for
+ *   the data contained in the product
  */
 struct Timeline
 {
-    /*
-     * \func Timeline
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Timeline();
 
     //! Equality operators
@@ -78,18 +74,14 @@ struct Timeline
 };
 
 /*
- * \struct FxBand
+ *  \struct FxBand
  *
- * \brief Parameters that describe the FX frequency limits
- *  for the signal array(s) contained in the product
+ *  \brief Parameters that describe the FX frequency limits
+ *   for the signal array(s) contained in the product
  */
 struct FxBand
 {
-    /*
-     * \func FxBand
-     *
-     * \brief Default consturctor
-     */
+    //! Constructor
     FxBand();
 
     //! Equality operators
@@ -113,18 +105,14 @@ struct FxBand
 };
 
 /*
- * \struct TOASwath
+ *  \struct TOASwath
  *
- * \brief Parameters that describe the TOA swath limits
- *  for the signal array(s) contained in the product
+ *  \brief Parameters that describe the TOA swath limits
+ *   for the signal array(s) contained in the product
  */
 struct TOASwath
 {
-    /*
-     * \func TOASwath
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     TOASwath();
 
     //! Equality operators
@@ -148,18 +136,14 @@ struct TOASwath
 };
 
 /*
- * \struct TropoParameters
+ *  \struct TropoParameters
  *
- * \brief (Optional) Parameters that compute the propogation
- *  delay due to the troposphere
+ *  \brief (Optional) Parameters that compute the propogation
+ *   delay due to the troposphere
  */
 struct TropoParameters
 {
-    /*
-     * \func TropoParameters
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     TropoParameters();
 
     //! Equality operators
@@ -182,18 +166,14 @@ struct TropoParameters
 };
 
 /*
- * \struct IonoParameters
+ *  \struct IonoParameters
  *
- * \brief (Optional) Parameters that compute the propogation
- *  delay due to the ionosphere
+ *  \brief (Optional) Parameters that compute the propogation
+ *   delay due to the ionosphere
  */
 struct IonoParameters
 {
-    /*
-     * \func IonoParameters
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     IonoParameters();
 
     //! Equality operators
@@ -214,18 +194,14 @@ struct IonoParameters
 };
 
 /*
- * \sturct Global
+ *  \sturct Global
  *
- * \brief Global parameters that apply to metadata components
- *  and CPHD signal arrays
+ *  \brief Global parameters that apply to metadata components
+ *   and CPHD signal arrays
  */
 struct Global
 {
-    /*
-     * \func Global
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Global();
 
     //! Equality operators
@@ -236,9 +212,9 @@ struct Global
     }
 
     /*
-     * \func getDomainType
+     *  \func getDomainType
      *
-     * \brief Get domain represented by the sample dimension
+     *  \brief Get domain represented by the sample dimension
      */
     DomainType getDomainType() const
     {

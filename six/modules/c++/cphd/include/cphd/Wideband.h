@@ -50,14 +50,14 @@ public:
     static const size_t ALL;
 
     /*
-     * \func Wideband
+     *  \func Wideband
      *
-     * \brief Constructor initializes signal block book keeping
+     *  \brief Constructor initializes signal block book keeping
      *
-     * \param pathname Input CPHD pathname
-     * \param data Data section from CPHD
-     * \param startWB CPHD header keyword "CPHD_BYTE_OFFSET"
-     * \param sizeWB CPHD header keyword "CPHD_DATA_SIZE"
+     *  \param pathname Input CPHD pathname
+     *  \param data Data section from CPHD
+     *  \param startWB CPHD header keyword "CPHD_BYTE_OFFSET"
+     *  \param sizeWB CPHD header keyword "CPHD_DATA_SIZE"
      */
     Wideband(const std::string& pathname,
              const cphd::Data& data,
@@ -65,14 +65,14 @@ public:
              sys::Off_T sizeWB);
 
     /*
-     * \func Wideband
+     *  \func Wideband
      *
-     * \brief Constructor initializes signal block book keeping
+     *  \brief Constructor initializes signal block book keeping
      *
-     * \param inStream Input stream to an already opened CPHD file
-     * \param data Data section from CPHD
-     * \param startWB CPHD header keyword "cphd_BYTE_OFFSET"
-     * \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
+     *  \param inStream Input stream to an already opened CPHD file
+     *  \param data Data section from CPHD
+     *  \param startWB CPHD header keyword "cphd_BYTE_OFFSET"
+     *  \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
      */
     Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
              const cphd::Data& data,
@@ -80,17 +80,17 @@ public:
              sys::Off_T sizeWB);
 
     /*
-     * \func getFileOffset
+     *  \func getFileOffset
      *
-     * \brief Get the byte offset of a specific signal array in the CPHD file
+     *  \brief Get the byte offset of a specific signal array in the CPHD file
      *
-     * \param channel channel number of signal array
-     * \param vector vector number of signal channel
-     * \param sample sample number in signal vector
+     *  \param channel channel number of signal array
+     *  \param vector vector number of signal channel
+     *  \param sample sample number in signal vector
      *
-     * \throw except::Exception If invalid channel, vector or sample
+     *  \throw except::Exception If invalid channel, vector or sample
      *
-     * \return Returns offset from start of CPHD file
+     *  \return Returns offset from start of CPHD file
      */
     // first channel is 0!
     // 0-based vector in channel
@@ -100,15 +100,15 @@ public:
                              size_t sample) const;
 
     /*
-     * \func getFileOffset
+     *  \func getFileOffset
      *
-     * \brief Get the byte offset of a compressed signal block in the CPHD file
+     *  \brief Get the byte offset of a compressed signal block in the CPHD file
      *
-     * \param channel channel number of signal array
+     *  \param channel channel number of signal array
      *
-     * \throw except::Exception If invalid channel, vector or sample
+     *  \throw except::Exception If invalid channel, vector or sample
      *
-     * \return Returns offset from start of CPHD file
+     *  \return Returns offset from start of CPHD file
      */
     // This is specifically for compressed data
     // first channel is 0!
@@ -117,27 +117,27 @@ public:
     sys::Off_T getFileOffset(size_t channel) const;
 
     /*
-     * \func read
+     *  \func read
      *
-     * \brief Read the specified channel, vector(s), and sample(s)
+     *  \brief Read the specified channel, vector(s), and sample(s)
      *
-     * Performs endian swapping if necessary
+     *  Performs endian swapping if necessary
      *
-     * \param channel 0-based channel
-     * \param firstVector 0-based first vector to read (inclusive)
-     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
-     * read all vectors
-     * \param firstSample 0-based first sample to read (inclusive)
-     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
-     * read all samples
-     * \param numThreads Number of threads to use for endian swapping if
-     * necessary
-     * \param data A pre allocated mem::BufferView that will hold the data
-     *  read from the file.
+     *  \param channel 0-based channel
+     *  \param firstVector 0-based first vector to read (inclusive)
+     *  \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     *  read all vectors
+     *  \param firstSample 0-based first sample to read (inclusive)
+     *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     *  read all samples
+     *  \param numThreads Number of threads to use for endian swapping if
+     *  necessary
+     *  \param data A pre allocated mem::BufferView that will hold the data
+     *   read from the file.
      *
-     * \throws except::Exception If invalid channel, firstVector, lastVector,
-     *  firstSample or lastSample
-     * \throws except::Exception If BufferView memory allocated is insufficient
+     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *   firstSample or lastSample
+     *  \throws except::Exception If BufferView memory allocated is insufficient
      */
     void read(size_t channel,
               size_t firstVector,
@@ -152,26 +152,26 @@ public:
               const mem::BufferView<sys::ubyte>& data) const;
 
     /*
-     * \func read
+     *  \func read
      *
-     * \brief Read the specified channel, vector(s), and sample(s)
+     *  \brief Read the specified channel, vector(s), and sample(s)
      *
-     * Performs endian swapping if necessary
+     *  Performs endian swapping if necessary
      *
-     * \param channel 0-based channel
-     * \param firstVector 0-based first vector to read (inclusive)
-     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
-     * read all vectors
-     * \param firstSample 0-based first sample to read (inclusive)
-     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
-     * read all samples
-     * \param numThreads Number of threads to use for endian swapping if
-     * necessary
-     * \param data An empty mem::ScopedArray that will hold the data
-     *  read from the file.
+     *  \param channel 0-based channel
+     *  \param firstVector 0-based first vector to read (inclusive)
+     *  \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     *  read all vectors
+     *  \param firstSample 0-based first sample to read (inclusive)
+     *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     *  read all samples
+     *  \param numThreads Number of threads to use for endian swapping if
+     *  necessary
+     *  \param data An empty mem::ScopedArray that will hold the data
+     *   read from the file.
      *
-     * \throws except::Exception If invalid channel, firstVector, lastVector,
-     *  firstSample or lastSample
+     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *   firstSample or lastSample
      */
     // Same as above but allocates the memory
     void read(size_t channel,
@@ -187,31 +187,31 @@ public:
               mem::ScopedArray<sys::ubyte>& data) const;
 
     /*
-     * \func read
+     *  \func read
      *
-     * \brief Read the specified channel, vector(s), and sample(s)
+     *  \brief Read the specified channel, vector(s), and sample(s)
      *
-     * Performs scaling, promotion of sample, and endian swapping if necessary
+     *  Performs scaling, promotion of sample, and endian swapping if necessary
      *
-     * \param channel 0-based channel
-     * \param firstVector 0-based first vector to read (inclusive)
-     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
-     *  read all vectors
-     * \param firstSample 0-based first sample to read (inclusive)
-     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
-     *  read all samples
-     * \param vectorScaleFactors A vector of scaleFactors to scale signal samples
-     * \param numThreads Number of threads to use for endian swapping if
-     *  necessary
-     * \param scratch A pre allocated mem::BufferView for scratch space for scaling,
-     * promoting and/or byte swapping
-     * \param data A pre allocated mem::BufferView that will hold the data
-     *  read from the file.
+     *  \param channel 0-based channel
+     *  \param firstVector 0-based first vector to read (inclusive)
+     *  \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     *   read all vectors
+     *  \param firstSample 0-based first sample to read (inclusive)
+     *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     *   read all samples
+     *  \param vectorScaleFactors A vector of scaleFactors to scale signal samples
+     *  \param numThreads Number of threads to use for endian swapping if
+     *   necessary
+     *  \param scratch A pre allocated mem::BufferView for scratch space for scaling,
+     *  promoting and/or byte swapping
+     *  \param data A pre allocated mem::BufferView that will hold the data
+     *   read from the file.
      *
-     * \throws except::Exception If invalid channel, firstVector, lastVector,
-     *  firstSample or lastSample
-     * \throws except::Exception If scaleFactors vector size is not equal to number of samples
-     * \throws except::Exception If scratch size is not atleast the bytes size of one signal array
+     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *   firstSample or lastSample
+     *  \throws except::Exception If scaleFactors vector size is not equal to number of samples
+     *  \throws except::Exception If scratch size is not atleast the bytes size of one signal array
      */
     // Same as above but also applies a per-vector scale factor
     void read(size_t channel,
@@ -233,7 +233,7 @@ public:
               size_t lastSample,
               size_t numThreads,
               const types::RowCol<size_t>& dims,
-              void* data)
+              void*  data)
     {
         const mem::BufferView<sys::ubyte> buffer(
                 static_cast<sys::ubyte*>(data),
@@ -243,17 +243,17 @@ public:
     }
 
     /*
-     * \func getBufferDims
+     *  \func getBufferDims
      *
-     * \brief Gets the dimensions of the wideband block to be read
+     *  \brief Gets the dimensions of the wideband block to be read
      *
-     * \param channel 0-based channel
-     * \param firstVector 0-based first vector to read (inclusive)
-     * \param lastVector 0-based last vector to read (inclusive).  Use ALL to
-     * read all vectors
-     * \param firstSample 0-based first sample to read (inclusive)
-     * \param lastSample 0-based last sample to read (inclusive).  Use ALL to
-     * read all samples
+     *  \param channel 0-based channel
+     *  \param firstVector 0-based first vector to read (inclusive)
+     *  \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     *  read all vectors
+     *  \param firstSample 0-based first sample to read (inclusive)
+     *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     *  read all samples
      */
     types::RowCol<size_t> getBufferDims(size_t channel,
                                         size_t firstVector,
@@ -269,14 +269,14 @@ public:
 
 private:
     /*
-     * Initialize mOffsets for each array
-     * both for uncompressed and compressed data
+     *  Initialize mOffsets for each array
+     *  both for uncompressed and compressed data
      */
     void initialize();
 
     /*
-     * Validate all inputs
-     * Return dimensions of block to be read
+     *  Validate all inputs
+     *  Return dimensions of block to be read
      */
     void checkReadInputs(size_t channel,
                          size_t firstVector,
@@ -286,13 +286,13 @@ private:
                          types::RowCol<size_t>& dims) const;
 
     /*
-     * Validate channel input (Called by checkReadInputs)
+     *  Validate channel input (Called by checkReadInputs)
      */
     void checkChannelInput(size_t channel) const;
 
     /*
-     * Just performs the read
-     * No allocation, endian swapping or scaling
+     *  Just performs the read
+     *  No allocation, endian swapping or scaling
      */
     void readImpl(size_t channel,
                   size_t firstVector,
@@ -302,15 +302,15 @@ private:
                   void* data) const;
 
     /*
-     * Just performs the read for compressed data
-     * No allocation, endian swapping or scaling
+     *  Just performs the read for compressed data
+     *  No allocation, endian swapping or scaling
      */
     void readImpl(size_t channel,
                   void* data) const;
 
     /*
-     * Returns true if scale factor vector is all ones
-     * False otherwise.
+     *  Returns true if scale factor vector is all ones
+     *  False otherwise.
      */
     static
     bool allOnes(const std::vector<double>& vectorScaleFactors);

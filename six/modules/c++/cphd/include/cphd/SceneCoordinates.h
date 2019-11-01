@@ -35,20 +35,16 @@
 namespace cphd
 {
 /*!
- * \struct IARP
+ *  \struct IARP
  *
- * \brief Image Area Reference Point (IARP).
+ *  \brief Image Area Reference Point (IARP).
  *
- * The IARP is the origin of the Image Area Coordinate system
- * (IAX, IAY, IAZ)
+ *  The IARP is the origin of the Image Area Coordinate system
+ *  (IAX, IAY, IAZ)
  */
 struct IARP
 {
-    /*!
-     * \func IARP
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     IARP();
 
     //! Equality operator
@@ -69,17 +65,13 @@ struct IARP
 };
 
 /*!
- * \struct Planar
+ *  \struct Planar
  *
- * \brief Parameters for SurfaceType = PLANAR
+ *  \brief Parameters for SurfaceType = PLANAR
  */
 struct Planar
 {
-    /*!
-     * \func Planar
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Planar();
 
     //! Equality operator
@@ -104,17 +96,13 @@ struct Planar
 };
 
 /*!
- * \struct HAE
+ *  \struct HAE
  *
- * \brief Parameters for SurfaceType = HAE
+ *  \brief Parameters for SurfaceType = HAE
  */
 struct HAE
 {
-    /*!
-     * \func HAE
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     HAE();
 
     //! Equality operator
@@ -141,18 +129,14 @@ struct HAE
 };
 
 /*
- * \struct ReferenceSurface
+ *  \struct ReferenceSurface
  *
- * \brief Parameters that define the Reference Surface
- * used for the product.
+ *  \brief Parameters that define the Reference Surface
+ *  used for the product.
  */
 struct ReferenceSurface
 {
-    /*!
-     * \func ReferenceSurface
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ReferenceSurface();
 
     //! Equality operator
@@ -176,19 +160,15 @@ struct ReferenceSurface
 };
 
 /*!
- * \struct AreaType
+ *  \struct AreaType
  *
- * Image Area is defined by a rectangle aligned with
- * Image Area coordinates (IAX, IAY). May be
- * reduced by the optional polygon
+ *  Image Area is defined by a rectangle aligned with
+ *  Image Area coordinates (IAX, IAY). May be
+ *  reduced by the optional polygon
  */
 struct AreaType
 {
-    /*!
-     * \func AreaType
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     AreaType();
 
     //! Equality operator
@@ -217,19 +197,15 @@ struct AreaType
 };
 
 /*!
- * \sturct LineSample
+ *  \sturct LineSample
  *
- * \brief Identifies a parent tag with children Line and Sample.
+ *  \brief Identifies a parent tag with children Line and Sample.
  *
- * The children are each of type DBL.
+ *  The children are each of type DBL.
  */
 struct LineSample
 {
-    /*!
-     * \func LineSample
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     LineSample();
 
     //! Equality operator
@@ -243,7 +219,7 @@ struct LineSample
     }
 
     /*!
-     * Get index associated with LineSample
+     *  Get index associated with LineSample
      */
     size_t getIndex()
     {
@@ -251,7 +227,7 @@ struct LineSample
     }
 
     /*!
-     * Set index associated with LineSample
+     *  Set index associated with LineSample
      */
     void setIndex(size_t idx)
     {
@@ -270,17 +246,13 @@ private:
 };
 
 /*!
- * \struct ImageAreaXExtent
+ *  \struct ImageAreaXExtent
  *
- * \brief Increasing line index is in the +IAX direction
+ *  \brief Increasing line index is in the +IAX direction
  */
 struct ImageAreaXExtent
 {
-    /*!
-     * \func ImageAreaXExtent
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ImageAreaXExtent();
 
     //! Equality operator
@@ -306,17 +278,13 @@ struct ImageAreaXExtent
 };
 
 /*!
- * \struct ImageAreaYExtent
+ *  \struct ImageAreaYExtent
  *
- * \brief Increasing line index is in the +IAY direction
+ *  \brief Increasing line index is in the +IAY direction
  */
 struct ImageAreaYExtent
 {
-    /*!
-     * \func ImageAreaYExtent
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ImageAreaYExtent();
 
     //! Equality operator
@@ -342,18 +310,14 @@ struct ImageAreaYExtent
 };
 
 /*!
- * \struct Segment
+ *  \struct Segment
  *
- * \brief Each segment is a rectangle from Line = L1 to L2
- * and from Sample = S1 to S2.
+ *  \brief Each segment is a rectangle from Line = L1 to L2
+ *  and from Sample = S1 to S2.
  */
 struct Segment
 {
-    /*!
-     * \func Segment
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     Segment();
 
     //! Equality operator
@@ -393,19 +357,15 @@ struct Segment
 };
 
 /*!
- * \struct ImageGrid
+ *  \struct ImageGrid
  *
- * Parameters that describe a geo-referenced image
- * grid for image data products that may be formed
- * from the CPHD signal array(s).
+ *  Parameters that describe a geo-referenced image
+ *  grid for image data products that may be formed
+ *  from the CPHD signal array(s).
  */
 struct ImageGrid
 {
-    /*!
-     * \func ImageGrid
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     ImageGrid();
 
     //! Equality operator
@@ -440,18 +400,14 @@ struct ImageGrid
 };
 
 /*!
- * \struct SceeneCoordinates
+ *  \struct SceeneCoordinates
  *
- * \brief Parameters that define geographic coordinates for
- * in the imaged scene.
+ *  \brief Parameters that define geographic coordinates for
+ *  in the imaged scene.
  */
 struct SceneCoordinates
 {
-    /*!
-     * \func SceeneCoordinates
-     *
-     * \brief Default constructor
-     */
+    //! Constructor
     SceneCoordinates();
 
     //! Equality operator

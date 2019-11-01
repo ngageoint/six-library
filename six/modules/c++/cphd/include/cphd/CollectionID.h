@@ -59,14 +59,14 @@ struct CollectionID
     }
 
     /*!
-     * Contains product release information.
-     * Default value is UNRESTRICTED
+     *  Contains product release information.
+     *  Default value is UNRESTRICTED
      */
     std::string releaseInfo;
 
     /*
-     * Contains all other collectionID metadata
-     * From six/CollectionInformation
+     *  Contains all other collectionID metadata
+     *  From six/CollectionInformation
      */
     six::CollectionInformation collectInfo;
 

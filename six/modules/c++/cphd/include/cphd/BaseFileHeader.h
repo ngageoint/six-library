@@ -31,6 +31,14 @@
 
 namespace cphd
 {
+
+/*
+ *  \struct BaseFileHeader
+ *
+ *  \brief Base class for file header
+ *
+ *  Stores file header parsing information
+ */
 class BaseFileHeader
 {
 public:
@@ -50,39 +58,56 @@ public:
     }
 
     /*
-     * Given a Seekable input stream of a CPHD file, reads the version
-     * of the CPHD
+     *  \func readVersion
      *
-     * \param inStream Input Stream of CPHD file
+     *  \brief Reads version of CPHD file
      *
-     * \return std::string Verision string
+     *  Given a Seekable input stream of a CPHD file, reads the version
+     *  of the CPHD
      *
-     * \throws except::Exception if file is not CPHD
+     *  \param inStream Input Stream of CPHD file
+     *
+     *  \return std::string Verision string
+     *
+     *  \throws except::Exception if file is not CPHD
      */
     static
     std::string readVersion(io::SeekableInputStream& inStream);
 
     /*
-     * Given a Seekable input stream of a CPHD file, reads
-     * header information
+     *  \func read
      *
-     * \param inStream Input Stream of CPHD file
+     *  \brief Read header
      *
-     * \throws except::Exception if expected header entry is not found
-     * \throws except::Exception if any header info is missing or empty
+     *  Given a Seekable input stream of a CPHD file, reads
+     *  header information
+     *
+     *  \param inStream Input Stream of CPHD file
+     *
+     *  \throws except::Exception if expected header entry is not found
+     *  \throws except::Exception if any header info is missing or empty
      */
     virtual void read(io::SeekableInputStream& inStream) = 0;
 
     /*
-     * Convert header info to string (for writing to file)
+     *  \func toString
+     *
+     *  \brief Convert header to string
+     *
+     *  For writing to file
+     *  Does not include section terminator string
      */
     // Does not include section terminator string
     virtual std::string toString() const = 0;
 
     /*
-     * Counts size of header string (not including section terminator)
+     *  \func size
      *
-     * \return size_t Size of header
+     *  \brief Size of string
+     *
+     *  Counts size of header string (not including section terminator)
+     *
+     *  \return size_t Size of header
      */
     size_t size() const
     {
@@ -91,19 +116,27 @@ public:
 
 protected:
     /*
-     * Return true if file version is a CPHD,
-     * false otherwise
+     *  \func isCPHD
+     *
+     *  \brief Checks if file stream is CPHD
+     *
+     *  \return true if file version is a CPHD,
+     *  false otherwise
      */
     static
     bool isCPHD(io::SeekableInputStream& inStream);
 
     /*
-     * Typedef of header key value pairs
+     *  Typedef of header key value pairs
      */
     typedef std::pair<std::string, std::string> KeyValuePair;
 
     /*
-     * Split header into key value pairs at specified delimiter
+     *  \func tokenize
+     *
+     *  \brief Parse header
+     *
+     *  Split header into key value pairs at specified delimiter
      */
     static
     void tokenize(const std::string& in,
@@ -111,9 +144,13 @@ protected:
                   KeyValuePair& kvPair);
 
     /*
-     * Split header into key value pairs at specified delimiter
+     *  \func tokenize
      *
-     * \return KeyValuePair Returns typedef KeyValuePair type
+     *  \brief Parse header
+     *
+     *  Split header into key value pairs at specified delimiter
+     *
+     *  \return KeyValuePair Returns typedef KeyValuePair type
      */
     static
     KeyValuePair tokenize(const std::string& in, const std::string& delimiter)
@@ -124,7 +161,9 @@ protected:
     }
 
     /*
-     * Block read header
+     *  \func blockReadHeader
+     *
+     *  \brief Block read header
      */
     void blockReadHeader(io::SeekableInputStream& inStream,
                          size_t blockSize,

@@ -32,9 +32,9 @@
 namespace cphd
 {
 /*
- * \class FileHeader
+ *  \class FileHeader
  *
- * \brief Stores CPHD file header information
+ *  \brief Stores CPHD file header information
  */
 class FileHeader : public BaseFileHeader
 {
@@ -42,10 +42,10 @@ public:
     static const char DEFAULT_VERSION[];
 
     /*
-     * \func FileHeader
+     *  \func FileHeader
      *
-     * \brief Default constructor
-     *  initialize default variables
+     *  \brief Default constructor
+     *   initialize default variables
      */
     FileHeader();
 
@@ -54,47 +54,55 @@ public:
     }
 
     /*
-     * \func read
+     *  \func read
      *
-     * \brief Initialize member variables from input stream
-     * \param inStream Valid input stream of CPHD file
+     *  \brief Initialize member variables from input stream
+     *
+     *  \param inStream Valid input stream of CPHD file
      */
     void read(io::SeekableInputStream& inStream) override;
 
     /*
-     * \func toString
+     *  \func toString
      *
-     * \brief Convert header info to string (for writing to file)
-     *        Does not include section terminator string
-     * \return std::string Returns header as string
+     *  \brief Convert header info to string
+     *
+     *  For writing to file
+     *  Does not include section terminator string
+     *
+     *  \return std::string Returns header as string
      */
     std::string toString() const override;
 
     /*
-     * \func set
+     *  \func set
      *
-     * \brief (Wrapper for actual set function) Set the file header
+     *  \brief Set the file header
+     *
+     *  (Wrapper for actual set function) Set the file header
      *  to its final state compute the offsets of the sections that
      *  depend on the file header size
      *
-     * \return size_t Return size of header
+     *  \return size_t Return size of header
      */
     size_t set();
 
     /*
-     * \func set
+     *  \func set
      *
-     * \brief Set the file header to its final state
+     *  \brief Set the file header to its final state
+     *
+     *  Set the file header to its final state
      *  compute the offsets of the sections that depend
      *  on the file header size
-     *
      *  Adds padding to modulo 8 for pvp block
      *
-     * \param xmlBlockSize Size of XML block
-     * \param supportBlockSize Size of support block
-     * \param pvpBlockSize Size of pvp block
-     * \param signalBlockSize Size of signal block
-     * \return size_t Return size of header
+     *  \param xmlBlockSize Size of XML block
+     *  \param supportBlockSize Size of support block
+     *  \param pvpBlockSize Size of pvp block
+     *  \param signalBlockSize Size of signal block
+     *
+     *  \return size_t Return size of header
      */
     size_t set(sys::Off_T xmlBlockSize, sys::Off_T supportBlockSize,
             sys::Off_T pvpBlockSize, sys::Off_T signalBlockSize);

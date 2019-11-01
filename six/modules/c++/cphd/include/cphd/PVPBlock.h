@@ -41,51 +41,53 @@ namespace cphd
 {
 
 /*!
- * \struct PVPBlock
+ *  \struct PVPBlock
  *
- * \brief The PVP Block contains the actual PVP data
+ *  \brief The PVP Block contains the actual PVP data
  */
 struct PVPBlock
 {
     /*!
-     * \struct PVPSet
+     *  \struct PVPSet
      *
-     * \brief Stores a single set of parameters
+     *  \brief Parameters for each vector
+     *
+     *  Stores a single set of parameters
      *  Each channel consists of a PVP Array,
      *  which consists of multiple sets
      */
     struct PVPSet
     {
         /*!
-         * \func PVPSet
+         *  \func PVPSet
          *
-         * \brief Default constructor
+         *  \brief Default constructor
          */
         PVPSet();
 
         /*
-         * \func write
+         *  \func write
          *
-         * \brief Writes binary data input into PVP Set
+         *  \brief Writes binary data input into PVP Set
          *
-         * \param pvp A filled out pvp sturcture. This will be used for
-         * information on where to allocate memory and set each
-         * parameter in a PVP set.
-         * \param input A pointer to an array of bytes that contains the
-         * parameter data to write into the pvp set
+         *  \param pvp A filled out pvp sturcture. This will be used for
+         *  information on where to allocate memory and set each
+         *  parameter in a PVP set.
+         *  \param input A pointer to an array of bytes that contains the
+         *  parameter data to write into the pvp set
          */
         void write(const Pvp& pvp, const sys::byte* input);
 
         /*
-         * \func read
+         *  \func read
          *
-         * \brief Read PVP set into binary data output
+         *  \brief Read PVP set into binary data output
          *
-         * \param pvp A filled out pvp sturcture. This will be used for
-         * information on where to allocate memory and set each
-         * parameter in a PVP set.
-         * \param output A pointer to an array of allocated bytes that
-         * will be written to
+         *  \param pvp A filled out pvp sturcture. This will be used for
+         *  information on where to allocate memory and set each
+         *  parameter in a PVP set.
+         *  \param output A pointer to an array of allocated bytes that
+         *  will be written to
          */
         void read(const Pvp& pvp, sys::ubyte* output) const;
 
@@ -162,9 +164,9 @@ struct PVPBlock
     };
 
     /*
-     * \func PVPBlock
+     *  \func PVPBlock
      *
-     * \brief Default Constructor
+     *  \brief Default Constructor
      */
     PVPBlock() :
         mNumBytesPerVector(0)
@@ -172,30 +174,30 @@ struct PVPBlock
     }
 
     /*
-     * \func PVPBlock
-     * \brief Consturctor sets up the internal structure of a PVPSet based on metadata.
+     *  \func PVPBlock
+     *  \brief Consturctor sets up the internal structure of a PVPSet based on metadata.
      *
-     * \param data A filled out data structure. This will be used to
-     * extract the number of channels and vectors of the VBM.
-     * This will also be used to store off the number of bytes
-     * per vector regardless of the optional values.
-     * \param pvp A filled out pvp sturcture. This will be used for
-     * information on where to allocate memory and set each
-     * parameter in a PVP set.
+     *  \param data A filled out data structure. This will be used to
+     *  extract the number of channels and vectors of the VBM.
+     *  This will also be used to store off the number of bytes
+     *  per vector regardless of the optional values.
+     *  \param pvp A filled out pvp sturcture. This will be used for
+     *  information on where to allocate memory and set each
+     *  parameter in a PVP set.
     */
     PVPBlock(const Data& data, const Pvp& pvp);
 
     /*!
-     * \func PVPBlock
+     *  \func PVPBlock
      *
-     * \brief Constructor sets up the internal sturcture of a PVPSet without metadata.
+     *  \brief Constructor sets up the internal sturcture of a PVPSet without metadata.
      *
-     * \param numBytesPerVector Used to allocate memory for per vector parameters
-     * \param numChannels Set the number of PVP Arrays to allocate in the block
-     * \param numVectors Set the number of PVP Sets to allocate per array
-     * \param pvp A filled out pvp sturcture. This will be used for
-     * information on where to allocate memory and set each
-     * parameter in a PVP set.
+     *  \param numBytesPerVector Used to allocate memory for per vector parameters
+     *  \param numChannels Set the number of PVP Arrays to allocate in the block
+     *  \param numVectors Set the number of PVP Sets to allocate per array
+     *  \param pvp A filled out pvp sturcture. This will be used for
+     *  information on where to allocate memory and set each
+     *  parameter in a PVP set.
      */
     PVPBlock(size_t numBytesPerVector,
              size_t numChannels,
@@ -203,15 +205,15 @@ struct PVPBlock
              const Pvp& p);
 
     /*!
-     * \func verifyChannelVector
+     *  \func verifyChannelVector
      *
-     * \brief Verify channel and vector indexes provided are valid
+     *  \brief Verify channel and vector indexes provided are valid
      *
-     * \param channel A channel number
-     * \param vector A vector number
+     *  \param channel A channel number
+     *  \param vector A vector number
      *
-     * \throws except::Exception If channel or vector indexes are less than 0,
-     * or greater than available number of channels or vectors
+     *  \throws except::Exception If channel or vector indexes are less than 0,
+     *  or greater than available number of channels or vectors
      */
     void verifyChannelVector(size_t channel, size_t vector) const;
 
@@ -300,29 +302,31 @@ struct PVPBlock
     }
 
     /*
-     * \func getPVPdata
-     * \brief This will return a contiguous buffer all the PVP data.
+     *  \func getPVPdata
+     *  \brief This will return a contiguous buffer all the PVP data.
      *
-     * \param channel 0 based index
-     * \param [Output]data Will be filled with PVP data. This will
-     * be resized and zeroed internally.
+     *  \param channel 0 based index
+     *  \param [Output]data Will be filled with PVP data. This will
+     *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
                     std::vector<sys::ubyte>& data) const;
 
     /*
-     * \func getPVPdata
-     * \brief Same as above but uses a void pointer.
+     *  \func getPVPdata
+     *  \brief Same as above but uses a void pointer.
      *
-     * \param channel 0 based index
-     * \param [Output]data A preallocated buffer for the data.
+     *  \param channel 0 based index
+     *  \param [Output]data A preallocated buffer for the data.
      */
     void getPVPdata(size_t channel,
-                    void* data) const;
+                    void*  data) const;
 
     /*
      *  \func getNumBytesVBP
-     *  \brief Returns the number of bytes of each vector in the PVPBlock.
+     *  \brief Number of bytes per PVP seet
+     *
+     *  Returns the number of bytes of each vector in the PVPBlock.
      *  This does not necessarily match the number of bytes used in
      *  the case where a CPHD file had a larger number allocated than
      *  actually used.
@@ -330,26 +334,26 @@ struct PVPBlock
     size_t getNumBytesPVPSet() const;
 
     /*
-     * \func getPVPsize
-     * \brief Returns the number of bytes in a PVP channel.
+     *  \func getPVPsize
+     *  \brief Returns the number of bytes in a PVP channel.
      *
-     * \param channel 0 based index
+     *  \param channel 0 based index
      */
     size_t getPVPsize(size_t channel) const;
 
     /*
-     * \func load
+     *  \func load
      *
-     * \brief Reads in the entire PVP array from an input stream
+     *  \brief Reads in the entire PVP array from an input stream
      *
-     * \param inStream Input stream that contains a valid CPHD file
-     * \param startPVP Offset of start of pvp block
-     * \param sizePVP Size of pvp block
-     * \param numThreads Number of threads desired for parallelism
+     *  \param inStream Input stream that contains a valid CPHD file
+     *  \param startPVP Offset of start of pvp block
+     *  \param sizePVP Size of pvp block
+     *  \param numThreads Number of threads desired for parallelism
      *
-     * \throw except::Exception If reach EOF before reading sizePVP bytes
+     *  \throw except::Exception If reach EOF before reading sizePVP bytes
      *
-     * \return sys::Off_T Returns the size of the pvp block read in
+     *  \return sys::Off_T Returns the size of the pvp block read in
      */
     // startPVP = cphd header keyword "PVP_BYTE_OFFSET"
     // sizePVP = cphd header keyword "PVP_DATA_SIZE"
@@ -373,8 +377,8 @@ struct PVPBlock
 private:
 
     /*
-     * Struct Template Specialization for getAddedPVP function
-     * mimics function template specialization
+     *  Struct Template Specialization for getAddedPVP function
+     *  mimics function template specialization
      */
     template<typename T>
     struct AddedPVP

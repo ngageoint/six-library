@@ -45,13 +45,13 @@ class CPHDReader
 {
 public:
     /*
-     * \func CPHDReader constructor
-     * \brief Construct CPHDReader from an input stream
+     *  \func CPHDReader constructor
+     *  \brief Construct CPHDReader from an input stream
      *
-     * \param inStream Input stream containing CPHD file
-     * \param numThreads Number of threads for parallelization
-     * \param schemaPaths (Optional) XML schemas for validation
-     * \param logger (Optional) Provide custom log
+     *  \param inStream Input stream containing CPHD file
+     *  \param numThreads Number of threads for parallelization
+     *  \param schemaPaths (Optional) XML schemas for validation
+     *  \param logger (Optional) Provide custom log
      */
     // Provides access to wideband but doesn't read it
     CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
@@ -62,13 +62,13 @@ public:
                        mem::SharedPtr<logging::Logger>());
 
     /*
-     * \func CPHDReader constructor
-     * \brief Construct CPHDReader from a file pathname
+     *  \func CPHDReader constructor
+     *  \brief Construct CPHDReader from a file pathname
      *
-     * \param fromFile File path of CPHD file
-     * \param numThreads Number of threads for parallelization
-     * \param schemaPaths (Optional) XML schemas for validation
-     * \param logger (Optional) Provide custom log
+     *  \param fromFile File path of CPHD file
+     *  \param numThreads Number of threads for parallelization
+     *  \param schemaPaths (Optional) XML schemas for validation
+     *  \param logger (Optional) Provide custom log
      */
     CPHDReader(const std::string& fromFile,
                size_t numThreads,
@@ -99,14 +99,14 @@ public:
     }
 
     /*
-     * \func getFileOffset
-     * \brief Calculate signal array offset in file
+     *  \func getFileOffset
+     *  \brief Calculate signal array offset in file
      *
-     * \param channel The channel number
-     * \param vector The vector number
-     * \param sample The sample number
+     *  \param channel The channel number
+     *  \param vector The vector number
+     *  \param sample The sample number
      *
-     * \return sys::Off_T File offset
+     *  \return sys::Off_T File offset
      */
     sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
@@ -169,7 +169,7 @@ private:
     std::auto_ptr<Wideband> mWideband;
 
     /*
-     * Read in header, metadata, supportblock, pvpblock and wideband
+     *  Read in header, metadata, supportblock, pvpblock and wideband
      */
     void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                     size_t numThreads,

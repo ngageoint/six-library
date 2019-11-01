@@ -40,8 +40,10 @@ namespace cphd
 {
 /*
  *  \class CPHDWriter
- *  \brief Used to write a CPHD file. You must be able to provide the
- *         appropriate metadata and vector based metadata.
+ *  \brief CPHD write handler
+ *
+ *  Used to write a CPHD file. You must be able to provide the
+ *  appropriate metadata and vector based metadata.
  */
 class CPHDWriter
 {
@@ -75,11 +77,12 @@ public:
     /*
      *  \func write
      *  \brief Writes the complete CPHD into the file.
-     *         This only works with valid CPHDWriter data types:
-     *              std:: ubyte* (for compressed data)
-     *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *
+     *  This only works with valid CPHDWriter data types:
+     *      std:: ubyte*  (for compressed data)
+     *      std::complex<float>
+     *      std::complex<sys::Int16_T>
+     *      std::complex<sys::Int8_T>
      *
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
@@ -93,9 +96,10 @@ public:
 
     /*
      *  \func writeMetadata
-     *  \brief Writes the header, and metadata into the file. This should
-     *         be used in situations where you need to write out the CPHD
-     *         data in chunks.
+     *  \brief Writes the header, and metadata into the file.
+     *
+     *  This should be used in situations where you need to write out the CPHD
+     *  data in chunks.
      *
      *  \param pvpBlock The vector based metadata to write.
      */
@@ -104,7 +108,8 @@ public:
     /*
      *  \func writeSupportData
      *  \brief Writes the specified support Array to the file
-     *         Does not include padding.
+     *
+     *  Does not include padding.
      *
      *  \param data A pointer to the start of the support array that
      *        will be written to file
@@ -122,7 +127,8 @@ public:
     /*
      *  \func writeSupportData
      *  \brief Writes all of the support Arrays to the file
-     *         Includes padding
+     *
+     *  Includes padding
      *
      *  \param data A pointer to the start of the support array data block
      */
@@ -148,25 +154,25 @@ public:
      *  \brief Writes the PVP to the file
      *
      *  \param PVPBlock A populated PVPBlock object that will be written
-     *         to the file as a block of data
+     *  to the file as a block of data
      */
     void writePVPData(const PVPBlock& PVPBlock);
 
     /*
      *  \func writeCPHDData
      *  \brief Writes a chunk of CPHD data to disk. To create a proper
-     *         CPHD file you must call writeMetadata and writePVPData before
-     *         using this method. This only works with
-     *         valid CPHDWriter data types:
-     *              std:: ubyte* (for compressed data)
-     *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *  CPHD file you must call writeMetadata and writePVPData before
+     *  using this method. This only works with
+     *  valid CPHDWriter data types:
+     *      std:: ubyte*  (for compressed data)
+     *      std::complex<float>
+     *      std::complex<sys::Int16_T>
+     *      std::complex<sys::Int8_T>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
-     *         as complex when computing the size (do not multiply by 2
-     *         for correct byte swapping this is done internally).
+     *  as complex when computing the size (do not multiply by 2
+     *  for correct byte swapping this is done internally).
      */
     template <typename T>
     void writeCPHDData(const T* data,
@@ -174,7 +180,7 @@ public:
                        size_t channel = 1);
 
     /*
-     * Closes the FileInputStream if open
+     *  Closes the FileInputStream if open
      */
     void close()
     {
@@ -186,7 +192,7 @@ public:
 
 private:
     /*
-     * Write metadata helper
+     *  Write metadata helper
      */
     void writeMetadata(
         size_t supportSize, // Optional
@@ -194,50 +200,50 @@ private:
         size_t cphdSize);
 
     /*
-     * Write pvp helper
+     *  Write pvp helper
      */
-    void writePVPData(const sys::ubyte* PVPBlock,
+    void writePVPData(const sys::ubyte* pvpBlock,
                       size_t index);
 
     /*
-     * Implementation of write wideband
+     *  Implementation of write wideband
      */
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
     /*
-     * Implementation of write compressed wideband
+     *  Implementation of write compressed wideband
      */
     void writeCompressedCPHDDataImpl(const sys::ubyte* data,
                                      size_t channel);
 
     /*
-     * Implementation of write support data
+     *  Implementation of write support data
      */
     void writeSupportDataImpl(const sys::ubyte* data,
                               size_t numElements, size_t elementSize);
 
     /*
-     * \class DataWriter
+     *  \class DataWriter
      *
-     * \brief Class to handle writing to file and byte swapping
+     *  \brief Class to handle writing to file and byte swapping
      */
     class DataWriter
     {
     public:
         /*
-         * Constructor
+         *  Constructor
          */
         DataWriter(io::FileOutputStream& stream,
                    size_t numThreads);
 
         /*
-         * Destructor
+         *  Destructor
          */
         virtual ~DataWriter();
 
         /*
-         * Implementation of writing and byteswapping
+         *  Implementation of writing and byteswapping
          */
         virtual void operator()(const sys::ubyte* data,
                                 size_t numElements,
@@ -251,11 +257,11 @@ private:
     };
 
     /*
-     * \class DataWriterLittleEndian
+     *  \class DataWriterLittleEndian
      *
-     * \brief Class to handle writing to file and byte swapping
-     * for little endian to big endian storage
-     * Inherits from DataWriter class
+     *  \brief Class to handle writing to file and byte swapping
+     *  for little endian to big endian storage
+     *  Inherits from DataWriter class
      */
     class DataWriterLittleEndian : public DataWriter
     {
@@ -274,11 +280,11 @@ private:
     };
 
     /*
-     * \class DataWriterBigEndian
+     *  \class DataWriterBigEndian
      *
-     * \brief Class to handle writing to file
-     * No byte swap. Already big endian.
-     * Inherits from DataWriter class
+     *  \brief Class to handle writing to file
+     *  No byte swap. Already big endian.
+     *  Inherits from DataWriter class
      */
     class DataWriterBigEndian : public DataWriter
     {
