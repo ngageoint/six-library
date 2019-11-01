@@ -1,5 +1,5 @@
 NAME            = 'cphd'
-MAINTAINER      = 'jonathan.means@mdaus.com'
+MAINTAINER      = 'vamsi.yadav@mdaus.com'
 MODULE_DEPS     = 'six six.sicd'
 TEST_DEPS       = 'cli'
 
