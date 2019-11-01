@@ -44,6 +44,12 @@ SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI,
 {
 }
 
+void SICommonXMLParser::parseVector2D(XMLElem vecXML, Vector2& vec) const
+{
+    parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
+    parseDouble(getFirstAndOnly(vecXML, "Y"), vec[1]);
+}
+
 void SICommonXMLParser::parseVector3D(XMLElem vecXML, Vector3& vec) const
 {
     parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
@@ -62,6 +68,26 @@ void SICommonXMLParser::parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla) const
     lla.setLat(lat);
     lla.setLon(lon);
     lla.setAlt(alt);
+}
+
+XMLElem SICommonXMLParser::createVector2D(
+        const std::string& name,
+        const std::string& uri,
+        Vector2 p,
+        XMLElem parent) const
+{
+    XMLElem e = newElement(name, (uri.empty()) ? getDefaultURI() : uri, parent);
+    createDouble("X", getSICommonURI(), p[0], e);
+    createDouble("Y", getSICommonURI(), p[1], e);
+    return e;
+}
+
+XMLElem SICommonXMLParser::createVector2D(
+        const std::string& name,
+        Vector2 p,
+        XMLElem parent) const
+{
+    return createVector2D(name, "", p, parent);
 }
 
 XMLElem SICommonXMLParser::createVector3D(

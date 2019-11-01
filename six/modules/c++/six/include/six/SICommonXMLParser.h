@@ -49,6 +49,10 @@ public:
 
     XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = NULL) const;
+    XMLElem createVector2D(const std::string& name, const std::string& uri,
+            Vector2 p, XMLElem parent) const;
+    XMLElem createVector2D(const std::string& name, Vector2 p,
+            XMLElem parent) const;
     XMLElem createVector3D(const std::string& name, const std::string& uri,
             Vector3 p = 0.0, XMLElem parent = NULL) const;
     XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
@@ -107,6 +111,7 @@ public:
     void parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const;
     void parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ) const;
 
+    void parseVector2D(XMLElem vecXML, Vector2& vec) const;
     void parseVector3D(XMLElem vecXML, Vector3& vec) const;
     void parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla) const;
     void parseLatLon(XMLElem parent, LatLon& ll) const;
