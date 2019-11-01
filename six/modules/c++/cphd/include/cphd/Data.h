@@ -39,28 +39,38 @@ namespace cphd
 
 /*
  * \struct Data
- * Parameter that describes binary data components
- * contained in the product.
- * See section 2.3 through 2.6
+ *
+ * \brief Parameter that describes binary data components
+ *  contained in the product.
+ *  See section 2.3 through 2.6
  */
 struct Data
 {
+    /*
+     * \struct SupportArray
+     *
+     * \brief Support Array size parameters.
+     *  Branch repeated for each binary support array
+     *  Support array referenced by its unique
+     *  support array identifier SA_ID
+     */
     // There's another SupportArray type in the Metadata,
     // so hiding this inside Data
-    /*
-     * Support Array size parameters.
-     * Branch repeated for each binary support array
-     * Support array referenced by its unique
-     * support array identifier SA_ID
-     */
     struct SupportArray
     {
 
-        //! Constructor
+        /*
+         * \func SupportArray
+         *
+         * \brief Default constructor
+         */
         SupportArray();
 
-        //! Custom constructor
-        //! Initalizes a support array with necessary params
+        /*
+         * \func SupportArray
+         *
+         * \brief Custom constructor initializes all parameters
+         */
         SupportArray(const std::string& id, size_t rows, size_t cols,
                 size_t numBytes, size_t offset);
 
@@ -105,22 +115,42 @@ struct Data
     };
 
     /*
-     * Paramters that define the Channel signal array and
-     * PVP array size and location.
-     * See section 2.4 and 2.5
+     * \struct Channel
+     *
+     * \brief Paramters that define the Channel signal array and
+     *  PVP array size and location.
+     *  See section 2.4 and 2.5
      */
     // There's another Channel type in the Metadata,
     // so hiding this inside Data
     struct Channel
     {
-        //! Constructor
+        /*
+         * \func Channel
+         *
+         * \brief Default constructor
+         */
         Channel();
 
-        //! Custom constructor
+        /*
+         * \func Channel
+         *
+         * \brief Custom constructor
+         * \param vectors Set number of vectors
+         * \param samples Set number of samples
+         */
         Channel(size_t vectors, size_t samples);
 
-        //! Custom constructor
-        //!
+        /*
+         * \func Channel
+         *
+         * \brief Custom constructor
+         * \param vectors Set number of vectors
+         * \param samples Set number of samples
+         * \param signalByteOffset set the byte offset of signal block
+         * \param pvpByteOffset set the byte offset of pvp block
+         * \param compressedSize (Optional) Size of the compressed signal block
+         */
         Channel(size_t vectors, size_t samples,
                 size_t signalByteOffset, size_t pvpByteOffset,
                 size_t compressedSize = six::Init::undefined<size_t>());
@@ -182,7 +212,11 @@ struct Data
         size_t compressedSignalSize; // Optional
     };
 
-    //! Constructor
+    /*
+     * \func Data
+     *
+     * \brief Default constructor
+     */
     Data();
 
     //! Equality operator

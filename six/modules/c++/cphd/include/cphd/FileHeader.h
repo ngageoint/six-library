@@ -31,113 +31,143 @@
 
 namespace cphd
 {
+/*
+ * \class FileHeader
+ *
+ * \brief Stores CPHD file header information
+ */
 class FileHeader : public BaseFileHeader
 {
 public:
     static const char DEFAULT_VERSION[];
 
+    /*
+     * \func FileHeader
+     *
+     * \brief Default constructor
+     *  initialize default variables
+     */
     FileHeader();
 
     virtual ~FileHeader()
     {
     }
 
+    /*
+     * \func read
+     *
+     * \brief Initialize member variables from input stream
+     * \param inStream Valid input stream of CPHD file
+     */
     void read(io::SeekableInputStream& inStream) override;
 
-    // Convert header info to string (for writing to file)
-    // Does not include section terminator string
+    /*
+     * \func toString
+     *
+     * \brief Convert header info to string (for writing to file)
+     *        Does not include section terminator string
+     * \return std::string Returns header as string
+     */
     std::string toString() const override;
 
-    // Set the file header to its final state
-    // Compute the offsets of the sections that depend on the file header size
-    // Add in padding to modulo 8 also.
-    // Returns size of the header
+    /*
+     * \func set
+     *
+     * \brief (Wrapper for actual set function) Set the file header
+     *  to its final state compute the offsets of the sections that
+     *  depend on the file header size
+     *
+     * \return size_t Return size of header
+     */
     size_t set();
+
+    /*
+     * \func set
+     *
+     * \brief Set the file header to its final state
+     *  compute the offsets of the sections that depend
+     *  on the file header size
+     *
+     *  Adds padding to modulo 8 for pvp block
+     *
+     * \param xmlBlockSize Size of XML block
+     * \param supportBlockSize Size of support block
+     * \param pvpBlockSize Size of pvp block
+     * \param signalBlockSize Size of signal block
+     * \return size_t Return size of header
+     */
     size_t set(sys::Off_T xmlBlockSize, sys::Off_T supportBlockSize,
             sys::Off_T pvpBlockSize, sys::Off_T signalBlockSize);
 
-    // Required elements
+    //! Set required elements
     void setXMLBlockSize(sys::Off_T size)
     {
         mXmlBlockSize = size;
     }
-
     void setPvpBlockSize(sys::Off_T size)
     {
         mPvpBlockSize = size;
     }
-
     void setSignalBlockSize(sys::Off_T size)
     {
         mSignalBlockSize = size;
     }
-
     void setXMLBlockByteOffset(sys::Off_T offset)
     {
         mXmlBlockByteOffset = offset;
     }
-
     void setPvpBlockByteOffset(sys::Off_T offset)
     {
         mPvpBlockByteOffset = offset;
     }
-
     void setSignalBlockByteOffset(sys::Off_T offset)
     {
         mSignalBlockByteOffset = offset;
     }
-
     void setClassification(const std::string& str)
     {
         mClassification = str;
     }
-
     void setReleaseInfo(const std::string& str)
     {
         mReleaseInfo = str;
     }
 
+    //! Get required elements
     sys::Off_T getXMLBlockSize() const
     {
         return mXmlBlockSize;
     }
-
     sys::Off_T getPvpBlockSize() const
     {
         return mPvpBlockSize;
     }
-
     sys::Off_T getSignalBlockSize() const
     {
         return mSignalBlockSize;
     }
-
     sys::Off_T getXMLBlockByteOffset() const
     {
         return mXmlBlockByteOffset;
     }
-
     sys::Off_T getPvpBlockByteOffset() const
     {
         return mPvpBlockByteOffset;
     }
-
     sys::Off_T getSignalBlockByteOffset() const
     {
         return mSignalBlockByteOffset;
     }
-
     std::string getClassification() const
     {
         return mClassification;
     }
-
     std::string getReleaseInfo() const
     {
         return mReleaseInfo;
     }
 
-    // Pad bytes don't include the Section terminator
+    //! Pad bytes don't include the Section terminator
     sys::Off_T getPvpPadBytes() const
     {
         if (mSupportBlockSize != 0)
@@ -147,12 +177,11 @@ public:
         return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
     }
 
-    // Optional elements
+    //! Optional elements
     void setSupportBlockSize(sys::Off_T size)
     {
         mSupportBlockSize = size;
     }
-
     void setSupportBlockByteOffset(sys::Off_T offset)
     {
         mSupportBlockByteOffset = offset;
@@ -162,7 +191,6 @@ public:
     {
         return mSupportBlockSize;
     }
-
     sys::Off_T getSupportBlockByteOffset() const
     {
         return mSupportBlockByteOffset;

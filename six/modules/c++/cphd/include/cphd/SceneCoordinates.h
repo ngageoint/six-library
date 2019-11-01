@@ -35,13 +35,20 @@
 namespace cphd
 {
 /*!
- * Image Area Reference Point (IARP). The IARP is
- * the origin of the Image Area Coordinate system
+ * \struct IARP
+ *
+ * \brief Image Area Reference Point (IARP).
+ *
+ * The IARP is the origin of the Image Area Coordinate system
  * (IAX, IAY, IAZ)
  */
 struct IARP
 {
-    //! Constructor
+    /*!
+     * \func IARP
+     *
+     * \brief Default constructor
+     */
     IARP();
 
     //! Equality operator
@@ -62,11 +69,17 @@ struct IARP
 };
 
 /*!
- * Parameters for SurfaceType = PLANAR
+ * \struct Planar
+ *
+ * \brief Parameters for SurfaceType = PLANAR
  */
 struct Planar
 {
-    //! Constructor
+    /*!
+     * \func Planar
+     *
+     * \brief Default constructor
+     */
     Planar();
 
     //! Equality operator
@@ -91,11 +104,17 @@ struct Planar
 };
 
 /*!
- * Parameters for SurfaceType = HAE
+ * \struct HAE
+ *
+ * \brief Parameters for SurfaceType = HAE
  */
 struct HAE
 {
-    //! Constructor
+    /*!
+     * \func HAE
+     *
+     * \brief Default constructor
+     */
     HAE();
 
     //! Equality operator
@@ -122,11 +141,18 @@ struct HAE
 };
 
 /*
- * Parameters that define the Reference Surface
+ * \struct ReferenceSurface
+ *
+ * \brief Parameters that define the Reference Surface
  * used for the product.
  */
 struct ReferenceSurface
 {
+    /*!
+     * \func ReferenceSurface
+     *
+     * \brief Default constructor
+     */
     ReferenceSurface();
 
     //! Equality operator
@@ -150,13 +176,19 @@ struct ReferenceSurface
 };
 
 /*!
+ * \struct AreaType
+ *
  * Image Area is defined by a rectangle aligned with
  * Image Area coordinates (IAX, IAY). May be
  * reduced by the optional polygon
  */
 struct AreaType
 {
-    //! Constructor
+    /*!
+     * \func AreaType
+     *
+     * \brief Default constructor
+     */
     AreaType();
 
     //! Equality operator
@@ -185,12 +217,19 @@ struct AreaType
 };
 
 /*!
- * Identifies a parent tag with children Line and Sample.
+ * \sturct LineSample
+ *
+ * \brief Identifies a parent tag with children Line and Sample.
+ *
  * The children are each of type DBL.
  */
 struct LineSample
 {
-    //! Constructor
+    /*!
+     * \func LineSample
+     *
+     * \brief Default constructor
+     */
     LineSample();
 
     //! Equality operator
@@ -231,11 +270,17 @@ private:
 };
 
 /*!
- * Increasing line index is in the +IAX direction
+ * \struct ImageAreaXExtent
+ *
+ * \brief Increasing line index is in the +IAX direction
  */
 struct ImageAreaXExtent
 {
-    //! Constructor
+    /*!
+     * \func ImageAreaXExtent
+     *
+     * \brief Default constructor
+     */
     ImageAreaXExtent();
 
     //! Equality operator
@@ -261,11 +306,17 @@ struct ImageAreaXExtent
 };
 
 /*!
- * Increasing line index is in the +IAY direction
+ * \struct ImageAreaYExtent
+ *
+ * \brief Increasing line index is in the +IAY direction
  */
 struct ImageAreaYExtent
 {
-    //! Constructor
+    /*!
+     * \func ImageAreaYExtent
+     *
+     * \brief Default constructor
+     */
     ImageAreaYExtent();
 
     //! Equality operator
@@ -291,11 +342,18 @@ struct ImageAreaYExtent
 };
 
 /*!
- * Each segment is a rectangle from Line = L1 to L2
+ * \struct Segment
+ *
+ * \brief Each segment is a rectangle from Line = L1 to L2
  * and from Sample = S1 to S2.
  */
 struct Segment
 {
+    /*!
+     * \func Segment
+     *
+     * \brief Default constructor
+     */
     Segment();
 
     //! Equality operator
@@ -335,12 +393,19 @@ struct Segment
 };
 
 /*!
- * (Optional) Parameters that describe a geo-referenced image
+ * \struct ImageGrid
+ *
+ * Parameters that describe a geo-referenced image
  * grid for image data products that may be formed
  * from the CPHD signal array(s).
  */
 struct ImageGrid
 {
+    /*!
+     * \func ImageGrid
+     *
+     * \brief Default constructor
+     */
     ImageGrid();
 
     //! Equality operator
@@ -375,12 +440,18 @@ struct ImageGrid
 };
 
 /*!
- * Parameters that define geographic coordinates for
+ * \struct SceeneCoordinates
+ *
+ * \brief Parameters that define geographic coordinates for
  * in the imaged scene.
  */
 struct SceneCoordinates
 {
-    //! Constructor
+    /*!
+     * \func SceeneCoordinates
+     *
+     * \brief Default constructor
+     */
     SceneCoordinates();
 
     //! Equality operator

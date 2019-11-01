@@ -489,7 +489,6 @@ void Wideband::read(size_t channel,
         // So only 1 thread can be used at max
         cphd::byteSwap(data.data, minSize, 1, 1);
     }
-
 }
 
 void Wideband::read(size_t channel,
@@ -511,28 +510,6 @@ void Wideband::read(size_t channel,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
-void Wideband::readAll(size_t firstVector,
-                    size_t lastVector,
-                    size_t firstSample,
-                    size_t lastSample,
-                    size_t numThreads,
-                    mem::ScopedArray<sys::ubyte>& data) const
-{
-    data.reset(new sys::ubyte[mWBSize]);
-    size_t idx = 0;
-    for (size_t channel = 0; channel < mData.getNumChannels(); ++channel)
-    {
-        types::RowCol<size_t> dims;
-        checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                        dims);
-
-        const size_t bufSize = dims.row * dims.col * mElementSize;
-        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads,
-             mem::BufferView<sys::ubyte>(&data[idx], bufSize));
-        idx += bufSize;
-    }
-}
-
 void Wideband::read(size_t channel,
                     mem::ScopedArray<sys::ubyte>& data) const
 {
@@ -551,7 +528,6 @@ bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
             return false;
         }
     }
-
     return true;
 }
 
@@ -677,7 +653,6 @@ std::ostream& operator<< (std::ostream& os, const Wideband& d)
             os << "[" << ii << "] mOffsets: " << d.mOffsets[ii] << "\n";
         }
     }
-
     return os;
 }
 }

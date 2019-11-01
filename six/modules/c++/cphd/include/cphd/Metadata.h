@@ -127,6 +127,7 @@ struct Metadata
     }
 };
 
+//! Ostream operator
 std::ostream& operator<< (std::ostream& os, const Metadata& d);
 }
 

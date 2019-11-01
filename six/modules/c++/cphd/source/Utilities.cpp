@@ -176,25 +176,6 @@ std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(const std::str
     return paramVec;
 }
 
-std::map<std::string, size_t> getMultipleParams(const std::string& format)
-{
-    std::map<std::string, size_t> paramMap;
-    std::vector<std::pair<std::string,std::string> > params = parseMultipleParams(format);
-    for (size_t ii = 0; ii < params.size(); ++ii)
-    {
-        if (paramMap.count(params[ii].first) == 0)
-        {
-            paramMap[params[ii].second] = getFormatSize(params[ii].second);
-        }
-        else
-        {
-            throw except::Exception(Ctxt(
-                "Param in format is not unique"));
-        }
-    }
-    return paramMap;
-}
-
 std::pair<std::string,std::string>  keyValueFinder(const std::string& format, size_t startPos, size_t endPos)
 {
     const std::string eqDelimiter = "=";

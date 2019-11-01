@@ -37,7 +37,9 @@ namespace cphd
 {
 
 /*
- * (Optional) Parameters that describe the statistics of errors
+ * \struct ErrorParameters
+ *
+ * \brief (Optional) Parameters that describe the statistics of errors
  * in measured or estimated parameters that describe
  * the collection
  * See section 9
@@ -45,17 +47,25 @@ namespace cphd
 struct ErrorParameters
 {
     /*
-     * (Conditional) Parameters for CollectType = "MONOSTATIC"
+     * \struct Monostatic
+     *
+     * \brief (Conditional) Parameters for CollectType = "MONOSTATIC"
      */
     struct Monostatic
     {
          /*
-         * Position and velocity error statistics for the
-         * sensor platform
+         * \struct RadarSensor
+         *
+         * \brief Position and velocity error statistics for the
+         *  sensor platform
          */
         struct RadarSensor
         {
-            //! Default constructor
+            /*
+             * \func RadarSensor
+             *
+             * \brief Default constructor
+             */
             RadarSensor();
 
             //! Equality operators
@@ -117,16 +127,24 @@ struct ErrorParameters
     };
 
     /*
-     * (Conditional) Parameters for CollectType = "BISTATIC"
+     * \struct Bistatic
+     *
+     * \brief (Conditional) Parameters for CollectType = "BISTATIC"
      */
     struct Bistatic
     {
         /*
-         * Error statistics for the Transmit platform
+         * \struct RadarSensor
+         *
+         * \brief Error statistics for the Transmit platform
          */
         struct RadarSensor
         {
-            //! Default constructor
+            /*
+             * \func RadarSensor
+             *
+             * \brief Default constructor
+             */
             RadarSensor();
 
             //! Equality operators
@@ -149,7 +167,9 @@ struct ErrorParameters
         };
 
         /*
-         * Error statisitcs of platforms
+         * \struct Platform
+         *
+         * \brief Error statisitcs of platforms
          */
         struct Platform
         {

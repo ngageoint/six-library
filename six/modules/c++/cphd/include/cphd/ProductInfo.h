@@ -33,18 +33,26 @@
 namespace cphd
 {
 /*
- * (Optional) Parameters that provide general information about the
+ * \struct ProductInfo
+ *
+ * \brief (Optional) Parameters that provide general information about the
  * CPHD product and/or the derived products that may be created from it
  */
 struct ProductInfo
 {
     /*
-     * (Optional) Parameters that provide general information about
+     * \struct CreationInfo
+     *
+     * \brief (Optional) Parameters that provide general information about
      * the CPHD product generation
      */
     struct CreationInfo
     {
-        //! Default constructor
+        /*
+         * \func CreationInfo
+         *
+         * \brief Default constructor
+         */
         CreationInfo();
 
         //! Equality operators
@@ -74,7 +82,11 @@ struct ProductInfo
         six::ParameterCollection parameter;
     };
 
-    //! Default constructor
+    /*
+     * \func ProductInfo
+     *
+     * \brief Default constructor
+     */
     ProductInfo();
 
     //! Equality operators

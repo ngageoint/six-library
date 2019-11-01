@@ -41,17 +41,22 @@
 namespace cphd
 {
 
-//  This class contains information about the SupportBlock CPHD data.
-//  It contains the cphd::Data structure.
-//
+/*
+ * \struct SupportBlock
+ *
+ * \brief This class contains information about the SupportBlock CPHD data.
+ */
 //  Due to the large size of CPHD SupportBlock, this object does not contain
 //  any actual SupportBlock data
 class SupportBlock
 {
 public:
-    static const std::string ALL;
     /*
-     * \param pathname Input CPHD pathname
+     * \func SupportBlock
+     *
+     * \brief Constructor initializes book keeping information
+     *
+     * \param pathname Input CPHD pathname to initialize a file input stream
      * \param data Data section from CPHD
      * \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
      * \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
@@ -62,6 +67,10 @@ public:
                  sys::Off_T sizeSupport);
 
     /*
+     * \func SupportBlock
+     *
+     * \brief Constructor initializes book keeping information
+     *
      * \param inStream Input stream to an already opened CPHD file
      * \param data Data section from CPHD
      * \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
@@ -73,38 +82,71 @@ public:
                  sys::Off_T sizeSupport);
 
     /*
-     * Return offset from start of CPHD file for a support array with
-     * specified id
-     * \param id unique id of support array
+     * \func getFileOffset
+     *
+     * \brief Get the byte offset of a specific support array in the CPHD file
+     *
+     * \param id Unique id of support array
+     *
+     * \return Returns offset from start of CPHD file
      */
     sys::Off_T getFileOffset(const std::string& id) const;
 
     /*
-     * Read the specified support array
-     * Performs endian swapping if necessary
+     * \func read
+     *
+     * \brief Read the specified support array.
+     *
+     *  Performs endian swapping if necessary
      *
      * \param id unique identifier of support array
      * \param numThreads Number of threads to use for endian swapping if
-     * necessary
-     * \param data Will contain the read in data.  Throws if buffer has not
-     * been allocated to a sufficient size
-     * (numRows * numCols * bytesPerElement)
+     *  necessary
+     * \param data A pre allocated mem::BufferView that will hold the data
+     *  read from the file.
+     *
+     * \throws except::Exception Throws if buffer has not been allocated to a sufficient size
+     *  (numRows * numCols * bytesPerElement)
      */
     void read(const std::string& id,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
 
+    /*
+     * \func read
+     *
+     * \brief Read the specified support array
+     *
+     *  Performs endian swapping if necessary
+     *
+     * \param id unique identifier of support array
+     * \param numThreads Number of threads to use for endian swapping if
+     *  necessary
+     * \param data mem::ScopedArray that will hold the data read from the file.
+     */
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
 
+    /*
+     * \func readAll
+     *
+     * \brief Read all the suppor arrays
+     *
+     *  Performs endian swapping if necessary
+     *
+     * \param numThreads Number of threads to use for endian swapping if
+     *  necessary
+     * \param data mem::ScopedArray that will hold the data read from the file.
+     *
+     */
     //! Reads all the support Arrays into data
     void readAll(size_t numThreads,
                  mem::ScopedArray<sys::ubyte>& data) const;
 
 private:
-    // Initialize mOffsets for each array
+    //! Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
 

@@ -150,8 +150,7 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
         signal.reset(new double());
         ::setData(input + p.signal->getByteOffset(), *signal);
     }
-    std::map<std::string, APVPType>::const_iterator it;
-    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
+    for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
         {
@@ -254,8 +253,7 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
         throw except::Exception(Ctxt(
             "Incorrect number of additional parameters instantiated"));
     }
-    std::map<std::string, APVPType>::const_iterator it;
-    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
+    for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
         {

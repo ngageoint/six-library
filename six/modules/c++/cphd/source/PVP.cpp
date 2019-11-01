@@ -97,8 +97,7 @@ void Pvp::setData(size_t size, size_t offset, const std::string& format, const s
 size_t Pvp::getAdditionalParamsSize() const
 {
     size_t res = 0;
-    std::map<std::string,APVPType>::const_iterator it;
-    for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
+    for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
         res += it->second.getSize();
     }
@@ -141,8 +140,7 @@ size_t Pvp::getReqSetSize() const
     {
         res += signal->getSize();
     }
-    std::map<std::string, APVPType>::const_iterator it;
-    for (it = addedPVP.begin(); it != addedPVP.end(); ++it)
+    for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
         res += it->second.getSize();
     }
@@ -214,8 +212,7 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
         os << "  SIGNAL        : \n" << *p.signal << "\n";
     }
 
-    std::map<std::string, APVPType>::const_iterator it;
-    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
+    for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         os << "  Additional Parameter : " << it->second << "\n";
     }

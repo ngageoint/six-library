@@ -43,43 +43,87 @@
 namespace cphd
 {
 /*!
- *  This class converts a Metadata object into a CPHD XML
+ * \class CPHDXMLControl
+ *
+ * \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM).
+ *  Inherits from CPHDXMLControl
  */
 class CPHDXMLControl : public six::XMLParser
 {
 public:
-    //!  Constructor
+    /*!
+     * \func CPHDXMLControl
+     *
+     * \brief Default constructor
+     */
     CPHDXMLControl();
 
-    //! Constructor
-    //! (Optional) Provide schemas for validation if available
+    /*!
+     * \func CPHDXMLControl
+     *
+     * \brief Constructor with custom log option
+     */
     CPHDXMLControl(logging::Logger* log, bool ownLog);
 
-    //! Metadata to XML string
+    /*!
+     * \func toXMLString
+     *
+     * \brief Convert XML to string
+     *  Calls toXML
+     * \return std::string XML String
+     */
     std::string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
 
-    //! Metadata to XML document object
+    /*!
+     * \func toXML
+     *
+     * \brief Convert XML to document object
+     *
+     * \param metadata Valid CPHD metadata object
+     * \param schemaPaths XML Schema for validation
+     * \return pointer to xml Document object
+     */
     std::auto_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
-    //! XML string to metadata
+    /*!
+     * \func fromXML
+     *
+     * \brief Convert document to XML object
+     *
+     * \param string Valid cphd XML string
+     * \param schemaPaths XML Schema for validation
+     * \return pointer to metadata object
+     */
     std::auto_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
-    //! XML document object to metadata
+    /*!
+     * \func fromXML
+     *
+     * \brief Convert document to XML object
+     *
+     * \param doc XML document object of CPHD
+     * \param schemaPaths XML Schema for validation
+     * \return pointer to metadata object
+     */
     std::auto_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
-    //! Validate the xml and log any errors
-    //  NOTE: Errors are treated as detriments to valid processing
-    //        and fail accordingly
+    /*!
+     * \func validate
+     *
+     * \brief Validate the xml and log any errors
+     * \param doc XML document object of CPHD
+     * \param schemaPaths XML Schema for validation
+     */
     static void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log);
@@ -96,7 +140,7 @@ private:
     //! Returns the URI to use with SI Common types
     std::string getSICommonURI() const;
 
-    // Write to XML object
+    //! Write to XML object
     XMLElem toXML(const CollectionID& obj, XMLElem parent);
     XMLElem toXML(const Global& obj, XMLElem parent);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
@@ -113,7 +157,7 @@ private:
     XMLElem toXML(const GeoInfo& obj, XMLElem parent);
     XMLElem toXML(const MatchInformation& obj, XMLElem parent);
 
-    // Read from XML object
+    //! Read from XML object
     void fromXML(const XMLElem collectionIDXML, CollectionID& collectionID);
     void fromXML(const XMLElem globalXML, Global& global);
     void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
@@ -131,13 +175,10 @@ private:
     void fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo);
 
 
-    // Create helper functions
+    //! Create helper functions
     void createParameterCollection(const std::string& name,
                                    const six::ParameterCollection& ParameterCollection,
                                    XMLElem parent) const;
-    XMLElem createVector2D(const std::string& name,
-                           const Vector2& p,
-                           XMLElem parent) const;
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
                                   const cphd::LatLonCorners& corners,
@@ -153,8 +194,7 @@ private:
                                      const ErrorParameters::Bistatic::Platform p,
                                      XMLElem parent) const;
 
-    // Parse helper functions
-    void parseVector2D(const XMLElem vecXML, Vector2& vec) const;
+    //! Parse helper functions
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;
     void parseLineSample(const XMLElem lsXML, LineSample& ls) const;
     void parseIAExtent(const XMLElem extentXML, ImageAreaXExtent& extent) const;

@@ -34,8 +34,6 @@
 
 namespace cphd
 {
-const std::string SupportBlock::ALL = six::Init::undefined<std::string>();
-
 SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
                            sys::Off_T startSupport,

@@ -25,6 +25,7 @@
 
 #include <ostream>
 #include <vector>
+#include <unordered_map>
 #include <stddef.h>
 #include <six/Types.h>
 #include <six/Init.h>
@@ -35,7 +36,10 @@ namespace cphd
 {
 
 /*!
- * Specifies a defined Per Vector Parameter.
+ * \struct PVPType
+ *
+ * \brief Specifies a defined Per Vector Parameter.
+ *
  * Size and Offset specify the size and placement of
  * the binary parameter in the set of Per Vector
  * parameters provided for each vector.
@@ -44,7 +48,11 @@ struct PVPType
 {
     static const size_t WORD_BYTE_SIZE;
 
-    //! Default constructor
+    /*!
+     * \func PVPType
+     *
+     * \brief Default constructor
+     */
     PVPType();
 
     //! Equality operators
@@ -59,6 +67,16 @@ struct PVPType
         return !((*this) == other);
     }
 
+    /*!
+     * \func setData
+     *
+     * \brief set PVPType data
+     *
+     * \param size Size of the expected parameter
+     * \param offset Offset of the expected parameter
+     * \param format Format of the expected parameter
+     *  See spec table 10.2 page 120 for allowed binary formats
+     */
     //! Set PVPType data
     void setData(size_t size, size_t offset, const std::string& format)
     {
@@ -104,12 +122,18 @@ protected:
 };
 
 /*!
- * Same as above but also stores unique name
- * for additional parameters
+ * \struct APVPType
+ *
+ * \brief Specifies additional (or custom) per vector parameters
+ *  Inherits from PVPType
  */
 struct APVPType : PVPType
 {
-    //! Constructor
+    /*!
+     * \func APVPType
+     *
+     * \brief Default constructor
+     */
     APVPType();
 
     //! Equality operators
@@ -126,24 +150,39 @@ struct APVPType : PVPType
         return !((*this) == other);
     }
 
-    //! Set name of additional type
+    /*
+     * \func setName
+     *
+     * \brief Set the name of the additional parameter
+     *
+     * \param name A unique name for the parameter
+     */
     void setName(const std::string& name)
     {
         mName = name;
     }
 
-    //! Get name of additional type
+    /*
+     * \func getName
+     *
+     * \brief Get the name of the additional parameter
+     *
+     * \return std::string Returns name of the parameter
+     */
     std::string getName() const
     {
         return mName;
     }
 
 private:
+    //! String contains the unique name of the parameter
     std::string mName;
 };
 
 /*!
- * Structure used to specify the Per Vector
+ * \struct Pvp
+ *
+ * \brief Structure used to specify the Per Vector
  * parameters provided for each channel of a given
  * product.
  */
@@ -323,7 +362,7 @@ struct Pvp
     /*
      * (Optional) User defined PV parameters
      */
-    std::map<std::string,APVPType> addedPVP;
+    std::unordered_map<std::string,APVPType> addedPVP;
 
     //! Default Constructor
     Pvp();
@@ -356,9 +395,34 @@ struct Pvp
     //! Get size of pvp set in blocks
     size_t getAdditionalParamsSize() const;
 
-    //! Set a PVP param
+    /*
+     * \func setData
+     *
+     * \brief Validate and set the metadata of the specified parameter
+     *
+     * \param param The PVPType parameter that should be set
+     * \param size The size of the parameter to be expected for the param
+     * \param offset The offset of the parameter to be expected for the param
+     * \param format The string format of the parameter to be expected for the param
+     *
+     * \throws except::Exception If param offset or size overlaps another parameter, or
+     *  if format is invalid
+     */
     void setData(PVPType& param, size_t size, size_t offset, const std::string& format);
 
+    /*
+     * \func setData
+     *
+     * \brief Validate and set the metadata of an additional parameter identified by name
+     *
+     * \param size The size of the parameter to be expected for the param
+     * \param offset The offset of the parameter to be expected for the param
+     * \param format The string format of the parameter to be expected for the param
+     * \param name The unique identifier of the additional parameter that should be set
+     *
+     * \throws except::Exception If param offset or size overlaps another parameter,
+     *  if format is invalid or if name is not unique
+     */
     //! Set an additional PVP param
     void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
 

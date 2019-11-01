@@ -33,7 +33,9 @@ namespace cphd
 {
 
 /*
- * Polarization of the signals that formed the signal array.
+ * \struct Polarization
+ *
+ * \brief Polarization of the signals that formed the signal array.
  */
 struct Polarization
 {
@@ -56,12 +58,16 @@ struct Polarization
 };
 
 /*
- * (Optional) TOA extended swath information
+ * \struct TOAExtended
+ *
+ * \brief (Optional) TOA extended swath information
  */
 struct TOAExtended
 {
     /*
-     * (Optional) Parameters that describe the FX domain signal
+     * \struct LFMEclipse
+     *
+     * \brief (Optional) Parameters that describe the FX domain signal
      * content for partially eclipsed echoes when the
      * collection is performed with a Linear FM
      * waveform.
@@ -125,7 +131,9 @@ struct TOAExtended
 };
 
 /*
- * COD Time & Dwell Time polynomials over the image area
+ * \struct DwellTimes
+ *
+ * \brief COD Time & Dwell Time polynomials over the image area
  * See section 6.3 and section 7.2.6
  */
 struct DwellTimes
@@ -155,7 +163,9 @@ struct DwellTimes
 };
 
 /*
- * (Optional) Signal level for an ideal point scatter
+ * \struct TgtRefLevel
+ *
+ * \brief (Optional) Signal level for an ideal point scatter
  * located at the SRP for reference signal vector (v_CH_REF)
  * See section 4.6 and section 7.2.9
  */
@@ -180,7 +190,9 @@ struct TgtRefLevel
 };
 
 /*
- * Points that describe the noise profile
+ * \struct Point
+ *
+ * \brief Points that describe the noise profile
  */
 struct Point
 {
@@ -206,7 +218,9 @@ struct Point
 };
 
 /*
- * (Optional) Power level for thermal noise (PN) vs FX freq values
+ * \struct FxNoiseProfile
+ *
+ * \brief (Optional) Power level for thermal noise (PN) vs FX freq values
  */
 struct FxNoiseProfile
 {
@@ -225,7 +239,9 @@ struct FxNoiseProfile
 };
 
 /*
- * (Optional) Thermal noise level for the reference signal vector
+ * \struct NoiseLevel
+ *
+ * \brief (Optional) Thermal noise level for the reference signal vector
  */
 struct NoiseLevel
 {
@@ -256,13 +272,19 @@ struct NoiseLevel
     mem::ScopedCopyablePtr<FxNoiseProfile> fxNoiseProfile;
 };
 
-/* Parameter Set that describes a CPHD data
-channel. Channels referenced by their unique
-Channel ID (Ch_ID). See Section 7.2. */
+/*
+ * \sturct ChannelParameter
+ *
+ * \brief Parameter Set that describes a CPHD data
+ * channel. Channels referenced by their unique
+ * Channel ID (Ch_ID). See Section 7.2.
+*/
 struct ChannelParameter
 {
     /*
-     * (Optional) Parameters to identify the Transmit and Receive
+     * \struct TxRcv
+     *
+     * \brief (Optional) Parameters to identify the Transmit and Receive
      * parameter sets used to collect the signal array
      */
     // Hiding TxRcv struct here because of name conflict
@@ -289,7 +311,9 @@ struct ChannelParameter
     };
 
     /*
-     * (Optional) Antenna Phase Center and Antenna Pattern
+     * \struct Antenna
+     *
+     * \brief (Optional) Antenna Phase Center and Antenna Pattern
      * identifiers for the antenna(s) used to collect and
      * form the signal array data.
      */
@@ -433,7 +457,9 @@ struct ChannelParameter
 };
 
 /*
- * Parameters that describe the data channels
+ * \struct Channel
+ *
+ * \brief Parameters that describe the data channels
  * contained in the product.
  * See section 7.
  */

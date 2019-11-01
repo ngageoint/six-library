@@ -124,7 +124,7 @@ void CPHDXMLControl::validate(const xml::lite::Document* doc,
             //  highly discouraged
             for (size_t ii = 0; ii < errors.size(); ++ii)
             {
-                std::cout << errors[ii].toString() << "\n";
+                std::cerr << errors[ii].toString() << "\n";
             }
             throw six::DESValidationException(Ctxt(
                 "INVALID XML: Check both the XML being " \
@@ -198,7 +198,8 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     root->setNamespacePrefix("", getDefaultURI());
 
     // Validate generated doc
-    if(!schemaPaths.empty()) {
+    if(!schemaPaths.empty())
+    {
         // Validate schema
         validate(doc.get(), schemaPaths, log());
     }
@@ -229,12 +230,7 @@ XMLElem CPHDXMLControl::toXML(const CollectionID& collectionID, XMLElem parent)
     createString("ReleaseInfo", collectionID.releaseInfo, collectionXML);
     if (!collectionID.collectInfo.countryCodes.empty())
     {
-        std::string countryCodes = "";
-        for (size_t ii = 0; ii < collectionID.collectInfo.countryCodes.size() - 1; ++ii)
-        {
-            countryCodes += collectionID.collectInfo.countryCodes[ii] + ",";
-        }
-        countryCodes += collectionID.collectInfo.countryCodes.back();
+        std::string countryCodes = str::join(collectionID.collectInfo.countryCodes, ",");
         createString("CountryCode", countryCodes, collectionXML);
     }
     mCommon.addParameters("Parameter", getDefaultURI(), collectionID.collectInfo.parameters, collectionXML);
@@ -312,8 +308,8 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
     }
 
     XMLElem imageAreaXML = newElement("ImageArea", sceneCoordsXML);
-    createVector2D("X1Y1", sceneCoords.imageArea.x1y1, imageAreaXML);
-    createVector2D("X2Y2", sceneCoords.imageArea.x2y2, imageAreaXML);
+    mCommon.createVector2D("X1Y1", sceneCoords.imageArea.x1y1, imageAreaXML);
+    mCommon.createVector2D("X2Y2", sceneCoords.imageArea.x2y2, imageAreaXML);
 
     if (!sceneCoords.imageArea.polygon.empty())
     {
@@ -321,7 +317,7 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
         setAttribute(polygonXML, "size", six::toString(sceneCoords.imageArea.polygon.size()));
         for (size_t ii = 0; ii < sceneCoords.imageArea.polygon.size(); ++ii)
         {
-            XMLElem vertexXML = createVector2D("Vertex", sceneCoords.imageArea.polygon[ii], polygonXML);
+            XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.imageArea.polygon[ii], polygonXML);
             setAttribute(vertexXML, "index", six::toString(ii+1));
         }
     }
@@ -331,8 +327,8 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
     if(sceneCoords.extendedArea.get())
     {
         XMLElem extendedAreaXML = newElement("ExtendedArea", sceneCoordsXML);
-        createVector2D("X1Y1", sceneCoords.extendedArea->x1y1, extendedAreaXML);
-        createVector2D("X2Y2", sceneCoords.extendedArea->x2y2, extendedAreaXML);
+        mCommon.createVector2D("X1Y1", sceneCoords.extendedArea->x1y1, extendedAreaXML);
+        mCommon.createVector2D("X2Y2", sceneCoords.extendedArea->x2y2, extendedAreaXML);
 
         if (!sceneCoords.extendedArea->polygon.empty())
         {
@@ -340,7 +336,7 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
             setAttribute(polygonXML, "size", six::toString(sceneCoords.extendedArea->polygon.size()));
             for (size_t ii = 0; ii < sceneCoords.extendedArea->polygon.size(); ++ii)
             {
-                XMLElem vertexXML = createVector2D("Vertex", sceneCoords.extendedArea->polygon[ii], polygonXML);
+                XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.extendedArea->polygon[ii], polygonXML);
                 setAttribute(vertexXML, "index", six::toString(ii+1));
             }
         }
@@ -487,15 +483,15 @@ XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
         if(!six::Init::isUndefined(channel.parameters[ii].imageArea))
         {
             XMLElem imageAreaXML = newElement("ImageArea", parametersXML);
-            createVector2D("X1Y1", channel.parameters[ii].imageArea.x1y1, imageAreaXML);
-            createVector2D("X2Y2", channel.parameters[ii].imageArea.x2y2, imageAreaXML);
+            mCommon.createVector2D("X1Y1", channel.parameters[ii].imageArea.x1y1, imageAreaXML);
+            mCommon.createVector2D("X2Y2", channel.parameters[ii].imageArea.x2y2, imageAreaXML);
             if(!channel.parameters[ii].imageArea.polygon.empty())
             {
                 XMLElem polygonXML = newElement("Polygon", imageAreaXML);
                 setAttribute(polygonXML, "size", six::toString(channel.parameters[ii].imageArea.polygon.size()));
                 for (size_t jj = 0; jj < channel.parameters[ii].imageArea.polygon.size(); ++jj)
                 {
-                    XMLElem vertexXML = createVector2D("Vertex", channel.parameters[ii].imageArea.polygon[jj], polygonXML);
+                    XMLElem vertexXML = mCommon.createVector2D("Vertex", channel.parameters[ii].imageArea.polygon[jj], polygonXML);
                     setAttribute(vertexXML, "index", six::toString(jj+1));
                 }
             }
@@ -542,7 +538,7 @@ XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
             }
         }
     }
-    if(channel.addedParameters.size() > 0)
+    if(!channel.addedParameters.empty())
     {
         XMLElem addedParamsXML = newElement("AddedParameters", channelXML);
         mCommon.addParameters("Parameter", getDefaultURI(), channel.addedParameters, addedParamsXML);
@@ -1069,7 +1065,8 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
 {
     std::auto_ptr<Metadata> cphd(new Metadata());
 
-    if(!schemaPaths.empty()) {
+    if(!schemaPaths.empty())
+    {
         // Validate schema
         validate(doc, schemaPaths, log());
     }
@@ -1562,12 +1559,12 @@ void CPHDXMLControl::fromXML(const XMLElem DwellXML,
     parseUInt(getFirstAndOnly(DwellXML, "NumCODTimes"), numCODTimes);
     dwell.cod.resize(numCODTimes);
 
-    std::vector<XMLElem> CODXML_vec;
-    DwellXML->getElementsByTagName("CODTime", CODXML_vec);
-    for(size_t ii = 0; ii < CODXML_vec.size(); ++ii)
+    std::vector<XMLElem> codXMLVec;
+    DwellXML->getElementsByTagName("CODTime", codXMLVec);
+    for(size_t ii = 0; ii < codXMLVec.size(); ++ii)
     {
-        parseString(getFirstAndOnly(CODXML_vec[ii], "Identifier"), dwell.cod[ii].identifier);
-        mCommon.parsePoly2D(getFirstAndOnly(CODXML_vec[ii], "CODTimePoly"), dwell.cod[ii].codTimePoly);
+        parseString(getFirstAndOnly(codXMLVec[ii], "Identifier"), dwell.cod[ii].identifier);
+        mCommon.parsePoly2D(getFirstAndOnly(codXMLVec[ii], "CODTimePoly"), dwell.cod[ii].codTimePoly);
     }
 
     // DwellTime
@@ -1575,12 +1572,12 @@ void CPHDXMLControl::fromXML(const XMLElem DwellXML,
     parseUInt(getFirstAndOnly(DwellXML, "NumDwellTimes"), numDwellTimes);
     dwell.dtime.resize(numDwellTimes);
 
-    std::vector<XMLElem> dtimeXML_vec;
-    DwellXML->getElementsByTagName("DwellTime", dtimeXML_vec);
-    for(size_t ii = 0; ii < dtimeXML_vec.size(); ++ii)
+    std::vector<XMLElem> dtimeXMLVec;
+    DwellXML->getElementsByTagName("DwellTime", dtimeXMLVec);
+    for(size_t ii = 0; ii < dtimeXMLVec.size(); ++ii)
     {
-        parseString(getFirstAndOnly(dtimeXML_vec[ii], "Identifier"), dwell.dtime[ii].identifier);
-        mCommon.parsePoly2D(getFirstAndOnly(dtimeXML_vec[ii], "DwellTimePoly"), dwell.dtime[ii].dwellTimePoly);
+        parseString(getFirstAndOnly(dtimeXMLVec[ii], "Identifier"), dwell.dtime[ii].identifier);
+        mCommon.parsePoly2D(getFirstAndOnly(dtimeXMLVec[ii], "DwellTimePoly"), dwell.dtime[ii].dwellTimePoly);
     }
 }
 
@@ -2014,17 +2011,6 @@ void CPHDXMLControl::createParameterCollection(
     }
 }
 
-XMLElem CPHDXMLControl::createVector2D(
-        const std::string& name,
-        const Vector2& p,
-        XMLElem parent) const
-{
-    XMLElem e = newElement(name, getDefaultURI(), parent);
-    createDouble("X", getSICommonURI(), p[0], e);
-    createDouble("Y", getSICommonURI(), p[1], e);
-    return e;
-}
-
 XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
                                               const std::string& cornerName,
                                               const cphd::LatLonCorners& corners,
@@ -2113,20 +2099,13 @@ XMLElem CPHDXMLControl::createErrorParamPlatform(
     return posVelErrXML;
 }
 
-
 /*
  * Parser helper functions
  */
-void CPHDXMLControl::parseVector2D(const XMLElem vecXML, Vector2& vec) const
-{
-    parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
-    parseDouble(getFirstAndOnly(vecXML, "Y"), vec[1]);
-}
-
 void CPHDXMLControl::parseAreaType(const XMLElem areaXML, AreaType& area) const
 {
-    parseVector2D(getFirstAndOnly(areaXML, "X1Y1"), area.x1y1);
-    parseVector2D(getFirstAndOnly(areaXML, "X2Y2"), area.x2y2);
+    mCommon.parseVector2D(getFirstAndOnly(areaXML, "X1Y1"), area.x1y1);
+    mCommon.parseVector2D(getFirstAndOnly(areaXML, "X2Y2"), area.x2y2);
     const XMLElem polygonXML = getOptional(areaXML, "Polygon");
     if (polygonXML)
     {
@@ -2142,7 +2121,7 @@ void CPHDXMLControl::parseAreaType(const XMLElem areaXML, AreaType& area) const
         {
             Vector2& vertex = area.polygon[ii];
             const XMLElem vertexXML = verticesXML[ii];
-            parseVector2D(vertexXML, vertex);
+            mCommon.parseVector2D(vertexXML, vertex);
         }
     }
 }
@@ -2287,24 +2266,23 @@ void CPHDXMLControl::parseChannelParameters(
                     "Atleast 2 noise profile points must be provided"));
             }
             param.noiseLevel->fxNoiseProfile->point.resize(pointXMLVec.size());
-            double prev_point = six::Init::undefined<double>();
+            double prevPoint = six::Init::undefined<double>();
             for(size_t ii = 0; ii < pointXMLVec.size(); ++ii)
             {
                 double fx;
                 parseDouble(getFirstAndOnly(pointXMLVec[ii], "Fx"), fx);
                 parseDouble(getFirstAndOnly(pointXMLVec[ii], "PN"), param.noiseLevel->fxNoiseProfile->point[ii].pn);
 
-                if(!six::Init::isUndefined(prev_point) && fx <= prev_point)
+                if(!six::Init::isUndefined(prevPoint) && fx <= prevPoint)
                 {
                     throw except::Exception(Ctxt(
                         "Fx values are strictly increasing"));
                 }
                 param.noiseLevel->fxNoiseProfile->point[ii].fx = fx;
-                prev_point = fx;
+                prevPoint = fx;
             }
         }
     }
-
 
     // Polarization
     std::vector<XMLElem> PolarizationXML;

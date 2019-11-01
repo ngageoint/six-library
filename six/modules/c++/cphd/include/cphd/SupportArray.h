@@ -36,15 +36,33 @@ namespace cphd
 {
 
 /*!
- * (Optional) Parameters that describe the binary support
+ * \struct SupportArrayParameter
+ *
+ * \brief (Optional) Parameters that describe the binary support
  * array(s) content and grid coordinates.
  */
 struct SupportArrayParameter
 {
-    //! Constructor
+    /*
+     * \func SupportArrayParameter
+     *
+     * \brief Default constructor
+     */
     SupportArrayParameter();
 
-    //! Custom constructor
+    /*
+     * \func SupportArrayParameter
+     *
+     * \brief Constructor initalizes values
+     *
+     * \param format Speicifies the binary format of the data
+     *  in the support array
+     * \param id Unique identifier of the support array
+     * \param x0_in Row 0 x coordinate
+     * \param y0_in Row 0 y coordinate
+     * \param xSS_in Row coordinate (X) sample spacing
+     * \param ySS_in Col coordinate (Y) sample spacing
+     */
     SupportArrayParameter(
         std::string format,
         size_t id,
@@ -100,16 +118,38 @@ private:
 };
 
 /*!
- *Added Array: Z(m,n) is a two dimensional array
+ * \struct AdditionalSupportArray
+ *
+ * \brief Added Array: Z(m,n) is a two dimensional array
  * of data elements. Content and format of each
  * element is user defined. Array coordinates X(m)
  * and Y(m) are also user defined.
  */
 struct AdditionalSupportArray : SupportArrayParameter
 {
-    //! Constructor
+    /*
+     * \func AdditionalSupportArray
+     *
+     * \brief Default constructor
+     */
     AdditionalSupportArray();
 
+    /*
+     * \func AdditionalSupportArray
+     *
+     * \brief Constructor initalizes values
+     *
+     * \param format Speicifies the binary format of the data
+     *  in the support array
+     * \param id Unique identifier of the support array
+     * \param x0_in Row 0 x coordinate
+     * \param y0_in Row 0 y coordinate
+     * \param xSS_in Row coordinate (X) sample spacing
+     * \param ySS_in Col coordinate (Y) sample spacing
+     * \param xUnits Defines the X units of the sampled grid
+     * \param yUnits Defines the Y units of the sampled grid
+     * \param zUnits Defines the Z units of the sampled grid
+     */
     //! Custom constructor
     AdditionalSupportArray(
         std::string format, std::string id,
@@ -151,7 +191,9 @@ struct AdditionalSupportArray : SupportArrayParameter
 };
 
 /*
- * (Optional) Parameters that describe the binary support
+ * \struct SupportArray
+ *
+ * \brief (Optional) Parameters that describe the binary support
  * array(s) content and grid coordinates.
  * See section 2.3
  */
@@ -188,7 +230,7 @@ struct SupportArray
     std::unordered_map<std::string, AdditionalSupportArray> addedSupportArray;
 };
 
-// Ostream operators
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s);
 std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a);
 std::ostream& operator<< (std::ostream& os, const SupportArray& s);

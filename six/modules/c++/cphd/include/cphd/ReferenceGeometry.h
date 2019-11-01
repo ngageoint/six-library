@@ -33,12 +33,18 @@ namespace cphd
 {
 
 /*!
- * The SRP position for the reference vector of the
+ * \struct SRP
+ *
+ * \brief The SRP position for the reference vector of the
  * reference channel
  */
 struct SRP
 {
-    //! Constructor
+    /*!
+    * \func SRP
+    *
+    * \brief Default constructor
+    */
     SRP();
 
     //! Equality operator
@@ -61,12 +67,18 @@ struct SRP
 };
 
 /*!
- * Base class for both Monostatic and
- * Bistatic imaging types
+ * \struct ImagingType
+ *
+ * \brief Base class for both Monostatic and
+ *  Bistatic imaging types
  */
 struct ImagingType
 {
-    //! Constructor
+    /*!
+    * \func ImagingType
+    *
+    * \brief Default constructor
+    */
     ImagingType();
 
     //! Equality operators
@@ -110,11 +122,20 @@ struct ImagingType
 };
 
 /*!
- * (Conditional) Collection Type Monostatic
+ * \struct Monostatic
+ *
+ * \brief (Conditional) Collection Type Monostatic metadata.
+ *
+ *  Single radar platform that is both the transmitter
+ *  and the receiver
  */
 struct Monostatic : public ImagingType
 {
-    //! Constructor
+    /*!
+     * \func Monostatic
+     *
+     * \brief Default constructor
+     */
     Monostatic();
 
     //! Equality operators
@@ -137,7 +158,7 @@ struct Monostatic : public ImagingType
     }
 
     //! Side of Track parameter for the collection.
-    //! L  Left-looking or R Right-looking
+    //! L Left-looking or R Right-looking
     six::SideOfTrackType sideOfTrack;
 
     //! Slant range from the ARP to the SRP
@@ -164,16 +185,27 @@ struct Monostatic : public ImagingType
 };
 
 /*!
- * (Conditional) Collection Type Bistatic
+ * \struct Bistatic
+ *
+ * \brief (Conditional) Collection Type Bistatic metadata.
+ *
+ * Pair of radar platforms, with a seperate transmitter
+ * and a passive receiver.
  */
 struct Bistatic : public ImagingType
 {
     /*!
-     * Describes Transmit and Recieve Platform parameters
+     * \struct PlatformParams
+     *
+     * \brief Describe transmit and recieve platform parameters
      */
     struct PlatformParams
     {
-        //! Constructor
+        /*!
+         * \func PlatformParams
+         *
+         * \brief Default constructor
+         */
         PlatformParams();
 
         //! Equality operator
@@ -194,7 +226,7 @@ struct Bistatic : public ImagingType
         }
 
         //! Side of Track parameter for the collection.
-        //! L  Left-looking or R Right-looking
+        //! L Left-looking or R Right-looking
         six::SideOfTrackType sideOfTrack;
 
         //! The transmit time for the vector (txc = TxTime).
@@ -233,7 +265,11 @@ struct Bistatic : public ImagingType
         Vector3 vel;
     };
 
-    //! Constructor
+    /*
+     * \func Bistatic
+     *
+     * \brief Default constructor
+     */
     Bistatic();
 
     //! Equality operator
@@ -276,12 +312,18 @@ struct Bistatic : public ImagingType
 };
 
 /*!
- * Parameters that describe the collection geometry
- * See section 6.5
+ * \struct ReferenceGeometry
+ *
+ * \brief Parameters that describe the collection geometry
+ *        See section 6.5
  */
 struct ReferenceGeometry
 {
-    //! Constructor
+    /*!
+     * \func ReferenceGeometry
+     *
+     * \brief Default constructor
+     */
     ReferenceGeometry();
 
     //! Equality operator
