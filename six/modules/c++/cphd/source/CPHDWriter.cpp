@@ -94,6 +94,7 @@ void CPHDWriter::DataWriterBigEndian::operator()(
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       const std::string& pathname,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
@@ -103,8 +104,11 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths)
 {
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
+    // create file to write to
+    mFile.create(pathname);
+
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
     if (sys::isBigEndianSystem())
     {
         mDataWriter.reset(new DataWriterBigEndian(mFile, mNumThreads));
@@ -174,14 +178,13 @@ void CPHDWriter::writeSupportDataImpl(const sys::ubyte* data,
 }
 
 template<typename T>
-void CPHDWriter::write(const std::string& pathname,
-                       const PVPBlock& pvpBlock,
+void CPHDWriter::write(const PVPBlock& pvpBlock,
                        const T* widebandData,
                        const sys::ubyte* supportData)
 {
     // Write File header and metadata to file
     // Padding is added in writeMetadata
-    writeMetadata(pathname, pvpBlock);
+    writeMetadata(pvpBlock);
 
     // Write optional support array block
     // Padding is added in writeSupportData
@@ -203,38 +206,40 @@ void CPHDWriter::write(const std::string& pathname,
     for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
     {
         size_t numElements = mMetadata.data.getNumVectors(ii)*mMetadata.data.getNumSamples(ii);
+        // writeCPHDData handles compressed data as well
         writeCPHDData<T>(widebandData, numElements, ii);
     }
 }
 
+// For compressed data
+template
+void CPHDWriter::write<sys::ubyte>(
+        const PVPBlock& pvpBlock,
+        const sys::ubyte* widebandData,
+        const sys::ubyte* supportData);
+
 template
 void CPHDWriter::write<std::complex<sys::Int8_T> >(
-        const std::string& pathname,
         const PVPBlock& pvpBlock,
         const std::complex<sys::Int8_T>* widebandData,
         const sys::ubyte* supportData);
 
 template
 void CPHDWriter::write<std::complex<sys::Int16_T> >(
-        const std::string& pathname,
         const PVPBlock& pvpBlock,
         const std::complex<sys::Int16_T>* widebandData,
         const sys::ubyte* supportData);
 
 template
 void CPHDWriter::write<std::complex<float> >(
-        const std::string& pathname,
         const PVPBlock& pvpBlock,
         const std::complex<float>* widebandData,
         const sys::ubyte* supportData);
 
-void CPHDWriter::writeMetadata(const std::string& pathname,
-                               const PVPBlock& pvpBlock)
+void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {
     // Update the number of bytes per PVP
     mMetadata.data.numBytesPVP = pvpBlock.getNumBytesPVPSet();
-
-    mFile.create(pathname);
 
     const size_t numChannels = mMetadata.data.getNumChannels();
     size_t totalSupportSize = 0;

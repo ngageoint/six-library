@@ -281,12 +281,12 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
 {
     const size_t numChannels = 1;
 
-    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
-    writer.writeMetadata(outPathname, pvpBlock);
+    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    writer.writeMetadata(pvpBlock);
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(&writeData[0],dims.area()*2);
+        writer.writeCPHDData(writeData.data(),dims.area()*2);
     }
 }
 

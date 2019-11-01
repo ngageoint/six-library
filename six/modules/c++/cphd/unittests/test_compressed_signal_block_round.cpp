@@ -220,15 +220,15 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
         }
     }
 
-    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
+    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
 
-    writer.writeMetadata(outPathname, pvpBlock);
+    writer.writeMetadata(pvpBlock);
 
     writer.writePVPData(pvpBlock);
 
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(&writeData[0],1,ii);
+        writer.writeCPHDData(writeData.data(),1,ii);
     }
 }
 

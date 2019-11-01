@@ -58,13 +58,16 @@ public:
      *  \param metadata A filled out metadata struct for the file that will be
      *         written. The data.arraySize and data.numCPHDChannels will be
      *         filled in internally. All other data must be provided.
-     *  \param numThreads The number of threads to use for processing.
-     *  \param scratchSpaceSize The maximum size of internal scratch space
+     *  \param pathname The file path to be written to
+     *  \param schemaPaths (Optional) A vector of XML schema paths for validation
+     *  \param numThreads (Optional) The number of threads to use for processing.
+     *  \param scratchSpaceSize (Optional) The maximum size of internal scratch space
      *         that may be used if byte swapping is necessary.
      *         Default is 4 MB
      */
     CPHDWriter(
             const Metadata& metadata,
+            const std::string& pathname,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
@@ -78,14 +81,12 @@ public:
      *              std::complex<sys::Int16_T>
      *              std::complex<sys::Int8_T>
      *
-     *  \param pathname The desired pathname of the file.
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
-     *  \param pvpBlock The vector based metadata to write.
+     *  \param supportData (Optional) The support array data to write to disk.
      */
     template<typename T>
     void write(
-            const std::string& pathname,
             const PVPBlock& pvpBlock,
             const T* widebandData,
             const sys::ubyte* supportData = nullptr);
@@ -96,16 +97,13 @@ public:
      *         be used in situations where you need to write out the CPHD
      *         data in chunks.
      *
-     *  \param pathname The desired pathname of the file.
      *  \param pvpBlock The vector based metadata to write.
      */
-    void writeMetadata(
-            const std::string& pathname,
-            const PVPBlock& pvpBlock);
+    void writeMetadata(const PVPBlock& pvpBlock);
 
     /*
      *  \func writeSupportData
-     *  \brief (Optional) Writes the specified support Array to the file
+     *  \brief Writes the specified support Array to the file
      *         Does not include padding.
      *
      *  \param data A pointer to the start of the support array that
@@ -123,7 +121,7 @@ public:
 
     /*
      *  \func writeSupportData
-     *  \brief (Optional) Writes all of the support Arrays to the file
+     *  \brief Writes all of the support Arrays to the file
      *         Includes padding
      *
      *  \param data A pointer to the start of the support array data block
@@ -187,40 +185,78 @@ public:
     }
 
 private:
+    /*
+     * Write metadata helper
+     */
     void writeMetadata(
         size_t supportSize, // Optional
         size_t pvpSize,
         size_t cphdSize);
 
+    /*
+     * Write pvp helper
+     */
     void writePVPData(const sys::ubyte* PVPBlock,
                       size_t index);
 
+    /*
+     * Implementation of write wideband
+     */
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
+    /*
+     * Implementation of write compressed wideband
+     */
     void writeCompressedCPHDDataImpl(const sys::ubyte* data,
                                      size_t channel);
 
+    /*
+     * Implementation of write support data
+     */
     void writeSupportDataImpl(const sys::ubyte* data,
                               size_t numElements, size_t elementSize);
 
+    /*
+     * \class DataWriter
+     *
+     * \brief Class to handle writing to file and byte swapping
+     */
     class DataWriter
     {
     public:
+        /*
+         * Constructor
+         */
         DataWriter(io::FileOutputStream& stream,
                    size_t numThreads);
 
+        /*
+         * Destructor
+         */
         virtual ~DataWriter();
 
+        /*
+         * Implementation of writing and byteswapping
+         */
         virtual void operator()(const sys::ubyte* data,
                                 size_t numElements,
                                 size_t elementSize) = 0;
 
     protected:
+        //! Output stream of CPHD file
         io::FileOutputStream& mStream;
+        //! Number of threads for parallelism
         const size_t mNumThreads;
     };
 
+    /*
+     * \class DataWriterLittleEndian
+     *
+     * \brief Class to handle writing to file and byte swapping
+     * for little endian to big endian storage
+     * Inherits from DataWriter class
+     */
     class DataWriterLittleEndian : public DataWriter
     {
     public:
@@ -237,6 +273,13 @@ private:
         const mem::ScopedArray<sys::byte> mScratch;
     };
 
+    /*
+     * \class DataWriterBigEndian
+     *
+     * \brief Class to handle writing to file
+     * No byte swap. Already big endian.
+     * Inherits from DataWriter class
+     */
     class DataWriterBigEndian : public DataWriter
     {
     public:
@@ -247,16 +290,23 @@ private:
                                 size_t numElements,
                                 size_t elementSize);
     };
-
+    //! DataWriter object
     std::auto_ptr<DataWriter> mDataWriter;
 
+    // Book-keeping element
+    //! metadata information
     Metadata mMetadata;
+    //! header information
     FileHeader mHeader;
+    //! size of each element in signal block
     const size_t mElementSize;
+    //! size of scratch space for byte swapping
     const size_t mScratchSpaceSize;
+    //! number of threads for parallelism
     const size_t mNumThreads;
+    //! schemas for XML validation
     std::vector<std::string> mSchemaPaths;
-
+    //! Output stream contains CPHD file
     io::FileOutputStream mFile;
 };
 }

@@ -226,9 +226,9 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
             setVectorParameters(ii, jj, pvpBlock);
         }
     }
-    cphd::CPHDWriter writer(metadata, std::vector<std::string>(), numThreads);
-    writer.writeMetadata(outPathname, pvpBlock);
-    writer.writeSupportData(&writeData[0]);
+    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    writer.writeMetadata(pvpBlock);
+    writer.writeSupportData(writeData.data());
     writer.writePVPData(pvpBlock);
 }
 

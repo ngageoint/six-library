@@ -31,7 +31,6 @@
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/CPHDReader.h>
-#include <cphd/CPHDWriter.h>
 #include <str/Convert.h>
 
 /*!
@@ -52,7 +51,7 @@ bool compareCPHDData(const sys::ubyte* data1,
     {
         if (castData1[ii] != castData2[ii])
         {
-            std::cout << "Wideband data at channel " << channel
+            std::cerr << "Wideband data at channel " << channel
                       << " has differing data starting at"
                       << " index " << ii << "\n";
             return false;
@@ -69,7 +68,7 @@ bool compareSupportData(const mem::ScopedArray<sys::ubyte>& data1,
     {
         if (data1[ii] != data2[ii])
         {
-            std::cout <<  "Support data has differing data starting at"
+            std::cerr <<  "Support data has differing data starting at"
                       << " index " << ii << "\n";
             return false;
         }
@@ -147,7 +146,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
         }
         else
         {
-            std::cout << "Data at channel " << ii
+            std::cerr << "Data at channel " << ii
                       << " has differing dimensions\n";
             dataMatches = false;
         }
@@ -164,14 +163,14 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
     // Check metadata
     if (reader1.getMetadata() != reader2.getMetadata())
     {
-        std::cout << "Metadata does not match \n";
+        std::cerr << "Metadata does not match \n";
         return false;
     }
 
     // Check pvp block
     if (reader1.getPVPBlock() != reader2.getPVPBlock())
     {
-        std::cout << "PVPBlock does not match \n";
+        std::cerr << "PVPBlock does not match \n";
         return false;
     }
 
@@ -182,7 +181,7 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
     reader2.getSupportBlock().readAll(numThreads, readPtr2);
     if (!compareSupportData(readPtr1, readPtr2, reader1.getMetadata().data.getAllSupportSize()))
     {
-        std::cout << "SupportBlock does not match \n";
+        std::cerr << "SupportBlock does not match \n";
         return false;
     }
 
@@ -193,7 +192,7 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
     if (reader1.getMetadata().data.getNumChannels() !=
         reader2.getMetadata().data.getNumChannels())
     {
-        std::cout << "Files contain a differing number of channels "
+        std::cerr << "Files contain a differing number of channels "
                   << "comparison will continue but will only look at "
                   << "the first " << channelsToProcess << " channels\n";
         return false;
@@ -208,13 +207,13 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
                                                      numThreads);
         if (!cphdDataMatches)
         {
-            std::cout << "Wideband data does not match \n";
+            std::cerr << "Wideband data does not match \n";
             return false;
         }
     }
     else
     {
-        std::cout << "Data has differing sample type\n";
+        std::cerr << "Data has differing sample type\n";
         return false;
     }
     return true;
@@ -251,7 +250,7 @@ int main(int argc, char** argv)
         }
 
         const bool isMatch = checkCPHD(pathname1, pathname2, numThreads, schemas);
-        isMatch == true ? std::cout << "CPHD Files match \n" : std::cout << "CPHD Files do not match \n";
+        isMatch == true ? std::cout << "CPHD Files match \n" : std::cerr << "CPHD Files do not match \n";
         return 0;
     }
     catch (const except::Exception& ex)

@@ -23,6 +23,9 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <mem/BufferView.h>
+#include <mem/ScopedArray.h>
+#include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
@@ -32,7 +35,6 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
-#include <str/Convert.h>
 
 /*!
  * Reads in CPHD file from InputFile
@@ -61,43 +63,72 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
 
     // Read Wideband
     const cphd::Wideband& wideband = reader.getWideband();
-    mem::ScopedArray<sys::ubyte> data;
-    wideband.readAll(0, cphd::Wideband::ALL,
-                  0, cphd::Wideband::ALL,
-                  numThreads, data);
 
     const cphd::SignalArrayFormat signalFormat =
             metadata.data.getSignalFormat();
 
-    // Write full CPHD
-    cphd::CPHDWriter writer(reader.getMetadata(), schemaPathnames, numThreads);
-    switch (signalFormat)
+    // Create the writer
+    cphd::CPHDWriter writer(reader.getMetadata(), outPathname, schemaPathnames, numThreads);
+
+    // Declare and allocate the wideband data storage
+    mem::ScopedArray<sys::ubyte> data;
+    data.reset(new sys::ubyte[header.getSignalBlockSize()]);
+
+    // Check if signal data is compressed
+    if (metadata.data.isCompressed())
     {
-    case cphd::SignalArrayFormat::CI2:
+        // If data is compressed
+        for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
+        {
+            const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
+            wideband.read(channel, mem::BufferView<sys::ubyte>(&data[idx], bufSize));
+            idx += bufSize;
+        }
         writer.write(
-                outPathname,
                 pvpBlock,
-                reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
+                data.get(),
                 readPtr.get());
-        break;
-    case cphd::SignalArrayFormat::CI4:
-        writer.write(
-                outPathname,
-                pvpBlock,
-                reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
-                readPtr.get());
-        break;
-    case cphd::SignalArrayFormat::CF8:
-        writer.write(
-                outPathname,
-                pvpBlock,
-                reinterpret_cast<const std::complex<float>* >(data.get()),
-                readPtr.get());
-        break;
     }
+    else
+    {
+        // If data is not compressed
+        for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
+        {
+            const size_t bufSize = metadata.data.getNumVectors(channel)
+                                   * metadata.data.getNumSamples(channel)
+                                   * getNumBytesPerSample(signalFormat);
+            wideband.read(channel, 0, cphd::Wideband::ALL,
+                 0, cphd::Wideband::ALL, numThreads,
+                 mem::BufferView<sys::ubyte>(&data[idx], bufSize));
+            idx += bufSize;
+        }
+
+        // Write full CPHD not compressed data
+        switch (signalFormat)
+        {
+        case cphd::SignalArrayFormat::CI2:
+            writer.write(
+                    pvpBlock,
+                    reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
+                    readPtr.get());
+            break;
+        case cphd::SignalArrayFormat::CI4:
+            writer.write(
+                    pvpBlock,
+                    reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
+                    readPtr.get());
+            break;
+        case cphd::SignalArrayFormat::CF8:
+            writer.write(
+                    pvpBlock,
+                    reinterpret_cast<const std::complex<float>* >(data.get()),
+                    readPtr.get());
+            break;
+        }
+    }
+
     std::cout << "Succesfully finished writing to CPHD: " << outPathname << "\n";
 }
-
 
 int main(int argc, char** argv)
 {
