@@ -728,6 +728,84 @@ class SRPType(_object):
 SRPType_swigregister = _cphd03.SRPType_swigregister
 SRPType_swigregister(SRPType)
 
+class PolarizationType(_object):
+    """Proxy of C++ cphd::PolarizationType class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PolarizationType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PolarizationType, name)
+    __repr__ = _swig_repr
+    X = _cphd03.PolarizationType_X
+    Y = _cphd03.PolarizationType_Y
+    V = _cphd03.PolarizationType_V
+    H = _cphd03.PolarizationType_H
+    RHC = _cphd03.PolarizationType_RHC
+    LHC = _cphd03.PolarizationType_LHC
+    UNSPECIFIED = _cphd03.PolarizationType_UNSPECIFIED
+    NOT_SET = _cphd03.PolarizationType_NOT_SET
+
+    def __init__(self, *args):
+        """
+        __init__(cphd::PolarizationType self) -> PolarizationType
+        __init__(cphd::PolarizationType self, std::string const & s) -> PolarizationType
+        __init__(cphd::PolarizationType self, int i) -> PolarizationType
+        """
+        this = _cphd03.new_PolarizationType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def toString(self):
+        """toString(PolarizationType self) -> std::string"""
+        return _cphd03.PolarizationType_toString(self)
+
+
+    def __eq__(self, *args):
+        """
+        __eq__(PolarizationType self, PolarizationType o) -> bool
+        __eq__(PolarizationType self, int const & o) -> bool
+        """
+        return _cphd03.PolarizationType___eq__(self, *args)
+
+
+    def __ne__(self, *args):
+        """
+        __ne__(PolarizationType self, PolarizationType o) -> bool
+        __ne__(PolarizationType self, int const & o) -> bool
+        """
+        return _cphd03.PolarizationType___ne__(self, *args)
+
+
+    def __lt__(self, o):
+        """__lt__(PolarizationType self, PolarizationType o) -> bool"""
+        return _cphd03.PolarizationType___lt__(self, o)
+
+
+    def __gt__(self, o):
+        """__gt__(PolarizationType self, PolarizationType o) -> bool"""
+        return _cphd03.PolarizationType___gt__(self, o)
+
+
+    def __le__(self, o):
+        """__le__(PolarizationType self, PolarizationType o) -> bool"""
+        return _cphd03.PolarizationType___le__(self, o)
+
+
+    def __ge__(self, o):
+        """__ge__(PolarizationType self, PolarizationType o) -> bool"""
+        return _cphd03.PolarizationType___ge__(self, o)
+
+    __swig_setmethods__["value"] = _cphd03.PolarizationType_value_set
+    __swig_getmethods__["value"] = _cphd03.PolarizationType_value_get
+    if _newclass:
+        value = _swig_property(_cphd03.PolarizationType_value_get, _cphd03.PolarizationType_value_set)
+    __swig_destroy__ = _cphd03.delete_PolarizationType
+    __del__ = lambda self: None
+PolarizationType_swigregister = _cphd03.PolarizationType_swigregister
+PolarizationType_swigregister(PolarizationType)
+
 class FileHeader(_object):
     """Proxy of C++ cphd03::FileHeader class."""
 
@@ -1681,6 +1759,11 @@ class Data(_object):
         return _cphd03.Data_getNumBytesVBP(self)
 
 
+    def getSampleType(self):
+        """getSampleType(Data self) -> SampleType"""
+        return _cphd03.Data_getSampleType(self)
+
+
     def setNumBytesVBP(self, n):
         """setNumBytesVBP(Data self, size_t n)"""
         return _cphd03.Data_setNumBytesVBP(self, n)
@@ -2011,7 +2094,7 @@ CPHDXMLControl_swigregister = _cphd03.CPHDXMLControl_swigregister
 CPHDXMLControl_swigregister(CPHDXMLControl)
 
 class Wideband(_object):
-    """Proxy of C++ cphd03::Wideband class."""
+    """Proxy of C++ cphd::Wideband class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Wideband, name, value)
@@ -2021,8 +2104,8 @@ class Wideband(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::Wideband self, std::string const & pathname, Data data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
-        __init__(cphd03::Wideband self, mem::SharedPtr< io::SeekableInputStream > inStream, Data data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, std::string const & pathname, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, mem::SharedPtr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
         """
         this = _cphd03.new_Wideband(*args)
         try:
@@ -2030,15 +2113,20 @@ class Wideband(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getFileOffset(self, channel, vector, sample):
-        """getFileOffset(Wideband self, size_t channel, size_t vector, size_t sample) -> sys::Off_T"""
-        return _cphd03.Wideband_getFileOffset(self, channel, vector, sample)
+    def getFileOffset(self, *args):
+        """
+        getFileOffset(Wideband self, size_t channel, size_t vector, size_t sample) -> sys::Off_T
+        getFileOffset(Wideband self, size_t channel) -> sys::Off_T
+        """
+        return _cphd03.Wideband_getFileOffset(self, *args)
 
 
     def read(self, *args):
         """
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< sys::ubyte > const & data)
+        read(Wideband self, size_t channel, mem::BufferView< sys::ubyte > const & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::ScopedArray< sys::ubyte > & data)
+        read(Wideband self, size_t channel, mem::ScopedArray< sys::ubyte > & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< sys::ubyte > const & scratch, mem::BufferView< std::complex< float > > const & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, void * data)
         """
@@ -2048,11 +2136,6 @@ class Wideband(_object):
     def getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample):
         """getBufferDims(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> RowColSizeT"""
         return _cphd03.Wideband_getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample)
-
-
-    def getSampleType(self):
-        """getSampleType(Wideband self) -> SampleType"""
-        return _cphd03.Wideband_getSampleType(self)
 
 
     def readImpl(self, channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, data):

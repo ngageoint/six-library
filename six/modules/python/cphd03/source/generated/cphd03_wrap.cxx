@@ -3033,103 +3033,107 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_cphd03__TOAParameters swig_types[23]
 #define SWIGTYPE_p_cphd03__VBM swig_types[24]
 #define SWIGTYPE_p_cphd03__VectorParameters swig_types[25]
-#define SWIGTYPE_p_cphd03__Wideband swig_types[26]
+#define SWIGTYPE_p_cphd__Data swig_types[26]
 #define SWIGTYPE_p_cphd__DomainType swig_types[27]
 #define SWIGTYPE_p_cphd__EarthModelType swig_types[28]
 #define SWIGTYPE_p_cphd__PhaseSGN swig_types[29]
-#define SWIGTYPE_p_cphd__RefHeight swig_types[30]
-#define SWIGTYPE_p_cphd__SRPType swig_types[31]
-#define SWIGTYPE_p_cphd__SampleType swig_types[32]
-#define SWIGTYPE_p_cphd__SignalArrayFormat swig_types[33]
-#define SWIGTYPE_p_difference_type swig_types[34]
-#define SWIGTYPE_p_except__Context swig_types[35]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[36]
-#define SWIGTYPE_p_int swig_types[37]
-#define SWIGTYPE_p_int16_t swig_types[38]
-#define SWIGTYPE_p_int32_t swig_types[39]
-#define SWIGTYPE_p_int64_t swig_types[40]
-#define SWIGTYPE_p_int8_t swig_types[41]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[42]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[43]
-#define SWIGTYPE_p_logging__Logger swig_types[44]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[45]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[46]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[47]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[48]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[49]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[50]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[51]
-#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[52]
-#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[53]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t swig_types[54]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t swig_types[55]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t swig_types[56]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t swig_types[57]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t swig_types[58]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[59]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[60]
-#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[61]
-#define SWIGTYPE_p_nitf__DateTime swig_types[62]
-#define SWIGTYPE_p_off_t swig_types[63]
-#define SWIGTYPE_p_p_PyObject swig_types[64]
-#define SWIGTYPE_p_pid_t swig_types[65]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[66]
-#define SWIGTYPE_p_scene__FrameType swig_types[67]
-#define SWIGTYPE_p_scene__LatLon swig_types[68]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[69]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[70]
-#define SWIGTYPE_p_six__BooleanType swig_types[71]
-#define SWIGTYPE_p_six__CollectType swig_types[72]
-#define SWIGTYPE_p_six__CollectionInformation swig_types[73]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[74]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[75]
-#define SWIGTYPE_p_six__Data swig_types[76]
-#define SWIGTYPE_p_six__DataType swig_types[77]
-#define SWIGTYPE_p_six__FFTSign swig_types[78]
-#define SWIGTYPE_p_six__RadarModeType swig_types[79]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[80]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[81]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[82]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[83]
-#define SWIGTYPE_p_six__sicd__ComplexCollectionInformation swig_types[84]
-#define SWIGTYPE_p_six__sicd__ComplexData swig_types[85]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[86]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[87]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[88]
-#define SWIGTYPE_p_size_t swig_types[89]
-#define SWIGTYPE_p_size_type swig_types[90]
-#define SWIGTYPE_p_ssize_t swig_types[91]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[92]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[93]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[94]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[95]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[96]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[97]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[98]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[99]
-#define SWIGTYPE_p_std__invalid_argument swig_types[100]
-#define SWIGTYPE_p_std__ostream swig_types[101]
-#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[102]
-#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[103]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[104]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[105]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[106]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[107]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[108]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[109]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[110]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[111]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[112]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[113]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[114]
-#define SWIGTYPE_p_uint16_t swig_types[115]
-#define SWIGTYPE_p_uint32_t swig_types[116]
-#define SWIGTYPE_p_uint64_t swig_types[117]
-#define SWIGTYPE_p_uint8_t swig_types[118]
-#define SWIGTYPE_p_unsigned_char swig_types[119]
-#define SWIGTYPE_p_value_type swig_types[120]
-static swig_type_info *swig_types[122];
-static swig_module_info swig_module = {swig_types, 121, 0, 0, 0, 0};
+#define SWIGTYPE_p_cphd__PolarizationType swig_types[30]
+#define SWIGTYPE_p_cphd__RefHeight swig_types[31]
+#define SWIGTYPE_p_cphd__SRPType swig_types[32]
+#define SWIGTYPE_p_cphd__SampleType swig_types[33]
+#define SWIGTYPE_p_cphd__SignalArrayFormat swig_types[34]
+#define SWIGTYPE_p_cphd__Wideband swig_types[35]
+#define SWIGTYPE_p_difference_type swig_types[36]
+#define SWIGTYPE_p_except__Context swig_types[37]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[38]
+#define SWIGTYPE_p_int swig_types[39]
+#define SWIGTYPE_p_int16_t swig_types[40]
+#define SWIGTYPE_p_int32_t swig_types[41]
+#define SWIGTYPE_p_int64_t swig_types[42]
+#define SWIGTYPE_p_int8_t swig_types[43]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[44]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[45]
+#define SWIGTYPE_p_logging__Logger swig_types[46]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[47]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[48]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[49]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[50]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[51]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[52]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[53]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[54]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[55]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t swig_types[56]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t swig_types[57]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t swig_types[58]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t swig_types[59]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t swig_types[60]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[61]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[62]
+#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[63]
+#define SWIGTYPE_p_nitf__DateTime swig_types[64]
+#define SWIGTYPE_p_off_t swig_types[65]
+#define SWIGTYPE_p_p_PyObject swig_types[66]
+#define SWIGTYPE_p_pid_t swig_types[67]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[68]
+#define SWIGTYPE_p_scene__FrameType swig_types[69]
+#define SWIGTYPE_p_scene__LatLon swig_types[70]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[71]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[72]
+#define SWIGTYPE_p_six__BooleanType swig_types[73]
+#define SWIGTYPE_p_six__CollectType swig_types[74]
+#define SWIGTYPE_p_six__CollectionInformation swig_types[75]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[76]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[77]
+#define SWIGTYPE_p_six__Data swig_types[78]
+#define SWIGTYPE_p_six__DataType swig_types[79]
+#define SWIGTYPE_p_six__FFTSign swig_types[80]
+#define SWIGTYPE_p_six__MatchInformation swig_types[81]
+#define SWIGTYPE_p_six__RadarModeType swig_types[82]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[83]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[84]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[85]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[86]
+#define SWIGTYPE_p_six__sicd__ComplexCollectionInformation swig_types[87]
+#define SWIGTYPE_p_six__sicd__ComplexData swig_types[88]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[89]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[90]
+#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[91]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[92]
+#define SWIGTYPE_p_size_t swig_types[93]
+#define SWIGTYPE_p_size_type swig_types[94]
+#define SWIGTYPE_p_ssize_t swig_types[95]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[96]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[97]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[98]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[99]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[100]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[101]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[102]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[103]
+#define SWIGTYPE_p_std__invalid_argument swig_types[104]
+#define SWIGTYPE_p_std__ostream swig_types[105]
+#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[106]
+#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[107]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[108]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[109]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[110]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[111]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[112]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[113]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[114]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[115]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[116]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[117]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[118]
+#define SWIGTYPE_p_uint16_t swig_types[119]
+#define SWIGTYPE_p_uint32_t swig_types[120]
+#define SWIGTYPE_p_uint64_t swig_types[121]
+#define SWIGTYPE_p_uint8_t swig_types[122]
+#define SWIGTYPE_p_unsigned_char swig_types[123]
+#define SWIGTYPE_p_value_type swig_types[124]
+static swig_type_info *swig_types[126];
+static swig_module_info swig_module = {swig_types, 125, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4777,6 +4781,7 @@ namespace swig
 
 
 #include "import/types.h"
+#include "import/cphd.h"
 #include "import/cphd03.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
@@ -5282,7 +5287,7 @@ namespace swig {
 	};
       }
     
-SWIGINTERN void cphd03_Wideband_readImpl(cphd03::Wideband *self,size_t channel,size_t firstVector,size_t lastVector,size_t firstSample,size_t lastSample,size_t numThreads,types::RowCol< size_t > const &dims,long long data){
+SWIGINTERN void cphd_Wideband_readImpl(cphd::Wideband *self,size_t channel,size_t firstVector,size_t lastVector,size_t firstSample,size_t lastSample,size_t numThreads,types::RowCol< size_t > const &dims,long long data){
         self->read(channel,
                     firstVector,
                     lastVector,
@@ -13809,6 +13814,1030 @@ SWIGINTERN PyObject *SRPType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_cphd__SRPType, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_PolarizationType")) SWIG_fail;
+  {
+    try
+    {
+      result = (cphd::PolarizationType *)new cphd::PolarizationType();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__PolarizationType, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  cphd::PolarizationType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_PolarizationType",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PolarizationType" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PolarizationType" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (cphd::PolarizationType *)new cphd::PolarizationType((std::string const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__PolarizationType, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::PolarizationType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_PolarizationType",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_PolarizationType" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try
+    {
+      result = (cphd::PolarizationType *)new cphd::PolarizationType(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__PolarizationType, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolarizationType(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_PolarizationType__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_PolarizationType__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_PolarizationType__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_PolarizationType'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    cphd::PolarizationType::PolarizationType()\n"
+    "    cphd::PolarizationType::PolarizationType(std::string const &)\n"
+    "    cphd::PolarizationType::PolarizationType(int)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType_toString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolarizationType_toString",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType_toString" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  {
+    try
+    {
+      result = ((cphd::PolarizationType const *)arg1)->toString();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___eq__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___eq__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___eq__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator ==((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___ne__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___ne__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___ne__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator !=((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  int *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int temp2 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___eq__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolarizationType___eq__" "', argument " "2"" of type '" "int""'");
+  } 
+  temp2 = static_cast< int >(val2);
+  arg2 = &temp2;
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator ==((int const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___eq__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__PolarizationType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__PolarizationType, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_PolarizationType___eq____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__PolarizationType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolarizationType___eq____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  int *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int temp2 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___ne__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolarizationType___ne__" "', argument " "2"" of type '" "int""'");
+  } 
+  temp2 = static_cast< int >(val2);
+  arg2 = &temp2;
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator !=((int const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___ne__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__PolarizationType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__PolarizationType, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_PolarizationType___ne____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__PolarizationType, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolarizationType___ne____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___lt__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___lt__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___lt__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___lt__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___lt__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator <((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___gt__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___gt__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___gt__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___gt__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___gt__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator >((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___le__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___le__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___le__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___le__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___le__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator <=((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType___ge__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  cphd::PolarizationType *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType___ge__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType___ge__" "', argument " "1"" of type '" "cphd::PolarizationType const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__PolarizationType,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolarizationType___ge__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolarizationType___ge__" "', argument " "2"" of type '" "cphd::PolarizationType const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::PolarizationType * >(argp2);
+  {
+    try
+    {
+      result = (bool)((cphd::PolarizationType const *)arg1)->operator >=((cphd::PolarizationType const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType_value_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolarizationType_value_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType_value_set" "', argument " "1"" of type '" "cphd::PolarizationType *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolarizationType_value_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try
+    {
+      if (arg1) (arg1)->value = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolarizationType_value_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolarizationType_value_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolarizationType_value_get" "', argument " "1"" of type '" "cphd::PolarizationType *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  {
+    try
+    {
+      result = (int) ((arg1)->value);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PolarizationType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::PolarizationType *arg1 = (cphd::PolarizationType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolarizationType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__PolarizationType, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolarizationType" "', argument " "1"" of type '" "cphd::PolarizationType *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::PolarizationType * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *PolarizationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_cphd__PolarizationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -28011,6 +29040,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Data_getSampleType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd03::Data *arg1 = (cphd03::Data *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::SampleType result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Data_getSampleType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Data, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Data_getSampleType" "', argument " "1"" of type '" "cphd03::Data const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd03::Data * >(argp1);
+  {
+    try
+    {
+      result = ((cphd03::Data const *)arg1)->getSampleType();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new cphd::SampleType(static_cast< const cphd::SampleType& >(result))), SWIGTYPE_p_cphd__SampleType, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Data_setNumBytesVBP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Data *arg1 = (cphd03::Data *) 0 ;
@@ -33049,7 +34130,7 @@ SWIGINTERN PyObject *Swig_var_Wideband_ALL_get(void) {
   {
     try
     {
-      pyobj = SWIG_From_size_t(static_cast< size_t >(cphd03::Wideband::ALL));
+      pyobj = SWIG_From_size_t(static_cast< size_t >(cphd::Wideband::ALL));
     } 
     catch (const std::exception& e)
     {
@@ -33086,7 +34167,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
-  cphd03::Data *arg2 = 0 ;
+  cphd::Data *arg2 = 0 ;
   sys::Off_T arg3 ;
   sys::Off_T arg4 ;
   int res1 = SWIG_OLDOBJ ;
@@ -33096,7 +34177,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  cphd03::Wideband *result = 0 ;
+  cphd::Wideband *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:new_Wideband",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   {
@@ -33110,14 +34191,14 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     }
     arg1 = ptr;
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd03__Data,  0  | 0);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Data,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd03::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd03::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
   }
-  arg2 = reinterpret_cast< cphd03::Data * >(argp2);
+  arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
 #if PY_VERSION_HEX >= 0x03000000
     arg3 = PyLong_AsSsize_t(obj2);
@@ -33135,7 +34216,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (cphd03::Wideband *)new cphd03::Wideband((std::string const &)*arg1,(cphd03::Data const &)*arg2,arg3,arg4);
+      result = (cphd::Wideband *)new cphd::Wideband((std::string const &)*arg1,(cphd::Data const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -33163,7 +34244,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd03__Wideband, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Wideband, SWIG_POINTER_NEW |  0 );
   if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
@@ -33175,7 +34256,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
-  cphd03::Data *arg2 = 0 ;
+  cphd::Data *arg2 = 0 ;
   sys::Off_T arg3 ;
   sys::Off_T arg4 ;
   void *argp1 ;
@@ -33186,7 +34267,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  cphd03::Wideband *result = 0 ;
+  cphd::Wideband *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:new_Wideband",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   {
@@ -33202,14 +34283,14 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd03__Data,  0  | 0);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Data,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd03::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd03::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
   }
-  arg2 = reinterpret_cast< cphd03::Data * >(argp2);
+  arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
 #if PY_VERSION_HEX >= 0x03000000
     arg3 = PyLong_AsSsize_t(obj2);
@@ -33227,7 +34308,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (cphd03::Wideband *)new cphd03::Wideband(arg1,(cphd03::Data const &)*arg2,arg3,arg4);
+      result = (cphd::Wideband *)new cphd::Wideband(arg1,(cphd::Data const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -33255,7 +34336,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd03__Wideband, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Wideband, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -33279,7 +34360,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd03__Data, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -33309,7 +34390,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
     int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd03__Data, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -33338,15 +34419,15 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Wideband'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::Wideband::Wideband(std::string const &,cphd03::Data const &,sys::Off_T,sys::Off_T)\n"
-    "    cphd03::Wideband::Wideband(mem::SharedPtr< io::SeekableInputStream >,cphd03::Data const &,sys::Off_T,sys::Off_T)\n");
+    "    cphd::Wideband::Wideband(std::string const &,cphd::Data const &,sys::Off_T,sys::Off_T)\n"
+    "    cphd::Wideband::Wideband(mem::SharedPtr< io::SeekableInputStream >,cphd::Data const &,sys::Off_T,sys::Off_T)\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Wideband_getFileOffset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -33365,11 +34446,11 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *SWIGUNUSEDPARM(self)
   sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:Wideband_getFileOffset",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getFileOffset" "', argument " "1"" of type '" "cphd03::Wideband const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getFileOffset" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_getFileOffset" "', argument " "2"" of type '" "size_t""'");
@@ -33388,7 +34469,7 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((cphd03::Wideband const *)arg1)->getFileOffset(arg2,arg3,arg4);
+      result = ((cphd::Wideband const *)arg1)->getFileOffset(arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -33429,9 +34510,140 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Wideband_getFileOffset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  sys::Off_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Wideband_getFileOffset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getFileOffset" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_getFileOffset" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      result = ((cphd::Wideband const *)arg1)->getFileOffset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
+    resultobj = PyInt_FromSsize_t(result);
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Wideband_getFileOffset__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_size_t(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_Wideband_getFileOffset__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Wideband_getFileOffset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    cphd::Wideband::getFileOffset(size_t,size_t,size_t) const\n"
+    "    cphd::Wideband::getFileOffset(size_t) const\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -33465,11 +34677,11 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj7 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:Wideband_read",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
@@ -33511,7 +34723,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(mem::BufferView< sys::ubyte > const &)*arg8);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(mem::BufferView< sys::ubyte > const &)*arg8);
     } 
     catch (const std::exception& e)
     {
@@ -33548,7 +34760,79 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
+  size_t arg2 ;
+  mem::BufferView< sys::ubyte > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Wideband_read",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
+  }
+  arg3 = reinterpret_cast< mem::BufferView< sys::ubyte > * >(argp3);
+  {
+    try
+    {
+      ((cphd::Wideband const *)arg1)->read(arg2,(mem::BufferView< sys::ubyte > const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -33582,11 +34866,11 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj7 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:Wideband_read",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
@@ -33628,7 +34912,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,*arg8);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,*arg8);
     } 
     catch (const std::exception& e)
     {
@@ -33663,9 +34947,81 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
+  size_t arg2 ;
+  mem::ScopedArray< sys::ubyte > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Wideband_read",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
+  }
+  arg3 = reinterpret_cast< mem::ScopedArray< sys::ubyte > * >(argp3);
+  {
+    try
+    {
+      ((cphd::Wideband const *)arg1)->read(arg2,*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -33706,11 +35062,11 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj9 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOO:Wideband_read",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
@@ -33771,7 +35127,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(mem::BufferView< sys::ubyte > const &)*arg9,(mem::BufferView< std::complex< float > > const &)*arg10);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(mem::BufferView< sys::ubyte > const &)*arg9,(mem::BufferView< std::complex< float > > const &)*arg10);
     } 
     catch (const std::exception& e)
     {
@@ -33808,9 +35164,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -33847,11 +35203,11 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj8 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:Wideband_read",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_read" "', argument " "2"" of type '" "size_t""'");
@@ -33944,10 +35300,99 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
   for (ii = 0; (ii < 10) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Wideband_read__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Wideband_read__SWIG_3(self, args);
+        }
+      }
+    }
+  }
   if (argc == 8) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd03__Wideband, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_size_t(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_size_t(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_size_t(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_size_t(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  void *vptr = 0;
+                  int res = SWIG_ConvertPtr(argv[7], &vptr, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t, 0);
+                  _v = SWIG_CheckState(res);
+                  if (_v) {
+                    return _wrap_Wideband_read__SWIG_2(self, args);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 8) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -33993,60 +35438,10 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
       }
     }
   }
-  if (argc == 8) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd03__Wideband, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_size_t(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_size_t(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_size_t(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_size_t(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  void *vptr = 0;
-                  int res = SWIG_ConvertPtr(argv[7], &vptr, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t, 0);
-                  _v = SWIG_CheckState(res);
-                  if (_v) {
-                    return _wrap_Wideband_read__SWIG_1(self, args);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   if (argc == 9) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd03__Wideband, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -34086,7 +35481,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
                     int res = SWIG_ConvertPtr(argv[8], &ptr, 0, 0);
                     _v = SWIG_CheckState(res);
                     if (_v) {
-                      return _wrap_Wideband_read__SWIG_3(self, args);
+                      return _wrap_Wideband_read__SWIG_5(self, args);
                     }
                   }
                 }
@@ -34100,7 +35495,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
   if (argc == 10) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd03__Wideband, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Wideband, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -34142,7 +35537,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
                       int res = SWIG_ConvertPtr(argv[9], 0, SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t, 0);
                       _v = SWIG_CheckState(res);
                       if (_v) {
-                        return _wrap_Wideband_read__SWIG_2(self, args);
+                        return _wrap_Wideband_read__SWIG_4(self, args);
                       }
                     }
                   }
@@ -34158,17 +35553,19 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Wideband_read'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::BufferView< sys::ubyte > const &)\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::ScopedArray< sys::ubyte > &)\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< sys::ubyte > const &,mem::BufferView< std::complex< float > > const &)\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *)\n");
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::BufferView< sys::ubyte > const &) const\n"
+    "    cphd::Wideband::read(size_t,mem::BufferView< sys::ubyte > const &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::ScopedArray< sys::ubyte > &) const\n"
+    "    cphd::Wideband::read(size_t,mem::ScopedArray< sys::ubyte > &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< sys::ubyte > const &,mem::BufferView< std::complex< float > > const &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_Wideband_getBufferDims(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -34195,11 +35592,11 @@ SWIGINTERN PyObject *_wrap_Wideband_getBufferDims(PyObject *SWIGUNUSEDPARM(self)
   types::RowCol< size_t > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOO:Wideband_getBufferDims",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getBufferDims" "', argument " "1"" of type '" "cphd03::Wideband const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getBufferDims" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_getBufferDims" "', argument " "2"" of type '" "size_t""'");
@@ -34228,7 +35625,7 @@ SWIGINTERN PyObject *_wrap_Wideband_getBufferDims(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((cphd03::Wideband const *)arg1)->getBufferDims(arg2,arg3,arg4,arg5,arg6);
+      result = ((cphd::Wideband const *)arg1)->getBufferDims(arg2,arg3,arg4,arg5,arg6);
     } 
     catch (const std::exception& e)
     {
@@ -34263,61 +35660,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Wideband_getSampleType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  cphd::SampleType result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Wideband_getSampleType",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getSampleType" "', argument " "1"" of type '" "cphd03::Wideband const *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
-  {
-    try
-    {
-      result = ((cphd03::Wideband const *)arg1)->getSampleType();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj((new cphd::SampleType(static_cast< const cphd::SampleType& >(result))), SWIGTYPE_p_cphd__SampleType, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Wideband_readImpl(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   size_t arg4 ;
@@ -34355,11 +35700,11 @@ SWIGINTERN PyObject *_wrap_Wideband_readImpl(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj8 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:Wideband_readImpl",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_readImpl" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_readImpl" "', argument " "1"" of type '" "cphd::Wideband *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Wideband_readImpl" "', argument " "2"" of type '" "size_t""'");
@@ -34406,7 +35751,7 @@ SWIGINTERN PyObject *_wrap_Wideband_readImpl(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      cphd03_Wideband_readImpl(arg1,arg2,arg3,arg4,arg5,arg6,arg7,(types::RowCol< size_t > const &)*arg8,arg9);
+      cphd_Wideband_readImpl(arg1,arg2,arg3,arg4,arg5,arg6,arg7,(types::RowCol< size_t > const &)*arg8,arg9);
     } 
     catch (const std::exception& e)
     {
@@ -34443,17 +35788,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_Wideband(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  cphd03::Wideband *arg1 = (cphd03::Wideband *) 0 ;
+  cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:delete_Wideband",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Wideband, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Wideband" "', argument " "1"" of type '" "cphd03::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Wideband" "', argument " "1"" of type '" "cphd::Wideband *""'"); 
   }
-  arg1 = reinterpret_cast< cphd03::Wideband * >(argp1);
+  arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   {
     try
     {
@@ -34495,7 +35840,7 @@ fail:
 SWIGINTERN PyObject *Wideband_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_cphd03__Wideband, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_cphd__Wideband, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -35576,7 +36921,7 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getWideband(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  cphd03::Wideband *result = 0 ;
+  cphd::Wideband *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:CPHDReader_getWideband",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__CPHDReader, 0 |  0 );
@@ -35587,7 +36932,7 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getWideband(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = (cphd03::Wideband *) &(arg1)->getWideband();
+      result = (cphd::Wideband *) &(arg1)->getWideband();
     } 
     catch (const std::exception& e)
     {
@@ -35615,7 +36960,7 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getWideband(PyObject *SWIGUNUSEDPARM(self)
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd03__Wideband, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -56038,6 +57383,28 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SRPType_value_get", _wrap_SRPType_value_get, METH_VARARGS, (char *)"SRPType_value_get(SRPType self) -> int"},
 	 { (char *)"delete_SRPType", _wrap_delete_SRPType, METH_VARARGS, (char *)"delete_SRPType(SRPType self)"},
 	 { (char *)"SRPType_swigregister", SRPType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_PolarizationType", _wrap_new_PolarizationType, METH_VARARGS, (char *)"\n"
+		"PolarizationType()\n"
+		"PolarizationType(std::string const & s)\n"
+		"new_PolarizationType(int i) -> PolarizationType\n"
+		""},
+	 { (char *)"PolarizationType_toString", _wrap_PolarizationType_toString, METH_VARARGS, (char *)"PolarizationType_toString(PolarizationType self) -> std::string"},
+	 { (char *)"PolarizationType___eq__", _wrap_PolarizationType___eq__, METH_VARARGS, (char *)"\n"
+		"__eq__(PolarizationType o) -> bool\n"
+		"PolarizationType___eq__(PolarizationType self, int const & o) -> bool\n"
+		""},
+	 { (char *)"PolarizationType___ne__", _wrap_PolarizationType___ne__, METH_VARARGS, (char *)"\n"
+		"__ne__(PolarizationType o) -> bool\n"
+		"PolarizationType___ne__(PolarizationType self, int const & o) -> bool\n"
+		""},
+	 { (char *)"PolarizationType___lt__", _wrap_PolarizationType___lt__, METH_VARARGS, (char *)"PolarizationType___lt__(PolarizationType self, PolarizationType o) -> bool"},
+	 { (char *)"PolarizationType___gt__", _wrap_PolarizationType___gt__, METH_VARARGS, (char *)"PolarizationType___gt__(PolarizationType self, PolarizationType o) -> bool"},
+	 { (char *)"PolarizationType___le__", _wrap_PolarizationType___le__, METH_VARARGS, (char *)"PolarizationType___le__(PolarizationType self, PolarizationType o) -> bool"},
+	 { (char *)"PolarizationType___ge__", _wrap_PolarizationType___ge__, METH_VARARGS, (char *)"PolarizationType___ge__(PolarizationType self, PolarizationType o) -> bool"},
+	 { (char *)"PolarizationType_value_set", _wrap_PolarizationType_value_set, METH_VARARGS, (char *)"PolarizationType_value_set(PolarizationType self, int value)"},
+	 { (char *)"PolarizationType_value_get", _wrap_PolarizationType_value_get, METH_VARARGS, (char *)"PolarizationType_value_get(PolarizationType self) -> int"},
+	 { (char *)"delete_PolarizationType", _wrap_delete_PolarizationType, METH_VARARGS, (char *)"delete_PolarizationType(PolarizationType self)"},
+	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"new_FileHeader() -> FileHeader"},
 	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},
 	 { (char *)"FileHeader_read", _wrap_FileHeader_read, METH_VARARGS, (char *)"FileHeader_read(FileHeader self, SeekableInputStream inStream)"},
@@ -56288,6 +57655,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Data_getNumSamples", _wrap_Data_getNumSamples, METH_VARARGS, (char *)"Data_getNumSamples(Data self, size_t channel) -> size_t"},
 	 { (char *)"Data_getNumBytesPerSample", _wrap_Data_getNumBytesPerSample, METH_VARARGS, (char *)"Data_getNumBytesPerSample(Data self) -> size_t"},
 	 { (char *)"Data_getNumBytesVBP", _wrap_Data_getNumBytesVBP, METH_VARARGS, (char *)"Data_getNumBytesVBP(Data self) -> size_t"},
+	 { (char *)"Data_getSampleType", _wrap_Data_getSampleType, METH_VARARGS, (char *)"Data_getSampleType(Data self) -> SampleType"},
 	 { (char *)"Data_setNumBytesVBP", _wrap_Data_setNumBytesVBP, METH_VARARGS, (char *)"Data_setNumBytesVBP(Data self, size_t n)"},
 	 { (char *)"Data___eq__", _wrap_Data___eq__, METH_VARARGS, (char *)"Data___eq__(Data self, Data other) -> bool"},
 	 { (char *)"Data___ne__", _wrap_Data___ne__, METH_VARARGS, (char *)"Data___ne__(Data self, Data other) -> bool"},
@@ -56381,18 +57749,22 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CPHDXMLControl", _wrap_delete_CPHDXMLControl, METH_VARARGS, (char *)"delete_CPHDXMLControl(CPHDXMLControl self)"},
 	 { (char *)"CPHDXMLControl_swigregister", CPHDXMLControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Wideband", _wrap_new_Wideband, METH_VARARGS, (char *)"\n"
-		"Wideband(std::string const & pathname, Data data, sys::Off_T startWB, sys::Off_T sizeWB)\n"
-		"new_Wideband(mem::SharedPtr< io::SeekableInputStream > inStream, Data data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
+		"Wideband(std::string const & pathname, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB)\n"
+		"new_Wideband(mem::SharedPtr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
 		""},
-	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"Wideband_getFileOffset(Wideband self, size_t channel, size_t vector, size_t sample) -> sys::Off_T"},
+	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"\n"
+		"getFileOffset(size_t channel, size_t vector, size_t sample) -> sys::Off_T\n"
+		"Wideband_getFileOffset(Wideband self, size_t channel) -> sys::Off_T\n"
+		""},
 	 { (char *)"Wideband_read", _wrap_Wideband_read, METH_VARARGS, (char *)"\n"
 		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< sys::ubyte > const & data)\n"
+		"read(size_t channel, mem::BufferView< sys::ubyte > const & data)\n"
 		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::ScopedArray< sys::ubyte > & data)\n"
+		"read(size_t channel, mem::ScopedArray< sys::ubyte > & data)\n"
 		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< sys::ubyte > const & scratch, mem::BufferView< std::complex< float > > const & data)\n"
 		"Wideband_read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, void * data)\n"
 		""},
 	 { (char *)"Wideband_getBufferDims", _wrap_Wideband_getBufferDims, METH_VARARGS, (char *)"Wideband_getBufferDims(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> RowColSizeT"},
-	 { (char *)"Wideband_getSampleType", _wrap_Wideband_getSampleType, METH_VARARGS, (char *)"Wideband_getSampleType(Wideband self) -> SampleType"},
 	 { (char *)"Wideband_readImpl", _wrap_Wideband_readImpl, METH_VARARGS, (char *)"Wideband_readImpl(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, long long data)"},
 	 { (char *)"delete_Wideband", _wrap_delete_Wideband, METH_VARARGS, (char *)"delete_Wideband(Wideband self)"},
 	 { (char *)"Wideband_swigregister", Wideband_swigregister, METH_VARARGS, NULL},
@@ -56825,6 +58197,9 @@ static void *_p_six__sicd__ComplexCollectionInformationTo_p_six__CollectionInfor
 static void *_p_io__FileInputStreamOSTo_p_io__SeekableInputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::SeekableInputStream *)  ((io::FileInputStreamOS *) x));
 }
+static void *_p_cphd03__DataTo_p_cphd__Data(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((cphd::Data *)  ((cphd03::Data *) x));
+}
 static void *_p_six__sicd__ComplexDataTo_p_six__Data(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((six::Data *)  ((six::sicd::ComplexData *) x));
 }
@@ -56857,14 +58232,16 @@ static swig_type_info _swigt__p_cphd03__SRP = {"_p_cphd03__SRP", "cphd03::SRP *"
 static swig_type_info _swigt__p_cphd03__TOAParameters = {"_p_cphd03__TOAParameters", "cphd03::TOAParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__VBM = {"_p_cphd03__VBM", "cphd03::VBM *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__VectorParameters = {"_p_cphd03__VectorParameters", "cphd03::VectorParameters *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_cphd03__Wideband = {"_p_cphd03__Wideband", "cphd03::Wideband *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__Data = {"_p_cphd__Data", "cphd::Data *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__DomainType = {"_p_cphd__DomainType", "cphd::DomainType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__EarthModelType = {"_p_cphd__EarthModelType", "cphd::EarthModelType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__PhaseSGN = {"_p_cphd__PhaseSGN", "cphd::PhaseSGN *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__PolarizationType = {"_p_cphd__PolarizationType", "cphd::PolarizationType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__RefHeight = {"_p_cphd__RefHeight", "cphd::RefHeight *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__SRPType = {"_p_cphd__SRPType", "cphd::SRPType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__SampleType = {"_p_cphd__SampleType", "cphd::SampleType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__SignalArrayFormat = {"_p_cphd__SignalArrayFormat", "cphd::SignalArrayFormat *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__Wideband = {"_p_cphd__Wideband", "cphd::Wideband *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *|six::ValidationContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
@@ -56911,6 +58288,7 @@ static swig_type_info _swigt__p_six__CornersT_scene__LatLon_t = {"_p_six__Corner
 static swig_type_info _swigt__p_six__Data = {"_p_six__Data", "six::Data *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__DataType = {"_p_six__DataType", "six::DataType *|cphd::DataType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__FFTSign = {"_p_six__FFTSign", "six::FFTSign *|cphd::FFTSign *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__MatchInformation = {"_p_six__MatchInformation", "six::MatchInformation *|cphd::MatchInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__RadarModeType = {"_p_six__RadarModeType", "six::RadarModeType *|cphd::RadarModeType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ReferencePoint = {"_p_six__ReferencePoint", "six::ReferencePoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__XMLControlCreator = {"_p_six__XMLControlCreator", "six::XMLControlCreator *", 0, 0, (void*)0, 0};
@@ -56919,6 +58297,7 @@ static swig_type_info _swigt__p_six__sicd__AreaDirectionParameters = {"_p_six__s
 static swig_type_info _swigt__p_six__sicd__ComplexData = {"_p_six__sicd__ComplexData", "six::sicd::ComplexData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd__ElectricalBoresight", "six::sicd::ElectricalBoresight *|cphd03::ElectricalBoresight *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__GainAndPhasePolys", "six::sicd::GainAndPhasePolys *|cphd03::GainAndPhasePolys *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__sicd__GeoInfo = {"_p_six__sicd__GeoInfo", "six::sicd::GeoInfo *|cphd::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__HalfPowerBeamwidths = {"_p_six__sicd__HalfPowerBeamwidths", "six::sicd::HalfPowerBeamwidths *|cphd03::HalfPowerBeamwidths *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
@@ -56980,14 +58359,16 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_cphd03__TOAParameters,
   &_swigt__p_cphd03__VBM,
   &_swigt__p_cphd03__VectorParameters,
-  &_swigt__p_cphd03__Wideband,
+  &_swigt__p_cphd__Data,
   &_swigt__p_cphd__DomainType,
   &_swigt__p_cphd__EarthModelType,
   &_swigt__p_cphd__PhaseSGN,
+  &_swigt__p_cphd__PolarizationType,
   &_swigt__p_cphd__RefHeight,
   &_swigt__p_cphd__SRPType,
   &_swigt__p_cphd__SampleType,
   &_swigt__p_cphd__SignalArrayFormat,
+  &_swigt__p_cphd__Wideband,
   &_swigt__p_difference_type,
   &_swigt__p_except__Context,
   &_swigt__p_except__NullPointerReferenceException,
@@ -57033,6 +58414,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__Data,
   &_swigt__p_six__DataType,
   &_swigt__p_six__FFTSign,
+  &_swigt__p_six__MatchInformation,
   &_swigt__p_six__RadarModeType,
   &_swigt__p_six__ReferencePoint,
   &_swigt__p_six__XMLControlCreator,
@@ -57042,6 +58424,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__sicd__ComplexData,
   &_swigt__p_six__sicd__ElectricalBoresight,
   &_swigt__p_six__sicd__GainAndPhasePolys,
+  &_swigt__p_six__sicd__GeoInfo,
   &_swigt__p_six__sicd__HalfPowerBeamwidths,
   &_swigt__p_size_t,
   &_swigt__p_size_type,
@@ -57103,14 +58486,16 @@ static swig_cast_info _swigc__p_cphd03__SRP[] = {  {&_swigt__p_cphd03__SRP, 0, 0
 static swig_cast_info _swigc__p_cphd03__TOAParameters[] = {  {&_swigt__p_cphd03__TOAParameters, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd03__VBM[] = {  {&_swigt__p_cphd03__VBM, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd03__VectorParameters[] = {  {&_swigt__p_cphd03__VectorParameters, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_cphd03__Wideband[] = {  {&_swigt__p_cphd03__Wideband, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cphd__Data[] = {  {&_swigt__p_cphd03__Data, _p_cphd03__DataTo_p_cphd__Data, 0, 0},  {&_swigt__p_cphd__Data, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__DomainType[] = {  {&_swigt__p_cphd__DomainType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__EarthModelType[] = {  {&_swigt__p_cphd__EarthModelType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__PhaseSGN[] = {  {&_swigt__p_cphd__PhaseSGN, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cphd__PolarizationType[] = {  {&_swigt__p_cphd__PolarizationType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__RefHeight[] = {  {&_swigt__p_cphd__RefHeight, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__SRPType[] = {  {&_swigt__p_cphd__SRPType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__SampleType[] = {  {&_swigt__p_cphd__SampleType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__SignalArrayFormat[] = {  {&_swigt__p_cphd__SignalArrayFormat, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cphd__Wideband[] = {  {&_swigt__p_cphd__Wideband, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Context[] = {  {&_swigt__p_except__Context, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
@@ -57157,6 +58542,7 @@ static swig_cast_info _swigc__p_six__CornersT_scene__LatLon_t[] = {  {&_swigt__p
 static swig_cast_info _swigc__p_six__Data[] = {  {&_swigt__p_six__Data, 0, 0, 0},  {&_swigt__p_six__sicd__ComplexData, _p_six__sicd__ComplexDataTo_p_six__Data, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__DataType[] = {  {&_swigt__p_six__DataType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__FFTSign[] = {  {&_swigt__p_six__FFTSign, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__MatchInformation[] = {  {&_swigt__p_six__MatchInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__RadarModeType[] = {  {&_swigt__p_six__RadarModeType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ReferencePoint[] = {  {&_swigt__p_six__ReferencePoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__XMLControlCreator[] = {  {&_swigt__p_six__XMLControlCreator, 0, 0, 0},{0, 0, 0, 0}};
@@ -57165,6 +58551,7 @@ static swig_cast_info _swigc__p_six__sicd__AreaDirectionParameters[] = {  {&_swi
 static swig_cast_info _swigc__p_six__sicd__ComplexData[] = {  {&_swigt__p_six__sicd__ComplexData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ElectricalBoresight[] = {  {&_swigt__p_six__sicd__ElectricalBoresight, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__GainAndPhasePolys[] = {  {&_swigt__p_six__sicd__GainAndPhasePolys, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__sicd__GeoInfo[] = {  {&_swigt__p_six__sicd__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__HalfPowerBeamwidths[] = {  {&_swigt__p_six__sicd__HalfPowerBeamwidths, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -57226,14 +58613,16 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_cphd03__TOAParameters,
   _swigc__p_cphd03__VBM,
   _swigc__p_cphd03__VectorParameters,
-  _swigc__p_cphd03__Wideband,
+  _swigc__p_cphd__Data,
   _swigc__p_cphd__DomainType,
   _swigc__p_cphd__EarthModelType,
   _swigc__p_cphd__PhaseSGN,
+  _swigc__p_cphd__PolarizationType,
   _swigc__p_cphd__RefHeight,
   _swigc__p_cphd__SRPType,
   _swigc__p_cphd__SampleType,
   _swigc__p_cphd__SignalArrayFormat,
+  _swigc__p_cphd__Wideband,
   _swigc__p_difference_type,
   _swigc__p_except__Context,
   _swigc__p_except__NullPointerReferenceException,
@@ -57279,6 +58668,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__Data,
   _swigc__p_six__DataType,
   _swigc__p_six__FFTSign,
+  _swigc__p_six__MatchInformation,
   _swigc__p_six__RadarModeType,
   _swigc__p_six__ReferencePoint,
   _swigc__p_six__XMLControlCreator,
@@ -57288,6 +58678,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__sicd__ComplexData,
   _swigc__p_six__sicd__ElectricalBoresight,
   _swigc__p_six__sicd__GainAndPhasePolys,
+  _swigc__p_six__sicd__GeoInfo,
   _swigc__p_six__sicd__HalfPowerBeamwidths,
   _swigc__p_size_t,
   _swigc__p_size_type,
@@ -58037,6 +59428,14 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SRPType_PVVPOLY",SWIG_From_int(static_cast< int >(cphd::SRPType::PVVPOLY)));
   SWIG_Python_SetConstant(d, "SRPType_STEPPED",SWIG_From_int(static_cast< int >(cphd::SRPType::STEPPED)));
   SWIG_Python_SetConstant(d, "SRPType_NOT_SET",SWIG_From_int(static_cast< int >(cphd::SRPType::NOT_SET)));
+  SWIG_Python_SetConstant(d, "PolarizationType_X",SWIG_From_int(static_cast< int >(cphd::PolarizationType::X)));
+  SWIG_Python_SetConstant(d, "PolarizationType_Y",SWIG_From_int(static_cast< int >(cphd::PolarizationType::Y)));
+  SWIG_Python_SetConstant(d, "PolarizationType_V",SWIG_From_int(static_cast< int >(cphd::PolarizationType::V)));
+  SWIG_Python_SetConstant(d, "PolarizationType_H",SWIG_From_int(static_cast< int >(cphd::PolarizationType::H)));
+  SWIG_Python_SetConstant(d, "PolarizationType_RHC",SWIG_From_int(static_cast< int >(cphd::PolarizationType::RHC)));
+  SWIG_Python_SetConstant(d, "PolarizationType_LHC",SWIG_From_int(static_cast< int >(cphd::PolarizationType::LHC)));
+  SWIG_Python_SetConstant(d, "PolarizationType_UNSPECIFIED",SWIG_From_int(static_cast< int >(cphd::PolarizationType::UNSPECIFIED)));
+  SWIG_Python_SetConstant(d, "PolarizationType_NOT_SET",SWIG_From_int(static_cast< int >(cphd::PolarizationType::NOT_SET)));
   SWIG_addvarlink(SWIG_globals(),(char *)"FileHeader_DEFAULT_VERSION",Swig_var_FileHeader_DEFAULT_VERSION_get, Swig_var_FileHeader_DEFAULT_VERSION_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Wideband_ALL",Swig_var_Wideband_ALL_get, Swig_var_Wideband_ALL_set);
 #if PY_VERSION_HEX >= 0x03000000

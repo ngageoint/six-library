@@ -39,9 +39,11 @@
 namespace cphd
 {
 
-//  This class contains information about the Wideband CPHD data.
+/*
+ * \class Wideband
+ * \brief Information about the wideband CPHD data
+ */
 //  It contains the cphd::Data structure (for channel and vector sizes).
-//
 //  Due to the large size of CPHD wideband, this object does not contain
 //  any actual wideband data
 class Wideband
@@ -147,6 +149,29 @@ public:
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
 
+    /*
+     *  \func read
+     *
+     *  \brief Read the specified channel, vector(s), and sample(s)
+     *
+     *  Performs endian swapping if necessary
+     *
+     *  \param channel 0-based channel
+     *  \param firstVector 0-based first vector to read (inclusive)
+     *  \param lastVector 0-based last vector to read (inclusive).  Use ALL to
+     *  read all vectors
+     *  \param firstSample 0-based first sample to read (inclusive)
+     *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
+     *  read all samples
+     *  \param numThreads Number of threads to use for endian swapping if
+     *  necessary
+     *  \param data A pre allocated mem::BufferView that will hold the data
+     *   read from the file.
+     *
+     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *   firstSample or lastSample
+     *  \throws except::Exception If BufferView memory allocated is insufficient
+     */
     // Same as above for compressed Signal Array
     void read(size_t channel,
               const mem::BufferView<sys::ubyte>& data) const;

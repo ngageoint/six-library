@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of cphd03-c++
+ * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
- * cphd03-c++ is free software; you can redistribute it and/or modify
+ * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,24 +20,32 @@
  *
  */
 
-#ifndef __IMPORT_CPHD03_H__
-#define __IMPORT_CPHD03_H__
+#ifndef __IMPORT_CPHD_H__
+#define __IMPORT_CPHD_H__
 
-#include "cphd03/Antenna.h"
-#include "cphd03/Channel.h"
-#include "cphd03/CPHDReader.h"
-#include "cphd03/CPHDWriter.h"
-#include "cphd03/CPHDXMLControl.h"
-#include "cphd03/Data.h"
+#include "cphd/Antenna.h"
+#include "cphd/Channel.h"
+#include "cphd/CollectionID.h"
+#include "cphd/CPHDReader.h"
+#include "cphd/CPHDWriter.h"
+#include "cphd/CPHDXMLControl.h"
+#include "cphd/Data.h"
+#include "cphd/Dwell.h"
 #include "cphd/Enums.h"
-#include "cphd03/FileHeader.h"
-#include "cphd03/Global.h"
-#include "cphd03/Metadata.h"
-#include "cphd03/SRP.h"
+#include "cphd/ErrorParameters.h"
+#include "cphd/FileHeader.h"
+#include "cphd/Global.h"
+#include "cphd/Metadata.h"
+#include "cphd/ProductInfo.h"
+#include "cphd/PVP.h"
+#include "cphd/PVPBlock.h"
+#include "cphd/ReferenceGeometry.h"
+#include "cphd/SceneCoordinates.h"
+#include "cphd/SupportArray.h"
+#include "cphd/SupportBlock.h"
+#include "cphd/TxRcv.h"
 #include "cphd/Types.h"
-#include "cphd03/Utilities.h"
-#include "cphd03/VBM.h"
-#include "cphd03/VectorParameters.h"
+#include "cphd/Utilities.h"
 #include "cphd/Wideband.h"
 
 #endif

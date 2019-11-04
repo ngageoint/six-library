@@ -38,6 +38,7 @@
 
 %{
 #include "import/types.h"
+#include "import/cphd.h"
 #include "import/cphd03.h"
 #include "import/six.h"
 #include "import/six/sicd.h"
@@ -63,7 +64,7 @@ using six::Vector3;
 %include "cphd03/VBM.h"
 %include "cphd03/CPHDXMLControl.h"
 
-%include "cphd03/Wideband.h"
+%include "cphd/Wideband.h"
 %include "cphd03/CPHDReader.h"
 %include "cphd03/CPHDWriter.h"
 
@@ -136,7 +137,7 @@ using six::Vector3;
     }
 }
 
-%extend cphd03::Wideband
+%extend cphd::Wideband
 {
     // We need to expose a way to read into a raw buffer
     void readImpl(size_t channel,
