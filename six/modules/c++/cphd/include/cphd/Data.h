@@ -33,6 +33,7 @@
 #include <six/Init.h>
 #include <sys/Conf.h>
 #include <cphd/Enums.h>
+#include <cphd/Utilities.h>
 
 namespace cphd
 {
@@ -240,7 +241,7 @@ struct Data
     }
 
     //! Getter functions
-    size_t getNumVectors(size_t channel) const
+    virtual size_t getNumVectors(size_t channel) const
     {
         if (channel < channels.size())
         {
@@ -252,7 +253,7 @@ struct Data
                 << " channels exist \n";
         throw except::Exception(ostr.str());
     }
-    size_t getNumSamples(size_t channel) const
+    virtual size_t getNumSamples(size_t channel) const
     {
         if (channel < channels.size())
         {
@@ -276,7 +277,7 @@ struct Data
                 << " channels exist \n";
         throw except::Exception(ostr.str());
     }
-    size_t getNumChannels() const
+    virtual size_t getNumChannels() const
     {
         return channels.size();
     }
@@ -288,9 +289,13 @@ struct Data
     {
         return signalCompressionID;
     }
-    SignalArrayFormat getSignalFormat() const
+    SignalArrayFormat getSampleType() const
     {
         return signalArrayFormat;
+    }
+    virtual size_t getNumBytesPerSample() const
+    {
+        return cphd::getNumBytesPerSample(signalArrayFormat);
     }
     size_t getNumSupportArrays() const
     {

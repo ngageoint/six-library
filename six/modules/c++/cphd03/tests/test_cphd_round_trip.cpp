@@ -29,6 +29,7 @@
 #include <cphd03/CPHDReader.h>
 #include <types/RowCol.h>
 #include <cli/ArgumentParser.h>
+#include <cphd/Wideband.h>
 
 int main(int argc, char** argv)
 {
@@ -59,7 +60,7 @@ int main(int argc, char** argv)
         const cphd::SampleType sampleType =
                 reader.getMetadata().data.sampleType;
         const cphd03::VBM& vbm = reader.getVBM();
-        cphd03::Wideband& wideband = reader.getWideband();
+        cphd::Wideband& wideband = reader.getWideband();
 
         std::cout << "Writing file: " << outPathname << "\n";
         writer.writeMetadata(outPathname, vbm);
@@ -73,8 +74,8 @@ int main(int argc, char** argv)
             mem::ScopedArray<sys::ubyte> data;
 
             wideband.read(channel,
-                          0, cphd03::Wideband::ALL,
-                          0, cphd03::Wideband::ALL,
+                          0, cphd::Wideband::ALL,
+                          0, cphd::Wideband::ALL,
                           numThreads, data);
 
             switch (sampleType)

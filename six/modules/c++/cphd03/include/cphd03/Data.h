@@ -28,6 +28,7 @@
 #include <vector>
 #include <stddef.h>
 
+#include <cphd/Data.h>
 #include <cphd/Enums.h>
 
 namespace cphd03
@@ -53,28 +54,31 @@ struct ArraySize
 
 std::ostream& operator<< (std::ostream& os, const ArraySize& d);
 
-struct Data
+struct Data : cphd::Data
 {
     Data();
 
-    size_t getNumChannels() const
+    size_t getNumChannels() const override
     {
         return numCPHDChannels;
     }
 
     // 1-based channel number
-    size_t getNumVectors(size_t channel) const;
+    size_t getNumVectors(size_t channel) const override;
 
     // 1-based channel number
-    size_t getNumSamples(size_t channel) const;
+    size_t getNumSamples(size_t channel) const override;
 
-    size_t getNumBytesPerSample() const;
+    size_t getNumBytesPerSample() const override;
 
     size_t getNumBytesVBP() const
     {
         return numBytesVBP;
     }
-
+    cphd::SampleType getSampleType() const
+    {
+        return sampleType;
+    }
     void setNumBytesVBP(size_t n)
     {
         numBytesVBP = n;

@@ -77,7 +77,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new Wideband(inStream, mMetadata->data,
+    mWideband.reset(new cphd::Wideband(inStream, mMetadata->data,
                                  mFileHeader.getCPHDoffset(),
                                  mFileHeader.getCPHDsize()));
 }

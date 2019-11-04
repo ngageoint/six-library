@@ -322,7 +322,7 @@ private:
 
 private:
     const mem::SharedPtr<io::SeekableInputStream> mInStream;
-    cphd::Data mData;                 // contains numChannels, numVectors
+    const cphd::Data* mData;          // pointer to data metadata
     const sys::Off_T mWBOffset;       // offset in bytes to start of wideband
     const size_t mWBSize;             // total size in bytes of wideband
     const size_t mElementSize;        // element size (bytes / complex sample)

@@ -98,7 +98,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
     mMetadata(metadata),
-    mElementSize(getNumBytesPerSample(metadata.data.sampleType)),
+    mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
     mCPHDSize(0),

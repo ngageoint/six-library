@@ -240,7 +240,7 @@ Wideband::Wideband(const std::string& pathname,
     mData(data),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.sampleType)),
+    mElementSize(mData.getNumBytesPerSample()),
     mOffsets(mData.getNumChannels())
 {
     initialize();
@@ -254,7 +254,7 @@ Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
     mData(data),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.sampleType)),
+    mElementSize(mData.getNumBytesPerSample()),
     mOffsets(mData.getNumChannels())
 {
     initialize();

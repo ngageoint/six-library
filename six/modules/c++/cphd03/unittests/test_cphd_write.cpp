@@ -22,6 +22,7 @@
 
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
+#include <cphd/Wideband.h>
 #include <types/RowCol.h>
 
 #include "TestCase.h"
@@ -386,7 +387,7 @@ void runCPHDTest(const std::string& testName,
     writer.close();
 
     cphd03::CPHDReader reader(FILE_NAME, NUM_THREADS);
-    cphd03::Wideband& wideband = reader.getWideband();
+    cphd::Wideband& wideband = reader.getWideband();
 
     TEST_ASSERT_EQ(metadata, reader.getMetadata());
     TEST_ASSERT_EQ(vbm, reader.getVBM());
@@ -399,8 +400,8 @@ void runCPHDTest(const std::string& testName,
         TEST_ASSERT_EQ(reader.getNumSamples(ii), dims[ii].col);
 
         wideband.read(ii,
-                      0, cphd03::Wideband::ALL,
-                      0, cphd03::Wideband::ALL,
+                      0, cphd::Wideband::ALL,
+                      0, cphd::Wideband::ALL,
                       NUM_THREADS, readData);
 
         const std::complex<float>* readBuffer =

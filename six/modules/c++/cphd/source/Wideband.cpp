@@ -238,11 +238,11 @@ Wideband::Wideband(const std::string& pathname,
                    sys::Off_T startWB,
                    sys::Off_T sizeWB) :
     mInStream(new io::FileInputStream(pathname)),
-    mData(data),
+    mData(&data),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.getSignalFormat())),
-    mOffsets(mData.getNumChannels())
+    mElementSize(mData->getNumBytesPerSample()), // THE ISSUE IS OVERLOADING THIS FUNCTION
+    mOffsets(mData->getNumChannels())
 {
     initialize();
 }
@@ -252,11 +252,11 @@ Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
                    sys::Off_T startWB,
                    sys::Off_T sizeWB) :
     mInStream(inStream),
-    mData(data),
+    mData(&data),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.getSignalFormat())),
-    mOffsets(mData.getNumChannels())
+    mElementSize(mData->getNumBytesPerSample()),// THE ISSUE IS OVERLOADING THIS FUNCTION
+    mOffsets(mData->getNumChannels())
 {
     initialize();
 }
@@ -264,14 +264,14 @@ Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
 void Wideband::initialize()
 {
     mOffsets[0] = mWBOffset;
-    if (!mData.isCompressed())
+    if (!mData->isCompressed())
     {
         // No Signal Array Compression
-        for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
+        for (size_t ii = 1; ii < mData->getNumChannels(); ++ii)
         {
             const sys::Off_T offset =
-                static_cast<sys::Off_T>(mData.channels[ii - 1].getNumSamples()) *
-                mData.channels[ii - 1].getNumVectors() *
+                static_cast<sys::Off_T>(mData->getNumSamples(ii - 1)) *
+                mData->getNumVectors(ii - 1) *
                 mElementSize;
 
             mOffsets[ii] = mOffsets[ii - 1] + offset;
@@ -280,9 +280,9 @@ void Wideband::initialize()
     else
     {
         // Signal Array is Compressed
-        for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
+        for (size_t ii = 1; ii < mData->getNumChannels(); ++ii)
         {
-            mOffsets[ii] = mOffsets[ii - 1] + mData.getCompressedSignalSize(ii);
+            mOffsets[ii] = mOffsets[ii - 1] + mData->getCompressedSignalSize(ii);
         }
     }
 }
@@ -296,18 +296,18 @@ sys::Off_T Wideband::getFileOffset(size_t channel,
         throw(except::Exception(Ctxt("Invalid channel number")));
     }
 
-    if (vector >= mData.channels[channel].getNumVectors())
+    if (vector >= mData->getNumVectors(channel))
     {
         throw(except::Exception(Ctxt("Invalid vector")));
     }
 
-    if (sample >= mData.channels[channel].getNumSamples())
+    if (sample >= mData->getNumSamples(channel))
     {
         throw(except::Exception(Ctxt("Invalid sample")));
     }
 
     const sys::Off_T bytesPerVectorFile =
-            mData.channels[channel].getNumSamples() * mElementSize;
+            mData->getNumSamples(channel) * mElementSize;
 
     const sys::Off_T offset =
             mOffsets[channel] +
@@ -336,7 +336,7 @@ void Wideband::checkReadInputs(size_t channel,
 {
     checkChannelInput(channel);
 
-    const size_t maxVector = mData.channels[channel].getNumVectors() - 1;
+    const size_t maxVector = mData->getNumVectors(channel) - 1;
     if (firstVector > maxVector)
     {
         throw except::Exception(Ctxt("Invalid first vector"));
@@ -351,7 +351,7 @@ void Wideband::checkReadInputs(size_t channel,
         throw except::Exception(Ctxt("Invalid last vector"));
     }
 
-    const size_t maxSample = mData.channels[channel].getNumSamples() - 1;
+    const size_t maxSample = mData->getNumSamples(channel) - 1;
     if (firstSample > maxSample)
     {
         throw except::Exception(Ctxt("Invalid first sample"));
@@ -372,7 +372,7 @@ void Wideband::checkReadInputs(size_t channel,
 
 void Wideband::checkChannelInput(size_t channel) const
 {
-    if (channel >= mData.getNumChannels())
+    if (channel >= mData->getNumChannels())
     {
         throw except::Exception(Ctxt("Invalid channel"));
     }
@@ -394,7 +394,7 @@ void Wideband::readImpl(size_t channel,
     sys::Off_T inOffset = getFileOffset(channel, firstVector, firstSample);
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
-    if (dims.col == mData.channels[channel].getNumSamples())
+    if (dims.col == mData->getNumSamples(channel))
     {
         // Life is easy - can do a single seek and read
         mInStream->seek(inOffset, io::FileInputStream::START);
@@ -406,7 +406,7 @@ void Wideband::readImpl(size_t channel,
         // of the columns
         const size_t bytesPerVectorAOI = dims.col * mElementSize;
         const size_t bytesPerVectorFile =
-                    mData.channels[channel].getNumSamples() * mElementSize;
+                    mData->getNumSamples(channel) * mElementSize;
 
         for (size_t row = 0; row < dims.row; ++row)
         {
@@ -427,7 +427,7 @@ void Wideband::readImpl(size_t channel,
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
     mInStream->seek(inOffset, io::FileInputStream::START);
-    mInStream->read(dataPtr, mData.getCompressedSignalSize(channel));
+    mInStream->read(dataPtr, mData->getCompressedSignalSize(channel));
 }
 
 void Wideband::read(size_t channel,
@@ -471,7 +471,7 @@ void Wideband::read(size_t channel,
     // Sanity checks
     checkChannelInput(channel);
 
-    const size_t minSize = mData.getCompressedSignalSize(channel);
+    const size_t minSize = mData->getCompressedSignalSize(channel);
     if (data.size < minSize)
     {
         std::ostringstream ostr;
@@ -513,7 +513,7 @@ void Wideband::read(size_t channel,
 void Wideband::read(size_t channel,
                     mem::ScopedArray<sys::ubyte>& data) const
 {
-    const size_t bufSize = mData.getCompressedSignalSize(channel);
+    const size_t bufSize = mData->getCompressedSignalSize(channel);
     data.reset(new sys::ubyte[bufSize]);
 
     read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));

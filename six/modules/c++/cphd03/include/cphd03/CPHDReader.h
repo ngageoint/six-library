@@ -29,7 +29,8 @@
 #include <cphd03/Metadata.h>
 #include <cphd03/FileHeader.h>
 #include <cphd03/VBM.h>
-#include <cphd03/Wideband.h>
+// #include <cphd03/Wideband.h>
+#include <cphd/Wideband.h>
 
 namespace cphd03
 {
@@ -118,7 +119,7 @@ public:
         return *mVBM;
     }
 
-    Wideband& getWideband()
+    cphd::Wideband& getWideband()
     {
         return *mWideband;
     }
@@ -128,7 +129,7 @@ private:
     FileHeader mFileHeader;
     std::auto_ptr<Metadata> mMetadata;
     std::auto_ptr<VBM> mVBM;
-    std::auto_ptr<Wideband> mWideband;
+    std::auto_ptr<cphd::Wideband> mWideband;
 
     void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                     size_t numThreads,

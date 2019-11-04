@@ -29,6 +29,7 @@
 
 #include <cphd03/CPHDReader.h>
 #include <cphd03/CPHDWriter.h>
+#include <cphd/Wideband.h>
 #include <types/RowCol.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
@@ -143,7 +144,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
         const types::RowCol<size_t>& dims)
 {
     cphd03::CPHDReader reader(pathname, numThreads);
-    cphd03::Wideband& wideband = reader.getWideband();
+    cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
@@ -151,7 +152,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
     mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
 
-    wideband.read(0, 0, cphd03::Wideband::ALL, 0, cphd03::Wideband::ALL,
+    wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
             scaleFactors, numThreads, scratch, data);
 
     return readData;

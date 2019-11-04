@@ -65,7 +65,7 @@ void testRoundTrip(std::string inPathname, std::string outPathname, size_t numTh
     const cphd::Wideband& wideband = reader.getWideband();
 
     const cphd::SignalArrayFormat signalFormat =
-            metadata.data.getSignalFormat();
+            metadata.data.getSampleType();
 
     // Create the writer
     cphd::CPHDWriter writer(reader.getMetadata(), outPathname, schemaPathnames, numThreads);

@@ -25,6 +25,7 @@
 #include <string>
 
 #include <cphd03/CPHDReader.h>
+#include <cphd/Wideband.h>
 #include <types/RowCol.h>
 #include <cli/ArgumentParser.h>
 
@@ -60,8 +61,8 @@ bool compareWideband(cphd03::CPHDReader& reader1,
 {
     bool dataMatches = true;
 
-    cphd03::Wideband& wideband1 = reader1.getWideband();
-    cphd03::Wideband& wideband2 = reader2.getWideband();
+    cphd::Wideband& wideband1 = reader1.getWideband();
+    cphd::Wideband& wideband2 = reader2.getWideband();
 
     mem::ScopedArray<sys::ubyte> cphd03Data1;
     mem::ScopedArray<sys::ubyte> cphd03Data2;
@@ -78,13 +79,13 @@ bool compareWideband(cphd03::CPHDReader& reader1,
         if (dims1 == dims2)
         {
             wideband1.read(ii,
-                           0, cphd03::Wideband::ALL, 0,
-                           cphd03::Wideband::ALL,
+                           0, cphd::Wideband::ALL, 0,
+                           cphd::Wideband::ALL,
                            numThreads, cphd03Data1);
 
             wideband2.read(ii,
-                           0, cphd03::Wideband::ALL, 0,
-                           cphd03::Wideband::ALL,
+                           0, cphd::Wideband::ALL, 0,
+                           cphd::Wideband::ALL,
                            numThreads, cphd03Data2);
 
             switch (reader1.getMetadata().getSampleType())

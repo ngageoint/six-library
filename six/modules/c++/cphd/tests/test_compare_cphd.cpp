@@ -110,7 +110,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                            cphd::Wideband::ALL,
                            numThreads, cphdData2);
 
-            switch (reader1.getMetadata().data.getSignalFormat())
+            switch (reader1.getMetadata().data.getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
                 if (!compareCPHDData<std::complex<sys::Int8_T> >(
@@ -198,8 +198,8 @@ bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, 
         return false;
     }
     //! Only process wideband data if the data types are the same
-    if (reader1.getMetadata().data.getSignalFormat() ==
-        reader2.getMetadata().data.getSignalFormat())
+    if (reader1.getMetadata().data.getSampleType() ==
+        reader2.getMetadata().data.getSampleType())
     {
         const bool cphdDataMatches = compareWideband(reader1,
                                                      reader2,

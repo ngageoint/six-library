@@ -91,7 +91,7 @@ struct Metadata
     cphd::CollectionInformation collectionInformation;
 
     //!  Data block. Very unfortunate name, but matches the CPHD spec.
-    //!  Contains the  information
+    //!  Contains the information
     cphd03::Data data;
 
     //!  Global block. Contains the information

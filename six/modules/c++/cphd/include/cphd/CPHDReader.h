@@ -95,7 +95,7 @@ public:
     //! returns total per complex sample (2, 4, or 8)
     size_t getNumBytesPerSample() const
     {
-        return cphd::getNumBytesPerSample(mMetadata->data.getSignalFormat());
+        return cphd::getNumBytesPerSample(mMetadata->data.getSampleType());
     }
 
     /*
