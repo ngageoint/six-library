@@ -26,12 +26,13 @@
 #include <string>
 #include <vector>
 
-#include <sys/Conf.h>
-#include <cphd03/Metadata.h>
-#include <types/RowCol.h>
 #include <io/FileOutputStream.h>
-#include <cphd03/VBM.h>
 #include <sys/OS.h>
+#include <sys/Conf.h>
+#include <types/RowCol.h>
+#include <cphd03/Metadata.h>
+#include <cphd03/VBM.h>
+#include <cphd/CPHDWriter.h>
 
 namespace cphd03
 {
@@ -157,51 +158,7 @@ private:
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
-    class DataWriter
-    {
-    public:
-        DataWriter(io::FileOutputStream& stream,
-                   size_t numThreads);
-
-        virtual ~DataWriter();
-
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize) = 0;
-
-    protected:
-        io::FileOutputStream& mStream;
-        const size_t mNumThreads;
-    };
-
-    class DataWriterLittleEndian : public DataWriter
-    {
-    public:
-        DataWriterLittleEndian(io::FileOutputStream& stream,
-                               size_t numThreads,
-                               size_t scratchSize);
-
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize);
-
-    private:
-        const size_t mScratchSize;
-        const mem::ScopedArray<sys::byte> mScratch;
-    };
-
-    class DataWriterBigEndian : public DataWriter
-    {
-    public:
-        DataWriterBigEndian(io::FileOutputStream& stream,
-                            size_t numThreads);
-
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize);
-    };
-
-    std::auto_ptr<DataWriter> mDataWriter;
+    std::auto_ptr<cphd::DataWriter> mDataWriter;
 
     Metadata mMetadata;
     const size_t mElementSize;

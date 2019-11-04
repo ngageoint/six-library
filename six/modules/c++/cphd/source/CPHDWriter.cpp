@@ -29,18 +29,18 @@
 
 namespace cphd
 {
-CPHDWriter::DataWriter::DataWriter(io::FileOutputStream& stream,
+DataWriter::DataWriter(io::FileOutputStream& stream,
             size_t numThreads) :
     mStream(stream),
     mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
 {
 }
 
-CPHDWriter::DataWriter::~DataWriter()
+DataWriter::~DataWriter()
 {
 }
 
-CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
+DataWriterLittleEndian::DataWriterLittleEndian(
         io::FileOutputStream& stream,
         size_t numThreads,
         size_t scratchSize) :
@@ -50,7 +50,7 @@ CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
 {
 }
 
-void CPHDWriter::DataWriterLittleEndian::operator()(
+void DataWriterLittleEndian::operator()(
         const sys::ubyte* data,
         size_t numElements,
         size_t elementSize)
@@ -77,14 +77,14 @@ void CPHDWriter::DataWriterLittleEndian::operator()(
     }
 }
 
-CPHDWriter::DataWriterBigEndian::DataWriterBigEndian(
+DataWriterBigEndian::DataWriterBigEndian(
         io::FileOutputStream& stream,
         size_t numThreads) :
     DataWriter(stream, numThreads)
 {
 }
 
-void CPHDWriter::DataWriterBigEndian::operator()(
+void DataWriterBigEndian::operator()(
         const sys::ubyte* data,
         size_t numElements,
         size_t elementSize)

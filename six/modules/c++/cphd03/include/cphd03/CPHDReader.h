@@ -29,7 +29,6 @@
 #include <cphd03/Metadata.h>
 #include <cphd03/FileHeader.h>
 #include <cphd03/VBM.h>
-// #include <cphd03/Wideband.h>
 #include <cphd/Wideband.h>
 
 namespace cphd03

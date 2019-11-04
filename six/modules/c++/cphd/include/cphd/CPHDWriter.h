@@ -38,6 +38,128 @@
 
 namespace cphd
 {
+
+/*
+ *  \class DataWriter
+ *
+ *  \brief Class to handle writing to file and byte swapping
+ */
+class DataWriter
+{
+public:
+    /*
+     *  \func DataWriter
+     *  \brief Constructor
+     *
+     *  \param stream The file output stream to be written
+     *  \param numThreads Number of threads for parallel processing
+     */
+    DataWriter(io::FileOutputStream& stream,
+               size_t numThreads);
+
+    /*
+     *  Destructor
+     */
+    virtual ~DataWriter();
+
+    /*
+     *  \func operator()
+     *  \brief Overload operator performs write and endian swap
+     *
+     *  \param data Pointer to the data that will be written to the filestream
+     *  \param numElements Total number of elements in array
+     *  \param elementSize Size of each element
+     */
+    virtual void operator()(const sys::ubyte* data,
+                            size_t numElements,
+                            size_t elementSize) = 0;
+
+protected:
+    //! Output stream of CPHD file
+    io::FileOutputStream& mStream;
+    //! Number of threads for parallelism
+    const size_t mNumThreads;
+};
+
+/*
+ *  \class DataWriterLittleEndian
+ *
+ *  \brief Class to handle writing to file and byte swapping
+ *
+ *  For little endian to big endian storage
+ */
+// Inherits from DataWriter class
+class DataWriterLittleEndian : public DataWriter
+{
+public:
+    /*
+     *  \func DataWriterLittleEndian
+     *  \brief Constructor
+     *
+     *  \param stream The file output stream to be written
+     *  \param numThreads Number of threads for parallel processing
+     *  \param scratchSize Size of buffer to be used for scratch space
+     */
+    DataWriterLittleEndian(io::FileOutputStream& stream,
+                           size_t numThreads,
+                           size_t scratchSize);
+
+    /*
+     *  \func operator()
+     *  \brief Overload operator performs write and endian swap
+     *
+     *  \param data Pointer to the data that will be written to the filestream
+     *  \param numElements Total number of elements in array
+     *  \param elementSize Size of each element
+     */
+    virtual void operator()(const sys::ubyte* data,
+                            size_t numElements,
+                            size_t elementSize);
+
+private:
+    // Size of scratch space
+    const size_t mScratchSize;
+    // Scratch space buffer
+    const mem::ScopedArray<sys::byte> mScratch;
+};
+
+/*
+ *  \class DataWriterBigEndian
+ *
+ *  \brief Class to handle writing to file
+ *
+ *  No byte swap. Already big endian.
+ */
+// Inherits from DataWriter class
+class DataWriterBigEndian : public DataWriter
+{
+public:
+    /*
+     *  \func DataWriter
+     *  \brief Constructor
+     *
+     *  \param stream The file output stream to be written
+     *  \param numThreads Number of threads for parallel processing
+     */
+    DataWriterBigEndian(io::FileOutputStream& stream,
+                        size_t numThreads);
+
+    /*
+     *  \func operator()
+     *  \brief Overload operator performs write
+     *
+     *  No endian swapping is necessary. Already Big Endian.
+     *
+     *  \param data Pointer to the data that will be written to the filestream
+     *  \param numElements Total number of elements in array
+     *  \param elementSize Size of each element
+     */
+    virtual void operator()(const sys::ubyte* data,
+                            size_t numElements,
+                            size_t elementSize);
+};
+
+
 /*
  *  \class CPHDWriter
  *  \brief CPHD write handler
@@ -173,6 +295,7 @@ public:
      *  \param numElements The number of elements in data. Treat the data
      *  as complex when computing the size (do not multiply by 2
      *  for correct byte swapping this is done internally).
+     *  \param channel For selecting channel of compressed signal block
      */
     template <typename T>
     void writeCPHDData(const T* data,
@@ -223,79 +346,6 @@ private:
     void writeSupportDataImpl(const sys::ubyte* data,
                               size_t numElements, size_t elementSize);
 
-    /*
-     *  \class DataWriter
-     *
-     *  \brief Class to handle writing to file and byte swapping
-     */
-    class DataWriter
-    {
-    public:
-        /*
-         *  Constructor
-         */
-        DataWriter(io::FileOutputStream& stream,
-                   size_t numThreads);
-
-        /*
-         *  Destructor
-         */
-        virtual ~DataWriter();
-
-        /*
-         *  Implementation of writing and byteswapping
-         */
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize) = 0;
-
-    protected:
-        //! Output stream of CPHD file
-        io::FileOutputStream& mStream;
-        //! Number of threads for parallelism
-        const size_t mNumThreads;
-    };
-
-    /*
-     *  \class DataWriterLittleEndian
-     *
-     *  \brief Class to handle writing to file and byte swapping
-     *  for little endian to big endian storage
-     *  Inherits from DataWriter class
-     */
-    class DataWriterLittleEndian : public DataWriter
-    {
-    public:
-        DataWriterLittleEndian(io::FileOutputStream& stream,
-                               size_t numThreads,
-                               size_t scratchSize);
-
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize);
-
-    private:
-        const size_t mScratchSize;
-        const mem::ScopedArray<sys::byte> mScratch;
-    };
-
-    /*
-     *  \class DataWriterBigEndian
-     *
-     *  \brief Class to handle writing to file
-     *  No byte swap. Already big endian.
-     *  Inherits from DataWriter class
-     */
-    class DataWriterBigEndian : public DataWriter
-    {
-    public:
-        DataWriterBigEndian(io::FileOutputStream& stream,
-                            size_t numThreads);
-
-        virtual void operator()(const sys::ubyte* data,
-                                size_t numElements,
-                                size_t elementSize);
-    };
     //! DataWriter object
     std::auto_ptr<DataWriter> mDataWriter;
 

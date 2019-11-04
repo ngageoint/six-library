@@ -29,71 +29,6 @@
 
 namespace cphd03
 {
-CPHDWriter::DataWriter::DataWriter(io::FileOutputStream& stream,
-            size_t numThreads) :
-    mStream(stream),
-    mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
-{
-}
-
-CPHDWriter::DataWriter::~DataWriter()
-{
-}
-
-CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
-        io::FileOutputStream& stream,
-        size_t numThreads,
-        size_t scratchSize) :
-    DataWriter(stream, numThreads),
-    mScratchSize(scratchSize),
-    mScratch(new sys::byte[mScratchSize])
-{
-}
-
-void CPHDWriter::DataWriterLittleEndian::operator()(
-        const sys::ubyte* data,
-        size_t numElements,
-        size_t elementSize)
-{
-    size_t dataProcessed = 0;
-    const size_t dataSize = numElements * elementSize;
-
-    while (dataProcessed < dataSize)
-    {
-        const size_t dataToProcess =
-                std::min(mScratchSize, dataSize - dataProcessed);
-
-        memcpy(mScratch.get(),
-               data + dataProcessed,
-               dataToProcess);
-
-        cphd::byteSwap(mScratch.get(),
-                 elementSize,
-                 dataToProcess / elementSize,
-                 mNumThreads);
-
-        mStream.write(mScratch.get(), dataToProcess);
-
-        dataProcessed += dataToProcess;
-    }
-}
-
-CPHDWriter::DataWriterBigEndian::DataWriterBigEndian(
-        io::FileOutputStream& stream,
-        size_t numThreads) :
-    DataWriter(stream, numThreads)
-{
-}
-
-void CPHDWriter::DataWriterBigEndian::operator()(
-        const sys::ubyte* data,
-        size_t numElements,
-        size_t elementSize)
-{
-    mStream.write(reinterpret_cast<const sys::byte*>(data),
-                  numElements * elementSize);
-}
-
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
@@ -108,11 +43,11 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     //  The CPHD file needs to be big endian.
     if (sys::isBigEndianSystem())
     {
-        mDataWriter.reset(new DataWriterBigEndian(mFile, mNumThreads));
+        mDataWriter.reset(new cphd::DataWriterBigEndian(mFile, mNumThreads));
     }
     else
     {
-        mDataWriter.reset(new DataWriterLittleEndian(
+        mDataWriter.reset(new cphd::DataWriterLittleEndian(
                 mFile, mNumThreads, mScratchSpaceSize));
     }
 }
