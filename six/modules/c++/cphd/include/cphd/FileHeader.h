@@ -70,7 +70,7 @@ public:
      *  For writing to file
      *  Does not include section terminator string
      *
-     *  \return std::string Returns header as string
+     *  \return Returns header as string
      */
     std::string toString() const override;
 
@@ -79,11 +79,11 @@ public:
      *
      *  \brief Set the file header
      *
-     *  (Wrapper for actual set function) Set the file header
-     *  to its final state compute the offsets of the sections that
+     *  Set the file header to its final state.
+     *  Compute the offsets of the sections that
      *  depend on the file header size
      *
-     *  \return size_t Return size of header
+     *  \return Return size of header
      */
     size_t set();
 
@@ -92,9 +92,9 @@ public:
      *
      *  \brief Set the file header to its final state
      *
-     *  Set the file header to its final state
-     *  compute the offsets of the sections that depend
-     *  on the file header size
+     *  Set the file header to its final state.
+     *  Compute the offsets of the sections that depend
+     *  on the file header size.
      *  Adds padding to modulo 8 for pvp block
      *
      *  \param xmlBlockSize Size of XML block
@@ -102,7 +102,7 @@ public:
      *  \param pvpBlockSize Size of pvp block
      *  \param signalBlockSize Size of signal block
      *
-     *  \return size_t Return size of header
+     *  \return Return size of header
      */
     size_t set(sys::Off_T xmlBlockSize, sys::Off_T supportBlockSize,
             sys::Off_T pvpBlockSize, sys::Off_T signalBlockSize);

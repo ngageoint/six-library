@@ -86,7 +86,7 @@ struct PVPBlock
          *  \param pvp A filled out pvp sturcture. This will be used for
          *  information on where to allocate memory and set each
          *  parameter in a PVP set.
-         *  \param output A pointer to an array of allocated bytes that
+         *  \param[out] output A pointer to an array of allocated bytes that
          *  will be written to
          */
         void read(const Pvp& pvp, sys::ubyte* output) const;
@@ -306,7 +306,7 @@ struct PVPBlock
      *  \brief This will return a contiguous buffer all the PVP data.
      *
      *  \param channel 0 based index
-     *  \param [Output]data Will be filled with PVP data. This will
+     *  \param[out] data Will be filled with PVP data. This will
      *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
@@ -317,7 +317,7 @@ struct PVPBlock
      *  \brief Same as above but uses a void pointer.
      *
      *  \param channel 0 based index
-     *  \param [Output]data A preallocated buffer for the data.
+     *  \param[out] data A preallocated buffer for the data.
      */
     void getPVPdata(size_t channel,
                     void*  data) const;
@@ -353,7 +353,7 @@ struct PVPBlock
      *
      *  \throw except::Exception If reach EOF before reading sizePVP bytes
      *
-     *  \return sys::Off_T Returns the size of the pvp block read in
+     *  \return Returns the size of the pvp block read in
      */
     // startPVP = cphd header keyword "PVP_BYTE_OFFSET"
     // sizePVP = cphd header keyword "PVP_DATA_SIZE"

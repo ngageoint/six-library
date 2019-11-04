@@ -134,7 +134,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param data A pre allocated mem::BufferView that will hold the data
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
@@ -155,7 +155,7 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param data A pre allocated mem::BufferView that will hold the data
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception If invalid channel
@@ -181,7 +181,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty mem::ScopedArray that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
@@ -202,7 +202,7 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty mem::ScopedArray that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception If invalid channel
@@ -231,7 +231,7 @@ public:
      *   necessary
      *  \param scratch A pre allocated mem::BufferView for scratch space for scaling,
      *  promoting and/or byte swapping
-     *  \param data A pre allocated mem::BufferView that will hold the data
+     *  \param[out] data A pre allocated mem::BufferView that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
@@ -266,7 +266,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param data A void pointer to a data buffer.
+     *  \param[out] data A void pointer to a data buffer.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
@@ -280,7 +280,7 @@ public:
               size_t lastSample,
               size_t numThreads,
               const types::RowCol<size_t>& dims,
-              void*  data)
+              void* data)
     {
         const mem::BufferView<sys::ubyte> buffer(
                 static_cast<sys::ubyte*>(data),
@@ -369,7 +369,7 @@ private:
 
 private:
     const mem::SharedPtr<io::SeekableInputStream> mInStream;
-    const cphd::Data* mData;          // pointer to data metadata
+    const cphd::Data& mData;          // pointer to data metadata
     const sys::Off_T mWBOffset;       // offset in bytes to start of wideband
     const size_t mWBSize;             // total size in bytes of wideband
     const size_t mElementSize;        // element size (bytes / complex sample)

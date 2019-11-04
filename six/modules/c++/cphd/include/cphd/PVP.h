@@ -168,7 +168,7 @@ struct APVPType : PVPType
      *
      *  \brief Get the name of the additional parameter
      *
-     *  \return std::string Returns name of the parameter
+     *  \return Returns name of the parameter
      */
     std::string getName() const
     {

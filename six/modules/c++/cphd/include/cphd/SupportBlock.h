@@ -102,7 +102,7 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param data A pre allocated mem::BufferView that will hold the data
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception Throws if buffer has not been allocated to a sufficient size
@@ -122,7 +122,7 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
      */
     // Same as above but allocates the memory
     void read(const std::string& id,
@@ -138,7 +138,7 @@ public:
      *
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
      *
      */
     //! Reads all the support Arrays into data

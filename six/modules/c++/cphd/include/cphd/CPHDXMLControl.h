@@ -71,7 +71,7 @@ public:
      *
      *  \brief Convert XML to string
      *  Calls toXML
-     *  \return std::string XML String
+     *  \return XML String
      */
     std::string toXMLString(
             const Metadata& metadata,
@@ -84,7 +84,7 @@ public:
      *  \brief Convert XML to document object
      *
      *  \param metadata Valid CPHD metadata object
-     *  \param schemaPaths XML Schema for validation
+     *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
     std::auto_ptr<xml::lite::Document> toXML(
@@ -96,8 +96,8 @@ public:
      *
      *  \brief Convert document to XML object
      *
-     *  \param string Valid cphd XML string
-     *  \param schemaPaths XML Schema for validation
+     *  \param xmlString Valid cphd XML string
+     *  \param schemaPaths Vector of XML Schema for validation
      *
      *  \return pointer to metadata object
      */
@@ -111,7 +111,7 @@ public:
      *  \brief Convert document to XML object
      *
      *  \param doc XML document object of CPHD
-     *  \param schemaPaths XML Schema for validation
+     *  \param schemaPaths Vector of XML Schema for validation
      *
      *  \return pointer to metadata object
      */
@@ -125,7 +125,7 @@ public:
      *  \brief Validate the xml and log any errors
      *
      *  \param doc XML document object of CPHD
-     *  \param schemaPaths XML Schema for validation
+     *  \param schemaPaths Vector of XML Schema for validation
      */
     static void validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,

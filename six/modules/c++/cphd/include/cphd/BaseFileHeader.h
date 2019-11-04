@@ -67,7 +67,7 @@ public:
      *
      *  \param inStream Input Stream of CPHD file
      *
-     *  \return std::string Verision string
+     *  \return Verision string
      *
      *  \throws except::Exception if file is not CPHD
      */
@@ -107,7 +107,7 @@ public:
      *
      *  Counts size of header string (not including section terminator)
      *
-     *  \return size_t Size of header
+     *  \return Size of header
      */
     size_t size() const
     {
@@ -150,7 +150,7 @@ protected:
      *
      *  Split header into key value pairs at specified delimiter
      *
-     *  \return KeyValuePair Returns typedef KeyValuePair type
+     *  \return Returns typedef KeyValuePair type
      */
     static
     KeyValuePair tokenize(const std::string& in, const std::string& delimiter)

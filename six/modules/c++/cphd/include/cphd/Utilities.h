@@ -83,7 +83,7 @@ std::vector<std::pair<std::string,size_t> > getMultipleParamSizes(const std::str
  *
  *  \throws except::Exception If format string is not valid binary format
  *
- *  \return returns size of expected parameter
+ *  \return Returns size of expected parameter
  */
 size_t getFormatSize(const std::string& format);
 
@@ -95,7 +95,7 @@ size_t getFormatSize(const std::string& format);
  *  \param format A format string.
  *   Valid binary formats are listed in CPHD 1.0 spec table 10.2, page 120
  *
- *  \return returns true of format is multiple param type
+ *  \return Returns true of format is multiple param type
  */
 bool isMultipleParam(const std::string& format);
 
@@ -107,7 +107,7 @@ bool isMultipleParam(const std::string& format);
  *  \param format A format string.
  *   Valid binary formats are listed in CPHD 1.0 spec table 10.2, page 120
  *
- *  \return returns size specified by string format if true,
+ *  \return Returns size specified by string format if true,
     if false returns six::Init::undefined<size_t>
  */
 size_t isFormatStr(const std::string& format);
