@@ -95,7 +95,7 @@ public:
     //! returns total per complex sample (2, 4, or 8)
     size_t getNumBytesPerSample() const
     {
-        return cphd::getNumBytesPerSample(mMetadata->data.getSampleType());
+        return mMetadata->data.getNumBytesPerSample();
     }
 
     /*
@@ -116,11 +116,11 @@ public:
     //! Domain type flags
     bool isFX() const
     {
-        return (getDomainType() == cphd::DomainType::FX);
+        return (getDomainType() == DomainType::FX);
     }
     bool isTOA() const
     {
-        return (getDomainType() == cphd::DomainType::TOA);
+        return (getDomainType() == DomainType::TOA);
     }
 
     //! Get block info functions
