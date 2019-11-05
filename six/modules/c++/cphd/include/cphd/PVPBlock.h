@@ -47,122 +47,6 @@ namespace cphd
  */
 struct PVPBlock
 {
-    /*!
-     *  \struct PVPSet
-     *
-     *  \brief Parameters for each vector
-     *
-     *  Stores a single set of parameters
-     *  Each channel consists of a PVP Array,
-     *  which consists of multiple sets
-     */
-    struct PVPSet
-    {
-        /*!
-         *  \func PVPSet
-         *
-         *  \brief Default constructor
-         */
-        PVPSet();
-
-        /*
-         *  \func write
-         *
-         *  \brief Writes binary data input into PVP Set
-         *
-         *  \param pvp A filled out pvp sturcture. This will be used for
-         *  information on where to allocate memory and set each
-         *  parameter in a PVP set.
-         *  \param input A pointer to an array of bytes that contains the
-         *  parameter data to write into the pvp set
-         */
-        void write(const Pvp& pvp, const sys::byte* input);
-
-        /*
-         *  \func read
-         *
-         *  \brief Read PVP set into binary data output
-         *
-         *  \param pvp A filled out pvp sturcture. This will be used for
-         *  information on where to allocate memory and set each
-         *  parameter in a PVP set.
-         *  \param[out] output A pointer to an array of allocated bytes that
-         *  will be written to
-         */
-        void read(const Pvp& pvp, sys::ubyte* output) const;
-
-        //! Equality operators
-        bool operator==(const PVPSet& other) const
-        {
-            if(!(txTime == other.txTime && txPos == other.txPos &&
-                    txVel == other.txVel && rcvTime == other.rcvTime &&
-                    rcvPos == other.rcvPos && rcvVel == other.rcvVel &&
-                    srpPos == other.srpPos && aFDOP == other.aFDOP &&
-                    aFRR1 == other.aFRR1 && aFRR2 == other.aFRR2 &&
-                    fx1 == other.fx1 && fx2 == other.fx2 &&
-                    toa1 == other.toa1 && toa2 == other.toa2 &&
-                    tdTropoSRP == other.tdTropoSRP && sc0 == other.sc0 &&
-                    scss == other.scss &&
-                    ampSF == other.ampSF && fxN1 == other.fxN1 &&
-                    fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
-                    toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                    signal == other.signal))
-            {
-                return false;
-            }
-                if (addedPVP.size() != other.addedPVP.size())
-                {
-                    return false;
-                }
-                for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
-                {
-                    if(it->second.str() != other.addedPVP.find(it->first)->second.str())
-                    {
-                        return false;
-                    }
-                }
-                return true;
-        }
-        bool operator!=(const PVPSet& other) const
-        {
-            return !((*this) == other);
-        }
-
-        //! Required Parameters
-        double txTime;
-        Vector3 txPos;
-        Vector3 txVel;
-        double rcvTime;
-        Vector3 rcvPos;
-        Vector3 rcvVel;
-        Vector3 srpPos;
-        double aFDOP;
-        double aFRR1;
-        double aFRR2;
-        double fx1;
-        double fx2;
-        double toa1;
-        double toa2;
-        double tdTropoSRP;
-        double sc0;
-        double scss;
-
-        //! (Optional) Parameters
-        mem::ScopedCopyablePtr<double> ampSF;
-        mem::ScopedCopyablePtr<double> fxN1;
-        mem::ScopedCopyablePtr<double> fxN2;
-        mem::ScopedCopyablePtr<double> toaE1;
-        mem::ScopedCopyablePtr<double> toaE2;
-        mem::ScopedCopyablePtr<double> tdIonoSRP;
-        mem::ScopedCopyablePtr<double> signal;
-
-        //! (Optional) Additional parameters
-        std::map<std::string,six::Parameter> addedPVP;
-
-    private:
-        friend std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p);
-    };
-
     /*
      *  \func PVPBlock
      *
@@ -218,33 +102,33 @@ struct PVPBlock
     void verifyChannelVector(size_t channel, size_t vector) const;
 
     //! Getter functions
-    double getTxTime(size_t channel, size_t set);
-    Vector3 getTxPos(size_t channel, size_t set);
-    Vector3 getTxVel(size_t channel, size_t set);
-    double getRcvTime(size_t channel, size_t set);
-    Vector3 getRcvPos(size_t channel, size_t set);
-    Vector3 getRcvVel(size_t channel, size_t set);
-    Vector3 getSRPPos(size_t channel, size_t set);
-    double getaFDOP(size_t channel, size_t set);
-    double getaFRR1(size_t channel, size_t set);
-    double getaFRR2(size_t channel, size_t set);
-    double getFx1(size_t channel, size_t set);
-    double getFx2(size_t channel, size_t set);
-    double getTOA1(size_t channel, size_t set);
-    double getTOA2(size_t channel, size_t set);
-    double getTdTropoSRP(size_t channel, size_t set);
-    double getSC0(size_t channel, size_t set);
-    double getSCSS(size_t channel, size_t set);
-    double getAmpSF(size_t channel, size_t set);
-    double getFxN1(size_t channel, size_t set);
-    double getFxN2(size_t channel, size_t set);
-    double getTOAE1(size_t channel, size_t set);
-    double getTOAE2(size_t channel, size_t set);
-    double getTdIonoSRP(size_t channel, size_t set);
-    double getSignal(size_t channel, size_t set);
+    double getTxTime(size_t channel, size_t set) const;
+    Vector3 getTxPos(size_t channel, size_t set) const;
+    Vector3 getTxVel(size_t channel, size_t set) const;
+    double getRcvTime(size_t channel, size_t set) const;
+    Vector3 getRcvPos(size_t channel, size_t set) const;
+    Vector3 getRcvVel(size_t channel, size_t set) const;
+    Vector3 getSRPPos(size_t channel, size_t set) const;
+    double getaFDOP(size_t channel, size_t set) const;
+    double getaFRR1(size_t channel, size_t set) const;
+    double getaFRR2(size_t channel, size_t set) const;
+    double getFx1(size_t channel, size_t set) const;
+    double getFx2(size_t channel, size_t set) const;
+    double getTOA1(size_t channel, size_t set) const;
+    double getTOA2(size_t channel, size_t set) const;
+    double getTdTropoSRP(size_t channel, size_t set) const;
+    double getSC0(size_t channel, size_t set) const;
+    double getSCSS(size_t channel, size_t set) const;
+    double getAmpSF(size_t channel, size_t set) const;
+    double getFxN1(size_t channel, size_t set) const;
+    double getFxN2(size_t channel, size_t set) const;
+    double getTOAE1(size_t channel, size_t set) const;
+    double getTOAE2(size_t channel, size_t set) const;
+    double getTdIonoSRP(size_t channel, size_t set) const;
+    double getSignal(size_t channel, size_t set) const;
 
     template<typename T>
-    T getAddedPVP(size_t channel, size_t set, const std::string& name)
+    T getAddedPVP(size_t channel, size_t set, const std::string& name) const
     {
         verifyChannelVector(channel, set);
         if(mData[channel][set].addedPVP.count(name) == 1)
@@ -374,8 +258,122 @@ struct PVPBlock
         return !((*this) == other);
     }
 
-private:
+protected:
+    /*!
+     *  \struct PVPSet
+     *
+     *  \brief Parameters for each vector
+     *
+     *  Stores a single set of parameters
+     *  Each channel consists of a PVP Array,
+     *  which consists of multiple sets
+     */
+    struct PVPSet
+    {
+        /*!
+         *  \func PVPSet
+         *
+         *  \brief Default constructor
+         */
+        PVPSet();
 
+        /*
+         *  \func write
+         *
+         *  \brief Writes binary data input into PVP Set
+         *
+         *  \param pvp A filled out pvp sturcture. This will be used for
+         *  information on where to allocate memory and set each
+         *  parameter in a PVP set.
+         *  \param input A pointer to an array of bytes that contains the
+         *  parameter data to write into the pvp set
+         */
+        void write(const Pvp& pvp, const sys::byte* input);
+
+        /*
+         *  \func read
+         *
+         *  \brief Read PVP set into binary data output
+         *
+         *  \param pvp A filled out pvp sturcture. This will be used for
+         *  information on where to allocate memory and set each
+         *  parameter in a PVP set.
+         *  \param[out] output A pointer to an array of allocated bytes that
+         *  will be written to
+         */
+        void read(const Pvp& pvp, sys::ubyte* output) const;
+
+        //! Equality operators
+        bool operator==(const PVPSet& other) const
+        {
+            if(!(txTime == other.txTime && txPos == other.txPos &&
+                    txVel == other.txVel && rcvTime == other.rcvTime &&
+                    rcvPos == other.rcvPos && rcvVel == other.rcvVel &&
+                    srpPos == other.srpPos && aFDOP == other.aFDOP &&
+                    aFRR1 == other.aFRR1 && aFRR2 == other.aFRR2 &&
+                    fx1 == other.fx1 && fx2 == other.fx2 &&
+                    toa1 == other.toa1 && toa2 == other.toa2 &&
+                    tdTropoSRP == other.tdTropoSRP && sc0 == other.sc0 &&
+                    scss == other.scss &&
+                    ampSF == other.ampSF && fxN1 == other.fxN1 &&
+                    fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
+                    toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
+                    signal == other.signal))
+            {
+                return false;
+            }
+                if (addedPVP.size() != other.addedPVP.size())
+                {
+                    return false;
+                }
+                for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
+                {
+                    if(it->second.str() != other.addedPVP.find(it->first)->second.str())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+        }
+        bool operator!=(const PVPSet& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! Required Parameters
+        double txTime;
+        Vector3 txPos;
+        Vector3 txVel;
+        double rcvTime;
+        Vector3 rcvPos;
+        Vector3 rcvVel;
+        Vector3 srpPos;
+        double aFDOP;
+        double aFRR1;
+        double aFRR2;
+        double fx1;
+        double fx2;
+        double toa1;
+        double toa2;
+        double tdTropoSRP;
+        double sc0;
+        double scss;
+
+        //! (Optional) Parameters
+        mem::ScopedCopyablePtr<double> ampSF;
+        mem::ScopedCopyablePtr<double> fxN1;
+        mem::ScopedCopyablePtr<double> fxN2;
+        mem::ScopedCopyablePtr<double> toaE1;
+        mem::ScopedCopyablePtr<double> toaE2;
+        mem::ScopedCopyablePtr<double> tdIonoSRP;
+        mem::ScopedCopyablePtr<double> signal;
+
+        //! (Optional) Additional parameters
+        std::map<std::string,six::Parameter> addedPVP;
+    };
+    friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
+
+private:
     /*
      *  Struct Template Specialization for getAddedPVP function
      *  mimics function template specialization
@@ -383,7 +381,7 @@ private:
     template<typename T>
     struct AddedPVP
     {
-        T getAddedPVP(six::Parameter& val, size_t channel, size_t set, const std::string& name)
+        T getAddedPVP(const six::Parameter& val, size_t channel, size_t set, const std::string& name) const
         {
             return static_cast<T>(val);
         }
@@ -391,7 +389,7 @@ private:
     template<typename T>
     struct AddedPVP<std::complex<T> >
     {
-        std::complex<T> getAddedPVP(six::Parameter& val, size_t channel, size_t set, const std::string& name)
+        std::complex<T> getAddedPVP(const six::Parameter& val, size_t channel, size_t set, const std::string& name) const
         {
             return val.getComplex<T>();
         }

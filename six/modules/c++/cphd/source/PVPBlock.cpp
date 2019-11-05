@@ -392,7 +392,8 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
     // Allocate the buffers
     size_t numBytesIn(0);
 
-    // Compute the PVPBlock size per channel (channels aren't necessarily the same size)
+    // Compute the PVPBlock size per channel
+    // (channels aren't necessarily the same size)
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
         numBytesIn += getPVPsize(ii);
@@ -450,109 +451,109 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
     return totalBytesRead;
 }
 
-double PVPBlock::getTxTime(size_t channel, size_t set)
+double PVPBlock::getTxTime(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txTime;
 }
 
-Vector3 PVPBlock::getTxPos(size_t channel, size_t set)
+Vector3 PVPBlock::getTxPos(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txPos;
 }
 
-Vector3 PVPBlock::getTxVel(size_t channel, size_t set)
+Vector3 PVPBlock::getTxVel(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].txVel;
 }
 
-double PVPBlock::getRcvTime(size_t channel, size_t set)
+double PVPBlock::getRcvTime(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvTime;
 }
 
-Vector3 PVPBlock::getRcvPos(size_t channel, size_t set)
+Vector3 PVPBlock::getRcvPos(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvPos;
 }
 
-Vector3 PVPBlock::getRcvVel(size_t channel, size_t set)
+Vector3 PVPBlock::getRcvVel(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].rcvVel;
 }
 
-Vector3 PVPBlock::getSRPPos(size_t channel, size_t set)
+Vector3 PVPBlock::getSRPPos(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].srpPos;
 }
 
-double PVPBlock::getaFDOP(size_t channel, size_t set)
+double PVPBlock::getaFDOP(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFDOP;
 }
 
-double PVPBlock::getaFRR1(size_t channel, size_t set)
+double PVPBlock::getaFRR1(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFRR1;
 }
 
-double PVPBlock::getaFRR2(size_t channel, size_t set)
+double PVPBlock::getaFRR2(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].aFRR2;
 }
 
-double PVPBlock::getFx1(size_t channel, size_t set)
+double PVPBlock::getFx1(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].fx1;
 }
 
-double PVPBlock::getFx2(size_t channel, size_t set)
+double PVPBlock::getFx2(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].fx2;
 }
 
-double PVPBlock::getTOA1(size_t channel, size_t set)
+double PVPBlock::getTOA1(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].toa1;
 }
 
-double PVPBlock::getTOA2(size_t channel, size_t set)
+double PVPBlock::getTOA2(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].toa2;
 }
 
-double PVPBlock::getTdTropoSRP(size_t channel, size_t set)
+double PVPBlock::getTdTropoSRP(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].tdTropoSRP;
 }
 
-double PVPBlock::getSC0(size_t channel, size_t set)
+double PVPBlock::getSC0(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].sc0;
 }
 
-double PVPBlock::getSCSS(size_t channel, size_t set)
+double PVPBlock::getSCSS(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     return mData[channel][set].scss;
 }
 
-double PVPBlock::getAmpSF(size_t channel, size_t set)
+double PVPBlock::getAmpSF(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].ampSF.get())
@@ -563,7 +564,7 @@ double PVPBlock::getAmpSF(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPBlock::getFxN1(size_t channel, size_t set)
+double PVPBlock::getFxN1(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].fxN1.get())
@@ -574,7 +575,7 @@ double PVPBlock::getFxN1(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPBlock::getFxN2(size_t channel, size_t set)
+double PVPBlock::getFxN2(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].fxN2.get())
@@ -585,7 +586,7 @@ double PVPBlock::getFxN2(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPBlock::getTOAE1(size_t channel, size_t set)
+double PVPBlock::getTOAE1(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].toaE1.get())
@@ -596,7 +597,7 @@ double PVPBlock::getTOAE1(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPBlock::getTOAE2(size_t channel, size_t set)
+double PVPBlock::getTOAE2(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].toaE2.get())
@@ -607,7 +608,7 @@ double PVPBlock::getTOAE2(size_t channel, size_t set)
                     "Parameter was not set"));
 }
 
-double PVPBlock::getTdIonoSRP(size_t channel, size_t set)
+double PVPBlock::getTdIonoSRP(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].tdIonoSRP.get())
