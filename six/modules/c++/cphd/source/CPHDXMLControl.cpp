@@ -1141,50 +1141,9 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
 
 void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
 {
-    parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
-                collectionID.collectInfo.collectorName);
-    XMLElem element = getOptional(collectionIDXML, "IlluminatorName");
-    if (element)
-        parseString(element, collectionID.collectInfo.illuminatorName);
-    element = getOptional(collectionIDXML, "CoreName");
-    if (element)
-        parseString(element, collectionID.collectInfo.coreName);
-    element = getOptional(collectionIDXML, "CollectType");
-    if (element)
-        collectionID.collectInfo.collectType
-                = six::toType<six::CollectType>(element->getCharacterData());
-    XMLElem radarModeXML = getFirstAndOnly(collectionIDXML, "RadarMode");
-    collectionID.collectInfo.radarMode
-            = six::toType<six::RadarModeType>(getFirstAndOnly(radarModeXML,
-                                              "ModeType")->getCharacterData());
-    element = getOptional(radarModeXML, "ModeID");
-    if (element)
-        parseString(element, collectionID.collectInfo.radarModeID);
-
-    std::string classification;
-    parseString(getFirstAndOnly(collectionIDXML, "Classification"),
-                classification);
-    collectionID.collectInfo.setClassificationLevel(classification);
-
-    element = getFirstAndOnly(collectionIDXML, "ReleaseInfo");
+    mCommon.parseCollectionInformationFromXML(collectionIDXML, &collectionID.collectInfo);
+    XMLElem element = getFirstAndOnly(collectionIDXML, "ReleaseInfo");
     parseString(element, collectionID.releaseInfo);
-
-    // Optional
-    std::vector<std::string> countryCodes;
-    element = getOptional(collectionIDXML, "CountryCode");
-    if (element)
-    {
-        std::string countryCodeStr;
-        parseString(element, countryCodeStr);
-        collectionID.collectInfo.countryCodes = str::split(countryCodeStr, ",");
-        for (size_t ii = 0; ii < collectionID.collectInfo.countryCodes.size(); ++ii)
-        {
-            str::trim(collectionID.collectInfo.countryCodes[ii]);
-        }
-    }
-
-    //optional
-    mCommon.parseParameters(collectionIDXML, "Parameter", collectionID.collectInfo.parameters);
 }
 
 void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
