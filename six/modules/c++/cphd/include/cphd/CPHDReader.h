@@ -38,6 +38,7 @@ namespace cphd
  *  \class CPHDReader
  *
  *  \brief Used to read a CPHD file.
+ *
  *  Requires a valid CPHD file,and optional schemas
  *  for XML format verification
  */
