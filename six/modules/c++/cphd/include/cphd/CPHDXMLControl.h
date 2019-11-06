@@ -31,7 +31,6 @@
 #include <xml/lite/Document.h>
 #include <six/XMLParser.h>
 #include <six/SICommonXMLParser10x.h>
-#include <cphd/CollectionID.h>
 #include <cphd/SceneCoordinates.h>
 #include <cphd/Data.h>
 #include <cphd/Global.h>
@@ -144,7 +143,7 @@ private:
     std::string getSICommonURI() const;
 
     //! Write to XML object
-    XMLElem toXML(const CollectionID& obj, XMLElem parent);
+    XMLElem toXML(const CollectionInformation& obj, XMLElem parent);
     XMLElem toXML(const Global& obj, XMLElem parent);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
     XMLElem toXML(const Data& obj, XMLElem parent);
@@ -161,7 +160,7 @@ private:
     XMLElem toXML(const MatchInformation& obj, XMLElem parent);
 
     //! Read from XML object
-    void fromXML(const XMLElem collectionIDXML, CollectionID& collectionID);
+    void fromXML(const XMLElem collectionIDXML, CollectionInformation& collectionID);
     void fromXML(const XMLElem globalXML, Global& global);
     void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
     void fromXML(const XMLElem dataXML, Data& data);

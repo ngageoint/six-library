@@ -244,11 +244,11 @@ void setUpMetaData(const types::RowCol<size_t> dims,
     }
 
     //! We must have a collectType set
-    metadata.collectionID.collectInfo.collectType = cphd::CollectType::MONOSTATIC;
-    metadata.collectionID.collectInfo.setClassificationLevel("Unclassified");
+    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    metadata.collectionID.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
     //! We must have a radar mode set
-    metadata.collectionID.collectInfo.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());

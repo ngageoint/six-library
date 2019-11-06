@@ -25,7 +25,6 @@
 
 #include "cphd/Antenna.h"
 #include "cphd/Channel.h"
-#include "cphd/CollectionID.h"
 #include "cphd/CPHDReader.h"
 #include "cphd/CPHDWriter.h"
 #include "cphd/CPHDXMLControl.h"
@@ -47,5 +46,8 @@
 #include "cphd/Types.h"
 #include "cphd/Utilities.h"
 #include "cphd/Wideband.h"
+#include "six/CollectionInformation.h"
+#include "six/MatchInformation.h"
+#include "six/sicd/GeoData.h"
 
 #endif

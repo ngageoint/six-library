@@ -27,7 +27,6 @@
 
 #include <cphd/Antenna.h>
 #include <cphd/Channel.h>
-#include <cphd/CollectionID.h>
 #include <cphd/Data.h>
 #include <cphd/Dwell.h>
 #include <cphd/ErrorParameters.h>
@@ -63,7 +62,7 @@ struct Metadata
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
-    CollectionID collectionID;
+    CollectionInformation collectionID;
 
     //!  Global block. Contains the information
     Global global;

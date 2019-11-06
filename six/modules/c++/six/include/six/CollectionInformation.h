@@ -82,6 +82,13 @@ struct CollectionInformation
     std::string radarModeID;
 
     /*!
+     *  (Optional) ReleaseInfo contains product release information.
+     *  Required only for CPHD 1.0
+     *  Default value is UNRESTRICTED
+     */
+    std::string releaseInfo;
+
+    /*!
      *  (Optional)
      *  List of country codes for region covered by the image
      *
@@ -112,6 +119,7 @@ struct CollectionInformation
                coreName == other.coreName &&
                radarMode == other.radarMode &&
                radarModeID == other.radarModeID &&
+               releaseInfo == other.releaseInfo &&
                getClassificationLevel() == other.getClassificationLevel();
     }
 

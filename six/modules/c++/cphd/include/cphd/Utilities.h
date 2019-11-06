@@ -129,6 +129,11 @@ size_t isFormatStr(const std::string& format);
 std::pair<std::string, std::string> keyValueFinder(const std::string& format, size_t startPos, size_t endPos);
 
 /*
+ *  Ostream operators for six::CollectionInformation type
+ */
+std::ostream& operator<< (std::ostream& os, const CollectionInformation& g);
+
+/*
  *  Ostream operators for six::sicd::GeoInfo type
  */
 std::ostream& operator<< (std::ostream& os, const GeoInfo& g);

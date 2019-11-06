@@ -893,21 +893,21 @@ TEST_CASE(testReadXML)
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     // CollectionID
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.collectorName, "Collector");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.coreName, "Core");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.collectType,
+    TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
+    TEST_ASSERT_EQ(metadata->collectionID.coreName, "Core");
+    TEST_ASSERT_EQ(metadata->collectionID.collectType,
                    six::CollectType::MONOSTATIC);
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.radarMode,
+    TEST_ASSERT_EQ(metadata->collectionID.radarMode,
                    six::RadarModeType::STRIPMAP);
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.radarModeID, "Mode");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.getClassificationLevel(), "U");
+    TEST_ASSERT_EQ(metadata->collectionID.radarModeID, "Mode");
+    TEST_ASSERT_EQ(metadata->collectionID.getClassificationLevel(), "U");
     TEST_ASSERT_EQ(metadata->collectionID.releaseInfo, "Release");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[0], "US");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[1], "GB");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.countryCodes[2], "AZ");
+    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[0], "US");
+    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[1], "GB");
+    TEST_ASSERT_EQ(metadata->collectionID.countryCodes[2], "AZ");
 
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.parameters[0].getName(), "param1");
-    TEST_ASSERT_EQ(metadata->collectionID.collectInfo.parameters[0].str(), "val");
+    TEST_ASSERT_EQ(metadata->collectionID.parameters[0].getName(), "param1");
+    TEST_ASSERT_EQ(metadata->collectionID.parameters[0].str(), "val");
 
     // Global
     const cphd::Global& global = metadata->global;

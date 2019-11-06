@@ -227,6 +227,31 @@ size_t isFormatStr(const std::string& format)
     return six::Init::undefined<size_t>();
 }
 
+std::ostream& operator<< (std::ostream& os, const CollectionInformation& c)
+{
+    os << "CollectionID:: \n"
+        << "  CollectorName    : " << c.collectorName << "\n";
+    if (!six::Init::isUndefined(c.illuminatorName))
+    {
+        os << "  IlluminatorName  : " << c.illuminatorName << "\n";
+    }
+    os << "  CoreName         : " << c.coreName << "\n"
+        << "  CollectType      : " << c.collectType << "\n"
+        << "  RadarMode        : " << c.radarMode << "\n"
+        << "  RadarModeID      : " << c.radarMode << "\n"
+        << "  ReleaseInfo      : " << c.releaseInfo << "\n";
+    for (size_t ii = 0; ii < c.countryCodes.size(); ++ii)
+    {
+        os << "  CountryCodes     : " << c.countryCodes[ii] << "\n";
+    }
+    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
+    {
+        os << "  Parameter name   : " << c.parameters[ii].getName() << "\n"
+            << "  Parameter value  : " << c.parameters[ii].str() << "\n";
+    }
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
 {
     os << "GeoInfo:: \n"

@@ -44,7 +44,6 @@ namespace cphd
  *  (Optional) Parameters that describe the statistics of errors
  *  in measured or estimated parameters that describe
  *  the collection
- *  See section 9
  */
 struct ErrorParameters
 {

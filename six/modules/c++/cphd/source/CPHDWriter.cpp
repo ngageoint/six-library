@@ -127,15 +127,16 @@ void CPHDWriter::writeMetadata(
 {
     const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    if (!mMetadata.collectionID.collectInfo.getClassificationLevel().empty())
+    if (!six::Init::isUndefined(mMetadata.collectionID.getClassificationLevel()) &&
+        !six::Init::isUndefined(mMetadata.collectionID.releaseInfo))
     {
-        mHeader.setClassification(mMetadata.collectionID.collectInfo.getClassificationLevel());
-    }
-    if (!mMetadata.collectionID.releaseInfo.empty())
-    {
+        mHeader.setClassification(mMetadata.collectionID.getClassificationLevel());
         mHeader.setReleaseInfo(mMetadata.collectionID.releaseInfo);
     }
-
+    else
+    {
+        throw except::Exception(Ctxt("Classification level and Release informaion must be specified"));
+    }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
     mFile.write(mHeader.toString().c_str(), mHeader.size());

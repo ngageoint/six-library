@@ -206,34 +206,34 @@ std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
-XMLElem CPHDXMLControl::toXML(const CollectionID& collectionID, XMLElem parent)
+XMLElem CPHDXMLControl::toXML(const CollectionInformation& collectionID, XMLElem parent)
 {
     XMLElem collectionXML = newElement("CollectionID", parent);
 
-    createString("CollectorName", collectionID.collectInfo.collectorName, collectionXML);
-    if(!six::Init::isUndefined(collectionID.collectInfo.illuminatorName))
+    createString("CollectorName", collectionID.collectorName, collectionXML);
+    if(!six::Init::isUndefined(collectionID.illuminatorName))
     {
-        createString("IlluminatorName", collectionID.collectInfo.illuminatorName, collectionXML);
+        createString("IlluminatorName", collectionID.illuminatorName, collectionXML);
     }
-    createString("CoreName", collectionID.collectInfo.coreName, collectionXML);
-    createString("CollectType", collectionID.collectInfo.collectType, collectionXML);
+    createString("CoreName", collectionID.coreName, collectionXML);
+    createString("CollectType", collectionID.collectType, collectionXML);
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
-    createString("ModeType", collectionID.collectInfo.radarMode.toString(), radarModeXML);
-    if(!six::Init::isUndefined(collectionID.collectInfo.radarModeID))
+    createString("ModeType", collectionID.radarMode.toString(), radarModeXML);
+    if(!six::Init::isUndefined(collectionID.radarModeID))
     {
-        createString("ModeID", collectionID.collectInfo.radarModeID, radarModeXML);
+        createString("ModeID", collectionID.radarModeID, radarModeXML);
     }
 
-    createString("Classification", collectionID.collectInfo.getClassificationLevel(), collectionXML);
+    createString("Classification", collectionID.getClassificationLevel(), collectionXML);
     createString("ReleaseInfo", collectionID.releaseInfo, collectionXML);
-    if (!collectionID.collectInfo.countryCodes.empty())
+    if (!collectionID.countryCodes.empty())
     {
-        std::string countryCodes = str::join(collectionID.collectInfo.countryCodes, ",");
+        std::string countryCodes = str::join(collectionID.countryCodes, ",");
         createString("CountryCode", countryCodes, collectionXML);
     }
-    mCommon.addParameters("Parameter", getDefaultURI(), collectionID.collectInfo.parameters, collectionXML);
+    mCommon.addParameters("Parameter", getDefaultURI(), collectionID.parameters, collectionXML);
     return collectionXML;
 }
 
@@ -304,7 +304,7 @@ XMLElem CPHDXMLControl::toXML(const SceneCoordinates& sceneCoords, XMLElem paren
     else
     {
         throw except::Exception(Ctxt(
-                                "Reference Surface must be one of two types"));
+                "Reference Surface must be one of two types"));
     }
 
     XMLElem imageAreaXML = newElement("ImageArea", sceneCoordsXML);
@@ -1139,9 +1139,9 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
     return cphd;
 }
 
-void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionID& collectionID)
+void CPHDXMLControl::fromXML(const XMLElem collectionIDXML, CollectionInformation& collectionID)
 {
-    mCommon.parseCollectionInformationFromXML(collectionIDXML, &collectionID.collectInfo);
+    mCommon.parseCollectionInformationFromXML(collectionIDXML, &collectionID);
     XMLElem element = getFirstAndOnly(collectionIDXML, "ReleaseInfo");
     parseString(element, collectionID.releaseInfo);
 }
