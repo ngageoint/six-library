@@ -71,10 +71,22 @@ public:
 
     /*!
      * Return the Version of the file passed in by its file name.
-     * Valid return values are:
-     *      NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
+     * \param fileName Pathname of file to read
+     * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
      */
     static nitf::Version getNITFVersion(const std::string& fileName);
+
+    /*!
+     * Return the Version of the file
+     * \param io IOInterface wrapping file contents
+     * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
+     * \note If file is not a NITF, or if errors occur, returns
+     *       NITF_VER_UNKNOWN
+     * \note IOInterface should be at the start of the file. Its location
+     *       will be reset to wherever it began after reading the neccesary
+     *       bytes.
+     */
+    static nitf::Version getNITFVersion(nitf::IOInterface& io);
 
     /*!
      *  This is the preferred method for reading a NITF 2.1 file.
@@ -96,7 +108,7 @@ public:
      *  \return  An ImageReader matching the imageSegmentNumber
      */
     nitf::ImageReader newImageReader(int imageSegmentNumber);
-    
+
     /*!
      *  Get a new image reader for the segment
      *  \param imageSegmentNumber  The image segment number

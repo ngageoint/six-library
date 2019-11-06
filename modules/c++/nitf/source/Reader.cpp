@@ -78,6 +78,11 @@ nitf::Version Reader::getNITFVersion(const std::string& fileName)
     return nitf_Reader_getNITFVersion(fileName.c_str());
 }
 
+nitf::Version Reader::getNITFVersion(IOInterface& io)
+{
+    return nitf_Reader_getNITFVersionIO(io.getNativeOrThrow());
+}
+
 nitf::Record Reader::read(nitf::IOHandle & io)
 {
     return readIO(io);
