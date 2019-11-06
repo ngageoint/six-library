@@ -26,6 +26,7 @@
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/CollectionInformation.h>
+
 namespace cphd
 {
 /*!

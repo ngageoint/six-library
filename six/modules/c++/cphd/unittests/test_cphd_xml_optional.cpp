@@ -24,7 +24,6 @@
 #include <memory>
 #include <logging/NullLogger.h>
 
-
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Global.h>
 #include <cphd/Metadata.h>

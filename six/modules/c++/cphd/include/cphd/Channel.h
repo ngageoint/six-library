@@ -28,7 +28,6 @@
 #include <cphd/Enums.h>
 #include <cphd/SceneCoordinates.h>
 
-
 namespace cphd
 {
 
