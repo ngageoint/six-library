@@ -51,10 +51,10 @@ public:
      *  \func DataWriter
      *  \brief Constructor
      *
-     *  \param stream The file output stream to be written
+     *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      */
-    DataWriter(io::FileOutputStream& stream,
+    DataWriter(mem::SharedPtr<io::SeekableOutputStream> stream,
                size_t numThreads);
 
     /*
@@ -75,8 +75,8 @@ public:
                             size_t elementSize) = 0;
 
 protected:
-    //! Output stream of CPHD file
-    io::FileOutputStream& mStream;
+    //! Output stream of CPHD
+        mem::SharedPtr<io::SeekableOutputStream> mStream;
     //! Number of threads for parallelism
     const size_t mNumThreads;
 };
@@ -84,7 +84,7 @@ protected:
 /*
  *  \class DataWriterLittleEndian
  *
- *  \brief Class to handle writing to file and byte swapping
+ *  \brief Class to handle writing to output stream and byte swapping
  *
  *  For little endian to big endian storage
  */
@@ -96,11 +96,11 @@ public:
      *  \func DataWriterLittleEndian
      *  \brief Constructor
      *
-     *  \param stream The file output stream to be written
+     *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      *  \param scratchSize Size of buffer to be used for scratch space
      */
-    DataWriterLittleEndian(io::FileOutputStream& stream,
+    DataWriterLittleEndian(mem::SharedPtr<io::SeekableOutputStream> stream,
                            size_t numThreads,
                            size_t scratchSize);
 
@@ -138,10 +138,10 @@ public:
      *  \func DataWriter
      *  \brief Constructor
      *
-     *  \param stream The file output stream to be written
+     *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      */
-    DataWriterBigEndian(io::FileOutputStream& stream,
+    DataWriterBigEndian(mem::SharedPtr<io::SeekableOutputStream> stream,
                         size_t numThreads);
 
     /*
@@ -170,6 +170,32 @@ public:
 class CPHDWriter
 {
 public:
+    /*
+     *  \func Constructor
+     *  \brief Sets up the internal structure of the CPHDWriter
+     *
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  However, SWIG doesn't seem to like that.
+     *  As a workaround, we pass in 0 for the default, and the ctor sets the
+     *  number of threads to the number of CPUs if this happens.
+     *
+     *  \param metadata A filled out metadata struct for the file that will be
+     *         written. The data.arraySize and data.numCPHDChannels will be
+     *         filled in internally. All other data must be provided.
+     *  \param stream Seekable output stream to be written to
+     *  \param schemaPaths (Optional) A vector of XML schema paths for validation
+     *  \param numThreads (Optional) The number of threads to use for processing.
+     *  \param scratchSpaceSize (Optional) The maximum size of internal scratch space
+     *         that may be used if byte swapping is necessary.
+     *         Default is 4 MB
+     */
+    CPHDWriter(
+            const Metadata& metadata,
+            mem::SharedPtr<io::SeekableOutputStream> stream,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+            size_t numThreads = 0,
+            size_t scratchSpaceSize = 4 * 1024 * 1024);
+
     /*
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
@@ -261,13 +287,13 @@ public:
         for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
         {
             // Move inputstream head to offset of particular support array
-            mFile.seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::FileOutputStream::START);
+            mStream->seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::SeekableOutputStream::START);
             writeSupportDataImpl(dataPtr + it->second.arrayByteOffset,
                                  it->second.numRows * it->second.numCols,
                                  it->second.bytesPerElement);
         }
         // Move inputstream head to the end of the support block after all supports have been written
-        mFile.seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::FileOutputStream::START);
+        mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
     }
 
 
@@ -301,17 +327,6 @@ public:
     void writeCPHDData(const T* data,
                        size_t numElements,
                        size_t channel = 1);
-
-    /*
-     *  Closes the FileInputStream if open
-     */
-    void close()
-    {
-        if (mFile.isOpen())
-        {
-            mFile.close();
-        }
-    }
 
 private:
     /*
@@ -361,9 +376,9 @@ private:
     //! number of threads for parallelism
     const size_t mNumThreads;
     //! schemas for XML validation
-    std::vector<std::string> mSchemaPaths;
+    const std::vector<std::string> mSchemaPaths;
     //! Output stream contains CPHD file
-    io::FileOutputStream mFile;
+    mem::SharedPtr<io::SeekableOutputStream> mStream;
 };
 }
 

@@ -30,6 +30,32 @@
 namespace cphd03
 {
 CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       mem::SharedPtr<io::SeekableOutputStream> stream,
+                       size_t numThreads,
+                       size_t scratchSpaceSize) :
+    mMetadata(metadata),
+    mElementSize(metadata.data.getNumBytesPerSample()),
+    mScratchSpaceSize(scratchSpaceSize),
+    mNumThreads(numThreads),
+    mStream(stream),
+    mCPHDSize(0),
+    mVBMSize(0)
+{
+    //! Get the correct dataWriter.
+    //  The CPHD file needs to be big endian.
+    if (sys::isBigEndianSystem())
+    {
+        mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
+    }
+    else
+    {
+        mDataWriter.reset(new cphd::DataWriterLittleEndian(
+                mStream, mNumThreads, mScratchSpaceSize));
+    }
+}
+
+CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       const std::string& pathname,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
     mMetadata(metadata),
@@ -39,16 +65,19 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mCPHDSize(0),
     mVBMSize(0)
 {
+    // Create file stream to write
+    mStream.reset(new io::FileOutputStream(pathname));
+
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
     if (sys::isBigEndianSystem())
     {
-        mDataWriter.reset(new cphd::DataWriterBigEndian(mFile, mNumThreads));
+        mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
     else
     {
         mDataWriter.reset(new cphd::DataWriterLittleEndian(
-                mFile, mNumThreads, mScratchSpaceSize));
+                mStream, mNumThreads, mScratchSpaceSize));
     }
 }
 
@@ -118,16 +147,16 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
 
     // set header size, final step before write
     header.set(xmlMetadata.size(), vbmSize, cphd03Size);
-    mFile.write(header.toString().c_str(), header.size());
-    mFile.write("\f\n", 2);
-    mFile.write(xmlMetadata.c_str(), xmlMetadata.size());
-    mFile.write("\f\n", 2);
+    mStream->write(header.toString().c_str(), header.size());
+    mStream->write("\f\n", 2);
+    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
+    mStream->write("\f\n", 2);
 
     // Pad bytes
     char zero = 0;
     for (sys::Off_T ii = 0; ii < header.getPadBytes(); ++ii)
     {
-        mFile.write(&zero, 1);
+        mStream->write(&zero, 1);
     }
 }
 
@@ -149,15 +178,12 @@ void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
     (*mDataWriter)(data, size * 2, mElementSize / 2);
 }
 
-void CPHDWriter::writeMetadata(const std::string& pathname,
-                               const VBM& vbm,
+void CPHDWriter::writeMetadata(const VBM& vbm,
                                const std::string& classification,
                                const std::string& releaseInfo)
 {
     // Update the number of bytes per VBP
     mMetadata.data.numBytesVBP = vbm.getNumBytesVBP();
-
-    mFile.create(pathname);
 
     const size_t numChannels = vbm.getNumChannels();
     size_t totalVBMSize = 0;
@@ -210,12 +236,9 @@ void CPHDWriter::writeCPHDData<std::complex<float> >(
         const std::complex<float>* data,
         size_t numElements);
 
-void CPHDWriter::write(const std::string& pathname,
-                       const std::string& classification,
+void CPHDWriter::write(const std::string& classification,
                        const std::string& releaseInfo)
 {
-    mFile.create(pathname);
-
     writeMetadata(mVBMSize, mCPHDSize, classification, releaseInfo);
 
     for (size_t ii = 0; ii < mVBMData.size(); ++ii)
@@ -229,7 +252,5 @@ void CPHDWriter::write(const std::string& pathname,
                 mMetadata.data.arraySize[ii].numSamples;
         writeCPHDDataImpl(mCPHDData[ii], cphd03DataSize);
     }
-
-    mFile.close();
 }
 }

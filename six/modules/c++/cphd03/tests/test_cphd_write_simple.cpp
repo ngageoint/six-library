@@ -127,8 +127,8 @@ int main(int argc, char** argv)
                       false,
                       domainType);
 
-        cphd03::CPHDWriter writer(metadata, numThreads);
-        writer.writeMetadata(outPathname, vbm);
+        cphd03::CPHDWriter writer(metadata, outPathname, numThreads);
+        writer.writeMetadata(vbm);
         for (size_t ii = 0; ii < numChannels; ++ii)
         {
             writer.writeCPHDData(&data[0], dims.area());

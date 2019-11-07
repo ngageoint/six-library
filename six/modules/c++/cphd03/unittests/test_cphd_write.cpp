@@ -323,8 +323,9 @@ void addTwoWayParams(cphd03::Metadata& metadata)
 void runCPHDTest(const std::string& testName,
                  cphd03::Metadata& metadata)
 {
+
     metadata.data.numCPHDChannels = NUM_IMAGES;
-    cphd03::CPHDWriter writer(metadata, NUM_THREADS);
+    cphd03::CPHDWriter writer(metadata, FILE_NAME, NUM_THREADS);
 
     cphd03::VBM vbm(metadata.data, metadata.vectorParameters);
     for (size_t ii = 0; ii < NUM_IMAGES; ++ii)
@@ -366,7 +367,7 @@ void runCPHDTest(const std::string& testName,
     std::vector<std::vector<std::complex<float> > >data(NUM_IMAGES);
     std::vector<types::RowCol<size_t> > dims(NUM_IMAGES);
 
-    writer.writeMetadata(FILE_NAME, vbm);
+    writer.writeMetadata(vbm);
 
     for (size_t ii = 0; ii < NUM_IMAGES; ++ii)
     {
@@ -383,8 +384,6 @@ void runCPHDTest(const std::string& testName,
 
         writer.writeCPHDData(&data[ii][0], data[ii].size());
     }
-
-    writer.close();
 
     cphd03::CPHDReader reader(FILE_NAME, NUM_THREADS);
     cphd::Wideband& wideband = reader.getWideband();

@@ -53,6 +53,7 @@ public:
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
      *
+     *  \param stream seekable output stream to write cphd
      *  \param metadata A filled out metadata struct for the file that will be
      *         written. The data.arraySize and data.numCPHDChannels will be
      *         filled in internally. All other data must be provided.
@@ -62,6 +63,30 @@ public:
      *         Default is 4 MB
      */
     CPHDWriter(const Metadata& metadata,
+               mem::SharedPtr<io::SeekableOutputStream> stream,
+               size_t numThreads = 0,
+               size_t scratchSpaceSize = 4 * 1024 * 1024);
+
+    /*
+     *  \func Constructor
+     *  \brief Sets up the internal structure of the CPHDWriter
+     *
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  However, SWIG doesn't seem to like that.
+     *  As a workaround, we pass in 0 for the default, and the ctor sets the
+     *  number of threads to the number of CPUs if this happens.
+     *
+     *  \param pathname The desired pathname of the file.
+     *  \param metadata A filled out metadata struct for the file that will be
+     *         written. The data.arraySize and data.numCPHDChannels will be
+     *         filled in internally. All other data must be provided.
+     *  \param numThreads The number of threads to use for processing.
+     *  \param scratchSpaceSize The maximum size of internal scratch space
+     *         that may be used if byte swapping is necessary.
+     *         Default is 4 MB
+     */
+    CPHDWriter(const Metadata& metadata,
+               const std::string& pathname,
                size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
 
@@ -91,15 +116,13 @@ public:
      *         data in chunks. Otherwise you should use addImage and write.
      *         This will internally set the number of bytes per VBP.
      *
-     *  \param pathname The desired pathname of the file.
      *  \param vbm The vector based metadata to write.
      *  \param classification The classification of the file. Optional
      *         By default, CPHD will not be populated with this value.
      *  \param releaseInfo The release information for the file. Optional
      *         By default, CPHD will not be populated with this value.
      */
-    void writeMetadata(const std::string& pathname,
-                       const VBM& vbm,
+    void writeMetadata(const VBM& vbm,
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
@@ -128,23 +151,13 @@ public:
      *  \brief Writes the CPHD file to disk. This should only be called
      *         if you are writing using addImage.
      *
-     *  \param pathname The desired pathname of the file.
      *  \param classification The classification of the file. Optional
      *         By default, CPHD will not be populated with this value.
      *  \param releaseInfo The release information for the file. Optional
      *         By default, CPHD will not be populated with this value.
      */
-    void write(const std::string& pathname,
-               const std::string& classification = "",
+    void write(const std::string& classification = "",
                const std::string& releaseInfo = "");
-
-    void close()
-    {
-        if (mFile.isOpen())
-        {
-            mFile.close();
-        }
-    }
 
 private:
     void writeMetadata(size_t vbmSize,
@@ -165,7 +178,7 @@ private:
     const size_t mScratchSpaceSize;
     const size_t mNumThreads;
 
-    io::FileOutputStream mFile;
+    mem::SharedPtr<io::SeekableOutputStream> mStream;
 
     std::vector<const sys::ubyte*> mCPHDData;
     std::vector<const sys::ubyte*> mVBMData;

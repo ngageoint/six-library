@@ -129,8 +129,8 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
                   false,
                   metadata.global.domainType);
 
-    cphd03::CPHDWriter writer(metadata, numThreads);
-    writer.writeMetadata(outPathname, vbm);
+    cphd03::CPHDWriter writer(metadata, outPathname, numThreads);
+    writer.writeMetadata(vbm);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         writer.writeCPHDData(&writeData[0], dims.area());

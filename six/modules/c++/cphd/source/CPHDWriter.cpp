@@ -29,7 +29,7 @@
 
 namespace cphd
 {
-DataWriter::DataWriter(io::FileOutputStream& stream,
+DataWriter::DataWriter(mem::SharedPtr<io::SeekableOutputStream> stream,
             size_t numThreads) :
     mStream(stream),
     mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
@@ -41,7 +41,7 @@ DataWriter::~DataWriter()
 }
 
 DataWriterLittleEndian::DataWriterLittleEndian(
-        io::FileOutputStream& stream,
+        mem::SharedPtr<io::SeekableOutputStream> stream,
         size_t numThreads,
         size_t scratchSize) :
     DataWriter(stream, numThreads),
@@ -71,14 +71,14 @@ void DataWriterLittleEndian::operator()(
                  dataToProcess / elementSize,
                  mNumThreads);
 
-        mStream.write(mScratch.get(), dataToProcess);
+        mStream->write(mScratch.get(), dataToProcess);
 
         dataProcessed += dataToProcess;
     }
 }
 
 DataWriterBigEndian::DataWriterBigEndian(
-        io::FileOutputStream& stream,
+        mem::SharedPtr<io::SeekableOutputStream> stream,
         size_t numThreads) :
     DataWriter(stream, numThreads)
 {
@@ -89,8 +89,33 @@ void DataWriterBigEndian::operator()(
         size_t numElements,
         size_t elementSize)
 {
-    mStream.write(reinterpret_cast<const sys::byte*>(data),
+    mStream->write(reinterpret_cast<const sys::byte*>(data),
                   numElements * elementSize);
+}
+
+CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       mem::SharedPtr<io::SeekableOutputStream> outStream,
+                       const std::vector<std::string>& schemaPaths,
+                       size_t numThreads,
+                       size_t scratchSpaceSize) :
+    mMetadata(metadata),
+    mElementSize(metadata.data.getNumBytesPerSample()),
+    mScratchSpaceSize(scratchSpaceSize),
+    mNumThreads(numThreads),
+    mSchemaPaths(schemaPaths),
+    mStream(outStream)
+{
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    if (sys::isBigEndianSystem())
+    {
+        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
+    }
+    else
+    {
+        mDataWriter.reset(new DataWriterLittleEndian(
+                mStream, mNumThreads, mScratchSpaceSize));
+    }
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -104,21 +129,23 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths)
 {
-    // create file to write to
-    mFile.create(pathname);
+
+    // Initialize output stream
+    mStream.reset(new io::FileOutputStream(pathname));
 
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
     if (sys::isBigEndianSystem())
     {
-        mDataWriter.reset(new DataWriterBigEndian(mFile, mNumThreads));
+        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
     else
     {
         mDataWriter.reset(new DataWriterLittleEndian(
-                mFile, mNumThreads, mScratchSpaceSize));
+                mStream, mNumThreads, mScratchSpaceSize));
     }
 }
+
 
 void CPHDWriter::writeMetadata(
         size_t supportSize,
@@ -139,10 +166,10 @@ void CPHDWriter::writeMetadata(
     }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    mFile.write(mHeader.toString().c_str(), mHeader.size());
-    mFile.write("\f\n", 2);
-    mFile.write(xmlMetadata.c_str(), xmlMetadata.size());
-    mFile.write("\f\n", 2);
+    mStream->write(mHeader.toString().c_str(), mHeader.size());
+    mStream->write("\f\n", 2);
+    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
+    mStream->write("\f\n", 2);
 }
 
 void CPHDWriter::writePVPData(const sys::ubyte* pvpBlock,
@@ -269,7 +296,7 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
     char zero = 0;
     for (sys::Off_T ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
     {
-        mFile.write(&zero, 1);
+        mStream->write(&zero, 1);
     }
 
     // Write each PVP array

@@ -56,14 +56,14 @@ int main(int argc, char** argv)
         std::cout << "Reading file: " << inPathname << "\n";
         cphd03::CPHDReader reader(inPathname, numThreads);
 
-        cphd03::CPHDWriter writer(reader.getMetadata(), numThreads);
+        cphd03::CPHDWriter writer(reader.getMetadata(), outPathname, numThreads);
         const cphd::SampleType sampleType =
                 reader.getMetadata().data.sampleType;
         const cphd03::VBM& vbm = reader.getVBM();
         cphd::Wideband& wideband = reader.getWideband();
 
         std::cout << "Writing file: " << outPathname << "\n";
-        writer.writeMetadata(outPathname, vbm);
+        writer.writeMetadata(vbm);
 
         for (size_t channel = 0;
              channel < reader.getNumChannels();
