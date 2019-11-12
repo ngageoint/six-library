@@ -29,7 +29,7 @@
 
 namespace cphd
 {
-DataWriter::DataWriter(mem::SharedPtr<io::SeekableOutputStream> stream,
+DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
             size_t numThreads) :
     mStream(stream),
     mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
@@ -41,7 +41,7 @@ DataWriter::~DataWriter()
 }
 
 DataWriterLittleEndian::DataWriterLittleEndian(
-        mem::SharedPtr<io::SeekableOutputStream> stream,
+        std::shared_ptr<io::SeekableOutputStream> stream,
         size_t numThreads,
         size_t scratchSize) :
     DataWriter(stream, numThreads),
@@ -78,7 +78,7 @@ void DataWriterLittleEndian::operator()(
 }
 
 DataWriterBigEndian::DataWriterBigEndian(
-        mem::SharedPtr<io::SeekableOutputStream> stream,
+        std::shared_ptr<io::SeekableOutputStream> stream,
         size_t numThreads) :
     DataWriter(stream, numThreads)
 {
@@ -94,7 +94,7 @@ void DataWriterBigEndian::operator()(
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
-                       mem::SharedPtr<io::SeekableOutputStream> outStream,
+                       std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
@@ -267,7 +267,13 @@ void CPHDWriter::write<std::complex<float> >(
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {
     // Update the number of bytes per PVP
-    mMetadata.data.numBytesPVP = pvpBlock.getNumBytesPVPSet();
+    if (mMetadata.data.numBytesPVP != pvpBlock.getNumBytesPVPSet())
+    {
+        std::ostringstream ostr;
+        ostr << "Number of pvp block bytes in metadata: " << mMetadata.data.numBytesPVP
+             << " does not match calculated size of pvp block: " << pvpBlock.getNumBytesPVPSet();
+        throw except::Exception(ostr.str());
+    }
 
     const size_t numChannels = mMetadata.data.getNumChannels();
     size_t totalSupportSize = 0;

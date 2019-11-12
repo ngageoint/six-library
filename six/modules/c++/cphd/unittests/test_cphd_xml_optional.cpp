@@ -887,7 +887,7 @@ TEST_CASE(testOptional)
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
-    const std::auto_ptr<cphd::Metadata> metadata =
+    const std::unique_ptr<cphd::Metadata> metadata =
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);

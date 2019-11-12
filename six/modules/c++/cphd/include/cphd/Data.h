@@ -225,6 +225,10 @@ struct Data
      */
     Data();
 
+    virtual ~Data()
+    {
+    }
+
     //! Equality operator
     bool operator==(const Data& other) const
     {
@@ -243,39 +247,25 @@ struct Data
     //! Getter functions
     virtual size_t getNumVectors(size_t channel) const
     {
-        if (channel < channels.size())
-        {
-            return channels[channel].getNumVectors();
-        }
-        std::ostringstream ostr;
-        ostr << "Channel provided is " << channel << "\n"
-                << "while only " << channels.size()
-                << " channels exist \n";
-        throw except::Exception(ostr.str());
+        verifyChannelInRange(channel);
+        return channels[channel].getNumVectors();
     }
     virtual size_t getNumSamples(size_t channel) const
     {
-        if (channel < channels.size())
-        {
-            return channels[channel].getNumSamples();
-        }
-        std::ostringstream ostr;
-        ostr << "Channel provided is " << channel << "\n"
-                << "while only " << channels.size()
-                << " channels exist \n";
-        throw except::Exception(ostr.str());
+        verifyChannelInRange(channel);
+        return channels[channel].getNumSamples();
     }
     size_t getCompressedSignalSize(size_t channel) const
     {
-        if (channel < channels.size())
-        {
-            return channels[channel].getCompressedSignalSize();
-        }
-        std::ostringstream ostr;
-        ostr << "Channel provided is " << channel << "\n"
-                << "while only " << channels.size()
-                << " channels exist \n";
-        throw except::Exception(ostr.str());
+        verifyChannelInRange(channel);
+        return channels[channel].getCompressedSignalSize();
+    }
+    size_t getSignalSize(size_t channel) const
+    {
+        verifyChannelInRange(channel);
+        return getNumVectors(channel) *
+               getNumSamples(channel) *
+               getNumBytesPerSample();
     }
     virtual size_t getNumChannels() const
     {
@@ -355,6 +345,11 @@ private:
             return lhs < rhs;
         }
     };
+
+    /*
+     * Check if channel is in range
+     */
+    void verifyChannelInRange(size_t channel) const;
 
     // Book keeping map for efficient validation
     // Support Array Map with:

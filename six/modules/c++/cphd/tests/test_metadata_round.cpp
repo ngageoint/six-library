@@ -56,7 +56,7 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
     xml::lite::MinidomParser xmlParser;
     parseXMLFile(xmlParser, inPathname);
     cphd::CPHDXMLControl xmlControl(new logging::NullLogger(), true);
-    const std::auto_ptr<cphd::Metadata> metadata =
+    const std::unique_ptr<cphd::Metadata> metadata =
             xmlControl.fromXML(xmlParser.getDocument(), schemas);
 
     const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
@@ -72,7 +72,7 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
     cphd::CPHDXMLControl xmlControl2(new logging::NullLogger(), true);
 
     // Populate metadata object from XML Document
-    const std::auto_ptr<cphd::Metadata> metadata2 =
+    const std::unique_ptr<cphd::Metadata> metadata2 =
             xmlControl2.fromXML(xmlParser2.getDocument(), schemas);
 
     // Check if both metadata are equal
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
                            "XML", 1, 1);
         parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
                            "XSD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string>("input"));
         const std::string schemaPathname(options->get<std::string>("schema"));
         const size_t numThreads(options->get<size_t>("threads"));

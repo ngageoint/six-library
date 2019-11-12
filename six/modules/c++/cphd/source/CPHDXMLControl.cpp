@@ -138,7 +138,7 @@ std::string CPHDXMLControl::toXMLString(
         const std::vector<std::string>& schemaPaths,
         bool prettyPrint)
 {
-    std::auto_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
+    std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
     io::StringStream ss;
     (prettyPrint) ?
             doc->getRootElement()->prettyPrint(ss) :
@@ -149,11 +149,11 @@ std::string CPHDXMLControl::toXMLString(
 /*
  * TO XML
  */
-std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    std::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -1048,7 +1048,7 @@ XMLElem CPHDXMLControl::toXML(const MatchInformation& matchInfo, XMLElem parent)
 /*
  * FROM XML
  */
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(
         const std::string& xmlString,
         const std::vector<std::string>& schemaPaths)
 {
@@ -1059,11 +1059,11 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
     return fromXML(parser.getDocument(), schemaPaths);
 }
 
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(
         const xml::lite::Document* doc,
         const std::vector<std::string>& schemaPaths)
 {
-    std::auto_ptr<Metadata> cphd(new Metadata());
+    std::unique_ptr<Metadata> cphd(new Metadata());
 
     if(!schemaPaths.empty())
     {
@@ -1955,20 +1955,6 @@ void CPHDXMLControl::fromXML(const XMLElem matchInfoXML, MatchInformation& match
     mCommon.parseMatchInformationFromXML(matchInfoXML, &matchInfo);
 }
 
-/*
- * Creation helper functions
-*/
-void CPHDXMLControl::createParameterCollection(
-        const std::string& name,
-        const six::ParameterCollection& parameterCollection,
-        XMLElem parent) const
-{
-    for (size_t ii = 0; ii < parameterCollection.size(); ++ii)
-    {
-        XMLElem elem = createString(name, parameterCollection[ii].str(), parent);
-        setAttribute(elem, "name", parameterCollection[ii].getName());
-    }
-}
 
 XMLElem CPHDXMLControl::createLatLonFootprint(const std::string& name,
                                               const std::string& cornerName,
@@ -2265,7 +2251,7 @@ void CPHDXMLControl::parsePVPType(Pvp& pvp, const XMLElem paramXML, PVPType& par
     parseUInt(getFirstAndOnly(paramXML, "Size"), size);
     parseUInt(getFirstAndOnly(paramXML, "Offset"), offset);
     parseString(getFirstAndOnly(paramXML, "Format"), format);
-    pvp.setData(param, size, offset, format);
+    pvp.setData(size, offset, format, param);
 }
 
 void CPHDXMLControl::parsePVPType(Pvp& pvp, const XMLElem paramXML) const

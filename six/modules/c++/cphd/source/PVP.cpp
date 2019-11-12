@@ -71,7 +71,7 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
-void Pvp::setData(PVPType& param, size_t size, size_t offset, const std::string& format)
+void Pvp::setData(size_t size, size_t offset, const std::string& format, PVPType& param)
 {
     validate(size, offset);
     validateFormat(format);

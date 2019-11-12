@@ -155,6 +155,22 @@ size_t Data::getAllSupportSize() const
     return size;
 }
 
+/*
+ * Check if channel is in range
+ */
+void Data::verifyChannelInRange(size_t channel) const
+{
+    if (channel >= channels.size())
+    {
+    std::ostringstream ostr;
+    ostr << "Channel provided is " << channel << "\n"
+            << "while only " << channels.size()
+            << " channels exist \n";
+    throw except::Exception(ostr.str());
+    }
+}
+
+
 std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
 {
     os << "    Identifier        : " << s.identifier << "\n"

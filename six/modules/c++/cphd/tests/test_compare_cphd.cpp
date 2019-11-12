@@ -25,7 +25,6 @@
 #include <memory>
 #include <logging/NullLogger.h>
 #include <cli/ArgumentParser.h>
-#include <io/TempFile.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
 #include <cphd/Metadata.h>
@@ -237,7 +236,7 @@ int main(int argc, char** argv)
                            "CPHD", 1, 1);
         parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
                            "XSD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string pathname1(options->get<std::string>("file1"));
         const std::string pathname2(options->get<std::string>("file2"));
         const std::string schemaPathname(options->get<std::string>("schema"));

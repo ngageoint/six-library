@@ -29,7 +29,6 @@
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
-
 #include <sys/Conf.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
@@ -54,7 +53,7 @@ public:
      *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      */
-    DataWriter(mem::SharedPtr<io::SeekableOutputStream> stream,
+    DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
                size_t numThreads);
 
     /*
@@ -76,7 +75,7 @@ public:
 
 protected:
     //! Output stream of CPHD
-        mem::SharedPtr<io::SeekableOutputStream> mStream;
+        std::shared_ptr<io::SeekableOutputStream> mStream;
     //! Number of threads for parallelism
     const size_t mNumThreads;
 };
@@ -88,7 +87,6 @@ protected:
  *
  *  For little endian to big endian storage
  */
-// Inherits from DataWriter class
 class DataWriterLittleEndian : public DataWriter
 {
 public:
@@ -100,7 +98,7 @@ public:
      *  \param numThreads Number of threads for parallel processing
      *  \param scratchSize Size of buffer to be used for scratch space
      */
-    DataWriterLittleEndian(mem::SharedPtr<io::SeekableOutputStream> stream,
+    DataWriterLittleEndian(std::shared_ptr<io::SeekableOutputStream> stream,
                            size_t numThreads,
                            size_t scratchSize);
 
@@ -130,7 +128,6 @@ private:
  *
  *  No byte swap. Already big endian.
  */
-// Inherits from DataWriter class
 class DataWriterBigEndian : public DataWriter
 {
 public:
@@ -141,7 +138,7 @@ public:
      *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      */
-    DataWriterBigEndian(mem::SharedPtr<io::SeekableOutputStream> stream,
+    DataWriterBigEndian(std::shared_ptr<io::SeekableOutputStream> stream,
                         size_t numThreads);
 
     /*
@@ -191,7 +188,7 @@ public:
      */
     CPHDWriter(
             const Metadata& metadata,
-            mem::SharedPtr<io::SeekableOutputStream> stream,
+            std::shared_ptr<io::SeekableOutputStream> stream,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
@@ -362,11 +359,11 @@ private:
                               size_t numElements, size_t elementSize);
 
     //! DataWriter object
-    std::auto_ptr<DataWriter> mDataWriter;
+    std::unique_ptr<DataWriter> mDataWriter;
 
     // Book-keeping element
     //! metadata information
-    Metadata mMetadata;
+    const Metadata& mMetadata;
     //! header information
     FileHeader mHeader;
     //! size of each element in signal block
@@ -378,7 +375,7 @@ private:
     //! schemas for XML validation
     const std::vector<std::string> mSchemaPaths;
     //! Output stream contains CPHD file
-    mem::SharedPtr<io::SeekableOutputStream> mStream;
+    std::shared_ptr<io::SeekableOutputStream> mStream;
 };
 }
 

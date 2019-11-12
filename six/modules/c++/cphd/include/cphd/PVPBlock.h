@@ -27,8 +27,7 @@
 #include <vector>
 #include <complex>
 #include <stddef.h>
-#include <typeinfo>
-#include <map>
+#include <unordered_map>
 #include <sys/Conf.h>
 #include <cphd/Types.h>
 #include <cphd/Data.h>
@@ -61,20 +60,22 @@ struct PVPBlock
      *  \func PVPBlock
      *  \brief Consturctor sets up the internal structure of a PVPSet based on metadata.
      *
-     *  \param data A filled out data structure. This will be used to
-     *  extract the number of channels and vectors of the VBM.
-     *  This will also be used to store off the number of bytes
-     *  per vector regardless of the optional values.
      *  \param pvp A filled out pvp sturcture. This will be used for
      *  information on where to allocate memory and set each
      *  parameter in a PVP set.
+     *  \param[in, out] data A filled out data structure. This will be used to
+     *  extract the number of channels and vectors of the VBM.
+     *  The data metadata will also be updated with the number of pvp bytes required
+     *  if provided number of bytes is not sufficient
     */
-    PVPBlock(const Data& data, const Pvp& pvp);
+    PVPBlock(const Pvp& pvp, Data& data);
 
     /*!
      *  \func PVPBlock
      *
      *  \brief Constructor sets up the internal sturcture of a PVPSet without metadata.
+     *
+     *  Does not update metadata data numBytesPVP with calculated pvp bytes per set
      *
      *  \param numBytesPerVector Used to allocate memory for per vector parameters
      *  \param numChannels Set the number of PVP Arrays to allocate in the block
@@ -83,8 +84,7 @@ struct PVPBlock
      *  information on where to allocate memory and set each
      *  parameter in a PVP set.
      */
-    PVPBlock(size_t numBytesPerVector,
-             size_t numChannels,
+    PVPBlock(size_t numChannels,
              const std::vector<size_t>& numVectors,
              const Pvp& p);
 
@@ -134,7 +134,7 @@ struct PVPBlock
         if(mData[channel][set].addedPVP.count(name) == 1)
         {
             AddedPVP<T> aP;
-            return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second, channel, set, name);
+            return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second);
         }
         throw except::Exception(Ctxt(
                 "Parameter was not set"));
@@ -239,8 +239,8 @@ struct PVPBlock
      *
      *  \return Returns the size of the pvp block read in
      */
-    // startPVP = cphd header keyword "PVP_BYTE_OFFSET"
-    // sizePVP = cphd header keyword "PVP_DATA_SIZE"
+    // startPVP = cphd header keyword "PVP_BYTE_OFFSET" contains PVP block starting offset
+    // sizePVP = cphd header keyword "PVP_DATA_SIZE" contains PVP block size
     sys::Off_T load(io::SeekableInputStream& inStream,
                     sys::Off_T startPVP,
                     sys::Off_T sizePVP,
@@ -306,7 +306,7 @@ protected:
         //! Equality operators
         bool operator==(const PVPSet& other) const
         {
-            if(!(txTime == other.txTime && txPos == other.txPos &&
+            return txTime == other.txTime && txPos == other.txPos &&
                     txVel == other.txVel && rcvTime == other.rcvTime &&
                     rcvPos == other.rcvPos && rcvVel == other.rcvVel &&
                     srpPos == other.srpPos && aFDOP == other.aFDOP &&
@@ -318,22 +318,7 @@ protected:
                     ampSF == other.ampSF && fxN1 == other.fxN1 &&
                     fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                     toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                    signal == other.signal))
-            {
-                return false;
-            }
-                if (addedPVP.size() != other.addedPVP.size())
-                {
-                    return false;
-                }
-                for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
-                {
-                    if(it->second.str() != other.addedPVP.find(it->first)->second.str())
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                    signal == other.signal && addedPVP == other.addedPVP;
         }
         bool operator!=(const PVPSet& other) const
         {
@@ -369,7 +354,7 @@ protected:
         mem::ScopedCopyablePtr<double> signal;
 
         //! (Optional) Additional parameters
-        std::map<std::string,six::Parameter> addedPVP;
+        std::unordered_map<std::string,six::Parameter> addedPVP;
     };
     friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
 
@@ -381,7 +366,7 @@ private:
     template<typename T>
     struct AddedPVP
     {
-        T getAddedPVP(const six::Parameter& val, size_t channel, size_t set, const std::string& name) const
+        T getAddedPVP(const six::Parameter& val) const
         {
             return static_cast<T>(val);
         }
@@ -389,7 +374,7 @@ private:
     template<typename T>
     struct AddedPVP<std::complex<T> >
     {
-        std::complex<T> getAddedPVP(const six::Parameter& val, size_t channel, size_t set, const std::string& name) const
+        std::complex<T> getAddedPVP(const six::Parameter& val) const
         {
             return val.getComplex<T>();
         }

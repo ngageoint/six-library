@@ -77,7 +77,6 @@ struct PVPType
      *  \param format Format of the expected parameter
      *   See spec table 10.2 page 120 for allowed binary formats
      */
-    //! Set PVPType data
     void setData(size_t size, size_t offset, const std::string& format)
     {
         mSize = size;
@@ -130,7 +129,6 @@ protected:
  *  \brief Additional per vector parameter
  *
  *  Specifies additional (or custom) per vector parameters
- *  Inherits from PVPType
  */
 struct APVPType : PVPType
 {
@@ -184,8 +182,9 @@ private:
  *  \struct Pvp
  *
  *  \brief Structure used to specify the Per Vector
- *  parameters provided for each channel of a given
- *  product.
+ *  parameters
+ *
+ *  Provided for each channel of a given product.
  */
 struct Pvp
 {
@@ -401,15 +400,15 @@ struct Pvp
      *
      *  \brief Validate and set the metadata of the specified parameter
      *
-     *  \param param The PVPType parameter that should be set
      *  \param size The size of the parameter to be expected for the param
      *  \param offset The offset of the parameter to be expected for the param
      *  \param format The string format of the parameter to be expected for the param
+     *  \param[out] param The PVPType parameter that should be set
      *
      *  \throws except::Exception If param offset or size overlaps another parameter, or
      *   if format is invalid
      */
-    void setData(PVPType& param, size_t size, size_t offset, const std::string& format);
+    void setData(size_t size, size_t offset, const std::string& format, PVPType& param);
 
     /*
      *  \func setData
@@ -424,7 +423,6 @@ struct Pvp
      *  \throws except::Exception If param offset or size overlaps another parameter,
      *   if format is invalid or if name is not unique
      */
-    //! Set an additional PVP param
     void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
 
 private:

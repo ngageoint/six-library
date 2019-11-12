@@ -97,7 +97,6 @@ public:
      *  For writing to file
      *  Does not include section terminator string
      */
-    // Does not include section terminator string
     virtual std::string toString() const = 0;
 
     /*

@@ -39,7 +39,7 @@ SupportArrayParameter::SupportArrayParameter() :
 }
 
 SupportArrayParameter::SupportArrayParameter(
-        std::string format,
+        const std::string& format,
         size_t id,
         double x0_in,
         double y0_in,
@@ -69,10 +69,10 @@ AdditionalSupportArray::AdditionalSupportArray() :
 }
 
 AdditionalSupportArray::AdditionalSupportArray(
-        std::string format, std::string id,
+        const std::string& format, const std::string& id,
         double x0_in, double y0_in, double xSS_in, double ySS_in,
-        std::string xUnits_in, std::string yUnits_in,
-        std::string zUnits_in) :
+        const std::string& xUnits_in, const std::string& yUnits_in,
+        const std::string& zUnits_in) :
     identifier(id),
     xUnits(xUnits_in),
     yUnits(yUnits_in),
@@ -86,7 +86,7 @@ AdditionalSupportArray::AdditionalSupportArray(
     initializeParams();
 }
 
-SupportArrayParameter SupportArray::getIAZSupportArray(const std::string key) const
+SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const
 {
     size_t keyNum = str::toType<size_t>(key);
     if (iazArray.size() <= keyNum)
@@ -98,7 +98,7 @@ SupportArrayParameter SupportArray::getIAZSupportArray(const std::string key) co
     return iazArray[keyNum];
 }
 
-SupportArrayParameter SupportArray::getAGPSupportArray(const std::string key) const
+SupportArrayParameter SupportArray::getAGPSupportArray(const std::string& key) const
 {
     size_t keyNum = str::toType<size_t>(key);
     if (antGainPhase.size() <= keyNum)
@@ -110,7 +110,7 @@ SupportArrayParameter SupportArray::getAGPSupportArray(const std::string key) co
     return antGainPhase[keyNum];
 }
 
-AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string key) const
+AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key) const
 {
     if (addedSupportArray.count(key) == 0 || addedSupportArray.count(key) > 1)
     {

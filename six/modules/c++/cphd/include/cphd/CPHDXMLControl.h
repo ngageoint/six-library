@@ -46,7 +46,6 @@ namespace cphd
  *
  *  \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM).
- *  Inherits from CPHDXMLControl
  */
 class CPHDXMLControl : public six::XMLParser
 {
@@ -86,7 +85,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    std::auto_ptr<xml::lite::Document> toXML(
+    std::unique_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -100,7 +99,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::auto_ptr<Metadata> fromXML(
+    std::unique_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -114,7 +113,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::auto_ptr<Metadata> fromXML(
+    std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -178,9 +177,6 @@ private:
 
 
     //! Create helper functions
-    void createParameterCollection(const std::string& name,
-                                   const six::ParameterCollection& ParameterCollection,
-                                   XMLElem parent) const;
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
                                   const cphd::LatLonCorners& corners,
@@ -206,7 +202,7 @@ private:
     void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
     void parsePVPType(Pvp& p, const XMLElem paramXML) const;
     void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
-    void parseCommon(const XMLElem imgTypeXML, ImagingType*  imgType) const;
+    void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
     void parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const;
     void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
     void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,

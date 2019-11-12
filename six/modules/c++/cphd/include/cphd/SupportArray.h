@@ -27,7 +27,6 @@
 #include <vector>
 #include <unordered_map>
 #include <stddef.h>
-
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
@@ -62,7 +61,7 @@ struct SupportArrayParameter
      *  \param ySS_in Col coordinate (Y) sample spacing
      */
     SupportArrayParameter(
-        std::string format,
+        const std::string& format,
         size_t id,
         double x0_in,
         double y0_in,
@@ -146,12 +145,11 @@ struct AdditionalSupportArray : SupportArrayParameter
      *  \param yUnits Defines the Y units of the sampled grid
      *  \param zUnits Defines the Z units of the sampled grid
      */
-    //! Custom constructor
     AdditionalSupportArray(
-        std::string format, std::string id,
+        const std::string& format, const std::string& id,
         double x0_in, double y0_in, double xSS_in, double ySS_in,
-        std::string xUnits_in, std::string yUnits_in,
-        std::string zUnits_in);
+        const std::string& xUnits_in, const std::string& yUnits_in,
+        const std::string& zUnits_in);
 
     //! Equality operator
     bool operator==(const AdditionalSupportArray& other) const
@@ -210,13 +208,13 @@ struct SupportArray
     }
 
     //! Get IAZ support array by unique id
-    SupportArrayParameter getIAZSupportArray(const std::string key) const;
+    SupportArrayParameter getIAZSupportArray(const std::string& key) const;
 
     //! Get AGP support array by unique id
-    SupportArrayParameter getAGPSupportArray(const std::string key) const;
+    SupportArrayParameter getAGPSupportArray(const std::string& key) const;
 
     //! Get AGP support array by unique id
-    AdditionalSupportArray getAddedSupportArray(const std::string key) const;
+    AdditionalSupportArray getAddedSupportArray(const std::string& key) const;
 
     //! Vector of IAZ type arrays
     std::vector<SupportArrayParameter> iazArray;

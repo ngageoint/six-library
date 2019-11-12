@@ -25,17 +25,16 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
-#include <mem/SharedPtr.h>
 #include <xml/lite/MinidomParser.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 
 namespace cphd
 {
-CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
+CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths,
-                       mem::SharedPtr<logging::Logger> logger)
+                       std::shared_ptr<logging::Logger> logger)
 {
     initialize(inStream, numThreads, logger, schemaPaths);
 }
@@ -43,15 +42,15 @@ CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
 CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths,
-                       mem::SharedPtr<logging::Logger> logger)
+                       std::shared_ptr<logging::Logger> logger)
 {
-    initialize(mem::SharedPtr<io::SeekableInputStream>(
+    initialize(std::shared_ptr<io::SeekableInputStream>(
         new io::FileInputStream(fromFile)), numThreads, logger, schemaPaths);
 }
 
-void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
+void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                             size_t numThreads,
-                            mem::SharedPtr<logging::Logger> logger,
+                            std::shared_ptr<logging::Logger> logger,
                             const std::vector<std::string>& schemaPaths)
 {
     mFileHeader.read(*inStream);
@@ -75,7 +74,7 @@ void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                         mFileHeader.getSupportBlockSize()));
 
     // Load the PVPBlock into memory
-    mPVPBlock.reset(new PVPBlock(mMetadata->data, mMetadata->pvp));
+    mPVPBlock.reset(new PVPBlock(mMetadata->pvp, mMetadata->data));
     mPVPBlock->load(*inStream,
                     mFileHeader.getPvpBlockByteOffset(),
                     mFileHeader.getPvpBlockSize(),

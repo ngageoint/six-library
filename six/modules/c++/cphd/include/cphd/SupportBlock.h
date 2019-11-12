@@ -32,7 +32,6 @@
 #include <types/RowCol.h>
 
 #include <mem/ScopedArray.h>
-#include <mem/SharedPtr.h>
 #include <mem/BufferView.h>
 
 #include <cphd/Data.h>
@@ -46,8 +45,7 @@ namespace cphd
  *
  *  \brief This class contains information about the SupportBlock CPHD data.
  */
-//  Due to the large size of CPHD SupportBlock, this object does not contain
-//  any actual SupportBlock data
+//  Provides methods to read support block data from CPHD file/stream
 class SupportBlock
 {
 public:
@@ -76,7 +74,7 @@ public:
      *  \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
      *  \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
-    SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
+    SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                  const cphd::Data& data,
                  sys::Off_T startSupport,
                  sys::Off_T sizeSupport);
@@ -132,7 +130,7 @@ public:
     /*
      *  \func readAll
      *
-     *  \brief Read all the suppor arrays
+     *  \brief Read all the support arrays
      *
      *   Performs endian swapping if necessary
      *
@@ -141,7 +139,6 @@ public:
      *  \param[out] data mem::ScopedArray that will hold the data read from the file.
      *
      */
-    //! Reads all the support Arrays into data
     void readAll(size_t numThreads,
                  mem::ScopedArray<sys::ubyte>& data) const;
 
@@ -152,11 +149,11 @@ private:
 
 private:
     // Noncopyable
-    SupportBlock(const SupportBlock& );
-    const SupportBlock& operator=(const SupportBlock& );
+    SupportBlock(const SupportBlock& ) = delete;
+    const SupportBlock& operator=(const SupportBlock& ) = delete;
 
 private:
-    const mem::SharedPtr<io::SeekableInputStream> mInStream;
+    const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
     const sys::Off_T mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock

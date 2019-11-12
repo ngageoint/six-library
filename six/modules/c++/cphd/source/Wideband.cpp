@@ -247,7 +247,7 @@ Wideband::Wideband(const std::string& pathname,
     initialize();
 }
 
-Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
+Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
                    const cphd::Data& data,
                    sys::Off_T startWB,
                    sys::Off_T sizeWB) :

@@ -31,7 +31,6 @@
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
-#include <mem/SharedPtr.h>
 #include <types/RowCol.h>
 #include <sys/Conf.h>
 
@@ -44,8 +43,7 @@ namespace cphd
  * \brief Information about the wideband CPHD data
  */
 //  It contains the cphd::Data structure (for channel and vector sizes).
-//  Due to the large size of CPHD wideband, this object does not contain
-//  any actual wideband data
+//  Provides methods read wideband data from CPHD file/stream
 class Wideband
 {
 public:
@@ -76,7 +74,7 @@ public:
      *  \param startWB CPHD header keyword "cphd_BYTE_OFFSET"
      *  \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
      */
-    Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
+    Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
              const cphd::Data& data,
              sys::Off_T startWB,
              sys::Off_T sizeWB);
@@ -368,7 +366,7 @@ private:
     const Wideband& operator=(const Wideband& );
 
 private:
-    const mem::SharedPtr<io::SeekableInputStream> mInStream;
+    const std::shared_ptr<io::SeekableInputStream> mInStream;
     const cphd::Data& mData;          // pointer to data metadata
     const sys::Off_T mWBOffset;       // offset in bytes to start of wideband
     const size_t mWBSize;             // total size in bytes of wideband

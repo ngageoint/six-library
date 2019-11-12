@@ -295,7 +295,6 @@ struct Bistatic : public ImagingType
  *  \struct ReferenceGeometry
  *
  *  \brief Parameters that describe the collection geometry
- *         See section 6.5
  */
 struct ReferenceGeometry
 {

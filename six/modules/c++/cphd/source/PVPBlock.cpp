@@ -288,32 +288,31 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 /*
  * Initialize PVP Array with a data object
  */
-PVPBlock::PVPBlock(const Data& d, const Pvp& p)
+PVPBlock::PVPBlock(const Pvp& p, Data& d)
 {
     mPvp = p;
-    mNumBytesPerVector = mPvp.getReqSetSize()*sizeof(double);
+    mNumBytesPerVector = d.getNumBytesPVPSet();
     mData.resize(d.getNumChannels());
     for (size_t ii = 0; ii < d.getNumChannels(); ++ii)
     {
         mData[ii].resize(d.getNumVectors(ii));
     }
-    size_t calculateBytesPerVector = getNumBytesPVPSet();
+    size_t calculateBytesPerVector = mPvp.getReqSetSize()*sizeof(double);
     if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
         calculateBytesPerVector > mNumBytesPerVector)
     {
         mNumBytesPerVector = calculateBytesPerVector;
+        d.numBytesPVP = calculateBytesPerVector;
     }
-
 }
 
 /*
  * Initialize PVP Array with custom parameters
  */
-PVPBlock::PVPBlock(size_t numBytesPerVector,
-                   size_t numChannels,
+PVPBlock::PVPBlock(size_t numChannels,
                    const std::vector<size_t>& numVectors,
                    const Pvp& p) :
-    mNumBytesPerVector(numBytesPerVector),
+    mNumBytesPerVector(0),
     mPvp(p)
 {
     mData.resize(numChannels);
@@ -326,7 +325,7 @@ PVPBlock::PVPBlock(size_t numBytesPerVector,
     {
         mData[ii].resize(numVectors[ii]);
     }
-    size_t calculateBytesPerVector = getNumBytesPVPSet();
+    size_t calculateBytesPerVector = mPvp.getReqSetSize()*sizeof(double);
     if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
         calculateBytesPerVector > mNumBytesPerVector)
     {
@@ -855,8 +854,7 @@ std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
         os << "  SIGNAL     : " << *p.signal << "\n";
     }
 
-    std::map<std::string, six::Parameter>::const_iterator it;
-    for (it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
+    for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         os << "  Additional Parameter : " << it->second.str() << "\n";
     }

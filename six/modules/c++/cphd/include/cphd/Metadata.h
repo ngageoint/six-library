@@ -52,7 +52,6 @@ namespace cphd
  *
  *  This object contains all of the sub-blocks for CPHD.
  *
- *
  */
 struct Metadata
 {
