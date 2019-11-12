@@ -118,11 +118,11 @@ XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
     XMLElem poly1DXML = newElement(name, uri, parent);
     setAttribute(poly1DXML, "order1", six::toString(order));
 
-    for (size_t i = 0; i <= order; ++i)
+    for (size_t ii = 0; ii <= order; ++ii)
     {
-        XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[i],
+        XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[ii],
                                        poly1DXML);
-        setAttribute(coefXML, "exponent1", six::toString(i));
+        setAttribute(coefXML, "exponent1", six::toString(ii));
     }
     return poly1DXML;
 }
@@ -195,16 +195,16 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     setAttribute(yXML, "order1", six::toString(order));
     setAttribute(zXML, "order1", six::toString(order));
 
-    for (size_t i = 0; i <= order; ++i)
+    for (size_t ii = 0; ii <= order; ++ii)
     {
-        Vector3 v3 = polyXYZ[i];
+        Vector3 v3 = polyXYZ[ii];
         XMLElem xCoefXML = createDouble("Coef", getSICommonURI(), v3[0], xXML);
         XMLElem yCoefXML = createDouble("Coef", getSICommonURI(), v3[1], yXML);
         XMLElem zCoefXML = createDouble("Coef", getSICommonURI(), v3[2], zXML);
 
-        setAttribute(xCoefXML, "exponent1", six::toString(i));
-        setAttribute(yCoefXML, "exponent1", six::toString(i));
-        setAttribute(zCoefXML, "exponent1", six::toString(i));
+        setAttribute(xCoefXML, "exponent1", six::toString(ii));
+        setAttribute(yCoefXML, "exponent1", six::toString(ii));
+        setAttribute(zCoefXML, "exponent1", six::toString(ii));
     }
     return polyXML;
 }
@@ -218,9 +218,9 @@ void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1;
-    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
     {
-        XMLElem element = coeffsXML[i];
+        XMLElem element = coeffsXML[ii];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         parseDouble(element, p1D[exp1]);
     }
@@ -237,9 +237,9 @@ void SICommonXMLParser::parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1, exp2;
-    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
     {
-        XMLElem element = coeffsXML[i];
+        XMLElem element = coeffsXML[ii];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         exp2 = str::toType<int>(element->getAttributes().getValue("exponent2"));
         parseDouble(element, p2D[exp1][exp2]);
@@ -255,14 +255,14 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
     setAttribute(poly2DXML, "order1", six::toString(poly2D.orderX()));
     setAttribute(poly2DXML, "order2", six::toString(poly2D.orderY()));
 
-    for (size_t i = 0; i <= poly2D.orderX(); i++)
+    for (size_t ii = 0; ii <= poly2D.orderX(); ii++)
     {
-        for (size_t j = 0; j <= poly2D.orderY(); j++)
+        for (size_t jj = 0; jj <= poly2D.orderY(); jj++)
         {
             XMLElem coefXML = createDouble("Coef", getSICommonURI(),
-                                           poly2D[i][j], poly2DXML);
-            setAttribute(coefXML, "exponent1", six::toString(i));
-            setAttribute(coefXML, "exponent2", six::toString(j));
+                                           poly2D[ii][jj], poly2DXML);
+            setAttribute(coefXML, "exponent1", six::toString(ii));
+            setAttribute(coefXML, "exponent2", six::toString(jj));
         }
     }
 
@@ -1042,7 +1042,7 @@ void SICommonXMLParser::parseMatchInformationFromXML(
     const XMLElem matchInfoXML,
     MatchInformation* matchInfo) const
 {
-    int numMatchTypes = 0;
+    size_t numMatchTypes = 0;
     parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
     if (numMatchTypes == 0)
     {
@@ -1053,26 +1053,27 @@ void SICommonXMLParser::parseMatchInformationFromXML(
     matchInfoXML->getElementsByTagName("MatchType", typesXML);
 
     //! validate the numMatchTypes
-    if (typesXML.size() != (size_t)numMatchTypes)
+    if (typesXML.size() != numMatchTypes)
     {
         throw except::Exception(
             Ctxt("NumMatchTypes does not match number of MatchType fields"));
     }
 
-    for (size_t i = 0; i < typesXML.size(); i++)
+    matchInfo->types.reserve(typesXML.size());
+    for (size_t ii = 0; ii < typesXML.size(); ii++)
     {
         // The MatchInformation object was given a MatchType when
         // it was instantiated.  The first time through, just populate it.
-        if (i != 0)
+        if (ii != 0)
         {
             matchInfo->types.push_back(
                 mem::ScopedCopyablePtr<MatchType>(new MatchType()));
         }
-        MatchType* type = matchInfo->types[i].get();
+        MatchType* type = matchInfo->types[ii].get();
 
-        parseString(getFirstAndOnly(typesXML[i], "TypeID"), type->typeID);
+        parseString(getFirstAndOnly(typesXML[ii], "TypeID"), type->typeID);
 
-        XMLElem curIndexElem = getOptional(typesXML[i], "CurrentIndex");
+        XMLElem curIndexElem = getOptional(typesXML[ii], "CurrentIndex");
         if (curIndexElem)
         {
             //optional
@@ -1080,11 +1081,11 @@ void SICommonXMLParser::parseMatchInformationFromXML(
         }
 
         int numMatchCollections = 0;
-        parseInt(getFirstAndOnly(typesXML[i], "NumMatchCollections"),
+        parseInt(getFirstAndOnly(typesXML[ii], "NumMatchCollections"),
                  numMatchCollections);
 
         std::vector < XMLElem > matchCollectionsXML;
-        typesXML[i]->getElementsByTagName("MatchCollection", matchCollectionsXML);
+        typesXML[ii]->getElementsByTagName("MatchCollection", matchCollectionsXML);
 
         //! validate the numMatchTypes
         if (matchCollectionsXML.size() !=
@@ -1129,25 +1130,25 @@ XMLElem SICommonXMLParser::convertMatchInformationToXML(
               static_cast<int>(matchInfo->types.size()),
               matchInfoXML);
 
-    for (size_t i = 0; i < matchInfo->types.size(); ++i)
+    for (size_t ii = 0; ii < matchInfo->types.size(); ++ii)
     {
-        const MatchType* mt = matchInfo->types[i].get();
+        const MatchType* mt = matchInfo->types[ii].get();
         XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
+        setAttribute(mtXML, "index", str::toString(ii + 1));
 
         createString("TypeID", mt->typeID, mtXML);
         createInt("CurrentIndex", mt->currentIndex, mtXML);
         createInt("NumMatchCollections",
-				static_cast<int>(mt->matchCollects.size()), mtXML);
+                  static_cast<int>(mt->matchCollects.size()), mtXML);
 
-        for (size_t j = 0; j < mt->matchCollects.size(); ++j)
+        for (size_t jj = 0; jj < mt->matchCollects.size(); ++jj)
         {
             XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(j + 1));
+            setAttribute(mcXML, "index", str::toString(jj + 1));
 
-            createString("CoreName", mt->matchCollects[j].coreName, mcXML);
-            createInt("MatchIndex", mt->matchCollects[j].matchIndex, mcXML);
-            addParameters("Parameter", mt->matchCollects[j].parameters, mcXML);
+            createString("CoreName", mt->matchCollects[jj].coreName, mcXML);
+            createInt("MatchIndex", mt->matchCollects[jj].matchIndex, mcXML);
+            addParameters("Parameter", mt->matchCollects[jj].parameters, mcXML);
         }
     }
 
@@ -1164,19 +1165,25 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
 
     createString("CollectorName", si, collInfo->collectorName, collInfoXML);
     if (!collInfo->illuminatorName.empty())
+    {
         createString("IlluminatorName", si, collInfo->illuminatorName,
                      collInfoXML);
+    }
     createString("CoreName", si, collInfo->coreName, collInfoXML);
     if (!Init::isUndefined(collInfo->collectType))
+    {
         createString("CollectType", si,
                      six::toString<six::CollectType>(collInfo->collectType),
                      collInfoXML);
+    }
 
     XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
     createString("ModeType", si, six::toString(collInfo->radarMode),
                  radarModeXML);
     if (!collInfo->radarModeID.empty())
+    {
         createString("ModeID", si, collInfo->radarModeID, radarModeXML);
+    }
 
     createString("Classification", si, collInfo->getClassificationLevel(),
                  collInfoXML);
@@ -1200,16 +1207,22 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
 
     XMLElem element = getOptional(collectionInfoXML, "IlluminatorName");
     if (element)
+    {
         parseString(element, collInfo->illuminatorName);
+    }
 
     element = getOptional(collectionInfoXML, "CoreName");
     if (element)
+    {
         parseString(element, collInfo->coreName);
+    }
 
     element = getOptional(collectionInfoXML, "CollectType");
     if (element)
+    {
         collInfo->collectType
                 = six::toType<six::CollectType>(element->getCharacterData());
+    }
 
     XMLElem radarModeXML = getFirstAndOnly(collectionInfoXML, "RadarMode");
 
@@ -1219,7 +1232,9 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
 
     element = getOptional(radarModeXML, "ModeID");
     if (element)
+    {
         parseString(element, collInfo->radarModeID);
+    }
 
     std::string classification;
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
@@ -1234,7 +1249,6 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
             != countryCodeXML.end(); ++it)
     {
         std::string cc;
-
         parseString(*it, cc);
         collInfo->countryCodes.push_back(cc);
     }

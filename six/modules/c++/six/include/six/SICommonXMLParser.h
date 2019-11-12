@@ -50,9 +50,9 @@ public:
     XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = NULL) const;
     XMLElem createVector2D(const std::string& name, const std::string& uri,
-            Vector2 p, XMLElem parent) const;
-    XMLElem createVector2D(const std::string& name, Vector2 p,
-            XMLElem parent) const;
+            Vector2 p = 0.0, XMLElem parent = nullptr) const;
+    XMLElem createVector2D(const std::string& name, Vector2 p = 0.0,
+            XMLElem parent = nullptr) const;
     XMLElem createVector3D(const std::string& name, const std::string& uri,
             Vector3 p = 0.0, XMLElem parent = NULL) const;
     XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
@@ -153,19 +153,19 @@ public:
 
     XMLElem convertCollectionInformationToXML(
         const CollectionInformation *obj,
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     void parseCollectionInformationFromXML(
         const XMLElem collectionInfoXML,
         CollectionInformation *obj) const;
 
+    XMLElem convertMatchInformationToXML(
+            const MatchInformation* matchInformation,
+            XMLElem parent = nullptr) const;
+
     void parseMatchInformationFromXML(
             const XMLElem matchInfoXML,
             MatchInformation* matchInformation) const;
-
-    XMLElem convertMatchInformationToXML(
-            const MatchInformation* matchInformation,
-            XMLElem parent = NULL) const;
 
     virtual XMLElem convertRadiometryToXML(
         const Radiometric *obj,
