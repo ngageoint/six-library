@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         cphd::CPHDXMLControl xmlControl;
         std::string xml = xmlControl.toXMLString(reader.getMetadata(), schemaPathnames, prettyPrint);
 
-        std::auto_ptr<io::OutputStream> os;
+        std::unique_ptr<io::OutputStream> os;
         if (toConsole)
         {
             os.reset(new io::StandardOutStream());
@@ -92,6 +92,7 @@ int main(int argc, char** argv)
         }
         os->write(xml);
         os->close();
+        return 0;
     }
     catch (const except::Exception& e)
     {
