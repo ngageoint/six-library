@@ -175,15 +175,15 @@ public:
         return mReleaseInfo;
     }
 
-    //! Pad bytes don't include the Section terminator
-    sys::Off_T getPvpPadBytes() const
-    {
-        if (mSupportBlockSize != 0)
-        {
-            return (getPvpBlockByteOffset() - (getSupportBlockByteOffset() + getSupportBlockSize()));
-        }
-        return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
-    }
+    /*
+     *  \func getPvpPadBytes
+     *  \brief Calculate padding in CPHD file for PVP block
+     *
+     *  Pad bytes don't include section terminator
+     *
+     *  \return number of pad bytes
+     */
+    sys::Off_T getPvpPadBytes() const;
 
     //! Optional elements
     void setSupportBlockSize(sys::Off_T size)

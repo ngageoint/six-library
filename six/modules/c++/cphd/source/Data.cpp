@@ -145,6 +145,30 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
     supportArrayMap.insert(entry);
 }
 
+//! Getter functions
+size_t Data::getNumVectors(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return channels[channel].getNumVectors();
+}
+size_t Data::getNumSamples(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return channels[channel].getNumSamples();
+}
+size_t Data::getCompressedSignalSize(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return channels[channel].getCompressedSignalSize();
+}
+size_t Data::getSignalSize(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return getNumVectors(channel) *
+           getNumSamples(channel) *
+           getNumBytesPerSample();
+}
+
 size_t Data::getAllSupportSize() const
 {
     size_t size = 0;

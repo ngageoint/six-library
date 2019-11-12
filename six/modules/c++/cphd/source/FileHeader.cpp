@@ -239,6 +239,17 @@ size_t FileHeader::set()
     return size();
 }
 
+//! Pad bytes don't include the Section terminator
+sys::Off_T FileHeader::getPvpPadBytes() const
+{
+    if (mSupportBlockSize != 0)
+    {
+        return (getPvpBlockByteOffset() - (getSupportBlockByteOffset() + getSupportBlockSize()));
+    }
+    return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
+}
+
+
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"

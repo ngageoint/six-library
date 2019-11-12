@@ -245,28 +245,10 @@ struct Data
     }
 
     //! Getter functions
-    virtual size_t getNumVectors(size_t channel) const
-    {
-        verifyChannelInRange(channel);
-        return channels[channel].getNumVectors();
-    }
-    virtual size_t getNumSamples(size_t channel) const
-    {
-        verifyChannelInRange(channel);
-        return channels[channel].getNumSamples();
-    }
-    size_t getCompressedSignalSize(size_t channel) const
-    {
-        verifyChannelInRange(channel);
-        return channels[channel].getCompressedSignalSize();
-    }
-    size_t getSignalSize(size_t channel) const
-    {
-        verifyChannelInRange(channel);
-        return getNumVectors(channel) *
-               getNumSamples(channel) *
-               getNumBytesPerSample();
-    }
+    virtual size_t getNumVectors(size_t channel) const;
+    virtual size_t getNumSamples(size_t channel) const;
+    size_t getCompressedSignalSize(size_t channel) const;
+    size_t getSignalSize(size_t channel) const;
     virtual size_t getNumChannels() const
     {
         return channels.size();

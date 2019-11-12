@@ -61,12 +61,9 @@ struct SupportArrayParameter
      *  \param ySS_in Col coordinate (Y) sample spacing
      */
     SupportArrayParameter(
-        const std::string& format,
-        size_t id,
-        double x0_in,
-        double y0_in,
-        double xSS_in,
-        double ySS_in);
+        const std::string& format, size_t id,
+        double x0_in, double y0_in,
+        double xSS_in, double ySS_in);
 
     //! Equality operator
     bool operator==(const SupportArrayParameter& other) const
