@@ -218,13 +218,10 @@ struct Data
         size_t compressedSignalSize; // Optional
     };
 
-    /*
-     *  \func Data
-     *
-     *  \brief Default constructor
-     */
+    //! Constructor
     Data();
 
+    //! Destructor
     virtual ~Data()
     {
     }
@@ -273,6 +270,8 @@ struct Data
     {
         return supportArrayMap.size();
     }
+
+    // SupportArray get functions
     //! Get specific support array by identifier
     SupportArray getSupportArrayById(const std::string& id) const;
 

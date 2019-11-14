@@ -28,6 +28,9 @@
 #include <vector>
 #include <map>
 
+#include <cphd/Metadata.h>
+#include <cphd/PVP.h>
+#include <cphd/PVPBlock.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
@@ -48,7 +51,7 @@ double getRandom();
  *
  *  \return Return vector3D object
  */
-cphd::Vector3 getRandomVector3();
+Vector3 getRandomVector3();
 
 /*
  *  \func setPVPXML
@@ -59,7 +62,7 @@ cphd::Vector3 getRandomVector3();
  *  \params[out] pvp A Pvp object for which values will be set
  *
  */
-void setPVPXML(cphd::Pvp& pvp);
+void setPVPXML(Pvp& pvp);
 
 /*
  *  \func setVectorParameters
@@ -76,7 +79,7 @@ void setPVPXML(cphd::Pvp& pvp);
  */
 void setVectorParameters(size_t channel,
                           size_t vector,
-                          cphd::PVPBlock& pvpBlock);
+                          PVPBlock& pvpBlock);
 
 /*
  *  \func setUpMetadata
@@ -85,7 +88,7 @@ void setVectorParameters(size_t channel,
  *  \param[out] Filled metadata object
  *
  */
-void setUpMetadata(cphd::Metadata& metadata);
+void setUpMetadata(Metadata& metadata);
 
 /*
  *  \func setUpData
@@ -99,7 +102,7 @@ void setUpMetadata(cphd::Metadata& metadata);
  *  \throws except::Exception if wideband data is not an accepted type or size
  */
 template<typename T>
-void setUpData(cphd::Metadata& metadata,
+void setUpData(Metadata& metadata,
                const types::RowCol<size_t>& dims,
                const std::vector<T>& writeData)
 {

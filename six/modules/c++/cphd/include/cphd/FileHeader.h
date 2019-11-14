@@ -44,7 +44,7 @@ public:
     /*
      *  \func FileHeader
      *
-     *  \brief Default constructor
+     *  \brief Constructor
      *   initialize default variables
      */
     FileHeader();

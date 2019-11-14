@@ -42,16 +42,16 @@ double getRandom()
     return -1000.0  + r * 2000.0;
 }
 
-cphd::Vector3 getRandomVector3()
+Vector3 getRandomVector3()
 {
-    cphd::Vector3 ret;
+    Vector3 ret;
     ret[0] = getRandom();
     ret[1] = getRandom();
     ret[2] = getRandom();
     return ret;
 }
 
-void setPVPXML(cphd::Pvp& pvp)
+void setPVPXML(Pvp& pvp)
 {
     // Size, Offset, Format
     pvp.setData(1, 1, "F8", pvp.txTime);
@@ -75,27 +75,27 @@ void setPVPXML(cphd::Pvp& pvp)
 
 void setVectorParameters(size_t channel,
                           size_t vector,
-                          cphd::PVPBlock& pvpBlock)
+                          PVPBlock& pvpBlock)
 {
     const double txTime = getRandom();
     pvpBlock.setTxTime(txTime, channel, vector);
 
-    const cphd::Vector3 txPos = getRandomVector3();
+    const Vector3 txPos = getRandomVector3();
     pvpBlock.setTxPos(txPos, channel, vector);
 
-    const cphd::Vector3 txVel = getRandomVector3();
+    const Vector3 txVel = getRandomVector3();
     pvpBlock.setTxVel(txVel, channel, vector);
 
     const double rcvTime = getRandom();
     pvpBlock.setRcvTime(rcvTime, channel, vector);
 
-    const cphd::Vector3 rcvPos = getRandomVector3();
+    const Vector3 rcvPos = getRandomVector3();
     pvpBlock.setRcvPos(rcvPos, channel, vector);
 
-    const cphd::Vector3 rcvVel = getRandomVector3();
+    const Vector3 rcvVel = getRandomVector3();
     pvpBlock.setRcvVel(rcvVel, channel, vector);
 
-    const cphd::Vector3 srpPos = getRandomVector3();
+    const Vector3 srpPos = getRandomVector3();
     pvpBlock.setSRPPos(srpPos, channel, vector);
 
     const double aFDOP = getRandom();
@@ -129,20 +129,20 @@ void setVectorParameters(size_t channel,
     pvpBlock.setSCSS(scss, channel, vector);
 }
 
-void setUpMetadata(cphd::Metadata& metadata)
+void setUpMetadata(Metadata& metadata)
 {
-    //! We must have a collectType set
-    metadata.collectionID.collectType = cphd::CollectType::MONOSTATIC;
+    // We must have a collectType set
+    metadata.collectionID.collectType = CollectType::MONOSTATIC;
     metadata.collectionID.setClassificationLevel("Unclassified");
     metadata.collectionID.releaseInfo = "Release";
-    //! We must have a radar mode set
-    metadata.collectionID.radarMode = cphd::RadarModeType::SPOTLIGHT;
+    // We must have a radar mode set
+    metadata.collectionID.radarMode = RadarModeType::SPOTLIGHT;
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
-    metadata.sceneCoordinates.iarp.llh = cphd::LatLonAlt(0,0,0);
-    metadata.sceneCoordinates.referenceSurface.planar.reset(new cphd::Planar());
+    metadata.sceneCoordinates.iarp.llh = LatLonAlt(0,0,0);
+    metadata.sceneCoordinates.referenceSurface.planar.reset(new Planar());
     metadata.sceneCoordinates.referenceSurface.planar->uIax = getRandomVector3();
     metadata.sceneCoordinates.referenceSurface.planar->uIay = getRandomVector3();
-    //! We must have corners set
+    // We must have corners set
     for (size_t ii = 0; ii < six::Corners<double>::NUM_CORNERS; ++ii)
     {
         metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLat(0.0);
@@ -153,7 +153,7 @@ void setUpMetadata(cphd::Metadata& metadata)
     metadata.channel.srpFixedCphd = false;
     metadata.referenceGeometry.srp.ecf = getRandomVector3();
     metadata.referenceGeometry.srp.iac = getRandomVector3();
-    metadata.referenceGeometry.monostatic.reset(new cphd::Monostatic());
+    metadata.referenceGeometry.monostatic.reset(new Monostatic());
     metadata.referenceGeometry.monostatic->arpPos = getRandomVector3();
     metadata.referenceGeometry.monostatic->arpVel = getRandomVector3();
 }

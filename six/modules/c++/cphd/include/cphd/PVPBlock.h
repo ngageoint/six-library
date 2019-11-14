@@ -43,6 +43,8 @@ namespace cphd
  *  \struct PVPBlock
  *
  *  \brief The PVP Block contains the actual PVP data
+ *
+ *  PVPBlock handles reading PVPBlock from CPHD file, and loading the data structure
  */
 struct PVPBlock
 {

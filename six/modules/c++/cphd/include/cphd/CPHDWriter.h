@@ -75,7 +75,7 @@ public:
 
 protected:
     //! Output stream of CPHD
-        std::shared_ptr<io::SeekableOutputStream> mStream;
+    std::shared_ptr<io::SeekableOutputStream> mStream;
     //! Number of threads for parallelism
     const size_t mNumThreads;
 };

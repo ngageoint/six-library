@@ -39,7 +39,7 @@ namespace cphd
 /*
  *  \struct ErrorParameters
  *
- *  \brief Error paramaters
+ *  \brief Describes error parameters
  *
  *  (Optional) Parameters that describe the statistics of errors
  *  in measured or estimated parameters that describe

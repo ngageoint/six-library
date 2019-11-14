@@ -65,7 +65,6 @@ std::string CPHDXMLControl::getSICommonURI() const
     return CPHD10_URI;
 }
 
-
 void CPHDXMLControl::validate(const xml::lite::Document* doc,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger* log)
@@ -225,7 +224,6 @@ XMLElem CPHDXMLControl::toXML(const CollectionInformation& collectionID, XMLElem
     {
         createString("ModeID", collectionID.radarModeID, radarModeXML);
     }
-
     createString("Classification", collectionID.getClassificationLevel(), collectionXML);
     createString("ReleaseInfo", collectionID.releaseInfo, collectionXML);
     if (!collectionID.countryCodes.empty())

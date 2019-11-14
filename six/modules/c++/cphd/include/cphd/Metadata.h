@@ -55,6 +55,7 @@ namespace cphd
  */
 struct Metadata
 {
+    //! Default constructor
     Metadata()
     {
     }

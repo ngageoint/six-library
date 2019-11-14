@@ -67,7 +67,7 @@ public:
     /*!
      *  \func toXMLString
      *
-     *  \brief Convert XML to string
+     *  \brief Convert metadata to XML string
      *  Calls toXML
      *  \return XML String
      */
@@ -79,7 +79,7 @@ public:
     /*!
      *  \func toXML
      *
-     *  \brief Convert XML to document object
+     *  \brief Convert metadata to XML document object
      *
      *  \param metadata Valid CPHD metadata object
      *  \param schemaPaths Vector of XML Schema for validation
@@ -92,7 +92,7 @@ public:
     /*!
      *  \func fromXML
      *
-     *  \brief Convert document to XML object
+     *  \brief Parse XML string to Metadata object
      *
      *  \param xmlString Valid cphd XML string
      *  \param schemaPaths Vector of XML Schema for validation
@@ -106,7 +106,7 @@ public:
     /*!
      *  \func fromXML
      *
-     *  \brief Convert document to XML object
+     *  \brief Parse XML document to Metadata object
      *
      *  \param doc XML document object of CPHD
      *  \param schemaPaths Vector of XML Schema for validation

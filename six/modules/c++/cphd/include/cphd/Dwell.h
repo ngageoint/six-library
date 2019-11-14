@@ -40,11 +40,7 @@ namespace cphd
  */
 struct DwellTime
 {
-    /*
-     *  \func DwellTime
-     *
-     *  \brief Default constructor
-     */
+    //! Constructor
     DwellTime();
 
     //! Equality operators
@@ -71,11 +67,7 @@ struct DwellTime
  */
 struct COD
 {
-    /*
-     *  \func COD
-     *
-     *  \brief Constructor
-     */
+    //! Constructor
     COD();
 
     //! Equality operators
