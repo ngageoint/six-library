@@ -21,7 +21,7 @@
  */
 
 #include <cphd03/VBM.h>
-
+#include <cphd/TestDataGenerator.h>
 #include "TestCase.h"
 
 static const size_t NUM_CHANNELS = 3;
@@ -29,49 +29,33 @@ static const size_t NUM_VECTORS = 7;
 
 namespace
 {
-// [-1000, 1000]
-double getRandom()
-{
-    const double r = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-    return -1000.0  + r * 2000.0;
-}
-
-cphd::Vector3 getRandomVector3()
-{
-    cphd::Vector3 ret;
-    ret[0] = getRandom();
-    ret[1] = getRandom();
-    ret[2] = getRandom();
-    return ret;
-}
-
 void testVectorParameters(const std::string& testName,
                           size_t channel,
                           size_t vector,
                           cphd03::VBM& vbm)
 {
-    const double txTime = getRandom();
+    const double txTime = cphd::getRandom();
     vbm.setTxTime(txTime, channel, vector);
 
-    const cphd::Vector3 txPos = getRandomVector3();
+    const cphd::Vector3 txPos = cphd::getRandomVector3();
     vbm.setTxPos(txPos, channel, vector);
 
-    const double rcvTime = getRandom();
+    const double rcvTime = cphd::getRandom();
     vbm.setRcvTime(rcvTime, channel, vector);
 
-    const cphd::Vector3 rcvPos = getRandomVector3();
+    const cphd::Vector3 rcvPos = cphd::getRandomVector3();
     vbm.setRcvPos(rcvPos, channel, vector);
 
-    const double srpTime = getRandom();
+    const double srpTime = cphd::getRandom();
     vbm.setSRPTime(srpTime, channel, vector);
 
-    const cphd::Vector3 srpPos = getRandomVector3();
+    const cphd::Vector3 srpPos = cphd::getRandomVector3();
     vbm.setSRPPos(srpPos, channel, vector);
 
-    const double tropoSrp = getRandom();
+    const double tropoSrp = cphd::getRandom();
     vbm.setTropoSRP(tropoSrp, channel, vector);
 
-    const double ampSF = getRandom();
+    const double ampSF = cphd::getRandom();
     vbm.setAmpSF(ampSF, channel, vector);
 
     TEST_ASSERT_EQ(txTime, vbm.getTxTime(channel, vector));
@@ -99,16 +83,16 @@ TEST_CASE(testVbmFx)
         {
             testVectorParameters(testName, channel, vector, vbm);
 
-            const double fx0 = getRandom();
+            const double fx0 = cphd::getRandom();
             vbm.setFx0(fx0, channel, vector);
 
-            const double fxSS = getRandom();
+            const double fxSS = cphd::getRandom();
             vbm.setFxSS(fxSS, channel, vector);
 
-            const double fx1 = getRandom();
+            const double fx1 = cphd::getRandom();
             vbm.setFx1(fx1, channel, vector);
 
-            const double fx2 = getRandom();
+            const double fx2 = cphd::getRandom();
             vbm.setFx2(fx2, channel, vector);
 
             TEST_ASSERT_EQ(fx0, vbm.getFx0(channel, vector));
@@ -134,10 +118,10 @@ TEST_CASE(testVbmToa)
         {
             testVectorParameters(testName, channel, vector, vbm);
 
-            const double deltaToa0 = getRandom();
+            const double deltaToa0 = cphd::getRandom();
             vbm.setDeltaTOA0(deltaToa0, channel, vector);
 
-            const double toaSS = getRandom();
+            const double toaSS = cphd::getRandom();
             vbm.setTOASS(toaSS, channel, vector);
 
             TEST_ASSERT_EQ(deltaToa0, vbm.getDeltaTOA0(channel, vector));
