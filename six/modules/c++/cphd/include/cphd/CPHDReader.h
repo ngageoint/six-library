@@ -107,50 +107,34 @@ public:
      *  \param vector The vector number
      *  \param sample The sample number
      *
-     *  \return sys::Off_T File offset
+     *  \return offset of signal sample in file
      */
     sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }
 
-    //! Domain type flags
-    bool isFX() const
-    {
-        return (getDomainType() == DomainType::FX);
-    }
-    bool isTOA() const
-    {
-        return (getDomainType() == DomainType::TOA);
-    }
-
-    //! Get block info functions
-    // returns "FX", "TOA", or "NOT_SET"
-    std::string getDomainTypeString() const
-    {
-        return std::string(getDomainType());
-    }
-    // returns enum for FX, TOA, or NOT_SET
-    cphd::DomainType getDomainType() const
-    {
-        return mMetadata->global.getDomainType();
-    }
+    //! Get file header object
     const FileHeader& getFileHeader() const
     {
         return mFileHeader;
     }
+    //! Get metadata object
     const Metadata& getMetadata() const
     {
         return *mMetadata;
     }
+    //! Get per vector parameters
     const PVPBlock& getPVPBlock() const
     {
         return *mPVPBlock;
     }
+    //! Get signal data
     const Wideband& getWideband() const
     {
         return *mWideband;
     }
+    //! Get support data
     const SupportBlock& getSupportBlock() const
     {
         return *mSupportBlock;
