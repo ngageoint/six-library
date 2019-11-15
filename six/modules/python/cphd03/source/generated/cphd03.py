@@ -2105,7 +2105,7 @@ class Wideband(_object):
     def __init__(self, *args):
         """
         __init__(cphd::Wideband self, std::string const & pathname, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
-        __init__(cphd::Wideband self, mem::SharedPtr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, std::shared_ptr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
         """
         this = _cphd03.new_Wideband(*args)
         try:
@@ -2159,9 +2159,9 @@ class CPHDReader(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
-        __init__(cphd03::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
-        __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads, std::shared_ptr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads, std::shared_ptr< logging::Logger > logger) -> CPHDReader
         __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads) -> CPHDReader
         """
         this = _cphd03.new_CPHDReader(*args)
@@ -2248,13 +2248,16 @@ class CPHDWriter(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, CPHDWriter, name)
     __repr__ = _swig_repr
 
-    def __init__(self, metadata, numThreads=0, scratchSpaceSize=4):
+    def __init__(self, *args):
         """
-        __init__(cphd03::CPHDWriter self, Metadata metadata, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, size_t numThreads=0) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname) -> CPHDWriter
         """
-        this = _cphd03.new_CPHDWriter(metadata, numThreads, scratchSpaceSize)
+        this = _cphd03.new_CPHDWriter(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2262,25 +2265,20 @@ class CPHDWriter(_object):
 
     def writeMetadata(self, *args):
         """
-        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification, std::string const & releaseInfo)
-        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification)
-        writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm)
+        writeMetadata(CPHDWriter self, VBM vbm, std::string const & classification, std::string const & releaseInfo)
+        writeMetadata(CPHDWriter self, VBM vbm, std::string const & classification)
+        writeMetadata(CPHDWriter self, VBM vbm)
         """
         return _cphd03.CPHDWriter_writeMetadata(self, *args)
 
 
     def write(self, *args):
         """
-        write(CPHDWriter self, std::string const & pathname, std::string const & classification, std::string const & releaseInfo)
-        write(CPHDWriter self, std::string const & pathname, std::string const & classification)
-        write(CPHDWriter self, std::string const & pathname)
+        write(CPHDWriter self, std::string const & classification, std::string const & releaseInfo)
+        write(CPHDWriter self, std::string const & classification)
+        write(CPHDWriter self)
         """
         return _cphd03.CPHDWriter_write(self, *args)
-
-
-    def close(self):
-        """close(CPHDWriter self)"""
-        return _cphd03.CPHDWriter_close(self)
 
 
     def addImageImpl(self, image, dims, vbm):

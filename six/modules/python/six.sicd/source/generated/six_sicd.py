@@ -268,6 +268,10 @@ class CollectionInformation(_object):
     __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
     if _newclass:
         radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_sicd.CollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_sicd.CollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_sicd.CollectionInformation_releaseInfo_get, _six_sicd.CollectionInformation_releaseInfo_set)
     __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
     __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
     if _newclass:
@@ -3355,6 +3359,10 @@ class ScopedCloneableComplexCollectionInformation(_object):
     __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get
     if _newclass:
         radarModeID = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableComplexCollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_sicd.ScopedCloneableComplexCollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_sicd.ScopedCloneableComplexCollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_sicd.ScopedCloneableComplexCollectionInformation_releaseInfo_get, _six_sicd.ScopedCloneableComplexCollectionInformation_releaseInfo_set)
     __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_set
     __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableComplexCollectionInformation_countryCodes_get
     if _newclass:
