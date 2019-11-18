@@ -86,6 +86,11 @@ public:
     }
 };
 
+/*
+ *  Ostream operators for six::sicd::GeoInfo type
+ */
+std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
+
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block

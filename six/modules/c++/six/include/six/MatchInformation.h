@@ -144,8 +144,13 @@ public:
     {
         return !(*this == rhs);
     }
-};
 
+    /*
+     *  Ostream operators for six::MatchInformation type
+     */
+    friend std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
+};
 }
+
 #endif
 

@@ -312,6 +312,14 @@ public:
         return dims;
     }
 
+    /*
+     * Get sample type element size
+     */
+    size_t getElementSize()
+    {
+        return mElementSize;
+    }
+
 private:
     /*
      *  Initialize mOffsets for each array

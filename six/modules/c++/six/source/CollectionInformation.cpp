@@ -39,4 +39,38 @@ CollectionInformation* CollectionInformation::clone() const
 {
     return new CollectionInformation(*this);
 }
+
+std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)
+{
+    os << "CollectionID:: \n"
+        << "  CollectorName    : " << c.collectorName << "\n";
+    if (!six::Init::isUndefined(c.illuminatorName))
+    {
+        os << "  IlluminatorName  : " << c.illuminatorName << "\n";
+    }
+    os << "  CoreName         : " << c.coreName << "\n";
+    if (!six::Init::isUndefined(c.collectType))
+    {
+        os << "  CollectType      : " << c.collectType << "\n";
+    }
+    os << "  RadarMode        : " << c.radarMode << "\n";
+    if (!six::Init::isUndefined(c.radarModeID))
+    {
+        os << "  RadarModeID      : " << c.radarModeID << "\n";
+    }
+    if (!six::Init::isUndefined(c.releaseInfo))
+    {
+        os << "  ReleaseInfo      : " << c.releaseInfo << "\n";
+    }
+    for (size_t ii = 0; ii < c.countryCodes.size(); ++ii)
+    {
+        os << "  CountryCodes     : " << c.countryCodes[ii] << "\n";
+    }
+    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
+    {
+        os << "  Parameter name   : " << c.parameters[ii].getName() << "\n"
+            << "  Parameter value  : " << c.parameters[ii].str() << "\n";
+    }
+    return os;
+}
 }

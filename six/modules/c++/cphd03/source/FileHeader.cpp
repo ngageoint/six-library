@@ -67,7 +67,6 @@ void FileHeader::read(io::SeekableInputStream& inStream)
         {
             // Determine our header entry
             tokenize(headerLines[ii], KVP_DELIMITER, headerEntry);
-
             if (headerEntry.first == "XML_DATA_SIZE")
             {
                 mXmlDataSize = str::toType<sys::Off_T>(headerEntry.second);

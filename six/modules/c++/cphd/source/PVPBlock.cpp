@@ -301,8 +301,10 @@ PVPBlock::PVPBlock(const Pvp& p, Data& d)
     if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
         calculateBytesPerVector > mNumBytesPerVector)
     {
-        mNumBytesPerVector = calculateBytesPerVector;
-        d.numBytesPVP = calculateBytesPerVector;
+        std::ostringstream oss;
+        oss << "PVP size specified in metadata: " << mNumBytesPerVector
+            << " does not match PVP size calculated: " << calculateBytesPerVector;
+        throw except::Exception(oss.str());
     }
 }
 

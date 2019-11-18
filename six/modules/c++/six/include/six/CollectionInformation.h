@@ -138,15 +138,16 @@ struct CollectionInformation
         mClassification = classification;
     }
 
+    //! Ostream operators for six::CollectionInformation type (utility only).
+    friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
+
 private:
     /*!
      *  Classification level
      */
     std::string mClassification;
-
-
 };
-
 }
+
 #endif
 

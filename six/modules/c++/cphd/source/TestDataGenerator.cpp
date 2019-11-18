@@ -137,6 +137,11 @@ void setUpMetadata(Metadata& metadata)
     metadata.collectionID.releaseInfo = "Release";
     // We must have a radar mode set
     metadata.collectionID.radarMode = RadarModeType::SPOTLIGHT;
+
+    // We must set pvpNumBytes
+    // Set default pvp size based on setPVP function
+    metadata.data.numBytesPVP = (1*12 + 3*5) * 8;
+
     metadata.sceneCoordinates.iarp.ecf = getRandomVector3();
     metadata.sceneCoordinates.iarp.llh = LatLonAlt(0,0,0);
     metadata.sceneCoordinates.referenceSurface.planar.reset(new Planar());
