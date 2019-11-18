@@ -35,11 +35,10 @@ if __name__ == '__main__':
         sys.exit(0)
 
     reader = CPHDReader(inputPathname, multiprocessing.cpu_count())
-    writer = CPHDWriter(reader.getMetadata())
+    writer = CPHDWriter(reader.getMetadata(), outputPathname)
     wideband = reader.getWideband()
     writer.writeCPHD(outputPathname, wideband.read(),
             reader.getVBM(), 0)
-
     roundTrippedReader = CPHDReader(outputPathname, multiprocessing.cpu_count())
     roundTrippedWideband = roundTrippedReader.getWideband()
     assert (roundTrippedWideband.read() == wideband.read()).all()

@@ -3,7 +3,7 @@
  * This file is part of cphd03-python
  * =========================================================================
  *
- * (C) Copyright 2004 - 2015, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd03-python is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -69,7 +69,6 @@ using six::Vector3;
 %include "cphd03/CPHDWriter.h"
 
 %ignore CPHDWriter::writeCPHDData;
-%ignore CPHDWriter::close;
 %ignore CPHDWriter::writeMetadata;
 %ignore CPHDWriter::addImage;
 %ignore CPHDWriter::write;
@@ -198,13 +197,9 @@ def write(self, pathname, data, vbm, channel):
 
     dims = RowColSizeT(data.shape[0], data.shape[1])
     self.addImageImpl(imagePointer, dims, vbmPointer)
-    self.write(pathname)
-
-def __del__(self):
-    self.close()
+    self.write()
 
 CPHDWriter.writeCPHD = write
-CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,
@@ -215,10 +210,10 @@ def read(self,
          numThreads = multiprocessing.cpu_count()):
 
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
-    sampleType = self.getSampleType()
+    sampleTypeSize = self.getElementSize()
 
     # RF32F_IM32F
-    if sampleType == 1:
+    if sampleTypeSize == 8:
         dtype = 'complex64'
     else:
         raise Exception('Unknown element type')
