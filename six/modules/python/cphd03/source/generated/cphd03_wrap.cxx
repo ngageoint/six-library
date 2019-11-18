@@ -3008,133 +3008,153 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define SWIGTYPE_p_ConstParameterCollectionIteratorT swig_types[0]
-#define SWIGTYPE_p_Like_T swig_types[1]
-#define SWIGTYPE_p_ParameterCollectionIteratorT swig_types[2]
-#define SWIGTYPE_p_ParameterIter swig_types[3]
-#define SWIGTYPE_p_ParameterMap swig_types[4]
-#define SWIGTYPE_p_allocator_type swig_types[5]
-#define SWIGTYPE_p_char swig_types[6]
-#define SWIGTYPE_p_cphd03__Antenna swig_types[7]
-#define SWIGTYPE_p_cphd03__AreaPlane swig_types[8]
-#define SWIGTYPE_p_cphd03__ArraySize swig_types[9]
-#define SWIGTYPE_p_cphd03__CPHDReader swig_types[10]
-#define SWIGTYPE_p_cphd03__CPHDWriter swig_types[11]
-#define SWIGTYPE_p_cphd03__CPHDXMLControl swig_types[12]
-#define SWIGTYPE_p_cphd03__Channel swig_types[13]
-#define SWIGTYPE_p_cphd03__ChannelParameters swig_types[14]
-#define SWIGTYPE_p_cphd03__Data swig_types[15]
-#define SWIGTYPE_p_cphd03__DwellTimeParameters swig_types[16]
-#define SWIGTYPE_p_cphd03__FileHeader swig_types[17]
-#define SWIGTYPE_p_cphd03__FxParameters swig_types[18]
-#define SWIGTYPE_p_cphd03__Global swig_types[19]
-#define SWIGTYPE_p_cphd03__ImageArea swig_types[20]
-#define SWIGTYPE_p_cphd03__Metadata swig_types[21]
-#define SWIGTYPE_p_cphd03__SRP swig_types[22]
-#define SWIGTYPE_p_cphd03__TOAParameters swig_types[23]
-#define SWIGTYPE_p_cphd03__VBM swig_types[24]
-#define SWIGTYPE_p_cphd03__VectorParameters swig_types[25]
-#define SWIGTYPE_p_cphd__Data swig_types[26]
-#define SWIGTYPE_p_cphd__DomainType swig_types[27]
-#define SWIGTYPE_p_cphd__EarthModelType swig_types[28]
-#define SWIGTYPE_p_cphd__PhaseSGN swig_types[29]
-#define SWIGTYPE_p_cphd__PolarizationType swig_types[30]
-#define SWIGTYPE_p_cphd__RefHeight swig_types[31]
-#define SWIGTYPE_p_cphd__SRPType swig_types[32]
-#define SWIGTYPE_p_cphd__SampleType swig_types[33]
-#define SWIGTYPE_p_cphd__SignalArrayFormat swig_types[34]
-#define SWIGTYPE_p_cphd__Wideband swig_types[35]
-#define SWIGTYPE_p_difference_type swig_types[36]
-#define SWIGTYPE_p_except__Context swig_types[37]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[38]
-#define SWIGTYPE_p_int swig_types[39]
-#define SWIGTYPE_p_int16_t swig_types[40]
-#define SWIGTYPE_p_int32_t swig_types[41]
-#define SWIGTYPE_p_int64_t swig_types[42]
-#define SWIGTYPE_p_int8_t swig_types[43]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[44]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[45]
-#define SWIGTYPE_p_logging__Logger swig_types[46]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[47]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[48]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[49]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[50]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[51]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[52]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[53]
-#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[54]
-#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[55]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t swig_types[56]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t swig_types[57]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t swig_types[58]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t swig_types[59]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t swig_types[60]
-#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[61]
-#define SWIGTYPE_p_nitf__DateTime swig_types[62]
-#define SWIGTYPE_p_off_t swig_types[63]
-#define SWIGTYPE_p_p_PyObject swig_types[64]
-#define SWIGTYPE_p_pid_t swig_types[65]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[66]
-#define SWIGTYPE_p_scene__FrameType swig_types[67]
-#define SWIGTYPE_p_scene__LatLon swig_types[68]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[69]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[70]
-#define SWIGTYPE_p_six__BooleanType swig_types[71]
-#define SWIGTYPE_p_six__CollectType swig_types[72]
-#define SWIGTYPE_p_six__CollectionInformation swig_types[73]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[74]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[75]
-#define SWIGTYPE_p_six__Data swig_types[76]
-#define SWIGTYPE_p_six__DataType swig_types[77]
-#define SWIGTYPE_p_six__FFTSign swig_types[78]
-#define SWIGTYPE_p_six__MatchInformation swig_types[79]
-#define SWIGTYPE_p_six__RadarModeType swig_types[80]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[81]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[82]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[83]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[84]
-#define SWIGTYPE_p_six__sicd__ComplexCollectionInformation swig_types[85]
-#define SWIGTYPE_p_six__sicd__ComplexData swig_types[86]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[87]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[88]
-#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[89]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[90]
-#define SWIGTYPE_p_size_t swig_types[91]
-#define SWIGTYPE_p_size_type swig_types[92]
-#define SWIGTYPE_p_ssize_t swig_types[93]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[94]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[95]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[96]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[97]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[98]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[99]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[100]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[101]
-#define SWIGTYPE_p_std__invalid_argument swig_types[102]
-#define SWIGTYPE_p_std__ostream swig_types[103]
-#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[104]
-#define SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t swig_types[105]
-#define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[106]
-#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[107]
-#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[108]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[109]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[110]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[111]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[112]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[113]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[114]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[115]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[116]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[117]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[118]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[119]
-#define SWIGTYPE_p_uint16_t swig_types[120]
-#define SWIGTYPE_p_uint32_t swig_types[121]
-#define SWIGTYPE_p_uint64_t swig_types[122]
-#define SWIGTYPE_p_uint8_t swig_types[123]
-#define SWIGTYPE_p_unsigned_char swig_types[124]
-#define SWIGTYPE_p_value_type swig_types[125]
-static swig_type_info *swig_types[127];
-static swig_module_info swig_module = {swig_types, 126, 0, 0, 0, 0};
+#define SWIGTYPE_p_Iterator swig_types[1]
+#define SWIGTYPE_p_Like_T swig_types[2]
+#define SWIGTYPE_p_ParameterCollectionIteratorT swig_types[3]
+#define SWIGTYPE_p_ParameterIter swig_types[4]
+#define SWIGTYPE_p_ParameterMap swig_types[5]
+#define SWIGTYPE_p__nitf_Version swig_types[6]
+#define SWIGTYPE_p_allocator_type swig_types[7]
+#define SWIGTYPE_p_char swig_types[8]
+#define SWIGTYPE_p_cphd03__Antenna swig_types[9]
+#define SWIGTYPE_p_cphd03__AreaPlane swig_types[10]
+#define SWIGTYPE_p_cphd03__ArraySize swig_types[11]
+#define SWIGTYPE_p_cphd03__CPHDReader swig_types[12]
+#define SWIGTYPE_p_cphd03__CPHDWriter swig_types[13]
+#define SWIGTYPE_p_cphd03__CPHDXMLControl swig_types[14]
+#define SWIGTYPE_p_cphd03__Channel swig_types[15]
+#define SWIGTYPE_p_cphd03__ChannelParameters swig_types[16]
+#define SWIGTYPE_p_cphd03__Data swig_types[17]
+#define SWIGTYPE_p_cphd03__DwellTimeParameters swig_types[18]
+#define SWIGTYPE_p_cphd03__FileHeader swig_types[19]
+#define SWIGTYPE_p_cphd03__FxParameters swig_types[20]
+#define SWIGTYPE_p_cphd03__Global swig_types[21]
+#define SWIGTYPE_p_cphd03__ImageArea swig_types[22]
+#define SWIGTYPE_p_cphd03__Metadata swig_types[23]
+#define SWIGTYPE_p_cphd03__SRP swig_types[24]
+#define SWIGTYPE_p_cphd03__TOAParameters swig_types[25]
+#define SWIGTYPE_p_cphd03__VBM swig_types[26]
+#define SWIGTYPE_p_cphd03__VectorParameters swig_types[27]
+#define SWIGTYPE_p_cphd__Data swig_types[28]
+#define SWIGTYPE_p_cphd__DomainType swig_types[29]
+#define SWIGTYPE_p_cphd__EarthModelType swig_types[30]
+#define SWIGTYPE_p_cphd__PhaseSGN swig_types[31]
+#define SWIGTYPE_p_cphd__PolarizationType swig_types[32]
+#define SWIGTYPE_p_cphd__RefHeight swig_types[33]
+#define SWIGTYPE_p_cphd__SRPType swig_types[34]
+#define SWIGTYPE_p_cphd__SampleType swig_types[35]
+#define SWIGTYPE_p_cphd__SignalArrayFormat swig_types[36]
+#define SWIGTYPE_p_cphd__Wideband swig_types[37]
+#define SWIGTYPE_p_difference_type swig_types[38]
+#define SWIGTYPE_p_except__Context swig_types[39]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[40]
+#define SWIGTYPE_p_int swig_types[41]
+#define SWIGTYPE_p_int16_t swig_types[42]
+#define SWIGTYPE_p_int32_t swig_types[43]
+#define SWIGTYPE_p_int64_t swig_types[44]
+#define SWIGTYPE_p_int8_t swig_types[45]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[46]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[47]
+#define SWIGTYPE_p_logging__Logger swig_types[48]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[49]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[50]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[51]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[52]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[53]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[54]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[55]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[56]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[57]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t swig_types[58]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t swig_types[59]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t swig_types[60]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t swig_types[61]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t swig_types[62]
+#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[63]
+#define SWIGTYPE_p_nitf_AccessFlags swig_types[64]
+#define SWIGTYPE_p_nitf_ConvType swig_types[65]
+#define SWIGTYPE_p_nitf_CornersType swig_types[66]
+#define SWIGTYPE_p_nitf_CreationFlags swig_types[67]
+#define SWIGTYPE_p_nitf_FieldType swig_types[68]
+#define SWIGTYPE_p_nitf_Int16 swig_types[69]
+#define SWIGTYPE_p_nitf_Int32 swig_types[70]
+#define SWIGTYPE_p_nitf_Int64 swig_types[71]
+#define SWIGTYPE_p_nitf_Int8 swig_types[72]
+#define SWIGTYPE_p_nitf_Off swig_types[73]
+#define SWIGTYPE_p_nitf_Uint16 swig_types[74]
+#define SWIGTYPE_p_nitf_Uint32 swig_types[75]
+#define SWIGTYPE_p_nitf_Uint64 swig_types[76]
+#define SWIGTYPE_p_nitf_Uint8 swig_types[77]
+#define SWIGTYPE_p_nitf__DateTime swig_types[78]
+#define SWIGTYPE_p_off_t swig_types[79]
+#define SWIGTYPE_p_p_PyObject swig_types[80]
+#define SWIGTYPE_p_pid_t swig_types[81]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[82]
+#define SWIGTYPE_p_scene__FrameType swig_types[83]
+#define SWIGTYPE_p_scene__LatLon swig_types[84]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[85]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[86]
+#define SWIGTYPE_p_scene__ProjectionPolynomialFitter swig_types[87]
+#define SWIGTYPE_p_six__BooleanType swig_types[88]
+#define SWIGTYPE_p_six__CollectType swig_types[89]
+#define SWIGTYPE_p_six__CollectionInformation swig_types[90]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[91]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[92]
+#define SWIGTYPE_p_six__Data swig_types[93]
+#define SWIGTYPE_p_six__DataType swig_types[94]
+#define SWIGTYPE_p_six__FFTSign swig_types[95]
+#define SWIGTYPE_p_six__MatchInformation swig_types[96]
+#define SWIGTYPE_p_six__RadarModeType swig_types[97]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[98]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[99]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[100]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[101]
+#define SWIGTYPE_p_six__sicd__ComplexCollectionInformation swig_types[102]
+#define SWIGTYPE_p_six__sicd__ComplexData swig_types[103]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[104]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[105]
+#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[106]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[107]
+#define SWIGTYPE_p_six__sicd__NoiseMesh swig_types[108]
+#define SWIGTYPE_p_six__sicd__ScalarMesh swig_types[109]
+#define SWIGTYPE_p_size_t swig_types[110]
+#define SWIGTYPE_p_size_type swig_types[111]
+#define SWIGTYPE_p_ssize_t swig_types[112]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[113]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[114]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[115]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[116]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[117]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[118]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[119]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[120]
+#define SWIGTYPE_p_std__invalid_argument swig_types[121]
+#define SWIGTYPE_p_std__ostream swig_types[122]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[123]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t swig_types[124]
+#define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[125]
+#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[126]
+#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[127]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[128]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[129]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[130]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[131]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[132]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[133]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[134]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[135]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[136]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[137]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[138]
+#define SWIGTYPE_p_uint16_t swig_types[139]
+#define SWIGTYPE_p_uint32_t swig_types[140]
+#define SWIGTYPE_p_uint64_t swig_types[141]
+#define SWIGTYPE_p_uint8_t swig_types[142]
+#define SWIGTYPE_p_unsigned_char swig_types[143]
+#define SWIGTYPE_p_value_type swig_types[144]
+#define SWIGTYPE_p_void swig_types[145]
+static swig_type_info *swig_types[147];
+static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -51594,6 +51614,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > *) 0 ;
@@ -52549,6 +52621,58 @@ fail:
     "    mem::ScopedCopyablePtr< cphd03::AreaPlane >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< cphd03::AreaPlane >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd03::AreaPlane > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd03::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd03::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd03::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd03::AreaPlane > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< cphd03::AreaPlane > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -53835,6 +53959,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd03::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd03::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd03::FxParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< cphd03::FxParameters > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< cphd03::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::FxParameters > *) 0 ;
@@ -55118,6 +55294,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd03::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd03::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd03::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< cphd03::TOAParameters > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< cphd03::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd03::TOAParameters > *) 0 ;
@@ -56174,6 +56402,58 @@ fail:
     "    mem::ScopedCopyablePtr< cphd03::Antenna >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< cphd03::Antenna >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd03::Antenna > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableCphdAntenna___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd03::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd03::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableCphdAntenna___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableCphdAntenna___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd03::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd03::Antenna > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< cphd03::Antenna > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -58252,6 +58532,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableDwellTimeParameters()\n"
 		"new_ScopedCopyableDwellTimeParameters(ScopedCopyableDwellTimeParameters rhs) -> ScopedCopyableDwellTimeParameters\n"
 		""},
+	 { (char *)"ScopedCopyableDwellTimeParameters___nonzero__", _wrap_ScopedCopyableDwellTimeParameters___nonzero__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___nonzero__(ScopedCopyableDwellTimeParameters self) -> bool"},
 	 { (char *)"ScopedCopyableDwellTimeParameters_get", _wrap_ScopedCopyableDwellTimeParameters_get, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
 	 { (char *)"ScopedCopyableDwellTimeParameters___ref__", _wrap_ScopedCopyableDwellTimeParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___ref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
 	 { (char *)"ScopedCopyableDwellTimeParameters___deref__", _wrap_ScopedCopyableDwellTimeParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___deref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
@@ -58273,6 +58554,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableAreaPlane()\n"
 		"new_ScopedCopyableAreaPlane(ScopedCopyableAreaPlane rhs) -> ScopedCopyableAreaPlane\n"
 		""},
+	 { (char *)"ScopedCopyableAreaPlane___nonzero__", _wrap_ScopedCopyableAreaPlane___nonzero__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___nonzero__(ScopedCopyableAreaPlane self) -> bool"},
 	 { (char *)"ScopedCopyableAreaPlane_get", _wrap_ScopedCopyableAreaPlane_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_get(ScopedCopyableAreaPlane self) -> AreaPlane"},
 	 { (char *)"ScopedCopyableAreaPlane___ref__", _wrap_ScopedCopyableAreaPlane___ref__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___ref__(ScopedCopyableAreaPlane self) -> AreaPlane"},
 	 { (char *)"ScopedCopyableAreaPlane___deref__", _wrap_ScopedCopyableAreaPlane___deref__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___deref__(ScopedCopyableAreaPlane self) -> AreaPlane"},
@@ -58301,6 +58583,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableFxParameters()\n"
 		"new_ScopedCopyableFxParameters(ScopedCopyableFxParameters rhs) -> ScopedCopyableFxParameters\n"
 		""},
+	 { (char *)"ScopedCopyableFxParameters___nonzero__", _wrap_ScopedCopyableFxParameters___nonzero__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___nonzero__(ScopedCopyableFxParameters self) -> bool"},
 	 { (char *)"ScopedCopyableFxParameters_get", _wrap_ScopedCopyableFxParameters_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_get(ScopedCopyableFxParameters self) -> FxParameters"},
 	 { (char *)"ScopedCopyableFxParameters___ref__", _wrap_ScopedCopyableFxParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___ref__(ScopedCopyableFxParameters self) -> FxParameters"},
 	 { (char *)"ScopedCopyableFxParameters___deref__", _wrap_ScopedCopyableFxParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___deref__(ScopedCopyableFxParameters self) -> FxParameters"},
@@ -58329,6 +58612,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableTOAParameters()\n"
 		"new_ScopedCopyableTOAParameters(ScopedCopyableTOAParameters rhs) -> ScopedCopyableTOAParameters\n"
 		""},
+	 { (char *)"ScopedCopyableTOAParameters___nonzero__", _wrap_ScopedCopyableTOAParameters___nonzero__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___nonzero__(ScopedCopyableTOAParameters self) -> bool"},
 	 { (char *)"ScopedCopyableTOAParameters_get", _wrap_ScopedCopyableTOAParameters_get, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_get(ScopedCopyableTOAParameters self) -> TOAParameters"},
 	 { (char *)"ScopedCopyableTOAParameters___ref__", _wrap_ScopedCopyableTOAParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___ref__(ScopedCopyableTOAParameters self) -> TOAParameters"},
 	 { (char *)"ScopedCopyableTOAParameters___deref__", _wrap_ScopedCopyableTOAParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___deref__(ScopedCopyableTOAParameters self) -> TOAParameters"},
@@ -58353,6 +58637,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableCphdAntenna()\n"
 		"new_ScopedCopyableCphdAntenna(ScopedCopyableCphdAntenna rhs) -> ScopedCopyableCphdAntenna\n"
 		""},
+	 { (char *)"ScopedCopyableCphdAntenna___nonzero__", _wrap_ScopedCopyableCphdAntenna___nonzero__, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna___nonzero__(ScopedCopyableCphdAntenna self) -> bool"},
 	 { (char *)"ScopedCopyableCphdAntenna_get", _wrap_ScopedCopyableCphdAntenna_get, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna_get(ScopedCopyableCphdAntenna self) -> CphdAntenna"},
 	 { (char *)"ScopedCopyableCphdAntenna___ref__", _wrap_ScopedCopyableCphdAntenna___ref__, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna___ref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"},
 	 { (char *)"ScopedCopyableCphdAntenna___deref__", _wrap_ScopedCopyableCphdAntenna___deref__, METH_VARARGS, (char *)"ScopedCopyableCphdAntenna___deref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"},
@@ -58399,10 +58684,12 @@ static void *_p_scene__LatLonAltTo_p_scene__LatLon(void *x, int *SWIGUNUSEDPARM(
     return (void *)((scene::LatLon *)  ((scene::LatLonAlt *) x));
 }
 static swig_type_info _swigt__p_ConstParameterCollectionIteratorT = {"_p_ConstParameterCollectionIteratorT", "ConstParameterCollectionIteratorT *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Iterator = {"_p_Iterator", "Iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ParameterCollectionIteratorT = {"_p_ParameterCollectionIteratorT", "ParameterCollectionIteratorT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ParameterIter = {"_p_ParameterIter", "ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ParameterMap = {"_p_ParameterMap", "ParameterMap *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p__nitf_Version = {"_p__nitf_Version", "enum _nitf_Version *|nitf::Version *|nitf_Version *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__Antenna = {"_p_cphd03__Antenna", "cphd03::Antenna *", 0, 0, (void*)0, 0};
@@ -58460,6 +58747,20 @@ static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParamet
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t", "mem::ScopedCopyablePtr< cphd03::FxParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t", "mem::ScopedCopyablePtr< cphd03::TOAParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t = {"_p_mt__SingletonT_six__XMLControlRegistry_true_t", "six::XMLControlFactory *|mt::Singleton< six::XMLControlRegistry,true > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_AccessFlags = {"_p_nitf_AccessFlags", "nitf_AccessFlags *|nitf::AccessFlags *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_ConvType = {"_p_nitf_ConvType", "nitf_ConvType *|nitf::ConvType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_CornersType = {"_p_nitf_CornersType", "nitf_CornersType *|nitf::CornersType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_CreationFlags = {"_p_nitf_CreationFlags", "nitf_CreationFlags *|nitf::CreationFlags *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_FieldType = {"_p_nitf_FieldType", "nitf_FieldType *|nitf::FieldType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int16 = {"_p_nitf_Int16", "nitf_Int16 *|nitf::Int16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int32 = {"_p_nitf_Int32", "nitf_Int32 *|nitf::Int32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int64 = {"_p_nitf_Int64", "nitf_Int64 *|nitf::Int64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int8 = {"_p_nitf_Int8", "nitf::Int8 *|nitf_Int8 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Off = {"_p_nitf_Off", "nitf_Off *|nitf::Off *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint16 = {"_p_nitf_Uint16", "nitf_Uint16 *|nitf::Uint16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint32 = {"_p_nitf_Uint32", "nitf_Uint32 *|nitf::Uint32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint64 = {"_p_nitf_Uint64", "nitf_Uint64 *|nitf::Uint64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint8 = {"_p_nitf_Uint8", "nitf_Uint8 *|nitf::Uint8 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__DateTime = {"_p_nitf__DateTime", "nitf::DateTime *|six::DateTime *|cphd::DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
@@ -58469,6 +58770,7 @@ static swig_type_info _swigt__p_scene__FrameType = {"_p_scene__FrameType", "scen
 static swig_type_info _swigt__p_scene__LatLon = {"_p_scene__LatLon", "scene::LatLon *|six::LatLon *|cphd::LatLon *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__LatLonAlt = {"_p_scene__LatLonAlt", "scene::LatLonAlt *|six::LatLonAlt *|cphd::LatLonAlt *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__PlaneProjectionModel = {"_p_scene__PlaneProjectionModel", "scene::PlaneProjectionModel *|scene::XRGYCRProjectionModel *|scene::XCTYATProjectionModel *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_scene__ProjectionPolynomialFitter = {"_p_scene__ProjectionPolynomialFitter", "scene::ProjectionPolynomialFitter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__BooleanType = {"_p_six__BooleanType", "six::BooleanType *|cphd::BooleanType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectType = {"_p_six__CollectType", "six::CollectType *|cphd::CollectType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectionInformation = {"_p_six__CollectionInformation", "six::CollectionInformation *|cphd::CollectionInformation *", 0, 0, (void*)0, 0};
@@ -58489,6 +58791,8 @@ static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd_
 static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__GainAndPhasePolys", "six::sicd::GainAndPhasePolys *|cphd03::GainAndPhasePolys *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__GeoInfo = {"_p_six__sicd__GeoInfo", "six::sicd::GeoInfo *|cphd::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__HalfPowerBeamwidths = {"_p_six__sicd__HalfPowerBeamwidths", "six::sicd::HalfPowerBeamwidths *|cphd03::HalfPowerBeamwidths *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__sicd__NoiseMesh = {"_p_six__sicd__NoiseMesh", "six::sicd::NoiseMesh *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__sicd__ScalarMesh = {"_p_six__sicd__ScalarMesh", "six::sicd::ScalarMesh *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
@@ -58524,13 +58828,16 @@ static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint
 static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *|six::UByte *|cphd::UByte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_void = {"_p_void", "NITF_DATA *|void *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ConstParameterCollectionIteratorT,
+  &_swigt__p_Iterator,
   &_swigt__p_Like_T,
   &_swigt__p_ParameterCollectionIteratorT,
   &_swigt__p_ParameterIter,
   &_swigt__p_ParameterMap,
+  &_swigt__p__nitf_Version,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_cphd03__Antenna,
@@ -58588,6 +58895,20 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t,
   &_swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t,
+  &_swigt__p_nitf_AccessFlags,
+  &_swigt__p_nitf_ConvType,
+  &_swigt__p_nitf_CornersType,
+  &_swigt__p_nitf_CreationFlags,
+  &_swigt__p_nitf_FieldType,
+  &_swigt__p_nitf_Int16,
+  &_swigt__p_nitf_Int32,
+  &_swigt__p_nitf_Int64,
+  &_swigt__p_nitf_Int8,
+  &_swigt__p_nitf_Off,
+  &_swigt__p_nitf_Uint16,
+  &_swigt__p_nitf_Uint32,
+  &_swigt__p_nitf_Uint64,
+  &_swigt__p_nitf_Uint8,
   &_swigt__p_nitf__DateTime,
   &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
@@ -58597,6 +58918,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_scene__LatLon,
   &_swigt__p_scene__LatLonAlt,
   &_swigt__p_scene__PlaneProjectionModel,
+  &_swigt__p_scene__ProjectionPolynomialFitter,
   &_swigt__p_six__BooleanType,
   &_swigt__p_six__CollectType,
   &_swigt__p_six__CollectionInformation,
@@ -58617,6 +58939,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__sicd__GainAndPhasePolys,
   &_swigt__p_six__sicd__GeoInfo,
   &_swigt__p_six__sicd__HalfPowerBeamwidths,
+  &_swigt__p_six__sicd__NoiseMesh,
+  &_swigt__p_six__sicd__ScalarMesh,
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
@@ -58652,13 +58976,16 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_uint8_t,
   &_swigt__p_unsigned_char,
   &_swigt__p_value_type,
+  &_swigt__p_void,
 };
 
 static swig_cast_info _swigc__p_ConstParameterCollectionIteratorT[] = {  {&_swigt__p_ConstParameterCollectionIteratorT, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Iterator[] = {  {&_swigt__p_Iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Like_T[] = {  {&_swigt__p_Like_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ParameterCollectionIteratorT[] = {  {&_swigt__p_ParameterCollectionIteratorT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ParameterIter[] = {  {&_swigt__p_ParameterIter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ParameterMap[] = {  {&_swigt__p_ParameterMap, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p__nitf_Version[] = {  {&_swigt__p__nitf_Version, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd03__Antenna[] = {  {&_swigt__p_cphd03__Antenna, 0, 0, 0},{0, 0, 0, 0}};
@@ -58716,6 +59043,20 @@ static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParamet
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t[] = {  {&_swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_AccessFlags[] = {  {&_swigt__p_nitf_AccessFlags, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_ConvType[] = {  {&_swigt__p_nitf_ConvType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_CornersType[] = {  {&_swigt__p_nitf_CornersType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_CreationFlags[] = {  {&_swigt__p_nitf_CreationFlags, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_FieldType[] = {  {&_swigt__p_nitf_FieldType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Int16[] = {  {&_swigt__p_nitf_Int16, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Int32[] = {  {&_swigt__p_nitf_Int32, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Int64[] = {  {&_swigt__p_nitf_Int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Int8[] = {  {&_swigt__p_nitf_Int8, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Off[] = {  {&_swigt__p_nitf_Off, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Uint16[] = {  {&_swigt__p_nitf_Uint16, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Uint32[] = {  {&_swigt__p_nitf_Uint32, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Uint64[] = {  {&_swigt__p_nitf_Uint64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_Uint8[] = {  {&_swigt__p_nitf_Uint8, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf__DateTime[] = {  {&_swigt__p_nitf__DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
@@ -58725,6 +59066,7 @@ static swig_cast_info _swigc__p_scene__FrameType[] = {  {&_swigt__p_scene__Frame
 static swig_cast_info _swigc__p_scene__LatLon[] = {  {&_swigt__p_scene__LatLon, 0, 0, 0},  {&_swigt__p_scene__LatLonAlt, _p_scene__LatLonAltTo_p_scene__LatLon, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__LatLonAlt[] = {  {&_swigt__p_scene__LatLonAlt, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__PlaneProjectionModel[] = {  {&_swigt__p_scene__PlaneProjectionModel, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_scene__ProjectionPolynomialFitter[] = {  {&_swigt__p_scene__ProjectionPolynomialFitter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__BooleanType[] = {  {&_swigt__p_six__BooleanType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CollectType[] = {  {&_swigt__p_six__CollectType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ComplexCollectionInformation[] = {{&_swigt__p_six__sicd__ComplexCollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
@@ -58745,6 +59087,8 @@ static swig_cast_info _swigc__p_six__sicd__ElectricalBoresight[] = {  {&_swigt__
 static swig_cast_info _swigc__p_six__sicd__GainAndPhasePolys[] = {  {&_swigt__p_six__sicd__GainAndPhasePolys, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__GeoInfo[] = {  {&_swigt__p_six__sicd__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__HalfPowerBeamwidths[] = {  {&_swigt__p_six__sicd__HalfPowerBeamwidths, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__sicd__NoiseMesh[] = {  {&_swigt__p_six__sicd__NoiseMesh, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__sicd__ScalarMesh[] = {  {&_swigt__p_six__sicd__ScalarMesh, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -58780,13 +59124,16 @@ static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{
 static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_uint8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ConstParameterCollectionIteratorT,
+  _swigc__p_Iterator,
   _swigc__p_Like_T,
   _swigc__p_ParameterCollectionIteratorT,
   _swigc__p_ParameterIter,
   _swigc__p_ParameterMap,
+  _swigc__p__nitf_Version,
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_cphd03__Antenna,
@@ -58844,6 +59191,20 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_mem__ScopedCopyablePtrT_cphd03__FxParameters_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd03__TOAParameters_t,
   _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t,
+  _swigc__p_nitf_AccessFlags,
+  _swigc__p_nitf_ConvType,
+  _swigc__p_nitf_CornersType,
+  _swigc__p_nitf_CreationFlags,
+  _swigc__p_nitf_FieldType,
+  _swigc__p_nitf_Int16,
+  _swigc__p_nitf_Int32,
+  _swigc__p_nitf_Int64,
+  _swigc__p_nitf_Int8,
+  _swigc__p_nitf_Off,
+  _swigc__p_nitf_Uint16,
+  _swigc__p_nitf_Uint32,
+  _swigc__p_nitf_Uint64,
+  _swigc__p_nitf_Uint8,
   _swigc__p_nitf__DateTime,
   _swigc__p_off_t,
   _swigc__p_p_PyObject,
@@ -58853,6 +59214,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_scene__LatLon,
   _swigc__p_scene__LatLonAlt,
   _swigc__p_scene__PlaneProjectionModel,
+  _swigc__p_scene__ProjectionPolynomialFitter,
   _swigc__p_six__BooleanType,
   _swigc__p_six__CollectType,
   _swigc__p_six__CollectionInformation,
@@ -58873,6 +59235,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__sicd__GainAndPhasePolys,
   _swigc__p_six__sicd__GeoInfo,
   _swigc__p_six__sicd__HalfPowerBeamwidths,
+  _swigc__p_six__sicd__NoiseMesh,
+  _swigc__p_six__sicd__ScalarMesh,
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_ssize_t,
@@ -58908,6 +59272,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_uint8_t,
   _swigc__p_unsigned_char,
   _swigc__p_value_type,
+  _swigc__p_void,
 };
 
 

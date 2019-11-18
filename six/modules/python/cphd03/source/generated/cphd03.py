@@ -2296,8 +2296,8 @@ import multiprocessing
 from coda.coda_types import RowColSizeT
 
 def toBuffer(self, channel = 0):
-
-    numpyArray = numpy.empty(shape = ((self.getVBMsize(channel) / 8)), dtype = 'double')
+    numpyArray = numpy.empty(shape = int((self.getVBMsize(channel) / 8)),
+                             dtype = 'double')
     pointer, ro = numpyArray.__array_interface__['data']
 
     self.getVBMdata(channel, pointer)
@@ -2329,11 +2329,8 @@ def write(self, pathname, data, vbm, channel):
     self.addImageImpl(imagePointer, dims, vbmPointer)
     self.write(pathname)
 
-def __del__(self):
-    self.close()
 
 CPHDWriter.writeCPHD = write
-CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,
@@ -3266,6 +3263,12 @@ class ScopedCopyableDwellTimeParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableDwellTimeParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd03.ScopedCopyableDwellTimeParameters_get(self)
@@ -3335,6 +3338,12 @@ class ScopedCopyableAreaPlane(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableAreaPlane___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
@@ -3435,6 +3444,12 @@ class ScopedCopyableFxParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableFxParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd03.ScopedCopyableFxParameters_get(self)
@@ -3534,6 +3549,12 @@ class ScopedCopyableTOAParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableTOAParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd03.ScopedCopyableTOAParameters_get(self)
@@ -3624,6 +3645,12 @@ class ScopedCopyableCphdAntenna(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableCphdAntenna___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""

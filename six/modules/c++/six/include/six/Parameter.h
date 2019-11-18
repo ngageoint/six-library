@@ -67,6 +67,11 @@ public:
         mValue = str::toString<std::complex<T> >(mValue);
     }
 
+    //! Return a bool
+    inline operator bool() const
+    {
+        return str::toType<bool>(mValue);
+    }
     //!  Return a double
     inline operator double() const
     {
@@ -112,6 +117,18 @@ public:
     {
         return str::toType<sys::Int64_T>(mValue);
     }
+
+    /*!
+     * \tparam T Desired (presumably numeric) type to convert to
+     *
+     * \return Value as a T type
+     */
+    // template <typename T>
+    // inline
+    // operator T() const
+    // {
+    //     return str::toType<T>(mValue);
+    // }
 
     //!  Get a string as a string
     inline std::string str() const

@@ -3063,119 +3063,118 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_nitf_DateTime swig_types[53]
 #define SWIGTYPE_p_nitf__DateTime swig_types[54]
 #define SWIGTYPE_p_nitf__FileSecurity swig_types[55]
-#define SWIGTYPE_p_nitf__NITFException swig_types[56]
-#define SWIGTYPE_p_off_t swig_types[57]
-#define SWIGTYPE_p_p_PyObject swig_types[58]
-#define SWIGTYPE_p_pid_t swig_types[59]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[60]
-#define SWIGTYPE_p_scene__Errors swig_types[61]
-#define SWIGTYPE_p_scene__FrameType swig_types[62]
-#define SWIGTYPE_p_scene__LatLon swig_types[63]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[64]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[65]
-#define SWIGTYPE_p_six__AmplitudeTable swig_types[66]
-#define SWIGTYPE_p_six__AppliedType swig_types[67]
-#define SWIGTYPE_p_six__AutofocusType swig_types[68]
-#define SWIGTYPE_p_six__BooleanType swig_types[69]
-#define SWIGTYPE_p_six__ByteSwapping swig_types[70]
-#define SWIGTYPE_p_six__Classification swig_types[71]
-#define SWIGTYPE_p_six__CollectType swig_types[72]
-#define SWIGTYPE_p_six__ComplexImageGridType swig_types[73]
-#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[74]
-#define SWIGTYPE_p_six__Components swig_types[75]
-#define SWIGTYPE_p_six__CompositeSCP swig_types[76]
-#define SWIGTYPE_p_six__Constants swig_types[77]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[78]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[79]
-#define SWIGTYPE_p_six__CorrCoefs swig_types[80]
-#define SWIGTYPE_p_six__DESValidationException swig_types[81]
-#define SWIGTYPE_p_six__Data swig_types[82]
-#define SWIGTYPE_p_six__DataType swig_types[83]
-#define SWIGTYPE_p_six__DecimationMethod swig_types[84]
-#define SWIGTYPE_p_six__DecorrType swig_types[85]
-#define SWIGTYPE_p_six__DemodType swig_types[86]
-#define SWIGTYPE_p_six__DisplayType swig_types[87]
-#define SWIGTYPE_p_six__DualPolarizationType swig_types[88]
-#define SWIGTYPE_p_six__EarthModelType swig_types[89]
-#define SWIGTYPE_p_six__ErrorStatistics swig_types[90]
-#define SWIGTYPE_p_six__FFTSign swig_types[91]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[92]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[93]
-#define SWIGTYPE_p_six__Init swig_types[94]
-#define SWIGTYPE_p_six__IonoError swig_types[95]
-#define SWIGTYPE_p_six__LUT swig_types[96]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[97]
-#define SWIGTYPE_p_six__MatchCollect swig_types[98]
-#define SWIGTYPE_p_six__MatchInformation swig_types[99]
-#define SWIGTYPE_p_six__MatchType swig_types[100]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[101]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[102]
-#define SWIGTYPE_p_six__Options swig_types[103]
-#define SWIGTYPE_p_six__OrientationType swig_types[104]
-#define SWIGTYPE_p_six__Parameter swig_types[105]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[106]
-#define SWIGTYPE_p_six__PixelType swig_types[107]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[108]
-#define SWIGTYPE_p_six__PolarizationType swig_types[109]
-#define SWIGTYPE_p_six__PosVelError swig_types[110]
-#define SWIGTYPE_p_six__ProjectionType swig_types[111]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[112]
-#define SWIGTYPE_p_six__RadarModeType swig_types[113]
-#define SWIGTYPE_p_six__RadarSensor swig_types[114]
-#define SWIGTYPE_p_six__Radiometric swig_types[115]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[116]
-#define SWIGTYPE_p_six__RegionType swig_types[117]
-#define SWIGTYPE_p_six__RowColEnum swig_types[118]
-#define SWIGTYPE_p_six__SCP swig_types[119]
-#define SWIGTYPE_p_six__SCPType swig_types[120]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[121]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[122]
-#define SWIGTYPE_p_six__TropoError swig_types[123]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[124]
-#define SWIGTYPE_p_six__XMLControl swig_types[125]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[126]
-#define SWIGTYPE_p_six__XMLControlRegistry swig_types[127]
-#define SWIGTYPE_p_six__XYZEnum swig_types[128]
-#define SWIGTYPE_p_size_t swig_types[129]
-#define SWIGTYPE_p_size_type swig_types[130]
-#define SWIGTYPE_p_ssize_t swig_types[131]
-#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[132]
-#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[133]
-#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[134]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[135]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[136]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[137]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[138]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[139]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[140]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[141]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[142]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[143]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[144]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[145]
-#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[146]
-#define SWIGTYPE_p_std__invalid_argument swig_types[147]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[148]
-#define SWIGTYPE_p_std__ostream swig_types[149]
-#define SWIGTYPE_p_std__string swig_types[150]
-#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[151]
-#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[152]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[153]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[154]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[155]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[156]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[157]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[158]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[159]
-#define SWIGTYPE_p_uint16_t swig_types[160]
-#define SWIGTYPE_p_uint32_t swig_types[161]
-#define SWIGTYPE_p_uint64_t swig_types[162]
-#define SWIGTYPE_p_uint8_t swig_types[163]
-#define SWIGTYPE_p_unsigned_char swig_types[164]
-#define SWIGTYPE_p_value_type swig_types[165]
-#define SWIGTYPE_p_xml__lite__Document swig_types[166]
-static swig_type_info *swig_types[168];
-static swig_module_info swig_module = {swig_types, 167, 0, 0, 0, 0};
+#define SWIGTYPE_p_off_t swig_types[56]
+#define SWIGTYPE_p_p_PyObject swig_types[57]
+#define SWIGTYPE_p_pid_t swig_types[58]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[59]
+#define SWIGTYPE_p_scene__Errors swig_types[60]
+#define SWIGTYPE_p_scene__FrameType swig_types[61]
+#define SWIGTYPE_p_scene__LatLon swig_types[62]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[63]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[64]
+#define SWIGTYPE_p_six__AmplitudeTable swig_types[65]
+#define SWIGTYPE_p_six__AppliedType swig_types[66]
+#define SWIGTYPE_p_six__AutofocusType swig_types[67]
+#define SWIGTYPE_p_six__BooleanType swig_types[68]
+#define SWIGTYPE_p_six__ByteSwapping swig_types[69]
+#define SWIGTYPE_p_six__Classification swig_types[70]
+#define SWIGTYPE_p_six__CollectType swig_types[71]
+#define SWIGTYPE_p_six__ComplexImageGridType swig_types[72]
+#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[73]
+#define SWIGTYPE_p_six__Components swig_types[74]
+#define SWIGTYPE_p_six__CompositeSCP swig_types[75]
+#define SWIGTYPE_p_six__Constants swig_types[76]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[77]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[78]
+#define SWIGTYPE_p_six__CorrCoefs swig_types[79]
+#define SWIGTYPE_p_six__DESValidationException swig_types[80]
+#define SWIGTYPE_p_six__Data swig_types[81]
+#define SWIGTYPE_p_six__DataType swig_types[82]
+#define SWIGTYPE_p_six__DecimationMethod swig_types[83]
+#define SWIGTYPE_p_six__DecorrType swig_types[84]
+#define SWIGTYPE_p_six__DemodType swig_types[85]
+#define SWIGTYPE_p_six__DisplayType swig_types[86]
+#define SWIGTYPE_p_six__DualPolarizationType swig_types[87]
+#define SWIGTYPE_p_six__EarthModelType swig_types[88]
+#define SWIGTYPE_p_six__ErrorStatistics swig_types[89]
+#define SWIGTYPE_p_six__FFTSign swig_types[90]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[91]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[92]
+#define SWIGTYPE_p_six__Init swig_types[93]
+#define SWIGTYPE_p_six__IonoError swig_types[94]
+#define SWIGTYPE_p_six__LUT swig_types[95]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[96]
+#define SWIGTYPE_p_six__MatchCollect swig_types[97]
+#define SWIGTYPE_p_six__MatchInformation swig_types[98]
+#define SWIGTYPE_p_six__MatchType swig_types[99]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[100]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[101]
+#define SWIGTYPE_p_six__Options swig_types[102]
+#define SWIGTYPE_p_six__OrientationType swig_types[103]
+#define SWIGTYPE_p_six__Parameter swig_types[104]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[105]
+#define SWIGTYPE_p_six__PixelType swig_types[106]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[107]
+#define SWIGTYPE_p_six__PolarizationType swig_types[108]
+#define SWIGTYPE_p_six__PosVelError swig_types[109]
+#define SWIGTYPE_p_six__ProjectionType swig_types[110]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[111]
+#define SWIGTYPE_p_six__RadarModeType swig_types[112]
+#define SWIGTYPE_p_six__RadarSensor swig_types[113]
+#define SWIGTYPE_p_six__Radiometric swig_types[114]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[115]
+#define SWIGTYPE_p_six__RegionType swig_types[116]
+#define SWIGTYPE_p_six__RowColEnum swig_types[117]
+#define SWIGTYPE_p_six__SCP swig_types[118]
+#define SWIGTYPE_p_six__SCPType swig_types[119]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[120]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[121]
+#define SWIGTYPE_p_six__TropoError swig_types[122]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[123]
+#define SWIGTYPE_p_six__XMLControl swig_types[124]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[125]
+#define SWIGTYPE_p_six__XMLControlRegistry swig_types[126]
+#define SWIGTYPE_p_six__XYZEnum swig_types[127]
+#define SWIGTYPE_p_size_t swig_types[128]
+#define SWIGTYPE_p_size_type swig_types[129]
+#define SWIGTYPE_p_ssize_t swig_types[130]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[131]
+#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[132]
+#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[133]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[134]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[135]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[136]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[137]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[138]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[139]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[140]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[141]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[142]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[143]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[144]
+#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[145]
+#define SWIGTYPE_p_std__invalid_argument swig_types[146]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[147]
+#define SWIGTYPE_p_std__ostream swig_types[148]
+#define SWIGTYPE_p_std__string swig_types[149]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[150]
+#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[151]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[152]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[153]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[154]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[155]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[156]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[157]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[158]
+#define SWIGTYPE_p_uint16_t swig_types[159]
+#define SWIGTYPE_p_uint32_t swig_types[160]
+#define SWIGTYPE_p_uint64_t swig_types[161]
+#define SWIGTYPE_p_uint8_t swig_types[162]
+#define SWIGTYPE_p_unsigned_char swig_types[163]
+#define SWIGTYPE_p_value_type swig_types[164]
+#define SWIGTYPE_p_xml__lite__Document swig_types[165]
+static swig_type_info *swig_types[167];
+static swig_module_info swig_module = {swig_types, 166, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6460,13 +6459,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime();
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime();
     } 
     catch (const std::exception& e)
     {
@@ -6518,13 +6511,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime(arg1);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -6576,13 +6563,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime(arg1);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -6653,13 +6634,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_3(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime((std::string const &)*arg1,(std::string const &)*arg2);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime((std::string const &)*arg1,(std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -7910,13 +7885,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,arg3,arg4);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -7997,13 +7966,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,*arg3);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,*arg3);
     } 
     catch (const std::exception& e)
     {
@@ -8071,13 +8034,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        result = ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -42189,6 +42146,52 @@ fail:
 }
 
 
+SWIGINTERN int Swig_var_Constants_ILOC_MAX_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_ILOC_MAX is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_ILOC_MAX_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_From_size_t(static_cast< size_t >(six::Constants::ILOC_MAX));
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN int Swig_var_Constants_GT_XML_KEY_set(PyObject *) {
   SWIG_Error(SWIG_AttributeError,"Variable Constants_GT_XML_KEY is read-only.");
   return 1;
@@ -42570,6 +42573,52 @@ SWIGINTERN PyObject *Swig_var_Constants_SIDD_DESSHSI_get(void) {
     try
     {
       pyobj = SWIG_FromCharPtr(six::Constants::SIDD_DESSHSI);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN int Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Constants_EXCESS_BANDWIDTH_FACTOR is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_From_double(static_cast< double >(six::Constants::EXCESS_BANDWIDTH_FACTOR));
     } 
     catch (const std::exception& e)
     {
@@ -45767,6 +45816,58 @@ fail:
     "    six::Parameter::Parameter()\n"
     "    six::Parameter::Parameter(six::Parameter const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Parameter___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter___nonzero__" "', argument " "1"" of type '" "six::Parameter const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      result = (bool)((six::Parameter const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -60457,6 +60558,76 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_XMLControl_splitVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:XMLControl_splitVersion",&obj0,&obj1)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLControl_splitVersion" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_splitVersion" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_splitVersion" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_splitVersion" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      six::XMLControl::splitVersion((std::string const &)*arg1,*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *XMLControl_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
@@ -65524,6 +65695,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::Radiometric > *arg1 = (mem::ScopedCopyablePtr< six::Radiometric > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableRadiometric___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableRadiometric___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::Radiometric > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::Radiometric > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::Radiometric > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::Radiometric > *arg1 = (mem::ScopedCopyablePtr< six::Radiometric > *) 0 ;
@@ -67247,6 +67470,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::ErrorStatistics > *arg1 = (mem::ScopedCopyablePtr< six::ErrorStatistics > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableErrorStatistics___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableErrorStatistics___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::ErrorStatistics > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::ErrorStatistics > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::ErrorStatistics > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::ErrorStatistics > *arg1 = (mem::ScopedCopyablePtr< six::ErrorStatistics > *) 0 ;
@@ -68418,6 +68693,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchInformation___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchInformation___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchInformation > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::MatchInformation > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::MatchInformation > *arg1 = (mem::ScopedCopyablePtr< six::MatchInformation > *) 0 ;
@@ -69362,6 +69689,58 @@ fail:
     "    mem::ScopedCopyablePtr< six::CorrCoefs >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< six::CorrCoefs >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::CorrCoefs > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::CorrCoefs > *arg1 = (mem::ScopedCopyablePtr< six::CorrCoefs > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableCorrCoefs___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableCorrCoefs___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::CorrCoefs > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::CorrCoefs > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::CorrCoefs > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -71880,6 +72259,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::PosVelError > *arg1 = (mem::ScopedCopyablePtr< six::PosVelError > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyablePosVelError___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyablePosVelError___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::PosVelError > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::PosVelError > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::PosVelError > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::PosVelError > *arg1 = (mem::ScopedCopyablePtr< six::PosVelError > *) 0 ;
@@ -73723,6 +74154,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::RadarSensor > *arg1 = (mem::ScopedCopyablePtr< six::RadarSensor > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableRadarSensor___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableRadarSensor___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::RadarSensor > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::RadarSensor > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::RadarSensor > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::RadarSensor > *arg1 = (mem::ScopedCopyablePtr< six::RadarSensor > *) 0 ;
@@ -75006,6 +75489,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::TropoError > *arg1 = (mem::ScopedCopyablePtr< six::TropoError > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTropoError___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTropoError___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::TropoError > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::TropoError > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::TropoError > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::TropoError > *arg1 = (mem::ScopedCopyablePtr< six::TropoError > *) 0 ;
@@ -76174,6 +76709,58 @@ fail:
     "    mem::ScopedCopyablePtr< six::IonoError >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< six::IonoError >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::IonoError > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::IonoError > *arg1 = (mem::ScopedCopyablePtr< six::IonoError > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableIonoError___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableIonoError___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::IonoError > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::IonoError > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::IonoError > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -77460,6 +78047,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::CompositeSCP > *arg1 = (mem::ScopedCopyablePtr< six::CompositeSCP > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableCompositeSCP___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableCompositeSCP___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::CompositeSCP > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::CompositeSCP > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::CompositeSCP > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mem::ScopedCopyablePtr< six::CompositeSCP > *arg1 = (mem::ScopedCopyablePtr< six::CompositeSCP > *) 0 ;
@@ -78740,6 +79379,58 @@ fail:
     "    mem::ScopedCopyablePtr< six::Components >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< six::Components >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::Components > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::Components > *arg1 = (mem::ScopedCopyablePtr< six::Components > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableComponents___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableComponents___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::Components > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::Components > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::Components > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -81408,6 +82099,58 @@ fail:
     "    mem::ScopedCopyablePtr< six::MatchType >::ScopedCopyablePtr()\n"
     "    mem::ScopedCopyablePtr< six::MatchType >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::MatchType > const &)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::MatchType > *arg1 = (mem::ScopedCopyablePtr< six::MatchType > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableMatchType___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableMatchType___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::MatchType > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::MatchType > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::MatchType > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -89968,6 +90711,7 @@ static PyMethodDef SwigMethods[] = {
 		"Parameter()\n"
 		"new_Parameter(Parameter other) -> Parameter\n"
 		""},
+	 { (char *)"Parameter___nonzero__", _wrap_Parameter___nonzero__, METH_VARARGS, (char *)"Parameter___nonzero__(Parameter self) -> bool"},
 	 { (char *)"Parameter_str", _wrap_Parameter_str, METH_VARARGS, (char *)"Parameter_str(Parameter self) -> std::string"},
 	 { (char *)"Parameter_getName", _wrap_Parameter_getName, METH_VARARGS, (char *)"Parameter_getName(Parameter self) -> std::string"},
 	 { (char *)"Parameter_setName", _wrap_Parameter_setName, METH_VARARGS, (char *)"Parameter_setName(Parameter self, std::string name)"},
@@ -90249,6 +90993,7 @@ static PyMethodDef SwigMethods[] = {
 		"dataTypeToString(DataType dataType, bool appendXML=True) -> std::string\n"
 		"XMLControl_dataTypeToString(DataType dataType) -> std::string\n"
 		""},
+	 { (char *)"XMLControl_splitVersion", _wrap_XMLControl_splitVersion, METH_VARARGS, (char *)"XMLControl_splitVersion(std::string const & versionStr, VectorString version)"},
 	 { (char *)"XMLControl_swigregister", XMLControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"remapZeroTo360", _wrap_remapZeroTo360, METH_VARARGS, (char *)"remapZeroTo360(double degree) -> double"},
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
@@ -90346,6 +91091,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableRadiometric()\n"
 		"new_ScopedCopyableRadiometric(ScopedCopyableRadiometric rhs) -> ScopedCopyableRadiometric\n"
 		""},
+	 { (char *)"ScopedCopyableRadiometric___nonzero__", _wrap_ScopedCopyableRadiometric___nonzero__, METH_VARARGS, (char *)"ScopedCopyableRadiometric___nonzero__(ScopedCopyableRadiometric self) -> bool"},
 	 { (char *)"ScopedCopyableRadiometric_get", _wrap_ScopedCopyableRadiometric_get, METH_VARARGS, (char *)"ScopedCopyableRadiometric_get(ScopedCopyableRadiometric self) -> Radiometric"},
 	 { (char *)"ScopedCopyableRadiometric___ref__", _wrap_ScopedCopyableRadiometric___ref__, METH_VARARGS, (char *)"ScopedCopyableRadiometric___ref__(ScopedCopyableRadiometric self) -> Radiometric"},
 	 { (char *)"ScopedCopyableRadiometric___deref__", _wrap_ScopedCopyableRadiometric___deref__, METH_VARARGS, (char *)"ScopedCopyableRadiometric___deref__(ScopedCopyableRadiometric self) -> Radiometric"},
@@ -90382,6 +91128,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableErrorStatistics()\n"
 		"new_ScopedCopyableErrorStatistics(ScopedCopyableErrorStatistics rhs) -> ScopedCopyableErrorStatistics\n"
 		""},
+	 { (char *)"ScopedCopyableErrorStatistics___nonzero__", _wrap_ScopedCopyableErrorStatistics___nonzero__, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics___nonzero__(ScopedCopyableErrorStatistics self) -> bool"},
 	 { (char *)"ScopedCopyableErrorStatistics_get", _wrap_ScopedCopyableErrorStatistics_get, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics_get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"},
 	 { (char *)"ScopedCopyableErrorStatistics___ref__", _wrap_ScopedCopyableErrorStatistics___ref__, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics___ref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"},
 	 { (char *)"ScopedCopyableErrorStatistics___deref__", _wrap_ScopedCopyableErrorStatistics___deref__, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics___deref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"},
@@ -90408,6 +91155,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableMatchInformation()\n"
 		"new_ScopedCopyableMatchInformation(ScopedCopyableMatchInformation rhs) -> ScopedCopyableMatchInformation\n"
 		""},
+	 { (char *)"ScopedCopyableMatchInformation___nonzero__", _wrap_ScopedCopyableMatchInformation___nonzero__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___nonzero__(ScopedCopyableMatchInformation self) -> bool"},
 	 { (char *)"ScopedCopyableMatchInformation_get", _wrap_ScopedCopyableMatchInformation_get, METH_VARARGS, (char *)"ScopedCopyableMatchInformation_get(ScopedCopyableMatchInformation self) -> MatchInformation"},
 	 { (char *)"ScopedCopyableMatchInformation___ref__", _wrap_ScopedCopyableMatchInformation___ref__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___ref__(ScopedCopyableMatchInformation self) -> MatchInformation"},
 	 { (char *)"ScopedCopyableMatchInformation___deref__", _wrap_ScopedCopyableMatchInformation___deref__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___deref__(ScopedCopyableMatchInformation self) -> MatchInformation"},
@@ -90430,6 +91178,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableCorrCoefs()\n"
 		"new_ScopedCopyableCorrCoefs(ScopedCopyableCorrCoefs rhs) -> ScopedCopyableCorrCoefs\n"
 		""},
+	 { (char *)"ScopedCopyableCorrCoefs___nonzero__", _wrap_ScopedCopyableCorrCoefs___nonzero__, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs___nonzero__(ScopedCopyableCorrCoefs self) -> bool"},
 	 { (char *)"ScopedCopyableCorrCoefs_get", _wrap_ScopedCopyableCorrCoefs_get, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs_get(ScopedCopyableCorrCoefs self) -> CorrCoefs"},
 	 { (char *)"ScopedCopyableCorrCoefs___ref__", _wrap_ScopedCopyableCorrCoefs___ref__, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs___ref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"},
 	 { (char *)"ScopedCopyableCorrCoefs___deref__", _wrap_ScopedCopyableCorrCoefs___deref__, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs___deref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"},
@@ -90480,6 +91229,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyablePosVelError()\n"
 		"new_ScopedCopyablePosVelError(ScopedCopyablePosVelError rhs) -> ScopedCopyablePosVelError\n"
 		""},
+	 { (char *)"ScopedCopyablePosVelError___nonzero__", _wrap_ScopedCopyablePosVelError___nonzero__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___nonzero__(ScopedCopyablePosVelError self) -> bool"},
 	 { (char *)"ScopedCopyablePosVelError_get", _wrap_ScopedCopyablePosVelError_get, METH_VARARGS, (char *)"ScopedCopyablePosVelError_get(ScopedCopyablePosVelError self) -> PosVelError"},
 	 { (char *)"ScopedCopyablePosVelError___ref__", _wrap_ScopedCopyablePosVelError___ref__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___ref__(ScopedCopyablePosVelError self) -> PosVelError"},
 	 { (char *)"ScopedCopyablePosVelError___deref__", _wrap_ScopedCopyablePosVelError___deref__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___deref__(ScopedCopyablePosVelError self) -> PosVelError"},
@@ -90518,6 +91268,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableRadarSensor()\n"
 		"new_ScopedCopyableRadarSensor(ScopedCopyableRadarSensor rhs) -> ScopedCopyableRadarSensor\n"
 		""},
+	 { (char *)"ScopedCopyableRadarSensor___nonzero__", _wrap_ScopedCopyableRadarSensor___nonzero__, METH_VARARGS, (char *)"ScopedCopyableRadarSensor___nonzero__(ScopedCopyableRadarSensor self) -> bool"},
 	 { (char *)"ScopedCopyableRadarSensor_get", _wrap_ScopedCopyableRadarSensor_get, METH_VARARGS, (char *)"ScopedCopyableRadarSensor_get(ScopedCopyableRadarSensor self) -> RadarSensor"},
 	 { (char *)"ScopedCopyableRadarSensor___ref__", _wrap_ScopedCopyableRadarSensor___ref__, METH_VARARGS, (char *)"ScopedCopyableRadarSensor___ref__(ScopedCopyableRadarSensor self) -> RadarSensor"},
 	 { (char *)"ScopedCopyableRadarSensor___deref__", _wrap_ScopedCopyableRadarSensor___deref__, METH_VARARGS, (char *)"ScopedCopyableRadarSensor___deref__(ScopedCopyableRadarSensor self) -> RadarSensor"},
@@ -90546,6 +91297,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableTropoError()\n"
 		"new_ScopedCopyableTropoError(ScopedCopyableTropoError rhs) -> ScopedCopyableTropoError\n"
 		""},
+	 { (char *)"ScopedCopyableTropoError___nonzero__", _wrap_ScopedCopyableTropoError___nonzero__, METH_VARARGS, (char *)"ScopedCopyableTropoError___nonzero__(ScopedCopyableTropoError self) -> bool"},
 	 { (char *)"ScopedCopyableTropoError_get", _wrap_ScopedCopyableTropoError_get, METH_VARARGS, (char *)"ScopedCopyableTropoError_get(ScopedCopyableTropoError self) -> TropoError"},
 	 { (char *)"ScopedCopyableTropoError___ref__", _wrap_ScopedCopyableTropoError___ref__, METH_VARARGS, (char *)"ScopedCopyableTropoError___ref__(ScopedCopyableTropoError self) -> TropoError"},
 	 { (char *)"ScopedCopyableTropoError___deref__", _wrap_ScopedCopyableTropoError___deref__, METH_VARARGS, (char *)"ScopedCopyableTropoError___deref__(ScopedCopyableTropoError self) -> TropoError"},
@@ -90572,6 +91324,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableIonoError()\n"
 		"new_ScopedCopyableIonoError(ScopedCopyableIonoError rhs) -> ScopedCopyableIonoError\n"
 		""},
+	 { (char *)"ScopedCopyableIonoError___nonzero__", _wrap_ScopedCopyableIonoError___nonzero__, METH_VARARGS, (char *)"ScopedCopyableIonoError___nonzero__(ScopedCopyableIonoError self) -> bool"},
 	 { (char *)"ScopedCopyableIonoError_get", _wrap_ScopedCopyableIonoError_get, METH_VARARGS, (char *)"ScopedCopyableIonoError_get(ScopedCopyableIonoError self) -> IonoError"},
 	 { (char *)"ScopedCopyableIonoError___ref__", _wrap_ScopedCopyableIonoError___ref__, METH_VARARGS, (char *)"ScopedCopyableIonoError___ref__(ScopedCopyableIonoError self) -> IonoError"},
 	 { (char *)"ScopedCopyableIonoError___deref__", _wrap_ScopedCopyableIonoError___deref__, METH_VARARGS, (char *)"ScopedCopyableIonoError___deref__(ScopedCopyableIonoError self) -> IonoError"},
@@ -90600,6 +91353,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableCompositeSCP()\n"
 		"new_ScopedCopyableCompositeSCP(ScopedCopyableCompositeSCP rhs) -> ScopedCopyableCompositeSCP\n"
 		""},
+	 { (char *)"ScopedCopyableCompositeSCP___nonzero__", _wrap_ScopedCopyableCompositeSCP___nonzero__, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP___nonzero__(ScopedCopyableCompositeSCP self) -> bool"},
 	 { (char *)"ScopedCopyableCompositeSCP_get", _wrap_ScopedCopyableCompositeSCP_get, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP_get(ScopedCopyableCompositeSCP self) -> CompositeSCP"},
 	 { (char *)"ScopedCopyableCompositeSCP___ref__", _wrap_ScopedCopyableCompositeSCP___ref__, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP___ref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"},
 	 { (char *)"ScopedCopyableCompositeSCP___deref__", _wrap_ScopedCopyableCompositeSCP___deref__, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP___deref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"},
@@ -90628,6 +91382,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableComponents()\n"
 		"new_ScopedCopyableComponents(ScopedCopyableComponents rhs) -> ScopedCopyableComponents\n"
 		""},
+	 { (char *)"ScopedCopyableComponents___nonzero__", _wrap_ScopedCopyableComponents___nonzero__, METH_VARARGS, (char *)"ScopedCopyableComponents___nonzero__(ScopedCopyableComponents self) -> bool"},
 	 { (char *)"ScopedCopyableComponents_get", _wrap_ScopedCopyableComponents_get, METH_VARARGS, (char *)"ScopedCopyableComponents_get(ScopedCopyableComponents self) -> Components"},
 	 { (char *)"ScopedCopyableComponents___ref__", _wrap_ScopedCopyableComponents___ref__, METH_VARARGS, (char *)"ScopedCopyableComponents___ref__(ScopedCopyableComponents self) -> Components"},
 	 { (char *)"ScopedCopyableComponents___deref__", _wrap_ScopedCopyableComponents___deref__, METH_VARARGS, (char *)"ScopedCopyableComponents___deref__(ScopedCopyableComponents self) -> Components"},
@@ -90687,6 +91442,7 @@ static PyMethodDef SwigMethods[] = {
 		"ScopedCopyableMatchType()\n"
 		"new_ScopedCopyableMatchType(ScopedCopyableMatchType rhs) -> ScopedCopyableMatchType\n"
 		""},
+	 { (char *)"ScopedCopyableMatchType___nonzero__", _wrap_ScopedCopyableMatchType___nonzero__, METH_VARARGS, (char *)"ScopedCopyableMatchType___nonzero__(ScopedCopyableMatchType self) -> bool"},
 	 { (char *)"ScopedCopyableMatchType_get", _wrap_ScopedCopyableMatchType_get, METH_VARARGS, (char *)"ScopedCopyableMatchType_get(ScopedCopyableMatchType self) -> MatchType"},
 	 { (char *)"ScopedCopyableMatchType___ref__", _wrap_ScopedCopyableMatchType___ref__, METH_VARARGS, (char *)"ScopedCopyableMatchType___ref__(ScopedCopyableMatchType self) -> MatchType"},
 	 { (char *)"ScopedCopyableMatchType___deref__", _wrap_ScopedCopyableMatchType___deref__, METH_VARARGS, (char *)"ScopedCopyableMatchType___deref__(ScopedCopyableMatchType self) -> MatchType"},
@@ -91006,7 +91762,6 @@ static swig_type_info _swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t = 
 static swig_type_info _swigt__p_nitf_DateTime = {"_p_nitf_DateTime", "nitf_DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__DateTime = {"_p_nitf__DateTime", "nitf::DateTime *|six::DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__FileSecurity = {"_p_nitf__FileSecurity", "nitf::FileSecurity *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf__NITFException = {"_p_nitf__NITFException", "nitf::NITFException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
@@ -91175,7 +91930,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_nitf_DateTime,
   &_swigt__p_nitf__DateTime,
   &_swigt__p_nitf__FileSecurity,
-  &_swigt__p_nitf__NITFException,
   &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
   &_swigt__p_pid_t,
@@ -91344,7 +92098,6 @@ static swig_cast_info _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t[] 
 static swig_cast_info _swigc__p_nitf_DateTime[] = {  {&_swigt__p_nitf_DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf__DateTime[] = {  {&_swigt__p_nitf__DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf__FileSecurity[] = {  {&_swigt__p_nitf__FileSecurity, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_nitf__NITFException[] = {  {&_swigt__p_nitf__NITFException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -91513,7 +92266,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_nitf_DateTime,
   _swigc__p_nitf__DateTime,
   _swigc__p_nitf__FileSecurity,
-  _swigc__p_nitf__NITFException,
   _swigc__p_off_t,
   _swigc__p_p_PyObject,
   _swigc__p_pid_t,
@@ -92454,6 +93206,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"SCHEMA_PATH",Swig_var_SCHEMA_PATH_get, Swig_var_SCHEMA_PATH_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_IS_SIZE_MAX",Swig_var_Constants_IS_SIZE_MAX_get, Swig_var_Constants_IS_SIZE_MAX_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_SIZE_MAX",Swig_var_Constants_GT_SIZE_MAX_get, Swig_var_Constants_GT_SIZE_MAX_set);
+  SWIG_addvarlink(SWIG_globals(),(char *)"Constants_ILOC_MAX",Swig_var_Constants_ILOC_MAX_get, Swig_var_Constants_ILOC_MAX_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_XML_KEY",Swig_var_Constants_GT_XML_KEY_get, Swig_var_Constants_GT_XML_KEY_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_GT_XML_TAG",Swig_var_Constants_GT_XML_TAG_get, Swig_var_Constants_GT_XML_TAG_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_DES_VERSION",Swig_var_Constants_DES_VERSION_get, Swig_var_Constants_DES_VERSION_set);
@@ -92463,7 +93216,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_DES_USER_DEFINED_SUBHEADER_LENGTH",Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get, Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_SICD_DESSHSI",Swig_var_Constants_SICD_DESSHSI_get, Swig_var_Constants_SICD_DESSHSI_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Constants_SIDD_DESSHSI",Swig_var_Constants_SIDD_DESSHSI_get, Swig_var_Constants_SIDD_DESSHSI_set);
-  SWIG_Python_SetConstant(d, "Constants_ILOC_MAX",SWIG_From_int(static_cast< int >(six::Constants::ILOC_MAX)));
+  SWIG_addvarlink(SWIG_globals(),(char *)"Constants_EXCESS_BANDWIDTH_FACTOR",Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get, Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_set);
   SWIG_Python_SetConstant(d, "FRAME_MODE",SWIG_From_int(static_cast< int >(six::FRAME_MODE)));
   SWIG_Python_SetConstant(d, "SCAN_MODE",SWIG_From_int(static_cast< int >(six::SCAN_MODE)));
   SWIG_Python_SetConstant(d, "CompositeSCP_ROW_COL",SWIG_From_int(static_cast< int >(six::CompositeSCP::ROW_COL)));

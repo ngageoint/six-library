@@ -364,37 +364,36 @@ int main(int argc, char** argv)
             }
         }
 
-        six::NITFWriteControl writer;
+        six::Options writerOptions;
         if (!maxILOC.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     maxILOC);
         }
         if (!maxSize.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     maxSize);
         }
 
         if (!rowsPerBlock.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     rowsPerBlock);
         }
 
         if (!colsPerBlock.empty())
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+            writerOptions.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     colsPerBlock);
         }
 
+        six::NITFWriteControl writer(writerOptions, container, &xmlRegistry);
         writer.setLogger(&log);
-        writer.initialize(container);
-        writer.setXMLControlRegistry(&xmlRegistry);
         writer.save(buffers.get(), outputFile, schemaPaths);
     }
     catch (const std::exception& ex)

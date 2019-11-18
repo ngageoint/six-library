@@ -116,6 +116,21 @@ void cropSICD(six::NITFReadControl& reader,
               const std::vector<scene::LatLonAlt>& corners,
               const std::string& outPathname,
               bool trimCornersIfNeeded = true);
+
+/*
+ * Given a six::Sicd::ComplexData object and a cropping region,
+ * update the metadata in the same way as the functions above.
+ * \param complexData the input complexData object
+ * \param aoiOffset Upper left corner of AOI
+ * \param aoiDims Size of AOI
+ *
+ * \returns A cloned complex data object where the 
+ * meta data has been updated to reflect the cropped aoi.
+ */
+std::auto_ptr<six::sicd::ComplexData>
+cropMetaData(const six::sicd::ComplexData& complexData,
+             const types::RowCol<size_t>& aoiOffset,
+             const types::RowCol<size_t>& aoiDims);
 }
 }
 

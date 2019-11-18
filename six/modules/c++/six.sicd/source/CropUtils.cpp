@@ -47,6 +47,41 @@ void updateMinMax(double val, double& curMin, double& curMax)
     }
 }
 
+six::sicd::ComplexData* const updateMetadata(
+        const six::sicd::ComplexData& data,
+        const scene::SceneGeometry& geom,
+        const scene::ProjectionModel& projection,
+        const types::RowCol<size_t>& aoiOffset,
+        const types::RowCol<size_t>& aoiDims)
+{
+    six::sicd::ComplexData* const aoiData(
+               reinterpret_cast<six::sicd::ComplexData*>(data.clone()));
+
+    aoiData->imageData->firstRow += aoiOffset.row;
+    aoiData->imageData->firstCol += aoiOffset.col;
+    aoiData->imageData->numRows = aoiDims.row;
+    aoiData->imageData->numCols = aoiDims.col;
+
+    const size_t firstRow(aoiData->imageData->firstRow);
+    const size_t lastRow(firstRow + aoiDims.row - 1);
+    const size_t firstCol(aoiData->imageData->firstCol);
+    const size_t lastCol(firstCol + aoiDims.col - 1);
+
+    const six::sicd::SlantPlanePixelTransformer trans(data, geom, projection);
+    six::LatLonCorners& corners(aoiData->geoData->imageCorners);
+
+    corners.upperLeft = trans.toLatLon(
+            types::RowCol<size_t>(firstRow, firstCol));
+    corners.upperRight = trans.toLatLon(
+            types::RowCol<size_t>(firstRow, lastCol));
+    corners.lowerRight = trans.toLatLon(
+            types::RowCol<size_t>(lastRow, lastCol));
+    corners.lowerLeft = trans.toLatLon(
+            types::RowCol<size_t>(lastRow, firstCol));
+
+    return aoiData;
+}
+
 void cropSICD(six::NITFReadControl& reader,
               const std::vector<std::string>& schemaPaths,
               const six::sicd::ComplexData& data,
@@ -59,6 +94,7 @@ void cropSICD(six::NITFReadControl& reader,
     // Make sure the AOI is in bounds
     const types::RowCol<size_t> origDims(data.getNumRows(),
                                          data.getNumCols());
+
     if (aoiOffset.row + aoiDims.row > origDims.row ||
         aoiOffset.col + aoiDims.col > origDims.col)
     {
@@ -83,48 +119,49 @@ void cropSICD(six::NITFReadControl& reader,
     region.setBuffer(buffer.get());
     reader.interleaved(region, 0);
 
-    // Update to reflect the AOI in the SIX metadata
-    six::sicd::ComplexData* const aoiData(
-            reinterpret_cast<six::sicd::ComplexData*>(data.clone()));
+    six::sicd::ComplexData* const aoiData = updateMetadata(
+            data, geom,  projection,
+            aoiOffset, aoiDims);
     std::auto_ptr<six::Data> scopedData(aoiData);
-
-    aoiData->imageData->firstRow += aoiOffset.row;
-    aoiData->imageData->firstCol += aoiOffset.col;
-    aoiData->imageData->numRows = aoiDims.row;
-    aoiData->imageData->numCols = aoiDims.col;
-
-    const size_t firstRow(aoiData->imageData->firstRow);
-    const size_t lastRow(firstRow + aoiDims.row - 1);
-    const size_t firstCol(aoiData->imageData->firstCol);
-    const size_t lastCol(firstCol + aoiDims.col - 1);
-
-    const six::sicd::SlantPlanePixelTransformer trans(data, geom, projection);
-    six::LatLonCorners& corners(aoiData->geoData->imageCorners);
-
-    corners.upperLeft = trans.toLatLon(
-        types::RowCol<size_t>(firstRow, firstCol));
-    corners.upperRight = trans.toLatLon(
-        types::RowCol<size_t>(firstRow, lastCol));
-    corners.lowerRight = trans.toLatLon(
-        types::RowCol<size_t>(lastRow, lastCol));
-    corners.lowerLeft = trans.toLatLon(
-        types::RowCol<size_t>(lastRow, firstCol));
 
     // Write the AOI SICD out
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(scopedData);
-    six::NITFWriteControl writer;
-    writer.initialize(container);
+    six::NITFWriteControl writer(container);
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);
 }
+
 }
 
 namespace six
 {
 namespace sicd
 {
+
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+        const six::sicd::ComplexData& complexData,
+        const types::RowCol<size_t>& aoiOffset,
+        const types::RowCol<size_t>& aoiDims)
+{
+    // Build up the geometry info
+    std::auto_ptr<const scene::SceneGeometry> geom(
+            six::sicd::Utilities::getSceneGeometry(&complexData));
+
+    std::auto_ptr<const scene::ProjectionModel> projection(
+            six::sicd::Utilities::getProjectionModel(&complexData, geom.get()));
+
+    six::sicd::ComplexData* const aoiData = updateMetadata(
+            complexData,
+            *geom,
+            *projection,
+            aoiOffset,
+            aoiDims);
+
+    return std::auto_ptr<six::sicd::ComplexData>(aoiData);
+}
+
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const types::RowCol<size_t>& aoiOffset,

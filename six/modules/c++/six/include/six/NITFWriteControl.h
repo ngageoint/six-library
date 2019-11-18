@@ -30,6 +30,7 @@
 #include "six/WriteControl.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
+#include <six/NITFHeaderCreator.h>
 
 namespace six
 {
@@ -48,8 +49,24 @@ class NITFWriteControl : public WriteControl
 {
 public:
 
-    //!  Constructor
+    //! Constructor. Must call initialize to use.
     NITFWriteControl();
+
+    /*!
+     * Constructor. Calls initialize.
+     * \param container The data container
+     */
+    NITFWriteControl(mem::SharedPtr<Container> container);
+
+    /*!
+     * Constructor. Calls initialize.
+     * \param options Initialization options
+     * \param container The data container
+     * \param xmlRegistry Optional XMLControlRegistry
+     */
+    NITFWriteControl(const six::Options& options,
+                     mem::SharedPtr<Container> container,
+                     const XMLControlRegistry* xmlRegistry = NULL);
 
     //!  We are a 'NITF'
     std::string getFileType() const
@@ -57,30 +74,85 @@ public:
         return "NITF";
     }
 
-    //!  Keys that allow us to override the ILOC rules for tests
-    static const char OPT_MAX_PRODUCT_SIZE[];
-    static const char OPT_MAX_ILOC_ROWS[];
-    static const char OPT_J2K_COMPRESSION[];
-
-    //! These determine the NITF blocking
-    //  They only pertain to SIDD
-    //  SICDs are never blocked, so setting this for a SICD will
-    //  result in an error
-    static const char OPT_NUM_ROWS_PER_BLOCK[];
-    static const char OPT_NUM_COLS_PER_BLOCK[];
-
-    //!  Buffered IO
-    static const size_t DEFAULT_BUFFER_SIZE;
-
     // Get the record that was generated during initialization
     nitf::Record getRecord() const
     {
-        return mRecord;
+        return mNITFHeaderCreator->getRecord();
     }
+
+    /*!
+     * Sets XMLControlRegistry. Overriding so we can pass to NITFHeaderCreator
+     * as well.
+     * \param xmlRegistry XMLControlRegistry to set
+     */
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    {
+        setXMLControlRegistryImpl(xmlRegistry);
+    }
+
+    // Get the record that was generated during initialization
+    nitf::Record& getRecord()
+    {
+        return mNITFHeaderCreator->getRecord();
+    }
+
+    //! \return Collection of NITF image info pointers
+    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos()
+    {
+        return mNITFHeaderCreator->getInfos();
+    }
+
+    //! \return Mutable data container
+    mem::SharedPtr<Container> getContainer()
+    {
+        return mNITFHeaderCreator->getContainer();
+    }
+
+    //! \return Const data container
+    mem::SharedPtr<const Container> getContainer() const
+    {
+        return mNITFHeaderCreator->getContainer();
+    }
+
+    //! \return Const NITF options
+    const six::Options& getOptions() const
+    {
+        return mNITFHeaderCreator->getOptions();
+    }
+
+    //! \return Collection of NITF segment writers
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters()
+    {
+        return mNITFHeaderCreator->getSegmentWriters();
+    }
+
+    //! \return The underlying NITF header creator object
+    const six::NITFHeaderCreator* getNITFHeaderCreator() const
+    {
+        return mNITFHeaderCreator.get();
+    }
+
+    /*!
+     * Set the internal NITF header creator
+     * \param headerCreator Populated NITF header creator
+     */
+    void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
+
+    virtual void initialize(const six::Options& options,
+                            mem::SharedPtr<Container> container);
 
     virtual void initialize(mem::SharedPtr<Container> container);
 
     using WriteControl::save;
+
+    /*!
+     * Set the logger.
+     * \param logger The logger.
+     */
+    void setLogger(logging::Logger* logger, bool ownLog = false)
+    {
+        mNITFHeaderCreator->setLogger(logger, ownLog);
+    }
 
     /*
      *  \func  save
@@ -202,12 +274,16 @@ public:
      */
     void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
+    /*!
+     *  Takes in a string representing the classification level
+     *  and returns the value expected by the NITF
+     */
+    static std::string getNITFClassification(const std::string& level);
+
 protected:
     nitf::Writer mWriter;
-    nitf::Record mRecord;
-    std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
-    std::vector<mem::SharedPtr<nitf::SegmentWriter> > mSegmentWriters;
     std::map<std::string, void*> mCompressionOptions;
+    std::auto_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
 
     void writeNITF(nitf::IOInterface& os);
 
@@ -336,12 +412,6 @@ protected:
                      const std::string& prefix);
 
     /*!
-     *  Takes in a string representing the classification level
-     *  and returns the value expected by the NITF
-     */
-    std::string getNITFClassification(const std::string& level);
-
-    /*!
      *  This function scans through the security fields for each
      *  image segment and sets the security information in the file
      *  subheader so that it matches the highest level of the
@@ -359,34 +429,69 @@ protected:
 
     bool shouldByteSwap() const;
 
+    void setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry);
+
 private:
+    /*!
+     * Get the DES type identifier.
+     * \param data The data object.
+     * \result The DES type identifier.
+     */
     static
     std::string getDesTypeID(const six::Data& data);
 
+    /*!
+     * Determine if a user-defined sub-header if required.
+     * \param data The data object.
+     * \result Boolean true if a user-defined sub-header is required.
+     */
     static
     bool needUserDefinedSubheader(const six::Data& data);
 
+    /*!
+     * Add a user-defined sub-header.
+     * \param data The data object.
+     * \param[out] subheader The sub-header to modify.
+     */
     void addUserDefinedSubheader(const six::Data& data,
                                  nitf::DESubheader& subheader) const;
 
+    /*!
+     * Construct complex image sub-header identifier.
+     * \param segmentNum The segment number.
+     * \param numImageSegments The number of image segments.
+     * \result Sub-header identifier.
+     */
     static
     std::string getComplexIID(size_t segmentNum, size_t numImageSegments);
 
+    /*!
+     * Construct detected image sub-header identifier.
+     * \param segmentNum The segment number.
+     * \param productNum The product number.
+     * \result Sub-header identifier.
+     */
     static
     std::string getDerivedIID(size_t segmentNum, size_t productNum);
 
+    /*!
+     * Construct image sub-header identifier.
+     * \param segmentNum The segment number.
+     * \param numImageSegments The number of image segments.
+     * \param productNum The product number.
+     * \result Sub-header identifier.
+     */
     static
     std::string getIID(DataType dataType,
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
 
-    std::string mOrganizationId;
-    std::string mLocationId;
-    std::string mLocationIdNamespace;
-    std::string mAbstract;
+private:
+    //! Noncopyable
+    NITFWriteControl(const NITFWriteControl& );
+    const NITFWriteControl& operator=(const NITFWriteControl& );
 };
-
 }
 #endif
 

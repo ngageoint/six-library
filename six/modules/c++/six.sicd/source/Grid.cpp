@@ -159,7 +159,7 @@ DirectionParameters::calculateWeightFunction() const
         }
         else if (windowName == "KAISER")
         {
-            weightFunction.reset(new Kaiser(weightType->parameters[0]));
+            weightFunction.reset(new Kaiser(double(weightType->parameters[0])));
         }
     }
 
@@ -914,7 +914,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
-            << derivedRowUnitVector(rmcr, scp);
+            << derivedColUnitVector(rmcr, scp);
         log.error(messageBuilder.str());
         valid = false;
     }

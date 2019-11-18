@@ -22,6 +22,18 @@
 #include <six/sicd/RadarCollection.h>
 #include <six/Utilities.h>
 
+namespace
+{
+template <typename T>
+types::RowCol<T> rotatePixel(size_t origNumCols, const types::RowCol<T>& pixel)
+{
+    types::RowCol<T> rotatedPixel;
+    rotatedPixel.col = pixel.row;
+    rotatedPixel.row = origNumCols - pixel.col;
+    return rotatedPixel;
+}
+}
+
 namespace six
 {
 namespace sicd
@@ -344,6 +356,79 @@ const Segment& AreaPlane::getSegment(const std::string& segmentId) const
     }
     throw except::Exception(Ctxt("No segment with identifier " + segmentId));
 }
+
+void AreaPlane::rotateToShadowsDown()
+{
+    switch(orientation)
+    {
+    case OrientationType::RIGHT:
+        rotateCCW();
+        rotateCCW();
+        rotateCCW();
+        break;
+    case OrientationType::UP:
+        rotateCCW();
+        rotateCCW();
+        break;
+    case OrientationType::LEFT:
+        rotateCCW();
+        break;
+    default:
+        break;
+    }
+}
+
+void AreaPlane::rotateCCW()
+{
+    switch (orientation)
+    {
+    case OrientationType::LEFT:
+        orientation = OrientationType::DOWN;
+        break;
+    case OrientationType::DOWN:
+        orientation = OrientationType::RIGHT;
+        break;
+    case OrientationType::RIGHT:
+        orientation = OrientationType::UP;
+        break;
+    case OrientationType::UP:
+        orientation = OrientationType::LEFT;
+        break;
+    default:
+        break;
+    }
+    referencePoint.rowCol = rotatePixel(yDirection->elements, referencePoint.rowCol);
+
+    std::swap(yDirection->elements, xDirection->elements);
+    std::swap(yDirection->spacing, xDirection->spacing);
+    std::swap(yDirection->unitVector, xDirection->unitVector);
+    xDirection->unitVector *= -1;
+
+    for (size_t ii = 0; ii < segmentList.size(); ++ii)
+    {
+        segmentList[ii]->rotateCCW(yDirection->elements);
+    }
+}
+
+void Segment::rotateCCW(size_t numColumns)
+{
+    /*
+     *   5   wth           --    ! is reference corner
+     * !-----             |  |   2 right, 1 down becomes
+     * | .  | 2 ht. -->   |  |   1 right, 2 up
+     * |    |             |  |
+     * ------             |. |
+     *                    |  |
+     *                    !--
+     */
+    const six::RowColDouble start(startSample * -1, startLine);
+    const six::RowColDouble end(endSample * -1, endLine);
+    startLine = start.row;
+    startSample = start.col;
+    endLine = end.row;
+    endSample = end.col;
+}
+
 
 Area::Area()
 {

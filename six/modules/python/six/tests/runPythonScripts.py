@@ -71,6 +71,7 @@ def run():
     cphd03Runner = PythonTestRunner(testsDir)
     result = result and cphd03Runner.run('test_round_trip_cphd.py', cphd03Pathname,
             'out.cphd')
+    os.remove(cphdPathname)
 
     # SIX tests
     testsDir = os.path.join(utils.findSixHome(), 'six',

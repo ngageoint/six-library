@@ -25,6 +25,7 @@
 #include <six/Data.h>
 #include <six/Utilities.h>
 #include <six/NITFSegmentInfo.h>
+#include <nitf/ImageSegmentComputer.h>
 
 namespace six
 {
@@ -44,23 +45,38 @@ namespace six
 class NITFImageInfo
 {
 public:
-
-    NITFImageInfo(Data* d,
-    		      size_t maxRows = Constants::ILOC_MAX,
+    /*!
+     * \param data Data associated with the NITF
+     * \param maxRows Maximum number of rows allowed in an image segment.
+     * Only applies when there is more than one image segment (we're ensuring
+     * that the 5 characters reserved for the row offset in ILOC don't
+     * overflow, so if there is only one image segment, there is no row offset
+     * and thus no restriction on the number of rows).  Defaults to ILOC_MAX.
+     * \param maxSize Maximum number of bytes allows in an image segment.
+     * Defaults to IS_SIZE_MAX which is the ~10 GB NITF limit.
+     * \param computeSegments Whether or not to compute segmentation at
+     * construction time.  Defaults to false.
+     * \param rowsPerBlock The number of rows in a NITF block.  Set this to 0
+     * if the NITF is not blocked.  This needs to be taken into account as it'll
+     * affect segmentation since NITFs always write entire NITF blocks even
+     * when there are fewer rows than a multiple of the block size.  Defaults to
+     * 0 (no blocking).
+     * \param colsPerBlock The number of columns in a NITF block.  Set this to
+     * 0 if the NITF is not blocked.  This needs to be taken into account as
+     * it'll affect segmentation since NITFs always write entire NITF blocks
+     * even when there are fewer columns than a multiple of the block size.
+     * Defaults to 0 (no blocking).
+     */
+    NITFImageInfo(Data* data,
+                  size_t maxRows = Constants::ILOC_MAX,
                   sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
-                  bool computeSegments = false) :
-        data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
-    {
-        productSize = (sys::Uint64_T) data->getNumBytesPerPixel()
-                * (sys::Uint64_T) data->getNumRows()
-                * (sys::Uint64_T) data->getNumCols();
-        if (computeSegments)
-            compute();
-    }
+                  bool computeSegments = false,
+                  size_t rowsPerBlock = 0,
+                  size_t colsPerBlock = 0);
 
     size_t getNumBitsPerPixel() const
     {
-        return data->getNumBytesPerPixel() / data->getNumChannels() * 8;
+        return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;
     }
 
     static
@@ -79,7 +95,7 @@ public:
 
     std::string getPixelValueType() const
     {
-        return getPixelValueType(data->getPixelType());
+        return getPixelValueType(mData->getPixelType());
     }
 
     static
@@ -102,7 +118,7 @@ public:
 
     std::string getRepresentation() const
     {
-        return getRepresentation(data->getPixelType());
+        return getRepresentation(mData->getPixelType());
     }
 
     static
@@ -122,49 +138,58 @@ public:
 
     std::string getMode() const
     {
-        return getMode(data->getPixelType());
+        return getMode(mData->getPixelType());
     }
 
     Data* getData() const
     {
-        return data;
+        return mData;
     }
 
     std::vector<NITFSegmentInfo> getImageSegments() const
     {
-        return imageSegments;
+        return mImageSegments;
     }
 
-    void addSegment(NITFSegmentInfo info)
+    /*!
+     * Adds a segment.  Note that the segmentation layout computed at
+     * construction time will no longer hold, so this should only be used
+     * when 'computeSegments' was false at construction or the segmentation
+     * layout is otherwise not being used.
+     *
+     * \param info The segment info to add
+     */
+    void addSegment(const NITFSegmentInfo& info)
     {
-        imageSegments.push_back(info);
+        mImageSegments.push_back(info);
     }
 
     size_t getStartIndex() const
     {
-        return startIndex;
-    }
-    void setStartIndex(size_t index)
-    {
-        startIndex = index;
+        return mStartIndex;
     }
 
-    //! Number of bytes in the product
-    sys::Uint64_T getProductSize() const
+    void setStartIndex(size_t index)
     {
-        return productSize;
+        mStartIndex = index;
+    }
+
+    //! \return Number of total bytes in the image
+    sys::Uint64_T getNumBytesTotal() const
+    {
+        return mSegmentComputer.getNumBytesTotal();
     }
 
     //! This is the total number of rows we can have in a NITF segment
     size_t getNumRowsLimit() const
     {
-        return numRowsLimit;
+        return mSegmentComputer.getNumRowsLimit();
     }
 
-    //! This is the total size that each product seg can be
-    sys::Uint64_T getMaxProductSize() const
+    //! \return Max number of bytes that each image segment can be
+    sys::Uint64_T getMaxNumBytesPerSegment() const
     {
-        return maxProductSize;
+        return mSegmentComputer.getMaxNumBytesPerSegment();
     }
 
     std::vector<nitf::BandInfo> getBandInfo() const;
@@ -214,8 +239,6 @@ public:
             const std::string& prefix = "", int index = -1);
 
 private:
-    void computeImageInfo();
-
     /*!
      *  This function figures out the parameters for each segment
      *  The algorithm follows the document.  The document does not
@@ -234,59 +257,12 @@ private:
      */
     void computeSegmentCorners();
 
-    /*!
-     *  This function is called by the container to determine
-     *  what the properties of the image segments will be.
-     *
-     */
-    void compute();
-
-    /*     NITFImageInfo() : data(NULL), startIndex(0), */
-    /*         numRowsLimit(Constants::ILOC_MAX), */
-    /*             maxProductSize(Constants::IS_SIZE_MAX)  {} */
-
-    /*!
-     *  By default, we use the IS_SIZE_MAX to determine the max product
-     *  size for an image segment, and if we have to segment, we
-     *  use the ILOC_MAX to determine the segment size (if that is
-     *  smaller than the product size).  These calls give the
-     *  user access to these limits and allows them to be overridden.
-     *
-     *  This method would typically only be used during product
-     *  prototyping and testing.  It should not be used to artificially
-     *  constrain actual products.
-     *
-     *  Do not attempt to use this method unless you understand the
-     *  segmentation rules.
-     *
-     */
-    /*      void setLimits(sys::Uint64_T maxSize, */
-    /*                     size_t maxRows) */
-    /*      { */
-
-    /*          if (maxSize > Constants::IS_SIZE_MAX) */
-    /*              throw except::Exception(Ctxt("You cannot exceed the IS_SIZE_MAX")); */
-
-    /*          if (maxRows > Constants::ILOC_MAX) */
-    /*              throw except::Exception(Ctxt("You cannot exceed the ILOC_MAX")); */
-
-    /*          maxProductSize = maxSize; */
-    /*          numRowsLimit = maxRows; */
-    /*      } */
-
 private:
-    Data* data;
+    Data* const mData;
 
-    size_t startIndex;
+    const nitf::ImageSegmentComputer mSegmentComputer;
 
-    //! Number of bytes in the product
-    sys::Uint64_T productSize;
-
-    //! This is the total number of rows we can have in a NITF segment
-    size_t numRowsLimit;
-
-    //! This is the total size that each product seg can be
-    sys::Uint64_T maxProductSize;
+    size_t mStartIndex;
 
     /*!
      *  This is a vector of segment information that is used to get
@@ -294,7 +270,7 @@ private:
      *
      *  Note that the number of segments has a hard limit of 999
      */
-    std::vector<NITFSegmentInfo> imageSegments;
+    std::vector<NITFSegmentInfo> mImageSegments;
 };
 
 //------------------------------------------------------------------------------
