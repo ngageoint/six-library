@@ -237,8 +237,9 @@ int main(int argc, char** argv)
         mem::SharedPtr<six::Container> container(new six::Container(
                 six::DataType::COMPLEX));
         container->addData(scopedData);
+        six::NITFWriteControl writer;
+        writer.setLogger(logger.get());
 
-        six::Options writerOptions;
         /*
          *  Under normal circumstances, the library uses the
          *  segmentation algorithm in the SICD spec, and numRowsLimit
@@ -253,14 +254,14 @@ int main(int argc, char** argv)
         if (maxRows > 0)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
-            writerOptions.setParameter(six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
+            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
                                              maxRows);
 
         }
         if (maxSize > 0)
         {
             std::cout << "Overriding NITF product size" << std::endl;
-            writerOptions.setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
+            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                                              maxSize);
         }
 
@@ -269,12 +270,11 @@ int main(int argc, char** argv)
             (sys::isBigEndianSystem() && fileHeader->isDifferentByteOrdering())
          || (!sys::isBigEndianSystem() && !fileHeader->isDifferentByteOrdering());
 
-        writerOptions.setParameter(
+        writer.getOptions().setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,
                 six::Parameter((sys::Uint16_T) needsByteSwap));
 
-        six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(logger.get());
+        writer.initialize(container);
         std::vector<io::InputStream*> sources;
         sources.push_back(&sioReader);
 

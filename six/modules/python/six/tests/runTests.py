@@ -34,7 +34,7 @@ import runUnitTests
 import checkNITFs
 import utils
 
-from runner import CppTestRunner, PythonTestRunner
+from runner import CppTestRunner
 
 
 def runCsmTests():
@@ -112,7 +112,7 @@ def run(sourceDir):
             return False
     else:
         print('Warning: skipping the bulk of the test suite, '
-              'since Python modules are by default disabled on Solaris')
+                'since Python modules are by default disabled on Solaris')
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
@@ -121,30 +121,26 @@ def run(sourceDir):
     sicdTestRunner = CppTestRunner(sicdTestDir)
     siddTestRunner = CppTestRunner(siddTestDir)
     sampleTestRunner = CppTestRunner(sampleTestDir)
-    pySicdTestRunner = PythonTestRunner(sicdTestDir)
 
     if os.path.exists(sicdDir) and os.path.exists(siddDir):
         sampleSicd = os.path.join(sicdDir, os.listdir(sicdDir)[0])
         sampleSidd = os.path.join(siddDir, os.listdir(siddDir)[0])
-        if not (sicdTestRunner.run('test_load_from_input_stream', sampleSicd) and
-                sicdTestRunner.run('test_streaming_write') and
-                pySicdTestRunner.run('test_projection_polynomials.py', sampleSicd) and
-                sicdTestRunner.run('test_sicd_byte_provider') and
-                runCsmTests() and
-                siddTestRunner.run('test_byte_swap') and
-                siddTestRunner.run('test_geotiff') and
-                siddTestRunner.run('test_check_blocking', sampleSidd) and
-                siddTestRunner.run('test_sidd_blocking', utils.installPath()) and
-                siddTestRunner.run('test_sidd_byte_provider')):
+        if not sicdTestRunner.run('test_load_from_input_stream', sampleSicd):
             return False
 
-        # This test is too expensive for Windows to handle
-        if platform.system() != 'Windows':
-            if not sampleTestRunner.run('test_large_offset'):
-                return False
+        if not sicdTestRunner.run('test_streaming_write'):
+            return False
 
-        if not sampleTestRunner.run(
-                'test_create_sidd_with_compressed_byte_provider'):
+        if not runCsmTests():
+            return False
+
+        if not (siddTestRunner.run('test_byte_swap') and
+                siddTestRunner.run('test_geotiff') and
+                siddTestRunner.run('test_check_blocking', sampleSidd) and
+                siddTestRunner.run('test_sidd_blocking', utils.installPath())):
+            return False
+
+        if not sampleTestRunner.run('test_large_offset'):
             return False
 
     if runUnitTests.run() == False:

@@ -77,15 +77,14 @@ public:
         return (sys::Off_T) mReader.getSize();
     }
 
-protected:
     /*!
      *  Read len bytes from the DES.  Returns the number of 
      *  bytes that succeeded (which is guaranteed to be len
      *  by SegmentReader)
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
     {
-        mReader.read(buffer, len);
+        mReader.read((NITF_DATA*) b, len);
         return len;
     }
 };

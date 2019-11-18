@@ -34,7 +34,6 @@
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
-#include <six/NITFHeaderCreator.h>
 
 namespace
 {
@@ -232,12 +231,15 @@ struct TestHelper
         buffers.push_back(buffer4.get());
 
         // Write it out
-        six::Options options;
-        options.setParameter(
-                six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
+        six::NITFWriteControl writer;
+
+        writer.getOptions().setParameter(
+                six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                 str::toString(maxSize));
 
-        six::NITFWriteControl writer(options, container, &mXmlRegistry);
+        writer.setXMLControlRegistry(&mXmlRegistry);
+        writer.initialize(container);
+
         writer.save(buffers, mPathname);
     }
 

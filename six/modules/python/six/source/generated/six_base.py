@@ -3001,6 +3001,7 @@ class Constants(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Constants, name)
     __repr__ = _swig_repr
+    ILOC_MAX = _six_base.Constants_ILOC_MAX
 
     def getNumBytesPerPixel(type):
         """getNumBytesPerPixel(PixelType type) -> int"""
@@ -3021,7 +3022,6 @@ Constants_swigregister = _six_base.Constants_swigregister
 Constants_swigregister(Constants)
 Constants.IS_SIZE_MAX = _six_base.cvar.Constants_IS_SIZE_MAX
 Constants.GT_SIZE_MAX = _six_base.cvar.Constants_GT_SIZE_MAX
-Constants.ILOC_MAX = _six_base.cvar.Constants_ILOC_MAX
 Constants.GT_XML_KEY = _six_base.cvar.Constants_GT_XML_KEY
 Constants.GT_XML_TAG = _six_base.cvar.Constants_GT_XML_TAG
 Constants.DES_VERSION = _six_base.cvar.Constants_DES_VERSION
@@ -3031,7 +3031,6 @@ Constants.DES_USER_DEFINED_SUBHEADER_ID = _six_base.cvar.Constants_DES_USER_DEFI
 Constants.DES_USER_DEFINED_SUBHEADER_LENGTH = _six_base.cvar.Constants_DES_USER_DEFINED_SUBHEADER_LENGTH
 Constants.SICD_DESSHSI = _six_base.cvar.Constants_SICD_DESSHSI
 Constants.SIDD_DESSHSI = _six_base.cvar.Constants_SIDD_DESSHSI
-Constants.EXCESS_BANDWIDTH_FACTOR = _six_base.cvar.Constants_EXCESS_BANDWIDTH_FACTOR
 
 def Constants_getNumBytesPerPixel(type):
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
@@ -3281,12 +3280,6 @@ class Parameter(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def __nonzero__(self):
-        return _six_base.Parameter___nonzero__(self)
-    __bool__ = __nonzero__
-
-
 
     def str(self):
         """str(Parameter self) -> std::string"""
@@ -4322,12 +4315,6 @@ class XMLControl(_object):
         return _six_base.XMLControl_dataTypeToString(dataType, appendXML)
 
     dataTypeToString = staticmethod(dataTypeToString)
-
-    def splitVersion(versionStr, version):
-        """splitVersion(std::string const & versionStr, VectorString version)"""
-        return _six_base.XMLControl_splitVersion(versionStr, version)
-
-    splitVersion = staticmethod(splitVersion)
 XMLControl_swigregister = _six_base.XMLControl_swigregister
 XMLControl_swigregister(XMLControl)
 
@@ -4337,10 +4324,6 @@ def XMLControl_dataTypeToString(dataType, appendXML=True):
     XMLControl_dataTypeToString(DataType dataType) -> std::string
     """
     return _six_base.XMLControl_dataTypeToString(dataType, appendXML)
-
-def XMLControl_splitVersion(versionStr, version):
-    """XMLControl_splitVersion(std::string const & versionStr, VectorString version)"""
-    return _six_base.XMLControl_splitVersion(versionStr, version)
 
 
 def remapZeroTo360(degree):
@@ -4686,12 +4669,6 @@ class ScopedCopyableRadiometric(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableRadiometric___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableRadiometric self) -> Radiometric"""
         return _six_base.ScopedCopyableRadiometric_get(self)
@@ -4809,12 +4786,6 @@ class ScopedCopyableErrorStatistics(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableErrorStatistics___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
         return _six_base.ScopedCopyableErrorStatistics_get(self)
@@ -4910,12 +4881,6 @@ class ScopedCopyableMatchInformation(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableMatchInformation___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
         return _six_base.ScopedCopyableMatchInformation_get(self)
@@ -5002,12 +4967,6 @@ class ScopedCopyableCorrCoefs(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableCorrCoefs___nonzero__(self)
-    __bool__ = __nonzero__
-
-
 
     def get(self):
         """get(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
@@ -5152,12 +5111,6 @@ class ScopedCopyablePosVelError(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyablePosVelError___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyablePosVelError self) -> PosVelError"""
         return _six_base.ScopedCopyablePosVelError_get(self)
@@ -5277,12 +5230,6 @@ class ScopedCopyableRadarSensor(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableRadarSensor___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableRadarSensor self) -> RadarSensor"""
         return _six_base.ScopedCopyableRadarSensor_get(self)
@@ -5382,12 +5329,6 @@ class ScopedCopyableTropoError(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableTropoError___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableTropoError self) -> TropoError"""
         return _six_base.ScopedCopyableTropoError_get(self)
@@ -5482,12 +5423,6 @@ class ScopedCopyableIonoError(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableIonoError___nonzero__(self)
-    __bool__ = __nonzero__
-
-
 
     def get(self):
         """get(ScopedCopyableIonoError self) -> IonoError"""
@@ -5588,12 +5523,6 @@ class ScopedCopyableCompositeSCP(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableCompositeSCP___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def get(self):
         """get(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
         return _six_base.ScopedCopyableCompositeSCP_get(self)
@@ -5692,12 +5621,6 @@ class ScopedCopyableComponents(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableComponents___nonzero__(self)
-    __bool__ = __nonzero__
-
-
 
     def get(self):
         """get(ScopedCopyableComponents self) -> Components"""
@@ -5911,12 +5834,6 @@ class ScopedCopyableMatchType(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableMatchType___nonzero__(self)
-    __bool__ = __nonzero__
-
-
 
     def get(self):
         """get(ScopedCopyableMatchType self) -> MatchType"""

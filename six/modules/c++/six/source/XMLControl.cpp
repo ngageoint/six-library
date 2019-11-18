@@ -23,8 +23,6 @@
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
 
-namespace
-{
 //! Validate the xml and log any errors
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
@@ -36,26 +34,21 @@ void validate(const xml::lite::Document* doc,
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     sys::OS os;
-
-    if (paths.empty() && os.isEnvSet(six::SCHEMA_PATH))
+    try
     {
-        std::string envPath = os.getEnv(six::SCHEMA_PATH);
-        str::trim(envPath);
-        if (!envPath.empty())
+        if (paths.empty())
         {
-            paths.push_back(envPath);
+            std::string envPath = os.getEnv(six::SCHEMA_PATH);
+            str::trim(envPath);
+            if (!envPath.empty())
+            {
+                paths.push_back(envPath);
+            }
         }
     }
-
-    // If the paths we have don't exist, throw
-    for (size_t ii = 0; ii < paths.size(); ++ii)
+    catch (const except::Exception& )
     {
-        if (!os.exists(paths[ii]))
-        {
-            std::ostringstream msg;
-            msg << paths[ii] << " does not exist!";
-            throw except::Exception(Ctxt(msg.str()));
-        }
+        // do nothing here
     }
 
     // validate against any specified schemas
@@ -72,11 +65,7 @@ void validate(const xml::lite::Document* doc,
                 "determined to use for validation"));
         }
 
-        // Pretty-print so that lines numbers are useful
-        io::StringStream xmlStream;
-        doc->getRootElement()->prettyPrint(xmlStream);
-
-        validator.validate(xmlStream,
+        validator.validate(doc->getRootElement(),
                            doc->getRootElement()->getUri(),
                            errors);
 
@@ -98,7 +87,6 @@ void validate(const xml::lite::Document* doc,
                 "produced and the schemas available"));
         }
     }
-}
 }
 
 namespace six

@@ -43,7 +43,6 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
-#include <six/NITFHeaderCreator.h>
 #include "utils.h"
 
 namespace
@@ -202,32 +201,38 @@ int main(int argc, char** argv)
 
         // Write it out
         {
-            six::Options options;
-            options.setParameter(
-                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
+            six::NITFWriteControl writer;
+
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            six::NITFWriteControl writer(options, container, &xmlRegistry);
+            writer.setXMLControlRegistry(&xmlRegistry);
+            writer.initialize(container);
+
             writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
         }
 
         // Write it out with blocking
         {
-            six::Options options;
-            options.setParameter(
-                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
+            six::NITFWriteControl writer;
+
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            const std::string blockSize("23");
-            options.setParameter(
-                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
+            const std::string blockSize("1024");
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
                     blockSize);
 
-            options.setParameter(
-                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
                     blockSize);
 
-            six::NITFWriteControl writer(options, container, &xmlRegistry);
+            writer.setXMLControlRegistry(&xmlRegistry);
+            writer.initialize(container);
+
             writer.save(buffers, outPathnamePrefix + "_blocked.nitf");
         }
 

@@ -23,11 +23,11 @@
 #
 
 
+import numpy
 import sys
 import traceback
 from datetime import datetime
 from pysix.six_base import DateTime
-
 
 def convertToPython():
     original = DateTime()
@@ -40,12 +40,11 @@ def convertToPython():
         assert(original.getMinute() == converted.minute)
         assert(int(original.getSecond()) == converted.second)
         microseconds = (original.getSecond() - int(original.getSecond())) * 1e6
-        assert(int(microseconds) == converted.microsecond)
-    except AssertionError:
+        assert(numpy.isclose(microseconds, converted.microsecond, rtol=1e-4))
+    except AssertionError as error:
         traceback.print_exc()
         return False
     return True
-
 
 def convertFromPython():
     original = datetime.now()
@@ -58,8 +57,8 @@ def convertFromPython():
         assert(converted.getMinute() == original.minute)
         assert(int(converted.getSecond()) == original.second)
         microsecond = (converted.getSecond() - int(converted.getSecond())) * 1e6
-        assert(round(microsecond) == original.microsecond)
-    except AssertionError:
+        assert(numpy.isclose(microsecond, original.microsecond, rtol=1e-4))
+    except AssertionError as error:
         traceback.print_exc()
         return False
     return True

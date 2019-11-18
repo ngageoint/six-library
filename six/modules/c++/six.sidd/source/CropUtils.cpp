@@ -237,7 +237,8 @@ void cropSIDD(const std::string& inPathname,
     }
 
     // Write the AOI SIDD out
-    six::NITFWriteControl writer(container);
+    six::NITFWriteControl writer;
+    writer.initialize(container);
     writer.save(buffers.get(), outPathname, schemaPaths);
 }
 }

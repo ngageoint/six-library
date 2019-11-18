@@ -22,7 +22,6 @@
 #ifndef __SIX_RADAR_COLLECTION_H__
 #define __SIX_RADAR_COLLECTION_H__
 
-#include <cmath>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -251,17 +250,15 @@ struct Segment
     Segment* clone() const;
 
     //! The number of lines in the segment
-    size_t getNumLines() const
+    int getNumLines() const
     {
-        // Rotating can make the start/end in reverse order,
-        // so need the absolute value
-        return std::abs(endLine - startLine) + 1;
+        return (endLine - startLine + 1);
     }
 
     //! The number of samples in the segment
-    size_t getNumSamples() const
+    int getNumSamples() const
     {
-        return std::abs(endSample - startSample) + 1;
+        return (endSample - startSample + 1);
     }
 
     /*!
@@ -303,13 +300,6 @@ struct Segment
     {
         return !(*this == rhs);
     }
-
-    /*!
-     * Rotate the segment counter clockwise
-     * \param numColumns How many columns are in the plane
-     */
-    void rotateCCW(size_t numColumns);
-
 };
 
 /*!
@@ -391,18 +381,6 @@ struct AreaPlane
      * \return Reference to Segment
      */
     const Segment& getSegment(const std::string& segmentId) const;
-
-    /*!
-     * Rotate the plane counterclockwise, updating the fields to match
-     */
-    void rotateCCW();
-
-    /*!
-     * Rotate the plane until it is shadows down.
-     * If the plane's orientation type is ARBITRARY or NOT_SET (or DOWN),
-     * no rotation will occur
-     */
-    void rotateToShadowsDown();
 };
 
 /*!

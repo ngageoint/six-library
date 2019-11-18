@@ -34,14 +34,12 @@ def run():
     success = True
     for childDir in childDirs:
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
-            if not test.endswith('.py'):
-                print(os.path.join(unitTestDir, childDir, test))
-                testPathname = os.path.join(unitTestDir, childDir, test)
-                if call([utils.executableName(testPathname)]) != 0:
-                    success = False
+            print(os.path.join(unitTestDir, childDir, test))
+            if call([utils.executableName(os.path.join(unitTestDir, childDir, test))]) != 0:
+                success = False
 
     return success
 
 if __name__ == '__main__':
     run()
-
+    

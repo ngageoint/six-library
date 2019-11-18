@@ -2274,13 +2274,13 @@ int main(int argc, char** argv)
             if (!smallImage)
             {
             writer->getOptions().setParameter(
-                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
                     IMAGE.width * IMAGE.height / 2);
             }
             else
             {
             writer->getOptions().setParameter(
-                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, 2);
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, 2);
             }
 
         }

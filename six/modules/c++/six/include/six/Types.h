@@ -130,7 +130,6 @@ struct Constants
     //!  This is the upper bound of a NITF segment
     static const sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
     static const sys::Uint64_T GT_SIZE_MAX;
-    static const size_t ILOC_MAX;
 
     static const unsigned short GT_XML_KEY;
     static const char GT_XML_TAG[];
@@ -146,7 +145,10 @@ struct Constants
     static const char SICD_DESSHSI[];
     static const char SIDD_DESSHSI[];
 
-    static const double EXCESS_BANDWIDTH_FACTOR;
+    enum
+    {
+        ILOC_MAX = 99999
+    };
 
     /*!
      *  If we have the PixelType, we know exactly how many bytes

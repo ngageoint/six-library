@@ -25,9 +25,7 @@
 #include <import/six.h>
 
 #include "six/sicd/Antenna.h"
-#include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/ComplexCollectionInformation.h"
-#include "six/CollectionInformation.h"
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/ComplexDataBuilder.h"
 #include "six/sicd/ComplexXMLControl.h"
@@ -37,12 +35,10 @@
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/ImageFormation.h"
-#include "six/MatchInformation.h"
 #include "six/sicd/PFA.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RadarCollection.h"
 #include "six/sicd/RgAzComp.h"
-#include "six/sicd/SICDMesh.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 

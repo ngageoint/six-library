@@ -106,16 +106,21 @@ public:
     void close();
 
 private:
+    void setComplexityLevelIfRequired();
+
     void writeHeaders();
 
-    void write(const std::vector<sys::byte>& data);
-
 private:
+    // TODO: You probably want to use a buffered IO for the initial small
+    //       writes of the file header but then a non-buffered IO for the image
+    //       writes (otherwise you're going to do a needless memcpy() for the
+    //       cases where you have partial rows).  Not sure how you could cleanly
+    //       handle this since you need to keep the same file descriptor open.
+    //       Probably would need to make a new IOInterface for this.
     std::auto_ptr<nitf::IOInterface> mIO;
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;
-    std::vector<NITFSegmentInfo> mImageSegmentInfo;
     bool mHaveWrittenHeaders;
 };
 }

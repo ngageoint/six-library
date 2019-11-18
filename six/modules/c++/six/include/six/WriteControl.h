@@ -227,15 +227,11 @@ public:
         mOwnLog = log ? ownLog : true;
     }
 
-    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
     {
-        setXMLControlRegistryImpl(xmlRegistry);
-    }
-
-    //! \return XML registry being used by the writer
-    const XMLControlRegistry* getXMLControlRegistry() const
-    {
-        return mXMLRegistry;
+        mXMLRegistry = xmlRegistry;
+        if (!mXMLRegistry)
+            mXMLRegistry = &XMLControlFactory::getInstance();
     }
 
     static
@@ -252,12 +248,6 @@ public:
     }
 
 protected:
-    void setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry)
-    {
-        mXMLRegistry = xmlRegistry;
-        if (!mXMLRegistry)
-            mXMLRegistry = &XMLControlFactory::getInstance();
-    }
     mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
