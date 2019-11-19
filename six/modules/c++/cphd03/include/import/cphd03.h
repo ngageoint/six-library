@@ -23,21 +23,20 @@
 #ifndef __IMPORT_CPHD03_H__
 #define __IMPORT_CPHD03_H__
 
+#include <import/cphd.h>
+
 #include "cphd03/Antenna.h"
 #include "cphd03/Channel.h"
 #include "cphd03/CPHDReader.h"
 #include "cphd03/CPHDWriter.h"
 #include "cphd03/CPHDXMLControl.h"
 #include "cphd03/Data.h"
-#include "cphd/Enums.h"
 #include "cphd03/FileHeader.h"
 #include "cphd03/Global.h"
 #include "cphd03/Metadata.h"
 #include "cphd03/SRP.h"
-#include "cphd/Types.h"
 #include "cphd03/Utilities.h"
 #include "cphd03/VBM.h"
 #include "cphd03/VectorParameters.h"
-#include "cphd/Wideband.h"
 
 #endif

@@ -23,6 +23,8 @@
 #ifndef __IMPORT_CPHD_H__
 #define __IMPORT_CPHD_H__
 
+#include <import/six.h>
+
 #include "cphd/Antenna.h"
 #include "cphd/Channel.h"
 #include "cphd/CPHDReader.h"
@@ -46,8 +48,5 @@
 #include "cphd/Types.h"
 #include "cphd/Utilities.h"
 #include "cphd/Wideband.h"
-#include "six/CollectionInformation.h"
-#include "six/MatchInformation.h"
-#include "six/sicd/GeoData.h"
 
 #endif
