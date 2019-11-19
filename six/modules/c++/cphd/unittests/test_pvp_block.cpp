@@ -155,7 +155,7 @@ TEST_CASE(testPvpOptional)
             pvpBlock.setFxN2(fxN2, channel, vector);
             const double addedParam1 = cphd::getRandom();
             pvpBlock.setAddedPVP(addedParam1, channel, vector, "Param1");
-            const std::string addedParam2 = "Param1";
+            const std::string addedParam2 = "Parameter2";
             pvpBlock.setAddedPVP(addedParam2, channel, vector, "Param2");
             const std::complex<int> addedParam3(3,4);
             pvpBlock.setAddedPVP(addedParam3, channel, vector, "Param3");

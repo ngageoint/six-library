@@ -36,8 +36,42 @@
 #include <cphd/ByteSwap.h>
 #include <six/Parameter.h>
 
+
+
 namespace cphd
 {
+/*
+ *  \struct AddedPVP
+ *  \brief Template Specialization to get additional pvp
+ *
+ *  Mimics function template specialization
+ *
+ * \tparam T Desired type to convert to
+ */
+template<typename T>
+struct AddedPVP
+{
+    T getAddedPVP(const six::Parameter& val) const
+    {
+        return static_cast<T>(val);
+    }
+};
+template<typename T>
+struct AddedPVP<std::complex<T> >
+{
+    std::complex<T> getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<T>();
+    }
+};
+template<>
+struct AddedPVP<std::string>
+{
+    std::string getAddedPVP(const six::Parameter& val) const
+    {
+        return val.str();
+    }
+};
 
 /*!
  *  \struct PVPBlock
@@ -137,6 +171,7 @@ struct PVPBlock
         {
             AddedPVP<T> aP;
             return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second);
+            // return AddPVPNamespace::getAddedPVP<T>(mData[channel][set].addedPVP.find(name)->second);
         }
         throw except::Exception(Ctxt(
                 "Parameter was not set"));
@@ -361,27 +396,6 @@ protected:
     friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
 
 private:
-    /*
-     *  Struct Template Specialization for getAddedPVP function
-     *  mimics function template specialization
-     */
-    template<typename T>
-    struct AddedPVP
-    {
-        T getAddedPVP(const six::Parameter& val) const
-        {
-            return static_cast<T>(val);
-        }
-    };
-    template<typename T>
-    struct AddedPVP<std::complex<T> >
-    {
-        std::complex<T> getAddedPVP(const six::Parameter& val) const
-        {
-            return val.getComplex<T>();
-        }
-    };
-
     //! The PVP Block [Num Channles][Num Parameters]
     std::vector<std::vector<PVPSet> > mData;
     //! Number of bytes per PVP vector
