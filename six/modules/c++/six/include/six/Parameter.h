@@ -67,6 +67,11 @@ public:
         mValue = str::toString<std::complex<T> >(mValue);
     }
 
+    //! Return a bool
+    inline operator bool() const
+    {
+        return str::toType<bool>(mValue);
+    }
     //!  Return a double
     inline operator double() const
     {

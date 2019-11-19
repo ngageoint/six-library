@@ -34,15 +34,6 @@ const char logging::XMLFormatter::DEFAULT_FORMAT[] =
 \t\t<Message>%m</Message>\n\
 \t</Record>";
 
-// add to this list as more characters are needed -- 
-// separate the xml non-safe from conversion by a comma
-//
-// &amp must be the first character, because it will replace
-// all other safe characters if it came later
-const char logging::XMLFormatter::XML_SAFE_CONVERSION[]       
-    = "&,&amp;,<,&lt;,>,&gt;,\",&quot;,',&apos;,\n, ,"; 
-
-
 logging::XMLFormatter::XMLFormatter() : logging::Formatter(DEFAULT_FORMAT, "<Log>", "</Log>")
 {
     // TODO: Generate a better prologue that contains
@@ -66,12 +57,8 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
     std::string line = str::toString<int>(record->getLineNum());
     std::string threadID =  str::toString(sys::getThreadID());
 
-
-    std::string xmlSC = XML_SAFE_CONVERSION;
-    std::vector<std::string> xmlSafeConvert = str::split(xmlSC, ",");
-    std::vector<std::string> logRecord;
-
     // populate vector with record
+    std::vector<std::string> logRecord;
     logRecord.push_back(threadID);
     logRecord.push_back(name);    
     logRecord.push_back(record->getLevelName());    
@@ -85,23 +72,7 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
     // update record with SGML escape characters
     for (size_t chr = 4; chr < logRecord.size(); chr++)
     { 
-        // every non-safe xml character pair
-        for (size_t xml = 0; xml < xmlSafeConvert.size(); xml += 2)          
-        {
-            // convert until no more cases are found
-            size_t start = 0;
-            while (start < logRecord[chr].length())
-            {
-                start = str::replace(logRecord[chr], 
-                                     xmlSafeConvert[xml], 
-                                     xmlSafeConvert[xml+1], 
-                                     start);
-
-                // incremented due to replacing 
-                // '&' to '&amp'
-                start++;
-            }
-        }
+        str::escapeForXML(logRecord[chr]);
     }
 
 

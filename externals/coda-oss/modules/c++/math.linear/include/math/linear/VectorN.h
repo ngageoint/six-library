@@ -398,7 +398,6 @@ template<size_t _ND, typename _T>
         os << std::setw(10) << v[i] << " ";
     }
     return os;
-    
 }
 } // linear
 } // math

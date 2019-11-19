@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <sstream>
+#include <limits>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -82,64 +83,45 @@ const char NITFImageInfo::SRDT[] = "SRDT";
 //!  File security control number
 const char NITFImageInfo::CTLN[] = "CTLN";
 
-void NITFImageInfo::computeImageInfo()
+
+NITFImageInfo::NITFImageInfo(Data* data,
+                             size_t maxRows,
+                             sys::Uint64_T maxSize,
+                             bool computeSegments,
+                             size_t rowsPerBlock,
+                             size_t colsPerBlock) :
+    mData(data),
+    mSegmentComputer(data->getNumRows(),
+                     data->getNumCols(),
+                     data->getNumBytesPerPixel(),
+                     maxRows,
+                     maxSize,
+                     rowsPerBlock,
+                     colsPerBlock),
+    mStartIndex(0)
 {
-    size_t bytesPerRow = data->getNumBytesPerPixel()
-            * data->getNumCols();
-
-    // This, to be safe, should be a 64bit number
-    sys::Uint64_T limit1 = (sys::Uint64_T) std::floor((double) maxProductSize
-            / (double) bytesPerRow);
-
-    if (limit1 == 0)
+    if (computeSegments)
     {
-        std::ostringstream ostr;
-        ostr << "maxProductSize [" << maxProductSize << "] < bytesPerRow ["
-             << bytesPerRow << "]";
-
-        throw except::Exception(Ctxt(ostr.str()));
-    }
-
-    if (limit1 < numRowsLimit)
-    {
-        numRowsLimit = static_cast<size_t>(limit1);
+        computeSegmentInfo();
     }
 }
 
 void NITFImageInfo::computeSegmentInfo()
 {
-    if (productSize <= maxProductSize)
+    // The segment computer figured out all the row sizes and offsets for us
+    // We just need to compute the segment corners
+    const std::vector<nitf::ImageSegmentComputer::Segment>& segments =
+            mSegmentComputer.getSegments();
+
+    mImageSegments.resize(segments.size());
+    for (size_t ii = 0; ii < mImageSegments.size(); ++ii)
     {
-        imageSegments.resize(1);
-        imageSegments[0].numRows = data->getNumRows();
-        imageSegments[0].firstRow = 0;
-        imageSegments[0].rowOffset = 0;
-        imageSegments[0].corners = data->getImageCorners();
-    }
+        const nitf::ImageSegmentComputer::Segment& segment(segments[ii]);
+        NITFSegmentInfo& imageSegment(mImageSegments[ii]);
 
-    else
-    {
-        // NOTE: See header for why rowOffset is always set to numRowsLimit
-        //       for image segments 1 and above
-        size_t numIS = (size_t) std::ceil(data->getNumRows()
-                / (double) numRowsLimit);
-        imageSegments.resize(numIS);
-        imageSegments[0].numRows = numRowsLimit;
-        imageSegments[0].firstRow = 0;
-        imageSegments[0].rowOffset = 0;
-        size_t i;
-        for (i = 1; i < numIS - 1; i++)
-        {
-            imageSegments[i].numRows = numRowsLimit;
-            imageSegments[i].firstRow = i * numRowsLimit;
-            imageSegments[i].rowOffset = numRowsLimit;
-        }
-
-        imageSegments[i].firstRow = i * numRowsLimit;
-        imageSegments[i].rowOffset = numRowsLimit;
-        imageSegments[i].numRows = data->getNumRows() - (numIS - 1)
-                * numRowsLimit;
-
+        imageSegment.firstRow = segment.firstRow;
+        imageSegment.rowOffset = segment.rowOffset;
+        imageSegment.numRows = segment.numRows;
     }
 
     computeSegmentCorners();
@@ -147,7 +129,7 @@ void NITFImageInfo::computeSegmentInfo()
 
 void NITFImageInfo::computeSegmentCorners()
 {
-    const LatLonCorners corners = data->getImageCorners();
+    const LatLonCorners corners = mData->getImageCorners();
 
     // (0, 0)
     Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
@@ -158,34 +140,34 @@ void NITFImageInfo::computeSegmentCorners()
     // (M, 0)
     Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
 
-    size_t numIS = imageSegments.size();
-    double total = data->getNumRows() - 1.0;
+    size_t numIS = mImageSegments.size();
+    double total = mData->getNumRows() - 1.0;
 
     Vector3 ecef;
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        size_t firstRow = imageSegments[i].firstRow;
+        size_t firstRow = mImageSegments[i].firstRow;
         double wgt1 = (total - firstRow) / total;
         double wgt2 = firstRow / total;
 
         // This requires an operator overload for scalar * vector
         ecef = wgt1 * icp1 + wgt2 * icp4;
 
-        imageSegments[i].corners.upperLeft =
+        mImageSegments[i].corners.upperLeft =
             scene::Utilities::ecefToLatLon(ecef);
 
         // Now do it for the first
         ecef = wgt1 * icp2 + wgt2 * icp3;
 
-        imageSegments[i].corners.upperRight =
+        mImageSegments[i].corners.upperRight =
             scene::Utilities::ecefToLatLon(ecef);
     }
 
     for (i = 0; i < numIS - 1; i++)
     {
-        LatLonCorners& theseCorners(imageSegments[i].corners);
-        const LatLonCorners& nextCorners(imageSegments[i + 1].corners);
+        LatLonCorners& theseCorners(mImageSegments[i].corners);
+        const LatLonCorners& nextCorners(mImageSegments[i + 1].corners);
 
         theseCorners.lowerRight.setLat(nextCorners.upperRight.getLat());
         theseCorners.lowerRight.setLon(nextCorners.upperRight.getLon());
@@ -195,25 +177,17 @@ void NITFImageInfo::computeSegmentCorners()
     }
 
     // This last one is cake
-    imageSegments[i].corners.lowerRight = corners.lowerRight;
-    imageSegments[i].corners.lowerLeft = corners.lowerLeft;
+    mImageSegments[i].corners.lowerRight = corners.lowerRight;
+    mImageSegments[i].corners.lowerLeft = corners.lowerLeft;
 
     // SHOULD WE JUST ASSUME THAT WHATEVER IS IN THE XML GeoData is what
     // we want?  For now, this makes sense
 }
 
-void NITFImageInfo::compute()
-{
-
-    computeImageInfo();
-    computeSegmentInfo();
-}
-
-
 std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo() const
 {
-    const GetDisplayLutFromData getLUT(*data);
-    return getBandInfoImpl<GetDisplayLutFromData>(data->getPixelType(), getLUT);
+    const GetDisplayLutFromData getLUT(*mData);
+    return getBandInfoImpl<GetDisplayLutFromData>(mData->getPixelType(), getLUT);
 }
 
 std::string NITFImageInfo::generateFieldKey(const std::string& field,

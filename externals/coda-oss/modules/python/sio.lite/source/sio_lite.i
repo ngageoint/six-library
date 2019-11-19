@@ -60,7 +60,7 @@ def dtypeFromSioType(elementType, elementSize):
                FileHeader.COMPLEX_FLOAT: 'complex'}
 
     if not elementType in typeMap:
-        raise Exception("Unknown element type: " + elementType)
+        raise Exception("Unknown element type: " + str(elementType))
 
     dtypeStr = "%s%s" % (typeMap[elementType], elementSize * 8)
 
@@ -91,23 +91,25 @@ def write(numpyArray, outputPathname, elementType = None):
     # Make sure this array is sized properly
     if len(numpyArray.shape) != 2:
         raise Exception("Only 2 dimensional images are supported")
+    if elementType is None:
+        elementType = numpyArray.dtype
 
-    if elementType == None:
-        elementType = sioTypeFromDtype(numpyArray.dtype)
-    
+    if type(elementType) != int:
+        elementType = sioTypeFromDtype(elementType)
+
     if not numpyArray.flags['C_CONTIGUOUS']:
         numpyArray = numpy.ascontiguousarray(numpyArray)
-            
-    header = FileHeader(numpyArray.shape[0], 
+
+    header = FileHeader(numpyArray.shape[0],
                         numpyArray.shape[1],
                         numpyArray.strides[1],
                         elementType);
-    
+
     pointer, ro = numpyArray.__array_interface__['data']
-    
+
     if pointer == 0 or pointer == None:
         raise Exception("Attempting to write a NULL image")
-    
+
     writer = FileWriter(outputPathname)
     writer.write(header, pointer)
 %}

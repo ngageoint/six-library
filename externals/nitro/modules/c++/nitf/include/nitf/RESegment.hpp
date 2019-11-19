@@ -53,14 +53,14 @@ public:
     RESegment(nitf_RESegment * x);
 
     //! Default Constructor
-    RESegment() throw(nitf::NITFException);
+    RESegment();
 
     RESegment(NITF_DATA * x);
 
     RESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::RESegment clone() throw(nitf::NITFException);
+    nitf::RESegment clone();
 
     ~RESegment();
 

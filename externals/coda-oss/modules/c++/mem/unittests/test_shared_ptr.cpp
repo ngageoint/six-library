@@ -20,6 +20,7 @@
  *
  */
 
+#include <config/coda_oss_config.h>
 #include <mem/SharedPtr.h>
 
 #include "TestCase.h"
@@ -62,6 +63,11 @@ struct BarPtrTest : public FooPtrTest
 
     mem::SharedPtr<Bar> mBarPtr;
 };
+
+size_t cpp11Function(std::shared_ptr<Foo> foo)
+{
+    return foo->mVal;
+}
 
 TEST_CASE(testNullCopying)
 {
@@ -249,6 +255,18 @@ TEST_CASE(testCasting)
         TEST_ASSERT_EQ(barPtr.getCount(), 3);
     }
 }
+
+TEST_CASE(testStdSharedPtr)
+{
+    const mem::SharedPtr<Foo> fooLegacy(new Foo(123));
+    std::shared_ptr<Foo> fooCtor(fooLegacy);
+    TEST_ASSERT_EQ(fooLegacy.get(), fooCtor.get());
+
+    std::shared_ptr<Foo> fooAssign = fooLegacy;
+    TEST_ASSERT_EQ(fooLegacy.get(), fooAssign.get());
+
+    TEST_ASSERT_EQ(cpp11Function(fooLegacy), 123);
+}
 }
 
 int main(int, char**)
@@ -260,6 +278,7 @@ int main(int, char**)
    TEST_CHECK(testAssigning);
    TEST_CHECK(testSyntax);
    TEST_CHECK(testCasting);
+   TEST_CHECK(testStdSharedPtr);
 
    return 0;
 }

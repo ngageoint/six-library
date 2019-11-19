@@ -20,10 +20,11 @@
  *
  */
 
-#include "nitf/ImageSubheader.hpp"
+#include <nitf/ImageIO.h>
+#include <nitf/ImageSubheader.hpp>
 
-using namespace nitf;
-
+namespace nitf
+{
 ImageSubheader::ImageSubheader(const ImageSubheader & x)
 {
     setNative(x.getNative());
@@ -42,7 +43,7 @@ ImageSubheader::ImageSubheader(nitf_ImageSubheader * x)
     getNativeOrThrow();
 }
 
-ImageSubheader::ImageSubheader() throw(nitf::NITFException)
+ImageSubheader::ImageSubheader()
 {
     setNative(nitf_ImageSubheader_construct(&error));
     getNativeOrThrow();
@@ -50,7 +51,7 @@ ImageSubheader::ImageSubheader() throw(nitf::NITFException)
 }
 
 
-nitf::ImageSubheader ImageSubheader::clone() throw(nitf::NITFException)
+nitf::ImageSubheader ImageSubheader::clone()
 {
     nitf::ImageSubheader dolly(nitf_ImageSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -68,9 +69,9 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          nitf::Uint32 abpp,
                          std::string justification,
                          std::string irep, std::string icat,
-                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
+                         std::vector<nitf::BandInfo>& bands)
 {
-    nitf::Uint32 bandCount = bands.size();
+    const size_t bandCount = bands.size();
     nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
             sizeof(nitf_BandInfo*) * bandCount);
     if (!bandInfo)
@@ -78,7 +79,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
     }
 
-    for (nitf::Uint32 i = 0; i < bandCount; i++)
+    for (size_t i = 0; i < bandCount; i++)
     {
         bandInfo[i] = nitf_BandInfo_clone(bands[i].getNative(), &error);
         if (!bandInfo[i])
@@ -87,29 +88,16 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
-        icat.c_str(), bandCount, bandInfo, &error);
+        icat.c_str(), static_cast<nitf::Uint32>(bandCount), bandInfo, &error);
     if (!x)
         throw nitf::NITFException(&error);
-}
-
-
-void ImageSubheader::setPixelInformation(std::string pvtype,
-                         nitf::Uint32 nbpp,
-                         nitf::Uint32 abpp,
-                         std::string justification,
-                         std::string irep, std::string icat,
-                         nitf::Uint32 bandCount,
-                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
-{
-    return setPixelInformation(pvtype, nbpp, abpp, justification, irep, icat,
-            bands);
 }
 
 void ImageSubheader::setBlocking(nitf::Uint32 numRows,
                      nitf::Uint32 numCols,
                      nitf::Uint32 numRowsPerBlock,
                      nitf::Uint32 numColsPerBlock,
-                     const std::string& imode) throw(nitf::NITFException)
+                     const std::string& imode)
 {
     NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
         numRows, numCols, numRowsPerBlock, numColsPerBlock, imode.c_str(),
@@ -134,7 +122,6 @@ void ImageSubheader::computeBlocking(nitf::Uint32 numRows,
 }
 
 void ImageSubheader::setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols)
-    throw(nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
         numRows, numCols, &error);
@@ -142,7 +129,7 @@ void ImageSubheader::setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols)
         throw nitf::NITFException(&error);
 }
 
-nitf::Uint32 ImageSubheader::getBandCount() throw(nitf::NITFException)
+nitf::Uint32 ImageSubheader::getBandCount()
 {
     nitf::Uint32 x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
     if (x == NITF_INVALID_BAND_COUNT)
@@ -150,7 +137,7 @@ nitf::Uint32 ImageSubheader::getBandCount() throw(nitf::NITFException)
     return x;
 }
 
-void ImageSubheader::createBands(nitf::Uint32 numBands) throw(nitf::NITFException)
+void ImageSubheader::createBands(nitf::Uint32 numBands)
 {
     if (!nitf_ImageSubheader_createBands(getNativeOrThrow(), numBands, &error))
         throw nitf::NITFException(&error);
@@ -159,7 +146,6 @@ void ImageSubheader::createBands(nitf::Uint32 numBands) throw(nitf::NITFExceptio
 
 void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
                                            double corners[4][2])
-    throw(nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
@@ -171,7 +157,6 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 }
 
 void ImageSubheader::getCornersAsLatLons(double corners[4][2])
-    throw(nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
@@ -182,7 +167,6 @@ void ImageSubheader::getCornersAsLatLons(double corners[4][2])
 }
 
 nitf::CornersType ImageSubheader::getCornersType()
-    throw(nitf::NITFException)
 {
     return nitf_ImageSubheader_getCornersType(getNativeOrThrow());
 }
@@ -337,7 +321,7 @@ nitf::Field ImageSubheader::getNumMultispectralImageBands()
     return nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
 }
 
-nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band) throw(nitf::NITFException)
+nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band)
 {
     return nitf::BandInfo(nitf_ImageSubheader_getBandInfo(
         getNativeOrThrow(), band, &error));
@@ -456,4 +440,35 @@ void ImageSubheader::setExtendedSection(nitf::Extensions value)
     //have the library manage the "new" one
     getNativeOrThrow()->extendedSection = value.getNative();
     value.setManaged(true);
+}
+
+size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock)
+{
+    if (numDimsPerBlock == 0)
+    {
+        return dim;
+    }
+    else
+    {
+        // If we're blocking then we'll always write full blocks due to how
+        // the NITF file layout works
+        const size_t numBlocks =
+                (dim / numDimsPerBlock) + (dim % numDimsPerBlock != 0);
+        return numBlocks * numDimsPerBlock;
+    }
+}
+
+size_t ImageSubheader::getNumBytesPerPixel() const
+{
+    const size_t numBitsPerPixel =
+            nitf::Field(getNativeOrThrow()->numBitsPerPixel);
+    return NITF_NBPP_TO_BYTES(numBitsPerPixel);
+}
+
+size_t ImageSubheader::getNumBytesOfImageData() const
+{
+    const size_t numBytes = getActualNumRows() * getActualNumCols() *
+            getNumImageBands() * getNumBytesPerPixel();
+    return numBytes;
+}
 }

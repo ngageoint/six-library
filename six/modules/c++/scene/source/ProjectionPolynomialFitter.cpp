@@ -21,6 +21,7 @@
  */
 
 #include <scene/ProjectionPolynomialFitter.h>
+#include <polygon/PolygonMask.h>
 
 namespace
 {
@@ -47,11 +48,11 @@ namespace scene
 const size_t ProjectionPolynomialFitter::DEFAULTS_POINTS_1D = 10;
 
 ProjectionPolynomialFitter::ProjectionPolynomialFitter(
-        const ProjectionModel& projModel,
-        const GridECEFTransform& gridTransform,
-        const types::RowCol<double>& outPixelStart,
-        const types::RowCol<size_t>& outExtent,
-        size_t numPoints1D) :
+    const ProjectionModel& projModel,
+    const GridECEFTransform& gridTransform,
+    const types::RowCol<double>& outPixelStart,
+    const types::RowCol<size_t>& outExtent,
+    size_t numPoints1D) :
     mNumPoints1D(numPoints1D),
     mOutputPlaneRows(numPoints1D, numPoints1D),
     mOutputPlaneCols(numPoints1D, numPoints1D),
@@ -81,25 +82,168 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
              jj < mNumPoints1D;
              ++jj, currentOffset.col += skip.col)
         {
-            // currentOffset refers to the spot in the global output grid, so
-            // we want to offset by outPixelStart so that we are in units of
-            // pixels in terms of our portion of this output grid
-            // That is, we want (outPixelStart.row, outPixelStart.col) to
-            // correspond to (0, 0) in our grid.
-            mOutputPlaneRows(ii, jj) = currentOffset.row - outPixelStart.row;
-            mOutputPlaneCols(ii, jj) = currentOffset.col - outPixelStart.col;
-
-            // Find ECEF location of this output plane pixel
-            const scene::Vector3 sPos =
-                    gridTransform.rowColToECEF(currentOffset);
-
-            // Call sceneToImage() to get meters from the slant plane SCP
-            double timeCOA(0.0);
-            mSceneCoordinates(ii, jj) =
-                    projModel.sceneToImage(sPos, &timeCOA);
-            mTimeCOA(ii, jj) = timeCOA;
+            projectToSlantPlane(projModel, gridTransform, outPixelStart,
+                                currentOffset, ii, jj);
         }
     }
+}
+
+ProjectionPolynomialFitter::ProjectionPolynomialFitter(
+        const ProjectionModel& projModel,
+        const GridECEFTransform& gridTransform,
+        const types::RowCol<size_t>& fullExtent,
+        const types::RowCol<double>& outPixelStart,
+        const types::RowCol<size_t>& outExtent,
+        const std::vector<types::RowCol<double> >& polygon,
+        size_t numPoints1D) :
+    mNumPoints1D(numPoints1D),
+    mOutputPlaneRows(numPoints1D, numPoints1D),
+    mOutputPlaneCols(numPoints1D, numPoints1D),
+    mSceneCoordinates(numPoints1D,
+                      numPoints1D,
+                      types::RowCol<double>(0.0, 0.0)),
+    mTimeCOA(numPoints1D, numPoints1D)
+{
+    // Get bounding rectangle of output plane polygon.
+    double minRow =  std::numeric_limits<double>::max();
+    double maxRow = -std::numeric_limits<double>::max();
+    double minCol =  std::numeric_limits<double>::max();
+    double maxCol = -std::numeric_limits<double>::max();
+
+    for (size_t ii = 0; ii < polygon.size(); ++ii)
+    {
+        minRow = std::min(minRow, polygon[ii].row);
+        maxRow = std::max(maxRow, polygon[ii].row);
+        minCol = std::min(minCol, polygon[ii].col);
+        maxCol = std::max(maxCol, polygon[ii].col);
+    }
+
+    if (minRow > static_cast<double>(fullExtent.row) ||
+        maxRow < 0 ||
+        minCol > static_cast<double>(fullExtent.col) ||
+        maxCol < 0)
+    {
+        throw except::Exception(Ctxt(
+            "Bounding rectangle is outside of output extent"));
+    }
+
+    // Only interested in pixels inside the fullExtent.
+    minRow = std::max(minRow, 0.0);
+    minCol = std::max(minCol, 0.0);
+    maxRow = std::min(maxRow, static_cast<double>(fullExtent.row) - 1);
+    maxCol = std::min(maxCol, static_cast<double>(fullExtent.col) - 1);
+
+    // Get size_t extent of the set of points.
+    const size_t minRowI = static_cast<size_t>(std::ceil(minRow));
+    const size_t minColI = static_cast<size_t>(std::ceil(minCol));
+    const size_t maxRowI = static_cast<size_t>(std::floor(maxRow));
+    const size_t maxColI = static_cast<size_t>(std::floor(maxCol));
+
+    if (minRowI > maxRowI || minColI > maxColI)
+    {
+        throw except::Exception(Ctxt(
+            "Bounding rectangle has no area"));
+    }
+
+    // The offset and extent are relative to the entire global output plane.
+    const types::RowCol<double> boundingOffset(
+        static_cast<double>(minRowI),
+        static_cast<double>(minColI));
+    const types::RowCol<size_t> boundingExtent(maxRowI - minRowI + 1,
+                                               maxColI - minColI + 1);
+
+    // Get the PolygonMas. For each row of the polygon this will determine
+    // the first and last column of the row inside the convex hull of the
+    // polygon sent in.
+    const polygon::PolygonMask polygonMask(polygon, fullExtent);
+    
+    // Compute a delta in the row direction as if the entire bounding row 
+    // extent will be covered by the point grid.
+    const double initialDeltaRow =
+        static_cast<double>(boundingExtent.row - 1) / (numPoints1D - 1);
+
+    // Scale factor for shrinking the row extent.
+    const double shrinkFactor = 0.1;
+
+    // Shring the row extent a bit.
+    const double deltaToRemove = initialDeltaRow * shrinkFactor;
+
+    // Get the new row start and end values.
+    const size_t newStartRow = static_cast<size_t>(
+        std::ceil(boundingOffset.row + deltaToRemove));
+    const size_t newEndRow = static_cast<size_t>(
+        std::floor(boundingOffset.row + boundingExtent.row - 1 -
+                   deltaToRemove));
+
+    // Check the new row extent.
+    if (newStartRow > newEndRow)
+    {
+        throw except::Exception(Ctxt(
+            "New bounding rectangle has no area"));
+    }
+
+    // Compute the row exent.
+    const size_t newExtentRow = (newEndRow - newStartRow + 1);
+    
+    // Compute the delta in the row direction for the new extent.
+    const double newDeltaRow =
+         static_cast<double>(newExtentRow - 1) / 
+         static_cast<double>(numPoints1D - 1);
+
+    double currentOffsetRow = static_cast<double>(newStartRow);
+    for (size_t ii = 0; ii < numPoints1D; ++ii, currentOffsetRow += newDeltaRow)
+    {
+        double currentRow = std::floor(currentOffsetRow);
+        size_t row = static_cast<size_t>(currentRow);
+
+        // Get the start column and number of columns inside the polygon row
+        // the current row.
+        const types::Range colRange = polygonMask.getRange(row);
+
+        // Check that there are internal points.
+        if (colRange.mNumElements == 0)
+        {
+            throw except::Exception(Ctxt(
+                "Column range has no elements"));
+        }
+
+        // Compute the delta in the column direction to cover the internal
+        // points.
+        const double newDeltaCol =
+            static_cast<double>(colRange.mNumElements - 1) /
+            static_cast<double>(numPoints1D - 1);
+
+        double currentCol = static_cast<double>(colRange.mStartElement);
+        for (size_t jj = 0; jj < numPoints1D; ++jj, currentCol += newDeltaCol)
+        {
+            const types::RowCol<double> currentOffset(currentRow, currentCol);
+            projectToSlantPlane(projModel, gridTransform, outPixelStart,
+                currentOffset, ii, jj);
+        }
+    }
+}
+
+void ProjectionPolynomialFitter::projectToSlantPlane(
+    const ProjectionModel& projModel,
+    const GridECEFTransform& gridTransform,
+    const types::RowCol<double>& outPixelStart,
+    const types::RowCol<double>& currentOffset,
+    size_t row,
+    size_t col)
+{
+    // Get the coordinate relative to the outPixelStart.
+    mOutputPlaneRows(row, col) = currentOffset.row - outPixelStart.row;
+    mOutputPlaneCols(row, col) = currentOffset.col - outPixelStart.col;
+
+    // Find ECEF of the output plane pixel.
+    const scene::Vector3 ecef =
+        gridTransform.rowColToECEF(currentOffset);
+
+    // Project ECEF coordinate into the slant plane and get meters from
+    // the slant plane scene center point.
+    double timeCOA(0.0);
+    mSceneCoordinates(row, col) = projModel.sceneToImage(ecef, &timeCOA);
+    mTimeCOA(row, col) = timeCOA;
 }
 
 void ProjectionPolynomialFitter::getSlantPlaneSamples(

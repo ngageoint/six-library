@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,6 +25,8 @@
 // writes via NITFWriteControl
 
 #include <iostream>
+
+#include "TestUtilities.h"
 
 #include <import/six.h>
 #include <import/io.h>
@@ -212,107 +214,6 @@ void subsetData(const T* orig,
     }
 }
 
-// Read in the entire contents of a file into 'contents'
-void readFile(const std::string& pathname,
-              std::vector<sys::byte>& contents)
-{
-    io::FileInputStream inStream(pathname);
-
-    contents.resize(inStream.available());
-
-    const size_t numRead = inStream.read(&contents[0], contents.size());
-    if (numRead != contents.size())
-    {
-        throw except::Exception(Ctxt("Short read"));
-    }
-}
-
-// Note that this will work because SIX is forcing the NITF date/time to match
-// what's in the SICD XML and we're writing the same SICD XML in all our files
-class CompareFiles
-{
-public:
-    CompareFiles(const std::string& lhsPathname)
-    {
-        readFile(lhsPathname, mLHS);
-    }
-
-    bool operator()(const std::string& prefix,
-                    const std::string& rhsPathname) const
-    {
-        readFile(rhsPathname, mRHS);
-
-        if (mLHS == mRHS)
-        {
-            std::cout << prefix << " matches" << std::endl;
-            return true;
-        }
-        else if (mLHS.size() != mRHS.size())
-        {
-            std::cerr << prefix << " DOES NOT MATCH: file sizes are "
-                      << mLHS.size() << " vs. " << mRHS.size() << " bytes"
-                      << std::endl;
-        }
-        else
-        {
-            size_t ii;
-            for (ii = 0; ii < mLHS.size(); ++ii)
-            {
-                if (mLHS[ii] != mRHS[ii])
-                {
-                    break;
-                }
-            }
-
-            std::cerr << prefix << " DOES NOT MATCH at byte " << ii
-                      << std::endl;
-        }
-
-        return false;
-    }
-
-private:
-    std::vector<sys::byte> mLHS;
-    mutable std::vector<sys::byte> mRHS;
-};
-
-// Makes sure a file gets removed
-// Both makes sure we start with a clean slate each time and that there are no
-// leftover files if an exception occurs
-class EnsureFileCleanup
-{
-public:
-    EnsureFileCleanup(const std::string& pathname) :
-        mPathname(pathname)
-    {
-        removeIfExists();
-    }
-
-    ~EnsureFileCleanup()
-    {
-        try
-        {
-            removeIfExists();
-        }
-        catch (...)
-        {
-        }
-    }
-
-private:
-    void removeIfExists()
-    {
-        sys::OS os;
-        if (os.exists(mPathname))
-        {
-            os.remove(mPathname);
-        }
-    }
-
-private:
-    const std::string mPathname;
-};
-
 // Main test class
 template <typename DataTypeT>
 class Tester
@@ -376,12 +277,12 @@ private:
         }
     }
 
-    void setMaxProductSize(six::NITFWriteControl& writer)
+    void setMaxProductSize(six::Options& options)
     {
         if (mSetMaxProductSize)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
     }
 
@@ -407,12 +308,11 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    mContainer->addData(createData<DataTypeT>(mDims));
+    mContainer->addData(createData<DataTypeT>(mDims).release());
 
-    six::NITFWriteControl writer;
-    setMaxProductSize(writer);
-    writer.initialize(mContainer);
-
+    six::Options options;
+    setMaxProductSize(options);
+    six::NITFWriteControl writer(options, mContainer);
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
@@ -426,9 +326,10 @@ void Tester<DataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
@@ -441,9 +342,10 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     types::RowCol<size_t> offset(40, 0);
@@ -491,9 +393,11 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
+
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     // Cols [400, 456)

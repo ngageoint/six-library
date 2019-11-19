@@ -20,38 +20,10 @@
  *
  */
 
+#include <except/Context.h>
 
-#include <iostream>
-#include "except/Context.h"
-
-/*!
- * \file Context.cpp
- * \brief defines a class that contains the information surrounding an
- * exception or error.
- */
-
-except::Context::Context(const except::Context& c)
+namespace except
 {
-    mMessage = c.getMessage();
-    mTime = c.getTime();
-    mFunc = c.getFunction();
-    mFile = c.getFile();
-    mLine = c.getLine();
-}
-
-except::Context& except::Context::operator=(const except::Context& c)
-{
-    if (&c != this)
-    {
-        mMessage = c.getMessage();
-        mTime = c.getTime();
-        mFunc = c.getFunction();
-        mFile = c.getFile();
-        mLine = c.getLine();
-    }
-    return *this;
-}
-
 std::ostream& operator<< (std::ostream& os, const except::Context& c)
 {
     os << "(" << c.getFile() << ", ";
@@ -61,4 +33,4 @@ std::ostream& operator<< (std::ostream& os, const except::Context& c)
     os << c.getMessage() << "' ";
     return os;
 }
-
+}

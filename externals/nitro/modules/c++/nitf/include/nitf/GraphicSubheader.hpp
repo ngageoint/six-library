@@ -55,10 +55,10 @@ public:
     GraphicSubheader(nitf_GraphicSubheader * x);
 
     //! Default Constructor
-    GraphicSubheader() throw(nitf::NITFException);
+    GraphicSubheader();
 
     //! Clone
-    nitf::GraphicSubheader clone() throw(nitf::NITFException);
+    nitf::GraphicSubheader clone();
 
     ~GraphicSubheader();
 

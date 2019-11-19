@@ -24,7 +24,9 @@
 
 #include <import/six.h>
 
+#include "six/MatchInformation.h"
 #include "six/sicd/Antenna.h"
+#include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/ComplexDataBuilder.h"
@@ -39,6 +41,7 @@
 #include "six/sicd/Position.h"
 #include "six/sicd/RadarCollection.h"
 #include "six/sicd/RgAzComp.h"
+#include "six/sicd/SICDMesh.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
 

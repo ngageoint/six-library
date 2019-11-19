@@ -73,7 +73,11 @@ typedef nrt_Int64 nrt_Off;
 #      define  NRT_ACCESS_READWRITE GENERIC_READ|GENERIC_WRITE
 
 /* type suffixes */
+#if defined(__GNUC__)
+#      define  NRT_INT64(x) x##LL
+#else
 #      define  NRT_INT64(x) x##i64
+#endif
 
 #else
 /*

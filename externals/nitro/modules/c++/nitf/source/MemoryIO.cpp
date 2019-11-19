@@ -26,13 +26,13 @@ namespace nitf
 {
 nitf_IOInterface* MemoryIO::create(void* buffer,
                                    size_t size,
-                                   bool adopt) throw(nitf::NITFException)
+                                   bool adopt)
 {
     nitf_Error error;
-    nitf_IOInterface* const interface = nitf_BufferAdapter_construct(
+    nitf_IOInterface* const ioInterface = nitf_BufferAdapter_construct(
             static_cast<char*>(buffer), size, adopt, &error);
 
-    if (!interface)
+    if (!ioInterface)
     {
         if (adopt)
         {
@@ -42,10 +42,10 @@ nitf_IOInterface* MemoryIO::create(void* buffer,
         throw nitf::NITFException(&error);
     }
 
-    return interface;
+    return ioInterface;
 }
 
-MemoryIO::MemoryIO(size_t capacity) throw(nitf::NITFException) :
+MemoryIO::MemoryIO(size_t capacity) :
     IOInterface(create(NRT_MALLOC(capacity), capacity, true))
 {
     // NOTE: We are telling the C layer to adopt this memory which means it
@@ -55,8 +55,7 @@ MemoryIO::MemoryIO(size_t capacity) throw(nitf::NITFException) :
 }
 
 MemoryIO::MemoryIO(void* buffer, size_t size, bool adopt)
-        throw(nitf::NITFException) :
-    IOInterface(create(buffer, size, adopt))
+  : IOInterface(create(buffer, size, adopt))
 {
     setManaged(false);
 }

@@ -24,25 +24,28 @@
 
 using namespace zip;
 
-GZipOutputStream::GZipOutputStream(std::string file)
+GZipOutputStream::GZipOutputStream(const std::string& file)
 {
     mFile = gzopen(file.c_str(), "wb");
     if (mFile == NULL)
-        throw except::IOException(Ctxt(FmtX("Failed to open gzip stream [%s]",
-                file.c_str())));
+    {
+        throw except::IOException(Ctxt(
+                "Failed to open gzip stream [" + file + "]"));
+    }
 
 }
 
-void GZipOutputStream::write(const sys::byte* b, sys::Size_T len)
+void GZipOutputStream::write(const void* buffer, size_t len)
 {
-    sys::Size_T written = 0;
+    size_t written = 0;
     int rv = 0;
+    const sys::byte* const bufferPtr = static_cast<const sys::byte*>(buffer);
     do
     {
-        rv = gzwrite(mFile, (const voidp)&(b[written]), len - written);
+        rv = gzwrite(mFile, bufferPtr + written, len - written);
         if (rv < 0)
         {
-            std::string err(gzerror(mFile, &rv));
+            const std::string err(gzerror(mFile, &rv));
             throw except::Exception(Ctxt(err));
         }
         if (!rv)
@@ -58,5 +61,3 @@ void GZipOutputStream::close()
     gzclose( mFile);
     mFile = NULL;
 }
-
-

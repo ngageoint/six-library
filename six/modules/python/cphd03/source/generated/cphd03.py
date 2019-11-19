@@ -2138,6 +2138,11 @@ class Wideband(_object):
         return _cphd03.Wideband_getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample)
 
 
+    def getElementSize(self):
+        """getElementSize(Wideband self) -> size_t"""
+        return _cphd03.Wideband_getElementSize(self)
+
+
     def readImpl(self, channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, data):
         """readImpl(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, long long data)"""
         return _cphd03.Wideband_readImpl(self, channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, data)
@@ -2296,8 +2301,8 @@ import multiprocessing
 from coda.coda_types import RowColSizeT
 
 def toBuffer(self, channel = 0):
-
-    numpyArray = numpy.empty(shape = ((self.getVBMsize(channel) / 8)), dtype = 'double')
+    numpyArray = numpy.empty(shape = int((self.getVBMsize(channel) / 8)),
+                             dtype = 'double')
     pointer, ro = numpyArray.__array_interface__['data']
 
     self.getVBMdata(channel, pointer)
@@ -2327,13 +2332,9 @@ def write(self, pathname, data, vbm, channel):
 
     dims = RowColSizeT(data.shape[0], data.shape[1])
     self.addImageImpl(imagePointer, dims, vbmPointer)
-    self.write(pathname)
-
-def __del__(self):
-    self.close()
+    self.write()
 
 CPHDWriter.writeCPHD = write
-CPHDWriter.__del__ = __del__
 
 def read(self,
          channel = 0,
@@ -2344,10 +2345,10 @@ def read(self,
          numThreads = multiprocessing.cpu_count()):
 
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
-    sampleType = self.getSampleType()
+    sampleTypeSize = self.getElementSize()
 
 # RF32F_IM32F
-    if sampleType == 1:
+    if sampleTypeSize == 8:
         dtype = 'complex64'
     else:
         raise Exception('Unknown element type')
@@ -3266,6 +3267,12 @@ class ScopedCopyableDwellTimeParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableDwellTimeParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd03.ScopedCopyableDwellTimeParameters_get(self)
@@ -3335,6 +3342,12 @@ class ScopedCopyableAreaPlane(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableAreaPlane___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
@@ -3435,6 +3448,12 @@ class ScopedCopyableFxParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableFxParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd03.ScopedCopyableFxParameters_get(self)
@@ -3534,6 +3553,12 @@ class ScopedCopyableTOAParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableTOAParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd03.ScopedCopyableTOAParameters_get(self)
@@ -3624,6 +3649,12 @@ class ScopedCopyableCphdAntenna(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _cphd03.ScopedCopyableCphdAntenna___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""

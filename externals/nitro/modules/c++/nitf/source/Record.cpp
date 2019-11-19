@@ -20,10 +20,13 @@
  *
  */
 
-#include "nitf/Record.hpp"
+#include <string.h>
 
-using namespace nitf;
+#include <nitf/ComplexityLevel.h>
+#include <nitf/Record.hpp>
 
+namespace nitf
+{
 Record::Record(const Record & x)
 {
     setNative(x.getNative());
@@ -42,14 +45,14 @@ Record::Record(nitf_Record * x)
     getNativeOrThrow();
 }
 
-Record::Record(nitf::Version version) throw(nitf::NITFException)
+Record::Record(nitf::Version version)
 {
     setNative(nitf_Record_construct(version, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::Record Record::clone() const throw(nitf::NITFException)
+nitf::Record Record::clone() const
 {
     nitf::Record dolly(nitf_Record_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -292,4 +295,25 @@ void Record::moveReservedExtensionSegment(nitf::Uint32 oldIndex, int newIndex)
     if (NITF_SUCCESS != nitf_Record_moveReservedExtensionSegment(getNativeOrThrow(),
         oldIndex, newIndex, &error))
         throw nitf::NITFException(&error);
+}
+
+void Record::setComplexityLevelIfUnset()
+{
+    // Fill out the complexity level if they didn't set it
+    char* const clevelRaw =
+            getHeader().getComplianceLevel().getRawData();
+
+    if (!strncmp(clevelRaw, "00", 2))
+    {
+        const NITF_CLEVEL clevel =
+                nitf_ComplexityLevel_measure(getNativeOrThrow(), &error);
+
+        if (clevel == NITF_CLEVEL_CHECK_FAILED)
+        {
+            throw nitf::NITFException(&error);
+        }
+
+        nitf_ComplexityLevel_toString(clevel, clevelRaw);
+    }
+}
 }

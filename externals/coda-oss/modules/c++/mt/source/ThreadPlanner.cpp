@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include <math/Round.h>
 #include <mt/ThreadPlanner.h>
 
 namespace mt
@@ -13,8 +14,7 @@ ThreadPlanner::ThreadPlanner(size_t numElements, size_t numThreads) :
     // If there are leftovers, add one more to the elements per thread value
     // What this will amount to meaning is that early threads will end up with
     // one more piece of work than later threads.
-    mNumElementsPerThread =
-            (mNumElements / mNumThreads) + (mNumElements % mNumThreads != 0);
+    mNumElementsPerThread = math::ceilingDivide(mNumElements, mNumThreads);
 }
 
 bool ThreadPlanner::getThreadInfo(size_t threadNum,
@@ -37,10 +37,16 @@ bool ThreadPlanner::getThreadInfo(size_t threadNum,
 
 size_t ThreadPlanner::getNumThreadsThatWillBeUsed() const
 {
-    const size_t numThreads =
-            (mNumElements / mNumElementsPerThread) +
-            (mNumElements % mNumElementsPerThread != 0);
+    if (mNumElementsPerThread == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        const size_t numThreads =
+                math::ceilingDivide(mNumElements, mNumElementsPerThread);
 
-    return numThreads;
+        return numThreads;
+    }
 }
 }

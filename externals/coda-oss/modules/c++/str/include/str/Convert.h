@@ -45,7 +45,7 @@ template<typename T> int getPrecision(const std::complex<T>& type);
 template<typename T> std::string toString(const T& value)
 {
     std::ostringstream buf;
-    buf.precision(str::getPrecision(value));
+    buf.precision(getPrecision(value));
     buf << std::boolalpha << value;
     return buf.str();
 }
@@ -171,7 +171,7 @@ template<> int getPrecision(const long double& type);
  @throw BadCastException thrown if cast cannot be performed.
  */
 template<typename T>
-T generic_cast(const std::string& value) throw (except::BadCastException)
+T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }

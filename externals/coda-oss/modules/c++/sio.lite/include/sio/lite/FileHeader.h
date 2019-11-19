@@ -57,6 +57,11 @@ public:
     /** N-Byte signed */
     static const int N_BYTE_SIGNED = 22;
 
+    /*!
+     * SIOs can either have a basic header which is always of length 20 or a
+     * more complex header which has extra freeform key/value pairs
+     */
+    static const size_t BASIC_HEADER_LENGTH = 20;
 
     /**
      *  Constructor.
@@ -170,8 +175,7 @@ public:
      *  Get the raw byte user data for a given user data ID.
      *  @return An array of user data for a given key
      */
-    std::vector<sys::byte>& getUserData(const std::string& key)
-        throw (except::NoSuchKeyException);
+    std::vector<sys::byte>& getUserData(const std::string& key);
 
     /**
      *  Get back the whole hash table

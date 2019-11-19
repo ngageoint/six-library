@@ -66,10 +66,10 @@ public:
     Record(nitf_Record * x);
 
     //! Default Constructor
-    Record(nitf::Version version = NITF_VER_21) throw(nitf::NITFException);
+    Record(nitf::Version version = NITF_VER_21);
 
     //! Clone
-    nitf::Record clone() const throw(nitf::NITFException);
+    nitf::Record clone() const;
 
     ~Record();
 
@@ -154,6 +154,17 @@ public:
 
     //! Move the RE segment from the oldIndex to the newIndex
     void moveReservedExtensionSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+
+    /*!
+     * If the CLEVEL field in this object is not set, computes the complexity
+     * level of the NITF based on the Record's contents and sets it.
+     *
+     * \note Normally you don't have to call this method directly as the
+     * underlying Writer object will compute this before writing out the NITF.
+     * This is only necessary if you are using NITRO to populate the headers
+     * but then using something else to do the actual writing.
+     */
+    void setComplexityLevelIfUnset();
 
 private:
     mutable nitf_Error error;

@@ -23,7 +23,6 @@
 #include "nitf/WriteHandler.hpp"
 
 void nitf::WriteHandler::write(nitf::IOInterface& handle)
-        throw (nitf::NITFException)
 {
     nitf_WriteHandler *handler = getNativeOrThrow();
     if (handler && handler->iface)

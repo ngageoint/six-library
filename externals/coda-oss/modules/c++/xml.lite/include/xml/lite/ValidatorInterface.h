@@ -160,15 +160,14 @@ public:
                           std::vector<ValidationInfo>& errors) const = 0;
 
 };
-}
-}
 
-inline std::ostream& operator<< (
-    std::ostream& out, 
-    const xml::lite::ValidationInfo& info)
+inline std::ostream& operator<< (std::ostream& out,
+                                 const ValidationInfo& info)
 {
     out << info.toString();
     return out;
+}
+}
 }
 
 #endif

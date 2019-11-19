@@ -67,11 +67,20 @@ FILE* ExecPipe::openPipe(const std::string& command,
             // connect the pipes we create to stdin or stdout
             if (type == "r")
             {
-                // reset stdout to the outpipe if it isn't already
+                // reset both stdout and stderr to the outpipe
+                // only close the descriptor if it is not already one of them
                 if (pIO[WRITE_PIPE] != fileno(stdout))
                 {
                     dup2(pIO[WRITE_PIPE], fileno(stdout));
-                    close(pIO[WRITE_PIPE]);
+                    if (pIO[WRITE_PIPE] != fileno(stderr))
+                    {
+                        dup2(pIO[WRITE_PIPE], fileno(stderr));
+                        close(pIO[WRITE_PIPE]);
+                    }
+                }
+                else if (pIO[WRITE_PIPE] != fileno(stderr))
+                {
+                    dup2(pIO[WRITE_PIPE], fileno(stderr));
                 }
 
                 // close the in pipe accordingly

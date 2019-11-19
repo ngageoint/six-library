@@ -145,21 +145,21 @@ public:
         return inputStream->available();
     }
 
+protected:
     /**
      *  Implements the necessary function to make this
      *  all work.
      *
      * NOTE: You will need to byteswap if the endianness of the
      * machine is different from the stream endianness.
-     *  @param b The byte buffer to read into
+     *  @param buffer The byte buffer to read into
      *  @param size the Number of bytes to read
      *  @return The number of bytes read
      */
-    sys::SSize_T read(sys::byte* b, size_t size)
+    virtual sys::SSize_T readImpl(void* buffer, size_t size)
     {
-        return inputStream->read(b, size);
+        return inputStream->read(buffer, size);
     }
-protected:
 
     /**
      *  Read the next integer in the stream.  This is vital for

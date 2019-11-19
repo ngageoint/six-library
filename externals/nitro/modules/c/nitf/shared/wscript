@@ -3,7 +3,6 @@ from waflib import Options
 from os.path import splitext, dirname, join
 
 MAINTAINER         = 'adam.sylvester@mdaus.com'
-VERSION            = '1.0'
 LANG               = 'c'
 USE                = 'nitf-c'
 PLUGIN             = 'nitf'
@@ -24,7 +23,7 @@ def configure(conf):
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant]
-    
+
     pluginList = []
     tres = bld.path.ant_glob('*.c')
 
@@ -40,6 +39,7 @@ def build(bld):
         kw['LIBNAME'] = treName
         kw['INCLUDES'] = []
         kw['EXPORT_INCLUDES'] = []
+        kw['VERSION'] = bld.env['VERSION']
 
         # Build the TRE as a plugin
         kw['NAME'] = treName

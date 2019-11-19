@@ -38,7 +38,7 @@ class IOStreamReader : public CustomIO
 public:
     /*
      *  \func Constructor
-     *  \brief Sets up the stream reader from an seekable input stream.
+     *  \brief Sets up the stream reader from a seekable input stream.
      *
      *  \param stream The stream to use for reading. The stream must remain
      *         in scope throughout the lifetime of the IOStreamReader.
@@ -46,7 +46,7 @@ public:
     IOStreamReader(io::SeekableInputStream& stream);
 
 private:
-    void readImpl(void* bufer, size_t size);
+    void readImpl(void* buffer, size_t size);
 
     void writeImpl(const void* buffer, size_t size);
 

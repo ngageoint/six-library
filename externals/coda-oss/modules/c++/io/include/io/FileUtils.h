@@ -85,11 +85,11 @@ public:
      * given one. If the given filename is empty, a temporary name is used.
      */
     static std::string createFile(std::string dirname, std::string filename =
-            std::string(""), bool overwrite = true) throw (except::IOException);
+            std::string(""), bool overwrite = true);
 
-    static void touchFile(std::string filename) throw (except::IOException);
+    static void touchFile(std::string filename);
 
-    static void forceMkdir(std::string dirname) throw (except::IOException);
+    static void forceMkdir(std::string dirname);
 
 private:
     //private constructor

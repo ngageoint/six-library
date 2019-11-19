@@ -42,14 +42,14 @@ DESubheader::DESubheader(nitf_DESubheader * x)
     getNativeOrThrow();
 }
 
-DESubheader::DESubheader() throw(nitf::NITFException)
+DESubheader::DESubheader()
 {
     setNative(nitf_DESubheader_construct(&error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::DESubheader DESubheader::clone() throw(nitf::NITFException)
+nitf::DESubheader DESubheader::clone()
 {
     nitf::DESubheader dolly(nitf_DESubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

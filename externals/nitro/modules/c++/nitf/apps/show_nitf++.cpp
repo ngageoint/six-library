@@ -132,7 +132,7 @@ void showFileHeader(nitf::FileHeader header)
 
         std::cout << "\tThe length of the graphics data: "
                   << (unsigned int)info.getLengthData()
-                  << "bytes\n" << std::endl;
+                  << " bytes\n" << std::endl;
     }
 
     num = header.getNumLabels();
@@ -149,7 +149,7 @@ void showFileHeader(nitf::FileHeader header)
 
         std::cout << "\tThe length of the label data: "
                   << (unsigned int)info.getLengthData()
-                  << "bytes\n" << std::endl;
+                  << " bytes\n" << std::endl;
     }
 
     num = header.getNumTexts();
@@ -164,7 +164,7 @@ void showFileHeader(nitf::FileHeader header)
 
         std::cout << "\tThe length of the text data: "
                   << (unsigned int)info.getLengthData()
-                  << "bytes\n" << std::endl;
+                  << " bytes\n" << std::endl;
     }
 
     num = header.getNumDataExtensions();
@@ -180,7 +180,7 @@ void showFileHeader(nitf::FileHeader header)
 
         std::cout << "\tThe length of the DES data: "
                   << (unsigned int)info.getLengthData()
-                  << "bytes\n" << std::endl;
+                  << " bytes\n" << std::endl;
     }
 
     num = header.getNumReservedExtensions();
@@ -195,7 +195,7 @@ void showFileHeader(nitf::FileHeader header)
 
         std::cout << "\tThe length of the RES data: "
                   << (unsigned int)info.getLengthData()
-                  << "bytes\n" << std::endl;
+                  << " bytes\n" << std::endl;
     }
 
     SHOW(header.getUserDefinedHeaderLength().toString());

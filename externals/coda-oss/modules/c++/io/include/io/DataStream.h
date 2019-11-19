@@ -63,21 +63,11 @@ public:
     }
 
     /*!
-     *  Read bytes from our byte stream into the buffer
-     *  \param data The data buffer to read to
-     *  \param size The size of the data buffer to read
-     */
-    virtual sys::SSize_T read(sys::byte* data, sys::Size_T size)
-    {
-        return mStringStream.read(data, size);
-    }
-
-    /*!
      *  Write bytes from into our byte stream from the buffer
      *  \param data The data buffer to read from
      *  \param size The size of the data buffer.
      */
-    virtual void write(const sys::byte* data, sys::Size_T size)
+    virtual void write(const void* data, sys::Size_T size)
     {
         mStringStream.write(data, size);
     }
@@ -108,7 +98,18 @@ public:
     {
         return mStringStream;
     }
+
 protected:
+    /*!
+     *  Read bytes from our byte stream into the buffer
+     *  \param data The data buffer to read to
+     *  \param size The size of the data buffer to read
+     */
+    virtual sys::SSize_T readImpl(void* data, sys::Size_T size)
+    {
+        return mStringStream.read(data, size);
+    }
+
     io::StringStream mStringStream;
 };
 }

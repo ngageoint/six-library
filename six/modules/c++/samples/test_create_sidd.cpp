@@ -365,11 +365,11 @@ int main(int argc, char** argv)
             std::cout << "Overriding NITF product size and max ILOC"
                     << std::endl;
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, str::toType<
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, str::toType<
                             long>(argv[5]));
 
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     str::toType<long>(argv[6]));
 
         }

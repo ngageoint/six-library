@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <config/coda_oss_config.h>
 
 namespace mem
 {
@@ -105,6 +106,12 @@ public:
     bool operator!=(const ScopedCopyablePtr<T>& rhs) const
     {
         return !(*this == rhs);
+    }
+
+    // explicit operators not supported until C++11
+    explicit operator bool() const
+    {
+        return get() == NULL ? false : true;
     }
 
     T* get() const

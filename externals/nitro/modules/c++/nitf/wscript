@@ -2,8 +2,7 @@ from os.path import join, split, basename, splitext
 
 NAME            = 'nitf'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
-VERSION         = '2.7'
-MODULE_DEPS     = 'mt sys mem io'
+MODULE_DEPS     = 'math mt sys mem io'
 TEST_DEPS       = 'cli'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'
@@ -15,7 +14,9 @@ APPS            = join('apps', 'show_nitf++.cpp')
 options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.module(**globals())
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    bld.module(**modArgs)
 
     env = bld.get_env()
     for app in APPS.split():

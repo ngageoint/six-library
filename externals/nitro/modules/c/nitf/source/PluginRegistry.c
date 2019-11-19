@@ -507,7 +507,93 @@ NITFAPI(NITF_BOOL)
 
 }
 
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_registerCompressionHandler(
+        NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handle,
+        nitf_Error * error)
+{
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
+    const char** ident;
+    int i = 1;
+    int ok = 1;
+    if (!reg)
+    {
+        return NITF_FAILURE;
+    }
+    if ( (ident = (*init)(error)) == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    if (!ident[0] || (strcmp(ident[0], NITF_PLUGIN_COMPRESSION_KEY) != 0))
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Expected a Compression identity");
+        return NITF_FAILURE;
+    }
+
+    for (; ident[i] != NULL; ++i)
+    {
+#ifdef NITF_DEBUG_PLUGIN_REG
+        if (nitf_HashTable_exists(reg->compressionHandlers, ident[i]))
+        {
+            printf("Warning, static handler overriding [%s] hook\n", ident[i]);
+        }
+#endif
+        ok &= nitf_HashTable_insert(reg->compressionHandlers, ident[i],
+                (NITF_DATA*)handle, error);
+    }
+
+    return ok;
+}
+
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_registerDecompressionHandler(
+        NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handle,
+        nitf_Error * error)
+{
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    const char** ident;
+    int i = 1;
+    int ok = 1;
+    if (!reg)
+    {
+        return NITF_FAILURE;
+    }
+    if ( (ident = (*init)(error)) == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    if (!ident[0] || (strcmp(ident[0], NITF_PLUGIN_DECOMPRESSION_KEY) != 0))
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Expected a Decompression identity");
+        return NITF_FAILURE;
+    }
+
+    for (; ident[i] != NULL; ++i)
+    {
+#ifdef NITF_DEBUG_PLUGIN_REG
+        if (nitf_HashTable_exists(reg->decompressionHandlers, ident[i]))
+        {
+            printf("Warning, static handler overriding [%s] hook\n", ident[i]);
+        }
+#endif
+        ok &= nitf_HashTable_insert(reg->decompressionHandlers, ident[i],
+                (NITF_DATA*)handle, error);
+    }
+
+    return ok;
+}
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
@@ -643,6 +729,46 @@ nitf_PluginRegistry_internalTREHandlerExists(nitf_PluginRegistry* reg,
     return nitf_HashTable_exists(reg->treHandlers, ident);
 }
 
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_internalCompressionHandlerExists(nitf_PluginRegistry* reg,
+                                                     const char* ident)
+{
+    return nitf_HashTable_exists(reg->compressionHandlers, ident);
+}
+
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_internalDecompressionHandlerExists(nitf_PluginRegistry* reg,
+                                                       const char* ident)
+{
+    return nitf_HashTable_exists(reg->decompressionHandlers, ident);
+}
+
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_internalHandlerExists(
+        const char* ident,
+        NITF_BOOL handlerCheck(nitf_PluginRegistry*, const char*))
+{
+    NITF_BOOL exists;
+    nitf_Error error;
+
+    /* first, get the registry */
+    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstance(&error);
+    if (reg == NULL)
+    {
+        return NITF_FAILURE;
+    }
+
+    /* must be thread safe */
+    nitf_Mutex_lock(GET_MUTEX());
+
+    exists = handlerCheck(reg, ident);
+
+    /* unlock */
+    nitf_Mutex_unlock(GET_MUTEX());
+
+    return exists;
+}
+
 NITFPROT(NITF_BOOL) nitf_PluginRegistry_load(nitf_PluginRegistry * reg,
                                              nitf_Error * error)
 {
@@ -671,25 +797,25 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExists(const char* ident)
 {
-    NITF_BOOL exists;
-    nitf_Error error;
+    return nitf_PluginRegistry_internalHandlerExists(
+            ident,
+            nitf_PluginRegistry_internalTREHandlerExists);
+}
 
-    /* first, get the registry */
-    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstance(&error);
-    if (reg == NULL)
-    {
-        return NITF_FAILURE;
-    }
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_compressionHandlerExists(const char* ident)
+{
+    return nitf_PluginRegistry_internalHandlerExists(
+            ident,
+            nitf_PluginRegistry_internalCompressionHandlerExists);
+}
 
-    /* must be thread safe */
-    nitf_Mutex_lock(GET_MUTEX());
-
-    exists = nitf_PluginRegistry_internalTREHandlerExists(reg, ident);
-
-    /* unlock */
-    nitf_Mutex_unlock(GET_MUTEX());
-
-    return exists;
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_decompressionHandlerExists(const char* ident)
+{
+    return nitf_PluginRegistry_internalHandlerExists(
+            ident,
+            nitf_PluginRegistry_internalDecompressionHandlerExists);
 }
 
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)

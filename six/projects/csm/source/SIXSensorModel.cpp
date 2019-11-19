@@ -161,14 +161,13 @@ std::string SIXSensorModel::getSensorType() const
     return CSM_SENSOR_TYPE_SAR;
 }
 
-
-csm::ImageCoord SIXSensorModel::getImageStart() const
-{
-    return csm::ImageCoord(0.0, 0.0);
-}
-
 int SIXSensorModel::getNumParameters() const
 {
+    // Without a covariance matrix, there are no adjustable parameters
+    if (mSensorCovariance == mSensorCovariance * 0)
+    {
+        return 0;
+    }
     return scene::AdjustableParams::NUM_PARAMS;
 }
 

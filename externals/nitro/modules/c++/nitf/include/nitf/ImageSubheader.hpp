@@ -59,11 +59,11 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader() throw(nitf::NITFException);
+    ImageSubheader();
 
 
     //! Clone
-    nitf::ImageSubheader clone() throw(nitf::NITFException);
+    nitf::ImageSubheader clone();
 
     /*!
      *  Destructor
@@ -86,23 +86,7 @@ public:
                              nitf::Uint32 abpp,
                              std::string justification,
                              std::string irep, std::string icat,
-                             std::vector<nitf::BandInfo>& bands)
-        throw(nitf::NITFException);
-
-
-    /*!
-     *  @deprecated - here for backwards compatibility
-     *  bandCount WILL get ignored
-     */
-    void setPixelInformation(std::string pvtype,
-                             nitf::Uint32 nbpp,
-                             nitf::Uint32 abpp,
-                             std::string justification,
-                             std::string irep, std::string icat,
-                             nitf::Uint32 bandCount,
-                             std::vector<nitf::BandInfo>& bands)
-        throw(nitf::NITFException);
-
+                             std::vector<nitf::BandInfo>& bands);
 
     /*!
      *  This function allows the user to set the corner coordinates from a
@@ -124,8 +108,7 @@ public:
      *  following in line with 2500C.
      */
     void setCornersFromLatLons(nitf::CornersType type,
-                               double corners[4][2])
-        throw(nitf::NITFException);
+                               double corners[4][2]);
 
 
     /*!
@@ -143,14 +126,14 @@ public:
      *
      *  following in line with 2500C.
      */
-    void getCornersAsLatLons(double corners[4][2]) throw(nitf::NITFException);
+    void getCornersAsLatLons(double corners[4][2]);
 
     /*!
      *  Get the type of corners.  This will return NITF_CORNERS_UNKNOWN
      *  in the event that it is not 'U', 'N', 'S', 'D', or 'G'.
      *
      */
-    nitf::CornersType getCornersType() throw(nitf::NITFException);
+    nitf::CornersType getCornersType();
 
     /*!
      * Set the image dimensions and blocking info.
@@ -170,7 +153,7 @@ public:
                      nitf::Uint32 numCols,
                      nitf::Uint32 numRowsPerBlock,
                      nitf::Uint32 numColsPerBlock,
-                     const std::string& imode) throw(nitf::NITFException);
+                     const std::string& imode);
 
     /*!
      * Compute blocking parameters
@@ -213,15 +196,13 @@ public:
      * \param numRows           The number of rows
      * \param numCols           The number of columns
      */
-    void setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols)
-        throw(nitf::NITFException);
-
+    void setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols);
 
     //! Get the number of bands
-    nitf::Uint32 getBandCount() throw(nitf::NITFException);
+    nitf::Uint32 getBandCount();
 
     //! Create new bands
-    void createBands(nitf::Uint32 numBands) throw(nitf::NITFException);
+    void createBands(nitf::Uint32 numBands);
 
     //! Insert the given comment at the given index (zero-indexed);
     int insertImageComment(std::string comment, int index);
@@ -305,7 +286,7 @@ public:
     nitf::Field getNumMultispectralImageBands();
 
     //! Get the bandInfo
-    nitf::BandInfo getBandInfo(nitf::Uint32 band) throw(nitf::NITFException);
+    nitf::BandInfo getBandInfo(nitf::Uint32 band);
 
     //! Get the imageSyncCode
     nitf::Field getImageSyncCode();
@@ -364,7 +345,62 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    /*!
+     * \param dim Number of elements (i.e. rows or columns)
+     * \param numDimsPerBlock Number of elements per block.  0 indicates no
+     * blocking.
+     *
+     * \return The actual number of elements, including padding (i.e. will be
+     * an even multiple of numDimsPerBlock)
+     */
+    static
+    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock);
+
+    /*!
+     * \return The number of bytes the image data associated with the image
+     * subheader takes up (takes dimensions, bytes/pixel, and blocking into
+     * account)
+     */
+    size_t getNumBytesOfImageData() const;
+
 private:
+    size_t getNumRows() const
+    {
+        return nitf::Field(getNativeOrThrow()->numRows);
+    }
+
+    size_t getNumCols() const
+    {
+        return nitf::Field(getNativeOrThrow()->numCols);
+    }
+
+    size_t getNumPixelsPerHorizBlock() const
+    {
+        return nitf::Field(getNativeOrThrow()->numPixelsPerHorizBlock);
+    }
+
+    size_t getNumPixelsPerVertBlock() const
+    {
+        return nitf::Field(getNativeOrThrow()->numPixelsPerVertBlock);
+    }
+
+    size_t getActualNumRows() const
+    {
+        return getActualImageDim(getNumRows(), getNumPixelsPerVertBlock());
+    }
+
+    size_t getActualNumCols() const
+    {
+        return getActualImageDim(getNumCols(), getNumPixelsPerHorizBlock());
+    }
+
+    size_t getNumImageBands() const
+    {
+        return nitf::Field(getNativeOrThrow()->numImageBands);
+    }
+
+    size_t getNumBytesPerPixel() const;
+
     nitf_Error error;
 };
 

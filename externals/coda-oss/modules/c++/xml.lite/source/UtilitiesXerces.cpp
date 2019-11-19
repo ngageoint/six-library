@@ -20,40 +20,42 @@
  *
  */
 
-#include "xml/lite/UtilitiesXerces.h"
+#include <xml/lite/UtilitiesXerces.h>
 
 #if defined(USE_XERCES)
 
-sys::Mutex xml::lite::XercesContext::mMutex;
+namespace xml
+{
+namespace lite
+{
+sys::Mutex XercesContext::mMutex;
 
-xml::lite::XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
+XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
     mLocal(xmlStr)
 {
 }
 
-xml::lite::XercesLocalString::XercesLocalString(const XMLCh* xmlStr) :
+XercesLocalString::XercesLocalString(const XMLCh* xmlStr) :
     mLocal(XMLString::replicate(xmlStr))
 {
 }
 
-xml::lite::XercesLocalString::XercesLocalString(const char* str) :
+XercesLocalString::XercesLocalString(const char* str) :
     mLocal(XMLString::transcode(str))
 {
 }
 
-xml::lite::XercesLocalString::XercesLocalString(const std::string& str) :
+XercesLocalString::XercesLocalString(const std::string& str) :
     mLocal(XMLString::transcode(str.c_str()))
 {
 }
 
-xml::lite::XercesLocalString::
-XercesLocalString(const XercesLocalString& rhs)
+XercesLocalString::XercesLocalString(const XercesLocalString& rhs)
 {
     mLocal = XMLString::replicate(rhs.toXMLCh());
 }
 
-xml::lite::XercesLocalString& xml::lite::XercesLocalString::
-operator=(XMLCh* xmlStr)
+XercesLocalString& XercesLocalString::operator=(XMLCh* xmlStr)
 {
     // clean up old memory first
     if (xmlStr != mLocal)
@@ -64,8 +66,7 @@ operator=(XMLCh* xmlStr)
     return *this;
 }
 
-xml::lite::XercesLocalString& xml::lite::XercesLocalString::
-operator=(const XMLCh* xmlStr)
+XercesLocalString& XercesLocalString::operator=(const XMLCh* xmlStr)
 {
     // clean up old memory first
     if (xmlStr != mLocal)
@@ -76,8 +77,7 @@ operator=(const XMLCh* xmlStr)
     return *this;
 }
 
-xml::lite::XercesLocalString& xml::lite::XercesLocalString::
-operator=(const xml::lite::XercesLocalString& rhs)
+XercesLocalString& XercesLocalString::operator=(const XercesLocalString& rhs)
 {
     if (this != &rhs)
     {
@@ -87,37 +87,37 @@ operator=(const xml::lite::XercesLocalString& rhs)
     return *this;
 }
 
-void xml::lite::XercesContentHandler::characters(const XMLCh* const chars,
-                                                 const XercesSize_T length)
+void XercesContentHandler::characters(const XMLCh* const chars,
+                                      const XercesSize_T length)
 {
-    xml::lite::XercesLocalString xstr(chars);
+    XercesLocalString xstr(chars);
     mLiteHandler->characters(xstr.str().c_str(), (int)length);
 }
 
-void xml::lite::XercesContentHandler::startDocument()
+void XercesContentHandler::startDocument()
 {
     mLiteHandler->startDocument();
 }
 
-void xml::lite::XercesContentHandler::endDocument()
+void XercesContentHandler::endDocument()
 {
     mLiteHandler->endDocument();
 }
 
-void xml::lite::XercesContentHandler::endElement(const XMLCh* const uri,
-                                                 const XMLCh* const localName,
-                                                 const XMLCh* const qname)
+void XercesContentHandler::endElement(const XMLCh* const uri,
+                                      const XMLCh* const localName,
+                                      const XMLCh* const qname)
 {
-    xml::lite::XercesLocalString xuri(uri);
-    xml::lite::XercesLocalString xlocalName(localName);
-    xml::lite::XercesLocalString xqname(qname);
+    XercesLocalString xuri(uri);
+    XercesLocalString xlocalName(localName);
+    XercesLocalString xqname(qname);
 
     mLiteHandler->endElement(xuri.str(),
                              xlocalName.str(),
                              xqname.str());
 }
 
-void xml::lite::XercesContentHandler::startElement(
+void XercesContentHandler::startElement(
         const XMLCh* const uri,
         const XMLCh* const localName,
         const XMLCh* const qname,
@@ -154,32 +154,32 @@ void xml::lite::XercesContentHandler::startElement(
                                attributes);
 }
 
-void xml::lite::XercesErrorHandler::
+void XercesErrorHandler::
 warning(const SAXParseException& /*exception*/)
 {
 }
 
-void xml::lite::XercesErrorHandler::
+void XercesErrorHandler::
 error(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
-    throw(xml::lite::XMLParseException(m.str(),
+    throw(XMLParseException(m.str(),
                                        exception.getLineNumber(),
                                        exception.getColumnNumber()));
 }
 
-void xml::lite::XercesErrorHandler::
+void XercesErrorHandler::
 fatalError(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
-    xml::lite::XMLParseException xex(m.str(),
+    XMLParseException xex(m.str(),
                                      exception.getLineNumber(),
                                      exception.getColumnNumber());
 
     throw except::Error(Ctxt(xex.getMessage()));
 }
 
-xml::lite::XercesContext::XercesContext() :
+XercesContext::XercesContext() :
     mIsDestroyed(false)
 {
     //! XMLPlatformUtils::Initialize is not thread safe!
@@ -190,13 +190,13 @@ xml::lite::XercesContext::XercesContext() :
     }
     catch (const ::XMLException& toCatch)
     {
-        xml::lite::XercesLocalString local(toCatch.getMessage());
+        XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
         throw (e);
     }
 }
 
-xml::lite::XercesContext::~XercesContext()
+XercesContext::~XercesContext()
 {
     try
     {
@@ -207,7 +207,7 @@ xml::lite::XercesContext::~XercesContext()
     }
 }
 
-void xml::lite::XercesContext::destroy()
+void XercesContext::destroy()
 {
     // wrapping it here saves the mutex lock
     if (!mIsDestroyed)
@@ -222,11 +222,13 @@ void xml::lite::XercesContext::destroy()
         catch (const ::XMLException& toCatch)
         {
             mIsDestroyed = false;
-            xml::lite::XercesLocalString local(toCatch.getMessage());
+            XercesLocalString local(toCatch.getMessage());
             except::Error e(Ctxt(local.str() + " (Termination error)"));
             throw (e);
         }
     }
+}
+}
 }
 
 #endif

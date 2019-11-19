@@ -26,6 +26,7 @@
 #include <import/nitf.h>
 #include <numpyutils/numpyutils.h>
 #include <iostream>
+#include <limits>
 %}
 
 #define NITF_LIST_TO_PYTHON_LIST(_type) \
@@ -199,6 +200,8 @@
 %include "nrt/IOHandle.h"
 %include "nrt/IOInterface.h"
 %include "nitf/System.h"
+%include "nrt/nrt_config.h"
+%include "nitf/nitf_config.h"
 
 
 
@@ -594,13 +597,23 @@
         nitf_Uint8 **buf = NULL;
         nitf_Uint8 *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
-        int padded, rowSkip, colSkip, subimageSize;
+        int padded, rowSkip, colSkip;
+        nitf_Uint64 subimageSize;
         nitf_Uint32 i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
+                (window->numCols/colSkip) *
+                nitf_ImageIO_pixelSize(reader->imageDeblocker);
+        if (subimageSize > std::numeric_limits<size_t>::max())
+        {
+            nitf_Error_print(error, stderr,
+                             "Image is too large for this system\n");
+            PyErr_SetString(PyExc_MemoryError, "");
+            goto CATCH_ERROR;
+        }
 
         dims.row = window->numBands;
         dims.col = subimageSize;

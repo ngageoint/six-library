@@ -38,7 +38,6 @@ void nitf::DownSampler::apply(NITF_DATA ** inputWindow,
         nitf::Uint32 numInputCols, nitf::Uint32 numSubWindowCols,
         nitf::Uint32 pixelType, nitf::Uint32 pixelSize,
         nitf::Uint32 rowsInLastWindow, nitf::Uint32 colsInLastWindow)
-        throw (nitf::NITFException)
 {
     nitf_DownSampler *ds = getNativeOrThrow();
     if (ds && ds->iface)
@@ -56,7 +55,6 @@ void nitf::DownSampler::apply(NITF_DATA ** inputWindow,
 }
 
 nitf::PixelSkip::PixelSkip(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
-        throw (nitf::NITFException)
 {
     setNative(nitf_PixelSkip_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -67,7 +65,6 @@ nitf::PixelSkip::~PixelSkip()
 }
 
 nitf::MaxDownSample::MaxDownSample(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
-        throw (nitf::NITFException)
 {
     setNative(nitf_MaxDownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -78,7 +75,7 @@ nitf::MaxDownSample::~MaxDownSample()
 }
 
 nitf::SumSq2DownSample::SumSq2DownSample(nitf::Uint32 rowSkip,
-        nitf::Uint32 colSkip) throw (nitf::NITFException)
+        nitf::Uint32 colSkip)
 {
     setNative(nitf_SumSq2DownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -89,7 +86,7 @@ nitf::SumSq2DownSample::~SumSq2DownSample()
 }
 
 nitf::Select2DownSample::Select2DownSample(nitf::Uint32 rowSkip,
-        nitf::Uint32 colSkip) throw (nitf::NITFException)
+        nitf::Uint32 colSkip)
 {
     setNative(nitf_Select2DownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
