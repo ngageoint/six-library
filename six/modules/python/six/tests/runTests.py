@@ -65,12 +65,54 @@ def runCsmTests():
     return True
 
 
+def runCPHDTests(sourceDir):
+    # Directory of CPHD file
+    cphdDir = os.path.join(sourceDir, 'CPHD1.0')
+
+    # Directory of CPHD1.0 schemas
+    cphdSchemaDir = os.path.join(utils.findSixHome(), 'six',
+            'modules', 'c++', 'cphd', 'conf', 'schema')
+    cphdSchemas = []
+    for schema in os.listdir(cphdSchemaDir):
+        cphdSchemas.append(os.path.join(cphdSchemaDir, schema))
+
+    if (sourceDir != ''):
+        os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
+                os.path.join(utils.installPath(), 'tests', 'cphd'))
+        writeCphd = utils.executableName('test_round_trip')
+        cphdPathname = os.path.join(cphdDir, os.listdir(cphdDir)[0])
+
+        # Generate CPHD1.0 output file
+        success = subprocess.call([writeCphd,
+                cphdPathname, 'output.cphd', cphdSchemas[0]],
+                stdout=subprocess.PIPE)
+
+        print("Running test_round_trip")
+
+        if success != 0:
+            if os.path.exists('output.cphd'):
+                os.remove('output.cphd')
+            print("Error running test_round_trip")
+            return False
+
+        # Check if CPHD1.0 input and output files match
+        cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
+        result = cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemas[0])
+
+        # Remove output file after done
+        if os.path.exists('output.cphd'):
+            os.remove('output.cphd')
+
+        return result;
+
+
 def run(sourceDir):
     # If we don't run this before setting the paths, we won't be testing
     # the right things
 
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
+    cphdDir = os.path.join(sourceDir, 'CPHD1.0')
 
     if sourceDir != '':
         os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
@@ -143,6 +185,10 @@ def run(sourceDir):
         if not sampleTestRunner.run('test_large_offset'):
             return False
 
+    if os.path.exists(cphdDir):
+        if not runCPHDTests(sourceDir):
+            return False
+
     if runUnitTests.run() == False:
         print("Unit tests failed")
         return False
@@ -151,10 +197,10 @@ def run(sourceDir):
     return True
 
 if __name__ == '__main__':
-    sicdDir = ''
+    sourceDir = ''
     if len(sys.argv) > 1:
-        sicdDir = sys.argv[1]
-    if run(sicdDir):
+        sourceDir = sys.argv[1]
+    if run(sourceDir):
         sys.exit(0)
     sys.exit(1)
 
