@@ -133,7 +133,9 @@ def run(sourceDir):
     utils.setPaths()
 
     if platform.system() != 'SunOS':
-        if makeRegressionFiles.run() == False:
+        try:
+            makeRegressionFiles.run()
+        except RuntimeError:
             print('Error generating regression files')
             return False
 
