@@ -25,6 +25,7 @@
 #include <mem/ScopedCopyablePtr.h>
 #include <str/Convert.h>
 #include <six/Utilities.h>
+#include <six/XMLControl.h>
 #include <six/SICommonXMLParser.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Enums.h>
@@ -63,73 +64,6 @@ std::string CPHDXMLControl::getDefaultURI() const
 std::string CPHDXMLControl::getSICommonURI() const
 {
     return CPHD10_URI;
-}
-
-void CPHDXMLControl::validate(const xml::lite::Document* doc,
-                              const std::vector<std::string>& schemaPaths,
-                              logging::Logger* log)
-{
-    // attempt to get the schema location from the
-    // environment if nothing is specified
-    std::vector<std::string> paths(schemaPaths);
-    sys::OS os;
-    try
-    {
-        if (paths.empty())
-        {
-            std::string envPath = os.getEnv(six::SCHEMA_PATH);
-            str::trim(envPath);
-            if (!envPath.empty())
-            {
-                paths.push_back(envPath);
-            }
-        }
-    }
-    catch (const except::Exception& )
-    {
-        // do nothing here
-    }
-
-    // validate against any specified schemas
-    if (!paths.empty())
-    {
-        xml::lite::Validator validator(paths, log, true);
-
-        std::vector<xml::lite::ValidationInfo> errors;
-
-        if (doc->getRootElement()->getUri().empty())
-        {
-            throw six::DESValidationException(Ctxt(
-                "INVALID XML: URI is empty so document version cannot be "
-                "determined to use for validation"));
-        }
-
-        validator.validate(doc->getRootElement(),
-                           doc->getRootElement()->getUri(),
-                           errors);
-
-        // log any error found and throw
-        if (!errors.empty())
-        {
-            for (size_t ii = 0; ii < errors.size(); ++ii)
-            {
-                log->critical(errors[ii].toString());
-            }
-
-            //! this is a unique error thrown only in this location --
-            //  if the user wants a file written regardless of the consequences
-            //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-            //  and attempt to rewrite the file. Continuing in this manner is
-            //  highly discouraged
-            for (size_t ii = 0; ii < errors.size(); ++ii)
-            {
-                std::cerr << errors[ii].toString() << "\n";
-            }
-            throw six::DESValidationException(Ctxt(
-                "INVALID XML: Check both the XML being " \
-                "produced and the schemas available"));
-        }
-    }
 }
 
 std::string CPHDXMLControl::toXMLString(
@@ -200,7 +134,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     if(!schemaPaths.empty())
     {
         // Validate schema
-        validate(doc.get(), schemaPaths, log());
+        six::XMLControl::validate(doc.get(), schemaPaths, log());
     }
     return doc;
 }
@@ -1066,7 +1000,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(
     if(!schemaPaths.empty())
     {
         // Validate schema
-        validate(doc, schemaPaths, log());
+        six::XMLControl::validate(doc, schemaPaths, log());
     }
 
     XMLElem root = doc->getRootElement();

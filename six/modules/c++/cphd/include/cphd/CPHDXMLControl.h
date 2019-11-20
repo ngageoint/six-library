@@ -117,18 +117,6 @@ public:
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
-    /*!
-     *  \func validate
-     *
-     *  \brief Validate the xml and log any errors
-     *
-     *  \param doc XML document object of CPHD
-     *  \param schemaPaths Vector of XML Schema for validation
-     */
-    static void validate(const xml::lite::Document* doc,
-              const std::vector<std::string>& schemaPaths,
-              logging::Logger* log);
-
 private:
     typedef xml::lite::Element*  XMLElem;
 

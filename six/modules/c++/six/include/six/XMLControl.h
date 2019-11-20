@@ -64,6 +64,18 @@ public:
 
     void setLogger(logging::Logger* log, bool ownLog = false);
 
+    /*
+     *  \func validate
+     *  \brief Validate the xml and log any errors
+     *
+     *  \param doc XML document
+     *  \param schemaPaths  Directories or files of schema locations
+     *  \param log Logs validation errors
+     */
+    static void validate(const xml::lite::Document* doc,
+                  const std::vector<std::string>& schemaPaths,
+                  logging::Logger* log);
+
     /*!
      *  Convert the Data model into an XML DOM.
      *  \param data         Data structure
