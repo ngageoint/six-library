@@ -44,7 +44,7 @@ def runCsmTests():
     else:
         pathKey = 'LD_LIBRARY_PATH'
     os.environ[pathKey] = (os.environ[pathKey] + os.pathsep +
-            os.path.join(utils.installPath(), 'lib'))
+                           os.path.join(utils.installPath(), 'lib'))
 
     nitfPathname = os.path.join(utils.findSixHome(), 'croppedNitfs')
     sicdPathname = os.path.join(nitfPathname, 'SICD')
@@ -65,88 +65,84 @@ def runCsmTests():
     return True
 
 
-def runCPHDTests(sourceDir):
-    # Directory of CPHD file
-    cphdDir = os.path.join(sourceDir, 'CPHD1.0')
+def runCPHDTests(cphdDir):
 
     # Directory of CPHD1.0 schemas
     cphdSchemaDir = os.path.join(utils.findSixHome(), 'six',
-            'modules', 'c++', 'cphd', 'conf', 'schema')
+                                 'modules', 'c++', 'cphd', 'conf', 'schema')
     cphdSchemas = []
     for schema in os.listdir(cphdSchemaDir):
         cphdSchemas.append(os.path.join(cphdSchemaDir, schema))
 
-    if (sourceDir != ''):
-        os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
-                os.path.join(utils.installPath(), 'tests', 'cphd'))
-        writeCphd = utils.executableName('test_round_trip')
-        cphdPathname = os.path.join(cphdDir, os.listdir(cphdDir)[0])
+    os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
+                          os.path.join(utils.installPath(), 'tests', 'cphd'))
+    writeCphd = utils.executableName('test_round_trip')
+    cphdPathname = os.path.join(cphdDir, os.listdir(cphdDir)[0])
 
-        # Generate CPHD1.0 output file
-        success = subprocess.call([writeCphd,
-                cphdPathname, 'output.cphd', cphdSchemas[0]],
-                stdout=subprocess.PIPE)
+    # Generate CPHD1.0 output file
+    success = subprocess.call([writeCphd,
+                               cphdPathname, 'output.cphd', cphdSchemas[0]],
+                              stdout=subprocess.PIPE)
 
-        print("Running test_round_trip")
+    print('Running test_round_trip')
 
-        if success != 0:
-            if os.path.exists('output.cphd'):
-                os.remove('output.cphd')
-            print("Error running test_round_trip")
-            return False
-
-        # Check if CPHD1.0 input and output files match
-        cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
-        result = cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemas[0])
-
-        # Remove output file after done
+    if success != 0:
         if os.path.exists('output.cphd'):
             os.remove('output.cphd')
+        print('Error running test_round_trip')
+        return False
 
-        return result;
+    # Check if CPHD1.0 input and output files match
+    cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
+    result = cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemas[0])
+
+    # Remove output file after done
+    if os.path.exists('output.cphd'):
+        os.remove('output.cphd')
+
+    return result
 
 
 def run(sourceDir):
     # If we don't run this before setting the paths, we won't be testing
     # the right things
-
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
     cphdDir = os.path.join(sourceDir, 'CPHD1.0')
 
     if sourceDir != '':
-        os.environ["PATH"] = (os.environ["PATH"] + os.pathsep +
-                os.path.join(utils.installPath(), 'bin'))
+        os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
+                              os.path.join(utils.installPath(), 'bin'))
         cropSicds = utils.executableName('crop_sicd')
 
         sicdPathname = os.path.join(sicdDir, os.listdir(sicdDir)[0])
 
         success = subprocess.call([cropSicds,
-                '--start-row', '0', '--start-col', '0',
-                '--num-rows', '10', '--num-cols', '10',
-                sicdPathname, 'cropped.nitf'],
-                stdout=subprocess.PIPE)
+                                   '--start-row', '0', '--start-col', '0',
+                                   '--num-rows', '10', '--num-cols', '10',
+                                   sicdPathname, 'cropped.nitf'],
+                                  stdout=subprocess.PIPE)
 
-        print("Running crop_sicd")
+        print('Running crop_sicd')
         if os.path.exists('cropped.nitf'):
             os.remove('cropped.nitf')
         if success != 0:
-            print("Error running crop_sicd")
+            print('Error running crop_sicd')
             return False
 
     utils.setPaths()
 
     if platform.system() != 'SunOS':
         if makeRegressionFiles.run() == False:
-            print("Error generating regression files")
+            print('Error generating regression files')
             return False
 
         if runPythonScripts.run() == False:
-            print("Error running a python script")
+            print('Error running a python script')
             return False
 
         if checkNITFs.run() == False:
-            print("test in checkNITFS.py failed")
+            print('test in checkNITFS.py failed')
             return False
 
         if runMiscTests.run() == False:
@@ -154,7 +150,7 @@ def run(sourceDir):
             return False
     else:
         print('Warning: skipping the bulk of the test suite, '
-                'since Python modules are by default disabled on Solaris')
+              'since Python modules are by default disabled on Solaris')
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
@@ -186,14 +182,14 @@ def run(sourceDir):
             return False
 
     if os.path.exists(cphdDir):
-        if not runCPHDTests(sourceDir):
+        if not runCPHDTests(cphdDir):
             return False
 
-    if runUnitTests.run() == False:
-        print("Unit tests failed")
+    if not runUnitTests.run():
+        print('Unit tests failed')
         return False
 
-    print("All passed")
+    print('All passed')
     return True
 
 if __name__ == '__main__':
@@ -203,4 +199,3 @@ if __name__ == '__main__':
     if run(sourceDir):
         sys.exit(0)
     sys.exit(1)
-
