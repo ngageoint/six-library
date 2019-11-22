@@ -434,7 +434,7 @@ private:
     /*
      *  Marks filled bytes
      */
-    std::vector<six::BooleanType> mParamLocations;
+    std::vector<bool> mParamLocations;
 };
 
 //! Ostream operators
