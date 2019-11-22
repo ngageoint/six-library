@@ -20,8 +20,11 @@
  *
  */
 
-#include <cphd/Utilities.h>
+#include <cstdlib>
+#include <cctype>
+
 #include <import/str.h>
+#include <cphd/Utilities.h>
 #include <six/Init.h>
 
 namespace cphd
