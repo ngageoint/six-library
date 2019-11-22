@@ -3282,12 +3282,6 @@ class Parameter(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __nonzero__(self):
-        return _six_base.Parameter___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
     def str(self):
         """str(Parameter self) -> std::string"""
         return _six_base.Parameter_str(self)
@@ -4304,6 +4298,12 @@ class XMLControl(_object):
         return _six_base.XMLControl_setLogger(self, log, ownLog)
 
 
+    def validate(doc, schemaPaths, log):
+        """validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+        return _six_base.XMLControl_validate(doc, schemaPaths, log)
+
+    validate = staticmethod(validate)
+
     def toXML(self, data, schemaPaths):
         """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
@@ -4330,6 +4330,10 @@ class XMLControl(_object):
     splitVersion = staticmethod(splitVersion)
 XMLControl_swigregister = _six_base.XMLControl_swigregister
 XMLControl_swigregister(XMLControl)
+
+def XMLControl_validate(doc, schemaPaths, log):
+    """XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+    return _six_base.XMLControl_validate(doc, schemaPaths, log)
 
 def XMLControl_dataTypeToString(dataType, appendXML=True):
     """

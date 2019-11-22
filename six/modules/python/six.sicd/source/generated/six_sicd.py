@@ -202,6 +202,1520 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_sicd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+
+def cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
+    """cropSICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
+    return _six_sicd.cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
+class ComponentInfoDestructor(_object):
+    """Proxy of C++ nitf::ComponentInfoDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ComponentInfoDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ComponentInfoDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ComponentInfoDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(ComponentInfoDestructor self, nitf_ComponentInfo * nativeObject)"""
+        return _six_sicd.ComponentInfoDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::ComponentInfoDestructor self) -> ComponentInfoDestructor"""
+        this = _six_sicd.new_ComponentInfoDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+ComponentInfoDestructor_swigregister = _six_sicd.ComponentInfoDestructor_swigregister
+ComponentInfoDestructor_swigregister(ComponentInfoDestructor)
+
+class ComponentInfo(_object):
+    """Proxy of C++ nitf::ComponentInfo class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ComponentInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ComponentInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::ComponentInfo self, ComponentInfo x) -> ComponentInfo
+        __init__(nitf::ComponentInfo self, nitf_ComponentInfo * x) -> ComponentInfo
+        """
+        this = _six_sicd.new_ComponentInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(ComponentInfo self) -> ComponentInfo"""
+        return _six_sicd.ComponentInfo_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_ComponentInfo
+    __del__ = lambda self: None
+
+    def getLengthSubheader(self):
+        """getLengthSubheader(ComponentInfo self) -> Field"""
+        return _six_sicd.ComponentInfo_getLengthSubheader(self)
+
+
+    def getLengthData(self):
+        """getLengthData(ComponentInfo self) -> Field"""
+        return _six_sicd.ComponentInfo_getLengthData(self)
+
+ComponentInfo_swigregister = _six_sicd.ComponentInfo_swigregister
+ComponentInfo_swigregister(ComponentInfo)
+
+class DESegmentDestructor(_object):
+    """Proxy of C++ nitf::DESegmentDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DESegmentDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DESegmentDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_DESegmentDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(DESegmentDestructor self, nitf_DESegment * nativeObject)"""
+        return _six_sicd.DESegmentDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::DESegmentDestructor self) -> DESegmentDestructor"""
+        this = _six_sicd.new_DESegmentDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+DESegmentDestructor_swigregister = _six_sicd.DESegmentDestructor_swigregister
+DESegmentDestructor_swigregister(DESegmentDestructor)
+
+class DESegment(_object):
+    """Proxy of C++ nitf::DESegment class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DESegment, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DESegment, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::DESegment self, DESegment x) -> DESegment
+        __init__(nitf::DESegment self, nitf_DESegment * x) -> DESegment
+        __init__(nitf::DESegment self) -> DESegment
+        __init__(nitf::DESegment self, NITF_DATA * x) -> DESegment
+        """
+        this = _six_sicd.new_DESegment(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(DESegment self) -> DESegment"""
+        return _six_sicd.DESegment_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_DESegment
+    __del__ = lambda self: None
+
+    def getSubheader(self):
+        """getSubheader(DESegment self) -> DESubheader"""
+        return _six_sicd.DESegment_getSubheader(self)
+
+
+    def setSubheader(self, value):
+        """setSubheader(DESegment self, DESubheader value)"""
+        return _six_sicd.DESegment_setSubheader(self, value)
+
+
+    def getOffset(self):
+        """getOffset(DESegment self) -> nitf::Uint64"""
+        return _six_sicd.DESegment_getOffset(self)
+
+
+    def setOffset(self, value):
+        """setOffset(DESegment self, nitf::Uint64 value)"""
+        return _six_sicd.DESegment_setOffset(self, value)
+
+
+    def getEnd(self):
+        """getEnd(DESegment self) -> nitf::Uint64"""
+        return _six_sicd.DESegment_getEnd(self)
+
+
+    def setEnd(self, value):
+        """setEnd(DESegment self, nitf::Uint64 value)"""
+        return _six_sicd.DESegment_setEnd(self, value)
+
+DESegment_swigregister = _six_sicd.DESegment_swigregister
+DESegment_swigregister(DESegment)
+
+class DESubheaderDestructor(_object):
+    """Proxy of C++ nitf::DESubheaderDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DESubheaderDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DESubheaderDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_DESubheaderDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(DESubheaderDestructor self, nitf_DESubheader * nativeObject)"""
+        return _six_sicd.DESubheaderDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::DESubheaderDestructor self) -> DESubheaderDestructor"""
+        this = _six_sicd.new_DESubheaderDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+DESubheaderDestructor_swigregister = _six_sicd.DESubheaderDestructor_swigregister
+DESubheaderDestructor_swigregister(DESubheaderDestructor)
+
+class DESubheader(_object):
+    """Proxy of C++ nitf::DESubheader class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DESubheader, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DESubheader, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::DESubheader self, DESubheader x) -> DESubheader
+        __init__(nitf::DESubheader self, nitf_DESubheader * x) -> DESubheader
+        __init__(nitf::DESubheader self) -> DESubheader
+        """
+        this = _six_sicd.new_DESubheader(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(DESubheader self) -> DESubheader"""
+        return _six_sicd.DESubheader_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_DESubheader
+    __del__ = lambda self: None
+
+    def getFilePartType(self):
+        """getFilePartType(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getFilePartType(self)
+
+
+    def getTypeID(self):
+        """getTypeID(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getTypeID(self)
+
+
+    def getVersion(self):
+        """getVersion(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getVersion(self)
+
+
+    def getSecurityClass(self):
+        """getSecurityClass(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getSecurityClass(self)
+
+
+    def getSecurityGroup(self):
+        """getSecurityGroup(DESubheader self) -> nitf::FileSecurity"""
+        return _six_sicd.DESubheader_getSecurityGroup(self)
+
+
+    def setSecurityGroup(self, value):
+        """setSecurityGroup(DESubheader self, nitf::FileSecurity value)"""
+        return _six_sicd.DESubheader_setSecurityGroup(self, value)
+
+
+    def getOverflowedHeaderType(self):
+        """getOverflowedHeaderType(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getOverflowedHeaderType(self)
+
+
+    def getDataItemOverflowed(self):
+        """getDataItemOverflowed(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getDataItemOverflowed(self)
+
+
+    def getSubheaderFieldsLength(self):
+        """getSubheaderFieldsLength(DESubheader self) -> Field"""
+        return _six_sicd.DESubheader_getSubheaderFieldsLength(self)
+
+
+    def getSubheaderFields(self):
+        """getSubheaderFields(DESubheader self) -> TRE"""
+        return _six_sicd.DESubheader_getSubheaderFields(self)
+
+
+    def setSubheaderFields(self, fields):
+        """setSubheaderFields(DESubheader self, TRE fields)"""
+        return _six_sicd.DESubheader_setSubheaderFields(self, fields)
+
+
+    def getDataLength(self):
+        """getDataLength(DESubheader self) -> nitf::Uint32"""
+        return _six_sicd.DESubheader_getDataLength(self)
+
+
+    def setDataLength(self, value):
+        """setDataLength(DESubheader self, nitf::Uint32 value)"""
+        return _six_sicd.DESubheader_setDataLength(self, value)
+
+
+    def getUserDefinedSection(self):
+        """getUserDefinedSection(DESubheader self) -> Extensions"""
+        return _six_sicd.DESubheader_getUserDefinedSection(self)
+
+
+    def setUserDefinedSection(self, value):
+        """setUserDefinedSection(DESubheader self, Extensions value)"""
+        return _six_sicd.DESubheader_setUserDefinedSection(self, value)
+
+DESubheader_swigregister = _six_sicd.DESubheader_swigregister
+DESubheader_swigregister(DESubheader)
+
+class ExtensionsIterator(_object):
+    """Proxy of C++ nitf::ExtensionsIterator class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ExtensionsIterator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ExtensionsIterator, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ExtensionsIterator
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::ExtensionsIterator self) -> ExtensionsIterator
+        __init__(nitf::ExtensionsIterator self, ExtensionsIterator x) -> ExtensionsIterator
+        __init__(nitf::ExtensionsIterator self, nitf_ExtensionsIterator x) -> ExtensionsIterator
+        """
+        this = _six_sicd.new_ExtensionsIterator(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getHandle(self):
+        """getHandle(ExtensionsIterator self) -> nitf_ExtensionsIterator &"""
+        return _six_sicd.ExtensionsIterator_getHandle(self)
+
+
+    def setHandle(self, x):
+        """setHandle(ExtensionsIterator self, nitf_ExtensionsIterator x)"""
+        return _six_sicd.ExtensionsIterator_setHandle(self, x)
+
+
+    def equals(self, it2):
+        """equals(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
+        return _six_sicd.ExtensionsIterator_equals(self, it2)
+
+
+    def __eq__(self, it2):
+        """__eq__(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
+        return _six_sicd.ExtensionsIterator___eq__(self, it2)
+
+
+    def notEqualTo(self, it2):
+        """notEqualTo(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
+        return _six_sicd.ExtensionsIterator_notEqualTo(self, it2)
+
+
+    def __ne__(self, it2):
+        """__ne__(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
+        return _six_sicd.ExtensionsIterator___ne__(self, it2)
+
+
+    def increment(self):
+        """increment(ExtensionsIterator self)"""
+        return _six_sicd.ExtensionsIterator_increment(self)
+
+
+    def __ref__(self):
+        """__ref__(ExtensionsIterator self) -> TRE"""
+        return _six_sicd.ExtensionsIterator___ref__(self)
+
+
+    def get(self):
+        """get(ExtensionsIterator self) -> TRE"""
+        return _six_sicd.ExtensionsIterator_get(self)
+
+ExtensionsIterator_swigregister = _six_sicd.ExtensionsIterator_swigregister
+ExtensionsIterator_swigregister(ExtensionsIterator)
+
+class ExtensionsDestructor(_object):
+    """Proxy of C++ nitf::ExtensionsDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ExtensionsDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ExtensionsDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ExtensionsDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(ExtensionsDestructor self, nitf_Extensions * nativeObject)"""
+        return _six_sicd.ExtensionsDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::ExtensionsDestructor self) -> ExtensionsDestructor"""
+        this = _six_sicd.new_ExtensionsDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+ExtensionsDestructor_swigregister = _six_sicd.ExtensionsDestructor_swigregister
+ExtensionsDestructor_swigregister(ExtensionsDestructor)
+
+class Extensions(_object):
+    """Proxy of C++ nitf::Extensions class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Extensions, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Extensions, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::Extensions self, Extensions x) -> Extensions
+        __init__(nitf::Extensions self, nitf_Extensions * x) -> Extensions
+        __init__(nitf::Extensions self) -> Extensions
+        """
+        this = _six_sicd.new_Extensions(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(Extensions self) -> Extensions"""
+        return _six_sicd.Extensions_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_Extensions
+    __del__ = lambda self: None
+
+    def appendTRE(self, tre):
+        """appendTRE(Extensions self, TRE tre)"""
+        return _six_sicd.Extensions_appendTRE(self, tre)
+
+
+    def getTREsByName(self, name):
+        """getTREsByName(Extensions self, std::string const & name) -> nitf::List"""
+        return _six_sicd.Extensions_getTREsByName(self, name)
+
+
+    def removeTREsByName(self, name):
+        """removeTREsByName(Extensions self, std::string const & name)"""
+        return _six_sicd.Extensions_removeTREsByName(self, name)
+
+
+    def remove(self, iter):
+        """remove(Extensions self, ExtensionsIterator iter)"""
+        return _six_sicd.Extensions_remove(self, iter)
+
+
+    def getHash(self):
+        """getHash(Extensions self) -> nitf::HashTable"""
+        return _six_sicd.Extensions_getHash(self)
+
+
+    def setHash(self, value):
+        """setHash(Extensions self, nitf::HashTable & value)"""
+        return _six_sicd.Extensions_setHash(self, value)
+
+
+    def exists(self, key):
+        """exists(Extensions self, std::string const & key) -> bool"""
+        return _six_sicd.Extensions_exists(self, key)
+
+
+    def begin(self):
+        """begin(Extensions self) -> ExtensionsIterator"""
+        return _six_sicd.Extensions_begin(self)
+
+
+    def end(self):
+        """end(Extensions self) -> ExtensionsIterator"""
+        return _six_sicd.Extensions_end(self)
+
+
+    def computeLength(self, version):
+        """computeLength(Extensions self, nitf::Version version) -> nitf::Uint64"""
+        return _six_sicd.Extensions_computeLength(self, version)
+
+Extensions_swigregister = _six_sicd.Extensions_swigregister
+Extensions_swigregister(Extensions)
+
+class Field(_object):
+    """Proxy of C++ nitf::Field class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Field, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Field, name)
+    __repr__ = _swig_repr
+    BCS_A = _six_sicd.Field_BCS_A
+    BCS_N = _six_sicd.Field_BCS_N
+    BINARY = _six_sicd.Field_BINARY
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::Field self, Field x) -> Field
+        __init__(nitf::Field self, nitf_Field * field) -> Field
+        __init__(nitf::Field self, NITF_DATA * x) -> Field
+        """
+        this = _six_sicd.new_Field(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_Field
+    __del__ = lambda self: None
+
+    def set(self, *args):
+        """
+        set(Field self, nitf::Uint8 data)
+        set(Field self, nitf::Uint16 data)
+        set(Field self, nitf::Uint32 data)
+        set(Field self, nitf::Uint64 data)
+        set(Field self, nitf::Int8 data)
+        set(Field self, nitf::Int16 data)
+        set(Field self, nitf::Int32 data)
+        set(Field self, nitf::Int64 data)
+        set(Field self, float data)
+        set(Field self, double data)
+        set(Field self, char const * data)
+        set(Field self, std::string const & data)
+        set(Field self, DateTime dateTime, std::string const & format)
+        set(Field self, DateTime dateTime)
+        """
+        return _six_sicd.Field_set(self, *args)
+
+
+    def asDateTime(self, *args):
+        """
+        asDateTime(Field self, std::string const & format) -> DateTime
+        asDateTime(Field self) -> DateTime
+        """
+        return _six_sicd.Field_asDateTime(self, *args)
+
+
+    def getType(self):
+        """getType(Field self) -> nitf::Field::FieldType"""
+        return _six_sicd.Field_getType(self)
+
+
+    def setType(self, type):
+        """setType(Field self, nitf::Field::FieldType type)"""
+        return _six_sicd.Field_setType(self, type)
+
+
+    def getRawData(self):
+        """getRawData(Field self) -> char *"""
+        return _six_sicd.Field_getRawData(self)
+
+
+    def setRawData(self, raw, length):
+        """setRawData(Field self, char * raw, size_t length)"""
+        return _six_sicd.Field_setRawData(self, raw, length)
+
+
+    def getLength(self):
+        """getLength(Field self) -> size_t"""
+        return _six_sicd.Field_getLength(self)
+
+
+    def resize(self, length):
+        """resize(Field self, size_t length)"""
+        return _six_sicd.Field_resize(self, length)
+
+
+    def toString(self):
+        """toString(Field self) -> std::string"""
+        return _six_sicd.Field_toString(self)
+
+
+    def parse(self):
+        data = self.getRawData()
+        try:
+            data = float(data)
+            if data - int(data) == 0:
+                data = int(data)
+            return data
+        except ValueError:
+            return str(data)
+
+Field_swigregister = _six_sicd.Field_swigregister
+Field_swigregister(Field)
+
+class FileHeaderDestructor(_object):
+    """Proxy of C++ nitf::FileHeaderDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileHeaderDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FileHeaderDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_FileHeaderDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(FileHeaderDestructor self, nitf_FileHeader * nativeObject)"""
+        return _six_sicd.FileHeaderDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::FileHeaderDestructor self) -> FileHeaderDestructor"""
+        this = _six_sicd.new_FileHeaderDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+FileHeaderDestructor_swigregister = _six_sicd.FileHeaderDestructor_swigregister
+FileHeaderDestructor_swigregister(FileHeaderDestructor)
+
+class FileHeader(_object):
+    """Proxy of C++ nitf::FileHeader class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileHeader, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FileHeader, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::FileHeader self, FileHeader x) -> FileHeader
+        __init__(nitf::FileHeader self, nitf_FileHeader * x) -> FileHeader
+        __init__(nitf::FileHeader self) -> FileHeader
+        """
+        this = _six_sicd.new_FileHeader(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(FileHeader self) -> FileHeader"""
+        return _six_sicd.FileHeader_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_FileHeader
+    __del__ = lambda self: None
+
+    def getFileHeader(self):
+        """getFileHeader(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getFileHeader(self)
+
+
+    def getFileVersion(self):
+        """getFileVersion(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getFileVersion(self)
+
+
+    def getComplianceLevel(self):
+        """getComplianceLevel(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getComplianceLevel(self)
+
+
+    def getSystemType(self):
+        """getSystemType(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getSystemType(self)
+
+
+    def getOriginStationID(self):
+        """getOriginStationID(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getOriginStationID(self)
+
+
+    def getFileDateTime(self):
+        """getFileDateTime(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getFileDateTime(self)
+
+
+    def getFileTitle(self):
+        """getFileTitle(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getFileTitle(self)
+
+
+    def getClassification(self):
+        """getClassification(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getClassification(self)
+
+
+    def getSecurityGroup(self):
+        """getSecurityGroup(FileHeader self) -> nitf::FileSecurity"""
+        return _six_sicd.FileHeader_getSecurityGroup(self)
+
+
+    def setSecurityGroup(self, value):
+        """setSecurityGroup(FileHeader self, nitf::FileSecurity value)"""
+        return _six_sicd.FileHeader_setSecurityGroup(self, value)
+
+
+    def getMessageCopyNum(self):
+        """getMessageCopyNum(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getMessageCopyNum(self)
+
+
+    def getMessageNumCopies(self):
+        """getMessageNumCopies(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getMessageNumCopies(self)
+
+
+    def getEncrypted(self):
+        """getEncrypted(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getEncrypted(self)
+
+
+    def getBackgroundColor(self):
+        """getBackgroundColor(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getBackgroundColor(self)
+
+
+    def getOriginatorName(self):
+        """getOriginatorName(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getOriginatorName(self)
+
+
+    def getOriginatorPhone(self):
+        """getOriginatorPhone(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getOriginatorPhone(self)
+
+
+    def getFileLength(self):
+        """getFileLength(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getFileLength(self)
+
+
+    def getHeaderLength(self):
+        """getHeaderLength(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getHeaderLength(self)
+
+
+    def getNumImages(self):
+        """getNumImages(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumImages(self)
+
+
+    def getNumGraphics(self):
+        """getNumGraphics(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumGraphics(self)
+
+
+    def getNumLabels(self):
+        """getNumLabels(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumLabels(self)
+
+
+    def getNumTexts(self):
+        """getNumTexts(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumTexts(self)
+
+
+    def getNumDataExtensions(self):
+        """getNumDataExtensions(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumDataExtensions(self)
+
+
+    def getNumReservedExtensions(self):
+        """getNumReservedExtensions(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getNumReservedExtensions(self)
+
+
+    def getImageInfo(self, i):
+        """getImageInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getImageInfo(self, i)
+
+
+    def getGraphicInfo(self, i):
+        """getGraphicInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getGraphicInfo(self, i)
+
+
+    def getLabelInfo(self, i):
+        """getLabelInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getLabelInfo(self, i)
+
+
+    def getTextInfo(self, i):
+        """getTextInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getTextInfo(self, i)
+
+
+    def getDataExtensionInfo(self, i):
+        """getDataExtensionInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getDataExtensionInfo(self, i)
+
+
+    def getReservedExtensionInfo(self, i):
+        """getReservedExtensionInfo(FileHeader self, int i) -> ComponentInfo"""
+        return _six_sicd.FileHeader_getReservedExtensionInfo(self, i)
+
+
+    def getUserDefinedHeaderLength(self):
+        """getUserDefinedHeaderLength(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getUserDefinedHeaderLength(self)
+
+
+    def getUserDefinedOverflow(self):
+        """getUserDefinedOverflow(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getUserDefinedOverflow(self)
+
+
+    def getExtendedHeaderLength(self):
+        """getExtendedHeaderLength(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getExtendedHeaderLength(self)
+
+
+    def getExtendedHeaderOverflow(self):
+        """getExtendedHeaderOverflow(FileHeader self) -> Field"""
+        return _six_sicd.FileHeader_getExtendedHeaderOverflow(self)
+
+
+    def getUserDefinedSection(self):
+        """getUserDefinedSection(FileHeader self) -> Extensions"""
+        return _six_sicd.FileHeader_getUserDefinedSection(self)
+
+
+    def setUserDefinedSection(self, value):
+        """setUserDefinedSection(FileHeader self, Extensions value)"""
+        return _six_sicd.FileHeader_setUserDefinedSection(self, value)
+
+
+    def getExtendedSection(self):
+        """getExtendedSection(FileHeader self) -> Extensions"""
+        return _six_sicd.FileHeader_getExtendedSection(self)
+
+
+    def setExtendedSection(self, value):
+        """setExtendedSection(FileHeader self, Extensions value)"""
+        return _six_sicd.FileHeader_setExtendedSection(self, value)
+
+FileHeader_swigregister = _six_sicd.FileHeader_swigregister
+FileHeader_swigregister(FileHeader)
+
+class ImageSegmentDestructor(_object):
+    """Proxy of C++ nitf::ImageSegmentDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSegmentDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSegmentDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ImageSegmentDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(ImageSegmentDestructor self, nitf_ImageSegment * nativeObject)"""
+        return _six_sicd.ImageSegmentDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::ImageSegmentDestructor self) -> ImageSegmentDestructor"""
+        this = _six_sicd.new_ImageSegmentDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+ImageSegmentDestructor_swigregister = _six_sicd.ImageSegmentDestructor_swigregister
+ImageSegmentDestructor_swigregister(ImageSegmentDestructor)
+
+class ImageSegment(_object):
+    """Proxy of C++ nitf::ImageSegment class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSegment, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSegment, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::ImageSegment self, ImageSegment x) -> ImageSegment
+        __init__(nitf::ImageSegment self, nitf_ImageSegment * x) -> ImageSegment
+        __init__(nitf::ImageSegment self) -> ImageSegment
+        __init__(nitf::ImageSegment self, NITF_DATA * x) -> ImageSegment
+        """
+        this = _six_sicd.new_ImageSegment(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(ImageSegment self) -> ImageSegment"""
+        return _six_sicd.ImageSegment_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_ImageSegment
+    __del__ = lambda self: None
+
+    def getSubheader(self):
+        """getSubheader(ImageSegment self) -> ImageSubheader"""
+        return _six_sicd.ImageSegment_getSubheader(self)
+
+
+    def setSubheader(self, value):
+        """setSubheader(ImageSegment self, ImageSubheader value)"""
+        return _six_sicd.ImageSegment_setSubheader(self, value)
+
+
+    def getImageOffset(self):
+        """getImageOffset(ImageSegment self) -> nitf::Uint64"""
+        return _six_sicd.ImageSegment_getImageOffset(self)
+
+
+    def setImageOffset(self, value):
+        """setImageOffset(ImageSegment self, nitf::Uint64 value)"""
+        return _six_sicd.ImageSegment_setImageOffset(self, value)
+
+
+    def getImageEnd(self):
+        """getImageEnd(ImageSegment self) -> nitf::Uint64"""
+        return _six_sicd.ImageSegment_getImageEnd(self)
+
+
+    def setImageEnd(self, value):
+        """setImageEnd(ImageSegment self, nitf::Uint64 value)"""
+        return _six_sicd.ImageSegment_setImageEnd(self, value)
+
+ImageSegment_swigregister = _six_sicd.ImageSegment_swigregister
+ImageSegment_swigregister(ImageSegment)
+
+class ImageSourceDestructor(_object):
+    """Proxy of C++ nitf::ImageSourceDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSourceDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSourceDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ImageSourceDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(ImageSourceDestructor self, nitf_ImageSource * nativeObject)"""
+        return _six_sicd.ImageSourceDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::ImageSourceDestructor self) -> ImageSourceDestructor"""
+        this = _six_sicd.new_ImageSourceDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+ImageSourceDestructor_swigregister = _six_sicd.ImageSourceDestructor_swigregister
+ImageSourceDestructor_swigregister(ImageSourceDestructor)
+
+class ImageSource(_object):
+    """Proxy of C++ nitf::ImageSource class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSource, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSource, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::ImageSource self, ImageSource x) -> ImageSource
+        __init__(nitf::ImageSource self, nitf_ImageSource * x) -> ImageSource
+        __init__(nitf::ImageSource self) -> ImageSource
+        """
+        this = _six_sicd.new_ImageSource(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_ImageSource
+    __del__ = lambda self: None
+
+    def addBand(self, bandSource):
+        """addBand(ImageSource self, nitf::BandSource bandSource)"""
+        return _six_sicd.ImageSource_addBand(self, bandSource)
+
+
+    def getBand(self, n):
+        """getBand(ImageSource self, int n) -> nitf::BandSource"""
+        return _six_sicd.ImageSource_getBand(self, n)
+
+ImageSource_swigregister = _six_sicd.ImageSource_swigregister
+ImageSource_swigregister(ImageSource)
+
+class ImageSubheaderDestructor(_object):
+    """Proxy of C++ nitf::ImageSubheaderDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSubheaderDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSubheaderDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_ImageSubheaderDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(ImageSubheaderDestructor self, nitf_ImageSubheader * nativeObject)"""
+        return _six_sicd.ImageSubheaderDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::ImageSubheaderDestructor self) -> ImageSubheaderDestructor"""
+        this = _six_sicd.new_ImageSubheaderDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+ImageSubheaderDestructor_swigregister = _six_sicd.ImageSubheaderDestructor_swigregister
+ImageSubheaderDestructor_swigregister(ImageSubheaderDestructor)
+
+class ImageSubheader(_object):
+    """Proxy of C++ nitf::ImageSubheader class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ImageSubheader, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ImageSubheader, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::ImageSubheader self, ImageSubheader x) -> ImageSubheader
+        __init__(nitf::ImageSubheader self, nitf_ImageSubheader * x) -> ImageSubheader
+        __init__(nitf::ImageSubheader self) -> ImageSubheader
+        """
+        this = _six_sicd.new_ImageSubheader(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(ImageSubheader self) -> ImageSubheader"""
+        return _six_sicd.ImageSubheader_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_ImageSubheader
+    __del__ = lambda self: None
+
+    def setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands):
+        """setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)"""
+        return _six_sicd.ImageSubheader_setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands)
+
+
+    def setCornersFromLatLons(self, type, corners):
+        """setCornersFromLatLons(ImageSubheader self, nitf::CornersType type, double [4][2] corners)"""
+        return _six_sicd.ImageSubheader_setCornersFromLatLons(self, type, corners)
+
+
+    def getCornersAsLatLons(self, corners):
+        """getCornersAsLatLons(ImageSubheader self, double [4][2] corners)"""
+        return _six_sicd.ImageSubheader_getCornersAsLatLons(self, corners)
+
+
+    def getCornersType(self):
+        """getCornersType(ImageSubheader self) -> nitf::CornersType"""
+        return _six_sicd.ImageSubheader_getCornersType(self)
+
+
+    def setBlocking(self, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode):
+        """setBlocking(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 numRowsPerBlock, nitf::Uint32 numColsPerBlock, std::string const & imode)"""
+        return _six_sicd.ImageSubheader_setBlocking(self, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode)
+
+
+    def computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
+        """computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
+        return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
+
+    computeBlocking = staticmethod(computeBlocking)
+
+    def setDimensions(self, numRows, numCols):
+        """setDimensions(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols)"""
+        return _six_sicd.ImageSubheader_setDimensions(self, numRows, numCols)
+
+
+    def getBandCount(self):
+        """getBandCount(ImageSubheader self) -> nitf::Uint32"""
+        return _six_sicd.ImageSubheader_getBandCount(self)
+
+
+    def createBands(self, numBands):
+        """createBands(ImageSubheader self, nitf::Uint32 numBands)"""
+        return _six_sicd.ImageSubheader_createBands(self, numBands)
+
+
+    def insertImageComment(self, comment, index):
+        """insertImageComment(ImageSubheader self, std::string comment, int index) -> int"""
+        return _six_sicd.ImageSubheader_insertImageComment(self, comment, index)
+
+
+    def removeImageComment(self, index):
+        """removeImageComment(ImageSubheader self, int index)"""
+        return _six_sicd.ImageSubheader_removeImageComment(self, index)
+
+
+    def getFilePartType(self):
+        """getFilePartType(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getFilePartType(self)
+
+
+    def getImageId(self):
+        """getImageId(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageId(self)
+
+
+    def getImageDateAndTime(self):
+        """getImageDateAndTime(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageDateAndTime(self)
+
+
+    def getTargetId(self):
+        """getTargetId(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getTargetId(self)
+
+
+    def getImageTitle(self):
+        """getImageTitle(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageTitle(self)
+
+
+    def getImageSecurityClass(self):
+        """getImageSecurityClass(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageSecurityClass(self)
+
+
+    def getSecurityGroup(self):
+        """getSecurityGroup(ImageSubheader self) -> nitf::FileSecurity"""
+        return _six_sicd.ImageSubheader_getSecurityGroup(self)
+
+
+    def setSecurityGroup(self, value):
+        """setSecurityGroup(ImageSubheader self, nitf::FileSecurity value)"""
+        return _six_sicd.ImageSubheader_setSecurityGroup(self, value)
+
+
+    def getEncrypted(self):
+        """getEncrypted(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getEncrypted(self)
+
+
+    def getImageSource(self):
+        """getImageSource(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageSource(self)
+
+
+    def getNumRows(self):
+        """getNumRows(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumRows(self)
+
+
+    def getNumCols(self):
+        """getNumCols(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumCols(self)
+
+
+    def getPixelValueType(self):
+        """getPixelValueType(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getPixelValueType(self)
+
+
+    def getImageRepresentation(self):
+        """getImageRepresentation(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageRepresentation(self)
+
+
+    def getImageCategory(self):
+        """getImageCategory(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageCategory(self)
+
+
+    def getActualBitsPerPixel(self):
+        """getActualBitsPerPixel(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getActualBitsPerPixel(self)
+
+
+    def getPixelJustification(self):
+        """getPixelJustification(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getPixelJustification(self)
+
+
+    def getImageCoordinateSystem(self):
+        """getImageCoordinateSystem(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageCoordinateSystem(self)
+
+
+    def getCornerCoordinates(self):
+        """getCornerCoordinates(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getCornerCoordinates(self)
+
+
+    def getNumImageComments(self):
+        """getNumImageComments(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumImageComments(self)
+
+
+    def getImageComments(self):
+        """getImageComments(ImageSubheader self) -> nitf::List"""
+        return _six_sicd.ImageSubheader_getImageComments(self)
+
+
+    def getImageCompression(self):
+        """getImageCompression(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageCompression(self)
+
+
+    def getCompressionRate(self):
+        """getCompressionRate(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getCompressionRate(self)
+
+
+    def getNumImageBands(self):
+        """getNumImageBands(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumImageBands(self)
+
+
+    def getNumMultispectralImageBands(self):
+        """getNumMultispectralImageBands(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumMultispectralImageBands(self)
+
+
+    def getBandInfo(self, band):
+        """getBandInfo(ImageSubheader self, nitf::Uint32 band) -> nitf::BandInfo"""
+        return _six_sicd.ImageSubheader_getBandInfo(self, band)
+
+
+    def getImageSyncCode(self):
+        """getImageSyncCode(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageSyncCode(self)
+
+
+    def getImageMode(self):
+        """getImageMode(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageMode(self)
+
+
+    def getNumBlocksPerRow(self):
+        """getNumBlocksPerRow(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumBlocksPerRow(self)
+
+
+    def getNumBlocksPerCol(self):
+        """getNumBlocksPerCol(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumBlocksPerCol(self)
+
+
+    def getNumPixelsPerHorizBlock(self):
+        """getNumPixelsPerHorizBlock(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumPixelsPerHorizBlock(self)
+
+
+    def getNumPixelsPerVertBlock(self):
+        """getNumPixelsPerVertBlock(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumPixelsPerVertBlock(self)
+
+
+    def getNumBitsPerPixel(self):
+        """getNumBitsPerPixel(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getNumBitsPerPixel(self)
+
+
+    def getImageDisplayLevel(self):
+        """getImageDisplayLevel(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageDisplayLevel(self)
+
+
+    def getImageAttachmentLevel(self):
+        """getImageAttachmentLevel(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageAttachmentLevel(self)
+
+
+    def getImageLocation(self):
+        """getImageLocation(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageLocation(self)
+
+
+    def getImageMagnification(self):
+        """getImageMagnification(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getImageMagnification(self)
+
+
+    def getUserDefinedImageDataLength(self):
+        """getUserDefinedImageDataLength(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getUserDefinedImageDataLength(self)
+
+
+    def getUserDefinedOverflow(self):
+        """getUserDefinedOverflow(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getUserDefinedOverflow(self)
+
+
+    def getExtendedHeaderLength(self):
+        """getExtendedHeaderLength(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getExtendedHeaderLength(self)
+
+
+    def getExtendedHeaderOverflow(self):
+        """getExtendedHeaderOverflow(ImageSubheader self) -> Field"""
+        return _six_sicd.ImageSubheader_getExtendedHeaderOverflow(self)
+
+
+    def getUserDefinedSection(self):
+        """getUserDefinedSection(ImageSubheader self) -> Extensions"""
+        return _six_sicd.ImageSubheader_getUserDefinedSection(self)
+
+
+    def setUserDefinedSection(self, value):
+        """setUserDefinedSection(ImageSubheader self, Extensions value)"""
+        return _six_sicd.ImageSubheader_setUserDefinedSection(self, value)
+
+
+    def getExtendedSection(self):
+        """getExtendedSection(ImageSubheader self) -> Extensions"""
+        return _six_sicd.ImageSubheader_getExtendedSection(self)
+
+
+    def setExtendedSection(self, value):
+        """setExtendedSection(ImageSubheader self, Extensions value)"""
+        return _six_sicd.ImageSubheader_setExtendedSection(self, value)
+
+
+    def getActualImageDim(dim, numDimsPerBlock):
+        """getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
+        return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
+
+    getActualImageDim = staticmethod(getActualImageDim)
+
+    def getNumBytesOfImageData(self):
+        """getNumBytesOfImageData(ImageSubheader self) -> size_t"""
+        return _six_sicd.ImageSubheader_getNumBytesOfImageData(self)
+
+ImageSubheader_swigregister = _six_sicd.ImageSubheader_swigregister
+ImageSubheader_swigregister(ImageSubheader)
+
+def ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
+    """ImageSubheader_computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
+    return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
+
+def ImageSubheader_getActualImageDim(dim, numDimsPerBlock):
+    """ImageSubheader_getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
+    return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
+
+NITF_VER_20 = _six_sicd.NITF_VER_20
+NITF_VER_21 = _six_sicd.NITF_VER_21
+NITF_VER_UNKNOWN = _six_sicd.NITF_VER_UNKNOWN
+class SICDMeshes(_object):
+    """Proxy of C++ six::sicd::SICDMeshes class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SICDMeshes, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SICDMeshes, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::SICDMeshes self) -> SICDMeshes"""
+        this = _six_sicd.new_SICDMeshes()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_SICDMeshes
+    __del__ = lambda self: None
+SICDMeshes_swigregister = _six_sicd.SICDMeshes_swigregister
+SICDMeshes_swigregister(SICDMeshes)
+cvar = _six_sicd.cvar
+SICDMeshes.SLANT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_SLANT_PLANE_MESH_ID
+SICDMeshes.OUTPUT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_OUTPUT_PLANE_MESH_ID
+SICDMeshes.NOISE_MESH_ID = _six_sicd.cvar.SICDMeshes_NOISE_MESH_ID
+SICDMeshes.SCALAR_MESH_ID = _six_sicd.cvar.SICDMeshes_SCALAR_MESH_ID
+
+class PlanarCoordinateMesh(_object):
+    """Proxy of C++ six::sicd::PlanarCoordinateMesh class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PlanarCoordinateMesh, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PlanarCoordinateMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name) -> PlanarCoordinateMesh
+        __init__(six::sicd::PlanarCoordinateMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y) -> PlanarCoordinateMesh
+        """
+        this = _six_sicd.new_PlanarCoordinateMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getName(self):
+        """getName(PlanarCoordinateMesh self) -> std::string"""
+        return _six_sicd.PlanarCoordinateMesh_getName(self)
+
+
+    def getMeshDims(self):
+        """getMeshDims(PlanarCoordinateMesh self) -> RowColSizeT"""
+        return _six_sicd.PlanarCoordinateMesh_getMeshDims(self)
+
+
+    def getX(self):
+        """getX(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getX(self)
+
+
+    def getY(self):
+        """getY(PlanarCoordinateMesh self) -> std_vector_double"""
+        return _six_sicd.PlanarCoordinateMesh_getY(self)
+
+
+    def getFields(self):
+        """getFields(PlanarCoordinateMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.PlanarCoordinateMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(PlanarCoordinateMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.PlanarCoordinateMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(PlanarCoordinateMesh self, sys::byte const *& values)"""
+        return _six_sicd.PlanarCoordinateMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_PlanarCoordinateMesh
+    __del__ = lambda self: None
+PlanarCoordinateMesh_swigregister = _six_sicd.PlanarCoordinateMesh_swigregister
+PlanarCoordinateMesh_swigregister(PlanarCoordinateMesh)
+
+class ScalarMesh(PlanarCoordinateMesh):
+    """Proxy of C++ six::sicd::ScalarMesh class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScalarMesh, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ScalarMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::ScalarMesh self, std::string const & name) -> ScalarMesh
+        __init__(six::sicd::ScalarMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, size_t numScalarsPerCoord, std::map< std::string,std::vector< double,std::allocator< double > > > const & scalars) -> ScalarMesh
+        """
+        this = _six_sicd.new_ScalarMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getScalars(self):
+        """getScalars(ScalarMesh self) -> std::map< std::string,std::vector< double,std::allocator< double > > > const &"""
+        return _six_sicd.ScalarMesh_getScalars(self)
+
+
+    def getNumScalarsPerCoord(self):
+        """getNumScalarsPerCoord(ScalarMesh self) -> size_t"""
+        return _six_sicd.ScalarMesh_getNumScalarsPerCoord(self)
+
+
+    def getFields(self):
+        """getFields(ScalarMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.ScalarMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(ScalarMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.ScalarMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(ScalarMesh self, sys::byte const *& values)"""
+        return _six_sicd.ScalarMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_ScalarMesh
+    __del__ = lambda self: None
+ScalarMesh_swigregister = _six_sicd.ScalarMesh_swigregister
+ScalarMesh_swigregister(ScalarMesh)
+
+class NoiseMesh(PlanarCoordinateMesh):
+    """Proxy of C++ six::sicd::NoiseMesh class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseMesh, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NoiseMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::NoiseMesh self, std::string const & name) -> NoiseMesh
+        __init__(six::sicd::NoiseMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, std_vector_double mainBeamNoise, std_vector_double azimuthAmbiguityNoise, std_vector_double combinedNoise) -> NoiseMesh
+        """
+        this = _six_sicd.new_NoiseMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getMainBeamNoise(self):
+        """getMainBeamNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getMainBeamNoise(self)
+
+
+    def getAzimuthAmbiguityNoise(self):
+        """getAzimuthAmbiguityNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getAzimuthAmbiguityNoise(self)
+
+
+    def getCombinedNoise(self):
+        """getCombinedNoise(NoiseMesh self) -> std_vector_double"""
+        return _six_sicd.NoiseMesh_getCombinedNoise(self)
+
+
+    def getFields(self):
+        """getFields(NoiseMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.NoiseMesh_getFields(self)
+
+
+    def serialize(self, values):
+        """serialize(NoiseMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.NoiseMesh_serialize(self, values)
+
+
+    def deserialize(self, values):
+        """deserialize(NoiseMesh self, sys::byte const *& values)"""
+        return _six_sicd.NoiseMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_NoiseMesh
+    __del__ = lambda self: None
+NoiseMesh_swigregister = _six_sicd.NoiseMesh_swigregister
+NoiseMesh_swigregister(NoiseMesh)
+
 import coda.math_poly
 import coda.math_linear
 import coda.coda_except
@@ -211,6 +1725,233 @@ import pysix.six_base
 import pysix.scene
 import coda.mem
 import coda.coda_io
+class RecordDestructor(_object):
+    """Proxy of C++ nitf::RecordDestructor class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RecordDestructor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, RecordDestructor, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_sicd.delete_RecordDestructor
+    __del__ = lambda self: None
+
+    def __call__(self, nativeObject):
+        """__call__(RecordDestructor self, nitf_Record * nativeObject)"""
+        return _six_sicd.RecordDestructor___call__(self, nativeObject)
+
+
+    def __init__(self):
+        """__init__(nitf::RecordDestructor self) -> RecordDestructor"""
+        this = _six_sicd.new_RecordDestructor()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+RecordDestructor_swigregister = _six_sicd.RecordDestructor_swigregister
+RecordDestructor_swigregister(RecordDestructor)
+
+class Record(_object):
+    """Proxy of C++ nitf::Record class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Record, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Record, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(nitf::Record self, Record x) -> Record
+        __init__(nitf::Record self, nitf_Record * x) -> Record
+        __init__(nitf::Record self, nitf::Version version=NITF_VER_21) -> Record
+        __init__(nitf::Record self) -> Record
+        """
+        this = _six_sicd.new_Record(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def clone(self):
+        """clone(Record self) -> Record"""
+        return _six_sicd.Record_clone(self)
+
+    __swig_destroy__ = _six_sicd.delete_Record
+    __del__ = lambda self: None
+
+    def getVersion(self):
+        """getVersion(Record self) -> nitf::Version"""
+        return _six_sicd.Record_getVersion(self)
+
+
+    def getHeader(self):
+        """getHeader(Record self) -> FileHeader"""
+        return _six_sicd.Record_getHeader(self)
+
+
+    def setHeader(self, value):
+        """setHeader(Record self, FileHeader value)"""
+        return _six_sicd.Record_setHeader(self, value)
+
+
+    def getNumImages(self):
+        """getNumImages(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumImages(self)
+
+
+    def getNumGraphics(self):
+        """getNumGraphics(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumGraphics(self)
+
+
+    def getNumLabels(self):
+        """getNumLabels(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumLabels(self)
+
+
+    def getNumTexts(self):
+        """getNumTexts(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumTexts(self)
+
+
+    def getNumDataExtensions(self):
+        """getNumDataExtensions(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumDataExtensions(self)
+
+
+    def getNumReservedExtensions(self):
+        """getNumReservedExtensions(Record self) -> nitf::Uint32"""
+        return _six_sicd.Record_getNumReservedExtensions(self)
+
+
+    def newImageSegment(self, index=-1):
+        """
+        newImageSegment(Record self, int index=-1) -> ImageSegment
+        newImageSegment(Record self) -> ImageSegment
+        """
+        return _six_sicd.Record_newImageSegment(self, index)
+
+
+    def newGraphicSegment(self, index=-1):
+        """
+        newGraphicSegment(Record self, int index=-1) -> nitf::GraphicSegment
+        newGraphicSegment(Record self) -> nitf::GraphicSegment
+        """
+        return _six_sicd.Record_newGraphicSegment(self, index)
+
+
+    def newTextSegment(self, index=-1):
+        """
+        newTextSegment(Record self, int index=-1) -> nitf::TextSegment
+        newTextSegment(Record self) -> nitf::TextSegment
+        """
+        return _six_sicd.Record_newTextSegment(self, index)
+
+
+    def newDataExtensionSegment(self, index=-1):
+        """
+        newDataExtensionSegment(Record self, int index=-1) -> DESegment
+        newDataExtensionSegment(Record self) -> DESegment
+        """
+        return _six_sicd.Record_newDataExtensionSegment(self, index)
+
+
+    def removeImageSegment(self, index):
+        """removeImageSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeImageSegment(self, index)
+
+
+    def removeGraphicSegment(self, index):
+        """removeGraphicSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeGraphicSegment(self, index)
+
+
+    def removeTextSegment(self, index):
+        """removeTextSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeTextSegment(self, index)
+
+
+    def removeLabelSegment(self, index):
+        """removeLabelSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeLabelSegment(self, index)
+
+
+    def removeDataExtensionSegment(self, index):
+        """removeDataExtensionSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeDataExtensionSegment(self, index)
+
+
+    def removeReservedExtensionSegment(self, index):
+        """removeReservedExtensionSegment(Record self, nitf::Uint32 index)"""
+        return _six_sicd.Record_removeReservedExtensionSegment(self, index)
+
+
+    def moveImageSegment(self, oldIndex, newIndex=-1):
+        """
+        moveImageSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveImageSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveImageSegment(self, oldIndex, newIndex)
+
+
+    def moveTextSegment(self, oldIndex, newIndex=-1):
+        """
+        moveTextSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveTextSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveTextSegment(self, oldIndex, newIndex)
+
+
+    def moveGraphicSegment(self, oldIndex, newIndex=-1):
+        """
+        moveGraphicSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveGraphicSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveGraphicSegment(self, oldIndex, newIndex)
+
+
+    def moveLabelSegment(self, oldIndex, newIndex=-1):
+        """
+        moveLabelSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveLabelSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveLabelSegment(self, oldIndex, newIndex)
+
+
+    def moveDataExtensionSegment(self, oldIndex, newIndex=-1):
+        """
+        moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveDataExtensionSegment(self, oldIndex, newIndex)
+
+
+    def moveReservedExtensionSegment(self, oldIndex, newIndex=-1):
+        """
+        moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
+        moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex)
+        """
+        return _six_sicd.Record_moveReservedExtensionSegment(self, oldIndex, newIndex)
+
+
+    def setComplexityLevelIfUnset(self):
+        """setComplexityLevelIfUnset(Record self)"""
+        return _six_sicd.Record_setComplexityLevelIfUnset(self)
+
+
+    def getImageSegment(self, index):
+        """getImageSegment(Record self, size_t index) -> ImageSegment"""
+        return _six_sicd.Record_getImageSegment(self, index)
+
+
+    def getDataExtension(self, index):
+        """getDataExtension(Record self, size_t index) -> DESegment"""
+        return _six_sicd.Record_getDataExtension(self, index)
+
+Record_swigregister = _six_sicd.Record_swigregister
+Record_swigregister(Record)
+
 
 def asComplexData(data):
     """asComplexData(Data data) -> ComplexData"""
@@ -224,8 +1965,19 @@ def readNITF(pathname, schemaPaths):
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
 
+def cropMetaData(complexData, aoiOffset, aoiDims):
+    """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> std::auto_ptr< six::sicd::ComplexData >"""
+    return _six_sicd.cropMetaData(complexData, aoiOffset, aoiDims)
+
+def _readRecord(pathname):
+    """_readRecord(std::string const & pathname) -> Record"""
+    return _six_sicd._readRecord(pathname)
+
 import os
 import sys
+
+from coda.math_poly import Poly2D
+
 
 def schema_path():
     """Provide an absolute path to the schemas."""
@@ -317,6 +2069,111 @@ class CollectionInformation(_object):
 
 CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
 CollectionInformation_swigregister(CollectionInformation)
+
+class ProjectionPolynomialFitter(_object):
+    """Proxy of C++ scene::ProjectionPolynomialFitter class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ProjectionPolynomialFitter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ProjectionPolynomialFitter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent, size_t numPoints1D) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColDouble outPixelStart, RowColSizeT outExtent) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColSizeT fullExtent, RowColDouble outPixelStart, RowColSizeT outExtent, VectorRowColDouble polygon, size_t numPoints1D) -> ProjectionPolynomialFitter
+        __init__(scene::ProjectionPolynomialFitter self, ProjectionModel projModel, GridECEFTransform gridTransform, RowColSizeT fullExtent, RowColDouble outPixelStart, RowColSizeT outExtent, VectorRowColDouble polygon) -> ProjectionPolynomialFitter
+        """
+        this = _six_sicd.new_ProjectionPolynomialFitter(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getOutputPlaneRows(self):
+        """getOutputPlaneRows(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneRows(self)
+
+
+    def getOutputPlaneCols(self):
+        """getOutputPlaneCols(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneCols(self)
+
+
+    def getSceneCoordinates(self):
+        """getSceneCoordinates(ProjectionPolynomialFitter self) -> math::linear::Matrix2D< types::RowCol< double > > const &"""
+        return _six_sicd.ProjectionPolynomialFitter_getSceneCoordinates(self)
+
+
+    def getTimeCOA(self):
+        """getTimeCOA(ProjectionPolynomialFitter self) -> MatrixDouble"""
+        return _six_sicd.ProjectionPolynomialFitter_getTimeCOA(self)
+
+
+    def _fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+        """
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
+        _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol)
+        """
+        return _six_sicd.ProjectionPolynomialFitter__fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
+
+
+    def _fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+        """
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None)
+        _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol)
+        """
+        return _six_sicd.ProjectionPolynomialFitter__fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow, meanResidualErrorCol)
+
+
+    def fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+        """
+        fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
+        fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
+
+
+    def fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+        """
+        fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
+        fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
+        """
+        return _six_sicd.ProjectionPolynomialFitter_fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
+
+
+    def fitOutputToSlantPolynomials(
+            self, offset, inSceneCenter,
+            interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY):
+        toSlantRow = Poly2D()
+        toSlantCol = Poly2D()
+        self._fitOutputToSlantImpl(
+            offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY, toSlantRow, toSlantCol)
+        return (toSlantRow, toSlantCol)
+
+    def fitSlantToOutputPolynomials(
+            self, offset, inSceneCenter,
+            interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY):
+        toOutputRow = Poly2D()
+        toOutputCol = Poly2D()
+        self._fitSlantToOutputImpl(
+            offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+            polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+        return (toOutputRow, toOutputCol)
+
+
+    __swig_destroy__ = _six_sicd.delete_ProjectionPolynomialFitter
+    __del__ = lambda self: None
+ProjectionPolynomialFitter_swigregister = _six_sicd.ProjectionPolynomialFitter_swigregister
+ProjectionPolynomialFitter_swigregister(ProjectionPolynomialFitter)
+ProjectionPolynomialFitter.DEFAULTS_POINTS_1D = _six_sicd.cvar.ProjectionPolynomialFitter_DEFAULTS_POINTS_1D
 
 class ComplexClassification(pysix.six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class."""
@@ -1349,12 +3206,12 @@ class Segment(_object):
 
 
     def getNumLines(self):
-        """getNumLines(Segment self) -> int"""
+        """getNumLines(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumLines(self)
 
 
     def getNumSamples(self):
-        """getNumSamples(Segment self) -> int"""
+        """getNumSamples(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumSamples(self)
 
     __swig_setmethods__["startLine"] = _six_sicd.Segment_startLine_set
@@ -1386,6 +3243,11 @@ class Segment(_object):
     def __ne__(self, rhs):
         """__ne__(Segment self, Segment rhs) -> bool"""
         return _six_sicd.Segment___ne__(self, rhs)
+
+
+    def rotateCCW(self, numColumns):
+        """rotateCCW(Segment self, size_t numColumns)"""
+        return _six_sicd.Segment_rotateCCW(self, numColumns)
 
 Segment_swigregister = _six_sicd.Segment_swigregister
 Segment_swigregister(Segment)
@@ -1450,6 +3312,16 @@ class AreaPlane(_object):
     def getSegment(self, segmentId):
         """getSegment(AreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.AreaPlane_getSegment(self, segmentId)
+
+
+    def rotateCCW(self):
+        """rotateCCW(AreaPlane self)"""
+        return _six_sicd.AreaPlane_rotateCCW(self)
+
+
+    def rotateToShadowsDown(self):
+        """rotateToShadowsDown(AreaPlane self)"""
+        return _six_sicd.AreaPlane_rotateToShadowsDown(self)
 
     __swig_destroy__ = _six_sicd.delete_AreaPlane
     __del__ = lambda self: None
@@ -2198,6 +4070,7 @@ AntennaParameters_swigregister(AntennaParameters)
 
 def __lshift__(*args):
     """
+    __lshift__(std::ostream & os, GeoInfo g) -> std::ostream
     __lshift__(std::ostream & os, AreaDirectionParameters d) -> std::ostream
     __lshift__(std::ostream & os, ElectricalBoresight d) -> std::ostream
     __lshift__(std::ostream & os, HalfPowerBeamwidths d) -> std::ostream
@@ -2982,9 +4855,12 @@ class ComplexData(pysix.six_base.Data):
         return _six_sicd.ComplexData_setVersion(self, version)
 
 
-    def getOutputPlaneOffsetAndExtent(self, offset, extent):
-        """getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)"""
-        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, offset, extent)
+    def getOutputPlaneOffsetAndExtent(self, *args):
+        """
+        getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
+        getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane areaPlane, RowColSizeT offset, RowColSizeT extent)
+        """
+        return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
 
 
     def pixelToImagePoint(self, pixelLoc):
@@ -3072,15 +4948,34 @@ class SixSicdUtilities(_object):
 
     getProjectionModel = staticmethod(getProjectionModel)
 
+    def getModelComponents(complexData, geometry, projectionModel, areaPlane):
+        """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+        return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+    getModelComponents = staticmethod(getModelComponents)
+
+    def getPolynomialFitter(*args):
+        """
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        """
+        return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
+
+    getPolynomialFitter = staticmethod(getPolynomialFitter)
+
     def getValidDataPolygon(sicdData, projection, validData):
         """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
         return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
     getValidDataPolygon = staticmethod(getValidDataPolygon)
 
-    def readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-        """readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
-        return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
+    def readSicd(*args):
+        """
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
+        """
+        return _six_sicd.SixSicdUtilities_readSicd(*args)
 
     readSicd = staticmethod(readSicd)
 
@@ -3161,6 +5056,60 @@ class SixSicdUtilities(_object):
 
     createFakeComplexData = staticmethod(createFakeComplexData)
 
+    def getNoiseMesh(reader):
+        """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+        return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
+
+    getNoiseMesh = staticmethod(getNoiseMesh)
+
+    def getScalarMesh(reader):
+        """getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+        return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
+
+    getScalarMesh = staticmethod(getScalarMesh)
+
+    def getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    getProjectionPolys = staticmethod(getProjectionPolys)
+
+    def transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+        """transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+        return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+    transformXYPolyToRowColPoly = staticmethod(transformXYPolyToRowColPoly)
+
+    def transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+        """transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+        return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+    transformXYProjectionPolys = staticmethod(transformXYProjectionPolys)
+
+    def fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+        """fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+        return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+    fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
+
+    def projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+        """projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+        return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+    projectPixelsToOutputPlane = staticmethod(projectPixelsToOutputPlane)
+
+    def projectValidDataPolygonToOutputPlane(complexData, opPixels):
+        """projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+        return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+    projectValidDataPolygonToOutputPlane = staticmethod(projectValidDataPolygonToOutputPlane)
+
+    def projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+        """projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+        return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
+
+    projectPixelsToSlantPlane = staticmethod(projectPixelsToSlantPlane)
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -3181,13 +5130,28 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
+def SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane):
+    """SixSicdUtilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+    return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
+
+def SixSicdUtilities_getPolynomialFitter(*args):
+    """
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    """
+    return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
+
 def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
     """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
     return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
-def SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData):
-    """SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)"""
-    return _six_sicd.SixSicdUtilities_readSicd(sicdPathname, schemaPaths, complexData, widebandData)
+def SixSicdUtilities_readSicd(*args):
+    """
+    readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
+    """
+    return _six_sicd.SixSicdUtilities_readSicd(*args)
 
 def SixSicdUtilities_getComplexData(*args):
     """
@@ -3245,6 +5209,139 @@ def SixSicdUtilities_toXMLString(*args):
 def SixSicdUtilities_createFakeComplexData():
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
+
+def SixSicdUtilities_getNoiseMesh(reader):
+    """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+    return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
+
+def SixSicdUtilities_getScalarMesh(reader):
+    """SixSicdUtilities_getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+    return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
+
+def SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+    """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+    """SixSicdUtilities_transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
+    return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
+
+def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+    """SixSicdUtilities_transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
+
+def SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+    """SixSicdUtilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
+    return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
+
+def SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+    """SixSicdUtilities_projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
+    return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
+
+def SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels):
+    """SixSicdUtilities_projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
+    return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
+
+def SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+    """SixSicdUtilities_projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
+    return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
+
+class AreaPlaneUtility(_object):
+    """Proxy of C++ six::sicd::AreaPlaneUtility class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AreaPlaneUtility, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AreaPlaneUtility, name)
+    __repr__ = _swig_repr
+
+    def setAreaPlane(*args):
+        """
+        setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
+        setAreaPlane(ComplexData data, bool includeSegmentList=True)
+        setAreaPlane(ComplexData data)
+        """
+        return _six_sicd.AreaPlaneUtility_setAreaPlane(*args)
+
+    setAreaPlane = staticmethod(setAreaPlane)
+
+    def deriveAreaPlane(*args):
+        """
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
+        deriveAreaPlane(ComplexData data, AreaPlane areaPlane)
+        """
+        return _six_sicd.AreaPlaneUtility_deriveAreaPlane(*args)
+
+    deriveAreaPlane = staticmethod(deriveAreaPlane)
+
+    def hasAreaPlane(data):
+        """hasAreaPlane(ComplexData data) -> bool"""
+        return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
+
+    hasAreaPlane = staticmethod(hasAreaPlane)
+
+    def __init__(self):
+        """__init__(six::sicd::AreaPlaneUtility self) -> AreaPlaneUtility"""
+        this = _six_sicd.new_AreaPlaneUtility()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_sicd.delete_AreaPlaneUtility
+    __del__ = lambda self: None
+AreaPlaneUtility_swigregister = _six_sicd.AreaPlaneUtility_swigregister
+AreaPlaneUtility_swigregister(AreaPlaneUtility)
+
+def AreaPlaneUtility_setAreaPlane(*args):
+    """
+    setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
+    setAreaPlane(ComplexData data, bool includeSegmentList=True)
+    AreaPlaneUtility_setAreaPlane(ComplexData data)
+    """
+    return _six_sicd.AreaPlaneUtility_setAreaPlane(*args)
+
+def AreaPlaneUtility_deriveAreaPlane(*args):
+    """
+    deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
+    deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
+    AreaPlaneUtility_deriveAreaPlane(ComplexData data, AreaPlane areaPlane)
+    """
+    return _six_sicd.AreaPlaneUtility_deriveAreaPlane(*args)
+
+def AreaPlaneUtility_hasAreaPlane(data):
+    """AreaPlaneUtility_hasAreaPlane(ComplexData data) -> bool"""
+    return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
+AreaPlaneUtility.DEFAULT_SAMPLE_DENSITY = _six_sicd.cvar.AreaPlaneUtility_DEFAULT_SAMPLE_DENSITY
+
+class GeoLocator(_object):
+    """Proxy of C++ six::sicd::GeoLocator class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoLocator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoLocator, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, complexData, shadowsDown=True):
+        """
+        __init__(six::sicd::GeoLocator self, ComplexData complexData, bool shadowsDown=True) -> GeoLocator
+        __init__(six::sicd::GeoLocator self, ComplexData complexData) -> GeoLocator
+        """
+        this = _six_sicd.new_GeoLocator(complexData, shadowsDown)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def geolocate(self, rowCol):
+        """geolocate(GeoLocator self, RowColDouble rowCol) -> LatLonAlt"""
+        return _six_sicd.GeoLocator_geolocate(self, rowCol)
+
+    __swig_destroy__ = _six_sicd.delete_GeoLocator
+    __del__ = lambda self: None
+GeoLocator_swigregister = _six_sicd.GeoLocator_swigregister
+GeoLocator_swigregister(GeoLocator)
 
 class StdAutoComplexCollectionInformation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::ComplexCollectionInformation)> class."""
@@ -3533,6 +5630,12 @@ class ScopedCopyableImageData(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableImageData___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableImageData self) -> ImageData"""
@@ -3911,6 +6014,12 @@ class ScopedCopyableTimeline(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableTimeline___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableTimeline self) -> Timeline"""
         return _six_sicd.ScopedCopyableTimeline_get(self)
@@ -4005,6 +6114,12 @@ class ScopedCopyablePosition(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePosition___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyablePosition self) -> Position"""
@@ -4114,6 +6229,12 @@ class ScopedCopyableRcvAPC(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRcvAPC___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableRcvAPC self) -> RcvAPC"""
@@ -4340,6 +6461,12 @@ class ScopedCopyableImageFormation(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableImageFormation___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableImageFormation self) -> ImageFormation"""
         return _six_sicd.ScopedCopyableImageFormation_get(self)
@@ -4483,6 +6610,12 @@ class ScopedCopyableSCPCOA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableSCPCOA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableSCPCOA self) -> SCPCOA"""
@@ -4653,6 +6786,12 @@ class ScopedCopyableAntenna(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableAntenna___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableAntenna self) -> Antenna"""
         return _six_sicd.ScopedCopyableAntenna_get(self)
@@ -4748,6 +6887,12 @@ class ScopedCopyableSlowTimeDeskew(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew_get(self)
@@ -4838,6 +6983,12 @@ class ScopedCopyablePFA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePFA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyablePFA self) -> PFA"""
@@ -4977,6 +7128,12 @@ class ScopedCopyableRMA(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRMA self) -> RMA"""
         return _six_sicd.ScopedCopyableRMA_get(self)
@@ -5090,6 +7247,12 @@ class ScopedCopyableRgAzComp(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRgAzComp___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableRgAzComp self) -> RgAzComp"""
@@ -5728,6 +7891,12 @@ class ScopedCopyableAntennaParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableAntennaParameters___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableAntennaParameters self) -> AntennaParameters"""
         return _six_sicd.ScopedCopyableAntennaParameters_get(self)
@@ -5851,6 +8020,12 @@ class ScopedCopyableElectricalBoresight(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableElectricalBoresight___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableElectricalBoresight self) -> ElectricalBoresight"""
         return _six_sicd.ScopedCopyableElectricalBoresight_get(self)
@@ -5941,6 +8116,12 @@ class ScopedCopyableHalfPowerBeamwidths(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableHalfPowerBeamwidths___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableHalfPowerBeamwidths self) -> HalfPowerBeamwidths"""
@@ -6033,6 +8214,12 @@ class ScopedCopyableGainAndPhasePolys(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableGainAndPhasePolys___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableGainAndPhasePolys self) -> GainAndPhasePolys"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys_get(self)
@@ -6123,6 +8310,12 @@ class ScopedCopyableWeightType(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableWeightType___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableWeightType self) -> WeightType"""
@@ -6650,6 +8843,16 @@ class ScopedCloneableAreaPlane(_object):
         """getSegment(ScopedCloneableAreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.ScopedCloneableAreaPlane_getSegment(self, segmentId)
 
+
+    def rotateCCW(self):
+        """rotateCCW(ScopedCloneableAreaPlane self)"""
+        return _six_sicd.ScopedCloneableAreaPlane_rotateCCW(self)
+
+
+    def rotateToShadowsDown(self):
+        """rotateToShadowsDown(ScopedCloneableAreaPlane self)"""
+        return _six_sicd.ScopedCloneableAreaPlane_rotateToShadowsDown(self)
+
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
 
@@ -6839,12 +9042,12 @@ class ScopedCloneableSegment(_object):
 
 
     def getNumLines(self):
-        """getNumLines(ScopedCloneableSegment self) -> int"""
+        """getNumLines(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumLines(self)
 
 
     def getNumSamples(self):
-        """getNumSamples(ScopedCloneableSegment self) -> int"""
+        """getNumSamples(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumSamples(self)
 
     __swig_setmethods__["startLine"] = _six_sicd.ScopedCloneableSegment_startLine_set
@@ -6876,6 +9079,11 @@ class ScopedCloneableSegment(_object):
     def __ne__(self, rhs):
         """__ne__(ScopedCloneableSegment self, Segment rhs) -> bool"""
         return _six_sicd.ScopedCloneableSegment___ne__(self, rhs)
+
+
+    def rotateCCW(self, numColumns):
+        """rotateCCW(ScopedCloneableSegment self, size_t numColumns)"""
+        return _six_sicd.ScopedCloneableSegment_rotateCCW(self, numColumns)
 
 ScopedCloneableSegment_swigregister = _six_sicd.ScopedCloneableSegment_swigregister
 ScopedCloneableSegment_swigregister(ScopedCloneableSegment)
@@ -8432,6 +10640,12 @@ class ScopedCopyableRcvChannelProcessed(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRcvChannelProcessed___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRcvChannelProcessed self) -> RcvChannelProcessed"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed_get(self)
@@ -8743,6 +10957,12 @@ class ScopedCopyablePolarizationCalibration(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyablePolarizationCalibration___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyablePolarizationCalibration self) -> PolarizationCalibration"""
         return _six_sicd.ScopedCopyablePolarizationCalibration_get(self)
@@ -8837,6 +11057,12 @@ class ScopedCopyableDistortion(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableDistortion___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableDistortion self) -> Distortion"""
@@ -8972,6 +11198,12 @@ class ScopedCopyableRMAT(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMAT___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableRMAT self) -> RMAT"""
@@ -9136,6 +11368,12 @@ class ScopedCopyableRMCR(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableRMCR___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
     def get(self):
         """get(ScopedCopyableRMCR self) -> RMCR"""
         return _six_sicd.ScopedCopyableRMCR_get(self)
@@ -9265,6 +11503,12 @@ class ScopedCopyableINCA(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableINCA___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableINCA self) -> INCA"""
@@ -9422,6 +11666,12 @@ class ScopedCopyableInterPulsePeriod(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableInterPulsePeriod___nonzero__(self)
+    __bool__ = __nonzero__
+
+
 
     def get(self):
         """get(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
@@ -9719,6 +11969,16 @@ def readRegion(inputPathname, startRow, numRows, startCol, numCols, schemaPaths 
 
     return widebandData, complexData
 
+def readRecord(pathname):
+    record = _readRecord(pathname)
+    attributes = dir(record)
+    for attribute in attributes:
+        if (attribute.startswith('move') or
+                attribute.startswith('remove') or
+                attribute.startswith('set') or
+                attribute.startswith('new')):
+            delattr(record.__class__, attribute)
+    return record
 
 def writeAsNITF(outFile, schemaPaths, complexData, image):
     writeNITF(outFile, schemaPaths, complexData,
