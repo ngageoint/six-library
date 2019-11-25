@@ -2255,9 +2255,9 @@ class CPHDWriter(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname) -> CPHDWriter
@@ -2284,6 +2284,11 @@ class CPHDWriter(_object):
         write(CPHDWriter self)
         """
         return _cphd03.CPHDWriter_write(self, *args)
+
+
+    def close(self):
+        """close(CPHDWriter self)"""
+        return _cphd03.CPHDWriter_close(self)
 
 
     def addImageImpl(self, image, dims, vbm):

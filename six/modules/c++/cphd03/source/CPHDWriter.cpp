@@ -30,7 +30,7 @@
 namespace cphd03
 {
 CPHDWriter::CPHDWriter(const Metadata& metadata,
-                       std::shared_ptr<io::SeekableOutputStream> stream,
+                       std::shared_ptr<io::FileOutputStream> stream,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
     mMetadata(metadata),
@@ -252,5 +252,6 @@ void CPHDWriter::write(const std::string& classification,
                 mMetadata.data.arraySize[ii].numSamples;
         writeCPHDDataImpl(mCPHDData[ii], cphd03DataSize);
     }
+    mStream->close();
 }
 }

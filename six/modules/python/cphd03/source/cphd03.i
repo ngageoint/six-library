@@ -69,6 +69,7 @@ using six::Vector3;
 %include "cphd03/CPHDWriter.h"
 
 %ignore CPHDWriter::writeCPHDData;
+%ignore CPHDWriter::close;
 %ignore CPHDWriter::writeMetadata;
 %ignore CPHDWriter::addImage;
 %ignore CPHDWriter::write;
