@@ -135,6 +135,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     {
         writer.writeCPHDData(&writeData[0], dims.area());
     }
+    writer.close();
 }
 
 std::vector<std::complex<float> > checkData(const std::string& pathname,

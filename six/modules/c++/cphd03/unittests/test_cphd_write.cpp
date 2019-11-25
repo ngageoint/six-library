@@ -384,6 +384,7 @@ void runCPHDTest(const std::string& testName,
 
         writer.writeCPHDData(&data[ii][0], data[ii].size());
     }
+    writer.close();
 
     cphd03::CPHDReader reader(FILE_NAME, NUM_THREADS);
     cphd::Wideband& wideband = reader.getWideband();

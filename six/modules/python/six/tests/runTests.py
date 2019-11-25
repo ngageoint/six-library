@@ -108,7 +108,7 @@ def run(sourceDir):
     # the right things
     sicdDir = os.path.join(sourceDir, 'SICD')
     siddDir = os.path.join(sourceDir, 'SIDD')
-    cphdDir = os.path.join(sourceDir, 'CPHD1.0')
+    cphdDir = os.path.join(sourceDir, 'CPHD')
 
     if sourceDir != '':
         os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
@@ -133,9 +133,8 @@ def run(sourceDir):
     utils.setPaths()
 
     if platform.system() != 'SunOS':
-        try:
-            makeRegressionFiles.run()
-        except RuntimeError:
+
+        if makeRegressionFiles.run() == False:
             print('Error generating regression files')
             return False
 
