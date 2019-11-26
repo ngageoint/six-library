@@ -25,7 +25,7 @@
 #include <string>
 #include <complex>
 
-#include <cphd/Data.h>
+#include <cphd/MetadataBase.h>
 #include <cphd/Utilities.h>
 
 #include <io/SeekableStreams.h>
@@ -60,7 +60,7 @@ public:
      *  \param sizeWB CPHD header keyword "CPHD_DATA_SIZE"
      */
     Wideband(const std::string& pathname,
-             const cphd::Data& data,
+             const cphd::MetadataBase& metadata,
              sys::Off_T startWB,
              sys::Off_T sizeWB);
 
@@ -75,7 +75,7 @@ public:
      *  \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
      */
     Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
-             const cphd::Data& data,
+             const cphd::MetadataBase& metadata,
              sys::Off_T startWB,
              sys::Off_T sizeWB);
 
@@ -375,7 +375,7 @@ private:
 
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
-    const cphd::Data& mData;          // pointer to data metadata
+    const cphd::MetadataBase& mMetadata;          // pointer to data metadata
     const sys::Off_T mWBOffset;       // offset in bytes to start of wideband
     const size_t mWBSize;             // total size in bytes of wideband
     const size_t mElementSize;        // element size (bytes / complex sample)

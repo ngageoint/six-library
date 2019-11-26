@@ -26,6 +26,7 @@
 
 #include <ostream>
 
+#include <cphd/MetadataBase.h>
 #include <cphd/Types.h>
 #include <cphd03/Data.h>
 #include <cphd03/Global.h>
@@ -49,7 +50,7 @@ namespace cphd03
  *
  *
  */
-struct Metadata
+struct Metadata : cphd::MetadataBase
 {
     Metadata()
     {

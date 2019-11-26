@@ -31,10 +31,11 @@
 #include <cphd/Dwell.h>
 #include <cphd/ErrorParameters.h>
 #include <cphd/Global.h>
-#include <cphd/SceneCoordinates.h>
+#include <cphd/MetadataBase.h>
 #include <cphd/ProductInfo.h>
 #include <cphd/PVP.h>
 #include <cphd/ReferenceGeometry.h>
+#include <cphd/SceneCoordinates.h>
 #include <cphd/SupportArray.h>
 #include <cphd/TxRcv.h>
 #include <cphd/Utilities.h>
@@ -53,12 +54,23 @@ namespace cphd
  *  This object contains all of the sub-blocks for CPHD.
  *
  */
-struct Metadata
+struct Metadata : MetadataBase
 {
     //! Default constructor
     Metadata()
     {
     }
+
+    /*
+     * Getter functions
+     */
+    size_t getNumChannels() const override;
+    size_t getNumVectors(size_t channel) const override;    // 0-based channel number
+    size_t getNumSamples(size_t channel) const override;   // 0-based channel number
+    size_t getNumBytesPerSample() const override;   // 2, 4, or 8 bytes/complex sample
+    size_t getCompressedSignalSize(size_t channel) const override;
+    bool isCompressed() const override;
+
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly

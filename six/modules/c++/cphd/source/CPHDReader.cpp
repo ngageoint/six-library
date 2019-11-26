@@ -81,7 +81,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                     numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new Wideband(inStream, mMetadata->data,
+    mWideband.reset(new Wideband(inStream, *mMetadata,
                                  mFileHeader.getSignalBlockByteOffset(),
                                  mFileHeader.getSignalBlockSize()));
 }
