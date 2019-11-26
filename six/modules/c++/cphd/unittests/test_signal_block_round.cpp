@@ -100,15 +100,15 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     {
         writer.writeCPHDData(writeData.data(),dims.area()*2);
     }
+    writer.close();
 }
 
 std::vector<std::complex<float> > checkData(const std::string& pathname,
         size_t numThreads,
         const std::vector<double>& scaleFactors,
-        const types::RowCol<size_t>& dims,
-        std::shared_ptr<io::SeekableInputStream> inStream)
+        const types::RowCol<size_t>& dims)
 {
-    cphd::CPHDReader reader(inStream, numThreads);
+    cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::complex<float> > readData(dims.area());
 
@@ -155,16 +155,14 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
     const types::RowCol<size_t> dims(128, 256);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
-    std::shared_ptr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
     setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
-
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
     const std::vector<std::complex<float> > readData =
             checkData(tempfile.pathname(), numThreads,
-                      scaleFactors, dims, inStream);
+                      scaleFactors, dims);
     return compareVectors(readData, writeData, scaleFactors, scale);
 }
 
