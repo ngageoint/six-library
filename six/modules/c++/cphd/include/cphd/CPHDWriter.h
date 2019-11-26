@@ -325,6 +325,11 @@ public:
                        size_t numElements,
                        size_t channel = 1);
 
+    void close()
+    {
+        mStream->close();
+    }
+
 private:
     /*
      *  Write metadata helper
