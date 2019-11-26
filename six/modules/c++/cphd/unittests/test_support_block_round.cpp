@@ -94,10 +94,9 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
 std::vector<sys::ubyte> checkSupportData(
         const std::string& pathname,
         size_t size,
-        size_t numThreads,
-        std::shared_ptr<io::SeekableInputStream> inStream)
+        size_t numThreads)
 {
-    cphd::CPHDReader reader(inStream, numThreads);
+    cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
     mem::ScopedArray<sys::ubyte> readPtr;
@@ -136,7 +135,6 @@ bool runTest(const std::vector<T>& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = 1;
-    std::shared_ptr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, types::RowCol<size_t>(128,256), std::vector<std::complex<float> >());
     setSupport<T>(meta.data);
@@ -144,9 +142,9 @@ bool runTest(const std::vector<T>& writeData)
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
     const std::vector<sys::ubyte> readData =
-            checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads, inStream);
+            checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
 
-    return compareVectors(readData, &writeData[0], writeData.size());
+    return compareVectors(readData, writeData.data(), writeData.size());
 }
 
 TEST_CASE(testSupportsInt)

@@ -29,8 +29,6 @@
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
-#include <io/FileInputStream.h>
-#include <io/FileOutputStream.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/Wideband.h>
@@ -93,20 +91,19 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
         }
     }
 
-    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    cphd::CPHDWriter writer(metadata, outPathname);
     writer.writeMetadata(pvpBlock);
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(writeData.data(),dims.area()*2);
+        writer.writeCPHDData(writeData.data(),dims.area());
     }
-    writer.close();
 }
 
 std::vector<std::complex<float> > checkData(const std::string& pathname,
         size_t numThreads,
         const std::vector<double>& scaleFactors,
-        const types::RowCol<size_t>& dims)
+        const types::RowCol<size_t> dims)
 {
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
@@ -152,23 +149,25 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
     cphd::Metadata meta = cphd::Metadata();
     setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
+
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
     const std::vector<std::complex<float> > readData =
             checkData(tempfile.pathname(), numThreads,
                       scaleFactors, dims);
     return compareVectors(readData, writeData, scaleFactors, scale);
+    return true;
 }
 
 TEST_CASE(testUnscaledInt8)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<sys::Int8_T> > writeData =
             generateData<sys::Int8_T>(dims.area());
     const bool scale = false;
@@ -177,7 +176,7 @@ TEST_CASE(testUnscaledInt8)
 
 TEST_CASE(testScaledInt8)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<sys::Int8_T> > writeData =
             generateData<sys::Int8_T>(dims.area());
     const bool scale = true;
@@ -186,7 +185,7 @@ TEST_CASE(testScaledInt8)
 
 TEST_CASE(testUnscaledInt16)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<sys::Int16_T> > writeData =
             generateData<sys::Int16_T>(dims.area());
     const bool scale = false;
@@ -195,7 +194,7 @@ TEST_CASE(testUnscaledInt16)
 
 TEST_CASE(testScaledInt16)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<sys::Int16_T> > writeData =
             generateData<sys::Int16_T>(dims.area());
     const bool scale = true;
@@ -204,7 +203,7 @@ TEST_CASE(testScaledInt16)
 
 TEST_CASE(testUnscaledFloat)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<float> > writeData =
             generateData<float>(dims.area());
     const bool scale = false;
@@ -213,7 +212,7 @@ TEST_CASE(testUnscaledFloat)
 
 TEST_CASE(testScaledFloat)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(128, 128);
     const std::vector<std::complex<float> > writeData =
             generateData<float>(dims.area());
     const bool scale = true;

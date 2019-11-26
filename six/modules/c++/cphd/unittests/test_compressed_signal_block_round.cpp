@@ -89,11 +89,10 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
 
 std::vector<sys::ubyte> checkCompressedData(const std::string& pathname,
         size_t numThreads,
-        const types::RowCol<size_t>& dims,
-        std::shared_ptr<io::SeekableInputStream> inStream)
+        const types::RowCol<size_t>& dims)
 {
 
-    cphd::CPHDReader reader(inStream, numThreads);
+    cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<sys::ubyte> readData(dims.area());
 
@@ -124,7 +123,6 @@ bool runTest(const std::vector<sys::ubyte>& writeData)
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
     const types::RowCol<size_t> dims(128, 256);
-    std::shared_ptr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
     cphd::Metadata meta = cphd::Metadata();
     meta.data.signalCompressionID = "Huffman";
     cphd::setUpData(meta, dims, writeData);
@@ -134,7 +132,7 @@ bool runTest(const std::vector<sys::ubyte>& writeData)
     writeCompressedCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
     const std::vector<sys::ubyte> readData =
             checkCompressedData(tempfile.pathname(), numThreads,
-            dims, inStream);
+            dims);
     return compareVectors(readData, writeData);
 }
 

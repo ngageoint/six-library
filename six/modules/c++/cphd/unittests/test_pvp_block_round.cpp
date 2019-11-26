@@ -115,7 +115,6 @@ template<typename T>
 void writeCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
         const std::vector<std::complex<T> >& writeData,
-        io::FileOutputStream& mStream,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -126,16 +125,16 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(writeData.data(),dims.area()*2);
+        writer.writeCPHDData(writeData.data(),dims.area());
     }
 }
 
-bool checkData(size_t numThreads,
-               std::shared_ptr<io::SeekableInputStream> inStream,
+bool checkData(const std::string& pathname,
+               size_t numThreads,
                cphd::Metadata& metadata,
                cphd::PVPBlock& pvpBlock)
 {
-    cphd::CPHDReader reader(inStream, numThreads);
+    cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
 
     if (metadata.pvp != reader.getMetadata().pvp)
@@ -156,11 +155,8 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData,
 {
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
-    io::FileOutputStream outStream;
-    std::shared_ptr<io::SeekableInputStream> inStream(new io::FileInputStream(tempfile.pathname()));
-
-    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, outStream, meta, pvpBlock);
-    return checkData(numThreads, inStream, meta, pvpBlock);
+    writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
+    return checkData(tempfile.pathname(), numThreads, meta, pvpBlock);
 }
 
 TEST_CASE(testPVPBlockSimple)
