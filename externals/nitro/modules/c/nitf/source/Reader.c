@@ -1923,23 +1923,33 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *reader,
 }
 
 
-NITFAPI(nitf_Version) nitf_Reader_getNITFVersion(const char* fileName)
+NITFAPI(nitf_Version) nitf_Reader_getNITFVersionIO(nitf_IOInterface* io)
 {
-    nitf_IOHandle handle;
     nitf_Error error;
     char fhdr[NITF_FHDR_SZ];
     char fver[NITF_FVER_SZ];
     nitf_Version version = NITF_VER_UNKNOWN;
+    nitf_Off offset = nitf_IOInterface_tell(io, &error);
 
-    handle = nitf_IOHandle_create(fileName, NITF_ACCESS_READONLY,
-                                  NITF_OPEN_EXISTING, &error);
-    if (NITF_INVALID_HANDLE(handle))
-        goto CLEAN_AND_RETURN;
+    if (offset == (nitf_Off) -1)
+    {
+        return version;
+    }
 
-    if (!nitf_IOHandle_read(handle, fhdr, NITF_FHDR_SZ, &error))
-        goto CLEAN_AND_RETURN;
-    if (!nitf_IOHandle_read(handle, fver, NITF_FVER_SZ, &error))
-        goto CLEAN_AND_RETURN;
+    if (!nitf_IOInterface_canSeek(io, &error))
+    {
+        return version;
+    }
+
+    if (!nitf_IOInterface_read(io, fhdr, NITF_FHDR_SZ, &error))
+    {
+        goto RESET_STREAM_AND_RETURN;
+    }
+
+    if (!nitf_IOInterface_read(io, fver, NITF_FVER_SZ, &error))
+    {
+        goto RESET_STREAM_AND_RETURN;
+    }
 
     /* NSIF1.0 == NITF2.1 */
     if ((strncmp(fhdr, "NITF", NITF_FHDR_SZ) == 0 &&
@@ -1955,7 +1965,26 @@ NITFAPI(nitf_Version) nitf_Reader_getNITFVersion(const char* fileName)
         version = NITF_VER_20;
     }
 
-CLEAN_AND_RETURN:
-    if (!NITF_INVALID_HANDLE(handle)) nitf_IOHandle_close(handle);
+RESET_STREAM_AND_RETURN:
+    nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, &error);
     return version;
 }
+
+NITFAPI(nitf_Version) nitf_Reader_getNITFVersion(const char* fileName)
+{
+    nitf_IOInterface* io;
+    nitf_Error error;
+    nitf_Version version = NITF_VER_UNKNOWN;
+
+    io = nitf_IOHandleAdapter_open(fileName, NITF_ACCESS_READONLY,
+                                  NITF_OPEN_EXISTING, &error);
+    if (io)
+    {
+        version = nitf_Reader_getNITFVersionIO(io);
+        nitf_IOInterface_destruct(&io);
+    }
+
+    return version;
+}
+
+
