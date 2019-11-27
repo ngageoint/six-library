@@ -55,7 +55,7 @@ public:
      *  \brief Constructor initializes signal block book keeping
      *
      *  \param pathname Input CPHD pathname
-     *  \param data Data section from CPHD
+     *  \param metadata Metadata section of CPHD file
      *  \param startWB CPHD header keyword "CPHD_BYTE_OFFSET"
      *  \param sizeWB CPHD header keyword "CPHD_DATA_SIZE"
      */
@@ -70,7 +70,7 @@ public:
      *  \brief Constructor initializes signal block book keeping
      *
      *  \param inStream Input stream to an already opened CPHD file
-     *  \param data Data section from CPHD
+     *  \param metadata Metadata section of CPHD file
      *  \param startWB CPHD header keyword "cphd_BYTE_OFFSET"
      *  \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
      */
