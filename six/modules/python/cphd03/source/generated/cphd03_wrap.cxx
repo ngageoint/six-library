@@ -3035,9 +3035,9 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_cphd03__TOAParameters swig_types[25]
 #define SWIGTYPE_p_cphd03__VBM swig_types[26]
 #define SWIGTYPE_p_cphd03__VectorParameters swig_types[27]
-#define SWIGTYPE_p_cphd__Data swig_types[28]
-#define SWIGTYPE_p_cphd__DomainType swig_types[29]
-#define SWIGTYPE_p_cphd__EarthModelType swig_types[30]
+#define SWIGTYPE_p_cphd__DomainType swig_types[28]
+#define SWIGTYPE_p_cphd__EarthModelType swig_types[29]
+#define SWIGTYPE_p_cphd__MetadataBase swig_types[30]
 #define SWIGTYPE_p_cphd__PhaseSGN swig_types[31]
 #define SWIGTYPE_p_cphd__PolarizationType swig_types[32]
 #define SWIGTYPE_p_cphd__RefHeight swig_types[33]
@@ -3130,8 +3130,8 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[120]
 #define SWIGTYPE_p_std__invalid_argument swig_types[121]
 #define SWIGTYPE_p_std__ostream swig_types[122]
-#define SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t swig_types[123]
-#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[124]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[123]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t swig_types[124]
 #define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[125]
 #define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[126]
 #define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[127]
@@ -5026,13 +5026,6 @@ SWIG_From_std_string  (const std::string& s)
 }
 
 
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
 SWIGINTERNINLINE PyObject* 
 SWIG_From_unsigned_SS_long  (unsigned long value)
 {
@@ -5064,6 +5057,13 @@ SWIG_From_size_t  (size_t value)
     return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
   }
 #endif
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
 }
 
 SWIGINTERN std::string cphd03_FileHeader___str__(cphd03::FileHeader *self){
@@ -14859,6 +14859,403 @@ SWIGINTERN PyObject *PolarizationType_swigregister(PyObject *SWIGUNUSEDPARM(self
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_cphd__PolarizationType, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_MetadataBase_getNumChannels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_getNumChannels",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getNumChannels" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getNumChannels();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_getNumVectors(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetadataBase_getNumVectors",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getNumVectors" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetadataBase_getNumVectors" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getNumVectors(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_getNumSamples(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetadataBase_getNumSamples",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getNumSamples" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetadataBase_getNumSamples" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getNumSamples(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_getNumBytesPerSample(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_getNumBytesPerSample",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getNumBytesPerSample" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getNumBytesPerSample();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_getCompressedSignalSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetadataBase_getCompressedSignalSize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getCompressedSignalSize" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetadataBase_getCompressedSignalSize" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getCompressedSignalSize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_isCompressed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_isCompressed",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_isCompressed" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = (bool)((cphd::MetadataBase const *)arg1)->isCompressed();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MetadataBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetadataBase",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetadataBase" "', argument " "1"" of type '" "cphd::MetadataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MetadataBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_cphd__MetadataBase, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -34188,7 +34585,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
-  cphd::Data *arg2 = 0 ;
+  cphd::MetadataBase *arg2 = 0 ;
   sys::Off_T arg3 ;
   sys::Off_T arg4 ;
   int res1 = SWIG_OLDOBJ ;
@@ -34212,14 +34609,14 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     }
     arg1 = ptr;
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Data,  0  | 0);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__MetadataBase,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::MetadataBase const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::MetadataBase const &""'"); 
   }
-  arg2 = reinterpret_cast< cphd::Data * >(argp2);
+  arg2 = reinterpret_cast< cphd::MetadataBase * >(argp2);
   {
 #if PY_VERSION_HEX >= 0x03000000
     arg3 = PyLong_AsSsize_t(obj2);
@@ -34237,7 +34634,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (cphd::Wideband *)new cphd::Wideband((std::string const &)*arg1,(cphd::Data const &)*arg2,arg3,arg4);
+      result = (cphd::Wideband *)new cphd::Wideband((std::string const &)*arg1,(cphd::MetadataBase const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -34277,7 +34674,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SwigValueWrapper< std::shared_ptr< io::SeekableInputStream > > arg1 ;
-  cphd::Data *arg2 = 0 ;
+  cphd::MetadataBase *arg2 = 0 ;
   sys::Off_T arg3 ;
   sys::Off_T arg4 ;
   void *argp1 ;
@@ -34304,14 +34701,14 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Data,  0  | 0);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__MetadataBase,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::MetadataBase const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::Data const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "2"" of type '" "cphd::MetadataBase const &""'"); 
   }
-  arg2 = reinterpret_cast< cphd::Data * >(argp2);
+  arg2 = reinterpret_cast< cphd::MetadataBase * >(argp2);
   {
 #if PY_VERSION_HEX >= 0x03000000
     arg3 = PyLong_AsSsize_t(obj2);
@@ -34329,7 +34726,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (cphd::Wideband *)new cphd::Wideband(arg1,(cphd::Data const &)*arg2,arg3,arg4);
+      result = (cphd::Wideband *)new cphd::Wideband(arg1,(cphd::MetadataBase const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -34381,7 +34778,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__MetadataBase, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -34411,7 +34808,7 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
     int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__MetadataBase, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -34440,8 +34837,8 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Wideband'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd::Wideband::Wideband(std::string const &,cphd::Data const &,sys::Off_T,sys::Off_T)\n"
-    "    cphd::Wideband::Wideband(std::shared_ptr< io::SeekableInputStream >,cphd::Data const &,sys::Off_T,sys::Off_T)\n");
+    "    cphd::Wideband::Wideband(std::string const &,cphd::MetadataBase const &,sys::Off_T,sys::Off_T)\n"
+    "    cphd::Wideband::Wideband(std::shared_ptr< io::SeekableInputStream >,cphd::MetadataBase const &,sys::Off_T,sys::Off_T)\n");
   return 0;
 }
 
@@ -37101,7 +37498,7 @@ SWIGINTERN PyObject *CPHDReader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  std::shared_ptr< io::FileOutputStream > arg2 ;
+  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
   size_t arg3 ;
   size_t arg4 ;
   void *argp1 = 0 ;
@@ -37128,14 +37525,14 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd03::Metadata * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t,  0  | 0);
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::FileOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::FileOutputStream > * >(argp2);
+      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -37191,7 +37588,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  std::shared_ptr< io::FileOutputStream > arg2 ;
+  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
   size_t arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -37214,14 +37611,14 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd03::Metadata * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t,  0  | 0);
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::FileOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::FileOutputStream > * >(argp2);
+      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -37272,7 +37669,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  std::shared_ptr< io::FileOutputStream > arg2 ;
+  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -37291,14 +37688,14 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd03::Metadata * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t,  0  | 0);
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::FileOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::FileOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::FileOutputStream > * >(argp2);
+      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -37598,7 +37995,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_cphd03__Metadata, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_new_CPHDWriter__SWIG_2(self, args);
@@ -37622,7 +38019,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_cphd03__Metadata, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -37658,7 +38055,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_cphd03__Metadata, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__FileOutputStream_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -37705,9 +38102,9 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_CPHDWriter'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::FileOutputStream >,size_t,size_t)\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::FileOutputStream >,size_t)\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::FileOutputStream >)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >,size_t,size_t)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >,size_t)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &,size_t,size_t)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &,size_t)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &)\n");
@@ -57978,6 +58375,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationType_value_get", _wrap_PolarizationType_value_get, METH_VARARGS, (char *)"PolarizationType_value_get(PolarizationType self) -> int"},
 	 { (char *)"delete_PolarizationType", _wrap_delete_PolarizationType, METH_VARARGS, (char *)"delete_PolarizationType(PolarizationType self)"},
 	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MetadataBase_getNumChannels", _wrap_MetadataBase_getNumChannels, METH_VARARGS, (char *)"MetadataBase_getNumChannels(MetadataBase self) -> size_t"},
+	 { (char *)"MetadataBase_getNumVectors", _wrap_MetadataBase_getNumVectors, METH_VARARGS, (char *)"MetadataBase_getNumVectors(MetadataBase self, size_t channel) -> size_t"},
+	 { (char *)"MetadataBase_getNumSamples", _wrap_MetadataBase_getNumSamples, METH_VARARGS, (char *)"MetadataBase_getNumSamples(MetadataBase self, size_t channel) -> size_t"},
+	 { (char *)"MetadataBase_getNumBytesPerSample", _wrap_MetadataBase_getNumBytesPerSample, METH_VARARGS, (char *)"MetadataBase_getNumBytesPerSample(MetadataBase self) -> size_t"},
+	 { (char *)"MetadataBase_getCompressedSignalSize", _wrap_MetadataBase_getCompressedSignalSize, METH_VARARGS, (char *)"MetadataBase_getCompressedSignalSize(MetadataBase self, size_t channel) -> size_t"},
+	 { (char *)"MetadataBase_isCompressed", _wrap_MetadataBase_isCompressed, METH_VARARGS, (char *)"MetadataBase_isCompressed(MetadataBase self) -> bool"},
+	 { (char *)"delete_MetadataBase", _wrap_delete_MetadataBase, METH_VARARGS, (char *)"delete_MetadataBase(MetadataBase self)"},
+	 { (char *)"MetadataBase_swigregister", MetadataBase_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"new_FileHeader() -> FileHeader"},
 	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},
 	 { (char *)"FileHeader_read", _wrap_FileHeader_read, METH_VARARGS, (char *)"FileHeader_read(FileHeader self, SeekableInputStream inStream)"},
@@ -58322,8 +58727,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CPHDXMLControl", _wrap_delete_CPHDXMLControl, METH_VARARGS, (char *)"delete_CPHDXMLControl(CPHDXMLControl self)"},
 	 { (char *)"CPHDXMLControl_swigregister", CPHDXMLControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Wideband", _wrap_new_Wideband, METH_VARARGS, (char *)"\n"
-		"Wideband(std::string const & pathname, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB)\n"
-		"new_Wideband(std::shared_ptr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
+		"Wideband(std::string const & pathname, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB)\n"
+		"new_Wideband(std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
 		""},
 	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"\n"
 		"getFileOffset(size_t channel, size_t vector, size_t sample) -> sys::Off_T\n"
@@ -58364,9 +58769,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CPHDReader", _wrap_delete_CPHDReader, METH_VARARGS, (char *)"delete_CPHDReader(CPHDReader self)"},
 	 { (char *)"CPHDReader_swigregister", CPHDReader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_CPHDWriter", _wrap_new_CPHDWriter, METH_VARARGS, (char *)"\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0)\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::FileOutputStream > stream)\n"
+		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
+		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0)\n"
+		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream)\n"
 		"CPHDWriter(Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
 		"CPHDWriter(Metadata metadata, std::string const & pathname, size_t numThreads=0)\n"
 		"new_CPHDWriter(Metadata metadata, std::string const & pathname) -> CPHDWriter\n"
@@ -58773,14 +59178,14 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_cphd03__MetadataTo_p_cphd__MetadataBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((cphd::MetadataBase *)  ((cphd03::Metadata *) x));
+}
 static void *_p_six__sicd__ComplexCollectionInformationTo_p_six__CollectionInformation(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((six::CollectionInformation *)  ((six::sicd::ComplexCollectionInformation *) x));
 }
 static void *_p_io__FileInputStreamOSTo_p_io__SeekableInputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::SeekableInputStream *)  ((io::FileInputStreamOS *) x));
-}
-static void *_p_cphd03__DataTo_p_cphd__Data(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((cphd::Data *)  ((cphd03::Data *) x));
 }
 static void *_p_six__sicd__ComplexDataTo_p_six__Data(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((six::Data *)  ((six::sicd::ComplexData *) x));
@@ -58816,9 +59221,9 @@ static swig_type_info _swigt__p_cphd03__SRP = {"_p_cphd03__SRP", "cphd03::SRP *"
 static swig_type_info _swigt__p_cphd03__TOAParameters = {"_p_cphd03__TOAParameters", "cphd03::TOAParameters *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__VBM = {"_p_cphd03__VBM", "cphd03::VBM *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__VectorParameters = {"_p_cphd03__VectorParameters", "cphd03::VectorParameters *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_cphd__Data = {"_p_cphd__Data", "cphd::Data *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__DomainType = {"_p_cphd__DomainType", "cphd::DomainType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__EarthModelType = {"_p_cphd__EarthModelType", "cphd::EarthModelType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cphd__MetadataBase = {"_p_cphd__MetadataBase", "cphd::MetadataBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__PhaseSGN = {"_p_cphd__PhaseSGN", "cphd::PhaseSGN *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__PolarizationType = {"_p_cphd__PolarizationType", "cphd::PolarizationType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__RefHeight = {"_p_cphd__RefHeight", "cphd::RefHeight *", 0, 0, (void*)0, 0};
@@ -58911,8 +59316,8 @@ static swig_type_info _swigt__p_std__auto_ptrT_cphd03__FxParameters_t = {"_p_std
 static swig_type_info _swigt__p_std__auto_ptrT_cphd03__TOAParameters_t = {"_p_std__auto_ptrT_cphd03__TOAParameters_t", "std::auto_ptr< cphd03::TOAParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_io__FileOutputStream_t = {"_p_std__shared_ptrT_io__FileOutputStream_t", "std::shared_ptr< io::FileOutputStream > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableInputStream_t = {"_p_std__shared_ptrT_io__SeekableInputStream_t", "std::shared_ptr< io::SeekableInputStream > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableOutputStream_t = {"_p_std__shared_ptrT_io__SeekableOutputStream_t", "std::shared_ptr< io::SeekableOutputStream > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "std::shared_ptr< logging::Logger > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t = {"_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t", "std::vector< cphd03::ArraySize,std::allocator< cphd03::ArraySize > > *|std::vector< cphd03::ArraySize > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t = {"_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t", "std::vector< cphd03::ChannelParameters > *|std::vector< cphd03::ChannelParameters,std::allocator< cphd03::ChannelParameters > > *", 0, 0, (void*)0, 0};
@@ -58964,9 +59369,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_cphd03__TOAParameters,
   &_swigt__p_cphd03__VBM,
   &_swigt__p_cphd03__VectorParameters,
-  &_swigt__p_cphd__Data,
   &_swigt__p_cphd__DomainType,
   &_swigt__p_cphd__EarthModelType,
+  &_swigt__p_cphd__MetadataBase,
   &_swigt__p_cphd__PhaseSGN,
   &_swigt__p_cphd__PolarizationType,
   &_swigt__p_cphd__RefHeight,
@@ -59059,8 +59464,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__auto_ptrT_cphd03__TOAParameters_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__ostream,
-  &_swigt__p_std__shared_ptrT_io__FileOutputStream_t,
   &_swigt__p_std__shared_ptrT_io__SeekableInputStream_t,
+  &_swigt__p_std__shared_ptrT_io__SeekableOutputStream_t,
   &_swigt__p_std__shared_ptrT_logging__Logger_t,
   &_swigt__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t,
   &_swigt__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t,
@@ -59112,9 +59517,9 @@ static swig_cast_info _swigc__p_cphd03__SRP[] = {  {&_swigt__p_cphd03__SRP, 0, 0
 static swig_cast_info _swigc__p_cphd03__TOAParameters[] = {  {&_swigt__p_cphd03__TOAParameters, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd03__VBM[] = {  {&_swigt__p_cphd03__VBM, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd03__VectorParameters[] = {  {&_swigt__p_cphd03__VectorParameters, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_cphd__Data[] = {  {&_swigt__p_cphd03__Data, _p_cphd03__DataTo_p_cphd__Data, 0, 0},  {&_swigt__p_cphd__Data, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__DomainType[] = {  {&_swigt__p_cphd__DomainType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__EarthModelType[] = {  {&_swigt__p_cphd__EarthModelType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cphd__MetadataBase[] = {  {&_swigt__p_cphd03__Metadata, _p_cphd03__MetadataTo_p_cphd__MetadataBase, 0, 0},  {&_swigt__p_cphd__MetadataBase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__PhaseSGN[] = {  {&_swigt__p_cphd__PhaseSGN, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__PolarizationType[] = {  {&_swigt__p_cphd__PolarizationType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__RefHeight[] = {  {&_swigt__p_cphd__RefHeight, 0, 0, 0},{0, 0, 0, 0}};
@@ -59207,8 +59612,8 @@ static swig_cast_info _swigc__p_std__auto_ptrT_cphd03__FxParameters_t[] = {  {&_
 static swig_cast_info _swigc__p_std__auto_ptrT_cphd03__TOAParameters_t[] = {  {&_swigt__p_std__auto_ptrT_cphd03__TOAParameters_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__shared_ptrT_io__FileOutputStream_t[] = {  {&_swigt__p_std__shared_ptrT_io__FileOutputStream_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__shared_ptrT_io__SeekableInputStream_t[] = {  {&_swigt__p_std__shared_ptrT_io__SeekableInputStream_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__shared_ptrT_io__SeekableOutputStream_t[] = {  {&_swigt__p_std__shared_ptrT_io__SeekableOutputStream_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__shared_ptrT_logging__Logger_t[] = {  {&_swigt__p_std__shared_ptrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t[] = {  {&_swigt__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t[] = {  {&_swigt__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -59260,9 +59665,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_cphd03__TOAParameters,
   _swigc__p_cphd03__VBM,
   _swigc__p_cphd03__VectorParameters,
-  _swigc__p_cphd__Data,
   _swigc__p_cphd__DomainType,
   _swigc__p_cphd__EarthModelType,
+  _swigc__p_cphd__MetadataBase,
   _swigc__p_cphd__PhaseSGN,
   _swigc__p_cphd__PolarizationType,
   _swigc__p_cphd__RefHeight,
@@ -59355,8 +59760,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__auto_ptrT_cphd03__TOAParameters_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__ostream,
-  _swigc__p_std__shared_ptrT_io__FileOutputStream_t,
   _swigc__p_std__shared_ptrT_io__SeekableInputStream_t,
+  _swigc__p_std__shared_ptrT_io__SeekableOutputStream_t,
   _swigc__p_std__shared_ptrT_logging__Logger_t,
   _swigc__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t,
   _swigc__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t,

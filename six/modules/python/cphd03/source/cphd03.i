@@ -53,6 +53,7 @@ using six::Vector3;
 
 %include "cphd/Types.h"
 %include "cphd/Enums.h"
+%include "cphd/MetadataBase.h"
 %include "cphd03/FileHeader.h"
 %include "cphd03/Global.h"
 %include "cphd03/Channel.h"

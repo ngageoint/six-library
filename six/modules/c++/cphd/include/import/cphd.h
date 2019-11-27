@@ -36,6 +36,7 @@
 #include "cphd/ErrorParameters.h"
 #include "cphd/FileHeader.h"
 #include "cphd/Global.h"
+#include "cphd/MetadataBase.h"
 #include "cphd/Metadata.h"
 #include "cphd/ProductInfo.h"
 #include "cphd/PVP.h"

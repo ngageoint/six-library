@@ -806,6 +806,52 @@ class PolarizationType(_object):
 PolarizationType_swigregister = _cphd03.PolarizationType_swigregister
 PolarizationType_swigregister(PolarizationType)
 
+class MetadataBase(_object):
+    """Proxy of C++ cphd::MetadataBase class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MetadataBase, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MetadataBase, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+
+    def getNumChannels(self):
+        """getNumChannels(MetadataBase self) -> size_t"""
+        return _cphd03.MetadataBase_getNumChannels(self)
+
+
+    def getNumVectors(self, channel):
+        """getNumVectors(MetadataBase self, size_t channel) -> size_t"""
+        return _cphd03.MetadataBase_getNumVectors(self, channel)
+
+
+    def getNumSamples(self, channel):
+        """getNumSamples(MetadataBase self, size_t channel) -> size_t"""
+        return _cphd03.MetadataBase_getNumSamples(self, channel)
+
+
+    def getNumBytesPerSample(self):
+        """getNumBytesPerSample(MetadataBase self) -> size_t"""
+        return _cphd03.MetadataBase_getNumBytesPerSample(self)
+
+
+    def getCompressedSignalSize(self, channel):
+        """getCompressedSignalSize(MetadataBase self, size_t channel) -> size_t"""
+        return _cphd03.MetadataBase_getCompressedSignalSize(self, channel)
+
+
+    def isCompressed(self):
+        """isCompressed(MetadataBase self) -> bool"""
+        return _cphd03.MetadataBase_isCompressed(self)
+
+    __swig_destroy__ = _cphd03.delete_MetadataBase
+    __del__ = lambda self: None
+MetadataBase_swigregister = _cphd03.MetadataBase_swigregister
+MetadataBase_swigregister(MetadataBase)
+
 class FileHeader(_object):
     """Proxy of C++ cphd03::FileHeader class."""
 
@@ -1560,12 +1606,16 @@ class VectorParameters(_object):
 VectorParameters_swigregister = _cphd03.VectorParameters_swigregister
 VectorParameters_swigregister(VectorParameters)
 
-class Metadata(_object):
+class Metadata(MetadataBase):
     """Proxy of C++ cphd03::Metadata class."""
 
     __swig_setmethods__ = {}
+    for _s in [MetadataBase]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Metadata, name, value)
     __swig_getmethods__ = {}
+    for _s in [MetadataBase]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Metadata, name)
     __repr__ = _swig_repr
 
@@ -2104,8 +2154,8 @@ class Wideband(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd::Wideband self, std::string const & pathname, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
-        __init__(cphd::Wideband self, std::shared_ptr< io::SeekableInputStream > inStream, cphd::Data const & data, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, std::string const & pathname, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
         """
         this = _cphd03.new_Wideband(*args)
         try:
@@ -2255,9 +2305,9 @@ class CPHDWriter(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream, size_t numThreads=0) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::FileOutputStream > stream) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname) -> CPHDWriter
