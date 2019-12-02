@@ -14862,6 +14862,57 @@ SWIGINTERN PyObject *PolarizationType_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_delete_MetadataBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetadataBase",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetadataBase" "', argument " "1"" of type '" "cphd::MetadataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_MetadataBase_getNumChannels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
@@ -15195,57 +15246,6 @@ SWIGINTERN PyObject *_wrap_MetadataBase_isCompressed(PyObject *SWIGUNUSEDPARM(se
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_MetadataBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetadataBase",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetadataBase" "', argument " "1"" of type '" "cphd::MetadataBase *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -58375,13 +58375,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationType_value_get", _wrap_PolarizationType_value_get, METH_VARARGS, (char *)"PolarizationType_value_get(PolarizationType self) -> int"},
 	 { (char *)"delete_PolarizationType", _wrap_delete_PolarizationType, METH_VARARGS, (char *)"delete_PolarizationType(PolarizationType self)"},
 	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_MetadataBase", _wrap_delete_MetadataBase, METH_VARARGS, (char *)"delete_MetadataBase(MetadataBase self)"},
 	 { (char *)"MetadataBase_getNumChannels", _wrap_MetadataBase_getNumChannels, METH_VARARGS, (char *)"MetadataBase_getNumChannels(MetadataBase self) -> size_t"},
 	 { (char *)"MetadataBase_getNumVectors", _wrap_MetadataBase_getNumVectors, METH_VARARGS, (char *)"MetadataBase_getNumVectors(MetadataBase self, size_t channel) -> size_t"},
 	 { (char *)"MetadataBase_getNumSamples", _wrap_MetadataBase_getNumSamples, METH_VARARGS, (char *)"MetadataBase_getNumSamples(MetadataBase self, size_t channel) -> size_t"},
 	 { (char *)"MetadataBase_getNumBytesPerSample", _wrap_MetadataBase_getNumBytesPerSample, METH_VARARGS, (char *)"MetadataBase_getNumBytesPerSample(MetadataBase self) -> size_t"},
 	 { (char *)"MetadataBase_getCompressedSignalSize", _wrap_MetadataBase_getCompressedSignalSize, METH_VARARGS, (char *)"MetadataBase_getCompressedSignalSize(MetadataBase self, size_t channel) -> size_t"},
 	 { (char *)"MetadataBase_isCompressed", _wrap_MetadataBase_isCompressed, METH_VARARGS, (char *)"MetadataBase_isCompressed(MetadataBase self) -> bool"},
-	 { (char *)"delete_MetadataBase", _wrap_delete_MetadataBase, METH_VARARGS, (char *)"delete_MetadataBase(MetadataBase self)"},
 	 { (char *)"MetadataBase_swigregister", MetadataBase_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"new_FileHeader() -> FileHeader"},
 	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},

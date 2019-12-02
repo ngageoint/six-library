@@ -44,6 +44,11 @@ struct MetadataBase
     {
     }
 
+    //! Destructor
+    virtual ~MetadataBase()
+    {
+    }
+
     /*
      * Getter functions
      */

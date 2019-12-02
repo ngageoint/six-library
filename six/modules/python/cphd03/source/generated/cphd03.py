@@ -817,6 +817,8 @@ class MetadataBase(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
+    __swig_destroy__ = _cphd03.delete_MetadataBase
+    __del__ = lambda self: None
 
     def getNumChannels(self):
         """getNumChannels(MetadataBase self) -> size_t"""
@@ -847,8 +849,6 @@ class MetadataBase(_object):
         """isCompressed(MetadataBase self) -> bool"""
         return _cphd03.MetadataBase_isCompressed(self)
 
-    __swig_destroy__ = _cphd03.delete_MetadataBase
-    __del__ = lambda self: None
 MetadataBase_swigregister = _cphd03.MetadataBase_swigregister
 MetadataBase_swigregister(MetadataBase)
 
