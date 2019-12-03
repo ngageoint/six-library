@@ -28,7 +28,7 @@
 
 namespace cphd
 {
-const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
+const int NOT_SET_VALUE = std::numeric_limits<int>::max();
 
 
 /*!
