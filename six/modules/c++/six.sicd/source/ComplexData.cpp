@@ -33,7 +33,7 @@ Data* ComplexData::clone() const
 }
 
 ComplexData::ComplexData() :
-    collectionInformation(new CollectionInformation()),
+    collectionInformation(new ComplexCollectionInformation()),
     imageData(new ImageData()),
     geoData(new GeoData()),
     grid(new Grid()),

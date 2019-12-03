@@ -28,6 +28,7 @@
 #include <logging/Setup.h>
 #include <cli/ArgumentParser.h>
 #include <six/sicd/Utilities.h>
+#include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/NITFHeaderCreator.h>
 
@@ -77,8 +78,6 @@ int main(int argc, char** argv)
 
         std::auto_ptr<six::Data> data(
                 six::sicd::Utilities::createFakeComplexData().release());
-        data->setNumRows(dims.row);
-        data->setNumCols(dims.col);
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
         mem::SharedPtr<six::Container> container(new six::Container(

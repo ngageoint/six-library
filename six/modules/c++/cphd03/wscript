@@ -1,0 +1,11 @@
+NAME            = 'cphd03'
+MAINTAINER      = 'clyde.stanfield@mdaus.com'
+MODULE_DEPS     = 'cphd six.sicd'
+TEST_DEPS       = 'cli'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['SIX_VERSION'] = bld.env['SIX_VERSION']
+    bld.module(**modArgs)

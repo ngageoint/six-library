@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"

@@ -198,6 +198,9 @@ def options(opt):
                    default='3.0.0', help='Specify the minimum swig version')
     opt.add_option('--require-swig', action='store_true', dest='require_swig',
                    help='Require swig (configure option)', default=False)
+    opt.add_option('--with-swig-home', action='store', dest='swig_home',
+                   help='Bin directory of swig installation, e.g. '
+                   '/swig/install/bin')
     opt.add_option('--python-version-agnostic', action='store_true',
                    dest='pyver_agnostic',
                    help='The default behavior for generated Python code is to '
@@ -208,7 +211,9 @@ def options(opt):
 
 def configure(conf):
     if Options.options.swig:
-        swig = conf.find_program('swig', var='SWIG', mandatory=Options.options.require_swig)
+        swig = conf.find_program('swig', var='SWIG',
+                                 path_list=Options.options.swig_home,
+                                 mandatory=Options.options.require_swig)
         if not swig: return
         swigver = Options.options.swigver
         if swigver:

@@ -22,6 +22,7 @@
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
 
+#include <six/Types.h>
 #include <six/Data.h>
 #include <six/Utilities.h>
 #include <six/NITFSegmentInfo.h>

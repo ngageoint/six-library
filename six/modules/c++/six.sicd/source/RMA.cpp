@@ -20,7 +20,6 @@
  *
  */
 #include "math/Utilities.h"
-#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/RMA.h"

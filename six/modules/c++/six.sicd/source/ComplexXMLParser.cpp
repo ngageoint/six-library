@@ -78,7 +78,8 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     }
     rgAzCompXML                = getOptional(root, "RgAzComp"); // added in 1.0.0
 
-    parseCollectionInformationFromXML(collectionInfoXML, sicd->collectionInformation.get());
+    common().parseCollectionInformationFromXML(collectionInfoXML,
+            sicd->collectionInformation.get());
 
     if (imageCreationXML != NULL)
     {
@@ -146,7 +147,8 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
     XMLElem root = newElement("SICD");
     doc->setRootElement(root);
 
-    convertCollectionInformationToXML(sicd->collectionInformation.get(), root);
+    common().convertCollectionInformationToXML(
+            sicd->collectionInformation.get(), root);
     if (sicd->imageCreation.get())
     {
         convertImageCreationToXML(sicd->imageCreation.get(), root);
@@ -189,43 +191,6 @@ XMLElem ComplexXMLParser::createFFTSign(const std::string& name, six::FFTSign si
 {
     return createInt(name, getDefaultURI(),
                      (sign == FFTSign::NEG) ? "-1" : "+1", parent);
-}
-
-XMLElem ComplexXMLParser::convertCollectionInformationToXML(
-    const CollectionInformation *collInfo,
-    XMLElem parent) const
-{
-    XMLElem collInfoXML = newElement("CollectionInfo", parent);
-
-    const std::string si = common().getSICommonURI();
-
-    createString("CollectorName", si, collInfo->collectorName, collInfoXML);
-    if (!collInfo->illuminatorName.empty())
-        createString("IlluminatorName", si, collInfo->illuminatorName,
-                     collInfoXML);
-    createString("CoreName", si, collInfo->coreName, collInfoXML);
-    if (!Init::isUndefined(collInfo->collectType))
-        createString("CollectType", si,
-                     six::toString<six::CollectType>(collInfo->collectType),
-                     collInfoXML);
-
-    XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
-    createString("ModeType", si, six::toString(collInfo->radarMode),
-                 radarModeXML);
-    if (!collInfo->radarModeID.empty())
-        createString("ModeID", si, collInfo->radarModeID, radarModeXML);
-
-    //TODO maybe add more class. info in the future
-    createString("Classification", si, collInfo->classification.level,
-                 collInfoXML);
-
-    for (std::vector<std::string>::const_iterator it =
-            collInfo->countryCodes.begin(); it != collInfo->countryCodes.end(); ++it)
-    {
-        createString("CountryCode", si, *it, collInfoXML);
-    }
-    common().addParameters("Parameter", si, collInfo->parameters, collInfoXML);
-    return collInfoXML;
 }
 
 XMLElem ComplexXMLParser::convertImageCreationToXML(
@@ -925,56 +890,6 @@ void ComplexXMLParser::parseDRateSFPolyFromXML(
     //! Poly2D in 0.4.1
     common().parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
                          inca->dopplerRateScaleFactorPoly);
-}
-
-void ComplexXMLParser::parseCollectionInformationFromXML(
-    const XMLElem collectionInfoXML,
-    CollectionInformation *collInfo) const
-{
-    parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
-                collInfo->collectorName);
-
-    XMLElem element = getOptional(collectionInfoXML, "IlluminatorName");
-    if (element)
-        parseString(element, collInfo->illuminatorName);
-
-    element = getOptional(collectionInfoXML, "CoreName");
-    if (element)
-        parseString(element, collInfo->coreName);
-
-    element = getOptional(collectionInfoXML, "CollectType");
-    if (element)
-        collInfo->collectType
-                = six::toType<six::CollectType>(element->getCharacterData());
-
-    XMLElem radarModeXML = getFirstAndOnly(collectionInfoXML, "RadarMode");
-
-    collInfo->radarMode
-            = six::toType<RadarModeType>(getFirstAndOnly(radarModeXML,
-                                         "ModeType")->getCharacterData());
-
-    element = getOptional(radarModeXML, "ModeID");
-    if (element)
-        parseString(element, collInfo->radarModeID);
-
-    parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
-                collInfo->classification.level);
-
-    std::vector < XMLElem > countryCodeXML;
-    collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
-
-    //optional
-    for (std::vector<XMLElem>::const_iterator it = countryCodeXML.begin(); it
-            != countryCodeXML.end(); ++it)
-    {
-        std::string cc;
-
-        parseString(*it, cc);
-        collInfo->countryCodes.push_back(cc);
-    }
-
-    //optional
-    common().parseParameters(collectionInfoXML, "Parameter", collInfo->parameters);
 }
 
 void ComplexXMLParser::parseImageCreationFromXML(

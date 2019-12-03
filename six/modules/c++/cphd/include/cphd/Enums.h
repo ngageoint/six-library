@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_ENUMS_H__
 #define __CPHD_ENUMS_H__
 
@@ -29,10 +28,11 @@
 
 namespace cphd
 {
-const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
+const int NOT_SET_VALUE = std::numeric_limits<int>::max();
+
 
 /*!
- *  \struct SampleType 
+ *  \struct SampleType
  *
  *  Enumeration used to represent SampleTypes
  */
@@ -129,7 +129,7 @@ struct SampleType
 };
 
 /*!
- *  \struct DomainType 
+ *  \struct DomainType
  *
  *  Enumeration used to represent DomainTypes
  */
@@ -218,7 +218,7 @@ struct DomainType
 
 
 /*!
- *  \struct PhaseSGN 
+ *  \struct PhaseSGN
  *
  *  Enumeration used to represent PhaseSGNs
  */
@@ -306,10 +306,276 @@ struct PhaseSGN
     int value;
 };
 
+/*!
+ *  \struct RefHeight
+ *
+ *  Enumeration used to represent RefHeights
+ */
+struct RefHeight
+{
+    //! The enumerations allowed
+    enum
+    {
+        IARP = 1,
+        ZERO = 2,
+        NOT_SET = cphd::NOT_SET_VALUE
+    };
 
+    //! Default constructor
+    RefHeight() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    RefHeight(const std::string& s)
+    {
+        if (s == "IARP")
+            value = IARP;
+        else if (s == "ZERO")
+            value = ZERO;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + s));
+        }
+    }
+
+    //! int constructor
+    RefHeight(int i)
+    {
+        switch(i)
+        {
+        case 1:
+            value = IARP;
+            break;
+        case 2:
+            value = ZERO;
+            break;
+        case cphd::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(i)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("IARP");
+        case 2:
+            return std::string("ZERO");
+        case cphd::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const RefHeight& o) const { return value == o.value; }
+    bool operator!=(const RefHeight& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    RefHeight& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const RefHeight& o) const { return value < o.value; }
+    bool operator>(const RefHeight& o) const { return value > o.value; }
+    bool operator<=(const RefHeight& o) const { return value <= o.value; }
+    bool operator>=(const RefHeight& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
 
 /*!
- *  \struct SRPType 
+ *  \struct EarthModelType
+ *
+ *  Enumeration used to represent EarthModelType
+ *  Distict from SICD's EarthModelType
+ *  (underscore vs. no underscore)
+ */
+struct EarthModelType
+{
+    //! The enumerations allowed
+    enum
+    {
+        WGS_84= 1,
+        NOT_SET = cphd::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    EarthModelType() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    EarthModelType(const std::string& s)
+    {
+        if (s == "WGS_84")
+            value = WGS_84;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + s));
+        }
+    }
+
+    //! int constructor
+    EarthModelType(int i)
+    {
+        switch(i)
+        {
+        case 1:
+            value = WGS_84;
+            break;
+        case cphd::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(i)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("WGS_84");
+        case cphd::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const EarthModelType& o) const { return value == o.value; }
+    bool operator!=(const EarthModelType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    EarthModelType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const EarthModelType& o) const { return value < o.value; }
+    bool operator>(const EarthModelType& o) const { return value > o.value; }
+    bool operator<=(const EarthModelType& o) const { return value <= o.value; }
+    bool operator>=(const EarthModelType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
+
+/*!
+ * \struct SignalArrayFormat
+ *
+ * Enumeration used to represent signal array format
+ */
+struct SignalArrayFormat
+{
+    //! The enumerations allowed
+    enum
+    {
+        CI2 = 1,
+        CI4 = 2,
+        CF8 = 3,
+        NOT_SET = cphd::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    SignalArrayFormat() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    SignalArrayFormat(const std::string& s)
+    {
+        if (s == "CI2")
+            value = CI2;
+        else if (s == "CI4")
+            value = CI4;
+        else if (s == "CF8")
+            value = CF8;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + s));
+        }
+    }
+
+    //! int constructor
+    SignalArrayFormat(int i)
+    {
+        switch(i)
+        {
+        case 1:
+            value = CI2;
+            break;
+        case 2:
+            value = CI4;
+            break;
+        case 3:
+            value = CF8;
+            break;
+        case cphd::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(i)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("CI2");
+        case 2:
+            return std::string("CI4");
+        case 3:
+            return std::string("CF8");
+        case cphd::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const SignalArrayFormat& o) const { return value == o.value; }
+    bool operator!=(const SignalArrayFormat& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    SignalArrayFormat& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const SignalArrayFormat& o) const { return value < o.value; }
+    bool operator>(const SignalArrayFormat& o) const { return value > o.value; }
+    bool operator<=(const SignalArrayFormat& o) const { return value <= o.value; }
+    bool operator>=(const SignalArrayFormat& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
+/*!
+ *  \struct SRPType
  *
  *  Enumeration used to represent SRPTypes
  */
@@ -412,6 +678,137 @@ struct SRPType
 
     int value;
 };
+
+/*!
+ *  \struct PolarizationType
+ *
+ *  Enumeration used to represent PolarizationTypes
+ */
+struct PolarizationType
+{
+    //! The enumerations allowed
+    enum
+    {
+        X = 1,
+        Y = 2,
+        V = 3,
+        H = 4,
+        RHC = 5,
+        LHC = 6,
+        UNSPECIFIED = 7,
+        NOT_SET = cphd::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    PolarizationType() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    PolarizationType(const std::string& s)
+    {
+        if (s == "X")
+            value = X;
+        else if (s == "Y")
+            value = Y;
+        else if (s == "V")
+            value = V;
+        else if (s == "H")
+            value = H;
+        else if (s == "RHC")
+            value = RHC;
+        else if (s == "LHC")
+            value = LHC;
+        else if (s == "UNSPECIFIED")
+            value = UNSPECIFIED;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + s));
+        }
+    }
+
+    //! int constructor
+    PolarizationType(int i)
+    {
+        switch(i)
+        {
+        case 1:
+            value = X;
+            break;
+        case 2:
+            value = Y;
+            break;
+        case 3:
+            value = V;
+            break;
+        case 4:
+            value = H;
+            break;
+        case 5:
+            value = RHC;
+            break;
+        case 6:
+            value = LHC;
+            break;
+        case 7:
+            value = UNSPECIFIED;
+            break;
+        case cphd::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(i)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("X");
+        case 2:
+            return std::string("Y");
+        case 3:
+            return std::string("V");
+        case 4:
+            return std::string("H");
+        case 5:
+            return std::string("RHC");
+        case 6:
+            return std::string("LHC");
+        case 7:
+            return std::string("UNSPECIFIED");
+        case cphd::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const PolarizationType& o) const { return value == o.value; }
+    bool operator!=(const PolarizationType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    PolarizationType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const PolarizationType& o) const { return value < o.value; }
+    bool operator>(const PolarizationType& o) const { return value > o.value; }
+    bool operator<=(const PolarizationType& o) const { return value <= o.value; }
+    bool operator>=(const PolarizationType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
+
+
 }
 
 #endif

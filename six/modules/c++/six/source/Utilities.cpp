@@ -105,7 +105,8 @@ template<> std::string six::toString<float>(const float& value)
     }
 
    std::ostringstream os;
-   os << std::uppercase << std::scientific << std::setprecision(15) << value;
+   size_t precision =  std::numeric_limits<float>::max_digits10;
+   os << std::uppercase << std::scientific << std::setprecision(precision) << value;
    std::string strValue = os.str();
 
    // remove any + in scientific notation to meet SICD XML standard
@@ -126,7 +127,8 @@ template<> std::string six::toString<double>(const double& value)
     }
 
    std::ostringstream os;
-   os << std::uppercase << std::scientific << std::setprecision(15) << value;
+   size_t precision =  std::numeric_limits<double>::max_digits10;
+   os << std::uppercase << std::scientific << std::setprecision(precision) << value;
    std::string strValue = os.str();
 
    // remove any + in scientific notation to meet SICD XML standard

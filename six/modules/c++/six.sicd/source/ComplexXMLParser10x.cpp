@@ -128,36 +128,7 @@ XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
     const MatchInformation* matchInfo,
     XMLElem parent) const
 {
-    XMLElem matchInfoXML = newElement("MatchInfo", parent);
-
-    createInt("NumMatchTypes",
-              static_cast<int>(matchInfo->types.size()),
-              matchInfoXML);
-
-    for (size_t i = 0; i < matchInfo->types.size(); ++i)
-    {
-        const MatchType* mt = matchInfo->types[i].get();
-        XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
-
-        createString("TypeID", mt->typeID, mtXML);
-        createInt("CurrentIndex", mt->currentIndex, mtXML);
-        createInt("NumMatchCollections",
-				static_cast<int>(mt->matchCollects.size()), mtXML);
-
-        for (size_t j = 0; j < mt->matchCollects.size(); ++j)
-        {
-            XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(j + 1));
-
-            createString("CoreName", mt->matchCollects[j].coreName, mcXML);
-            createInt("MatchIndex", mt->matchCollects[j].matchIndex, mcXML);
-            common().addParameters("Parameter",
-                mt->matchCollects[j].parameters, mcXML);
-        }
-    }
-
-    return matchInfoXML;
+    return common().convertMatchInformationToXML(matchInfo, parent);
 }
 
 XMLElem ComplexXMLParser10x::convertImageFormationToXML(
@@ -412,78 +383,7 @@ void ComplexXMLParser10x::parseMatchInformationFromXML(
     const XMLElem matchInfoXML,
     MatchInformation* matchInfo) const
 {
-    int numMatchTypes = 0;
-    parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
-
-    //TODO make sure there is at least one
-    std::vector < XMLElem > typesXML;
-    matchInfoXML->getElementsByTagName("MatchType", typesXML);
-
-    //! validate the numMatchTypes
-    if (typesXML.size() != (size_t)numMatchTypes)
-    {
-        throw except::Exception(
-            Ctxt("NumMatchTypes does not match number of MatchType fields"));
-    }
-
-    for (size_t i = 0; i < typesXML.size(); i++)
-    {
-        // The MatchInformation object was given a MatchType when
-        // it was instantiated.  The first time through, just populate it.
-        if (i != 0)
-        {
-            matchInfo->types.push_back(
-                mem::ScopedCopyablePtr<MatchType>(new MatchType()));
-        }
-        MatchType* type = matchInfo->types[i].get();
-
-        parseString(getFirstAndOnly(typesXML[i], "TypeID"), type->typeID);
-
-        XMLElem curIndexElem = getOptional(typesXML[i], "CurrentIndex");
-        if (curIndexElem)
-        {
-            //optional
-            parseInt(curIndexElem, type->currentIndex);
-        }
-
-        int numMatchCollections = 0;
-        parseInt(getFirstAndOnly(typesXML[i], "NumMatchCollections"),
-                 numMatchCollections);
-
-        std::vector < XMLElem > matchCollectionsXML;
-        typesXML[i]->getElementsByTagName("MatchCollection", matchCollectionsXML);
-
-        //! validate the numMatchTypes
-        if (matchCollectionsXML.size() !=
-            static_cast<size_t>(numMatchCollections))
-        {
-            throw except::Exception(
-                Ctxt("NumMatchCollections does not match number of " \
-                     "MatchCollect fields"));
-        }
-
-        // Need to make sure this is resized properly - at MatchType
-        // construction time, matchCollects is initialized to size 1, but in
-        // SICD 1.1 this entire block may be missing.
-        type->matchCollects.resize(matchCollectionsXML.size());
-        for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
-        {
-            MatchCollect& collect(type->matchCollects[jj]);
-
-            parseString(getFirstAndOnly(
-                matchCollectionsXML[jj], "CoreName"), collect.coreName);
-
-            XMLElem matchIndexXML =
-                getOptional(matchCollectionsXML[jj], "MatchIndex");
-            if (matchIndexXML)
-            {
-                parseInt(matchIndexXML, collect.matchIndex);
-            }
-
-            common().parseParameters(
-                matchCollectionsXML[jj], "Parameter", collect.parameters);
-        }
-    }
+    common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
 }
 
 void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,
