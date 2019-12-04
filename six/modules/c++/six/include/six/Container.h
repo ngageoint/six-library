@@ -152,7 +152,7 @@ public:
      * SICD/SIDD DES.
      * \param source SegmentSource to add
      */
-    void addDESSource(nitf::SegmentSource source);
+    void addDESSource(const nitf::SegmentSource& source);
 
     /*!
      * Get all added DES sources for DES other than the
